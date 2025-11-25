@@ -129,7 +129,15 @@ function getNPCReturnCommand(player: PlayerData, npcId: string): string {
 	if (currentLocation && currentLocation.buildings) {
 		// Check all buildings in the current location
 		for (const building of currentLocation.buildings) {
-			// If this building has a list of NPCs and our NPC is in it
+			// Check rooms first if they exist
+			if (building.rooms) {
+				for (const room of building.rooms) {
+					if (room.npcs && room.npcs.includes(npcId)) {
+						return `/rpg building ${toID(building.id)} ${room.id}`;
+					}
+				}
+			}
+			// If this building has a list of NPCs and our NPC is in it (Legacy/Single Room)
 			if (building.npcs && building.npcs.includes(npcId)) {
 				// Return to this specific building
 				return `/rpg building ${toID(building.id)}`;
@@ -1122,14 +1130,18 @@ export const commands: ChatCommands = {
 			const currentLocation = LOCATIONS[currentLocationId];
 
 			if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
-			if (!target) return this.errorReply("Please specify which building to enter.");
+			
+			const args = target.split(' ');
+			const buildingId = toID(args[0]);
+			const roomId = args[1] ? toID(args[1]) : null;
+			
+			if (!buildingId) return this.errorReply("Please specify which building to enter.");
 
-			const buildingId = toID(target);
 			const building = currentLocation.buildings?.find(b => toID(b.id) === buildingId);
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
 			
-			// --- Access Checks ---
+			// --- Access Checks (Building Level) ---
 			
 			// 1. Check Accessible property
 			if (building.accessible === false) {
@@ -1164,7 +1176,7 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// --- Successful Entry: Handle Flags ---
+			// --- Successful Entry (Building Level): Handle Flags ---
 			if ((building as any).setFlag) {
 				const flags = Array.isArray((building as any).setFlag) ? (building as any).setFlag : [(building as any).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
@@ -1173,6 +1185,177 @@ export const commands: ChatCommands = {
 				const flags = Array.isArray((building as any).removeFlag) ? (building as any).removeFlag : [(building as any).removeFlag];
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
+
+			// ============================================================
+			// ROOM LOGIC (Multi-floor support)
+			// ============================================================
+			if (building.rooms && building.rooms.length > 0) {
+				// Determine target room
+				let targetRoom = null;
+				if (roomId) {
+					targetRoom = building.rooms.find(r => r.id === roomId);
+				} else {
+					targetRoom = building.rooms.find(r => r.isEntrance) || building.rooms[0];
+				}
+
+				if (!targetRoom) return this.errorReply("Invalid room.");
+
+				// --- Access Checks (Room Level) ---
+				if (targetRoom.requiredBadge) {
+					const reqBadges = Array.isArray(targetRoom.requiredBadge) ? targetRoom.requiredBadge : [targetRoom.requiredBadge];
+					if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
+						const blockMsg = targetRoom.blockMessage || "Locked: You need more badges to enter this room.";
+						// If blocked from a room, where do we go? 
+						// If we tried to enter the building, go back to explore.
+						// If we tried to move between rooms, stay in current room? (Complex to track previous)
+						// For simplicity, return to Explore with message.
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+					}
+				}
+
+				if (targetRoom.requiredFlag) {
+					const reqFlags = Array.isArray(targetRoom.requiredFlag) ? targetRoom.requiredFlag : [targetRoom.requiredFlag];
+					if (!reqFlags.every(f => player.storyFlags.has(f))) {
+						const blockMsg = targetRoom.blockMessage || "You can't access this area yet.";
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+					}
+				}
+
+				if (targetRoom.preventIfFlag) {
+					const prevFlags = Array.isArray(targetRoom.preventIfFlag) ? targetRoom.preventIfFlag : [targetRoom.preventIfFlag];
+					if (prevFlags.some(f => player.storyFlags.has(f))) {
+						const blockMsg = targetRoom.blockMessage || "This area is blocked.";
+						return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
+					}
+				}
+
+				// --- Room State Changes ---
+				if (targetRoom.setFlag) {
+					const flags = Array.isArray(targetRoom.setFlag) ? targetRoom.setFlag : [targetRoom.setFlag];
+					flags.forEach((f: string) => player.storyFlags.add(f));
+				}
+				if (targetRoom.removeFlag) {
+					const flags = Array.isArray(targetRoom.removeFlag) ? targetRoom.removeFlag : [targetRoom.removeFlag];
+					flags.forEach((f: string) => player.storyFlags.delete(f));
+				}
+
+				// --- Generate Room HTML ---
+				let roomHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name} - ${targetRoom.name}</b></h2><p><em>${targetRoom.description}</em></p></div><hr>`;
+
+				// NPCs in Room
+				if (targetRoom.npcs && targetRoom.npcs.length > 0) {
+					roomHTML += '<p><strong>People here:</strong></p>';
+					for (const npcId of targetRoom.npcs) {
+						const npc = NPC_DATABASE[npcId];
+						if (npc) {
+							if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
+							roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button">💬 ${npc.name}</button> `;
+						}
+					}
+				}
+
+				// Trainers in Room
+				if (targetRoom.trainers && targetRoom.trainers.length > 0) {
+					roomHTML += '<p><strong>Trainers:</strong></p>';
+					for (const trainerId of targetRoom.trainers) {
+						const trainer = TRAINER_DATABASE[trainerId];
+						if (trainer) {
+							if (!player.defeatedTrainers.has(trainerId)) {
+								roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button">⚔️ Challenge ${trainer.name}</button> `;
+							} else {
+								roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+							}
+						}
+					}
+					roomHTML += '<hr>';
+				}
+
+				// --- Room Actions (PC, Shop, Gym Leader) ---
+				let actionsHTML = '';
+
+				if (targetRoom.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button">💻 Access PC</button> `;
+				if (targetRoom.type === 'pokemart' || targetRoom.type === 'department') actionsHTML += `<button name="send" value="/rpg shop" class="button">🏪 Shop</button> `;
+
+				if (targetRoom.type === 'gym' && targetRoom.gymLeaderId) {
+					const gymLeaderId = targetRoom.gymLeaderId;
+					const gymData = TRAINER_DATABASE[gymLeaderId];
+					if (gymData) {
+						// Check if all trainers in the BUILDING are defeated
+						let allTrainersDefeated = true;
+						// Check building level trainers
+						if (building.trainers) {
+							for (const tid of building.trainers) {
+								if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+							}
+						}
+						// Check room level trainers
+						if (allTrainersDefeated && building.rooms) {
+							for (const room of building.rooms) {
+								if (room.trainers) {
+									for (const tid of room.trainers) {
+										if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+									}
+								}
+							}
+						}
+
+						if (!player.defeatedTrainers.has(gymLeaderId)) {
+							if (allTrainersDefeated) {
+								actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button">⚔️ Challenge LEADER ${gymData.name}</button> `;
+							} else {
+								actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+							}
+						} else {
+							actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
+						}
+					}
+				}
+
+				if (actionsHTML !== '') {
+					roomHTML += '<p><strong>Actions:</strong></p>';
+					roomHTML += actionsHTML;
+					roomHTML += '<hr>';
+				}
+
+				// Navigation (Connected Rooms)
+				if (targetRoom.connectedRooms && targetRoom.connectedRooms.length > 0) {
+					roomHTML += '<p><strong>Go to:</strong></p>';
+					for (const connectedRoomId of targetRoom.connectedRooms) {
+						const connectedRoom = building.rooms.find(r => r.id === connectedRoomId);
+						if (connectedRoom) {
+							roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId}" class="button">➡️ ${connectedRoom.name}</button> `;
+						}
+					}
+					roomHTML += '<hr>';
+				}
+
+				// Exit Button
+				// If this is the entrance, show "Leave Building"
+				// If it's not the entrance but has no other connections, show "Leave Building" (fallback)
+				if (targetRoom.isEntrance) {
+					roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+				} else {
+					// Optional: Add a "Return to Entrance" button if not directly connected?
+					// For now, assume rooms are connected in a way that allows backtracking.
+					// If deep in a dungeon building, user might want to leave immediately?
+					// Let's keep it simple: if not entrance, you rely on connections.
+					// BUT, let's add a safety "Leave Building" always visible at bottom or just rely on connections.
+					// Standard RPGs usually require walking back.
+					// Let's add a "Leave Building" button ONLY if isEntrance is true.
+					// Actually, if there are NO connections, we might be stuck, so add Leave.
+					if (!targetRoom.connectedRooms || targetRoom.connectedRooms.length === 0) {
+						roomHTML += `<p><button name="send" value="/rpg explore" class="button">← Leave Building</button></p></div>`;
+					} else {
+						roomHTML += `</div>`; // Close div
+					}
+				}
+
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${roomHTML}`);
+			}
+
+			// ============================================================
+			// LEGACY / SINGLE ROOM BUILDING LOGIC
+			// ============================================================
 
 			// --- Generate Building UI ---
 			let buildingHTML = `<div class="rpg-infobox"><div class="rpg-text-center"><h2><b>${building.name}</b></h2><p><em>${building.description}</em></p></div><hr>`;

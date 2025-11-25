@@ -434,6 +434,32 @@ export interface LocationConnection {
 	blockMessage?: string;
 }
 
+export interface BuildingRoom {
+	id: string;
+	name: string;
+	description: string;
+	npcs?: string[];
+	trainers?: string[];
+
+	// Access Control
+	requiredFlag?: string | string[];
+	requiredBadge?: string | string[];
+	preventIfFlag?: string | string[];
+	blockMessage?: string;
+
+	// State Change
+	setFlag?: string | string[];
+	removeFlag?: string | string[];
+
+	// Navigation
+	connectedRooms?: string[]; // IDs of other rooms in this building
+	isEntrance?: boolean;
+
+	// Features
+	type?: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
+	gymLeaderId?: string;
+}
+
 export interface Building {
 	id: string;
 	type: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
@@ -452,6 +478,8 @@ export interface Building {
 	
 	gymLeaderId?: string;
 	trainers?: string[]; // NEW: List of trainer IDs in this building
+
+	rooms?: BuildingRoom[]; // NEW: Multiple rooms support
 }
 
 export interface Location {

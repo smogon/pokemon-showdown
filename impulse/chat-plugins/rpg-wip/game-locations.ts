@@ -66,14 +66,61 @@ export const LOCATIONS: Record<string, any> = {
 				requiredFlag: 'security_cleared',
 				blockMessage: 'The Security Guard is blocking the door. Defeat him outside to enter!',
 				gymLeaderId: 'dojomaster',
-				// NEW: Gym Configuration
-				npcs: ['dojoguide'],
-				trainers: ['blackbelt'],
-			},
-		],
-		encounterZones: [],
-	},
-	'route101': {
+				                // NEW: Gym Configuration
+				                npcs: ['dojoguide'],
+				                trainers: ['blackbelt'],
+				            },
+				            {
+				                id: 'rockethideout',
+				                name: 'Rocket Hideout',
+				                type: 'misc',
+				                description: 'A suspicious looking warehouse.',
+				                accessible: true,
+				                rooms: [
+				                    {
+				                        id: 'floor1',
+				                        name: 'Floor 1 - Storage',
+				                        description: 'Crates are piled everywhere. Two guards are patrolling.',
+				                        isEntrance: true,
+				                        connectedRooms: ['floor2'],
+				                        npcs: ['rocketguard'],
+				                        trainers: ['rocketgrunt_1a', 'rocketgrunt_1b'],
+				                    },
+				                    {
+				                        id: 'floor2',
+				                        name: 'Floor 2 - Lab',
+				                        description: 'Strange chemical smells fill the air.',
+				                        connectedRooms: ['floor1', 'office'],
+				                        trainers: ['rocketgrunt_2'],
+				                        // ACCESS CONTROL: Requires defeating both Floor 1 trainers
+				                        requiredFlag: ['hideout_1a_clear', 'hideout_1b_clear'],
+				                        blockMessage: 'The gate is locked electronically. It seems linked to the biometrics of the guards downstairs.',
+				                    },
+				                    					{
+				                    						id: 'office',
+				                    						name: 'Admin Office',
+				                    						description: 'A lavish office overlooking the operation.',
+				                    						connectedRooms: ['floor2'],
+				                    						trainers: ['rocketadmin'],
+				                    						// ACCESS CONTROL: Requires defeating Floor 2 trainer
+				                    						requiredFlag: ['hideout_2_clear'],
+				                    						blockMessage: 'The heavy oak door is locked. You need the key card from the Floor 2 guard.',
+				                    					}
+				                    				]
+				                    			},
+				                    			{
+				                    				id: 'oldhouse',
+				                    				name: 'Old House (Legacy Demo)',
+				                    				type: 'misc',
+				                    				description: 'A dusty old house with a single room.',
+				                    				accessible: true,
+				                    				// LEGACY SINGLE-FLOOR CONFIGURATION
+				                    				npcs: ['guide'],
+				                    				trainers: [],
+				                    			},
+				                    		],
+				                    		encounterZones: [],
+				                    	},	'route101': {
 		id: 'route101',
 		name: 'Route 101',
 		type: 'route',

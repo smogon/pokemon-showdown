@@ -513,15 +513,28 @@ export function generateBattleHTML(
 
 				if (location && location.buildings) {
 					for (const building of location.buildings) {
-						// Check if the trainer is in this building's trainer list
+						// 1. Check Building-level trainers
 						if (building.trainers && building.trainers.includes(battle.trainerId)) {
 							continueCommand = `/rpg building ${toID(building.id)}`;
 							break;
 						}
-						// Also check if it's the Gym Leader for this building
+						// 2. Check Building-level Gym Leader
 						if (building.gymLeaderId === battle.trainerId) {
 							continueCommand = `/rpg building ${toID(building.id)}`;
 							break;
+						}
+						// 3. Check Room-level trainers and leaders
+						if (building.rooms) {
+							for (const room of building.rooms) {
+								if (room.trainers && room.trainers.includes(battle.trainerId)) {
+									continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
+									break;
+								}
+								if (room.gymLeaderId === battle.trainerId) {
+									continueCommand = `/rpg building ${toID(building.id)} ${toID(room.id)}`;
+									break;
+								}
+							}
 						}
 					}
 				}

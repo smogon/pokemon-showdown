@@ -41,6 +41,12 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		action: {
 			type: 'heal',
 		},
+	},
+	'rocketguard': {
+		id: 'rocketguard',
+		name: 'Suspicious Guard',
+		location: 'newbarktown', // Logically inside hideout
+		dialogue: "This is private property! Get lost!",
 	}
 };
 
@@ -49,6 +55,63 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 // ============================================================================
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
+	// Rocket Hideout Trainers
+	'rocketgrunt_1a': {
+		name: 'Rocket Grunt (Mike)',
+		money: 300,
+		party: [
+			{ species: 'rattata', level: 10, moves: ['tackle', 'bite'] },
+			{ species: 'zubat', level: 10, moves: ['supersonic', 'astonish'] },
+		],
+		dialogue: {
+			start: "Intruder! Alert!",
+			win: "My radio... it's broken!",
+			lose: "Scram, kid!",
+		},
+		setFlag: 'hideout_1a_clear',
+	},
+	'rocketgrunt_1b': {
+		name: 'Rocket Grunt (Steve)',
+		money: 300,
+		party: [
+			{ species: 'koffing', level: 11, moves: ['smog', 'tackle'] },
+		],
+		dialogue: {
+			start: "You're not going anywhere!",
+			win: "I failed...",
+			lose: "Team Rocket is unstoppable!",
+		},
+		setFlag: 'hideout_1b_clear',
+	},
+	'rocketgrunt_2': {
+		name: 'Rocket Grunt (Sarah)',
+		money: 400,
+		party: [
+			{ species: 'ekans', level: 13, moves: ['wrap', 'poisonsting'] },
+			{ species: 'grimer', level: 13, moves: ['pound', 'poisongas'] },
+		],
+		dialogue: {
+			start: "How did you get past the others?",
+			win: "The Admin will crush you!",
+			lose: "Go back home!",
+		},
+		setFlag: 'hideout_2_clear',
+	},
+	'rocketadmin': {
+		name: 'Admin Viper',
+		money: 1000,
+		party: [
+			{ species: 'arbok', level: 16, moves: ['bite', 'glare', 'poisonsting'] },
+			{ species: 'weezing', level: 16, moves: ['sludge', 'smokescreen', 'tackle'] },
+		],
+		dialogue: {
+			start: "So, a child thinks they can stop us? Amusing.",
+			win: "Impossible! My plans!",
+			lose: "As expected. Weak.",
+		},
+		setFlag: 'hideout_cleared',
+	},
+
 	// 1. The Gatekeeper
 	'securitybob': {
 		name: 'Security Bob',
