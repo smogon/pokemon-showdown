@@ -129,24 +129,23 @@ const randomMultiplier = Math.floor(Math.random() * 16 + 85) / 100;
 9. Burn modifier (if applicable)
 10. Final modifiers (Life Orb, etc.)
 
-#### RPG-WIP Order (in calculateDamage):
+#### RPG-WIP Order (in calculateDamage - Updated to Match):
 1. Add 2 to base damage
-2. Metronome item modifier
+2. Spread modifier (doubles)
 3. Screen modifiers (Reflect/Light Screen)
 4. Weather modifiers
-5. Terrain modifiers
-6. Ability damage modifiers
-7. Item damage modifiers
-8. STAB multiplier
-9. Type effectiveness (with berry reduction)
-10. Critical hit multiplier
-11. Random factor
-12. Spread multiplier
+5. Critical hit multiplier
+6. Random factor (0.85-1.00)
+7. STAB multiplier
+8. Type effectiveness (with berry reduction)
+9. Final modifiers (Terrain, Abilities, Items like Life Orb)
 
-**Analysis**: ⚠️ **ORDER DIFFERENCES**
-- The order of modifier application differs significantly
-- In actual games and Pokemon-Showdown, the order matters because rounding occurs after each step
-- RPG-WIP applies some modifiers in different positions which can cause small damage differences
+**Analysis**: ✅ **NOW MATCHING POKEMON-SHOWDOWN**
+- The modifier order has been updated to match pokemon-showdown's modifyDamage order
+- Spread modifier is now applied first after base damage
+- Critical hit is applied before random factor (matching games)
+- STAB and type effectiveness come after random factor
+- Final modifiers (terrain, abilities, items) are applied last
 
 ### 6. Critical Hit Multiplier
 
@@ -236,14 +235,15 @@ Does not explicitly apply 16-bit truncation.
 | Critical Hit | 1.5x (Gen 6+) | 1.5x | ✅ |
 | STAB | 1.5x | 1.5x | ✅ |
 | Type Effectiveness | Correct | Correct | ✅ |
-| Modifier Order | Official Order | Custom Order | ⚠️ |
+| Modifier Order | Official Order | Matching Order | ✅ |
 | 16-bit Truncation | Yes | No | ❌ |
+| End-of-Turn Order | Official Order | Matching Order | ✅ |
 
 ## Recommendations
 
 1. **Optional Enhancement**: Consider implementing the 4096-based modifier system for better accuracy with chained modifiers. However, this is only necessary for competitive accuracy.
 
-2. **Optional Enhancement**: Review modifier application order to match the official games more closely. The current order works but may produce slightly different results.
+2. ~~**Optional Enhancement**: Review modifier application order to match the official games more closely.~~ **COMPLETED** - Modifier order now matches pokemon-showdown.
 
 3. **Low Priority**: Add 16-bit truncation at the final step for edge case handling (extremely high damage values).
 
@@ -251,18 +251,16 @@ Does not explicitly apply 16-bit truncation.
 
 ## Detailed Implementation Comparison
 
-### RPG-WIP Modifier Application Order (battle-core.ts lines 824-834):
-1. Screen modifiers (Reflect/Light Screen/Aurora Veil) - via `applyFinalDamageModifiers`
-2. Weather modifiers (Sun/Rain) - via `applyFinalDamageModifiers`
-3. Terrain modifiers - via `applyFinalDamageModifiers`
-4. Mud Sport/Water Sport - via `applyFinalDamageModifiers`
-5. Ability damage modifiers - via `applyFinalDamageModifiers`
-6. Item damage modifiers (Life Orb, type boosters) - via `applyFinalDamageModifiers`
-7. STAB multiplier - `damage = pokeRound(damage * stabMultiplier)`
-8. Type effectiveness - `damage = Math.floor(damage * effectivenessMultiplier)`
-9. Critical hit - `damage = pokeRound(damage * criticalMultiplier)`
-10. Random factor - `damage = Math.floor(damage * randomMultiplier)`
-11. Spread damage - `damage = pokeRound(damage * spreadMultiplier)`
+### RPG-WIP Modifier Application Order (Updated - battle-core.ts):
+1. +2 to base damage
+2. Spread modifier (doubles battles)
+3. Screen modifiers (Reflect/Light Screen/Aurora Veil)
+4. Weather modifier (Sun/Rain)
+5. Critical hit multiplier
+6. Random factor (85-100%)
+7. STAB multiplier
+8. Type effectiveness
+9. Final modifiers (Terrain, Abilities, Items like Life Orb)
 
 ### Pokemon-Showdown Modifier Application Order (battle-actions.ts):
 1. +2 to base damage
@@ -277,13 +275,25 @@ Does not explicitly apply 16-bit truncation.
 10. Final modifiers (Life Orb, etc. via ModifyDamage event)
 11. 16-bit truncation
 
+### End-of-Turn (Residual) Order - Now Matching Pokemon-Showdown:
+| Order | Pokemon-Showdown | RPG-WIP |
+|-------|------------------|---------|
+| 1 | Field effects (weather, terrain) | Field effects (weather, terrain) |
+| 3 | Future Sight/Doom Desire | Future Sight/Doom Desire |
+| 5 | Leftovers, Aqua Ring, Ingrain | Leftovers, Aqua Ring, Ingrain, Leech Seed |
+| 9 | Poison/Toxic damage | Poison/Toxic damage |
+| 10 | Burn damage | Burn damage |
+| 13 | Partial trapping | Partial trapping (Curse, Nightmare) |
+| 28-29 | Weather abilities, end-of-turn abilities | Decrement counters, end-of-turn abilities |
+
 ## Conclusion
 
-The rpg-wip battle simulator's damage formula is **fundamentally accurate** and follows the correct Gen 9 damage calculation formula. The main differences are implementation details:
+The rpg-wip battle simulator's damage formula is **fundamentally accurate** and follows the correct Gen 9 damage calculation formula. After recent updates:
 
-1. **Modifier precision**: Using direct multiplication instead of 4096-based arithmetic may cause 1-2 point differences in rare cases
-2. **Modifier order**: Slightly different application order may cause minor variations
-3. **16-bit overflow**: Missing truncation only affects extreme edge cases
+1. **Modifier order**: ✅ Now matches pokemon-showdown's modifyDamage order
+2. **End-of-turn order**: ✅ Now matches pokemon-showdown's residual order
+3. **Modifier precision**: Using direct multiplication instead of 4096-based arithmetic may cause 1-2 point differences in rare cases
+4. **16-bit overflow**: Missing truncation only affects extreme edge cases (damage > 65535)
 
 **For a single-player RPG experience, these differences are negligible and the simulator provides an authentic Pokémon battle experience.** The implementation correctly handles:
 
@@ -296,5 +306,6 @@ The rpg-wip battle simulator's damage formula is **fundamentally accurate** and 
 - Critical hits with proper multipliers
 - Random damage factor (85-100%)
 - All major held items (Life Orb, Choice items, type boosters, etc.)
+- End-of-turn effects in the correct order (weather damage, status damage, healing, etc.)
 
 The rpg-wip simulator is well-suited for its purpose and provides accurate battle mechanics for a Pokémon RPG experience.
