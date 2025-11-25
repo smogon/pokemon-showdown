@@ -32,6 +32,7 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 				requiredBadges: 0,
 				items: [
 					'pokeball',
+					'expcandyxl', // For Testing
 					'potion',
 					'antidote',
 					'paralyzeheal',
