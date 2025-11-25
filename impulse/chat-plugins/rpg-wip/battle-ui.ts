@@ -300,28 +300,28 @@ export function generateFieldEffectTags(battle: BattleState): string {
 	const tagClass = 'rpg-field-effect-tag';
 
 	if (battle.trickRoomTurns > 0) {
-		effects.push(`<span class="${tagClass}">Trick Room (${battle.trickRoomTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-trickroom">Trick Room (${battle.trickRoomTurns})</span>`);
 	}
 	if (battle.magicRoomTurns > 0) {
-		effects.push(`<span class="${tagClass}">Magic Room (${battle.magicRoomTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-magicroom">Magic Room (${battle.magicRoomTurns})</span>`);
 	}
 	if (battle.wonderRoomTurns > 0) {
-		effects.push(`<span class="${tagClass}">Wonder Room (${battle.wonderRoomTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-wonderroom">Wonder Room (${battle.wonderRoomTurns})</span>`);
 	}
 	if (battle.gravityTurns > 0) {
-		effects.push(`<span class="${tagClass}">Gravity (${battle.gravityTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-gravity">Gravity (${battle.gravityTurns})</span>`);
 	}
 	if (battle.mudSportTurns > 0) {
-		effects.push(`<span class="${tagClass}">Mud Sport (${battle.mudSportTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-mudsport">Mud Sport (${battle.mudSportTurns})</span>`);
 	}
 	if (battle.waterSportTurns > 0) {
-		effects.push(`<span class="${tagClass}">Water Sport (${battle.waterSportTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-watersport">Water Sport (${battle.waterSportTurns})</span>`);
 	}
 	if (battle.fairyLockTurns > 0) {
-		effects.push(`<span class="${tagClass}">Fairy Lock (${battle.fairyLockTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-fairylock">Fairy Lock (${battle.fairyLockTurns})</span>`);
 	}
 	if (battle.ionDelugeTurns > 0) {
-		effects.push(`<span class="${tagClass}">Ion Deluge (${battle.ionDelugeTurns})</span>`);
+		effects.push(`<span class="${tagClass} rpg-field-iondeluge">Ion Deluge (${battle.ionDelugeTurns})</span>`);
 	}
 
 	return effects.join('');
