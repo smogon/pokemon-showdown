@@ -309,3 +309,119 @@ The rpg-wip battle simulator's damage formula is **fundamentally accurate** and 
 - End-of-turn effects in the correct order (weather damage, status damage, healing, etc.)
 
 The rpg-wip simulator is well-suited for its purpose and provides accurate battle mechanics for a Pokémon RPG experience.
+
+---
+
+## Full Battle Simulator Accuracy Analysis
+
+### Battle Mechanics Comparison
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Damage Formula** | `tr(tr(tr(tr(2*level/5+2)*bp*atk)/def)/50)+2` | Same formula with `Math.floor` | ✅ Accurate |
+| **Modifier Order** | Spread→Screen→Weather→Crit→Random→STAB→Type→Final | Same order after update | ✅ Accurate |
+| **End-of-Turn Order** | Residual order 1→3→5→9-10→13→28-29 | Same order after update | ✅ Accurate |
+| **Stat Stages** | (2+n)/2 for positive, 2/(2+n) for negative | Same formula | ✅ Accurate |
+| **STAB Multiplier** | 1.5x (2.0x Adaptability, 2.0x/2.25x Tera) | Same implementation | ✅ Accurate |
+| **Type Chart** | All 18 types with Gen 6+ effectiveness | Same chart | ✅ Accurate |
+
+### Priority System
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Move Priority** | -7 to +5 range | Same range supported | ✅ Accurate |
+| **Prankster** | +1 priority for Status moves | Implemented | ✅ Accurate |
+| **Gale Wings** | +1 priority for Flying at full HP | Implemented | ✅ Accurate |
+| **Triage** | +3 priority for healing moves | Implemented | ✅ Accurate |
+| **Speed Ties** | Random 50/50 | Uses `Math.random()` | ✅ Accurate |
+| **Quick Claw** | 20% chance to go first | Implemented | ✅ Accurate |
+| **Trick Room** | Slower moves first | Implemented | ✅ Accurate |
+
+### Status Conditions
+
+| Status | Pokemon-Showdown | RPG-WIP | Accuracy |
+|--------|------------------|---------|----------|
+| **Burn** | 1/16 HP, -50% Physical Atk | Same mechanics | ✅ Accurate |
+| **Poison** | 1/8 HP per turn | Same damage | ✅ Accurate |
+| **Toxic** | N/16 HP, escalating | Same mechanics | ✅ Accurate |
+| **Paralysis** | 25% fail, -50% Speed | Same mechanics | ✅ Accurate |
+| **Sleep** | 1-3 turns duration | Same mechanics | ✅ Accurate |
+| **Freeze** | 20% thaw chance | Same mechanics | ✅ Accurate |
+
+### Abilities (Sample Coverage)
+
+| Category | Examples Implemented | Accuracy |
+|----------|---------------------|----------|
+| **Type Immunities** | Levitate, Water Absorb, Flash Fire, Motor Drive, Sap Sipper | ✅ Accurate |
+| **Stat Modifiers** | Huge Power, Pure Power, Hustle, Defeatist | ✅ Accurate |
+| **Weather** | Drought, Drizzle, Sand Stream, Snow Warning | ✅ Accurate |
+| **Priority** | Prankster, Gale Wings, Triage | ✅ Accurate |
+| **Damage Reduction** | Filter, Solid Rock, Multiscale | ✅ Accurate |
+| **Contact Effects** | Static, Flame Body, Rough Skin, Iron Barbs | ✅ Accurate |
+| **Mold Breaker** | Ignores target abilities correctly | ✅ Accurate |
+
+### Items (Sample Coverage)
+
+| Category | Examples Implemented | Accuracy |
+|----------|---------------------|----------|
+| **Damage Boost** | Life Orb (1.3x), Choice Band/Specs (1.5x) | ✅ Accurate |
+| **Type Boost** | Charcoal, Mystic Water, etc. (1.2x) | ✅ Accurate |
+| **Speed** | Choice Scarf (1.5x), Quick Claw | ✅ Accurate |
+| **Berries** | Type resist berries, Pinch berries | ✅ Accurate |
+| **Hold Items** | Leftovers (1/16 heal), Eviolite | ✅ Accurate |
+
+### Weather and Terrain
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Sun** | 1.5x Fire, 0.5x Water | Same | ✅ Accurate |
+| **Rain** | 1.5x Water, 0.5x Fire | Same | ✅ Accurate |
+| **Sand** | 1/16 damage, 1.5x Rock SpD | Same | ✅ Accurate |
+| **Snow** | 1.5x Ice Def | Same | ✅ Accurate |
+| **Electric Terrain** | 1.3x Electric, no Sleep | Same | ✅ Accurate |
+| **Grassy Terrain** | 1.3x Grass, 1/16 heal, 0.5x ground | Same | ✅ Accurate |
+| **Psychic Terrain** | 1.3x Psychic, blocks priority | Same | ✅ Accurate |
+| **Misty Terrain** | 0.5x Dragon, no status | Same | ✅ Accurate |
+
+### Move Mechanics
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Multi-hit** | 2-5 hits distribution | Skill Link and Loaded Dice supported | ✅ Accurate |
+| **Variable BP** | Reversal, Flail, Eruption, etc. | Same formulas | ✅ Accurate |
+| **Protect** | Decreasing success rate | Implemented correctly | ✅ Accurate |
+| **Substitute** | 25% HP, blocks most moves | Implemented | ✅ Accurate |
+| **Accuracy** | Stage multipliers, weather effects | Same calculations | ✅ Accurate |
+
+### Battle Flow
+
+| Feature | Pokemon-Showdown | RPG-WIP | Accuracy |
+|---------|------------------|---------|----------|
+| **Turn Order** | Priority → Speed → Random | Same order | ✅ Accurate |
+| **Action Queue** | Dynamic re-sorting | Implemented | ✅ Accurate |
+| **Switch Priority** | Higher than most moves | Same (priority 6) | ✅ Accurate |
+
+### Minor Differences (Low Impact)
+
+| Area | Difference | Impact |
+|------|------------|--------|
+| **Modifier Precision** | PS uses 4096-based arithmetic; RPG-WIP uses direct multiplication | ±1-2 damage in edge cases |
+| **16-bit Truncation** | PS applies; RPG-WIP does not | Only affects damage >65535 |
+| **Complex Interactions** | Some niche ability/item combos may not be implemented | Negligible for normal play |
+
+---
+
+## Summary
+
+The rpg-wip battle simulator is **highly accurate** compared to pokemon-showdown:
+
+- ✅ **Core mechanics**: Damage formula, stat stages, type chart - all match exactly
+- ✅ **Priority system**: Full implementation including Prankster, Gale Wings, Triage
+- ✅ **Status conditions**: All major statuses with correct damage/effects
+- ✅ **Abilities**: Extensive coverage of Gen 9 abilities
+- ✅ **Items**: All major held items implemented correctly
+- ✅ **Weather/Terrain**: All 4 weather types and 4 terrains with correct modifiers
+- ✅ **Move mechanics**: Variable BP, multi-hit, Protect, Substitute all working
+- ✅ **Battle flow**: Correct turn order and priority handling
+
+**The simulator is well-suited for a single-player RPG experience and provides authentic Pokémon battle mechanics.**
