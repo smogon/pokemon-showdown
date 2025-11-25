@@ -95,7 +95,7 @@ export function generateBattleMoveSelectionHTML(
 		moveButtonsHTML += '</tr>';
 		moveButtonsHTML += '</table>';
 	} else {
-		const canTerastallize = !battle.playerTerastallizeUsed && !slot.terastallized;
+		const canTerastallize = !battle.playerSide.terastallizeUsed && !slot.terastallized;
 		const teraActive = teraToggled || false;
 
 		const moveButtons = pokemon.moves.map(move => {
@@ -158,7 +158,7 @@ export function generateAvailablePokemonListHTML(
 
 	let availableParty = partyToUse.filter(p =>
 		p.hp > 0 &&
-		!battle.playerSlots.some(s => s?.pokemon.id === p.id)
+		!battle.playerSide.slots.some(s => s?.pokemon.id === p.id)
 	);
 
 	if (additionalFilter) {
@@ -329,7 +329,7 @@ export function generateFieldEffectTags(battle: BattleState): string {
 
 export function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
 	const isDoubleBattle = battle.battleType.includes('double');
-	const [pSlot0, pSlot1] = battle.playerSlots;
+	const [pSlot0, pSlot1] = battle.playerSide.slots;
 
 	let activeSlot: ActivePokemonSlot | null = null;
 	let activeSlotIndex = -1;
@@ -359,8 +359,8 @@ export function generateBattleActionPanel(battle: BattleState, teraToggled?: boo
 }
 
 export function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
-	const [pSlot0, pSlot1] = battle.playerSlots;
-	const [oSlot0, oSlot1] = battle.opponentSlots;
+	const [pSlot0, pSlot1] = battle.playerSide.slots;
+	const [oSlot0, oSlot1] = battle.opponentSide.slots;
 	const move = getMove(targetSelection.moveId);
 	const teraText = targetSelection.shouldTerastallize ? ' (with Terastallization)' : '';
 
@@ -470,16 +470,16 @@ export function generateBattlefield(battle: BattleState, targetSelection?: { att
 	html += generateGlobalBattleConditionsHTML(battle);
 
 	html += '<div class="rpg-opponent-side">';
-	html += generateBattleSlot(battle.opponentSlots[0], 2, 'opponent');
+	html += generateBattleSlot(battle.opponentSide.slots[0], 2, 'opponent');
 	if (isDoubleBattle) {
-		html += generateBattleSlot(battle.opponentSlots[1], 3, 'opponent');
+		html += generateBattleSlot(battle.opponentSide.slots[1], 3, 'opponent');
 	}
 	html += '</div>';
 
 	html += '<div class="rpg-player-side">';
-	html += generateBattleSlot(battle.playerSlots[0], 0, 'player');
+	html += generateBattleSlot(battle.playerSide.slots[0], 0, 'player');
 	if (isDoubleBattle) {
-		html += generateBattleSlot(battle.playerSlots[1], 1, 'player');
+		html += generateBattleSlot(battle.playerSide.slots[1], 1, 'player');
 	}
 	html += '</div>';
 
@@ -576,7 +576,7 @@ export function generateBattleHTML(
 export function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="rpg-infobox"><h2>Choose a Pokémon to switch</h2>`;
 	const player = getPlayerData(battle.playerId);
-	const [pSlot0, pSlot1] = battle.playerSlots;
+	const [pSlot0, pSlot1] = battle.playerSide.slots;
 
 	let slotToSwitchOut: number;
 
@@ -598,7 +598,7 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 		}
 	}
 
-	const outgoingPokemon = battle.playerSlots[slotToSwitchOut]?.pokemon;
+	const outgoingPokemon = battle.playerSide.slots[slotToSwitchOut]?.pokemon;
 	if (!outgoingPokemon) {
 		return `<div class="rpg-infobox"><h2>Error: Invalid slot.</h2><p><button name="send" value="/rpg battleaction back" class="button">Back</button></p></div>`;
 	}
@@ -620,10 +620,10 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 
 	let slotToFill = -1;
 
-	if (battle.playerSlots[0] === null || (battle.playerSlots[0] && battle.playerSlots[0].pokemon.hp <= 0)) {
+	if (battle.playerSide.slots[0] === null || (battle.playerSide.slots[0] && battle.playerSide.slots[0].pokemon.hp <= 0)) {
 		slotToFill = 0;
-	} else if (isDoubleBattle && (battle.playerSlots[1] === null ||
-		(battle.playerSlots[1] && battle.playerSlots[1].pokemon.hp <= 0))) {
+	} else if (isDoubleBattle && (battle.playerSide.slots[1] === null ||
+		(battle.playerSide.slots[1] && battle.playerSide.slots[1].pokemon.hp <= 0))) {
 		slotToFill = 1;
 	}
 
@@ -650,7 +650,7 @@ export function generatePivotSwitchHTML(battle: BattleState, message: string, pi
 	const filter = (p: RPGPokemon) => p.id !== pivotingPokemon?.id;
 	html += generateAvailablePokemonListHTML(battle, player, commandPrefix, filter);
 
-	if (!battle.overridePlayerParty && player.party.filter(p => p.hp > 0 && p.id !== pivotingPokemon?.id && !battle.playerSlots.some(s => s?.pokemon.id === p.id)).length === 0) {
+	if (!battle.overridePlayerParty && player.party.filter(p => p.hp > 0 && p.id !== pivotingPokemon?.id && !battle.playerSide.slots.some(s => s?.pokemon.id === p.id)).length === 0) {
 		html += `<p><button name="send" value="/rpg battleaction forceswitch ${pivotSlotIndex} cancel" class="button">Continue</button></p>`;
 	}
 
@@ -670,7 +670,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	const pokeBalls = getAvailablePokeBalls(player);
 
 	const isDoubleBattle = battle.battleType.includes('double');
-	const activeOpponents = getActiveSlots(battle.opponentSlots);
+	const activeOpponents = getActiveSlots(battle.opponentSide.slots);
 
 	if (pokeBalls.length === 0) {
 		html += `<p>You have no Poke Balls!</p>`;
@@ -683,7 +683,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 			if (isDoubleBattle && activeOpponents.length > 1) {
 				command = `/rpg battleaction selectcatchtarget ${safeBallId}`;
 			} else if (isDoubleBattle && activeOpponents.length === 1) {
-				const targetSlot = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
+				const targetSlot = battle.opponentSide.slots.indexOf(activeOpponents[0]) + 2;
 				command = `/rpg battleaction catch ${safeBallId} ${targetSlot}`;
 			} else {
 				command = `/rpg battleaction catch ${safeBallId} 2`;
@@ -721,8 +721,8 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 	html += `<p>Choose which wild Pokémon to throw the ${ballName} at:</p>`;
 
 	let hasTargets = false;
-	for (let i = 0; i < battle.opponentSlots.length; i++) {
-		const slot = battle.opponentSlots[i];
+	for (let i = 0; i < battle.opponentSide.slots.length; i++) {
+		const slot = battle.opponentSide.slots[i];
 		if (!slot || slot.pokemon.hp <= 0) continue;
 
 		hasTargets = true;
@@ -863,8 +863,8 @@ export function generateBattleItemTargetHTML(battle: BattleState, player: Player
 	const isReviveItem = itemData?.effects?.revive || false;
 
 	// Show player's active Pokemon
-	for (let i = 0; i < battle.playerSlots.length; i++) {
-		const slot = battle.playerSlots[i];
+	for (let i = 0; i < battle.playerSide.slots.length; i++) {
+		const slot = battle.playerSide.slots[i];
 		if (!slot) continue;
 
 		const pokemon = slot.pokemon;

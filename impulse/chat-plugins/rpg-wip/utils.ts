@@ -188,7 +188,7 @@ export function applyStatChange(
 
 		// Mist protection
 		if (!isSelf) {
-			const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
+			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
 			const sideMist = isPlayer ? (battle as any).playerMistTurns : (battle as any).opponentMistTurns;
 
 			if (sideMist > 0) {
@@ -220,8 +220,8 @@ export function applyStatChange(
 		}
 		const species = Dex.species.get(pokemon.species);
 		if (species.types.includes('Grass')) {
-			const isPlayerPokemon = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-			const allies = isPlayerPokemon ? battle.playerSlots : battle.opponentSlots;
+			const isPlayerPokemon = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+			const allies = isPlayerPokemon ? battle.playerSide.slots : battle.opponentSide.slots;
 			if (allies.some(s => s && s.pokemon.hp > 0 && toID(s.pokemon.ability || '') === 'flowerveil' && s.pokemon.id !== pokemon.id)) {
 				const ignoresFlowerVeil = source && ['moldbreaker', 'teravolt', 'turboblaze'].includes(toID(source.pokemon.ability || ''));
 				if (!ignoresFlowerVeil) {
@@ -252,17 +252,17 @@ export function applyStatChange(
 
 		// Eject Pack Logic
 		if (battle.magicRoomTurns === 0 && pokemon.item === 'ejectpack' && !battle.pendingPivot && !battle.aiPendingPivot) {
-			let slotIndex = battle.playerSlots.indexOf(slot);
+			let slotIndex = battle.playerSide.slots.indexOf(slot);
 			let isPlayer = true;
 			if (slotIndex === -1) {
-				slotIndex = battle.opponentSlots.indexOf(slot);
+				slotIndex = battle.opponentSide.slots.indexOf(slot);
 				isPlayer = false;
 			}
 
 			if (slotIndex !== -1) {
 				// Check if there are available replacements before setting up pivot
 				const party = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
-				const slots = isPlayer ? battle.playerSlots : battle.opponentSlots;
+				const slots = isPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
 				const availableReplacements = party.filter(p =>
 					p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
@@ -276,10 +276,10 @@ export function applyStatChange(
 
 					if (isPlayer) {
 						battle.pendingPivot = { slotIndex, slot, isBatonPass: false };
-						battle.playerSlots[slotIndex as 0 | 1] = null;
+						battle.playerSide.slots[slotIndex as 0 | 1] = null;
 					} else {
 						battle.aiPendingPivot = { slotIndex, slot, isBatonPass: false };
-						battle.opponentSlots[slotIndex as 0 | 1] = null;
+						battle.opponentSide.slots[slotIndex as 0 | 1] = null;
 					}
 				}
 			}
@@ -406,10 +406,10 @@ export function getMoveTargets(attackerSlotIndex: number, targetSlotIndex: numbe
 
 export function getSlotFromIndex(battle: BattleState, slotIndex: number): ActivePokemonSlot | null {
 	let slot: ActivePokemonSlot | null = null;
-	if (slotIndex === 0) slot = battle.playerSlots[0];
-	else if (slotIndex === 1) slot = battle.playerSlots[1];
-	else if (slotIndex === 2) slot = battle.opponentSlots[0];
-	else if (slotIndex === 3) slot = battle.opponentSlots[1];
+	if (slotIndex === 0) slot = battle.playerSide.slots[0];
+	else if (slotIndex === 1) slot = battle.playerSide.slots[1];
+	else if (slotIndex === 2) slot = battle.opponentSide.slots[0];
+	else if (slotIndex === 3) slot = battle.opponentSide.slots[1];
 
 	if (slot && slot.pokemon.hp > 0) {
 		return slot;
@@ -421,8 +421,8 @@ export function checkTrappingAbility(
 	slotToSwitch: ActivePokemonSlot,
 	battle: BattleState
 ): ActivePokemonSlot | null {
-	const isPlayer = battle.playerSlots.includes(slotToSwitch);
-	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+	const isPlayer = battle.playerSide.slots.includes(slotToSwitch);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSide.slots : battle.playerSide.slots);
 	const userPokemon = slotToSwitch.pokemon;
 	const userAbility = toID(userPokemon.ability || '');
 	const userTypes = Dex.species.get(userPokemon.species).types;
@@ -471,8 +471,8 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 	// Handle status items immediately in case damage triggered them
 	checkStatusHealBerries(slot, battle, messageLog);
 
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+	const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
 		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
 	if (hasUnnerve && pokemon.item?.toLowerCase().includes('berry')) {
@@ -589,8 +589,8 @@ export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleSt
 	const item = pokemon.item;
 
 	// Check Unnerve
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === pokemon.id);
-	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
+	const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
 		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
 
@@ -652,8 +652,8 @@ export function handleLeppaBerry(slot: ActivePokemonSlot, battle: BattleState, m
 	if (!slot.pokemon.item || slot.pokemon.item !== 'leppaberry' || battle.magicRoomTurns > 0) return;
 
 	// Check Unnerve
-	const isPlayer = battle.playerSlots.some(s => s?.pokemon.id === slot.pokemon.id);
-	const opponents = isPlayer ? battle.opponentSlots : battle.playerSlots;
+	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === slot.pokemon.id);
+	const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
 		['unnerve', 'asoneglastrier', 'asonespectrier'].includes(toID(s.pokemon.ability || '')));
 	if (hasUnnerve) return;
@@ -775,8 +775,8 @@ export function checkMentalHerb(slot: ActivePokemonSlot, battle: BattleState, me
 export function handleMirrorHerb(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]): void {
 	if (battle.magicRoomTurns > 0 || slot.pokemon.item !== 'mirrorherb') return;
 
-	const isPlayer = battle.playerSlots.includes(slot);
-	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+	const isPlayer = battle.playerSide.slots.includes(slot);
+	const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSide.slots : battle.playerSide.slots);
 
 	let copiedAnyBoost = false;
 

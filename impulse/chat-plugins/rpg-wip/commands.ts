@@ -1724,7 +1724,7 @@ export const commands: ChatCommands = {
 
 				if (attackerSlotIndex !== 0 && attackerSlotIndex !== 1) return this.errorReply("Invalid attacker slot.");
 
-				const attackerSlot = battle.playerSlots[attackerSlotIndex];
+				const attackerSlot = battle.playerSide.slots[attackerSlotIndex];
 				if (!attackerSlot || attackerSlot.pokemon.hp <= 0) return this.errorReply("This Pokémon cannot move.");
 				if (battle.pendingActions[attackerSlotIndex]) return this.errorReply("Action already queued.");
 
@@ -1732,7 +1732,7 @@ export const commands: ChatCommands = {
 				if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
 
 				if (shouldTerastallize) {
-					if (battle.playerTerastallizeUsed) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+					if (battle.playerSide.terastallizeUsed) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
 					if (attackerSlot.terastallized) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Already Terastallized!"])}`);
 				}
 
@@ -1752,7 +1752,7 @@ export const commands: ChatCommands = {
 					[`${attackerSlot.pokemon.species} is ready to Terastallize and use ${moveData.name}!`] :
 					[`${attackerSlot.pokemon.species} is ready to use ${moveData.name}!`];
 
-				const activePlayerSlots = battle.playerSlots.filter(s => s && s.pokemon.hp > 0).length;
+				const activePlayerSlots = battle.playerSide.slots.filter(s => s && s.pokemon.hp > 0).length;
 				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
 
 				if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
@@ -1792,7 +1792,7 @@ export const commands: ChatCommands = {
 
 				if (pokemonId === 'cancel') {
 					if (battle.pendingPivot?.slotIndex === slotToFill) {
-						battle.playerSlots[slotToFill as 0 | 1] = battle.pendingPivot.slot;
+						battle.playerSide.slots[slotToFill as 0 | 1] = battle.pendingPivot.slot;
 						battle.pendingPivot = undefined;
 					}
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["The battle continues..."])}`);
@@ -1803,8 +1803,8 @@ export const commands: ChatCommands = {
 				const partyIndex = partyToUse.findIndex(p => p.id === pokemonId && p.hp > 0);
 
 				if (partyIndex === -1) return this.errorReply("Invalid Pokemon or it has fainted.");
-				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonId)) return this.errorReply("This Pokemon is already in battle.");
-				if (battle.playerSlots[slotToFill] !== null && !battle.pendingPivot) return this.errorReply("This slot is not empty.");
+				if (battle.playerSide.slots.some(s => s?.pokemon.id === pokemonId)) return this.errorReply("This Pokemon is already in battle.");
+				if (battle.playerSide.slots[slotToFill] !== null && !battle.pendingPivot) return this.errorReply("This slot is not empty.");
 
 				const nextPokemon = partyToUse[partyIndex];
 				const newSlot = createActivePokemonSlot(nextPokemon);
@@ -1821,7 +1821,7 @@ export const commands: ChatCommands = {
 					battle.pendingPivot = undefined;
 				}
 
-				battle.playerSlots[slotToFill as 0 | 1] = newSlot;
+				battle.playerSide.slots[slotToFill as 0 | 1] = newSlot;
 
 				const faintedOnEntry = applyHazardEffectsOnSwitchIn(newSlot, battle, true, messageLog);
 				if (faintedOnEntry) messageLog.push(`<span class="rpg-text-error"><strong>${newSlot.pokemon.species} fainted upon entry!</strong></span>`);
@@ -1829,8 +1829,8 @@ export const commands: ChatCommands = {
 
 				const isDoubleBattle = battle.battleType.includes('double');
 				const slotsToCheck = isDoubleBattle ? [0, 1] : [0];
-				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSlots[i] === null) &&
-					partyToUse.some(p => p.hp > 0 && !battle.playerSlots.some(s => s?.pokemon.id === p.id));
+				const needsAnotherSwitch = slotsToCheck.some(i => battle.playerSide.slots[i] === null) &&
+					partyToUse.some(p => p.hp > 0 && !battle.playerSide.slots.some(s => s?.pokemon.id === p.id));
 
 				if (needsAnotherSwitch) {
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
@@ -1849,7 +1849,7 @@ export const commands: ChatCommands = {
 
 				if (isNaN(slotToSwitchOut) || !pokemonIdIn) return this.errorReply("Invalid switch command.");
 
-				const outgoingSlot = battle.playerSlots[slotToSwitchOut];
+				const outgoingSlot = battle.playerSide.slots[slotToSwitchOut];
 				if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) return this.errorReply("Slot empty or fainted.");
 
 				const trappingPokemon = checkTrappingAbility(outgoingSlot, battle);
@@ -1862,7 +1862,7 @@ export const commands: ChatCommands = {
 				const incomingPokemon = partyToUse.find(p => p.id === pokemonIdIn && p.hp > 0);
 
 				if (!incomingPokemon) return this.errorReply("Invalid Pokemon.");
-				if (battle.playerSlots.some(s => s?.pokemon.id === pokemonIdIn)) return this.errorReply("Pokemon already in battle.");
+				if (battle.playerSide.slots.some(s => s?.pokemon.id === pokemonIdIn)) return this.errorReply("Pokemon already in battle.");
 
 				outgoingSlot.lockedMove = undefined;
 				outgoingSlot.lockedMoveCounter = 0;
@@ -1873,7 +1873,7 @@ export const commands: ChatCommands = {
 					pokemonId: outgoingSlot.pokemon.id,
 				};
 
-				const activePlayerSlots = getActiveSlots(battle.playerSlots).length;
+				const activePlayerSlots = getActiveSlots(battle.playerSide.slots).length;
 				const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
 
 				if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
@@ -1892,7 +1892,7 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Cannot catch in Battle Tower!"])}`);
 
 				if (battle.battleType.includes('double')) {
-					const activeOpponents = getActiveSlots(battle.opponentSlots);
+					const activeOpponents = getActiveSlots(battle.opponentSide.slots);
 					if (activeOpponents.length > 1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMultipleOpponentsCatchErrorHTML()}`);
 				}
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
@@ -1904,9 +1904,9 @@ export const commands: ChatCommands = {
 				if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
 
 				const ballId = toID(target);
-				const activeOpponents = getActiveSlots(battle.opponentSlots);
+				const activeOpponents = getActiveSlots(battle.opponentSide.slots);
 				if (activeOpponents.length === 1) {
-					const slotIndex = battle.opponentSlots.indexOf(activeOpponents[0]) + 2;
+					const slotIndex = battle.opponentSide.slots.indexOf(activeOpponents[0]) + 2;
 					return this.parse(`/rpg battleaction catch ${ballId} ${slotIndex}`);
 				}
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchTargetHTML(battle, ballId)}`);
@@ -1981,7 +1981,7 @@ export const commands: ChatCommands = {
 				if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from Battle Tower!"])}`);
 				if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from a Trainer!"])}`);
 
-				const playerSlots = getActiveSlots(battle.playerSlots);
+				const playerSlots = getActiveSlots(battle.playerSide.slots);
 				for (const slot of playerSlots) {
 					const trapping = checkTrappingAbility(slot, battle);
 					if (trapping) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Trapped by ${trapping.pokemon.ability}!`])}`);
@@ -2006,8 +2006,8 @@ export const commands: ChatCommands = {
 			back(target, room, user) {
 				const battle = activeBattles.get(user.id);
 				if (battle) {
-					for (let i = 0; i < battle.playerSlots.length; i++) {
-						if (battle.playerSlots[i] === null || battle.playerSlots[i]?.pokemon.hp === 0) delete battle.pendingActions[i];
+					for (let i = 0; i < battle.playerSide.slots.length; i++) {
+						if (battle.playerSide.slots[i] === null || battle.playerSide.slots[i]?.pokemon.hp === 0) delete battle.pendingActions[i];
 					}
 					this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
 				}
@@ -2087,7 +2087,7 @@ export const commands: ChatCommands = {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target slot!"])}`);
 				}
 
-				const targetSlot = battle.playerSlots[slotIndex];
+				const targetSlot = battle.playerSide.slots[slotIndex];
 				if (!targetSlot) {
 					return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["No Pokémon in that slot!"])}`);
 				}

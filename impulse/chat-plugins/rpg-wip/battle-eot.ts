@@ -9,7 +9,7 @@ import {
 } from './battle-core';
 
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
-	const allSlots = getActiveSlots([...battle.playerSlots, ...battle.opponentSlots]);
+	const allSlots = getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]);
 
 	// Pokemon-Showdown Residual Order:
 	// 1. Field effects (weather, terrain, screens, etc.) - onFieldResidualOrder: 1
@@ -26,10 +26,10 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 
 	// Order 3: Future Sight / Doom Desire
-	battle.playerFutureMoves = battle.playerFutureMoves.filter(fm => {
+	battle.playerSide.futureMoves = battle.playerSide.futureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
-			const targetSlot = battle.opponentSlots[fm.slotIndex];
+			const targetSlot = battle.opponentSide.slots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
@@ -54,10 +54,10 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
-	battle.opponentFutureMoves = battle.opponentFutureMoves.filter(fm => {
+	battle.opponentSide.futureMoves = battle.opponentSide.futureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
-			const targetSlot = battle.playerSlots[fm.slotIndex];
+			const targetSlot = battle.playerSide.slots[fm.slotIndex];
 			const moveName = fm.moveId === 'futuresight' ? 'Future Sight' : 'Doom Desire';
 			if (targetSlot && targetSlot.pokemon.hp > 0) {
 				messageLog.push(`<strong>${moveName}</strong> took effect!`);
@@ -281,29 +281,29 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		}
 	}
 
-	if (battle.playerReflectTurns > 0) {
-		battle.playerReflectTurns--;
-		if (battle.playerReflectTurns === 0) messageLog.push(`Your team's Reflect wore off!`);
+	if (battle.playerSide.reflectTurns > 0) {
+		battle.playerSide.reflectTurns--;
+		if (battle.playerSide.reflectTurns === 0) messageLog.push(`Your team's Reflect wore off!`);
 	}
-	if (battle.opponentReflectTurns > 0) {
-		battle.opponentReflectTurns--;
-		if (battle.opponentReflectTurns === 0) messageLog.push(`The opposing team's Reflect wore off!`);
+	if (battle.opponentSide.reflectTurns > 0) {
+		battle.opponentSide.reflectTurns--;
+		if (battle.opponentSide.reflectTurns === 0) messageLog.push(`The opposing team's Reflect wore off!`);
 	}
-	if (battle.playerLightScreenTurns > 0) {
-		battle.playerLightScreenTurns--;
-		if (battle.playerLightScreenTurns === 0) messageLog.push(`Your team's Light Screen wore off!`);
+	if (battle.playerSide.lightScreenTurns > 0) {
+		battle.playerSide.lightScreenTurns--;
+		if (battle.playerSide.lightScreenTurns === 0) messageLog.push(`Your team's Light Screen wore off!`);
 	}
-	if (battle.opponentLightScreenTurns > 0) {
-		battle.opponentLightScreenTurns--;
-		if (battle.opponentLightScreenTurns === 0) messageLog.push(`The opposing team's Light Screen wore off!`);
+	if (battle.opponentSide.lightScreenTurns > 0) {
+		battle.opponentSide.lightScreenTurns--;
+		if (battle.opponentSide.lightScreenTurns === 0) messageLog.push(`The opposing team's Light Screen wore off!`);
 	}
-	if (battle.playerAuroraVeilTurns > 0) {
-		battle.playerAuroraVeilTurns--;
-		if (battle.playerAuroraVeilTurns === 0) messageLog.push(`Your team's Aurora Veil wore off!`);
+	if (battle.playerSide.auroraVeilTurns > 0) {
+		battle.playerSide.auroraVeilTurns--;
+		if (battle.playerSide.auroraVeilTurns === 0) messageLog.push(`Your team's Aurora Veil wore off!`);
 	}
-	if (battle.opponentAuroraVeilTurns > 0) {
-		battle.opponentAuroraVeilTurns--;
-		if (battle.opponentAuroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
+	if (battle.opponentSide.auroraVeilTurns > 0) {
+		battle.opponentSide.auroraVeilTurns--;
+		if (battle.opponentSide.auroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
 	}
 
 	if ((battle as any).playerMistTurns > 0) {
@@ -369,13 +369,13 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 	}
 
 	// Tailwind Expiry (Step 1)
-	if (battle.playerTailwindTurns > 0) {
-		battle.playerTailwindTurns--;
-		if (battle.playerTailwindTurns === 0) messageLog.push(`Your team's Tailwind petered out!`);
+	if (battle.playerSide.tailwindTurns > 0) {
+		battle.playerSide.tailwindTurns--;
+		if (battle.playerSide.tailwindTurns === 0) messageLog.push(`Your team's Tailwind petered out!`);
 	}
-	if (battle.opponentTailwindTurns > 0) {
-		battle.opponentTailwindTurns--;
-		if (battle.opponentTailwindTurns === 0) messageLog.push(`The opposing team's Tailwind petered out!`);
+	if (battle.opponentSide.tailwindTurns > 0) {
+		battle.opponentSide.tailwindTurns--;
+		if (battle.opponentSide.tailwindTurns === 0) messageLog.push(`The opposing team's Tailwind petered out!`);
 	}
 }
 
@@ -547,8 +547,8 @@ export function applyEOTLeechSeedDamage(slot: ActivePokemonSlot, battle: BattleS
 			pokemon.hp = Math.max(0, pokemon.hp - drainAmount);
 			messageLog.push(`${pokemon.species}'s health was sapped by Leech Seed!`);
 
-			const isPlayer = battle.playerSlots.includes(slot);
-			const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSlots : battle.playerSlots);
+			const isPlayer = battle.playerSide.slots.includes(slot);
+			const opponentSlots = getActiveSlots(isPlayer ? battle.opponentSide.slots : battle.playerSide.slots);
 			const opponentToHeal = opponentSlots[0];
 
 			if (opponentToHeal && opponentToHeal.pokemon.hp > 0 && (opponentToHeal.healBlockTurns || 0) <= 0) {
