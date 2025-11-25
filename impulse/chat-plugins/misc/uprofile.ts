@@ -13,11 +13,6 @@ import type { TcgUserProfile } from '../tcg/interface';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
-/**
- * Avatar to show for offline users
- */
-const OFFLINE_AVATAR = 'unknown';
-
 interface ProfileStatusDocument {
 	_id: string;
 	status: string;
@@ -46,7 +41,7 @@ function getAvatarDisplay(user: User | null): string {
 		avatar = user.avatar;
 	} else {
 		// User is offline - show 'unknown' avatar
-		avatar = OFFLINE_AVATAR;
+		avatar = 'unknown';
 	}
 
 	// Check if user has a custom avatar (file with extension)
