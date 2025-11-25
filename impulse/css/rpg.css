@@ -794,7 +794,19 @@
 .rpg-tag-frz { background-color: #98D8D8; color: #333; }
 .rpg-tag-confused { background-color: #E5597D; }
 .rpg-tag-seeded, .rpg-tag-ingrained { background-color: #78C850; }
-.rpg-tag-trapped, .rpg-tag-locked { background-color: #A8A878; }
+.rpg-tag-trapped, .rpg-tag-locked, .rpg-tag-grounded { background-color: #A8A878; }
+
+/* Volatile Statuses */
+.rpg-tag-cursed, .rpg-tag-nightmare, .rpg-tag-embargo { background-color: #4b4b4b; border-color: #2b2b2b; }
+.rpg-tag-taunted, .rpg-tag-tormented, .rpg-tag-rampage, .rpg-tag-uproar { background-color: #d63031; }
+.rpg-tag-substitute { background-color: #55efc4; color: #333; }
+.rpg-tag-disabled, .rpg-tag-encored, .rpg-tag-heal-block { background-color: #a29bfe; color: #333; }
+.rpg-tag-focus-energy, .rpg-tag-must-recharge, .rpg-tag-charging { background-color: #fdcb6e; color: #333; }
+.rpg-tag-aqua-ring, .rpg-tag-protected, .rpg-tag-helped { background-color: #74b9ff; }
+.rpg-tag-telekinesis, .rpg-tag-infatuated, .rpg-tag-destiny-bond, .rpg-tag-grudge { background-color: #e84393; }
+.rpg-tag-analytic, .rpg-tag-slow-start, .rpg-tag-unburden { background-color: #b2bec3; color: #333; }
+.rpg-tag-stockpile { background-color: #00b894; }
+.rpg-tag-attention { background-color: #fab1a0; color: #333; }
 
 .rpg-tag-tera {
     background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
@@ -847,6 +859,7 @@
 .rpg-weather-rain, .rpg-weather-heavy-rain { background-color: #5090D0; }
 .rpg-weather-sand { background-color: #D0A050; }
 .rpg-weather-hail { background-color: #80C0C0; }
+.rpg-weather-strong-winds { background-color: #00b894; }
 
 .rpg-terrain-electric { background-color: #F8D030; color: #333; }
 .rpg-terrain-grassy { background-color: #78C850; }
@@ -859,8 +872,23 @@
 .rpg-side-auroraveil { background-color: #6890F0; }
 .rpg-side-stealthrock { background-color: #B8A038; }
 .rpg-side-spikes { background-color: #A8A878; }
+.rpg-side-toxicspikes { background-color: #A040A0; }
+.rpg-side-stickyweb { background-color: #b2bec3; color: #333; }
 .rpg-side-mist { background-color: #A8B8C0; color: #333; }
 .rpg-side-tailwind { background-color: #87CEEB; color: #333; }
+.rpg-side-quickguard, .rpg-side-wideguard { background-color: #74b9ff; }
+.rpg-side-craftyshield { background-color: #ff7675; }
+
+
+/* --- Global Field Effects --- */
+.rpg-field-trickroom { background-color: #a29bfe; color: #333; }
+.rpg-field-magicroom { background-color: #fd79a8; color: #333; }
+.rpg-field-wonderroom { background-color: #74b9ff; color: #333; }
+.rpg-field-gravity { background-color: #636e72; }
+.rpg-field-mudsport { background-color: #e17055; }
+.rpg-field-watersport { background-color: #74b9ff; }
+.rpg-field-fairylock { background-color: #ff7675; }
+.rpg-field-iondeluge { background-color: #ffeaa7; color: #333; }
 
 
 /******************************************************************
