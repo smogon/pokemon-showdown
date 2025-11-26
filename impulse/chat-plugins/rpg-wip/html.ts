@@ -1154,7 +1154,7 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 		html += `<div class="rpg-notification">${notification}</div>`;
 	}
 
-	html += `<h2>Poké Mart - ${formatLocationWithTime(player.location)}</h2>` +
+	html += `<h2>Poké Mart - ${player.location}</h2>` +
 		`<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {
