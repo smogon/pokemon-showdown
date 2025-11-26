@@ -54,7 +54,7 @@ import { teraToggleState } from './battle-state';
  * Battle action commands namespace
  * These are all accessible via /rpg battleaction <subcommand>
  */
-export const battleActionCommands: ChatCommands = {
+export const battleActionCommands: Chat.ChatCommands = {
 	move(target, room, user) {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
