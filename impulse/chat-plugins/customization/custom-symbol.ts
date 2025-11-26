@@ -8,6 +8,7 @@ import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
+const BLOCKED_SYMBOLS = ['➦', '~', '&', '@', '%', '*', '+'];
 
 interface CustomSymbolDocument {
 	_id: string;
@@ -19,27 +20,43 @@ interface CustomSymbolDocument {
 
 const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
 
+const parseArgs = (target: string) => {
+	const [name, symbol] = target.split(',').map(s => s.trim());
+	return { name, userId: toID(name), symbol };
+};
+
+const validateSymbol = (symbol: string): { valid: boolean; error?: string } => {
+	if (!symbol || symbol.length !== 1) {
+		return { valid: false, error: 'Symbol must be a single character.' };
+	}
+	if (BLOCKED_SYMBOLS.includes(symbol)) {
+		return { valid: false, error: `The following symbols are blocked: ${BLOCKED_SYMBOLS.join(' ')}` };
+	}
+	return { valid: true };
+};
+
 const applyCustomSymbol = async (userid: string): Promise<void> => {
-	const user = Users.get(userid);
+	const user = Users.get(userid) as any;
 	if (!user) return;
 
 	const symbolDoc = await CustomSymbolDB.findOne(
 		{ _id: userid },
 		{ projection: { symbol: 1 } }
 	);
+
 	if (symbolDoc) {
-		if (!(user as any).originalGroup) (user as any).originalGroup = user.tempGroup;
-		(user as any).customSymbol = symbolDoc.symbol;
+		if (!user.originalGroup) user.originalGroup = user.tempGroup;
+		user.customSymbol = symbolDoc.symbol;
 		user.updateIdentity();
 	}
 };
 
 const removeCustomSymbol = (userid: string): void => {
-	const user = Users.get(userid);
+	const user = Users.get(userid) as any;
 	if (!user) return;
 
-	delete (user as any).customSymbol;
-	if ((user as any).originalGroup) delete (user as any).originalGroup;
+	delete user.customSymbol;
+	if (user.originalGroup) delete user.originalGroup;
 	user.updateIdentity();
 };
 
@@ -50,36 +67,29 @@ const sendSymbolNotifications = (
 	action: 'set' | 'updated' | 'removed'
 ): void => {
 	const userId = toID(targetName);
-	const staffNameColor = nameColor(staffUser.name, true, true);
-	const targetNameColor = nameColor(targetName, true, false);
+	const staffHtml = nameColor(staffUser.name, true, true);
+	const targetHtml = nameColor(targetName, true, false);
+	const user = Users.get(userId);
+	const room = Rooms.get(STAFF_ROOM_ID);
 
-	if (action !== 'removed') {
-		const user = Users.get(userId);
+	if (action === 'removed') {
 		if (user?.connected) {
-			const msg = `${staffNameColor} has ${action} your custom symbol to: <strong>${symbol}</strong>` +
-				`<br /><center>Refresh to see changes.</center>`;
-			user.popup(`|html|${msg}`);
+			user.popup(`|html|${staffHtml} has removed your custom symbol.<br /><center>Refresh to see changes.</center>`);
 		}
-
-		const room = Rooms.get(STAFF_ROOM_ID);
 		if (room) {
-			const msg = `${staffNameColor} ${action} custom symbol for ${targetNameColor}: ` +
-				`<strong>${symbol}</strong>`;
-			room.add(`|html|<div class="infobox">${msg}</div>`).update();
+			room.add(`|html|<div class="infobox">${staffHtml} removed custom symbol for ${targetHtml}.</div>`).update();
 		}
-	} else {
-		const user = Users.get(userId);
-		if (user?.connected) {
-			const msg = `${staffNameColor} has removed your custom symbol.` +
-				`<br /><center>Refresh to see changes.</center>`;
-			user.popup(`|html|${msg}`);
-		}
+		return;
+	}
 
-		const room = Rooms.get(STAFF_ROOM_ID);
-		if (room) {
-			const msg = `${staffNameColor} removed custom symbol for ${targetNameColor}.`;
-			room.add(`|html|<div class="infobox">${msg}</div>`).update();
-		}
+	if (user?.connected) {
+		const msg = `${staffHtml} has ${action} your custom symbol to: <strong>${symbol}</strong><br /><center>Refresh to see changes.</center>`;
+		user.popup(`|html|${msg}`);
+	}
+
+	if (room) {
+		const msg = `${staffHtml} ${action} custom symbol for ${targetHtml}: <strong>${symbol}</strong>`;
+		room.add(`|html|<div class="infobox">${msg}</div>`).update();
 	}
 };
 
@@ -87,23 +97,22 @@ export const commands: Chat.ChatCommands = {
 	customsymbol: 'symbol',
 	cs: 'symbol',
 	symbol: {
-		''(target, room, user): void {
+		''(target) {
 			this.parse('/symbolhelp');
 		},
 
-		async set(target, room, user): Promise<void> {
+		async set(target, room, user) {
 			this.checkCan('roomowner');
-			const [name, symbol] = target.split(',').map(s => s.trim());
-			if (!name || !symbol) return this.parse('/cs help');
+			const { name, userId, symbol } = parseArgs(target);
 
-			const userId = toID(name);
+			if (!name || !symbol) return this.parse('/cs help');
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
-			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
+
+			const validation = validateSymbol(symbol);
+			if (!validation.valid) return this.errorReply(validation.error!);
 
 			if (await CustomSymbolDB.exists({ _id: userId })) {
-				return this.errorReply(
-					'User already has symbol. Use /symbol update or /symbol delete.'
-				);
+				return this.errorReply('User already has symbol. Use /symbol update or /symbol delete.');
 			}
 
 			const now = new Date();
@@ -117,24 +126,23 @@ export const commands: Chat.ChatCommands = {
 
 			await applyCustomSymbol(userId);
 
-			const targetNameColor = nameColor(name, true, false);
-			this.sendReply(`|raw|You have given ${targetNameColor} the custom symbol: ${symbol}`);
-
+			const targetHtml = nameColor(name, true, false);
+			this.sendReply(`|raw|You have given ${targetHtml} the custom symbol: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'set');
 		},
 
-		async update(target, room, user): Promise<void> {
+		async update(target, room, user) {
 			this.checkCan('roomowner');
-			const [name, symbol] = target.split(',').map(s => s.trim());
+			const { name, userId, symbol } = parseArgs(target);
+
 			if (!name || !symbol) return this.parse('/sc help');
 
-			const userId = toID(name);
+			const validation = validateSymbol(symbol);
+			if (!validation.valid) return this.errorReply(validation.error!);
 
 			if (!await CustomSymbolDB.exists({ _id: userId })) {
 				return this.errorReply('User does not have symbol. Use /symbol set.');
 			}
-
-			if (symbol.length !== 1) return this.errorReply('Symbol must be a single character.');
 
 			await CustomSymbolDB.updateOne(
 				{ _id: userId },
@@ -142,13 +150,12 @@ export const commands: Chat.ChatCommands = {
 			);
 			await applyCustomSymbol(userId);
 
-			const targetNameColor = nameColor(name, true, false);
-			this.sendReply(`|raw|You have updated ${targetNameColor}'s custom symbol to: ${symbol}`);
-
+			const targetHtml = nameColor(name, true, false);
+			this.sendReply(`|raw|You have updated ${targetHtml}'s custom symbol to: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'updated');
 		},
 
-		async delete(target, room, user): Promise<void> {
+		async delete(target, room, user) {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
@@ -160,32 +167,28 @@ export const commands: Chat.ChatCommands = {
 			removeCustomSymbol(userId);
 
 			this.sendReply(`You removed ${target}'s custom symbol.`);
-
 			sendSymbolNotifications(user, target, '', 'removed');
 		},
 
-		help(): void {
+		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{
-					cmd: "/symbol set [user], [symbol]",
-					desc: "Set custom symbol. Requires: &.",
-				},
-				{
-					cmd: "/symbol update [user], [symbol]",
-					desc: "Update symbol. Requires: &.",
-				},
-				{
-					cmd: "/symbol delete [user]",
-					desc: "Remove custom symbol. Requires: &.",
-				},
+				{ cmd: "/symbol set [user], [symbol]", desc: "Set custom symbol. Requires: &." },
+				{ cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &." },
+				{ cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &." },
 			];
-			const html = `<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center>` +
-				`<hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
+			
+			const listHtml = helpList.map(({ cmd, desc }) => 
+				`<li><b>${cmd}</b> - ${desc}</li>`
+			).join('<hr>');
+
+			const html = [
+				`<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center>`,
+				`<hr><ul style="list-style-type:none;padding-left:0;">`,
+				listHtml,
+				`</ul><small>Blocked symbols: ${BLOCKED_SYMBOLS.join(' ')}</small>`
+			].join('');
+			
 			this.sendReplyBox(html);
 		},
 	},
@@ -197,6 +200,7 @@ export const loginfilter: Chat.LoginFilter = user => {
 	void applyCustomSymbol(user.id);
 };
 
+// Monkey Patching
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
@@ -204,6 +208,7 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 	if (!customSymbol) return originalGetIdentity.call(this, room);
 
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
+	
 	if (this.locked || this.namelocked) {
 		return (punishgroups.locked?.symbol || '\u203d') + this.name;
 	}
