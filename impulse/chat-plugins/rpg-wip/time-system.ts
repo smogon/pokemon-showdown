@@ -40,13 +40,14 @@ export function formatLocationWithTime(locationName: string): string {
 }
 
 /**
- * Gets an emoji representation of the current time period.
+ * Gets an emoji representation for a given time period.
+ * @param timePeriod The time period to get an emoji for. If not provided, uses current time.
  * @returns An emoji representing the time of day
  */
-export function getTimeEmoji(): string {
-	const timePeriod = getCurrentTimePeriod();
+export function getTimeEmoji(timePeriod?: TimePeriod): string {
+	const period = timePeriod ?? getCurrentTimePeriod();
 
-	switch (timePeriod) {
+	switch (period) {
 	case 'Morning':
 		return '🌅';
 	case 'Afternoon':
@@ -64,6 +65,6 @@ export function getTimeEmoji(): string {
  */
 export function getTimeInfo(): { period: TimePeriod, emoji: string } {
 	const period = getCurrentTimePeriod();
-	const emoji = getTimeEmoji();
+	const emoji = getTimeEmoji(period);
 	return { period, emoji };
 }
