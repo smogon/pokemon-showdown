@@ -978,7 +978,7 @@ export const commands: ChatCommands = {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
 
-				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${formatLocationWithTime(currentLocation.name)}</h2>`;
 				travelHTML += `<p>Where would you like to go?</p>`;
 
 				if (currentLocation.connectedLocations.length === 0) {
@@ -1132,7 +1132,7 @@ export const commands: ChatCommands = {
 			}
 
 			// No Event - Show Explore Screen
-			const msg = `You arrived at ${targetLocation.name}.`;
+			const msg = `You arrived at ${formatLocationWithTime(targetLocation.name)}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
 

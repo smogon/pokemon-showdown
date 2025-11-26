@@ -394,7 +394,7 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 		`<div>` +
 		`<h4>Adventure</h4>` +
 		`<div class="rpg-memo-box">` +
-		`<p><strong>Location:</strong><br>${player.location}</p>` +
+		`<p><strong>Location:</strong><br>${formatLocationWithTime(player.location)}</p>` +
 		`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
 		`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
 		`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
@@ -460,7 +460,7 @@ export function generateStoryModeStartHTML(): string {
 	}
 
 	return `<div class="rpg-infobox">` +
-		`<h2>Welcome to ${location.name}!</h2>` +
+		`<h2>Welcome to ${formatLocationWithTime(location.name)}!</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
 		`<p>Your adventure is about to begin.</p>` +
 		`<p>To get your first Pokémon partner, head to the lab!</p>` +
@@ -1151,7 +1151,7 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 		html += `<div class="rpg-notification">${notification}</div>`;
 	}
 
-	html += `<h2>Poké Mart - ${player.location}</h2>` +
+	html += `<h2>Poké Mart - ${formatLocationWithTime(player.location)}</h2>` +
 		`<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {
