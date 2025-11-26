@@ -28,7 +28,7 @@ import {
 	generateBattleTowerLossHTML,
 } from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
-import { teraToggleState, activeScriptedEvents } from './commands';
+import { teraToggleState, activeScriptedEvents } from './battle-state';
 import {
 	generateMoveLearnHTML,
 } from './html';

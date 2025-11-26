@@ -4,7 +4,7 @@ import type { RPGPokemon, PlayerData, BattleState, ActivePokemonSlot } from './i
 import { createSideState } from './interface';
 import { getMove, calculateStats, generateRandomTeam, createActivePokemonSlot } from './utils';
 import { createPokemon, activeBattles } from './core';
-import { teraToggleState } from './commands';
+import { teraToggleState } from './battle-state';
 
 export interface BattleTowerFormatConfig {
 	id: string;
