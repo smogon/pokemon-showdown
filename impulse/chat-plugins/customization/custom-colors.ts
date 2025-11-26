@@ -84,24 +84,20 @@ const notifyStaffRoom = (message: string) => {
 	}
 };
 
-const sendColorNotifications = (
-	user: User, 
-	targetName: string, 
-	color: string | null, 
-	action: 'set' | 'delete'
+const sendColorSetNotifications = (
+	setterUser: User,
+	targetName: string,
+	color: string
 ) => {
-	const userHtml = nameColor(user.name, true, true);
-	const targetHtml = nameColor(targetName, true, false);
-
-	if (action === 'set' && color) {
-		notifyStaffRoom(`${userHtml} set custom color for ${targetHtml} to ${color}.`);
-	} else if (action === 'delete') {
-		const targetUser = Users.get(targetName);
-		if (targetUser?.connected) {
-			targetUser.popup(`${user.name} removed your custom color.`);
-		}
-		notifyStaffRoom(`${userHtml} removed custom color for ${targetHtml}.`);
+	const targetUser = Users.get(targetName);
+	if (targetUser?.connected) {
+		const escapedName = Chat.escapeHTML(setterUser.name);
+		targetUser.popup(`|html|${escapedName} set your custom color to <font color="${color}">${color}</font>.`);
 	}
+
+	const userNameColor = nameColor(setterUser.name, true, true);
+	const targetNameColor = nameColor(targetName, true, false);
+	notifyStaffRoom(`${userNameColor} set custom color for ${targetNameColor} to ${color}.`);
 };
 
 export const commands: Chat.ChatCommands = {
