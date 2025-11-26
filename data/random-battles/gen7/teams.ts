@@ -1025,6 +1025,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -1083,7 +1085,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
 			(!counter.get('Physical') || (counter.get('Physical') <= 1 && (moves.has('foulplay') || moves.has('rapidspin')))) &&
-			!moves.has('copycat') && !moves.has('transform')
+			!moves.has('copycat') && !moves.has('transform') &&
+			!ruleTable.has('forceofthefallenmod')
 		) {
 			evs.atk = 0;
 			ivs.atk = 0;
@@ -1385,7 +1388,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
-
 		return pokemon;
 	}
 
