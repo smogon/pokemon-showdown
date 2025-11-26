@@ -334,6 +334,7 @@ export interface TrainerSpec {
 		item?: string,
 		evs?: Partial<{ hp: number, atk: number, def: number, spa: number, spd: number, spe: number }>,
 		ivs?: Partial<{ hp: number, atk: number, def: number, spa: number, spd: number, spe: number }>,
+		teraType?: string,
 	}[];
 	money: number;
 	dialogue?: {

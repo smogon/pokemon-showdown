@@ -1676,6 +1676,7 @@ export const commands: ChatCommands = {
 					});
 				}
 				if (spec.item) pokemon.item = spec.item;
+				if (spec.teraType) pokemon.teraType = spec.teraType;
 
 				// Apply custom EVs and IVs if provided
 				let needsStatRecalc = false;
