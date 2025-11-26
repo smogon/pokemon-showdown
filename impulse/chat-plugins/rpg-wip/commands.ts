@@ -104,7 +104,7 @@ import {
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
-import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime } from './time-system';
+import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime, isNPCAvailableByTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
@@ -1244,15 +1244,24 @@ export const commands: ChatCommands = {
 
 					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
-						roomHTML += `<hr /><strong>People Here:</strong><br><p class="rpg-text-center">`;
-						for (const npcId of roomToRender.npcs) {
+						// Filter NPCs by time availability
+						const availableNPCsInRoom = roomToRender.npcs.filter((npcId: string) => {
 							const npc = NPC_DATABASE[npcId];
-							if (npc) {
-								if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-								roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button" style="${btnStyle}">💬 ${npc.name}</button>`;
+							if (!npc) return false;
+							if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) return false;
+							return isNPCAvailableByTime(npc);
+						});
+
+						if (availableNPCsInRoom.length > 0) {
+							roomHTML += `<hr /><strong>People Here:</strong><br><p class="rpg-text-center">`;
+							for (const npcId of availableNPCsInRoom) {
+								const npc = NPC_DATABASE[npcId];
+								if (npc) {
+									roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button" style="${btnStyle}">💬 ${npc.name}</button>`;
+								}
 							}
+							roomHTML += `</p>`;
 						}
-						roomHTML += `</p>`;
 					}
 
 					// Trainers in Room
@@ -2299,6 +2308,9 @@ export const commands: ChatCommands = {
 
 				for (const [id, npc] of Object.entries(NPC_DATABASE)) {
 					const npcLocationId = toID(npc.location);
+					// Check time-based availability first
+					if (!isNPCAvailableByTime(npc)) continue;
+
 					if (npcLocationId === currentLocationId) {
 						if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
 					} else if (currentLocation?.buildings) {
@@ -2324,6 +2336,8 @@ export const commands: ChatCommands = {
 			const npc = NPC_DATABASE[npcId];
 			if (!npc) return this.errorReply("That NPC doesn't exist.");
 			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) return this.errorReply("Cannot talk to this NPC yet.");
+			// Check time-based availability
+			if (!isNPCAvailableByTime(npc)) return this.errorReply("This NPC is not available at this time.");
 
 			// Security check: Ensure player is in the same location as the NPC
 			const playerLocId = toID(player.location);

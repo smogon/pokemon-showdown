@@ -9,7 +9,7 @@
  * - Night: 8:00 PM - 5:59 AM
  */
 
-import type { EncounterZone, TrainerSpec, TimeAvailability } from './interface';
+import type { EncounterZone, TrainerSpec, TimeAvailability, NPCData } from './interface';
 
 export type TimePeriod = 'Morning' | 'Afternoon' | 'Evening' | 'Night';
 
@@ -142,4 +142,16 @@ export function isAvailableByTime(availability?: TimeAvailability): boolean {
 	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
 
 	return availability[timeKey] === true;
+}
+
+/**
+ * Checks if an NPC is available at the current time of day.
+ * If the NPC has no time restrictions (no availableByTime), they are always available.
+ * If availableByTime is defined, the NPC is only available during the specified times.
+ *
+ * @param npc The NPC data to check
+ * @returns True if the NPC is available at the current time
+ */
+export function isNPCAvailableByTime(npc: NPCData): boolean {
+	return isAvailableByTime(npc.availableByTime);
 }

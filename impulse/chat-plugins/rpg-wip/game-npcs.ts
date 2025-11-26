@@ -25,6 +25,13 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		name: 'Town Guide',
 		location: 'newbarktown',
 		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in! You should go to the Lab to get a Pokémon first.",
+		// Example: Town Guide is only available during daytime
+		availableByTime: {
+			morning: true,
+			afternoon: true,
+			evening: true,
+			night: false, // Goes home at night
+		},
 	},
 	// NEW: The Gym Guide
 	'dojoguide': {
@@ -41,6 +48,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		action: {
 			type: 'heal',
 		},
+		// Nurse Joy is always available (no time restrictions) - fallback behavior
 	},
 	'rocketguard': {
 		id: 'rocketguard',
