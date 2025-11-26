@@ -634,7 +634,7 @@ export class RandomBabyTeams extends RandomTeams {
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
-		if (noAttackStatMoves) {
+		if (noAttackStatMoves && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
