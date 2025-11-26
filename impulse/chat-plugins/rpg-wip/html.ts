@@ -6,6 +6,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, TOTAL_BADGES } from './game-npcs';
 import { GameConfig, STARTER_POKEMON } from './game-config';
+import { formatLocationWithTime } from './time-system';
 import type { RPGPokemon, PlayerData } from './interface';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
@@ -477,7 +478,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-text-center">` +
-		`<h2><b>${location.name}</b></h2>` +
+		`<h2><b>${formatLocationWithTime(location.name)}</b></h2>` +
 		`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 

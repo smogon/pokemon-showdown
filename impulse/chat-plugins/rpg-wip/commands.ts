@@ -104,6 +104,7 @@ import {
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { formatLocationWithTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
@@ -1226,7 +1227,7 @@ export const commands: ChatCommands = {
 						roomHTML += `<div class="rpg-notification">${notification}</div>`;
 					}
 
-					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
+					roomHTML += `<div class="rpg-text-center"><h2><b>${formatLocationWithTime(building.name)} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
 
 					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
