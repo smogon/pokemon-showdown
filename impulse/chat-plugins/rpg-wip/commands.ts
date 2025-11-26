@@ -10,6 +10,7 @@ import {
 	checkTrappingAbility,
 	getSlotFromIndex,
 	handleMirrorHerb,
+	calculateStats,
 } from './utils';
 import { STARTER_POKEMON, GameConfig } from './game-config';
 import type { RPGPokemon, ActivePokemonSlot, PlayerData, BattleState, NPCData, InventoryItem } from './interface';
@@ -1675,6 +1676,44 @@ export const commands: ChatCommands = {
 					});
 				}
 				if (spec.item) pokemon.item = spec.item;
+				if (spec.teraType) pokemon.teraType = spec.teraType;
+
+				// Apply custom EVs and IVs if provided
+				let needsStatRecalc = false;
+				if (spec.evs) {
+					pokemon.evs = {
+						hp: spec.evs.hp ?? 0,
+						atk: spec.evs.atk ?? 0,
+						def: spec.evs.def ?? 0,
+						spa: spec.evs.spa ?? 0,
+						spd: spec.evs.spd ?? 0,
+						spe: spec.evs.spe ?? 0,
+					};
+					needsStatRecalc = true;
+				}
+				if (spec.ivs) {
+					pokemon.ivs = {
+						hp: spec.ivs.hp ?? pokemon.ivs.hp,
+						atk: spec.ivs.atk ?? pokemon.ivs.atk,
+						def: spec.ivs.def ?? pokemon.ivs.def,
+						spa: spec.ivs.spa ?? pokemon.ivs.spa,
+						spd: spec.ivs.spd ?? pokemon.ivs.spd,
+						spe: spec.ivs.spe ?? pokemon.ivs.spe,
+					};
+					needsStatRecalc = true;
+				}
+				if (needsStatRecalc) {
+					const species = Dex.species.get(pokemon.species);
+					const newStats = calculateStats(species, pokemon.level, pokemon.nature, pokemon.ivs, pokemon.evs);
+					pokemon.maxHp = newStats.maxHp;
+					pokemon.hp = newStats.maxHp;
+					pokemon.atk = newStats.atk;
+					pokemon.def = newStats.def;
+					pokemon.spa = newStats.spa;
+					pokemon.spd = newStats.spd;
+					pokemon.spe = newStats.spe;
+				}
+
 				trainerParty.push(pokemon);
 			}
 
