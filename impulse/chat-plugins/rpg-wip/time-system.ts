@@ -9,6 +9,8 @@
  * - Night: 8:00 PM - 5:59 AM
  */
 
+import type { EncounterZone } from './interface';
+
 export type TimePeriod = 'Morning' | 'Afternoon' | 'Evening' | 'Night';
 
 /**
@@ -67,4 +69,33 @@ export function getTimeInfo(): { period: TimePeriod, emoji: string } {
 	const period = getCurrentTimePeriod();
 	const emoji = getTimeEmoji(period);
 	return { period, emoji };
+}
+
+/**
+ * Gets the available Pokemon for an encounter zone based on the current time of day.
+ * If the zone has time-specific Pokemon defined for the current period, those are used.
+ * Otherwise, falls back to the default pokemon list.
+ *
+ * @param zone The encounter zone to get Pokemon from
+ * @returns Array of Pokemon species IDs available at the current time
+ */
+export function getZonePokemonByTime(zone: EncounterZone): string[] {
+	const period = getCurrentTimePeriod();
+
+	// If no time-based Pokemon are defined, use the default list
+	if (!zone.pokemonByTime) {
+		return zone.pokemon;
+	}
+
+	// Map the time period to the correct key
+	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
+	const timePokemon = zone.pokemonByTime[timeKey];
+
+	// If time-specific Pokemon are defined for this period, use them
+	// Otherwise, fall back to the default list
+	if (timePokemon && timePokemon.length > 0) {
+		return timePokemon;
+	}
+
+	return zone.pokemon;
 }

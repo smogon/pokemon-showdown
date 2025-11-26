@@ -104,7 +104,7 @@ import {
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
-import { formatLocationWithTime } from './time-system';
+import { formatLocationWithTime, getZonePokemonByTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
@@ -1537,7 +1537,9 @@ export const commands: ChatCommands = {
 			const opponentParty: RPGPokemon[] = [];
 
 			try {
-				const wildSpecies1 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+				// Get Pokemon available at the current time of day
+				const availablePokemon = getZonePokemonByTime(zone);
+				const wildSpecies1 = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
 				const [minLevel, maxLevel] = zone.levelRange;
 				const wildLevel1 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
@@ -1546,7 +1548,7 @@ export const commands: ChatCommands = {
 				if (zoneBattleType === 'double') {
 					finalBattleType = 'wild_double';
 
-					const wildSpecies2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+					const wildSpecies2 = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
 					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
 					opponentParty.push(wildPokemon2);

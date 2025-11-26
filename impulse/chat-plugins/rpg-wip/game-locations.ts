@@ -205,13 +205,26 @@ export const LOCATIONS: Record<string, any> = {
 export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	'grassland': {
 		name: 'Tall Grass',
-		pokemon: ['rattata', 'pidgey', 'sentret'],
+		pokemon: ['rattata', 'pidgey', 'sentret'], // Default fallback
+		// Time-based Pokemon encounters
+		pokemonByTime: {
+			morning: ['pidgey', 'sentret', 'ledyba'],     // Early birds
+			afternoon: ['rattata', 'pidgey', 'spearow'], // Common daytime Pokemon
+			evening: ['hoothoot', 'rattata', 'spinarak'], // Dusk Pokemon
+			night: ['hoothoot', 'rattata', 'gastly'],    // Nocturnal Pokemon
+		},
 		levelRange: [2, 5],
 		battleType: 'single',
 	},
 	'rarezone': {
 		name: 'Mystic Clearing',
-		pokemon: ['pikachu', 'eevee', 'ralts'],
+		pokemon: ['pikachu', 'eevee', 'ralts'], // Default fallback
+		pokemonByTime: {
+			morning: ['eevee', 'ralts', 'kirlia'],
+			afternoon: ['pikachu', 'eevee', 'clefairy'],
+			evening: ['ralts', 'clefairy', 'jigglypuff'],
+			night: ['clefairy', 'jigglypuff', 'gastly'],
+		},
 		levelRange: [10, 15],
 		battleType: 'single',
 	},

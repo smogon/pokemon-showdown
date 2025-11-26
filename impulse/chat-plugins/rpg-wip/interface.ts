@@ -508,9 +508,23 @@ export interface Location {
 	removeFlag?: string | string[]; // Supports single or multiple flags
 }
 
+/**
+ * Time-based Pokemon encounter configuration.
+ * Allows different Pokemon to appear at different times of day.
+ */
+export interface TimePokemon {
+	morning?: string[];
+	afternoon?: string[];
+	evening?: string[];
+	night?: string[];
+}
+
 export interface EncounterZone {
 	name: string;
+	/** Default Pokemon list (used if no time-based entries match or as fallback) */
 	pokemon: string[];
+	/** Optional time-based Pokemon lists that override the default */
+	pokemonByTime?: TimePokemon;
 	levelRange: [number, number];
 	battleType?: 'single' | 'double';
 
