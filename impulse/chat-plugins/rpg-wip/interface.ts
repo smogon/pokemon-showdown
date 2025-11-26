@@ -332,6 +332,8 @@ export interface TrainerSpec {
 		level: number,
 		moves?: string[],
 		item?: string,
+		evs?: Partial<Record<keyof Stats, number>>,
+		ivs?: Partial<Record<keyof Stats, number>>,
 	}[];
 	money: number;
 	dialogue?: {
