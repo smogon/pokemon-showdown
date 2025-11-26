@@ -98,9 +98,7 @@ import {
 	generateNPCInteractionHTML,
 	generatePokedexHTML,
 } from './html';
-import {
-	generateBattleHTML,
-} from './battle-ui';
+import { BattleUI } from './battle-ui';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
@@ -225,7 +223,7 @@ function initializeAndStartBattle(
 	activeBattles.set(user.id, battle);
 	battle.battleLog.push(...initialMessages);
 
-	ctx.sendReply(`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), config.eventId)}`);
+	ctx.sendReply(`|uhtml|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id), config.eventId)}`);
 }
 
 function handleUseMedicine(

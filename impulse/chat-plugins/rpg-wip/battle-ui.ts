@@ -16,7 +16,7 @@ import {
 } from './html';
 import type { RPGPokemon, InventoryItem, ActivePokemonSlot, PlayerData, Status, BattleState } from './interface';
 
-export function generateBattleActionButtonsHTML(
+function generateBattleActionButtonsHTML(
 	battle: BattleState,
 	playerSlot: ActivePokemonSlot | null
 ): string {
@@ -45,7 +45,7 @@ export function generateBattleActionButtonsHTML(
 	return `<p class="rpg-text-center rpg-margin-top">${buttons}</p>`;
 }
 
-export function generateBattleMoveSelectionHTML(
+function generateBattleMoveSelectionHTML(
 	battle: BattleState,
 	slot: ActivePokemonSlot,
 	slotIndex: number,
@@ -148,7 +148,7 @@ export function generateBattleMoveSelectionHTML(
 	return moveButtonsHTML;
 }
 
-export function generateAvailablePokemonListHTML(
+function generateAvailablePokemonListHTML(
 	battle: BattleState,
 	player: PlayerData,
 	commandPrefix: string,
@@ -201,7 +201,7 @@ export function generateAvailablePokemonListHTML(
 	return html;
 }
 
-export function generateSharedBattlePokemonInfo(
+function generateSharedBattlePokemonInfo(
 	slot: ActivePokemonSlot,
 	isPlayerSide: boolean,
 	battle?: BattleState
@@ -231,7 +231,7 @@ export function generateSharedBattlePokemonInfo(
 	return html;
 }
 
-export function generateGlobalBattleConditionsHTML(battle: BattleState): string {
+function generateGlobalBattleConditionsHTML(battle: BattleState): string {
 	const weatherTags = generateWeatherTags(battle);
 	const terrainTags = generateTerrainTags(battle);
 	const fieldEffectTags = generateFieldEffectTags(battle);
@@ -247,7 +247,7 @@ export function generateGlobalBattleConditionsHTML(battle: BattleState): string 
 	return '';
 }
 
-export function generateWeatherTags(battle: BattleState): string {
+function generateWeatherTags(battle: BattleState): string {
 	if (!battle.weather) return '';
 
 	const weatherNames: Record<string, string> = {
@@ -272,7 +272,7 @@ export function generateWeatherTags(battle: BattleState): string {
 	return `<span class="rpg-weather-tag ${weatherClass}">${name}${turnsText}</span>`;
 }
 
-export function generateTerrainTags(battle: BattleState): string {
+function generateTerrainTags(battle: BattleState): string {
 	if (!battle.terrain) return '';
 
 	const terrainNames: Record<string, string> = {
@@ -294,7 +294,7 @@ export function generateTerrainTags(battle: BattleState): string {
 	return `<span class="rpg-terrain-tag ${terrainClass}">${name}${turnsText}</span>`;
 }
 
-export function generateFieldEffectTags(battle: BattleState): string {
+function generateFieldEffectTags(battle: BattleState): string {
 	const effects: string[] = [];
 
 	const tagClass = 'rpg-field-effect-tag';
@@ -327,7 +327,7 @@ export function generateFieldEffectTags(battle: BattleState): string {
 	return effects.join('');
 }
 
-export function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
+function generateBattleActionPanel(battle: BattleState, teraToggled?: boolean): string {
 	const isDoubleBattle = battle.battleType.includes('double');
 	const [pSlot0, pSlot1] = battle.playerSide.slots;
 
@@ -358,7 +358,7 @@ export function generateBattleActionPanel(battle: BattleState, teraToggled?: boo
 	return html;
 }
 
-export function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
+function generateBattleTargetSelection(battle: BattleState, targetSelection: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const [pSlot0, pSlot1] = battle.playerSide.slots;
 	const [oSlot0, oSlot1] = battle.opponentSide.slots;
 	const move = getMove(targetSelection.moveId);
@@ -406,7 +406,7 @@ export function generateBattleTargetSelection(battle: BattleState, targetSelecti
 	return html;
 }
 
-export function generateBattleHeader(battle: BattleState): string {
+function generateBattleHeader(battle: BattleState): string {
 	if (battle.battleType === 'battletower') {
 		const currentFloor = battle.floor || 1;
 		const formatConfig = BATTLE_TOWER_FORMATS[battle.battleTowerFormat || 'battlefactory'];
@@ -418,7 +418,7 @@ export function generateBattleHeader(battle: BattleState): string {
 	return '';
 }
 
-export function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
+function generateBattlefield(battle: BattleState, targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean }): string {
 	const isDoubleBattle = battle.battleType.includes('double');
 
 	const generateBattleSlot = (
@@ -487,7 +487,7 @@ export function generateBattlefield(battle: BattleState, targetSelection?: { att
 	return html;
 }
 
-export function generateBattleHTML(
+function generateBattleHTML(
 	battle: BattleState,
 	messageLog: string[] = [],
 	targetSelection?: { attackerSlotIndex: number, moveId: string, shouldTerastallize?: boolean },
@@ -575,7 +575,7 @@ export function generateBattleHTML(
 		'</div>';
 }
 
-export function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
+function generateSwitchMenuHTML(battle: BattleState, target?: string): string {
 	let html = `<div class="rpg-infobox"><h2>Choose a Pokémon to switch</h2>`;
 	const player = getPlayerData(battle.playerId);
 	const [pSlot0, pSlot1] = battle.playerSide.slots;
@@ -614,7 +614,7 @@ export function generateSwitchMenuHTML(battle: BattleState, target?: string): st
 	return html;
 }
 
-export function generateFaintSwitchHTML(battle: BattleState, message: string): string {
+function generateFaintSwitchHTML(battle: BattleState, message: string): string {
 	let html = `<div class="rpg-infobox"><h2>A Pokémon fainted!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 
@@ -641,7 +641,7 @@ export function generateFaintSwitchHTML(battle: BattleState, message: string): s
 	return html;
 }
 
-export function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlotIndex: number): string {
+function generatePivotSwitchHTML(battle: BattleState, message: string, pivotSlotIndex: number): string {
 	let html = `<div class="rpg-infobox"><h2>A Pokémon is switching out!</h2><p>${message}</p>`;
 	const player = getPlayerData(battle.playerId);
 	const pivotingPokemon = battle.pendingPivot?.slot.pokemon;
@@ -666,7 +666,7 @@ function getAvailablePokeBalls(player: PlayerData): InventoryItem[] {
 	);
 }
 
-export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
+function generateCatchMenuHTML(player: PlayerData, battle: BattleState): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Poke Ball</h2>`;
 
 	const pokeBalls = getAvailablePokeBalls(player);
@@ -716,7 +716,7 @@ export function generateCatchMenuHTML(player: PlayerData, battle: BattleState): 
 	return html;
 }
 
-export function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
+function generateCatchTargetHTML(battle: BattleState, ballId: string): string {
 	let html = `<div class="rpg-infobox"><h2>Select a Target</h2>`;
 	const item = ITEMS_DATABASE[ballId];
 	const ballName = item?.name || 'Poke Ball';
@@ -747,7 +747,7 @@ export function generateCatchTargetHTML(battle: BattleState, ballId: string): st
 	return html;
 }
 
-export function generateRunHTML(zoneId: string): string {
+function generateRunHTML(zoneId: string): string {
 	return `<div class="rpg-infobox rpg-menu-box">` +
 		`<h2>Got away safely!</h2>` +
 		`<p>You ran away from the wild Pokemon.</p>` +
@@ -759,7 +759,7 @@ export function generateRunHTML(zoneId: string): string {
 		`</div>`;
 }
 
-export function generateCatchSuccessHTML(
+function generateCatchSuccessHTML(
 	caughtPokemon: RPGPokemon,
 	tempSlot: ActivePokemonSlot,
 	location: string,
@@ -782,11 +782,11 @@ export function generateCatchSuccessHTML(
 		`</div>`;
 }
 
-export function generateMultipleOpponentsCatchErrorHTML(): string {
+function generateMultipleOpponentsCatchErrorHTML(): string {
 	return `<div class="rpg-infobox rpg-menu-box"><h2>Cannot Catch</h2><p>You can't throw a Poké Ball when there are multiple wild Pokémon!</p><p>Defeat one first, then you can catch the remaining one.</p><p><button name="send" value="/rpg battleaction back" class="button">Back to Battle</button></p></div>`;
 }
 
-export function generateBattleBagMenuHTML(battle: BattleState, player: PlayerData): string {
+function generateBattleBagMenuHTML(battle: BattleState, player: PlayerData): string {
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
 
 	let html = `<div class="rpg-infobox"><h2>Bag</h2>`;
@@ -819,7 +819,7 @@ export function generateBattleBagMenuHTML(battle: BattleState, player: PlayerDat
 	return html;
 }
 
-export function generateBattleItemMenuHTML(battle: BattleState, player: PlayerData, usableItems: InventoryItem[]): string {
+function generateBattleItemMenuHTML(battle: BattleState, player: PlayerData, usableItems: InventoryItem[]): string {
 	let html = `<div class="rpg-infobox"><h2>Select an Item</h2>`;
 
 	if (usableItems.length === 0) {
@@ -854,7 +854,7 @@ export function generateBattleItemMenuHTML(battle: BattleState, player: PlayerDa
 	return html;
 }
 
-export function generateBattleItemTargetHTML(battle: BattleState, player: PlayerData, itemId: string): string {
+function generateBattleItemTargetHTML(battle: BattleState, player: PlayerData, itemId: string): string {
 	const item = player.inventory.get(itemId);
 	if (!item) return generateBattleHTML(battle, ["Invalid item!"]);
 
@@ -896,3 +896,30 @@ export function generateBattleItemTargetHTML(battle: BattleState, player: Player
 	html += `<hr /><p><button name="send" value="/rpg battleaction itemmenu" class="button">Back</button></p></div>`;
 	return html;
 }
+
+export const BattleUI = {
+	generateBattleActionButtonsHTML,
+	generateBattleMoveSelectionHTML,
+	generateAvailablePokemonListHTML,
+	generateSharedBattlePokemonInfo,
+	generateGlobalBattleConditionsHTML,
+	generateWeatherTags,
+	generateTerrainTags,
+	generateFieldEffectTags,
+	generateBattleActionPanel,
+	generateBattleTargetSelection,
+	generateBattleHeader,
+	generateBattlefield,
+	generateBattleHTML,
+	generateSwitchMenuHTML,
+	generateFaintSwitchHTML,
+	generatePivotSwitchHTML,
+	generateCatchMenuHTML,
+	generateCatchTargetHTML,
+	generateRunHTML,
+	generateCatchSuccessHTML,
+	generateMultipleOpponentsCatchErrorHTML,
+	generateBattleBagMenuHTML,
+	generateBattleItemMenuHTML,
+	generateBattleItemTargetHTML,
+};

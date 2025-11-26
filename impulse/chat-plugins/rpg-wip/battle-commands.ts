@@ -37,18 +37,7 @@ import { applyHazardEffectsOnSwitchIn, teraToggleState } from './battle-state';
 import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import { LOCATIONS, getZoneLocation } from './game-locations';
 import { generateExploreHTML } from './html';
-import {
-	generateBattleHTML,
-	generateCatchMenuHTML,
-	generateCatchTargetHTML,
-	generateSwitchMenuHTML,
-	generateFaintSwitchHTML,
-	generateMultipleOpponentsCatchErrorHTML,
-	generateCatchSuccessHTML,
-	generateBattleItemMenuHTML,
-	generateBattleItemTargetHTML,
-	generateBattleBagMenuHTML,
-} from './battle-ui';
+import { BattleUI } from './battle-ui';
 
 /**
  * Battle action commands namespace
@@ -70,7 +59,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const moveId = toID(moveIdStr);
 
 		if (isNaN(attackerSlotIndex) || !moveId || isNaN(targetSlotIndex)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Error: Invalid move command received."])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Error: Invalid move command received."])}`);
 		}
 
 		if (attackerSlotIndex !== 0 && attackerSlotIndex !== 1) return this.errorReply("Invalid attacker slot.");
@@ -83,12 +72,12 @@ export const battleActionCommands: Chat.ChatCommands = {
 		if (!moveData.exists) return this.errorReply(`Move '${moveId}' not found.`);
 
 		if (shouldTerastallize) {
-			if (battle.playerSide.terastallizeUsed) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
-			if (attackerSlot.terastallized) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Already Terastallized!"])}`);
+			if (battle.playerSide.terastallizeUsed) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You can only Terastallize once per battle!"])}`);
+			if (attackerSlot.terastallized) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Already Terastallized!"])}`);
 		}
 
 		const validationError = validateMoveAction(attackerSlot, moveId, battle);
-		if (validationError) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [validationError])}`);
+		if (validationError) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [validationError])}`);
 
 		battle.pendingActions[attackerSlotIndex] = {
 			actionType: 'move',
@@ -107,7 +96,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
 
 		if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
-		else this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+		else this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog)}`);
 	},
 
 	selecttarget(target, room, user) {
@@ -121,7 +110,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 
 		if (isNaN(attackerSlotIndex) || !moveId) return this.errorReply("Invalid command.");
 
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [shouldTerastallize ? `Select a target for ${getMove(moveId).name} (with Terastallization).` : `Select a target for ${getMove(moveId).name}.`], { attackerSlotIndex, moveId, shouldTerastallize })}`);
 	},
 
 	teratoggle(target, room, user) {
@@ -129,7 +118,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		if (!battle) return this.errorReply("You are not in a battle.");
 		const newState = target === 'on';
 		teraToggleState.set(user.id, newState);
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, newState)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [], undefined, newState)}`);
 	},
 
 	forceswitch(target, room, user) {
@@ -146,7 +135,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 				battle.playerSide.slots[slotToFill as 0 | 1] = battle.pendingPivot.slot;
 				battle.pendingPivot = undefined;
 			}
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["The battle continues..."])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["The battle continues..."])}`);
 		}
 
 		const player = getPlayerData(battle.playerId);
@@ -184,10 +173,10 @@ export const battleActionCommands: Chat.ChatCommands = {
 			partyToUse.some(p => p.hp > 0 && !battle.playerSide.slots.some(s => s?.pokemon.id === p.id));
 
 		if (needsAnotherSwitch) {
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		} else {
 			if (!battle.pendingPivot) battle.pendingActions = {};
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog)}`);
 		}
 	},
 
@@ -204,9 +193,9 @@ export const battleActionCommands: Chat.ChatCommands = {
 		if (!outgoingSlot || outgoingSlot.pokemon.hp <= 0) return this.errorReply("Slot empty or fainted.");
 
 		const trappingPokemon = checkTrappingAbility(outgoingSlot, battle);
-		if (trappingPokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Trapped by ${trappingPokemon.pokemon.ability}!`])}`);
-		if (outgoingSlot.isTrapped || outgoingSlot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped!`])}`);
-		if (outgoingSlot.isIngrained) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted!`])}`);
+		if (trappingPokemon) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`Trapped by ${trappingPokemon.pokemon.ability}!`])}`);
+		if (outgoingSlot.isTrapped || outgoingSlot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is trapped!`])}`);
+		if (outgoingSlot.isIngrained) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is rooted!`])}`);
 
 		const player = getPlayerData(battle.playerId);
 		const partyToUse = battle.overridePlayerParty || player.party;
@@ -228,31 +217,31 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const submittedPlayerActions = Object.keys(battle.pendingActions).filter(k => parseInt(k) <= 1).length;
 
 		if (submittedPlayerActions === activePlayerSlots) processTurn(this, battle, room, user);
-		else this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is ready to switch out!`])}`);
+		else this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${outgoingSlot.pokemon.species} is ready to switch out!`])}`);
 	},
 
 	switchmenu(target, room, user) {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateSwitchMenuHTML(battle, target)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateSwitchMenuHTML(battle, target)}`);
 	},
 
 	catchmenu(target, room, user) {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
-		if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Cannot catch in Battle Tower!"])}`);
+		if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Cannot catch in Battle Tower!"])}`);
 
 		if (battle.battleType.includes('double')) {
 			const activeOpponents = getActiveSlots(battle.opponentSide.slots);
-			if (activeOpponents.length > 1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMultipleOpponentsCatchErrorHTML()}`);
+			if (activeOpponents.length > 1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateMultipleOpponentsCatchErrorHTML()}`);
 		}
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
 	},
 
 	selectcatchtarget(target, room, user) {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
-		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
 
 		const ballId = toID(target);
 		const activeOpponents = getActiveSlots(battle.opponentSide.slots);
@@ -260,7 +249,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			const slotIndex = battle.opponentSide.slots.indexOf(activeOpponents[0]) + 2;
 			return this.parse(`/rpg battleaction catch ${ballId} ${slotIndex}`);
 		}
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchTargetHTML(battle, ballId)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateCatchTargetHTML(battle, ballId)}`);
 	},
 
 	catch(target, room, user) {
@@ -271,10 +260,10 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const targetSlotIndex = parseInt(slotIndexStr);
 
 		if (!ballId || isNaN(targetSlotIndex)) return this.errorReply("Invalid catch command.");
-		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
+		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You can't steal another Trainer's Pokémon!"])}`);
 
 		const targetSlot = getSlotFromIndex(battle, targetSlotIndex);
-		if (!targetSlot || targetSlot.pokemon.hp <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target!"])}`);
+		if (!targetSlot || targetSlot.pokemon.hp <= 0) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid target!"])}`);
 
 		const player = getPlayerData(battle.playerId);
 		const ballItem = player.inventory.get(ballId);
@@ -320,7 +309,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 				returnCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
 			}
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
 		} else {
 			messageLog.push(`<span class="rpg-text-error"><strong>${["Oh no! The Pokemon broke free!", "Aww! It appeared to be caught!", "Aargh! Almost had it!", "Gah! It was so close, too!"][catchResult.shakes]}</strong></span>`);
 			processTurn(this, battle, room, user, messageLog);
@@ -330,14 +319,14 @@ export const battleActionCommands: Chat.ChatCommands = {
 	run(target, room, user) {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
-		if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from Battle Tower!"])}`);
-		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Can't run from a Trainer!"])}`);
+		if (battle.battleType === 'battletower') return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Can't run from Battle Tower!"])}`);
+		if (battle.battleType.includes('trainer')) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Can't run from a Trainer!"])}`);
 
 		const playerSlots = getActiveSlots(battle.playerSide.slots);
 		for (const slot of playerSlots) {
 			const trapping = checkTrappingAbility(slot, battle);
-			if (trapping) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`Trapped by ${trapping.pokemon.ability}!`])}`);
-			if (slot.isTrapped || slot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`You can't escape!`])}`);
+			if (trapping) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`Trapped by ${trapping.pokemon.ability}!`])}`);
+			if (slot.isTrapped || slot.partiallyTrapped) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`You can't escape!`])}`);
 		}
 
 		const zoneId = battle.zoneId;
@@ -362,7 +351,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			for (let i = 0; i < battle.playerSide.slots.length; i++) {
 				if (battle.playerSide.slots[i] === null || battle.playerSide.slots[i]?.pokemon.hp === 0) delete battle.pendingActions[i];
 			}
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You returned to the battle."], undefined, teraToggleState.get(user.id))}`);
 		}
 	},
 
@@ -370,7 +359,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
 		const player = getPlayerData(battle.playerId);
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleBagMenuHTML(battle, player)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleBagMenuHTML(battle, player)}`);
 	},
 
 	itemmenu(target, room, user) {
@@ -379,17 +368,17 @@ export const battleActionCommands: Chat.ChatCommands = {
 
 		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
 
 		const player = getPlayerData(battle.playerId);
 		const usableItems = getBattleUsableItems(player);
 
 		if (usableItems.length === 0) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have any items to use in battle!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You don't have any items to use in battle!"])}`);
 		}
 
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemMenuHTML(battle, player, usableItems)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateBattleItemMenuHTML(battle, player, usableItems)}`);
 	},
 
 	selectitemtarget(target, room, user) {
@@ -398,7 +387,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 
 		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
 
 		const itemId = toID(target);
@@ -406,10 +395,10 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const item = player.inventory.get(itemId);
 
 		if (!item || !canUseItemInBattle(itemId)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid item!"])}`);
 		}
 
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleItemTargetHTML(battle, player, itemId)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateBattleItemTargetHTML(battle, player, itemId)}`);
 	},
 
 	useitem(target, room, user) {
@@ -418,7 +407,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 
 		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
 
 		const [itemIdStr, slotIndexStr] = target.split(' ');
@@ -426,29 +415,29 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const slotIndex = parseInt(slotIndexStr);
 
 		if (!itemId || isNaN(slotIndex)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item command!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid item command!"])}`);
 		}
 
 		const player = getPlayerData(battle.playerId);
 		const item = player.inventory.get(itemId);
 
 		if (!item || !canUseItemInBattle(itemId)) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["You don't have that item!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You don't have that item!"])}`);
 		}
 
 		if (slotIndex < 0 || slotIndex > 1) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid target slot!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid target slot!"])}`);
 		}
 
 		const targetSlot = battle.playerSide.slots[slotIndex];
 		if (!targetSlot) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["No Pokémon in that slot!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["No Pokémon in that slot!"])}`);
 		}
 
 		const pokemon = targetSlot.pokemon;
 		const itemData = ITEMS_DATABASE[itemId];
 		if (!itemData?.effects) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Invalid item!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid item!"])}`);
 		}
 
 		const eff = itemData.effects;
@@ -458,16 +447,16 @@ export const battleActionCommands: Chat.ChatCommands = {
 		if (itemId === 'direhit') {
 			// Dire Hit raises critical-hit ratio
 			if (pokemon.hp <= 0) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
 			if (targetSlot.focusEnergy) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} is already pumped!`])}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} is already pumped!`])}`);
 			}
 			targetSlot.focusEnergy = true;
 			result = { success: true, message: `${pokemon.species} is getting pumped!` };
 		} else if (itemId === 'guardspec') {
 			// Guard Spec prevents stat reduction (not implemented yet)
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["Guard Spec is not yet implemented!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Guard Spec is not yet implemented!"])}`);
 		} else if (eff.revive) {
 			result = useBattleRevivalItem(pokemon, itemId);
 		} else if (eff.healAmount || eff.healPercent || eff.statusCure) {
@@ -475,12 +464,12 @@ export const battleActionCommands: Chat.ChatCommands = {
 		} else if (eff.battleStatBoost) {
 			// Handle stat boost items
 			if (pokemon.hp <= 0) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
 			const boost = eff.battleStatBoost;
 			const currentStage = targetSlot.statStages[boost.stat];
 			if (currentStage >= 6) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species}'s ${boost.stat.toUpperCase()} is already maxed!`])}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species}'s ${boost.stat.toUpperCase()} is already maxed!`])}`);
 			}
 			const newStage = Math.min(6, currentStage + boost.stages);
 			targetSlot.statStages[boost.stat] = newStage as any;
@@ -491,7 +480,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		} else if (eff.ppRestore) {
 			// Handle PP restoration items
 			if (pokemon.hp <= 0) {
-				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
+				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
 
 			let restoredAny = false;
@@ -527,11 +516,11 @@ export const battleActionCommands: Chat.ChatCommands = {
 				}
 			}
 		} else {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, ["This item cannot be used in battle!"])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["This item cannot be used in battle!"])}`);
 		}
 
 		if (!result.success) {
-			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [result.message])}`);
+			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [result.message])}`);
 		}
 
 		// Remove item from inventory
