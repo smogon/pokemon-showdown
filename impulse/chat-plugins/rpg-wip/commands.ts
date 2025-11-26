@@ -53,7 +53,8 @@ import {
 	hasSaveInDB,
 	deletePlayerFromDB,
 } from './core';
-import { validateMoveAction, processTurn, applyHazardEffectsOnSwitchIn } from './battle-flow';
+import { validateMoveAction, processTurn } from './battle-flow';
+import { applyHazardEffectsOnSwitchIn, teraToggleState, activeScriptedEvents } from './battle-state';
 import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import {
 	startBattleTowerFloor,
@@ -107,7 +108,6 @@ import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime,
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 import { battleActionCommands } from './battle-commands';
-import { teraToggleState, activeScriptedEvents } from './battle-state';
 
 /**
  * Helper function to check if a player is in an active (ongoing) battle.

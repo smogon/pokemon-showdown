@@ -1,6 +1,6 @@
 import { Dex, toID } from '../../../sim/dex';
 import { FS } from '../../../lib';
-import { createPokemon } from './core';
+import { createPokemon, getPlayerData } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
 import { MANUAL_EVOLUTIONS } from './data-exp-evs-catch-rates';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState, Status, SideState } from './interface';

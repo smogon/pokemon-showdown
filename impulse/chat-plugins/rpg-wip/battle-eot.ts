@@ -6,7 +6,7 @@ import type { ActivePokemonSlot, BattleState } from './interface';
 import {
 	getCustomEffectiveness,
 	getStatMultiplier,
-} from './battle-core';
+} from './battle-state';
 
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]);

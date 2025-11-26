@@ -370,7 +370,7 @@ export function startBattleTowerFloor(
 ) {
 // Import dynamically to avoid circular dependency
 	const { generateBattleHTML } = require('./battle-ui');
-	const { applyHazardEffectsOnSwitchIn } = require('./battle-flow');
+	const { applyHazardEffectsOnSwitchIn } = require('./battle-state');
 
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
 	const level = formatConfig.level;
