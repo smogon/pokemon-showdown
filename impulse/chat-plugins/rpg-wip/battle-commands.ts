@@ -33,7 +33,7 @@ import {
 	storePokemonInPC,
 } from './core';
 import { validateMoveAction, processTurn } from './battle-flow';
-import { applyHazardEffectsOnSwitchIn } from './battle-state';
+import { applyHazardEffectsOnSwitchIn, teraToggleState } from './battle-state';
 import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import { LOCATIONS, getZoneLocation } from './game-locations';
 import { generateExploreHTML } from './html';
@@ -49,7 +49,6 @@ import {
 	generateBattleItemTargetHTML,
 	generateBattleBagMenuHTML,
 } from './battle-ui';
-import { teraToggleState } from './battle-state';
 
 /**
  * Battle action commands namespace
