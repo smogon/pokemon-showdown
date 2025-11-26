@@ -47,7 +47,7 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		name: 'Suspicious Guard',
 		location: 'newbarktown', // Logically inside hideout
 		dialogue: "This is private property! Get lost!",
-	}
+	},
 };
 
 // ============================================================================
@@ -124,7 +124,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			win: "Fine, you may pass.",
 			lose: "Go home and train more.",
 		},
-		setFlag: 'security_cleared', 
+		setFlag: 'security_cleared',
 	},
 
 	// 2. The Gym Minion (NEW)
@@ -138,7 +138,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			start: "I'm not letting you reach the Master without a fight!",
 			win: "Oof! You're tough.",
 			lose: "Train harder!",
-		}
+		},
 	},
 
 	// 3. The Boss
@@ -147,7 +147,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		money: 1000,
 		party: [
 			{ species: 'riolu', level: 8, moves: ['quickattack', 'forcepalm'] },
-			{ species: 'mankey', level: 9, moves: [ 'scratch', 'lowkick'] },
+			{ species: 'mankey', level: 9, moves: ['scratch', 'lowkick'] },
 		],
 		dialogue: {
 			start: "So you got past Bob? Show me your strength!",
@@ -164,7 +164,7 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
 	// Trainers that appear in the OVERWORLD (not inside buildings)
-	'newbarktown': ['securitybob'], 
+	'newbarktown': ['securitybob'],
 };
 
 // ============================================================================
@@ -184,7 +184,7 @@ export const BADGES: BadgeInfo[] = [
 		badgeName: 'Expert Badge',
 		order: 1,
 		description: 'Allows access to dark caves.',
-	}
+	},
 ];
 
 // ============================================================================

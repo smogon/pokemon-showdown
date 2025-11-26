@@ -306,13 +306,13 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		if (battle.opponentSide.auroraVeilTurns === 0) messageLog.push(`The opposing team's Aurora Veil wore off!`);
 	}
 
-	if ((battle as any).playerMistTurns > 0) {
-		(battle as any).playerMistTurns--;
-		if ((battle as any).playerMistTurns === 0) messageLog.push(`Your team's Mist wore off!`);
+	if (battle.playerSide.mistTurns > 0) {
+		battle.playerSide.mistTurns--;
+		if (battle.playerSide.mistTurns === 0) messageLog.push(`Your team's Mist wore off!`);
 	}
-	if ((battle as any).opponentMistTurns > 0) {
-		(battle as any).opponentMistTurns--;
-		if ((battle as any).opponentMistTurns === 0) messageLog.push(`The opposing team's Mist wore off!`);
+	if (battle.opponentSide.mistTurns > 0) {
+		battle.opponentSide.mistTurns--;
+		if (battle.opponentSide.mistTurns === 0) messageLog.push(`The opposing team's Mist wore off!`);
 	}
 
 	if (battle.trickRoomTurns > 0) {
