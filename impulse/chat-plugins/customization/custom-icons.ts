@@ -8,7 +8,10 @@ import { FS } from '../../../lib';
 import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
+const CONFIG_PATH = 'config/custom.css';
 const STAFF_ROOM_ID = 'staff';
+const ICONS_START_TAG = '/* ICONS START */';
+const ICONS_END_TAG = '/* ICONS END */';
 const DEFAULT_ICON_SIZE = 24;
 const MIN_SIZE = 1;
 const MAX_SIZE = 100;
@@ -23,55 +26,54 @@ interface IconDocument {
 }
 
 const IconsDB = ImpulseDB<IconDocument>('usericons');
+
 const cacheBuster = () => `?v=${Date.now()}`;
 
-const validateSize = (sizeStr: string | undefined): {
-	valid: boolean,
-	size: number,
-	error?: string,
-} => {
+const validateSize = (sizeStr?: string): { valid: boolean; size: number; error?: string } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
+	
 	const size = parseInt(sizeStr);
 	if (isNaN(size) || size < MIN_SIZE || size > MAX_SIZE) {
-		return { valid: false, size: 0, error: `Invalid size. Use 1-${MAX_SIZE} pixels.` };
+		return { valid: false, size: 0, error: `Invalid size. Use ${MIN_SIZE}-${MAX_SIZE} pixels.` };
 	}
 	return { valid: true, size };
 };
 
+const parseArgs = (target: string) => {
+	const [name, url, sizeStr] = target.split(',').map(s => s.trim());
+	return { name, userId: toID(name), url, sizeStr };
+};
+
+const formatSizeDisplay = (size: number) => (size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '');
+
 const updateIcons = async () => {
 	try {
 		const iconDocs = await IconsDB.find({}, { projection: { _id: 1, url: 1, size: 1 } });
-		let css = '/* ICONS START */\n';
 		const bust = cacheBuster();
 
-		iconDocs.forEach(doc => {
+		const cssRules = iconDocs.map(doc => {
 			const size = doc.size || DEFAULT_ICON_SIZE;
-			css += `[id$="-userlist-user-${doc._id}"] { background: url("${doc.url}${bust}") `;
-			css += `right no-repeat !important; background-size: ${size}px!important;}\n`;
-		});
+			return `[id$="-userlist-user-${doc._id}"] { background: url("${doc.url}${bust}") right no-repeat !important; background-size: ${size}px!important;}`;
+		}).join('\n');
 
-		css += '/* ICONS END */\n';
+		const cssBlock = `${ICONS_START_TAG}\n${cssRules}\n${ICONS_END_TAG}\n`;
 
-		const file = FS('config/custom.css').readIfExistsSync().split('\n');
-		const start = file.indexOf('/* ICONS START */');
-		const end = file.indexOf('/* ICONS END */');
+		const fileContent = FS(CONFIG_PATH).readIfExistsSync().split('\n');
+		const startIndex = fileContent.indexOf(ICONS_START_TAG);
+		const endIndex = fileContent.indexOf(ICONS_END_TAG);
 
-		if (start !== -1 && end !== -1 && start < end) {
-			file.splice(start, (end - start + 1), ...css.split('\n'));
-			FS('config/custom.css').writeUpdate(() => file.join('\n'));
+		if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
+			fileContent.splice(startIndex, (endIndex - startIndex + 1), ...cssBlock.split('\n'));
+			FS(CONFIG_PATH).writeUpdate(() => fileContent.join('\n'));
 		} else {
-			FS('config/custom.css').writeUpdate(() => file.join('\n') + '\n' + css);
+			FS(CONFIG_PATH).writeUpdate(() => fileContent.join('\n') + '\n' + cssBlock);
 		}
+		
 		Impulse.reloadCSS();
-	} catch {
-		// Ignore errors during initialization
+	} catch (err) {
+		console.error("Error updating icons CSS:", err);
 	}
 };
-
-const displayIcon = (url: string, size: number = DEFAULT_ICON_SIZE) =>
-	`<img src="${url}${cacheBuster()}" width="32" height="32">`;
-
-const getSizeDisplay = (size: number) => size !== DEFAULT_ICON_SIZE ? ` (${size}px)` : '';
 
 const sendIconNotifications = (
 	staffUser: User,
@@ -81,24 +83,23 @@ const sendIconNotifications = (
 	size: number = DEFAULT_ICON_SIZE
 ) => {
 	const userId = toID(targetName);
-	const sizeDisplay = getSizeDisplay(size);
-	const icon = url ? displayIcon(url, size) : '';
-
+	const sizeDisplay = formatSizeDisplay(size);
+	const iconHtml = url ? `<img src="${url}${cacheBuster()}" width="32" height="32">` : '';
+	const iconDisplay = iconHtml ? `: ${iconHtml}` : '';
+	
 	const user = Users.get(userId);
 	if (user?.connected) {
-		const staffNameColor = nameColor(staffUser.name, true, true);
-		const iconDisplay = icon ? `: ${icon}` : '';
-		const msg = `${staffNameColor} ${action}${sizeDisplay}${iconDisplay}` +
-			`<br /><center>Refresh if you don't see it.</center>`;
+		const staffHtml = nameColor(staffUser.name, true, true);
+		const msg = `${staffHtml} ${action}${sizeDisplay}${iconDisplay}<br /><center>Refresh if you don't see it.</center>`;
 		user.popup(`|html|${msg}`);
 	}
-
+	
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
-		const staffNameColor = nameColor(staffUser.name, true, true);
-		const targetNameColor = nameColor(targetName, true, false);
-		const iconDisplay = icon ? `: ${icon}` : '';
-		const msg = `${staffNameColor} ${action.replace('has ', '').replace('your userlist icon', `icon for ${targetNameColor}`)}${iconDisplay}`;
+		const staffHtml = nameColor(staffUser.name, true, true);
+		const targetHtml = nameColor(targetName, true, false);
+		const logAction = action.replace('has ', '').replace('your userlist icon', `icon for ${targetHtml}`);
+		const msg = `${staffHtml} ${logAction}${iconDisplay}`;
 		room.add(`|html|<div class="infobox">${msg}</div>`).update();
 	}
 };
@@ -107,30 +108,29 @@ export const commands: Chat.ChatCommands = {
 	usericon: 'icon',
 	ic: 'icon',
 	icon: {
-		''(target, room, user) {
+		''(target) {
 			this.parse('/iconhelp');
 		},
 
 		async set(target, room, user) {
 			this.checkCan('roomowner');
-			const [name, imageUrl, sizeStr] = target.split(',').map(s => s.trim());
-			if (!name || !imageUrl) return this.parse('/icon help');
-
-			const userId = toID(name);
+			const { name, userId, url, sizeStr } = parseArgs(target);
+			
+			if (!name || !url) return this.parse('/icon help');
 			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
 
 			if (await IconsDB.exists({ _id: userId })) {
 				return this.errorReply('User already has icon. Remove with /icon delete [user].');
 			}
 
-			const sizeCheck = validateSize(sizeStr);
-			if (!sizeCheck.valid) return this.errorReply(sizeCheck.error);
+			const { valid, size, error } = validateSize(sizeStr);
+			if (!valid) return this.errorReply(error!);
 
 			const now = new Date();
 			await IconsDB.insertOne({
 				_id: userId,
-				url: imageUrl,
-				size: sizeCheck.size,
+				url: url,
+				size: size,
 				setBy: user.id,
 				createdAt: now,
 				updatedAt: now,
@@ -138,49 +138,40 @@ export const commands: Chat.ChatCommands = {
 
 			await updateIcons();
 
-			const sizeDisplay = getSizeDisplay(sizeCheck.size);
-			const targetNameColor = nameColor(name, true, false);
-			this.sendReply(`|raw|You have given ${targetNameColor} an icon${sizeDisplay}.`);
-
-			sendIconNotifications(user, name, 'has set your userlist icon', imageUrl, sizeCheck.size);
+			const targetHtml = nameColor(name, true, false);
+			this.sendReply(`|raw|You have given ${targetHtml} an icon${formatSizeDisplay(size)}.`);
+			sendIconNotifications(user, name, 'has set your userlist icon', url, size);
 		},
 
 		async update(target, room, user) {
 			this.checkCan('roomowner');
-			const [name, imageUrl, sizeStr] = target.split(',').map(s => s.trim());
+			const { name, userId, url, sizeStr } = parseArgs(target);
+
 			if (!name) return this.parse('/icon help');
 
-			const userId = toID(name);
-			if (!await IconsDB.exists({ _id: userId })) {
+			const existingDoc = await IconsDB.findOne({ _id: userId }, { projection: { url: 1, size: 1 } });
+			if (!existingDoc) {
 				return this.errorReply('User does not have icon. Use /icon set.');
 			}
 
-			const updateFields: any = { updatedAt: new Date() };
-
-			if (imageUrl) {
-				updateFields.url = imageUrl;
-			}
+			const updateFields: Partial<IconDocument> = { updatedAt: new Date() };
+			if (url) updateFields.url = url;
+			
 			if (sizeStr) {
-				const sizeCheck = validateSize(sizeStr);
-				if (!sizeCheck.valid) return this.errorReply(sizeCheck.error);
-				updateFields.size = sizeCheck.size;
+				const { valid, size, error } = validateSize(sizeStr);
+				if (!valid) return this.errorReply(error!);
+				updateFields.size = size;
 			}
 
 			await IconsDB.updateOne({ _id: userId }, { $set: updateFields });
 			await updateIcons();
 
-			const updatedIcon = await IconsDB.findOne(
-				{ _id: userId },
-				{ projection: { url: 1, size: 1 } }
-			);
-			const size = updatedIcon?.size || DEFAULT_ICON_SIZE;
-			const url = updatedIcon?.url || imageUrl;
-			const sizeDisplay = getSizeDisplay(size);
+			const newSize = updateFields.size || existingDoc.size;
+			const newUrl = updateFields.url || existingDoc.url;
 
-			const targetNameColor = nameColor(name, true, false);
-			this.sendReply(`|raw|You have updated ${targetNameColor}'s icon${sizeDisplay}.`);
-
-			sendIconNotifications(user, name, 'has updated your userlist icon', url, size);
+			const targetHtml = nameColor(name, true, false);
+			this.sendReply(`|raw|You have updated ${targetHtml}'s icon${formatSizeDisplay(newSize)}.`);
+			sendIconNotifications(user, name, 'has updated your userlist icon', newUrl, newSize);
 		},
 
 		async delete(target, room, user) {
@@ -201,25 +192,22 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			const helpList = [
-				{
-					cmd: "/icon set [user], [url], [size]",
-					desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.`,
-				},
-				{
-					cmd: "/icon update [user], [url], [size]",
-					desc: "Update icon. Requires: &.",
-				},
-				{
-					cmd: "/icon delete [user]",
-					desc: "Remove icon. Requires: &.",
-				},
+				{ cmd: "/icon set [user], [url], [size]", desc: `Set icon (${DEFAULT_ICON_SIZE}-${MAX_SIZE}px). Requires: &.` },
+				{ cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &." },
+				{ cmd: "/icon delete [user]", desc: "Remove icon. Requires: &." },
 			];
-			const html = `<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center>` +
-				`<hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
+			
+			const listHtml = helpList.map(({ cmd, desc }) => 
+				`<li><b>${cmd}</b> - ${desc}</li>`
+			).join('<hr>');
+
+			const html = [
+				`<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center>`,
+				`<hr><ul style="list-style-type:none;padding-left:0;">`,
+				listHtml,
+				`</ul>`
+			].join('');
+			
 			this.sendReplyBox(html);
 		},
 	},
