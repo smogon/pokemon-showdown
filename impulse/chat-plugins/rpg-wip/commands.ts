@@ -1681,7 +1681,7 @@ export const commands: ChatCommands = {
 				let needsStatRecalc = false;
 				if (spec.evs) {
 					pokemon.evs = {
-						maxHp: spec.evs.maxHp ?? 0,
+						hp: spec.evs.hp ?? 0,
 						atk: spec.evs.atk ?? 0,
 						def: spec.evs.def ?? 0,
 						spa: spec.evs.spa ?? 0,
@@ -1692,7 +1692,7 @@ export const commands: ChatCommands = {
 				}
 				if (spec.ivs) {
 					pokemon.ivs = {
-						maxHp: spec.ivs.maxHp ?? pokemon.ivs.maxHp,
+						hp: spec.ivs.hp ?? pokemon.ivs.hp,
 						atk: spec.ivs.atk ?? pokemon.ivs.atk,
 						def: spec.ivs.def ?? pokemon.ivs.def,
 						spa: spec.ivs.spa ?? pokemon.ivs.spa,
