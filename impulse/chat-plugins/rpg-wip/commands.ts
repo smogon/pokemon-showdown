@@ -163,17 +163,6 @@ function initializeAndStartBattle(
 	},
 	initialMessages: string[]
 ) {
-	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-
-	playerSlots[0] = createActivePokemonSlot(activeParty[0]);
-	opponentSlots[0] = createActivePokemonSlot(opponent.party[0]);
-
-	if (config.battleType.includes('double')) {
-		if (activeParty[1]) playerSlots[1] = createActivePokemonSlot(activeParty[1]);
-		if (opponent.party[1]) opponentSlots[1] = createActivePokemonSlot(opponent.party[1]);
-	}
-
 	const locationWeatherData = getLocationWeatherData(player);
 	if (locationWeatherData.weather) {
 		initialMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
@@ -182,8 +171,14 @@ function initializeAndStartBattle(
 	// Create unified side states
 	const playerSide = createSideState();
 	const opponentSide = createSideState();
-	playerSide.slots = playerSlots;
-	opponentSide.slots = opponentSlots;
+
+	playerSide.slots[0] = createActivePokemonSlot(activeParty[0]);
+	opponentSide.slots[0] = createActivePokemonSlot(opponent.party[0]);
+
+	if (config.battleType.includes('double')) {
+		if (activeParty[1]) playerSide.slots[1] = createActivePokemonSlot(activeParty[1]);
+		if (opponent.party[1]) opponentSide.slots[1] = createActivePokemonSlot(opponent.party[1]);
+	}
 
 	const battle: BattleState = {
 		battleType: config.battleType,
@@ -194,31 +189,6 @@ function initializeAndStartBattle(
 		// Unified side states
 		playerSide,
 		opponentSide,
-		// Legacy accessors (reference the same data)
-		playerSlots: playerSide.slots,
-		opponentSlots: opponentSide.slots,
-		playerHazards: playerSide.hazards,
-		opponentHazards: opponentSide.hazards,
-		playerFutureMoves: playerSide.futureMoves,
-		opponentFutureMoves: opponentSide.futureMoves,
-		playerQuickGuard: playerSide.quickGuard,
-		opponentQuickGuard: opponentSide.quickGuard,
-		playerWideGuard: playerSide.wideGuard,
-		opponentWideGuard: opponentSide.wideGuard,
-		playerCraftyShield: playerSide.craftyShield,
-		opponentCraftyShield: opponentSide.craftyShield,
-		playerReflectTurns: playerSide.reflectTurns,
-		opponentReflectTurns: opponentSide.reflectTurns,
-		playerLightScreenTurns: playerSide.lightScreenTurns,
-		opponentLightScreenTurns: opponentSide.lightScreenTurns,
-		playerAuroraVeilTurns: playerSide.auroraVeilTurns,
-		opponentAuroraVeilTurns: opponentSide.auroraVeilTurns,
-		playerMistTurns: playerSide.mistTurns,
-		opponentMistTurns: opponentSide.mistTurns,
-		playerTailwindTurns: playerSide.tailwindTurns,
-		opponentTailwindTurns: opponentSide.tailwindTurns,
-		playerTerastallizeUsed: playerSide.terastallizeUsed,
-		opponentTerastallizeUsed: opponentSide.terastallizeUsed,
 		// Other battle state
 		pendingActions: {},
 		playerId: user.id,
@@ -245,10 +215,10 @@ function initializeAndStartBattle(
 		overridePlayerParty: null,
 	};
 
-	if (playerSlots[0]) applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, initialMessages);
-	if (playerSlots[1]) applyHazardEffectsOnSwitchIn(playerSlots[1], battle, true, initialMessages);
-	if (opponentSlots[0]) applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, initialMessages);
-	if (opponentSlots[1]) applyHazardEffectsOnSwitchIn(opponentSlots[1], battle, false, initialMessages);
+	if (playerSide.slots[0]) applyHazardEffectsOnSwitchIn(playerSide.slots[0], battle, true, initialMessages);
+	if (playerSide.slots[1]) applyHazardEffectsOnSwitchIn(playerSide.slots[1], battle, true, initialMessages);
+	if (opponentSide.slots[0]) applyHazardEffectsOnSwitchIn(opponentSide.slots[0], battle, false, initialMessages);
+	if (opponentSide.slots[1]) applyHazardEffectsOnSwitchIn(opponentSide.slots[1], battle, false, initialMessages);
 
 	activeBattles.set(user.id, battle);
 	battle.battleLog.push(...initialMessages);

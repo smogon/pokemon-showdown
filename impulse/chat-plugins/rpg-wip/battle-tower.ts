@@ -377,8 +377,6 @@ export function startBattleTowerFloor(
 	const teamSize = formatConfig.teamSize;
 
 	const battleMessages: string[] = [];
-	const playerSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
-	const opponentSlots: [ActivePokemonSlot | null, ActivePokemonSlot | null] = [null, null];
 
 	try {
 		let playerTeam: RPGPokemon[];
@@ -395,9 +393,6 @@ export function startBattleTowerFloor(
 			aiTeam = generateRandomTeam(teamSize, level);
 		}
 
-		playerSlots[0] = createActivePokemonSlot(playerTeam[0]);
-		opponentSlots[0] = createActivePokemonSlot(aiTeam[0]);
-
 		battleMessages.push(`<b>Battle Tower - Floor ${floor}</b>`);
 		battleMessages.push(`Your random team for this floor is: ${playerTeam.map(p => p.species).join(', ')}.`);
 
@@ -409,8 +404,9 @@ export function startBattleTowerFloor(
 		// Create unified side states
 		const playerSide = createSideState();
 		const opponentSide = createSideState();
-		playerSide.slots = playerSlots;
-		opponentSide.slots = opponentSlots;
+
+		playerSide.slots[0] = createActivePokemonSlot(playerTeam[0]);
+		opponentSide.slots[0] = createActivePokemonSlot(aiTeam[0]);
 
 		const battle: BattleState = {
 			battleType: 'battletower',
@@ -423,31 +419,6 @@ export function startBattleTowerFloor(
 			// Unified side states
 			playerSide,
 			opponentSide,
-			// Legacy accessors (reference the same data)
-			playerSlots: playerSide.slots,
-			opponentSlots: opponentSide.slots,
-			playerHazards: playerSide.hazards,
-			opponentHazards: opponentSide.hazards,
-			playerFutureMoves: playerSide.futureMoves,
-			opponentFutureMoves: opponentSide.futureMoves,
-			playerQuickGuard: playerSide.quickGuard,
-			opponentQuickGuard: opponentSide.quickGuard,
-			playerWideGuard: playerSide.wideGuard,
-			opponentWideGuard: opponentSide.wideGuard,
-			playerCraftyShield: playerSide.craftyShield,
-			opponentCraftyShield: opponentSide.craftyShield,
-			playerReflectTurns: playerSide.reflectTurns,
-			opponentReflectTurns: opponentSide.reflectTurns,
-			playerLightScreenTurns: playerSide.lightScreenTurns,
-			opponentLightScreenTurns: opponentSide.lightScreenTurns,
-			playerAuroraVeilTurns: playerSide.auroraVeilTurns,
-			opponentAuroraVeilTurns: opponentSide.auroraVeilTurns,
-			playerMistTurns: playerSide.mistTurns,
-			opponentMistTurns: opponentSide.mistTurns,
-			playerTailwindTurns: playerSide.tailwindTurns,
-			opponentTailwindTurns: opponentSide.tailwindTurns,
-			playerTerastallizeUsed: playerSide.terastallizeUsed,
-			opponentTerastallizeUsed: opponentSide.terastallizeUsed,
 			// Other battle state
 			pendingActions: {},
 			playerId: user.id,
@@ -472,11 +443,11 @@ export function startBattleTowerFloor(
 			persistentPokemonState: {},
 		};
 
-		if (playerSlots[0]) {
-			applyHazardEffectsOnSwitchIn(playerSlots[0], battle, true, battleMessages);
+		if (playerSide.slots[0]) {
+			applyHazardEffectsOnSwitchIn(playerSide.slots[0], battle, true, battleMessages);
 		}
-		if (opponentSlots[0]) {
-			applyHazardEffectsOnSwitchIn(opponentSlots[0], battle, false, battleMessages);
+		if (opponentSide.slots[0]) {
+			applyHazardEffectsOnSwitchIn(opponentSide.slots[0], battle, false, battleMessages);
 		}
 
 		activeBattles.set(user.id, battle);

@@ -655,12 +655,12 @@ export function handleSpecificStatusMove(
 			if (battle.opponentSide.reflectTurns > 0) { battle.opponentSide.reflectTurns = 0; messageLog.push(`The opposing team's Reflect wore off!`); }
 			if (battle.opponentSide.lightScreenTurns > 0) { battle.opponentSide.lightScreenTurns = 0; messageLog.push(`The opposing team's Light Screen wore off!`); }
 			if (battle.opponentSide.auroraVeilTurns > 0) { battle.opponentSide.auroraVeilTurns = 0; messageLog.push(`The opposing team's Aurora Veil wore off!`); }
-			if ((battle as any).opponentMistTurns > 0) { (battle as any).opponentMistTurns = 0; messageLog.push(`The opposing team's Mist faded!`); }
+			if (battle.opponentSide.mistTurns > 0) { battle.opponentSide.mistTurns = 0; messageLog.push(`The opposing team's Mist faded!`); }
 		} else {
 			if (battle.playerSide.reflectTurns > 0) { battle.playerSide.reflectTurns = 0; messageLog.push(`Your team's Reflect wore off!`); }
 			if (battle.playerSide.lightScreenTurns > 0) { battle.playerSide.lightScreenTurns = 0; messageLog.push(`Your team's Light Screen wore off!`); }
 			if (battle.playerSide.auroraVeilTurns > 0) { battle.playerSide.auroraVeilTurns = 0; messageLog.push(`Your team's Aurora Veil wore off!`); }
-			if ((battle as any).playerMistTurns > 0) { (battle as any).playerMistTurns = 0; messageLog.push(`Your team's Mist faded!`); }
+			if (battle.playerSide.mistTurns > 0) { battle.playerSide.mistTurns = 0; messageLog.push(`Your team's Mist faded!`); }
 		}
 		if (defenderSlot) {
 			applyStatChange(defenderSlot, 'evasion', -1, battle, messageLog, attackerSlot);
@@ -961,9 +961,9 @@ export function handleSpecificStatusMove(
 		battle.playerSide.auroraVeilTurns = battle.opponentSide.auroraVeilTurns;
 		battle.opponentSide.auroraVeilTurns = tempAuroraVeil;
 
-		const tempMist = (battle as any).playerMistTurns;
-		(battle as any).playerMistTurns = (battle as any).opponentMistTurns;
-		(battle as any).opponentMistTurns = tempMist;
+		const tempMist = battle.playerSide.mistTurns;
+		battle.playerSide.mistTurns = battle.opponentSide.mistTurns;
+		battle.opponentSide.mistTurns = tempMist;
 
 		messageLog.push(`${attacker.species} swapped the battle effects on both sides of the field!`);
 		return true;
@@ -1813,14 +1813,14 @@ export function handleGenericSideMove(
 
 	if (move.id === 'mist') {
 		if (isPlayerAttacker) {
-			if ((battle as any).playerMistTurns === 0) {
-				(battle as any).playerMistTurns = 5;
+			if (battle.playerSide.mistTurns === 0) {
+				battle.playerSide.mistTurns = 5;
 				messageLog.push(`Your team became shrouded in mist!`);
 				hadEffect = true;
 			}
 		} else {
-			if ((battle as any).opponentMistTurns === 0) {
-				(battle as any).opponentMistTurns = 5;
+			if (battle.opponentSide.mistTurns === 0) {
+				battle.opponentSide.mistTurns = 5;
 				messageLog.push(`The opposing team became shrouded in mist!`);
 				hadEffect = true;
 			}

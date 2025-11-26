@@ -2612,17 +2612,17 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		let removedScreens = false;
 
 		for (const side of sides) {
-			const sidePrefix = side.name === 'player' ? 'player' : 'opponent';
-			if ((battle as any)[`${sidePrefix}ReflectTurns`] > 0) {
-				(battle as any)[`${sidePrefix}ReflectTurns`] = 0;
+			const sideState = side.name === 'player' ? battle.playerSide : battle.opponentSide;
+			if (sideState.reflectTurns > 0) {
+				sideState.reflectTurns = 0;
 				removedScreens = true;
 			}
-			if ((battle as any)[`${sidePrefix}LightScreenTurns`] > 0) {
-				(battle as any)[`${sidePrefix}LightScreenTurns`] = 0;
+			if (sideState.lightScreenTurns > 0) {
+				sideState.lightScreenTurns = 0;
 				removedScreens = true;
 			}
-			if ((battle as any)[`${sidePrefix}AuroraVeilTurns`] > 0) {
-				(battle as any)[`${sidePrefix}AuroraVeilTurns`] = 0;
+			if (sideState.auroraVeilTurns > 0) {
+				sideState.auroraVeilTurns = 0;
 				removedScreens = true;
 			}
 		}
