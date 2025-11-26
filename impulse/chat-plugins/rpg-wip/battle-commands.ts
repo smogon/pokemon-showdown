@@ -32,7 +32,8 @@ import {
 	activeBattles,
 	storePokemonInPC,
 } from './core';
-import { validateMoveAction, processTurn, applyHazardEffectsOnSwitchIn } from './battle-flow';
+import { validateMoveAction, processTurn } from './battle-flow';
+import { applyHazardEffectsOnSwitchIn } from './battle-state';
 import { saveBattleStatus, performCatchAttempt } from './battle-core';
 import { LOCATIONS, getZoneLocation } from './game-locations';
 import { generateExploreHTML } from './html';

@@ -13,7 +13,8 @@ import {
 } from './utils';
 import { ITEMS_DATABASE } from './items';
 import { RPGAbilities } from './abilities';
-import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness, executeForcedRandomSwitch } from './battle-core';
+import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness } from './battle-state';
+import { executeForcedRandomSwitch } from './battle-core';
 import { getPlayerData } from './core';
 
 function hasAromaVeilProtection(targetSlot: ActivePokemonSlot, battle: BattleState, attacker?: RPGPokemon): boolean {

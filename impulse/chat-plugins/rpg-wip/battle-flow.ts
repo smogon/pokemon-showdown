@@ -28,7 +28,7 @@ import {
 	generateBattleTowerLossHTML,
 } from './battle-tower';
 import { getPlayerData, activeBattles } from './core';
-import { teraToggleState, activeScriptedEvents } from './battle-state';
+import { teraToggleState, activeScriptedEvents, getStatMultiplier, getCustomEffectiveness, getPokemonTypes, applyHazardEffectsOnSwitchIn } from './battle-state';
 import {
 	generateMoveLearnHTML,
 } from './html';
@@ -43,12 +43,9 @@ import { GameConfig } from './game-config';
 
 import {
 	gainExperience,
-	getCustomEffectiveness,
-	getStatMultiplier,
 	handleDamagingMove,
 	handleStatusMove,
 	saveBattleStatus,
-	getPokemonTypes,
 	getMoveType,
 	checkAccuracy,
 	checkSubstituteBypass,
@@ -980,112 +977,6 @@ export function resolveMoveTarget(
 	}
 
 	return finalTargetIndex;
-}
-
-export function applyHazardEffectsOnSwitchIn(slot: ActivePokemonSlot, battle: BattleState, isPlayerSwitchIn: boolean, messageLog: string[]): boolean {
-	const pokemon = slot.pokemon;
-	const ability = toID(pokemon.ability || '');
-
-	const runSwitchInAbilities = () => {
-		RPGAbilities.applySwitchInAbilities(slot, battle, isPlayerSwitchIn, messageLog);
-
-		const opponentSlots = isPlayerSwitchIn ? getActiveSlots(battle.opponentSide.slots) : getActiveSlots(battle.playerSide.slots);
-		if (ability === 'frisk') {
-			for (const opponentSlot of opponentSlots) {
-				if (opponentSlot && opponentSlot.pokemon.hp > 0 && opponentSlot.pokemon.item) {
-					const itemName = ITEMS_DATABASE[opponentSlot.pokemon.item]?.name || opponentSlot.pokemon.item;
-					messageLog.push(`${pokemon.species} frisked ${opponentSlot.pokemon.species} and found its ${itemName}!`);
-				}
-			}
-		}
-
-		if (ability === 'download' && opponentSlots.length > 0) {
-			let totalDef = 0;
-			let totalSpd = 0;
-			for (const oppSlot of opponentSlots) {
-				totalDef += oppSlot.pokemon.def * getStatMultiplier(oppSlot.statStages.def);
-				totalSpd += oppSlot.pokemon.spd * getStatMultiplier(oppSlot.statStages.spd);
-			}
-			if (totalDef < totalSpd) {
-				applyStatChange(slot, 'atk', 1, battle, messageLog, slot);
-			} else {
-				applyStatChange(slot, 'spa', 1, battle, messageLog, slot);
-			}
-		}
-	};
-
-	if (battle.magicRoomTurns === 0 && pokemon.item === 'heavydutyboots') {
-		runSwitchInAbilities();
-		return false;
-	}
-
-	const hazards = isPlayerSwitchIn ? battle.playerSide.hazards : battle.opponentSide.hazards;
-	if (hazards.length === 0) {
-		runSwitchInAbilities();
-		return false;
-	}
-
-	const species = Dex.species.get(pokemon.species);
-	const isGrounded = RPGAbilities.isGrounded(pokemon, battle);
-	const hasAirBalloon = battle.magicRoomTurns === 0 && pokemon.item === 'airballoon';
-	let totalDamage = 0;
-
-	if (isGrounded) {
-		if (hazards.includes('stickyweb')) {
-			applyStatChange(slot, 'spe', -1, battle, messageLog, null);
-		}
-
-		const toxicSpikeLayers = hazards.filter(h => h === 'toxicspikes').length;
-		if (toxicSpikeLayers > 0) {
-			if (species.types.includes('Poison')) {
-				if (isPlayerSwitchIn) battle.playerSide.hazards = battle.playerSide.hazards.filter(h => h !== 'toxicspikes');
-				else battle.opponentSide.hazards = battle.opponentSide.hazards.filter(h => h !== 'toxicspikes');
-				messageLog.push(`The Toxic Spikes were absorbed by ${pokemon.species}!`);
-			} else {
-				const isImmune = species.types.includes('Steel');
-				if (!isImmune && !slot.status) {
-					const newStatus = toxicSpikeLayers >= 2 ? 'tox' : 'psn';
-					slot.status = newStatus;
-					if (newStatus === 'tox') {
-						slot.toxicCounter = 1;
-						messageLog.push(`${pokemon.species} was badly poisoned by the Toxic Spikes!`);
-					} else {
-						messageLog.push(`${pokemon.species} was poisoned by the Toxic Spikes!`);
-					}
-				}
-			}
-		}
-
-		const spikeLayers = hazards.filter(h => h === 'spikes').length;
-		if (spikeLayers > 0) {
-			const damageFraction = [0, 1 / 8, 1 / 6, 1 / 4][spikeLayers];
-			totalDamage += Math.floor(pokemon.maxHp * damageFraction);
-		}
-	}
-
-	if (hazards.includes('stealthrock')) {
-		if (hasAirBalloon) {
-			messageLog.push(`${pokemon.species}'s Air Balloon popped from the pointed stones!`);
-			pokemon.item = undefined;
-		}
-		const effectiveness = getCustomEffectiveness('Rock', species.types, pokemon, battle);
-		totalDamage += Math.floor(pokemon.maxHp * (1 / 8) * effectiveness);
-	}
-
-	if (totalDamage > 0) {
-		if (RPGAbilities.takesIndirectDamage(pokemon)) {
-			if (hazards.includes('stealthrock')) messageLog.push(`Pointed stones dug into ${pokemon.species}!`);
-			else if (hazards.includes('spikes')) messageLog.push(`${pokemon.species} was hurt by the spikes!`);
-
-			pokemon.hp = Math.max(0, pokemon.hp - totalDamage);
-			if (pokemon.hp <= 0) return true;
-		} else {
-			messageLog.push(`${pokemon.species}'s Magic Guard prevents hazard damage!`);
-		}
-	}
-
-	runSwitchInAbilities();
-	return false;
 }
 
 export function handlePlayerFaint(battle: BattleState, messageLog: string[]): boolean {

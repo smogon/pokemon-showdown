@@ -39,8 +39,7 @@ import {
 } from './battle-ui';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
-// Circular dependency note: Ensure your build system handles this, or refactor hazard logic to a shared file.
-import { applyHazardEffectsOnSwitchIn } from './battle-flow';
+import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness, applyHazardEffectsOnSwitchIn } from './battle-state';
 
 /**
  * Helper for Gen 9 Damage Rounding
@@ -1224,14 +1223,6 @@ export function getCriticalHitChance(attackerSlot: ActivePokemonSlot, defenderSl
 	return critChances[Math.min(critStage, 3)];
 }
 
-export function getStatMultiplier(stage: number): number {
-	if (stage >= 0) {
-		return (2 + stage) / 2;
-	} else {
-		return 2 / (2 + Math.abs(stage));
-	}
-}
-
 export function applyDamageAndEnduranceEffects(
 	defenderSlot: ActivePokemonSlot,
 	damageDealt: number,
@@ -1805,92 +1796,6 @@ export function applySecondaryEffects(
 			defenderSlot.willFlinch = true;
 		}
 	}
-}
-
-export function getPokemonTypes(pokemon: RPGPokemon, slot?: ActivePokemonSlot): string[] {
-	if (slot?.terastallized) {
-		return [slot.terastallized];
-	}
-	const species = Dex.species.get(pokemon.species);
-	return species.types;
-}
-
-export function getCustomEffectiveness(
-	moveType: string,
-	defenderTypes: string[],
-	defender: RPGPokemon,
-	battle: BattleState,
-	attacker?: RPGPokemon,
-	moveId?: string
-): number {
-	let effectiveness = 1;
-
-	// Special handling for Flying Press (Fighting + Flying)
-	if (moveId === 'flyingpress') {
-		let fightingEff = 1;
-		let flyingEff = 1;
-
-		const fightingChart = TYPE_CHART['Fighting'];
-		const flyingChart = TYPE_CHART['Flying'];
-
-		for (const type of defenderTypes) {
-			// Fighting part
-			if (fightingChart.superEffective.includes(type)) fightingEff *= 2;
-			else if (fightingChart.notVeryEffective.includes(type)) fightingEff *= 0.5;
-			else if (fightingChart.noEffect.includes(type)) fightingEff *= 0;
-
-			// Flying part
-			if (flyingChart.superEffective.includes(type)) flyingEff *= 2;
-			else if (flyingChart.notVeryEffective.includes(type)) flyingEff *= 0.5;
-			else if (flyingChart.noEffect.includes(type)) flyingEff *= 0;
-		}
-
-		return fightingEff * flyingEff;
-	}
-
-	const chartEntry = TYPE_CHART[moveType];
-	if (!chartEntry) return 1;
-
-	const hasStrongWinds = battle.weather?.type === 'strong-winds';
-	const isFlyingType = defenderTypes.includes('Flying');
-
-	const attackerAbility = attacker ? toID(attacker.ability || '') : '';
-	const hasMindEye = attackerAbility === 'mindseye';
-	const hasScrappy = attackerAbility === 'scrappy';
-
-	for (const defenderType of defenderTypes) {
-		// Freeze-Dry check
-		if (moveId === 'freezedry' && defenderType === 'Water') {
-			effectiveness *= 2; // Super Effective on Water
-			continue;
-		}
-
-		// Thousand Arrows check (grounding logic is usually elsewhere, but for effectiveness)
-		// If it hits flying, it should be neutral unless other types interact.
-		// Standard chart says Ground vs Flying is 0.
-		// If grounding logic happens before this, defenderTypes won't have Flying or isGrounded returns true.
-		// Assuming standard chart lookup:
-
-		if (chartEntry.superEffective.includes(defenderType)) {
-			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
-				['Rock', 'Electric', 'Ice'].includes(moveType)) {
-				effectiveness *= 1;
-			} else {
-				effectiveness *= 2;
-			}
-		} else if (chartEntry.notVeryEffective.includes(defenderType)) {
-			effectiveness *= 0.5;
-		} else if (chartEntry.noEffect.includes(defenderType)) {
-			if (hasMindEye && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
-				effectiveness *= 1;
-			} else if (hasScrappy && defenderType === 'Ghost' && ['Normal', 'Fighting'].includes(moveType)) {
-				effectiveness *= 1;
-			} else {
-				effectiveness *= 0;
-			}
-		}
-	}
-	return effectiveness;
 }
 
 export function performCatchAttempt(battle: BattleState, ballId: string, targetSlot: ActivePokemonSlot): { success: boolean, shakes: number } {
