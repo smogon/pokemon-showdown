@@ -508,9 +508,11 @@ export function generateBattleHTML(
 
 			if (battle.battleResult === 'victory') {
 				// New Logic: Check if the battle was against a trainer inside a building
+				const player = getPlayerData(battle.playerId);
+				const currentLocationId = toID(player.location);
+
 				if (battle.trainerId) {
-					const player = getPlayerData(battle.playerId);
-					const location = LOCATIONS[toID(player.location)];
+					const location = LOCATIONS[currentLocationId];
 
 					if (location?.buildings) {
 						for (const building of location.buildings) {
@@ -532,7 +534,7 @@ export function generateBattleHTML(
 				}
 
 				if (battle.zoneId) {
-					const locInfo = getZoneLocation(battle.zoneId);
+					const locInfo = getZoneLocation(battle.zoneId, currentLocationId);
 					if (locInfo?.buildingId && locInfo.roomId) {
 						continueCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
 					}
