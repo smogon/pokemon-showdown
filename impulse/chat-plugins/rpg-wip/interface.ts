@@ -314,6 +314,17 @@ export interface BattleState {
 	battleTowerFormat?: string;
 }
 
+/**
+ * Time-based availability configuration for trainers/NPCs.
+ * Allows trainers to only appear during specific times of day.
+ */
+export interface TimeAvailability {
+	morning?: boolean;
+	afternoon?: boolean;
+	evening?: boolean;
+	night?: boolean;
+}
+
 export interface TrainerSpec {
 	name: string;
 	party: {
@@ -335,6 +346,12 @@ export interface TrainerSpec {
 	preventIfFlag?: string | string[];
 	requiredBadge?: string | string[];
 	blockMessage?: string; // NEW: Message to show if access is denied
+
+	/** 
+	 * Time-based availability. If defined, trainer only appears during specified times.
+	 * If not defined, trainer is always available (fallback behavior).
+	 */
+	availableByTime?: TimeAvailability;
 
 	// Rewards / State Change
 	setFlag?: string | string[];
@@ -391,6 +408,12 @@ export interface NPCData {
 	flags?: string[];
 	action?: NPCAction;
 	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' | 'elitefoura' | 'champion' | 'rival';
+
+	/** 
+	 * Time-based availability. If defined, NPC only appears during specified times.
+	 * If not defined, NPC is always available (fallback behavior).
+	 */
+	availableByTime?: TimeAvailability;
 }
 
 export interface ScriptedEvent {
@@ -508,9 +531,23 @@ export interface Location {
 	removeFlag?: string | string[]; // Supports single or multiple flags
 }
 
+/**
+ * Time-based Pokemon encounter configuration.
+ * Allows different Pokemon to appear at different times of day.
+ */
+export interface TimePokemon {
+	morning?: string[];
+	afternoon?: string[];
+	evening?: string[];
+	night?: string[];
+}
+
 export interface EncounterZone {
 	name: string;
+	/** Default Pokemon list (used if no time-based entries match or as fallback) */
 	pokemon: string[];
+	/** Optional time-based Pokemon lists that override the default */
+	pokemonByTime?: TimePokemon;
 	levelRange: [number, number];
 	battleType?: 'single' | 'double';
 

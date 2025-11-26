@@ -6,6 +6,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, TOTAL_BADGES } from './game-npcs';
 import { GameConfig, STARTER_POKEMON } from './game-config';
+import { formatLocationWithTime, isTrainerAvailableByTime } from './time-system';
 import type { RPGPokemon, PlayerData } from './interface';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
@@ -393,7 +394,7 @@ export function generateProfileHTML(player: PlayerData, notification?: string): 
 		`<div>` +
 		`<h4>Adventure</h4>` +
 		`<div class="rpg-memo-box">` +
-		`<p><strong>Location:</strong><br>${player.location}</p>` +
+		`<p><strong>Location:</strong><br>${formatLocationWithTime(player.location)}</p>` +
 		`<hr style="border-color:rgba(0,0,0,0.1); margin:5px 0;">` +
 		`<p><strong>Party:</strong> ${player.party.length} / 6</p>` +
 		`<p><strong>PC Box:</strong> ${player.pc.size}</p>` +
@@ -459,7 +460,7 @@ export function generateStoryModeStartHTML(): string {
 	}
 
 	return `<div class="rpg-infobox">` +
-		`<h2>Welcome to ${location.name}!</h2>` +
+		`<h2>Welcome to ${formatLocationWithTime(location.name)}!</h2>` +
 		`<div class="rpg-memo-box" style="text-align:center; margin-bottom:15px;">` +
 		`<p>Your adventure is about to begin.</p>` +
 		`<p>To get your first Pokémon partner, head to the lab!</p>` +
@@ -477,7 +478,7 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (notification) html += `<div class="rpg-notification">${notification}</div>`;
 
 	html += `<div class="rpg-text-center">` +
-		`<h2><b>${location.name}</b></h2>` +
+		`<h2><b>${formatLocationWithTime(location.name)}</b></h2>` +
 		`<p><em>${location.description || ''}</em></p>` +
 		`</div>`;
 
@@ -526,6 +527,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			// Check flags for Roaming Trainers
 			const trainer = TRAINER_DATABASE[tid];
 			if (!trainer) return false;
+
+			// Check time-based availability
+			if (!isTrainerAvailableByTime(trainer)) return false;
 
 			if (trainer.requiredFlag) {
 				const req = Array.isArray(trainer.requiredFlag) ? trainer.requiredFlag : [trainer.requiredFlag];
@@ -1150,7 +1154,7 @@ export function generateShopHTML(player: PlayerData, category?: string, notifica
 		html += `<div class="rpg-notification">${notification}</div>`;
 	}
 
-	html += `<h2>Poké Mart - ${player.location}</h2>` +
+	html += `<h2>Poké Mart - ${formatLocationWithTime(player.location)}</h2>` +
 		`<p><strong>Money:</strong> ₽${player.money} | <strong>Badges:</strong> ${player.badges}/${TOTAL_BADGES}</p>`;
 
 	if (nextTier) {

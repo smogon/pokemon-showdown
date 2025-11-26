@@ -104,6 +104,7 @@ import {
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime, isNPCAvailableByTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
@@ -977,7 +978,7 @@ export const commands: ChatCommands = {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
 
-				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${currentLocation.name}</h2>`;
+				let travelHTML = `<div class="rpg-infobox"><h2>Travel from ${formatLocationWithTime(currentLocation.name)}</h2>`;
 				travelHTML += `<p>Where would you like to go?</p>`;
 
 				if (currentLocation.connectedLocations.length === 0) {
@@ -1131,7 +1132,7 @@ export const commands: ChatCommands = {
 			}
 
 			// No Event - Show Explore Screen
-			const msg = `You arrived at ${targetLocation.name}.`;
+			const msg = `You arrived at ${formatLocationWithTime(targetLocation.name)}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
 
@@ -1226,7 +1227,7 @@ export const commands: ChatCommands = {
 						roomHTML += `<div class="rpg-notification">${notification}</div>`;
 					}
 
-					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
+					roomHTML += `<div class="rpg-text-center"><h2><b>${formatLocationWithTime(building.name)} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
 
 					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
@@ -1243,31 +1244,49 @@ export const commands: ChatCommands = {
 
 					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
-						roomHTML += `<hr /><strong>People Here:</strong><br><p class="rpg-text-center">`;
-						for (const npcId of roomToRender.npcs) {
+						// Filter NPCs by time availability
+						const availableNPCsInRoom = roomToRender.npcs.filter((npcId: string) => {
 							const npc = NPC_DATABASE[npcId];
-							if (npc) {
-								if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) continue;
-								roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button" style="${btnStyle}">💬 ${npc.name}</button>`;
+							if (!npc) return false;
+							if (npc.flags && !npc.flags.every(flag => player.storyFlags.has(flag))) return false;
+							return isNPCAvailableByTime(npc);
+						});
+
+						if (availableNPCsInRoom.length > 0) {
+							roomHTML += `<hr /><strong>People Here:</strong><br><p class="rpg-text-center">`;
+							for (const npcId of availableNPCsInRoom) {
+								const npc = NPC_DATABASE[npcId];
+								if (npc) {
+									roomHTML += `<button name="send" value="/rpg talknpc ${npcId}" class="button" style="${btnStyle}">💬 ${npc.name}</button>`;
+								}
 							}
+							roomHTML += `</p>`;
 						}
-						roomHTML += `</p>`;
 					}
 
 					// Trainers in Room
 					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
-						roomHTML += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
-						for (const trainerId of roomToRender.trainers) {
-							const trainer = TRAINER_DATABASE[trainerId];
-							if (trainer) {
-								if (!player.defeatedTrainers.has(trainerId)) {
-									roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
-								} else {
-									roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+						// Filter trainers by time availability
+						const availableTrainers = roomToRender.trainers.filter((tid: string) => {
+							const trainer = TRAINER_DATABASE[tid];
+							return trainer && isTrainerAvailableByTime(trainer);
+						});
+
+						if (availableTrainers.length > 0 || roomToRender.trainers.some((tid: string) => player.defeatedTrainers.has(tid))) {
+							roomHTML += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
+							for (const trainerId of roomToRender.trainers) {
+								const trainer = TRAINER_DATABASE[trainerId];
+								if (trainer) {
+									if (player.defeatedTrainers.has(trainerId)) {
+										roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+									} else if (isTrainerAvailableByTime(trainer)) {
+										roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
+									}
+									// If not available by time and not defeated, don't show
 								}
 							}
+							roomHTML += `</p>`;
 						}
-						roomHTML += `</p>`;
 					}
 
 					// --- Room Actions (PC, Shop, Gym Leader) ---
@@ -1280,24 +1299,31 @@ export const commands: ChatCommands = {
 						const gymLeaderId = roomToRender.gymLeaderId;
 						const gymData = TRAINER_DATABASE[gymLeaderId];
 						if (gymData) {
-							// Check if all trainers in the BUILDING are defeated
+							// Check if all trainers in the BUILDING are defeated (only check those available by time)
 							let allTrainersDefeated = true;
 							// Check room level trainers (Building level check removed as it's legacy)
 							if (building.rooms) {
 								for (const r of building.rooms) {
 									if (r.trainers) {
 										for (const tid of r.trainers) {
-											if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+											const trainerData = TRAINER_DATABASE[tid];
+											// Only count trainers that are available by time
+											if (trainerData && isTrainerAvailableByTime(trainerData)) {
+												if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+											}
 										}
 									}
 								}
 							}
 
 							if (!player.defeatedTrainers.has(gymLeaderId)) {
-								if (allTrainersDefeated) {
-									actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
-								} else {
-									actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+								// Also check if gym leader is available by time
+								if (isTrainerAvailableByTime(gymData)) {
+									if (allTrainersDefeated) {
+										actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
+									} else {
+										actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+									}
 								}
 							} else {
 								actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;
@@ -1536,7 +1562,9 @@ export const commands: ChatCommands = {
 			const opponentParty: RPGPokemon[] = [];
 
 			try {
-				const wildSpecies1 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+				// Get Pokemon available at the current time of day
+				const availablePokemon = getZonePokemonByTime(zone);
+				const wildSpecies1 = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
 				const [minLevel, maxLevel] = zone.levelRange;
 				const wildLevel1 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 				const wildPokemon1 = createPokemon(wildSpecies1, wildLevel1);
@@ -1545,7 +1573,7 @@ export const commands: ChatCommands = {
 				if (zoneBattleType === 'double') {
 					finalBattleType = 'wild_double';
 
-					const wildSpecies2 = zone.pokemon[Math.floor(Math.random() * zone.pokemon.length)];
+					const wildSpecies2 = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
 					const wildLevel2 = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
 					const wildPokemon2 = createPokemon(wildSpecies2, wildLevel2);
 					opponentParty.push(wildPokemon2);
@@ -2280,6 +2308,9 @@ export const commands: ChatCommands = {
 
 				for (const [id, npc] of Object.entries(NPC_DATABASE)) {
 					const npcLocationId = toID(npc.location);
+					// Check time-based availability first
+					if (!isNPCAvailableByTime(npc)) continue;
+
 					if (npcLocationId === currentLocationId) {
 						if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
 					} else if (currentLocation?.buildings) {
@@ -2305,6 +2336,8 @@ export const commands: ChatCommands = {
 			const npc = NPC_DATABASE[npcId];
 			if (!npc) return this.errorReply("That NPC doesn't exist.");
 			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) return this.errorReply("Cannot talk to this NPC yet.");
+			// Check time-based availability
+			if (!isNPCAvailableByTime(npc)) return this.errorReply("This NPC is not available at this time.");
 
 			// Security check: Ensure player is in the same location as the NPC
 			const playerLocId = toID(player.location);
