@@ -409,9 +409,6 @@ function handleUseMiscItem(
 	return this.errorReply("This item cannot be used right now.");
 }
 
-// Re-export from battle-state for backward compatibility
-export { teraToggleState, activeScriptedEvents } from './battle-state';
-
 export const commands: ChatCommands = {
 	rpg: {
 		start(target, room, user) {
