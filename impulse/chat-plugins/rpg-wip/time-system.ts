@@ -9,7 +9,7 @@
  * - Night: 8:00 PM - 5:59 AM
  */
 
-import type { EncounterZone } from './interface';
+import type { EncounterZone, TrainerSpec, TimeAvailability } from './interface';
 
 export type TimePeriod = 'Morning' | 'Afternoon' | 'Evening' | 'Night';
 
@@ -98,4 +98,48 @@ export function getZonePokemonByTime(zone: EncounterZone): string[] {
 	}
 
 	return zone.pokemon;
+}
+
+/**
+ * Checks if a trainer is available at the current time of day.
+ * If the trainer has no time restrictions (no availableByTime), they are always available.
+ * If availableByTime is defined, the trainer is only available during the specified times.
+ *
+ * @param trainer The trainer spec to check
+ * @returns True if the trainer is available at the current time
+ */
+export function isTrainerAvailableByTime(trainer: TrainerSpec): boolean {
+	// If no time restrictions defined, trainer is always available (fallback)
+	if (!trainer.availableByTime) {
+		return true;
+	}
+
+	const period = getCurrentTimePeriod();
+	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
+
+	// Check if the trainer is available at the current time period
+	const isAvailable = trainer.availableByTime[timeKey];
+
+	// If the specific time period is explicitly set to true, trainer is available
+	// If not defined or false, trainer is not available
+	return isAvailable === true;
+}
+
+/**
+ * Checks if a trainer is available based on TimeAvailability settings.
+ * This is a generic version that can be used for any entity with TimeAvailability.
+ *
+ * @param availability The time availability settings
+ * @returns True if available at the current time
+ */
+export function isAvailableByTime(availability?: TimeAvailability): boolean {
+	// If no time restrictions defined, always available (fallback)
+	if (!availability) {
+		return true;
+	}
+
+	const period = getCurrentTimePeriod();
+	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
+
+	return availability[timeKey] === true;
 }

@@ -104,7 +104,7 @@ import {
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
-import { formatLocationWithTime, getZonePokemonByTime } from './time-system';
+import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
 
@@ -1257,18 +1257,27 @@ export const commands: ChatCommands = {
 
 					// Trainers in Room
 					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
-						roomHTML += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
-						for (const trainerId of roomToRender.trainers) {
-							const trainer = TRAINER_DATABASE[trainerId];
-							if (trainer) {
-								if (!player.defeatedTrainers.has(trainerId)) {
-									roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
-								} else {
-									roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+						// Filter trainers by time availability
+						const availableTrainers = roomToRender.trainers.filter((tid: string) => {
+							const trainer = TRAINER_DATABASE[tid];
+							return trainer && isTrainerAvailableByTime(trainer);
+						});
+
+						if (availableTrainers.length > 0 || roomToRender.trainers.some((tid: string) => player.defeatedTrainers.has(tid))) {
+							roomHTML += `<hr /><strong>Trainers:</strong><br><p class="rpg-text-center">`;
+							for (const trainerId of roomToRender.trainers) {
+								const trainer = TRAINER_DATABASE[trainerId];
+								if (trainer) {
+									if (player.defeatedTrainers.has(trainerId)) {
+										roomHTML += `<span class="rpg-text-muted">✅ ${trainer.name} (Defeated)</span><br>`;
+									} else if (isTrainerAvailableByTime(trainer)) {
+										roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
+									}
+									// If not available by time and not defeated, don't show
 								}
 							}
+							roomHTML += `</p>`;
 						}
-						roomHTML += `</p>`;
 					}
 
 					// --- Room Actions (PC, Shop, Gym Leader) ---
@@ -1281,24 +1290,31 @@ export const commands: ChatCommands = {
 						const gymLeaderId = roomToRender.gymLeaderId;
 						const gymData = TRAINER_DATABASE[gymLeaderId];
 						if (gymData) {
-							// Check if all trainers in the BUILDING are defeated
+							// Check if all trainers in the BUILDING are defeated (only check those available by time)
 							let allTrainersDefeated = true;
 							// Check room level trainers (Building level check removed as it's legacy)
 							if (building.rooms) {
 								for (const r of building.rooms) {
 									if (r.trainers) {
 										for (const tid of r.trainers) {
-											if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+											const trainerData = TRAINER_DATABASE[tid];
+											// Only count trainers that are available by time
+											if (trainerData && isTrainerAvailableByTime(trainerData)) {
+												if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
+											}
 										}
 									}
 								}
 							}
 
 							if (!player.defeatedTrainers.has(gymLeaderId)) {
-								if (allTrainersDefeated) {
-									actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
-								} else {
-									actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+								// Also check if gym leader is available by time
+								if (isTrainerAvailableByTime(gymData)) {
+									if (allTrainersDefeated) {
+										actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
+									} else {
+										actionsHTML += `<p><em>Defeat all trainers in the gym to challenge the Leader!</em></p>`;
+									}
 								}
 							} else {
 								actionsHTML += `<p><em>You already defeated ${gymData.name}!</em></p>`;

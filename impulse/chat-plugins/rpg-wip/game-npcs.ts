@@ -125,6 +125,13 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Go home and train more.",
 		},
 		setFlag: 'security_cleared',
+		// Example: Security Bob only works during the day
+		availableByTime: {
+			morning: true,
+			afternoon: true,
+			evening: true,
+			night: false, // Off duty at night
+		},
 	},
 
 	// 2. The Gym Minion (NEW)

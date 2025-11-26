@@ -6,7 +6,7 @@ import { BATTLE_TOWER_FORMATS } from './battle-tower';
 import { LOCATIONS, ENCOUNTER_ZONES } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, TOTAL_BADGES } from './game-npcs';
 import { GameConfig, STARTER_POKEMON } from './game-config';
-import { formatLocationWithTime } from './time-system';
+import { formatLocationWithTime, isTrainerAvailableByTime } from './time-system';
 import type { RPGPokemon, PlayerData } from './interface';
 
 function calculateExpBarPercentage(expProgress: number, expNeededForLevel: number): number {
@@ -527,6 +527,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			// Check flags for Roaming Trainers
 			const trainer = TRAINER_DATABASE[tid];
 			if (!trainer) return false;
+
+			// Check time-based availability
+			if (!isTrainerAvailableByTime(trainer)) return false;
 
 			if (trainer.requiredFlag) {
 				const req = Array.isArray(trainer.requiredFlag) ? trainer.requiredFlag : [trainer.requiredFlag];

@@ -314,6 +314,17 @@ export interface BattleState {
 	battleTowerFormat?: string;
 }
 
+/**
+ * Time-based availability configuration for trainers/NPCs.
+ * Allows trainers to only appear during specific times of day.
+ */
+export interface TimeAvailability {
+	morning?: boolean;
+	afternoon?: boolean;
+	evening?: boolean;
+	night?: boolean;
+}
+
 export interface TrainerSpec {
 	name: string;
 	party: {
@@ -335,6 +346,12 @@ export interface TrainerSpec {
 	preventIfFlag?: string | string[];
 	requiredBadge?: string | string[];
 	blockMessage?: string; // NEW: Message to show if access is denied
+
+	/** 
+	 * Time-based availability. If defined, trainer only appears during specified times.
+	 * If not defined, trainer is always available (fallback behavior).
+	 */
+	availableByTime?: TimeAvailability;
 
 	// Rewards / State Change
 	setFlag?: string | string[];
