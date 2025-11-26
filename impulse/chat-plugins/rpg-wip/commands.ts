@@ -1963,7 +1963,8 @@ export const commands: ChatCommands = {
 
 					const tempSlot = createActivePokemonSlot(caughtPokemon);
 
-					const locInfo = getZoneLocation(zoneId);
+					const currentLocationId = toID(player.location);
+					const locInfo = getZoneLocation(zoneId, currentLocationId);
 					let returnCommand = '/rpg explore';
 					if (locInfo?.buildingId && locInfo.roomId) {
 						returnCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
@@ -1994,13 +1995,14 @@ export const commands: ChatCommands = {
 				activeBattles.delete(user.id);
 				teraToggleState.delete(user.id);
 
-				const locInfo = getZoneLocation(zoneId);
+				const player = getPlayerData(user.id);
+				const currentLocationId = toID(player.location);
+				const locInfo = getZoneLocation(zoneId, currentLocationId);
 				if (locInfo?.buildingId && locInfo.roomId) {
 					return this.parse(`/rpg building ${locInfo.buildingId} ${locInfo.roomId}`);
 				}
 
-				const player = getPlayerData(user.id);
-				const location = LOCATIONS[toID(player.location)];
+				const location = LOCATIONS[currentLocationId];
 				this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, location, "You ran away safely!")}`);
 			},
 

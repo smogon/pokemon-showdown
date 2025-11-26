@@ -256,7 +256,32 @@ export function getStartingLocation(): { id: string, name: string } {
 	return { id: 'newbarktown', name: 'New Bark Town' };
 }
 
-export function getZoneLocation(zoneId: string): { locationId: string, buildingId?: string, roomId?: string } | null {
+export function getZoneLocation(zoneId: string, currentLocationId?: string): { locationId: string, buildingId?: string, roomId?: string } | null {
+	// If currentLocationId is provided, check that location first to prioritize
+	// zones in the player's current location (since a zone can exist in multiple places)
+	if (currentLocationId) {
+		const currentLoc = LOCATIONS[currentLocationId];
+		if (currentLoc) {
+			// Check if zone is in the current location's outdoor encounter zones
+			if (currentLoc.encounterZones?.includes(zoneId)) {
+				return { locationId: currentLocationId };
+			}
+			// Check if zone is inside a building in the current location
+			if (currentLoc.buildings) {
+				for (const building of currentLoc.buildings) {
+					if (building.rooms) {
+						for (const room of building.rooms) {
+							if (room.encounterZones?.includes(zoneId)) {
+								return { locationId: currentLocationId, buildingId: building.id, roomId: room.id };
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Fall back to searching all locations if not found in current location
 	for (const locId in LOCATIONS) {
 		const loc = LOCATIONS[locId];
 		if (loc.encounterZones?.includes(zoneId)) {
