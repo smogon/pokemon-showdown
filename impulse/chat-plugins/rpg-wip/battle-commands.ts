@@ -173,7 +173,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			partyToUse.some(p => p.hp > 0 && !battle.playerSide.slots.some(s => s?.pokemon.id === p.id));
 
 		if (needsAnotherSwitch) {
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		} else {
 			if (!battle.pendingPivot) battle.pendingActions = {};
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog)}`);
@@ -235,7 +235,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			const activeOpponents = getActiveSlots(battle.opponentSide.slots);
 			if (activeOpponents.length > 1) return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateMultipleOpponentsCatchErrorHTML()}`);
 		}
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateCatchMenuHTML(getPlayerData(battle.playerId), battle)}`);
 	},
 
 	selectcatchtarget(target, room, user) {
@@ -309,7 +309,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 				returnCommand = `/rpg building ${locInfo.buildingId} ${locInfo.roomId}`;
 			}
 
-			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
+			this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateCatchSuccessHTML(caughtPokemon, tempSlot, location, zoneId, ballId === 'healball', returnCommand)}`);
 		} else {
 			messageLog.push(`<span class="rpg-text-error"><strong>${["Oh no! The Pokemon broke free!", "Aww! It appeared to be caught!", "Aargh! Almost had it!", "Gah! It was so close, too!"][catchResult.shakes]}</strong></span>`);
 			processTurn(this, battle, room, user, messageLog);
@@ -378,7 +378,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["You don't have any items to use in battle!"])}`);
 		}
 
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateBattleItemMenuHTML(battle, player, usableItems)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleItemMenuHTML(battle, player, usableItems)}`);
 	},
 
 	selectitemtarget(target, room, user) {
@@ -398,7 +398,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Invalid item!"])}`);
 		}
 
-		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.BattleUI.generateBattleItemTargetHTML(battle, player, itemId)}`);
+		this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleItemTargetHTML(battle, player, itemId)}`);
 	},
 
 	useitem(target, room, user) {
