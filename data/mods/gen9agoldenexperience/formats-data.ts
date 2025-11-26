@@ -1686,7 +1686,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "NFE",
 	},
 	medichammega: {
-		tier: "UUBL",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	mediyumi: {
@@ -4014,7 +4014,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DOU",
 	},
 	tapubulu: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	tapufini: {
