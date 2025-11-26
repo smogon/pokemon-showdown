@@ -1257,7 +1257,7 @@ export const commands: ChatCommands = {
 					}
 
 					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
-					
+
 					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
 						roomHTML += `<hr /><strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
@@ -1341,30 +1341,33 @@ export const commands: ChatCommands = {
 						roomHTML += `</p>`;
 					}
 
-					// Navigation (Connected Rooms)
-					if (roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0) {
+					// Navigation & Exit
+					// We group them together so buttons appear side-by-side
+					const hasConnections = roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0;
+
+					if (hasConnections || roomToRender.isEntrance) {
 						roomHTML += `<hr /><strong>Go To:</strong><br><p class="rpg-text-center">`;
-						for (const connectedRoomId of roomToRender.connectedRooms) {
-							const connectedRoom = building.rooms?.find(r => r.id === connectedRoomId);
-							if (connectedRoom) {
-								// PASS CURRENT ROOM ID (roomToRender.id) AS SOURCE FOR NAVIGATION
-								roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button" style="${btnStyle}">➡️ ${connectedRoom.name}</button>`;
+
+						if (hasConnections) {
+							for (const connectedRoomId of roomToRender.connectedRooms) {
+								const connectedRoom = building.rooms?.find(r => r.id === connectedRoomId);
+								if (connectedRoom) {
+									roomHTML += `<button name="send" value="/rpg building ${buildingId} ${connectedRoomId} ${roomToRender.id}" class="button" style="${btnStyle}">➡️ ${connectedRoom.name}</button>`;
+								}
 							}
 						}
-						roomHTML += `</p>`;
-					}
 
-					// Exit Button
-					if (roomToRender.isEntrance) {
-						roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p></div>`;
-					} else {
-						if (!roomToRender.connectedRooms || roomToRender.connectedRooms.length === 0) {
-							roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p></div>`;
-						} else {
-							roomHTML += `</div>`;
+						if (roomToRender.isEntrance) {
+							roomHTML += `<button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button>`;
 						}
+
+						roomHTML += `</p>`;
+					} else {
+						// Fallback: If not an entrance and no connections (prevent softlock)
+						roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p>`;
 					}
 
+					roomHTML += `</div>`;
 					return roomHTML;
 				};
 
