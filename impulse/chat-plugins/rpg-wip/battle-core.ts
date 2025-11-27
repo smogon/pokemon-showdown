@@ -32,7 +32,6 @@ import { GameConfig } from './game-config';
 import {
 	generateMoveLearnHTML,
 } from './html';
-import { BattleUI } from './battle-ui';
 import { MANUAL_CATCH_RATES, MANUAL_BASE_EXP, MANUAL_EV_YIELDS } from './data-exp-evs-catch-rates';
 import { RPGMoves } from './battle-moves';
 import { getStatMultiplier, getPokemonTypes, getCustomEffectiveness, applyHazardEffectsOnSwitchIn } from './battle-state';
