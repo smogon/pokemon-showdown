@@ -1,4 +1,4 @@
-import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { MANUAL_LEARNSETS } from './data-learnsets';
 import { Dex, toID } from '../../../sim/dex';
 import { calculateTotalExpForLevel, calculateStats, getMove, NATURE_LIST } from './utils';
 import type { PlayerData, RPGPokemon, BattleState } from './interface';
