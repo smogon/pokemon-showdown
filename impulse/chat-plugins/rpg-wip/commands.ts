@@ -101,7 +101,7 @@ import {
 import { BattleUI } from './battle-ui';
 import { LOCATIONS, ENCOUNTER_ZONES, getStartingLocation, getZoneLocation } from './game-locations';
 import { TRAINER_DATABASE, TRAINER_LOCATIONS, NPC_DATABASE } from './game-npcs';
-import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
+import { MANUAL_LEARNSETS } from './data-learnsets';
 import { formatLocationWithTime, getZonePokemonByTime, isTrainerAvailableByTime, isNPCAvailableByTime } from './time-system';
 import * as NPCActions from './npc-actions';
 import * as ScriptedEvents from './scripted-events';
