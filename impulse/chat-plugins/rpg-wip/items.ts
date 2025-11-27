@@ -10,7 +10,7 @@ export {
 	NATURE_FLAVOR_PREFERENCES,
 	TYPE_RESIST_BERRIES,
 	CUSTOM_ITEMS_DATABASE,
-} from './items-data';
+} from './data-items';
 
 // Import for local use
 import {
@@ -19,7 +19,7 @@ import {
 	BERRY_FLAVORS,
 	NATURE_FLAVOR_PREFERENCES,
 	TYPE_RESIST_BERRIES,
-} from './items-data';
+} from './data-items';
 
 // ==========================================
 // ITEM LOGIC FUNCTIONS
