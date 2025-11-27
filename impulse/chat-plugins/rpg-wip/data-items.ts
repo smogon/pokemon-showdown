@@ -4,33 +4,6 @@ import type { InventoryItem, Stats } from './interface';
 // ITEM CONSTANTS & CONFIGURATION
 // ==========================================
 
-// Kept intact for Battle Tower enemy generation
-export const VIABLE_HELD_ITEMS: string[] = [
-	'leftovers', 'sitrusberry', 'blacksludge',
-	'shellbell', 'lifeorb', 'choiceband', 'choicespecs',
-	'expertbelt', 'choicescarf', 'quickclaw', 'focussash',
-	'assaultvest', 'heavydutyboots', 'rockyhelmet', 'airballoon',
-	'shedshell', 'clearamulet', 'lumberry', 'mentalherb', 'whiteherb',
-	'powerherb', 'weaknesspolicy', 'flameorb', 'toxicorb', 'stickybarb',
-	'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry', 'apicotberry',
-	'starfberry', 'chopleberry', 'yacheberry', 'shucaberry', 'occaberry',
-	'passhoberry', 'wacanberry', 'rindoberry', 'kasibberry', 'colburberry',
-	'babiriberry', 'roseliberry', 'chilanberry', 'chartiberry', 'cobaberry',
-	'payapaberry', 'habanberry', 'tangaberry', 'kebiaberry',
-	'lightball', 'thickclub', 'deepseatooth', 'deepseascale', 'metalpowder',
-	'widelens', 'scopelens', 'razorclaw', 'zoomlens', 'lightclay',
-	'kingsrock', 'razorfang', 'metronome', 'safetygoggles', 'protectivepads',
-	'adrenalineorb', 'utilityumbrella', 'brightpowder',
-	'laxincense', 'terrainextender',
-	// Added Step 1 Items
-	'ejectbutton', 'ejectpack', 'blunderpolicy', 'throatspray', 'roomservice',
-	'loadeddice', 'covertcloak', 'punchingglove', 'abilityshield',
-	'quickpowder', 'souldew', 'adamantorb', 'lustrousorb', 'griseousorb',
-	'normalgem', 'firegem', 'watergem', 'electricgem', 'grassgem', 'icegem',
-	'fightinggem', 'poisongem', 'groundgem', 'flyinggem', 'psychicgem',
-	'buggem', 'rockgem', 'ghostgem', 'dragongem', 'darkgem', 'steelgem', 'fairygem',
-];
-
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
 	'figyberry': { flavor: 'Spicy', stat: 'atk' },
 	'wikiberry': { flavor: 'Dry', stat: 'spa' },
