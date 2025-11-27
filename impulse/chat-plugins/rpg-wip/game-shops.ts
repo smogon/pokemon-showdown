@@ -10,9 +10,6 @@ import { ITEMS_DATABASE } from './items';
  * Edit this file to create new stories and adventures.
  */
 
-// ============================================================================
-// SHOP CONFIGURATION
-// ============================================================================
 
 export interface ShopTier {
 	requiredBadges: number;
@@ -32,21 +29,17 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 				requiredBadges: 0,
 				items: [
 					'pokeball',
-					'expcandyxl', // For Testing
+					'expcandyxl',
 					'potion',
 					'antidote',
 					'paralyzeheal',
 					'oranberry',
 				],
 			},
-			// Additional tiers can be added if badges were in use
 		],
 	},
 };
 
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
 
 export function getShopInventory(locationId: string, playerBadges: number): string[] {
 	const shopData = SHOP_INVENTORIES[locationId];

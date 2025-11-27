@@ -11,21 +11,10 @@ import {
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]);
 
-	// Pokemon-Showdown Residual Order:
-	// 1. Field effects (weather, terrain, screens, etc.) - onFieldResidualOrder: 1
-	// 3. Future Sight/Doom Desire - onResidualOrder: 3
-	// 5. Healing items (Leftovers, Black Sludge), Aqua Ring, Ingrain - onResidualOrder: 5
-	// 9. Poison/Toxic damage - onResidualOrder: 9
-	// 10. Burn damage, Flame/Toxic Orb status infliction - onResidualOrder: 10
-	// 13. Partial trapping (Wrap, Bind) - onResidualOrder: 13
-	// 28. Weather abilities (Rain Dish, Ice Body, Dry Skin) - onResidualOrder: 28
-	// 29. End of turn abilities (Bad Dreams, Moody, Speed Boost) - onResidualOrder: 29
 
-	// Order 1: Field effects (weather, terrain, screens)
 	handleEndOfTurnWeather(battle, messageLog, allSlots);
 	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 
-	// Order 3: Future Sight / Doom Desire
 	battle.playerSide.futureMoves = battle.playerSide.futureMoves.filter(fm => {
 		fm.turnsLeft--;
 		if (fm.turnsLeft === 0) {
@@ -82,7 +71,6 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		return true;
 	});
 
-	// Order 5: Healing effects (Aqua Ring, Ingrain, Leftovers, Black Sludge healing)
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTHealingEffects(slot, battle, messageLog);
@@ -95,14 +83,12 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	// Order 5 (continued): Leech Seed (draining/healing effect, same priority as other healing)
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTLeechSeedDamage(slot, battle, messageLog);
 		}
 	}
 
-	// Order 9-10: Status damage (Poison before Burn in pokemon-showdown)
 	const lumCuredStatus = new Map<string, boolean>();
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
@@ -117,14 +103,12 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	// Order 13: Volatile status damage (Curse, Nightmare, Partial Trapping)
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			applyEOTVolatileStatusDamage(slot, battle, messageLog);
 		}
 	}
 
-	// Order 28-29: Decrement counters and end-of-turn abilities
 	for (const slot of allSlots) {
 		if (slot.pokemon.hp > 0) {
 			decrementEOTVolatileCounters(slot, battle, messageLog);
@@ -132,7 +116,6 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	}
 
-	// Perish Song check
 	allSlots.forEach(slot => {
 		if (slot.perishSongCounter !== undefined && slot.perishSongCounter > 0) {
 			slot.perishSongCounter--;
@@ -144,7 +127,6 @@ export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 		}
 	});
 
-	// Clear per-turn flags
 	for (const slot of allSlots) {
 		slot.willFlinch = false;
 		slot.isProtected = false;
@@ -368,7 +350,6 @@ export function handleEndOfTurnFieldEffects(battle: BattleState, messageLog: str
 		battle.ionDelugeTurns--;
 	}
 
-	// Tailwind Expiry (Step 1)
 	if (battle.playerSide.tailwindTurns > 0) {
 		battle.playerSide.tailwindTurns--;
 		if (battle.playerSide.tailwindTurns === 0) messageLog.push(`Your team's Tailwind petered out!`);
@@ -450,11 +431,10 @@ export function applyEOTNonHealingItemEffects(slot: ActivePokemonSlot, battle: B
 		}
 	}
 
-	// Check for all Status healing berries (Lum, Cheri, Chesto, etc.)
 	const hadStatus = !!slot.status;
 	checkStatusHealBerries(slot, battle, messageLog);
 	if (hadStatus && !slot.status) {
-		return true; // Status was cured
+		return true;
 	}
 
 	if (pokemon.item === 'blacksludge') {
@@ -716,7 +696,6 @@ export function decrementEOTVolatileCounters(slot: ActivePokemonSlot, battle: Ba
 		slot.harvestUsedThisTurn = false;
 	}
 
-	// Clear Destiny Bond and Grudge flags at end of turn
 	if (slot.destinyBondActive) {
 		slot.destinyBondActive = false;
 	}

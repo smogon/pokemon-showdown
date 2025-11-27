@@ -115,7 +115,6 @@ import { battleActionCommands } from './battle-commands';
 function isInActiveBattle(userId: string): boolean {
 	const battle = activeBattles.get(userId);
 	if (!battle) return false;
-	// If the battle has ended, we should allow the player to use commands
 	if (battle.battleEnded) return false;
 	return true;
 }
@@ -128,9 +127,7 @@ function isInActiveBattle(userId: string): boolean {
 function getNPCReturnCommand(player: PlayerData, npcId: string): string {
 	const currentLocation = LOCATIONS[toID(player.location)];
 	if (currentLocation?.buildings) {
-		// Check all buildings in the current location
 		for (const building of currentLocation.buildings) {
-			// Check rooms first if they exist
 			if (building.rooms) {
 				for (const room of building.rooms) {
 					if (room.npcs?.includes(npcId)) {
@@ -140,7 +137,6 @@ function getNPCReturnCommand(player: PlayerData, npcId: string): string {
 			}
 		}
 	}
-	// Default to the main location view
 	return '/rpg explore';
 }
 
@@ -168,7 +164,6 @@ function initializeAndStartBattle(
 		initialMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 	}
 
-	// Create unified side states
 	const playerSide = createSideState();
 	const opponentSide = createSideState();
 
@@ -186,10 +181,8 @@ function initializeAndStartBattle(
 		opponentParty: opponent.party,
 		opponentMoney: opponent.money,
 		trainerId: opponent.trainerId,
-		// Unified side states
 		playerSide,
 		opponentSide,
-		// Other battle state
 		pendingActions: {},
 		playerId: user.id,
 		turn: 0,
@@ -969,7 +962,6 @@ export const commands: ChatCommands = {
 			const player = getPlayerData(user.id);
 			const currentLocationId = toID(player.location);
 
-			// 1. Generate Travel Menu (No Target)
 			if (!target) {
 				const currentLocation = LOCATIONS[currentLocationId];
 				if (!currentLocation) return this.errorReply(`Unknown location: ${player.location}`);
@@ -981,7 +973,6 @@ export const commands: ChatCommands = {
 					travelHTML += `<p>There are no paths from this location yet.</p>`;
 				} else {
 					for (const connection of currentLocation.connectedLocations) {
-						// Render as clickable button regardless of requirements
 						travelHTML += `<button name="send" value="/rpg travel ${connection.id}" class="button">➡️ ${connection.name}</button> `;
 					}
 				}
@@ -990,7 +981,6 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${travelHTML}`);
 			}
 
-			// 2. Handle Travel Execution (Target Selected)
 			const targetLocationId = toID(target);
 			const targetLocation = LOCATIONS[targetLocationId];
 			const currentLocation = LOCATIONS[currentLocationId];
@@ -1000,11 +990,9 @@ export const commands: ChatCommands = {
 			const connection = currentLocation.connectedLocations.find(c => c.id === targetLocationId);
 			if (!connection) return this.errorReply(`You can't travel to ${targetLocation.name} from here.`);
 
-			// --- Access Checks ---
 			let isBlocked = false;
 			let blockMsg = "";
 
-			// Check Badges (String or Array)
 			if (connection.requiredBadge) {
 				const reqBadges = Array.isArray(connection.requiredBadge) ? connection.requiredBadge : [connection.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
@@ -1013,7 +1001,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// Check Required Flags (String or Array)
 			if (!isBlocked && connection.requiredFlag) {
 				const reqFlags = Array.isArray(connection.requiredFlag) ? connection.requiredFlag : [connection.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
@@ -1022,7 +1009,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// Check Prevent Flags (String or Array) - Block if ANY exist
 			if (!isBlocked && connection.preventIfFlag) {
 				const prevFlags = Array.isArray(connection.preventIfFlag) ? connection.preventIfFlag : [connection.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
@@ -1032,15 +1018,12 @@ export const commands: ChatCommands = {
 			}
 
 			if (isBlocked) {
-				// refresh explore page with notification
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
-			// --- Successful Travel ---
 			player.location = targetLocation.name;
 			player.visitedLocations.add(targetLocationId);
 
-			// Handle Location Entry Flags (Set/Remove)
 			if ((targetLocation).setFlag) {
 				const flags = Array.isArray((targetLocation).setFlag) ? (targetLocation).setFlag : [(targetLocation).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
@@ -1050,13 +1033,11 @@ export const commands: ChatCommands = {
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
-			// --- Scripted Events ---
 			const triggeredEvents = [];
 			if (targetLocation.scriptedEvents) {
 				for (const event of targetLocation.scriptedEvents) {
 					const eventFlagId = `scripted_${event.id}`;
 
-					// Check Trigger Conditions
 					if (event.triggerOnce && player.storyFlags.has(eventFlagId)) continue;
 
 					if (event.requiredFlag) {
@@ -1074,7 +1055,6 @@ export const commands: ChatCommands = {
 
 					triggeredEvents.push(event);
 
-					// Handle Event Flags (for non-interactive events that resolve immediately)
 					const interactiveTypes = ['choice', 'branching', 'wildbattle', 'bossbattle', 'trainer', 'gymchallenge', 'elitefour'];
 					if (!interactiveTypes.includes(event.type)) {
 						if (event.triggerOnce) player.storyFlags.add(eventFlagId);
@@ -1092,7 +1072,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// Execute First Triggered Event
 			if (triggeredEvents.length > 0) {
 				const firstEvent = triggeredEvents[0];
 				const result = { success: true, message: '' };
@@ -1112,9 +1091,7 @@ export const commands: ChatCommands = {
 					}
 				} else {
 					const handlerName = `handle${firstEvent.type.charAt(0).toUpperCase() + firstEvent.type.slice(1)}`;
-					// @ts-expect-error - Dynamic handler access
 					if (ScriptedEvents[handlerName]) {
-						// @ts-expect-error - Dynamic handler access
 						const r = ScriptedEvents[handlerName](player, firstEvent, firstEvent.id);
 						result.message = r.message;
 						if (r.opponent) firstEvent.nextOpponent = r.opponent;
@@ -1127,7 +1104,6 @@ export const commands: ChatCommands = {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${html}`);
 			}
 
-			// No Event - Show Explore Screen
 			const msg = `You arrived at ${formatLocationWithTime(targetLocation.name)}.`;
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, targetLocation, msg)}`);
 		},
@@ -1154,15 +1130,12 @@ export const commands: ChatCommands = {
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
 
-			// --- Access Checks (Building Level) ---
 
-			// 1. Check Accessible property
 			if (building.accessible === false) {
 				const blockMsg = (building).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);
 			}
 
-			// 2. Check Badges (String or Array)
 			if (building.requiredBadge) {
 				const reqBadges = Array.isArray(building.requiredBadge) ? building.requiredBadge : [building.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
@@ -1171,7 +1144,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// 3. Check Required Flags (String or Array)
 			if (building.requiredFlag) {
 				const reqFlags = Array.isArray(building.requiredFlag) ? building.requiredFlag : [building.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
@@ -1180,7 +1152,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// 4. Check Prevent Flags (String or Array) - Block if ANY exist
 			if (building.preventIfFlag) {
 				const prevFlags = Array.isArray(building.preventIfFlag) ? building.preventIfFlag : [building.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
@@ -1189,7 +1160,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// --- Successful Entry (Building Level): Handle Flags ---
 			if ((building).setFlag) {
 				const flags = Array.isArray((building).setFlag) ? (building).setFlag : [(building).setFlag];
 				flags.forEach((f: string) => player.storyFlags.add(f));
@@ -1199,11 +1169,7 @@ export const commands: ChatCommands = {
 				flags.forEach((f: string) => player.storyFlags.delete(f));
 			}
 
-			// ============================================================
-			// ROOM LOGIC (Multi-floor support)
-			// ============================================================
 			if (building.rooms && building.rooms.length > 0) {
-				// Determine target room
 				let targetRoom = null;
 				if (roomId) {
 					targetRoom = building.rooms.find(r => r.id === roomId);
@@ -1213,9 +1179,7 @@ export const commands: ChatCommands = {
 
 				if (!targetRoom) return this.errorReply("Invalid room.");
 
-				// Helper to render a room (used for success and fallback)
 				const renderRoom = (roomToRender: any, notification?: string) => {
-					// --- Generate Room HTML ---
 					let roomHTML = `<div class="rpg-infobox">`;
 					const btnStyle = 'margin: 3px;';
 
@@ -1225,7 +1189,6 @@ export const commands: ChatCommands = {
 
 					roomHTML += `<div class="rpg-text-center"><h2><b>${building.name} - ${roomToRender.name}</b></h2><p><em>${roomToRender.description}</em></p></div>`;
 
-					// Encounter Zones in Room (first, like ExploreHTML)
 					if (roomToRender.encounterZones && roomToRender.encounterZones.length > 0) {
 						roomHTML += `<hr /><strong>Wild Pokémon:</strong><br><p class="rpg-text-center">`;
 						for (const zoneId of roomToRender.encounterZones) {
@@ -1238,9 +1201,7 @@ export const commands: ChatCommands = {
 						roomHTML += `</p>`;
 					}
 
-					// NPCs in Room
 					if (roomToRender.npcs && roomToRender.npcs.length > 0) {
-						// Filter NPCs by time availability
 						const availableNPCsInRoom = roomToRender.npcs.filter((npcId: string) => {
 							const npc = NPC_DATABASE[npcId];
 							if (!npc) return false;
@@ -1260,9 +1221,7 @@ export const commands: ChatCommands = {
 						}
 					}
 
-					// Trainers in Room
 					if (roomToRender.trainers && roomToRender.trainers.length > 0) {
-						// Filter trainers by time availability
 						const availableTrainers = roomToRender.trainers.filter((tid: string) => {
 							const trainer = TRAINER_DATABASE[tid];
 							return trainer && isTrainerAvailableByTime(trainer);
@@ -1278,14 +1237,12 @@ export const commands: ChatCommands = {
 									} else if (isTrainerAvailableByTime(trainer)) {
 										roomHTML += `<button name="send" value="/rpg challenge ${trainerId}" class="button" style="${btnStyle}">⚔️ Challenge ${trainer.name}</button>`;
 									}
-									// If not available by time and not defeated, don't show
 								}
 							}
 							roomHTML += `</p>`;
 						}
 					}
 
-					// --- Room Actions (PC, Shop, Gym Leader) ---
 					let actionsHTML = '';
 
 					if (roomToRender.type === 'pokecenter') actionsHTML += `<button name="send" value="/rpg pc" class="button" style="${btnStyle}">💻 Access PC</button>`;
@@ -1295,15 +1252,12 @@ export const commands: ChatCommands = {
 						const gymLeaderId = roomToRender.gymLeaderId;
 						const gymData = TRAINER_DATABASE[gymLeaderId];
 						if (gymData) {
-							// Check if all trainers in the BUILDING are defeated (only check those available by time)
 							let allTrainersDefeated = true;
-							// Check room level trainers (Building level check removed as it's legacy)
 							if (building.rooms) {
 								for (const r of building.rooms) {
 									if (r.trainers) {
 										for (const tid of r.trainers) {
 											const trainerData = TRAINER_DATABASE[tid];
-											// Only count trainers that are available by time
 											if (trainerData && isTrainerAvailableByTime(trainerData)) {
 												if (!player.defeatedTrainers.has(tid)) allTrainersDefeated = false;
 											}
@@ -1313,7 +1267,6 @@ export const commands: ChatCommands = {
 							}
 
 							if (!player.defeatedTrainers.has(gymLeaderId)) {
-								// Also check if gym leader is available by time
 								if (isTrainerAvailableByTime(gymData)) {
 									if (allTrainersDefeated) {
 										actionsHTML += `<button name="send" value="/rpg challenge ${gymLeaderId}" class="button" style="${btnStyle}">⚔️ Challenge LEADER ${gymData.name}</button>`;
@@ -1333,8 +1286,6 @@ export const commands: ChatCommands = {
 						roomHTML += `</p>`;
 					}
 
-					// Navigation & Exit
-					// We group them together so buttons appear side-by-side
 					const hasConnections = roomToRender.connectedRooms && roomToRender.connectedRooms.length > 0;
 
 					if (hasConnections || roomToRender.isEntrance) {
@@ -1355,7 +1306,6 @@ export const commands: ChatCommands = {
 
 						roomHTML += `</p>`;
 					} else {
-						// Fallback: If not an entrance and no connections (prevent softlock)
 						roomHTML += `<p class="rpg-text-center"><button name="send" value="/rpg explore" class="button" style="${btnStyle}">← Leave Building</button></p>`;
 					}
 
@@ -1363,7 +1313,6 @@ export const commands: ChatCommands = {
 					return roomHTML;
 				};
 
-				// --- Access Checks (Room Level) ---
 				let accessDenied = false;
 				let denyMessage = "";
 
@@ -1392,7 +1341,6 @@ export const commands: ChatCommands = {
 				}
 
 				if (accessDenied) {
-					// FALLBACK LOGIC:
 					let fallbackRoom = null;
 					if (sourceRoomId) {
 						fallbackRoom = building.rooms.find(r => r.id === sourceRoomId);
@@ -1408,7 +1356,6 @@ export const commands: ChatCommands = {
 					}
 				}
 
-				// --- Room State Changes ---
 				if (targetRoom.setFlag) {
 					const flags = Array.isArray(targetRoom.setFlag) ? targetRoom.setFlag : [targetRoom.setFlag];
 					flags.forEach((f: string) => player.storyFlags.add(f));
@@ -1486,18 +1433,15 @@ export const commands: ChatCommands = {
 			const zone = ENCOUNTER_ZONES[zoneId];
 			if (!zone) return this.errorReply("This is not a valid area to explore.");
 
-			// Security check: Ensure the player is actually in the location that contains this zone
 			const currentLocationId = toID(player.location);
 			const currentLocation = LOCATIONS[currentLocationId];
 
 			let zoneFound = false;
 
-			// 1. Check main location zones
 			if (currentLocation?.encounterZones?.includes(zoneId)) {
 				zoneFound = true;
 			}
 
-			// 2. Check building room zones
 			if (!zoneFound && currentLocation?.buildings) {
 				for (const building of currentLocation.buildings) {
 					if (building.rooms) {
@@ -1516,11 +1460,9 @@ export const commands: ChatCommands = {
 				return this.errorReply("You cannot find this wild Pokémon zone in your current location.");
 			}
 
-			// --- NEW: Logic Checks for Zone Access ---
 			let isBlocked = false;
 			let blockMessage = "";
 
-			// 1. Check Badges
 			if (zone.requiredBadge) {
 				const reqBadges = Array.isArray(zone.requiredBadge) ? zone.requiredBadge : [zone.requiredBadge];
 				if (!reqBadges.every(b => player.obtainedBadges.includes(b))) {
@@ -1529,7 +1471,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// 2. Check Required Flags
 			if (!isBlocked && zone.requiredFlag) {
 				const reqFlags = Array.isArray(zone.requiredFlag) ? zone.requiredFlag : [zone.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
@@ -1538,7 +1479,6 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			// 3. Check Prevent Flags
 			if (!isBlocked && zone.preventIfFlag) {
 				const prevFlags = Array.isArray(zone.preventIfFlag) ? zone.preventIfFlag : [zone.preventIfFlag];
 				if (prevFlags.some(f => player.storyFlags.has(f))) {
@@ -1550,7 +1490,6 @@ export const commands: ChatCommands = {
 			if (isBlocked) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMessage)}`);
 			}
-			// -----------------------------------------
 
 			const zoneBattleType = zone.battleType || 'single';
 			let finalBattleType: BattleState['battleType'] = 'wild';
@@ -1558,7 +1497,6 @@ export const commands: ChatCommands = {
 			const opponentParty: RPGPokemon[] = [];
 
 			try {
-				// Get Pokemon available at the current time of day
 				const availablePokemon = getZonePokemonByTime(zone);
 				const wildSpecies1 = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
 				const [minLevel, maxLevel] = zone.levelRange;
@@ -1637,7 +1575,6 @@ export const commands: ChatCommands = {
 			const trainerSpec = TRAINER_DATABASE[trainerId];
 			if (!trainerSpec) return this.errorReply("That trainer could not be found.");
 
-			// --- NEW: Validation Logic ---
 			if (trainerSpec.requiredFlag) {
 				const reqFlags = Array.isArray(trainerSpec.requiredFlag) ? trainerSpec.requiredFlag : [trainerSpec.requiredFlag];
 				if (!reqFlags.every(f => player.storyFlags.has(f))) {
@@ -1659,7 +1596,6 @@ export const commands: ChatCommands = {
 					return this.errorReply(msg);
 				}
 			}
-			// -----------------------------
 
 			const trainerParty: RPGPokemon[] = [];
 			for (const spec of trainerSpec.party) {
@@ -1673,7 +1609,6 @@ export const commands: ChatCommands = {
 				if (spec.item) pokemon.item = spec.item;
 				if (spec.teraType) pokemon.teraType = spec.teraType;
 
-				// Apply custom EVs and IVs if provided
 				let needsStatRecalc = false;
 				if (spec.evs) {
 					pokemon.evs = {
@@ -1851,7 +1786,6 @@ export const commands: ChatCommands = {
 
 				for (const [id, npc] of Object.entries(NPC_DATABASE)) {
 					const npcLocationId = toID(npc.location);
-					// Check time-based availability first
 					if (!isNPCAvailableByTime(npc)) continue;
 
 					if (npcLocationId === currentLocationId) {
@@ -1859,11 +1793,10 @@ export const commands: ChatCommands = {
 					} else if (currentLocation?.buildings) {
 						const building = currentLocation.buildings.find(b => toID(b.id) === npcLocationId);
 						if (building?.rooms) {
-							// Iterate through all rooms to find NPCs
 							for (const room of building.rooms) {
 								if (room.npcs?.includes(id)) {
 									if (!npc.flags || npc.flags.every(f => player.storyFlags.has(f))) availableNPCs.push([id, npc]);
-									break; // Found the NPC in this building, no need to check other rooms
+									break;
 								}
 							}
 						}
@@ -1879,10 +1812,8 @@ export const commands: ChatCommands = {
 			const npc = NPC_DATABASE[npcId];
 			if (!npc) return this.errorReply("That NPC doesn't exist.");
 			if (npc.flags && !npc.flags.every(f => player.storyFlags.has(f))) return this.errorReply("Cannot talk to this NPC yet.");
-			// Check time-based availability
 			if (!isNPCAvailableByTime(npc)) return this.errorReply("This NPC is not available at this time.");
 
-			// Security check: Ensure player is in the same location as the NPC
 			const playerLocId = toID(player.location);
 			const npcLocId = toID(npc.location);
 			const currentLocation = LOCATIONS[playerLocId];
@@ -1891,7 +1822,6 @@ export const commands: ChatCommands = {
 			if (npcLocId === playerLocId) {
 				isNearby = true;
 			} else if (currentLocation?.buildings) {
-				// Check if NPC is in a building within the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
 				if (building) isNearby = true;
 			}
@@ -1903,7 +1833,6 @@ export const commands: ChatCommands = {
 				npcToRender = { ...npc, action: null, dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(Request completed.)</em>' };
 			}
 
-			// CALCULATE RETURN PATH
 			const returnCommand = getNPCReturnCommand(player, npcId);
 
 			this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateNPCInteractionHTML(npcToRender, undefined, returnCommand)}`);
@@ -1920,7 +1849,6 @@ export const commands: ChatCommands = {
 			const npc = NPC_DATABASE[npcId];
 			if (!npc?.action) return this.errorReply("Invalid NPC action.");
 
-			// Security check: Ensure player is in the same location as the NPC
 			const playerLocId = toID(player.location);
 			const npcLocId = toID(npc.location);
 			const currentLocation = LOCATIONS[playerLocId];
@@ -1929,10 +1857,8 @@ export const commands: ChatCommands = {
 			if (npcLocId === playerLocId) {
 				isNearby = true;
 			} else if (currentLocation?.buildings) {
-				// Check if NPC is in a building within the current location
 				const building = currentLocation.buildings.find(b => toID(b.id) === npcLocId);
 				if (building?.rooms) {
-					// Check if NPC is in ANY room of this building
 					for (const room of building.rooms) {
 						if (room.npcs?.includes(npcId)) {
 							isNearby = true;
@@ -2006,7 +1932,6 @@ export const commands: ChatCommands = {
 				break;
 
 			case 'choosestarter':
-				// This is handled directly in generateNPCInteractionHTML, should never reach here
 				return this.errorReply("Starter selection should be done through the NPC dialogue interface.");
 
 			case 'heal': result = NPCActions.handleHeal(player); break;
@@ -2018,9 +1943,7 @@ export const commands: ChatCommands = {
 
 			default:
 				const handlerName = `handle${action.type.charAt(0).toUpperCase() + action.type.slice(1)}`;
-				// @ts-expect-error - Dynamic handler access
 				if (NPCActions[handlerName]) {
-					// @ts-expect-error - Dynamic handler access
 					result = NPCActions[handlerName](player, action, npcId, param1);
 				} else {
 					result = { success: false, message: `Unknown action type: ${action.type}` };
@@ -2033,7 +1956,6 @@ export const commands: ChatCommands = {
 				npcToRender = { ...npc, action: null, dialogue: npc.dialogue + ' <br><br><em class="rpg-text-muted">(Request completed.)</em>' };
 			}
 
-			// CALCULATE RETURN PATH
 			const returnCommand = getNPCReturnCommand(player, npcId);
 
 			if (result.success) {

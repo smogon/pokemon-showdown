@@ -313,12 +313,10 @@ export function generateRandomTeamFromBaby(count: number): RPGPokemon[] {
 	return team;
 }
 
-// Battle Tower floor management and HTML generation
 export function getLocationWeatherData(player: PlayerData): {
 	weather: BattleState['weather'],
 	locationWeather: BattleState['locationWeather'],
 } {
-// Import LOCATIONS dynamically to avoid circular dependency
 	const { LOCATIONS } = require('./game-locations');
 	const locationId = toID(player.location);
 	const location = LOCATIONS[locationId];
@@ -368,7 +366,6 @@ export function startBattleTowerFloor(
 	user: User,
 	format = 'battlefactory'
 ) {
-// Import dynamically to avoid circular dependency
 	const { BattleUI } = require('./battle-ui');
 	const { applyHazardEffectsOnSwitchIn } = require('./battle-state');
 
@@ -401,7 +398,6 @@ export function startBattleTowerFloor(
 			battleMessages.push(getWeatherStartMessage(locationWeatherData.weather.type));
 		}
 
-		// Create unified side states
 		const playerSide = createSideState();
 		const opponentSide = createSideState();
 
@@ -416,10 +412,8 @@ export function startBattleTowerFloor(
 			opponentName: `Battle Tower Trainer`,
 			opponentParty: aiTeam,
 			opponentMoney: 500 * floor,
-			// Unified side states
 			playerSide,
 			opponentSide,
-			// Other battle state
 			pendingActions: {},
 			playerId: user.id,
 			turn: 0,
@@ -462,7 +456,6 @@ export function startBattleTowerFloor(
 	}
 }
 
-// Battle Tower HTML generation functions
 export function generateBattleTowerWelcomeHTML(floor: number): string {
 	let html = `<div class="rpg-infobox"><h2>🗼 Battle Tower</h2>` +
 		`<div class="rpg-memo-box" style="margin-bottom:15px;">` +

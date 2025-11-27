@@ -61,7 +61,6 @@ export function getCustomEffectiveness(
 ): number {
 	let effectiveness = 1;
 
-	// Special handling for Flying Press (Fighting + Flying)
 	if (moveId === 'flyingpress') {
 		let fightingEff = 1;
 		let flyingEff = 1;
@@ -70,12 +69,10 @@ export function getCustomEffectiveness(
 		const flyingChart = TYPE_CHART['Flying'];
 
 		for (const type of defenderTypes) {
-			// Fighting part
 			if (fightingChart.superEffective.includes(type)) fightingEff *= 2;
 			else if (fightingChart.notVeryEffective.includes(type)) fightingEff *= 0.5;
 			else if (fightingChart.noEffect.includes(type)) fightingEff *= 0;
 
-			// Flying part
 			if (flyingChart.superEffective.includes(type)) flyingEff *= 2;
 			else if (flyingChart.notVeryEffective.includes(type)) flyingEff *= 0.5;
 			else if (flyingChart.noEffect.includes(type)) flyingEff *= 0;
@@ -95,17 +92,11 @@ export function getCustomEffectiveness(
 	const hasScrappy = attackerAbility === 'scrappy';
 
 	for (const defenderType of defenderTypes) {
-		// Freeze-Dry check
 		if (moveId === 'freezedry' && defenderType === 'Water') {
-			effectiveness *= 2; // Super Effective on Water
+			effectiveness *= 2;
 			continue;
 		}
 
-		// Thousand Arrows check (grounding logic is usually elsewhere, but for effectiveness)
-		// If it hits flying, it should be neutral unless other types interact.
-		// Standard chart says Ground vs Flying is 0.
-		// If grounding logic happens before this, defenderTypes won't have Flying or isGrounded returns true.
-		// Assuming standard chart lookup:
 
 		if (chartEntry.superEffective.includes(defenderType)) {
 			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&

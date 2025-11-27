@@ -28,10 +28,8 @@ function generateBattleActionButtonsHTML(
 
 	const isWild = battle.battleType === 'wild' || battle.battleType === 'wild_double';
 
-	// Bag button (combines items and poké balls)
 	const bagButton = '<button name="send" value="/rpg battleaction bagmenu" class="button rpg-battle-action-button">🎒 BAG</button>';
 
-	// Run button (only for wild battles)
 	let runButton = '';
 	if (isWild) {
 		const canRun = !playerSlot?.isTrapped;
@@ -40,7 +38,6 @@ function generateBattleActionButtonsHTML(
 			'<button class="button rpg-battle-action-button" disabled>🏃 RUN</button>';
 	}
 
-	// Build button row with available buttons
 	const buttons = [switchButton, bagButton, runButton].filter(b => b !== '').join(' ');
 	return `<p class="rpg-text-center rpg-margin-top">${buttons}</p>`;
 }
@@ -507,7 +504,6 @@ function generateBattleHTML(
 			let continueCommand = '/rpg explore';
 
 			if (battle.battleResult === 'victory') {
-				// New Logic: Check if the battle was against a trainer inside a building
 				const player = getPlayerData(battle.playerId);
 				const currentLocationId = toID(player.location);
 
@@ -516,7 +512,6 @@ function generateBattleHTML(
 
 					if (location?.buildings) {
 						for (const building of location.buildings) {
-							// Check Room-level trainers and leaders
 							if (building.rooms) {
 								for (const room of building.rooms) {
 									if (room.trainers?.includes(battle.trainerId)) {
@@ -792,14 +787,12 @@ function generateBattleBagMenuHTML(battle: BattleState, player: PlayerData): str
 	let html = `<div class="rpg-infobox"><h2>Bag</h2>`;
 	html += `<p>What would you like to do?</p>`;
 
-	// Items button
 	if (GameConfig.allowItemUsageInBattle) {
 		html += `<p class="rpg-text-center">` +
 			`<button name="send" value="/rpg battleaction itemmenu" class="button rpg-button-large" ` +
 			`style="margin:5px; min-width:200px;">🎒 Items</button></p>`;
 	}
 
-	// Poké Balls button (only in wild battles)
 	if (isWild) {
 		const pokeBalls = getAvailablePokeBalls(player);
 
@@ -864,7 +857,6 @@ function generateBattleItemTargetHTML(battle: BattleState, player: PlayerData, i
 	const itemData = ITEMS_DATABASE[itemId];
 	const isReviveItem = itemData?.effects?.revive || false;
 
-	// Show player's active Pokemon
 	for (let i = 0; i < battle.playerSide.slots.length; i++) {
 		const slot = battle.playerSide.slots[i];
 		if (!slot) continue;

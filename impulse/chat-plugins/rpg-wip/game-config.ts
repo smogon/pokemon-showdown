@@ -12,20 +12,18 @@
 export const GameConfig = {
 
 	startLocationId: 'newbarktown',
-	startMoney: 1000000, // Increased for testing should be 3000
+	startMoney: 1000000,
 	startInventory: [
 		{ id: 'pokeball', quantity: 5 },
 		{ id: 'potion', quantity: 5 },
 	],
 
 	defaultMoves: ['tackle', 'growl'],
-	// Pokemon level cap - can be adjusted between 5 and 1000, default is 100
 	levelCap: 100,
 	minLevelCap: 5,
 	maxLevelCap: 1000,
 
-	// Battle settings
-	allowItemUsageInBattle: true, // Enable/disable using items (potions, revives, stat boosters, etc.) during battle (Poké Balls for catching are not affected)
+	allowItemUsageInBattle: true,
 
 	specialIds: {
 		champion: 'finalboss',
@@ -46,9 +44,6 @@ export const GameConfig = {
 	},
 };
 
-// ============================================================================
-// STARTER POKEMON
-// ============================================================================
 
 export const STARTER_POKEMON = {
 	fire: ['torchic'],

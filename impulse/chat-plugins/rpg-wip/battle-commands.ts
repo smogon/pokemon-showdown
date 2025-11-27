@@ -286,7 +286,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 			const caughtPokemon = targetSlot.pokemon;
 			caughtPokemon.caughtIn = ballId;
 
-			// Special ball effects after catching
 			if (ballId === 'healball') {
 				caughtPokemon.hp = caughtPokemon.maxHp;
 				caughtPokemon.status = null;
@@ -294,7 +293,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 			if (ballId === 'friendball') {
 				caughtPokemon.friendship = 200;
 			}
-			// Luxury Ball increases friendship gain (handled in friendship gain logic)
 
 			const location = player.party.length < 6 ? "your party" : "PC";
 			if (player.party.length < 6) player.party.push(caughtPokemon);
@@ -366,7 +364,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
 
-		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
@@ -385,7 +382,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
 
-		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
@@ -405,7 +401,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const battle = activeBattles.get(user.id);
 		if (!battle) return this.errorReply("You are not in a battle.");
 
-		// Check if item usage is enabled in config
 		if (!GameConfig.allowItemUsageInBattle) {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Item usage during battle is disabled!"])}`);
 		}
@@ -443,9 +438,7 @@ export const battleActionCommands: Chat.ChatCommands = {
 		const eff = itemData.effects;
 		let result: { success: boolean, message: string };
 
-		// Handle special items first
 		if (itemId === 'direhit') {
-			// Dire Hit raises critical-hit ratio
 			if (pokemon.hp <= 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
@@ -455,14 +448,12 @@ export const battleActionCommands: Chat.ChatCommands = {
 			targetSlot.focusEnergy = true;
 			result = { success: true, message: `${pokemon.species} is getting pumped!` };
 		} else if (itemId === 'guardspec') {
-			// Guard Spec prevents stat reduction (not implemented yet)
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, ["Guard Spec is not yet implemented!"])}`);
 		} else if (eff.revive) {
 			result = useBattleRevivalItem(pokemon, itemId);
 		} else if (eff.healAmount || eff.healPercent || eff.statusCure) {
 			result = useBattleHealingItem(pokemon, itemId);
 		} else if (eff.battleStatBoost) {
-			// Handle stat boost items
 			if (pokemon.hp <= 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
@@ -478,7 +469,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 				message: `${pokemon.species}'s ${boost.stat.toUpperCase()} ${boost.stages >= 2 ? 'sharply ' : ''}rose!`,
 			};
 		} else if (eff.ppRestore) {
-			// Handle PP restoration items
 			if (pokemon.hp <= 0) {
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [`${pokemon.species} has fainted!`])}`);
 			}
@@ -487,7 +477,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 			const ppAmount = eff.ppRestore === -1 ? 999 : eff.ppRestore;
 
 			if (eff.ppRestoreAll) {
-				// Restore PP to all moves
 				for (const move of pokemon.moves) {
 					const moveData = getMove(move.id);
 					const maxPP = moveData.pp || 5;
@@ -500,7 +489,6 @@ export const battleActionCommands: Chat.ChatCommands = {
 					{ success: true, message: `PP was restored for all of ${pokemon.species}'s moves!` } :
 					{ success: false, message: `${pokemon.species}'s moves already have full PP!` };
 			} else {
-				// For single move PP items, restore the first move that needs PP
 				for (const move of pokemon.moves) {
 					const moveData = getMove(move.id);
 					const maxPP = moveData.pp || 5;
@@ -523,13 +511,10 @@ export const battleActionCommands: Chat.ChatCommands = {
 			return this.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [result.message])}`);
 		}
 
-		// Remove item from inventory
 		removeItemFromInventory(player, itemId, 1);
 
-		// Queue the item usage as an action
 		const messageLog = [`Used <strong>${itemData.name}</strong>! ${result.message}`];
 
-		// Process turn after item usage
 		processTurn(this, battle, room, user, messageLog);
 	},
 

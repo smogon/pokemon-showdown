@@ -164,7 +164,6 @@ export function handleHeal(
 		}
 	}
 
-	// Set respawn point
 	player.lastPokemonCenter = player.location.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 	return {

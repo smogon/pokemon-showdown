@@ -169,7 +169,6 @@ export function withdrawPokemonFromPC(player: PlayerData, pokemonId: string): RP
 	return null;
 }
 
-// Helper function to convert PlayerData to MongoDB document format
 function playerDataToDocument(player: PlayerData): any {
 	return {
 		id: player.id,
@@ -191,8 +190,6 @@ function playerDataToDocument(player: PlayerData): any {
 	};
 }
 
-// Export for test compatibility - converts PlayerData to serializable format
-// This uses array format for inventory/pc to maintain test compatibility
 export function serializePlayerData(player: PlayerData): any {
 	return {
 		id: player.id,
@@ -214,18 +211,14 @@ export function serializePlayerData(player: PlayerData): any {
 	};
 }
 
-// Helper function to convert MongoDB document to PlayerData
 function documentToPlayerData(data: any): PlayerData {
 	const startLocName = LOCATIONS[GameConfig.startLocationId]?.name || 'Unknown';
 
-	// Support both object and array formats for inventory and pc
 	let inventory: Map<string, any>;
 	if (data.inventory) {
 		if (Array.isArray(data.inventory)) {
-			// Old array format from tests
 			inventory = new Map(data.inventory);
 		} else {
-			// New object format from MongoDB
 			inventory = new Map(Object.entries(data.inventory));
 		}
 	} else {
@@ -235,10 +228,8 @@ function documentToPlayerData(data: any): PlayerData {
 	let pc: Map<string, any>;
 	if (data.pc) {
 		if (Array.isArray(data.pc)) {
-			// Old array format from tests
 			pc = new Map(data.pc);
 		} else {
-			// New object format from MongoDB
 			pc = new Map(Object.entries(data.pc));
 		}
 	} else {
@@ -269,9 +260,7 @@ function documentToPlayerData(data: any): PlayerData {
 	};
 }
 
-// Validation function for testing - validates data and converts to PlayerData
 export function deserializePlayerData(data: any): PlayerData {
-	// Basic validation
 	if (!data || typeof data !== 'object') {
 		throw new Error('Invalid save data format');
 	}
@@ -297,7 +286,6 @@ export function deserializePlayerData(data: any): PlayerData {
 		throw new Error('Invalid save data: money must be between 0 and 999999999');
 	}
 
-	// Validate inventory
 	if (!Array.isArray(data.inventory) && typeof data.inventory !== 'object') {
 		throw new Error('Invalid save data: inventory must be an array or object');
 	}
@@ -314,7 +302,6 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	// Validate pc
 	if (!Array.isArray(data.pc) && typeof data.pc !== 'object') {
 		throw new Error('Invalid save data: PC must be an array or object');
 	}
@@ -344,7 +331,6 @@ export function deserializePlayerData(data: any): PlayerData {
 		seenBadges.add(badgeName);
 	}
 
-	// Validate party Pokemon
 	for (const pokemon of data.party) {
 		if (!pokemon || typeof pokemon !== 'object') {
 			throw new Error('Invalid save data: invalid Pokemon in party');
@@ -441,7 +427,6 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	// Validate PC Pokemon
 	for (const [pcId, pokemon] of pcEntries) {
 		if (!pokemon || typeof pokemon !== 'object') {
 			throw new Error('Invalid save data: invalid Pokemon in PC');
@@ -461,7 +446,6 @@ export function deserializePlayerData(data: any): PlayerData {
 		}
 	}
 
-	// After validation, convert to PlayerData
 	return documentToPlayerData(data);
 }
 

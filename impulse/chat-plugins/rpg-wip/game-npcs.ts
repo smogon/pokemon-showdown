@@ -4,9 +4,6 @@ import type { NPCData, TrainerSpec } from './interface';
  * Game NPCs & Story Configuration
  */
 
-// ============================================================================
-// NPCS
-// ============================================================================
 
 export const NPC_DATABASE: Record<string, NPCData> = {
 	'professorelm': {
@@ -25,19 +22,17 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		name: 'Town Guide',
 		location: 'newbarktown',
 		dialogue: "The Dojo Master is looking for a challenger, but his guard won't let anyone in! You should go to the Lab to get a Pokémon first.",
-		// Example: Town Guide is only available during daytime
 		availableByTime: {
 			morning: true,
 			afternoon: true,
 			evening: true,
-			night: false, // Goes home at night
+			night: false,
 		},
 	},
-	// NEW: The Gym Guide
 	'dojoguide': {
 		id: 'dojoguide',
 		name: 'Dojo Guide',
-		location: 'newbarktown', // He is physically in New Bark Town data structure, but logically inside the building
+		location: 'newbarktown',
 		dialogue: "Yo! Champ in the making! The Master uses Fighting-type Pokémon. Flying and Psychic moves are your best bet!",
 	},
 	'nursejoy': {
@@ -48,22 +43,17 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		action: {
 			type: 'heal',
 		},
-		// Nurse Joy is always available (no time restrictions) - fallback behavior
 	},
 	'rocketguard': {
 		id: 'rocketguard',
 		name: 'Suspicious Guard',
-		location: 'newbarktown', // Logically inside hideout
+		location: 'newbarktown',
 		dialogue: "This is private property! Get lost!",
 	},
 };
 
-// ============================================================================
-// TRAINERS
-// ============================================================================
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
-	// Rocket Hideout Trainers
 	'rocketgrunt1a': {
 		name: 'Rocket Grunt (Mike)',
 		money: 300,
@@ -120,7 +110,6 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		setFlag: 'hideout_cleared',
 	},
 
-	// 1. The Gatekeeper
 	'securitybob': {
 		name: 'Security Bob',
 		money: 100,
@@ -133,16 +122,14 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 			lose: "Go home and train more.",
 		},
 		setFlag: 'security_cleared',
-		// Example: Security Bob only works during the day
 		availableByTime: {
 			morning: true,
 			afternoon: true,
 			evening: true,
-			night: false, // Off duty at night
+			night: false,
 		},
 	},
 
-	// 2. The Gym Minion (NEW)
 	'blackbelt': {
 		name: 'Black Belt Aaron',
 		money: 200,
@@ -156,7 +143,6 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 		},
 	},
 
-	// 3. The Boss
 	'dojomaster': {
 		name: 'Master Ken',
 		money: 1000,
@@ -173,18 +159,11 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 };
 
-// ============================================================================
-// TRAINER LOCATIONS
-// ============================================================================
 
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
-	// Trainers that appear in the OVERWORLD (not inside buildings)
 	'newbarktown': ['securitybob'],
 };
 
-// ============================================================================
-// BADGES
-// ============================================================================
 
 export interface BadgeInfo {
 	gymLeaderId: string;
@@ -202,9 +181,6 @@ export const BADGES: BadgeInfo[] = [
 	},
 ];
 
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
 
 export const TOTAL_BADGES = BADGES.length;
 
@@ -234,9 +210,6 @@ export function isValidBadge(badgeName: string): boolean {
 export const FIRST_BADGE_NAME = BADGES[0]?.badgeName;
 export const LAST_BADGE_NAME = BADGES[BADGES.length - 1]?.badgeName;
 
-// ============================================================================
-// STORY EVENTS
-// ============================================================================
 
 export interface StoryEvent {
 	id: string;

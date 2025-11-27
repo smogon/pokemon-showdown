@@ -19,7 +19,6 @@ export interface ItemEffects {
 		amount: number,
 	};
 
-	// Battle-only stat boost (temporary during battle, like X Attack, X Defense, etc.)
 	battleStatBoost?: {
 		stat: 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'accuracy' | 'evasion',
 		stages: number,
@@ -154,13 +153,11 @@ export interface ActivePokemonSlot {
 	hasSwitchedOut?: boolean;
 	toxicCounter?: number;
 
-	// New Mechanics / Future Proofing
 	commanderActive?: boolean;
 	commanderBoost?: boolean;
 	gulpMissileForm?: 'gulping' | 'gorging' | null;
 	boosterEnergyActive?: boolean;
 
-	// Tier 1 move additions
 	isAttracted?: boolean;
 	destinyBondActive?: boolean;
 	grudgeActive?: boolean;
@@ -199,11 +196,8 @@ export interface PlayerData {
  * This unified structure reduces duplication between player and opponent sides.
  */
 export interface SideState {
-	// Entry hazards on this side
 	hazards: string[];
-	// Active Pokemon slots for this side
 	slots: [ActivePokemonSlot | null, ActivePokemonSlot | null];
-	// Pending future moves targeting this side
 	futureMoves: {
 		slotIndex: number,
 		moveId: 'futuresight' | 'doomdesire',
@@ -211,17 +205,14 @@ export interface SideState {
 		attackerSlotIndex: number,
 		attackerStats: { atk: number, spa: number },
 	}[];
-	// Per-turn protection moves (reset each turn)
 	quickGuard: boolean;
 	wideGuard: boolean;
 	craftyShield: boolean;
-	// Screen effect turn counters
 	reflectTurns: number;
 	lightScreenTurns: number;
 	auroraVeilTurns: number;
 	mistTurns: number;
 	tailwindTurns: number;
-	// Terastallize usage tracking
 	terastallizeUsed: boolean;
 }
 
@@ -250,7 +241,6 @@ export interface BattleState {
 	turn: number;
 	zoneId: string;
 
-	// Unified side states
 	playerSide: SideState;
 	opponentSide: SideState;
 
@@ -279,7 +269,6 @@ export interface BattleState {
 	battleEnded?: boolean;
 	battleResult?: 'victory' | 'defeat';
 
-	// Simplified battle types
 	battleType: 'wild' | 'trainer' | 'wild_double' | 'trainer_double' | 'battletower';
 	opponentName: string;
 	opponentParty: RPGPokemon[];
@@ -344,11 +333,10 @@ export interface TrainerSpec {
 	};
 	battleType?: 'single' | 'double';
 
-	// Access Control
 	requiredFlag?: string | string[];
 	preventIfFlag?: string | string[];
 	requiredBadge?: string | string[];
-	blockMessage?: string; // NEW: Message to show if access is denied
+	blockMessage?: string;
 
 	/** 
 	 * Time-based availability. If defined, trainer only appears during specified times.
@@ -356,7 +344,6 @@ export interface TrainerSpec {
 	 */
 	availableByTime?: TimeAvailability;
 
-	// Rewards / State Change
 	setFlag?: string | string[];
 	removeFlag?: string | string[];
 }
@@ -377,19 +364,17 @@ export interface NPCAction {
 		'battlerequest' | 'questchain' | 'delivery' | 'conditionaldialogue' | 'escort' |
 		'rivalbattle' | 'moverelearner';
 
-	// Generic / Shared properties
 	onceOnly?: boolean;
 	requiredFlag?: string;
 	itemId?: string;
 	quantity?: number;
 	cost?: number;
 
-	// Specific properties
 	pokemon?: { species: string, level: number };
 	requiredItem?: string;
 	requiredQuantity?: number;
 	trainerId?: string;
-	battleCooldown?: number; // hours
+	battleCooldown?: number;
 	questId?: string;
 	questStages?: any[];
 	starterLevel?: number;
@@ -425,15 +410,14 @@ export interface ScriptedEvent {
 	type: string;
 	triggerOnce?: boolean;
 
-	requiredFlag?: string | string[]; // Supports single or multiple flags
-	setFlag?: string | string[]; // Supports single or multiple flags
-	removeFlag?: string | string[]; // Supports single or multiple flags
-	preventIfFlag?: string | string[]; // Supports single or multiple flags
+	requiredFlag?: string | string[];
+	setFlag?: string | string[];
+	removeFlag?: string | string[];
+	preventIfFlag?: string | string[];
 
 	requiredBadgeCount?: number;
 	maxBadgeCount?: number;
 
-	// Event specific data
 	cutsceneScript?: string[];
 	choices?: { text: string, resultFlag?: string, resultDialogue?: string }[];
 	question?: string;
@@ -464,15 +448,15 @@ export interface ScriptedEvent {
 	epilogueCharacters?: string[];
 	chapterNumber?: number;
 	chapterTitle?: string;
-	nextOpponent?: string; // Runtime property
+	nextOpponent?: string;
 }
 
 export interface LocationConnection {
 	id: string;
 	name: string;
-	requiredBadge?: string | string[]; // Supports single or multiple badges
-	requiredFlag?: string | string[]; // Supports single or multiple flags
-	preventIfFlag?: string | string[]; // Supports single or multiple flags
+	requiredBadge?: string | string[];
+	requiredFlag?: string | string[];
+	preventIfFlag?: string | string[];
 	blockMessage?: string;
 }
 
@@ -483,21 +467,17 @@ export interface BuildingRoom {
 	npcs?: string[];
 	trainers?: string[];
 
-	// Access Control
 	requiredFlag?: string | string[];
 	requiredBadge?: string | string[];
 	preventIfFlag?: string | string[];
 	blockMessage?: string;
 
-	// State Change
 	setFlag?: string | string[];
 	removeFlag?: string | string[];
 
-	// Navigation
-	connectedRooms?: string[]; // IDs of other rooms in this building
+	connectedRooms?: string[];
 	isEntrance?: boolean;
 
-	// Features
 	type?: 'pokecenter' | 'pokemart' | 'gym' | 'lab' | 'department' | 'gameCorner' | 'misc';
 	gymLeaderId?: string;
 	encounterZones?: string[];
@@ -510,15 +490,15 @@ export interface Building {
 	description: string;
 	accessible?: boolean;
 
-	requiredFlag?: string | string[]; // Supports single or multiple flags
-	requiredBadge?: string | string[]; // Supports single or multiple badges
-	preventIfFlag?: string | string[]; // Supports single or multiple flags
+	requiredFlag?: string | string[];
+	requiredBadge?: string | string[];
+	preventIfFlag?: string | string[];
 	blockMessage?: string;
 
-	setFlag?: string | string[]; // Supports single or multiple flags
-	removeFlag?: string | string[]; // Supports single or multiple flags
+	setFlag?: string | string[];
+	removeFlag?: string | string[];
 
-	rooms?: BuildingRoom[]; // NEW: Multiple rooms support
+	rooms?: BuildingRoom[];
 }
 
 export interface Location {
@@ -530,8 +510,8 @@ export interface Location {
 	encounterZones?: string[];
 	scriptedEvents?: ScriptedEvent[];
 
-	setFlag?: string | string[]; // Supports single or multiple flags
-	removeFlag?: string | string[]; // Supports single or multiple flags
+	setFlag?: string | string[];
+	removeFlag?: string | string[];
 }
 
 /**

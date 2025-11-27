@@ -273,7 +273,6 @@ export function getDamageBasePower(
 		}
 	}
 
-	// Punching Glove Boost
 	if (move.flags.punch && battle.magicRoomTurns === 0 && attacker.item === 'punchingglove') {
 		basePower = Math.floor(basePower * 1.1);
 	}
@@ -291,13 +290,11 @@ export function handleDamagingMovePreamble(
 	const attacker = attackerSlot.pokemon;
 	const defender = defenderSlot.pokemon;
 
-	// Sucker Punch Logic
 	if (move.id === 'suckerpunch') {
 		if (defenderSlot.hasActedThisTurn) {
 			messageLog.push(`But it failed!`);
 			return true;
 		}
-		// Check opponent's pending action
 		const isPlayerDefender = battle.playerSide.slots.includes(defenderSlot);
 		const defenderIndex = isPlayerDefender ? battle.playerSide.slots.indexOf(defenderSlot) : battle.opponentSide.slots.indexOf(defenderSlot) + 2;
 		const action = battle.pendingActions[defenderIndex];
@@ -313,7 +310,6 @@ export function handleDamagingMovePreamble(
 		}
 	}
 
-	// Fake Out and First Impression Logic
 	if (move.id === 'fakeout' || move.id === 'firstimpression') {
 		if (attackerSlot.activeTurns !== 1) {
 			messageLog.push(`But it failed!`);
@@ -321,19 +317,13 @@ export function handleDamagingMovePreamble(
 		}
 	}
 
-	// Last Resort
 	if (move.id === 'lastresort') {
 		const hasUsedOtherMoves = attacker.moves.every(m => {
 			if (m.id === 'lastresort') return true;
-			// Simplified check: In a real engine we check if used this switch-in.
-			// For this engine, we assume it fails if they have unused moves.
-			return true; // Placeholder logic as we don't track individual move usage history perfectly per switch yet
+			return true;
 		});
-		// Keeping strictly to implementation: If we can't track it perfectly, we often let it pass or fail.
-		// Allowing it for now to avoid breaking, but noting it needs move usage history in ActivePokemonSlot.
 	}
 
-	// Poltergeist
 	if (move.id === 'poltergeist') {
 		if (!defender.item || battle.magicRoomTurns > 0) {
 			messageLog.push(`But it failed!`);
@@ -343,7 +333,6 @@ export function handleDamagingMovePreamble(
 		messageLog.push(`${defender.species} is being attacked by its ${itemName}!`);
 	}
 
-	// Synchronoise
 	if (move.id === 'synchronoise') {
 		const attackerTypes = getPokemonTypes(attacker, attackerSlot);
 		const defenderTypes = getPokemonTypes(defender, defenderSlot);
@@ -354,18 +343,13 @@ export function handleDamagingMovePreamble(
 		}
 	}
 
-	// Belch
 	if (move.id === 'belch') {
-		// Requires ateBerry flag which we added to logic context in previous step
-		// For now, if not tracked, it fails.
-		// Implementation note: we need to track `ateBerry` in slot.
-		if (!attackerSlot.consumedBerry) { // consumedBerry tracks *last*, implies eating.
+		if (!attackerSlot.consumedBerry) {
 			messageLog.push(`But it failed!`);
 			return true;
 		}
 	}
 
-	// Burn Up / Double Shock
 	if (move.id === 'burnup' || move.id === 'doubleshock') {
 		const typeToCheck = move.id === 'burnup' ? 'Fire' : 'Electric';
 		const attackerTypes = getPokemonTypes(attacker, attackerSlot);
@@ -373,11 +357,8 @@ export function handleDamagingMovePreamble(
 			messageLog.push(`But it failed!`);
 			return true;
 		}
-		// Remove type logic would go here, but we don't have a way to mutate base types persistently easily
-		// without complex volatile flags. For now, we allow the move but don't remove type.
 	}
 
-	// Brick Break / Psychic Fangs (Screen Breaking)
 	if (move.id === 'brickbreak' || move.id === 'psychicfangs' || move.id === 'ragingbull') {
 		const isPlayerAttacker = battle.playerSide.slots.includes(attackerSlot);
 		if (isPlayerAttacker) {
@@ -395,11 +376,9 @@ export function handleDamagingMovePreamble(
 				messageLog.push(`It shattered the barriers!`);
 			}
 		}
-		// Returns false so damage continues
 		return false;
 	}
 
-	// Final Gambit
 	if (move.id === 'finalgambit') {
 		const damage = attacker.hp;
 		attacker.hp = 0;
@@ -407,10 +386,9 @@ export function handleDamagingMovePreamble(
 		messageLog.push(`${defender.species} took ${damage} damage!`);
 		messageLog.push(`${attacker.species} fainted!`);
 		handleHPDropEffects(defenderSlot, battle, messageLog);
-		return true; // Stop standard calc
+		return true;
 	}
 
-	// Endeavor
 	if (move.id === 'endeavor') {
 		if (attacker.hp >= defender.hp) {
 			messageLog.push(`But it failed!`);
@@ -423,7 +401,6 @@ export function handleDamagingMovePreamble(
 		return true;
 	}
 
-	// Spit Up (Failure Check)
 	if (move.id === 'spitup') {
 		if (attackerSlot.stockpileCount === 0) {
 			messageLog.push(`But it failed!`);
@@ -431,7 +408,6 @@ export function handleDamagingMovePreamble(
 		}
 	}
 
-	// Future Sight / Doom Desire
 	if (move.id === 'futuresight' || move.id === 'doomdesire') {
 		const isPlayerAttacker = battle.playerSide.slots.includes(attackerSlot);
 		const futureMoveArray = isPlayerAttacker ? battle.opponentSide.futureMoves : battle.playerSide.futureMoves;
@@ -442,7 +418,6 @@ export function handleDamagingMovePreamble(
 			return true;
 		}
 
-		// Check if slot already targeted
 		const existing = futureMoveArray.find(fm => fm.slotIndex === targetSlotLocalIndex);
 		if (existing) {
 			messageLog.push(`But it failed!`);
@@ -454,7 +429,7 @@ export function handleDamagingMovePreamble(
 		futureMoveArray.push({
 			slotIndex: targetSlotLocalIndex,
 			moveId: move.id as any,
-			turnsLeft: 3, // Ends at end of 2nd turn after this one, so 3 decrements? End of turn logic decrements. Usually hits 2 turns later.
+			turnsLeft: 3,
 			attackerSlotIndex: futureAttackerSlotIndex,
 			attackerStats: {
 				atk: attacker.atk * getStatMultiplier(attackerSlot.statStages.atk),
@@ -490,7 +465,6 @@ export function handleDamagingMovePreamble(
 			) {
 				isImmune = false;
 			}
-			// No Guard (attacker or defender) bypasses this
 			const attackerAbility = toID(attacker.ability || '');
 			const defenderAbility = toID(defender.ability || '');
 			if (attackerAbility === 'noguard' || defenderAbility === 'noguard') {
@@ -528,7 +502,6 @@ export function handleDamagingMovePreamble(
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} flung its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 
-		// Use setItem to remove item and trigger Unburden
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
 
 		return true;
@@ -543,7 +516,6 @@ export function handleDamagingMovePreamble(
 		defender.hp = Math.max(0, defender.hp - damage);
 		messageLog.push(`${attacker.species} used its ${ITEMS_DATABASE[attacker.item]?.name || attacker.item} and dealt ${damage} damage!`);
 
-		// Use setItem to remove item and trigger Unburden
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
 
 		return true;
@@ -620,7 +592,6 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${defenderSlot.pokemon.species} is rooted in place!`);
 			return true;
 		}
-		// Crafty Shield check
 		if (battle.playerSide.slots.includes(defenderSlot) ? battle.playerSide.craftyShield : battle.opponentSide.craftyShield) {
 			messageLog.push(`${defenderSlot.pokemon.species} is protected by Crafty Shield!`);
 			return true;
@@ -630,7 +601,6 @@ export function handleSpecificStatusMove(
 		const party = isDefenderPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
 		const slots = isDefenderPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
-		// Filter for valid switch candidates (Healthy and not active)
 		const candidates = party.filter(p =>
 			p.hp > 0 && !slots.some(s => s?.pokemon.id === p.id)
 		);
@@ -642,7 +612,6 @@ export function handleSpecificStatusMove(
 
 		messageLog.push(`${defender.species} was blown away!`);
 
-		// Use the helper logic to force the switch
 		executeForcedRandomSwitch(battle, defenderSlot, messageLog);
 		return true;
 
@@ -726,7 +695,6 @@ export function handleSpecificStatusMove(
 		const attackerItem = attacker.item;
 		const defenderItem = defender.item;
 
-		// Use setItem for item swapping logic with Unburden support
 		setItem(attackerSlot, defenderItem, defenderSlot, battle, messageLog);
 		setItem(defenderSlot, attackerItem, attackerSlot, battle, messageLog);
 
@@ -756,7 +724,6 @@ export function handleSpecificStatusMove(
 		}
 		const givenItem = attacker.item;
 
-		// Use setItem logic
 		setItem(defenderSlot, givenItem, attackerSlot, battle, messageLog);
 		setItem(attackerSlot, undefined, undefined, battle, messageLog);
 
@@ -909,7 +876,6 @@ export function handleSpecificStatusMove(
 			messageLog.push(`${attacker.species} protected itself!`);
 		} else {
 			messageLog.push(`But it failed!`);
-			// FIX: Reset counter on failure so the next Protect has 100% chance
 			attackerSlot.protectSuccessCounter = 0;
 		}
 		return true;
@@ -1035,7 +1001,6 @@ export function handleSpecificStatusMove(
 			if (slot?.status) {
 				const ability = toID(slot.pokemon.ability || '');
 				if (move.id === 'healbell' && ability === 'soundproof') {
-					// Blocks healing
 				} else {
 					slot.status = null;
 					slot.sleepCounter = 0;
@@ -1178,18 +1143,15 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'sleeptalk':
-		// Sleep Talk - Use a random move while asleep
 		if (attackerSlot.status !== 'slp') {
 			messageLog.push('But it failed!');
 			return true;
 		}
 
-		// Get all usable moves (excluding Sleep Talk itself)
 		const sleepTalkMoves = attacker.moves.filter(m => {
 			if (m.id === 'sleeptalk') return false;
 			if (m.pp === 0) return false;
 			const moveData = getMove(m.id);
-			// Sleep Talk can't call these moves
 			if (['sleeptalk', 'assist', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'sketch', 'struggle', 'switcheroo', 'trick'].includes(moveData.id)) return false;
 			return true;
 		});
@@ -1199,30 +1161,24 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 
-		// Select random move
 		const selectedMove = sleepTalkMoves[Math.floor(Math.random() * sleepTalkMoves.length)];
 		const moveToUse = getMove(selectedMove.id);
 		messageLog.push(`${attacker.species} used ${moveToUse.name} via Sleep Talk!`);
 
-		// Execute the move (don't deduct PP from the called move)
-		// This will be handled by the calling function
 		(attackerSlot as any).sleepTalkMove = selectedMove.id;
 		return true;
 
 	case 'attract':
-		// Attract - Infatuate the target
 		if (!defenderSlot || !defender) {
 			messageLog.push('But it failed!');
 			return true;
 		}
 
-		// Check if already attracted
 		if (defenderSlot.isAttracted) {
 			messageLog.push(`${defender.species} is already infatuated!`);
 			return true;
 		}
 
-		// Check for same gender or genderless
 		if (attacker.gender === 'N' || defender.gender === 'N') {
 			messageLog.push('But it failed!');
 			return true;
@@ -1233,14 +1189,12 @@ export function handleSpecificStatusMove(
 			return true;
 		}
 
-		// Check Oblivious ability
 		const defenderAbilityAttract = RPGAbilities.getActiveAbility(defender, attacker);
 		if (defenderAbilityAttract === 'oblivious') {
 			messageLog.push(`${defender.species}'s Oblivious prevents infatuation!`);
 			return true;
 		}
 
-		// Check Aroma Veil protection
 		if (hasAromaVeilProtection(defenderSlot, battle, attacker)) {
 			messageLog.push(`${defender.species} is protected by Aroma Veil!`);
 			return true;
@@ -1251,13 +1205,11 @@ export function handleSpecificStatusMove(
 		return true;
 
 	case 'destinybond':
-		// Destiny Bond - If user faints, faint attacker
 		attackerSlot.destinyBondActive = true;
 		messageLog.push(`${attacker.species} is trying to take its foe down with it!`);
 		return true;
 
 	case 'grudge':
-		// Grudge - If user faints, deplete PP of move that KO'd it
 		attackerSlot.grudgeActive = true;
 		messageLog.push(`${attacker.species} wants its target to bear a grudge!`);
 		return true;
@@ -1378,8 +1330,6 @@ export function handleGenericStatusInflictMove(
 		return true;
 	}
 
-	// Status move application (Will-O-Wisp, Thunder Wave, etc.)
-	// Use centralized status check logic
 	let statusToInflict = move.status;
 	if (move.id === 'toxic') statusToInflict = 'tox';
 
@@ -1434,8 +1384,6 @@ export function handleGenericVolatileMove(
 		return true;
 	}
 
-	// If the move is targeting opponent, we use getActiveAbility.
-	// If it targets self, we use simple ability check (Mold Breaker doesn't break own abilities usually).
 	const isSelfTarget = move.target === 'self';
 	const targetAbility = isSelfTarget ? toID(target.ability || '') : RPGAbilities.getActiveAbility(target, attackerSlot.pokemon);
 
@@ -1455,8 +1403,6 @@ export function handleGenericVolatileMove(
 		break;
 	case 'taunt':
 		if (targetSlot.tauntTurns <= 0) {
-			// Aroma Veil protects against Taunt.
-			// Aroma Veil protects allies. Mold Breaker bypasses it.
 			if (hasAromaVeilProtection(targetSlot, battle, attackerSlot.pokemon)) {
 				messageLog.push(`${target.species} is protected by Aroma Veil!`);
 				hadEffect = false;
@@ -1477,8 +1423,6 @@ export function handleGenericVolatileMove(
 		break;
 	case 'yawn':
 		if (!targetSlot.status && !targetSlot.yawnCounter) {
-			// Check if status CAN be inflicted later (e.g. Immunity to Sleep via Electric Terrain)
-			// Using canInflictStatus with 'slp'
 			const sleepCheck = RPGAbilities.canInflictStatus(targetSlot, 'slp', battle, attackerSlot, move);
 
 			if (sleepCheck.success) {
@@ -1700,7 +1644,6 @@ export function handleGenericFieldMove(
 			if (battle.terrain?.type === terrainType) {
 				messageLog.push('But it failed!');
 			} else {
-				// Terrain Extender logic added here
 				const duration = (battle.magicRoomTurns === 0 && attacker.item === 'terrainextender') ?
 					EXTENDED_FIELD_EFFECT_DURATION : FIELD_EFFECT_DURATION;
 				battle.terrain = { type: terrainType, turns: duration };
@@ -1720,7 +1663,6 @@ export function handleGenericFieldMove(
 			battle.trickRoomTurns = FIELD_EFFECT_DURATION;
 			messageLog.push(`${attacker.species} twisted the dimensions!`);
 
-			// Room Service Logic
 			getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]).forEach(slot => {
 				if (slot.pokemon.hp > 0 && slot.pokemon.item === 'roomservice') {
 					if (applyStatChange(slot, 'spe', -1, battle, messageLog)) {
