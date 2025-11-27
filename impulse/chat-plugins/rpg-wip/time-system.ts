@@ -82,17 +82,13 @@ export function getTimeInfo(): { period: TimePeriod, emoji: string } {
 export function getZonePokemonByTime(zone: EncounterZone): string[] {
 	const period = getCurrentTimePeriod();
 
-	// If no time-based Pokemon are defined, use the default list
 	if (!zone.pokemonByTime) {
 		return zone.pokemon;
 	}
 
-	// Map the time period to the correct key
 	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
 	const timePokemon = zone.pokemonByTime[timeKey];
 
-	// If time-specific Pokemon are defined for this period, use them
-	// Otherwise, fall back to the default list
 	if (timePokemon && timePokemon.length > 0) {
 		return timePokemon;
 	}
@@ -109,7 +105,6 @@ export function getZonePokemonByTime(zone: EncounterZone): string[] {
  * @returns True if the trainer is available at the current time
  */
 export function isTrainerAvailableByTime(trainer: TrainerSpec): boolean {
-	// If no time restrictions defined, trainer is always available (fallback)
 	if (!trainer.availableByTime) {
 		return true;
 	}
@@ -117,11 +112,8 @@ export function isTrainerAvailableByTime(trainer: TrainerSpec): boolean {
 	const period = getCurrentTimePeriod();
 	const timeKey = period.toLowerCase() as 'morning' | 'afternoon' | 'evening' | 'night';
 
-	// Check if the trainer is available at the current time period
 	const isAvailable = trainer.availableByTime[timeKey];
 
-	// If the specific time period is explicitly set to true, trainer is available
-	// If not defined or false, trainer is not available
 	return isAvailable === true;
 }
 
@@ -133,7 +125,6 @@ export function isTrainerAvailableByTime(trainer: TrainerSpec): boolean {
  * @returns True if available at the current time
  */
 export function isAvailableByTime(availability?: TimeAvailability): boolean {
-	// If no time restrictions defined, always available (fallback)
 	if (!availability) {
 		return true;
 	}

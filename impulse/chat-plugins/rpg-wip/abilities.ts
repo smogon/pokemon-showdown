@@ -14,10 +14,8 @@ export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): s
 	const attackerAbility = toID(attacker.ability || '');
 	const breakerAbilities = ['moldbreaker', 'turboblaze', 'teravolt'];
 
-	// Specific override for Moongeist Beam / Sunsteel Strike / Photon Geyser would go here
 
 	if (breakerAbilities.includes(attackerAbility)) {
-		// List of abilities that cannot be ignored by Mold Breaker
 		const ignoredAbilities = [
 			'asomeone', 'battlebond', 'comatose', 'disguise', 'multitype',
 			'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown',
@@ -53,17 +51,14 @@ export function canInflictStatus(
 ): { success: boolean, message?: string } {
 	const target = targetSlot.pokemon;
 
-	// 1. Check if already has status
 	if (targetSlot.status) {
 		return { success: false, message: `But ${target.species} is already ${targetSlot.status === 'slp' ? 'asleep' : 'afflicted'}!` };
 	}
 
-	// 2. Check Comatose (acts as if asleep)
 	if (getActiveAbility(target, sourceSlot?.pokemon) === 'comatose') {
 		return { success: false, message: `${target.species} is already drowsing!` };
 	}
 
-	// 3. Check Terrain Immunities
 	if (isGrounded(targetSlot, battle)) {
 		if (battle.terrain?.type === 'misty') {
 			return { success: false, message: `The Misty Terrain prevents status conditions!` };
@@ -73,15 +68,8 @@ export function canInflictStatus(
 		}
 	}
 
-	// 4. Check Safeguard
 	const isPlayerTarget = battle.playerSide.slots.some(s => s?.pokemon.id === target.id);
-	// Safeguard is a side condition, but we store it as a generic move check in standard engines.
-	// In this custom engine, we assume standard side conditions exist in the array or object.
-	// Currently side conditions are simple strings in playerHazards, but Safeguard is a volatile side effect.
-	// Assuming we implement Safeguard later fully, here is placeholder logic or check generic side effect flags if implemented.
-	// For now, we skip Safeguard specific check unless added to BattleState.
 
-	// 5. Check Shield Dust (only blocks secondary effects)
 	if (isSecondaryEffect && sourceSlot) {
 		const ability = getActiveAbility(target, sourceSlot.pokemon);
 		if (ability === 'shielddust') {
@@ -89,7 +77,6 @@ export function canInflictStatus(
 		}
 	}
 
-	// 6. Check Type Immunities
 	const targetSpecies = Dex.species.get(target.species);
 	const targetTypes = targetSlot.terastallized ? [targetSlot.terastallized] : targetSpecies.types;
 
@@ -115,16 +102,13 @@ export function canInflictStatus(
 		}
 	}
 
-	// 7. Check Ability Immunities
 	const attacker = sourceSlot?.pokemon;
 
-	// Prevents Status is internal logic for simple ability checks
 	if (preventsStatus(target, status, battle, attacker)) {
 		const ability = getActiveAbility(target, attacker);
 		return { success: false, message: `${target.species}'s ${ability} prevents ${status}!` };
 	}
 
-	// 8. Check Flower Veil
 	if (targetTypes.includes('Grass')) {
 		const allies = isPlayerTarget ? battle.playerSide.slots : battle.opponentSide.slots;
 		const hasFlowerVeil = allies.some(s => s && s.pokemon.hp > 0 && getActiveAbility(s.pokemon, attacker) === 'flowerveil');
@@ -133,7 +117,6 @@ export function canInflictStatus(
 		}
 	}
 
-	// 9. Uproar Check
 	if (status === 'slp') {
 		const allSlots = [...battle.playerSide.slots, ...battle.opponentSide.slots];
 		const uproarUser = allSlots.find(s => s && s.pokemon.hp > 0 && s.uproarTurns && s.uproarTurns > 0);
@@ -1586,9 +1569,6 @@ export const STAT_DROP_RESPONSE_ABILITIES: Record<string, { handler: (slot: Acti
 	},
 	'mirrorarmor': {
 		handler: (slot, battle, messageLog, sourceSlot) => {
-			// This handler is actually tricky to use for reflection because
-			// reflection needs to happen INSTEAD of the drop, not AFTER.
-			// It is cleaner to handle this directly in applyStatChange
 		},
 	},
 };
@@ -2483,7 +2463,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 
 				if (opponentSlot.pokemon.item === 'adrenalineorb' && opponentSlot.statStages.spe < 6) {
 					applyStatChange(opponentSlot, 'spe', 1, battle, messageLog, slot);
-					setItem(opponentSlot, undefined, undefined, battle, messageLog); // Consume Adrenaline Orb
+					setItem(opponentSlot, undefined, undefined, battle, messageLog);
 					messageLog.push(`${opponentSlot.pokemon.species}'s Adrenaline Orb raised its Speed!`);
 				}
 
@@ -2638,7 +2618,7 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 		const hasTerrainBuff = ability === 'quarkdrive' && battle.terrain?.type === 'electric';
 
 		if (!hasWeatherBuff && !hasTerrainBuff && !(slot as any).boosterEnergyActive) {
-			setItem(slot, undefined, undefined, battle, messageLog); // Consume Booster Energy
+			setItem(slot, undefined, undefined, battle, messageLog);
 			(slot as any).boosterEnergyActive = true;
 			messageLog.push(`${pokemon.species} consumed its Booster Energy to activate ${pokemon.ability}!`);
 		}
@@ -2646,7 +2626,6 @@ export function applySwitchInAbilities(slot: ActivePokemonSlot, battle: BattleSt
 }
 
 export function applyContactAbilityEffects(ctx: AbilityContext): void {
-	// Protective Pads check
 	if (ctx.attacker.item === 'protectivepads') return;
 
 	const defenderAbility = getActiveAbility(ctx.defender, ctx.attacker);
@@ -2708,7 +2687,6 @@ export function applyContactAbilityEffects(ctx: AbilityContext): void {
 		const attackerAbility = toID(attacker.ability || '');
 
 		if (attackerAbility !== 'stickyhold') {
-			// Use setItem to handle item transfer
 			setItem(ctx.defenderSlot, attacker.item, ctx.attackerSlot, ctx.battle, ctx.messageLog);
 			setItem(ctx.attackerSlot, undefined, undefined, ctx.battle, ctx.messageLog);
 			ctx.messageLog.push(`${ctx.defender.species} stole ${attacker.species}'s ${ctx.defender.item}!`);

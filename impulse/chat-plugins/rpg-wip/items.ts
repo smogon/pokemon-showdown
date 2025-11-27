@@ -3,7 +3,6 @@ import type { InventoryItem, PlayerData, RPGPokemon } from './interface';
 import { calculateStats, levelUp, checkEvolution, handleLearningMoves, calculateTotalExpForLevel, getMove, type CheckEvolutionContext } from './utils';
 import { GameConfig } from './game-config';
 
-// Re-export static data from items-data.ts
 export {
 	VIABLE_HELD_ITEMS,
 	BERRY_FLAVORS,
@@ -12,7 +11,6 @@ export {
 	CUSTOM_ITEMS_DATABASE,
 } from './data-items';
 
-// Import for local use
 import {
 	CUSTOM_ITEMS_DATABASE,
 	VIABLE_HELD_ITEMS,
@@ -21,9 +19,6 @@ import {
 	TYPE_RESIST_BERRIES,
 } from './data-items';
 
-// ==========================================
-// ITEM LOGIC FUNCTIONS
-// ==========================================
 
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	const id = toID(itemId);
@@ -122,7 +117,6 @@ export function useHealingItem(player: PlayerData, pokemon: RPGPokemon, itemId: 
 	}
 
 	if (eff.ppRestore) {
-		// Find a move with less than max PP
 		let restoredMove = false;
 		for (const move of pokemon.moves) {
 			const moveData = getMove(move.id);
@@ -303,7 +297,6 @@ export function useEvolutionStone(player: PlayerData, pokemon: RPGPokemon, itemI
 	if (!itemData?.effects?.evolutionItem) return { success: false, message: "This is not an evolution item." };
 	if (pokemon.hp <= 0) return { success: false, message: "Cannot use on fainted Pokemon." };
 
-	// Check if this Pokemon can evolve with this stone
 	const evoMsg = checkEvolution(player, pokemon, { room, user }, id);
 
 	if (evoMsg) {
@@ -314,9 +307,6 @@ export function useEvolutionStone(player: PlayerData, pokemon: RPGPokemon, itemI
 	}
 }
 
-// ==========================================
-// BATTLE-SPECIFIC ITEM USAGE
-// ==========================================
 
 /**
  * Use a healing item on a Pokemon during battle.
@@ -331,12 +321,10 @@ export function useBattleHealingItem(pokemon: RPGPokemon, itemId: string): { suc
 	let success = false;
 	const messageParts: string[] = [];
 
-	// Can't use healing items on fainted Pokemon during battle (use revive items instead)
 	if (pokemon.hp <= 0 && !eff.revive) {
 		return { success: false, message: `${pokemon.species} has fainted! Use a revive item instead.` };
 	}
 
-	// Handle status healing
 	if (eff.statusCure && pokemon.hp > 0) {
 		if (pokemon.status) {
 			if (eff.statusCure === 'all' || eff.statusCure === pokemon.status) {
@@ -349,7 +337,6 @@ export function useBattleHealingItem(pokemon: RPGPokemon, itemId: string): { suc
 		}
 	}
 
-	// Handle HP healing
 	if (eff.healAmount || eff.healPercent) {
 		if (pokemon.hp > 0 && pokemon.hp < pokemon.maxHp) {
 			let heal = 0;
@@ -366,7 +353,6 @@ export function useBattleHealingItem(pokemon: RPGPokemon, itemId: string): { suc
 		}
 	}
 
-	// Handle friendship changes
 	if (eff.friendshipChange && success) {
 		pokemon.friendship = Math.max(0, Math.min(255, pokemon.friendship + eff.friendshipChange));
 	}
@@ -397,7 +383,6 @@ export function useBattleRevivalItem(pokemon: RPGPokemon, itemId: string): { suc
 	pokemon.hp = Math.max(1, Math.floor(pokemon.maxHp * healPercent));
 	pokemon.status = null;
 
-	// Restore PP to all moves
 	for (const move of pokemon.moves) {
 		const moveData = getMove(move.id);
 		move.pp = moveData.pp || 5;
@@ -416,7 +401,6 @@ export function useBattleRevivalItem(pokemon: RPGPokemon, itemId: string): { suc
 export function canUseItemInBattle(itemId: string): boolean {
 	const id = toID(itemId);
 
-	// Special items that can be used in battle
 	if (id === 'direhit') return true;
 	if (id === 'guardspec') return true;
 
@@ -426,7 +410,6 @@ export function canUseItemInBattle(itemId: string): boolean {
 	const eff = itemData.effects;
 	if (!eff) return false;
 
-	// Usable in battle: healing items, status cure, revival, stat boosters, pp restore
 	return !!(
 		eff.healAmount ||
 		eff.healPercent ||

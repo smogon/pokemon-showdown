@@ -10,9 +10,6 @@
 
 import type { EncounterZone } from './interface';
 
-// ============================================================================
-// LOCATIONS
-// ============================================================================
 
 export const LOCATIONS: Record<string, any> = {
 	'newbarktown': {
@@ -28,7 +25,7 @@ export const LOCATIONS: Record<string, any> = {
 			{
 				id: 'hiddengrove',
 				name: 'Hidden Grove',
-				requiredFlag: 'master_defeated', // Flag required to travel
+				requiredFlag: 'master_defeated',
 				blockMessage: 'The path is overgrown. Only a Dojo Master could clear this way.',
 			},
 		],
@@ -89,7 +86,6 @@ export const LOCATIONS: Record<string, any> = {
 				type: 'gym',
 				description: 'A place where trainers temper their spirits.',
 				accessible: true,
-				// BUILDING GATING LOGIC
 				requiredFlag: 'security_cleared',
 				blockMessage: 'The Security Guard is blocking the door. Defeat him outside to enter!',
 				rooms: [
@@ -113,7 +109,7 @@ export const LOCATIONS: Record<string, any> = {
 						name: 'Master\'s Room',
 						description: 'The top floor where the master awaits.',
 						connectedRooms: ['floor2'],
-						type: 'gym', // Mark as gym to show leader actions
+						type: 'gym',
 						gymLeaderId: 'dojomaster',
 					},
 				],
@@ -140,7 +136,6 @@ export const LOCATIONS: Record<string, any> = {
 						description: 'Strange chemical smells fill the air.',
 						connectedRooms: ['floor1', 'office'],
 						trainers: ['rocketgrunt2'],
-						// ACCESS CONTROL: Requires defeating both Floor 1 trainers
 						requiredFlag: ['hideout_1a_clear', 'hideout_1b_clear'],
 						blockMessage: 'The gate is locked electronically. It seems linked to the biometrics of the guards downstairs.',
 					},
@@ -150,7 +145,6 @@ export const LOCATIONS: Record<string, any> = {
 						description: 'A lavish office overlooking the operation.',
 						connectedRooms: ['floor2'],
 						trainers: ['rocketadmin'],
-						// ACCESS CONTROL: Requires defeating Floor 2 trainer
 						requiredFlag: ['hideout_2_clear'],
 						blockMessage: 'The heavy oak door is locked. You need the key card from the Floor 2 guard.',
 					},
@@ -169,7 +163,7 @@ export const LOCATIONS: Record<string, any> = {
 						description: 'A dusty old room.',
 						isEntrance: true,
 						npcs: ['guide'],
-						encounterZones: ['grassland'], // Demo: Indoor encounter
+						encounterZones: ['grassland'],
 					},
 				],
 			},
@@ -198,27 +192,23 @@ export const LOCATIONS: Record<string, any> = {
 	},
 };
 
-// ============================================================================
-// ENCOUNTER ZONES
-// ============================================================================
 
 export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	'grassland': {
 		name: 'Tall Grass',
-		pokemon: ['rattata', 'pidgey', 'sentret'], // Default fallback
-		// Time-based Pokemon encounters
+		pokemon: ['rattata', 'pidgey', 'sentret'],
 		pokemonByTime: {
-			morning: ['pidgey', 'sentret', 'ledyba'],     // Early birds
-			afternoon: ['rattata', 'pidgey', 'spearow'], // Common daytime Pokemon
-			evening: ['hoothoot', 'rattata', 'spinarak'], // Dusk Pokemon
-			night: ['hoothoot', 'rattata', 'gastly'],    // Nocturnal Pokemon
+			morning: ['pidgey', 'sentret', 'ledyba'],
+			afternoon: ['rattata', 'pidgey', 'spearow'],
+			evening: ['hoothoot', 'rattata', 'spinarak'],
+			night: ['hoothoot', 'rattata', 'gastly'],
 		},
 		levelRange: [2, 5],
 		battleType: 'single',
 	},
 	'rarezone': {
 		name: 'Mystic Clearing',
-		pokemon: ['pikachu', 'eevee', 'ralts'], // Default fallback
+		pokemon: ['pikachu', 'eevee', 'ralts'],
 		pokemonByTime: {
 			morning: ['eevee', 'ralts', 'kirlia'],
 			afternoon: ['pikachu', 'eevee', 'clefairy'],
@@ -228,7 +218,6 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 		levelRange: [10, 15],
 		battleType: 'single',
 	},
-	// Badge Lock Test
 	'dangerouscave': {
 		name: 'Dangerous Cave',
 		pokemon: ['zubat', 'geodude', 'onix'],
@@ -237,7 +226,6 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 		requiredBadge: 'Expert Badge',
 		blockMessage: 'It is too dark and dangerous here! You need the Experr Badge to enter safely.',
 	},
-	// Flag Lock Test
 	'secretgarden': {
 		name: 'Secret Garden',
 		pokemon: ['bulbasaur', 'chikorita', 'roselia'],
@@ -248,25 +236,18 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	},
 };
 
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
 
 export function getStartingLocation(): { id: string, name: string } {
 	return { id: 'newbarktown', name: 'New Bark Town' };
 }
 
 export function getZoneLocation(zoneId: string, currentLocationId?: string): { locationId: string, buildingId?: string, roomId?: string } | null {
-	// If currentLocationId is provided, check that location first to prioritize
-	// zones in the player's current location (since a zone can exist in multiple places)
 	if (currentLocationId) {
 		const currentLoc = LOCATIONS[currentLocationId];
 		if (currentLoc) {
-			// Check if zone is in the current location's outdoor encounter zones
 			if (currentLoc.encounterZones?.includes(zoneId)) {
 				return { locationId: currentLocationId };
 			}
-			// Check if zone is inside a building in the current location
 			if (currentLoc.buildings) {
 				for (const building of currentLoc.buildings) {
 					if (building.rooms) {
@@ -281,7 +262,6 @@ export function getZoneLocation(zoneId: string, currentLocationId?: string): { l
 		}
 	}
 
-	// Fall back to searching all locations if not found in current location
 	for (const locId in LOCATIONS) {
 		const loc = LOCATIONS[locId];
 		if (loc.encounterZones?.includes(zoneId)) {

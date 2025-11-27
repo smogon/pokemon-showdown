@@ -500,7 +500,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (location.buildings && location.buildings.length > 0) {
 		html += `<hr /><strong>Buildings:</strong><br><p class="rpg-text-center">`;
 		for (const building of location.buildings) {
-			// Buildings explicitly marked accessible: false are still hidden/skipped
 			if (building.accessible === false) continue;
 
 			let icon = '🏠';
@@ -511,8 +510,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 			else if (building.type === 'department') icon = '🏬';
 			else if (building.type === 'gameCorner') icon = '🎰';
 
-			// Always render as a clickable button.
-			// Validation happens in the /rpg building command handler.
 			html += `<button name="send" value="/rpg building ${toID(building.id)}" class="button" style="${btnStyle}">${icon} ${building.name}</button>`;
 		}
 		html += `</p>`;
@@ -524,11 +521,9 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 		const availableTrainers = locationTrainers.filter(tid => {
 			if (player.defeatedTrainers.has(tid)) return false;
 
-			// Check flags for Roaming Trainers
 			const trainer = TRAINER_DATABASE[tid];
 			if (!trainer) return false;
 
-			// Check time-based availability
 			if (!isTrainerAvailableByTime(trainer)) return false;
 
 			if (trainer.requiredFlag) {
@@ -561,8 +556,6 @@ export function generateExploreHTML(player: PlayerData, location: any, notificat
 	if (location.connectedLocations && location.connectedLocations.length > 0) {
 		html += `<hr /><strong>Travel:</strong><br><p class="rpg-text-center">`;
 		for (const connection of location.connectedLocations) {
-			// Always render as a clickable button.
-			// Validation happens in the /rpg travel command handler.
 			html += `<button name="send" value="/rpg travel ${toID(connection.id)}" class="button" style="${btnStyle}">➡️ ${connection.name}</button>`;
 		}
 		html += `</p>`;
@@ -778,22 +771,16 @@ export function generatePokemonStatusTagsHTML(
 		slot.isHelped ? '<span class="rpg-tag rpg-tag-helped">Helped</span>' : '',
 		slot.terastallized ? '<span class="rpg-tag rpg-tag-tera">⭐ Tera: ' + slot.terastallized + '</span>' : '',
 
-		// --- NEW MECHANICS TAGS ---
-		// Perish Song (Visual countdown)
 		slot.perishSongCounter && slot.perishSongCounter > 0 ? `<span class="rpg-tag rpg-tag-perish">Perish (${slot.perishSongCounter})</span>` : '',
 
-		// Commander (Tatsugiri / Dondozo interaction)
 		(slot as any).commanderActive ? '<span class="rpg-tag rpg-tag-commander">Commanding</span>' : '',
 		(slot as any).commanderBoost ? '<span class="rpg-tag rpg-tag-commander">Commander Boost</span>' : '',
 
-		// Disguise (Mimikyu)
 		slot.isDisguised ? '<span class="rpg-tag rpg-tag-disguise">Disguised</span>' : '',
 
-		// Gulp Missile (Cramorant forms)
 		(slot as any).gulpMissileForm === 'gulping' ? '<span class="rpg-tag rpg-tag-gulping">Gulping</span>' : '',
 		(slot as any).gulpMissileForm === 'gorging' ? '<span class="rpg-tag rpg-tag-gorging">Gorging</span>' : '',
 
-		// --- TIER 1 MOVE TAGS ---
 		slot.isAttracted ? '<span class="rpg-tag rpg-tag-infatuated">💕 Infatuated</span>' : '',
 		slot.destinyBondActive ? '<span class="rpg-tag rpg-tag-destiny-bond">Destiny Bond</span>' : '',
 		slot.grudgeActive ? '<span class="rpg-tag rpg-tag-grudge">Grudge</span>' : '',
@@ -805,10 +792,7 @@ export function generatePokemonStatusTagsHTML(
 		slot.slowStartTurns !== undefined && slot.slowStartTurns > 0 ? '<span class="rpg-tag rpg-tag-slow-start">Slow Start (' + String(slot.slowStartTurns) + ')</span>' : '',
 		slot.unburdenActive ? '<span class="rpg-tag rpg-tag-unburden">Unburden</span>' : '',
 
-		// --- PARADOX ABILITIES ---
-		// Quark Drive (Future)
 		(slot as any).boosterEnergyActive && pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-quark">Quark Drive</span>' : '',
-		// Protosynthesis (Ancient)
 		(slot as any).boosterEnergyActive && !pokemon.species.includes('Iron') ? '<span class="rpg-tag rpg-tag-proto">Protosynthesis</span>' : '',
 	].filter(Boolean).join('');
 
@@ -1611,7 +1595,6 @@ export function generateNPCInteractionHTML(
 		html += `<hr />`;
 
 		if (action.type === 'choosestarter') {
-			// Show starters inline directly - streamlined flow
 			const allStarters = Object.values(STARTER_POKEMON).flat();
 			html += `<p class="rpg-text-center" style="margin-bottom: 10px;"><strong>Choose your starter Pokémon:</strong></p>`;
 			html += `<div class="rpg-grid-3col">`;
@@ -1631,8 +1614,6 @@ export function generateNPCInteractionHTML(
 		}
 	}
 
-	// "Talk to Others" button has been removed to improve immersion.
-	// "Say Goodbye" now uses the dynamic returnCommand to send the player back to the specific building or location.
 	html += `<hr /><p class="rpg-text-center"><button name="send" value="${returnCommand}" class="button">Say Goodbye</button></p>`;
 	html += `</div>`;
 

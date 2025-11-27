@@ -95,7 +95,6 @@ export function createActivePokemonSlot(
 		lastMoveThatHitMe: undefined,
 		terastallized: savedState?.terastallized || undefined,
 		toxicCounter: savedState?.toxicCounter || (pokemon.status === 'tox' ? 1 : undefined),
-		// Tier 1 move additions
 		isAttracted: false,
 		destinyBondActive: false,
 		grudgeActive: false,
@@ -118,10 +117,7 @@ export function setItem(
 	const oldItem = pokemon.item;
 	const ability = toID(pokemon.ability || '');
 
-	// Check Sticky Hold (Prevention)
-	// Only applies if an item is being removed or swapped by another pokemon
 	if (oldItem && newItem !== oldItem && sourceSlot && sourceSlot.pokemon.id !== pokemon.id) {
-		// Mold Breaker can ignore Sticky Hold
 		const effectiveAbility = RPGAbilities.getActiveAbility(pokemon, sourceSlot.pokemon);
 		if (effectiveAbility === 'stickyhold') {
 			if (messageLog) messageLog.push(`${pokemon.species}'s Sticky Hold prevents item theft!`);
@@ -129,22 +125,17 @@ export function setItem(
 		}
 	}
 
-	// Apply the item change
 	pokemon.item = newItem;
 
-	// Trigger Unburden
-	// Condition: Had an item, now doesn't, and ability is Unburden
 	if (oldItem && !newItem && ability === 'unburden' && !slot.unburdenActive) {
 		slot.unburdenActive = true;
 		if (messageLog) messageLog.push(`${pokemon.species}'s Unburden activated!`);
 	}
 
-	// Reset Unburden if gaining an item
 	if (!oldItem && newItem && slot.unburdenActive) {
 		slot.unburdenActive = false;
 	}
 
-	// TODO: Add Symbiosis check here later (checks ally slot for item pass)
 
 	return true;
 }
@@ -158,7 +149,6 @@ export function applyStatChange(
 	source: ActivePokemonSlot | null = null
 ): boolean {
 	const pokemon = slot.pokemon;
-	// Use getActiveAbility to allow Mold Breaker to ignore immunity abilities (like Clear Body)
 	const ability = RPGAbilities.getActiveAbility(pokemon, source?.pokemon);
 	const actualValue = RPGAbilities.applyStatChangeModifier(value, ability);
 
@@ -176,17 +166,14 @@ export function applyStatChange(
 		messageLog.push(msg);
 		return true;
 	} else if (actualValue < 0) {
-		// Mirror Armor: Reflects stat drops from opponents
 		if (!isSelf && ability === 'mirrorarmor') {
 			messageLog.push(`${pokemon.species}'s Mirror Armor reflected the stat drop!`);
 			if (source) {
-				// Pass null as source to prevent infinite reflection if both have Mirror Armor
 				applyStatChange(source, stat, actualValue, battle, messageLog, null);
 			}
 			return false;
 		}
 
-		// Mist protection
 		if (!isSelf) {
 			const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
 			const sideMist = isPlayer ? battle.playerSide.mistTurns : battle.opponentSide.mistTurns;
@@ -250,7 +237,6 @@ export function applyStatChange(
 
 		checkStatDropAbilities(slot, source, battle, messageLog);
 
-		// Eject Pack Logic
 		if (battle.magicRoomTurns === 0 && pokemon.item === 'ejectpack' && !battle.pendingPivot && !battle.aiPendingPivot) {
 			let slotIndex = battle.playerSide.slots.indexOf(slot);
 			let isPlayer = true;
@@ -260,7 +246,6 @@ export function applyStatChange(
 			}
 
 			if (slotIndex !== -1) {
-				// Check if there are available replacements before setting up pivot
 				const party = isPlayer ? (battle.overridePlayerParty || getPlayerData(battle.playerId).party) : battle.opponentParty;
 				const slots = isPlayer ? battle.playerSide.slots : battle.opponentSide.slots;
 
@@ -285,7 +270,6 @@ export function applyStatChange(
 			}
 		}
 
-		// Handle White Herb
 		if (battle.magicRoomTurns === 0 && pokemon.item === 'whiteherb') {
 			let restored = false;
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'] as const;
@@ -468,7 +452,6 @@ export function handleHPDropEffects(slot: ActivePokemonSlot, battle: BattleState
 
 	if (pokemon.hp <= 0 || !pokemon.item) return;
 
-	// Handle status items immediately in case damage triggered them
 	checkStatusHealBerries(slot, battle, messageLog);
 
 	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
@@ -588,7 +571,6 @@ export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleSt
 	const pokemon = slot.pokemon;
 	const item = pokemon.item;
 
-	// Check Unnerve
 	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === pokemon.id);
 	const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
@@ -651,7 +633,6 @@ export function checkStatusHealBerries(slot: ActivePokemonSlot, battle: BattleSt
 export function handleLeppaBerry(slot: ActivePokemonSlot, battle: BattleState, messageLog: string[]) {
 	if (!slot.pokemon.item || slot.pokemon.item !== 'leppaberry' || battle.magicRoomTurns > 0) return;
 
-	// Check Unnerve
 	const isPlayer = battle.playerSide.slots.some(s => s?.pokemon.id === slot.pokemon.id);
 	const opponents = isPlayer ? battle.opponentSide.slots : battle.playerSide.slots;
 	const hasUnnerve = opponents.some(s => s && s.pokemon.hp > 0 &&
@@ -666,7 +647,7 @@ export function handleLeppaBerry(slot: ActivePokemonSlot, battle: BattleState, m
 			move.pp = 10;
 			const moveData = getMove(move.id);
 			moveRestored = moveData.name;
-			break; // Restore only the first 0 PP move found
+			break;
 		}
 	}
 
@@ -694,7 +675,6 @@ export function consumeBerry(slot: ActivePokemonSlot, berryId: string, messageLo
 		slot.cudChewBerry = berryId;
 	}
 
-	// Use setItem to remove the berry and trigger Unburden
 	setItem(slot, undefined, undefined, undefined, messageLog);
 
 	if (ability === 'cheekpouch' && slot.pokemon.hp < slot.pokemon.maxHp) {
@@ -1222,11 +1202,9 @@ export function createBattleState(config: {
 		turn: 0,
 		zoneId: config.zoneId,
 
-		// Unified side states
 		playerSide,
 		opponentSide,
 
-		// Weather and field effects
 		weather: config.weather,
 		locationWeather: config.locationWeather,
 		trickRoomTurns: 0,
@@ -1239,7 +1217,6 @@ export function createBattleState(config: {
 		fairyLockTurns: 0,
 		ionDelugeTurns: 0,
 
-		// Battle meta
 		forceEnd: false,
 		battleEnded: false,
 		battleResult: undefined,
@@ -1249,17 +1226,14 @@ export function createBattleState(config: {
 		opponentMoney: config.opponentMoney,
 		trainerId: config.trainerId,
 
-		// Switches and pivots
 		playerShouldSwitch: undefined,
 		pendingPivot: undefined,
 		aiPendingPivot: undefined,
 		pendingActions: {},
 
-		// Battle log and persistent state
 		battleLog: [],
 		persistentPokemonState: {},
 
-		// Battle Tower specific
 		floor: config.floor ?? 0,
 		overridePlayerParty: config.overridePlayerParty ?? null,
 		battleTowerFormat: config.battleTowerFormat,
