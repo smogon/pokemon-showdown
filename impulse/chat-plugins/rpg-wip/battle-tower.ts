@@ -369,7 +369,7 @@ export function startBattleTowerFloor(
 	format = 'battlefactory'
 ) {
 // Import dynamically to avoid circular dependency
-	const { generateBattleHTML } = require('./battle-ui');
+	const { BattleUI } = require('./battle-ui');
 	const { applyHazardEffectsOnSwitchIn } = require('./battle-state');
 
 	const formatConfig = BATTLE_TOWER_FORMATS[format] || BATTLE_TOWER_FORMATS['battlefactory'];
@@ -454,7 +454,7 @@ export function startBattleTowerFloor(
 		battle.battleLog.push(...battleMessages);
 
 		context.sendReply(
-			`|uhtml|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`
+			`|uhtml|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`
 		);
 	} catch (error) {
 		console.error(error);

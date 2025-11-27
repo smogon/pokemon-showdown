@@ -32,11 +32,7 @@ import { teraToggleState, activeScriptedEvents, getStatMultiplier, getCustomEffe
 import {
 	generateMoveLearnHTML,
 } from './html';
-import {
-	generateBattleHTML,
-	generatePivotSwitchHTML,
-	generateFaintSwitchHTML,
-} from './battle-ui';
+import { BattleUI } from './battle-ui';
 import { RPGMoves } from './battle-moves';
 import { getBadgeForGymLeader, TOTAL_BADGES, TRAINER_DATABASE } from './game-npcs';
 import { GameConfig } from './game-config';
@@ -146,7 +142,7 @@ export function processTurn(context: CommandContext, battle: BattleState, room: 
 		}
 
 		if (hasActivePlayerSlot && hasActiveOpponentSlot) {
-			context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
+			context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, [], undefined, teraToggleState.get(user.id))}`);
 		}
 	}
 }
@@ -1184,7 +1180,7 @@ export function checkBattleEndCondition(
 	if (battleEnded) return true;
 
 	if (battle.pendingPivot) {
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generatePivotSwitchHTML(battle, messageLog.join('<br>'), battle.pendingPivot.slotIndex)}`);
 		return true;
 	}
 
@@ -1193,7 +1189,7 @@ export function checkBattleEndCondition(
 		for (let i = 0; i < battle.playerSide.slots.length; i++) {
 			if (battle.playerSide.slots[i] === null || battle.playerSide.slots[i]?.pokemon.hp === 0) delete battle.pendingActions[i];
 		}
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateFaintSwitchHTML(battle, messageLog.join('<br>'))}`);
 		return true;
 	}
 
@@ -1246,7 +1242,7 @@ export function checkForWinLoss(
 		messageLog.push(`<hr><center><b>Defeat!</b></center>`);
 		messageLog.push(`<center><b>You lost ₽${moneyLost}!</b></center>`);
 
-		context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
+		context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id))}`);
 		activeBattles.delete(user.id);
 		teraToggleState.delete(user.id);
 		activeScriptedEvents.delete(user.id);
@@ -1322,7 +1318,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		} else {
 			moneyGained = Math.floor(battle.opponentParty.reduce((sum, p) => sum + p.level, 0) * 5);
@@ -1334,7 +1330,7 @@ export function checkForWinLoss(
 			if (player.pendingMoveLearnQueue && player.pendingMoveLearnQueue.length > 0) {
 				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateMoveLearnHTML(player, messageLog)}`);
 			} else {
-				context.sendReply(`|uhtmlchange|rpg-${user.id}|${generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
+				context.sendReply(`|uhtmlchange|rpg-${user.id}|${BattleUI.generateBattleHTML(battle, messageLog, undefined, teraToggleState.get(user.id), eventId)}`);
 			}
 		}
 		activeBattles.delete(user.id);
