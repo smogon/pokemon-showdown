@@ -2,7 +2,7 @@ import { Dex, toID } from '../../../sim/dex';
 import { FS } from '../../../lib';
 import { createPokemon, getPlayerData } from './core';
 import { MANUAL_LEARNSETS } from './MANUAL_LEARNSETS';
-import { MANUAL_EVOLUTIONS } from './data-exp-evs-catch-rates';
+import { MANUAL_EVOLUTIONS } from './data-pokemon';
 import type { RPGPokemon, PlayerData, Stats, ActivePokemonSlot, Move, BattleState, Status, SideState } from './interface';
 import { createSideState } from './interface';
 import { VIABLE_HELD_ITEMS, BERRY_FLAVORS, NATURE_FLAVOR_PREFERENCES, ITEMS_DATABASE } from './items';
