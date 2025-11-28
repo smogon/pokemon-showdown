@@ -13,28 +13,16 @@ import type { TcgUserProfile } from '../tcg/interface';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
-interface ProfileStatusDocument {
+interface ProfileSettingsDocument {
 	_id: string;
-	status: string;
+	status?: string;
+	backgroundType?: 'image' | 'color';
+	backgroundValue?: string;
+	textColor?: string;
 	updatedAt: Date;
 }
 
-interface ProfileBackgroundDocument {
-	_id: string;
-	type: 'image' | 'color';
-	value: string;
-	updatedAt: Date;
-}
-
-interface ProfileTextColorDocument {
-	_id: string;
-	color: string;
-	updatedAt: Date;
-}
-
-const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
-const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackgrounds');
-const ProfileTextColorDB = ImpulseDB<ProfileTextColorDocument>('profiletextcolors');
+const ProfileSettingsDB = ImpulseDB<ProfileSettingsDocument>('profilesettings');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
 /**
@@ -171,16 +159,14 @@ async function getUserProfileData(userid: string) {
 
 	// Fetch all data in parallel for better performance
 	const [
-		expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile, backgroundDoc, textColorDoc,
+		expDoc, ontimeDoc, profileSettings, userClanInfo, registrationResult, tcgProfile,
 	] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
 		ImpulseDB('ontime').findOne({ _id: userid }),
-		ProfileStatusDB.findOne({ _id: userid }),
+		ProfileSettingsDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
 		getRegistrationData(userid),
 		TcgProfileDB.findOne({ userId: userid }),
-		ProfileBackgroundDB.findOne({ _id: userid }),
-		ProfileTextColorDB.findOne({ _id: userid }),
 	]);
 
 	// Process EXP data
@@ -194,9 +180,19 @@ async function getUserProfileData(userid: string) {
 		data.ontime = ontimeDoc.value.ontime;
 	}
 
-	// Process custom profile status
-	if (statusDoc.status === 'fulfilled' && statusDoc.value) {
-		data.customStatus = statusDoc.value.status;
+	// Process profile settings (status, background, text color)
+	if (profileSettings.status === 'fulfilled' && profileSettings.value) {
+		const settings = profileSettings.value;
+		if (settings.status) {
+			data.customStatus = settings.status;
+		}
+		if (settings.backgroundType && settings.backgroundValue) {
+			data.backgroundType = settings.backgroundType;
+			data.backgroundValue = settings.backgroundValue;
+		}
+		if (settings.textColor) {
+			data.textColor = settings.textColor;
+		}
 	}
 
 	// Process clan data - fetch clan details if user is in a clan
@@ -244,17 +240,6 @@ async function getUserProfileData(userid: string) {
 		if (cardsRankResult.status === 'fulfilled') {
 			data.tcgTotalCardsRank = cardsRankResult.value + 1;
 		}
-	}
-
-	// Process background data
-	if (backgroundDoc.status === 'fulfilled' && backgroundDoc.value) {
-		data.backgroundType = backgroundDoc.value.type;
-		data.backgroundValue = backgroundDoc.value.value;
-	}
-
-	// Process text color data
-	if (textColorDoc.status === 'fulfilled' && textColorDoc.value) {
-		data.textColor = textColorDoc.value.color;
 	}
 
 	return data;
@@ -431,9 +416,9 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Please provide a status message (max 50 characters).");
 			}
 
-			await ProfileStatusDB.updateOne(
+			await ProfileSettingsDB.updateOne(
 				{ _id: user.id },
-				{ $set: { _id: user.id, status: target, updatedAt: new Date() } },
+				{ $set: { status: target, updatedAt: new Date() }, $setOnInsert: { _id: user.id } },
 				{ upsert: true }
 			);
 
@@ -441,7 +426,10 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async clearstatus(target, room, user): Promise<void> {
-			await ProfileStatusDB.deleteOne({ _id: user.id });
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { status: '' }, $set: { updatedAt: new Date() } }
+			);
 			this.sendReply("Your profile status has been cleared.");
 		},
 
@@ -454,9 +442,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Check if it's a hex color code
 			if (isValidHexColor(value)) {
-				await ProfileBackgroundDB.updateOne(
+				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
-					{ $set: { _id: user.id, type: 'color', value, updatedAt: new Date() } },
+					{
+						$set: { backgroundType: 'color', backgroundValue: value, updatedAt: new Date() },
+						$setOnInsert: { _id: user.id },
+					},
 					{ upsert: true }
 				);
 				this.sendReply(`Your profile background has been set to color: ${value}`);
@@ -465,9 +456,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Check if it's a valid image URL
 			if (isValidImageUrl(value)) {
-				await ProfileBackgroundDB.updateOne(
+				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
-					{ $set: { _id: user.id, type: 'image', value, updatedAt: new Date() } },
+					{
+						$set: { backgroundType: 'image', backgroundValue: value, updatedAt: new Date() },
+						$setOnInsert: { _id: user.id },
+					},
 					{ upsert: true }
 				);
 				this.sendReply(`Your profile background has been set to image: ${value}`);
@@ -479,7 +473,10 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async clearbg(target, room, user): Promise<void> {
-			await ProfileBackgroundDB.deleteOne({ _id: user.id });
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { backgroundType: '', backgroundValue: '' }, $set: { updatedAt: new Date() } }
+			);
 			this.sendReply("Your profile background has been cleared.");
 		},
 
@@ -495,16 +492,19 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Invalid hex color code. Please provide a valid hex color (e.g., #FF5733 or #FFF).");
 			}
 
-			await ProfileTextColorDB.updateOne(
+			await ProfileSettingsDB.updateOne(
 				{ _id: user.id },
-				{ $set: { _id: user.id, color: value, updatedAt: new Date() } },
+				{ $set: { textColor: value, updatedAt: new Date() }, $setOnInsert: { _id: user.id } },
 				{ upsert: true }
 			);
 			this.sendReply(`Your profile text color has been set to: ${value}`);
 		},
 
 		async cleartextcolor(target, room, user): Promise<void> {
-			await ProfileTextColorDB.deleteOne({ _id: user.id });
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { textColor: '' }, $set: { updatedAt: new Date() } }
+			);
 			this.sendReply("Your profile text color has been cleared.");
 		},
 
