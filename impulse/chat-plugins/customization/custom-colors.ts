@@ -1,56 +1,74 @@
 /*
 * Pokemon Showdown
 * Custom Colors Commands
-* @author MusaddikTemkar
 */
 
 import https from 'https';
-import { FS } from '../../../lib';
-import { ImpulseDB } from '../../impulse-db';
-import { validateHexColor, clearColorCache, loadCustomColorsFromDB, nameColor } from '../../colors';
+import { FS, Utils } from '../../../lib';
+import { 
+	validateHexColor, 
+	nameColor, 
+	getCustomColors, 
+	addCustomColor, 
+	removeCustomColor,
+	reloadCustomColors
+} from '../../colors';
 
 const STAFF_ROOM_ID = 'staff';
+const CONFIG_PATH = 'config/custom.css';
+const COLORS_START_TAG = '/* COLORS START */';
+const COLORS_END_TAG = '/* COLORS END */';
 
-Impulse.reloadCSS = () => {
-	const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
-	const req = https.get(url, res => {});
-	req.on('error', err => {});
-	req.end();
+const reloadCSS = () => {
+	if (global.Config?.serverid) {
+		const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid || 'impulse'}&invalidate`;
+		const req = https.get(url, () => {});
+		req.on('error', () => {});
+		req.end();
+	}
 };
 
-const generateCSS = (name: string, color: string): string => {
+Impulse.reloadCSS = reloadCSS;
+
+const generateCSSRule = (name: string, color: string): string => {
 	const id = toID(name);
 	return `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, ` +
 		`[class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, ` +
 		`[id$="-userlist-user-${id}"] strong, [id$="-userlist-user-${id}"] span ` +
-		`{ color: ${color} !important; }\n`;
+		`{ color: ${color} !important; }`;
 };
 
-const updateColor = async () => {
+const updateColorsCSS = async () => {
 	try {
-		const colorDocs = await ImpulseDB('customcolors').find({});
-		let css = '/* COLORS START */\n';
+		const colors = getCustomColors();
+		const cssRules = Object.entries(colors).map(([userid, color]) => {
+			return generateCSSRule(userid, color);
+		}).join('\n');
 
-		colorDocs.forEach(doc => {
-			css += generateCSS(doc.userid, doc.color);
+		const cssBlock = `${COLORS_START_TAG}\n${cssRules}\n${COLORS_END_TAG}`;
+
+		FS(CONFIG_PATH).writeUpdate(() => {
+			const fileContent = FS(CONFIG_PATH).readIfExistsSync();
+			
+			if (!fileContent.trim()) return cssBlock + '\n';
+
+			const startIndex = fileContent.indexOf(COLORS_START_TAG);
+			const endIndex = fileContent.indexOf(COLORS_END_TAG);
+
+			if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
+				const pre = fileContent.substring(0, startIndex);
+				const post = fileContent.substring(endIndex + COLORS_END_TAG.length);
+				return pre + cssBlock + post;
+			} else {
+				return fileContent + '\n' + cssBlock + '\n';
+			}
 		});
 
-		css += '/* COLORS END */\n';
-
-		const fileContent = await FS('config/custom.css').readIfExists();
-		const file = fileContent ? fileContent.split('\n') : [];
-
-		const start = file.indexOf('/* COLORS START */');
-		const end = file.indexOf('/* COLORS END */');
-		if (start !== -1 && end !== -1) file.splice(start, (end - start) + 1);
-
-		FS('config/custom.css').writeUpdate(() => file.join('\n') + css);
-
-		clearColorCache();
-		await loadCustomColorsFromDB();
-		Impulse.reloadCSS();
-	} catch {
-		// Ignore errors during initialization
+		if (typeof Impulse !== 'undefined' && Impulse.reloadCSS) {
+			Impulse.reloadCSS();
+		}
+	} catch (err) {
+		console.error("Error updating colors CSS:", err);
 	}
 };
 
@@ -71,14 +89,12 @@ const sendColorNotifications = (
 	const targetNameColor = nameColor(targetName, true, false);
 
 	if (color) {
-		// Set notification
 		if (targetUser?.connected) {
-			const escapedName = Chat.escapeHTML(user.name);
+			const escapedName = Utils.escapeHTML(user.name);
 			targetUser.popup(`|html|${escapedName} set your custom color to <font color="${color}">${color}</font>.`);
 		}
 		notifyStaffRoom(`${userNameColor} set custom color for ${targetNameColor} to ${color}.`);
 	} else {
-		// Delete notification
 		if (targetUser?.connected) {
 			targetUser.popup(`${user.name} removed your custom color.`);
 		}
@@ -98,20 +114,17 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !color) return this.parse('/cc help');
 
 			const targetId = toID(name);
-			if (targetId.length > 19) return this.errorReply('Usernames are not this long...');
+			if (targetId.length > 19) throw new Chat.ErrorMessage('Usernames are not this long...');
 
 			if (!validateHexColor(color)) {
-				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
+				throw new Chat.ErrorMessage('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			await ImpulseDB('customcolors').upsert(
-				{ userid: targetId },
-				{ $set: { userid: targetId, color, updatedBy: user.id, updatedAt: new Date() } }
-			);
+			addCustomColor(targetId, color);
+			
+			await updateColorsCSS();
 
-			await updateColor();
-
-			const escapedName = Chat.escapeHTML(name);
+			const escapedName = Utils.escapeHTML(name);
 			this.sendReply(
 				`|raw|You have given <b><font color="${color}">${escapedName}</font></b> a custom color.`
 			);
@@ -124,15 +137,17 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/cc help');
 
 			const targetId = toID(target);
-			const colorDoc = await ImpulseDB('customcolors').findOne({ userid: targetId });
+			const colors = getCustomColors();
 
-			if (!colorDoc) return this.errorReply(`${target} does not have a custom color.`);
-
-			await ImpulseDB('customcolors').deleteOne({ userid: targetId });
-			await updateColor();
+			if (!colors[targetId]) {
+				throw new Chat.ErrorMessage(`${target} does not have a custom color.`);
+			}
+			
+			removeCustomColor(targetId);
+			
+			await updateColorsCSS();
 
 			this.sendReply(`You removed ${target}'s custom color.`);
-
 			sendColorNotifications(user, target, null);
 		},
 
@@ -142,16 +157,17 @@ export const commands: Chat.ChatCommands = {
 			if (!name || !color) return this.parse('/cc help');
 
 			if (!validateHexColor(color)) {
-				return this.errorReply('Invalid hex format. Use #RGB or #RRGGBB.');
+				throw new Chat.ErrorMessage('Invalid hex format. Use #RGB or #RRGGBB.');
 			}
 
-			const escapedName = Chat.escapeHTML(name);
+			const escapedName = Utils.escapeHTML(name);
 			return this.sendReplyBox(`<b><font size="3" color="${color}">${escapedName}</font></b>`);
 		},
 
 		async reload(target: string, room: ChatRoom, user: User) {
 			this.checkCan('roomowner');
-			await updateColor();
+			await reloadCustomColors();
+			await updateColorsCSS();
 			this.privateModAction(`(${user.name} has reloaded custom colours.)`);
 		},
 
