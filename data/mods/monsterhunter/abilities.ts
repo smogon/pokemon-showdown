@@ -1270,7 +1270,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const reaction = this.dex.getActiveMove('risenburst');
 				// reaction.noreact = true;
 				this.add('-activate', target, 'ability: Risen Burst');
-				this.actions.useMove(reaction, target, source);
+				this.actions.useMove(reaction, target, { target: source });
 			}
 		},
 		onModifyDamage(damage, source, target, move) {
