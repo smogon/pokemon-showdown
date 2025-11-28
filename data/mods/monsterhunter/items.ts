@@ -6,7 +6,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (!this.effectState.started || pokemon.transformed || this.queue.peek(true)?.choice === 'runSwitch') return;
 			if (!this.field.isWeather('sunnyday')) {
 				for (const proto of ['protopyre', 'protoneuron', 'prototoxin', 'protolithos', 'protoavian',
-									'protorefraction', 'protosynthesis']) { 
+					'protorefraction', 'protosynthesis']) {
 					if (pokemon.hasAbility(proto)) {
 						if (!pokemon.volatiles[proto] /* && !this.field.isWeather('sunnyday') */ && pokemon.useItem()) {
 							pokemon.addVolatile(proto);
@@ -17,7 +17,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 			if (!this.field.isTerrain('electricterrain')) {
 				for (const quark of ['quarkdrive', 'jellyfilleddrive', 'winddrive', 'heavydrive', 'jadedrive', 'airdrive',
-									'magicdrive', 'phantomdrive', 'toxicdrive']) { 
+					'magicdrive', 'phantomdrive', 'toxicdrive']) {
 					if (pokemon.hasAbility(quark)) {
 						if (!pokemon.volatiles[quark] && pokemon.useItem()) {
 							pokemon.addVolatile(quark);
@@ -397,7 +397,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	kirinite: {
 		name: "Kirinite",
-		gen: 9, 
+		gen: 9,
 		shortDesc: "If held by Kirin, allows it to transform into Emperor. (Mega-Evolution)",
 		megaStone: "Emperor Kirin",
 		megaEvolves: "Kirin",
@@ -456,12 +456,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		shortDesc: "If held by Fatalis, triggers its Crimson Form in battle. (Primal Reversion)",
 		itemUser: ["Fatalis", "Crimson-Fatalis"],
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Fatalis') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Fatalis' && !pokemon.transformed) {
+				pokemon.formeChange('Crimson-Fatalis', this.effect, true);
 			}
-		},
-		onPrimal(pokemon) {
-			pokemon.formeChange('Crimson-Fatalis', this.effect, true);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Fatalis') return false;
@@ -474,12 +471,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		shortDesc: "If held by Fatalis, triggers its Crimson Form in battle. (Primal Reversion)",
 		itemUser: ["Fatalis", "White-Fatalis"],
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Fatalis') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Fatalis' && !pokemon.transformed) {
+				pokemon.formeChange('White-Fatalis', this.effect, true);
 			}
-		},
-		onPrimal(pokemon) {
-			pokemon.formeChange('White-Fatalis', this.effect, true);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Fatalis') return false;

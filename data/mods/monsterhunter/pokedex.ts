@@ -236,7 +236,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Flying Wyvern"],
 	},
- 	dreadkingrathalos: {
+	dreadkingrathalos: {
 		num: 11,
 		name: "Dreadking Rathalos",
 		baseSpecies: "Rathalos",
@@ -284,7 +284,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Flying Wyvern"],
 	},
- 	dreadqueenrathian: {
+	dreadqueenrathian: {
 		num: 12,
 		name: "Dreadqueen Rathian",
 		baseSpecies: "Rathian",
@@ -383,7 +383,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "White-Fatalis",
 		baseSpecies: "Fatalis",
 		forme: "Primal",
-		types: ["Dragon", "Electric"], 
+		types: ["Dragon", "Electric"],
 		baseStats: { hp: 100, atk: 90, def: 100, spa: 130, spd: 115, spe: 95 },
 		abilities: { 0: "Hadron Engine" },
 		weightkg: 270.0,
@@ -593,7 +593,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Fanged Beast"],
 		otherFormes: ["Furious Rajang"],
 	},
- 	furiousrajang: {
+	furiousrajang: {
 		num: 28,
 		name: "Furious Rajang",
 		baseSpecies: "Rajang",
@@ -829,7 +829,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Fanged Beast"],
 		otherFormes: ["Redhelm Arzuros"],
 	},
- 	redhelmarzuros: {
+	redhelmarzuros: {
 		num: 40,
 		name: "Redhelm Arzuros",
 		baseSpecies: "Arzuros",
@@ -897,7 +897,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Brute Wyvern"],
 		otherFormes: ["Raging Brachydios"],
 	},
- 	ragingbrachydios: {
+	ragingbrachydios: {
 		num: 43,
 		name: "Raging Brachydios",
 		baseSpecies: "Brachydios",
@@ -1058,7 +1058,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Leviathan"],
 	},
- 	abyssallagiacrus: {
+	abyssallagiacrus: {
 		num: 51,
 		name: "Abyssal Lagiacrus",
 		baseSpecies: "Lagiacrus",
@@ -1082,7 +1082,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Fanged Beast"],
 		otherFormes: ["Snowbaron Lagombi"],
 	},
- 	snowbaronlagombi: {
+	snowbaronlagombi: {
 		num: 52,
 		name: "Snowbaron Lagombi",
 		baseSpecies: "Lagombi",
@@ -1202,7 +1202,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Fanged Wyvern"],
 	},
- 	thunderlordzinogre: {
+	thunderlordzinogre: {
 		num: 58,
 		name: "Thunderlord Zinogre",
 		baseSpecies: "Zinogre",
@@ -1297,7 +1297,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Flying Wyvern"],
 		otherFormes: ["Boltreaver Astalos"],
 	},
- 	boltreaverastalos: {
+	boltreaverastalos: {
 		num: 64,
 		name: "Boltreaver Astalos",
 		baseSpecies: "Astalos",
@@ -1476,7 +1476,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Leviathan"],
 		otherFormes: ["Soulseer Mizutsune"],
 	},
- 	soulseermizutsune: {
+	soulseermizutsune: {
 		num: 72,
 		name: "Soulseer Mizutsune",
 		baseSpecies: "Mizutsune",
@@ -1698,7 +1698,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Elder Dragon"],
 	},
- 	glowstrax: {
+	glowstrax: {
 		num: 85,
 		name: "Glowstrax",
 		types: ["Dragon"],
@@ -1779,7 +1779,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Flying Wyvern"],
 		otherFormes: ["Seething Bazelgeuse"],
 	},
- 	seethingbazelgeuse: {
+	seethingbazelgeuse: {
 		num: 90,
 		name: "Seething Bazelgeuse",
 		baseSpecies: "Bazelgeuse",
@@ -1892,7 +1892,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Fanged Wyvern"],
 	},
- 	greatizuchi: {
+	greatizuchi: {
 		num: 98,
 		name: "Great Izuchi",
 		types: ["Normal", "Fighting"],
@@ -1964,7 +1964,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Fanged Wyvern"],
 		otherFormes: ["Scorned Magnamalo"],
 	},
- 	scornedmagnamalo: {
+	scornedmagnamalo: {
 		num: 104,
 		name: "Scorned Magnamalo",
 		baseSpecies: "Magnamalo",
@@ -2058,7 +2058,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Temnoceran"],
 	},
- 	pyrekadaki: {
+	pyrekadaki: {
 		num: 109,
 		name: "Pyre-Kadaki",
 		types: ["Fire", "Bug"],
@@ -2101,7 +2101,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Amphibian"],
 	},
- 	tobikadachi: {
+	tobikadachi: {
 		num: 112,
 		name: "Tobi-Kadachi",
 		types: ["Electric"],
@@ -2163,7 +2163,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 		// tags: ["Elder Dragon"],
 	},
- 	primozeno: {
+	primozeno: {
 		num: 117,
 		name: "Primozeno",
 		types: ["Dragon", "Fairy"],
@@ -2195,7 +2195,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		// tags: ["Elder Dragon"],
 		otherFormes: ["Allmother Narwa"],
 	},
- 	allmothernarwa: {
+	allmothernarwa: {
 		num: 119,
 		name: "Allmother Narwa",
 		baseSpecies: "Narwa",
@@ -2474,7 +2474,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Gureadomosu",
 		types: ["Grass", "Water"],
 		baseStats: { hp: 105, atk: 92, def: 97, spa: 124, spd: 103, spe: 65 },
-		abilities: { 0: "Storm Drain", 1: "Chlorophyll",  H: "Protosynthesis" },
+		abilities: { 0: "Storm Drain", 1: "Chlorophyll", H: "Protosynthesis" },
 		weightkg: 170.0,
 		eggGroups: ["Undiscovered"],
 		// tags: ["Flying Wyvern"],

@@ -1,25 +1,25 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
-    statusmod: {
-        effectType: 'Rule',
-        name: 'Status Mod',
-        desc: "Displays Dragonblight as a volatile",
-        onSwitchIn(pokemon) {
-            if (pokemon.status === 'dragonblight') {
-                this.add('-start', pokemon, 'dragonblight', '[silent]');
-            }
-        },
-        onSetStatus(status, target, source, effect) {
-            if (status === 'dragonblight') {
-                this.add('-start', target, 'dragonblight', '[silent]');
-            }
-        },
-        onCureStatus(pokemon, source, effect) {
-            const cured = effect?.status || pokemon.statusState?.prevStatus;
-            if (cured === 'dragonblight') {
-                this.add('-end', pokemon, 'dragonblight', '[silent]');
-            }
-        },
-    },
+	statusmod: {
+		effectType: 'Rule',
+		name: 'Status Mod',
+		desc: "Displays Dragonblight as a volatile",
+		onSwitchIn(pokemon) {
+			if (pokemon.status === 'dragonblight') {
+				this.add('-start', pokemon, 'dragonblight', '[silent]');
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status === 'dragonblight') {
+				this.add('-start', target, 'dragonblight', '[silent]');
+			}
+		},
+		onCureStatus(pokemon, source, effect) {
+			const cured = effect?.status || pokemon.statusState?.prevStatus;
+			if (cured === 'dragonblight') {
+				this.add('-end', pokemon, 'dragonblight', '[silent]');
+			}
+		},
+	},
 	megadatamod: {
 		effectType: 'Rule',
 		name: 'Mega Data Mod',
@@ -43,7 +43,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			const stats = [];
 			let stat: StatID;
 			for (stat in species.baseStats) {
-				const statNames: {[k in StatID]: string} = {hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe"};
+				const statNames: { [k in StatID]: string } = { hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
 				stats.push(`<span class="col statcol"><em>${statNames[stat]}</em><br>${species.baseStats[stat]}</span>`);
 			}
 			buf += `<span style="float: left ; min-height: 26px">${stats.join(' ')}</span>`;

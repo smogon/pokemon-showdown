@@ -781,5 +781,5 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	grimclawtigrex: {
 		tier: "OU",
-	}
+	},
 };

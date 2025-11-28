@@ -16,9 +16,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Torch Song", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Torch Song", target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
@@ -41,8 +41,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMove: {basePower: 120 },
-		maxMove: {basePower: 140 },
+		zMove: { basePower: 120 },
+		maxMove: { basePower: 140 },
 	},
 	glidebomb: {
 		accuracy: 100,
@@ -57,13 +57,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMove: {basePower: 140 },
-		maxMove: {basePower: 130 },
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Fire Lash", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fire Lash", target);
+		},
 	},
 	dragonator: {
 		accuracy: 100,
@@ -78,9 +78,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (type === 'Dragon') return 1;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Gigaton Hammer", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Gigaton Hammer", target);
+		},
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch',
@@ -99,8 +99,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
-			const item = pokemon.getItem();
-			if (item && item.isBerry) {
+			const item = pokemon.getItem().isBerry;
+			if (item) {
 				// Heal 50% if berry is present
 				this.heal(pokemon.baseMaxhp / 2, pokemon);
 				pokemon.eatItem(true);
@@ -110,7 +110,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.heal(pokemon.baseMaxhp / 4, pokemon);
 				this.add('-message', `${pokemon.name} devoured nothing... but still restored some HP!`);
 			}
-    	},
+		},
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -133,9 +133,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Whirlpool", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Whirlpool", target);
+		},
 	},
 	cutwingbarrage: {
 		accuracy: 95,
@@ -151,9 +151,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'bleeding',
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Aerial Ace", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Aerial Ace", target);
+		},
 		target: "normal",
 		type: "Flying",
 		contestType: "Cool",
@@ -173,9 +173,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Supercell Slam", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Supercell Slam", target);
+		},
 	},
 	frenzyslam: {
 		accuracy: 95,
@@ -219,9 +219,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Chilling Water", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Chilling Water", target);
+		},
 	},
 	creepynoise: {
 		accuracy: 100,
@@ -240,9 +240,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Bug",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Bug Buzz", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Bug Buzz", target);
+		},
 	},
 	arcticshriek: {
 		accuracy: 90,
@@ -260,9 +260,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Freeze-Dry", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Freeze-Dry", target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Ice",
@@ -285,9 +285,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Psychic",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Luster Purge", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Luster Purge", target);
+		},
 	},
 	mossbomb: {
 		accuracy: 90,
@@ -303,9 +303,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			target.addVolatile('leechseed', source);
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Seed Bomb", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Seed Bomb", target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -328,9 +328,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fire",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Flame Wheel", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Flame Wheel", target);
+		},
 	},
 	apexburst: {
 		accuracy: 85,
@@ -346,16 +346,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', source, 'move: Aromatherapy');
 				for (const ally of source.side.pokemon) {
 					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+						ally.cureStatus();
 					}
-					ally.cureStatus();
 				}
 			},
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Fleur Cannon", target);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fleur Cannon", target);
 			this.add('-anim', source, "Aromatherapy", source);
-        },
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -380,9 +380,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Fairy",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Strange Steam", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Strange Steam", target);
+		},
 	},
 	psychocrush: {
 		accuracy: 100,
@@ -401,9 +401,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Psychic",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Psystrike", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Psystrike", target);
+		},
 	},
 	biocharge: {
 		accuracy: true,
@@ -420,12 +420,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMove: { effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Parabolic Charge", source);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Parabolic Charge", source);
+		},
 	},
 	heatbeam: {
 		accuracy: 100,
@@ -442,9 +442,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fire",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Heat Wave", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Heat Wave", target);
+		},
 	},
 	boltbreath: {
 		accuracy: 100,
@@ -458,9 +458,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return move.basePower;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Wildbolt Storm", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Wildbolt Storm", target);
+		},
 		category: "Special",
 		name: "Bolt Breath",
 		shortDesc: "Power doubles if the user moves before the target.",
@@ -505,12 +505,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMove: {boost: { spa: 1 }},
+		zMove: { boost: { spa: 1 } },
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Mist", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Mist", target);
+		},
 	},
 	blazeball: {
 		accuracy: 100,
@@ -526,9 +526,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fire",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Pyro Ball", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Pyro Ball", target);
+		},
 	},
 	crimsondawn: {
 		accuracy: 100,
@@ -549,9 +549,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return null;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "V-create", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "V-create", target);
+		},
 	},
 	ancestralthunder: {
 		accuracy: 100,
@@ -572,9 +572,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return null;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Electro Drift", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Electro Drift", target);
+		},
 	},
 	quicksandbreath: {
 		accuracy: 75,
@@ -591,9 +591,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ground",
 		contestType: "Tough",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Sandsear Storm", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Sandsear Storm", target);
+		},
 	},
 	sedativespine: {
 		accuracy: 100,
@@ -612,9 +612,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Bug",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Leech Life", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Leech Life", target);
+		},
 	},
 	hellflare: {
 		accuracy: 100,
@@ -631,7 +631,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'hellflare',
-				source: source,
+				source,
 				moveData: {
 					id: 'hellflare',
 					name: "Hellflare",
@@ -649,9 +649,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return this.NOT_FAIL;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Sacred Fire", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Sacred Fire", target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
@@ -673,9 +673,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Accelerock", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Accelerock", target);
+		},
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
@@ -728,7 +728,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Dragon",
-		zMove: {boost: { spd: 1 }},
+		zMove: { boost: { spd: 1 } },
 		contestType: "Clever",
 	},
 	convectionnova: {
@@ -740,9 +740,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Ice Burn", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Ice Burn", target);
+		},
 		secondary: null,
 		shortDesc: "Fire moves become Ice type this turn, can't use twice.",
 		pseudoWeather: 'convection',
@@ -764,7 +764,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			duration: 1,
 			onFieldStart(target, source, sourceEffect) {
 				this.add('-fieldactivate', 'move: Convection');
-				this.hint(`Fire-type moves become Ice-type after using ${ sourceEffect}.`);
+				this.hint(`Fire-type moves become Ice-type after using ${sourceEffect}.`);
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
@@ -777,7 +777,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Ice",
-		zMove: {boost: { spa: 1 }},
+		zMove: { boost: { spa: 1 } },
 		contestType: "Beautiful",
 	},
 	/*
@@ -798,9 +798,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Infernal Parade", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Infernal Parade", target);
+		},
 		shortDesc: "30% chance to inflict blastblight.",
 		target: "normal",
 		type: "Ghost",
@@ -821,9 +821,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Shell Side Arm", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Shell Side Arm", target);
+		},
 		shortDesc: "50% chance to inflict blastblight.",
 		target: "normal",
 		type: "Poison",
@@ -844,9 +844,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Fiery Dance", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fiery Dance", target);
+		},
 		shortDesc: "Inflicts blastblight.",
 		target: "normal",
 		type: "Fire",
@@ -872,9 +872,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Fire Fang", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fire Fang", target);
+		},
 		shortDesc: "Inflicts blast. 10% chance to flinch.",
 		target: "normal",
 		type: "Fire",
@@ -900,9 +900,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Black Hole Eclipse", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Black Hole Eclipse", target);
+		},
 		shortDesc: "Reduces Sp. Atk by 2. 50% chance to inflict blast.",
 		target: "normal",
 		type: "Dark",
@@ -921,12 +921,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		volatileStatus: 'defensedown',
 		target: "allAdjacentFoes",
 		type: "Flying",
-		zMove: {boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Tough",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Bleakwind Storm", source);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Bleakwind Storm", source);
+		},
 	},
 	harshsting: {
 		accuracy: 100,
@@ -945,9 +945,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Bug",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Leech Life", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Leech Life", target);
+		},
 	},
 	decayduster: {
 		accuracy: true,
@@ -964,9 +964,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Bug",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Pollen Puff", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Pollen Puff", target);
+		},
 	},
 	slimyspit: {
 		accuracy: 100,
@@ -985,9 +985,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Snipe Shot", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Snipe Shot", target);
+		},
 	},
 	stinkbomb: {
 		accuracy: 100,
@@ -1006,9 +1006,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Poison",
 		contestType: "Tough",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Sludge Bomb", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Sludge Bomb", target);
+		},
 	},
 	perfumepulse: {
 		accuracy: 100,
@@ -1024,9 +1024,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'stench',
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Malignant Chain", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Malignant Chain", target);
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -1044,9 +1044,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'fatigue',
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Gunk Shot", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Gunk Shot", target);
+		},
 		shortDesc: "30% chance to inflict fatigue.",
 		target: "normal",
 		type: "Poison",
@@ -1069,9 +1069,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Poison",
 		contestType: "Cute",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Poison Tail", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Poison Tail", target);
+		},
 	},
 	roughhouse: {
 		accuracy: 90,
@@ -1090,9 +1090,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fighting",
 		contestType: "Cute",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Play Rough", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Play Rough", target);
+		},
 	},
 	cruelclaw: {
 		accuracy: 100,
@@ -1118,9 +1118,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dark",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Dire Claw", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dire Claw", target);
+		},
 	},
 	brimstoneblade: {
 		accuracy: 100,
@@ -1140,9 +1140,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Rock",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Stone Axe", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Stone Axe", target);
+		},
 	},
 	sulfurousblade: {
 		accuracy: 100,
@@ -1162,9 +1162,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Poison",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Cross Poison", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Cross Poison", target);
+		},
 	},
 	thousandblades: {
 		accuracy: 100,
@@ -1184,9 +1184,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fighting",
 		contestType: "Cool",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Triple Arrows", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Triple Arrows", target);
+		},
 	},
 	snowballcannon: {
 		accuracy: 95,
@@ -1201,9 +1201,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'snowman',
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Mountain Gale", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Mountain Gale", target);
+		},
 		shortDesc: "10% chance to trap the foe in a Snowman.",
 		target: "normal",
 		type: "Ice",
@@ -1226,9 +1226,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ice",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Blizzard", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Blizzard", target);
+		},
 	},
 	oxideairstrike: {
 		accuracy: 95,
@@ -1243,9 +1243,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'rusted',
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Dragon Ascent", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dragon Ascent", target);
+		},
 		shortDesc: "100% chance to inflict Rust.",
 		target: "allAdjacentFoes",
 		type: "Flying",
@@ -1264,12 +1264,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMove: {boost: { atk: 1 }},
+		zMove: { boost: { atk: 1 } },
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Spicy Extract", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Spicy Extract", target);
+		},
 	},
 	devilsjaw: {
 		accuracy: 100,
@@ -1288,9 +1288,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dragon",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Poison Fang", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Poison Fang", target);
+		},
 	},
 	seraphicshift: {
 		accuracy: 100,
@@ -1312,9 +1312,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Sheer Cold", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Sheer Cold", target);
+		},
 		shortDesc: "Changes Disufiroa's form.",
 		target: "allAdjacentFoes",
 		type: "Ice",
@@ -1339,9 +1339,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 		contestType: "Tough",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Surf", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Surf", target);
+		},
 	},
 	frozencleave: {
 		accuracy: 100,
@@ -1355,13 +1355,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (type === 'Water') return 1;
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Ice Spinner", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Ice Spinner", target);
+		},
 		secondary: {
 			chance: 10,
 			status: 'frz',
-		},	
+		},
 		target: "normal",
 		shortDesc: "10% chance to freeze. Super effective on Water.",
 		type: "Ice",
@@ -1382,9 +1382,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Fusion Flare", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fusion Flare", target);
+		},
 		shortDesc: "50% chance to Blast. Hits adjacent Pokemon.",
 		target: "allAdjacent",
 		type: "Fire",
@@ -1455,9 +1455,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Dark Pulse", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dark Pulse", target);
+		},
 		onModifyMove(move, pokemon, target) {
 			move.type = '???';
 			if (!target) return;
@@ -1467,10 +1467,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const spd = target.getStat('spd', false, true);
 			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-				if (physical > special || (physical === special && this.random(2) === 0)) {
-					move.category = 'Physical';
-					move.flags.contact = 1;
-				}
+			if (physical > special || (physical === special && this.random(2) === 0)) {
+				move.category = 'Physical';
+				move.flags.contact = 1;
+			}
 		},
 		type: 'Dark',
 		secondary: null,
@@ -1493,9 +1493,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Meteor Beam", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Meteor Beam", target);
+		},
 	},
 	rageray: {
 		accuracy: 100,
@@ -1541,9 +1541,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Psychic",
 		contestType: "Clever",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Tera Starstorm", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Tera Starstorm", target);
+		},
 	},
 	butterflare: {
 		accuracy: 100,
@@ -1562,10 +1562,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Bug",
 		contestType: "Beautiful",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Flamethrower", target);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Flamethrower", target);
 			this.add('-anim', source, "Bug Buzz", source);
-        },
+		},
 	},
 	butterflight: {
 		accuracy: 100,
@@ -1582,9 +1582,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Flying",
 		contestType: "Cute",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Aerial Ace", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Aerial Ace", target);
+		},
 	},
 	gracefulsweep: {
 		accuracy: 90,
@@ -1605,9 +1605,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 		contestType: "Cute",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Play Rough", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Play Rough", target);
+		},
 	},
 	immolationorder: {
 		accuracy: 100,
@@ -1629,10 +1629,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dragon",
 		contestType: "Tough",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Draco Meteor", target);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Draco Meteor", target);
 			this.add('-anim', source, "Bug Buzz", source);
-        },
+		},
 	},
 	virulentvolley: {
 		accuracy: 100,
@@ -1652,15 +1652,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMove: {basePower: 140 },
-		maxMove: {basePower: 130 },
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
 		contestType: "Beautiful",
 		shortDesc: "Hits 2-5 times. Destroys screens, unless the target is immune.",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Icicle Spear", target);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Icicle Spear", target);
 			this.add('-anim', source, "Baneful Bunker", target);
-        },
+		},
 	},
 	aviniasblessing: {
 		accuracy: true,
@@ -1679,9 +1679,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "self",
 		type: "Ice",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
+			this.attrLastMove('[still]');
 			this.add('-anim', source, "Haze", source);
-        },
+		},
 	},
 	dreadrockcannon: {
 		accuracy: 85,
@@ -1705,9 +1705,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Beautiful",
 		shortDesc: "Can't miss in sand.",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Rock Wrecker", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Rock Wrecker", target);
+		},
 	},
 	mentalload: {
 		accuracy: 100,
@@ -1723,9 +1723,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', target, "Psycho Boost", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', target, "Psycho Boost", target);
+		},
 	},
 	pyrotoxicgale: {
 		accuracy: 90,
@@ -1738,10 +1738,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { protect: 1, mirror: 1, wind: 1 },
 		secondary: null,
 		onPrepareHit(target, source, move) {
-            this.attrLastMove('[still]');
-            this.add('-anim', source, "Heat Wave", target);
-            this.add('-anim', target, "Corrosive Gas", target);
-        },
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Heat Wave", target);
+			this.add('-anim', target, "Corrosive Gas", target);
+		},
 		onHit(target, source, move) {
 			if (!target.side.sideConditions['firepledge']) {
 				target.side.addSideCondition('firepledge');
@@ -1767,7 +1767,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return;
 			}
 			this.attrLastMove('[still]');
-        	this.add('-anim', attacker, "Burning Bulwark", attacker);
+			this.add('-anim', attacker, "Burning Bulwark", attacker);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -1876,8 +1876,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 	dualchop: {
-    	inherit: true,
-    	shortDesc: "Hits twice. Removes Reflect, Light Screen, and Aurora Veil on hit.",
+		inherit: true,
+		shortDesc: "Hits twice. Removes Reflect, Light Screen, and Aurora Veil on hit.",
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
 			pokemon.side.removeSideCondition('reflect');
@@ -2415,7 +2415,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.basePower *= 2;
 				break;
 			}
-			this.debug('BP: ' + move.basePower);
+			this.debug(`BP: ${move.basePower}`);
 		},
 	},
 	auroraveil: {
@@ -2449,7 +2449,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: {
 			chance: 20,
 			status: 'frz',
-		},	
+		},
 		desc: "Has a 20% to frostbite the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
 		shortDesc: "20% to frostbite the target. Rain: can't miss.",
 	},
@@ -2461,7 +2461,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Blazing Torque",
 		pp: 10,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		},
@@ -2480,7 +2480,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Combat Torque",
 		pp: 10,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		},
@@ -2499,7 +2499,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Magical Torque",
 		pp: 10,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		},
@@ -2518,7 +2518,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Noxious Torque",
 		pp: 10,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		},
@@ -2538,7 +2538,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Wicked Torque",
 		pp: 10,
 		priority: 0,
-		flags: { 
+		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		},

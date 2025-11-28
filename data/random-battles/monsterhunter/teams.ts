@@ -626,7 +626,10 @@ export class RandomMHSTeams extends RandomTeams {
 			return 'Frost Orb';
 		}
 		if (species.id === 'xenojiiva' && ability === 'Quark Drive') return 'Booster Energy';
-		if (ability === 'Magic Guard' || ability === 'Fervent Scales' || (ability === 'Sheer Force' && counter.get('sheerforce'))) {
+		if (
+			ability === 'Magic Guard' || ability === 'Fervent Scales' ||
+			(ability === 'Sheer Force' && counter.get('sheerforce'))
+		) {
 			return 'Life Orb';
 		}
 		if (moves.has('devour') && ability !== 'Unburden') return 'Liechi Berry';

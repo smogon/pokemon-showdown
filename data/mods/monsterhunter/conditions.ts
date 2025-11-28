@@ -5,7 +5,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (sourceEffect && sourceEffect.id === 'frostorb') {
 				this.add('-status', target, 'frz', '[from] item: Frost Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
 			} else {
 				this.add('-status', target, 'frz');
 			}
@@ -24,7 +24,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target, source, sourceEffect) {
 			this.add('-message', `${target.name} is Drowsy! Damage taken is 1.2x; can't use same attack twice! Multi-Hits strike once!`);
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
 			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
 				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
 			} else {
@@ -47,24 +47,24 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 	},
 	par: {
-        inherit: true,
+		inherit: true,
 		onStart(target, source, sourceEffect) {
 			this.add('-message', `${target.name} is Paralyzed! Speed halved; will be fully paralyzed every 3 turns!`);
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
 			} else {
 				this.add('-status', target, 'par');
 			}
 		},
 		onResidual(pokemon) {
 			if (pokemon.static === undefined) pokemon.static = 0;
-			pokemon.static ++;
+			pokemon.static++;
 			if (pokemon.static >= 3) {
 				this.add('-message', `${pokemon.name} has too much static!`);
 			} else {
 				this.add('-message', `${pokemon.name} is building static!`);
 			}
-        },
+		},
 		onSwitchout(pokemon) {
 			pokemon.static = 0;
 		},
@@ -72,12 +72,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			pokemon.static = 0;
 		},
 		onBeforeMove(pokemon) {
- 			if (pokemon.static >= 3) {
+			if (pokemon.static >= 3) {
 				this.add('cant', pokemon, 'par');
 				pokemon.static = 0;
 				return false;
 			}
-    	}
+		}
 	},
 	warmed: {
 		name: 'Warmed',
@@ -102,13 +102,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-start', pokemon, 'Cooled');
 		},
 		onModifyDefPriority: 5,
-    	onModifyDef(def, pokemon) {
-            return this.chainModify([5325, 4096]);
-    	},
-    	onModifySpDPriority: 5,
-    	onModifySpD(spd, pokemon) {
-            	return this.chainModify([5325, 4096]);
-    	},
+		onModifyDef(def, pokemon) {
+			return this.chainModify([5325, 4096]);
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, pokemon) {
+			return this.chainModify([5325, 4096]);
+		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Cooled');
 		},
@@ -133,13 +133,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Bubbled');
 			this.add('-message', `${pokemon.name} has Bubbleblight! +1 Speed, -1 Accuracy!`);
-			this.boost({spe: 1, accuracy: -1}, pokemon);
+			this.boost( { spe: 1, accuracy: -1 }, pokemon);
 		},
 		onEnd(pokemon) {
-			this.boost({spe: -1, accuracy: 1}, pokemon);
+			this.boost( { spe: -1, accuracy: 1 }, pokemon);
 			this.add('-end', pokemon, 'Bubbled');
 		},
-		},
+	},
 	defensedown: {
 		name: 'Defense Down',
 		duration: 4,
@@ -167,24 +167,24 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 		},
 		onDisableMove(pokemon) {
-				for (const moveSlot of pokemon.moveSlots) {
-					const move = this.dex.moves.get(moveSlot.id);
-					if (move.category === 'Status' && move.id !== 'mefirst') {
-						pokemon.disableMove(moveSlot.id);
-					}
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.id);
+				if (move.category === 'Status' && move.id !== 'mefirst') {
+					pokemon.disableMove(moveSlot.id);
 				}
+			}
 		},
 		onBeforeMovePriority: 5,
 		onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && !move.isMax && move.category === 'Status' && move.id !== 'mefirst') {
-					this.add('cant', attacker, 'move: Taunt', move);
-					return false;
-				}
+			if (!move.isZ && !move.isMax && move.category === 'Status' && move.id !== 'mefirst') {
+				this.add('cant', attacker, 'move: Taunt', move);
+				return false;
+			}
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Stench');
 		},
-		},
+	},
 	fatigue: {
 		name: 'Fatigue',
 		duration: 5,
@@ -232,7 +232,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
-				this.add('-curestatus', pokemon, 'snowman', '[from] move: ' + move);
+				this.add('-curestatus', pokemon, 'snowman', `[from] move: ${move}`);
 				pokemon.clearStatus();
 			}
 		},
@@ -254,13 +254,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'Rusted',
 		duration: 4,
 		onStart(pokemon) {
-        	if (pokemon.hasType('Steel')) {
-            	this.add('-start', pokemon, 'Rusted');
-            	this.add('-message', `${pokemon.name}'s steel defenses have rusted away!`);
-        	} else {
-            	pokemon.removeVolatile('rusted');
-        	}
-    	},
+			if (pokemon.hasType('Steel')) {
+				this.add('-start', pokemon, 'Rusted');
+				this.add('-message', `${pokemon.name}'s steel defenses have rusted away!`);
+			} else {
+				pokemon.removeVolatile('rusted');
+			}
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hasType('Steel') && target.volatiles['rusted']) {
 				if (typeMod < 0) {
@@ -270,20 +270,20 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 					return 1;
 				}
 			}
-    	},
+		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Rusted');
 			this.add('-message', `${pokemon.name}'s steel defenses are restored!`);
-    	},
+		},
 	},
 	dragonblight: {
 		name: 'Dragonblight',
 		effectType: 'Status',
 		onStart(pokemon) {
 			if (pokemon.hasType('Fairy')) {
-            	this.add('-immune', pokemon, '[from] status: Dragonblight');
-            	return false;
-        	}
+				this.add('-immune', pokemon, '[from] status: Dragonblight');
+				return false;
+			}
 			this.add('-start', pokemon, 'Dragonblight');
 			this.add('-message', `${pokemon.name} is afflicted with Dragonblight! STAB disabled!`);
 		},
@@ -292,8 +292,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.damage(pokemon.baseMaxhp / 16);
 		},
 		onModifySTAB(stab, source, target, move) {
-        	return 1;
-    	},
+			return 1;
+		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dragonblight');
 			this.add('-message', `${pokemon.name} overcame Dragonblight!`);
@@ -301,65 +301,65 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	/* Weather */
 	dustdevil: {
-        name: 'Dust Devil',
-        effectType: 'Weather',
-        duration: 0,
-        // This should be applied directly to the stat before any of the other modifiers are chained
-        // So we give it increased priority.
-        onModifySpDPriority: 10,
-        onModifySpD(spd, pokemon) {
-            if (pokemon.hasType('Rock') && this.field.isWeather('dustdevil')) {
-                return this.modify(spd, 1.5);
-            }
-        },
-        onModifyMove(move, attacker) {
-            if (move.type === 'Rock') {
-                move.accuracy = true;
-            }
-        },
-        onFieldStart(field, source, effect) {
-            this.add('-weather', 'Dust Devil', '[from] ability: ' + effect.name, `[of] ${source}`);
-        },
-        onFieldResidualOrder: 1,
-        onFieldResidual() {
-            this.add('-weather', 'Dust Devil', '[upkeep]');
-            this.eachEvent('Weather');
-        },
-        onWeather(target) {
-            if (this.field.weatherState.source !== target) this.damage(target.baseMaxhp / 16);
-        },
-        onFieldEnd() {
-            this.add('-weather', 'none');
-        },
-    },
+		name: 'Dust Devil',
+		effectType: 'Weather',
+		duration: 0,
+		// This should be applied directly to the stat before any of the other modifiers are chained
+		// So we give it increased priority.
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasType('Rock') && this.field.isWeather('dustdevil')) {
+				return this.modify(spd, 1.5);
+			}
+		},
+		onModifyMove(move, attacker) {
+			if (move.type === 'Rock') {
+				move.accuracy = true;
+			}
+		},
+		onFieldStart(field, source, effect) {
+			this.add('-weather', 'Dust Devil', '[from] ability: ' + effect.name, `[of] ${ source}`);
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Dust Devil', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (this.field.weatherState.source !== target) this.damage(target.baseMaxhp / 16);
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	absolutezero: {
-        name: 'Absolute Zero',
-        effectType: 'Weather',
-        duration: 0,
-        onModifyDefPriority: 10,
-        onModifyDef(def, pokemon) {
-            if (pokemon.hasType('Ice') && this.field.isWeather('absolutezero')) {
-                return this.modify(def, 1.5);
-            }
-        },
-        onModifySpe(spe, pokemon) {
-            if (this.field.weatherState.source !== pokemon) return this.chainModify(0.75);
-        },
-        onFieldStart(field, source, effect) {
-            this.add('-weather', 'Absolute Zero', '[from] ability: ' + effect.name, `[of] ${source}`);
-        },
-        onFieldResidualOrder: 1,
-        onFieldResidual() {
-            this.add('-weather', 'Absolute Zero', '[upkeep]');
-            this.eachEvent('Weather');
-        },
-        onWeather(target) {
-            if (this.field.weatherState.source !== target) this.damage(target.baseMaxhp / 16);
-        },
-        onFieldEnd() {
-            this.add('-weather', 'none');
-        },
-    },
+		name: 'Absolute Zero',
+		effectType: 'Weather',
+		duration: 0,
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('absolutezero')) {
+				return this.modify(def, 1.5);
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.weatherState.source !== pokemon) return this.chainModify(0.75);
+		},
+		onFieldStart(field, source, effect) {
+			this.add('-weather', 'Absolute Zero', '[from] ability: ' + effect.name, `[of] ${ source}`);
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Absolute Zero', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (this.field.weatherState.source !== target) this.damage(target.baseMaxhp / 16);
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	snow: {
 		inherit: true,
 		onImmunity(type) {
