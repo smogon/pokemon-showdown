@@ -104,12 +104,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.2);
 			}
 		},
-		onModifySpe(spe, pokemon, target) {
+		/* onModifySpe(spe, pokemon, target) {
 			if (target && target.status === 'slp') {
 				this.debug('Bewitching Tail boost');
 				return this.chainModify(1.2);
 			}
-		},
+		}, */
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.status === 'slp') {
 				return this.chainModify(0.833);
@@ -597,7 +597,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	icebreaker: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (['snow', 'hail', 'absolutezero'].includes(pokemon.effectiveWeather())) {
+			if (['snow', 'hail', 'absolutezero'].includes(attacker.effectiveWeather())) {
 				this.debug('Ice Breaker boost');
 				return this.chainModify([0x14CD, 0x1000]); // 1.3x modifier
 			}
@@ -804,7 +804,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-activate', target, 'ability: Mucus Veil');
 				const reaction = this.dex.getActiveMove('soak');
 				// reaction.noreact = true;
-				this.actions.useMove(reaction, target, source);
+				this.actions.useMove(reaction, target, { target: source });
 			}
 		},
 		flags: {},
@@ -1262,11 +1262,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const reaction = this.dex.getActiveMove('risenburst');
 			// reaction.noreact = true;
 			this.add('-activate', pokemon, 'ability: Risen Burst');
-			this.actions.useMove(reaction, pokemon, pokemon.side.foe.active[pokemon.position]);
+			this.actions.useMove(reaction, pokemon, { target: pokemon.side.foe.active[pokemon.position] });
 		},
 		onDamagingHitOrder: 3,
 		onDamagingHit(damage, target, source, move) {
-			if (!move.noreact && target.hp && source.hp && move.type === 'Dark') {
+			if (/* !move.noreact && */ target.hp && source.hp && move.type === 'Dark') {
 				const reaction = this.dex.getActiveMove('risenburst');
 				// reaction.noreact = true;
 				this.add('-activate', target, 'ability: Risen Burst');
@@ -1754,7 +1754,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sandforce: {
 		inherit: true,
 		onBasePower(basePower, attacker, defender, move) {
-			if (['sandstorm', 'dustdevil'].includes(pokemon.effectiveWeather())) {
+			if (['sandstorm', 'dustdevil'].includes(attacker.effectiveWeather())) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
