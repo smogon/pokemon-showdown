@@ -1,13 +1,14 @@
 /*
 * Pokemon Showdown - Impulse Server
-* Emotions chat-plugin.
-* Rewritten By @ClarkJ338
+* Emoticons chat-plugin.
+* @author PrinceSky-Git
+* Refactored By @ClarkJ338
 */
 import { FS, Utils } from '../../../lib';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-const DATA_FILE = 'impulse/db/emoticons.json';
+const DATA_FILE = 'config/chat-plugins/emoticons.json';
 
 interface EmoticonEntry {
 	url: string;
@@ -21,6 +22,7 @@ interface EmoticonData {
 	ignores: { [userId: string]: boolean };
 }
 
+// Initial default state
 let data: EmoticonData = {
 	emoticons: {},
 	emoteSize: 32,
@@ -32,7 +34,7 @@ let emoteRegex = /^$/g;
 
 Impulse.ignoreEmotes = {} as { [userId: string]: boolean };
 
-const getEmoteSize = (): string => data.emoteSize.toString();
+const getEmoteSize = (): string => (data.emoteSize || 32).toString();
 
 function parseMessage(message: string): string {
 	if (message.substr(0, 5) === "/html") {
@@ -59,12 +61,19 @@ const loadEmoticons = async (): Promise<void> => {
 	try {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
-			data = JSON.parse(raw);
+			const json = JSON.parse(raw);
+			// Robust merging with defaults to prevent crashes
+			data = {
+				emoticons: json.emoticons || {},
+				emoteSize: json.emoteSize || 32,
+				ignores: json.ignores || {},
+			};
 		} else {
 			saveData();
 		}
 
 		emoticons = {};
+		// Safe to iterate now that we guaranteed data.emoticons exists
 		for (const [name, entry] of Object.entries(data.emoticons)) {
 			emoticons[name] = entry.url;
 		}
@@ -74,6 +83,9 @@ const loadEmoticons = async (): Promise<void> => {
 		buildEmoteRegex();
 	} catch (e) {
 		console.error('Failed to load emoticons:', e);
+		// Reset to safe defaults on error
+		data = { emoticons: {}, emoteSize: 32, ignores: {} };
+		emoticons = {};
 	}
 };
 
@@ -83,6 +95,8 @@ const saveEmoteSize = async (size: number): Promise<void> => {
 };
 
 const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
+	if (!data.emoticons) data.emoticons = {};
+	
 	data.emoticons[name] = {
 		url,
 		addedBy: user.name,
@@ -94,6 +108,7 @@ const addEmoticon = async (name: string, url: string, user: User): Promise<void>
 };
 
 const deleteEmoticon = async (name: string): Promise<void> => {
+	if (!data.emoticons) return;
 	delete data.emoticons[name];
 	delete emoticons[name];
 	saveData();
@@ -141,7 +156,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("Emoticons may not be longer than 10 characters.");
 			}
 			
-			if (data.emoticons[name]) {
+			if (data.emoticons && data.emoticons[name]) {
 				throw new Chat.ErrorMessage(`${name} is already an emoticon.`);
 			}
 
@@ -155,7 +170,9 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
 
-			if (!data.emoticons[target]) throw new Chat.ErrorMessage("That emoticon does not exist.");
+			if (!data.emoticons || !data.emoticons[target]) {
+				throw new Chat.ErrorMessage("That emoticon does not exist.");
+			}
 
 			await deleteEmoticon(target);
 
@@ -194,6 +211,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Already ignoring emoticons.');
 			}
 			
+			if (!data.ignores) data.ignores = {};
 			data.ignores[user.id] = true;
 			Impulse.ignoreEmotes[user.id] = true;
 			saveData();
@@ -206,7 +224,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Not ignoring emoticons.');
 			}
 			
-			delete data.ignores[user.id];
+			if (data.ignores) delete data.ignores[user.id];
 			delete Impulse.ignoreEmotes[user.id];
 			saveData();
 
@@ -231,7 +249,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) throw new Chat.ErrorMessage('Usage: /emoticon info <name>');
 
-			const emote = data.emoticons[target];
+			const emote = data.emoticons ? data.emoticons[target] : null;
 			if (!emote) throw new Chat.ErrorMessage(`Emoticon "${target}" not found.`);
 
 			const rows = [
