@@ -1040,7 +1040,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	puffup: {
 		onDamagingHit(damage, target, source, move) {
-		if (move.category === 'Special' && target.species.id === 'zamtrios') {
+			if (move.category === 'Special' && target.species.id === 'zamtrios') {
 				this.add('-ability', target, 'Puff-Up');
 				this.add('-message', `Zamtrios is transforming!`);
 				target.formeChange('zamtriospuffed', this.effect, true);
@@ -1204,7 +1204,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// Damage multipliers: 1x → 1.2x → 1.4x → 1.6x → 1.8x → 2x
 			const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
 			const numConsecutive = Math.min(this.effectState.numConsecutive, 5);
-			this.debug(`Relentless boost: ${ dmgMod[numConsecutive]}/4096`);
+			this.debug(`Relentless boost: ${dmgMod[numConsecutive]}/4096`);
 			if (numConsecutive > 0) {
 				this.add('-activate', source, 'ability: Relentless');
 			}
@@ -1292,7 +1292,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSwitchIn(pokemon) {
 			// Apply Rusted to Steel-types that enter while Rusted Gale is active
 			const holder = this.effectState.target;
-			if (holder && holder.isActive && holder.hasAbility('Rusted Gale')) {
+			if (!holder) return;
+			if (!holder.isActive) return;
+			if (holder.hasAbility('Rusted Gale')) {
 				if (pokemon.hasType('Steel') && !pokemon.volatiles['rusted']) {
 					pokemon.addVolatile('rusted');
 					this.add('-message', `${pokemon.name} is afflicted by rust!`);
@@ -1634,8 +1636,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			if (target.hp && !target.volatiles['dragoncharge']) {
 				if (target.status && target.status !== 'slp') {
-					const oldStatus = target.status;
-					this.add('-curestatus', target, oldStatus, '[from] ability: Wyversion');
+					// const oldStatus = target.status;
+					this.add('-curestatus', target, /* oldStatus, */ '[from] ability: Wyversion');
 					target.cureStatus();
 				}
 				target.addVolatile('dragoncharge');

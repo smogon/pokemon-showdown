@@ -5,7 +5,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (sourceEffect && sourceEffect.id === 'frostorb') {
 				this.add('-status', target, 'frz', '[from] item: Frost Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
+				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
 				this.add('-status', target, 'frz');
 			}
@@ -24,7 +24,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target, source, sourceEffect) {
 			this.add('-message', `${target.name} is Drowsy! Damage taken is 1.2x; can't use same attack twice! Multi-Hits strike once!`);
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
+				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
 				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
 			} else {
@@ -51,7 +51,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target, source, sourceEffect) {
 			this.add('-message', `${target.name} is Paralyzed! Speed halved; will be fully paralyzed every 3 turns!`);
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, `[of] ${ source}`);
+				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
 				this.add('-status', target, 'par');
 			}
@@ -77,7 +77,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				pokemon.static = 0;
 				return false;
 			}
-		}
+		},
 	},
 	warmed: {
 		name: 'Warmed',
@@ -133,10 +133,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Bubbled');
 			this.add('-message', `${pokemon.name} has Bubbleblight! +1 Speed, -1 Accuracy!`);
-			this.boost( { spe: 1, accuracy: -1 }, pokemon);
+			this.boost({ spe: 1, accuracy: -1 }, pokemon);
 		},
 		onEnd(pokemon) {
-			this.boost( { spe: -1, accuracy: 1 }, pokemon);
+			this.boost({ spe: -1, accuracy: 1 }, pokemon);
 			this.add('-end', pokemon, 'Bubbled');
 		},
 	},
@@ -318,7 +318,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'Dust Devil', '[from] ability: ' + effect.name, `[of] ${ source}`);
+			this.add('-weather', 'Dust Devil', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -346,7 +346,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (this.field.weatherState.source !== pokemon) return this.chainModify(0.75);
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'Absolute Zero', '[from] ability: ' + effect.name, `[of] ${ source}`);
+			this.add('-weather', 'Absolute Zero', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
