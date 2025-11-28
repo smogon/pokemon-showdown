@@ -347,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 			buf += '<td>';
 
 			// Status with custom status in brackets if available
-			buf += `<p style="margin: 4px 0"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
+			buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
 			// Clan (if available)
 			if (profileData.clanName) {
