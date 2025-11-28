@@ -2311,6 +2311,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 95, atk: 125, def: 110, spa: 65, spd: 75, spe: 110 },
 		abilities: { 0: "Wyversion", H: "Long Reach" },
 		weightkg: 110.0,
+		eggGroups: ["Undiscovered"],
 	},
 	balahara: {
 		num: 129,

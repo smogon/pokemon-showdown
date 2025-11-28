@@ -104,7 +104,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Heal 50% if berry is present
 				this.heal(pokemon.baseMaxhp / 2, pokemon);
 				pokemon.eatItem(true);
-				this.add('-message', `${pokemon.name} devoured its ${item.name} and restored more HP!`);
+				this.add('-message', `${pokemon.name} devoured its berry and restored more HP!`);
 			} else {
 				// Heal 25% if no berry
 				this.heal(pokemon.baseMaxhp / 4, pokemon);
@@ -1510,6 +1510,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
+				if (!target) return;
 				if (target.activeTurns && !this.queue.willMove(target)) {
 					this.effectState.duration++;
 				}
@@ -1745,7 +1746,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (!target.side.sideConditions['firepledge']) {
 				target.side.addSideCondition('firepledge');
-				target.side.sideConditions['firepledge'].duration = 3;
 				this.add('-fieldactivate', 'move: Fire Pledge');
 			}
 		},
@@ -1761,7 +1761,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { charge: 1, protect: 1, mirror: 1, metronome: 1 },
-		prepareAnim: "Burning Bulwark",
+		// prepareAnim: "Burning Bulwark",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -1844,7 +1844,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	rest: {
 		inherit: true,
-		cantusetwice: 1,
+		flags: { snatch: 1, heal: 1, metronome: 1, cantusetwice: 1 },
 		desc: "Induces Drowsy; Heals HP/Status. Can't use consecutively.",
 	},
 	razorwind: {
@@ -1914,7 +1914,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		inherit: true,
 		category: "Physical",
-		isNonstandard: false,
+		isNonstandard: null,
 		name: "Cut",
 		pp: 30,
 		priority: 0,
@@ -2260,7 +2260,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isWeather('sandstorm', 'dustdevil')) {
+			if (['sandstorm', 'dustdevil'].includes(pokemon.effectiveWeather())) {
 				factor = 0.667;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -2452,6 +2452,31 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		desc: "Has a 20% to frostbite the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
 		shortDesc: "20% to frostbite the target. Rain: can't miss.",
+	},
+	firepledge: {
+		inherit: true,
+		condition: {
+			duration: 4,
+			durationCallback(target, source, effect) {
+				if (effect?.name === "Pyrotoxic Gale") {
+					return 3;
+				}
+				return 4;
+			},
+			onSideStart(targetSide) {
+				this.add('-sidestart', targetSide, 'Fire Pledge');
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
+			onResidual(pokemon) {
+				if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 8,
+			onSideEnd(targetSide) {
+				this.add('-sideend', targetSide, 'Fire Pledge');
+			},
+		},
 	},
 	blazingtorque: {
 		num: 896,

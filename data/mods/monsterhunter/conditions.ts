@@ -57,24 +57,24 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onResidual(pokemon) {
-			if (pokemon.static === undefined) pokemon.static = 0;
-			pokemon.static++;
-			if (pokemon.static >= 3) {
+			if (this.effectState.static === undefined) this.effectState.static = 0;
+			this.effectState.static++;
+			if (this.effectState.static >= 3) {
 				this.add('-message', `${pokemon.name} has too much static!`);
 			} else {
 				this.add('-message', `${pokemon.name} is building static!`);
 			}
 		},
-		onSwitchout(pokemon) {
-			pokemon.static = 0;
+		onSwitchOut(pokemon) {
+			this.effectState.static = 0;
 		},
 		onSwitchIn(pokemon) {
-			pokemon.static = 0;
+			this.effectState.static = 0;
 		},
 		onBeforeMove(pokemon) {
-			if (pokemon.static >= 3) {
+			if (this.effectState.static >= 3) {
 				this.add('cant', pokemon, 'par');
-				pokemon.static = 0;
+				this.effectState.static = 0;
 				return false;
 			}
 		},
@@ -262,6 +262,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
 			if (target.hasType('Steel') && target.volatiles['rusted']) {
 				if (typeMod < 0) {
 					return 0;

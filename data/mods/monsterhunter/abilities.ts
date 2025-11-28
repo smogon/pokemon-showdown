@@ -28,7 +28,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedBerserk = false;
 			} else {
@@ -83,11 +83,31 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Slicing moves: +1 priority at full HP, always crit at 1/3 HP or less.",
 	},
 	bewitchingtail: {
-		onModifyStats(stats, pokemon, target, move) {
+		/* onModifyStats(stats, pokemon, target, move) {
 			if (target && target.status === 'slp') {
 				stats.atk = this.chainModify([stats.atk, 0x1333]);
 				stats.spa = this.chainModify([stats.spa, 0x1333]);
 				stats.spe = this.chainModify([stats.spe, 0x1333]);
+			}
+		}, */
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon, target, move) {
+			if (target && target.status === 'slp') {
+				this.debug('Bewitching Tail boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, pokemon, target, move) {
+			if (target && target.status === 'slp') {
+				this.debug('Bewitching Tail boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpe(spe, pokemon, target) {
+			if (target && target.status === 'slp') {
+				this.debug('Bewitching Tail boost');
+				return this.chainModify(1.2);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -103,7 +123,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			if (!move || !target) return;
 			if (this.dex.getEffectiveness(move.type, target) > 0) {
-				this.boost({ atk: 1, spa: 1 }, target, target, null, this.dex.abilities.get('blindrage'));
+				this.boost({ atk: 1, spa: 1 }, target, target, null, /* this.dex.abilities.get('blindrage') */);
 				this.add('-ability', target, 'Blind Rage');
 				this.add('-message', target.name + "flew into a blind rage!");
 			}
@@ -186,12 +206,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			if (move.category === 'Physical') {
 				if (target.boosts.def > -6) {
-					this.boost({ def: -1 }, target, source, null, this.dex.abilities.get('corruptedpoison'));
+					this.boost({ def: -1 }, target, source, null, /* this.dex.abilities.get('corruptedpoison') */);
 					this.add('-ability', source, 'Corrupted Poison');
 				}
 			} else if (move.category === 'Special') {
 				if (target.boosts.spd > -6) {
-					this.boost({ spd: -1 }, target, source, null, this.dex.abilities.get('corruptedpoison'));
+					this.boost({ spd: -1 }, target, source, null, /* this.dex.abilities.get('corruptedpoison') */);
 					this.add('-ability', source, 'Corrupted Poison');
 				}
 			}
@@ -340,14 +360,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSourceHit(target, source, move) {
 			if (!move || !target) return;
 			if (move.flags['slicing']) {
-				this.boost({ def: 1 }, source, source, null, this.dex.abilities.get('dulledblades'));
+				this.boost({ def: 1 }, source, source, null, /* this.dex.abilities.get('dulledblades') */);
 				this.add('-ability', source, 'Dulled Blades');
 			}
 		},
 		onSourceAfterSubDamage(damage, target, source, move) {
 			if (!move || !target) return;
 			if (move.flags['slicing']) {
-				this.boost({ def: 1 }, source, source, null, this.dex.abilities.get('dulledblades'));
+				this.boost({ def: 1 }, source, source, null, /* this.dex.abilities.get('dulledblades') */);
 				this.add('-ability', source, 'Dulled Blades');
 			}
 		},
@@ -577,7 +597,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	icebreaker: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isWeather('snow', 'hail', 'absolutezero')) {
+			if (['snow', 'hail', 'absolutezero'].includes(pokemon.effectiveWeather())) {
 				this.debug('Ice Breaker boost');
 				return this.chainModify([0x14CD, 0x1000]); // 1.3x modifier
 			}
@@ -783,7 +803,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (this.checkMoveMakesContact(move, source, target)) {
 				this.add('-activate', target, 'ability: Mucus Veil');
 				const reaction = this.dex.getActiveMove('soak');
-				reaction.noreact = true;
+				// reaction.noreact = true;
 				this.actions.useMove(reaction, target, source);
 			}
 		},
@@ -1076,8 +1096,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAllyBasePower(basePower, attacker, defender, move) {
 			let rebel = false;
 			for (const pokemon of this.getAllActive()) {
-				for (const stat in pokemon.boosts) {
-					if (pokemon.boosts[stat as BoostName] < 0) {
+				let i: BoostID;
+				for (i in pokemon.boosts) {
+					if (pokemon.boosts[i] < 0) {
 						rebel = true;
 						break;
 					}
@@ -1236,10 +1257,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	risenburst: {
 		onStart(pokemon) {
-			if (pokemon.risenBurst) return;
-			pokemon.risenBurst = true;
+			if (this.effectState.risenBurst) return;
+			this.effectState.risenBurst = true;
 			const reaction = this.dex.getActiveMove('risenburst');
-			reaction.noreact = true;
+			// reaction.noreact = true;
 			this.add('-activate', pokemon, 'ability: Risen Burst');
 			this.actions.useMove(reaction, pokemon, pokemon.side.foe.active[pokemon.position]);
 		},
@@ -1247,7 +1268,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			if (!move.noreact && target.hp && source.hp && move.type === 'Dark') {
 				const reaction = this.dex.getActiveMove('risenburst');
-				reaction.noreact = true;
+				// reaction.noreact = true;
 				this.add('-activate', target, 'ability: Risen Burst');
 				this.actions.useMove(reaction, target, source);
 			}
@@ -1429,9 +1450,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Biting attacks ignore immunities and abilities.",
 	},
 	stealthsilver: {
-		onStart(pokemon, source) {
-			if (pokemon.stealthsilver) return;
-			pokemon.stealthsilver = true;
+		onStart(pokemon) {
+			if (this.effectState.stealthSilver) return;
+			this.effectState.stealthSilver = true;
 			pokemon.side.foe.addSideCondition('gmaxsteelsurge');
 		},
 		flags: {},
@@ -1471,7 +1492,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(target, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind' || this.field.isWeather('sandstorm')) {
 				this.boost({ spa: 1 }, pokemon, pokemon);
@@ -1492,7 +1513,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.boost({ atk: 1 }, pokemon, pokemon);
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(target, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind' || this.field.isWeather('sandstorm')) {
 				this.boost({ atk: 1 }, pokemon, pokemon);
@@ -1733,7 +1754,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sandforce: {
 		inherit: true,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isWeather('sandstorm', 'dustdevil')) {
+			if (['sandstorm', 'dustdevil'].includes(pokemon.effectiveWeather())) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -1744,7 +1765,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sandrush: {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('sandstorm', 'dustdevil')) {
+			if (['sandstorm', 'dustdevil'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
 		},
@@ -1752,7 +1773,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	slushrush: {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow', 'absolutezero'])) {
+			if (['hail', 'snow', 'absolutezero'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
 		},

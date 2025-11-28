@@ -9,16 +9,16 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (status === 'dragonblight') {
+			if (target.status === 'dragonblight') {
 				this.add('-start', target, 'dragonblight', '[silent]');
 			}
 		},
-		onCureStatus(pokemon, source, effect) {
+		/* onCureStatus(pokemon, source, effect) {
 			const cured = effect?.status || pokemon.statusState?.prevStatus;
 			if (cured === 'dragonblight') {
 				this.add('-end', pokemon, 'dragonblight', '[silent]');
 			}
-		},
+		}, */
 	},
 	megadatamod: {
 		effectType: 'Rule',
