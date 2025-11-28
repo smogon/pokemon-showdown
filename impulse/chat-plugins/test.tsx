@@ -54,10 +54,10 @@ export const commands = {
 		// Test 2: Inject a raw script string (should NOT be escaped due to your changes)
 		const maliciousString = `<script>alert('Sanitization bypassed!');</script>`;
 
-		const output = html`<div style="border: 1px solid red; padding: 10px; background: #222; color: #fff;">` +
-				`<h3>Unsafe Preact Test</h3>` +
-				`<p><strong>VNode Render:</strong> ${icon}</p>` +
-				`<p><strong>String Injection:</strong> ${maliciousString}</p></div>`;
+		const output = html`<div style="border: 1px solid red; padding: 10px; background: #222; color: #fff;">
+				<h3>Unsafe Preact Test</h3>
+				<p><strong>VNode Render:</strong> ${icon}</p>
+				<p><strong>String Injection:</strong> ${maliciousString}</p></div>`
 
 		this.sendReplyBox(output);
 	},
