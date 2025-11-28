@@ -2313,7 +2313,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Parting Shot", "Taunt", "Trick", "Population Bomb", "Knock Off"],
-                "abilities": ["Innards Out", "Tangling Hair", "Pulp Up"],
+                "abilities": ["Innards Out", "Tangling Hair"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -2542,7 +2542,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Toxic", "Protect", "Tailwind", "Sludge Bomb", "Giga Drain", "Dark Pulse", "Hurricane"],
-                "abilities": ["Liquid Ooze", "Pulp Up"],
+                "abilities": ["Liquid Ooze"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -2859,7 +2859,7 @@
             {
                 "role": "Bulky Setup", 
                 "movepool": ["Calm Mind", "Slimy Spit", "Ice Beam", "Hurricane", "Make It Rain"],
-                "abilities": ["Pulp Up"],
+                "abilities": ["Spongy"],
                 "teraTypes": ["Normal"]
             }
         ]
