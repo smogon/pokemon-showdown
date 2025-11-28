@@ -1,28 +1,38 @@
-import { Utils } from '../../../lib';
-import { ImpulseDB } from '../../impulse-db';
+/*
+* Pokemon Showdown - Impulse Server
+* Emotions chat-plugin.
+* Rewritten By @ClarkJ338
+*/
+import { FS, Utils } from '../../../lib';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-interface EmoticonDoc {
-	_id: string;
-	type: 'emote' | 'config' | 'ignore';
-	url?: string;
-	addedBy?: string;
-	addedAt?: Date;
-	emoteSize?: number;
-	lastUpdated?: Date;
-	ignored?: boolean;
+const DATA_FILE = 'impulse/db/emoticons.json';
+
+interface EmoticonEntry {
+	url: string;
+	addedBy: string;
+	addedAt: number;
 }
 
-const EmoticonsDB = ImpulseDB<EmoticonDoc>('emoticons');
+interface EmoticonData {
+	emoticons: { [name: string]: EmoticonEntry };
+	emoteSize: number;
+	ignores: { [userId: string]: boolean };
+}
+
+let data: EmoticonData = {
+	emoticons: {},
+	emoteSize: 32,
+	ignores: {},
+};
 
 let emoticons: { [key: string]: string } = {};
 let emoteRegex = /^$/g;
-let emoteSize = 32;
 
 Impulse.ignoreEmotes = {} as { [userId: string]: boolean };
 
-const getEmoteSize = (): string => emoteSize.toString();
+const getEmoteSize = (): string => data.emoteSize.toString();
 
 function parseMessage(message: string): string {
 	if (message.substr(0, 5) === "/html") {
@@ -41,25 +51,26 @@ const buildEmoteRegex = (): void => {
 	emoteRegex = emoteArray.length > 0 ? new RegExp(`(${emoteArray.join('|')})`, 'g') : /^$/g;
 };
 
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
+};
+
 const loadEmoticons = async (): Promise<void> => {
 	try {
-		const emoticonDocs = await EmoticonsDB.find({ type: 'emote' });
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			data = JSON.parse(raw);
+		} else {
+			saveData();
+		}
+
 		emoticons = {};
-		for (const doc of emoticonDocs) {
-			const name = doc._id.replace(/^emote:/, '');
-			if (doc.url) emoticons[name] = doc.url;
+		for (const [name, entry] of Object.entries(data.emoticons)) {
+			emoticons[name] = entry.url;
 		}
 
-		const config = await EmoticonsDB.findOne({ _id: 'system:config' });
-		if (config && config.emoteSize) emoteSize = config.emoteSize;
-
-		const ignoreDocs = await EmoticonsDB.find({ type: 'ignore', ignored: true });
-		Impulse.ignoreEmotes = {};
-		for (const doc of ignoreDocs) {
-			const userId = doc._id.replace(/^ignore:/, '');
-			Impulse.ignoreEmotes[userId] = true;
-		}
-
+		Impulse.ignoreEmotes = data.ignores || {};
+		
 		buildEmoteRegex();
 	} catch (e) {
 		console.error('Failed to load emoticons:', e);
@@ -67,37 +78,25 @@ const loadEmoticons = async (): Promise<void> => {
 };
 
 const saveEmoteSize = async (size: number): Promise<void> => {
-	try {
-		await EmoticonsDB.upsert(
-			{ _id: 'system:config' },
-			{ 
-				$set: { 
-					type: 'config',
-					emoteSize: size, 
-					lastUpdated: new Date() 
-				} 
-			}
-		);
-		emoteSize = size;
-	} catch {
-	}
+	data.emoteSize = size;
+	saveData();
 };
 
 const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
-	await EmoticonsDB.insertOne({ 
-		_id: `emote:${name}`, 
-		type: 'emote',
-		url, 
-		addedBy: user.name, 
-		addedAt: new Date() 
-	});
+	data.emoticons[name] = {
+		url,
+		addedBy: user.name,
+		addedAt: Date.now(),
+	};
 	emoticons[name] = url;
+	saveData();
 	buildEmoteRegex();
 };
 
 const deleteEmoticon = async (name: string): Promise<void> => {
-	await EmoticonsDB.deleteOne({ _id: `emote:${name}` });
+	delete data.emoticons[name];
 	delete emoticons[name];
+	saveData();
 	buildEmoteRegex();
 };
 
@@ -142,7 +141,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("Emoticons may not be longer than 10 characters.");
 			}
 			
-			if (await EmoticonsDB.exists({ _id: `emote:${name}` })) {
+			if (data.emoticons[name]) {
 				throw new Chat.ErrorMessage(`${name} is already an emoticon.`);
 			}
 
@@ -156,8 +155,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roomowner');
 			if (!target) return this.parse("/emoticon help");
 
-			const emote = await EmoticonsDB.findOne({ _id: `emote:${target}` });
-			if (!emote) throw new Chat.ErrorMessage("That emoticon does not exist.");
+			if (!data.emoticons[target]) throw new Chat.ErrorMessage("That emoticon does not exist.");
 
 			await deleteEmoticon(target);
 
@@ -196,18 +194,10 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Already ignoring emoticons.');
 			}
 			
-			await EmoticonsDB.upsert(
-				{ _id: `ignore:${user.id}` }, 
-				{ 
-					$set: { 
-						type: 'ignore',
-						ignored: true, 
-						lastUpdated: new Date() 
-					} 
-				}
-			);
-			
+			data.ignores[user.id] = true;
 			Impulse.ignoreEmotes[user.id] = true;
+			saveData();
+
 			this.sendReply('Ignoring emoticons. Note: Chat history may still show emoticons when rejoining.');
 		},
 
@@ -216,9 +206,10 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Not ignoring emoticons.');
 			}
 			
-			await EmoticonsDB.deleteOne({ _id: `ignore:${user.id}` });
-			
+			delete data.ignores[user.id];
 			delete Impulse.ignoreEmotes[user.id];
+			saveData();
+
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
@@ -240,7 +231,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			if (!target) throw new Chat.ErrorMessage('Usage: /emoticon info <name>');
 
-			const emote = await EmoticonsDB.findOne({ _id: `emote:${target}` });
+			const emote = data.emoticons[target];
 			if (!emote) throw new Chat.ErrorMessage(`Emoticon "${target}" not found.`);
 
 			const rows = [
