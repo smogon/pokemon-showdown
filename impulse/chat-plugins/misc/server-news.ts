@@ -7,7 +7,7 @@
 import { FS } from '../../../lib';
 import { nameColor } from '../../colors';
 
-const DATA_FILE = 'impulse/db/server-news.json';
+const DATA_FILE = 'config/chat-plugins/server-news.json';
 
 interface NewsEntry {
 	id: string;
@@ -23,6 +23,7 @@ interface ServerNewsData {
 	blocks: { [userId: string]: boolean };
 }
 
+// Initial state
 let data: ServerNewsData = {
 	news: {},
 	blocks: {},
@@ -42,16 +43,26 @@ const loadData = async (): Promise<void> => {
 	try {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
-			data = JSON.parse(raw);
+			const json = JSON.parse(raw);
+			// Merge with defaults to prevent crashes if keys are missing
+			data = {
+				news: json.news || {},
+				blocks: json.blocks || {},
+			};
 		}
 	} catch (e) {
 		console.error('Failed to load server news:', e);
+		// If load fails, keep default empty state to prevent crashes
+		data = { news: {}, blocks: {} };
 	}
 };
 
 void loadData();
 
 const generateNewsDisplay = (): string[] => {
+	// Safety check just in case
+	if (!data.news) return [];
+
 	const news = Object.values(data.news)
 		.sort((a, b) => b.timestamp - a.timestamp)
 		.slice(0, 2);
@@ -63,8 +74,9 @@ const generateNewsDisplay = (): string[] => {
 };
 
 const onUserConnect = (user: User): void => {
-	if (Object.keys(data.news).length === 0) return;
-	if (data.blocks[user.id]) return;
+	// Robust checks for data existence
+	if (!data.news || Object.keys(data.news).length === 0) return;
+	if (data.blocks && data.blocks[user.id]) return;
 
 	const news = generateNewsDisplay();
 	if (news.length) {
@@ -73,6 +85,7 @@ const onUserConnect = (user: User): void => {
 };
 
 const addNews = (id: string, title: string, desc: string, user: User): void => {
+	if (!data.news) data.news = {};
 	data.news[id] = {
 		id,
 		title,
@@ -85,19 +98,20 @@ const addNews = (id: string, title: string, desc: string, user: User): void => {
 };
 
 const deleteNews = (id: string): boolean => {
-	if (!data.news[id]) return false;
+	if (!data.news || !data.news[id]) return false;
 	delete data.news[id];
 	saveData();
 	return true;
 };
 
 const blockNews = (userid: string): void => {
+	if (!data.blocks) data.blocks = {};
 	data.blocks[userid] = true;
 	saveData();
 };
 
 const unblockNews = (userid: string): boolean => {
-	if (!data.blocks[userid]) return false;
+	if (!data.blocks || !data.blocks[userid]) return false;
 	delete data.blocks[userid];
 	saveData();
 	return true;
@@ -144,7 +158,7 @@ export const commands: Chat.ChatCommands = {
 			const [title, desc] = args;
 			const id = toID(title);
 
-			if (data.news[id]) {
+			if (data.news && data.news[id]) {
 				throw new Chat.ErrorMessage(`"${title}" exists.`);
 			}
 
@@ -167,7 +181,7 @@ export const commands: Chat.ChatCommands = {
 
 		block(target, room, user): void {
 			const userid = toID(user.name);
-			if (data.blocks[userid]) {
+			if (data.blocks && data.blocks[userid]) {
 				throw new Chat.ErrorMessage("You have already blocked server news.");
 			}
 
