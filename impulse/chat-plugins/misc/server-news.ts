@@ -1,14 +1,16 @@
 /*
-* Pokemon Showdown
-* News Commands
+* Pokemon Showdown - Impulse Server
+* News chat-plugin.
 * @author PrinceSky-Git
+* Refactored By @ClarkJ338
 */
-
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib';
 import { nameColor } from '../../colors';
 
+const DATA_FILE = 'impulse/db/server-news.json';
+
 interface NewsEntry {
-	_id: string;
+	id: string;
 	title: string;
 	postedBy: string;
 	desc: string;
@@ -16,96 +18,118 @@ interface NewsEntry {
 	timestamp: number;
 }
 
-interface NewsBlockEntry {
-	_id: string;
+interface ServerNewsData {
+	news: { [id: string]: NewsEntry };
+	blocks: { [userId: string]: boolean };
 }
 
-const serverName = Config.serverName || 'Impulse';
+let data: ServerNewsData = {
+	news: {},
+	blocks: {},
+};
 
-const NewsDB = ImpulseDB<NewsEntry>('news');
-const NewsBlockDB = ImpulseDB<NewsBlockEntry>('newsblock');
+const serverName = Config.serverName || 'Impulse';
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const formatDate = (date: Date = new Date()): string =>
 	`${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
+};
+
+const loadData = async (): Promise<void> => {
+	try {
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			data = JSON.parse(raw);
+		}
+	} catch (e) {
+		console.error('Failed to load server news:', e);
+	}
+};
+
+void loadData();
+
+const generateNewsDisplay = (): string[] => {
+	const news = Object.values(data.news)
+		.sort((a, b) => b.timestamp - a.timestamp)
+		.slice(0, 2);
+
+	return news.map(entry =>
+		`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
+		`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
+	);
+};
+
+const onUserConnect = (user: User): void => {
+	if (Object.keys(data.news).length === 0) return;
+	if (data.blocks[user.id]) return;
+
+	const news = generateNewsDisplay();
+	if (news.length) {
+		user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
+	}
+};
+
+const addNews = (id: string, title: string, desc: string, user: User): void => {
+	data.news[id] = {
+		id,
+		title,
+		postedBy: user.name,
+		desc,
+		postTime: formatDate(),
+		timestamp: Date.now(),
+	};
+	saveData();
+};
+
+const deleteNews = (id: string): boolean => {
+	if (!data.news[id]) return false;
+	delete data.news[id];
+	saveData();
+	return true;
+};
+
+const blockNews = (userid: string): void => {
+	data.blocks[userid] = true;
+	saveData();
+};
+
+const unblockNews = (userid: string): boolean => {
+	if (!data.blocks[userid]) return false;
+	delete data.blocks[userid];
+	saveData();
+	return true;
+};
 
 const parseTargetArgs = (target: string): [string, string] => {
 	const [title, ...descParts] = target.split(',');
 	return [title, descParts.join(',')];
 };
 
-const validateNewsArgs = (target: string, context: Chat.CommandContext, usage: string): [string, string] | null => {
+const validateNewsArgs = (target: string, context: Chat.CommandContext): [string, string] | null => {
 	if (!target) {
 		context.parse('/help servernewshelp');
 		return null;
 	}
 	const [title, desc] = parseTargetArgs(target);
 	if (!desc) {
-		context.errorReply(usage);
-		return null;
+		throw new Chat.ErrorMessage("Usage: /servernews add [title], [desc]");
 	}
 	return [title, desc];
 };
 
-class NewsManager {
-	static async generateNewsDisplay(): Promise<string[]> {
-		const news = await NewsDB.find(
-			{},
-			{ sort: { timestamp: -1 }, limit: 2, projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 } }
-		);
-		return news.map(entry =>
-			`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
-			`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
-		);
-	}
-
-	static async onUserConnect(user: User): Promise<void> {
-		if (!await NewsDB.exists({})) return;
-		if (await NewsBlockDB.exists({ _id: toID(user.name) })) return;
-		const news = await this.generateNewsDisplay();
-		if (news.length) {
-			user.send(`|pm| ${serverName} News|${user.getIdentity()}|/raw ${news.join('<hr>')}`);
-		}
-	}
-
-	static async addNews(id: string, title: string, desc: string, user: User): Promise<string> {
-		const newsEntry: NewsEntry = {
-			_id: id,
-			title,
-			postedBy: user.name,
-			desc,
-			postTime: formatDate(),
-			timestamp: Date.now(),
-		};
-		await NewsDB.insertOne(newsEntry);
-		return `Added: ${title}`;
-	}
-
-	static async deleteNews(id: string, title: string): Promise<string | null> {
-		const result = await NewsDB.deleteOne({ _id: id });
-		return result.deletedCount === 0 ? `News "${title}" not found.` : `Deleted: ${title}`;
-	}
-
-	static async blockNews(userid: string): Promise<void> {
-		await NewsBlockDB.insertOne({ _id: userid });
-	}
-
-	static async unblockNews(userid: string): Promise<boolean> {
-		const result = await NewsBlockDB.deleteOne({ _id: userid });
-		return result.deletedCount > 0;
-	}
-}
-
 export const loginfilter = (user: User, oldUser: User | null, userType: string): void => {
-	void NewsManager.onUserConnect(user);
+	onUserConnect(user);
 };
 
 export const commands: Chat.ChatCommands = {
 	servernews: {
 		'': 'view',
 		display: 'view',
-		async view(target, room, user): Promise<void> {
-			const news = await NewsManager.generateNewsDisplay();
+		view(target, room, user): void {
+			const news = generateNewsDisplay();
 			const output = news.length ?
 				`<center><strong>Server News:</strong></center>${news.join('<hr>')}` :
 				`<center><strong>Server News:</strong></center><center><em>No news.</em></center>`;
@@ -113,50 +137,48 @@ export const commands: Chat.ChatCommands = {
 			user.send(`|popup||html|<div class="infobox">${output}</div>`);
 		},
 
-		async add(target, room, user): Promise<void> {
+		add(target, room, user): void {
 			this.checkCan('roomowner');
-			const args = validateNewsArgs(target, this, "Usage: /servernews add [title], [desc]");
+			const args = validateNewsArgs(target, this);
 			if (!args) return;
 			const [title, desc] = args;
 			const id = toID(title);
 
-			if (await NewsDB.exists({ _id: id })) {
-				return this.errorReply(`"${title}" exists.`);
+			if (data.news[id]) {
+				throw new Chat.ErrorMessage(`"${title}" exists.`);
 			}
 
-			await NewsManager.addNews(id, title, desc, user);
+			addNews(id, title, desc, user);
 			this.sendReply(`Added: "${title}"`);
 		},
 
 		remove: 'delete',
-		async delete(target, room, user): Promise<void> {
+		delete(target, room, user): void {
 			this.checkCan('roomowner');
 			if (!target) return this.parse('/help servernewshelp');
 
 			const id = toID(target);
-			const result = await NewsManager.deleteNews(id, target);
-
-			if (result?.includes('not found')) return this.errorReply(result);
+			if (!deleteNews(id)) {
+				throw new Chat.ErrorMessage(`News "${target}" not found.`);
+			}
 
 			this.sendReply(`Deleted: "${target}"`);
 		},
 
-		async block(target, room, user): Promise<void> {
+		block(target, room, user): void {
 			const userid = toID(user.name);
-			if (await NewsBlockDB.exists({ _id: userid })) {
-				return this.errorReply("You have already blocked server news.");
+			if (data.blocks[userid]) {
+				throw new Chat.ErrorMessage("You have already blocked server news.");
 			}
 
-			await NewsManager.blockNews(userid);
+			blockNews(userid);
 			this.sendReply("You have blocked server news. You will no longer receive news on login.");
 		},
 
-		async unblock(target, room, user): Promise<void> {
+		unblock(target, room, user): void {
 			const userid = toID(user.name);
-			const unblocked = await NewsManager.unblockNews(userid);
-
-			if (!unblocked) {
-				return this.errorReply("You have not blocked server news.");
+			if (!unblockNews(userid)) {
+				throw new Chat.ErrorMessage("You have not blocked server news.");
 			}
 
 			this.sendReply("You have unblocked server news. You will now receive news on login.");
