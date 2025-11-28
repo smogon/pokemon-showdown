@@ -123,7 +123,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			if (!move || !target) return;
 			if (this.dex.getEffectiveness(move.type, target) > 0) {
-				this.boost({ atk: 1, spa: 1 }, target, target, null /*, this.dex.abilities.get('blindrage') */);
+				this.boost({ atk: 1, spa: 1 }, target, target, null /* , this.dex.abilities.get('blindrage') */);
 				this.add('-ability', target, 'Blind Rage');
 				this.add('-message', target.name + "flew into a blind rage!");
 			}
@@ -206,12 +206,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			if (move.category === 'Physical') {
 				if (target.boosts.def > -6) {
-					this.boost({ def: -1 }, target, source, null /*, this.dex.abilities.get('corruptedpoison') */);
+					this.boost({ def: -1 }, target, source, null /* , this.dex.abilities.get('corruptedpoison') */);
 					this.add('-ability', source, 'Corrupted Poison');
 				}
 			} else if (move.category === 'Special') {
 				if (target.boosts.spd > -6) {
-					this.boost({ spd: -1 }, target, source, null /*, this.dex.abilities.get('corruptedpoison') */);
+					this.boost({ spd: -1 }, target, source, null /* , this.dex.abilities.get('corruptedpoison') */);
 					this.add('-ability', source, 'Corrupted Poison');
 				}
 			}
@@ -360,14 +360,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSourceHit(target, source, move) {
 			if (!move || !target) return;
 			if (move.flags['slicing']) {
-				this.boost({ def: 1 }, source, source, null /*, this.dex.abilities.get('dulledblades') */);
+				this.boost({ def: 1 }, source, source, null /* , this.dex.abilities.get('dulledblades') */);
 				this.add('-ability', source, 'Dulled Blades');
 			}
 		},
 		onSourceAfterSubDamage(damage, target, source, move) {
 			if (!move || !target) return;
 			if (move.flags['slicing']) {
-				this.boost({ def: 1 }, source, source, null /*, this.dex.abilities.get('dulledblades') */);
+				this.boost({ def: 1 }, source, source, null /* , this.dex.abilities.get('dulledblades') */);
 				this.add('-ability', source, 'Dulled Blades');
 			}
 		},
