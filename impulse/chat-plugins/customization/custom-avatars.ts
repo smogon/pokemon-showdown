@@ -40,7 +40,7 @@ const displayAvatar = (filename: string) => {
 };
 
 const notifyChanges = (
-	user: Chat.User, 
+	user: string, 
 	targetId: string, 
 	action: 'set' | 'delete', 
 	filename?: string
