@@ -120,3 +120,5 @@ export const nameColor = (
 	const userName = Utils.escapeHTML(Users.getExact(name)?.name || name);
 	return symbol + (bold ? '<b>' : '') + `<font color=${hashColor(name)}>${userName}</font>` + (bold ? '</b>' : '');
 };
+
+Impulse.nameColor = nameColor;
