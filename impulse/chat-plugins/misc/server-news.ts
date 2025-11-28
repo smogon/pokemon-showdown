@@ -5,7 +5,6 @@
 * Refactored By @ClarkJ338
 */
 import { FS } from '../../../lib';
-import { nameColor } from '../../colors';
 
 const DATA_FILE = 'impulse/db/server-news.json';
 
@@ -68,7 +67,7 @@ const generateNewsDisplay = (): string[] => {
 
 	return news.map(entry =>
 		`<center><strong>${entry.title}</strong></center><br>${entry.desc}<br><br>` +
-		`<small>-<em> ${nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
+		`<small>-<em> ${Impulse.nameColor(entry.postedBy, true, false)}</em> on ${entry.postTime}</small>`
 	);
 };
 
@@ -215,5 +214,8 @@ export const commands: Chat.ChatCommands = {
 			`</ul>`;
 		this.sendReplyBox(html);
 	},
+	svnhelp: 'servernewshelp',
+};
+},
 	svnhelp: 'servernewshelp',
 };

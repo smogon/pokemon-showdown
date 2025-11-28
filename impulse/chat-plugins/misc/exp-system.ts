@@ -7,8 +7,7 @@ if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
 */
 
 import { ImpulseDB } from '../../impulse-db';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
 
 const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
@@ -175,14 +174,14 @@ export class ExpSystem {
 
 			message =
 				`<div class="broadcast-green">` +
-				`<b>Double EXP has been enabled${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
+				`<b>Double EXP has been enabled${user ? ` by ${Impulse.nameColor(user.name, true, true)}` : ''}!</b><br>` +
 				`Duration: ${durationText}<br>` +
 				`All EXP gains will now be doubled.` +
 				`</div>`;
 		} else {
 			message =
 				`<div class="broadcast-green">` +
-				`<b>Double EXP has been ${DOUBLE_EXP_END_TIME ? 'ended' : 'disabled'}${user ? ` by ${nameColor(user.name, true, true)}` : ''}!</b><br>` +
+				`<b>Double EXP has been ${DOUBLE_EXP_END_TIME ? 'ended' : 'disabled'}${user ? ` by ${Impulse.nameColor(user.name, true, true)}` : ''}!</b><br>` +
 				`All EXP gains will now be normal.` +
 				`</div>`;
 		}
@@ -267,12 +266,12 @@ export const pages: Chat.PageTable = {
 			const level = ExpSystem.getLevel(exp);
 			return [
 				(index + 1).toString(),
-				nameColor(userid, true, true),
+				Impulse.nameColor(userid, true, true),
 				level.toString(),
 			];
 		});
 
-		const output = generateThemedTable(
+		const output = Table(
 			`Exp Ladder`,
 			['Rank', 'User', 'Level'],
 			data
@@ -294,7 +293,7 @@ export const commands: Chat.ChatCommands = {
 			const expNeeded = nextLevelExp - currentExp;
 
 			this.sendReplyBox(
-				`<b>${nameColor(userid, true, true)}</b> - Level ${currentLevel}<br>` +
+				`<b>${Impulse.nameColor(userid, true, true)}</b> - Level ${currentLevel}<br>` +
 				`Current EXP: ${currentExp} ${EXP_UNIT}<br>` +
 				`EXP needed for Level ${currentLevel + 1}: ${expNeeded} ${EXP_UNIT}`
 			);
@@ -323,14 +322,14 @@ export const commands: Chat.ChatCommands = {
 			const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
 
 			this.sendReplyBox(
-				`${nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${nameColor(targetUser.name, true, true)} (${reason}). ` +
+				`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
 				`New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
 			);
 
 			this.modlog('GIVEEXP', targetUser, `${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}`, { by: user.id, reason });
 			if (targetUser.connected) {
 				targetUser.popup(
-					`|html|You received <b>${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}</b> from <b>${nameColor(user.name, true, true)}</b>.<br>` +
+					`|html|You received <b>${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
 					`Reason: ${reason}<br>` +
 					`You are now Level ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
 				);
@@ -360,14 +359,14 @@ export const commands: Chat.ChatCommands = {
 			const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
 
 			this.sendReplyBox(
-				`${nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${nameColor(targetUser.name, true, true)} (${reason}). ` +
+				`${Impulse.nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
 				`New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
 			);
 
 			this.modlog('TAKEEXP', targetUser, `${amount} ${EXP_UNIT}`, { by: user.id, reason });
 			if (targetUser.connected) {
 				targetUser.popup(
-					`|html|<b>${nameColor(user.name, true, true)}</b> took <b>${amount} ${EXP_UNIT}</b> from you.<br>` +
+					`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${EXP_UNIT}</b> from you.<br>` +
 					`Reason: ${reason}<br>` +
 					`You are now Level ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
 				);
@@ -387,13 +386,13 @@ export const commands: Chat.ChatCommands = {
 
 			await ExpSystem.writeExp(targetUser.id, DEFAULT_EXP);
 			this.sendReplyBox(
-				`${nameColor(user.name, true, true)} reset ${nameColor(targetUser.name, true, true)}'s EXP to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
+				`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s EXP to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
 			);
 
 			this.modlog('RESETEXP', targetUser, `${DEFAULT_EXP} ${EXP_UNIT}`, { by: user.id, reason });
 			if (targetUser.connected) {
 				targetUser.popup(
-					`|html|Your ${EXP_UNIT} has been reset to <b>${DEFAULT_EXP}</b> (Level 0) by <b>${nameColor(user.name, true, true)}</b>.<br>` +
+					`|html|Your ${EXP_UNIT} has been reset to <b>${DEFAULT_EXP}</b> (Level 0) by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
 					`Reason: ${reason}`
 				);
 			}
@@ -412,7 +411,7 @@ export const commands: Chat.ChatCommands = {
 			if (room) {
 				room.add(
 					`|html|<center><div class="broadcast-blue">` +
-					`<b>${nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>` +
+					`<b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>` +
 					`Reason: ${reason}` +
 					`</div></center>`
 				);

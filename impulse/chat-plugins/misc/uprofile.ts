@@ -3,8 +3,6 @@
  * User Profile Command
  * @author TurboRx
  */
-
-import { nameColor } from '../../colors';
 import { ImpulseDB } from '../../impulse-db';
 import { Net } from '../../../lib';
 import { getAvatarName } from '../../avatar-names';
@@ -336,7 +334,7 @@ export const commands: Chat.ChatCommands = {
 			buf += '<td style="width: 80px; text-align: center; border-right: solid 1px black; padding: 12px;">';
 
 			// Username in avatar section
-			buf += `<div style="text-align: center; padding-bottom: 6px;"><b class="username">${nameColor(targetName, true, true)}</b></div>`;
+			buf += `<div style="text-align: center; padding-bottom: 6px;"><b class="username">${Impulse.nameColor(targetName, true, true)}</b></div>`;
 
 			// Avatar image - always display (either current or 'unknown' for offline users)
 			buf += `<div style="text-align: center;">${getAvatarDisplay(targetUser)}</div>`;
@@ -532,4 +530,6 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	uprofilehelp(): void { this.parse('/uprofile help'); },
+};
+his.parse('/uprofile help'); },
 };

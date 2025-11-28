@@ -3,8 +3,7 @@
 * Seen & Clearall chat-plugin.
 */
 import { FS } from '../../../lib';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
 
 const DATA_FILE = 'impulse/db/seen.json';
 
@@ -100,7 +99,7 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 };
 
 const formatSeenStatus = (targetName: string, status: 'online' | 'never' | 'ago', duration?: string): string => {
-	const userNameColor = nameColor(targetName, true, true);
+	const userNameColor = Impulse.nameColor(targetName, true, true);
 	if (status === 'online') {
 		return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
 	}
@@ -161,11 +160,11 @@ export const commands: Chat.ChatCommands = {
 
 			const rows = recent.map((doc, i) => [
 				`${i + 1}`,
-				nameColor(doc.userid, true),
+				Impulse.nameColor(doc.userid, true),
 				Chat.toDurationString(Date.now() - doc.date),
 			]);
 
-			const tableHTML = generateThemedTable(
+			const tableHTML = Table(
 				`Recently Seen (${recent.length})`,
 				['#', 'User', 'Last Seen'],
 				rows,
@@ -254,4 +253,6 @@ export const commands: Chat.ChatCommands = {
 	clearallhelp(): void { this.parse('/clearall help'); },
 	recentseen(): void { this.parse('/seen recent'); },
 	cleanupseen(): void { this.parse('/seen cleanup'); },
+};
+anupseen(): void { this.parse('/seen cleanup'); },
 };

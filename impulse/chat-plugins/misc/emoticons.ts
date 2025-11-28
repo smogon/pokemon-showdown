@@ -5,8 +5,7 @@
 * Refactored By @ClarkJ338
 */
 import { FS, Utils } from '../../../lib';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
 
 const DATA_FILE = 'impulse/db/emoticons.json';
 
@@ -198,7 +197,7 @@ export const commands: Chat.ChatCommands = {
 				rows.push(row);
 			}
 
-			const tableHTML = generateThemedTable('Available Emoticons', [], rows);
+			const tableHTML = Table('Available Emoticons', [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
@@ -251,11 +250,11 @@ export const commands: Chat.ChatCommands = {
 			const rows = [
 				[`<img src="${emote.url}" height="40" width="40">`],
 				[`<b>URL:</b> ${Utils.escapeHTML(emote.url || '')}`],
-				[`<b>Added by:</b> ${nameColor(emote.addedBy || 'Unknown', true, true)}`],
+				[`<b>Added by:</b> ${Impulse.nameColor(emote.addedBy || 'Unknown', true, true)}`],
 				[`<b>Added:</b> ${emote.addedAt ? new Date(emote.addedAt).toUTCString() : 'Unknown'}`],
 			];
 
-			const tableHTML = generateThemedTable(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows);
+			const tableHTML = Table(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
@@ -279,6 +278,12 @@ export const commands: Chat.ChatCommands = {
 				`</ul>`;
 			this.sendReplyBox(html);
 		},
+	},
+	emote: 'emoticon',
+	emotes: 'emoticon',
+	emoticons: 'emoticon',
+};
+	},
 	},
 	emote: 'emoticon',
 	emotes: 'emoticon',

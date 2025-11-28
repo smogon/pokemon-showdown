@@ -4,8 +4,7 @@
 * Refactored By @ClarkJ338
 */
 import { FS } from '../../../lib';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
 
 const DATA_FILE = 'impulse/db/ontime.json';
 const ONTIME_LEADERBOARD_SIZE = 100;
@@ -88,7 +87,7 @@ const unblockUser = (userid: string): void => {
 function formatOntimeDisplay(userid: string, totalTime: number, currentSession: number, isConnected: boolean): string {
 	const displayTotal = displayTime(convertTime(totalTime + currentSession));
 	const sessionPart = isConnected ? ` Current session: <strong>${displayTime(convertTime(currentSession))}</strong>.` : '';
-	return `${nameColor(userid, true)}'s total ontime is <strong>${displayTotal}</strong>.${sessionPart}`;
+	return `${Impulse.nameColor(userid, true)}'s total ontime is <strong>${displayTotal}</strong>.${sessionPart}`;
 }
 
 export const handlers: Chat.Handlers = {
@@ -116,17 +115,17 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(targetId);
 
 			if (targetUser?.isPublicBot) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} is a bot and does not track ontime.`);
+				return this.sendReplyBox(`${Impulse.nameColor(targetId, true)} is a bot and does not track ontime.`);
 			}
 
 			if (isBlockedOntime(targetId)) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} is blocked from gaining ontime.`);
+				return this.sendReplyBox(`${Impulse.nameColor(targetId, true)} is blocked from gaining ontime.`);
 			}
 
 			const totalOntime = getTotalOntime(targetId);
 
 			if (!totalOntime && !targetUser?.connected) {
-				return this.sendReplyBox(`${nameColor(targetId, true)} has never been online.`);
+				return this.sendReplyBox(`${Impulse.nameColor(targetId, true)} has never been online.`);
 			}
 
 			const currentOntime = getCurrentSessionTime(targetUser);
@@ -160,11 +159,11 @@ export const commands: Chat.ChatCommands = {
 
 			const rows = ladderData.map((entry, i) => [
 				(i + 1).toString(),
-				nameColor(entry.name, true),
+				Impulse.nameColor(entry.name, true),
 				displayTime(convertTime(entry.time)),
 			]);
 
-			const tableHTML = generateThemedTable('Ontime Leaderboard', ['Rank', 'User', 'Time'], rows);
+			const tableHTML = Table('Ontime Leaderboard', ['Rank', 'User', 'Time'], rows);
 			return this.sendReply(`|raw|${tableHTML}`);
 		},
 
@@ -174,11 +173,11 @@ export const commands: Chat.ChatCommands = {
 			if (!targetId) throw new Chat.ErrorMessage("Please specify a user to block.");
 			
 			if (isBlockedOntime(targetId)) {
-				throw new Chat.ErrorMessage(`${nameColor(targetId, true)} is already blocked from gaining ontime.`);
+				throw new Chat.ErrorMessage(`${Impulse.nameColor(targetId, true)} is already blocked from gaining ontime.`);
 			}
 			
 			blockUser(targetId);
-			this.sendReplyBox(`${nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
+			this.sendReplyBox(`${Impulse.nameColor(targetId, true)} has been blocked from gaining ontime and will not appear on the ladder.`);
 		},
 
 		unblock(target, room, user): void {
@@ -187,11 +186,11 @@ export const commands: Chat.ChatCommands = {
 			if (!targetId) throw new Chat.ErrorMessage("Please specify a user to unblock.");
 			
 			if (!isBlockedOntime(targetId)) {
-				throw new Chat.ErrorMessage(`${nameColor(targetId, true)} is not blocked from gaining ontime.`);
+				throw new Chat.ErrorMessage(`${Impulse.nameColor(targetId, true)} is not blocked from gaining ontime.`);
 			}
 			
 			unblockUser(targetId);
-			this.sendReplyBox(`${nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
+			this.sendReplyBox(`${Impulse.nameColor(targetId, true)} has been unblocked and can now gain ontime and appear on the ladder.`);
 		},
 
 		blocklist(target, room, user): void {
@@ -199,8 +198,8 @@ export const commands: Chat.ChatCommands = {
 			const blockedUsers = Object.keys(data.blocks);
 			if (!blockedUsers.length) return this.sendReplyBox("No users are currently blocked from gaining ontime.");
 			
-			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
-			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
+			const rows = blockedUsers.map(userid => [Impulse.nameColor(userid, true)]);
+			const tableHTML = Table('Blocked Ontime Users', ['User'], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 
@@ -223,4 +222,6 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	ontimehelp(): void { this.parse('/ontime help'); },
+};
+
 };
