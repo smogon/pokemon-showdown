@@ -531,5 +531,3 @@ export const commands: Chat.ChatCommands = {
 
 	uprofilehelp(): void { this.parse('/uprofile help'); },
 };
-his.parse('/uprofile help'); },
-};
