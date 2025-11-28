@@ -2,23 +2,45 @@
 * Pokemon Showdown
 * Custom Symbol Commands
 * @author PrinceSky-Git
+* Refactored By @ClarkJ338
 */
-
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib';
 import { nameColor } from '../../colors';
 
+const DATA_FILE = 'impulse/db/custom-symbol.json';
 const STAFF_ROOM_ID = 'staff';
-const BLOCKED_SYMBOLS = ['➦', '~', '&', '@', '%', '*', '+'];
+const BLOCKED_SYMBOLS = ['➦', '~', '&', '#', '@', '%', '*', '+'];
 
-interface CustomSymbolDocument {
-	_id: string;
+interface CustomSymbolEntry {
 	symbol: string;
 	setBy: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 }
 
-const CustomSymbolDB = ImpulseDB<CustomSymbolDocument>('customsymbols');
+interface CustomSymbolData {
+	[userid: string]: CustomSymbolEntry;
+}
+
+let data: CustomSymbolData = {};
+
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
+};
+
+const loadData = async (): Promise<void> => {
+	try {
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			data = JSON.parse(raw);
+		}
+	} catch (e) {
+		console.error('Failed to load custom symbols:', e);
+		data = {};
+	}
+};
+
+void loadData();
 
 const parseArgs = (target: string) => {
 	const [name, symbol] = target.split(',').map(s => s.trim());
@@ -35,18 +57,15 @@ const validateSymbol = (symbol: string): { valid: boolean; error?: string } => {
 	return { valid: true };
 };
 
-const applyCustomSymbol = async (userid: string): Promise<void> => {
+const applyCustomSymbol = (userid: string): void => {
 	const user = Users.get(userid) as any;
 	if (!user) return;
 
-	const symbolDoc = await CustomSymbolDB.findOne(
-		{ _id: userid },
-		{ projection: { symbol: 1 } }
-	);
+	const symbolEntry = data[userid];
 
-	if (symbolDoc) {
+	if (symbolEntry) {
 		if (!user.originalGroup) user.originalGroup = user.tempGroup;
-		user.customSymbol = symbolDoc.symbol;
+		user.customSymbol = symbolEntry.symbol;
 		user.updateIdentity();
 	}
 };
@@ -101,69 +120,70 @@ export const commands: Chat.ChatCommands = {
 			this.parse('/symbolhelp');
 		},
 
-		async set(target, room, user) {
+		set(target, room, user) {
 			this.checkCan('roomowner');
 			const { name, userId, symbol } = parseArgs(target);
 
 			if (!name || !symbol) return this.parse('/cs help');
-			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
+			if (userId.length > 19) throw new Chat.ErrorMessage('Usernames are not this long...');
 
 			const validation = validateSymbol(symbol);
-			if (!validation.valid) return this.errorReply(validation.error!);
+			if (!validation.valid) throw new Chat.ErrorMessage(validation.error!);
 
-			if (await CustomSymbolDB.exists({ _id: userId })) {
-				return this.errorReply('User already has symbol. Use /symbol update or /symbol delete.');
+			if (data[userId]) {
+				throw new Chat.ErrorMessage('User already has symbol. Use /symbol update or /symbol delete.');
 			}
 
-			const now = new Date();
-			await CustomSymbolDB.insertOne({
-				_id: userId,
+			const now = Date.now();
+			data[userId] = {
 				symbol,
 				setBy: user.id,
 				createdAt: now,
 				updatedAt: now,
-			});
+			};
+			saveData();
 
-			await applyCustomSymbol(userId);
+			applyCustomSymbol(userId);
 
 			const targetHtml = nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetHtml} the custom symbol: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'set');
 		},
 
-		async update(target, room, user) {
+		update(target, room, user) {
 			this.checkCan('roomowner');
 			const { name, userId, symbol } = parseArgs(target);
 
 			if (!name || !symbol) return this.parse('/sc help');
 
 			const validation = validateSymbol(symbol);
-			if (!validation.valid) return this.errorReply(validation.error!);
+			if (!validation.valid) throw new Chat.ErrorMessage(validation.error!);
 
-			if (!await CustomSymbolDB.exists({ _id: userId })) {
-				return this.errorReply('User does not have symbol. Use /symbol set.');
+			if (!data[userId]) {
+				throw new Chat.ErrorMessage('User does not have symbol. Use /symbol set.');
 			}
 
-			await CustomSymbolDB.updateOne(
-				{ _id: userId },
-				{ $set: { symbol, updatedAt: new Date() } }
-			);
-			await applyCustomSymbol(userId);
+			data[userId].symbol = symbol;
+			data[userId].updatedAt = Date.now();
+			saveData();
+			
+			applyCustomSymbol(userId);
 
 			const targetHtml = nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetHtml}'s custom symbol to: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'updated');
 		},
 
-		async delete(target, room, user) {
+		delete(target, room, user) {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
-			if (!await CustomSymbolDB.exists({ _id: userId })) {
-				return this.errorReply(`${target} does not have a custom symbol.`);
+			if (!data[userId]) {
+				throw new Chat.ErrorMessage(`${target} does not have a custom symbol.`);
 			}
 
-			await CustomSymbolDB.deleteOne({ _id: userId });
+			delete data[userId];
+			saveData();
 			removeCustomSymbol(userId);
 
 			this.sendReply(`You removed ${target}'s custom symbol.`);
@@ -197,10 +217,9 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const loginfilter: Chat.LoginFilter = user => {
-	void applyCustomSymbol(user.id);
+	applyCustomSymbol(user.id);
 };
 
-// Monkey Patching
 const originalGetIdentity = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
