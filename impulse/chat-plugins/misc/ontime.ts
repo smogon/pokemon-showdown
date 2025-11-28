@@ -15,7 +15,6 @@ interface OntimeData {
 	blocks: { [userid: string]: boolean };
 }
 
-// Initial state
 let data: OntimeData = {
 	ontime: {},
 	blocks: {},
@@ -97,7 +96,9 @@ export const handlers: Chat.Handlers = {
 		const isLastConnection = user.connections.length === 0;
 		if (user.named && isLastConnection && !user.isPublicBot) {
 			if (isBlockedOntime(user.id)) return;
-			const sessionTime = user.lastDisconnected - user.lastConnected;
+			
+			const sessionTime = Date.now() - user.lastConnected;
+			
 			if (sessionTime > 0) {
 				updateOntime(user.id, sessionTime);
 			}
@@ -136,11 +137,9 @@ export const commands: Chat.ChatCommands = {
 		ladder(target, room, user): void {
 			if (!this.runBroadcast()) return;
 
-			// Convert data.ontime map to array
 			const ontimeEntries = Object.entries(data.ontime);
 			const ontimeMap = new Map(ontimeEntries);
 
-			// Add currently connected users to the map if they aren't in the DB yet
 			for (const u of Users.users.values()) {
 				if (u.connected && u.named && !ontimeMap.has(u.id) && !u.isPublicBot && !isBlockedOntime(u.id)) {
 					ontimeMap.set(u.id, 0);
