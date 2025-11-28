@@ -248,5 +248,3 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 
 	return customSymbol + this.name;
 };
-.name;
-};
