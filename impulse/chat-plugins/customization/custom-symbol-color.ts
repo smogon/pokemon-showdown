@@ -59,15 +59,14 @@ const updateSymbolColors = (): void => {
 	try {
 		const cssRules = Object.entries(data).map(([userId, entry]) => {
 			const selector = `[id$="-userlist-user-${userId}"] button > em.group`;
-			// Note: This specific CSS selector might need adjustment depending on client changes
 			const chatSelector = `[class$="chatmessage-${userId}"] strong small, .groupsymbol`;
 			return `${selector} { color: ${entry.color} !important; }\n${chatSelector} { color: ${entry.color} !important; }`;
 		}).join('\n');
 
 		const cssBlock = `${START_TAG}\n${cssRules}\n${END_TAG}`;
 
-		FS(CONFIG_PATH).writeUpdate(content => {
-			let fileContent = (content || '').toString();
+		FS(CONFIG_PATH).writeUpdate(() => {
+			const fileContent = FS(CONFIG_PATH).readIfExistsSync();
 			
 			if (!fileContent.trim()) return cssBlock + '\n';
 
@@ -82,7 +81,7 @@ const updateSymbolColors = (): void => {
 				return fileContent + '\n' + cssBlock + '\n';
 			}
 		});
-		
+
 		if (typeof Impulse !== 'undefined' && Impulse.reloadCSS) {
 			Impulse.reloadCSS();
 		}
