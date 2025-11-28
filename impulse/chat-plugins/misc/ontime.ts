@@ -168,23 +168,6 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply(`|raw|${tableHTML}`);
 		},
 
-		help(): void {
-			if (!this.runBroadcast()) return;
-			const helpList = [
-				{ cmd: "/ontime [user]", desc: "Check user's online time." },
-				{ cmd: "/ontime ladder", desc: "Top 100 by ontime." },
-				{ cmd: "/ontime block [user]", desc: "Block user from gaining ontime. Requires: &." },
-				{ cmd: "/ontime unblock [user]", desc: "Unblock user from gaining ontime. Requires: &." },
-				{ cmd: "/ontime blocklist", desc: "List blocked users. Requires: &." },
-			];
-			const html = `<center><strong>Ontime Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
-		},
-
 		block(target, room, user): void {
 			this.checkCan('roomowner');
 			const targetId = toID(target);
@@ -219,6 +202,23 @@ export const commands: Chat.ChatCommands = {
 			const rows = blockedUsers.map(userid => [nameColor(userid, true)]);
 			const tableHTML = generateThemedTable('Blocked Ontime Users', ['User'], rows);
 			this.sendReply(`|html|${tableHTML}`);
+		},
+
+		help(): void {
+			if (!this.runBroadcast()) return;
+			const helpList = [
+				{ cmd: "/ontime [user]", desc: "Check user's online time." },
+				{ cmd: "/ontime ladder", desc: "Top 100 by ontime." },
+				{ cmd: "/ontime block [user]", desc: "Block user from gaining ontime. Requires: &." },
+				{ cmd: "/ontime unblock [user]", desc: "Unblock user from gaining ontime. Requires: &." },
+				{ cmd: "/ontime blocklist", desc: "List blocked users. Requires: &." },
+			];
+			const html = `<center><strong>Ontime Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
+				helpList.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				).join('') +
+				`</ul>`;
+			this.sendReplyBox(html);
 		},
 	},
 
