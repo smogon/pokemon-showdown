@@ -3,28 +3,21 @@
 * Colors Utility Functions
 */
 import * as crypto from 'crypto';
-import { FS } from '../lib/fs';
+import { FS, Utils } from '../lib';
 
 interface RGB { R: number; G: number; B: number }
 interface CustomColors { [userid: string]: string }
-interface ColorDocument { userid: string; color: string }
+
+const DATA_FILE = 'impulse/db/custom-colors.json';
 
 let customColors: CustomColors = {};
 const colorCache: Record<string, string> = {};
-const CUSTOM_COLORS_FILE = 'impulse/db/customcolors.json';
 
-export const loadCustomColorsFromDB = async (): Promise<void> => {
+const loadData = async (): Promise<void> => {
 	try {
-		const data = await FS(CUSTOM_COLORS_FILE).readIfExists();
-		let parsed: CustomColors | ColorDocument[] = {};
-		if (data) parsed = JSON.parse(data);
-		customColors = {};
-		if (Array.isArray(parsed)) {
-			parsed.forEach(doc => {
-				if (doc.userid && doc.color) customColors[doc.userid] = doc.color;
-			});
-		} else {
-			Object.assign(customColors, parsed);
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			customColors = JSON.parse(raw);
 		}
 	} catch (e) {
 		console.error('Error loading colors:', e);
@@ -32,27 +25,37 @@ export const loadCustomColorsFromDB = async (): Promise<void> => {
 	}
 };
 
-export const saveCustomColorsToDB = async (): Promise<void> => {
-	try {
-		await FS(CUSTOM_COLORS_FILE).safeWrite(JSON.stringify(customColors, null, 2));
-	} catch (e) {
-		console.error('Error saving colors:', e);
-	}
+void loadData();
+
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(customColors));
 };
 
-loadCustomColorsFromDB().catch(err => console.error('Failed to init colors:', err));
+export const addCustomColor = (userid: string, color: string): void => {
+	customColors[userid] = color;
+	colorCache[userid] = color;
+	saveData();
+};
+
+export const removeCustomColor = (userid: string): void => {
+	delete customColors[userid];
+	delete colorCache[userid];
+	saveData();
+};
 
 export const getCustomColors = (): CustomColors => customColors;
 
-export const setCustomColors = (colors: CustomColors): void => {
-	customColors = colors;
-	void saveCustomColorsToDB();
-};
-
 export const reloadCustomColors = async (): Promise<void> => {
-	await loadCustomColorsFromDB();
+	await loadData();
 	clearColorCache();
 };
+
+export const clearColorCache = (): void => {
+	for (const key in colorCache) delete colorCache[key];
+};
+
+export const validateHexColor = (color: string): boolean =>
+	/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
 const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	const C = (100 - Math.abs(2 * L - 100)) * S / 100 / 100;
@@ -61,7 +64,12 @@ const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	let R1 = 0, G1 = 0, B1 = 0;
 
 	const hCase = Math.floor(H / 60);
-	if (hCase === 0) { R1 = C; G1 = X; } else if (hCase === 1) { R1 = X; G1 = C; } else if (hCase === 2) { G1 = C; B1 = X; } else if (hCase === 3) { G1 = X; B1 = C; } else if (hCase === 4) { R1 = X; B1 = C; } else if (hCase === 5) { R1 = C; B1 = X; }
+	if (hCase === 0) { R1 = C; G1 = X; }
+	else if (hCase === 1) { R1 = X; G1 = C; }
+	else if (hCase === 2) { G1 = C; B1 = X; }
+	else if (hCase === 3) { G1 = X; B1 = C; }
+	else if (hCase === 4) { R1 = X; B1 = C; }
+	else if (hCase === 5) { R1 = C; B1 = X; }
 
 	return { R: R1 + m, G: G1 + m, B: B1 + m };
 };
@@ -100,23 +108,15 @@ const hashColor = (name: string): string => {
 	return color;
 };
 
-export const validateHexColor = (color: string): boolean =>
-	/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
-
-export const clearColorCache = (): void => {
-	Object.keys(colorCache).forEach(key => delete colorCache[key]);
-};
-
 export const nameColor = (
 	name: string,
 	bold = true,
-	userGroup = false,
-	room: Room | null = null
+	userGroup = false
 ): string => {
 	const userId = toID(name);
 	const symbol = userGroup && Users.globalAuth.get(userId) ?
 		`<font color=#948A88>${Users.globalAuth.get(userId)}</font>` :
 		'';
-	const userName = Chat.escapeHTML(Users.getExact(name)?.name || name);
+	const userName = Utils.escapeHTML(Users.getExact(name)?.name || name);
 	return symbol + (bold ? '<b>' : '') + `<font color=${hashColor(name)}>${userName}</font>` + (bold ? '</b>' : '');
 };
