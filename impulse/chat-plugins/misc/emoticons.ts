@@ -22,7 +22,6 @@ interface EmoticonData {
 	ignores: { [userId: string]: boolean };
 }
 
-// Initial default state
 let data: EmoticonData = {
 	emoticons: {},
 	emoteSize: 32,
@@ -62,7 +61,6 @@ const loadEmoticons = async (): Promise<void> => {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
 			const json = JSON.parse(raw);
-			// Robust merging with defaults to prevent crashes
 			data = {
 				emoticons: json.emoticons || {},
 				emoteSize: json.emoteSize || 32,
@@ -73,7 +71,6 @@ const loadEmoticons = async (): Promise<void> => {
 		}
 
 		emoticons = {};
-		// Safe to iterate now that we guaranteed data.emoticons exists
 		for (const [name, entry] of Object.entries(data.emoticons)) {
 			emoticons[name] = entry.url;
 		}
@@ -83,7 +80,6 @@ const loadEmoticons = async (): Promise<void> => {
 		buildEmoteRegex();
 	} catch (e) {
 		console.error('Failed to load emoticons:', e);
-		// Reset to safe defaults on error
 		data = { emoticons: {}, emoteSize: 32, ignores: {} };
 		emoticons = {};
 	}
