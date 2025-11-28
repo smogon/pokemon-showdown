@@ -8,7 +8,7 @@ import { FS, Utils } from '../../../lib';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-const DATA_FILE = 'config/chat-plugins/emoticons.json';
+const DATA_FILE = 'impulse/db/emoticons.json';
 
 interface EmoticonEntry {
 	url: string;
