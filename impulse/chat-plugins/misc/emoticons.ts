@@ -283,9 +283,3 @@ export const commands: Chat.ChatCommands = {
 	emotes: 'emoticon',
 	emoticons: 'emoticon',
 };
-	},
-	},
-	emote: 'emoticon',
-	emotes: 'emoticon',
-	emoticons: 'emoticon',
-};
