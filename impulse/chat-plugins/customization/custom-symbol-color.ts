@@ -5,7 +5,6 @@
 * Refactored By @ClarkJ338
 */
 import { FS } from '../../../lib';
-import { nameColor } from '../../colors';
 
 const DATA_FILE = 'impulse/db/custom-symbol-colors.json';
 const CONFIG_PATH = 'config/custom.css';
@@ -97,8 +96,8 @@ const sendSymbolColorNotifications = (
 	action: 'set' | 'updated' | 'removed'
 ): void => {
 	const userId = toID(targetName);
-	const staffHtml = nameColor(staffUser.name, true, true);
-	const targetHtml = nameColor(targetName, true, false);
+	const staffHtml = Impulse.nameColor(staffUser.name, true, true);
+	const targetHtml = Impulse.nameColor(targetName, true, false);
 
 	const user = Users.get(userId);
 	const room = Rooms.get(STAFF_ROOM_ID);
@@ -150,7 +149,7 @@ export const commands: Chat.ChatCommands = {
 			saveData();
 			updateSymbolColors();
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetHtml} a symbol color: ${formatColorSpan(color)}`);
 			sendSymbolColorNotifications(user, name, color, 'set');
 		},
@@ -171,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 			saveData();
 			updateSymbolColors();
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetHtml}'s symbol color to: ${formatColorSpan(color)}`);
 			sendSymbolColorNotifications(user, name, color, 'updated');
 		},
@@ -221,4 +220,6 @@ export const commands: Chat.ChatCommands = {
 	sc: 'symbolcolor',
 	symbolcolorhelp: 'symbolcolor.help',
 	schelp: 'symbolcolor.help',
+};
+help',
 };

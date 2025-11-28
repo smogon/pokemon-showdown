@@ -5,7 +5,6 @@
 * Refactored By @ClarkJ338
 */
 import { FS } from '../../../lib';
-import { nameColor } from '../../colors';
 
 const DATA_FILE = 'impulse/db/custom-symbol.json';
 const STAFF_ROOM_ID = 'staff';
@@ -86,8 +85,8 @@ const sendSymbolNotifications = (
 	action: 'set' | 'updated' | 'removed'
 ): void => {
 	const userId = toID(targetName);
-	const staffHtml = nameColor(staffUser.name, true, true);
-	const targetHtml = nameColor(targetName, true, false);
+	const staffHtml = Impulse.nameColor(staffUser.name, true, true);
+	const targetHtml = Impulse.nameColor(targetName, true, false);
 	const user = Users.get(userId);
 	const room = Rooms.get(STAFF_ROOM_ID);
 
@@ -145,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 
 			applyCustomSymbol(userId);
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetHtml} the custom symbol: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'set');
 		},
@@ -169,7 +168,7 @@ export const commands: Chat.ChatCommands = {
 			
 			applyCustomSymbol(userId);
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetHtml}'s custom symbol to: ${symbol}`);
 			sendSymbolNotifications(user, name, symbol, 'updated');
 		},
@@ -248,4 +247,6 @@ Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): str
 	}
 
 	return customSymbol + this.name;
+};
+.name;
 };

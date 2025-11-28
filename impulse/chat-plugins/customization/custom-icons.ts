@@ -1,10 +1,9 @@
 /*
 * Pokemon Showdown
 * Custom Icons Commands
-* @author MusaddikTemkar
+* Refactored By @MusaddikTemkar
 */
 import { FS } from '../../../lib';
-import { nameColor } from '../../colors';
 
 const DATA_FILE = 'impulse/db/custom-icons.json';
 const CONFIG_PATH = 'config/custom.css';
@@ -116,15 +115,15 @@ const sendIconNotifications = (
 	
 	const user = Users.get(userId);
 	if (user?.connected) {
-		const staffHtml = nameColor(staffUser.name, true, true);
+		const staffHtml = Impulse.nameColor(staffUser.name, true, true);
 		const msg = `${staffHtml} ${action}${sizeDisplay}${iconDisplay}<br /><center>Refresh if you don't see it.</center>`;
 		user.popup(`|html|${msg}`);
 	}
 	
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
-		const staffHtml = nameColor(staffUser.name, true, true);
-		const targetHtml = nameColor(targetName, true, false);
+		const staffHtml = Impulse.nameColor(staffUser.name, true, true);
+		const targetHtml = Impulse.nameColor(targetName, true, false);
 		const logAction = action.replace('has ', '').replace('your userlist icon', `icon for ${targetHtml}`);
 		const msg = `${staffHtml} ${logAction}${iconDisplay}`;
 		room.add(`|html|<div class="infobox">${msg}</div>`).update();
@@ -164,7 +163,7 @@ export const commands: Chat.ChatCommands = {
 			saveData();
 			updateIcons();
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetHtml} an icon${formatSizeDisplay(size)}.`);
 			sendIconNotifications(user, name, 'has set your userlist icon', url, size);
 		},
@@ -196,7 +195,7 @@ export const commands: Chat.ChatCommands = {
 			const newSize = data[userId].size;
 			const newUrl = data[userId].url;
 
-			const targetHtml = nameColor(name, true, false);
+			const targetHtml = Impulse.nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetHtml}'s icon${formatSizeDisplay(newSize)}.`);
 			sendIconNotifications(user, name, 'has updated your userlist icon', newUrl, newSize);
 		},

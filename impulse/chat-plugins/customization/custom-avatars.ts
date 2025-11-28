@@ -1,10 +1,10 @@
 /*
-* Pokemon Showdown
-* Custom Avatars Commands
+* Pokemon Showdown - Impulse Server
+* Custom Avatars chat-plugin.
+* Refactored By @PrinceSky-Git
 */
 
 import { FS } from '../../../lib';
-import { nameColor } from '../../colors';
 
 const CONFIG = {
 	path: 'config/avatars/',
@@ -45,8 +45,8 @@ const notifyChanges = (
 	action: 'set' | 'delete', 
 	filename?: string
 ) => {
-	const setterColor = nameColor(user.name, true, true);
-	const targetColor = nameColor(targetId, true, true);
+	const setterColor = Impulse.nameColor(user.name, true, true);
+	const targetColor = Impulse.nameColor(targetId, true, true);
 	const targetUser = Users.get(targetId);
 	
 	let staffMsg = '';
