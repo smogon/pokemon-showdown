@@ -221,5 +221,3 @@ export const commands: Chat.ChatCommands = {
 	symbolcolorhelp: 'symbolcolor.help',
 	schelp: 'symbolcolor.help',
 };
-help',
-};
