@@ -23,7 +23,6 @@ interface ServerNewsData {
 	blocks: { [userId: string]: boolean };
 }
 
-// Initial state
 let data: ServerNewsData = {
 	news: {},
 	blocks: {},
