@@ -21,7 +21,7 @@ let data: OntimeData = {
 };
 
 const saveData = (): void => {
-	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data), { throttle: 5000 });
 };
 
 const loadData = async (): Promise<void> => {
