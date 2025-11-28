@@ -145,7 +145,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	clefablemega: {
 		inherit: true,
-		abilities: { 0: "Aerilate" },
+		abilities: { 0: "Unaware" },
 	},
 	ninetales: {
 		inherit: true,
@@ -606,6 +606,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	feraligatrmega: {
 		inherit: true,
+		baseStats: { hp: 85, atk: 160, def: 125, spa: 79, spd: 93, spe: 88 },
 		abilities: { 0: "Strong Jaw" },
 	},
 	furret: {
@@ -1982,7 +1983,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	excadrillmega: {
 		inherit: true,
-		abilities: { 0: "Mold Breaker" },
+		abilities: { 0: "Sand Rush" },
 	},
 	audinomega: {
 		inherit: true,
@@ -2010,7 +2011,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	scolipedemega: {
 		inherit: true,
-		abilities: {0: "Speed Boost"},
+		abilities: {0: "Tinted Lens"},
 	},
 	whimsicott: {
 		inherit: true,
@@ -2460,7 +2461,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	malamarmega: {
 		inherit: true,
-		abilities: { 0: "Prankster" },
+		baseStats: { hp: 86, atk: 102, def: 88, spa: 98, spd: 85, spe: 123 },
+		abilities: { 0: "Contrary" },
 	},
 	barbaraclemega: {
 		inherit: true,
@@ -2944,7 +2946,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	drampamega: {
 		inherit: true,
-		abilities: { 0: "Tempestuous" },
+		types: ["Electric", "Dragon"],
+		abilities: { 0: "Galvanize" },
 	},
 	dhelmise: {
 		inherit: true,
