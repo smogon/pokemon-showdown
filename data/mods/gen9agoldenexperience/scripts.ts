@@ -1891,6 +1891,7 @@ export const Scripts: ModdedBattleScriptsData = {
     this.modData('Learnsets', 'drampa').learnset.chillyreception = ['9L1'];
     this.modData('Learnsets', 'drampa').learnset.earthpower = ['9L1']; // ZA addition
     this.modData('Learnsets', 'drampa').learnset.boomburst = ['9L1'];
+    this.modData('Learnsets', 'drampa').learnset.trickroom = ['9L1'];
     this.modData('Learnsets', 'mimikyu').learnset.poltergeist = ['9L1'];
     this.modData('Learnsets', 'nihilego').learnset.nastyplot = ['9L1'];
     this.modData('Learnsets', 'buzzwole').learnset.uturn = ['9L1'];
