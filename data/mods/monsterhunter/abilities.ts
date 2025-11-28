@@ -1636,8 +1636,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			if (target.hp && !target.volatiles['dragoncharge']) {
 				if (target.status && target.status !== 'slp') {
-					// const oldStatus = target.status;
-					this.add('-curestatus', target, /* oldStatus, */ '[from] ability: Wyversion');
+					const oldStatus = target.status;
+					this.add('-curestatus', target, oldStatus, '[from] ability: Wyversion');
 					target.cureStatus();
 				}
 				target.addVolatile('dragoncharge');
@@ -1652,7 +1652,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 
 			if (pokemon.status && pokemon.status !== 'slp' && !pokemon.volatiles['dragoncharge']) {
-				const oldStatus = pokemon.status;
+				// const oldStatus = pokemon.status;
 				pokemon.cureStatus();
 				pokemon.addVolatile('dragoncharge');
 			}
