@@ -2,27 +2,48 @@
 * Pokemon Showdown
 * Symbol Colors Commands
 * @author PrinceSky-Git
+* Refactored By @ClarkJ338
 */
-
 import { FS } from '../../../lib';
-import { ImpulseDB } from '../../impulse-db';
 import { nameColor } from '../../colors';
 
+const DATA_FILE = 'impulse/db/custom-symbol-colors.json';
 const CONFIG_PATH = 'config/custom.css';
 const STAFF_ROOM_ID = 'staff';
 const START_TAG = '/* SYMBOLCOLORS START */';
 const END_TAG = '/* SYMBOLCOLORS END */';
 const HEX_REGEX = /^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/;
 
-interface SymbolColorDocument {
-	_id: string;
+interface SymbolColorEntry {
 	color: string;
 	setBy: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: number;
+	updatedAt: number;
 }
 
-const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
+interface SymbolColorData {
+	[userid: string]: SymbolColorEntry;
+}
+
+let data: SymbolColorData = {};
+
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
+};
+
+const loadData = async (): Promise<void> => {
+	try {
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			data = JSON.parse(raw);
+		}
+	} catch (e) {
+		console.error('Failed to load symbol colors:', e);
+		data = {};
+	}
+};
+
+void loadData();
 
 const isValidColor = (color: string): boolean => HEX_REGEX.test(color);
 
@@ -34,30 +55,37 @@ const parseArgs = (target: string) => {
 const formatColorSpan = (color: string, content: string = '■') => 
 	`<span style="color: ${color}">${content}</span>`;
 
-const updateSymbolColors = async (): Promise<void> => {
+const updateSymbolColors = (): void => {
 	try {
-		const docs = await SymbolColorsDB.find({});
-		
-		const cssRules = docs.map(doc => {
-			const selector = `[id$="-userlist-user-${doc._id}"] button > em.group`;
-			const chatSelector = `[class$="chatmessage-${doc._id}"] strong small, .groupsymbol`;
-			return `${selector} { color: ${doc.color}; }\n${chatSelector} { color: ${doc.color}; }`;
+		const cssRules = Object.entries(data).map(([userId, entry]) => {
+			const selector = `[id$="-userlist-user-${userId}"] button > em.group`;
+			// Note: This specific CSS selector might need adjustment depending on client changes
+			const chatSelector = `[class$="chatmessage-${userId}"] strong small, .groupsymbol`;
+			return `${selector} { color: ${entry.color} !important; }\n${chatSelector} { color: ${entry.color} !important; }`;
 		}).join('\n');
 
-		const cssBlock = `${START_TAG}\n${cssRules}\n${END_TAG}\n`;
+		const cssBlock = `${START_TAG}\n${cssRules}\n${END_TAG}`;
 
-		const fileContent = FS(CONFIG_PATH).readIfExistsSync().split('\n');
-		const startIndex = fileContent.indexOf(START_TAG);
-		const endIndex = fileContent.indexOf(END_TAG);
+		FS(CONFIG_PATH).writeUpdate(content => {
+			let fileContent = (content || '').toString();
+			
+			if (!fileContent.trim()) return cssBlock + '\n';
 
-		if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
-			fileContent.splice(startIndex, (endIndex - startIndex + 1), ...cssBlock.split('\n'));
-			FS(CONFIG_PATH).writeUpdate(() => fileContent.join('\n'));
-		} else {
-			FS(CONFIG_PATH).writeUpdate(() => fileContent.join('\n') + '\n' + cssBlock);
-		}
+			const startIndex = fileContent.indexOf(START_TAG);
+			const endIndex = fileContent.indexOf(END_TAG);
+
+			if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
+				const pre = fileContent.substring(0, startIndex);
+				const post = fileContent.substring(endIndex + END_TAG.length);
+				return pre + cssBlock + post;
+			} else {
+				return fileContent + '\n' + cssBlock + '\n';
+			}
+		});
 		
-		Impulse.reloadCSS();
+		if (typeof Impulse !== 'undefined' && Impulse.reloadCSS) {
+			Impulse.reloadCSS();
+		}
 	} catch (err) {
 		console.error("Error updating symbol color CSS:", err);
 	}
@@ -101,67 +129,65 @@ const sendSymbolColorNotifications = (
 
 export const commands: Chat.ChatCommands = {
 	symbolcolor: {
-		async set(this: CommandContext, target: string, room: Room, user: User) {
+		set(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('roomowner');
 			const { name, userId, color } = parseArgs(target);
 
 			if (!name || !color) return this.parse('/sc help');
-			if (userId.length > 19) return this.errorReply('Usernames are not this long...');
-			if (!isValidColor(color)) return this.errorReply('Invalid color. Use hex format: #FF5733 or #F73');
+			if (userId.length > 19) throw new Chat.ErrorMessage('Usernames are not this long...');
+			if (!isValidColor(color)) throw new Chat.ErrorMessage('Invalid color. Use hex format: #FF5733 or #F73');
 
-			if (await SymbolColorsDB.exists({ _id: userId })) {
-				return this.errorReply('User already has symbol color. Remove with /symbolcolor delete.');
+			if (data[userId]) {
+				throw new Chat.ErrorMessage('User already has symbol color. Remove with /symbolcolor delete.');
 			}
 
-			const now = new Date();
-			await SymbolColorsDB.insertOne({
-				_id: userId,
+			const now = Date.now();
+			data[userId] = {
 				color,
 				setBy: user.id,
 				createdAt: now,
 				updatedAt: now,
-			});
-
-			await updateSymbolColors();
+			};
+			saveData();
+			updateSymbolColors();
 
 			const targetHtml = nameColor(name, true, false);
 			this.sendReply(`|raw|You have given ${targetHtml} a symbol color: ${formatColorSpan(color)}`);
 			sendSymbolColorNotifications(user, name, color, 'set');
 		},
 
-		async update(this: CommandContext, target: string, room: Room, user: User) {
+		update(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('roomowner');
 			const { name, userId, color } = parseArgs(target);
 
 			if (!name || !color) return this.parse('/sc help');
-			if (!isValidColor(color)) return this.errorReply('Invalid color. Use hex format: #FF5733 or #F73');
+			if (!isValidColor(color)) throw new Chat.ErrorMessage('Invalid color. Use hex format: #FF5733 or #F73');
 
-			const existingDoc = await SymbolColorsDB.findOne({ _id: userId }, { projection: { color: 1 } });
-			if (!existingDoc) {
-				return this.errorReply('User does not have symbol color. Use /symbolcolor set.');
+			if (!data[userId]) {
+				throw new Chat.ErrorMessage('User does not have symbol color. Use /symbolcolor set.');
 			}
 
-			await SymbolColorsDB.updateOne(
-				{ _id: userId },
-				{ $set: { color, updatedAt: new Date() } }
-			);
-			await updateSymbolColors();
+			data[userId].color = color;
+			data[userId].updatedAt = Date.now();
+			saveData();
+			updateSymbolColors();
 
 			const targetHtml = nameColor(name, true, false);
 			this.sendReply(`|raw|You have updated ${targetHtml}'s symbol color to: ${formatColorSpan(color)}`);
 			sendSymbolColorNotifications(user, name, color, 'updated');
 		},
 
-		async delete(this: CommandContext, target: string, room: Room, user: User) {
+		delete(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('roomowner');
 			const userId = toID(target);
 
-			if (!await SymbolColorsDB.exists({ _id: userId })) {
-				return this.errorReply(`${target} does not have a symbol color.`);
+			if (!data[userId]) {
+				throw new Chat.ErrorMessage(`${target} does not have a symbol color.`);
 			}
 
-			await SymbolColorsDB.deleteOne({ _id: userId });
-			await updateSymbolColors();
+			delete data[userId];
+			saveData();
+			updateSymbolColors();
 
 			this.sendReply(`You removed ${target}'s symbol color.`);
 			sendSymbolColorNotifications(user, target, '', 'removed');
