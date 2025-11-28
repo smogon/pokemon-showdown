@@ -13,21 +13,16 @@ import type { TcgUserProfile } from '../tcg/interface';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
-interface ProfileStatusDocument {
+interface ProfileSettingsDocument {
 	_id: string;
-	status: string;
+	status?: string;
+	backgroundType?: 'image' | 'color';
+	backgroundValue?: string;
+	textColor?: string;
 	updatedAt: Date;
 }
 
-interface ProfileBackgroundDocument {
-	_id: string;
-	type: 'image' | 'color';
-	value: string;
-	updatedAt: Date;
-}
-
-const ProfileStatusDB = ImpulseDB<ProfileStatusDocument>('profilestatus');
-const ProfileBackgroundDB = ImpulseDB<ProfileBackgroundDocument>('profilebackgrounds');
+const ProfileSettingsDB = ImpulseDB<ProfileSettingsDocument>('profilesettings');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
 /**
@@ -159,19 +154,19 @@ async function getUserProfileData(userid: string) {
 		tcgTotalCardsRank?: number,
 		backgroundType?: 'image' | 'color',
 		backgroundValue?: string,
+		textColor?: string,
 	} = {};
 
 	// Fetch all data in parallel for better performance
 	const [
-		expDoc, ontimeDoc, statusDoc, userClanInfo, registrationResult, tcgProfile, backgroundDoc,
+		expDoc, ontimeDoc, profileSettings, userClanInfo, registrationResult, tcgProfile,
 	] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
 		ImpulseDB('ontime').findOne({ _id: userid }),
-		ProfileStatusDB.findOne({ _id: userid }),
+		ProfileSettingsDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
 		getRegistrationData(userid),
 		TcgProfileDB.findOne({ userId: userid }),
-		ProfileBackgroundDB.findOne({ _id: userid }),
 	]);
 
 	// Process EXP data
@@ -185,9 +180,19 @@ async function getUserProfileData(userid: string) {
 		data.ontime = ontimeDoc.value.ontime;
 	}
 
-	// Process custom profile status
-	if (statusDoc.status === 'fulfilled' && statusDoc.value) {
-		data.customStatus = statusDoc.value.status;
+	// Process profile settings (status, background, text color)
+	if (profileSettings.status === 'fulfilled' && profileSettings.value) {
+		const settings = profileSettings.value;
+		if (settings.status) {
+			data.customStatus = settings.status;
+		}
+		if (settings.backgroundType && settings.backgroundValue) {
+			data.backgroundType = settings.backgroundType;
+			data.backgroundValue = settings.backgroundValue;
+		}
+		if (settings.textColor) {
+			data.textColor = settings.textColor;
+		}
 	}
 
 	// Process clan data - fetch clan details if user is in a clan
@@ -235,12 +240,6 @@ async function getUserProfileData(userid: string) {
 		if (cardsRankResult.status === 'fulfilled') {
 			data.tcgTotalCardsRank = cardsRankResult.value + 1;
 		}
-	}
-
-	// Process background data
-	if (backgroundDoc.status === 'fulfilled' && backgroundDoc.value) {
-		data.backgroundType = backgroundDoc.value.type;
-		data.backgroundValue = backgroundDoc.value.value;
 	}
 
 	return data;
@@ -323,8 +322,14 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			// Build text color style
+			let textColorStyle = '';
+			if (profileData.textColor && isValidHexColor(profileData.textColor)) {
+				textColorStyle = `color: ${profileData.textColor};`;
+			}
+
 			// Build the profile HTML in table format
-			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;${backgroundStyle}">`;
+			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;min-height:150px;${backgroundStyle}">`;
 			buf += '<tr>';
 
 			// Avatar section (left side)
@@ -346,7 +351,7 @@ export const commands: Chat.ChatCommands = {
 
 			// Clan (if available)
 			if (profileData.clanName) {
-				buf += `<p style="margin: 4px 0"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
 				if (profileData.clanRank) {
 					buf += ` ( ${Chat.escapeHTML(profileData.clanRank)} )`;
 				}
@@ -355,12 +360,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Registration date
 			if (profileData.registrationDate) {
-				buf += `<p style="margin: 4px 0"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
 			}
 
 			// Level (if available)
 			if (profileData.level !== undefined) {
-				buf += `<p style="margin: 4px 0"><u>Level:</u> <span>${profileData.level}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Level:</u> <span>${profileData.level}</span></p>`;
 			}
 
 			// Ontime (if available)
@@ -370,12 +375,12 @@ export const commands: Chat.ChatCommands = {
 				if (targetUser?.connected && targetUser.lastConnected) {
 					totalOntime += Date.now() - targetUser.lastConnected;
 				}
-				buf += `<p style="margin: 4px 0"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
 			}
 
 			// TCG (if available)
 			if (profileData.tcgPoints !== undefined || profileData.tcgTotalCards !== undefined) {
-				buf += `<p style="margin: 4px 0"><u>TCG:</u> <span>`;
+				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>TCG:</u> <span>`;
 				const parts: string[] = [];
 
 				if (profileData.tcgPoints !== undefined) {
@@ -411,9 +416,9 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Please provide a status message (max 50 characters).");
 			}
 
-			await ProfileStatusDB.updateOne(
+			await ProfileSettingsDB.updateOne(
 				{ _id: user.id },
-				{ $set: { _id: user.id, status: target, updatedAt: new Date() } },
+				{ $set: { status: target, updatedAt: new Date() }, $setOnInsert: { _id: user.id } },
 				{ upsert: true }
 			);
 
@@ -421,7 +426,10 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async clearstatus(target, room, user): Promise<void> {
-			await ProfileStatusDB.deleteOne({ _id: user.id });
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { status: '' }, $set: { updatedAt: new Date() } }
+			);
 			this.sendReply("Your profile status has been cleared.");
 		},
 
@@ -434,9 +442,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Check if it's a hex color code
 			if (isValidHexColor(value)) {
-				await ProfileBackgroundDB.updateOne(
+				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
-					{ $set: { _id: user.id, type: 'color', value, updatedAt: new Date() } },
+					{
+						$set: { backgroundType: 'color', backgroundValue: value, updatedAt: new Date() },
+						$setOnInsert: { _id: user.id },
+					},
 					{ upsert: true }
 				);
 				this.sendReply(`Your profile background has been set to color: ${value}`);
@@ -445,9 +456,12 @@ export const commands: Chat.ChatCommands = {
 
 			// Check if it's a valid image URL
 			if (isValidImageUrl(value)) {
-				await ProfileBackgroundDB.updateOne(
+				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
-					{ $set: { _id: user.id, type: 'image', value, updatedAt: new Date() } },
+					{
+						$set: { backgroundType: 'image', backgroundValue: value, updatedAt: new Date() },
+						$setOnInsert: { _id: user.id },
+					},
 					{ upsert: true }
 				);
 				this.sendReply(`Your profile background has been set to image: ${value}`);
@@ -459,8 +473,39 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async clearbg(target, room, user): Promise<void> {
-			await ProfileBackgroundDB.deleteOne({ _id: user.id });
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { backgroundType: '', backgroundValue: '' }, $set: { updatedAt: new Date() } }
+			);
 			this.sendReply("Your profile background has been cleared.");
+		},
+
+		async settextcolor(target, room, user): Promise<void> {
+			if (!target) {
+				return this.errorReply("Please provide a hex color code (e.g., /uprofile settextcolor #FF5733).");
+			}
+
+			const value = target.trim();
+
+			// Validate hex color
+			if (!isValidHexColor(value)) {
+				return this.errorReply("Invalid hex color code. Please provide a valid hex color (e.g., #FF5733 or #FFF).");
+			}
+
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $set: { textColor: value, updatedAt: new Date() }, $setOnInsert: { _id: user.id } },
+				{ upsert: true }
+			);
+			this.sendReply(`Your profile text color has been set to: ${value}`);
+		},
+
+		async cleartextcolor(target, room, user): Promise<void> {
+			await ProfileSettingsDB.updateOne(
+				{ _id: user.id },
+				{ $unset: { textColor: '' }, $set: { updatedAt: new Date() } }
+			);
+			this.sendReply("Your profile text color has been cleared.");
 		},
 
 		help(): void {
@@ -471,6 +516,11 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/uprofile clearstatus", desc: "Clear your custom profile status." },
 				{ cmd: "/uprofile setbg [url/color]", desc: "Set profile background to an image URL or hex color (e.g., #FF5733)." },
 				{ cmd: "/uprofile clearbg", desc: "Clear your custom profile background." },
+				{
+					cmd: "/uprofile settextcolor [color]",
+					desc: "Set profile text color to a hex color (e.g., #FF5733). Does not affect username or status.",
+				},
+				{ cmd: "/uprofile cleartextcolor", desc: "Clear your custom profile text color." },
 			];
 			const html = `<center><strong>User Profile Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 				helpList.map(({ cmd, desc }, i) =>
