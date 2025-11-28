@@ -1,39 +1,66 @@
 /*
-* Pokemon Showdown
-* Seen & Clearall Commands
+* Pokemon Showdown - Impulse Server
+* Seen & Clearall chat-plugin.
 */
-
-import { ImpulseDB } from '../../impulse-db';
+import { FS } from '../../../lib';
 import { generateThemedTable } from '../../utils';
 import { nameColor } from '../../colors';
 
-interface SeenDocument {
-	_id: string;
-	lastSeen: Date;
+const DATA_FILE = 'impulse/db/seen.json';
+
+interface SeenData {
+	[userid: string]: number;
 }
 
-const SeenDB = ImpulseDB<SeenDocument>('seen');
+let seenData: SeenData = {};
+
+const saveData = (): void => {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(seenData), { throttle: 5000 });
+};
+
+const loadData = async (): Promise<void> => {
+	try {
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			seenData = JSON.parse(raw);
+		}
+	} catch (e) {
+		console.error('Failed to load seen data:', e);
+		seenData = {};
+	}
+};
+
+void loadData();
 
 const trackSeen = (userid: string): void => {
-	void SeenDB.upsert({ _id: userid }, { $set: { lastSeen: new Date() } }).catch(err => {});
+	seenData[userid] = Date.now();
+	saveData();
 };
 
-const getLastSeen = async (userid: string): Promise<Date | null> => {
-	const doc = await SeenDB.findOne({ _id: userid }, { projection: { lastSeen: 1 } });
-	return doc?.lastSeen || null;
+const getLastSeen = (userid: string): number | null => {
+	return seenData[userid] || null;
 };
 
-const getRecentUsers = async (limit = 50): Promise<SeenDocument[]> => {
-	return SeenDB.find(
-		{},
-		{ sort: { lastSeen: -1 }, limit, projection: { _id: 1, lastSeen: 1 } }
-	);
+const getRecentUsers = (limit = 50): { userid: string, date: number }[] => {
+	return Object.entries(seenData)
+		.map(([userid, date]) => ({ userid, date }))
+		.sort((a, b) => b.date - a.date)
+		.slice(0, limit);
 };
 
-const cleanupOldSeen = async (daysOld = 365): Promise<number> => {
-	const cutoff = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);
-	const result = await SeenDB.deleteMany({ lastSeen: { $lt: cutoff } });
-	return result.deletedCount || 0;
+const cleanupOldSeen = (daysOld = 365): number => {
+	const cutoff = Date.now() - daysOld * 24 * 60 * 60 * 1000;
+	let deletedCount = 0;
+	
+	for (const userid in seenData) {
+		if (seenData[userid] < cutoff) {
+			delete seenData[userid];
+			deletedCount++;
+		}
+	}
+	
+	if (deletedCount > 0) saveData();
+	return deletedCount;
 };
 
 const rejoinUsersToRoom = (room: Room, userIds: ID[]): void => {
@@ -70,10 +97,6 @@ const clearRooms = (rooms: Room[], user: User): { cleared: string[], failed: str
 		}, 1000);
 	}
 	return { cleared, failed };
-};
-
-const getErrorMessage = (err: unknown): string => {
-	return err instanceof Error ? err.message : String(err);
 };
 
 const formatSeenStatus = (targetName: string, status: 'online' | 'never' | 'ago', duration?: string): string => {
@@ -115,66 +138,51 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(formatSeenStatus(targetUser.name, 'online'));
 			}
 
-			try {
-				const lastSeen = await getLastSeen(toID(target));
-				if (!lastSeen) {
-					return this.sendReplyBox(formatSeenStatus(target, 'never'));
-				}
-
-				const duration = Chat.toDurationString(
-					Date.now() - lastSeen.getTime(),
-					{ precision: true }
-				);
-				this.sendReplyBox(formatSeenStatus(target, 'ago', duration));
-			} catch (err: unknown) {
-				const message = getErrorMessage(err);
-				this.errorReply('Error retrieving seen data: ' + message);
+			const lastSeen = getLastSeen(toID(target));
+			if (!lastSeen) {
+				return this.sendReplyBox(formatSeenStatus(target, 'never'));
 			}
+
+			const duration = Chat.toDurationString(
+				Date.now() - lastSeen,
+				{ precision: true }
+			);
+			this.sendReplyBox(formatSeenStatus(target, 'ago', duration));
 		},
 
-		async recent(target, room, user): Promise<void> {
+		recent(target, room, user): void {
 			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
 			const limit = Math.min(parseInt(target) || 25, 100);
 
-			try {
-				const recent = await getRecentUsers(limit);
-				if (!recent.length) return this.sendReply('No seen data.');
+			const recent = getRecentUsers(limit);
+			if (!recent.length) return this.sendReply('No seen data.');
 
-				const rows = recent.map((doc, i) => [
-					`${i + 1}`,
-					nameColor(doc._id, true),
-					Chat.toDurationString(Date.now() - doc.lastSeen.getTime()),
-				]);
+			const rows = recent.map((doc, i) => [
+				`${i + 1}`,
+				nameColor(doc.userid, true),
+				Chat.toDurationString(Date.now() - doc.date),
+			]);
 
-				const tableHTML = generateThemedTable(
-					`Recently Seen (${recent.length})`,
-					['#', 'User', 'Last Seen'],
-					rows,
-				);
+			const tableHTML = generateThemedTable(
+				`Recently Seen (${recent.length})`,
+				['#', 'User', 'Last Seen'],
+				rows,
+			);
 
-				this.sendReply(`|raw|${tableHTML}`);
-			} catch (err: unknown) {
-				const message = getErrorMessage(err);
-				this.errorReply('Error: ' + message);
-			}
+			this.sendReply(`|raw|${tableHTML}`);
 		},
 
-		async cleanup(target, room, user): Promise<void> {
+		cleanup(target, room, user): void {
 			this.checkCan('roomowner');
 			if (!this.runBroadcast()) return;
 
 			const days = parseInt(target) || 365;
-			if (days < 30) return this.errorReply('Minimum: 30 days.');
+			if (days < 30) throw new Chat.ErrorMessage('Minimum: 30 days.');
 
-			try {
-				const deleted = await cleanupOldSeen(days);
-				this.sendReply(`Deleted ${deleted} records older than ${days} days.`);
-			} catch (err: unknown) {
-				const message = getErrorMessage(err);
-				this.errorReply('Error: ' + message);
-			}
+			const deleted = cleanupOldSeen(days);
+			this.sendReply(`Deleted ${deleted} records older than ${days} days.`);
 		},
 
 		help(): void {
@@ -202,13 +210,13 @@ export const commands: Chat.ChatCommands = {
 	clearall: {
 		''(target, room, user): void {
 			if (room?.battle) return this.sendReply("Cannot clearall in battle rooms.");
-			if (!room) return this.errorReply("Requires a room.");
+			if (!room) throw new Chat.ErrorMessage("Requires a room.");
 
 			this.checkCan('roommod', null, room);
 
 			const { failed } = clearRooms([room], user);
 			if (failed.length) {
-				return this.errorReply(
+				throw new Chat.ErrorMessage(
 					`Cannot clear room "${room.id}" because a tournament is running.`
 				);
 			}
@@ -219,7 +227,7 @@ export const commands: Chat.ChatCommands = {
 			const rooms = Rooms.global.chatRooms.filter((r): r is Room => !!r && !r.battle);
 			const { failed } = clearRooms(rooms, user);
 			if (failed.length) {
-				this.errorReply(
+				throw new Chat.ErrorMessage(
 					`Cannot clear the following rooms because a tournament is running: ` +
 					`${failed.join(', ')}`
 				);
