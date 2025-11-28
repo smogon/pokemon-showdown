@@ -7,7 +7,7 @@
 import { FS } from '../../../lib';
 import { nameColor } from '../../colors';
 
-const DATA_FILE = 'config/chat-plugins/server-news.json';
+const DATA_FILE = 'impulse/db/server-news.json';
 
 interface NewsEntry {
 	id: string;
