@@ -21,7 +21,7 @@ const COLORS_END_TAG = '/* COLORS END */';
 
 const reloadCSS = () => {
 	if (global.Config?.serverid) {
-		const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid || 'impulse'}&invalidate`;
+		const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
 		const req = https.get(url, () => {});
 		req.on('error', () => {});
 		req.end();
