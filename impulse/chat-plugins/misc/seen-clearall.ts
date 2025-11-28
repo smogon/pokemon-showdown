@@ -254,5 +254,3 @@ export const commands: Chat.ChatCommands = {
 	recentseen(): void { this.parse('/seen recent'); },
 	cleanupseen(): void { this.parse('/seen cleanup'); },
 };
-anupseen(): void { this.parse('/seen cleanup'); },
-};
