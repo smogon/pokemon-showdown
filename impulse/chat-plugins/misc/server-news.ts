@@ -216,6 +216,3 @@ export const commands: Chat.ChatCommands = {
 	},
 	svnhelp: 'servernewshelp',
 };
-},
-	svnhelp: 'servernewshelp',
-};
