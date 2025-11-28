@@ -223,5 +223,3 @@ export const commands: Chat.ChatCommands = {
 
 	ontimehelp(): void { this.parse('/ontime help'); },
 };
-
-};
