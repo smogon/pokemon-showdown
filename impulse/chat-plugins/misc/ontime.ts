@@ -61,11 +61,11 @@ const isBlockedOntime = (userid: string): boolean => {
 	return !!data.blocks[userid];
 };
 
-const getCurrentSessionTime = (user: User | undefined): number => {
+export const getCurrentSessionTime = (user: User | undefined): number => {
 	return user?.connected && user.lastConnected ? Date.now() - user.lastConnected : 0;
 };
 
-const getTotalOntime = (userid: string): number => {
+export const getTotalOntime = (userid: string): number => {
 	return data.ontime[userid] || 0;
 };
 

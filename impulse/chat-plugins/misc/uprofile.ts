@@ -9,6 +9,7 @@ import { getAvatarName } from '../../avatar-names';
 import { Clans, UserClans } from '../clans/database';
 import type { TcgUserProfile } from '../tcg/interface';
 import { toID } from '../../../sim/dex';
+import { getTotalOntime, getCurrentSessionTime } from './ontime';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
@@ -158,10 +159,9 @@ async function getUserProfileData(userid: string) {
 
 	// Fetch all data in parallel for better performance
 	const [
-		expDoc, ontimeDoc, profileSettings, userClanInfo, registrationResult, tcgProfile,
+		expDoc, profileSettings, userClanInfo, registrationResult, tcgProfile,
 	] = await Promise.allSettled([
 		ImpulseDB('expdata').findOne({ _id: userid }),
-		ImpulseDB('ontime').findOne({ _id: userid }),
 		ProfileSettingsDB.findOne({ _id: userid }),
 		UserClans.findOne({ _id: userid }),
 		getRegistrationData(userid),
@@ -174,9 +174,10 @@ async function getUserProfileData(userid: string) {
 		data.level = expDoc.value.level;
 	}
 
-	// Process ontime data
-	if (ontimeDoc.status === 'fulfilled' && ontimeDoc.value) {
-		data.ontime = ontimeDoc.value.ontime;
+	// Process ontime data - use the ontime module's function to read from the JSON file
+	const ontime = getTotalOntime(userid);
+	if (ontime > 0) {
+		data.ontime = ontime;
 	}
 
 	// Process profile settings (status, background, text color)
@@ -367,13 +368,11 @@ export const commands: Chat.ChatCommands = {
 				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Level:</u> <span>${profileData.level}</span></p>`;
 			}
 
-			// Ontime (if available)
-			if (profileData.ontime !== undefined) {
-				let totalOntime = profileData.ontime;
-				// Add current session time if user is online
-				if (targetUser?.connected && targetUser.lastConnected) {
-					totalOntime += Date.now() - targetUser.lastConnected;
-				}
+			// Ontime - show if user has stored ontime or is currently online
+			const storedOntime = profileData.ontime ?? 0;
+			const currentSessionOntime = getCurrentSessionTime(targetUser);
+			const totalOntime = storedOntime + currentSessionOntime;
+			if (totalOntime > 0) {
 				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Total Ontime:</u> <span>${formatOntime(totalOntime)}</span></p>`;
 			}
 
