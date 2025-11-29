@@ -5,6 +5,7 @@
 */
 
 import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex';
 
 const CONFIG = {
 	path: 'config/avatars/',
