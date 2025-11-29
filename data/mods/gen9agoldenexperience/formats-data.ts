@@ -4713,7 +4713,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 	},
 	espathra: {
 		tier: "Uber",
-		doublesTier: "DUU",
+		doublesTier: "DUber",
 	},
 	wiglett: {
 		tier: "LC",

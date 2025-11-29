@@ -2795,17 +2795,19 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 	poisonivy: {
 		num: -64,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 50,
 		category: "Special",
 		name: "Poison Ivy",
-		shortDesc: "Hits 2-5 times in one turn.",
-		desc: "Hits 2-5 times in one turn.",
-		pp: 20,
+		shortDesc: "Hits twice. This move does not check accuracy.",
+		desc: "Hits twice. This move does not check accuracy.",
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-		multihit: [2, 5],
+		multihit: 2,
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
+			this.add('-anim', source, "Power Whip", target);
+			this.add('-anim', source, "Sludge Wave", target);
 			this.add('-anim', source, "Power Whip", target);
 			this.add('-anim', source, "Sludge Wave", target);
 		},
