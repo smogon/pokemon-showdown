@@ -83,33 +83,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Slicing moves: +1 priority at full HP, always crit at 1/3 HP or less.",
 	},
 	bewitchingtail: {
-		/* onModifyStats(stats, pokemon, target, move) {
-			if (target && target.status === 'slp') {
-				stats.atk = this.chainModify([stats.atk, 0x1333]);
-				stats.spa = this.chainModify([stats.spa, 0x1333]);
-				stats.spe = this.chainModify([stats.spe, 0x1333]);
-			}
-		}, */
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon, target, move) {
-			if (target && target.status === 'slp') {
+			if (target && target.status === 'slp' || pokemon.ignoringAbility()) {
 				this.debug('Bewitching Tail boost');
 				return this.chainModify(1.2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, pokemon, target, move) {
-			if (target && target.status === 'slp') {
+			if (target && target.status === 'slp' || pokemon.ignoringAbility()) {
 				this.debug('Bewitching Tail boost');
 				return this.chainModify(1.2);
 			}
 		},
-		/* onModifySpe(spe, pokemon, target) {
-			if (target && target.status === 'slp') {
-				this.debug('Bewitching Tail boost');
-				return this.chainModify(1.2);
-			}
-		}, */
+		onModifySpe(this: Battle, spe: number, pokemon: Pokemon) {
+			if (!this.activeTarget || this.activeTarget.status !== 'slp' || pokemon.ignoringAbility()) return;
+			this.debug('Bewitching Tail boost');
+			return this.chainModify(1.5);
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.status === 'slp') {
 				return this.chainModify(0.833);
@@ -171,7 +163,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Ground moves: Drawn to user, immune, SpA +1",
 	},
 	corrosiveclaws: {
-		/* onAfterMoveSecondary(target, source, move) { // fix later
+		onAfterMoveSecondary(target, source, move) { // fix later
 			if (!target || !source || source === target) return;
 			if (!move || move.category === 'Status') return;
 			if (!target.hp) return;
@@ -179,13 +171,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
 
-			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			const damage = move.multihit ? (move.totalDamage || lastAttackedBy.damage) : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				if (target.trySetStatus('tox', source)) {
 					this.add('-ability', source, 'Corrosive Claws');
 				}
 			}
-		}, */
+		},
 		name: "Corrosive Claws",
 		desc: "When this Pokémon brings an opponent to 50% HP or less with an attacking move, it badly poisons that opponent.",
 		shortDesc: "Targets dropped to ≤50% HP by attacks: Badly Poisoned",
