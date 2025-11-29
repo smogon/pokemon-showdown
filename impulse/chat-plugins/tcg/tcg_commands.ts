@@ -6,7 +6,7 @@
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats,
 	renderCardGridHtml, addCardsToCollection, initializeCache } from './tcg_utils';
-import { generateThemedTable } from '../../utils';
+import { Table } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
 import { collectionCommands } from './tcg_collections_cmds';
@@ -463,7 +463,7 @@ export const commands: ChatCommands = {
 				});
 
 				let html = `<div style="padding: 10px;">`;
-				html += generateThemedTable(`TCG Leaderboard - ${title}`, headerRow, dataRows);
+				html += Table(`TCG Leaderboard - ${title}`, headerRow, dataRows);
 				html += `</div>`;
 				this.sendReply(`|html|${html}`);
 			} catch (error) {
