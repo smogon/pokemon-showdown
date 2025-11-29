@@ -8,7 +8,7 @@ import { Clans, UserClans, ClanLogs, ClanBans,
 	ClanBattleLogs } from './database';
 import type { Clan, ClanPermissions, CustomClanRank,
 	ClanStats, ClanWar } from './interface';
-import { generateThemedTable } from '../../utils';
+import { Table } from '../../utils';
 import { K_FACTOR, getExpectedScore, calculateElo, to,
 	logClanActivity, hasClanPermission, generateWarCard } from './utils';
 
@@ -928,7 +928,7 @@ export const warCommands: Chat.ChatCommands = {
 			]);
 		}
 
-		const output = generateThemedTable(title, headerRow, dataRows);
+		const output = Table(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
 
@@ -1019,7 +1019,7 @@ export const warCommands: Chat.ChatCommands = {
 			]);
 		});
 
-		let output = generateThemedTable(title, headerRow, dataRows);
+		let output = Table(title, headerRow, dataRows);
 
 		const cmd = `/clan war ladder`;
 		if (page > 1 || page < totalPages) {
@@ -1181,7 +1181,7 @@ export const warCommands: Chat.ChatCommands = {
 			]);
 		}
 
-		const output = generateThemedTable(title, headerRow, dataRows);
+		const output = Table(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
 
@@ -1287,7 +1287,7 @@ export const warCommands: Chat.ChatCommands = {
 			]);
 		});
 
-		const output = generateThemedTable(title, headerRow, dataRows);
+		const output = Table(title, headerRow, dataRows);
 		this.sendReply(`|html|${output}`);
 	},
 
