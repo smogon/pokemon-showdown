@@ -8,6 +8,7 @@ import { Net } from '../../../lib';
 import { getAvatarName } from '../../avatar-names';
 import { Clans, UserClans } from '../clans/database';
 import type { TcgUserProfile } from '../tcg/interface';
+import { toID } from '../../../sim/dex';
 
 const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-server.fun/avatars/';
 
