@@ -5,6 +5,7 @@
 * Refactored By @ClarkJ338
 */
 import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex';
 
 const DATA_FILE = 'impulse/db/custom-symbol-colors.json';
 const CONFIG_PATH = 'config/custom.css';
