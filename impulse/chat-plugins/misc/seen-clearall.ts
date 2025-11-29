@@ -4,6 +4,7 @@
 */
 import { FS } from '../../../lib';
 import { Table } from '../../utils';
+import { toID } from '../../../sim/dex';
 
 const DATA_FILE = 'impulse/db/seen.json';
 
