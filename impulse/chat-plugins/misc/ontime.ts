@@ -5,6 +5,7 @@
 */
 import { FS } from '../../../lib';
 import { Table } from '../../utils';
+import { toID } from '../../../sim/dex';
 
 const DATA_FILE = 'impulse/db/ontime.json';
 const ONTIME_LEADERBOARD_SIZE = 100;
