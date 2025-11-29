@@ -8,6 +8,7 @@ if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
 
 import { ImpulseDB } from '../../impulse-db';
 import { Table } from '../../utils';
+import { toID } from '../../../sim/dex';
 
 const DEFAULT_EXP = 0;
 const EXP_UNIT = `EXP`;
