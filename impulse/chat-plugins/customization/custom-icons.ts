@@ -4,6 +4,7 @@
 * Refactored By @MusaddikTemkar
 */
 import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex';
 
 const DATA_FILE = 'impulse/db/custom-icons.json';
 const CONFIG_PATH = 'config/custom.css';
