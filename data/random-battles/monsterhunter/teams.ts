@@ -626,6 +626,8 @@ export class RandomMHSTeams extends RandomTeams {
 			return 'Frost Orb';
 		}
 		if (species.id === 'xenojiiva' && ability === 'Quark Drive') return 'Booster Energy';
+		if (species.id === 'odogaron' && moves.has('closecombat')) return 'White Herb';
+		if (species.id === 'odogaron' && !moves.has('closecombat')) return 'Sitrus Berry';
 		if (
 			ability === 'Magic Guard' || ability === 'Fervent Scales' ||
 			(ability === 'Sheer Force' && counter.get('sheerforce'))
