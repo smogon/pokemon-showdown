@@ -10613,7 +10613,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			hornleech: ["9L1"],
 			ingrain: ["9L1"],
 			jawlock: ["9L1"],
-			knockoff: ["9L1"],
 			leafstorm: ["9L1"],
 			leer: ["9L1"],
 			lightscreen: ["9L1"],
