@@ -92,23 +92,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		}, */
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon, target, move) {
-			if (target && target.status === 'slp' || pokemon.ignoringAbility()) {
+			if (target && target.status === 'slp') {
 				this.debug('Bewitching Tail boost');
 				return this.chainModify(1.2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, pokemon, target, move) {
-			if (target && target.status === 'slp' || pokemon.ignoringAbility()) {
+			if (target && target.status === 'slp') {
 				this.debug('Bewitching Tail boost');
 				return this.chainModify(1.2);
 			}
 		},
-		onModifySpe(this: Battle, spe: number, pokemon: Pokemon) {
-			if (!this.activeTarget || this.activeTarget.status !== 'slp' || pokemon.ignoringAbility()) return;
-			this.debug('Bewitching Tail boost');
-			return this.chainModify(1.2);
-		},
+		/* onModifySpe(spe, pokemon, target) {
+			if (target && target.status === 'slp') {
+				this.debug('Bewitching Tail boost');
+				return this.chainModify(1.2);
+			}
+		}, */
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.status === 'slp') {
 				return this.chainModify(0.833);
@@ -178,7 +179,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
 
-			const damage = move.multihit ? (move.totalDamage || lastAttackedBy.damage) : lastAttackedBy.damage;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				if (target.trySetStatus('tox', source)) {
 					this.add('-ability', source, 'Corrosive Claws');
@@ -187,7 +188,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		}, */
 		name: "Corrosive Claws",
 		desc: "When this Pokémon brings an opponent to 50% HP or less with an attacking move, it badly poisons that opponent.",
-		shortDesc: "(Non-functional) Targets dropped to ≤50% HP by attacks: Badly Poisoned",
+		shortDesc: "Targets dropped to ≤50% HP by attacks: Badly Poisoned",
 	},
 	corruptedpoison: {
 		onSourceHit(target, source, move) {
@@ -811,6 +812,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When hit by contact moves: User retaliates with Soak.",
 	},
 	oceanicveil: {
+		onStart(source) {
+			this.add('-activate', source, 'ability: Oceanic Veil');
+		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			const heal = pokemon.maxhp / 16;
@@ -819,7 +823,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { breakable: 1 },
 		name: "Oceanic Veil",
-		shortDesc: "Heals 1/16 max HP each turn.",
+		shortDesc: "On switch-in: Heals 1/16 max HP each turn.",
 	},
 	oilmucus: {
 		onTryHit(target, source, move) {

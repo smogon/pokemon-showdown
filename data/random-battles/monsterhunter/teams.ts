@@ -634,10 +634,8 @@ export class RandomMHSTeams extends RandomTeams {
 		) {
 			return 'Life Orb';
 		}
-		if (moves.has('devour') && ability === 'Unburden') return 'Liechi Berry';
+		if (moves.has('devour') && ability !== 'Unburden') return 'Liechi Berry';
 		if (moves.has('virulentvolley')) return 'Loaded Dice';
-		if (moves.has('magnalance') && ability === 'Reactive Core') return 'Flame Orb';
-		if (moves.has('dragondance') && ability === 'Reactive Core') return 'Frost Orb';
 		// other
 		if (moves.has('substitute')) return 'Leftovers';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
