@@ -639,6 +639,8 @@ export class RandomMHSTeams extends RandomTeams {
 		// other
 		if (moves.has('substitute')) return 'Leftovers';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
+		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost' || ability === 'Poison Heal') ? 'Toxic Orb' : 'Flame Orb';
 		}
