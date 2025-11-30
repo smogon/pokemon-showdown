@@ -1124,8 +1124,8 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 			},
 			onSourceModifyAccuracyPriority: -1,
 			onSourceModifyAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Fighting') {
-					return 100;
+				if (move.type === 'Fighting' && typeof accuracy === 'number') {
+					return this.chainModify(100);
 				}
 			},
 			onFieldStart(field, source, effect) {
