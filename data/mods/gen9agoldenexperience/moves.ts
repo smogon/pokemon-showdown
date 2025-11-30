@@ -1130,6 +1130,12 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 				console.log("payo");
 				return accuracy;
 			},
+			onModifyMove(move, source, target) {
+				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
+					console.log("acc ok");
+					move.accuracy = true;
+				}
+			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Chakra Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
