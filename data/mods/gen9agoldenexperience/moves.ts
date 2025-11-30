@@ -1119,14 +1119,12 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 			onBasePower(basePower, attacker, defender, move) {
 				if ((move.type === 'Fighting' || move.flags['pulse']) && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('chakra terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
-			onSourceModifyAccuracyPriority: -1,
-			onSourceModifyAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Fighting' && typeof accuracy === 'number') {
-					return this.chainModify(100);
-				}
+			onModifyAccuracy(accuracy) {
+				if (typeof accuracy !== 'number') return;
+				return true;
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
@@ -1135,6 +1133,8 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 					this.add('-message', "Fighting-type and Pulse moves will be boosted by 30%.");
 				} else {
 					this.add('-fieldstart', 'move: Chakra Terrain');
+					this.add('-message', "Fighting-type moves used by grounded Pokémon won't miss.");
+					this.add('-message', "Fighting-type and Pulse moves will be boosted by 30%.");
 				}
 			},
 			onFieldResidualOrder: 27,
