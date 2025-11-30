@@ -1131,7 +1131,7 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 				return accuracy;
 			},
 			onModifyMove(move, source, target) {
-				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
+				if (move.type === 'Fighting') {
 					console.log("acc ok");
 					move.accuracy = true;
 				}
