@@ -1125,15 +1125,14 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 			onSourceModifyAccuracyPriority: -1,
 			onSourceModifyAccuracy(accuracy, target, source, move) {
 				if (move.type === 'Fighting') {
-					console.log("poyo");
-					accuracy = 100;
+					return 100;
 				}
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Chakra Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
 					this.add('-message', "Fighting-type moves used by grounded Pokémon won't miss.");
-					this.add('-message', "Pulse moves will be boosted by 30%.");
+					this.add('-message', "Fighting-type and Pulse moves will be boosted by 30%.");
 				} else {
 					this.add('-fieldstart', 'move: Chakra Terrain');
 				}
