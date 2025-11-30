@@ -1124,7 +1124,7 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 			},
 			onModifyAccuracy(accuracy) {
 				if (typeof accuracy !== 'number') return;
-				return true;
+				if (move.type ==='Fighting') return true;
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
