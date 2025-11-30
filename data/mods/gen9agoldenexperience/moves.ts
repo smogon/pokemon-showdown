@@ -1122,17 +1122,11 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 					return this.chainModify([0x14CD, 0x1000]);
 				}
 			},
-			onAnyAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
-					return true;
-				}
-				return accuracy;
-			},
 			onSourceModifyAccuracyPriority: -1,
 			onSourceModifyAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
+				if (move.type === 'Fighting') {
 					console.log("poyo");
-					return 100;
+					accuracy = 100;
 				}
 			},
 			onFieldStart(field, source, effect) {
