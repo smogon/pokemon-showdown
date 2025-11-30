@@ -1124,16 +1124,15 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 			},
 			onAnyAccuracy(accuracy, target, source, move) {
 				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
-					console.log("acc ok");
 					return true;
 				}
-				console.log("payo");
 				return accuracy;
 			},
-			onModifyMove(move, source, target) {
-				if (move.type === 'Fighting') {
-					console.log("acc ok");
-					move.accuracy = true;
+			onSourceModifyAccuracyPriority: -1,
+			onSourceModifyAccuracy(accuracy, target, source, move) {
+				if (move.type === 'Fighting' && source.isGrounded() && !source.isSemiInvulnerable()) {
+					console.log("poyo");
+					return 100;
 				}
 			},
 			onFieldStart(field, source, effect) {
