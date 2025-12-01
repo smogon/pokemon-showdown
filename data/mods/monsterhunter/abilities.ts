@@ -804,9 +804,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When hit by contact moves: User retaliates with Soak.",
 	},
 	oceanicveil: {
-		onStart(source) {
-			this.add('-activate', source, 'ability: Oceanic Veil');
-		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			const heal = pokemon.maxhp / 16;
@@ -815,7 +812,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { breakable: 1 },
 		name: "Oceanic Veil",
-		shortDesc: "On switch-in: Heals 1/16 max HP each turn.",
+		shortDesc: "Heals 1/16 max HP each turn.",
 	},
 	oilmucus: {
 		onTryHit(target, source, move) {

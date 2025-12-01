@@ -3158,6 +3158,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			acrobatics: ["9M"],
 			cutwingbarrage: ["9L1"],
 			thousandblades: ["9L1"],
+			roughhouse: ["9L1"],
 			acupressure: ["9M"],
 			uturn: ["9M"],
 			pursuit: ["9M"],
