@@ -404,12 +404,22 @@ export const commands: ChatCommands = {
 
 				if (packQuantity > 100) {
 					this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
-					await packCollection.updateOne({ userId: user.id, setId: rawSetId }, { $inc: { quantity: packQuantity - 100 } });
+					await packCollection.updateOne(
+						{ userId: user.id, setId: rawSetId },
+						{ $inc: { quantity: packQuantity - 100 } }
+					);
 				}
 
-				for (let i = 0; i < quantityToOpen; i++) {
-					const pack = await generatePack(rawSetId);
-					allPacks.push(...pack);
+				// Generate packs in parallel batches for better performance
+				// Using batches of 10 to avoid overwhelming the system while still being faster
+				const BATCH_SIZE = 10;
+				for (let i = 0; i < quantityToOpen; i += BATCH_SIZE) {
+					const batchSize = Math.min(BATCH_SIZE, quantityToOpen - i);
+					const packPromises = Array.from({ length: batchSize }, () => generatePack(rawSetId));
+					const batchPacks = await Promise.all(packPromises);
+					for (const pack of batchPacks) {
+						allPacks.push(...pack);
+					}
 				}
 
 				const { creditsAwarded } = await addCardsToCollection(user, allPacks);
