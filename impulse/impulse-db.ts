@@ -13,12 +13,31 @@
 import { MongoClient, type Db, type Collection, type Document, type Filter, type UpdateFilter, type OptionalId, type FindOptions, type UpdateOptions, type DeleteOptions, type InsertOneOptions, type BulkWriteOptions, type AggregateOptions, type CountDocumentsOptions, type CreateIndexesOptions, type IndexSpecification, type MongoClientOptions, type ClientSession, type TransactionOptions, type CollectionInfo, type ListCollectionsOptions, type RenameOptions } from 'mongodb';
 
 interface ImpulseDBConfig { uri: string; dbName: string; options?: MongoClientOptions }
-interface GlobalState { client: MongoClient | null; db: Db | null; config: ImpulseDBConfig | null; isConnecting: boolean; connectionPromise: Promise<void> | null }
+interface GlobalState {
+	client: MongoClient | null;
+	db: Db | null;
+	config: ImpulseDBConfig | null;
+	isConnecting: boolean;
+	connectionPromise: Promise<void> | null;
+	lastConnectionCheck: number;
+}
 
 declare const global: { __impulseDBState?: GlobalState, Config?: unknown };
 
+// Time in milliseconds between connection health checks (24 hours)
+// This reduces the overhead of pinging MongoDB on every single operation
+// The MongoDB driver handles connection pooling and reconnection automatically
+const CONNECTION_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 if (!global.__impulseDBState) {
-	global.__impulseDBState = { client: null, db: null, config: null, isConnecting: false, connectionPromise: null };
+	global.__impulseDBState = {
+		client: null,
+		db: null,
+		config: null,
+		isConnecting: false,
+		connectionPromise: null,
+		lastConnectionCheck: 0,
+	};
 }
 
 const state = global.__impulseDBState;
@@ -40,11 +59,20 @@ export const init = async (config: ImpulseDBConfig): Promise<void> => {
 const ensureConnection = async (): Promise<Db> => {
 	if (!state.db || !state.client) throw new Error('ImpulseDB not initialized. Call ImpulseDB.init()');
 
-	try {
-		await state.client.db('admin').command({ ping: 1 });
-	} catch {
-		if (state.config) await init(state.config);
-		else throw new Error('Connection lost and no config for reconnection');
+	const now = Date.now();
+	// Only perform connection health check if enough time has passed since last check
+	// This dramatically reduces overhead when performing many operations in succession
+	if (now - state.lastConnectionCheck > CONNECTION_CHECK_INTERVAL_MS) {
+		try {
+			await state.client.db('admin').command({ ping: 1 });
+			// eslint-disable-next-line require-atomic-updates
+			state.lastConnectionCheck = now;
+		} catch {
+			// eslint-disable-next-line require-atomic-updates
+			state.lastConnectionCheck = 0; // Reset to force check on next operation
+			if (state.config) await init(state.config);
+			else throw new Error('Connection lost and no config for reconnection');
+		}
 	}
 
 	return state.db;
