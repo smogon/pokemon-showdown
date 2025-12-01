@@ -2167,8 +2167,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	xerneas: {
 		isNonstandard: null,
 	},
-	xerneasneutral: {
-		isNonstandard: "Custom", // can't be used in battle
+	xerneasactive: {
+		isNonstandard: null,
 	},
 	yveltal: {
 		isNonstandard: null,
