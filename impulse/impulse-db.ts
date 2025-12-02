@@ -19,15 +19,9 @@ interface GlobalState {
 	config: ImpulseDBConfig | null;
 	isConnecting: boolean;
 	connectionPromise: Promise<void> | null;
-	lastConnectionCheck: number;
 }
 
 declare const global: { __impulseDBState?: GlobalState, Config?: unknown };
-
-// Time in milliseconds between connection health checks (24 hours)
-// This reduces the overhead of pinging MongoDB on every single operation
-// The MongoDB driver handles connection pooling and reconnection automatically
-const CONNECTION_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 if (!global.__impulseDBState) {
 	global.__impulseDBState = {
@@ -36,7 +30,6 @@ if (!global.__impulseDBState) {
 		config: null,
 		isConnecting: false,
 		connectionPromise: null,
-		lastConnectionCheck: 0,
 	};
 }
 
@@ -56,39 +49,10 @@ export const init = async (config: ImpulseDBConfig): Promise<void> => {
 	state.db = state.client.db(config.dbName);
 };
 
-const ensureConnection = async (): Promise<Db> => {
+const ensureConnection = (): Db => {
 	if (!state.db || !state.client) throw new Error('ImpulseDB not initialized. Call ImpulseDB.init()');
-
-	const now = Date.now();
-	// Only perform connection health check if enough time has passed since last check
-	// This dramatically reduces overhead when performing many operations in succession
-	if (now - state.lastConnectionCheck > CONNECTION_CHECK_INTERVAL_MS) {
-		try {
-			await state.client.db('admin').command({ ping: 1 });
-			// eslint-disable-next-line require-atomic-updates
-			state.lastConnectionCheck = now;
-		} catch {
-			// eslint-disable-next-line require-atomic-updates
-			state.lastConnectionCheck = 0; // Reset to force check on next operation
-			if (state.config) {
-				// Close existing connection before reconnecting
-				try {
-					if (state.client) await state.client.close();
-				} catch (closeError) {
-					// Log close errors for debugging, but don't prevent reconnection
-					console.error('ImpulseDB: Error closing connection during reconnect:', closeError);
-				}
-				// eslint-disable-next-line require-atomic-updates
-				state.client = null;
-				// eslint-disable-next-line require-atomic-updates
-				state.db = null;
-				await init(state.config);
-			} else {
-				throw new Error('Connection lost and no config for reconnection');
-			}
-		}
-	}
-
+	// MongoDB driver handles connection pooling and automatic reconnection,
+	// so no manual ping/health check is needed
 	return state.db;
 };
 
@@ -101,8 +65,8 @@ export const close = async (): Promise<void> => {
 	}
 };
 
-export const getDb = async (): Promise<Db> => ensureConnection();
-export const getClient = async (): Promise<MongoClient> => {
+export const getDb = (): Db => ensureConnection();
+export const getClient = (): MongoClient => {
 	if (!state.client) throw new Error('ImpulseDB not initialized');
 	return state.client;
 };
@@ -118,24 +82,24 @@ export class ImpulseCollection<T extends Document = Document> {
 		this.collectionName = collectionName;
 	}
 
-	private async getCollection(): Promise<Collection<T>> {
-		return (await ensureConnection()).collection<T>(this.collectionName);
+	private getCollection(): Collection<T> {
+		return ensureConnection().collection<T>(this.collectionName);
 	}
 
 	async insertOne(doc: OptionalId<T>, options?: InsertOneOptions): Promise<ReturnType<Collection<T>['insertOne']>> {
-		return (await this.getCollection()).insertOne(doc, options);
+		return this.getCollection().insertOne(doc, options);
 	}
 
 	async insertMany(docs: OptionalId<T>[], options?: BulkWriteOptions): Promise<ReturnType<Collection<T>['insertMany']>> {
-		return (await this.getCollection()).insertMany(docs, options);
+		return this.getCollection().insertMany(docs, options);
 	}
 
 	async findOne(filter: Filter<T>, options?: FindOptions): Promise<T | null> {
-		return (await this.getCollection()).findOne(filter, options);
+		return this.getCollection().findOne(filter, options);
 	}
 
 	async find(filter: Filter<T>, options?: FindOptions): Promise<T[]> {
-		return (await this.getCollection()).find(filter, options).toArray();
+		return this.getCollection().find(filter, options).toArray();
 	}
 
 	findCursor(filter: Filter<T>, options?: FindOptions): Promise<ReturnType<Collection<T>['find']>> {
@@ -143,31 +107,31 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async updateOne(filter: Filter<T>, update: UpdateFilter<T>, options?: UpdateOptions): Promise<ReturnType<Collection<T>['updateOne']>> {
-		return (await this.getCollection()).updateOne(filter, update, options);
+		return this.getCollection().updateOne(filter, update, options);
 	}
 
 	async updateMany(filter: Filter<T>, update: UpdateFilter<T>, options?: UpdateOptions): Promise<ReturnType<Collection<T>['updateMany']>> {
-		return (await this.getCollection()).updateMany(filter, update, options);
+		return this.getCollection().updateMany(filter, update, options);
 	}
 
 	async replaceOne(filter: Filter<T>, replacement: T, options?: UpdateOptions): Promise<ReturnType<Collection<T>['replaceOne']>> {
-		return (await this.getCollection()).replaceOne(filter, replacement, options);
+		return this.getCollection().replaceOne(filter, replacement, options);
 	}
 
 	async deleteOne(filter: Filter<T>, options?: DeleteOptions): Promise<ReturnType<Collection<T>['deleteOne']>> {
-		return (await this.getCollection()).deleteOne(filter, options);
+		return this.getCollection().deleteOne(filter, options);
 	}
 
 	async deleteMany(filter: Filter<T>, options?: DeleteOptions): Promise<ReturnType<Collection<T>['deleteMany']>> {
-		return (await this.getCollection()).deleteMany(filter, options);
+		return this.getCollection().deleteMany(filter, options);
 	}
 
 	async countDocuments(filter: Filter<T> = {}, options?: CountDocumentsOptions): Promise<number> {
-		return (await this.getCollection()).countDocuments(filter, options);
+		return this.getCollection().countDocuments(filter, options);
 	}
 
 	async estimatedDocumentCount(): Promise<number> {
-		return (await this.getCollection()).estimatedDocumentCount();
+		return this.getCollection().estimatedDocumentCount();
 	}
 
 	async exists(filter: Filter<T>): Promise<boolean> {
@@ -175,7 +139,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async aggregate<R = unknown>(pipeline: Document[], options?: AggregateOptions): Promise<R[]> {
-		return (await this.getCollection()).aggregate<R>(pipeline, options).toArray();
+		return this.getCollection().aggregate<R>(pipeline, options).toArray();
 	}
 
 	aggregateCursor<R = unknown>(pipeline: Document[], options?: AggregateOptions): Promise<ReturnType<Collection<T>['aggregate']>> {
@@ -183,63 +147,63 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async createIndex(indexSpec: IndexSpecification, options?: CreateIndexesOptions): Promise<string> {
-		return (await this.getCollection()).createIndex(indexSpec, options);
+		return this.getCollection().createIndex(indexSpec, options);
 	}
 
 	async createIndexes(indexSpecs: IndexSpecification[], options?: CreateIndexesOptions): Promise<string[]> {
-		return (await this.getCollection()).createIndexes(indexSpecs, options);
+		return this.getCollection().createIndexes(indexSpecs, options);
 	}
 
 	async dropIndex(indexName: string): Promise<Document> {
-		return (await this.getCollection()).dropIndex(indexName);
+		return this.getCollection().dropIndex(indexName);
 	}
 
 	async dropIndexes(): Promise<Document> {
-		return (await this.getCollection()).dropIndexes();
+		return this.getCollection().dropIndexes();
 	}
 
 	async listIndexes(): Promise<Document[]> {
-		return (await this.getCollection()).listIndexes().toArray();
+		return this.getCollection().listIndexes().toArray();
 	}
 
 	async findOneAndUpdate(filter: Filter<T>, update: UpdateFilter<T>, options?: FindOptions & UpdateOptions): Promise<ReturnType<Collection<T>['findOneAndUpdate']>> {
-		return (await this.getCollection()).findOneAndUpdate(filter, update, options);
+		return this.getCollection().findOneAndUpdate(filter, update, options);
 	}
 
 	async findOneAndReplace(filter: Filter<T>, replacement: T, options?: FindOptions & UpdateOptions): Promise<ReturnType<Collection<T>['findOneAndReplace']>> {
-		return (await this.getCollection()).findOneAndReplace(filter, replacement, options);
+		return this.getCollection().findOneAndReplace(filter, replacement, options);
 	}
 
 	async findOneAndDelete(filter: Filter<T>, options?: FindOptions & DeleteOptions): Promise<ReturnType<Collection<T>['findOneAndDelete']>> {
-		return (await this.getCollection()).findOneAndDelete(filter, options);
+		return this.getCollection().findOneAndDelete(filter, options);
 	}
 
 	async distinct<K extends keyof T>(key: K, filter?: Filter<T>): Promise<T[K][]> {
-		return (await this.getCollection()).distinct(key as string, filter || {}) as Promise<T[K][]>;
+		return this.getCollection().distinct(key as string, filter || {}) as Promise<T[K][]>;
 	}
 
 	async bulkWrite(operations: unknown[], options?: BulkWriteOptions): Promise<ReturnType<Collection<T>['bulkWrite']>> {
-		return (await this.getCollection()).bulkWrite(operations as Parameters<Collection<T>['bulkWrite']>[0], options);
+		return this.getCollection().bulkWrite(operations as Parameters<Collection<T>['bulkWrite']>[0], options);
 	}
 
 	async drop(): Promise<boolean> {
-		return (await this.getCollection()).drop();
+		return this.getCollection().drop();
 	}
 
 	async watch(pipeline: Document[] = [], options: unknown = {}): Promise<ReturnType<Collection<T>['watch']>> {
-		return (await this.getCollection()).watch(pipeline, options);
+		return this.getCollection().watch(pipeline, options);
 	}
 
 	async createTextIndex(fields: Document, options?: CreateIndexesOptions): Promise<string> {
-		return (await this.getCollection()).createIndex(fields, options);
+		return this.getCollection().createIndex(fields, options);
 	}
 
 	async stats(): Promise<Document> {
-		return (await ensureConnection()).command({ collStats: this.collectionName });
+		return ensureConnection().command({ collStats: this.collectionName });
 	}
 
 	async info(): Promise<Document | null> {
-		const cols = await (await ensureConnection()).listCollections({ name: this.collectionName }).toArray();
+		const cols = await ensureConnection().listCollections({ name: this.collectionName }).toArray();
 		return cols[0] || null;
 	}
 
@@ -293,11 +257,11 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async rename(newName: string, options?: RenameOptions): Promise<Collection<T>> {
-		return (await this.getCollection()).rename(newName, options);
+		return this.getCollection().rename(newName, options);
 	}
 
 	async createGeoIndex(indexSpec: IndexSpecification, options?: CreateIndexesOptions): Promise<string> {
-		return (await this.getCollection()).createIndex(indexSpec, options);
+		return this.getCollection().createIndex(indexSpec, options);
 	}
 
 	async findNear(field: string, coords: [number, number], maxDistance?: number, options?: FindOptions): Promise<T[]> {
@@ -307,7 +271,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async mapReduce(map: Function | string, reduce: Function | string, options: Document): Promise<Document> {
-		return (await ensureConnection()).command({
+		return ensureConnection().command({
 			mapReduce: this.collectionName,
 			map: map.toString(),
 			reduce: reduce.toString(),
@@ -321,11 +285,11 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async createCapped(size: number, max?: number): Promise<Collection> {
-		return (await ensureConnection()).createCollection(this.collectionName, { capped: true, size, max });
+		return ensureConnection().createCollection(this.collectionName, { capped: true, size, max });
 	}
 
 	async convertToCapped(size: number, max?: number): Promise<Document> {
-		return (await ensureConnection()).command({ convertToCapped: this.collectionName, size, max });
+		return ensureConnection().command({ convertToCapped: this.collectionName, size, max });
 	}
 
 	async getCappedSize(): Promise<{ size: number, maxSize: number, count: number, max: number }> {
@@ -334,11 +298,11 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async validate(full = false): Promise<Document> {
-		return (await ensureConnection()).command({ validate: this.collectionName, full });
+		return ensureConnection().command({ validate: this.collectionName, full });
 	}
 
 	async compact(): Promise<Document> {
-		return (await ensureConnection()).command({ compact: this.collectionName });
+		return ensureConnection().command({ compact: this.collectionName });
 	}
 
 	async getIndexSizes(): Promise<Record<string, number>> {
@@ -346,7 +310,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async reIndex(): Promise<Document> {
-		return (await ensureConnection()).command({ reIndex: this.collectionName });
+		return ensureConnection().command({ reIndex: this.collectionName });
 	}
 
 	async sample(size: number): Promise<T[]> {
@@ -387,7 +351,7 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async clone(newName: string, copyIndexes = true): Promise<CloneResult> {
-		const db = await ensureConnection();
+		const db = ensureConnection();
 		const docs = await this.find({});
 
 		if (docs.length) {
@@ -436,26 +400,26 @@ export const withTransaction = async <T>(
 };
 
 export const listCollections = async (filter?: ListCollectionsOptions): Promise<string[]> => {
-	return (await (await ensureConnection()).listCollections(filter).toArray()).map(c => c.name);
+	return (await ensureConnection().listCollections(filter).toArray()).map(c => c.name);
 };
 
 export const listCollectionsDetailed = async (filter?: ListCollectionsOptions): Promise<CollectionInfo[]> => {
-	return (await ensureConnection()).listCollections(filter).toArray();
+	return ensureConnection().listCollections(filter).toArray();
 };
 
-export const stats = async (): Promise<Document> => (await ensureConnection()).stats();
-export const command = async (cmd: Document): Promise<Document> => (await ensureConnection()).command(cmd);
+export const stats = async (): Promise<Document> => ensureConnection().stats();
+export const command = async (cmd: Document): Promise<Document> => ensureConnection().command(cmd);
 export const createCollection = async (name: string, options?: Document): Promise<Collection> =>
-	(await ensureConnection()).createCollection(name, options);
-export const dropCollection = async (name: string): Promise<boolean> => (await ensureConnection()).dropCollection(name);
+	ensureConnection().createCollection(name, options);
+export const dropCollection = async (name: string): Promise<boolean> => ensureConnection().dropCollection(name);
 export const renameCollection = async (oldName: string, newName: string, options?: RenameOptions): Promise<Collection> =>
-	(await ensureConnection()).renameCollection(oldName, newName, options);
-export const dropDatabase = async (): Promise<boolean> => (await ensureConnection()).dropDatabase();
-export const serverInfo = async (): Promise<Document> => (await ensureConnection()).admin().serverInfo();
-export const serverStatus = async (): Promise<Document> => (await ensureConnection()).admin().serverStatus();
+	ensureConnection().renameCollection(oldName, newName, options);
+export const dropDatabase = async (): Promise<boolean> => ensureConnection().dropDatabase();
+export const serverInfo = async (): Promise<Document> => ensureConnection().admin().serverInfo();
+export const serverStatus = async (): Promise<Document> => ensureConnection().admin().serverStatus();
 export const listDatabases = async (): Promise<{ databases: { name: string, sizeOnDisk: number, empty: boolean }[], totalSize: number }> =>
-	(await ensureConnection()).admin().listDatabases();
-export const ping = async (): Promise<Document> => (await ensureConnection()).admin().ping();
+	ensureConnection().admin().listDatabases();
+export const ping = async (): Promise<Document> => ensureConnection().admin().ping();
 
 export const exportCollections = async (names: string[]): Promise<Record<string, Document[]>> => {
 	const res: Record<string, Document[]> = {};
@@ -480,19 +444,19 @@ export const importCollections = async (data: Record<string, Document[]>, dropEx
 };
 
 export const currentOp = async (includeAll = false): Promise<Document> =>
-	(await ensureConnection()).admin().command({ currentOp: 1, $all: includeAll });
+	ensureConnection().admin().command({ currentOp: 1, $all: includeAll });
 export const killOp = async (opId: number): Promise<Document> =>
-	(await ensureConnection()).admin().command({ killOp: 1, op: opId });
-export const getProfilingLevel = async (): Promise<Document> => (await ensureConnection()).command({ profile: -1 });
+	ensureConnection().admin().command({ killOp: 1, op: opId });
+export const getProfilingLevel = async (): Promise<Document> => ensureConnection().command({ profile: -1 });
 export const setProfilingLevel = async (level: 0 | 1 | 2, slowMs?: number): Promise<Document> => {
 	const opts: Document = { profile: level };
 	if (slowMs !== undefined) opts.slowms = slowMs;
-	return (await ensureConnection()).command(opts);
+	return ensureConnection().command(opts);
 };
 export const getProfilingData = async (filter?: Filter<Document>): Promise<Document[]> =>
-	(await ensureConnection()).collection('system.profile').find(filter || {}).toArray();
+	ensureConnection().collection('system.profile').find(filter || {}).toArray();
 export const explain = async (collectionName: string, operation: unknown): Promise<Document> => {
-	const col = await getCollection(collectionName)['getCollection']();
+	const col = getCollection(collectionName)['getCollection']();
 	return (col as unknown as { explain: () => { find: (op: unknown) => Promise<Document> } }).explain().find(operation);
 };
 
