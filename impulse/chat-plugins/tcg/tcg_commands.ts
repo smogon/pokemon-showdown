@@ -400,13 +400,13 @@ export const commands: ChatCommands = {
 
 			try {
 				const allPacks: TcgCard[] = [];
-				const quantityToOpen = Math.min(packQuantity, 100);
+				const quantityToOpen = Math.min(packQuantity, 50);
 
-				if (packQuantity > 100) {
-					this.sendReply(`Opening 100 packs of ${setName}. You have ${packQuantity - 100} remaining.`);
+				if (packQuantity > 50) {
+					this.sendReply(`Opening 50 packs of ${setName}. You have ${packQuantity - 50} remaining.`);
 					await packCollection.updateOne(
 						{ userId: user.id, setId: rawSetId },
-						{ $inc: { quantity: packQuantity - 100 } }
+						{ $inc: { quantity: packQuantity - 50 } }
 					);
 				}
 
