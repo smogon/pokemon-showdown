@@ -2630,10 +2630,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Altaria-Base', 'Ampharos-Base', 'Arbok', 'Armaldo', 'Calyrex-Base', 'Castform-Base', 'Dewgong', 'Drifblim', 'Emolga', 'Fearow', 'Furret', 'Glalie-Base',
-			'Gumshoos-Base', 'Heliolisk', 'Jumpluff', 'Kecleon', 'Ludicolo', 'Lunatone', 'Luxray', 'Lycanroc-Midnight', 'Meowstic-M', 'Primeape', 'Pupitar',
-			'Pyroar-Base', 'Rampardos', 'Scovillain', 'Silvally-Fairy', 'Simisage', 'Sneasel-Hisui', 'Spidops', 'Swalot', 'Thievul', 'Tinkaton', 'Whiscash', 'Zangoose',
-			'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
+			'Beedrill-Base', 'Blastoise-Base', 'Bombirdier', 'Braviary-Hisui', 'Centiskorch', 'Cherrim', 'Cyclizar', 'Delcatty', 'Drampa-Base', 'Falinks-Base',
+			'Galvantula', 'Glastrier', 'Goodra-Base', 'Gothitelle', 'Hypno', 'Klinklang', 'Lurantis-Base', 'Mamoswine', 'Mandibuzz', 'Mismagius', 'Mothim',
+			'Oricorio-Baile', 'Perrserker', 'Revavroom', 'Scrafty-Base', 'Serperior', 'Sinistcha', 'Skarmory-Base', 'Squawkabilly-Green', 'Swoobat', 'Uxie',
+			'Vanilluxe', 'Walrein', 'Wishiwashi', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
