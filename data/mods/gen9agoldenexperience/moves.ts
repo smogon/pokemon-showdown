@@ -1122,7 +1122,7 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onModifyAccuracy(accuracy) {
+			onModifyAccuracy(accuracy, target, source, move) {
 				if (typeof accuracy !== 'number') return;
 				if (move.type ==='Fighting') return true;
 			},
