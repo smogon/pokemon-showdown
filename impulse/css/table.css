@@ -1,0 +1,114 @@
+/* Impulse Themed Table */
+
+.themed-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 12px;
+  background: rgba(245, 242, 233, 0.9);
+  border: 2px solid #5b7952;
+  box-shadow: 0 4px 12px rgba(91, 121, 82, 0.15);
+}
+
+/* Dark theme support */
+.dark .themed-table-container {
+  background: rgba(28, 40, 30, 0.9);
+  border-color: #4b3a32;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.themed-table-title {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #4b3a32 !important;
+  border-bottom: 2px solid #5b7952;
+  background: linear-gradient(to bottom, #f5f2e9, #e8e3d3);
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .themed-table-title {
+  color: #e8e3d3 !important;
+  background: linear-gradient(to bottom, #4b3a32, #2a3d2c);
+  border-bottom-color: #6e5745;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.themed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+}
+
+.themed-table-header th {
+  padding: 0.6rem 0.8rem;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 9pt !important;
+  color: #2a3d2c !important;
+  background: linear-gradient(to bottom, #e8e3d3, #bba47a) !important;
+  border-bottom: 2px solid #5b7952;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.dark .themed-table-header th {
+  color: #f5f2e9 !important;
+  background: linear-gradient(to bottom, #6e5745, #4b3a32) !important;
+  border-bottom-color: #6e5745;
+}
+
+.themed-table-row:nth-child(even) {
+  background-color: rgba(123, 159, 109, 0.1);
+}
+
+.dark .themed-table-row:nth-child(even) {
+  background-color: rgba(245, 242, 233, 0.04);
+}
+
+.themed-table-row:hover {
+  background-color: rgba(123, 159, 109, 0.25);
+}
+
+.dark .themed-table-row:hover {
+  background-color: rgba(245, 242, 233, 0.08);
+}
+
+.themed-table-row td {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid rgba(91, 121, 82, 0.15);
+  color: #2a3d2c !important;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.dark .themed-table-row td {
+  color: #d8d3c3 !important;
+  border-top-color: rgba(75, 58, 50, 0.3);
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .themed-table-title {
+    font-size: 1rem !important;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .themed-table-header th,
+  .themed-table-row td {
+    padding: 0.4rem 0.6rem;
+    font-size: 8pt !important;
+  }
+}
+
+/* Smooth scrolling for overflow */
+.themed-table-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Impulse Themed Table Ends */

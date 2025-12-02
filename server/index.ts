@@ -73,6 +73,7 @@ try {
 import { Repl } from '../lib';
 import * as ConfigLoader from './config-loader';
 import { Sockets } from './sockets';
+import { ImpulseDB } from '../impulse/impulse-db';
 
 function cleanupStale() {
 	return Repl.cleanup();
@@ -85,6 +86,9 @@ function setupGlobals() {
 	void Monitor.version().then((hash: any) => {
 		global.__version.tree = hash;
 	});
+
+	// Make Impulse namespace global
+	global.Impulse = {};
 
 	const { Dex } = require('../sim/dex');
 	global.Dex = Dex;
@@ -130,12 +134,52 @@ function setupGlobals() {
 	Sockets.start(Config.subprocessescache);
 }
 
+/*
+* Initialise ImpulseDB
+*/
+async function initializeDatabase() {
+	if (!Config.impulsedb?.uri) {
+		console.log('ImpulseDB: MongoDB URI not configured. Database features disabled.');
+		return false;
+	}
+	try {
+		await ImpulseDB.init({
+			uri: Config.impulsedb.uri,
+			dbName: Config.impulsedb.dbName || 'impulse',
+			options: {
+				maxPoolSize: Config.impulsedb.maxPoolSize || 100,
+				minPoolSize: Config.impulsedb.minPoolSize || 5,
+			},
+		});
+		console.log('ImpulseDB: Successfully connected to MongoDB');
+		return true;
+	} catch (err: any) {
+		console.log(err, 'ImpulseDB initialization failed');
+		return false;
+	}
+}
+/*
+* Initialisation Ends
+*/
+
 export const readyPromise = cleanupStale().then(() => {
+	return initializeDatabase();
+}).then(dbReady => {
+	if (dbReady) {
+		console.log('ImpulseDB: Database ready');
+	}
 	setupGlobals();
 }).then(() => {
 	if (Config.usesqlite) {
 		require('./modlog').start(Config.subprocessescache);
 	}
+
+	/* export const readyPromise = cleanupStale().then(() => {
+	setupGlobals();
+}).then(() => {
+	if (Config.usesqlite) {
+		require('./modlog').start(Config.subprocessescache);
+	} */
 
 	Rooms.global.start(Config.subprocessescache);
 	Verifier.start(Config.subprocessescache);
@@ -183,6 +227,35 @@ export const readyPromise = cleanupStale().then(() => {
 	if (Config.startuphook) {
 		process.nextTick(Config.startuphook);
 	}
+
+	/*
+	* ImpulseDB Graceful Shutdown
+	*/
+	process.on('SIGTERM', async () => {
+		Monitor.notice('Received SIGTERM, shutting down gracefully...');
+		try {
+			await ImpulseDB.close();
+			Monitor.notice('ImpulseDB: Connection closed');
+		} catch (err: any) {
+			Monitor.warn('ImpulseDB: Error closing: ' + err.message);
+		}
+		process.exit(0);
+	});
+
+	process.on('SIGINT', async () => {
+		Monitor.notice('Received SIGINT, shutting down gracefully...');
+		try {
+			await ImpulseDB.close();
+			Monitor.notice('ImpulseDB: Connection closed');
+		} catch (err: any) {
+			Monitor.warn('ImpulseDB: Error closing: ' + err.message);
+		}
+		process.exit(0);
+	});
+
+	/*
+	* Graceful Shutdown Ends
+	*/
 
 	if (Config.ofemain) {
 		// Create a heapdump if the process runs out of memory.

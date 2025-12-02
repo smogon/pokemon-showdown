@@ -34,6 +34,8 @@ import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
+// ExpSystem
+import { ExpSystem } from '../impulse/chat-plugins/misc/exp-system';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
@@ -159,7 +161,7 @@ const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
-const MAX_PLUGIN_LOADING_DEPTH = 3;
+const MAX_PLUGIN_LOADING_DEPTH = 10;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
@@ -694,6 +696,9 @@ export class CommandContext extends MessageContext {
 			this.sendChatMessage(message as string);
 			message = true;
 		}
+
+		// Exp Rewards
+		if (this.user.registered) ExpSystem.addExp(this.user.id, 1);
 
 		this.update();
 
@@ -1364,7 +1369,7 @@ export class CommandContext extends MessageContext {
 		const tags = htmlContent.match(/<!--.*?-->|<\/?[^<>]*/g);
 		if (tags) {
 			const ILLEGAL_TAGS = [
-				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link', 'iframe',
+				'iframe',
 			];
 			const LEGAL_AUTOCLOSE_TAGS = [
 				// void elements (no-close tags)
@@ -2089,6 +2094,7 @@ export const Chat = new class {
 		this.loadPlugin(Tournaments, 'tournaments');
 
 		this.loadPluginDirectory('dist/server/chat-plugins');
+		this.loadPluginDirectory('dist/impulse/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));

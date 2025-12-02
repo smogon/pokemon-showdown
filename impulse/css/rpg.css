@@ -1,0 +1,1127 @@
+/******************************************************************
+* 1. GLOBAL & UTILITIES
+******************************************************************/
+
+/* Global RPG Text Shadow Reset */
+[class*="rpg-"], .dark [class*="rpg-"] {
+    text-shadow: none !important;
+}
+
+/* --- Success Notification Banner --- */
+
+.rpg-notification {
+	background-color: #d4edda;
+    color: #155724;
+	border: 1px solid #c3e6cb;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    animation: fadeIn 0.3s;
+}
+
+.dark .rpg-notification {
+    background-color: #1e4d2b;
+    color: #d4edda;
+    border-color: #28a745;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(-5px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Text Utilities --- */
+.rpg-text-center { text-align: center; }
+.rpg-margin-top { margin-top: 15px; }
+.rpg-button-float-right { float: right; }
+
+.rpg-text-error { color: #E63946; }
+.dark .rpg-text-error { color: #ff6677; }
+
+.rpg-text-success { color: #28a745; }
+.dark .rpg-text-success { color: #40c040; }
+
+.rpg-text-warning { color: #FF8C00; }
+.dark .rpg-text-warning { color: #ffaa33; }
+
+.rpg-text-info { color: #007bff; }
+.dark .rpg-text-info { color: #55aaff; }
+
+.rpg-text-muted { color: #6c757d; }
+.dark .rpg-text-muted { color: #aaaaaa; }
+
+/* --- Generic Grid Utilities --- */
+.rpg-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
+
+/* NEW: 3 Column Grid for items */
+.rpg-grid-3col-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns for items */
+    gap: 10px;
+    width: 100%;
+}
+
+/* Responsive adjustment for mobile: stack columns */
+@media only screen and (max-width: 480px) {
+    .rpg-grid-2col {
+        grid-template-columns: 1fr;
+    }
+    /* NEW: 3-column grid stacks to 2 columns on mobile */
+    .rpg-grid-3col-items {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* --- Scrollable Grid Wrapper --- */
+.rpg-scrollable-grid {
+    max-height: 380px;
+    overflow: auto;
+    display: block;
+    margin-bottom: 10px;
+    /* Optional: Scrollbar aesthetics for WebKit browsers (Chrome/Safari) */
+    scrollbar-width: thin;
+}
+
+/******************************************************************
+* 2. CORE COMPONENTS (Infobox, Nav Bar, Party/Starter Cards)
+******************************************************************/
+
+/* --- RPG Infobox (Standalone Replacement) --- */
+.rpg-infobox {
+    display: block;
+    clear: both;
+    background-color: #eeeeee;  /* Soft cool white/gray */
+    border: 1px solid #b0c4de;  /* Pleasant blue-gray border */
+    color: #2c3e50;             /* Dark slate text for contrast */
+    border-radius: 8px;         /* Modern rounded corners */
+    padding: 8px;              /* Comfortable spacing */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 2px;
+    margin-top: 2px;
+    overflow: hidden;           /* Contains internal floats */
+}
+
+/* Dark Mode Variant */
+.dark .rpg-infobox {
+    background-color: rgba(25, 25, 25, 0.9);  /* Deep modern charcoal */
+    border: 1px solid #3e444a;  /* Subtle lighter border */
+    color: #e0e6ed;             /* Bright, clear text */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Ensure headers inside look clean */
+.rpg-infobox h2 {
+	 text-align: center;
+    margin-top: 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 4px;
+}
+.dark .rpg-infobox h2 {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- Navigation Bar Revamp --- */
+.rpg-nav-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns = 2 rows for 6 items */
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-nav-bar {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-nav-button {
+    display: flex;
+    flex-direction: column; /* Stack Icon on top of Text */
+    align-items: center;
+    justify-content: center;
+    padding: 6px 2px;
+    height: 50px; /* Fixed height for uniform look */
+    
+    /* Modern styling to match Infobox */
+    background-color: #fff;
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    color: #555;
+    
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1.2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.dark .rpg-nav-button {
+    background-color: #33383d;
+    border-color: #555;
+    color: #ccc;
+}
+
+/* Hover State */
+.rpg-nav-button:hover {
+    background-color: #f0f8ff; /* Light AliceBlue hover */
+    border-color: #87cefa;
+    transform: translateY(-1px); /* Subtle lift effect */
+}
+.dark .rpg-nav-button:hover {
+    background-color: #3e444a;
+    border-color: #777;
+}
+
+.rpg-nav-icon {
+    font-size: 1.4em;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+/* --- Party Screen Grid Layout --- */
+.rpg-party-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns for a 3x2 layout */
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rpg-party-card {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+.dark .rpg-party-card {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-party-empty {
+    background-color: rgba(0,0,0,0.05);
+    border: 2px dashed #ccc;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    height: 100%;
+    min-height: 100px; /* Match approx height of filled card */
+}
+.dark .rpg-party-empty {
+    background-color: rgba(255,255,255,0.05);
+    border-color: #555;
+    color: #777;
+}
+
+/* Upper Section: Icon + Stats */
+.rpg-party-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rpg-party-icon {
+    flex-shrink: 0;
+    width: 40px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.rpg-party-stats {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.9em;
+    line-height: 1.3;
+}
+
+/* Lower Section: Action Buttons */
+.rpg-party-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-party-actions {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-party-actions .button {
+    flex-grow: 1;
+    font-size: 0.75em;
+    padding: 2px 4px;
+    margin: 0;
+}
+
+/* Tiny Move Arrows */
+.rpg-party-move-btn {
+    flex-grow: 0 !important;
+    width: 24px;
+    text-align: center;
+    padding: 2px 0 !important;
+}
+
+/* --- Compact Starter Selection Card --- */
+.rpg-starter-card {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+	 height: 70px;
+    border-radius: 6px;
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    text-align: center;
+    transition: transform 0.1s;
+}
+
+.dark .rpg-starter-card {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-starter-card:hover {
+    transform: translateY(-2px);
+    border-color: #87cefa;
+    background-color: #f0f8ff;
+}
+.dark .rpg-starter-card:hover {
+    border-color: #777;
+    background-color: rgba(255,255,255,0.05);
+}
+
+.rpg-starter-card img {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+    margin-bottom: 2px;
+}
+
+.rpg-starter-info {
+    font-size: 0.9em;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.rpg-starter-card .button {
+    width: 120px;
+    padding: 3px 0;
+    font-size: 0.8em;
+    margin: 0;
+}
+
+/******************************************************************
+* 3. SUMMARY SCREEN
+******************************************************************/
+
+/* Header Section */
+.rpg-summary-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-header { border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-summary-sprite {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 50%; /* Circle background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-sprite {
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.rpg-summary-sprite img {
+    max-width: 64px;
+    max-height: 64px;
+    image-rendering: pixelated;
+}
+
+.rpg-summary-info {
+    flex-grow: 1;
+}
+
+/* Unified Stats Table */
+.rpg-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.rpg-stats-table th {
+    text-align: left;
+    color: #666;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    padding: 4px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-stats-table th { color: #aaa; border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-stats-table td {
+    padding: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-stats-table td { border-bottom-color: rgba(255,255,255,0.05); }
+
+.rpg-stat-val { font-weight: bold; }
+.rpg-stat-iv { color: #888; font-size: 0.85em; }
+.rpg-stat-ev { color: #5daae0; font-size: 0.85em; font-weight: bold; }
+
+/* Move Cards in Summary */
+.rpg-summary-move {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+}
+.dark .rpg-summary-move {
+    background: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+/* Trainer Memo Box */
+.rpg-memo-box {
+    background: rgba(0,0,0,0.03);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+.dark .rpg-memo-box { background: rgba(255,255,255,0.05); }
+
+
+/******************************************************************
+* 4. ITEM & SHOP GRID STYLING
+******************************************************************/
+
+.rpg-item-container {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.dark .rpg-item-container {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-item-header {
+    display: block; /* Changed from flex to block since it's just text now */
+    text-align: center; /* Center the text for a cleaner look without icons */
+    margin-bottom: 4px;
+}
+
+/* Remove the icon styling entirely */
+.rpg-item-icon {
+    display: none;
+}
+
+.rpg-item-details {
+    font-size: 0.9em;
+    line-height: 1.3;
+    overflow: hidden;
+}
+
+.rpg-item-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center; /* Center buttons */
+    margin-top: auto;
+}
+
+.rpg-item-actions .button {
+    padding: 2px 6px;
+    font-size: 0.75em;
+    margin: 0;
+    flex-grow: 1;
+    max-width: 80px; /* Prevent buttons from getting too wide */
+}
+
+/******************************************************************
+* 5. BATTLE UI - CORE STRUCTURE & ELEMENTS
+******************************************************************/
+
+/* --- Main Battle Container --- */
+.rpg-battle-ui {
+    display: block;
+    height: 250px;
+    background: url('https://i.ibb.co/6RQXD1Xx/pokemon-swsh-route-5-by-phoenixoflight92-de33uqj-350t.jpg') no-repeat center bottom !important;
+    background-size: cover !important;
+    border: 1px solid #444 !important;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.dark .rpg-battle-ui {
+    background: url('https://i.ibb.co/RGyJczN6/de33uyt-aab270ae-87c5-4511-89a9-05f39dcb1de8.jpg') no-repeat center bottom !important;
+    background-size: cover !important;
+}
+
+/* --- Battle Slot Wrappers (Shared) --- */
+.rpg-opponent-slot,
+.rpg-player-slot {
+    position: absolute;
+    width: 220px;
+    text-align: center;
+}
+
+/* --- SINGLE BATTLE POSITIONING --- */
+.rpg-single-slot-player {
+    bottom: 8px;
+    left: 18%; 
+    z-index: 3;
+}
+
+.rpg-single-slot-opponent {
+    top: 45px;
+    right: 18%; 
+    z-index: 2;
+}
+
+/* --- DOUBLE BATTLE POSITIONING --- */
+/* Player Slot 1 (Left) */
+.rpg-double-slot-0 {
+    bottom: 40px;
+    left: 2%;
+    z-index: 3;
+}
+
+/* Player Slot 2 (Right) */
+.rpg-double-slot-1 {
+    bottom: 20px;
+    right: 45%;
+    z-index: 3;
+}
+
+/* Opponent Slot 1 (Right - Standard) */
+.rpg-double-slot-2 {
+    top: 60px; /* Moved down to touch ground */
+    right: 7%;
+    z-index: 2;
+}
+
+/* Opponent Slot 2 (Left - Double Extra) */
+.rpg-double-slot-3 {
+    top: 30px; /* Moved down to touch ground */
+    left: 40%;
+    z-index: 2;
+}
+
+/* --- Sprites --- */
+.rpg-pokemon-sprite-front,
+.rpg-pokemon-sprite-back {
+    width: 70px;
+    height: 70px;
+    image-rendering: pixelated;
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- Info Blocks --- */
+.rpg-opponent-info,
+.rpg-player-info {
+    width: 100%;
+    color: white; /* Default to white for name text contrast */
+    margin-bottom: -5px;
+    position: relative;
+}
+
+/* --- Battle Name Text (Heavy Outline) --- */
+.rpg-battle-name-line {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    color: #fff;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0px 2px 3px rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
+.dark .rpg-battle-name-line { color: #fff; }
+
+
+/******************************************************************
+* 6. BATTLE UI - BARS (HP/EXP)
+******************************************************************/
+
+/* --- HP BAR (Pill Shape, External Text) --- */
+.rpg-hp-bar {
+    width: 75%;                   
+    max-width: 120px;             
+    min-width: 120px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #666;
+    border-radius: 15px;          /* Pill shape */
+    position: relative;
+    margin: 4px auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+.dark .rpg-hp-bar {
+    background: rgba(60, 60, 60, 0.8);
+    border-color: #888;
+}
+
+.rpg-hp-bar-inner {
+    width: 100%; /* Controlled via inline style */
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.rpg-hp-bar-text {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    color: #fff;
+    font-size: 0px !important;
+    font-weight: bold;
+    padding: 0;
+    text-align: left;
+    width: 35px;
+}
+.dark .rpg-hp-bar-text { background: transparent; color: #fff; }
+
+/* --- HP Colors --- */
+.rpg-hp-high { background-color: #6abf69;; }
+.dark .rpg-hp-high { background-color: #59b359; }
+
+.rpg-hp-mid { background-color: #ffd54f; }
+.dark .rpg-hp-mid { background-color: #ffca28; }
+
+.rpg-hp-low { background-color: #e57373; }
+.dark .rpg-hp-low { background-color: #ef5350; }
+
+/* --- EXP BAR (Attached to Player, Pill Shape) --- */
+.rpg-exp-bar {
+    width: 75%;
+    max-width: 120px;
+    min-width: 120px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #666;
+    border-radius: 10px;
+    position: relative;
+    margin: 3px auto 0 auto;
+    overflow: hidden;
+}
+.dark .rpg-exp-bar {
+    background: rgba(60, 60, 60, 0.8);
+    border-color: #888;
+}
+
+.rpg-exp-bar-inner {
+    background: #5daae0;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.rpg-exp-bar-text {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    color: #fff;
+    font-size: 0px !important;
+    font-weight: bold;
+    text-align: left;
+    width: 35px;
+}
+.dark .rpg-exp-bar-text { color: #fff; }
+
+
+/******************************************************************
+* 7. STATUS & TAG SYSTEM
+******************************************************************/
+
+/* --- 1. Attached Status Line --- */
+/* Holds Stat Boosts & Status Conditions immediately below the bar */
+.rpg-battle-status-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 1px;
+    width: 100%;
+    position: relative;
+    min-height: 16px;
+}
+
+/* --- 2. Fixed Weather/Field Container --- */
+/* Center-Top */
+.rpg-weather-container {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    z-index: 5;
+}
+
+/* --- 3. Unified Tag Styles (The Pill Look) --- */
+.rpg-tag,
+.rpg-stat-up,
+.rpg-stat-down,
+.rpg-weather-tag,
+.rpg-terrain-tag,
+.rpg-field-effect-tag,
+.rpg-side-effect-tag,
+/* NEW: Missing Tags */
+.rpg-tag-perish,
+.rpg-tag-proto,
+.rpg-tag-quark,
+.rpg-tag-commander,
+.rpg-tag-disguise,
+.rpg-tag-gulping,
+.rpg-tag-gorging
+{
+    font-size: 8px;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 6px; /* Pill */
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    text-shadow: none;
+    text-transform: uppercase;
+    display: inline-block;
+    line-height: 1.2;
+    margin: 0;
+    vertical-align: middle;
+    color: #fff;
+}
+
+.dark .rpg-tag, 
+.dark .rpg-stat-up,
+.dark .rpg-stat-down,
+.dark .rpg-weather-tag, 
+.dark .rpg-terrain-tag,
+.dark .rpg-field-effect-tag,
+.dark .rpg-side-effect-tag,
+.dark .rpg-tag-perish,
+.dark .rpg-tag-proto,
+.dark .rpg-tag-quark,
+.dark .rpg-tag-commander,
+.dark .rpg-tag-disguise,
+.dark .rpg-tag-gulping,
+.dark .rpg-tag-gorging
+{
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* --- Stat Boost Specifics --- */
+.rpg-stat-up {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+.dark .rpg-stat-up {
+    background-color: #1e4d2b;
+    color: #d4edda;
+    border-color: #4caf50;
+}
+
+.rpg-stat-down {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+.dark .rpg-stat-down {
+    background-color: #5a1e23;
+    color: #f8d7da;
+    border-color: #e57373;
+}
+
+
+/* --- Status Condition Colors --- */
+.rpg-tag-brn, .rpg-tag-flash-fire { background-color: #FF7F50; }
+.rpg-tag-par, .rpg-tag-charged, .rpg-tag-magnet-rise { background-color: #F8D030; color: #333; }
+.rpg-tag-psn, .rpg-tag-tox { background-color: #A040A0; }
+.rpg-tag-slp, .rpg-tag-yawn { background-color: #7890a8; }
+.rpg-tag-frz { background-color: #98D8D8; color: #333; }
+.rpg-tag-confused { background-color: #E5597D; }
+.rpg-tag-seeded, .rpg-tag-ingrained { background-color: #78C850; }
+.rpg-tag-trapped, .rpg-tag-locked, .rpg-tag-grounded { background-color: #A8A878; }
+
+/* Volatile Statuses */
+.rpg-tag-cursed, .rpg-tag-nightmare, .rpg-tag-embargo { background-color: #4b4b4b; border-color: #2b2b2b; }
+.rpg-tag-taunted, .rpg-tag-tormented, .rpg-tag-rampage, .rpg-tag-uproar { background-color: #d63031; }
+.rpg-tag-substitute { background-color: #55efc4; color: #333; }
+.rpg-tag-disabled, .rpg-tag-encored, .rpg-tag-heal-block { background-color: #a29bfe; color: #333; }
+.rpg-tag-focus-energy, .rpg-tag-must-recharge, .rpg-tag-charging { background-color: #fdcb6e; color: #333; }
+.rpg-tag-aqua-ring, .rpg-tag-protected, .rpg-tag-helped { background-color: #74b9ff; }
+.rpg-tag-telekinesis, .rpg-tag-infatuated, .rpg-tag-destiny-bond, .rpg-tag-grudge { background-color: #e84393; }
+.rpg-tag-analytic, .rpg-tag-slow-start, .rpg-tag-unburden { background-color: #b2bec3; color: #333; }
+.rpg-tag-stockpile { background-color: #00b894; }
+.rpg-tag-attention { background-color: #fab1a0; color: #333; }
+
+.rpg-tag-tera {
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    border: none;
+}
+
+/* --- NEW: Missing Mechanics Tags --- */
+
+/* Perish Song (Dark/Ominous) */
+.rpg-tag-perish { 
+    background-color: #2f3542; 
+    color: #ff4757; 
+    border: 1px solid #ff4757; 
+}
+
+/* Paradox Abilities (Ancient/Future themes) */
+.rpg-tag-proto { 
+    background: linear-gradient(135deg, #e17055 0%, #d63031 100%); 
+    color: white; 
+    border: none; 
+} 
+.rpg-tag-quark { 
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); 
+    color: white; 
+    border: none; 
+}
+
+/* Commander (Tatsugiri/Dondozo) */
+.rpg-tag-commander { 
+    background-color: #ffa502; 
+    color: #2f3542; 
+    border: 1px solid #eccc68; 
+}
+
+/* Disguise (Mimikyu) */
+.rpg-tag-disguise { 
+    background-color: #a4b0be; 
+    color: #2f3542; 
+    border: 1px dashed #57606f; 
+}
+
+/* Cramorant Forms */
+.rpg-tag-gulping { background-color: #70a1ff; color: white; }
+.rpg-tag-gorging { background-color: #ff6b81; color: white; }
+
+
+/* --- Weather & Terrain Colors --- */
+.rpg-weather-sun, .rpg-weather-harsh-sun { background-color: #F85858; }
+.rpg-weather-rain, .rpg-weather-heavy-rain { background-color: #5090D0; }
+.rpg-weather-sand { background-color: #D0A050; }
+.rpg-weather-hail { background-color: #80C0C0; }
+.rpg-weather-strong-winds { background-color: #00b894; }
+
+.rpg-terrain-electric { background-color: #F8D030; color: #333; }
+.rpg-terrain-grassy { background-color: #78C850; }
+.rpg-terrain-misty { background-color: #E0A0C0; }
+.rpg-terrain-psychic { background-color: #F85888; }
+
+/* --- Field Effects (Side effects/screens) --- */
+.rpg-side-reflect { background-color: #F85888; }
+.rpg-side-lightscreen { background-color: #F8D030; color: #333; }
+.rpg-side-auroraveil { background-color: #6890F0; }
+.rpg-side-stealthrock { background-color: #B8A038; }
+.rpg-side-spikes { background-color: #A8A878; }
+.rpg-side-toxicspikes { background-color: #A040A0; }
+.rpg-side-stickyweb { background-color: #b2bec3; color: #333; }
+.rpg-side-mist { background-color: #A8B8C0; color: #333; }
+.rpg-side-tailwind { background-color: #87CEEB; color: #333; }
+.rpg-side-quickguard, .rpg-side-wideguard { background-color: #74b9ff; }
+.rpg-side-craftyshield { background-color: #ff7675; }
+
+
+/* --- Global Field Effects --- */
+.rpg-field-trickroom { background-color: #a29bfe; color: #333; }
+.rpg-field-magicroom { background-color: #fd79a8; color: #333; }
+.rpg-field-wonderroom { background-color: #74b9ff; color: #333; }
+.rpg-field-gravity { background-color: #636e72; }
+.rpg-field-mudsport { background-color: #e17055; }
+.rpg-field-watersport { background-color: #74b9ff; }
+.rpg-field-fairylock { background-color: #ff7675; }
+.rpg-field-iondeluge { background-color: #ffeaa7; color: #333; }
+
+
+/******************************************************************
+* 8. BATTLE UI - BUTTONS & MENUS
+******************************************************************/
+
+/* --- Battle Log & Events --- */
+.rpg-battle-log {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #666;
+    min-height: 100px;
+    max-height: 100px;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+.dark .rpg-battle-log { border-color: #888; }
+
+/* --- General Battle Buttons --- */
+.rpg-button-victory {
+    width: 200px;
+    height: 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.rpg-battle-action-button {
+    width: 155px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+    margin: 4px 2px;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+.rpg-battle-action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- Tera Toggle Button --- */
+.rpg-tera-toggle {
+    width: 120px;
+    height: 22px;
+    padding: 1px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 auto 2px auto;
+    font-size: 0.75em;
+    border: 2px solid #FF1493;
+    color: #FF1493;
+    background: white;
+    line-height: 16px;
+}
+.dark .rpg-tera-toggle {
+    background: #333;
+    color: #FF69B4;
+    border-color: #FF69B4;
+}
+
+.rpg-tera-toggle-on {
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+    color: white;
+    border: none;
+    padding: 3px;
+    line-height: 16px;
+}
+.dark .rpg-tera-toggle-on { color: #111; }
+
+/* --- Move Buttons --- */
+.rpg-move-button {
+    width: 155px;
+    height: 40px;
+    padding: 4px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: left;
+}
+.rpg-move-button-terastallized { border: 2px solid #FF1493; }
+
+.rpg-move-grid {
+    width: auto;
+    border-collapse: separate;
+    border-spacing: 8px;
+    margin: 15px auto;
+}
+.rpg-move-grid-cell { padding: 0; vertical-align: top; }
+
+.rpg-move-name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+.rpg-move-info {
+    font-size: 0.8em;
+    opacity: 0.9;
+    overflow: hidden;
+}
+.rpg-move-pp { float: right; }
+
+/* --- Battle Switch Menu (Grid Layout) --- */
+.rpg-switch-list-item {
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.dark .rpg-switch-list-item { border: 1px solid #555; }
+
+.rpg-switch-button {
+    width: 160px;       /* Matches move button width approx */
+    height: 55px;       /* Taller to fit HP bar and name */
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;      /* Flexbox for Icon + Info layout */
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+.rpg-switch-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;     /* Prevent icon squishing */
+}
+
+.rpg-switch-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.8em;
+    line-height: 1.3;
+}
+
+/* Adjust HP bar within the button to fit nicely */
+.rpg-switch-button .rpg-hp-bar {
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+    height: 6px;
+    margin: 2px 0 0 0;
+}
+
+/* Hide text inside the tiny button HP bar to save space */
+.rpg-switch-button .rpg-hp-bar-text {
+    display: none;
+}
+
+/* --- Catch Menu Buttons (Compact) --- */
+.rpg-catch-button {
+    width: 140px;       /* Reduced width (was 160px) */
+    height: 38px;       /* Reduced height (was 55px) */
+    padding: 3px 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+/* Override inner icon size specifically for balls */
+.rpg-catch-button .rpg-switch-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Compact text styling */
+.rpg-catch-button .rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.75em;
+    line-height: 1.1;
+}
+
+/******************************************************************
+* 9. RESPONSIVE ADJUSTMENTS
+******************************************************************/
+
+/* Mobile Devices (max-width 480px) */
+@media only screen and (max-width: 480px) {
+    
+    .rpg-battle-ui {
+        height: 250px;
+    }
+    
+    /* Reduced from 220px to 155px for Double Battle safety */
+    .rpg-opponent-slot, .rpg-player-slot {
+        width: 155px; 
+    }
+
+    /* --- SINGLE BATTLE MOBILE RESET --- */
+    .rpg-single-slot-player {
+    	top: 100px;
+        left: 10px;
+    }
+    .rpg-single-slot-opponent {
+    	top: 70px;
+        right: 20px;
+    }
+
+    /* --- DOUBLE BATTLE MOBILE RESET --- */
+    /* Reset positioning to absolute edges for mobile */
+    .rpg-double-slot-0 { left: -2%; bottom: -5px; }
+    .rpg-double-slot-1 { right: 20%; bottom: -5px; }
+    .rpg-double-slot-2 { right: -2%; top: 80px; }
+    .rpg-double-slot-3 { left: 21%; top: 70px; }
+    
+    /* Slightly smaller name text */
+    .rpg-battle-name-line {
+        font-size: 0.9em;
+    }
+
+    /* Pull the HP bar text slightly closer */
+    .rpg-hp-bar-text, .rpg-exp-bar-text {
+        right: -32px; 
+        font-size: 6px;
+    }
+    
+    /* Ensure the bar allows enough room for text on small containers */
+    .rpg-hp-bar, .rpg-exp-bar {
+        max-width: 100px;
+    }
+  
+}

@@ -15,6 +15,42 @@ exports.port = 8000;
  */
 exports.bindaddress = '0.0.0.0';
 
+/*
+* Impulse Configs
+*/
+// ID & Token & Name
+exports.serverid = 'impulse';
+exports.servertoken = 'HJhfrbpH33EG';
+exports.serverName = 'Impulse';
+
+// Github Token For File Management
+exports.githubToken = '';
+
+// Emoticons Size For Emoticons
+exports.emoteSize = '36';
+
+// Whitelisted users for management commands
+exports.fileWhitelist = ['princesky', 'musaddiktemkar'];
+
+// ImpulseDB config
+exports.impulsedb = {
+	uri: 'mongodb://127.0.0.1:27017/impulse',
+	options: {
+		maxPoolSize: 5000,
+		minPoolSize: 100,
+	},
+};
+
+/**
+ * Tournament reward configuration.
+ */
+exports.tournamentRewards = {
+	eligibleRooms: ['lobby', 'tournaments'],
+	rewards: [10, 5],
+	packs: [2, 1],
+	clanPoints: [10, 5],
+};
+
 /**
  * wsdeflate - compresses WebSocket messages
  *  Toggles use of the Sec-WebSocket-Extension permessage-deflate extension.
@@ -44,7 +80,14 @@ exports.wsdeflate = {
  *  something.
  * @type {{port: number, options: {key: string, cert: string}} | null}
  */
-exports.ssl = null;
+// exports.ssl = null;
+exports.ssl = {
+	port: 443,
+	options: {
+		key: '/home/ubuntu/impulse/privkey.pem',
+		cert: '/home/ubuntu/impulse/fullchain.pem',
+	},
+};
 
 /*
 // example:
@@ -93,13 +136,13 @@ exports.subprocesses = {
 	 *   this means or you are unfamiliar with PS' networking code, leave this set
 	 *   to 1.
 	 */
-	network: 1,
+	network: 3,
 	/**
 	 * for simulating battles
 	 *   You should leave this at 1 unless your server has a very large
 	 *   amount of traffic (i.e. hundreds of concurrent battles).
 	 */
-	simulator: 1,
+	simulator: 3,
 
 	// beyond this point, it'd be very weird if you needed more than one of each of these
 
@@ -274,7 +317,7 @@ exports.reportjoinsperiod = 0;
  *   getting more than 160 or so users.
  *  @type {boolean | string[] | string}
  */
-exports.reportbattles = true;
+exports.reportbattles = false;
 
 /**
  * report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
@@ -299,7 +342,7 @@ exports.nothrottle = false;
 /**
  * Removes all ip-based alt checking.
  */
-exports.noipchecks = false;
+exports.noipchecks = true;
 
 /**
  * controls the behavior of the /battlesearch command
@@ -402,7 +445,7 @@ exports.backdoor = true;
  * the `console` permission in order to use the dev console.
  * Setting this to an empty array ([]) will disable the dev console.
  */
-exports.consoleips = ['127.0.0.1'];
+exports.consoleips = ['127.0.0.1', 'musaddiktemkar', 'princesky'];
 
 /**
  * Whether to watch the config file for changes. If this is enabled,
@@ -464,7 +507,7 @@ exports.tourroom = '';
 /** @type {string[]} */
 exports.tourannouncements = [/* roomids */];
 exports.tourdefaultplayercap = 0;
-exports.ratedtours = false;
+exports.ratedtours = true;
 
 /**
  * appealurl - specify a URL containing information on how users can appeal
@@ -478,7 +521,7 @@ exports.appealurl = '';
  * replsocketprefix - the prefix for the repl sockets to be listening on
  * replsocketmode - the file mode bits to use for the repl sockets
  */
-exports.repl = true;
+exports.repl = false;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
@@ -573,6 +616,36 @@ exports.chatlogreader = 'fs';
  */
 exports.grouplist = [
 	{
+		symbol: '➦',
+		id: "owner",
+		name: "Owner",
+		inherit: '@',
+		jurisdiction: 'u',
+		globalonly: true,
+
+		console: true,
+		bypassall: true,
+		lockdown: true,
+		promote: '➦u',
+		roomowner: true,
+		roombot: true,
+		roommod: true,
+		roomdriver: true,
+		forcewin: true,
+		declare: true,
+		addhtml: true,
+		rangeban: true,
+		makeroom: true,
+		editroom: true,
+		editprivacy: true,
+		potd: true,
+		disableladder: true,
+		gdeclare: true,
+		gamemanagement: true,
+		exportinputlog: true,
+		tournaments: true,
+	},
+	{
 		symbol: '~',
 		id: "admin",
 		name: "Administrator",
@@ -584,6 +657,33 @@ exports.grouplist = [
 		bypassall: true,
 		lockdown: true,
 		promote: '~u',
+		roomowner: true,
+		roombot: true,
+		roommod: true,
+		roomdriver: true,
+		forcewin: true,
+		declare: true,
+		addhtml: true,
+		rangeban: true,
+		makeroom: true,
+		editroom: true,
+		editprivacy: true,
+		potd: true,
+		disableladder: true,
+		gdeclare: true,
+		gamemanagement: true,
+		exportinputlog: true,
+		tournaments: true,
+	},
+	{
+		symbol: '&',
+		id: "leader",
+		name: "Leader",
+		inherit: '@',
+		jurisdiction: 'u',
+		globalonly: true,
+
+		promote: '&u',
 		roomowner: true,
 		roombot: true,
 		roommod: true,
@@ -677,6 +777,20 @@ exports.grouplist = [
 		minigame: true,
 		modchat: true,
 		hiderank: true,
+	},
+	{
+		symbol: '㆜',
+		id: "contributor",
+		name: "Contributor",
+		inherit: ' ',
+
+		altsself: true,
+		makegroupchat: true,
+		joinbattle: true,
+		show: true,
+		showmedia: true,
+		exportinputlog: true,
+		importinputlog: true,
 	},
 	{
 		// Bots are ranked below Driver/Mod so that Global Bots can be kept out

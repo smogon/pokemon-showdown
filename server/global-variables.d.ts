@@ -36,6 +36,7 @@ declare global {
 			Tournaments: any;
 			Users: any;
 			Verifier: any;
+			Impulse: any;
 			toID: (item: any) => ID;
 			__version: {head: string, origin?: string, tree?: string};
 		}
@@ -55,5 +56,6 @@ declare global {
 	var Tournaments: typeof TournamentsType;
 	var Users: typeof UsersType.Users;
 	var Verifier: typeof VerifierType;
+	var Impulse: any;
 	var toID: typeof DexType.toID;
 }

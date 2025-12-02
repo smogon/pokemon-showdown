@@ -170,7 +170,7 @@ Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,2
 The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
 ```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE,HPPERCENTAGE,STATUS
 ```
 
 - `SPECIES` is left blank if it's identical to `NICKNAME`
@@ -212,8 +212,39 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `TERATYPE` if left blank will default to the Pokémon's first type.
 
-- If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX`, `DYNAMAXLEVEL` and `TERATYPE`
-  are all blank, the commas will be left off.
+- `HPPERCENTAGE` is a number from 0-100 representing the initial HP percentage
+  (e.g., 50 for 50% HP). Left blank for 100% HP. Useful for testing abilities
+  and moves that trigger at low HP.
+
+- `STATUS` is a status condition ID (`brn`, `psn`, `par`, `slp`, `frz`, `tox`)
+  for the Pokémon to start with. Left blank for no status. Useful for testing
+  status-related abilities and moves.
+
+- If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX`, `DYNAMAXLEVEL`, `TERATYPE`,
+  `HPPERCENTAGE` and `STATUS` are all blank, the commas will be left off.
+
+
+### Examples with custom HP and status
+
+You can create Pokémon that start with reduced HP and/or status conditions:
+
+```
+Blissey||leftovers|naturalcure|softboiled,seismictoss,thunderwave,healbell|Bold|252,,252,,,4,|F|||100||,,,,,33,brn
+```
+
+This creates a Blissey starting at 33% HP with burn status.
+
+```
+Umbreon||leftovers|synchronize|wish,protect,foulplay,toxic|Careful|252,,4,,,252,|M|||100||,,,,,50,psn
+```
+
+This creates an Umbreon starting at 50% HP with poison status.
+
+```
+Mimikyu||lifeorb|disguise|swordsdance,playrough,shadowsneak,shadowclaw|Adamant|,252,4,,,252|F|||100||,,,,,,par
+```
+
+This creates a Mimikyu starting at 100% HP with paralysis status (note the empty hpPercentage field).
 
 
 Converting between formats

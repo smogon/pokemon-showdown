@@ -113,6 +113,21 @@ export interface PokemonSet {
 	 * Tera Type
 	 */
 	teraType?: string;
+	/**
+	 * Initial HP percentage (0-100). If not specified, Pokemon starts at 100% HP.
+	 * This allows Pokemon to start battles with reduced HP, useful for testing
+	 * abilities/moves that activate at low HP (e.g., Emergency Exit, Berries),
+	 * or for creating custom battle scenarios.
+	 */
+	hpPercentage?: number;
+	/**
+	 * Initial status condition (e.g., 'brn', 'psn', 'par', 'slp', 'frz', 'tox').
+	 * If not specified, Pokemon starts without a status condition.
+	 * This allows Pokemon to start battles with status conditions, useful for testing
+	 * status-related abilities/moves (e.g., Guts, Facade, Natural Cure),
+	 * or for creating custom battle scenarios.
+	 */
+	status?: string;
 }
 
 export const Teams = new class Teams {
@@ -198,13 +213,22 @@ export const Teams = new class Teams {
 				buf += '|';
 			}
 
+			// Extended properties section (misc array in team packing format)
+			// This section stores optional properties that aren't commonly used.
+			// We add hpPercentage and status to this section to maintain backward compatibility
+			// with existing team formats while allowing new battle scenarios.
 			if (set.pokeball || set.hpType || set.gigantamax ||
-				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
+				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType ||
+				set.hpPercentage !== undefined || set.status) {
 				buf += `,${set.hpType || ''}`;
 				buf += `,${this.packName(set.pokeball || '')}`;
 				buf += `,${set.gigantamax ? 'G' : ''}`;
 				buf += `,${set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : ''}`;
 				buf += `,${set.teraType || ''}`;
+				// Position 6 in misc array: initial HP percentage (0-100)
+				buf += `,${set.hpPercentage !== undefined ? set.hpPercentage : ''}`;
+				// Position 7 in misc array: initial status condition (brn, psn, par, slp, frz, tox)
+				buf += `,${this.packName(set.status || '')}`;
 			}
 		}
 
@@ -322,20 +346,63 @@ export const Teams = new class Teams {
 			i = j + 1;
 
 			// happiness
+			// Skip the pipe character that starts the happiness field
+			if (buf[i] === '|') i++;
+
 			j = buf.indexOf(']', i);
 			let misc;
+			let happinessEnd = j;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',', 6);
+				if (i >= buf.length) {
+					// No more data
+				} else {
+					// Find comma to separate happiness from misc array
+					const commaIndex = buf.indexOf(',', i);
+					if (commaIndex >= 0) {
+						happinessEnd = commaIndex;
+						// Extract misc array starting from the comma (format: ,val1,val2,...)
+						// When split by comma, first element is empty, so actual values start at index 1
+						misc = buf.substring(commaIndex).split(',', 8);
+					} else {
+						happinessEnd = buf.length;
+					}
+				}
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',', 6);
+				// Find comma to separate happiness from misc array
+				const commaIndex = buf.indexOf(',', i);
+				if (commaIndex >= 0 && commaIndex < j) {
+					happinessEnd = commaIndex;
+					// Extract misc array starting from the comma (format: ,val1,val2,...)
+					// When split by comma, first element is empty, so actual values start at index 1
+					misc = buf.substring(commaIndex, j).split(',', 8);
+				} else {
+					happinessEnd = j;
+				}
 			}
+
+			// Extract happiness value (after pipe, before comma or ])
+			if (i !== happinessEnd) {
+				const happinessStr = buf.substring(i, happinessEnd);
+				const happinessNum = Number(happinessStr);
+				set.happiness = (happinessStr && !isNaN(happinessNum)) ? happinessNum : 255;
+			}
+
+			// Unpack extended properties from the misc array
+			// These properties are optional and stored after the standard team format fields
+			// The misc array is split from ",val1,val2,..." so misc[0] is empty, values start at misc[1]
+			// Format: ['', hpType, pokeball, gigantamax, dynamaxLevel, teraType, hpPercentage, status]
 			if (misc) {
-				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1] || '';
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
 				set.gigantamax = !!misc[3];
 				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
 				set.teraType = misc[5];
+				// Position 6: Extract custom HP percentage (0-100) for battle start
+				// Only set if present to maintain backward compatibility with old team formats
+				if (misc[6]) set.hpPercentage = Number(misc[6]);
+				// Position 7: Extract custom status condition for battle start
+				// Uses Dex.conditions to validate and normalize the status name
+				set.status = this.unpackName(misc[7] || '', Dex.conditions);
 			}
 			if (j < 0) break;
 			i = j + 1;
