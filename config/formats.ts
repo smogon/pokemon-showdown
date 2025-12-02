@@ -2619,9 +2619,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: [
 			'Beedrill-Base', 'Blastoise-Base', 'Bombirdier', 'Braviary-Hisui', 'Centiskorch', 'Cherrim', 'Cyclizar', 'Delcatty', 'Drampa-Base', 'Falinks-Base',
-      'Galvantula', 'Glastrier', 'Goodra-Base', 'Gothitelle', 'Hypno', 'Klinklang', 'Lurantis-Base', 'Mamoswine', 'Mandibuzz', 'Mismagius', 'Mothim',
-      'Oricorio-Baile', 'Perrserker', 'Revavroom', 'Scrafty-Base', 'Serperior', 'Sinistcha', 'Skarmory-Base', 'Squawkabilly-Green', 'Swoobat', 'Uxie',
-      'Vanilluxe', 'Walrein', 'Wishiwashi', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
+			'Galvantula', 'Glastrier', 'Goodra-Base', 'Gothitelle', 'Hypno', 'Klinklang', 'Lurantis-Base', 'Mamoswine', 'Mandibuzz', 'Mismagius', 'Mothim',
+			'Oricorio-Baile', 'Perrserker', 'Revavroom', 'Scrafty-Base', 'Serperior', 'Sinistcha', 'Skarmory-Base', 'Squawkabilly-Green', 'Swoobat', 'Uxie',
+			'Vanilluxe', 'Walrein', 'Wishiwashi', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
