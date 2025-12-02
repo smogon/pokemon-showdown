@@ -99529,7 +99529,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dazzlinggleam: ["9M"],
 			doubleedge: ["9M", "9L60"],
 			earthquake: ["9M"],
-			encore: ["9M"],
 			endure: ["9M"],
 			facade: ["9M"],
 			gigaimpact: ["9M"],
