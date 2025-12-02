@@ -68,7 +68,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomSPMTeams extends RandomTeams {
+export class RandomMHSTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -621,12 +621,31 @@ export class RandomSPMTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		if (moves.has('substitute')) return 'Spellbook Magazine';
-		if (moves.has('protect') && ability !== 'Speed Boost') return 'Spellbook Magazine';
+		// MHS hardcodes
+		if (species.id === 'yiankutku' && moves.has('facade') || species.id === 'bluekutku' && moves.has('facade')) {
+			return 'Frost Orb';
+		}
+		if (species.id === 'xenojiiva' && ability === 'Quark Drive') return 'Booster Energy';
+		if (species.id === 'odogaron' && moves.has('closecombat')) return 'White Herb';
+		if (species.id === 'odogaron' && !moves.has('closecombat')) return 'Sitrus Berry';
+		if (
+			ability === 'Magic Guard' || ability === 'Fervent Scales' ||
+			(ability === 'Sheer Force' && counter.get('sheerforce'))
+		) {
+			return 'Life Orb';
+		}
+		if (moves.has('devour') && ability === 'Unburden') return 'Liechi Berry';
+		if (moves.has('virulentvolley')) return 'Loaded Dice';
+		if (moves.has('magnalance') && ability === 'Reactive Core') return 'Flame Orb';
+		if (moves.has('dragondance') && ability === 'Reactive Core') return 'Frost Orb';
+		// other
+		if (moves.has('substitute')) return 'Leftovers';
+		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
+		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost' || ability === 'Poison Heal') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -659,9 +678,9 @@ export class RandomSPMTeams extends RandomTeams {
 		}
 		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 		if (species.nfe) return 'Eviolite';
-		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Spellbook Magazine';
+		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.get('Physical') + counter.get('Special') >= 3) ? 'Life Orb' : 'Spellbook Magazine';
+			return (counter.get('Physical') + counter.get('Special') >= 3) ? 'Life Orb' : 'Leftovers';
 		}
 	}
 
@@ -798,7 +817,7 @@ export class RandomSPMTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomSPMTeam() {
+	randomMHSTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -952,4 +971,4 @@ export class RandomSPMTeams extends RandomTeams {
 	}
 }
 
-export default RandomSPMTeams;
+export default RandomMHSTeams;

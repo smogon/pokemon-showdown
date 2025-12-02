@@ -2902,13 +2902,24 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] spookymod Random Battle",
-		desc: `A Gen 9 Halloween-themed solomod comprised of entirely Ghost-types, some with more than 2 types.`,
-		mod: 'spookymod',
-		team: 'randomSPM',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause', 'Data Preview', 'Sprite Viewer', 'Spokymod'],
+		name: "[Gen 9] Monster Hunter Random Battle",
+		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
+		mod: 'monsterhunter',
+		team: 'randomMHS',
+		ruleset: [
+			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
+			'Terastal Clause', 'Data Preview', 'Sprite Viewer', 'Mega Data Mod', 'Status Mod',
+		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1gE9pr0ghm1_Y8kPk0c-jXP93X57xlEr1OzzyXUVH90w/edit#gid=0" target="_blank">spookymod Spreadsheet</a> or use /dt!</b></div>`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://tinyurl.com/MonHunShow" target="_blank">MHS Wikia</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Monster Hunter Showdown!`);
+			this.add('-message', `Coded by KnivesMK, it reimagines the Monsters from Monster Hunter as Competitive Pokemon!`);
+			this.add('-message', `Community Discord can be found here:`);
+			this.add('-message', `https://discord.gg/JjjRGVrEvc`);
+			this.add('-message', `Format Wikia can be found here:`);
+			this.add('-message', `https://tinyurl.com/MonHunShow`);
+			this.add('-message', `Special thanks to EggEggEgg for most of the Sprites, and Kestis for the Icons!`);
+			this.add('-message', `(Monster Hunter Showdown is in no way officially affiliated with the Monster Hunter games or CAPCOM and is purely a fan project.)`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
@@ -2920,20 +2931,55 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] spookymod", // roomtours
-		desc: `A Gen 9 Halloween-themed solomod comprised of entirely Ghost-types, some with more than 2 types.`,
-		mod: 'spookymod',
+		name: "[Gen 9] Monster Hunter Showdown OU", // Roomtours
+		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
+		mod: 'monsterhunter',
 		searchShow: false,
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Data Preview', 'Sprite Viewer', 'Spokymod'],
-		banlist: ['All Pokemon'],
+		ruleset: ['Standard NatDex', 'Data Preview', 'Mega Data Mod', 'Status Mod', 'Terastal Clause', 'Sprite Viewer'],
+		banlist: [
+			'All Pokemon', 'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z',
+			'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z',
+			'Psychium Z', 'Rockium Z', 'Steelium Z', 'Shed Tail', 'Baton Pass',
+		],
 		unbanlist: [
-			'Aegislash', 'Banette-Mega', 'Ceruledge', 'Dofagrigus', 'Eddy Azbear', 'Flutter Mane', 'Flutter Mane 2',
-			'Gourgeist-Tiny', 'Gourgeist', 'Gourgeist-Large', 'Gourgeist-Gigantic', 'Houndstone', 'Indeedee', 'Jableye',
-			'JOB APPLICATION', 'Kilotic', 'Lanturn-Evil', 'MERASMUS', 'Nursola', 'Okestar Spirit', 'PPiritomb', 'Quagsire-Dead',
-			'Rotom', 'Shedinja', 'Trevenant', 'Ursaluna-Bloodmoon', 'Vampharos', 'Wunala', 'XORygon-Z', 'Yveltal', 'Zoroark-Hisui',
+			'Acidinus', 'Agnaktor-EX', 'Ahtal-Ka', 'Alatreon', 'Amatsu', 'Arbitrellian',
+			'Arkveld', 'Ash-Shan Lung', 'Auroracanth', 'Blackveil Hazak', 'Blue Kutku', 'Brachydios', 'Ceadeus',
+			'Chameleos', 'Chaotic Gore', 'Dah\'ren Mohran', 'Dalamadur', 'Deviljho-Starving', 'Diablos', 'Dire Miralis',
+			'Doomtrellian', 'Duremudira', 'Eruzerion', 'Espinas', 'Estrellian', 'Fatalis', 'Flaminas', 'Gaismagorm',
+			'Gammoth', 'Glavenus', 'Glowstrax', 'Gogmazios', 'Goldeus', 'Goldthian', 'Goss Harag', 'Greencuga', 'Gureadomosu',
+			'Hallowed Mohran', 'Harudomerugu', 'Inagami', 'Inferonis', 'Jhen Mohran', 'Jin Dahaad', 'Jyuratodus', 'Kirin',
+			'Kulve Taroth', 'Kushala Daora', 'Landgiacrus', 'Lao-Shan Lung', 'Lucacuga', 'Magmadron', 'Magnamalo', 'Malzeno',
+			'Nakarkos', 'Namielle', 'Nargacuga', 'Narwa', 'Nef-Garmat', 'Nergigante', 'Odibatorasu', 'Oltura', 'Oltura-Larval',
+			'Oroshirin', 'Palepinas', 'Primozeno', 'Rajang', 'Rathian', 'Rey Dau', 'Rushala Daora', 'Safi\'jiiva', 'Sandrioth',
+			'Seregios', 'Shagaru Magala', 'Shahmadur', 'Shantien', 'Shara Ishvalda', 'Shen Gaoren', 'Silvalos', 'Tartaronis',
+			'Teostra', 'Tigrex', 'Ukanlos', 'Unknown', 'Uth Duna', 'Valstrax', 'Velkhana', 'Vizutsune', 'Xeno\'jiiva', 'Xu Wu',
+			'Yama Kurai', 'Yama Tsukami', 'Zoh Shia', 'Zorah Magdaros', 'Agnaktor', 'Ajarakan', 'Akantor', 'Akura Vashimu',
+			'Almudron', 'Anjanath', 'Astalos', 'Azurelos', 'Balahara', 'Barioth', 'Basarios-Sandstone', 'Bazelgeuse', 'Bishaten',
+			'Blackblos', 'Blackvios', 'Coral-Pukei', 'Daimyo Hermitaur', 'Deviljho', 'Disufiroa', 'Disufiroa-Sol', 'Doshaguma',
+			'Duramboros', 'Ebogaron', 'Fuljanath', 'Garangolm', 'Glanaktor', 'Gore Magala', 'Gravios', 'Great Izuchi', 'Greensioth',
+			'Gypceros', 'Ibushi', 'Ivogiacrus', 'Kulu-Ya-Ku', 'Lagiacrus', 'Lala Barina', 'Legiana', 'Lunagaron', 'Lunastra',
+			'Malfestio', 'Mizutsune', 'Molgrex', 'Monoblos', 'Najarala', 'Nightlumu', 'Nu Udra', 'Odogaron', 'Orangaten', 'Paolumu',
+			'Pinkthian', 'Plesioth', 'Pukei-Pukei', 'Pyre-Kadaki', 'Radobaan', 'Rakna-Kadaki', 'Rathalos', 'Rompopolo',
+			'Rustramboros', 'Seltas Queen', 'Shogun Ceanataur', 'Stygiogre', 'Terrataur', 'Tetranadon', 'Tzitzi-Ya-Ku',
+			'Uragaan', 'Vaal Hazak', 'Whiteblos', 'Yian Garuga', 'Yian Kutku', 'Zamtrios', 'Zinogre', 'Zinogre-Howling', 'Aknosom',
+			'Arzuros', 'Balenox', 'Banbaro', 'Barroth', 'Basarios', 'Beotodus', 'Blangonga', 'Bulldrome', 'Cephadrome',
+			'Chatacabra', 'Congalala', 'Crysarios', 'Dodogama', 'Emgalala', 'Gendrome', 'Giadrome', 'Gigginox', 'Gobul',
+			'Great Baggi', 'Great Girros', 'Great Jaggi', 'Great Jagras', 'Great Maccao', 'Great Wroggi', 'Hirabami',
+			'Hypnocatrice', 'Iodrome', 'Kecha Wacha', 'Khezu', 'King Shakalaka', 'Lagombi', 'Lavasioth', 'Nerscylla',
+			'Nibelsnarf', 'Palamute', 'Palico', 'Pokaradon', 'Purple Ludroth', 'Quematrice', 'Qurupeco', 'Redzu', 'Royal Ludroth',
+			'Seltas', 'Shroudcylla', 'Somnacanth', 'Spiribird', 'Spiribird-Orange', 'Spiribird-Red', 'Spiribird-Yellow',
+			'Tetsucabra', 'Tobi-Kadachi', 'Velocidrome', 'Vespoid Queen', 'Volvidon',
 		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1gE9pr0ghm1_Y8kPk0c-jXP93X57xlEr1OzzyXUVH90w/edit#gid=0" target="_blank">spookymod Spreadsheet</a> or use /dt!</b></div>`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://tinyurl.com/MonHunShow" target="_blank">MHS Wikia</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Monster Hunter Showdown!`);
+			this.add('-message', `Coded by KnivesMK, it reimagines the Monsters from Monster Hunter as Competitive Pokemon!`);
+			this.add('-message', `Community Discord can be found here:`);
+			this.add('-message', `https://discord.gg/JjjRGVrEvc`);
+			this.add('-message', `Format Wikia can be found here:`);
+			this.add('-message', `https://tinyurl.com/MonHunShow`);
+			this.add('-message', `Special thanks to EggEggEgg for most of the Sprites, and Kestis for the Icons!`);
+			this.add('-message', `(Monster Hunter Showdown is in no way officially affiliated with the Monster Hunter games or CAPCOM and is purely a fan project.)`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
