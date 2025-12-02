@@ -1905,7 +1905,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	chesnaughtmega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	fennekin: {
 		isNonstandard: null,
