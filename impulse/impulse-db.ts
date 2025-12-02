@@ -70,8 +70,22 @@ const ensureConnection = async (): Promise<Db> => {
 		} catch {
 			// eslint-disable-next-line require-atomic-updates
 			state.lastConnectionCheck = 0; // Reset to force check on next operation
-			if (state.config) await init(state.config);
-			else throw new Error('Connection lost and no config for reconnection');
+			if (state.config) {
+				// Close existing connection before reconnecting
+				try {
+					if (state.client) await state.client.close();
+				} catch (closeError) {
+					// Log close errors for debugging, but don't prevent reconnection
+					console.error('ImpulseDB: Error closing connection during reconnect:', closeError);
+				}
+				// eslint-disable-next-line require-atomic-updates
+				state.client = null;
+				// eslint-disable-next-line require-atomic-updates
+				state.db = null;
+				await init(state.config);
+			} else {
+				throw new Error('Connection lost and no config for reconnection');
+			}
 		}
 	}
 
