@@ -24642,7 +24642,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				atk: 1,
 			},
 		},
-		weather: 'snow',
+		weather: 'snowscape',
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Snowscape", target);

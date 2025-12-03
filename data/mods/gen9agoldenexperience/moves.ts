@@ -3564,7 +3564,7 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 				atk: 1,
 			},
 		},
-		weather: 'snow',
+		weather: 'snowscape',
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Snowscape", target);
