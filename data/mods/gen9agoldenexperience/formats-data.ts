@@ -1570,7 +1570,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	gallademega: {
-		tier: "Uber",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	surskit: {
