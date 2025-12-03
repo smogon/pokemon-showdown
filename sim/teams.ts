@@ -43,6 +43,7 @@ export interface PokemonSet {
 	 * These should always be converted to ids before use.
 	 */
 	moves: string[];
+	movePPUps?: number[];
 	/**
 	 * This can be an id, e.g. "adamant" or a full name, e.g. "Adamant".
 	 * This should always be converted to an id before use.
@@ -140,8 +141,19 @@ export const Teams = new class Teams {
 			// ability
 			buf += `|${this.packName(set.ability)}`;
 
-			// moves
-			buf += '|' + set.moves.map(this.packName).join(',');
+			// moves and PP Ups
+			let moves = '|';
+			let PPUps = '';
+			for (let i = 0; i < set.moves.length; i++) {
+				moves += (i ? ',' : '') + this.packName(set.moves[i]);
+				PPUps += (i ? ',' : ';');
+				const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
+				if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
+					PPUps += set.movePPUps![i].toString();
+				}
+			}
+			if (PPUps.length === set.moves.length) PPUps = '';
+			buf += moves + PPUps;
 
 			// nature
 			buf += `|${set.nature || ''}`;
@@ -225,6 +237,7 @@ export const Teams = new class Teams {
 		const team = [];
 		let i = 0;
 		let j = 0;
+		let k = 0;
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
@@ -260,10 +273,29 @@ export const Teams = new class Teams {
 			i = j + 1;
 
 			// moves
-			j = buf.indexOf('|', i);
-			if (j < 0) return null;
+			j = buf.indexOf(';', i);
+			k = buf.indexOf('|', i);
+			if (j < 0 || j > k) {
+				j = k;
+				if (j < 0) return null;
+			}
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
 			i = j + 1;
+
+			// move PP ups
+			if (buf.charAt(j) === ';') {
+				j = buf.indexOf('|', i);
+				if (j < 0) return null;
+				const PPUps = buf.substring(i, j).split(',', 24);
+				for (let index = 0; index < set.moves.length; index++) {
+					const defaultPPUps = toID(set.moves[index]) === 'trumpcard' ? 0 : 3;
+					if (!set.movePPUps) set.movePPUps = [];
+					set.movePPUps.push(PPUps[index] ? parseInt(PPUps[index]) : defaultPPUps);
+				}
+				i = j + 1;
+			} else {
+				set.movePPUps = set.moves.map(move => toID(move) === 'trumpcard' ? 0 : 3);
+			}
 
 			// nature
 			j = buf.indexOf('|', i);
@@ -444,11 +476,17 @@ export const Teams = new class Teams {
 		}
 
 		// moves
-		for (let move of set.moves) {
+		for (let i = 0; i < set.moves.length; i++) {
+			let move = set.moves[i];
+			let PPUps = ``;
 			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
-			out += `- ${move}  \n`;
+			const defaultPPUps = toID(move) === 'trumpcard' ? 0 : 3;
+			if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
+				PPUps = ` (PP Ups: ${set.movePPUps![i]})`;
+			}
+			out += `- ${move}${PPUps}  \n`;
 		}
 
 		return out;
@@ -534,9 +572,10 @@ export const Teams = new class Teams {
 			if (line !== 'undefined') set.nature = aggressive ? toID(line) : line;
 		} else if (line.startsWith('-') || line.startsWith('~')) {
 			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
-			if (line.startsWith('Hidden Power [')) {
-				const hpType = line.slice(14, -1);
-				line = 'Hidden Power ' + hpType;
+			let [move, PPUps] = line.split(' (PP Ups: ');
+			if (move.startsWith('Hidden Power [')) {
+				const hpType = move.slice(14, -1);
+				move = 'Hidden Power ' + hpType;
 				if (!set.ivs && Dex.types.isName(hpType)) {
 					set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 					const hpIVs = Dex.types.get(hpType).HPivs || {};
@@ -545,10 +584,13 @@ export const Teams = new class Teams {
 					}
 				}
 			}
-			if (line === 'Frustration' && set.happiness === undefined) {
+			if (!set.movePPUps) set.movePPUps = [];
+			const defaultPPUps = toID(move) === 'trumpcard' ? 0 : 3;
+			set.movePPUps.push(parseInt(PPUps?.charAt(0)) ?? defaultPPUps);
+			if (move === 'Frustration' && set.happiness === undefined) {
 				set.happiness = 0;
 			}
-			set.moves.push(line);
+			set.moves.push(move);
 		}
 	}
 	/** Accepts a team in any format (JSON, packed, or exported) */
