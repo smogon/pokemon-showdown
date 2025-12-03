@@ -848,7 +848,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	pinsirmega: {
-		tier: "RUBL",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	tauros: {
@@ -3231,7 +3231,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	genesect: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	genesectburn: {
