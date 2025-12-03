@@ -268,11 +268,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DOU",
 	},
 	clefable: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	clefablemega: {
-		tier: "(OU)",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	vulpix: {
@@ -1002,7 +1002,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	moltres: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	moltresgalar: {
@@ -1361,11 +1361,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DOU",
 	},
 	skarmory: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	skarmorymega: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	houndour: {
@@ -4616,7 +4616,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	enamorustherian: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 
@@ -5514,7 +5514,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DOU",
 	},
 	purerainbow: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	irondart: {
