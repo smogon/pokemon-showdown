@@ -40,36 +40,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
-		name: "[Gen 9] LC",
-		mod: 'gen9',
-		ruleset: ['Little Cup', 'Standard'],
-		banlist: [
-			'Aipom', 'Basculin-White-Striped', 'Cutiefly', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Gastly', 'Girafarig', 'Gligar',
-			'Magby', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
-			'Snivy', 'Stantler', 'Torchic', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Heat Rock', 'Baton Pass', 'Sticky Web',
-		],
-	},
-	{
-		name: "[Gen 9] Monotype",
-		mod: 'gen9',
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Same Type Clause', 'Terastal Clause'],
-		banlist: [
-			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Blaziken', 'Deoxys-Normal', 'Deoxys-Attack',
-			'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Kingambit',
-			'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
-			'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Zacian',
-			'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Moody', 'Shadow Tag', 'Booster Energy', 'Damp Rock', 'Focus Band', 'King\'s Rock',
-			'Quick Claw', 'Razor Fang', 'Smooth Rock', 'Baton Pass', 'Last Respects', 'Shed Tail',
-		],
-	},
-	{
-		name: "[Gen 9] CAP",
-		desc: "The Create-A-Pok&eacute;mon project is a community dedicated to exploring and understanding the competitive Pok&eacute;mon metagame by designing, creating, and playtesting new Pok&eacute;mon concepts.",
-		mod: 'gen9',
-		ruleset: ['[Gen 9] OU', '+CAP'],
-		banlist: ['Crucibellite', 'Rage Fist'],
-	},
-	{
 		name: "[Gen 9] Custom Game",
 		mod: 'gen9',
 		searchShow: false,
@@ -98,17 +68,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
-	},
-	{
-		name: "[Gen 9] Doubles LC",
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
-		banlist: [
-			'Basculin-White-Striped', 'Dunsparce', 'Duraludon', 'Girafarig', 'Gligar', 'Misdreavus', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
-			'Stantler', 'Vulpix', 'Vulpix-Alola', 'Yanma',
-		],
 	},
 	{
 		name: "[Gen 9] VGC 2026 Reg F",
@@ -185,7 +144,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Drizzle', 'Drought', 'Light Clay', 
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-		teambuilderFormat: 'National Dex UU',
 	},
 	{
 		name: "[Gen 9] A Golden Experience RU",
@@ -198,7 +156,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Drizzle', 'Drought', 'Light Clay', 
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-		teambuilderFormat: 'National Dex RU',
 	},
 	{
 		name: "[Gen 9] A Golden Experience NU",
@@ -212,7 +169,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Dante\'s Inferno', 'Happy Dance', 'Sticky Web', 
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-		teambuilderFormat: 'National Dex RU',
 	},
 	{
 		name: "[Gen 9] A Golden Experience PU",
@@ -226,7 +182,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Dante\'s Inferno', 'Happy Dance', 'Sticky Web', 
 		],
 		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
-		teambuilderFormat: 'National Dex RU',
 	},
 	{
 		name: "[Gen 9] A Golden Experience Doubles",
@@ -685,6 +640,58 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
+	// Touhoumons
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Touhoumons",
+	},
+	{
+		name: "[Gen 9] Touhoumons",
+		desc: `2hu`,
+		mod: 'gen9toho',
+		ruleset: ['Standard NatDex', '!Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
+		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
+		unbanlist: ['Light of Ruin'],
+		teambuilderFormat: 'National Dex',
+		onValidateTeam(team, format) {
+			/**@type {{[k: string]: true}} */
+			for (const set of team) {
+				let template = this.dex.species.get(set.species);
+				if (template.tier !== 'Toho') {
+					return [set.species + ' is not a Touhou character.'];
+				}
+				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
+					 return ["Cirno-Tanned can only have Drought as its ability."]
+				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
+					 return ["Only Cirno-Tanned can have Drought as its ability."]
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Touhoumons Doubles",
+		desc: `2hu`,
+		mod: 'gen9toho',
+		gameType: 'doubles',
+		ruleset: ['Standard NatDex', '!Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause', 'Data Preview'],
+		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
+		unbanlist: ['Light of Ruin'],
+		teambuilderFormat: 'National Dex',
+		onValidateTeam(team, format) {
+			/**@type {{[k: string]: true}} */
+			for (const set of team) {
+				let template = this.dex.species.get(set.species);
+				if (template.tier !== 'DToho') {
+					return [set.species + ' is not a Touhou character.'];
+				}
+				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
+					 return ["Cirno-Tanned can only have Drought as its ability."]
+				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
+					 return ["Only Cirno-Tanned can have Drought as its ability."]
+			}
+		},
+	},
+
 	// National Dex
 	///////////////////////////////////////////////////////////////////
 
@@ -723,76 +730,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['Standard AG', 'NatDex Mod'],
-	},
-
-	// Touhoumons
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Touhoumons",
-	},
-	{
-		name: "[Gen 9] Touhoumons",
-		desc: `2hu`,
-		mod: 'gen9toho',
-		ruleset: ['Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Z-Move Clause', 'Data Preview'],
-		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
-		unbanlist: ['Light of Ruin'],
-		teambuilderFormat: 'National Dex',
-		onValidateTeam(team, format) {
-			/**@type {{[k: string]: true}} */
-			for (const set of team) {
-				let template = this.dex.species.get(set.species);
-				if (template.tier !== 'Toho') {
-					return [set.species + ' is not a Touhou character.'];
-				}
-				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
-					 return ["Cirno-Tanned can only have Drought as its ability."]
-				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
-					 return ["Only Cirno-Tanned can have Drought as its ability."]
-			}
-		},
-	},
-	{
-		name: "[Gen 9] Touhoumons Doubles",
-		desc: `2hu`,
-		mod: 'gen9toho',
-		gameType: 'doubles',
-		ruleset: ['Terastal Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Z-Move Clause', 'Data Preview'],
-		banlist: ['Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'],
-		unbanlist: ['Light of Ruin'],
-		teambuilderFormat: 'National Dex',
-		onValidateTeam(team, format) {
-			/**@type {{[k: string]: true}} */
-			for (const set of team) {
-				let template = this.dex.species.get(set.species);
-				if (template.tier !== 'DToho') {
-					return [set.species + ' is not a Touhou character.'];
-				}
-				if (set.species == 'Cirno-Tanned' && set.ability !== 'Drought')
-					 return ["Cirno-Tanned can only have Drought as its ability."]
-				if ((set.species !== 'Cirno-Tanned' && set.species !== 'Cirno') && set.ability === 'Drought')
-					 return ["Only Cirno-Tanned can have Drought as its ability."]
-			}
-		},
-	},
-
-	// Pet Mods
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Pet Mods",
-	},
-	{
-		name: "[Gen 9] Legends Z-A OU",
-		desc: `Speculative turn-based metagame using Pok&eacute;mon obtainable in Legends: Z-A, but with National Dex learnsets.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3772808/">Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/10749086">List of Changes</a>`,
-		],
-		mod: 'gen9legendsou',
-		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Min Source Gen = 3', 'Terastal Clause'],
-		banlist: ['Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Baton Pass'],
 	},
 
 	// Past Gens
