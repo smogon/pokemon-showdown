@@ -93,7 +93,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	alakazam: {
-		tier: "OU",
+		tier: "UU",
 	},
 	alakazammega: {
 		tier: "Uber",
@@ -159,7 +159,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	starmie: {
-		tier: "OU",
+		tier: "UU",
 	},
 	starmiemega: {
 		tier: "OU",
@@ -276,7 +276,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	slowking: {
-		tier: "OU",
+		tier: "UU",
 	},
 	slowkinggalar: {
 		tier: "OU",
@@ -639,7 +639,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	eelektrossmega: {
-		tier: "UU",
+		tier: "OU",
 	},
 	litwick: {
 		tier: "LC",
@@ -774,7 +774,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	meowsticf: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	honedge: {
 		tier: "LC",
