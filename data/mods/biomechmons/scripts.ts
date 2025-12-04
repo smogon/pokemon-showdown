@@ -264,25 +264,25 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// TODO
 		eatItem(force, source, sourceEffect) {
-			console.log(sourceEffect);
-			if (!this.item) return false;
-			if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
+			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
+				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
+			if (!item) return false;
+			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') || !this.isActive) return false;
 
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event?.target) source = this.battle.event.target;
-			const item = this.getItem();
-			if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
-				// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
-				return false;
-			}
+			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			// 	return false;
+			// }
 			if (
-				this.battle.runEvent('UseItem', this, null, null, item) &&
-				(force || this.battle.runEvent('TryEatItem', this, null, null, item))
+				this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name)) &&
+				(force || this.battle.runEvent('TryEatItem', this, null, null, Dex.items.get(item.name)))
 			) {
-				this.battle.add('-enditem', this, item, '[eat]');
+				this.battle.add('-enditem', this, Dex.items.get(item.name), '[eat]');
 
-				this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
-				this.battle.runEvent('EatItem', this, source, sourceEffect, item);
+				this.battle.singleEvent('Eat', Dex.items.get(item.name), this.itemState, this, source, sourceEffect);
+				this.battle.runEvent('EatItem', this, source, sourceEffect, Dex.items.get(item.name));
 
 				if (RESTORATIVE_BERRIES.has(item.id)) {
 					switch (this.pendingStaleness) {
@@ -296,12 +296,18 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.pendingStaleness = undefined;
 				}
 
-				this.lastItem = this.item;
-				this.item = '';
+				const isBMM = this.volatiles[item.id]?.inSlot;
+				if (isBMM) {
+					this.removeVolatile(item.id);
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string }[]).findIndex(e => e.thing === this.battle.toID(item.name)), 1);
+				} else {
+					this.lastItem = this.item;
+					this.item = '';
+				}
 				this.battle.clearEffectState(this.itemState);
 				this.usedItemThisTurn = true;
 				this.ateBerry = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, item);
+				this.battle.runEvent('AfterUseItem', this, null, null, Dex.items.get(item.name));
 				return true;
 			}
 			return false;
@@ -309,38 +315,45 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// TODO
 		useItem(source, sourceEffect) {
-			console.log(sourceEffect)
-			if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
-			if (!this.item) return false;
+			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
+				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
+			if ((!this.hp && !item.isGem) || !this.isActive) return false;
+			if (!item) return false;
 
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event?.target) source = this.battle.event.target;
-			const item = this.getItem();
-			if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
-				// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
-				return false;
-			}
-			if (this.battle.runEvent('UseItem', this, null, null, item)) {
+			// const item = this.getItem();
+			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			// 	return false;
+			// }
+			if (this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name))) {
 				switch (item.id) {
 					case 'redcard':
-						this.battle.add('-enditem', this, item, `[of] ${source}`);
+						this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
 						break;
 					default:
 						if (item.isGem) {
-							this.battle.add('-enditem', this, item, '[from] gem');
+							this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
 						} else {
-							this.battle.add('-enditem', this, item);
+							this.battle.add('-enditem', this, Dex.items.get(item.name));
 						}
 						break;
 				}
 				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, item);
+					this.battle.boost(item.boosts, this, source, Dex.items.get(item.name));
 				}
 
-				this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
+				this.battle.singleEvent('Use', Dex.items.get(item.name), this.itemState, this, source, sourceEffect);
 
-				this.lastItem = this.item;
-				this.item = '';
+				const isBMM = this.volatiles[item.id]?.inSlot;
+				if (isBMM) {
+					this.removeVolatile(item.id);
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string }[]).findIndex(e => e.thing === this.battle.toID(item.name)), 1);
+				} else {
+					this.lastItem = this.item;
+					this.item = '';
+				}
 				this.battle.clearEffectState(this.itemState);
 				this.usedItemThisTurn = true;
 				this.battle.runEvent('AfterUseItem', this, null, null, item);
