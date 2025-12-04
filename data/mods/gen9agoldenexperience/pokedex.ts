@@ -2933,7 +2933,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	turtonator: {
 		inherit: true,
-		baseStats: {hp: 78, atk: 60, def: 150, spa: 91, spd: 85, spe: 36},
+		baseStats: {hp: 78, atk: 60, def: 135, spa: 91, spd: 85, spe: 36},
 		abilities: {0: "Shell Armor", 1: "Aftermath", H: "Unstable Shell"},
 	},
 	togedemaru: {
@@ -3235,9 +3235,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		inherit: true,
 		baseStats: {hp: 80, atk: 65, def: 95, spa: 110, spd: 100, spe: 70},
 	},
+	falinks: {
+		inherit: true,
+		abilities: {0: "Battle Armor", 1: "Multiheaded", H: "Defiant"},
+	},
 	falinksmega: {
 		inherit: true,
-		abilities: { 0: "Multiheaded" },
+		abilities: { 0: "Simple" },
 	},
 	pincurchin: {
 		inherit: true,
