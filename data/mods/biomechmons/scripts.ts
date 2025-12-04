@@ -299,7 +299,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string }[]).findIndex(e => e.thing === this.battle.toID(item.name)), 1);
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string}[]).findIndex(e => 
+						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
+					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {
 					this.lastItem = this.item;
 					this.item = '';
@@ -349,7 +351,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string }[]).findIndex(e => e.thing === this.battle.toID(item.name)), 1);
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string}[]).findIndex(e => 
+						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
+					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {
 					this.lastItem = this.item;
 					this.item = '';
