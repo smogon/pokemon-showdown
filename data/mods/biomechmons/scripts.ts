@@ -267,7 +267,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
 			if (!item) return false;
-			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') || !this.isActive) return false;
+			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
+				!this.isActive) return false;
 
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -286,12 +287,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (RESTORATIVE_BERRIES.has(item.id)) {
 					switch (this.pendingStaleness) {
-						case 'internal':
-							if (this.staleness !== 'external') this.staleness = 'internal';
-							break;
-						case 'external':
-							this.staleness = 'external';
-							break;
+					case 'internal':
+						if (this.staleness !== 'external') this.staleness = 'internal';
+						break;
+					case 'external':
+						this.staleness = 'external';
+						break;
 					}
 					this.pendingStaleness = undefined;
 				}
@@ -299,7 +300,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string}[]).findIndex(e => 
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {
@@ -331,16 +332,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			// }
 			if (this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name))) {
 				switch (item.id) {
-					case 'redcard':
-						this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
-						break;
-					default:
-						if (item.isGem) {
-							this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
-						} else {
-							this.battle.add('-enditem', this, Dex.items.get(item.name));
-						}
-						break;
+				case 'redcard':
+					this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
+					break;
+				default:
+					if (item.isGem) {
+						this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
+					} else {
+						this.battle.add('-enditem', this, Dex.items.get(item.name));
+					}
+					break;
 				}
 				if (item.boosts) {
 					this.battle.boost(item.boosts, this, source, Dex.items.get(item.name));
@@ -351,7 +352,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string}[]).findIndex(e => 
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {
