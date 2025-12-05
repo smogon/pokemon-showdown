@@ -171,10 +171,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 				this.item = '';
 				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-				if (wrongSlot) {
+				if (wrongSlot > -1) {
 					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.items[wrongSlot].thing));
 					this.m.scrambled.abilties.splice(wrongSlot, 1);
-				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item')) {
+				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') > -1) {
 					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
