@@ -924,7 +924,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const normalItem = set.item;
 			if (items.length) {
-				set.item = items[0];
+				set.item = items.find(i => dex.items.get(i).forcedForme) || items[0];
 			} else {
 				set.item = '';
 			}
