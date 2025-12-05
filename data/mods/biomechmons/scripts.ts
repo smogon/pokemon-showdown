@@ -95,7 +95,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (isItem >= 0) {
 					this.removeVolatile('item:' + this.battle.toID(this.m.scrambled.items[isItem].thing));
 					this.m.scrambled.items.splice(isItem, 1);
-				} else {
+				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
@@ -171,10 +171,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 				this.item = '';
 				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-				if (wrongSlot > -1) {
+				if (wrongSlot >= 0) {
 					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.items[wrongSlot].thing));
 					this.m.scrambled.abilties.splice(wrongSlot, 1);
-				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') > -1) {
+				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
 					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
@@ -227,7 +227,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (isAbil >= 0) {
 					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.items[isAbil].thing));
 					this.m.scrambled.abilities.splice(isAbil, 1);
-				} else {
+				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
 					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
