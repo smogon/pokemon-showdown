@@ -900,7 +900,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				!Object.values(species.abilities).map(this.toID).includes(this.toID(set.ability)) &&
 				this.ruleTable.has('obtainableabilities')
 			) {
-				return [`${set.ability} is not a valid ability for ${set.species}.`];
+				if (set.ability !== 'noability') return [`${set.ability} is not a valid ability for ${set.species}.`];
 			}
 			if (requiredAbility && !abilities.map(this.toID).includes(this.toID(requiredAbility))) {
 				return [`${set.species} requires ${requiredAbility} on its set.`];
@@ -931,7 +931,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!this.ruleTable.has('+ability:noability')) {
 				this.ruleTable.set('+ability:noability', '');
 			}
-			const problems = this.validateSet(set, teamHas);
+			let problems = this.validateSet(set, teamHas);
+			if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
 			if (problems?.length) return problems;
 			set.ability = normalAbility;
 			set.item = normalItem;
