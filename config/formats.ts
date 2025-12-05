@@ -1003,6 +1003,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				pokemon.moveSlots = pokemon.baseMoveSlots;
 			}
 		},
+	},
+	{
 		name: "[Gen 9] Camomons",
 		desc: `Pok&eacute;mon have their types set to match their first two moves.`,
 		mod: 'gen9',
