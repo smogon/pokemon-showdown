@@ -29,7 +29,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// can't use hasAbility because it would lead to infinite recursion
 				if (
 					(pokemon.ability === ('neutralizinggas' as ID) ||
-						(pokemon.m.scrambled.abilities as { thing: string }[]).some(abils => toID(abils.thing) === 'neutralizinggas')) &&
+						(pokemon.m.scrambled.abilities as { thing: string }[]).some(abils => this.battle.toID(abils.thing) === 'neutralizinggas')) &&
 						!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
 				) {
 					neutralizinggas = true;
@@ -41,7 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				(this.battle.gen >= 5 && !this.isActive) ||
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-						(this.m.scrambled.abilities as { thing: string }[]).some(abils => toID(abils.thing) === 'neutralizinggas'))
+						(this.m.scrambled.abilities as { thing: string }[]).some(abils => this.battle.toID(abils.thing) === 'neutralizinggas'))
 					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
