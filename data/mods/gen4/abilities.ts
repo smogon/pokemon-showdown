@@ -2,9 +2,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	airlock: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart(pokemon) {
-			pokemon.abilityState.ending = false;
-		},
 	},
 	angerpoint: {
 		inherit: true,
@@ -37,9 +34,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	cloudnine: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart(pokemon) {
-			pokemon.abilityState.ending = false;
-		},
 	},
 	colorchange: {
 		inherit: true,
@@ -145,6 +139,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	flowergift: {
 		inherit: true,
+		onWeatherChange(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.species.baseSpecies !== 'Cherrim') return;
+			if (pokemon.effectiveWeather() !== 'sunnyday') {
+				if (pokemon.species.id !== 'cherrimsunshine') {
+					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
+				}
+			} else {
+				if (pokemon.species.id === 'cherrimsunshine') {
+					pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
+				}
+			}
+		},
+		onEnd() {},
 		onAllyModifyAtk(atk) {
 			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
@@ -159,6 +166,28 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
+		onWeatherChange(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.species.baseSpecies !== 'Castform') return;
+			let forme = null;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (forme) {
+				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+			}
+		},
+		onEnd() {},
 		flags: { notrace: 1 },
 	},
 	forewarn: {
