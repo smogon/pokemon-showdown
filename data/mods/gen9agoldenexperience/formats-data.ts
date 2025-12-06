@@ -1365,7 +1365,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	skarmorymega: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	houndour: {
@@ -2686,7 +2686,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	excadrillmega: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	audino: {
@@ -3766,7 +3766,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		tier: "LC",
 	},
 	mudsdale: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	dewpider: {
