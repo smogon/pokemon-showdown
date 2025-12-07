@@ -2007,6 +2007,7 @@ export const Scripts: ModdedBattleScriptsData = {
     this.modData('Learnsets', 'houndstone').learnset.stealthrock = ['9L1'];
     this.modData('Learnsets', 'houndstone').learnset.houndshowl = ['9L1'];
     this.modData('Learnsets', 'cetitan').learnset.ningencry = ['9L1'];
+    this.modData('Learnsets', 'cetitan').learnset.fissure = ['9L1'];
     this.modData('Learnsets', 'ceruledge').learnset.agility = ['9L1'];
     this.modData('Learnsets', 'armarouge').learnset.agility = ['9L1'];
     this.modData('Learnsets', 'rabsca').learnset.teleport = ['9L1'];
