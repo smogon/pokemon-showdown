@@ -2904,7 +2904,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Monster Hunter Random Battle",
 		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
-		mod: 'monsterhunter',
+		mod: 'gen9monsterhunter',
 		team: 'randomMHS',
 		ruleset: [
 			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
@@ -2933,7 +2933,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Monster Hunter Showdown OU", // Roomtours
 		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
-		mod: 'monsterhunter',
+		mod: 'gen9monsterhunter',
 		searchShow: false,
 		ruleset: ['Standard NatDex', 'Data Preview', 'Mega Data Mod', 'Status Mod', 'Terastal Clause', 'Sprite Viewer'],
 		banlist: [
@@ -2993,7 +2993,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] ChatBats",
 		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
-		mod: 'chatbats',
+		mod: 'gen9chatbats',
 		team: 'randomChatBats',
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
 		onSwitchIn(pokemon) {
