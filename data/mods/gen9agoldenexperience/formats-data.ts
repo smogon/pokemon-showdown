@@ -1446,7 +1446,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	sceptilemega: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	torchic: {
@@ -4107,7 +4107,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	zeraora: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	meltan: {
@@ -4957,7 +4957,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 		doublesTier: "DUU",
 	},
 	ironmoth: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	ironhands: {
