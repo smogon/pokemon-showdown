@@ -1266,8 +1266,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	castform: {
 		inherit: true,
 		baseStats: {hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
-		otherFormes: ["Castform-Sunny", "Castform-Rainy", "Castform-Snowy", "Castform-Mega"],
-		formeOrder: ["Castform", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy", "Castform-Mega"],
+		otherFormes: ["Castform-Mega", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
+		formeOrder: ["Castform", "Castform-Mega", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
 	},
 	castformsunny: {
 		inherit: true,

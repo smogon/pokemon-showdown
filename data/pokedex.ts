@@ -6507,8 +6507,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 0.8,
 		color: "Gray",
 		eggGroups: ["Fairy", "Amorphous"],
-		otherFormes: ["Castform-Sunny", "Castform-Rainy", "Castform-Snowy", "Castform-Mega"],
-		formeOrder: ["Castform", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy", "Castform-Mega"],
+		otherFormes: ["Castform-Mega", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
+		formeOrder: ["Castform", "Castform-Mega", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
 	},
 	castformsunny: {
 		num: 351,
