@@ -235,6 +235,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'primeape') this.incompatibleMoves(moves, movePool, 'knockoff', 'earthquake');
 		if (species.id === 'feraligatrmega') this.incompatibleMoves(moves, movePool, 'thunderfang', 'poisonfang');
 		if (species.id === 'salazzle') this.incompatibleMoves(moves, movePool, 'malignantchain', 'venoshock');
+		if (species.id === 'glimmora') this.incompatibleMoves(moves, movePool, 'powergem', 'meteorbeam');
 	}
 
 	override randomMoveset(
@@ -914,7 +915,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			let species = this.sample(currentSpeciesPool);
+			const species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -1007,13 +1008,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');
-			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Salazzle');
-			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Ogerpon-Cornerstone');
-			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Glimmora');
-			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Mew');
-			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Decidueye');
-			
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');	
 
 			let set: RandomTeamsTypes.RandomSet;
 
