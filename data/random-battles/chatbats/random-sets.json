@@ -1129,5 +1129,38 @@
                 "teraTypes": ["Stellar"]
             }
         ]
+    },
+    "decidueye": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Sinister Arrows", "Leaf Blade", "Defog", "Roost", "Spirit Shackle", "U-turn"],
+                "abilities": ["Overgrow", "Sniper"],
+                "teraTypes": ["Steel", "Dark", "Ghost"]
+            }
+        ]
+    },
+    "ogerponcornerstone": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Sappy Seed", "Ivy Cudgel", "Synthesis", "Spiky Shield", "Thousand Waves"],
+                "abilities": ["Solid Rock"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "glimmora": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Mortal Spin", "Meteor Beam", "Power Gem", "Ice Beam", "Malignant Chain"],
+                "abilities": ["Corrosion"],
+                "teraTypes": ["Grass"]
+            }
+        ]
     }
 }
