@@ -926,7 +926,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	autospin: {
 		onResidual(pokemon, s, effect) {
-			const move = this.dex.getActiveMove(metronome);
+			const move = this.dex.getActiveMove('metronome');
 			const target = pokemon.foes()[0];
 			if (target && !target.fainted && (pokemon.hp >= pokemon.maxhp / 2)) {
 				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
