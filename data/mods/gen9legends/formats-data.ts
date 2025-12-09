@@ -507,13 +507,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	mewtwo: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	mewtwomegax: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	mewtwomegay: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	mew: {
 		isNonstandard: "Past",
