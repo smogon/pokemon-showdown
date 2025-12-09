@@ -1667,7 +1667,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', source, 'move: Sinister Arrows');
 			return this.NOT_FAIL;
 		},
-		onTryMove() {
+		onTryMove(target, source, move) {
 			this.add('-anim', source, 'Curse', target);
 			this.add('-anim', source, 'Spite', target);
 		},
