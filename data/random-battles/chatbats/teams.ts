@@ -719,6 +719,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'salazzle') return 'Heavy-Duty Boots';
 		if (species.id === 'kyogre') return 'Waterium Z';
 		if (species.id === 'azelf') return 'Focus Band';
+		if (species.id === 'decidueye') return this.sample(['Life Orb', 'Heavy-Duty Boots', "Leftovers"]);
+		if (species.id === 'ogerponcornerstone') return 'Cornerstone Mask';
+		if (species.id === 'glimmora' && moves.has('meteorbeam')) return 'Power Herb';
+		if (species.id === 'glimmora') return 'Air Balloon';
 	}
 
 	override randomSet(
@@ -1008,6 +1012,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Azelf');
 			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Kyogre');
 			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Mew');
+			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Decidueye');
+			
 
 			let set: RandomTeamsTypes.RandomSet;
 
