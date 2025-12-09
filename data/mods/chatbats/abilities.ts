@@ -896,11 +896,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!pokemon.hp) return;
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'kyogreprimal') {
-					pokemon.formeChange('Kyogre-Primal', this.effect, false, '0', '[msg]');
+					this.add('-ability', pokemon, 'Oceanic Blessing');
+					pokemon.formeChange('Kyogre-Primal', this.effect, false);
 				}
 			} else {
 				if (pokemon.species.id === 'kyogreprimal') {
-					pokemon.formeChange('kyogre', this.effect, false, '0', '[msg]');
+					this.add('-ability', pokemon, 'Oceanic Blessing');
+					pokemon.formeChange('kyogre', this.effect, false);
 				}
 			}
 		},
