@@ -475,4 +475,17 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Auto Spin" },
 		types: ["Psychic", "Normal"],
 	},
+	decidueye: {
+		inherit: true,
+		abilities: { 0: "Overgrow", 1: "Sniper" },
+	},
+	ogerponcornerstone: {
+		inherit: true,
+		abilities: { 0: "Solid Rock" },
+		types: ["Psychic", "Normal"],
+	},
+	glimmora: {
+		inherit: true,
+		abilities: { 0: "Corrosion" },
+	},
 };
