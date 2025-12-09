@@ -1682,7 +1682,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			onStart(target) {
 				this.effectState.targetSlot = target.getSlot();
-				this.effectState.endingTurn = (this.turn - 1) + 4;
+				this.effectState.endingTurn = (this.turn - 1) + 3;
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
@@ -1694,6 +1694,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 					return;
 				}
+				if (this.getOverflowedTurnCount() === 0) return;
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 				if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
