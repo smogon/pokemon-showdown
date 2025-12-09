@@ -1686,7 +1686,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 					return;
 				}
-				if (this.getOverflowedTurnCount() === 0) return;
+				if (!this.getOverflowedTurnCount()) return;
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 				if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
