@@ -1615,7 +1615,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onModifyMove(move, pokemon, target) {
 			const rand = this.random(8);
 			if (rand < 2) {
-				pokemon.addVolatile('healing');
 				move.basePower = 0;
 			} else if (rand < 4) {
 				move.basePower = 60;
@@ -1623,7 +1622,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.basePower = 120;
 			} else {
 				move.basePower = 150;
-				move.recoil = [1, 3];
 			}
 		},
 		onTryMove() {
@@ -1674,6 +1672,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', source, 'move: Sinister Arrows');
 			return this.NOT_FAIL;
 		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Spite', target);
+		},
 		condition: {
 			onStart(target) {
 				this.effectState.targetSlot = target.getSlot();
@@ -1700,6 +1705,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 				this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 				if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
+					this.hint(`${move.name} hits.`);
 					this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 				}
 				this.activeMove = null;
