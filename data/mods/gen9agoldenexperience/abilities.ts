@@ -3145,6 +3145,13 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 		rating: 4.5,
 		num: -102,
 	},
+	merciless: {
+		inherit: true,
+		onModifyCritRatio(critRatio, source, target) {
+			if (target && ['psn', 'tox', 'brn', 'par', 'frz', 'slp'].includes(target.status)) return 5;
+		},
+		shortDesc: "This Pokemon's attacks are critical hits if the target is statused.",
+	},
 
 
 

@@ -1736,7 +1736,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	dialgaorigin: {
 		inherit: true,
-		abilities: {0: "Regenerator"},
+		abilities: {0: "Levitate"},
 	},
 	palkiaorigin: {
 		inherit: true,
@@ -2393,7 +2393,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	delphoxmega: {
 		inherit: true,
-		abilities: { 0: "Magic Guard" },
+		abilities: { 0: "Levitate" },
 	},
 	greninjamega: {
 		inherit: true,
@@ -3729,7 +3729,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	fezandipiti: {
 		inherit: true,
 		baseStats: {hp: 88, atk: 70, def: 82, spa: 91, spd: 125, spe: 99},
-		abilities: {0: "Toxic Chain", 1: "Technician", H: "Magic Guard"},
+		abilities: {0: "Toxic Chain", 1: "Technician", H: "Levitate"},
 	},
 	gougingfire: {
 		inherit: true,

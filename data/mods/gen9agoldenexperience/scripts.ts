@@ -1366,8 +1366,10 @@ export const Scripts: ModdedBattleScriptsData = {
     this.modData('Learnsets', 'articunogalar').learnset.focusblast = ['9L1'];
     this.modData('Learnsets', 'articunogalar').learnset.mysticalfire = ['9L1'];
     this.modData('Learnsets', 'articunogalar').learnset.dazzlinggleam = ['9L1'];
+    this.modData('Learnsets', 'articunogalar').learnset.roost = ['9L1'];
     this.modData('Learnsets', 'zapdos').learnset.thunderstorm = ['9L1'];
     this.modData('Learnsets', 'moltres').learnset.heatstorm = ['9L1'];
+    this.modData('Learnsets', 'moltresgalar').learnset.roost = ['9L1'];
     this.modData('Learnsets', 'mew').learnset.genesiswave = ['9L1'];
 
     // Gen 2:
