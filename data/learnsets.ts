@@ -23086,6 +23086,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 8, level: 70, shiny: 1, moves: ["psychic", "disable", "recover", "blizzard"]},
 			{generation: 8, level: 70, shiny: 1, isHidden: true, moves: ['mist', 'guardswap', 'powerswap', 'psychic'], source: "gen8bdsp"},
 			{generation: 9, level: 100, nature: "Modest", perfectIVs: 6, isHidden: true, moves: ["psystrike", "aurasphere", "icebeam", "calmmind"]},
+			{generation: 9, level: 70, moves: ["psychic", "aurasphere", "psychocut", "amnesia"], source: "gen9legends"},
 		],
 		encounters: [
 			{generation: 1, level: 70},
