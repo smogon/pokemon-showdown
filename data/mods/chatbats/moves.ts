@@ -1702,12 +1702,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 				}
 				this.activeMove = null;
-	
 				this.checkWin();
 				if (this.getOverflowedTurnCount() >= this.effectState.endingTurn) {
 					target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'sinisterarrows');
 				}
-			},	
+			},
 		},
 		secondary: null,
 		target: "normal",
