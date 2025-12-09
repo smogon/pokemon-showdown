@@ -286,5 +286,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'azelf').learnset.rapidspin = ['9L1'];
 		this.modData('Learnsets', 'azelf').learnset.lootbox = ['9L1'];
 		this.modData('Learnsets', 'azelf').learnset.acupressure = ['9L1'];
+
+		this.modData('Learnsets', 'decidueye').learnset.sinisterarrows = ['9L1'];
+
+		this.modData('Learnsets', 'ogerpon').learnset.sappyseed = ['9L1'];
+		this.modData('Learnsets', 'ogerpon').learnset.thousandwaves = ['9L1'];
+
+		this.modData('Learnsets', 'glimmora').learnset.icebeam = ['9L1'];
+		this.modData('Learnsets', 'glimmora').learnset.malignantchain = ['9L1'];
 	},
 };
