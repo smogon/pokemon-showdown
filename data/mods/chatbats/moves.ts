@@ -1631,11 +1631,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Explosion', target);
 			this.add('-anim', source, 'Mind Blown', target);
 		},
-		onHit(pokemon, target) {
-			if (pokemon.volatiles['healing']) {
-				this.heal(Math.ceil(pokemon.maxhp * 0.5), source);
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -1673,9 +1668,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return this.NOT_FAIL;
 		},
 		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Curse', target);
 			this.add('-anim', source, 'Spite', target);
 		},
