@@ -124,7 +124,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string, ivs: string[],
-		prize: PokemonSet, game: Game = 'SV', ball: string, extraInfo: string
+		prize: PokemonSet, game: Game = 'Z-A', ball: string, extraInfo: string
 	) {
 		// Make into a sub-game if the gts ever opens up again
 		super(room);
@@ -162,7 +162,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 		const css: { [k: string]: string | { [k: string]: string } } = { class: "broadcast-blue" };
 		if (this.game === 'BDSP') css.style = { background: '#aa66a9', color: '#fff' };
 		if (this.game === 'SV') css.style = { background: '#CD5C5C', color: '#fff' };
-		if (this.game === 'Z-A') css.style = { background: '#9BC53B', color: '#fff' };
+		if (this.game === 'Z-A') css.style = { background: '#10a14f', color: '#fff' };
 		return css;
 	}
 
@@ -404,7 +404,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'SV';
+		if (!game) game = 'Z-A';
 		game = gameidToGame[toID(game)] || game as Game;
 		if (!game || !['SV', 'BDSP', 'SwSh', 'Z-A'].includes(game)) {
 			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," "SwSh," or "Z-A".`);
@@ -602,7 +602,7 @@ export class LotteryGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'SV';
+		if (!game) game = 'Z-A';
 		game = gameidToGame[toID(game)] || game as Game;
 		if (!game || !['SV', 'BDSP', 'SwSh', 'Z-A'].includes(game)) {
 			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," "SwSh," or "Z-A".`);
@@ -1614,8 +1614,8 @@ export const pages: Chat.PageTable = {
 							Game: <div>
 								<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 								<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-								<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+								<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+								<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 							</div><br />
 							<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 							{generatePokeballDropdown()}<br /><br />
@@ -1641,8 +1641,8 @@ export const pages: Chat.PageTable = {
 							Game: <div>
 								<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 								<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-								<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-								<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+								<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+								<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 							</div><br />
 							<label for="question">Question:</label><input name="question" /><br /><br />
 							<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
@@ -1789,8 +1789,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-											<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 										{generatePokeballDropdown()}<br /><br />
@@ -1813,8 +1813,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-											<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="question">Question:</label><input name="question" /><br /><br />
 										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
@@ -1961,8 +1961,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-											<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 										{generatePokeballDropdown()}<br /><br />
@@ -1985,8 +1985,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
-											<input type="radio" id="plza" name="game" value="plza" /><label for="plza">Z-A</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="question">Question:</label><input name="question" /><br /><br />
 										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />

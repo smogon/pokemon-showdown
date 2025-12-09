@@ -26,8 +26,9 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
-import { FriendsDatabase, PM } from './friends';
-import { SQL, Repl, FS, Utils } from '../lib';
+import * as ConfigLoader from './config-loader';
+import * as Friends from './friends';
+import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
@@ -171,6 +172,10 @@ try {
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
+
+const PM = SQL('chat-db', module, {
+	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
+});
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1548,8 +1553,8 @@ export const Chat = new class {
 	 * which tends to cause unexpected behavior.
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
-	readonly Friends = new FriendsDatabase();
-	readonly PM = PM;
+	readonly Friends = new Friends.FriendsDatabase();
+	readonly FriendsPM = Friends.PM;
 	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
@@ -1561,7 +1566,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1821,10 +1826,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = SQL(module, {
-		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.subprocessescache?.chatdb ?? 1,
-	});
+	database = PM;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -1911,14 +1913,14 @@ export const Chat = new class {
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({ message, room, user, connection });
-		const start = Date.now();
+		const startTime = Date.now();
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
 			void result.then(() => {
-				this.logSlowMessage(start, context);
+				this.logSlowMessage(startTime, context);
 			});
 		} else {
-			this.logSlowMessage(start, context);
+			this.logSlowMessage(startTime, context);
 		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
@@ -1929,8 +1931,8 @@ export const Chat = new class {
 
 		return result;
 	}
-	logSlowMessage(start: number, context: CommandContext) {
-		const timeUsed = Date.now() - start;
+	logSlowMessage(startTime: number, context: CommandContext) {
+		const timeUsed = Date.now() - startTime;
 		if (timeUsed < 1000) return;
 		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
 
@@ -2058,6 +2060,9 @@ export const Chat = new class {
 				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
 				Chat.handlers[handlerName].push(plugin.handlers[handlerName]);
 			}
+		}
+		if (plugin.start) {
+			plugin.start(Config.subprocessescache);
 		}
 		Chat.plugins[name] = plugin;
 	}
@@ -2639,6 +2644,14 @@ export const Chat = new class {
 		return this.linkRegex.test(possibleUrl);
 	}
 
+	extractLinks(possibleUrl: string) {
+		// SEE ABOVE COMMENT
+		// HOW DID I FUCKING FORGET THAT THIS WAS A THING
+		// https://youtu.be/rnzMkJocw6Q?t=9
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.exec(possibleUrl);
+	}
+
 	readonly filterWords: { [k: string]: FilterWord[] } = {};
 	readonly monitors: { [k: string]: Monitor } = {};
 
@@ -2649,6 +2662,10 @@ export const Chat = new class {
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
 		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
+	}
+
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -2708,13 +2725,8 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-// explicitly check this so it doesn't happen in other child processes
-if (!process.send) {
-	Chat.database.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
-	Chat.databaseReadyPromise = Chat.prepareDatabase();
-	// we need to make sure it is explicitly JUST the child of the original parent db process
-	// no other child processes
-} else if (process.mainModule === module) {
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -2727,7 +2739,16 @@ if (!process.send) {
 	process.on('unhandledRejection', err => {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
-	global.Config = require('./config-loader').Config;
 	// eslint-disable-next-line no-eval
-	Repl.start('chat-db', cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
+}
+
+function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (Config.usesqlite) {
+		PM.spawn(processCount['chatdb'] ?? 1);
+		Chat.databaseReadyPromise = Chat.prepareDatabase();
+	}
+	Chat.PrivateMessages.start(processCount);
+	Friends.start(processCount);
+	Artemis.start(processCount);
 }

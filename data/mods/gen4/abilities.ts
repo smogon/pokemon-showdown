@@ -190,7 +190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
-			if (target?.item && !target.itemKnockedOff) {
+			if (target?.item) {
 				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
@@ -538,16 +538,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { notrace: 1 },
 	},
-	unburden: {
-		inherit: true,
-		condition: {
-			onModifySpe(spe, pokemon) {
-				if ((!pokemon.item || pokemon.itemKnockedOff) && !pokemon.ignoringAbility()) {
-					return this.chainModify(2);
-				}
-			},
-		},
-	},
 	vitalspirit: {
 		inherit: true,
 		rating: 2.5,
@@ -559,7 +549,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
 				return;
 			}
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (target === source || move.category === 'Status' || move.type === '???') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
 				this.add('-immune', target, '[from] ability: Wonder Guard');

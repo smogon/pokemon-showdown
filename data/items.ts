@@ -396,7 +396,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	barbaracite: {
 		name: "Barbaracite",
-		spritenum: 0,
+		spritenum: 564,
 		megaStone: "Barbaracle-Mega",
 		megaEvolves: "Barbaracle",
 		itemUser: ["Barbaracle"],
@@ -687,6 +687,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	buginiumz: {
+		name: "Buginium Z",
+		spritenum: 642,
+		onPlate: 'Bug',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Bug",
+		forcedForme: "Arceus-Bug",
+		num: 787,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	bugmemory: {
 		name: "Bug Memory",
 		spritenum: 673,
@@ -700,18 +712,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Bug",
 		itemUser: ["Silvally-Bug"],
 		num: 909,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	buginiumz: {
-		name: "Buginium Z",
-		spritenum: 642,
-		onPlate: 'Bug',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Bug",
-		forcedForme: "Arceus-Bug",
-		num: 787,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -764,7 +764,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	chandelurite: {
 		name: "Chandelurite",
-		spritenum: 0,
+		spritenum: 557,
 		megaStone: "Chandelure-Mega",
 		megaEvolves: "Chandelure",
 		itemUser: ["Chandelure"],
@@ -874,7 +874,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	chesnaughtite: {
 		name: "Chesnaughtite",
-		spritenum: 0,
+		spritenum: 558,
 		megaStone: "Chesnaught-Mega",
 		megaEvolves: "Chesnaught",
 		itemUser: ["Chesnaught"],
@@ -1087,7 +1087,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	clefablite: {
 		name: "Clefablite",
-		spritenum: 0,
+		spritenum: 544,
 		megaStone: "Clefable-Mega",
 		megaEvolves: "Clefable",
 		itemUser: ["Clefable"],
@@ -1270,6 +1270,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	darkiniumz: {
+		name: "Darkinium Z",
+		spritenum: 646,
+		onPlate: 'Dark',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Dark",
+		forcedForme: "Arceus-Dark",
+		num: 791,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	darkmemory: {
 		name: "Dark Memory",
 		spritenum: 683,
@@ -1283,18 +1295,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Dark",
 		itemUser: ["Silvally-Dark"],
 		num: 919,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	darkiniumz: {
-		name: "Darkinium Z",
-		spritenum: 646,
-		onPlate: 'Dark',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Dark",
-		forcedForme: "Arceus-Dark",
-		num: 791,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -1354,7 +1354,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	delphoxite: {
 		name: "Delphoxite",
-		spritenum: 0,
+		spritenum: 559,
 		megaStone: "Delphox-Mega",
 		megaEvolves: "Delphox",
 		itemUser: ["Delphox"],
@@ -1450,7 +1450,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	dragalgite: {
 		name: "Dragalgite",
-		spritenum: 0,
+		spritenum: 565,
 		megaStone: "Dragalge-Mega",
 		megaEvolves: "Dragalge",
 		itemUser: ["Dragalge"],
@@ -1491,6 +1491,32 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	dragoninite: {
+		name: "Dragoninite",
+		spritenum: 547,
+		megaStone: "Dragonite-Mega",
+		megaEvolves: "Dragonite",
+		itemUser: ["Dragonite"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 2562,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	dragoniumz: {
+		name: "Dragonium Z",
+		spritenum: 645,
+		onPlate: 'Dragon',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Dragon",
+		forcedForme: "Arceus-Dragon",
+		num: 790,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	dragonmemory: {
 		name: "Dragon Memory",
 		spritenum: 682,
@@ -1516,35 +1542,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 235,
 		gen: 2,
 	},
-	dragoninite: {
-		name: "Dragoninite",
-		spritenum: 0,
-		megaStone: "Dragonite-Mega",
-		megaEvolves: "Dragonite",
-		itemUser: ["Dragonite"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 2562,
-		gen: 9,
-		isNonstandard: "Future",
-	},
-	dragoniumz: {
-		name: "Dragonium Z",
-		spritenum: 645,
-		onPlate: 'Dragon',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Dragon",
-		forcedForme: "Arceus-Dragon",
-		num: 790,
-		gen: 7,
-		isNonstandard: "Past",
-	},
 	drampanite: {
 		name: "Drampanite",
-		spritenum: 0,
+		spritenum: 569,
 		megaStone: "Drampa-Mega",
 		megaEvolves: "Drampa",
 		itemUser: ["Drampa"],
@@ -1643,7 +1643,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	eelektrossite: {
 		name: "Eelektrossite",
-		spritenum: 0,
+		spritenum: 556,
 		megaStone: "Eelektross-Mega",
 		megaEvolves: "Eelektross",
 		itemUser: ["Eelektross"],
@@ -1818,7 +1818,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	emboarite: {
 		name: "Emboarite",
-		spritenum: 0,
+		spritenum: 552,
 		megaStone: "Emboar-Mega",
 		megaEvolves: "Emboar",
 		itemUser: ["Emboar"],
@@ -1875,7 +1875,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	excadrite: {
 		name: "Excadrite",
-		spritenum: 0,
+		spritenum: 553,
 		megaStone: "Excadrill-Mega",
 		megaEvolves: "Excadrill",
 		itemUser: ["Excadrill"],
@@ -1960,7 +1960,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	falinksite: {
 		name: "Falinksite",
-		spritenum: 0,
+		spritenum: 570,
 		megaStone: "Falinks-Mega",
 		megaEvolves: "Falinks",
 		itemUser: ["Falinks"],
@@ -1981,7 +1981,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	feraligite: {
 		name: "Feraligite",
-		spritenum: 0,
+		spritenum: 549,
 		megaStone: "Feraligatr-Mega",
 		megaEvolves: "Feraligatr",
 		itemUser: ["Feraligatr"],
@@ -2181,12 +2181,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	floettite: {
 		name: "Floettite",
-		spritenum: 0,
+		spritenum: 562,
 		megaStone: "Floette-Mega",
 		megaEvolves: "Floette-Eternal",
 		itemUser: ["Floette-Eternal"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name) return false;
+			if ([item.megaEvolves, item.megaStone].includes(source.baseSpecies.name)) return false;
 			return true;
 		},
 		num: 2579,
@@ -2326,7 +2326,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	froslassite: {
 		name: "Froslassite",
-		spritenum: 0,
+		spritenum: 551,
 		megaStone: "Froslass-Mega",
 		megaEvolves: "Froslass",
 		itemUser: ["Froslass"],
@@ -2403,7 +2403,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	garchompite: {
 		name: "Garchompite",
-		spritenum: 589,
+		spritenum: 573,
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
 		itemUser: ["Garchomp"],
@@ -2457,6 +2457,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	ghostiumz: {
+		name: "Ghostium Z",
+		spritenum: 644,
+		onPlate: 'Ghost',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Ghost",
+		forcedForme: "Arceus-Ghost",
+		num: 789,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	ghostmemory: {
 		name: "Ghost Memory",
 		spritenum: 674,
@@ -2470,18 +2482,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Ghost",
 		itemUser: ["Silvally-Ghost"],
 		num: 910,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	ghostiumz: {
-		name: "Ghostium Z",
-		spritenum: 644,
-		onPlate: 'Ghost',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Ghost",
-		forcedForme: "Arceus-Ghost",
-		num: 789,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -2522,6 +2522,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	grassiumz: {
+		name: "Grassium Z",
+		spritenum: 635,
+		onPlate: 'Grass',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Grass",
+		forcedForme: "Arceus-Grass",
+		num: 780,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	grassmemory: {
 		name: "Grass Memory",
 		spritenum: 678,
@@ -2535,18 +2547,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Grass",
 		itemUser: ["Silvally-Grass"],
 		num: 914,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	grassiumz: {
-		name: "Grassium Z",
-		spritenum: 635,
-		onPlate: 'Grass',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Grass",
-		forcedForme: "Arceus-Grass",
-		num: 780,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -2582,7 +2582,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	greninjite: {
 		name: "Greninjite",
-		spritenum: 0,
+		spritenum: 560,
 		megaStone: "Greninja-Mega",
 		megaEvolves: "Greninja",
 		itemUser: ["Greninja"],
@@ -2667,6 +2667,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	groundiumz: {
+		name: "Groundium Z",
+		spritenum: 639,
+		onPlate: 'Ground',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Ground",
+		forcedForme: "Arceus-Ground",
+		num: 784,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	groundmemory: {
 		name: "Ground Memory",
 		spritenum: 671,
@@ -2680,18 +2692,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Ground",
 		itemUser: ["Silvally-Ground"],
 		num: 907,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	groundiumz: {
-		name: "Groundium Z",
-		spritenum: 639,
-		onPlate: 'Ground',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Ground",
-		forcedForme: "Arceus-Ground",
-		num: 784,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -2750,7 +2750,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	hawluchanite: {
 		name: "Hawluchanite",
-		spritenum: 0,
+		spritenum: 566,
 		megaStone: "Hawlucha-Mega",
 		megaEvolves: "Hawlucha",
 		itemUser: ["Hawlucha"],
@@ -3070,6 +3070,20 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	kangaskhanite: {
+		name: "Kangaskhanite",
+		spritenum: 592,
+		megaStone: "Kangaskhan-Mega",
+		megaEvolves: "Kangaskhan",
+		itemUser: ["Kangaskhan"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 675,
+		gen: 6,
+		isNonstandard: "Past",
+	},
 	kasibberry: {
 		name: "Kasib Berry",
 		spritenum: 233,
@@ -3149,20 +3163,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 170,
 		gen: 3,
-	},
-	kangaskhanite: {
-		name: "Kangaskhanite",
-		spritenum: 592,
-		megaStone: "Kangaskhan-Mega",
-		megaEvolves: "Kangaskhan",
-		itemUser: ["Kangaskhan"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 675,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	kingsrock: {
 		name: "King's Rock",
@@ -3691,7 +3691,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	malamarite: {
 		name: "Malamarite",
-		spritenum: 0,
+		spritenum: 563,
 		megaStone: "Malamar-Mega",
 		megaEvolves: "Malamar",
 		itemUser: ["Malamar"],
@@ -3822,7 +3822,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	meganiumite: {
 		name: "Meganiumite",
-		spritenum: 0,
+		spritenum: 548,
 		megaStone: "Meganium-Mega",
 		megaEvolves: "Meganium",
 		itemUser: ["Meganium"],
@@ -4615,6 +4615,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	poisoniumz: {
+		name: "Poisonium Z",
+		spritenum: 638,
+		onPlate: 'Poison',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Poison",
+		forcedForme: "Arceus-Poison",
+		num: 783,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	poisonmemory: {
 		name: "Poison Memory",
 		spritenum: 670,
@@ -4628,18 +4640,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Poison",
 		itemUser: ["Silvally-Poison"],
 		num: 906,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	poisoniumz: {
-		name: "Poisonium Z",
-		spritenum: 638,
-		onPlate: 'Poison',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Poison",
-		forcedForme: "Arceus-Poison",
-		num: 783,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -4763,6 +4763,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 12,
 		gen: 3,
 		isPokeball: true,
+	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		spritenum: 1,
+		fling: {
+			basePower: 20,
+		},
+		num: 571,
+		gen: 5,
 	},
 	primariumz: {
 		name: "Primarium Z",
@@ -4890,7 +4899,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	pyroarite: {
 		name: "Pyroarite",
-		spritenum: 0,
+		spritenum: 561,
 		megaStone: "Pyroar-Mega",
 		megaEvolves: "Pyroar",
 		itemUser: ["Pyroar"],
@@ -5175,6 +5184,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 4,
 		isNonstandard: "Past",
 	},
+	rockiumz: {
+		name: "Rockium Z",
+		spritenum: 643,
+		onPlate: 'Rock',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Rock",
+		forcedForme: "Arceus-Rock",
+		num: 788,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	rockmemory: {
 		name: "Rock Memory",
 		spritenum: 672,
@@ -5188,18 +5209,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Rock",
 		itemUser: ["Silvally-Rock"],
 		num: 908,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	rockiumz: {
-		name: "Rockium Z",
-		spritenum: 643,
-		onPlate: 'Rock',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Rock",
-		forcedForme: "Arceus-Rock",
-		num: 788,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -5460,7 +5469,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	scolipite: {
 		name: "Scolipite",
-		spritenum: 0,
+		spritenum: 554,
 		megaStone: "Scolipede-Mega",
 		megaEvolves: "Scolipede",
 		itemUser: ["Scolipede"],
@@ -5486,7 +5495,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	scraftinite: {
 		name: "Scraftinite",
-		spritenum: 0,
+		spritenum: 555,
 		megaStone: "Scrafty-Mega",
 		megaEvolves: "Scrafty",
 		itemUser: ["Scrafty"],
@@ -5678,7 +5687,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	skarmorite: {
 		name: "Skarmorite",
-		spritenum: 0,
+		spritenum: 550,
 		megaStone: "Skarmory-Mega",
 		megaEvolves: "Skarmory",
 		itemUser: ["Skarmory"],
@@ -5925,7 +5934,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	starminite: {
 		name: "Starminite",
-		spritenum: 0,
+		spritenum: 546,
 		megaStone: "Starmie-Mega",
 		megaEvolves: "Starmie",
 		itemUser: ["Starmie"],
@@ -5946,20 +5955,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1114,
 		gen: 8,
 	},
-	steelixite: {
-		name: "Steelixite",
-		spritenum: 621,
-		megaStone: "Steelix-Mega",
-		megaEvolves: "Steelix",
-		itemUser: ["Steelix"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 761,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	steelgem: {
 		name: "Steel Gem",
 		spritenum: 473,
@@ -5972,6 +5967,32 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 563,
 		gen: 5,
+		isNonstandard: "Past",
+	},
+	steeliumz: {
+		name: "Steelium Z",
+		spritenum: 647,
+		onPlate: 'Steel',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Steel",
+		forcedForme: "Arceus-Steel",
+		num: 792,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	steelixite: {
+		name: "Steelixite",
+		spritenum: 621,
+		megaStone: "Steelix-Mega",
+		megaEvolves: "Steelix",
+		itemUser: ["Steelix"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 761,
+		gen: 6,
 		isNonstandard: "Past",
 	},
 	steelmemory: {
@@ -5987,18 +6008,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		forcedForme: "Silvally-Steel",
 		itemUser: ["Silvally-Steel"],
 		num: 911,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	steeliumz: {
-		name: "Steelium Z",
-		spritenum: 647,
-		onPlate: 'Steel',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Steel",
-		forcedForme: "Arceus-Steel",
-		num: 792,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -7378,7 +7387,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	victreebelite: {
 		name: "Victreebelite",
-		spritenum: 0,
+		spritenum: 545,
 		megaStone: "Victreebel-Mega",
 		megaEvolves: "Victreebel",
 		itemUser: ["Victreebel"],
@@ -7427,6 +7436,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	wateriumz: {
+		name: "Waterium Z",
+		spritenum: 633,
+		onPlate: 'Water',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Water",
+		forcedForme: "Arceus-Water",
+		num: 778,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	watermemory: {
 		name: "Water Memory",
 		spritenum: 677,
@@ -7451,18 +7472,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 84,
 		gen: 1,
-	},
-	wateriumz: {
-		name: "Waterium Z",
-		spritenum: 633,
-		onPlate: 'Water',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Water",
-		forcedForme: "Arceus-Water",
-		num: 778,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	watmelberry: {
 		name: "Watmel Berry",
@@ -7728,7 +7737,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	zygardite: {
 		name: "Zygardite",
-		spritenum: 0,
+		spritenum: 568,
 		megaStone: "Zygarde-Mega",
 		megaEvolves: "Zygarde-Complete",
 		itemUser: ["Zygarde-Complete"],
@@ -7743,21 +7752,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 
 	// Gen 2 items
 
-	berserkgene: {
-		name: "Berserk Gene",
-		spritenum: 388,
-		onUpdate(pokemon) {
-			if (pokemon.useItem()) {
-				pokemon.addVolatile('confusion');
-			}
-		},
-		boosts: {
-			atk: 2,
-		},
-		num: 0,
-		gen: 2,
-		isNonstandard: "Past",
-	},
 	berry: {
 		name: "Berry",
 		spritenum: 319,
@@ -7779,6 +7773,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			this.heal(10);
 		},
 		num: 155,
+		gen: 2,
+		isNonstandard: "Past",
+	},
+	berserkgene: {
+		name: "Berserk Gene",
+		spritenum: 388,
+		onUpdate(pokemon) {
+			if (pokemon.useItem()) {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		boosts: {
+			atk: 2,
+		},
+		num: 0,
 		gen: 2,
 		isNonstandard: "Past",
 	},

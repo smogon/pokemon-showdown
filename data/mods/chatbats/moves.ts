@@ -531,7 +531,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					} else {
 						this.boost({ spe: 3 }, pokemon);
 					}
-					// adds volatile ordered, which prevents the order up effect from occuring again until Dondozo switches out
+					// adds volatile ordered, which prevents the order up effect from occurring again until Dondozo switches out
 					pokemon.addVolatile('ordered');
 					// removes the side condition
 					pokemon.side.removeSideCondition('orderup');

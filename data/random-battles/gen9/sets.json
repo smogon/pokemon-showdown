@@ -473,7 +473,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Fire Blast", "Psychic", "Shell Side Arm", "Slack Off", "Thunder Wave"],
+                "movepool": ["Earthquake", "Fire Blast", "Haze", "Psychic", "Shell Side Arm", "Slack Off", "Thunder Wave"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dark", "Ground", "Poison"]
             }
@@ -1178,7 +1178,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Ice Beam", "Scald", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Ice Beam", "Scald", "Thunder Wave", "Thunderbolt"],
                 "abilities": ["Volt Absorb"],
                 "teraTypes": ["Flying"]
             }
@@ -1721,7 +1721,7 @@
                 "role": "Bulky Support",
                 "movepool": ["Heal Bell", "Seismic Toss", "Soft-Boiled", "Stealth Rock", "Thunder Wave"],
                 "abilities": ["Natural Cure"],
-                "teraTypes": ["Fairy", "Ghost", "Poison", "Steel"]
+                "teraTypes": ["Dark", "Fairy", "Ghost", "Poison"]
             }
         ]
     },
@@ -1732,7 +1732,7 @@
                 "role": "Bulky Support",
                 "movepool": ["Heal Bell", "Seismic Toss", "Soft-Boiled", "Stealth Rock", "Thunder Wave"],
                 "abilities": ["Natural Cure"],
-                "teraTypes": ["Fairy", "Ghost", "Poison", "Steel"]
+                "teraTypes": ["Dark", "Fairy", "Ghost", "Poison"]
             }
         ]
     },
@@ -2479,9 +2479,15 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Aura Sphere", "Calm Mind", "Draco Meteor", "Flip Turn", "Luster Purge"],
+                "movepool": ["Aura Sphere", "Draco Meteor", "Flip Turn", "Luster Purge"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Dragon", "Psychic", "Steel"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Aura Sphere", "Draco Meteor", "Luster Purge", "Recover"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Dragon", "Fighting", "Steel"]
             }
         ]
     },
@@ -3285,7 +3291,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Nasty Plot", "Overheat", "Pain Split", "Thunderbolt", "Trick", "Volt Switch", "Will-O-Wisp"],
+                "movepool": ["Nasty Plot", "Overheat", "Pain Split", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Electric", "Fire"]
             }
@@ -3442,7 +3448,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earth Power", "Flash Cannon", "Heavy Slam", "Lava Plume", "Magma Storm", "Stealth Rock"],
+                "movepool": ["Earth Power", "Heavy Slam", "Lava Plume", "Magma Storm", "Stealth Rock"],
                 "abilities": ["Flash Fire"],
                 "teraTypes": ["Flying", "Grass"]
             }
@@ -4109,6 +4115,12 @@
                 "movepool": ["Close Combat", "Dragon Dance", "Knock Off", "Poison Jab"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dragon Dance", "Drain Punch", "Knock Off", "Poison Jab"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
@@ -4378,7 +4390,7 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Iron Head", "Stealth Rock", "Sucker Punch", "Swords Dance", "Throat Chop"],
                 "abilities": ["Defiant"],
-                "teraTypes": ["Ghost"]
+                "teraTypes": ["Flying", "Ghost"]
             }
         ]
     },
@@ -5038,13 +5050,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Boomburst", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "U-turn"],
+                "movepool": ["Boomburst", "Draco Meteor", "Flamethrower", "Hurricane", "U-turn"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Normal"]
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "U-turn"],
+                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Hurricane", "Roost"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Fire"]
             }
@@ -5701,12 +5713,6 @@
         "level": 81,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Hydro Pump", "Ice Beam", "U-turn"],
-                "abilities": ["Torrent"],
-                "teraTypes": ["Water"]
-            },
-            {
                 "role": "Wallbreaker",
                 "movepool": ["Hydro Pump", "Ice Beam", "Scald", "U-turn"],
                 "abilities": ["Torrent"],
@@ -5923,13 +5929,19 @@
         ]
     },
     "alcremie": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Acid Armor", "Alluring Voice", "Calm Mind", "Dazzling Gleam", "Recover"],
+                "movepool": ["Alluring Voice", "Calm Mind", "Psychic", "Psyshock", "Recover"],
                 "abilities": ["Aroma Veil"],
                 "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Alluring Voice", "Calm Mind", "Recover", "Tera Blast"],
+                "abilities": ["Aroma Veil"],
+                "teraTypes": ["Ground"]
             }
         ]
     },

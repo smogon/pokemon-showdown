@@ -410,7 +410,8 @@ export class RandomGen8Teams {
 					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			}
+			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
@@ -2175,6 +2176,8 @@ export class RandomGen8Teams {
 		isDoubles = false,
 		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const gmax = species.name.endsWith('-Gmax');
@@ -2412,7 +2415,10 @@ export class RandomGen8Teams {
 			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical' || move.id === 'bodypress';
 		});
-		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
+		if (
+			noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status')) &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
@@ -2425,6 +2431,9 @@ export class RandomGen8Teams {
 			ivs.spe = 0;
 		}
 
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -2432,7 +2441,7 @@ export class RandomGen8Teams {
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability,
 			evs,
 			ivs,
