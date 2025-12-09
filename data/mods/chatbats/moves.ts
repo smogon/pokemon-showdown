@@ -1643,4 +1643,77 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+	sinisterarrows: {
+		num: -1016,
+		accuracy: 100,
+		basePower: 50,
+		category: "Physical",
+		name: "Sinister Arrows",
+		pp: 10,
+		priority: 0,
+		flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+		ignoreImmunity: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'sinisterarrows')) return false;
+			Object.assign(target.side.slotConditions[target.position]['sinisterarrows'], {
+				move: 'sinisterarrows',
+				source,
+				moveData: {
+					id: 'sinisterarrows',
+					name: "Sinister Arrows",
+					accuracy: 100,
+					basePower: 50,
+					category: "Physical",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					ignoreImmunity: false,
+					effectType: 'Move',
+					type: 'Ghost',
+				},
+			});
+			this.add('-start', source, 'move: Sinister Arrows');
+			return this.NOT_FAIL;
+		},
+		condition: {
+			onStart(target) {
+				this.effectState.targetSlot = target.getSlot();
+				this.effectState.endingTurn = (this.turn - 1) + 4;
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
+			onResidual(target) {
+				const data = this.effectState;
+				// time's up; time to hit! :D
+				const move = this.dex.moves.get(data.move);
+				if (target.fainted || target === data.source) {
+					this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
+					return;
+				}
+				target.removeVolatile('Protect');
+				target.removeVolatile('Endure');
+				if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+					data.moveData.infiltrates = true;
+				}
+				if (data.source.hasAbility('normalize') && this.gen >= 6) {
+					data.moveData.type = 'Normal';
+				}
+				const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
+				this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+				if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
+					this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+				}
+				this.activeMove = null;
+	
+				this.checkWin();
+			},	
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Clever",
+	},
+	mortalspin: {
+		inherit: true,
+		category: "Special",
+	},
 };
