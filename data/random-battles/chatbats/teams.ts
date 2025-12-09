@@ -1008,7 +1008,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');	
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');
 
 			let set: RandomTeamsTypes.RandomSet;
 
