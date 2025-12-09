@@ -813,12 +813,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	dragonsjaw: {
 		onBasePower(basePower, attacker, defender, move) {
 			if (defender.hasType('Dragon') && defender.hasType('Steel')) {
-				return this.chainModify(1.5); }
-			else if (defender.hasType('Dragon')) {
-				return this.chainModify(2.25); }
-			else if (defender.hasType('Steel')) {
-				return; }
-			else return this.chainModify(1.5);
+				return this.chainModify(1.5);
+			} else if (defender.hasType('Dragon')) {
+				return this.chainModify(2.25);
+			} else if (defender.hasType('Steel')) {
+				return;
+			} else return this.chainModify(1.5);
 		},
 		onTryHit(target, source, move) {
 			if (target.hasType('Fairy')) {
@@ -926,12 +926,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const move = this.dex.getActiveMove('metronome');
 			const target = pokemon.foes()[0];
 			if (target && !target.fainted && (pokemon.hp >= pokemon.maxhp / 2)) {
-				this.actions.useMove(move, pokemon, { target, sourceEffect: effect }); }
-			else if (target && !target.fainted && (pokemon.hp <= pokemon.maxhp / 10)) {
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+			} else if (target && !target.fainted && (pokemon.hp <= pokemon.maxhp / 10)) {
 				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
 				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
-				this.actions.useMove(move, pokemon, { target, sourceEffect: effect }); }
-			else if (target && !target.fainted) {
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+			} else if (target && !target.fainted) {
 				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
 				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
 			}
