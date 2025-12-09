@@ -892,7 +892,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
+			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Kyogre' || pokemon.transformed) return;
 			if (!pokemon.hp) return;
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'kyogreprimal') {
