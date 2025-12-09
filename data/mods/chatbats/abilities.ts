@@ -1,4 +1,4 @@
-eexport const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	thickfat: {
 		// prevents burning
 		inherit: true,
