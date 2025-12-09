@@ -1605,7 +1605,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	lootbox: {
 		num: -1015,
-		accuracy: 10,
+		accuracy: 100,
 		basePower: 0,
 		category: "Physical",
 		name: "Loot Box",
