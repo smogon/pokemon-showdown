@@ -1520,7 +1520,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		const minutes = (toID(target) === 'off' ? 0 : parseFloat(target));
 		if (isNaN(minutes) || minutes < 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
-			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
+			throw new Chat.ErrorMessage(`You must specify a timer length that is a positive number.`);
 		}
 
 		const result = game.setTimer(minutes);
@@ -2057,7 +2057,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		if (!RATED_TYPES.includes(gameType)) throw new Chat.ErrorMessage(`You cannot set blitz points for ${gameType} hunts.`);
 
 		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) {
-			throw new Chat.ErrorMessage("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
+			throw new Chat.ErrorMessage("The points value awarded for blitz must be an integer between 0 and 1000.");
 		}
 		if (!room.settings.scavSettings.blitzPoints) room.settings.scavSettings.blitzPoints = {};
 		room.settings.scavSettings.blitzPoints[gameType] = blitzPoints;
@@ -2092,7 +2092,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			return this.sendReply(`The points rewarded for hosting a regular hunt is ${pointSetting}.`);
 		}
 
-		this.checkCan('declare', null, room); // perms for editting
+		this.checkCan('declare', null, room); // perms for editing
 		const points = parseInt(target);
 		if (isNaN(points)) throw new Chat.ErrorMessage(`${target} is not a valid number of points.`);
 
@@ -2133,7 +2133,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`The points rewarded for winning hunts is:<br />${points.join('<br />')}`);
 		}
 
-		this.checkCan('declare', null, room); // perms for editting
+		this.checkCan('declare', null, room); // perms for editing
 
 		let [type, ...pointsSet] = target.split(',');
 		type = toID(type) as GameTypes;

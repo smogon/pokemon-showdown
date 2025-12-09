@@ -3084,7 +3084,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 	},
 
-	// Effects needed to be overriden for things to happen
+	// Effects needed to be overridden for things to happen
 	attract: {
 		onStart(pokemon, source, effect) {
 			if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {

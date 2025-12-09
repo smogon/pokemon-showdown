@@ -10,7 +10,7 @@ describe('Target Resolution', () => {
 		battle.destroy();
 	});
 
-	describe(`Targetted Pokémon fainted in-turn`, () => {
+	describe(`Targeted Pokémon fainted in-turn`, () => {
 		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun'] },
@@ -135,7 +135,7 @@ describe('Target Resolution', () => {
 		});
 	});
 
-	describe(`Targetted slot is empty`, () => {
+	describe(`Targeted slot is empty`, () => {
 		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wailord', ability: 'pressure', moves: ['watergun'] },

@@ -871,7 +871,7 @@ export const commands: Chat.ChatCommands = {
 			game.suppressMessages = state;
 
 			this.addModAction(`${user.name} has turned ${state ? 'on' : 'off'} suppression of UNO game messages.`);
-			this.modlog('UNO SUPRESS', null, (state ? 'ON' : 'OFF'));
+			this.modlog('UNO SUPPRESS', null, (state ? 'ON' : 'OFF'));
 		},
 
 		spectate(target, room, user) {

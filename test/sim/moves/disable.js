@@ -21,7 +21,7 @@ describe('Disable', () => {
 		assert.cantMove(() => battle.makeChoices('auto', 'move growl'), "Spearow", 'growl');
 	});
 
-	it(`should interupt consecutively executed moves like Outrage`, () => {
+	it(`should interrupt consecutively executed moves like Outrage`, () => {
 		battle = common.createBattle([[
 			{ species: "Wynaut", moves: ['disable'] },
 		], [

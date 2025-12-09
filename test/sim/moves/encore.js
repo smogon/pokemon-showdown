@@ -136,7 +136,7 @@ describe('Encore', () => {
 		assert.notEqual(battle.p2.active[0].hp, hp);
 		hp = battle.p2.active[0].hp;
 
-		// During subesquent turns the normal Shell Trap behavior applies.
+		// During subsequent turns the normal Shell Trap behavior applies.
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');
 		assert.notEqual(battle.p2.active[0].hp, hp);
 	});
