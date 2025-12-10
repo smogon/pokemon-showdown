@@ -45,6 +45,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	butterfree: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 40, def: 50, spa: 90, spd: 80, spe: 75},
+		abilities: {0: "Compound Eyes", H: "Magic Guard"},
 		otherFormes: ["Butterfree-Gmax", "Butterfree-Mega"],
 		formeOrder: ["Butterfree", "Butterfree-Gmax", "Butterfree-Mega"],
 	},
@@ -53,9 +54,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		name: "Butterfree-Mega",
 		baseSpecies: "Butterfree",
 		forme: "Mega",
-		types: ["Bug", "Flying"],
+		types: ["Bug", "Fairy"],
 		baseStats: {hp: 60, atk: 40, def: 70, spa: 140, spd: 110, spe: 75},
-		abilities: {0: "Magic Guard"},
+		abilities: {0: "Technician"},
 		heightm: 5,
 		weightkg: 50,
 		color: "White",
@@ -1605,6 +1606,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	abomasnow: {
 		inherit: true,
 		baseStats: {hp: 100, atk: 102, def: 85, spa: 102, spd: 95, spe: 70},
+		abilities: { 0: "Snow Warning", H: "Mountain Walker" },
 	},
 	abomasnowmega: {
 		inherit: true,
@@ -2589,8 +2591,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	avalugghisui: {
 		inherit: true,
-		baseStats: {hp: 95, atk: 127, def: 154, spa: 34, spd: 36, spe: 68},
-		abilities: {0: "Strong Jaw", 1: "Sheer Force", H: "Sturdy"},
+		abilities: {0: "Mountain Walker", 1: "Sheer Force", H: "Sturdy"},
 	},
 	noibat: {
 		inherit: true,
@@ -3103,6 +3104,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	centiskorch: {
 		inherit: true,
+		abilities: { 0: "Flash Fire", 1: "Mountain Walker", H: "Flame Body" },
 		otherFormes: ["Centiskorch-Gmax", "Centiskorch-Mega-X", "Centiskorch-Mega-Y"],
 		formeOrder: ["Centiskorch", "Centiskorch-Gmax", "Centiskorch-Mega-X", "Centiskorch-Mega-Y"],
 	},

@@ -7881,7 +7881,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	    name: "Healing Echo",
 		rating: 3,
 		num: -102,
-	},		
+	},
+	mountainwalker: {
+		shortDesc: "This Pokemon is immune to all Rock-type attacks and Stealth Rock.",
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.id === 'stealthrock') {
+				return false;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Rock') {
+				this.add('-immune', target, '[from] ability: Mountain Walker');
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Mountain Walker",
+		rating: 3,
+		num: -103,
+	},
 	// Touhou
 	hakkero: {
 		//effect in conditions.ts

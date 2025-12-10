@@ -24409,7 +24409,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	befuddlepowder: {
 		num: -79,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 60,
 		category: "Special",
 		name: "Befuddle Powder",
 		pp: 10,
@@ -24427,7 +24427,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		secondary: null,
 		target: "adjacentFoe",
-		type: "Flying",
+		type: "Bug",
 		contestType: "Cool",
 		shortDesc: "Double damage on targets that resist.",
 	},
