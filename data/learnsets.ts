@@ -104596,14 +104596,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			pluck: ["9L1"],
 		},
 	},
-	golrobot: {
-		learnset: {
-			heatcrash: ["9L1"],
-			heavyslam: ["9L1"],
-			bulletpunch: ["9L1"],
-			machpunch: ["9L1"],
-		},
-	},
 	sautropius: {
 		learnset: {
 			acrobatics: ["9L1"],

@@ -3858,6 +3858,30 @@ export const Moves: { [k: string]: ModdedMoveData; } = {
 		shortDesc: "User switches out after damaging the target.",
 		switchOut: "#uturn",
 	},
+	calmingbell: {
+		num: -98,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Calming Bell",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, sound: 1},
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: -1,
+			},
+		},
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Heal Bell", target);
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Beautiful",
+		shortDesc: "100% chance to lower the target's SpA by 1.",
+	},
 
 
 

@@ -457,21 +457,6 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		desc: "If held by a Salazzle, this item allows it to Mega Evolve in battle.",
 		isNonstandard: null,
 	},
-	golisopodite: {
-		name: "Golisopodite",
-		spritenum: 578,
-		megaStone: "Golisopod-Mega",
-		megaEvolves: "Golisopod",
-		itemUser: ["Golisopod"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: -24,
-		gen: 9,
-		desc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
-		isNonstandard: null,
-	},
 	dhelmite: {
 		name: "Dhelmite",
 		spritenum: 578,
@@ -790,27 +775,6 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			}
 		},
 		itemUser: ["Clamperl", "Huntail"],
-	},
-	awakeningeye: {
-		name: "Awakening Eye",
-		shortDesc: "If held by a Meowstic, its Sp. Atk and its Sp. Def are x1.5.",
-		// spritenum: 699,
-		onModifySpAPriority: 2,
-		onModifySpA(spa, pokemon) {
-			if (pokemon.baseSpecies.name === 'Meowstic' || pokemon.baseSpecies.name === 'Meowstic-F') {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.name === 'Meowstic' || pokemon.baseSpecies.name === 'Meowstic-F') {
-				return this.chainModify(1.5);
-			}
-		},
-		itemUser: ["Meowstic", "Meowstic-F"],
-		num: -43,
-		gen: 9,
-		isNonstandard: null,
 	},
 	identitycard: { 
 		name: "Identity Card",

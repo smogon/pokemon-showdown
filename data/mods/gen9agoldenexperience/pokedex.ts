@@ -117,14 +117,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		inherit: true,
 		abilities: {0: "Adaptability"},
 	},
-	raichu: {
-		inherit: true,
-		baseStats: {hp: 60, atk: 100, def: 55, spa: 90, spd: 80, spe: 110},
-	},
-	raichualola: {
-		inherit: true,
-		baseStats: {hp: 60, atk: 85, def: 50, spa: 105, spd: 85, spe: 110},
-	},
 	sandshrew: {
 		inherit: true,
 		abilities: {0: "Sand Veil", 1: "Battle Armor", H: "Sand Rush"},
@@ -1316,10 +1308,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		inherit: true,
 		abilities: {0: "Pressure", 1: "Shadow Tag", H: "Frisk"},
 	},
-	chimecho: {
-		inherit: true,
-		baseStats: {hp: 95, atk: 70, def: 105, spa: 135, spd: 120, spe: 75},
-	},
 	tropius: {
 		inherit: true,
 		evos: ["Sautropius"],
@@ -1579,6 +1567,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	},
 	garchompmega: {
 		inherit: true,
+		baseStats: {hp: 108, atk: 170, def: 105, spa: 120, spd: 95, spe: 102},
 		abilities: {0: "Unconcerned"},
 	},
 	lucario: {
@@ -2285,11 +2274,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		inherit: true,
 		abilities: {0: "Striker", 1: "Regenerator", H: "Reckless"},
 	},
-	golurk: {
-		inherit: true,
-		abilities: {0: "Iron Fist", 1: "Klutz", H: "Invincible"},
-		evos: ["Golrobot"],
-	},
 	bouffalant: {
 		inherit: true,
 		abilities: {0: "Reckless", 1: "Sap Sipper", H: "Fluffy"},
@@ -2437,14 +2421,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	pangoro: {
 		inherit: true,
 		baseStats: {hp: 95, atk: 124, def: 78, spa: 48, spd: 71, spe: 79},
-	},
-	meowstic: {
-		inherit: true,
-		baseStats: {hp: 74, atk: 48, def: 76, spa: 93, spd: 81, spe: 109},
-	},
-	meowsticf: {
-		inherit: true,
-		baseStats: {hp: 74, atk: 48, def: 76, spa: 93, spd: 81, spe: 109},
 	},
 	spritzee: {
 		inherit: true,
@@ -2695,11 +2671,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		baseStats: {hp: 77, atk: 60, def: 90, spa: 145, spd: 75, spe: 63},
 		abilities: {0: "Levitate", H: "Speed Boost"},
 	},
-	crabominable: {
-		inherit: true,
-		baseStats: {hp: 97, atk: 132, def: 77, spa: 50, spd: 79, spe: 43},
-		abilities: {0: "Hyper Cutter", 1: "Iron Fist", H: "Fur Coat"},
-	},
 	oricorio: {
 		inherit: true,
 		baseStats: {hp: 75, atk: 70, def: 70, spa: 108, spd: 70, spe: 103},
@@ -2802,25 +2773,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	passimian: {
 		inherit: true,
 		abilities: {0: "Receiver", 1: "Defiant", H: "Libero"},
-	},
-	golisopod: {
-		inherit: true,
-		otherFormes: ["Golisopod-Mega"],
-		formeOrder: ["Golisopod", "Golisopod-Mega"],
-	},
-	golisopodmega: {
-		num: 768,
-		name: "Golisopod-Mega",
-		baseSpecies: "Golisopod",
-		forme: "Mega",
-		types: ["Bug", "Water"],
-		baseStats: {hp: 75, atk: 155, def: 150, spa: 60, spd: 115, spe: 75},
-		abilities: {0: "Tactical Escape"},
-		heightm: 2,
-		weightkg: 110,
-		color: "Gray",
-		eggGroups: ["Bug", "Water 3"],
-		requiredItem: "Golisopodite",
 	},
 	sandygast: {
 		inherit: true,
@@ -3459,10 +3411,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 	klawf: {
 		inherit: true,
 		baseStats: {hp: 70, atk: 100, def: 115, spa: 35, spd: 55, spe: 85},
-	},
-	scovillain: {
-		inherit: true,
-		baseStats: {hp: 65, atk: 118, def: 65, spa: 118, spd: 65, spe: 85},
 	},
 	rellor: {
 		inherit: true,
@@ -4568,17 +4516,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData;} = {
 		color: "White",
 		prevo: "Squawkabilly-White",
 		eggGroups: ["Flying"],
-	},
-	golrobot: {
-		num: -62,
-		name: "Golrobot",
-		types: ["Ground", "Ghost"],
-		baseStats: {hp: 119, atk: 134, def: 90, spa: 45, spd: 80, spe: 75},
-		abilities: {0: "Iron Fist", 1: "Smart Guard", H: "Invincible"},
-		heightm: 3,
-		weightkg: 999.9,
-		prevo: "Golurk",
-		eggGroups: ["Mineral"],
 	},
 	sautropius: {
 		num: -63,

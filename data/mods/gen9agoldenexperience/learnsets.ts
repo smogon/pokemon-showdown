@@ -1162,6 +1162,7 @@ export const Learnsets: { [speciesid: string]: LearnsetData; } = {
 			liquidation: ["9M"],
 			metalclaw: ["9M"],
 			mudshot: ["9M"],
+			nastyplot: ["9M"],
 			outrage: ["9M"],
 			poisonjab: ["9M"],
 			powergem: ["9M"],
@@ -7185,14 +7186,6 @@ export const Learnsets: { [speciesid: string]: LearnsetData; } = {
 			wideguard: ["9L1"],
 			quickguard: ["9L1"],
 			pluck: ["9L1"],
-		},
-	},
-	golrobot: {
-		learnset: {
-			heatcrash: ["9L1"],
-			heavyslam: ["9L1"],
-			bulletpunch: ["9L1"],
-			machpunch: ["9L1"],
 		},
 	},
 	sautropius: {
