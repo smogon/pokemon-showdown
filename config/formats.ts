@@ -217,6 +217,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Intrepid Sword', 'Light Power', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Rickroll', 'Shadow Tag', 'Simple', 'Speed Boost', 'Stakeout', 
 			'Strong Will', 'Triage', 'Unburden', 'Water Bubble', 'Wonder Guard', 'Wonder Skin', 'King\'s Rock', 'Light Clay', 'Baton Pass', 'Electrify', 'Last Respects', 'Shed Tail',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 	},
 	{
 		name: "[Gen 9] Balanced Hackmons A Golden Experience",
@@ -261,6 +262,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Calyrex-Shadow', 'Koraidon', 'Kyogre', 'Miraidon', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 
 			'Kangaskhanite', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb', 'Scolipite', 'Starminite', 'Baton Pass', 'Shed Tail',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 		restricted: [
 			'Arceus', 'Basculegion-M', 'Calyrex-Ice', 'Ceruledge', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Flutter Mane',
 			'Gengar', 'Gholdengo', 'Giratina', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Kyurem-Black', 'Kyurem-White', 'Lugia',
@@ -337,6 +339,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Zygarde-50%', 'Moody', 'Power Construct', 'Damp Rock', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects',
 			'Shed Tail', 'Wicked Blow', 
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 		restricted: [
 			'Astral Barrage', 'Belly Drum', 'Bolt Beak', 'Chatter', 'Clangorous Soul', 'Dire Claw', 'Double Iron Bash', 'Dragon Energy', 'Electrify', 'Extreme Speed',
 			'Fillet Away', 'Final Gambit', 'Fishious Rend', 'Geomancy', 'Gigaton Hammer', 'No Retreat', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'Thousand Arrows',
@@ -374,6 +377,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Heat Rock', 'King\'s Rock', 'Light Clay', 'Light Power', 'Razor Fang', 'Baton Pass', 'Boomburst', 'Extreme Speed', 'Last Respects', 'Population Bomb', 'Quiver Dance',
 			'Rage Fist', 'Shed Tail', 'Shell Smash', 'Spore', 'Transform',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 	},
 	{
 		name: "[Gen 9] Inheritance A Golden Experience",
@@ -390,6 +394,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Imposter', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Sheer Force', 'Speed Boost', 'Stakeout', 'Water Bubble',
 			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Ceaseless Edge', 'Fillet Away', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail', 'Shell Smash',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 		getEvoFamily(speciesid) {
 			let species = Dex.species.get(speciesid);
 			while (species.prevo) {
@@ -585,6 +590,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Zekrom', 'Moody', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Smooth Rock', 'Baton Pass', 'Shed Tail', 
 			'Last Respects',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
@@ -654,6 +660,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Court Change', 'Decorate', 'Dragon Cheer', 'Final Gambit', 'Flatter', 'Fling', 'Floral Healing', 'Follow Me', 'Heal Pulse', 'Heart Swap', 'Last Respects',
 			'Malignant Chain', 'Poison Fang', 'Rage Powder', 'Skill Swap', 'Spicy Extract', 'Swagger', 'Toxic', 'Toxic Spikes',
 		],
+		unbanlist: ['Battle Bond', 'Greninja-Bond', 'Light of Ruin'],
 	},
 
 	// Touhoumons
