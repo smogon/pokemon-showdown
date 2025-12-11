@@ -7161,6 +7161,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	latias: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			agility: ["9M"],
@@ -7224,6 +7225,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	latios: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			agility: ["9M"],
@@ -7289,6 +7291,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	kyogre: {
+		inherit: true,
 		learnset: {
 			ancientpower: ["9M", "9L1"],
 			aquaring: ["9L54"],
@@ -7336,6 +7339,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	groudon: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			ancientpower: ["9M", "9L1"],
@@ -7397,6 +7401,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	rayquaza: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			airslash: ["9L1"],
@@ -8530,6 +8535,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	heatran: {
+		inherit: true,
 		learnset: {
 			ancientpower: ["9M"],
 			bodyslam: ["9M"],
@@ -8581,6 +8587,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	darkrai: {
+		inherit: true,
 		learnset: {
 			blizzard: ["9M"],
 			brickbreak: ["9M"],
@@ -10621,6 +10628,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	cobalion: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			airslash: ["9L38"],
@@ -10670,6 +10678,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	terrakion: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			aurasphere: ["9L30"],
@@ -10718,6 +10727,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	virizion: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			airslash: ["9L38"],
@@ -10772,6 +10782,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	keldeo: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			airslash: ["9L38"],
@@ -10830,6 +10841,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	meloetta: {
+		inherit: true,
 		learnset: {
 			agility: ["9M"],
 			brickbreak: ["9M"],
@@ -10888,6 +10900,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	genesect: {
+		inherit: true,
 		learnset: {
 			ancientpower: ["9M"],
 			blazekick: ["9M"],
@@ -14384,6 +14397,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	magearna: {
+		inherit: true,
 		learnset: {
 			agility: ["9M"],
 			aurasphere: ["9L66"],
@@ -14438,8 +14452,64 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zenheadbutt: ["9M"],
 		},
 	},
-	magearnaoriginal: {},
+	magearnaoriginal: {
+		inherit: true,
+		learnset: {
+			agility: ["9M"],
+			aurasphere: ["9L66"],
+			bodyslam: ["9M"],
+			brickbreak: ["9M"],
+			calmmind: ["9M"],
+			chargebeam: ["9M", "9L24"],
+			dazzlinggleam: ["9M"],
+			disarmingvoice: ["9L1"],
+			drainingkiss: ["9L14"],
+			eerieimpulse: ["9L28"],
+			electroweb: ["9M"],
+			endure: ["9M"],
+			energyball: ["9M"],
+			facade: ["9M"],
+			falseswipe: ["9M"],
+			flashcannon: ["9M", "9L72"],
+			fleurcannon: ["9L80"],
+			focusblast: ["9M"],
+			gigaimpact: ["9M"],
+			hyperbeam: ["9M"],
+			icebeam: ["9M"],
+			irondefense: ["9M", "9L18"],
+			ironhead: ["9M", "9L60"],
+			lightscreen: ["9M"],
+			magnetbomb: ["9M", "9L42"],
+			metalsound: ["9L1"],
+			petaldance: ["9M"],
+			playrough: ["9M"],
+			powergem: ["9M"],
+			protect: ["9M"],
+			psybeam: ["9L30"],
+			psychic: ["9M"],
+			psyshock: ["9M", "9L50"],
+			reflect: ["9M"],
+			rollout: ["9L12"],
+			selfdestruct: ["9M"],
+			shadowball: ["9M"],
+			skullbash: ["9M"],
+			solarbeam: ["9M"],
+			solarblade: ["9M"],
+			spikes: ["9M"],
+			steelbeam: ["9M"],
+			substitute: ["9M"],
+			swift: ["9M"],
+			thunderbolt: ["9M"],
+			thunderwave: ["9M"],
+			triattack: ["9M", "9L36"],
+			vacuumwave: ["9M"],
+			voltswitch: ["9M"],
+			zapcannon: ["9L84"],
+			zenheadbutt: ["9M"],
+		},
+	},
 	marshadow: {
+		inherit: true,
 		learnset: {
 			agility: ["9M"],
 			aurasphere: ["9L32"],
@@ -14488,6 +14558,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 	},
 	zeraora: {
+		inherit: true,
 		learnset: {
 			aerialace: ["9M"],
 			agility: ["9M", "9L80"],
