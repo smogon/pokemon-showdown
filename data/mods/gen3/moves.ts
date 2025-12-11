@@ -589,9 +589,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			data.sources.push(pokemon);
 		},
-		onTryHit(target, pokemon) {
-			target.removeVolatile('pursuit');
-		},
+		onTryHit() {},
 	},
 	recover: {
 		inherit: true,
