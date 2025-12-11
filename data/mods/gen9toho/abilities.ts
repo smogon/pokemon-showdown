@@ -484,60 +484,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			// switch (pokemon.effectiveWeather()) {
-			// 	case 'sunnyday':
-			// 	case 'desolateland':
-			// 		pokemon.setType(['Fire', 'Dark']);
-			// 		break;
-			// 	case 'raindance':
-			// 	case 'primordialsea':
-			// 		pokemon.setType(['Water', 'Dark']);
-			// 		break;
-			// 	case 'sandstorm':
-			// 		pokemon.setType(['Rock', 'Dark']);
-			// 		break;
-			// 	case 'hail':
-			// 	case 'snowscape':
-			// 		pokemon.setType(['Ice', 'Dark']);
-			// 		break;
-			// 	default:
-			// 		// pokemon.setType(['Normal', 'Dark']);
-			// 		pokemon.setType(pokemon.baseSpecies.types);
-			// }
-
-			let types;
+			if (pokemon.baseSpecies.baseSpecies !== 'Okina Matara' || pokemon.transformed) return;
+			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				types = ['Fire, Dark'];
+				if (pokemon.species.id !== 'okinamatarasummer') forme = 'Okina Matara-Summer';
 				break;
 			case 'raindance':
-			case 'primordialsea': 
-				types = ['Water, Dark'];
+			case 'primordialsea':
+				if (pokemon.species.id !== 'okinamataraspring') forme = 'Okina Matara-Spring';
 				break;
 			case 'sandstorm':
-				types = ['Rock, Dark'];
+				if (pokemon.species.id !== 'okinamataraautumn') forme = 'Okina Matara-Autumn';
 				break;
 			case 'hail':
-			case 'snowscape':
-				types = ['Ice, Dark'];
+			case 'snow':
+				if (pokemon.species.id !== 'okinamatarawinter') forme = 'Okina Matara-Winter';
 				break;
 			default:
-				types = pokemon.baseSpecies.types;
+				if (pokemon.species.id !== 'okinamatara') forme = 'okina Matara';
+				break;
 			}
-			const oldTypes = pokemon.getTypes();
-			if (oldTypes.join() === types.join() || !pokemon.setType(types)) return;
-			if (pokemon.effectiveWeather() || pokemon.transformed) {
-				this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Four Seasons');
-				if (!pokemon.effectiveWeather()) this.hint("Transform Mimicry changes you to your original un-transformed types.");
-			} else {
-				this.add('-activate', pokemon, 'ability: Four Seasons');
-				this.add('-end', pokemon, 'typechange', '[silent]');
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
 		},
 		flags: {failroleplay: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Four Seasons",
-		shortDesc: "Okina Matara's primary typing changes to match the weather.",
+		shortDesc: "Okina Matara's forme changes to match the weather.",
 	},
 	heavystone: {
 		onStart(source) {
