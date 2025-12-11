@@ -582,7 +582,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Miraidon', 'Mewtwo', 'Necrozma-Dusk-Mane',
 			'Necrozma-Dawn-Wings', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Roaring Moon', 'Solgaleo', 
 			'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
-			'Zekrom', 'Moody', 'Bright Powder', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Razor Fang', 'Smooth Rock', 'Baton Pass', 'Shed Tail', 
+			'Zekrom', 'Moody', 'Damp Rock', 'Icy Rock', 'King\'s Rock', 'Smooth Rock', 'Baton Pass', 'Shed Tail', 
 			'Last Respects',
 		],
 		onValidateSet(set) {
