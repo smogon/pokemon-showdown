@@ -1650,6 +1650,7 @@ export const Scripts: ModdedBattleScriptsData = {
     this.modData('Learnsets', 'dusknoir').learnset.recover = ['9L1'];
     this.modData('Learnsets', 'dusknoir').learnset.drainpunch = ['9L1'];
     this.modData('Learnsets', 'froslass').learnset.nastyplot = ['9L1']; // ZA addition
+    this.modData('Learnsets', 'rotom').learnset.partingshot = ['9L1']; // ZA addition
     this.modData('Learnsets', 'rotom').learnset.recover = ['9L1'];
     this.modData('Learnsets', 'rotomheat').learnset.heatwave = ['9L1'];
     this.modData('Learnsets', 'rotomwash').learnset.whirlpool = ['9L1'];
