@@ -169,6 +169,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		if (!this.isParentProcess) this.setupDatabase();
 	}
 	private onError(err: Error, query: DatabaseQuery) {
+		err.message += ` [process ${process.pid}]`;
 		if (this.options.onError) {
 			const result = this.options.onError(err, query, false);
 			if (result) return result;

@@ -130,8 +130,8 @@ export const commands: Chat.ChatCommands = {
 				megaSpecies = dex.species.get(forcedForme);
 				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
-				megaSpecies = dex.species.get(stone.megaStone);
-				baseSpecies = dex.species.get(stone.megaEvolves);
+				megaSpecies = dex.species.get(Array.isArray(stone.megaStone) ? stone.megaStone[0] : stone.megaStone);
+				baseSpecies = dex.species.get(Array.isArray(stone.megaEvolves) ? stone.megaEvolves[0] : stone.megaEvolves);
 			}
 			break;
 		}
@@ -237,7 +237,7 @@ export const commands: Chat.ChatCommands = {
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
 				const formeRegex = new RegExp(
-					`(?:-Douse|-Shock|-Chill|-Burn|-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?|${dex.types.names().filter(x => x !== 'Normal').map(x => '-' + x).join('|')})$`
+					`(?:-Douse|-Shock|-Chill|-Burn|-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XYZ])?|${dex.types.names().filter(x => x !== 'Normal').map(x => '-' + x).join('|')})$`
 				);
 				if (!formeRegex.test(poke)) {
 					continue;
@@ -278,8 +278,8 @@ export const commands: Chat.ChatCommands = {
 					megaSpecies = dex.species.get(forcedForme);
 					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
-					megaSpecies = dex.species.get(aStone.megaStone);
-					baseSpecies = dex.species.get(aStone.megaEvolves);
+					megaSpecies = dex.species.get(Array.isArray(aStone.megaStone) ? aStone.megaStone[0] : aStone.megaStone);
+					baseSpecies = dex.species.get(Array.isArray(aStone.megaEvolves) ? aStone.megaEvolves[0] : aStone.megaEvolves);
 				}
 				break;
 			}
