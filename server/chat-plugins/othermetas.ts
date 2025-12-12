@@ -244,7 +244,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
-				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
+				if (/mega[xyz]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
 				if (!flag) continue;
 				stones.push(getMegaStone(flag, sep[1]));
 			}
