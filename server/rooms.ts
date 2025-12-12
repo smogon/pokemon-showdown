@@ -1248,7 +1248,7 @@ export class GlobalRoomState {
 				if (settings.isPrivate === true) settings.isPrivate = 'hidden';
 			}
 
-			// We're okay with assinging type `ID` to `RoomID` here
+			// We're okay with assigning type `ID` to `RoomID` here
 			// because the hyphens in chatrooms don't have any special
 			// meaning, unlike in helptickets, groupchats, battles etc
 			// where they are used for shared modlogs and the like
@@ -1814,7 +1814,7 @@ export class GlobalRoomState {
 				} else {
 					this.notifyRooms(
 						notifyPlaces,
-						`|html|<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
+						`|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
 					);
 				}
 			}, 10 * 1000);
@@ -2074,7 +2074,7 @@ export class GameRoom extends BasicRoom {
 			battle.replaySaved = true;
 		}
 
-		// If we have a direct connetion to a Replays database, just upload the replay
+		// If we have a direct connection to a Replays database, just upload the replay
 		// directly.
 
 		if (Replays.db) {
@@ -2085,7 +2085,7 @@ export class GameRoom extends BasicRoom {
 					log,
 					players: battle.players.map(p => p.name),
 					format: format.name,
-					rating: rating || null,
+					rating: Math.round(rating || 0) || null,
 					private: hidden,
 					password,
 					inputlog: battle.inputLog?.join('\n') || null,
