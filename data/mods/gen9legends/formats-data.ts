@@ -2344,13 +2344,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	hoopa: {
-		isNonstandard: null,
+		isNonstandard: "Unobtainable",
 	},
 	hoopaunbound: {
-		isNonstandard: null,
+		isNonstandard: "Unobtainable",
 	},
 	volcanion: {
-		isNonstandard: null,
+		isNonstandard: "Unobtainable",
 	},
 	rowlet: {
 		isNonstandard: "Past",
@@ -2569,6 +2569,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	magearnaoriginal: {
+		isNonstandard: null,
 	},
 	magearnamega: {
 		isNonstandard: null,
@@ -2950,10 +2951,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	squawkabillyblue: {
+		isNonstandard: null,
 	},
 	squawkabillywhite: {
+		isNonstandard: null,
 	},
 	squawkabillyyellow: {
+		isNonstandard: null,
 	},
 	nacli: {
 		isNonstandard: null,
@@ -3106,8 +3110,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	tatsugiridroopy: {
+		isNonstandard: null,
 	},
 	tatsugiristretchy: {
+		isNonstandard: null,
 	},
 	tatsugirimega: {
 		isNonstandard: null,

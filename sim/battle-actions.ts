@@ -1876,9 +1876,15 @@ export class BattleActions {
 			return item.megaStone as string;
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (Array.isArray(item.megaStone)) {
+		if (Array.isArray(item.megaEvolves)) {
+			if (!Array.isArray(item.megaStone)) {
+				throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
+			}
+			if (item.megaEvolves.length !== item.megaStone.length) {
+				throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone length mismatch`);
+			}
 			// FIXME: Change to species.name when champions comes
-			const index = (item.megaEvolves as string[]).indexOf(species.baseSpecies);
+			const index = item.megaEvolves.indexOf(species.baseSpecies);
 			if (index < 0) return null;
 			return item.megaStone[index];
 			// FIXME: Change to species.name when champions comes
