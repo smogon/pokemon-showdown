@@ -723,7 +723,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	sawsbuckautumn: "Sawsbuck",
 	sawsbuckwinter: "Sawsbuck",
 	tatsugiricurly: "Tatsugiri",
-	tatsugirimega: "Tatsugiri-Curly-Mega",
+	tatsugiricurlymega: "Tatsugiri-Mega",
 	unowna: "Unown",
 	unownb: "Unown",
 	unownc: "Unown",

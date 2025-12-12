@@ -18643,8 +18643,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 8,
 		color: "Red",
 		eggGroups: ["Water 2"],
-		otherFormes: ["Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Curly-Mega", "Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
-		formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Curly-Mega", "Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
+		otherFormes: ["Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Mega", "Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
+		formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Mega", "Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
 	},
 	tatsugiridroopy: {
 		num: 978,
@@ -18672,11 +18672,11 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Water 2"],
 	},
-	tatsugiricurlymega: {
+	tatsugirimega: {
 		num: 978,
-		name: "Tatsugiri-Curly-Mega",
+		name: "Tatsugiri-Mega",
 		baseSpecies: "Tatsugiri",
-		forme: "Curly-Mega",
+		forme: "Mega",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 65, def: 90, spa: 135, spd: 125, spe: 92 },
 		abilities: { 0: "Commander", H: "Storm Drain" },
@@ -18685,7 +18685,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Water 2"],
 		requiredItem: "Tatsugirinite",
-		battleOnly: "Tatsugiri",
 	},
 	tatsugiridroopymega: {
 		num: 978,

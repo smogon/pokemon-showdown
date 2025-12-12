@@ -1502,7 +1502,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tatsugiristretchy: {
 		tier: "OU",
 	},
-	tatsugiricurlymega: {
+	tatsugirimega: {
 		tier: "OU",
 	},
 	tatsugiridroopymega: {

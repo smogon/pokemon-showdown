@@ -200,7 +200,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Toxic Chain" },
 	},
-	tatsugiricurlymega: {
+	tatsugirimega: {
 		inherit: true,
 		abilities: { 0: "Drizzle" },
 	},
