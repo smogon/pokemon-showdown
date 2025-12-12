@@ -119,4 +119,22 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		gen: 2,
 		desc: "Doubles Attack.",
 	},
+	focusband: {
+		name: "Focus Band",
+		spritenum: 150,
+		fling: {
+			basePower: 10,
+		},
+		onDamagePriority: -40,
+		onDamage(damage, target, source, effect) {
+			const chance = Math.max(Math.floor(target.hp / target.maxhp), 10);
+			if (this.randomChance(chance, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add("-activate", target, "item: Focus Band");
+				return target.hp - 1;
+			}
+		},
+		num: 230,
+		gen: 2,
+		desc: "Chance to survive attack equal to percentage of remaining HP, minimum 10%.",
+	},
 };

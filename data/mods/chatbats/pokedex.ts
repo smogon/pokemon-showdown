@@ -443,4 +443,49 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Weak Armor" },
 		types: ["Dark", "Ground"],
 	},
+	feraligatr: {
+		inherit: true,
+	},
+	feraligatrmega: {
+		num: -988,
+		name: "Feraligatr-Mega",
+		baseSpecies: "Feraligatr",
+		forme: "Mega",
+		types: ["Dragon"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 85, atk: 145, def: 120, spa: 99, spd: 103, spe: 78 },
+		abilities: { 0: "Dragon's Jaw" },
+		heightm: 2.3,
+		weightkg: 108.8,
+		color: "Blue",
+		eggGroups: ["Monster", "Water 1"],
+		requiredItem: "Feraligite",
+		gen: 9,
+	},
+	salazzle: {
+		inherit: true,
+		abilities: { 0: "Corrosive Soul" },
+	},
+	kyogre: {
+		inherit: true,
+		abilities: { 0: "Oceanic Blessing" },
+	},
+	azelf: {
+		inherit: true,
+		abilities: { 0: "Auto Spin" },
+		types: ["Psychic", "Normal"],
+	},
+	decidueye: {
+		inherit: true,
+		abilities: { 0: "Overgrow", 1: "Sniper" },
+	},
+	ogerponcornerstone: {
+		inherit: true,
+		abilities: { 0: "Solid Rock" },
+		types: ["Psychic", "Normal"],
+	},
+	glimmora: {
+		inherit: true,
+		abilities: { 0: "Corrosion" },
+	},
 };

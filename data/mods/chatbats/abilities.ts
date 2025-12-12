@@ -604,7 +604,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Moves ignore charge/recharge turns.",
 	},
 	biogenesis: {
-		onSwitchInPriority: 1,
+		onSwitchInPriority: -1,
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.m.didRandomMoves) return;
 			const moves = this.dex.moves.all();
@@ -809,5 +809,148 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 5,
 		num: -117,
 		shortDesc: "Sets terrain depending on HP value.",
+	},
+	dragonsjaw: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (defender.hasType('Dragon') && defender.hasType('Steel')) {
+				return this.chainModify(1.5);
+			} else if (defender.hasType('Dragon')) {
+				return this.chainModify(2.25);
+			} else if (defender.hasType('Steel')) {
+				return;
+			} else return this.chainModify(1.5);
+		},
+		onTryHit(target, source, move) {
+			if (target.hasType('Fairy')) {
+				return null;
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		flags: {},
+		name: "Dragon's Jaw",
+		rating: 5,
+		num: -118,
+		shortDesc: "Serene Grace + Bite attacks are Dragon type.",
+	},
+	corrosivesoul: {
+		onStart(source) {
+			this.field.setTerrain('corrosivesoul');
+		},
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Corrosive Soul', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'move: Corrosive Soul');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
+			onResidual(pokemon) {
+				const move = this.dex.getActiveMove('smog');
+				move.accuracy = 100;
+				const target = pokemon.foes()[0];
+				if (target && !target.fainted) {
+					this.actions.useMove(move, pokemon, { target });
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Corrosive Soul');
+			},
+		},
+		flags: {},
+		name: "Corrosive Soul",
+		rating: 5,
+		num: -119,
+		shortDesc: "Sets Corrosive Terrian: active Pokemon hit each other with Smog.",
+	},
+	oceanicblessing: {
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Kyogre' || pokemon.transformed) return;
+			if (!pokemon.hp) return;
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				if (pokemon.species.id !== 'kyogreprimal') {
+					pokemon.formeChange('Kyogre-Primal', this.effect, false);
+				}
+			} else {
+				if (pokemon.species.id === 'kyogreprimal') {
+					pokemon.formeChange('kyogre', this.effect, false);
+				}
+			}
+		},
+		onAllyModifyAtkPriority: 3,
+		onAllyModifyAtk(atk, pokemon) {
+			if (this.effectState.target.baseSpecies.baseSpecies !== 'Kyogre') return;
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyModifySpDPriority: 4,
+		onAllyModifySpD(spd, pokemon) {
+			if (this.effectState.target.baseSpecies.baseSpecies !== 'Kyogre') return;
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, breakable: 1 },
+		name: "Oceanic Blessing",
+		rating: 5,
+		num: -120,
+		shortDesc: "Flower Gift but Kyogre",
+	},
+	autospin: {
+		onResidual(pokemon, s, effect) {
+			const move = this.dex.getActiveMove('metronome');
+			const target = pokemon.foes()[0];
+			if (target && !target.fainted && (pokemon.hp >= pokemon.maxhp / 2)) {
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+			} else if (target && !target.fainted && (pokemon.hp <= pokemon.maxhp / 10)) {
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+			} else if (target && !target.fainted) {
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+				this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
+			}
+		},
+		flags: {},
+		name: "Auto Spin",
+		rating: 5,
+		num: -121,
+		shortDesc: "Use Metronome at end of turn.",
+	},
+	corrosion: {
+		inherit: true,
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Poison'] = true;
+			}
+		},
+		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit them with Poison moves.",
 	},
 };
