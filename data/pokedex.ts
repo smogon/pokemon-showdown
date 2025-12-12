@@ -19014,7 +19014,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 315,
 		color: "Blue",
 		eggGroups: ["Dragon", "Mineral"],
-		requiredItem: "Baxcaliburite",
+		requiredItem: "Baxcalibrite",
 	},
 	gimmighoul: {
 		num: 999,

@@ -1307,7 +1307,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	wimpod: {
-		tier: "OU",
+		tier: "LC",
 	},
 	golisopod: {
 		tier: "OU",
