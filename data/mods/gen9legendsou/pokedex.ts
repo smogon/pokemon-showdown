@@ -128,7 +128,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Protean" },
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		inherit: true,
 		abilities: { 0: "Psychic Surge" },
 	},
