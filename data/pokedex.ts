@@ -12702,8 +12702,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Espurr",
 		evoLevel: 25,
 		eggGroups: ["Field"],
-		otherFormes: ["Meowstic-F", "Meowstic-Mega", "Meowstic-F-Mega"],
-		formeOrder: ["Meowstic", "Meowstic-F", "Meowstic-Mega", "Meowstic-F-Mega"],
+		otherFormes: ["Meowstic-F", "Meowstic-M-Mega", "Meowstic-F-Mega"],
+		formeOrder: ["Meowstic", "Meowstic-F", "Meowstic-M-Mega", "Meowstic-F-Mega"],
 	},
 	meowsticf: {
 		num: 678,
@@ -12721,9 +12721,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 25,
 		eggGroups: ["Field"],
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		num: 678,
-		name: "Meowstic-Mega",
+		name: "Meowstic-M-Mega",
 		baseSpecies: "Meowstic",
 		forme: "Mega",
 		types: ["Psychic"],

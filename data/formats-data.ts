@@ -3925,7 +3925,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
