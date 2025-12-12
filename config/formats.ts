@@ -2670,7 +2670,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['[Gen 9] National Dex UU'],
-		banlist: ['ND UU', 'ND RUBL', 'Slowbro-Base + Slowbronite'],
+		banlist: ['ND UU', 'ND RUBL'],
 	},
 	{
 		name: "[Gen 9] National Dex LC",
