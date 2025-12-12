@@ -2158,7 +2158,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meowsticf: {
 		isNonstandard: null,
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		isNonstandard: null,
 	},
 	meowsticfmega: {

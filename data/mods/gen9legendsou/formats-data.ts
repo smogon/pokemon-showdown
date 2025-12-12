@@ -1106,7 +1106,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meowsticf: {
 		tier: "OU",
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		tier: "OU",
 	},
 	meowsticfmega: {

@@ -4043,7 +4043,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	meowsticite: {
 		name: "Meowsticite",
 		spritenum: 0,
-		megaStone: ["Meowstic-Mega", "Meowstic-F-Mega"],
+		megaStone: ["Meowstic-M-Mega", "Meowstic-F-Mega"],
 		megaEvolves: ["Meowstic", "Meowstic-F"],
 		itemUser: ["Meowstic", "Meowstic-F"],
 		onTakeItem(item, source) {
