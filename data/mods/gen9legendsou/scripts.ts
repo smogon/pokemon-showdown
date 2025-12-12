@@ -9,7 +9,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			'powerlens', 'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder',
 			'softsand', 'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone',
 			'duskstone', 'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone',
-			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget', 'redorb', 'blueorb',
+			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget', 'redorb', 'blueorb', 'leek', 'thickclub', 'upgrade',
+			'dubiousdisc', 'prismscale', 'maliciousarmor', 'auspiciousarmor',
 		];
 		const legalBerries = [
 			'aspearberry', 'babiriberry', 'chartiberry', 'cheriberry', 'chestoberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry',
@@ -22,7 +23,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
-			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) || this.data.Items[i].megaStone) {
+			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) ||
+				this.data.Items[i].megaStone || this.data.Items[i].onDrive) {
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
