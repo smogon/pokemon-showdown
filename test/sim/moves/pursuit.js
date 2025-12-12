@@ -82,6 +82,24 @@ describe(`Pursuit`, () => {
 		assert.fullHP(alakazam);
 	});
 
+	it(`should activate on the second target switching out, if the first fainted`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Beedrill", moves: ['pursuit'] },
+			{ species: "Furret", moves: ['pursuit'] },
+		], [
+			{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
+			{ species: "Shedinja", moves: ['calmmind'], evs: { spe: 252 } },
+			{ species: "Wynaut", moves: ['calmmind'] },
+			{ species: "Alakazam", moves: ['calmmind'] },
+		]]);
+		const [clefable, shedinja, wynaut, alakazam] = battle.p2.pokemon;
+		battle.makeChoices('move pursuit 1, move pursuit 2', 'switch 3, switch 4');
+		assert.bounded(clefable.maxhp - clefable.hp, [34, 40]);
+		assert.fainted(shedinja);
+		assert.fullHP(wynaut);
+		assert.fullHP(alakazam);
+	});
+
 	it(`should activate on a switching opponent even if targeting an ally`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Beedrill", item: 'beedrillite', moves: ['pursuit'] },

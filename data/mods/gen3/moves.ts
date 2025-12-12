@@ -589,7 +589,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			data.sources.push(pokemon);
 		},
-		onTryHit() {},
 	},
 	recover: {
 		inherit: true,
