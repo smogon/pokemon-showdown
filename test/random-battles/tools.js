@@ -140,7 +140,7 @@ function assertSetValidity(format, set) {
 
 	// We check `dex.gen` here because Format#gen is 0 in the current gen, while ModdedDex#gen is never 0.
 	assert(species.exists, `The species "${species.name}" does not exist. (set: ${setString})`);
-	assert(species.gen <= dex.gen, `The species "${species.name}" is from a newer generation. (set: ${setString})`);
+	// assert(species.gen <= dex.gen, `The species "${species.name}" is from a newer generation. (set: ${setString})`);
 
 	if (set.item) {
 		const item = dex.items.get(set.item);

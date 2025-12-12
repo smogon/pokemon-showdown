@@ -130,8 +130,8 @@ export const commands: Chat.ChatCommands = {
 				megaSpecies = dex.species.get(forcedForme);
 				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
-				megaSpecies = dex.species.get(stone.megaStone);
-				baseSpecies = dex.species.get(stone.megaEvolves);
+				megaSpecies = dex.species.get(Array.isArray(stone.megaStone) ? stone.megaStone[0] : stone.megaStone);
+				baseSpecies = dex.species.get(Array.isArray(stone.megaEvolves) ? stone.megaEvolves[0] : stone.megaEvolves);
 			}
 			break;
 		}
@@ -278,8 +278,8 @@ export const commands: Chat.ChatCommands = {
 					megaSpecies = dex.species.get(forcedForme);
 					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
-					megaSpecies = dex.species.get(aStone.megaStone);
-					baseSpecies = dex.species.get(aStone.megaEvolves);
+					megaSpecies = dex.species.get(Array.isArray(aStone.megaStone) ? aStone.megaStone[0] : aStone.megaStone);
+					baseSpecies = dex.species.get(Array.isArray(aStone.megaEvolves) ? aStone.megaEvolves[0] : aStone.megaEvolves);
 				}
 				break;
 			}

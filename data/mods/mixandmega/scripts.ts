@@ -6,9 +6,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard === "Past") this.modData('Items', i).isNonstandard = null;
-			if (item.megaStone) {
+			/* if (item.megaStone) {
 				this.modData('FormatsData', this.toID(item.megaStone)).isNonstandard = null;
-			}
+			} */
 		}
 	},
 	start() {
@@ -386,8 +386,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const item = pokemon.getItem();
 			if (item.megaStone) {
-				if (item.megaStone === pokemon.baseSpecies.name) return null;
-				return item.megaStone;
+				if (item.megaStone.includes(pokemon.baseSpecies.name)) return null;
+				return Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone;
 			} else {
 				return null;
 			}
