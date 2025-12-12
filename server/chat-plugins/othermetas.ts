@@ -237,7 +237,7 @@ export const commands: Chat.ChatCommands = {
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
 				const formeRegex = new RegExp(
-					`(?:-Douse|-Shock|-Chill|-Burn|-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?|${dex.types.names().filter(x => x !== 'Normal').map(x => '-' + x).join('|')})$`
+					`(?:-Douse|-Shock|-Chill|-Burn|-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XYZ])?|${dex.types.names().filter(x => x !== 'Normal').map(x => '-' + x).join('|')})$`
 				);
 				if (!formeRegex.test(poke)) {
 					continue;
