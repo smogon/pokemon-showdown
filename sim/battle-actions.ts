@@ -1883,7 +1883,6 @@ export class BattleActions {
 			return item.megaStone[index];
 			// FIXME: Change to species.name when champions comes
 		} else if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-			if (Array.isArray(item.megaStone)) throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
 			return item.megaStone;
 		}
 		return null;
