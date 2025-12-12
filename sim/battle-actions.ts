@@ -1888,7 +1888,7 @@ export class BattleActions {
 			}
 			// FIXME: Change to species.name when champions comes
 			const index = item.megaEvolves.indexOf(species.baseSpecies);
-			if (index < 0) return null;
+			if (index < 0) return false;
 			return item.megaStone[index];
 			// FIXME: Change to species.name when champions comes
 		} else if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
