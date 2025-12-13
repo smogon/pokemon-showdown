@@ -11,15 +11,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
 		},
-		onResidual(pokemon) {
-			const trapper = this.effectState.source;
-			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
-				delete pokemon.volatiles['partiallytrapped'];
-				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
-				return;
-			}
-			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
-		},
 	},
 	stall: {
 		// Protect, Detect, Endure counter
