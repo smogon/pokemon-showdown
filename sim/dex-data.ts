@@ -208,6 +208,7 @@ export class DexNatures {
 }
 
 export interface TypeData {
+	num: number;
 	damageTaken: { [attackingTypeNameOrEffectid: string]: number };
 	HPdvs?: SparseStatsTable;
 	HPivs?: SparseStatsTable;
