@@ -49,7 +49,7 @@ export class Limiter {
 
 function isCommon(message: string) {
 	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
-	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
+	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello', 'hi'].includes(message);
 }
 
 let throttleTime: number | null = null;
@@ -92,7 +92,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		} catch (e: any) {
 			// eslint-disable-next-line require-atomic-updates
 			throttleTime = Date.now();
-			if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
+			if (e.message.startsWith('Request timeout') || e.statusCode === 429 || e.code === 'ETIMEDOUT') {
 				// request timeout: just ignore this. error on their end not ours.
 				// 429: too many requests, we already freeze for 10s above so. not much more we can do
 				return null;
