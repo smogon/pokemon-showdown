@@ -58,8 +58,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 	},
 	runAction(action) {
-		const pokemonOriginalHP = action.pokemon?.hp;
-		let residualPokemon: (readonly [Pokemon, number])[] = [];
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -226,7 +224,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
@@ -273,18 +270,14 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		if (this.gen >= 5) {
 			this.eachEvent('Update');
-			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
-			}
 		}
 
-		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
+		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag && pokemon.volatiles['emergencyexiting'])) {
+			// reject switch requests of other Pokemon
+			for (const pokemon of this.getAllActive(true)) {
+				if (!pokemon.volatiles['emergencyexiting']) {
+					pokemon.switchFlag = false;
+				}
 			}
 		}
 
