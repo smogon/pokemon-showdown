@@ -162,6 +162,17 @@ describe('Neutralizing Gas', () => {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
+	it(`should cause Cherrim-Sunshine to instantly revert form`, () => {
+		battle = common.createBattle([[
+			{ species: "Cherrim", ability: 'flowergift', moves: ['sleeptalk'] },
+		], [
+			{ species: "Torkoal", ability: 'drought', moves: ['sleeptalk'] },
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('auto', 'switch 2');
+		assert.species(battle.p1.active[0], 'Cherrim');
+	});
+
 	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, () => {
 		battle = common.createBattle([[
 			{ species: "Regigigas", ability: 'slowstart', moves: ['sleeptalk'] },
