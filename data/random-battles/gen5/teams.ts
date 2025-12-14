@@ -711,6 +711,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -817,7 +819,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
 			(!counter.get('Physical') || (counter.get('Physical') <= 1 && (moves.has('foulplay') || moves.has('rapidspin')))) &&
-			!moves.has('transform')
+			!moves.has('transform') && !ruleTable.has('forceofthefallenmod')
 		) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
