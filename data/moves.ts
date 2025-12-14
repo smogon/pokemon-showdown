@@ -3789,7 +3789,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+			if (!target.lastMove || target.lastMove.isZOrMaxPowered || target.lastMove.isMax || target.lastMove.id === 'struggle') {
 				return false;
 			}
 		},
@@ -3829,7 +3829,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.id === this.effectState.move) {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
@@ -4909,9 +4909,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
+				// Encore only works on Max Moves if the base move is not itself a Max Move
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				const moveSlot = target.getMoveData(move.id);
-				if (move.isZ || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+				if (move.isZ || move.isMax || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -8630,7 +8631,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRestart(target, source, effect) {
 				if (effect?.name === 'Psychic Noise') return;
 
-				this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
+				this.add('-fail', target, 'move: Heal Block'); // Succeeds to suppress downstream messages
 				if (!source.moveThisTurnResult) {
 					source.moveThisTurnResult = false;
 				}
@@ -9858,7 +9859,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove(attacker, defender, move) {
-				if (move.id !== 'struggle' && this.effectState.source.hasMove(move.id) && !move.isZ && !move.isMax) {
+				if (move.id !== 'struggle' && this.effectState.source.hasMove(move.id) && !move.isZOrMaxPowered) {
 					this.add('cant', attacker, 'move: Imprison', move);
 					return false;
 				}
@@ -19734,7 +19735,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 5,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.category === 'Status' && move.id !== 'mefirst') {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.category === 'Status' && move.id !== 'mefirst') {
 					this.add('cant', attacker, 'move: Taunt', move);
 					return false;
 				}
@@ -20156,13 +20157,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (!move.isZ && !move.isMax && move.flags['sound']) {
+				if (!move.isZOrMaxPowered && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
-				if (!move.isZ && !move.isMax && move.flags['sound']) {
+				if (!move.isZOrMaxPowered && move.flags['sound']) {
 					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
