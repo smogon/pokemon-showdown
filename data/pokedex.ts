@@ -1084,6 +1084,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "useItem",
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Ninetales-Alola-Christmas"],
 	},
 	jigglypuff: {
 		num: 39,
@@ -2962,7 +2963,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 4,
 		color: "Purple",
 		eggGroups: ["Ditto"],
-		cosmeticFormes: ["Ditto-Slimeking"],
+		cosmeticFormes: ["Ditto-Slimeking", "Ditto-Venom"],
 	},
 	eevee: {
 		num: 133,
@@ -3294,6 +3295,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 30,
 		evos: ["Dragonite"],
 		eggGroups: ["Water 1", "Dragon"],
+		cosmeticFormes: ["Dragonair-Christmas"],
 	},
 	dragonite: {
 		num: 149,
@@ -3307,6 +3309,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Dragonair",
 		evoLevel: 55,
 		eggGroups: ["Water 1", "Dragon"],
+		cosmeticFormes: ["Dragonite-Christmas"],
 	},
 	mewtwo: {
 		num: 150,
@@ -3861,6 +3864,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Marill",
 		evoLevel: 18,
 		eggGroups: ["Water 1", "Fairy"],
+		cosmeticFormes: ["Azumarill-Christmas"],
 	},
 	sudowoodo: {
 		num: 185,
@@ -4324,6 +4328,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 20.5,
 		color: "Yellow",
 		eggGroups: ["Bug"],
+		cosmeticFormes: ["Shuckle-Tophat"],
 	},
 	heracross: {
 		num: 214,
@@ -5677,6 +5682,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Human-Like"],
 		otherFormes: ["Sableye-Mega"],
 		formeOrder: ["Sableye", "Sableye-Mega"],
+		cosmeticFormes: ["Sableye-Sculk"],
 	},
 	sableyemega: {
 		num: 302,
@@ -7082,6 +7088,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
+		cosmeticFormes: ["Jirachi-Christmas"],
 	},
 	deoxys: {
 		num: 386,
@@ -8098,6 +8105,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field", "Human-Like"],
 		otherFormes: ["Lucario-Mega"],
 		formeOrder: ["Lucario", "Lucario-Mega"],
+		cosmeticFormes: ["Lucario-Christmas"],
 	},
 	lucariomega: {
 		num: 448,
@@ -8470,7 +8478,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "levelMove",
 		evoMove: "Ancient Power",
 		eggGroups: ["Field"],
-		cosmeticFormes: ["Mamoswine-Appa"],
+		cosmeticFormes: ["Mamoswine-Appa", "Mamoswine-Christmas"],
 	},
 	porygonz: {
 		num: 474,
@@ -9223,6 +9231,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
+		cosmeticFormes: ["Victini-Valentine", "Victini-Christmas"],
 	},
 	snivy: {
 		num: 495,
@@ -10164,6 +10173,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
 		otherFormes: ["Darmanitan-Galar-Zen"],
+		cosmeticFormes: ["Darmanitan-Galar-Christmas"],
 	},
 	darmanitangalarzen: {
 		num: 555,
@@ -10179,6 +10189,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field"],
 		requiredAbility: "Zen Mode",
 		battleOnly: "Darmanitan-Galar",
+		cosmeticFormes: ["Darmanitan-Galar-Zen-Christmas"],
 	},
 	maractus: {
 		num: 556,
@@ -11151,7 +11162,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Golurk"],
 		eggGroups: ["Mineral"],
-		cosmeticFormes: ["Golett-Halloween"],
+		cosmeticFormes: ["Golett-Halloween", "Golett-Fullmetal", "Golett-Christmas"],
 	},
 	golurk: {
 		num: 623,
@@ -11166,7 +11177,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Golett",
 		evoLevel: 43,
 		eggGroups: ["Mineral"],
-		cosmeticFormes: ["Golurk-Halloween", "Golurk-Fullmetal"],
+		cosmeticFormes: ["Golurk-Halloween", "Golurk-Fullmetal", "Golurk-Christmas"],
 	},
 	pawniard: {
 		num: 624,
@@ -11339,6 +11350,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Zweilous",
 		evoLevel: 64,
 		eggGroups: ["Dragon"],
+		cosmeticFormes: ["Hydreigon-Christmas"],
 	},
 	larvesta: {
 		num: 636,
@@ -11616,7 +11628,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		otherFormes: ["Meloetta-Pirouette"],
 		formeOrder: ["Meloetta", "Meloetta-Pirouette"],
-		cosmeticFormes: ["Meloetta-Diva"],
+		cosmeticFormes: ["Meloetta-Diva", "Meloetta-Christmas"],
 	},
 	meloettapirouette: {
 		num: 648,
@@ -12646,6 +12658,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoTime: "day",
 		evoCondition: "during the day",
 		eggGroups: ["Monster", "Dragon"],
+		cosmeticFormes: ["Tyrantrum-Christmas"],
 	},
 	amaura: {
 		num: 698,
@@ -13072,6 +13085,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
+		cosmeticFormes: ["Yveltal-Christmas"],
 	},
 	zygarde: {
 		num: 718,
@@ -13742,6 +13756,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Mareanie",
 		evoLevel: 38,
 		eggGroups: ["Water 1"],
+		cosmeticFormes: ["Toxapex-Christmas"],
 	},
 	mudbray: {
 		num: 749,
@@ -15054,6 +15069,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
+		cosmeticFormes: ["Zeraora-Mjolnirsoul"],
 	},
 	meltan: {
 		num: 808,
@@ -15144,6 +15160,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 35,
 		eggGroups: ["Field", "Grass"],
 		canGigantamax: "G-Max Drum Solo",
+		cosmeticFormes: ["Rillaboom-Christmas"],
 	},
 	rillaboomgmax: {
 		num: 812,
@@ -15202,6 +15219,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 35,
 		eggGroups: ["Field", "Human-Like"],
 		canGigantamax: "G-Max Fireball",
+		cosmeticFormes: ["Cinderace-Christmas"],
 	},
 	cinderacegmax: {
 		num: 815,
@@ -17206,6 +17224,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		evos: ["Oinkologne", "Oinkologne-F"],
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Lechonk-Halloween"],
 	},
 	oinkologne: {
 		num: 916,
@@ -17223,6 +17242,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		otherFormes: ["Oinkologne-F"],
 		formeOrder: ["Oinkologne", "Oinkologne-F"],
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Oinkologne-Halloween"],
 	},
 	oinkolognef: {
 		num: 916,
@@ -17239,6 +17259,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Lechonk",
 		evoLevel: 18,
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Oinkologne-F-Halloween"],
 	},
 	tarountula: {
 		num: 917,
@@ -17360,6 +17381,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		otherFormes: ["Maushold-Four"],
 		formeOrder: ["Maushold", "Maushold-Four"],
 		eggGroups: ["Field", "Fairy"],
+		cosmeticFormes: ["Maushold-Christmas"],
 	},
 	mausholdfour: {
 		num: 925,
