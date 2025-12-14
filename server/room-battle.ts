@@ -12,9 +12,10 @@
  */
 
 import { execSync } from "child_process";
-import { Repl, ProcessManager, type Streams } from '../lib';
+import { ProcessManager, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
+import * as ConfigLoader from './config-loader';
 import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
@@ -1300,7 +1301,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
 		}
 	}
-	async getLog(): Promise<string[] | void> {
+	async getInputLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
 		void this.stream.write('>requestlog');
 		const logPromise = new Promise<string[]>((resolve, reject) => {
@@ -1357,18 +1358,21 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream(), message => {
+export const PM = new ProcessManager.StreamProcessManager('sim', module, () => new RoomBattleStream(), message => {
 	if (message.startsWith(`SLOW\n`)) {
 		Monitor.slow(message.slice(5));
 	}
 });
 
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['simulator'] ?? 1);
+}
+
 if (!PM.isParentProcess) {
-	// This is a child process!
+	ConfigLoader.ensureLoaded();
 	try {
 		require('source-map-support').install();
 	} catch {}
-	global.Config = require('./config-loader').Config;
 	global.Dex = require('../sim/dex').Dex;
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
@@ -1403,7 +1407,5 @@ if (!PM.isParentProcess) {
 	}
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.simulator ?? 1);
+	PM.startRepl(cmd => eval(cmd));
 }

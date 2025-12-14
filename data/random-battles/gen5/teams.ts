@@ -311,6 +311,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
+		// Enforce Stealth Rock if the team doesn't already have it
+		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
 		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
@@ -587,7 +593,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (species.id === 'honchkrow') return 'Life Orb';
 		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
-		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
+		if (ability === 'Poison Heal' || (moves.has('facade') && species.id !== 'stoutland')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
@@ -705,6 +711,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -811,7 +819,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
 			(!counter.get('Physical') || (counter.get('Physical') <= 1 && (moves.has('foulplay') || moves.has('rapidspin')))) &&
-			!moves.has('transform')
+			!moves.has('transform') && !ruleTable.has('forceofthefallenmod')
 		) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;

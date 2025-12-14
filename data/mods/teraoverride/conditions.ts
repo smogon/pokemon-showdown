@@ -54,11 +54,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === this.effectState.source.teraType) {
 				this.debug('rain water boost');
-				return this.chainModify(1.5);
-			}
-			if (move.type === 'Fire') {
-				this.debug('rain fire suppress');
-				return this.chainModify(0.5);
+				return this.chainModify(0.75);
 			}
 		},
 	},
@@ -72,11 +68,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === this.effectState.source.teraType) {
 				this.debug('Sunny Day fire boost');
-				return this.chainModify(1.5);
-			}
-			if (move.type === 'Water') {
-				this.debug('Sunny Day water suppress');
-				return this.chainModify(0.5);
+				return this.chainModify(0.75);
 			}
 		},
 	},
