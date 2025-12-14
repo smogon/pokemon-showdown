@@ -44,9 +44,16 @@ const MOVE_PAIRS = [
 	['lightscreen', 'reflect'],
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
+	['spikyshield', 'wish'],
 	['leechseed', 'protect'],
 	['leechseed', 'substitute'],
-	['leechseed', 'burningbulwark'],
+	['moongeistbeam', 'moonlight'],
+	['hex', 'willowisp'],
+	['hex', 'toxic'],
+	['hex', 'thunderwave'],
+	['nightmare', 'willowisp'],
+	['nightmare', 'toxic'],
+	['nightmare', 'thunderwave'],
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
@@ -61,7 +68,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomBLCTeams extends RandomTeams {
+export class RandomMHSTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -218,20 +225,6 @@ export class RandomBLCTeams extends RandomTeams {
 			['healbell', 'stealthrock'],
 			// Araquanid and Magnezone
 			['mirrorcoat', ['hydropump', 'bodypress']],
-			// Plasmage
-			['electroshot', 'psychoboost'],
-			// Seaode
-			['stoneedge', 'stoneaxe'],
-			// Geigeramp
-			['willowisp', 'nuzzle'],
-			// Martorse
-			['willowisp', 'encore'],
-			// Faeruin
-			['substitute', 'rapidspin'],
-			// Geoporka
-			['toxic', 'stunspore'],
-			// Blobbiam
-			['spiritbreak', 'playrough'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -353,38 +346,6 @@ export class RandomBLCTeams extends RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Enforce Roost on Fausteil
-		if (species.id === 'fausteil') {
-			if (movePool.includes('roost')) {
-				counter = this.addMove('roost', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Enforce Sunny Day on Wallbreaker Cottentration
-		if (species.id === 'cottentration') {
-			if (movePool.includes('sunnyday')) {
-				counter = this.addMove('sunnyday', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Enforce Superpower on Reversadusa
-		if (species.id === 'reversadusa') {
-			if (movePool.includes('superpower')) {
-				counter = this.addMove('superpower', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Enforce Close Combat on Iron Crest
-		if (species.id === 'ironcrest') {
-			if (movePool.includes('closecombat')) {
-				counter = this.addMove('closecombat', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -660,130 +621,31 @@ export class RandomBLCTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		// buncha BC specific hardcodes
-		if (species.id === 'badjur') return 'Toxic Orb';
-		if (species.id === 'vipult' && role === 'Bulky Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
+		// MHS hardcodes
+		if (species.id === 'yiankutku' && moves.has('facade') || species.id === 'bluekutku' && moves.has('facade')) {
+			return 'Frost Orb';
+		}
+		if (species.id === 'xenojiiva' && ability === 'Quark Drive') return 'Booster Energy';
+		if (species.id === 'odogaron' && moves.has('closecombat')) return 'White Herb';
+		if (species.id === 'odogaron' && !moves.has('closecombat')) return 'Sitrus Berry';
 		if (
-			(species.id === 'lundicare' && role === 'Fast Bulky Setup' && moves.has('stuffcheeks')) ||
-			(species.id === 'devestial' && role === 'Bulky Setup')
+			ability === 'Magic Guard' || ability === 'Fervent Scales' ||
+			(ability === 'Sheer Force' && counter.get('sheerforce'))
 		) {
-			return 'Petaya Berry';
+			return 'Life Orb';
 		}
-		if (
-			[
-				'goblantern', 'lavalisk', 'eolikopter', 'scarachnid', 'bugswarm', 'leechmonner',
-				'hebicikuga', 'socknbuskn', 'fausteil', 'deadward', 'borealis', 'flarenheit',
-			].includes(species.id) ||
-			(species.id === 'searytch' && role === 'Bulky Attacker') ||
-			(species.id === 'monmothra' && role === 'Bulky Support') ||
-			(['crystuit', 'pinaturbo'].includes(species.id) && role === 'Fast Support')
-		) {
-			return 'Heavy-Duty Boots';
-		}
-		if (
-			['dastard', 'geigeramp', 'arsenstorm', 'jokerpent', 'geoporka'].includes(species.id) ||
-			(species.id === 'maldractice' && role === 'Bulky Support')
-		) {
-			return 'Black Sludge';
-		}
-		if (counter.get('skilllink') && ability !== 'Skill Link') return 'Loaded Dice';
-		if (ability === 'Sand Stream') return 'Smooth Rock';
-		if (ability === 'Drought' && role !== 'Setup Sweeper') return 'Heat Rock';
-		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
-		if (moves.has('sunnyday') || ['piss', 'sculptera'].includes(species.id)) return 'Life Orb';
-		if (species.id === 'plasmage' && moves.has('psychoboost') && role === 'Setup Sweeper') return 'Eject Pack';
-		if (['craggon', 'jackoswarm'].includes(species.id)) return this.sample(['Rocky Helmet', 'Leftovers']);
-		if (species.id === 'thaumaton') return (moves.has('steelbeam')) ? 'Sitrus Berry' : 'Air Balloon';
-		if (species.id === 'kadraoke' && role === 'Setup Sweeper') return 'Throat Spray';
-		if (species.id === 'sylravage') return this.sample(['Choice Band', 'Choice Scarf']);
-		if (species.id === 'capricorrie') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'maldractice' && role === 'Wallbreaker') {
-			return (moves.has('dragondance')) ? 'Black Sludge' : 'Choice Band';
-		}
-		if (species.id === 'snabterra' && role === 'Wallbreaker') return 'Choice Band';
-		if (species.id === 'snabterra' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
-		if (species.id === 'snabterra' && role === 'Bulky Setup') return this.sample(['Leftovers', 'Sitrus Berry']);
-		if (species.id === 'searytch') return (role === 'Bulky Support') ? 'Leftovers' : 'Heavy-Duty Boots';
-		if (species.id === 'lundicare' && role === 'Fast Attacker') return this.sample(['Leftovers', 'Earth Plate']);
-		if (species.id === 'tryonite' && ability === 'Sturdy') return 'Leftovers';
-		if (species.id === 'tryonite' && role === 'Setup Sweeper') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'ironcrest' && role === 'Setup Sweeper') return 'White Herb';
-		if (species.id === 'seaode') return this.sample(['Heavy-Duty Boots', 'Life Orb', 'Choice Band', 'Choice Scarf']);
-		if (['serpvoltidae', 'twinkaton', 'devestial'].includes(species.id) && role === 'Bulky Support') return 'Leftovers';
-		if (species.id === 'serpvoltidae' && role === 'Bulky Attacker' && !moves.has('shoreup')) {
-			return this.sample(['Choice Specs', 'Life Orb']);
-		}
-		if (species.id === 'serpvoltidae' && role === 'Bulky Attacker' && moves.has('shoreup')) return 'Life Orb';
-		if (species.id === 'sheepquake') return this.sample(['Leftovers', 'Life Orb']);
-		if (ability === 'Flare Boost') return 'Flame Orb';
-		if (species.id === 'sorrowcean' && ability !== 'Flare Boost') return 'Leftovers';
-		if (species.id === 'blobbiam' && role === 'Bulky Attacker') {
-			return this.sample(['Heavy-Duty Boots', 'Choice Band', 'Choice Scarf']);
-		}
-		if (
-			(['blobbiam', 'massassin', 'martorse'].includes(species.id) && role === 'Bulky Support') ||
-			['mohawtter', 'arachnode', 'porcupyre', 'bazhigangquan', 'actaniathan'].includes(species.id)
-		) {
-			return this.sample(['Heavy-Duty Boots', 'Leftovers']);
-		}
-		if (species.id === 'hippaint' && !moves.has('calmmind')) return this.sample(['Choice Specs', 'Life Orb']);
-		if (species.id === 'hippaint' && moves.has('calmmind')) return 'Life Orb';
-		if (species.id === 'parasike') return this.sample(['Heavy-Duty Boots', 'Choice Band', 'Silver Powder']);
-		if (species.id === 'llanfairwyrm' && role === 'Bulky Support') return this.sample(['Rocky Helmet', 'Leftovers']);
-		if (species.id === 'llanfairwyrm' && role === 'Bulky Setup') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'karmalice') {
-			return (moves.has('fakeout') || role === 'Fast Support') ? 'Heavy-Duty Boots' : 'Choice Specs';
-		}
-		if (species.id === 'reversadusa' && !moves.has('substitute')) return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'reversadusa' && moves.has('substitute')) return 'Leftovers';
-		if (species.id === 'primordialith' && ability === 'Vital Spirit') return 'Leftovers';
-		if (['frostengu', 'monmothra', 'drakkannon'].includes(species.id) && role === 'Fast Attacker') {
-			return this.sample(['Choice Specs', 'Choice Scarf']);
-		}
-		if (species.id === 'frostengu' && role === 'Wallbreaker') return this.sample(['Choice Band', 'Choice Scarf']);
-		if (species.id === 'sleetshell' && role === 'Fast Attacker') return this.sample(['Choice Band', 'Choice Scarf']);
-		if (['martorse', 'faeruin'].includes(species.id) && role === 'Fast Support') {
-			return this.sample(['Heavy-Duty Boots', 'Leftovers']);
-		}
-		if (species.id === 'martorse' && role === 'Fast Attacker') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'freightmare') return (role === 'Fast Support') ? 'Leftovers' : 'Life Orb';
-		if (species.id === 'faeruin' && role === 'Setup Sweeper' && !moves.has('substitute')) {
-			return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		}
-		if (species.id === 'faeruin' && role === 'Setup Sweeper' && moves.has('substitute')) return 'Leftovers';
-		if (species.id === 'haarstorm') {
-			if (role === 'Fast Attacker') return 'Choice Scarf';
-			if (role === 'Bulky Support') return 'Leftovers';
-			if (role === 'Fast Support') return 'Life Orb';
-		}
-		if (species.id === 'bulionage') return this.sample(['Leftovers', 'Clear Amulet']);
-		if (['fettogre', 'copperhead', 'psyllapse', 'obaki'].includes(species.id)) return 'Leftovers';
-		if (species.id === 'crystuit' && role === 'Fast Attacker') return this.sample(['Choice Specs', 'Choice Scarf']);
-		if (species.id === 'odonata') return this.sample(['Heavy-Duty Boots', 'Lum Berry']);
-		if (species.id === 'yamateraph') return this.sample(['Leftovers', 'Lum Berry']);
-		if (species.id === 'wizhazard') {
-			if (role === 'Wallbreaker') return 'Choice Specs';
-			if (role === 'Bulky Setup') return 'Leftovers';
-		}
-		if (species.id === 'groundead') return (role === 'Wallbreaker') ? 'Choice Band' : 'Leftovers';
-		if (species.id === 'bellolysk') {
-			if (role === 'Bulky Setup' || role === 'Bulky Support') return 'Leftovers';
-			if (role === 'Wallbreaker') return 'Life Orb';
-		}
-		if (species.id === 'bufferfly' && role === 'Bulky Setup') return 'Leftovers';
-		if (species.id === 'versalyre') return 'Choice Scarf';
-		if (species.id === 'pinaturbo' && role === 'Wallbreaker') return 'Life Orb';
-		if (species.id === 'brasspecter') {
-			if (role === 'Bulky Attacker') return 'Choice Band';
-			if (role === 'Bulky Setup') return 'Leftovers';
-		}
-		if (species.id === 'cottentration' && role !== 'Wallbreaker') return 'Leftovers';
-
-		// backups to catch stuff that falls through the cracks
+		if (moves.has('devour') && ability === 'Unburden') return 'Liechi Berry';
+		if (moves.has('virulentvolley')) return 'Loaded Dice';
+		if (moves.has('magnalance') && ability === 'Reactive Core') return 'Flame Orb';
+		if (moves.has('dragondance') && ability === 'Reactive Core') return 'Frost Orb';
+		// other
+		if (moves.has('substitute')) return 'Leftovers';
+		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
+		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost' || ability === 'Poison Heal') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -816,6 +678,10 @@ export class RandomBLCTeams extends RandomTeams {
 		}
 		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 		if (species.nfe) return 'Eviolite';
+		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
+		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
+			return (counter.get('Physical') + counter.get('Special') >= 3) ? 'Life Orb' : 'Leftovers';
+		}
 	}
 
 	override randomSet(
@@ -951,7 +817,7 @@ export class RandomBLCTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomBLCTeam() {
+	randomMHSTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -975,7 +841,7 @@ export class RandomBLCTeams extends RandomTeams {
 		const typeWeaknesses: { [k: string]: number } = {};
 		const typeDoubleWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		let numMaxLevelPokemon = 0;
+		// let numMaxLevelPokemon = 0;
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
@@ -1003,65 +869,6 @@ export class RandomBLCTeams extends RandomTeams {
 			);
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
-
-			// TEMPORARILY ADJUSTING BALANCE OF THIS BLOCK -- TOO FEW POKEMON TO GENERATE TEAMS
-			// update: reverting these changes, but leaving just in case
-			if (!isMonotype && !this.forceMonotype) {
-				let skip = false;
-
-				// Limit two of any type
-				// ADJUSTING TO 6 -- ADJUST BACK AFTER MORE POKEMON HAVE BEEN ADDED
-				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 /* 6 */ * limitFactor) {
-						skip = true;
-						break;
-					}
-				}
-				if (skip) continue;
-
-				// Limit three weak to any type, and one double weak to any type
-				// ADJUSTING TO 6 -- ADJUST BACK AFTER MORE POKEMON HAVE BEEN ADDED
-				for (const typeName of this.dex.types.names()) {
-					// it's weak to the type
-					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 3 /* 6 */ * limitFactor) {
-							skip = true;
-							break;
-						}
-					}
-					if (this.dex.getEffectiveness(typeName, species) > 1) {
-						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 /* 6 */ * Number(limitFactor)) {
-							skip = true;
-							break;
-						}
-					}
-				}
-				if (skip) continue;
-
-				// Count Dry Skin/Fluffy as Fire weaknesses
-				// ADJUSTING TO 6 -- ADJUST BACK AFTER MORE POKEMON HAVE BEEN ADDED
-				if (
-					this.dex.getEffectiveness('Fire', species) === 0 &&
-					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length
-				) {
-					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
-					if (typeWeaknesses['Fire'] >= 3 /* 6 */ * limitFactor) continue;
-				}
-
-				// Limit four weak to Freeze-Dry
-				// ADJUSTING TO 6 -- ADJUST BACK AFTER MORE POKEMON HAVE BEEN ADDED
-				if (weakToFreezeDry) {
-					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
-					if (typeWeaknesses['Freeze-Dry'] >= 4 /* 6 */ * limitFactor) continue;
-				}
-
-				// Limit one level 100 Pokemon
-				if (!this.adjustLevel && (this.getLevel(species, isDoubles) === 100) && numMaxLevelPokemon >= limitFactor) {
-					continue;
-				}
-			}
 
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
@@ -1129,7 +936,7 @@ export class RandomBLCTeams extends RandomTeams {
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 
 			// Increment level 100 counter
-			if (set.level === 100) numMaxLevelPokemon++;
+			// if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
@@ -1164,4 +971,4 @@ export class RandomBLCTeams extends RandomTeams {
 	}
 }
 
-export default RandomBLCTeams;
+export default RandomMHSTeams;

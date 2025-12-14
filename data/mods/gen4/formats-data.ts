@@ -1137,9 +1137,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	castform: {
 		tier: "NU",
 	},
-	castformsunny: {},
-	castformrainy: {},
-	castformsnowy: {},
+	castformsunny: {
+	},
+	castformrainy: {
+	},
+	castformsnowy: {
+	},
 	kecleon: {
 		tier: "NU",
 	},

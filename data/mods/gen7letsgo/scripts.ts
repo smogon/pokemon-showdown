@@ -1,8 +1,7 @@
 function checkMegaForme(species: Species, forme: string, battle: Battle) {
 	const baseSpecies = battle.dex.species.get(species.baseSpecies);
 	const altForme = battle.dex.species.get(`${baseSpecies.name}-${forme}`);
-	if (
-		altForme.exists && !battle.ruleTable.isBannedSpecies(altForme) &&
+	if (altForme.exists && altForme.gen <= 7 && !battle.ruleTable.isBannedSpecies(altForme) &&
 		!battle.ruleTable.isBanned('pokemontag:mega')
 	) {
 		return altForme.name;
@@ -40,9 +39,9 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Limit one mega evolution
 			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvo = null;
-				ally.canMegaEvoX = null;
-				ally.canMegaEvoY = null;
+				ally.canMegaEvo = false;
+				ally.canMegaEvoX = false;
+				ally.canMegaEvoY = false;
 			}
 
 			this.battle.runEvent('AfterMega', pokemon);
@@ -50,12 +49,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		runMegaEvoX(pokemon) {
 			if (!pokemon.canMegaEvoX) return false;
-			pokemon.canMegaEvoY = null;
+			pokemon.canMegaEvoY = false;
 			return this.runMegaEvo(pokemon);
 		},
 		runMegaEvoY(pokemon) {
 			if (!pokemon.canMegaEvoY) return false;
-			pokemon.canMegaEvoX = null;
+			pokemon.canMegaEvoX = false;
 			return this.runMegaEvo(pokemon);
 		},
 	},

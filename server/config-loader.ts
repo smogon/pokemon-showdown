@@ -7,6 +7,7 @@
 
 import * as defaults from '../config/config-example';
 import type { GroupInfo, EffectiveGroupSymbol } from './user-groups';
+import type { LogLevel, LogEntry } from './monitor';
 import { ProcessManager, FS } from '../lib';
 
 type DefaultConfig = typeof defaults;
@@ -20,7 +21,7 @@ type ProcessType = (
 	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
 );
 
-type SubProcessesConfig = Partial<Record<ProcessType, number>>;
+export type SubProcessesConfig = Partial<Record<ProcessType, number>>;
 
 export type ConfigType = InputConfig & {
 	groups: { [symbol: string]: GroupInfo },
@@ -41,8 +42,14 @@ const processTypes: ProcessType[] = [
 
 const CONFIG_PATH = FS('./config/config.js').path;
 
+const errors: LogEntry[] = [];
+
 export function load(invalidate = false) {
-	if (invalidate) delete require.cache[CONFIG_PATH];
+	if (global.Config) {
+		if (!invalidate) return global.Config;
+		delete require.cache[CONFIG_PATH];
+	}
+
 	const config = ({ ...defaults, ...require(CONFIG_PATH) }) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = { ...defaults.routes, ...config.routes };
@@ -77,6 +84,7 @@ export function load(invalidate = false) {
 
 	cacheSubProcesses(config);
 	cacheGroupData(config);
+	global.Config = config;
 	return config;
 }
 
@@ -89,10 +97,10 @@ function cacheSubProcesses(config: ConfigType) {
 			config.subprocessescache = (Object.fromEntries(
 				processTypes.map(k => [k, value])
 			) as Record<ProcessType, number>);
-		} else if (typeof value === 'object') {
+		} else if (typeof value === 'object' && !Array.isArray(value)) {
 			config.subprocessescache = value;
 		} else {
-			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
+			pushError('error' as const, `Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
 	}
 	config.subprocessescache ??= {};
@@ -110,7 +118,8 @@ function cacheSubProcesses(config: ConfigType) {
 		}
 	}
 	for (const compatKey of deprecatedKeys) {
-		reportError(
+		pushError(
+			'warning' as const,
 			`You are using \`${compatKey}\`, which is deprecated\n` +
 			`Support for this may be removed.\n` +
 			`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 80).\n`
@@ -122,7 +131,8 @@ export function cacheGroupData(config: ConfigType) {
 	if (config.groups) {
 		// Support for old config groups format.
 		// Should be removed soon.
-		reportError(
+		pushError(
+			'warning' as const,
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this may be removed.\n` +
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 521).\n`
@@ -151,7 +161,7 @@ export function cacheGroupData(config: ConfigType) {
 			if (isPermission(key)) {
 				const jurisdiction = groupData[key as 'jurisdiction'];
 				if (typeof jurisdiction === 'string' && jurisdiction.includes('s')) {
-					reportError(`Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
+					pushError('warning' as const, `Outdated jurisdiction for permission "${key}" of group "${symbol}": 's' is no longer a supported jurisdiction; we now use 'ipself' and 'altsself'`);
 					delete groupData[key as 'jurisdiction'];
 				}
 			}
@@ -229,10 +239,38 @@ export function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function reportError(msg: string) {
-	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
-	// Most child processes don't have Monitor.error, but the main process should always have them, and Config
-	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
-	setImmediate(() => global.Monitor?.error?.(`[CONFIG] ${msg}`));
+function pushError(logLevel: LogLevel, msg: string) {
+	if (process.send) return;
+	errors.push([logLevel, `[CONFIG] ${msg}`]);
 }
-export const Config = load();
+
+export function flushLog() {
+	for (const entry of errors) {
+		Monitor.logWithLevel(entry[0], entry[1]);
+	}
+	errors.length = 0;
+}
+
+export function ensureLoaded() {
+	// Call to prevent unused import ellision
+}
+
+export function watch() {
+	FS('config/config.js').onModify(() => {
+		if (!Config.watchconfig) return;
+		try {
+			load(true);
+			flushLog();
+			// ensure that battle prefixes configured via the chat plugin are not overwritten
+			// by battle prefixes manually specified in config.js
+			Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
+			Monitor.notice('Reloaded ../config/config.js');
+		} catch (e: any) {
+			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
+		}
+	});
+}
+
+load();
+
+// Note: Do NOT export Config name binding, so that importing it doesn't shadow global.Config

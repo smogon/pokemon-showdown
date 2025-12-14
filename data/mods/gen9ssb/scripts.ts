@@ -936,7 +936,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 			if (pokemon.canMegaEvo) {
-				pokemon.canMegaEvo = null;
+				pokemon.canMegaEvo = false;
 			} else {
 				pokemon.canUltraBurst = null;
 			}
@@ -964,8 +964,23 @@ export const Scripts: ModdedBattleScriptsData = {
 				return altForme.name;
 			}
 			// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-			if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-				return item.megaStone;
+			if (Array.isArray(item.megaEvolves)) {
+				if (!Array.isArray(item.megaStone)) {
+					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
+				}
+				if (item.megaEvolves.length !== item.megaStone.length) {
+					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone length mismatch`);
+				}
+				// FIXME: Change to species.name when champions comes
+				const index = item.megaEvolves.indexOf(species.baseSpecies);
+				if (index < 0) return null;
+				return item.megaStone[index];
+				// FIXME: Change to species.name when champions comes
+			} else {
+				if (item.megaEvolves === species.baseSpecies) {
+					if (Array.isArray(item.megaStone)) throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
+					return item.megaStone;
+				}
 			}
 			return null;
 		},

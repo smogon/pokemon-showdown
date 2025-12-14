@@ -1,9 +1,9 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import { FS, Utils, ProcessManager, Repl } from '../../lib';
+import { FS, Utils, ProcessManager } from '../../lib';
 
-import { checkRipgrepAvailability, Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 import * as path from 'path';
 import * as child_process from 'child_process';
@@ -27,7 +27,7 @@ interface BattleSearchResults {
 }
 
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
-	const useRipgrep = await checkRipgrepAvailability();
+	const useRipgrep = await ConfigLoader.checkRipgrepAvailability();
 	const pathString = `${month}/${tierid}/`;
 	const results: { [k: string]: BattleSearchResults } = {};
 	let files = [];
@@ -451,34 +451,38 @@ export const commands: Chat.ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
-	const { userids, turnLimit, month, tierid } = data;
-	const start = Date.now();
-	try {
-		const result = await runBattleSearch(userids, month, tierid, turnLimit);
-		const elapsedTime = Date.now() - start;
-		if (elapsedTime > 10 * 60 * 1000) {
-			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(
+	'battlesearch', module,
+	async data => {
+		const { userids, turnLimit, month, tierid } = data;
+		const startTime = Date.now();
+		try {
+			const result = await runBattleSearch(userids, month, tierid, turnLimit);
+			const elapsedTime = Date.now() - startTime;
+			if (elapsedTime > 10 * 60 * 1000) {
+				Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+			}
+			return result;
+		} catch (err) {
+			Monitor.crashlog(err, 'A battle search query', {
+				userids,
+				turnLimit,
+				month,
+				tierid,
+			});
 		}
-		return result;
-	} catch (err) {
-		Monitor.crashlog(err, 'A battle search query', {
-			userids,
-			turnLimit,
-			month,
-			tierid,
-		});
+		return null;
+	},
+	BATTLESEARCH_PROCESS_TIMEOUT,
+	message => {
+		if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
 	}
-	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
+);
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -496,7 +500,13 @@ if (!PM.isParentProcess) {
 	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
-	Repl.start('battlesearch', cmd => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.battlesearch ?? 1);
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['battlesearch'] ?? 1);
+}
+
+export function destroy() {
+	void PM.destroy();
 }
