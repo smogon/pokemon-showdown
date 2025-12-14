@@ -113,7 +113,7 @@ describe('Dex data', () => {
 				assert.equal(entry.evoItem, item.exists && item.name, `Misspelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
 			}
 
-			const battleOnly = ['Mega', 'Mega-X', 'Mega-Y', 'Mega-Z', 'Primal'].includes(entry.forme) ? entry.baseSpecies : entry.battleOnly;
+			const battleOnly = entry.forme.includes('Mega') || entry.forme === 'Primal' ? entry.baseSpecies : entry.battleOnly;
 			if (entry.requiredAbility) {
 				assert(entry.battleOnly, `Forme ${entry.name} with requiredAbility must have battleOnly`);
 			}
