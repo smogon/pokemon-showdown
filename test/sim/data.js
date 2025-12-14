@@ -13,14 +13,16 @@ describe('Dex data', () => {
 			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
 
 			assert(entry.color, `Pokemon ${entry.name} must have a color.`);
-			assert(entry.heightm, `Pokemon ${entry.name} must have a height.`);
+			if (!entry.isCosmeticForme) assert(entry.heightm, `Pokemon ${entry.name} must have a height.`);
 
 			if (entry.forme) {
 				// entry is a forme of a base species
 				const baseEntry = Pokedex[toID(entry.baseSpecies)];
 				assert(baseEntry && !baseEntry.forme, `Forme ${entry.name} should have a valid baseSpecies`);
 				// Gmax formes are not actually formes, they are only included in pokedex.ts for convenience
-				if (!entry.name.includes('Gmax')) assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
+				if (!entry.name.includes('Gmax') && !entry.isCosmeticForme) {
+					assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
+				}
 				assert.false(entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
 				assert.false(entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
 				assert.false(entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
@@ -65,6 +67,10 @@ describe('Dex data', () => {
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
+			if (entry.isCosmeticForme) {
+				assert.equal(Dex.getAlias(pokemonid), toID(entry.baseSpecies), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.baseSpecies}`);
+				assert.equal(Dex.data.FormatsData[pokemonid], undefined, `Cosmetic forme "${entry.name}" should not have its own tier`);
+			}
 			if (entry.battleOnly) {
 				const battleOnly = Array.isArray(entry.battleOnly) ? entry.battleOnly : [entry.battleOnly];
 				for (const battleForme of battleOnly) {
@@ -107,15 +113,15 @@ describe('Dex data', () => {
 				assert.equal(entry.evoItem, item.exists && item.name, `Misspelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
 			}
 
-			const battleOnly = ['Mega', 'Mega-X', 'Mega-Y', 'Primal'].includes(entry.forme) ? entry.baseSpecies : entry.battleOnly;
+			const battleOnly = ['Mega', 'Mega-X', 'Mega-Y', 'Mega-Z', 'Primal'].includes(entry.forme) ? entry.baseSpecies : entry.battleOnly;
 			if (entry.requiredAbility) {
 				assert(entry.battleOnly, `Forme ${entry.name} with requiredAbility must have battleOnly`);
 			}
 			if (entry.requiredItem) {
-				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredAbility must have battleOnly or changesFrom`);
+				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredItem must have battleOnly or changesFrom`);
 			}
 			if (entry.requiredMove) {
-				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredAbility must have battleOnly or changesFrom`);
+				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredMove must have battleOnly or changesFrom`);
 			}
 		}
 	});
@@ -126,6 +132,12 @@ describe('Dex data', () => {
 			const entry = Items[itemid];
 			assert.equal(toID(entry.name), itemid, `Mismatched Item key "${itemid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Item ${entry.name} should have a number`);
+			if (entry.megaStone) {
+				assert.equal(typeof entry.megaStone, typeof entry.megaEvolves, `Item ${entry.name} megaStone and megaEvolves should both be the same type`);
+				if (Array.isArray(entry.megaStone)) {
+					assert.equal(entry.megaStone.length, entry.megaEvolves.length, `Item ${entry.name} megaStone and megaEvolves arrays should be the same length`);
+				}
+			}
 		}
 	});
 
@@ -230,14 +242,14 @@ describe('Dex data', () => {
 
 	it('should have valid Learnsets entries', function () {
 		this.timeout(0);
-		const learnsetsArray = [Dex.mod('gen2').data.Learnsets, Dex.mod('gen7letsgo').data.Learnsets, Dex.mod('gen8bdsp').data.Learnsets, Dex.data.Learnsets];
-		for (const Learnsets of learnsetsArray) {
-			for (const speciesid in Learnsets) {
+		const mods = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex.mod('gen9legends'), Dex];
+		for (const mod of mods) {
+			for (const speciesid in mod.data.Learnsets) {
 				const species = Dex.species.get(speciesid);
 				assert.equal(speciesid, species.id, `Key "${speciesid}" in Learnsets should be a Species ID`);
 				assert(species.exists, `Key "${speciesid}" in Learnsets should be a pokemon`);
-				let entry = Learnsets[speciesid];
-				if (!entry.learnset) entry = Learnsets[toID(species.changesFrom || species.baseSpecies)];
+				let entry = mod.data.Learnsets[speciesid];
+				if (!entry.learnset) entry = mod.data.Learnsets[toID(species.changesFrom || species.baseSpecies)];
 				for (const moveid in entry.learnset) {
 					const move = Dex.moves.get(moveid);
 					assert.equal(moveid, move.id, `Move key "${moveid}" of Learnsets entry ${species.name} should be a Move ID`);
@@ -292,7 +304,8 @@ describe('Dex data', () => {
 								}
 								assert.equal(eventMove, toID(eventMove), `${species.name}'s event move "${eventMove}" must be an ID`);
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
-								assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
+								const effectiveMod = ['gen8bdsp', 'gen8legends', 'gen9legends'].includes(mod.currentMod) ? mod.currentMod : undefined;
+								if (eventEntry.source === effectiveMod) assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
 							}
 						}
 					}
@@ -307,6 +320,7 @@ describe('Dex data', () => {
 		const count = { species: 0, formes: 0 };
 		for (const pkmn of dex.species.all()) {
 			if (!existenceFunction(pkmn)) continue;
+			if (pkmn.isCosmeticForme) continue;
 			if (pkmn.name !== pkmn.baseSpecies) {
 				count.formes++;
 			} else {
@@ -347,7 +361,7 @@ describe('Dex data', () => {
 	// Pikachu (6) + Mega (48) [Floette (1)]
 	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
-	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
+	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1) +
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
 	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3;
 	// Silvally (17) + Rotom (5) + Basculin (1) + Meowstic (1) +
@@ -369,18 +383,42 @@ describe('Dex data', () => {
 	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Magearna (1) + Toxtricity (1) +
 	// Antique (2) + Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) +
 	// Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) +
-	// Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) +
+	// Palafin (1) + Maushold (1) + Squawkabilly (3) + Tatsugiri (2) + Gimmighoul (1) + Basculegion (1) +
 	// Masterpiece (2) + Ogerpon (7) + Terapagos (2)
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 + 3 + 5 + 1 + 17 +
 		2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1 + 2 + 1 + 1 + 2 +
 		1 + 1 + 2 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 1 +
-		1 + 1 + 3 + 1 + 1 + 2 + 7 + 2;
+		1 + 1 + 3 + 2 + 1 + 1 + 2 + 7 + 2;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {
 			const count = countPokemon(Dex.forGen(gen));
 			assert.equal(count.species, species[gen]);
 			assert.equal(count.formes, formes[gen]);
+		});
+	}
+
+	species['gen7letsgo'] = species[1] + 2; // Meltan + Melmetal
+	formes['gen7letsgo'] = 15 + 18 + 2; // Mega (15) + Alola (18) + Starter (2)
+	species['gen8bdsp'] = species[4];
+	formes['gen8bdsp'] = formes[4] + 1 - 1; // Arceus (1) - Pichu (1)
+	species['gen8legends'] = 242 - 16 + 1 - 1; // - Hisui (16) + Sneasel (1) - Basculin (1)
+	// Vulpix (1) + Ninetales (1) + Wormadam (2) + Cherrim (1) + Rotom (5) + Origin (3) + Arceus (17) +
+	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
+	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
+	species['gen9legends'] = 232 + 132; // Lumiose Pokedex + Hyperspace Pokedex
+	// Mega (90) + Primal (2) + Rotom (5) + Keldeo (1) + Meloetta (1) + Genesect (4) + Vivillon (2) + Floette (1) +
+	// Meowstic (1) + Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Zygarde (2) + Mimikyu (1) + Magearna (1) +
+	// Alola (4) + Toxtricity (1) + Indeedee (1) + Morpeko (1) + Galar (8) + Hisui (1) + Squawkabilly (3) +
+	// Tatsugiri (2) + Gimmighoul (1) + Hoopa (1)
+	formes['gen9legends'] = 92 + 2 + 5 + 1 + 1 + 4 + 2 + 1 + 1 + 1 + 3 + 3 + 2 + 1 + 1 + 4 + 1 + 1 + 1 + 8 + 1 + 3 + 2 + 1 + 1;
+
+	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
+		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {
+			const existenceFunction = mod.includes('legends') ? s => s.exists && !s.isNonstandard : undefined;
+			const count = countPokemon(Dex.mod(mod), existenceFunction);
+			assert.equal(count.species, species[mod]);
+			assert.equal(count.formes, formes[mod]);
 		});
 	}
 

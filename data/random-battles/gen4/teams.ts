@@ -381,6 +381,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
+		// Enforce Stealth Rock if the team doesn't already have it
+		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
 		// Enforce recovery
 		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Spinner', 'Staller'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
@@ -656,6 +662,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -752,7 +760,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('transform')) {
+		if (!counter.get('Physical') && !moves.has('transform') && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
 		}

@@ -1,0 +1,104 @@
+export const Scripts: ModdedBattleScriptsData = {
+	gen: 9,
+	inherit: 'gen9legends',
+	init() {
+		const legalItems = [
+			'assaultvest', 'bigroot', 'blackbelt', 'blackglasses', 'charcoal', 'dragonfang', 'eviolite', 'expertbelt', 'fairyfeather',
+			'focusband', 'focussash', 'hardstone', 'kingsrock', 'leftovers', 'lifeorb', 'lightball', 'magnet', 'metalcoat', 'miracleseed',
+			'muscleband', 'mysticwater', 'nevermeltice', 'normalgem', 'poisonbarb', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer',
+			'powerlens', 'powerweight', 'quickclaw', 'rockyhelmet', 'scopelens', 'sharpbeak', 'shellbell', 'silkscarf', 'silverpowder',
+			'softsand', 'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone',
+			'duskstone', 'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone',
+			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget', 'redorb', 'blueorb', 'leek', 'thickclub', 'upgrade',
+			'dubiousdisc', 'prismscale', 'maliciousarmor', 'auspiciousarmor',
+		];
+		const legalBerries = [
+			'aspearberry', 'babiriberry', 'chartiberry', 'cheriberry', 'chestoberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry',
+			'grepaberry', 'habanberry', 'hondewberry', 'kasibberry', 'kebiaberry', 'kelpsyberry', 'lumberry', 'occaberry', 'oranberry', 'passhoberry',
+			'payapaberry', 'pechaberry', 'persimberry', 'pomegberry', 'qualotberry', 'rawstberry', 'rindoberry', 'roseliberry', 'shucaberry',
+			'sitrusberry', 'tamatoberry', 'tangaberry', 'wacanberry', 'yacheberry',
+		];
+		const votedLegalitems = [
+			'heavydutyboots', 'choiceband', 'choicescarf', 'choicespecs',
+		];
+		for (const i in this.data.Items) {
+			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
+			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) ||
+				this.data.Items[i].megaStone || this.data.Items[i].onDrive) {
+				this.modData('Items', i).isNonstandard = null;
+			} else {
+				this.modData('Items', i).isNonstandard = 'Past';
+			}
+		}
+		for (const i in this.data.Moves) {
+			if (this.data.Moves[i].isNonstandard !== 'Past') continue;
+			this.modData('Moves', i).isNonstandard = null;
+		}
+	},
+	actions: {
+		canMegaEvo(pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+			// Mega Rayquaza
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
+				this.battle.ruleTable.has('+pokemontag:future')) &&
+				altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
+				return altForme.name;
+			}
+			if (Array.isArray(item.megaEvolves)) {
+				if (!Array.isArray(item.megaStone)) {
+					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
+				}
+				if (item.megaEvolves.length !== item.megaStone.length) {
+					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone length mismatch`);
+				}
+				const index = item.megaEvolves.indexOf(species.name);
+				if (index < 0) return null;
+				return item.megaStone[index];
+			} else {
+				if (item.megaEvolves === species.name) {
+					if (Array.isArray(item.megaStone)) throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
+					return item.megaStone;
+				}
+			}
+			return null;
+		},
+		runMegaEvo(pokemon) {
+			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+			if (!speciesid) return false;
+
+			pokemon.formeChange(speciesid, pokemon.getItem(), true);
+
+			// Limit one mega evolution
+			const wasMega = pokemon.canMegaEvo;
+			for (const ally of pokemon.side.pokemon) {
+				if (wasMega) {
+					ally.canMegaEvo = false;
+				} else {
+					ally.canUltraBurst = null;
+				}
+			}
+
+			// will finish coding this later, not important since zygarde is banned
+			if (speciesid === 'Zygarde-Mega') {
+				const coreEnforcer = pokemon.moveSlots.findIndex(x => x.id === 'coreenforcer');
+				if (coreEnforcer >= 0) {
+					const nihilLight = this.battle.dex.moves.get('nihillight');
+					pokemon.moveSlots[coreEnforcer] = pokemon.baseMoveSlots[coreEnforcer] = {
+						id: nihilLight.id,
+						move: nihilLight.name,
+						pp: pokemon.moveSlots[coreEnforcer].pp,
+						maxpp: pokemon.moveSlots[coreEnforcer].maxpp,
+						disabled: false,
+						used: false,
+					};
+				}
+			}
+
+			this.battle.runEvent('AfterMega', pokemon);
+			return true;
+		},
+	},
+};

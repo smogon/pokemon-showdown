@@ -26,8 +26,9 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
-import { FriendsDatabase, PM } from './friends';
-import { SQL, Repl, FS, Utils } from '../lib';
+import * as ConfigLoader from './config-loader';
+import * as Friends from './friends';
+import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
@@ -162,13 +163,19 @@ const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
-// @ts-expect-error no typedef available
-import ProbeModule = require('probe-image-size');
-const probe: (url: string) => Promise<{ width: number, height: number }> = ProbeModule;
+let probe: null | ((url: string) => Promise<{ width: number, height: number }>) = null;
+
+try {
+	probe = require('probe-image-size');
+} catch {}
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
+
+const PM = SQL('chat-db', module, {
+	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
+});
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -602,7 +609,9 @@ export class CommandContext extends MessageContext {
 			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
-		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+		if (this.user.statusType === 'idle' &&
+			this.message !== '/cmd rooms' &&
+			!['unaway', 'unafk', 'back'].includes(this.cmd)) {
 			this.user.setStatusType('online');
 		}
 
@@ -825,6 +834,8 @@ export class CommandContext extends MessageContext {
 				return prefix + message.slice(4);
 			} else if (message.startsWith(`|c|~|/`)) {
 				return prefix + message.slice(5);
+			} else if (message.startsWith(`|c|${sender.getIdentity()}|/raw `)) {
+				return prefix + message.slice(`|c|${sender.getIdentity()}|`.length);
 			} else if (message.startsWith(`|c|~|`)) {
 				return prefix + `/text ` + message.slice(5);
 			}
@@ -1542,8 +1553,8 @@ export const Chat = new class {
 	 * which tends to cause unexpected behavior.
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
-	readonly Friends = new FriendsDatabase();
-	readonly PM = PM;
+	readonly Friends = new Friends.FriendsDatabase();
+	readonly FriendsPM = Friends.PM;
 	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
@@ -1555,7 +1566,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1815,10 +1826,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = SQL(module, {
-		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses,
-	});
+	database = PM;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -1905,14 +1913,14 @@ export const Chat = new class {
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({ message, room, user, connection });
-		const start = Date.now();
+		const startTime = Date.now();
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
 			void result.then(() => {
-				this.logSlowMessage(start, context);
+				this.logSlowMessage(startTime, context);
 			});
 		} else {
-			this.logSlowMessage(start, context);
+			this.logSlowMessage(startTime, context);
 		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
@@ -1923,8 +1931,8 @@ export const Chat = new class {
 
 		return result;
 	}
-	logSlowMessage(start: number, context: CommandContext) {
-		const timeUsed = Date.now() - start;
+	logSlowMessage(startTime: number, context: CommandContext) {
+		const timeUsed = Date.now() - startTime;
 		if (timeUsed < 1000) return;
 		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
 
@@ -1948,12 +1956,12 @@ export const Chat = new class {
 
 	loadPluginFile(file: string) {
 		if (!file.endsWith('.js')) return;
-		this.loadPlugin(require(file), this.getPluginName(file));
+		this.loadPlugin(require(FS(file).path), this.getPluginName(file));
 	}
 
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
-			const path = pathModule.resolve(dir, file);
+			const path = pathModule.join(dir, file);
 			if (FS(path).isDirectorySync()) {
 				depth++;
 				if (depth > MAX_PLUGIN_LOADING_DEPTH) continue;
@@ -1968,11 +1976,11 @@ export const Chat = new class {
 			}
 		}
 	}
-	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
+	annotateCommands(commandTable: AnyObject, namespace = '', pluginName?: string): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.annotateCommands(entry, `${namespace}${cmd} `);
+				this.annotateCommands(entry, `${namespace}${cmd} `, pluginName);
 			}
 			if (typeof entry === 'string') {
 				const base = commandTable[entry];
@@ -1989,6 +1997,7 @@ export const Chat = new class {
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run|should)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
 			entry.requiredPermission = /this\.(?:checkCan|privately(?:Check)?Can)\(['`"]([a-zA-Z0-9]+)['"`](\)|, )/.exec(handlerCode)?.[1];
+			entry.plugin = pluginName;
 			if (!entry.aliases) entry.aliases = [];
 
 			// assign properties from the base command if the current command uses CommandContext.run.
@@ -2015,7 +2024,7 @@ export const Chat = new class {
 		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
 		plugin = { ...plugin };
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, '', name));
 		}
 		if (plugin.pages) {
 			Object.assign(Chat.pages, plugin.pages);
@@ -2051,6 +2060,9 @@ export const Chat = new class {
 				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
 				Chat.handlers[handlerName].push(plugin.handlers[handlerName]);
 			}
+		}
+		if (plugin.start) {
+			plugin.start(Config.subprocessescache);
 		}
 		Chat.plugins[name] = plugin;
 	}
@@ -2512,6 +2524,12 @@ export const Chat = new class {
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
 	getImageDimensions(url: string): Promise<{ height: number, width: number }> {
+		if (Config.noNetRequests) {
+			return Promise.reject(new Error(`Net requests are disabled.`));
+		}
+		if (!probe) {
+			return Promise.reject(new Error(`Images not supported.`));
+		}
 		return probe(url);
 	}
 
@@ -2626,6 +2644,14 @@ export const Chat = new class {
 		return this.linkRegex.test(possibleUrl);
 	}
 
+	extractLinks(possibleUrl: string) {
+		// SEE ABOVE COMMENT
+		// HOW DID I FUCKING FORGET THAT THIS WAS A THING
+		// https://youtu.be/rnzMkJocw6Q?t=9
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.exec(possibleUrl);
+	}
+
 	readonly filterWords: { [k: string]: FilterWord[] } = {};
 	readonly monitors: { [k: string]: Monitor } = {};
 
@@ -2636,6 +2662,10 @@ export const Chat = new class {
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
 		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
+	}
+
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -2695,13 +2725,8 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-// explicitly check this so it doesn't happen in other child processes
-if (!process.send) {
-	Chat.database.spawn(Config.chatdbprocesses || 1);
-	Chat.databaseReadyPromise = Chat.prepareDatabase();
-	// we need to make sure it is explicitly JUST the child of the original parent db process
-	// no other child processes
-} else if (process.mainModule === module) {
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -2714,7 +2739,16 @@ if (!process.send) {
 	process.on('unhandledRejection', err => {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
-	global.Config = require('./config-loader').Config;
 	// eslint-disable-next-line no-eval
-	Repl.start('chat-db', cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
+}
+
+function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (Config.usesqlite) {
+		PM.spawn(processCount['chatdb'] ?? 1);
+		Chat.databaseReadyPromise = Chat.prepareDatabase();
+	}
+	Chat.PrivateMessages.start(processCount);
+	Friends.start(processCount);
+	Artemis.start(processCount);
 }

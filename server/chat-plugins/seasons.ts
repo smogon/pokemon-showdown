@@ -147,8 +147,7 @@ export async function getLadderTop(format: string) {
 		const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
 		const reply = JSON.parse(results);
 		return reply.toplist;
-	} catch (e) {
-		Monitor.crashlog(e, "A season ladder request");
+	} catch {
 		return null;
 	}
 }

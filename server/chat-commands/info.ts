@@ -587,6 +587,7 @@ export const commands: Chat.ChatCommands = {
 
 		const { dex, format, targets } = this.splitFormat(target, true, true);
 
+		const prefix = `|c|${user.getIdentity(room)}|/raw `;
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -642,7 +643,7 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -664,6 +665,7 @@ export const commands: Chat.ChatCommands = {
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -710,7 +712,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(item.gen),
@@ -742,7 +744,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
@@ -848,7 +850,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
@@ -862,7 +864,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
-				buffer += `|raw|<font size="1">${Object.entries(details).map(([detail, value]) => (
+				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
 					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
@@ -1584,7 +1586,7 @@ export const commands: Chat.ChatCommands = {
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
 		`Inputting 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
-		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
+		`An actual stat can be given in place of a base stat or EVs. In this case, the minimum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
 	/*********************************************************
@@ -1718,7 +1720,7 @@ export const commands: Chat.ChatCommands = {
 
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/posts/10715136/">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 	staffhelp: [`/staff - View the staff list.`],
 
@@ -1982,7 +1984,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		return this.sendReply(`|raw|${buf.join("")}`);
+		return this.sendReply(`|c|${user.getIdentity(room)}|/raw ${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,
@@ -2862,12 +2864,15 @@ export const commands: Chat.ChatCommands = {
 		const args = Chat.parseArguments(target, ' | ', {
 			allowEmpty: true, useIDs: false,
 		});
+		if (!args.format?.[0]) {
+			return this.popupReply(`No format specified.`);
+		}
 		const format = Dex.formats.get(toID(args.format[0]));
 		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
-		const targetUserID = toID(args.user[0]);
+		const targetUserID = toID(args.user?.[0] || '');
 		if (targetUserID) {
 			this.checkChat();
 			if (!Users.get(targetUserID)) {
