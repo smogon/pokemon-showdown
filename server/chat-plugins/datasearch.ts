@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
@@ -143,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=gen9ssb, wonder guard</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
 			`You can search for info in a specific rule defined metagame by using <code>rule=[rule name]</code>; e.g. <code>/nds rule=alphabetcupmovelegality, v-create</code>. All supported rule names are: <code>${dexsearchHelpRules}</code><br/>` +
 			`By default, <code>/dexsearch</code> will search only Pok\u00e9mon obtainable in the current generation. Add the parameter <code>unreleased</code> to include unreleased Pok\u00e9mon. Add the parameter <code>natdex</code> (or use the command <code>/nds</code>) to include all past Pok\u00e9mon.<br/>` +
-			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
+			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., searching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
 			`The order of the parameters does not matter.<br/>`
 		);
@@ -859,7 +860,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (isNotSearch) return { error: "You cannot use the negation symbol '!' with inequality tier searches." };
 				target = target.substr(4).trim();
 				if (!target.startsWith('>') && !target.startsWith('<')) {
-					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searchs." };
+					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searches." };
 				}
 				isTierInequalityParam = true;
 				tierInequalitySearch = true;
@@ -3063,7 +3064,7 @@ function runRandtype(target: string, cmd: string, message: string) {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, query => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>('dexsearch', module, query => {
 	try {
 		if (Config.debugdexsearchprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(query));
@@ -3097,8 +3098,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 });
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -3116,9 +3116,7 @@ if (!PM.isParentProcess) {
 	Dex.includeData();
 
 	// eslint-disable-next-line no-eval
-	require('../../lib/repl').Repl.start('dexsearch', (cmd: string) => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.datasearch ?? 1);
+	PM.startRepl((cmd: string) => eval(cmd));
 }
 
 export const testables = {
@@ -3129,3 +3127,11 @@ export const testables = {
 	runMovesearch: (target: string, cmd: string, message: string) =>
 		runMovesearch(target, cmd, message, true),
 };
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['datasearch'] ?? 1);
+}
+
+export function destroy() {
+	void PM.destroy();
+}
