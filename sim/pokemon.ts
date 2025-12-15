@@ -954,8 +954,7 @@ export class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
-					// Keep original targeting (e.g. randomNormal for Outrage)
-					target: moveSlot.target,
+					...(moveSlot.target === 'randomNormal' && { target: 'randomNormal' }),
 				}];
 			}
 			// does this happen?
