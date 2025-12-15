@@ -12735,6 +12735,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Field"],
 		requiredItem: "Meowsticite",
+		battleOnly: "Meowstic",
 		gen: 9,
 	},
 	meowsticfmega: {
