@@ -466,7 +466,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			return species;
 		},
 		getFormeChangeDeltas(formeChangeSpecies, pokemon) {
-			let baseSpecies = this.dex.species.get(formeChangeSpecies.battleOnly);
+			// Should be fine as long as Necrozma-U doesn't get added or Game Freak makes me sad with some convoluted forme change
+			let baseSpecies = Array.isArray(formeChangeSpecies.battleOnly) ?
+				this.dex.species.get(formeChangeSpecies.battleOnly[0]) : this.dex.species.get(formeChangeSpecies.battleOnly);
 			if (formeChangeSpecies.name === 'Zygarde-Mega') {
 				baseSpecies = this.dex.species.get('Zygarde-Complete');
 			}
