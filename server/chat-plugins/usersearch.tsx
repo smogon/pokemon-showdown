@@ -220,7 +220,7 @@ export const pages: Chat.PageTable = {
 			const sorted: { [k: string]: number } = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
-					if (curUser.id.includes(term)) {
+					if (curUser.id.includes(term) && !curUser.id.startsWith('guest')) {
 						if (!(term in sorted)) sorted[term] = 0;
 						sorted[term]++;
 					}
