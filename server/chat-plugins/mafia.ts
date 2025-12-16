@@ -4483,7 +4483,7 @@ export const commands: Chat.ChatCommands = {
 		buf += `</details>`;
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
-			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
+			`<br/><strong>Commands that are only usable in the Mafia Room</strong>:<br/>`,
 			`/mafia queue add, [user] - Adds the user to the host queue. Requires + % @ # ~, voices can only add themselves.`,
 			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ # ~.`,
 			`/mafia queue - Shows the list of users who are in queue to host.`,
