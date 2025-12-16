@@ -649,8 +649,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
 				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1] ||
-					oSpecies.types[0] !== pokemon.species.types[0]) {
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
 					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 				}
 			}
