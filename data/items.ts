@@ -8010,7 +8010,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		megaEvolves: "Zygarde-Complete",
 		itemUser: ["Zygarde-Complete"],
 		onTakeItem(item, source) {
-			if ('Zygarde' === source.baseSpecies.baseSpecies) return false;
+			if (source.baseSpecies.baseSpecies === 'Zygarde') return false;
 			return true;
 		},
 		num: 2584,
