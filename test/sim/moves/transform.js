@@ -119,7 +119,7 @@ describe('Transform', () => {
 		assert.species(battle.p2.active[0], 'Zoroark');
 	});
 
-	it('should fail against tranformed Pokemon', () => {
+	it('should fail against transformed Pokemon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
 		battle.setPlayer('p2', { team: [

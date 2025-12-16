@@ -690,7 +690,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		}
 		for (const [i, poll] of queue.entries()) {
-			const number = i + 1; // for translation convienence
+			const number = i + 1; // for translation convenience
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
 				`<button class="button" name="send" value="/msgroom ${room.roomid},/poll deletequeue ${i + 1}">` +

@@ -69,7 +69,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = target.trim();
 		const input = this.filter(target);
-		if (target !== input) throw new Chat.ErrorMessage("You are not allowed to use fitered words in roomfaq entries.");
+		if (target !== input) throw new Chat.ErrorMessage("You are not allowed to use filtered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
 		topic = toID(topic);

@@ -232,7 +232,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
 		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
 		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'psychic', 'storedpower');
-		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'knockoff', 'earthquake');
+		if (species.id === 'primeape') this.incompatibleMoves(moves, movePool, 'knockoff', 'earthquake');
+		if (species.id === 'feraligatrmega') this.incompatibleMoves(moves, movePool, 'thunderfang', 'poisonfang');
+		if (species.id === 'salazzle') this.incompatibleMoves(moves, movePool, 'malignantchain', 'venoshock');
+		if (species.id === 'glimmora') this.incompatibleMoves(moves, movePool, 'powergem', 'meteorbeam');
 	}
 
 	override randomMoveset(
@@ -713,6 +716,14 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'primeape') return 'Eviolite';
 		if (species.id === 'rillaboom') return 'Heavy-Duty Boots';
 		if (species.id === 'mandibuzz') return 'Thick Club';
+		if (species.id === 'feraligatr') return 'Life Orb';
+		if (species.id === 'salazzle') return 'Heavy-Duty Boots';
+		if (species.id === 'kyogre') return 'Waterium Z';
+		if (species.id === 'azelf') return 'Focus Band';
+		if (species.id === 'decidueye') return this.sample(['Life Orb', 'Heavy-Duty Boots', "Leftovers"]);
+		if (species.id === 'ogerponcornerstone') return 'Cornerstone Mask';
+		if (species.id === 'glimmora' && moves.has('meteorbeam')) return 'Power Herb';
+		if (species.id === 'glimmora') return 'Air Balloon';
 	}
 
 	override randomSet(
@@ -997,7 +1008,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Mew');
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');
 
 			let set: RandomTeamsTypes.RandomSet;
 

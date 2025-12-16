@@ -2,7 +2,7 @@
  * Chat parser
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Parses formate.
+ * Parses format.
  *
  * @license MIT
  */
@@ -312,7 +312,7 @@ class TextFormatter {
 			}
 			return true;
 		case '[':
-			// Link span. Several possiblilities:
+			// Link span. Several possibilities:
 			// [[text <uri>]] - a link with custom text
 			// [[search term]] - Google search
 			// [[wiki: search term]] - Wikipedia search

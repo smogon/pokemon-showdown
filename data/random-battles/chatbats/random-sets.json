@@ -1074,5 +1074,93 @@
                 "teraTypes": ["Poison"]
             }
         ]
+    },
+    "feraligatr": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Thunder Fang", "Crunch", "Liquidation"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Dark"]
+            }
+        ]
+    },
+    "feraligatrmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Thunder Fang", "Poison Fang", "Crunch", "Fire Fang"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "salazzle": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Magma Storm", "Malignant Chain", "Venoshock", "Psychic Noise", "Baneful Bunker"],
+                "abilities": ["Corrosive Soul"],
+                "teraTypes": ["Flying"]
+            }
+        ]
+    },
+    "kyogre": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Origin Pulse", "Thunder", "Ice Beam", "Hurricane", "Tidal Surge"],
+                "abilities": ["Oceanic Blessing"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "azelf": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Rapid Spin", "Metronome", "Loot Box", "Acupressure"],
+                "abilities": ["Auto Spin"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "decidueye": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Sinister Arrows", "Leaf Blade", "Defog", "Roost", "Spirit Shackle", "U-turn"],
+                "abilities": ["Overgrow", "Sniper"],
+                "teraTypes": ["Steel", "Dark", "Ghost"]
+            }
+        ]
+    },
+    "ogerponcornerstone": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Sappy Seed", "Ivy Cudgel", "Synthesis", "Spiky Shield", "Thousand Waves"],
+                "abilities": ["Solid Rock"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "glimmora": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Mortal Spin", "Meteor Beam", "Power Gem", "Ice Beam", "Malignant Chain"],
+                "abilities": ["Corrosion"],
+                "teraTypes": ["Grass"]
+            }
+        ]
     }
 }

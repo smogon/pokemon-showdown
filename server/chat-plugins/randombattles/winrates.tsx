@@ -134,7 +134,7 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 	} else if (species === "Groudon" && item.name === "Red Orb") {
 		return "Groudon-Primal";
 	} else if (item.megaStone) {
-		return item.megaStone;
+		return Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone;
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
 	} else if (species === "Poltchageist-Artisan") { // Babymons from here on out

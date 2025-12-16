@@ -551,7 +551,7 @@ class RetryableError extends Error {
 // is importantly different than using the more obvious 20 and 1000ms here,
 // as it results in more spaced out requests which won't cause as many gettaddrinfo
 // ENOTFOUND (nodejs/node-v0.x-archive#5488). Similarly, the evenly spaced
-// requests makes us signficantly less likely to encounter ECONNRESET errors
+// requests makes us significantly less likely to encounter ECONNRESET errors
 // on macOS (though these are still pretty frequent, Linux is recommended for running
 // this tool). Retry up to 5 times with a 20ms backoff increment.
 const request = retrying(throttling(fetch, 1, 50), 5, 20);

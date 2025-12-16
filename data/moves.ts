@@ -8631,7 +8631,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRestart(target, source, effect) {
 				if (effect?.name === 'Psychic Noise') return;
 
-				this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
+				this.add('-fail', target, 'move: Heal Block'); // Succeeds to suppress downstream messages
 				if (!source.moveThisTurnResult) {
 					source.moveThisTurnResult = false;
 				}
