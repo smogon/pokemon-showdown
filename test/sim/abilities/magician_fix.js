@@ -5,23 +5,23 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magician Fix', function () {
-	afterEach(function () {
+describe('Magician Fix', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should emit an enditem event when stealing an item', function () {
+	it('should emit an enditem event when stealing an item', () => {
 		battle = common.createBattle([[
-			{species: 'Delphox', ability: 'magician', moves: ['mysticalfire']},
+			{ species: 'Delphox', ability: 'magician', moves: ['mysticalfire'] },
 		], [
-			{species: 'Alcremie', item: 'leftovers', moves: ['recover']},
+			{ species: 'Alcremie', item: 'leftovers', moves: ['recover'] },
 		]]);
 
 		battle.makeChoices();
 
-        const log = battle.getDebugLog();
+		const log = battle.getDebugLog();
 
-        assert(log.indexOf('|-enditem|p2a: Alcremie|Leftovers|[silent]|[from] ability: Magician') > -1,
-            "The log should contain the event -enditem (with silent) for Magician.");
+		assert(log.indexOf('|-enditem|p2a: Alcremie|Leftovers|[silent]|[from] ability: Magician') > -1,
+			"The log should contain the event -enditem (with silent) for Magician.");
 	});
 });
