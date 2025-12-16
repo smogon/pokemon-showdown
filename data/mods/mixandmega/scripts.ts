@@ -466,7 +466,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			return species;
 		},
 		getFormeChangeDeltas(formeChangeSpecies, pokemon) {
-			const baseSpecies = this.dex.species.get(formeChangeSpecies.baseSpecies);
+			let baseSpecies = this.dex.species.get(formeChangeSpecies.baseSpecies);
+			if (formeChangeSpecies.name === 'Zygarde-Mega') {
+				baseSpecies = this.dex.species.get('Zygarde-Complete');
+			}
 			const deltas: {
 				ability: string,
 				baseStats: SparseStatsTable,
