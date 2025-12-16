@@ -2226,10 +2226,10 @@ export const pages: Chat.PageTable = {
 			} else if (!isPlayer?.isEliminated()) {
 				if ((!isPlayer && game.subs.includes(user.id)) || (isPlayer && !game.requestedSub.includes(user.id))) {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</summary>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancelation of sub request'}</button></details></p>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancellation of sub request'}</button></details></p>`;
 				} else {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Cancel sub request' : 'Join the game as a sub'}</summary>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub in">${isPlayer ? 'Confirm cancelation of sub request' : 'Confirm that you want to join the game'}</button></details></p>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub in">${isPlayer ? 'Confirm cancellation of sub request' : 'Confirm that you want to join the game'}</button></details></p>`;
 				}
 			}
 		}
