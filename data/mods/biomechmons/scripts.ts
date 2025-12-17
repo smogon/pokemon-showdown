@@ -263,7 +263,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 
-		// TODO
 		eatItem(force, source, sourceEffect) {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
@@ -317,7 +316,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		},
 
-		// TODO
 		useItem(source, sourceEffect) {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
