@@ -27,12 +27,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			'clearamulet', 'covertcloak', 'damprock', 'heatrock', 'icyrock', 'smoothrock', 'electricseed', 'mistyseed', 'psychicseed', 'grassyseed',
 			'flameorb', 'toxicorb', 'gripclaw', 'laggingtail', 'metronome', 'protectivepads', 'punchingglove', 'razorclaw', 'razorfang', 'roomservice',
 			'safetygoggles', 'shellbell', 'shedshell', 'stickybarb', 'terrainextender', 'throatspray', 'utilityumbrella', 'zoomlens', 'bindingband',
-			'destinyknot', 'floatstone', 'ironball', 'machobrace', 'ringtarget',
+			'destinyknot', 'floatstone', 'ironball', 'machobrace', 'ringtarget', 'redcard', 'ejectpack', 'ejectbutton',
 		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
 			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) ||
-				this.data.Items[i].megaStone || this.data.Items[i].onDrive || this.data.Items[i].onPlate) {
+				this.data.Items[i].megaStone || this.data.Items[i].onDrive ||
+				(this.data.Items[i].onPlate && !this.data.Items[i].zMove)) {
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
