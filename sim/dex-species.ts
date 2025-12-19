@@ -1,6 +1,7 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
-import { type MoonPhase } from '@minecraft/server';
+import { type WeatherType, type MoonPhase } from '@minecraft/server';
+import { type MinecraftBiomeTypes } from '@minecraft/vanilla-data';
 
 interface SpeciesAbility {
 	0: string;
@@ -173,17 +174,20 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
+	/**
+	 * The type of trigger for this evolution.
+	 */
 	readonly evoType?: 'trade' |
 		'useItem' |
-		'levelMove' |
-		'levelExtra' |
-		// @pokebedrock: 'levelFriendship' -> 'levelHappiness'
-		'levelHappiness' |
-		'levelHold' |
+		'levelUp' |
 		// @pokebedrock
-		'levelShed' |
+		'shed' |
 		// @pokebedrock
-		'steps' |
+		'takeStep' |
+		// @pokebedrock
+		'changeNickname' |
+		// @pokebedrock
+		'afterBattle' |
 		'other';
 	/**
 	 * The evolving Pokémon species must know a move with this type during the evolution trigger event
@@ -196,6 +200,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * @pokebedrock
 	 */
 	readonly evoMinAffection?: number;
+	/**
+	 * The minimum required happiness the evolving Pokémon species to evolve into this Pokémon species.
+	 * @pokebedrock
+	 */
+	readonly evoMinHappiness?: number;
 	/**
 	 * The Pokémon species that must be in the players party in order for the evolving Pokémon species
 	 * to evolve into this Pokémon species.
@@ -244,6 +253,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 */
 	readonly evoPartyType?: string;
 	/**
+	 * At least one pokemon with these forms must be present in party for evolution, listed in ID form.
+	 * @pokebedrock
+	*/
+	readonly evoPartyForms?: string[];
+	/**
 	 * The required relation between the Pokémon's Attack and Defense stats.
 	 * 1 means Attack > Defense. 0 means Attack = Defense. -1 means Attack < Defense
 	 * @pokebedrock
@@ -262,11 +276,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * @pokebedrock
    */
 	declare readonly evoPriority?: number;
-	/**
-	* Biome required for evolution.
-	* @pokebedrock
-	*/
-	declare readonly evoBiomes?: string[];
 	/**
 	* Status required for evolution.
 	* @pokebedrock
@@ -287,6 +296,31 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	* @pokebedrock
 	*/
 	readonly evoCosmeticForme?: string;
+	/**
+	 * Nickname Required for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoNickname?: string;
+	/**
+	 * Weather Required for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoWeather?: keyof typeof WeatherType;
+	/**
+	 * The minimum required damage that must be taken for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoMinTakenDamage?: number;
+	/**
+	 * The minimum required recoil damage that must be taken for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoMinRecoilDamage?: number;
+	/**
+	 * A list of applicable biomes where the pokemon must be in one of for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoBiomes?: (keyof typeof MinecraftBiomeTypes | `${string}:${string}`)[];
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
