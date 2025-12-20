@@ -2156,10 +2156,11 @@ export class RandomGen8Teams {
 		if (species.name.endsWith('-Gmax')) return species.name.slice(0, -5);
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (['Magearna', 'Polteageist', 'Zarude'].includes(species.baseSpecies)) {
+		if (['Polteageist', 'Zarude'].includes(species.baseSpecies)) {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
 		if (species.baseSpecies === 'Pikachu' && this.dex.currentMod === 'gen8') {
 			return 'Pikachu' + this.sample(
@@ -2176,6 +2177,8 @@ export class RandomGen8Teams {
 		isDoubles = false,
 		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const gmax = species.name.endsWith('-Gmax');
@@ -2413,7 +2416,10 @@ export class RandomGen8Teams {
 			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical' || move.id === 'bodypress';
 		});
-		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
+		if (
+			noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status')) &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
