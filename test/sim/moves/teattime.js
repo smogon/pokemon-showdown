@@ -65,7 +65,7 @@ describe('Teatime', () => {
 		assert.equal(battle.p1.pokemon[0].item, '');
 	});
 
-	it('should not cause Pokemon in the semi-invulernable state to eat their Berries', () => {
+	it('should not cause Pokemon in the semi-invulnerable state to eat their Berries', () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', item: 'sitrusberry', evs: { spe: 252 }, moves: ['fly'] },
 		], [
