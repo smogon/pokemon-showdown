@@ -2,6 +2,8 @@ import { FS, Utils } from '../../lib';
 import { YouTube } from './youtube';
 
 const MINUTE = 60 * 1000;
+const DAY = 24 * 60 * MINUTE;
+const WEEK = DAY * 7;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
@@ -63,6 +65,7 @@ class OtdHandler {
 	removedNominations: Map<string, AnyObject>;
 	voting: boolean;
 	timer: NodeJS.Timeout | null;
+	autoStartTimer: NodeJS.Timeout | null;
 	keys: string[];
 	keyLabels: string[];
 	timeLabel: string;
@@ -81,6 +84,7 @@ class OtdHandler {
 
 		this.voting = false;
 		this.timer = null;
+		this.autoStartTimer = null;
 
 		this.keys = settings.keys;
 		this.keyLabels = settings.keyLabels;
@@ -105,6 +109,7 @@ class OtdHandler {
 				needsSave = true;
 			}
 		}
+		if (room.settings.autoStartOtd) handler.toggleAutoStartTimer(true);
 		if (needsSave) handler.save();
 		return handler;
 	}
@@ -139,6 +144,22 @@ class OtdHandler {
 		for (const value of this.removedNominations.values()) {
 			if (!Array.isArray(value.userids)) value.userids = Object.keys(value.userids);
 			if (!Array.isArray(value.ips)) value.ips = Object.keys(value.ips);
+		}
+	}
+
+	toggleAutoStartTimer(on: boolean) {
+		if (on && !this.autoStartTimer) {
+			this.autoStartTimer = setInterval(() => {
+				if (this.voting) {
+				// in case the 20 min auto-end timer didnt end the nomm process due to 0 nomms
+					this.rollWinner();
+				}
+				this.startVote();
+				this.room.modlog({ action: `${this.id.toUpperCase()} START` });
+			}, this.timeLabel === 'week' ? WEEK : DAY);
+		} else if (!on && this.autoStartTimer) {
+			clearInterval(this.autoStartTimer);
+			this.autoStartTimer = null;
 		}
 	}
 
@@ -740,6 +761,35 @@ export const otdCommands: Chat.ChatCommands = {
 		`Requires: % @ # ~`,
 	],
 
+	toggleautostart(target, room, user) {
+		const otd = selectHandler(this.message);
+		room = this.requireRoom(otd.room.roomid);
+
+		this.checkCan('declare', null, room);
+		let logMessage = '';
+		const handler = selectHandler(this.message);
+
+		if (this.meansYes(target)) {
+			if (room.settings.autoStartOtd) {
+				throw new Chat.ErrorMessage(`This -OTD is already set to automatically start.`);
+			}
+			room.settings.autoStartOtd = true;
+			handler.toggleAutoStartTimer(true);
+
+			logMessage = 'start automatically';
+		} else {
+			if (!room.settings.autoStartOtd) {
+				throw new Chat.ErrorMessage(`This -OTD is not set to automatically start.`);
+			}
+			room.settings.autoStartOtd = false;
+			logMessage = 'not start automatically';
+			handler.toggleAutoStartTimer(false);
+		}
+		this.privateModAction(`${user.name} set the ${otd.name} nomination to ${logMessage}`);
+		this.modlog(`OTD TOGGLEAUTOSTART`, null, logMessage);
+		room.saveSettings();
+	},
+
 	toggleupdate(target, room, user) {
 		const otd = selectHandler(this.message);
 		room = this.requireRoom(otd.room.roomid);
@@ -908,6 +958,7 @@ const otdHelp = [
 	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # ~`,
 	`- /-otd winners - Displays a list of previous things of the day.`,
 	`- /-otd toggleupdate [on|off] - Changes the Thing of the Day to display on nomination ([on] to update, [off] to turn off updates). Requires: # ~`,
+	`- /-otd toggleautostart [on|off] - Enables or disables automatic start for Thing of the Day ([on] enables autostart, [off] disables it). Requires: # ~`,
 ];
 
 for (const otd in otdData) {
@@ -928,6 +979,15 @@ for (const [k, v] of otds) {
 	commands[k] = otdCommands;
 	commands[`${k}help`] = otdHelp;
 }
+
+const getKeyByRoomId = (id: string): string | undefined => {
+	for (const [key, handler] of otds.entries()) {
+		if (handler.room.roomid === id) {
+			return key;
+		}
+	}
+	return undefined;
+};
 
 export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID, room) {
@@ -950,3 +1010,14 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 		handler.removeNomination(user);
 	}
 };
+
+export const roomSettings: Chat.SettingsHandler[] = [
+	(room, user) => ({
+		label: `Autostart -OTD`,
+		permission: "editroom",
+		options: getKeyByRoomId(room.roomid) ? [
+			['off', !room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart off`],
+			['on', room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart on`],
+		] : [['disabled', true]],
+	}),
+];
