@@ -65,6 +65,42 @@ describe('Knock Off', () => {
 		battle.makeChoices('move knockoff', 'move curse');
 		assert.equal(battle.p2.active[0].item, 'rockyhelmet');
 	});
+
+	it('should not remove Booster Energy from Paradox Pokemon', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Tapu Koko", ability: 'electricsurge', moves: ['sleeptalk'] },
+			{ species: "Mew", ability: 'synchronize', moves: ['knockoff'] },
+		], [
+			{ species: "Blissey", ability: 'naturalcure', moves: ['sleeptalk'] },
+			{ species: "Iron Bundle", ability: 'quarkdrive', item: 'boosterenergy', moves: ['sleeptalk'] },
+		]]);
+		// electric terrain is auto-set by tapu koko, so booster energy won't be consumed
+		const bundle = battle.p2.active[1];
+		assert.equal(bundle.item, 'boosterenergy', 'Iron Bundle should have Booster Energy with terrain present');
+		battle.makeChoices('move sleeptalk, move knockoff 2', 'move sleeptalk, move sleeptalk');
+		assert.equal(bundle.item, 'boosterenergy', 'Booster Energy should not be removed from Paradox Pokemon');
+	});
+
+	it('should not remove Ogerpon masks', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', moves: ['knockoff'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Ogerpon-Wellspring", ability: 'waterabsorb', item: 'wellspringmask', moves: ['sleeptalk'] }] });
+		battle.makeChoices('move knockoff', 'move sleeptalk');
+		assert.equal(battle.p2.active[0].item, 'wellspringmask');
+	});
+
+	it('should still get 1.5x power boost against Sticky Hold but not remove item', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', moves: ['knockoff'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Accelgor", ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] }] });
+		let damage = 0;
+		battle.onEvent('Damage', battle.format, (d, target) => {
+			if (target === battle.p2.active[0]) damage = d;
+		});
+		battle.makeChoices('move knockoff', 'move sleeptalk');
+		assert.equal(battle.p2.active[0].item, 'leftovers', 'Sticky Hold should prevent item removal');
+		assert(damage > 0, 'Knock Off should still deal damage');
+	});
 });
 
 describe('Knock Off [Gen 4]', () => {
