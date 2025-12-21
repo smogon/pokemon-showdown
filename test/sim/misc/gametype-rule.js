@@ -53,4 +53,40 @@ describe('Game Type Rule', () => {
 		battle = common.createBattle({ customRules: ['Game Type = DOUBLES'] });
 		assert.equal(battle.gameType, 'doubles');
 	});
+
+	it('should reject doubles/triples with Chimera 1v1 Rule', () => {
+		battle = null;
+		assert.throws(
+			() => common.createBattle({ customRules: ['Chimera 1v1 Rule', 'Game Type = Doubles'] }),
+			/incompatible with Chimera 1v1|cannot be 1v1/
+		);
+		assert.throws(
+			() => common.createBattle({ customRules: ['Chimera 1v1 Rule', 'Game Type = Triples'] }),
+			/incompatible with Chimera 1v1|cannot be 1v1/
+		);
+	});
+
+	it('should reject non-singles/doubles with Best Of', () => {
+		battle = null;
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = Triples', 'Best Of = 3'] }),
+			/incompatible with Best Of|Only single and doubles/
+		);
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = Multi', 'Best Of = 3'] }),
+			/incompatible with Best Of|Only single and doubles/
+		);
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = FreeForAll', 'Best Of = 3'] }),
+			/incompatible with Best Of|Only single and doubles/
+		);
+	});
+
+	it('should allow singles/doubles with Best Of', () => {
+		battle = common.createBattle({ customRules: ['Game Type = Singles', 'Best Of = 3'] });
+		assert.equal(battle.gameType, 'singles');
+		battle.destroy();
+		battle = common.createBattle({ customRules: ['Game Type = Doubles', 'Best Of = 3'] });
+		assert.equal(battle.gameType, 'doubles');
+	});
 });
