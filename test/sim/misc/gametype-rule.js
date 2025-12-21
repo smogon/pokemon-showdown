@@ -25,11 +25,6 @@ describe('Game Type Rule', () => {
 		assert.equal(battle.gameType, 'triples');
 	});
 
-	it('should support rotation game type', () => {
-		battle = common.createBattle({ customRules: ['Game Type = Rotation'] });
-		assert.equal(battle.gameType, 'rotation');
-	});
-
 	it('should support multi game type', () => {
 		battle = common.createBattle({ customRules: ['Game Type = Multi'] });
 		assert.equal(battle.gameType, 'multi');
