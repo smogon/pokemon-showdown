@@ -36,7 +36,6 @@ describe('Psychic Terrain', () => {
 
 		const skarmory = battle.p1.active[0];
 		battle.makeChoices('move psychicterrain', 'move quickattack');
-		const hpAfterSetup = skarmory.hp;
 		battle.makeChoices('move sleeptalk', 'move quickattack');
 		assert.false.fullHP(skarmory, 'Airborne Skarmory should be hit by Quick Attack.');
 
