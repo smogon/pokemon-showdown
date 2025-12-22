@@ -2081,19 +2081,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!validGameTypes.includes(gameType)) {
 				throw new Error(`Invalid game type "${value}". Valid game types are: ${validGameTypes.join(', ')}`);
 			}
-
-			// validate compatibility with other rules
-			if (this.ruleTable.has('chimera1v1rule')) {
-				if (gameType === 'doubles' || gameType === 'triples') {
-					throw new Error(`Game Type = ${value} is incompatible with Chimera 1v1 (sides can have multiple active Pokémon).`);
-				}
-			}
-			if (this.ruleTable.has('bestof')) {
-				if (!['singles', 'doubles'].includes(gameType)) {
-					throw new Error(`Game Type = ${value} is incompatible with Best Of (only singles and doubles are supported).`);
-				}
-			}
-
 			return gameType;
 		},
 		// applied in sim/dex-formats resolveNumbers to override format.gameType

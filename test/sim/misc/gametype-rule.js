@@ -89,4 +89,19 @@ describe('Game Type Rule', () => {
 		battle = common.createBattle({ customRules: ['Game Type = Doubles', 'Best Of = 3'] });
 		assert.equal(battle.gameType, 'doubles');
 	});
+
+	it('should reject non-singles game types with format-specific restrictions', () => {
+		battle = null;
+		// Shared Power format has onValidateRule that only allows singles
+		const Dex = require('../../../dist/sim/dex').Dex;
+		const BattleClass = require('../../../dist/sim/battle').Battle;
+
+		assert.throws(
+			() => {
+				const format = Dex.formats.get('[Gen 9] Shared Power @@@Game Type = Doubles', true);
+				new BattleClass({ format });
+			},
+			/Shared Power currently does not support/
+		);
+	});
 });
