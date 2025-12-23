@@ -345,6 +345,7 @@ export abstract class BasicRoom {
 	send(message: string) {
 		if (this.roomid !== 'lobby') message = '>' + this.roomid + '\n' + message;
 		if (this.userCount) Sockets.roomBroadcast(this.roomid, message);
+		if ((this as any).activeContext) (this as any).activeContext.didRoomOutput = true;
 	}
 	sendMods(data: string) {
 		this.sendRankedUsers(data, '*');
@@ -377,6 +378,7 @@ export abstract class BasicRoom {
 	 */
 	add(message: string) {
 		this.log.add(message);
+		if ((this as any).activeContext) (this as any).activeContext.didRoomOutput = true;
 		return this;
 	}
 	roomlog(message: string) {
@@ -551,7 +553,13 @@ export abstract class BasicRoom {
 		this.minorActivity = activity;
 		if (this.minorActivity) {
 			this.minorActivity.save();
-			if (!noDisplay) this.minorActivity.display();
+			if (!noDisplay) {
+				this.minorActivity.display();
+				const ctx = (this as any).activeContext;
+				if (ctx) {
+					ctx.didRoomOutput = true;
+				}
+			}
 		} else {
 			delete this.settings.minorActivity;
 			this.saveSettings();
