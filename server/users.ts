@@ -323,7 +323,7 @@ type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
 	blockChallenges: boolean | AuthLevel | 'friends';
-	blockPMs: boolean | AuthLevel | 'friends';
+	blockPMs: boolean | AuthLevel | 'friends' | 'trustedfriends';
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
 	blockInvites: AuthLevel | boolean;

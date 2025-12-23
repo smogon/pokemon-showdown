@@ -69,6 +69,10 @@ function canPM(sender: User, receiver: User | null) {
 	if (!receiver?.settings.blockPMs) return true;
 	if (receiver.settings.blockPMs === true) return sender.can('lock');
 	if (receiver.settings.blockPMs === 'friends') return false;
+	if (receiver.settings.blockPMs === 'trustedfriends') {
+		const friends = receiver.friends || new Set();
+		return friends.has(sender.id) || Users.globalAuth.atLeast(sender, 'trusted');
+	}
 	return Users.globalAuth.atLeast(sender, receiver.settings.blockPMs);
 }
 
