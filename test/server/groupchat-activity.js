@@ -16,7 +16,7 @@ describe('Groupchat activity tracking', () => {
 	});
 
 	it('should update activity when commands produce room-visible output', async () => {
-		room = Rooms.createChatRoom('groupchat-test-public', 'Test Public', {isPersonal: true});
+		room = Rooms.createChatRoom('groupchat-test-public', 'Test Public', { isPersonal: true });
 		user = makeUser('TestUser');
 		user.joinRoom(room);
 		room.auth.set(user.id, '%');
@@ -30,7 +30,7 @@ describe('Groupchat activity tracking', () => {
 	});
 
 	it('should not update activity when commands only produce private responses', async () => {
-		room = Rooms.createChatRoom('groupchat-test-private', 'Test Private', {isPersonal: true});
+		room = Rooms.createChatRoom('groupchat-test-private', 'Test Private', { isPersonal: true });
 		user = makeUser('TestUser2');
 		user.joinRoom(room);
 
@@ -43,7 +43,7 @@ describe('Groupchat activity tracking', () => {
 	});
 
 	it('should update activity for poll commands', async () => {
-		room = Rooms.createChatRoom('groupchat-test-poll', 'Test Poll', {isPersonal: true});
+		room = Rooms.createChatRoom('groupchat-test-poll', 'Test Poll', { isPersonal: true });
 		user = makeUser('TestUser3');
 		user.joinRoom(room);
 		room.auth.set(user.id, '%');
@@ -57,7 +57,7 @@ describe('Groupchat activity tracking', () => {
 	});
 
 	it('should not affect non-personal rooms', async () => {
-		room = Rooms.createChatRoom('test-regular-room', 'Test Regular', {isPersonal: false});
+		room = Rooms.createChatRoom('test-regular-room', 'Test Regular', { isPersonal: false });
 		room.persist = false;
 		user = makeUser('TestUser4');
 		user.joinRoom(room);
