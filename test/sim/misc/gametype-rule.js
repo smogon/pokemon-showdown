@@ -66,28 +66,26 @@ describe('Game Type Rule', () => {
 		);
 	});
 
-	it('should reject non-singles/doubles with Best Of', () => {
-		battle = null;
-		assert.throws(
-			() => common.createBattle({ customRules: ['Game Type = Triples', 'Best Of = 3'] }),
-			/incompatible with Best Of|Only single and doubles/
-		);
-		assert.throws(
-			() => common.createBattle({ customRules: ['Game Type = Multi', 'Best Of = 3'] }),
-			/incompatible with Best Of|Only single and doubles/
-		);
-		assert.throws(
-			() => common.createBattle({ customRules: ['Game Type = FreeForAll', 'Best Of = 3'] }),
-			/incompatible with Best Of|Only single and doubles/
-		);
-	});
-
-	it('should allow singles/doubles with Best Of', () => {
+	it('should allow singles/doubles/triples/multi with Best Of', () => {
 		battle = common.createBattle({ customRules: ['Game Type = Singles', 'Best Of = 3'] });
 		assert.equal(battle.gameType, 'singles');
 		battle.destroy();
 		battle = common.createBattle({ customRules: ['Game Type = Doubles', 'Best Of = 3'] });
 		assert.equal(battle.gameType, 'doubles');
+		battle.destroy();
+		battle = common.createBattle({ customRules: ['Game Type = Triples', 'Best Of = 3'] });
+		assert.equal(battle.gameType, 'triples');
+		battle.destroy();
+		battle = common.createBattle({ customRules: ['Game Type = Multi', 'Best Of = 3'] });
+		assert.equal(battle.gameType, 'multi');
+	});
+
+	it('should reject freeforall with Best Of', () => {
+		battle = null;
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = FreeForAll', 'Best Of = 3'] }),
+			/Free-For-All battles cannot be a Best-of series/
+		);
 	});
 
 	it('should reject non-singles game types with format-specific restrictions', () => {
