@@ -186,7 +186,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	zeraoramega: {
 		inherit: true,
-		abilities: { 0: "Iron Fist" },
+		abilities: { 0: "Volt Absorb" },
 	},
 	falinksmega: {
 		inherit: true,

@@ -10,7 +10,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			'softsand', 'spelltag', 'twistedspoon', 'weaknesspolicy', 'whiteherb', 'wiseglasses', 'bottlecap', 'goldbottlecap', 'dawnstone',
 			'duskstone', 'firestone', 'galaricacuff', 'galaricawreath', 'icestone', 'leafstone', 'moonstone', 'sachet', 'shinystone',
 			'sunstone', 'thunderstone', 'waterstone', 'whippeddream', 'bignugget', 'redorb', 'blueorb', 'leek', 'thickclub', 'upgrade',
-			'dubiousdisc', 'prismscale', 'maliciousarmor', 'auspiciousarmor',
+			'dubiousdisc', 'prismscale', 'maliciousarmor', 'auspiciousarmor', 'poweranklet', 'powerband', 'powerbelt', 'powerbracer',
+			'powerlens', 'powerweight', 'bignugget', 'bottlecap', 'goldbottlecap', 'prismscale', 'sachet', 'whippeddream',
 		];
 		const legalBerries = [
 			'aspearberry', 'babiriberry', 'chartiberry', 'cheriberry', 'chestoberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry',
@@ -19,12 +20,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			'sitrusberry', 'tamatoberry', 'tangaberry', 'wacanberry', 'yacheberry',
 		];
 		const votedLegalitems = [
-			'heavydutyboots', 'choiceband', 'choicescarf', 'choicespecs',
+			'heavydutyboots', 'choiceband', 'choicescarf', 'choicespecs', 'airballoon', 'loadeddice', 'mentalherb', 'powerherb', 'mirrorherb',
+			'aguavberry', 'apicotberry', 'custapberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry', 'jabocaberry', 'keeberry',
+			'lansatberry', 'leppaberry', 'liechiberry', 'magoberry', 'marangaberry', 'micleberry', 'petayaberry', 'rowapberry', 'salacberry',
+			'starfberry', 'wikiberry', 'abilityshield', 'blunderpolicy', 'blacksludge', 'lightclay', 'brightpowder', 'adrenalineorb', 'absorbbulb',
+			'clearamulet', 'covertcloak', 'damprock', 'heatrock', 'icyrock', 'smoothrock', 'electricseed', 'mistyseed', 'psychicseed', 'grassyseed',
+			'flameorb', 'toxicorb', 'gripclaw', 'laggingtail', 'metronome', 'protectivepads', 'punchingglove', 'razorclaw', 'razorfang', 'roomservice',
+			'safetygoggles', 'shellbell', 'shedshell', 'stickybarb', 'terrainextender', 'throatspray', 'utilityumbrella', 'zoomlens', 'bindingband',
+			'destinyknot', 'floatstone', 'ironball', 'machobrace', 'ringtarget', 'redcard', 'ejectpack', 'ejectbutton', 'souldew', 'cellbattery',
+			'luminousmoss', 'oddincense', 'roseincense', 'seaincense', 'waveincense', 'snowball',
 		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
 			if ([...legalItems, ...votedLegalitems, ...legalBerries].includes(i) ||
-				this.data.Items[i].megaStone || this.data.Items[i].onDrive) {
+				this.data.Items[i].megaStone || this.data.Items[i].onDrive ||
+				(this.data.Items[i].onPlate && !this.data.Items[i].zMove)) {
 				this.modData('Items', i).isNonstandard = null;
 			} else {
 				this.modData('Items', i).isNonstandard = 'Past';
