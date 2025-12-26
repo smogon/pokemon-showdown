@@ -1442,7 +1442,7 @@ export const pages: Chat.PageTable = {
 				const buf = `>view-help-request${query.length ? '-' + query.join('-') : ''}\n` +
 					`|init|html\n` +
 					`|title|Request Help\n` +
-					`|pagehtml|<div class="pad"><h2>${this.tr`Request help from global staff`}</h2><p>${this.tr`Please <button name="login" class="button">Log In</button> to request help.`}</p></div>`;
+					`|pagehtml|<div class="pad"><h2>${this.tr`Request help from global staff`}</h2><p>${this.tr`Please <button data-href="login" name="login" class="button">Log In</button> to request help.`}</p></div>`;
 				connection.send(buf);
 				return Rooms.RETRY_AFTER_LOGIN;
 			}
@@ -1615,7 +1615,7 @@ export const pages: Chat.PageTable = {
 					buf += `<p>If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.</p>`;
 					buf += `<p>A staff member will look at your case as soon as possible.</p>`;
 					if (!isLast) break;
-					buf += `<button name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;
+					buf += `<button data-cmd="/ht submit IP-Appeal|||I am on a mobile IP.|" name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;
 					break;
 				case 'public':
 					if (user.ips.some(ip => Punishments.sharedIpBlacklist.has(ip))) {
@@ -2224,7 +2224,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
-			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>${this.tr`Report someone`}</strong></button>`);
+			return this.sendReplyBox(`<button data-href="view-help-request--report${meta}" name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>${this.tr`Report someone`}</strong></button>`);
 		}
 
 		return this.parse(`/join view-help-request--report${meta}`);
@@ -2234,7 +2234,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
-			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>${this.tr`Appeal a punishment`}</strong></button>`);
+			return this.sendReplyBox(`<button data-href="view-help-request--appeal${meta}" name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>${this.tr`Appeal a punishment`}</strong></button>`);
 		}
 
 		return this.parse(`/join view-help-request--appeal${meta}`);
@@ -2249,7 +2249,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 			if (this.broadcasting) {
-				return this.sendReplyBox(`<button name="joinRoom" value="view-help-request${meta}" class="button"><strong>${this.tr`Request help`}</strong></button>`);
+				return this.sendReplyBox(`<button data-href="view-help-request${meta}" name="joinRoom" value="view-help-request${meta}" class="button"><strong>${this.tr`Request help`}</strong></button>`);
 			}
 			if (user.can('lock')) {
 				return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
