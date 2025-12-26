@@ -1536,8 +1536,8 @@ export const commands: Chat.ChatCommands = {
 				buf += files.map(f => {
 					const fName = f.slice(0, f.lastIndexOf('.'));
 					let line = `&bull; ${fName} `;
-					line += `<button name="send" value="/abusemonitor deletebackup ${fName}">Delete</button> `;
-					line += `<button name="send" value="/abusemonitor loadbackup ${fName}">Load</button>`;
+					line += `<button data-cmd="/abusemonitor deletebackup ${fName}" name="send" value="/abusemonitor deletebackup ${fName}">Delete</button> `;
+					line += `<button data-cmd="/abusemonitor loadbackup ${fName}" name="send" value="/abusemonitor loadbackup ${fName}">Load</button>`;
 					return line;
 				}).join('<br />');
 			}
