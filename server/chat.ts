@@ -1154,7 +1154,7 @@ export class CommandContext extends MessageContext {
 				if (!room.persist && !room.roomid.startsWith('help-') && !(user.registered || user.autoconfirmed)) {
 					this.sendReply(
 						this.tr`|html|<div class="message-error">You must be registered to chat in temporary rooms (like battles).</div>` +
-						this.tr`You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
+						this.tr`You may register in the <button data-href="options" name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
 					);
 					throw new Chat.Interruption();
 				}
@@ -1167,7 +1167,7 @@ export class CommandContext extends MessageContext {
 							this.tr`Moderated chat is set. To speak in this room, your account must be autoconfirmed, which means being registered for at least one week and winning at least one rated game (any game started through the 'Battle!' button).`
 						);
 						if (!user.registered) {
-							this.sendReply(this.tr`|html|You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
+							this.sendReply(this.tr`|html|You may register in the <button data-href="options" name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
 						}
 						throw new Chat.Interruption();
 					}
@@ -1192,7 +1192,7 @@ export class CommandContext extends MessageContext {
 				if (!(user.registered || user.autoconfirmed)) {
 					this.sendReply(
 						this.tr`|html|<div class="message-error">You must be registered to send private messages.</div>` +
-						this.tr`You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
+						this.tr`You may register in the <button data-href="options" name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
 					);
 					throw new Chat.Interruption();
 				}
@@ -1441,7 +1441,7 @@ export class CommandContext extends MessageContext {
 								`This button is not allowed: <${tagContent}>`,
 								`You do not have permission to use most buttons. Here are the two types you're allowed to use:`,
 								`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`,
-								`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`,
+								`2. Sending a message to a Bot: <button data-cmd="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE" name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`,
 							]);
 						}
 					}
@@ -2610,7 +2610,7 @@ export const Chat = new class {
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge' | 'invite', targetUser: User, user: User) {
 		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
-		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
+		const options = 'or change it in the <button data-href="options" name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.notified.blockPMs) {
 				targetUser.send(`${prefix}The user '${Utils.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
