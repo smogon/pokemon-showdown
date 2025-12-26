@@ -848,7 +848,7 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					playerUser.sendTo(
 						room,
-						Utils.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
+						Utils.html`|html|${user.name} wants to extract the battle input log. <button data-cmd="/allowexportinputlog ${user.id}" name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
 					);
 				}
 			}
@@ -862,7 +862,7 @@ export const commands: Chat.ChatCommands = {
 				logExported = false;
 				playerUser.sendTo(
 					room,
-					Utils.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
+					Utils.html`|html|${user.name} wants to extract the battle input log. <button data-cmd="/allowexportinputlog ${user.id}" name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
 				);
 			}
 			if (logExported) throw new Chat.ErrorMessage(this.tr`You already extracted the battle input log.`);
@@ -1464,7 +1464,7 @@ export const commands: Chat.ChatCommands = {
 			const ladder = Ladders(target);
 			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
 				user.send(
-					Utils.html`|popup||html|${this.tr`Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.`}<p style="text-align: center"><button name="register" value="${user.id}"><b>${this.tr`Register`}</b></button></p>`
+					Utils.html`|popup||html|${this.tr`Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.`}<p style="text-align: center"><button data-href="register" name="register" value="${user.id}"><b>${this.tr`Register`}</b></button></p>`
 				);
 				return false;
 			}
