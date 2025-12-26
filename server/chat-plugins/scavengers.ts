@@ -212,8 +212,8 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 	let buffer;
 	if (queue?.length) {
 		buffer = queue.map((item, index) => {
-			const removeButton = `<button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>`;
-			const startButton = `<button name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>`;
+			const removeButton = `<button data-cmd="/scav dequeue ${index}" name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>`;
+			const startButton = `<button data-cmd="/scav next ${index}" name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>`;
 			const unratedText = item.gameType === 'unrated' ?
 				'<span style="color: blue; font-style: italic">[Unrated]</span> ' :
 				'';
