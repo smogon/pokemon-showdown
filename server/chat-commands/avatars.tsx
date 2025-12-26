@@ -784,7 +784,11 @@ export const commands: Chat.ChatCommands = {
 						allowed.filter(Boolean).map(avatar => (
 							<p>
 								{hasButton ? (
-									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button>
+									<button
+										data-cmd={`/avatar ${avatar}`}
+										name="send" value={`/avatar ${avatar}`}
+										class="button"
+									>{Avatars.img(avatar!)}</button>
 								) : (
 									Avatars.img(avatar!)
 								)} {}
@@ -804,8 +808,12 @@ export const commands: Chat.ChatCommands = {
 
 		this.sendReplyBox(<>
 			{!target && [<p>
-				You can <button name="avatars" class="button">change your avatar</button> by clicking on it in the {}
-				<button name="openOptions" class="button" aria-label="Options"><i class="fa fa-cog"></i></button> menu in the upper {}
+				You can {}
+				<button data-href="avatars" name="avatars" class="button">change your avatar</button> by clicking on it in the {}
+				<button
+					data-href="options"
+					name="openOptions" class="button" aria-label="Options"
+				><i class="fa fa-cog"></i></button> menu in the upper {}
 				right.
 			</p>, <p>
 				Avatars from generations other than 4-5 are hidden. You can find them in this {}
