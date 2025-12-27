@@ -463,7 +463,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		shortDesc: "Lowers user's Def by 1",
-		flags: { protect: 1, mirror: 1, authentic: 1 },
+		flags: { protect: 1, mirror: 1, bypasssub: 1 },
 		selfBoost: {
 			boosts: {
 				def: -1,
