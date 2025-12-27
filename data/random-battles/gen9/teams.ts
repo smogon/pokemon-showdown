@@ -1445,10 +1445,11 @@ export class RandomTeams {
 		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (['Dudunsparce', 'Magearna', 'Maushold', 'Polteageist', 'Sinistcha', 'Zarude'].includes(species.baseSpecies)) {
+		if (['Dudunsparce', 'Maushold', 'Polteageist', 'Sinistcha', 'Zarude'].includes(species.baseSpecies)) {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Pikachu') {
 			return 'Pikachu' + this.sample(
 				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
@@ -1564,7 +1565,10 @@ export class RandomTeams {
 			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
-		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime') {
+		if (
+			noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
