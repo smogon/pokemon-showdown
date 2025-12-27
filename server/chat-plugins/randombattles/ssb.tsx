@@ -372,8 +372,9 @@ class SSBSetsHTML extends Chat.JSX.Component<{ target: string }> {
 			<SSBAbilityHTML set={set} dex={dex} baseDex={baseDex} />
 			<SSBInnateHTML name={setName} dex={dex} baseDex={baseDex} />
 			<SSBPokemonHTML species={set.species} dex={dex} baseDex={baseDex} />
-			{(!Array.isArray(set.item) && item.megaStone) &&
-				<SSBPokemonHTML species={item.megaStone} dex={dex} baseDex={baseDex} />}
+			{(!Array.isArray(set.item) && item.megaStone) && <SSBPokemonHTML
+				species={Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone} dex={dex} baseDex={baseDex}
+			/>}
 			{/* keys and Kennedy have an itemless forme change */}
 			{['Rayquaza'].includes(set.species) && <SSBPokemonHTML species={`${set.species}-Mega`} dex={dex} baseDex={baseDex} />}
 			{['Cinderace'].includes(set.species) && <SSBPokemonHTML species={`${set.species}-Gmax`} dex={dex} baseDex={baseDex} />}
