@@ -41,7 +41,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		gen: 9,
-		rating: 3,
 	},
 	feralorb: {
 		name: "Feral Orb",
@@ -85,6 +84,5 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		gen: 9,
-		rating: 3,
 	},
 };

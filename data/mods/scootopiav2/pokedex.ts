@@ -294,6 +294,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 80, atk: 115, def: 100, spa: 75, spd: 80, spe: 100 },
 		abilities: { 0: "Sheer Force", 1: "Chlorophyll", H: "Skill Link" },
 		eggGroups: ["Undiscovered"],
+		weightkg: 37,
 	},
 	blunderbusk: {
 		num: 2038,

@@ -1,218 +1,218 @@
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	arbrella: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	krachiten: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	scalaron: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	rantler: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	woolora: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	albatrygon: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	orchile: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	embuck: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	cindoe: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	cobracotta: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	minillow: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	crossont: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	torgeist: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	platypad: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	lumoth: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	aurorowl: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	carapex: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	dojodo: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	nunopod: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	zeploom: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	sturgard: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	brawnkey: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	salamalix: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	cinnastar: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	muabboa: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	harzodia: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	cyllindrake: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	kodokai: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	electangle: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	dolphena: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	soleron: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	jaegorm: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	elemadillo: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	axolacred: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	roscenti: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	blunderbusk: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	barracoth: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	jamborai: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	dracoil: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	celespirit: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	noxtrice: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	avastar: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	faerenheit: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	cellsius: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	kelven: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	salaos: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	morndos: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	pythos: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	corundell: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	quadringo: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	saphor: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	fenreil: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	efflor: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 	flocura: {
 		tier: "OU",
-		doublesTier: "OU",
+		doublesTier: "DOU",
 	},
 };

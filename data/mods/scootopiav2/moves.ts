@@ -116,27 +116,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ice",
 		zMove: { boost: { atk: 1 } },
 		contestType: "Beautiful",
-		viable: true,
 	},
 	spore: {
 		inherit: true,
 		pp: 10,
 		desc: "Puts the opponent to sleep for 1 turn",
-		viable: true,
 	},
 	sleeppowder: {
 		inherit: true,
 		pp: 15,
 		accuracy: 90,
 		desc: "Puts the opponent to sleep for 1 turn",
-		viable: true,
 	},
 	hypnosis: {
 		inherit: true,
 		pp: 20,
 		accuracy: 85,
 		desc: "Puts the opponent to sleep for 1 turn",
-		viable: true,
 	},
 	grasswhistle: {
 		inherit: true,
@@ -144,7 +140,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 25,
 		accuracy: 80,
 		desc: "Puts the opponent to sleep for 1 turn",
-		viable: true,
 	},
 	sing: {
 		inherit: true,
@@ -152,7 +147,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 25,
 		accuracy: 80,
 		desc: "Puts the opponent to sleep for 1 turn",
-		viable: true,
 	},
 	crystalcutter: {
 		name: "Crystal Cutter",
@@ -287,7 +281,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		shortDesc: "Cures whole team's status conditions. 1/16 residual healing at the end of each turn.",
-		flags: { snatch: 1, distance: 1, authentic: 1 },
+		flags: { snatch: 1, distance: 1, bypasssub: 1 },
 		onHit(pokemon, source) {
 			this.add('-activate', source, 'move: Crystal Healing');
 			const side = pokemon.side;
@@ -326,7 +320,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "+1 Def, +1 SpD. Clears negative stat changes.",
 		flags: { snatch: 1 },
 		onHit(pokemon, source) {
-			let b: BoostName;
+			let b: BoostID;
 			let didBoost = false;
 			const negBoosts = {};
 			for (b in source.boosts) {
