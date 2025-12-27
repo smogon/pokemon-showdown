@@ -4745,7 +4745,7 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Bulk Up", "High Horsepower", "Horn Leech", "Milk Drink", "Protect", "Roar"],
                 "abilities": ["Sap Sipper"],
-                "teraTypes": ["Ground", "Water"]
+                "teraTypes": ["Ground"]
             },
             {
                 "role": "Bulky Support",
@@ -4761,6 +4761,12 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Alluring Voice", "Light Screen", "Protect", "Psychic Noise", "Reflect", "Thunder Wave"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Imprisoner",
+                "movepool": ["Imprison", "Protect", "Psychic Noise", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Steel"]
             }
@@ -4780,12 +4786,6 @@
                 "movepool": ["Alluring Voice", "Dark Pulse", "Protect", "Psychic", "Thunderbolt"],
                 "abilities": ["Competitive"],
                 "teraTypes": ["Dark", "Electric", "Fairy"]
-            },
-            {
-                "role": "Imprisoner",
-                "movepool": ["Alluring Voice", "Imprison", "Protect", "Psychic"],
-                "abilities": ["Competitive"],
-                "teraTypes": ["Fairy"]
             }
         ]
     },
@@ -5115,7 +5115,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Beak Blast", "Boomburst", "Bullet Seed", "Encore", "Knock Off", "Protect", "Roost"],
-                "abilities": ["Pickup", "Skill Link"],
+                "abilities": ["Keen Eye", "Skill Link"],
                 "teraTypes": ["Steel"]
             }
         ]
