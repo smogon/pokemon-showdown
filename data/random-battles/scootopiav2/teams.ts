@@ -68,7 +68,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomMHSTeams extends RandomTeams {
+export class RandomSCTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -621,7 +621,9 @@ export class RandomMHSTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		// MHS hardcodes
+		if (species.id === 'cyllindrake' && moves.has('shiftgear')) return 'Throat Spray';
+		if (species.id === 'albatrygon' && moves.has('acrobatics')) return 'Sitrus Berry';
+		/*
 		if (species.id === 'yiankutku' && moves.has('facade') || species.id === 'bluekutku' && moves.has('facade')) {
 			return 'Frost Orb';
 		}
@@ -638,6 +640,7 @@ export class RandomMHSTeams extends RandomTeams {
 		if (moves.has('virulentvolley')) return 'Loaded Dice';
 		if (moves.has('magnalance') && ability === 'Reactive Core') return 'Flame Orb';
 		if (moves.has('dragondance') && ability === 'Reactive Core') return 'Frost Orb';
+		*/
 		// other
 		if (moves.has('substitute')) return 'Leftovers';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
@@ -705,7 +708,8 @@ export class RandomMHSTeams extends RandomTeams {
 				set.role === 'Fast Bulky Setup'
 			) continue;
 			// Prevent Tera Blast user if the team already has one, or if Terastallizion is prevented.
-			if ((teamDetails.teraBlast || ruleTable.has('terastalclause')) && set.role === 'Tera Blast user') {
+			// used here to limit team to 1 Super Types user
+			if (teamDetails.teraBlast && set.role === 'Tera Blast user') {
 				continue;
 			}
 			possibleSets.push(set);
@@ -817,7 +821,7 @@ export class RandomMHSTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomMHSTeam() {
+	randomSCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -971,4 +975,4 @@ export class RandomMHSTeams extends RandomTeams {
 	}
 }
 
-export default RandomMHSTeams;
+export default RandomSCTeams;

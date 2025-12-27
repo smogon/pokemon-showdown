@@ -2904,24 +2904,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Monster Hunter Random Battle",
-		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
-		mod: 'monsterhunter',
-		team: 'randomMHS',
+		name: "[Gen 9] Scootopia Random Battle",
+		desc: `A Gen 9 Fakemon micrometa featuring the Super Types mechanic, granting 1 Pokemon per team an additional and powerful new typing.`,
+		mod: 'scootopiav2',
+		team: 'randomSC',
 		ruleset: [
 			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
-			'Terastal Clause', 'Data Preview', 'Sprite Viewer', 'Mega Data Mod', 'Status Mod',
+			'Terastal Clause', 'Super Type Moves Rule', 'Data Preview', 'Sprite Viewer',
 		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://tinyurl.com/MonHunShow" target="_blank">MHS Wikia</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Monster Hunter Showdown!`);
-			this.add('-message', `Coded by KnivesMK, it reimagines the Monsters from Monster Hunter as Competitive Pokemon!`);
-			this.add('-message', `Community Discord can be found here:`);
-			this.add('-message', `https://discord.gg/JjjRGVrEvc`);
-			this.add('-message', `Format Wikia can be found here:`);
-			this.add('-message', `https://tinyurl.com/MonHunShow`);
-			this.add('-message', `Special thanks to EggEggEgg for most of the Sprites, and Kestis for the Icons!`);
-			this.add('-message', `(Monster Hunter Showdown is in no way officially affiliated with the Monster Hunter games or CAPCOM and is purely a fan project.)`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1khgnzqe3xldhLw1LbfjyYDcsltZrgyo8by4Y8EDE4vQ/edit#gid=524466747" target="_blank">Scootopia Spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Scootopia!`);
+			this.add('-message', `This is a fakemon micrometa created by Scootopia, featuring the Super Types mechanic!`);
+			this.add('-message', `Super Types are powerful additional types that a Pokemon can gain by holding a specific Super Type Orb!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3742131/`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
@@ -2933,55 +2930,32 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Monster Hunter Showdown OU", // Roomtours
-		desc: `A Gen 9 solomod where each Pokemon is based on a monster from the Monster Hunter franchise.`,
-		mod: 'monsterhunter',
+		name: "[Gen 9] Scootopia", // Roomtours
+		desc: `A Gen 9 Fakemon micrometa featuring the Super Types mechanic, granting 1 Pokemon per team an additional and powerful new typing.`,
+		mod: 'scootopiav2',
 		searchShow: false,
-		ruleset: ['Standard NatDex', 'Data Preview', 'Mega Data Mod', 'Status Mod', 'Terastal Clause', 'Sprite Viewer'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Super Type Moves Rule', 'Data Preview', 'Sprite Viewer'],
 		banlist: [
-			'All Pokemon', 'Normalium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Darkinium Z', 'Dragonium Z',
-			'Buginium Z', 'Waterium Z', 'Electrium Z', 'Ghostium Z', 'Grassium Z', 'Groundium Z', 'Icium Z', 'Poisonium Z',
-			'Psychium Z', 'Rockium Z', 'Steelium Z', 'Shed Tail', 'Baton Pass',
+			'All Pokemon', 'Crystal Heart', 'Wild Heart', 'Bright Powder', 'Lax Incense',
+			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Double Team', 'Snow Cloak', 'Sand Veil',
 		],
 		unbanlist: [
-			'Acidinus', 'Agnaktor-EX', 'Ahtal-Ka', 'Alatreon', 'Amatsu', 'Arbitrellian',
-			'Arkveld', 'Ash-Shan Lung', 'Auroracanth', 'Blackveil Hazak', 'Blue Kutku', 'Brachydios', 'Ceadeus',
-			'Chameleos', 'Chaotic Gore', 'Dah\'ren Mohran', 'Dalamadur', 'Deviljho-Starving', 'Diablos', 'Dire Miralis',
-			'Doomtrellian', 'Duremudira', 'Eruzerion', 'Espinas', 'Estrellian', 'Fatalis', 'Flaminas', 'Gaismagorm',
-			'Gammoth', 'Glavenus', 'Glowstrax', 'Gogmazios', 'Goldeus', 'Goldthian', 'Goss Harag', 'Greencuga', 'Gureadomosu',
-			'Hallowed Mohran', 'Harudomerugu', 'Inagami', 'Inferonis', 'Jhen Mohran', 'Jin Dahaad', 'Jyuratodus', 'Kirin',
-			'Kulve Taroth', 'Kushala Daora', 'Landgiacrus', 'Lao-Shan Lung', 'Lucacuga', 'Magmadron', 'Magnamalo', 'Malzeno',
-			'Nakarkos', 'Namielle', 'Nargacuga', 'Narwa', 'Nef-Garmat', 'Nergigante', 'Odibatorasu', 'Oltura', 'Oltura-Larval',
-			'Oroshirin', 'Palepinas', 'Primozeno', 'Rajang', 'Rathian', 'Rey Dau', 'Rushala Daora', 'Safi\'jiiva', 'Sandrioth',
-			'Seregios', 'Shagaru Magala', 'Shahmadur', 'Shantien', 'Shara Ishvalda', 'Shen Gaoren', 'Silvalos', 'Tartaronis',
-			'Teostra', 'Tigrex', 'Ukanlos', 'Unknown', 'Uth Duna', 'Valstrax', 'Velkhana', 'Vizutsune', 'Xeno\'jiiva', 'Xu Wu',
-			'Yama Kurai', 'Yama Tsukami', 'Zoh Shia', 'Zorah Magdaros', 'Agnaktor', 'Ajarakan', 'Akantor', 'Akura Vashimu',
-			'Almudron', 'Anjanath', 'Astalos', 'Azurelos', 'Balahara', 'Barioth', 'Basarios-Sandstone', 'Bazelgeuse', 'Bishaten',
-			'Blackblos', 'Blackvios', 'Coral-Pukei', 'Daimyo Hermitaur', 'Deviljho', 'Disufiroa', 'Disufiroa-Sol', 'Doshaguma',
-			'Duramboros', 'Ebogaron', 'Fuljanath', 'Garangolm', 'Glanaktor', 'Gore Magala', 'Gravios', 'Great Izuchi', 'Greensioth',
-			'Gypceros', 'Ibushi', 'Ivogiacrus', 'Kulu-Ya-Ku', 'Lagiacrus', 'Lala Barina', 'Legiana', 'Lunagaron', 'Lunastra',
-			'Malfestio', 'Mizutsune', 'Molgrex', 'Monoblos', 'Najarala', 'Nightlumu', 'Nu Udra', 'Odogaron', 'Orangaten', 'Paolumu',
-			'Pinkthian', 'Plesioth', 'Pukei-Pukei', 'Pyre-Kadaki', 'Radobaan', 'Rakna-Kadaki', 'Rathalos', 'Rompopolo',
-			'Rustramboros', 'Seltas Queen', 'Shogun Ceanataur', 'Stygiogre', 'Terrataur', 'Tetranadon', 'Tzitzi-Ya-Ku',
-			'Uragaan', 'Vaal Hazak', 'Whiteblos', 'Yian Garuga', 'Yian Kutku', 'Zamtrios', 'Zinogre', 'Zinogre-Howling', 'Aknosom',
-			'Arzuros', 'Balenox', 'Banbaro', 'Barroth', 'Basarios', 'Beotodus', 'Blangonga', 'Bulldrome', 'Cephadrome',
-			'Chatacabra', 'Congalala', 'Crysarios', 'Dodogama', 'Emgalala', 'Gendrome', 'Giadrome', 'Gigginox', 'Gobul',
-			'Great Baggi', 'Great Girros', 'Great Jaggi', 'Great Jagras', 'Great Maccao', 'Great Wroggi', 'Hirabami',
-			'Hypnocatrice', 'Iodrome', 'Kecha Wacha', 'Khezu', 'King Shakalaka', 'Lagombi', 'Lavasioth', 'Nerscylla',
-			'Nibelsnarf', 'Palamute', 'Palico', 'Pokaradon', 'Purple Ludroth', 'Quematrice', 'Qurupeco', 'Redzu', 'Royal Ludroth',
-			'Seltas', 'Shroudcylla', 'Somnacanth', 'Spiribird', 'Spiribird-Orange', 'Spiribird-Red', 'Spiribird-Yellow',
-			'Tetsucabra', 'Tobi-Kadachi', 'Velocidrome', 'Vespoid Queen', 'Volvidon',
+			'Arbrella', 'Krachiten', 'Scalaron', 'Rantler', 'Woolora', 'Albatrygon', 'Orchile',
+			'Embuck', 'Cindoe', 'Cobracotta', 'Minillow', 'Crossont', 'Torgeist', 'Platypad', 'Lumoth',
+			'Aurorowl', 'Carapex', 'Dojodo', 'Nunopod', 'Zeploom', 'Brawnkey', 'Salamalix', 'Cinnastar',
+			'MuabBoa', 'Sturgard', 'Harzodia', 'Cyllindrake', 'Kodokai', 'Electangle', 'Dolphena', 'Soleron',
+			'Soleron-Awakened', 'Jaegorm', 'Jaegorm-Collective', 'Elemadillo', 'Axolacred', 'Roscenti',
+			'Blunderbusk', 'Barracoth', 'Jamborai', 'Dracoil', 'Celespirit', 'Noxtrice', 'Avastar',
+			'Faerenheit', 'Cellsius', 'Kelven', 'Salaos', 'Morndos', 'Pythos', 'Corundell', 'Quadringo',
+			'Saphor', 'Fenreil', 'Efflor', 'Flocura', 'Flocura-Nexus',
 		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://tinyurl.com/MonHunShow" target="_blank">MHS Wikia</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Monster Hunter Showdown!`);
-			this.add('-message', `Coded by KnivesMK, it reimagines the Monsters from Monster Hunter as Competitive Pokemon!`);
-			this.add('-message', `Community Discord can be found here:`);
-			this.add('-message', `https://discord.gg/JjjRGVrEvc`);
-			this.add('-message', `Format Wikia can be found here:`);
-			this.add('-message', `https://tinyurl.com/MonHunShow`);
-			this.add('-message', `Special thanks to EggEggEgg for most of the Sprites, and Kestis for the Icons!`);
-			this.add('-message', `(Monster Hunter Showdown is in no way officially affiliated with the Monster Hunter games or CAPCOM and is purely a fan project.)`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1khgnzqe3xldhLw1LbfjyYDcsltZrgyo8by4Y8EDE4vQ/edit#gid=524466747" target="_blank">Scootopia Spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Scootopia!`);
+			this.add('-message', `This is a fakemon micrometa created by Scootopia, featuring the Super Types mechanic!`);
+			this.add('-message', `Super Types are powerful additional types that a Pokemon can gain by holding a specific Super Type Orb!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3742131/`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
