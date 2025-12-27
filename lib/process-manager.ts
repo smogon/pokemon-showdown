@@ -125,7 +125,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(6);
+				error.stack = `[${this.process.pid}] ${message.slice(6)}`;
 				throw error;
 			}
 
@@ -239,7 +239,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = message.slice(6);
+				error.stack = `[${this.process.pid}] ${message.slice(6)}`;
 				throw error;
 			}
 
