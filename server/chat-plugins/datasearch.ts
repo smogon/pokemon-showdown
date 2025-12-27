@@ -144,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=gen9ssb, wonder guard</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
 			`You can search for info in a specific rule defined metagame by using <code>rule=[rule name]</code>; e.g. <code>/nds rule=alphabetcupmovelegality, v-create</code>. All supported rule names are: <code>${dexsearchHelpRules}</code><br/>` +
 			`By default, <code>/dexsearch</code> will search only Pok\u00e9mon obtainable in the current generation. Add the parameter <code>unreleased</code> to include unreleased Pok\u00e9mon. Add the parameter <code>natdex</code> (or use the command <code>/nds</code>) to include all past Pok\u00e9mon.<br/>` +
-			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
+			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., searching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
 			`The order of the parameters does not matter.<br/>`
 		);
@@ -860,7 +860,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (isNotSearch) return { error: "You cannot use the negation symbol '!' with inequality tier searches." };
 				target = target.substr(4).trim();
 				if (!target.startsWith('>') && !target.startsWith('<')) {
-					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searchs." };
+					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searches." };
 				}
 				isTierInequalityParam = true;
 				tierInequalitySearch = true;
