@@ -27,9 +27,9 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Move Name',
 		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', teraType: 'Type',
 	},
-	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
+	// Species, ability, and item need to be capitalized properly ex: Ludicolo, Swift Swim, Life Orb
 	// Gender can be M, F, N, or left as an empty string
-	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
+	// each slot in moves needs to be a string (the move name, capitalized properly ex: Hydro Pump), or an array of strings (also move names)
 	// signatureMove also needs to be capitalized properly ex: Scripting
 	// You can skip Evs (defaults to 84 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
 	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
