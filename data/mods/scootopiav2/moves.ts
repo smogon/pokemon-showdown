@@ -114,7 +114,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMove: { boost: { atk: 1 }},
+		zMove: { boost: { atk: 1 } },
 		contestType: "Beautiful",
 		viable: true,
 	},
@@ -348,7 +348,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Crystal",
-		zMove: { boost: { spd: 1 }},
+		zMove: { boost: { spd: 1 } },
 		contestType: "Beautiful",
 	},
 	crystalshard: {
@@ -370,7 +370,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "foeSide",
 		type: "Crystal",
-		zMove: { boost: { spd: 1 }},
+		zMove: { boost: { spd: 1 } },
 		contestType: "Beautiful",
 	},
 	feralbite: {
@@ -527,7 +527,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, "Jungle Healing", target);
 		},
 		type: "Feral",
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Cool",
 	},
 	feralspray: {
@@ -553,7 +553,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Acid Spray", target);
 		},
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
 	feralresilience: {

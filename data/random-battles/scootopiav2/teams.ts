@@ -698,7 +698,7 @@ export class RandomSCTeams extends RandomTeams {
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		// const ruleTable = this.dex.formats.getRuleTable(this.format);
 
 		for (const set of sets) {
 			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.

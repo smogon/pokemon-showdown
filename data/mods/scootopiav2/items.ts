@@ -29,7 +29,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if (source && source.hasType("Crystal")) {
+			if (source?.hasType("Crystal")) {
 				return false;
 			}
 			return true;
@@ -73,7 +73,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if (source && source.hasType("Feral")) {
+			if (source?.hasType("Feral")) {
 				return false;
 			}
 			return true;

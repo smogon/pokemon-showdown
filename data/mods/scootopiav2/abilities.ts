@@ -4,8 +4,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Lowers opposing Pokemon Special Attack by 1 stage when switching in.",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !target.isAdjacent(pokemon)) continue;
+			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Mythical Presence', 'boost');
 					activated = true;
@@ -93,11 +92,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	schooling: {
 		onStart(pokemon) {
-		if (pokemon.baseSpecies.baseSpecies !== 'Jaegorm' || pokemon.transformed) return;
-		if (pokemon.hp > pokemon.maxhp / 4) {
-			if (pokemon.species.id === 'jaegorm') {
-				pokemon.formeChange('Jaegorm-Collective');
-			}
+			if (pokemon.baseSpecies.baseSpecies !== 'Jaegorm' || pokemon.transformed) return;
+			if (pokemon.hp > pokemon.maxhp / 4) {
+				if (pokemon.species.id === 'jaegorm') {
+					pokemon.formeChange('Jaegorm-Collective');
+				}
 			} else {
 				if (pokemon.species.id === 'jaegormcollective') {
 					pokemon.formeChange('Jaegorm');
@@ -107,8 +106,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 27,
 		onResidual(pokemon) {
 			if (
-			pokemon.baseSpecies.baseSpecies !== 'Jaegorm' ||
-			pokemon.transformed || !pokemon.hp
+				pokemon.baseSpecies.baseSpecies !== 'Jaegorm' || pokemon.transformed || !pokemon.hp
 			) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'jaegorm') {
