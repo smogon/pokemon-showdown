@@ -979,7 +979,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meloettapirouette: {
 	},
 	genesect: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	genesectdouse: {
 	},
@@ -1337,10 +1337,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	magearnamega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	magearnaoriginalmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	marshadow: {
 		tier: "Uber",

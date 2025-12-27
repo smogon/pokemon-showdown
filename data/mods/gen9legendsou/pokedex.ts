@@ -5,7 +5,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	victreebelmega: {
 		inherit: true,
-		abilities: { 0: "Toxic Debris" },
+		abilities: { 0: "Triage" },
 	},
 	raichumegax: {
 		inherit: true,
@@ -70,7 +70,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	garchompmegaz: {
 		inherit: true,
-		abilities: { 0: "Neuroforce" },
+		abilities: { 0: "Rough Skin" },
 	},
 	lucariomegaz: {
 		inherit: true,
@@ -186,7 +186,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	zeraoramega: {
 		inherit: true,
-		abilities: { 0: "Iron Fist" },
+		abilities: { 0: "Volt Absorb" },
 	},
 	falinksmega: {
 		inherit: true,
@@ -198,7 +198,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	glimmoramega: {
 		inherit: true,
-		abilities: { 0: "Toxic Chain" },
+		abilities: { 0: "Rocky Payload" },
 	},
 	tatsugiricurlymega: {
 		inherit: true,

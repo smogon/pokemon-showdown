@@ -5646,7 +5646,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	ironmoth: {
 		tier: "OU",
 		doublesTier: "(DUU)",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	ironhands: {
 		tier: "UUBL",
