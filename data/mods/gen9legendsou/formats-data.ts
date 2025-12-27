@@ -450,7 +450,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	blazikenmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	mudkip: {
 		tier: "LC",
@@ -979,7 +979,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meloettapirouette: {
 	},
 	genesect: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	genesectdouse: {
 	},
@@ -1106,7 +1106,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meowsticf: {
 		tier: "OU",
 	},
-	meowsticmega: {
+	meowsticmmega: {
 		tier: "OU",
 	},
 	meowsticfmega: {
@@ -1337,10 +1337,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	magearnamega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	magearnaoriginalmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	marshadow: {
 		tier: "Uber",
