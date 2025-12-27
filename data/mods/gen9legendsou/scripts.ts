@@ -27,7 +27,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			'clearamulet', 'covertcloak', 'damprock', 'heatrock', 'icyrock', 'smoothrock', 'electricseed', 'mistyseed', 'psychicseed', 'grassyseed',
 			'flameorb', 'toxicorb', 'gripclaw', 'laggingtail', 'metronome', 'protectivepads', 'punchingglove', 'razorclaw', 'razorfang', 'roomservice',
 			'safetygoggles', 'shellbell', 'shedshell', 'stickybarb', 'terrainextender', 'throatspray', 'utilityumbrella', 'zoomlens', 'bindingband',
-			'destinyknot', 'floatstone', 'ironball', 'machobrace', 'ringtarget', 'redcard', 'ejectpack', 'ejectbutton',
+			'destinyknot', 'floatstone', 'ironball', 'machobrace', 'ringtarget', 'redcard', 'ejectpack', 'ejectbutton', 'souldew', 'cellbattery',
+			'luminousmoss', 'oddincense', 'roseincense', 'seaincense', 'waveincense', 'snowball',
 		];
 		for (const i in this.data.Items) {
 			if (this.data.Items[i].isNonstandard === 'CAP' || this.data.Items[i].isNonstandard === 'Custom') continue;
