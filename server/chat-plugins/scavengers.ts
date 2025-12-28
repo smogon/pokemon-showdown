@@ -9,7 +9,7 @@
  */
 
 import { FS, Utils } from '../../lib';
-import { ScavMods, type Twist, type TwistEvent, type TwistCollection } from './scavenger-games';
+import { ScavMods, TwistType, type Twist } from './scavenger-games';
 import { type ChatHandler } from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
@@ -29,8 +29,32 @@ export interface FakeUser {
 }
 interface ModEvent {
 	priority: number;
-	exec: TwistEvent<ScavengerHunt>;
+	exec: ModEvents[keyof ModEvents];
 }
+
+export type ModEvents = {
+	AfterEnd: (isReset?: boolean) => void,
+	AfterLoad: () => void,
+	AnySubmit: (player: Scavenger, value: string, originalValue: string) => void,
+	Complete: (player: Scavenger, time: string, blitz: boolean) => void,
+	ConfirmCompletion: (player: Scavenger, time: string, blitz: boolean, place: string, res: ScavengerHuntFinish) => void,
+	Connect: (user: User, connection: Connection) => void,
+	CorrectAnswer: (player: Scavenger, value: string) => void,
+	CreateCallback: () => string | undefined,
+	EditQuestion: (questionNumber: number, questionAnswer: string, value: string) => void,
+	End: (isReset?: boolean) => void,
+	GivePoints: () => boolean,
+	IncorrectAnswer: (player: Scavenger, value: string) => void,
+	Join: (player: User) => void,
+	Leave: (player: Scavenger) => void,
+	Load: (questions: (string | string[])[]) => void,
+	NotifyChange: (num: number) => void,
+	PreComplete: (player: Scavenger) => void,
+	SendQuestion: (player: Scavenger, showHints?: boolean) => void,
+	ShowEndBoard: (endedBy?: User) => void,
+	Submit: (player: Scavenger, value: string, originalValue: string) => void,
+	ViewHunt: (user: User) => void,
+};
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
 const DEFAULT_POINTS: { [k: string]: number[] } = {
@@ -324,10 +348,13 @@ class ScavengerHuntDatabase {
 }
 
 export interface ScavengerHuntFinish { name: string; id: string; time: string; blitz?: boolean }
-export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
+export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 	override readonly gameid = 'scavengerhunt' as ID;
+	override title = 'Scavenger Hunt';
+	override playerCap = Infinity;
+	override allowRenames = true;
 	gameType: GameTypes;
-	joinedIps: string[];
+	joinedIps: string[] = [];
 	startTime: number;
 	questions: { hint: string, answer: string[], spoilers: string[] }[];
 	completed: ScavengerHuntFinish[];
@@ -335,16 +362,20 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	hosts: FakeUser[];
 	isHTML: boolean;
 	modsList: string[];
-	mods: { [k: string]: ModEvent[] };
+	mods: Partial<{ [E in keyof ModEvents as `on${E}`]: ModEvent[] }>;
 	staffHostId: string;
 	staffHostName: string;
-	scavGame: true;
+	scavGame = true;
 	timerEnd: number | null;
 	override timer: NodeJS.Timeout | null;
 
+	// Twist data:
+	modData: Record<string, any>;
+	huntLocked?: boolean; // Allows twists to lock the hunt in case of invalid stuff
+	preCompleted?: ScavengerHuntFinish[]; // Allows twists such as Incog to store completion data without broadcasting
+
 	override readonly checkChat = true;
 
-	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor({ room, staffHost, hosts, gameType, questions, isHTML, mod }:
 	{
 		room: Room,
@@ -357,11 +388,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}) {
 		super(room);
 
-		this.allowRenames = true;
 		this.gameType = gameType;
-		this.playerCap = Infinity;
-
-		this.joinedIps = [];
 
 		this.startTime = Date.now();
 		this.questions = [];
@@ -376,15 +403,14 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.modsList = [];
 		this.mods = {};
 
+		this.modData = {};
+
 		this.timer = null;
 		this.timerEnd = null;
 
 		this.staffHostId = staffHost.id;
 		this.staffHostName = staffHost.name;
 		this.cacheUserIps(staffHost); // store it in case of host subbing
-
-		this.title = 'Scavenger Hunt';
-		this.scavGame = true;
 
 		if (this.room.scavgame) {
 			this.loadMods(this.room.scavgame.mod);
@@ -419,17 +445,19 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		let twist: Twist;
 		if (typeof modData === 'string') {
 			const modId = toID(modData) as string;
-			if (modId in ScavMods.twists) twist = ScavMods.twists[modId as keyof TwistCollection] as Twist;
+			if (modId in ScavMods.twists) twist = ScavMods.twists[modId as TwistType]!;
 			else return this.announce(`Invalid mod. Starting the hunt without the mod ${modId}.`);
 		} else {
 			twist = modData as Twist;
 		}
 		this.modsList.push(twist.id);
-		for (const key in twist) {
+		for (const _key in twist) {
+			const key = _key as `on${keyof ModEvents}`;
 			if (!key.startsWith('on')) continue;
-			const priority = twist[`${key}Priority` as `on${string}Priority`] || 0;
+			const priority = twist[`${key}Priority`] || 0;
 			if (!this.mods[key]) this.mods[key] = [];
-			this.mods[key].push({ exec: twist[key as `on${string}`] as TwistEvent<ScavengerHunt>, priority });
+			// @ts-expect-error -- typing this is a pain
+			this.mods[key].push({ exec: twist[key]!, priority });
 		}
 		if (twist.isGameMode) {
 			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
@@ -512,7 +540,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 	// overwrite the default makePlayer so it makes a ScavengerHuntPlayer instead.
 	makePlayer(user: User) {
-		return new ScavengerHuntPlayer(user, this);
+		return new Scavenger(user, this);
 	}
 
 	onLoad(q: (string | string[])[]) {
@@ -528,14 +556,15 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 
 	// returns whether the next action should be stopped
-	runEvent(event_id: string, ...args: any[]) {
-		const events = this.mods['on' + event_id];
+	runEvent<E extends keyof ModEvents>(eventId: E, ...args: Parameters<ModEvents[E]>) {
+		const events = this.mods[`on${eventId}`];
 		if (!events) return;
 
 		Utils.sortBy(events, event => -event.priority);
 		let result = undefined;
 
 		for (const event of events) {
+			// @ts-expect-error -- we enforce 'args' matching the event's params in this signature
 			const subResult = event.exec.call(this, ...args) as any;
 			if (subResult === true) return true;
 			result = subResult;
@@ -646,7 +675,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`</tr></table></div>`;
 	}
 
-	onSendQuestion(user: User | ScavengerHuntPlayer, showHints?: boolean) {
+	onSendQuestion(user: User | Scavenger, showHints?: boolean) {
 		if (!(user.id in this.playerTable) || this.hosts.some(h => h.id === user.id)) return false;
 
 		const player = this.playerTable[user.id];
@@ -695,7 +724,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		);
 	}
 
-	onComplete(player: ScavengerHuntPlayer) {
+	onComplete(player: Scavenger) {
 		if (player.completed) return false;
 
 		const now = Date.now();
@@ -879,7 +908,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`).update();
 	}
 
-	validatePlayer(player: ScavengerHuntPlayer) {
+	validatePlayer(player: Scavenger) {
 		if (player.infracted) return false;
 		if (this.hosts.some(h => h.id === player.id) || player.id === this.staffHostId) {
 			// someone joining on an alt then going back to their original userid
@@ -1008,13 +1037,13 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
+export class Scavenger extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
 	override completed: boolean;
 	joinIps: string[];
 	currentQuestion: number;
+	infracted?: boolean;
 
-	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
 
@@ -1040,7 +1069,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	}
 
 	onNotifyChange(num: number) {
-		this.game.runEvent('NotifyChange', this, num);
+		this.game.runEvent('NotifyChange', num);
 		if (num === this.currentQuestion) {
 			this.sendRoom(`|raw|<div style="overflow:auto; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
 		}
@@ -1482,8 +1511,8 @@ const ScavengerCommands: Chat.ChatCommands = {
 			const finisher = game.completed.find(player => player.id === user.id);
 			const timeTrialMsg = finisher ?
 				`You finished the hunt in: ${finisher.time}.` :
-				(game.startTimes?.[user.id] ?
-					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], { hhmmss: true })} ago.` :
+				(game.modData[TwistType.TimeTrial]?.startTimes?.[user.id] ?
+					`You joined the hunt ${Chat.toDurationString(Date.now() - game.modData[TwistType.TimeTrial]!.startTimes[user.id], { hhmmss: true })} ago.` :
 					'You have not joined the hunt.');
 			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${timeTrialMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		}
@@ -1578,7 +1607,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			questions: [],
 			isHTML: game.isHTML,
 			staffHostId: game.staffHostId,
-			staffHostName: game.StaffHostName,
+			staffHostName: game.staffHostName,
 			gameType: game.gameType,
 		};
 		for (const entry of game.questions) {

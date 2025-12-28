@@ -8,44 +8,84 @@
  */
 
 import {
+	type ModEvents,
 	sanitizeAnswer,
 	ScavengerHunt,
-	type ScavengerHuntPlayer as Scavenger,
+	type Scavenger,
 	type ScavengerHuntFinish,
 } from "./scavengers";
 import { Utils } from "../../lib";
 
-declare namespace Twists {
-	/** Twists */
+export enum TwistType {
+	PerfectScore = "perfectscore",
+	BonusRound = "bonusround",
+	Incognito = "incognito",
+	SpamFilter = "spamfilter",
+	BlindIncognito = "blindincognito",
+	TimeTrial = "timetrial",
+	ScavengersFeud = "scavengersfeud",
+	Minesweeper = "minesweeper",
+	Pointless = "pointless",
 
-	export interface PerfectScore extends ScavengerHunt {
+	JumpStart = "jumpstart",
+}
+
+export declare namespace Twists {
+	/**
+	 * This is the base interface for any hunt that applies one or more twists.
+	 * In order to allow mods to stack, we need to make sure that hunt-level mod-specific data (eg: 'leftGame')
+	 * doesn't get affected by other mods. We also make sure that mod-specific data inside fields (eg: 'completed')
+	 * can all exist without conflicting keys.
+	 */
+	export interface TwistedHunt<T extends TwistType = never>
+		extends Omit<ScavengerHunt, "playerTable"> {
+		modData: T extends keyof CommonModData ?
+			Required<Pick<CommonModData, T>> & CommonModData :
+			CommonModData;
+		playerTable: Record<string, TwistPlayer<T>>;
+		completed: (ScavengerHuntFinish &
+			Partial<
+				PerfectScoreResult &
+				BonusRoundResult &
+				SpamFilterResult &
+				TimeTrialResult &
+				PointlessResult
+			>)[];
+	}
+
+	type CommonModData = Partial<{
+		[TwistType.PerfectScore]: PerfectScoreModData,
+		[TwistType.Incognito]: IncognitoModData,
+		[TwistType.TimeTrial]: TimeTrialModData,
+		[TwistType.ScavengersFeud]: ScavengersFeudModData,
+		[TwistType.Pointless]: PointlessModData,
+		[TwistType.Minesweeper]: MinesweeperModData,
+		[TwistType.JumpStart]: JumpStartModData,
+	}>;
+	export interface PerfectScoreModData {
 		leftGame: Set<string>;
-		completed: PerfectScoreResult[];
 	}
-	export interface BonusRound extends ScavengerHunt {
-		completed: BonusRoundResult[];
-	}
-	export interface Incognito extends ScavengerHunt {
+	export interface IncognitoModData {
 		preCompleted: ScavengerHuntFinish[];
 	}
-	export interface SpamFilter extends ScavengerHunt {
-		completed: SpamFilterResult[];
-	}
-	export interface TimeTrial extends ScavengerHunt {
+	export interface TimeTrialModData {
 		altIps: Record<string, { id: string, name: string }>;
 		startTimes: Record<string, number>;
-		completed: TimeTrialResult[];
 	}
-	export interface ScavengersFeud extends ScavengerHunt {
+	export interface ScavengersFeudModData {
 		guesses: Record<string, string[]>;
 		incorrect: Record<string, Set<string>>[];
 	}
-	export interface Minesweeper extends ScavengerHunt {
+	export interface PointlessModData {
+		correct: Record<string, string[]>[];
+	}
+	export interface MinesweeperModData {
 		mines: string[][];
 		guesses: { [playerId: string]: Set<string> }[];
 	}
-	export interface Pointless extends ScavengerHunt {
-		completed: PointlessResult[];
+	export interface JumpStartModData {
+		jumpstartTimers: NodeJS.Timeout[];
+		answerLock: boolean;
 	}
 
 	/** Other types */
@@ -66,8 +106,26 @@ declare namespace Twists {
 		noSkip?: boolean;
 	}
 
+	type CommonTwistPlayer = Scavenger & {
+		modData: Partial<{
+			[TwistType.PerfectScore]: PerfectScorePlayer,
+			[TwistType.BonusRound]: BonusRoundPlayer,
+			[TwistType.BlindIncognito]: BlindIncognitoPlayer,
+			[TwistType.SpamFilter]: SpamFilterPlayer,
+			[TwistType.Minesweeper]: MinesweeperPlayer,
+		}>,
+	};
+	export type TwistPlayer<T extends TwistType = never> = CommonTwistPlayer & {
+		modData: T extends keyof CommonTwistPlayer["modData"] ?
+			Required<Pick<CommonTwistPlayer["modData"], T>> :
+			unknown,
+	};
+
 	export interface PerfectScorePlayer extends Scavenger {
 		answers: Record<number, string[]>;
+	}
+	export interface SpamFilterPlayer extends Scavenger {
+		incorrect: string[];
 	}
 	export interface BonusRoundPlayer extends Scavenger {
 		skippedQuestion: boolean;
@@ -75,32 +133,33 @@ declare namespace Twists {
 	export interface BlindIncognitoPlayer extends Scavenger {
 		preCompleted?: boolean;
 	}
+	export interface MinesweeperPlayer extends Scavenger {
+		mines: { index: number, mine: string }[];
+	}
 }
 
-export type TwistEvent<T extends ScavengerHunt> = (
-	this: T,
-	...args: any[]
-) => void;
-export interface Twist<T extends ScavengerHunt = ScavengerHunt> {
-	name: string;
-	id: string;
-	isGameMode?: true;
-	desc?: string;
-	[event: `on${string}Priority`]: number;
-	[event: `on${string}`]: TwistEvent<T> | number;
-}
+type ScavengerAsTwistPlayer<
+	Params extends readonly unknown[],
+	T extends TwistType = never,
+> = {
+	[P in keyof Params]: Params[P] extends Scavenger ?
+		Twists.TwistPlayer<T> :
+		Params[P];
+};
 
-export interface TwistCollection {
-	perfectscore: Twist<Twists.PerfectScore>;
-	bonusround: Twist<Twists.BonusRound>;
-	incognito: Twist<Twists.Incognito>;
-	spamfilter: Twist<Twists.SpamFilter>;
-	blindincognito: Twist<Twists.Incognito>;
-	timetrial: Twist<Twists.TimeTrial>;
-	scavengersfeud: Twist<Twists.ScavengersFeud>;
-	minesweeper: Twist<Twists.Minesweeper>;
-	pointless: Twist<Twists.Pointless>;
-}
+export type Twist<T extends TwistType = never> = {
+	name: string,
+	id: string,
+	isGameMode?: true,
+	desc?: string,
+} & {
+	[E in keyof ModEvents as `on${E}`]?: (
+		this: Twists.TwistedHunt<T>,
+		...args: ScavengerAsTwistPlayer<Parameters<ModEvents[E]>, T>
+	) => ReturnType<ModEvents[E]>;
+} & {
+	[E in keyof ModEvents as `on${E}Priority`]?: number;
+};
 
 type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
 interface GameMode {
@@ -189,48 +248,45 @@ class Leaderboard {
 	}
 }
 
-const TWISTS: TwistCollection = {
-	perfectscore: {
+const TWISTS: Partial<Record<TwistType, Twist>> = {
+	[TwistType.PerfectScore]: {
 		name: "Perfect Score",
 		id: "perfectscore",
 		desc: "Players who finish the hunt without submitting a single wrong answer get a shoutout!",
 
 		onAfterLoad() {
-			this.leftGame = new Set();
+			this.modData[TwistType.PerfectScore] = { leftGame: new Set() };
 		},
 
-		onLeave(player: Twists.PerfectScorePlayer) {
-			this.leftGame.add(player.id);
+		onLeave(player) {
+			this.modData[TwistType.PerfectScore].leftGame.add(player.id);
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player: Twists.PerfectScorePlayer, value: string) {
+		onSubmit(player, value) {
 			const currentQuestion = player.currentQuestion;
+			const modData = player.modData[TwistType.PerfectScore];
 
-			if (!player.answers) player.answers = {};
-			if (!player.answers[currentQuestion])
-				player.answers[currentQuestion] = [];
+			if (!modData.answers) modData.answers = {};
+			if (!modData.answers[currentQuestion])
+				modData.answers[currentQuestion] = [];
 
-			if (player.answers[currentQuestion].includes(value)) return;
+			if (modData.answers[currentQuestion].includes(value)) return;
 
-			player.answers[currentQuestion].push(value);
+			modData.answers[currentQuestion].push(value);
 		},
 
-		onComplete(
-			player: Twists.PerfectScorePlayer,
-			time: string,
-			blitz: boolean
-		) {
+		onComplete(player, time, blitz) {
 			const isPerfect =
-				!this.leftGame?.has(player.id) &&
-				Object.values(player.answers).every(
-					(attempts: any) => attempts.length <= 1
-				);
+				!this.modData[TwistType.PerfectScore].leftGame?.has(player.id) &&
+				Object.values(
+					player.modData[TwistType.PerfectScore].answers ?? {}
+				).every((attempts: any) => attempts.length <= 1);
 			return { name: player.name, id: player.id, time, blitz, isPerfect };
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset: boolean) {
+		onAfterEnd(isReset) {
 			if (isReset) return;
 			const perfect = this.completed
 				.filter(entry => entry.isPerfect)
@@ -243,9 +299,9 @@ const TWISTS: TwistCollection = {
 				);
 			}
 		},
-	},
+	} satisfies Twist<TwistType.PerfectScore>,
 
-	bonusround: {
+	[TwistType.BonusRound]: {
 		name: "Bonus Round",
 		id: "bonusround",
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
@@ -280,7 +336,7 @@ const TWISTS: TwistCollection = {
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player: Twists.BonusRoundPlayer, value: string) {
+		onSubmit(player, value) {
 			const currentQuestion = player.currentQuestion;
 
 			if (
@@ -288,23 +344,19 @@ const TWISTS: TwistCollection = {
 				currentQuestion + 1 === this.questions.length
 			) {
 				player.sendRoom("You have opted to skip the current question.");
-				player.skippedQuestion = true;
+				player.modData[TwistType.BonusRound].skippedQuestion = true;
 				this.onComplete(player);
 				return true;
 			}
 		},
 
-		onComplete(
-			player: Twists.BonusRoundPlayer,
-			time: string,
-			blitz: boolean
-		) {
-			const noSkip = !player.skippedQuestion;
+		onComplete(player, time, blitz) {
+			const noSkip = !player.modData[TwistType.BonusRound].skippedQuestion;
 			return { name: player.name, id: player.id, time, blitz, noSkip };
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset: boolean) {
+		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noSkip = this.completed
 				.filter(entry => entry.noSkip)
@@ -317,14 +369,14 @@ const TWISTS: TwistCollection = {
 				);
 			}
 		},
-	},
+	} satisfies Twist<TwistType.BonusRound>,
 
-	incognito: {
+	[TwistType.Incognito]: {
 		name: "Incognito",
 		id: "incognito",
 		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room! Results will only be known at the end of the hunt.",
 
-		onCorrectAnswer(player: Scavenger, value: string) {
+		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent("PreComplete", player);
 
@@ -338,7 +390,7 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onPreComplete(player: Scavenger) {
+		onPreComplete(player) {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {
 				hhmmss: true,
@@ -370,7 +422,7 @@ const TWISTS: TwistCollection = {
 		onEnd() {
 			this.completed = this.preCompleted || [];
 		},
-	},
+	} satisfies Twist<TwistType.Incognito>,
 
 	spamfilter: {
 		name: "Spam Filter",
@@ -378,17 +430,19 @@ const TWISTS: TwistCollection = {
 
 		desc: "Every wrong answer adds 30 seconds to your final time!",
 
-		onIncorrectAnswer(player: Scavenger, value: string) {
-			if (!player.incorrect) player.incorrect = [];
+		onIncorrectAnswer(player, value) {
+			const modData = player.modData[TwistType.SpamFilter];
+			if (!modData.incorrect) modData.incorrect = [];
 			const id = `${player.currentQuestion}-${value}`;
-			if (player.incorrect.includes(id)) return;
+			if (modData.incorrect.includes(id)) return;
 
-			player.incorrect.push(id);
+			modData.incorrect.push(id);
 		},
 
-		onComplete(player: Scavenger, time: string, blitz: boolean) {
+		onComplete(player, time, blitz) {
 			const seconds = toSeconds(time);
-			if (!player.incorrect) {
+			const incorrect = player.modData[TwistType.SpamFilter].incorrect;
+			if (!incorrect) {
 				return {
 					name: player.name,
 					id: player.id,
@@ -398,7 +452,7 @@ const TWISTS: TwistCollection = {
 				};
 			}
 
-			const total = seconds + 30 * player.incorrect.length;
+			const total = seconds + 30 * incorrect.length;
 			const finalTime = Chat.toDurationString(total * 1000, {
 				hhmmss: true,
 			});
@@ -413,20 +467,11 @@ const TWISTS: TwistCollection = {
 			};
 		},
 
-		onConfirmCompletion(
-			player: Scavenger,
-			_time: string,
-			_blitz: boolean,
-			place: string,
-			result: ScavengerHuntFinish
-		) {
+		onConfirmCompletion(player, _time, _blitz, place, result) {
 			const { blitz, time } = result;
-			const deductionMessage = player.incorrect?.length ?
-				Chat.count(
-					player.incorrect,
-					"incorrect guesses",
-					"incorrect guess"
-				) :
+			const incorrect = player.modData[TwistType.SpamFilter].incorrect;
+			const deductionMessage = incorrect?.length ?
+				Chat.count(incorrect, "incorrect guesses", "incorrect guess") :
 				"Perfect!";
 			return `<em>${Utils.escapeHTML(
 				player.name
@@ -436,17 +481,17 @@ const TWISTS: TwistCollection = {
 		},
 
 		onEnd() {
-			Utils.sortBy(this.completed, entry => entry.total);
+			Utils.sortBy(this.completed, entry => entry.total ?? -1);
 		},
-	},
+	} satisfies Twist<TwistType.SpamFilter>,
 
-	blindincognito: {
+	[TwistType.BlindIncognito]: {
 		name: "Blind Incognito",
 		id: "blindincognito",
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
 
-		onAnySubmit(player: Twists.BlindIncognitoPlayer, value: string) {
-			if (player.preCompleted) {
+		onAnySubmit(player, value) {
+			if (player.modData[TwistType.BlindIncognito].preCompleted) {
 				player.sendRoom(
 					`That may or may not be the right answer - if you aren't confident, you can try again!`
 				);
@@ -454,7 +499,7 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onCorrectAnswer(player: Twists.BlindIncognitoPlayer, value: string) {
+		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent("PreComplete", player);
 
@@ -465,7 +510,7 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onIncorrectAnswer(player: Twists.BlindIncognitoPlayer, value: string) {
+		onIncorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				player.sendRoom(
 					`That may or may not be the right answer - if you aren't confident, you can try again!`
@@ -474,7 +519,7 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onPreComplete(player: Twists.BlindIncognitoPlayer) {
+		onPreComplete(player) {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {
 				hhmmss: true,
@@ -499,15 +544,15 @@ const TWISTS: TwistCollection = {
 			this.preCompleted = this.preCompleted ?
 				[...this.preCompleted, result] :
 				[result];
-			player.preCompleted = true;
+			player.modData[TwistType.BlindIncognito].preCompleted = true;
 		},
 
 		onEnd() {
 			this.completed = this.preCompleted || [];
 		},
-	},
+	} satisfies Twist<TwistType.BlindIncognito>,
 
-	timetrial: {
+	[TwistType.TimeTrial]: {
 		name: "Time Trial",
 		id: "timetrial",
 		desc: "Time starts when the player starts the hunt!",
@@ -519,24 +564,27 @@ const TWISTS: TwistCollection = {
 				);
 				this.huntLocked = true;
 			}
-			this.altIps = {};
-			this.startTimes = {};
+			const modData = this.modData[TwistType.TimeTrial];
+			modData.altIps = {};
+			modData.startTimes = {};
 		},
 
-		onJoin(user: Scavenger & User) {
+		onJoin(user) {
+			const modData = this.modData[TwistType.TimeTrial];
 			if (!Config.noipchecks) {
 				const altIp = user.ips?.find(
-					ip => this.altIps[ip] && this.altsIps[ip].id !== user.id
+					ip => modData.altIps[ip] && modData.altIps[ip].id !== user.id
 				);
 				if (altIp) {
 					user.sendTo(
 						this.room,
-						`You already have started the hunt as ${this.altIps[altIp].name}.`
+						`You already have started the hunt as ${modData.altIps[altIp].name}.`
 					);
 					return true;
 				}
 			}
-			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
+			if (!modData.startTimes[user.id])
+				modData.startTimes[user.id] = Date.now();
 			if (this.addPlayer(user)) {
 				this.cacheUserIps(user);
 				delete this.leftHunt[user.id];
@@ -551,9 +599,12 @@ const TWISTS: TwistCollection = {
 			return true;
 		},
 
-		onLeave(player: Scavenger) {
+		onLeave(player) {
 			for (const ip of player.joinIps) {
-				this.altIps[ip] = { id: player.id, name: player.name };
+				this.modData[TwistType.TimeTrial].altIps[ip] = {
+					id: player.id,
+					name: player.name,
+				};
 			}
 		},
 
@@ -566,9 +617,10 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onComplete(player: Scavenger, time: string, blitz: boolean) {
+		onComplete(player, time, blitz) {
 			const now = Date.now();
-			const takenTime = now - this.startTimes[player.id];
+			const takenTime =
+				now - this.modData[TwistType.TimeTrial].startTimes[player.id];
 			const result: Twists.TimeTrialResult = {
 				name: player.name,
 				id: player.id,
@@ -586,20 +638,22 @@ const TWISTS: TwistCollection = {
 					blitz ? " - BLITZ" : ""
 				})`
 			);
-			Utils.sortBy(this.completed, entry => entry.duration);
+			Utils.sortBy(this.completed, entry => entry.duration ?? Infinity);
 
 			player.destroy(); // remove from user.games;
 			return true;
 		},
-	},
+	} satisfies Twist<TwistType.TimeTrial>,
 
-	scavengersfeud: {
+	[TwistType.ScavengersFeud]: {
 		id: "scavengersfeud",
 		name: "Scavengers Feud",
 		desc: "After completing the hunt, players will guess what the most common incorrect answer for each question is.",
 		onAfterLoad() {
-			this.guesses = {};
-			this.incorrect = this.questions.map(() => ({}));
+			this.modData[TwistType.ScavengersFeud].guesses = {};
+			this.modData[TwistType.ScavengersFeud].incorrect = this.questions.map(
+				() => ({})
+			);
 
 			this.questions.push({
 				hint: "Please enter what you think are the most common incorrect answers to each question. (Enter your guesses in the order of the previous questions, and separate them with a comma)",
@@ -608,20 +662,20 @@ const TWISTS: TwistCollection = {
 			});
 		},
 
-		onIncorrectAnswer(player: Scavenger, value: string) {
+		onIncorrectAnswer(player, value) {
 			const curr = player.currentQuestion;
+			const incorrect = this.modData[TwistType.ScavengersFeud].incorrect;
 
-			if (!this.incorrect[curr][value])
-				this.incorrect[curr][value] = new Set();
-			this.incorrect[curr][value].add(player.id);
+			if (!incorrect[curr][value]) incorrect[curr][value] = new Set();
+			incorrect[curr][value].add(player.id);
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player: Scavenger, valueToId: string, value: string) {
+		onSubmit(player, valueToId, value) {
 			const currentQuestion = player.currentQuestion;
 
 			if (currentQuestion + 1 === this.questions.length) {
-				this.guesses[player.id] = value
+				this.modData[TwistType.ScavengersFeud].guesses[player.id] = value
 					.split(",")
 					.map((part: string) => sanitizeAnswer(part));
 
@@ -631,14 +685,16 @@ const TWISTS: TwistCollection = {
 		},
 
 		onEnd() {
-			this.questions = this.questions.slice(0, -1); // remove the automatically added last question.
+			this.questions.pop(); // The last question is automatically added
 		},
 
-		onAfterEnd(isReset: boolean) {
+		onAfterEnd(isReset) {
 			if (isReset) return;
 
 			const buffer = [];
-			for (const [idx, data] of this.incorrect.entries()) {
+			for (const [idx, data] of this.modData[
+				TwistType.ScavengersFeud
+			].incorrect.entries()) {
 				// collate the data for each question
 				let collection = [];
 				for (const str in data) {
@@ -652,8 +708,10 @@ const TWISTS: TwistCollection = {
 					.map(pair => pair.value);
 
 				const matchedPlayers = [];
-				for (const playerid in this.guesses) {
-					const guesses = this.guesses[playerid];
+				for (const playerid in this.modData[TwistType.ScavengersFeud]
+					.guesses) {
+					const guesses =
+						this.modData[TwistType.ScavengersFeud].guesses[playerid];
 					if (matches.includes(guesses[idx]))
 						matchedPlayers.push(playerid);
 				}
@@ -674,31 +732,36 @@ const TWISTS: TwistCollection = {
 				`<h3>Most common incorrect answers:</h3>${buffer.join("<br />")}`
 			);
 		},
-	},
+	} satisfies Twist<TwistType.ScavengersFeud>,
 
 	pointless: {
 		id: "pointless",
 		name: "Pointless",
 		desc: "Players get bonus points for guessing the least commonly guessed answers.",
 		onAfterLoad() {
-			this.correct = this.questions.map(() => ({}));
+			this.modData[TwistType.Pointless].correct = this.questions.map(
+				() => ({})
+			);
 		},
 
-		onCorrectAnswer(player: Scavenger, value: string) {
+		onCorrectAnswer(player, value) {
 			const curr = player.currentQuestion;
+			const correct = this.modData[TwistType.Pointless].correct;
 
-			if (!this.correct[curr][value]) this.correct[curr][value] = [];
-			if (this.correct[curr][value].includes(player.id)) return;
+			if (!correct[curr][value]) correct[curr][value] = [];
+			if (correct[curr][value].includes(player.id)) return;
 
-			this.correct[curr][value].push(player.id);
+			correct[curr][value].push(player.id);
 		},
 
-		onAfterEnd(isReset?: boolean) {
+		onAfterEnd(isReset) {
 			if (isReset) return;
 
 			const buffer = [];
 
-			for (const [idx, data] of this.correct.entries()) {
+			for (const [idx, data] of this.modData[
+				TwistType.Pointless
+			].correct.entries()) {
 				// collect the data for each question
 				const list = Object.entries<string[]>(data).map(
 					([value, players]) => ({ players, count: players.length, value })
@@ -730,13 +793,13 @@ const TWISTS: TwistCollection = {
 				`<h3>Least frequent correct answers:</h3>${buffer.join("<br />")}`
 			);
 		},
-	},
+	} satisfies Twist<TwistType.Pointless>,
 
-	minesweeper: {
+	[TwistType.Minesweeper]: {
 		id: "minesweeper",
 		name: "Minesweeper",
 		desc: "The huntmaker adds 'mines' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.",
-		onLoad(q: (string | string[])[]) {
+		onLoad(q) {
 			for (let i = 0; i < q.length; i += 2) {
 				const answer = q[i + 1] as string[];
 				if (answer.filter(ans => ans.startsWith("!")).length === 0) {
@@ -753,10 +816,12 @@ const TWISTS: TwistCollection = {
 		},
 		onLoadPriority: 2,
 		onAfterLoad() {
-			this.guesses = this.questions.map(() => ({}));
-			this.mines = [];
+			this.modData[TwistType.Minesweeper].guesses = this.questions.map(
+				() => ({})
+			);
+			this.modData[TwistType.Minesweeper].mines = [];
 			for (const question of this.questions) {
-				this.mines.push(
+				this.modData[TwistType.Minesweeper].mines.push(
 					question.answer.filter(ans => ans.startsWith("!"))
 				);
 				question.answer = question.answer.filter(
@@ -765,11 +830,7 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onEditQuestion(
-			questionNumber: number,
-			questionAnswer: string,
-			value: string
-		) {
+		onEditQuestion(questionNumber, questionAnswer, value) {
 			if (questionAnswer === "question") questionAnswer = "hint";
 			if (!["hint", "answer"].includes(questionAnswer)) return false;
 
@@ -791,9 +852,8 @@ const TWISTS: TwistCollection = {
 
 			if (questionAnswer === "answer") {
 				// These two lines are the only difference from the original
-				this.mines[questionNumber] = answer.filter(ans =>
-					ans.startsWith("!")
-				);
+				this.modData[TwistType.Minesweeper].mines[questionNumber] =
+					answer.filter(ans => ans.startsWith("!"));
 				this.questions[questionNumber].answer = answer.filter(
 					ans => !ans.startsWith("!")
 				);
@@ -814,17 +874,17 @@ const TWISTS: TwistCollection = {
 			return true;
 		},
 
-		onIncorrectAnswer(player: Scavenger, value: string) {
+		onIncorrectAnswer(player, value) {
 			const curr = player.currentQuestion;
 
-			if (!this.guesses[curr][player.id])
-				this.guesses[curr][player.id] = new Set();
-			this.guesses[curr][player.id].add(sanitizeAnswer(value));
+			const guesses = this.modData[TwistType.Minesweeper].guesses[curr];
+			if (!guesses[player.id]) guesses[player.id] = new Set();
+			guesses[player.id].add(sanitizeAnswer(value));
 
 			throw new Chat.ErrorMessage("That is not the answer - try again!");
 		},
 
-		onShowEndBoard(endedBy?: User) {
+		onShowEndBoard(endedBy) {
 			const sliceIndex = this.gameType === "official" ? 5 : 3;
 			const hosts = Chat.toListString(
 				this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`)
@@ -832,7 +892,7 @@ const TWISTS: TwistCollection = {
 
 			const mines: { mine: string, users: string[] }[][] = [];
 
-			for (const mineSet of this.mines) {
+			for (const mineSet of this.modData[TwistType.Minesweeper].mines) {
 				mines.push(
 					mineSet.map(mine => ({
 						mine: mine.substr(1),
@@ -843,12 +903,11 @@ const TWISTS: TwistCollection = {
 
 			for (const player of Object.values(this.playerTable)) {
 				if (!player) continue;
-				if (player.mines) {
-					for (const { index, mine } of player.mines) {
-						mines[index]
-							.find(obj => obj.mine === mine)
-							?.users.push(player.name);
-					}
+				const playerMines = player.modData[TwistType.Minesweeper].mines;
+				for (const { index, mine } of playerMines) {
+					mines[index]
+						.find(obj => obj.mine === mine)
+						?.users.push(player.name);
 				}
 			}
 
@@ -915,15 +974,19 @@ const TWISTS: TwistCollection = {
 			return true;
 		},
 
-		onEnd(isReset: boolean) {
+		onEnd(isReset) {
 			if (isReset) return;
-			for (const [q, guessObj] of this.guesses.entries()) {
-				const mines: string[] = this.mines[q];
+			for (const [q, guessObj] of this.modData[
+				TwistType.Minesweeper
+			].guesses.entries()) {
+				const mines: string[] =
+					this.modData[TwistType.Minesweeper].mines[q];
 				for (const [playerId, guesses] of Object.entries(guessObj)) {
 					const player = this.playerTable[playerId];
 					if (!player) continue;
-					if (!player.mines) player.mines = [];
-					(player.mines as { index: number, mine: string }[]).push(
+					if (!player.modData[TwistType.Minesweeper].mines)
+						player.modData[TwistType.Minesweeper].mines = [];
+					player.modData[TwistType.Minesweeper].mines.push(
 						...mines
 							.filter(mine => guesses.has(sanitizeAnswer(mine)))
 							.map(mine => ({ index: q, mine: mine.substr(1) }))
@@ -933,13 +996,14 @@ const TWISTS: TwistCollection = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset: boolean) {
+		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noMines = [];
 			for (const { name } of this.completed) {
 				const player = this.playerTable[toID(name)];
 				if (!player) continue;
-				if (!player.mines?.length) noMines.push(name);
+				if (!player.modData[TwistType.Minesweeper].mines?.length)
+					noMines.push(name);
 			}
 			if (noMines.length) {
 				this.announce(
@@ -950,7 +1014,7 @@ const TWISTS: TwistCollection = {
 				// Points are awarded manually
 			}
 		},
-	},
+	} satisfies Twist<TwistType.Minesweeper>,
 };
 
 const MODES: { [k: string]: GameMode | string } = {
@@ -1173,7 +1237,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.announce(`Round ${++game.round}`);
 			},
 
-			async onAfterEnd() {
+			onAfterEnd() {
 				const game = this.room.scavgame!;
 				for (const [i, completed] of this.completed
 					.map(e => e.name)
@@ -1185,8 +1249,9 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 				// post leaderboard
 				const room = this.room;
-				const html = (await game.leaderboard.htmlLadder()) as string;
-				room.add(`|raw|${html}`).update();
+				game.leaderboard.htmlLadder().then((html: string) => {
+					room.add(`|raw|${html}`).update();
+				});
 			},
 		},
 		round: 0,
@@ -1211,13 +1276,15 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (game.round === 0) return;
 				const maxTime = Math.max(...game.jumpstart);
 
-				this.jumpstartTimers = [];
-				this.answerLock = true;
+				this.modData[TwistType.JumpStart].jumpstartTimers = [];
+				const jumpstartTimers =
+					this.modData[TwistType.JumpStart].jumpstartTimers;
+				this.modData[TwistType.JumpStart].answerLock = true;
 
 				for (const [i, time] of game.jumpstart.entries()) {
 					if (!game.completed[i]) break;
 
-					this.jumpstartTimers[i] = setTimeout(() => {
+					jumpstartTimers[i] = setTimeout(() => {
 						const target = game.completed.shift();
 						if (!target) return;
 
@@ -1247,20 +1314,17 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 
 				// when the jump starts are all given to eligible players
-				this.jumpstartTimers[this.jumpstartTimers.length] = setTimeout(
-					() => {
-						this.answerLock = false;
-						const message = this.getCreationMessage(true);
-						this.room.add(message).update();
-						this.announce("You may start guessing!");
-						this.startTime = Date.now();
-					},
-					1000 * (maxTime + 5)
-				);
+				jumpstartTimers[jumpstartTimers.length] = setTimeout(() => {
+					this.modData[TwistType.JumpStart].answerLock = false;
+					const message = this.getCreationMessage(true);
+					this.room.add(message).update();
+					this.announce("You may start guessing!");
+					this.startTime = Date.now();
+				}, 1000 * (maxTime + 5));
 			},
 
 			onJoin(user) {
-				if (this.answerLock) {
+				if (this.modData[TwistType.JumpStart].answerLock) {
 					user.sendTo(this.room, `The hunt is not open for guesses yet!`);
 					return true;
 				}
@@ -1268,7 +1332,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 			onViewHunt(user) {
 				if (
-					this.answerLock &&
+					this.modData[TwistType.JumpStart].answerLock &&
 					!(
 						this.hosts.some(h => h.id === user.id) ||
 						user.id === this.staffHostId
@@ -1279,7 +1343,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			},
 
 			onCreateCallback() {
-				if (this.answerLock) {
+				if (this.modData[TwistType.JumpStart].answerLock) {
 					return (
 						`|raw|<div class="broadcast-blue"><strong>${
 							["official", "unrated"].includes(this.gameType) ?
@@ -1300,8 +1364,10 @@ const MODES: { [k: string]: GameMode | string } = {
 			},
 
 			onEnd(reset) {
-				if (this.jumpstartTimers) {
-					for (const timer of this.jumpstartTimers) {
+				const jumpstartTimers =
+					this.modData[TwistType.JumpStart].jumpstartTimers;
+				if (jumpstartTimers) {
+					for (const timer of jumpstartTimers) {
 						clearTimeout(timer);
 					}
 				}
@@ -1317,7 +1383,7 @@ const MODES: { [k: string]: GameMode | string } = {
 					}
 				}
 			},
-		},
+		} satisfies Twist<TwistType.JumpStart>,
 	},
 
 	ts: "teamscavs",
@@ -1530,14 +1596,13 @@ const MODES: { [k: string]: GameMode | string } = {
 
 export class ScavengerGameTemplate {
 	room: Room;
-	playerlist: null | string[];
-	timer: NodeJS.Timeout | null;
+	playerlist: null | string[] = null;
+	timer: NodeJS.Timeout | null = null;
+	mod: string | string[] = [];
 
 	[k: string]: any;
 	constructor(room: Room) {
 		this.room = room;
-		this.playerlist = null;
-		this.timer = null;
 	}
 
 	destroy(force?: boolean) {
