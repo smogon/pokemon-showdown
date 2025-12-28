@@ -8,9 +8,9 @@
  * @license MIT license
  */
 
-import {FS, Utils} from '../../lib';
-import {ScavMods, Twist, TwistEvent, TwistCollection} from './scavenger-games';
-import {ChatHandler} from '../chat';
+import { FS, Utils } from '../../lib';
+import { ScavMods, type Twist, type TwistEvent, type TwistCollection } from './scavenger-games';
+import { type ChatHandler } from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
 
@@ -323,7 +323,7 @@ class ScavengerHuntDatabase {
 	}
 }
 
-export interface ScavengerHuntFinish {name: string; id: string; time: string; blitz?: boolean}
+export interface ScavengerHuntFinish { name: string; id: string; time: string; blitz?: boolean }
 export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	override readonly gameid = 'scavengerhunt' as ID;
 	gameType: GameTypes;

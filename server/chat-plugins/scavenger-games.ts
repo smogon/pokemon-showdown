@@ -7,10 +7,14 @@
  * @license MIT license
  */
 
-import {ScavengerHunt, ScavengerHuntPlayer as Scavenger, ScavengerHuntFinish} from './scavengers';
-import {Utils} from '../../lib';
+import {
+	ScavengerHunt,
+	type ScavengerHuntPlayer as Scavenger,
+	type ScavengerHuntFinish,
+} from "./scavengers";
+import { Utils } from "../../lib";
 
-namespace Twists {
+declare namespace Twists {
 	export interface PerfectScoreResult extends ScavengerHuntFinish {
 		isPerfect?: boolean;
 	}
@@ -35,7 +39,7 @@ namespace Twists {
 		completed: SpamFilterResult[];
 	}
 	export interface TimeTrial extends ScavengerHunt {
-		altIps: Record<string, {id: string, name: string}>;
+		altIps: Record<string, { id: string, name: string }>;
 		startTimes: Record<string, number>;
 	}
 	export interface ScavengersFeud extends ScavengerHunt {
@@ -44,7 +48,7 @@ namespace Twists {
 	}
 	export interface Minesweeper extends ScavengerHunt {
 		mines: string[][];
-		guesses: {[playerId: string]: Set<string>}[];
+		guesses: { [playerId: string]: Set<string> }[];
 	}
 
 	export interface PerfectScorePlayer extends Scavenger {
@@ -58,7 +62,10 @@ namespace Twists {
 	}
 }
 
-export type TwistEvent<T extends ScavengerHunt> = (this: T, ...args: any[]) => void;
+export type TwistEvent<T extends ScavengerHunt> = (
+	this: T,
+	...args: any[]
+) => void;
 export interface Twist<T extends ScavengerHunt = ScavengerHunt> {
 	name: string;
 	id: string;
@@ -147,7 +154,7 @@ class Leaderboard {
 				} as { rank: number } & AnyObject;
 			}); // identify ties
 			if (userid) {
-				const rank = ladder.find((entry) => toID(entry.name) === userid);
+				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
 			} else {
 				resolve(ladder);
@@ -159,7 +166,7 @@ class Leaderboard {
 		const data = await this.visualize("points");
 		return `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data
 			.map(
-				(line) =>
+				line =>
 					`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`
 			)
 			.join("")}</table></div>`;
@@ -193,18 +200,25 @@ const TWISTS: TwistCollection = {
 			player.answers[currentQuestion].push(value);
 		},
 
-		onComplete(player: Twists.PerfectScorePlayer, time: string, blitz: boolean) {
-			const isPerfect = !this.leftGame?.has(player.id) &&
-				Object.values(player.answers).every((attempts: any) => attempts.length <= 1);
-			return {name: player.name, id: player.id, time, blitz, isPerfect};
+		onComplete(
+			player: Twists.PerfectScorePlayer,
+			time: string,
+			blitz: boolean
+		) {
+			const isPerfect =
+				!this.leftGame?.has(player.id) &&
+				Object.values(player.answers).every(
+					(attempts: any) => attempts.length <= 1
+				);
+			return { name: player.name, id: player.id, time, blitz, isPerfect };
 		},
 
 		onAfterEndPriority: 1,
 		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 			const perfect = this.completed
-				.filter((entry) => entry.isPerfect)
-				.map((entry) => entry.name);
+				.filter(entry => entry.isPerfect)
+				.map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(
 					Utils.html`${Chat.toListString(perfect)} ${
@@ -222,22 +236,29 @@ const TWISTS: TwistCollection = {
 
 		onLoad(q: (string | string[])[]) {
 			if (q.length < 8) {
-				throw new Chat.ErrorMessage('This twist requires at least four questions. Please reset the hunt and make it again.');
+				throw new Chat.ErrorMessage(
+					"This twist requires at least four questions. Please reset the hunt and make it again."
+				);
 			}
 		},
 		onLoadPriority: 2,
 		onAfterLoad() {
 			if (this.questions.length === 3) {
-				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
+				this.announce(
+					"This twist requires at least four questions.  Please reset the hunt and make it again."
+				);
 				this.huntLocked = true;
 			} else {
-				this.questions[this.questions.length - 1].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
+				this.questions[this.questions.length - 1].hint +=
+					" (You may choose to skip this question using ``/scavenge skip``.)";
 			}
 		},
 
 		onAnySubmit(player) {
 			if (this.huntLocked) {
-				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				player.sendRoom(
+					"The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one."
+				);
 				return true;
 			}
 		},
@@ -257,7 +278,11 @@ const TWISTS: TwistCollection = {
 			}
 		},
 
-		onComplete(player: Twists.BonusRoundPlayer, time: string, blitz: boolean) {
+		onComplete(
+			player: Twists.BonusRoundPlayer,
+			time: string,
+			blitz: boolean
+		) {
 			const noSkip = !player.skippedQuestion;
 			return { name: player.name, id: player.id, time, blitz, noSkip };
 		},
@@ -266,8 +291,8 @@ const TWISTS: TwistCollection = {
 		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 			const noSkip = this.completed
-				.filter((entry) => entry.noSkip)
-				.map((entry) => entry.name);
+				.filter(entry => entry.noSkip)
+				.map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(
 					Utils.html`${Chat.toListString(noSkip)} ${
@@ -310,12 +335,18 @@ const TWISTS: TwistCollection = {
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] ||
 					this.gameType === "official");
 
-			const fallbackResult = {name: player.name, id: player.id, time, blitz};
-			const result: ScavengerHuntFinish = this.runEvent('Complete', player, time, blitz) || fallbackResult;
+			const fallbackResult = {
+				name: player.name,
+				id: player.id,
+				time,
+				blitz,
+			};
+			const result: ScavengerHuntFinish =
+				this.runEvent("Complete", player, time, blitz) || fallbackResult;
 
-			this.preCompleted = this.preCompleted
-				? [...this.preCompleted, result]
-				: [result];
+			this.preCompleted = this.preCompleted ?
+				[...this.preCompleted, result] :
+				[result];
 			player.completed = true;
 			player.destroy();
 		},
@@ -342,7 +373,13 @@ const TWISTS: TwistCollection = {
 		onComplete(player: Scavenger, time: string, blitz: boolean) {
 			const seconds = toSeconds(time);
 			if (!player.incorrect) {
-				return { name: player.name, id: player.id, total: seconds, blitz, time };
+				return {
+					name: player.name,
+					id: player.id,
+					total: seconds,
+					blitz,
+					time,
+				};
 			}
 
 			const total = seconds + 30 * player.incorrect.length;
@@ -351,19 +388,39 @@ const TWISTS: TwistCollection = {
 			});
 			if (total > 60) blitz = false;
 
-			return { name: player.name, id: player.id, total, blitz, time: finalTime };
+			return {
+				name: player.name,
+				id: player.id,
+				total,
+				blitz,
+				time: finalTime,
+			};
 		},
 
-		onConfirmCompletion(player: Scavenger, _time: string, _blitz: boolean, place: string, result: ScavengerHuntFinish) {
-			const {blitz, time} = result;
+		onConfirmCompletion(
+			player: Scavenger,
+			_time: string,
+			_blitz: boolean,
+			place: string,
+			result: ScavengerHuntFinish
+		) {
+			const { blitz, time } = result;
 			const deductionMessage = player.incorrect?.length ?
-				Chat.count(player.incorrect, 'incorrect guesses', 'incorrect guess') :
+				Chat.count(
+					player.incorrect,
+					"incorrect guesses",
+					"incorrect guess"
+				) :
 				"Perfect!";
-			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${(blitz ? " - BLITZ" : "")})`;
+			return `<em>${Utils.escapeHTML(
+				player.name
+			)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${
+				blitz ? " - BLITZ" : ""
+			})`;
 		},
 
 		onEnd() {
-			Utils.sortBy(this.completed, (entry) => entry.total);
+			Utils.sortBy(this.completed, entry => entry.total);
 		},
 	},
 
@@ -414,12 +471,18 @@ const TWISTS: TwistCollection = {
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] ||
 					this.gameType === "official");
 
-			const fallbackResult = {name: player.name, id: player.id, time, blitz};
-			const result: ScavengerHuntFinish = this.runEvent('Complete', player, time, blitz) || fallbackResult;
+			const fallbackResult = {
+				name: player.name,
+				id: player.id,
+				time,
+				blitz,
+			};
+			const result: ScavengerHuntFinish =
+				this.runEvent("Complete", player, time, blitz) || fallbackResult;
 
-			this.preCompleted = this.preCompleted
-				? [...this.preCompleted, result]
-				: [result];
+			this.preCompleted = this.preCompleted ?
+				[...this.preCompleted, result] :
+				[result];
 			player.preCompleted = true;
 		},
 
@@ -435,7 +498,9 @@ const TWISTS: TwistCollection = {
 
 		onAfterLoad() {
 			if (this.questions.length === 3) {
-				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
+				this.announce(
+					"This twist requires at least four questions. Please reset the hunt and make it again."
+				);
 				this.huntLocked = true;
 			}
 			this.altIps = {};
@@ -444,7 +509,9 @@ const TWISTS: TwistCollection = {
 
 		onJoin(user: Scavenger & User) {
 			if (!Config.noipchecks) {
-				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				const altIp = user.ips.find(
+					ip => this.altIps[ip] && this.altsIps[ip].id !== user.id
+				);
 				if (altIp) {
 					user.sendTo(
 						this.room,
@@ -476,7 +543,9 @@ const TWISTS: TwistCollection = {
 
 		onAnySubmit(player) {
 			if (this.huntLocked) {
-				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				player.sendRoom(
+					"The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one."
+				);
 				return true;
 			}
 		},
@@ -501,7 +570,7 @@ const TWISTS: TwistCollection = {
 					blitz ? " - BLITZ" : ""
 				})`
 			);
-			Utils.sortBy(this.completed, (entry) => entry.duration);
+			Utils.sortBy(this.completed, entry => entry.duration);
 
 			player.destroy(); // remove from user.games;
 			return true;
@@ -526,7 +595,8 @@ const TWISTS: TwistCollection = {
 		onIncorrectAnswer(player: Scavenger, value: string) {
 			const curr = player.currentQuestion;
 
-			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = new Set();
+			if (!this.incorrect[curr][value])
+				this.incorrect[curr][value] = new Set();
 			this.incorrect[curr][value].add(player.id);
 		},
 
@@ -556,30 +626,31 @@ const TWISTS: TwistCollection = {
 				// collate the data for each question
 				let collection = [];
 				for (const str in data) {
-					collection.push({count: data[str].length, value: str});
+					collection.push({ count: data[str].length, value: str });
 				}
 				collection = collection.sort((a, b) => b.count - a.count);
 				const maxValue = collection[0]?.count || 0;
 
 				const matches = collection
-					.filter((pair) => pair.count === maxValue)
-					.map((pair) => pair.value);
+					.filter(pair => pair.count === maxValue)
+					.map(pair => pair.value);
 
 				const matchedPlayers = [];
 				for (const playerid in this.guesses) {
 					const guesses = this.guesses[playerid];
-					if (matches.includes(guesses[idx])) matchedPlayers.push(playerid);
+					if (matches.includes(guesses[idx]))
+						matchedPlayers.push(playerid);
 				}
 
 				// display the data
-				const matchDisplay = matches.length
-					? matches.join(", ")
-					: "No wrong answers!";
-				const playerDisplay = matches.length
-					? matchedPlayers.length
-						? `- ${matchedPlayers.join(", ")}`
-						: "- No one guessed correctly!"
-					: "";
+				const matchDisplay = matches.length ?
+					matches.join(", ") :
+					"No wrong answers!";
+				const playerDisplay = matches.length ?
+					matchedPlayers.length ?
+						`- ${matchedPlayers.join(", ")}` :
+						"- No one guessed correctly!" :
+					"";
 				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
 			}
 
@@ -616,22 +687,22 @@ const TWISTS: TwistCollection = {
 				const list = Object.entries<string[]>(data).map(
 					([value, players]) => ({ players, count: players.length, value })
 				);
-				const minValue = Math.min(...list.map((entry) => entry.count));
+				const minValue = Math.min(...list.map(entry => entry.count));
 
-				const minEntries = list.filter((entry) => entry.count === minValue);
+				const minEntries = list.filter(entry => entry.count === minValue);
 				const matchDisplay = minEntries
-					.map((entry) =>
+					.map(entry =>
 						this.questions[idx].answer.find(
-							(answer) => toID(answer) === entry.value
+							answer => toID(answer) === entry.value
 						)
 					)
 					.join(", ");
 				const playerDisplay = minEntries
-					.flatMap((entry) =>
+					.flatMap(entry =>
 						entry.players.map(
-							(foundPlayer) =>
+							foundPlayer =>
 								this.players.find(
-									(player) => player.id === foundPlayer
+									player => player.id === foundPlayer
 								)!.name
 						)
 					)
@@ -652,12 +723,12 @@ const TWISTS: TwistCollection = {
 		onLoad(q: (string | string[])[]) {
 			for (let i = 0; i < q.length; i += 2) {
 				const answer = q[i + 1] as string[];
-				if (answer.filter((ans) => ans.startsWith("!")).length === 0) {
+				if (answer.filter(ans => ans.startsWith("!")).length === 0) {
 					throw new Chat.ErrorMessage(
 						`No mines were added for question #${i / 2 + 1}.`
 					);
 				}
-				if (answer.filter((ans) => !ans.startsWith("!")).length === 0) {
+				if (answer.filter(ans => !ans.startsWith("!")).length === 0) {
 					throw new Chat.ErrorMessage(
 						`No correct answers were added for question #${i / 2 + 1}.`
 					);
@@ -670,10 +741,10 @@ const TWISTS: TwistCollection = {
 			this.mines = [];
 			for (const question of this.questions) {
 				this.mines.push(
-					question.answer.filter((ans) => ans.startsWith("!"))
+					question.answer.filter(ans => ans.startsWith("!"))
 				);
 				question.answer = question.answer.filter(
-					(ans) => !ans.startsWith("!")
+					ans => !ans.startsWith("!")
 				);
 			}
 		},
@@ -688,7 +759,7 @@ const TWISTS: TwistCollection = {
 
 			let answer: string[] = [];
 			if (questionAnswer === "answer") {
-				answer = value.split(";").map((p) => p.trim());
+				answer = value.split(";").map(p => p.trim());
 			}
 
 			if (
@@ -704,11 +775,11 @@ const TWISTS: TwistCollection = {
 
 			if (questionAnswer === "answer") {
 				// These two lines are the only difference from the original
-				this.mines[questionNumber] = answer.filter((ans) =>
+				this.mines[questionNumber] = answer.filter(ans =>
 					ans.startsWith("!")
 				);
 				this.questions[questionNumber].answer = answer.filter(
-					(ans) => !ans.startsWith("!")
+					ans => !ans.startsWith("!")
 				);
 			} else {
 				this.questions[questionNumber].hint = value;
@@ -740,13 +811,18 @@ const TWISTS: TwistCollection = {
 		onShowEndBoard(endedBy?: User) {
 			const sliceIndex = this.gameType === "official" ? 5 : 3;
 			const hosts = Chat.toListString(
-				this.hosts.map((h) => `<em>${Utils.escapeHTML(h.name)}</em>`)
+				this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`)
 			);
 
-			const mines: { mine: string; users: string[] }[][] = [];
+			const mines: { mine: string, users: string[] }[][] = [];
 
 			for (const mineSet of this.mines) {
-				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
+				mines.push(
+					mineSet.map(mine => ({
+						mine: mine.substr(1),
+						users: [] as string[],
+					}))
+				);
 			}
 
 			for (const player of Object.values(this.playerTable)) {
@@ -754,7 +830,7 @@ const TWISTS: TwistCollection = {
 				if (player.mines) {
 					for (const { index, mine } of player.mines) {
 						mines[index]
-							.find((obj) => obj.mine === mine)
+							.find(obj => obj.mine === mine)
 							?.users.push(player.name);
 					}
 				}
@@ -766,37 +842,37 @@ const TWISTS: TwistCollection = {
 				`The ${
 					this.gameType ? `${this.gameType} ` : ""
 				}scavenger hunt by ${hosts} was ended ${
-					endedBy
-						? "by " + Utils.escapeHTML(endedBy.name)
-						: "automatically"
+					endedBy ?
+						"by " + Utils.escapeHTML(endedBy.name) :
+						"automatically"
 				}.<br />` +
-					`${this.completed
-						.slice(0, sliceIndex)
-						.map(
-							(p, i) =>
-								`${Utils.formatOrder(
-									i + 1
-								)} place: <em>${Utils.escapeHTML(
-									p.name
-								)}</em> <span style="color: lightgreen;">[${
-									p.time
-								}]</span>.<br />`
-						)
-						.join("")}` +
+				`${this.completed
+					.slice(0, sliceIndex)
+					.map(
+						(p, i) =>
+							`${Utils.formatOrder(
+								i + 1
+							)} place: <em>${Utils.escapeHTML(
+								p.name
+							)}</em> <span style="color: lightgreen;">[${
+								p.time
+							}]</span>.<br />`
+					)
+					.join("")}` +
 					`${
-						this.completed.length > sliceIndex
-							? `Consolation Prize: ${this.completed
-									.slice(sliceIndex)
-									.map(
-										(e) =>
-											`<em>${Utils.escapeHTML(
-												e.name
-											)}</em> <span style="color: lightgreen;">[${
-												e.time
-											}]</span>`
-									)
-									.join(", ")}<br />`
-							: ""
+						this.completed.length > sliceIndex ?
+							`Consolation Prize: ${this.completed
+								.slice(sliceIndex)
+								.map(
+									e =>
+										`<em>${Utils.escapeHTML(
+											e.name
+										)}</em> <span style="color: lightgreen;">[${
+											e.time
+										}]</span>`
+								)
+								.join(", ")}<br />` :
+							""
 					}<br />` +
 					`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
 					`${this.questions
@@ -818,7 +894,7 @@ const TWISTS: TwistCollection = {
 									.join("<br />")}</details>`
 						)
 						.join("<br />")}` +
-					`</details>`
+						`</details>`
 			);
 			return true;
 		},
@@ -831,12 +907,10 @@ const TWISTS: TwistCollection = {
 					const player = this.playerTable[playerId];
 					if (!player) continue;
 					if (!player.mines) player.mines = [];
-					(player.mines as { index: number; mine: string }[]).push(
+					(player.mines as { index: number, mine: string }[]).push(
 						...mines
-							.filter((mine) =>
-								(guesses as Set<string>).has(sanitizeAnswer(mine))
-							)
-							.map((mine) => ({ index: q, mine: mine.substr(1) }))
+							.filter(mine => guesses.has(sanitizeAnswer(mine)))
+							.map(mine => ({ index: q, mine: mine.substr(1) }))
 					);
 				}
 			}
@@ -902,46 +976,46 @@ const MODES: { [k: string]: GameMode | string } = {
 
 				// elimination
 				if (!game.playerlist) {
-					game.playerlist = this.completed.map((entry) =>
+					game.playerlist = this.completed.map(entry =>
 						toID(entry.name)
 					);
 					this.announce(
 						`Round ${game.round} - ${Chat.toListString(
-							this.completed.map((p) => `<em>${p.name}</em>`)
+							this.completed.map(p => `<em>${p.name}</em>`)
 						)} have successfully completed the last hunt and have moved on to the next round!`
 					);
 				} else {
 					let eliminated = [];
-					const completed = this.completed.map((entry) =>
+					const completed = this.completed.map(entry =>
 						toID(entry.name)
 					) as string[];
 					if (completed.length === game.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
-						game.playerlist = game.playerlist.filter((userid) =>
+						game.playerlist = game.playerlist.filter(userid =>
 							completed.includes(userid)
 						);
 					} else {
 						eliminated = game.playerlist.filter(
-							(userid) => !completed.includes(userid)
+							userid => !completed.includes(userid)
 						);
 						for (const username of eliminated) {
 							const userid = toID(username);
 							game.playerlist = game.playerlist.filter(
-								(pid) => pid !== userid
+								pid => pid !== userid
 							);
 						}
 					}
 
 					this.announce(
 						`Round ${game.round} - ${Chat.toListString(
-							eliminated.map((n) => `<em>${n}</em>`)
+							eliminated.map(n => `<em>${n}</em>`)
 						)} ${Chat.plural(
 							eliminated,
 							"have",
 							"has"
 						)} been eliminated! ${Chat.toListString(
 							game.playerlist.map(
-								(p) => `<em>${this.playerTable[p].name}</em>`
+								p => `<em>${this.playerTable[p].name}</em>`
 							)
 						)} have successfully completed the last hunt and have moved on to the next round!`
 					);
@@ -950,9 +1024,9 @@ const MODES: { [k: string]: GameMode | string } = {
 				// process end of game
 				if (game.playerlist.length === 1) {
 					const winningUser = Users.get(game.playerlist[0]);
-					const winner = winningUser
-						? winningUser.name
-						: game.playerlist[0];
+					const winner = winningUser ?
+						winningUser.name :
+						game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
 					game.destroy();
@@ -1009,37 +1083,37 @@ const MODES: { [k: string]: GameMode | string } = {
 				let eliminated: string[] = [];
 				if (!game.playerlist) {
 					game.playerlist = this.completed.map(
-						(entry) => toID(entry.name) as string
+						entry => toID(entry.name) as string
 					);
 				} else {
 					const completed = this.completed.map(
-						(entry) => toID(entry.name) as string
+						entry => toID(entry.name) as string
 					);
 					eliminated = game.playerlist.filter(
-						(userid) => !completed.includes(userid)
+						userid => !completed.includes(userid)
 					);
 					for (const username of eliminated) {
 						const userid = toID(username);
 						game.playerlist = game.playerlist.filter(
-							(pid) => pid !== userid
+							pid => pid !== userid
 						);
 					}
 				}
 
 				this.announce(
 					`Round ${game.round} - ${Chat.toListString(
-						eliminated.map((n) => `<em>${n}</em>`)
+						eliminated.map(n => `<em>${n}</em>`)
 					)} ${
-						eliminated.length
-							? `${Chat.plural(
-									eliminated,
-									"have",
-									"has"
-							  )} been eliminated!`
-							: ""
+						eliminated.length ?
+							`${Chat.plural(
+								eliminated,
+								"have",
+								"has"
+							)} been eliminated!` :
+							""
 					} ${Chat.toListString(
 						game.playerlist.map(
-							(p) => `<em>${this.playerTable[p].name}</em>`
+							p => `<em>${this.playerTable[p].name}</em>`
 						)
 					)} have successfully completed the last hunt and have moved on to the next round!`
 				);
@@ -1047,9 +1121,9 @@ const MODES: { [k: string]: GameMode | string } = {
 				// process end of game
 				if (game.playerlist.length === 1) {
 					const winningUser = Users.get(game.playerlist[0]);
-					const winner = winningUser
-						? winningUser.name
-						: game.playerlist[0];
+					const winner = winningUser ?
+						winningUser.name :
+						game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
 					game.destroy();
@@ -1086,7 +1160,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			async onAfterEnd() {
 				const game = this.room.scavgame!;
 				for (const [i, completed] of this.completed
-					.map((e) => e.name)
+					.map(e => e.name)
 					.entries()) {
 					const points =
 						game.pointDistribution[i] ||
@@ -1180,7 +1254,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (
 					this.answerLock &&
 					!(
-						this.hosts.some((h) => h.id === user.id) ||
+						this.hosts.some(h => h.id === user.id) ||
 						user.id === this.staffHostId
 					)
 				) {
@@ -1192,17 +1266,17 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (this.answerLock) {
 					return (
 						`|raw|<div class="broadcast-blue"><strong>${
-							["official", "unrated"].includes(this.gameType)
-								? "An"
-								: "A"
+							["official", "unrated"].includes(this.gameType) ?
+								"An" :
+								"A"
 						} ${this.gameType} ` +
 						`Scavenger Hunt by <em>${Utils.escapeHTML(
-							Chat.toListString(this.hosts.map((h) => h.name))
+							Chat.toListString(this.hosts.map(h => h.name))
 						)}</em> ` +
 						`has been started${
-							this.hosts.some((h) => h.id === this.staffHostId)
-								? ""
-								: ` by <em>${Utils.escapeHTML(this.staffHostName)}</em>`
+							this.hosts.some(h => h.id === this.staffHostId) ?
+								"" :
+								` by <em>${Utils.escapeHTML(this.staffHostName)}</em>`
 						}.` +
 						`<br />The first hint is currently being handed out to early finishers.`
 					);
@@ -1218,7 +1292,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				const game = this.room.scavgame!;
 				if (!reset) {
 					if (game.round === 0) {
-						game.completed = this.completed.map((entry) =>
+						game.completed = this.completed.map(entry =>
 							toID(entry.name)
 						);
 						game.round++;
@@ -1459,7 +1533,7 @@ export class ScavengerGameTemplate {
 
 	eliminate(userid: string) {
 		if (!this.playerlist?.includes(userid)) return false;
-		this.playerlist = this.playerlist.filter((pid) => pid !== userid);
+		this.playerlist = this.playerlist.filter(pid => pid !== userid);
 
 		if (this.leaderboard) delete this.leaderboard.data[userid];
 		return true;
