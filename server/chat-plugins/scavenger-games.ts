@@ -48,8 +48,7 @@ export declare namespace Twists {
 				PerfectScoreResult &
 				BonusRoundResult &
 				SpamFilterResult &
-				TimeTrialResult &
-				PointlessResult
+				TimeTrialResult
 			>)[];
 	}
 
@@ -94,16 +93,13 @@ export declare namespace Twists {
 		isPerfect?: boolean;
 	}
 	export interface BonusRoundResult extends ScavengerHuntFinish {
-		noSkip?: boolean;
+		noSkipBonus?: boolean;
 	}
 	export interface SpamFilterResult extends ScavengerHuntFinish {
-		total: number;
+		totalTime: number;
 	}
 	export interface TimeTrialResult extends ScavengerHuntFinish {
 		duration: number;
-	}
-	export interface PointlessResult extends ScavengerHuntFinish {
-		noSkip?: boolean;
 	}
 
 	type CommonTwistPlayer = Scavenger & {
@@ -350,16 +346,16 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
-		onComplete(player, time, blitz) {
-			const noSkip = !player.modData[TwistType.BonusRound].skippedQuestion;
-			return { name: player.name, id: player.id, time, blitz, noSkip };
+		onComplete(player, time, blitz): Twists.BonusRoundResult | true {
+			const noSkipBonus = !player.modData[TwistType.BonusRound].skippedQuestion;
+			return { name: player.name, id: player.id, time, blitz, noSkipBonus };
 		},
 
 		onAfterEndPriority: 1,
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noSkip = this.completed
-				.filter(entry => entry.noSkip)
+				.filter(entry => entry.noSkipBonus)
 				.map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(
@@ -439,29 +435,29 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			modData.incorrect.push(id);
 		},
 
-		onComplete(player, time, blitz) {
+		onComplete(player, time, blitz): Twists.SpamFilterResult | true {
 			const seconds = toSeconds(time);
 			const incorrect = player.modData[TwistType.SpamFilter].incorrect;
 			if (!incorrect) {
 				return {
 					name: player.name,
 					id: player.id,
-					total: seconds,
+					totalTime: seconds,
 					blitz,
 					time,
 				};
 			}
 
-			const total = seconds + 30 * incorrect.length;
-			const finalTime = Chat.toDurationString(total * 1000, {
+			const totalTime = seconds + 30 * incorrect.length;
+			const finalTime = Chat.toDurationString(totalTime * 1000, {
 				hhmmss: true,
 			});
-			if (total > 60) blitz = false;
+			if (totalTime > 60) blitz = false;
 
 			return {
 				name: player.name,
 				id: player.id,
-				total,
+				totalTime,
 				blitz,
 				time: finalTime,
 			};
@@ -481,7 +477,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		},
 
 		onEnd() {
-			Utils.sortBy(this.completed, entry => entry.total ?? -1);
+			Utils.sortBy(this.completed, entry => entry.totalTime ?? -1);
 		},
 	} satisfies Twist<TwistType.SpamFilter>,
 

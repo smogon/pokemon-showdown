@@ -37,7 +37,13 @@ export type ModEvents = {
 	AfterLoad: () => void,
 	AnySubmit: (player: Scavenger, value: string, originalValue: string) => void,
 	Complete: (player: Scavenger, time: string, blitz: boolean) => void,
-	ConfirmCompletion: (player: Scavenger, time: string, blitz: boolean, place: string, res: ScavengerHuntFinish) => void,
+	ConfirmCompletion: (
+		player: Scavenger,
+		time: string,
+		blitz: boolean,
+		place: string,
+		result: ScavengerHuntFinish
+	) => string | void,
 	Connect: (user: User, connection: Connection) => void,
 	CorrectAnswer: (player: Scavenger, value: string) => void,
 	CreateCallback: () => string | undefined,
