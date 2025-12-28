@@ -8,6 +8,7 @@
  */
 
 import {
+	sanitizeAnswer,
 	ScavengerHunt,
 	type ScavengerHuntPlayer as Scavenger,
 	type ScavengerHuntFinish,
@@ -15,15 +16,7 @@ import {
 import { Utils } from "../../lib";
 
 declare namespace Twists {
-	export interface PerfectScoreResult extends ScavengerHuntFinish {
-		isPerfect?: boolean;
-	}
-	export interface BonusRoundResult extends ScavengerHuntFinish {
-		noSkip?: boolean;
-	}
-	export interface SpamFilterResult extends ScavengerHuntFinish {
-		total: number;
-	}
+	/** Twists */
 
 	export interface PerfectScore extends ScavengerHunt {
 		leftGame: Set<string>;
@@ -41,6 +34,7 @@ declare namespace Twists {
 	export interface TimeTrial extends ScavengerHunt {
 		altIps: Record<string, { id: string, name: string }>;
 		startTimes: Record<string, number>;
+		completed: TimeTrialResult[];
 	}
 	export interface ScavengersFeud extends ScavengerHunt {
 		guesses: Record<string, string[]>;
@@ -49,6 +43,27 @@ declare namespace Twists {
 	export interface Minesweeper extends ScavengerHunt {
 		mines: string[][];
 		guesses: { [playerId: string]: Set<string> }[];
+	}
+	export interface Pointless extends ScavengerHunt {
+		completed: PointlessResult[];
+	}
+
+	/** Other types */
+
+	export interface PerfectScoreResult extends ScavengerHuntFinish {
+		isPerfect?: boolean;
+	}
+	export interface BonusRoundResult extends ScavengerHuntFinish {
+		noSkip?: boolean;
+	}
+	export interface SpamFilterResult extends ScavengerHuntFinish {
+		total: number;
+	}
+	export interface TimeTrialResult extends ScavengerHuntFinish {
+		duration: number;
+	}
+	export interface PointlessResult extends ScavengerHuntFinish {
+		noSkip?: boolean;
 	}
 
 	export interface PerfectScorePlayer extends Scavenger {
@@ -84,6 +99,7 @@ export interface TwistCollection {
 	timetrial: Twist<Twists.TimeTrial>;
 	scavengersfeud: Twist<Twists.ScavengersFeud>;
 	minesweeper: Twist<Twists.Minesweeper>;
+	pointless: Twist<Twists.Pointless>;
 }
 
 type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
@@ -245,7 +261,7 @@ const TWISTS: TwistCollection = {
 		onAfterLoad() {
 			if (this.questions.length === 3) {
 				this.announce(
-					"This twist requires at least four questions.  Please reset the hunt and make it again."
+					"This twist requires at least four questions. Please reset the hunt and make it again."
 				);
 				this.huntLocked = true;
 			} else {
@@ -257,7 +273,7 @@ const TWISTS: TwistCollection = {
 		onAnySubmit(player) {
 			if (this.huntLocked) {
 				player.sendRoom(
-					"The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one."
+					"The hunt was not set up correctly. Please wait for the host to reset the hunt and create a new one."
 				);
 				return true;
 			}
@@ -306,7 +322,7 @@ const TWISTS: TwistCollection = {
 	incognito: {
 		name: "Incognito",
 		id: "incognito",
-		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room!  Results will only be known at the end of the hunt.",
+		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room! Results will only be known at the end of the hunt.",
 
 		onCorrectAnswer(player: Scavenger, value: string) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
@@ -427,7 +443,7 @@ const TWISTS: TwistCollection = {
 	blindincognito: {
 		name: "Blind Incognito",
 		id: "blindincognito",
-		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct!  You may be in for a nasty surprise when the hunt ends!",
+		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
 
 		onAnySubmit(player: Twists.BlindIncognitoPlayer, value: string) {
 			if (player.preCompleted) {
@@ -509,7 +525,7 @@ const TWISTS: TwistCollection = {
 
 		onJoin(user: Scavenger & User) {
 			if (!Config.noipchecks) {
-				const altIp = user.ips.find(
+				const altIp = user.ips?.find(
 					ip => this.altIps[ip] && this.altsIps[ip].id !== user.id
 				);
 				if (altIp) {
@@ -544,7 +560,7 @@ const TWISTS: TwistCollection = {
 		onAnySubmit(player) {
 			if (this.huntLocked) {
 				player.sendRoom(
-					"The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one."
+					"The hunt was not set up correctly. Please wait for the host to reset the hunt and create a new one."
 				);
 				return true;
 			}
@@ -553,7 +569,7 @@ const TWISTS: TwistCollection = {
 		onComplete(player: Scavenger, time: string, blitz: boolean) {
 			const now = Date.now();
 			const takenTime = now - this.startTimes[player.id];
-			const result = {
+			const result: Twists.TimeTrialResult = {
 				name: player.name,
 				id: player.id,
 				time: Chat.toDurationString(takenTime, { hhmmss: true }),
@@ -586,7 +602,7 @@ const TWISTS: TwistCollection = {
 			this.incorrect = this.questions.map(() => ({}));
 
 			this.questions.push({
-				hint: "Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)",
+				hint: "Please enter what you think are the most common incorrect answers to each question. (Enter your guesses in the order of the previous questions, and separate them with a comma)",
 				answer: ["Any"],
 				spoilers: [],
 			});
@@ -626,7 +642,7 @@ const TWISTS: TwistCollection = {
 				// collate the data for each question
 				let collection = [];
 				for (const str in data) {
-					collection.push({ count: data[str].length, value: str });
+					collection.push({ count: data[str].size, value: str });
 				}
 				collection = collection.sort((a, b) => b.count - a.count);
 				const maxValue = collection[0]?.count || 0;
@@ -668,7 +684,7 @@ const TWISTS: TwistCollection = {
 			this.correct = this.questions.map(() => ({}));
 		},
 
-		onCorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+		onCorrectAnswer(player: Scavenger, value: string) {
 			const curr = player.currentQuestion;
 
 			if (!this.correct[curr][value]) this.correct[curr][value] = [];
@@ -677,7 +693,7 @@ const TWISTS: TwistCollection = {
 			this.correct[curr][value].push(player.id);
 		},
 
-		onAfterEnd(isReset) {
+		onAfterEnd(isReset?: boolean) {
 			if (isReset) return;
 
 			const buffer = [];
@@ -1032,7 +1048,7 @@ const MODES: { [k: string]: GameMode | string } = {
 					game.destroy();
 				} else if (!game.playerlist.length) {
 					this.announce(
-						"Everyone has been eliminated!  Better luck next time!"
+						"Everyone has been eliminated! Better luck next time!"
 					);
 					game.destroy();
 				}
@@ -1129,7 +1145,7 @@ const MODES: { [k: string]: GameMode | string } = {
 					game.destroy();
 				} else if (!game.playerlist.length) {
 					this.announce(
-						"Everyone has been eliminated!  Better luck next time!"
+						"Everyone has been eliminated! Better luck next time!"
 					);
 					game.destroy();
 				}
@@ -1222,7 +1238,7 @@ const MODES: { [k: string]: GameMode | string } = {
 							);
 							targetUser.sendTo(
 								this.room,
-								`|notify|Early Hint|The first hint to the next hunt is: <div style="overflow:auto; max-height: 50vh">  ${this.formatOutput(
+								`|notify|Early Hint|The first hint to the next hunt is: <div style="overflow:auto; max-height: 50vh"> ${this.formatOutput(
 									this.questions[0].hint
 								)}</div>`
 							);
@@ -1313,13 +1329,13 @@ const MODES: { [k: string]: GameMode | string } = {
 		/* {
 			[team
 			name: string]: {
-			  name: string[],
-			  players: UserID[],
-			  answers: string[],
-			  question: number,
-			  completed: boolean
+			name: string[],
+			players: UserID[],
+			answers: string[],
+			question: number,
+			completed: boolean
 			}
-		  } */
+		} */
 		teams: {},
 
 		teamAnnounce(player: Scavenger | User, message: string) {
@@ -1432,7 +1448,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 				if (Object.keys(game.teams).length === 0) {
 					this.announce(
-						"Teams have not been set up yet.  Please reset the hunt."
+						"Teams have not been set up yet. Please reset the hunt."
 					);
 				}
 			},
@@ -1495,7 +1511,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 				game.teamAnnounce(
 					player,
-					Utils.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`
+					Utils.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}. Your team has completed the hunt!`
 				);
 			},
 
