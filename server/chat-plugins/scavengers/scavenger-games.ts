@@ -247,6 +247,56 @@ const TWISTS: Record<TwistType, Twist> = {
 		},
 	} satisfies Twist<TwistType.Incognito>,
 
+	[TwistType.BlindIncognito]: {
+		name: "Blind Incognito",
+		id: TwistType.BlindIncognito,
+		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
+
+		onAnySubmitPriority: 4,
+		onAnySubmit(player, value) {
+			if (player.modData[TwistType.BlindIncognito].preCompleted) {
+				player.sendRoom(
+					`That may or may not be the right answer - if you aren't confident, you can try again!`
+				);
+				return true;
+			}
+		},
+
+		onCorrectAnswerPriority: 2, // Overrides Incognito
+		onCorrectAnswer(player, value) {
+			if (player.currentQuestion + 1 >= this.questions.length) {
+				player.currentQuestion++;
+				this.onComplete(player);
+
+				player.sendRoom(
+					`That may or may not be the right answer - if you aren't confident, you can try again!`
+				);
+				return true;
+			}
+		},
+
+		onIncorrectAnswerPriority: 1,
+		onIncorrectAnswer(player, value) {
+			if (player.currentQuestion + 1 >= this.questions.length) {
+				player.sendRoom(
+					`That may or may not be the right answer - if you aren't confident, you can try again!`
+				);
+				return false;
+			}
+		},
+
+		onHideCompletionPriority: 4,
+		onHideCompletion() {
+			return true;
+		},
+
+		onCompletePriority: 1,
+		onComplete(finish, player) {
+			player.completed = false; // Hide completion and store it in mod info instead
+			finish.modData[TwistType.BlindIncognito].preCompleted = true;
+		},
+	} satisfies Twist<TwistType.BlindIncognito>,
+
 	[TwistType.SpamFilter]: {
 		name: "Spam Filter",
 		id: TwistType.SpamFilter,
@@ -298,56 +348,6 @@ const TWISTS: Record<TwistType, Twist> = {
 			);
 		},
 	} satisfies Twist<TwistType.SpamFilter>,
-
-	[TwistType.BlindIncognito]: {
-		name: "Blind Incognito",
-		id: TwistType.BlindIncognito,
-		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
-
-		onAnySubmitPriority: 4,
-		onAnySubmit(player, value) {
-			if (player.modData[TwistType.BlindIncognito].preCompleted) {
-				player.sendRoom(
-					`That may or may not be the right answer - if you aren't confident, you can try again!`
-				);
-				return true;
-			}
-		},
-
-		onCorrectAnswerPriority: 2, // Overrides Incognito
-		onCorrectAnswer(player, value) {
-			if (player.currentQuestion + 1 >= this.questions.length) {
-				player.currentQuestion++;
-				this.onComplete(player);
-
-				player.sendRoom(
-					`That may or may not be the right answer - if you aren't confident, you can try again!`
-				);
-				return true;
-			}
-		},
-
-		onIncorrectAnswerPriority: 1,
-		onIncorrectAnswer(player, value) {
-			if (player.currentQuestion + 1 >= this.questions.length) {
-				player.sendRoom(
-					`That may or may not be the right answer - if you aren't confident, you can try again!`
-				);
-				return false;
-			}
-		},
-
-		onHideCompletionPriority: 4,
-		onHideCompletion() {
-			return true;
-		},
-
-		onCompletePriority: 1,
-		onComplete(finish, player) {
-			player.completed = false; // Hide completion and store it in mod info instead
-			finish.modData[TwistType.BlindIncognito].preCompleted = true;
-		},
-	} satisfies Twist<TwistType.BlindIncognito>,
 
 	[TwistType.TimeTrial]: {
 		name: "Time Trial",
