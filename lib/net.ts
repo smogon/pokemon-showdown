@@ -59,8 +59,8 @@ export class NetStream extends Streams.ReadWriteStream {
 		let body = opts.body;
 		if (body && typeof body !== 'string') {
 			if (!opts.headers) opts.headers = {};
-			if (!(opts.headers as http.OutgoingHttpHeaders)['Content-Type']) {
-				(opts.headers as http.OutgoingHttpHeaders)['Content-Type'] = 'application/x-www-form-urlencoded';
+			if (!opts.headers['Content-Type']) {
+				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 			}
 			body = NetStream.encodeQuery(body);
 		}
