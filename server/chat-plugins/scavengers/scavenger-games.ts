@@ -324,7 +324,7 @@ const TWISTS: Record<TwistType, Twist> = {
 			if (totalTime > 60) finish.blitz = false;
 
 			finish.modData[TwistType.SpamFilter].totalTime = totalTime;
-			finish.modData[TwistType.SpamFilter].penalty = penalty;
+			finish.modData[TwistType.SpamFilter].penalty = penalty * 1000;
 		},
 
 		onConfirmCompletion(player, _time, _blitz, place, result) {
