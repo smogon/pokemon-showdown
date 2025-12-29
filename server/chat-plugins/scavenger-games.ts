@@ -517,7 +517,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
-		onCorrectAnswerPriority: 1,
+		onCorrectAnswerPriority: 2, // Overrides Incognito
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent("PreComplete", player);
@@ -902,8 +902,6 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			const guesses = this.modData[TwistType.Minesweeper].guesses[curr];
 			if (!guesses[player.id]) guesses[player.id] = new Set();
 			guesses[player.id].add(sanitizeAnswer(value));
-
-			throw new Chat.ErrorMessage("That is not the answer - try again!");
 		},
 
 		onShowEndBoard(endedBy) {
@@ -1549,7 +1547,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onCorrectAnswerPriority: 69,
+			onCorrectAnswerPriority: 1,
 			onCorrectAnswer(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
