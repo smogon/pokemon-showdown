@@ -25,7 +25,7 @@ jobs:
         # Please freely bump this version (and the check in `pokemon-showdown`
         # and `server/index.ts`) if you want to use features from newer versions;
         # this is purely for our own reference, not to constrain programmers.
-        node-version: ['18.x']
+        node-version: ['22.x']
 
     steps:
     - uses: actions/checkout@v4

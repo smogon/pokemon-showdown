@@ -54,11 +54,7 @@ try {
 
 // I've gotten enough reports by people who don't use the launch
 // script that this is worth repeating here
-try {
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-	fetch;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-} catch (e) {
+if (!Set.prototype.intersection) {
 	throw new Error("We require Node.js version 22 or later; you're using " + process.version);
 }
 

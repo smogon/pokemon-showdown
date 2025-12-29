@@ -9,7 +9,7 @@
  */
 
 import { FS, Utils } from '../../lib';
-import { ScavMods, TwistType, type Twist } from './scavenger-games';
+import { INVALID_TWIST_COMBOS, ScavMods, TwistType, type Twist } from './scavenger-games';
 import { type ChatHandler } from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
@@ -36,20 +36,21 @@ export type ModEvents = {
 	AfterEnd: (isReset?: boolean) => void,
 	AfterLoad: () => void,
 	AnySubmit: (player: Scavenger, value: string, originalValue: string) => void,
-	Complete: (player: Scavenger, time: string, blitz: boolean) => void,
+	Complete: (finish: ScavengerHuntFinish, player: Scavenger) => ScavengerHuntFinish | boolean | void,
 	ConfirmCompletion: (
 		player: Scavenger,
 		time: string,
 		blitz: boolean,
 		place: string,
 		result: ScavengerHuntFinish
-	) => string | void,
+	) => string | 'silent' | void,
 	Connect: (user: User, connection: Connection) => void,
 	CorrectAnswer: (player: Scavenger, value: string) => void,
 	CreateCallback: () => string | undefined,
 	EditQuestion: (questionNumber: number, questionAnswer: string, value: string) => void,
 	End: (isReset?: boolean) => void,
 	GivePoints: () => boolean,
+	HideCompletion: () => boolean,
 	IncorrectAnswer: (player: Scavenger, value: string) => void,
 	Join: (player: User) => void,
 	Leave: (player: Scavenger) => void,
@@ -353,7 +354,13 @@ class ScavengerHuntDatabase {
 	}
 }
 
-export interface ScavengerHuntFinish { name: string; id: string; time: string; blitz?: boolean }
+export interface ScavengerHuntFinish {
+	name: string;
+	id: string;
+	time: string;
+	blitz?: boolean;
+	modData: Record<string, any>;
+}
 export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 	override readonly gameid = 'scavengerhunt' as ID;
 	override title = 'Scavenger Hunt';
@@ -439,7 +446,18 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 
 	loadMods(modInformation: any) {
 		if (Array.isArray(modInformation)) {
-			for (const mod of modInformation) {
+			const modIds = new Set(modInformation.map(toID)) as Set<TwistType>;
+			if (modIds.has(TwistType.TeamScavengers)) {
+				if (modIds.size >= 2) return this.announce("Team Scavengers cannot be used with other twists.");
+			}
+			for (const invalidCombo of INVALID_TWIST_COMBOS) {
+				const firstMatch = invalidCombo[0].intersection(modIds);
+				const secondMatch = invalidCombo[1].intersection(modIds);
+				if (firstMatch.size > 0 && secondMatch.size > 0) {
+					return this.announce(`${[...firstMatch.values()]} and ${[...secondMatch.values()]} cannot be used together.`);
+				}
+			}
+			for (const mod of modIds) {
 				this.loadMod(mod);
 			}
 		} else {
@@ -741,17 +759,27 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 			(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
 
 		player.completed = true;
-		let result = this.runEvent('Complete', player, time, blitz);
+		const base: ScavengerHuntFinish = { name: player.name, id: player.id, time, blitz, modData: {} };
+		this.modsList.forEach(mod => {
+			base.modData[mod] = {};
+		});
+		let result = this.runEvent('Complete', base, player);
 		if (result === true) return;
-		result = result || { name: player.name, id: player.id, time, blitz };
-		this.completed.push(result);
+		result = result || base;
+		const hiddenFinish = this.runEvent('HideCompletion');
+		if (hiddenFinish) (this.preCompleted ??= []).push(result);
+		else this.completed.push(result);
 		const place = Utils.formatOrder(this.completed.length);
 
-		const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
-		this.announce(
-			completionMessage ||
-			Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
-		);
+		if (!hiddenFinish) {
+			const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
+			if (completionMessage) {
+				this.announce(
+					completionMessage ||
+					Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
+				);
+			}
+		}
 
 		player.destroy(); // remove from user.games;
 	}
@@ -1513,7 +1541,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
 		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
-		if (game.modsList.includes('timetrial')) {
+		if (game.modsList.includes(TwistType.TimeTrial)) {
 			const finisher = game.completed.find(player => player.id === user.id);
 			const timeTrialMsg = finisher ?
 				`You finished the hunt in: ${finisher.time}.` :
