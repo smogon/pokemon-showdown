@@ -554,15 +554,16 @@ const TWISTS: Record<TwistType, Twist> = {
 
 			const place = Utils.formatOrder(this.completed.length);
 
-			const hideFinish = this.runEvent('HideCompletion');
+			const hideFinish = this.runEvent("HideCompletion");
 
-			this.announce(
-				Utils.html`<em>${
-					finish.name
-				}</em> is the ${place} player to finish the hunt! (${takenTime}${
-					finish.blitz ? " - BLITZ" : ""
-				})`
-			);
+			if (!hideFinish)
+				this.announce(
+					Utils.html`<em>${
+						finish.name
+					}</em> is the ${place} player to finish the hunt! (${takenTime}${
+						finish.blitz ? " - BLITZ" : ""
+					})`
+				);
 			Utils.sortBy(
 				this.completed,
 				entry => entry.modData[TwistType.TimeTrial].duration ?? Infinity
@@ -744,7 +745,12 @@ const TWISTS: Record<TwistType, Twist> = {
 		desc: "The huntmaker adds 'mines' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.",
 		onLoadPriority: 4,
 		onLoad(q) {
-			for (let i = 0; i < q.length; i += 2) {
+			// Don't require mines for Time Trial
+			for (
+				let i = this.modsList.includes(TwistType.TimeTrial) ? 2 : 0;
+				i < q.length;
+				i += 2
+			) {
 				const answer = q[i + 1] as string[];
 				if (answer.filter(ans => ans.startsWith("!")).length === 0) {
 					throw new Chat.ErrorMessage(
@@ -900,15 +906,17 @@ const TWISTS: Record<TwistType, Twist> = {
 								)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(
 									q.answer.join(" / ")
 								)}</em>]</span><br/>` +
-								`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[
-									i
-								]
-									.map(({ mine, users }) =>
-										Utils.escapeHTML(
-											`${mine}: ${users.join(" / ") || "-"}`
+								(mines[i].length > 0 ?
+									`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[
+										i
+									]
+										.map(({ mine, users }) =>
+											Utils.escapeHTML(
+												`${mine}: ${users.join(" / ") || "-"}`
+											)
 										)
-									)
-									.join("<br />")}</details>`
+										.join("<br />")}</details>` :
+									"")
 						)
 						.join("<br />")}` +
 						`</details>`
