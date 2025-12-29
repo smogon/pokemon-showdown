@@ -2,9 +2,26 @@
  * Scavengers Games Plugin
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This plugin stores the different possible game modes and twists that take place in scavengers room
+ * This plugin stores the different possible game modes and twists that take place in Scavengers.
  *
  * @license MIT license
+ */
+
+/**
+ * Note for developers:
+ *
+ * Priorities for twists follow the following convention.
+ * * 5 - Highest priority, for cases where the twist is absolutely necessary to the game. Only to be used
+ *       to overwrite a '4' if needed.
+ * * 4 - Very high priority, reserved for cases where 'true' may be returned. These may not have any other
+ *       logic in the handler.
+ * * 3 - Unused for now; reserved for future use.
+ * * 2 - High priority, for when a twist needs to specifically override another twist.
+ * * 1 - Above default priority; for when a twist should be applied before the default logic.
+ * * 0 - For when the order of priority doesn't matter and the side effects have no effect on other logic.
+ * *-1 - For when something must be run AFTER default logic.
+ *
+ * * 69 - I added this for debugging; if you see this, please sue PartMan.
  */
 
 import {
@@ -258,7 +275,6 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			this.modData[TwistType.PerfectScore].leftGame.add(player.id);
 		},
 
-		onSubmitPriority: 1,
 		onSubmit(player, value) {
 			const currentQuestion = player.currentQuestion;
 			const modData = player.modData[TwistType.PerfectScore];
@@ -281,7 +297,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			return { name: player.name, id: player.id, time, blitz, isPerfect };
 		},
 
-		onAfterEndPriority: 1,
+		onAfterEndPriority: 69,
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const perfect = this.completed
@@ -302,6 +318,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "bonusround",
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
 
+		// TODO: this validation needs to be done without huntLocked
+		onLoadPriority: 4,
 		onLoad(q: (string | string[])[]) {
 			if (q.length < 8) {
 				throw new Chat.ErrorMessage(
@@ -309,7 +327,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				);
 			}
 		},
-		onLoadPriority: 2,
+		onAfterLoadPriority: 4,
 		onAfterLoad() {
 			if (this.questions.length === 3) {
 				this.announce(
@@ -322,6 +340,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
+		onAnySubmitPriority: 4,
 		onAnySubmit(player) {
 			if (this.huntLocked) {
 				player.sendRoom(
@@ -331,7 +350,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
-		onSubmitPriority: 1,
+		onSubmitPriority: 4,
 		onSubmit(player, value) {
 			const currentQuestion = player.currentQuestion;
 
@@ -352,7 +371,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			return { name: player.name, id: player.id, time, blitz, noSkipBonus };
 		},
 
-		onAfterEndPriority: 1,
+		onAfterEndPriority: 69,
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noSkip = this.completed
@@ -373,6 +392,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "incognito",
 		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room! Results will only be known at the end of the hunt.",
 
+		onCorrectAnswerPriority: 1,
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent("PreComplete", player);
@@ -487,6 +507,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "blindincognito",
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
 
+		onAnySubmitPriority: 4,
 		onAnySubmit(player, value) {
 			if (player.modData[TwistType.BlindIncognito].preCompleted) {
 				player.sendRoom(
@@ -496,6 +517,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
+		onCorrectAnswerPriority: 1,
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent("PreComplete", player);
@@ -507,6 +529,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
+		onIncorrectAnswerPriority: 1,
 		onIncorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				player.sendRoom(
@@ -554,6 +577,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "timetrial",
 		desc: "Time starts when the player starts the hunt!",
 
+		onAfterLoadPriority: 4,
 		onAfterLoad() {
 			if (this.questions.length === 3) {
 				this.announce(
@@ -646,6 +670,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "scavengersfeud",
 		name: "Scavengers Feud",
 		desc: "After completing the hunt, players will guess what the most common incorrect answer for each question is.",
+		onAfterLoadPriority: 4,
 		onAfterLoad() {
 			this.modData[TwistType.ScavengersFeud].guesses = {};
 			this.modData[TwistType.ScavengersFeud].incorrect = this.questions.map(
@@ -796,6 +821,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		id: "minesweeper",
 		name: "Minesweeper",
 		desc: "The huntmaker adds 'mines' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.",
+		onLoadPriority: 4,
 		onLoad(q) {
 			for (let i = 0; i < q.length; i += 2) {
 				const answer = q[i + 1] as string[];
@@ -811,7 +837,6 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				}
 			}
 		},
-		onLoadPriority: 2,
 		onAfterLoad() {
 			this.modData[TwistType.Minesweeper].guesses = this.questions.map(
 				() => ({})
@@ -992,7 +1017,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
-		onAfterEndPriority: 1,
+		onAfterEndPriority: 69,
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noMines = [];
@@ -1029,7 +1054,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
 			},
 
-			onJoinPriority: 1,
+			onJoinPriority: 4,
 			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				if (game.playerlist && !game.playerlist.includes(user.id)) {
@@ -1137,7 +1162,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.setTimer(1);
 			},
 
-			onJoinPriority: 1,
+			onJoinPriority: 4,
 			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				if (game.playerlist && !game.playerlist.includes(user.id)) {
@@ -1322,7 +1347,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}, 1000 * (maxTime + 5));
 			},
 
-			onJoinPriority: 1,
+			onJoinPriority: 4,
 			onJoin(user) {
 				if (this.modData[TwistType.JumpStart].answerLock) {
 					user.sendTo(this.room, `The hunt is not open for guesses yet!`);
@@ -1330,7 +1355,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onViewHuntPriority: 1,
+			onViewHuntPriority: 4,
 			onViewHunt(user) {
 				if (
 					this.modData[TwistType.JumpStart].answerLock &&
@@ -1456,6 +1481,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.allowRenames = false;
 			},
 
+			onViewHuntPriority: 2,
 			onViewHunt(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
@@ -1497,7 +1523,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onJoinPriority: 1,
+			onJoinPriority: 4,
 			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
@@ -1510,7 +1536,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onAfterLoadPriority: -9999,
+			onAfterLoadPriority: 4,
 			onAfterLoad() {
 				const game = this.room.scavgame!;
 
@@ -1518,11 +1544,12 @@ const MODES: { [k: string]: GameMode | string } = {
 					this.announce(
 						"Teams have not been set up yet. Please reset the hunt."
 					);
+					this.huntLocked = true;
+					return true;
 				}
 			},
 
-			// -1 so that blind incog takes precedence of this
-			onCorrectAnswerPriority: -1,
+			onCorrectAnswerPriority: 69,
 			onCorrectAnswer(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
