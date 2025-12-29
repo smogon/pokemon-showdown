@@ -11,7 +11,17 @@
 import { FS, Utils } from '../../../lib';
 import { INVALID_TWIST_COMBOS, ScavMods } from './scavenger-games';
 import type { ChatHandler } from '../../chat';
-import { type QueuedHunt, type FakeUser, type ScavengerHuntFinish, type ModEvents, type ModEvent, TwistType, GameModeType, type GameTypes, type Twist } from './types';
+import {
+	type QueuedHunt,
+	type FakeUser,
+	type ScavengerHuntFinish,
+	type ModEvents,
+	type ModEvent,
+	TwistType,
+	GameModeType,
+	type GameTypes,
+	type Twist,
+} from './types';
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
 const DEFAULT_POINTS: { [k: string]: number[] } = {
@@ -536,7 +546,9 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 	}
 
 	// returns whether the next action should be stopped
-	runEvent<E extends keyof ModEvents>(eventId: E, ...args: Parameters<ModEvents[E]>): ReturnType<ModEvents[E]> | true | undefined {
+	runEvent<E extends keyof ModEvents>(
+		eventId: E, ...args: Parameters<ModEvents[E]>
+	): ReturnType<ModEvents[E]> | true | undefined {
 		const events = this.mods[`on${eventId}`];
 		if (!events) return;
 
