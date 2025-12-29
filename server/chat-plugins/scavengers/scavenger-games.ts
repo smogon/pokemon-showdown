@@ -32,7 +32,7 @@ import {
 	type ScavengerHuntFinish,
 } from "./types";
 
-// Team Scavengers has all other twists disabled, apart from these combos
+// Team Scavengers has all other twists disabled, but we list all other combos here
 export const INVALID_TWIST_COMBOS: [
 	Set<TwistType | GameModeType>,
 	Set<TwistType | GameModeType>,

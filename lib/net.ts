@@ -17,6 +17,7 @@ export interface NetRequestOptions extends https.RequestOptions {
 	body?: string | PostData;
 	writable?: boolean;
 	query?: PostData;
+	headers?: http.OutgoingHttpHeaders & NodeJS.Dict<unknown>; // Node 22 lets headers be readonly string[]
 }
 
 export class HttpError extends Error {
@@ -58,8 +59,8 @@ export class NetStream extends Streams.ReadWriteStream {
 		let body = opts.body;
 		if (body && typeof body !== 'string') {
 			if (!opts.headers) opts.headers = {};
-			if (!opts.headers['Content-Type']) {
-				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			if (!(opts.headers as http.OutgoingHttpHeaders)['Content-Type']) {
+				(opts.headers as http.OutgoingHttpHeaders)['Content-Type'] = 'application/x-www-form-urlencoded';
 			}
 			body = NetStream.encodeQuery(body);
 		}
