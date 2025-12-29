@@ -39,27 +39,27 @@ export declare namespace Twists {
 	 */
 	export interface TwistedHunt<T extends TwistType = never>
 		extends Omit<ScavengerHunt, "playerTable"> {
-		modData: T extends keyof CommonModData
-			? Required<Pick<CommonModData, T>> & CommonModData
-			: CommonModData;
+		modData: T extends keyof CommonModData ?
+			Required<Pick<CommonModData, T>> & CommonModData :
+			CommonModData;
 		playerTable: Record<string, TwistPlayer<T>>;
 		completed: (ScavengerHuntFinish &
 			Partial<
 				PerfectScoreResult &
-					BonusRoundResult &
-					SpamFilterResult &
-					TimeTrialResult
+				BonusRoundResult &
+				SpamFilterResult &
+				TimeTrialResult
 			>)[];
 	}
 
 	type CommonModData = Partial<{
-		[TwistType.PerfectScore]: PerfectScoreModData;
-		[TwistType.Incognito]: IncognitoModData;
-		[TwistType.TimeTrial]: TimeTrialModData;
-		[TwistType.ScavengersFeud]: ScavengersFeudModData;
-		[TwistType.Pointless]: PointlessModData;
-		[TwistType.Minesweeper]: MinesweeperModData;
-		[TwistType.JumpStart]: JumpStartModData;
+		[TwistType.PerfectScore]: PerfectScoreModData,
+		[TwistType.Incognito]: IncognitoModData,
+		[TwistType.TimeTrial]: TimeTrialModData,
+		[TwistType.ScavengersFeud]: ScavengersFeudModData,
+		[TwistType.Pointless]: PointlessModData,
+		[TwistType.Minesweeper]: MinesweeperModData,
+		[TwistType.JumpStart]: JumpStartModData,
 	}>;
 	export interface PerfectScoreModData {
 		leftGame: Set<string>;
@@ -68,7 +68,7 @@ export declare namespace Twists {
 		preCompleted: ScavengerHuntFinish[];
 	}
 	export interface TimeTrialModData {
-		altIps: Record<string, { id: string; name: string }>;
+		altIps: Record<string, { id: string, name: string }>;
 		startTimes: Record<string, number>;
 	}
 	export interface ScavengersFeudModData {
@@ -104,17 +104,17 @@ export declare namespace Twists {
 
 	type CommonTwistPlayer = Scavenger & {
 		modData: Partial<{
-			[TwistType.PerfectScore]: PerfectScorePlayer;
-			[TwistType.BonusRound]: BonusRoundPlayer;
-			[TwistType.BlindIncognito]: BlindIncognitoPlayer;
-			[TwistType.SpamFilter]: SpamFilterPlayer;
-			[TwistType.Minesweeper]: MinesweeperPlayer;
-		}>;
+			[TwistType.PerfectScore]: PerfectScorePlayer,
+			[TwistType.BonusRound]: BonusRoundPlayer,
+			[TwistType.BlindIncognito]: BlindIncognitoPlayer,
+			[TwistType.SpamFilter]: SpamFilterPlayer,
+			[TwistType.Minesweeper]: MinesweeperPlayer,
+		}>,
 	};
 	export type TwistPlayer<T extends TwistType = never> = CommonTwistPlayer & {
-		modData: T extends keyof CommonTwistPlayer["modData"]
-			? Required<Pick<CommonTwistPlayer["modData"], T>>
-			: unknown;
+		modData: T extends keyof CommonTwistPlayer["modData"] ?
+			Required<Pick<CommonTwistPlayer["modData"], T>> :
+			unknown,
 	};
 
 	export interface PerfectScorePlayer extends Scavenger {
@@ -130,24 +130,24 @@ export declare namespace Twists {
 		preCompleted?: boolean;
 	}
 	export interface MinesweeperPlayer extends Scavenger {
-		mines: { index: number; mine: string }[];
+		mines: { index: number, mine: string }[];
 	}
 }
 
 type ScavengerAsTwistPlayer<
 	Params extends readonly unknown[],
-	T extends TwistType = never
+	T extends TwistType = never,
 > = {
-	[P in keyof Params]: Params[P] extends Scavenger
-		? Twists.TwistPlayer<T>
-		: Params[P];
+	[P in keyof Params]: Params[P] extends Scavenger ?
+		Twists.TwistPlayer<T> :
+		Params[P];
 };
 
 export type Twist<T extends TwistType = never> = {
-	name: string;
-	id: string;
-	isGameMode?: true;
-	desc?: string;
+	name: string,
+	id: string,
+	isGameMode?: true,
+	desc?: string,
 } & {
 	[E in keyof ModEvents as `on${E}`]?: (
 		this: Twists.TwistedHunt<T>,
@@ -225,7 +225,7 @@ class Leaderboard {
 				} as { rank: number } & AnyObject;
 			}); // identify ties
 			if (userid) {
-				const rank = ladder.find((entry) => toID(entry.name) === userid);
+				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
 			} else {
 				resolve(ladder);
@@ -237,7 +237,7 @@ class Leaderboard {
 		const data = await this.visualize("points");
 		return `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data
 			.map(
-				(line) =>
+				line =>
 					`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`
 			)
 			.join("")}</table></div>`;
@@ -285,8 +285,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const perfect = this.completed
-				.filter((entry) => entry.isPerfect)
-				.map((entry) => entry.name);
+				.filter(entry => entry.isPerfect)
+				.map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(
 					Utils.html`${Chat.toListString(perfect)} ${
@@ -356,8 +356,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noSkip = this.completed
-				.filter((entry) => entry.noSkipBonus)
-				.map((entry) => entry.name);
+				.filter(entry => entry.noSkipBonus)
+				.map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(
 					Utils.html`${Chat.toListString(noSkip)} ${
@@ -409,9 +409,9 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			const result: ScavengerHuntFinish =
 				this.runEvent("Complete", player, time, blitz) || fallbackResult;
 
-			this.preCompleted = this.preCompleted
-				? [...this.preCompleted, result]
-				: [result];
+			this.preCompleted = this.preCompleted ?
+				[...this.preCompleted, result] :
+				[result];
 			player.completed = true;
 			player.destroy();
 		},
@@ -467,9 +467,9 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onConfirmCompletion(player, _time, _blitz, place, result) {
 			const { blitz, time } = result;
 			const incorrect = player.modData[TwistType.SpamFilter].incorrect;
-			const deductionMessage = incorrect?.length
-				? Chat.count(incorrect, "incorrect guesses", "incorrect guess")
-				: "Perfect!";
+			const deductionMessage = incorrect?.length ?
+				Chat.count(incorrect, "incorrect guesses", "incorrect guess") :
+				"Perfect!";
 			return `<em>${Utils.escapeHTML(
 				player.name
 			)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${
@@ -478,7 +478,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		},
 
 		onEnd() {
-			Utils.sortBy(this.completed, (entry) => entry.totalTime ?? -1);
+			Utils.sortBy(this.completed, entry => entry.totalTime ?? -1);
 		},
 	} satisfies Twist<TwistType.SpamFilter>,
 
@@ -538,9 +538,9 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			const result: ScavengerHuntFinish =
 				this.runEvent("Complete", player, time, blitz) || fallbackResult;
 
-			this.preCompleted = this.preCompleted
-				? [...this.preCompleted, result]
-				: [result];
+			this.preCompleted = this.preCompleted ?
+				[...this.preCompleted, result] :
+				[result];
 			player.modData[TwistType.BlindIncognito].preCompleted = true;
 		},
 
@@ -570,7 +570,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			const modData = this.modData[TwistType.TimeTrial];
 			if (!Config.noipchecks) {
 				const altIp = user.ips?.find(
-					(ip) => modData.altIps[ip] && modData.altIps[ip].id !== user.id
+					ip => modData.altIps[ip] && modData.altIps[ip].id !== user.id
 				);
 				if (altIp) {
 					user.sendTo(
@@ -635,7 +635,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 					blitz ? " - BLITZ" : ""
 				})`
 			);
-			Utils.sortBy(this.completed, (entry) => entry.duration ?? Infinity);
+			Utils.sortBy(this.completed, entry => entry.duration ?? Infinity);
 
 			player.destroy(); // remove from user.games;
 			return true;
@@ -701,8 +701,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				const maxValue = collection[0]?.count || 0;
 
 				const matches = collection
-					.filter((pair) => pair.count === maxValue)
-					.map((pair) => pair.value);
+					.filter(pair => pair.count === maxValue)
+					.map(pair => pair.value);
 
 				const matchedPlayers = [];
 				for (const playerid in this.modData[TwistType.ScavengersFeud]
@@ -714,14 +714,14 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				}
 
 				// display the data
-				const matchDisplay = matches.length
-					? matches.join(", ")
-					: "No wrong answers!";
-				const playerDisplay = matches.length
-					? matchedPlayers.length
-						? `- ${matchedPlayers.join(", ")}`
-						: "- No one guessed correctly!"
-					: "";
+				const matchDisplay = matches.length ?
+					matches.join(", ") :
+					"No wrong answers!";
+				const playerDisplay = matches.length ?
+					matchedPlayers.length ?
+						`- ${matchedPlayers.join(", ")}` :
+						"- No one guessed correctly!" :
+					"";
 				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
 			}
 
@@ -763,22 +763,22 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				const list = Object.entries<string[]>(data).map(
 					([value, players]) => ({ players, count: players.length, value })
 				);
-				const minValue = Math.min(...list.map((entry) => entry.count));
+				const minValue = Math.min(...list.map(entry => entry.count));
 
-				const minEntries = list.filter((entry) => entry.count === minValue);
+				const minEntries = list.filter(entry => entry.count === minValue);
 				const matchDisplay = minEntries
-					.map((entry) =>
+					.map(entry =>
 						this.questions[idx].answer.find(
-							(answer) => toID(answer) === entry.value
+							answer => toID(answer) === entry.value
 						)
 					)
 					.join(", ");
 				const playerDisplay = minEntries
-					.flatMap((entry) =>
+					.flatMap(entry =>
 						entry.players.map(
-							(foundPlayer) =>
+							foundPlayer =>
 								this.players.find(
-									(player) => player.id === foundPlayer
+									player => player.id === foundPlayer
 								)!.name
 						)
 					)
@@ -799,12 +799,12 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onLoad(q) {
 			for (let i = 0; i < q.length; i += 2) {
 				const answer = q[i + 1] as string[];
-				if (answer.filter((ans) => ans.startsWith("!")).length === 0) {
+				if (answer.filter(ans => ans.startsWith("!")).length === 0) {
 					throw new Chat.ErrorMessage(
 						`No mines were added for question #${i / 2 + 1}.`
 					);
 				}
-				if (answer.filter((ans) => !ans.startsWith("!")).length === 0) {
+				if (answer.filter(ans => !ans.startsWith("!")).length === 0) {
 					throw new Chat.ErrorMessage(
 						`No correct answers were added for question #${i / 2 + 1}.`
 					);
@@ -819,10 +819,10 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			this.modData[TwistType.Minesweeper].mines = [];
 			for (const question of this.questions) {
 				this.modData[TwistType.Minesweeper].mines.push(
-					question.answer.filter((ans) => ans.startsWith("!"))
+					question.answer.filter(ans => ans.startsWith("!"))
 				);
 				question.answer = question.answer.filter(
-					(ans) => !ans.startsWith("!")
+					ans => !ans.startsWith("!")
 				);
 			}
 		},
@@ -833,7 +833,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 
 			let answer: string[] = [];
 			if (questionAnswer === "answer") {
-				answer = value.split(";").map((p) => p.trim());
+				answer = value.split(";").map(p => p.trim());
 			}
 
 			if (
@@ -850,9 +850,9 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			if (questionAnswer === "answer") {
 				// These two lines are the only difference from the original
 				this.modData[TwistType.Minesweeper].mines[questionNumber] =
-					answer.filter((ans) => ans.startsWith("!"));
+					answer.filter(ans => ans.startsWith("!"));
 				this.questions[questionNumber].answer = answer.filter(
-					(ans) => !ans.startsWith("!")
+					ans => !ans.startsWith("!")
 				);
 			} else {
 				this.questions[questionNumber].hint = value;
@@ -884,14 +884,14 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onShowEndBoard(endedBy) {
 			const sliceIndex = this.gameType === "official" ? 5 : 3;
 			const hosts = Chat.toListString(
-				this.hosts.map((h) => `<em>${Utils.escapeHTML(h.name)}</em>`)
+				this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`)
 			);
 
-			const mines: { mine: string; users: string[] }[][] = [];
+			const mines: { mine: string, users: string[] }[][] = [];
 
 			for (const mineSet of this.modData[TwistType.Minesweeper].mines) {
 				mines.push(
-					mineSet.map((mine) => ({
+					mineSet.map(mine => ({
 						mine: mine.substr(1),
 						users: [] as string[],
 					}))
@@ -903,7 +903,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				const playerMines = player.modData[TwistType.Minesweeper].mines;
 				for (const { index, mine } of playerMines) {
 					mines[index]
-						.find((obj) => obj.mine === mine)
+						.find(obj => obj.mine === mine)
 						?.users.push(player.name);
 				}
 			}
@@ -914,37 +914,37 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 				`The ${
 					this.gameType ? `${this.gameType} ` : ""
 				}scavenger hunt by ${hosts} was ended ${
-					endedBy
-						? "by " + Utils.escapeHTML(endedBy.name)
-						: "automatically"
+					endedBy ?
+						"by " + Utils.escapeHTML(endedBy.name) :
+						"automatically"
 				}.<br />` +
-					`${this.completed
-						.slice(0, sliceIndex)
-						.map(
-							(p, i) =>
-								`${Utils.formatOrder(
-									i + 1
-								)} place: <em>${Utils.escapeHTML(
-									p.name
-								)}</em> <span style="color: lightgreen;">[${
-									p.time
-								}]</span>.<br />`
-						)
-						.join("")}` +
+				`${this.completed
+					.slice(0, sliceIndex)
+					.map(
+						(p, i) =>
+							`${Utils.formatOrder(
+								i + 1
+							)} place: <em>${Utils.escapeHTML(
+								p.name
+							)}</em> <span style="color: lightgreen;">[${
+								p.time
+							}]</span>.<br />`
+					)
+					.join("")}` +
 					`${
-						this.completed.length > sliceIndex
-							? `Consolation Prize: ${this.completed
-									.slice(sliceIndex)
-									.map(
-										(e) =>
-											`<em>${Utils.escapeHTML(
-												e.name
-											)}</em> <span style="color: lightgreen;">[${
-												e.time
-											}]</span>`
-									)
-									.join(", ")}<br />`
-							: ""
+						this.completed.length > sliceIndex ?
+							`Consolation Prize: ${this.completed
+								.slice(sliceIndex)
+								.map(
+									e =>
+										`<em>${Utils.escapeHTML(
+											e.name
+										)}</em> <span style="color: lightgreen;">[${
+											e.time
+										}]</span>`
+								)
+								.join(", ")}<br />` :
+							""
 					}<br />` +
 					`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
 					`${this.questions
@@ -966,7 +966,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 									.join("<br />")}</details>`
 						)
 						.join("<br />")}` +
-					`</details>`
+						`</details>`
 			);
 			return true;
 		},
@@ -985,8 +985,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 						player.modData[TwistType.Minesweeper].mines = [];
 					player.modData[TwistType.Minesweeper].mines.push(
 						...mines
-							.filter((mine) => guesses.has(sanitizeAnswer(mine)))
-							.map((mine) => ({ index: q, mine: mine.substr(1) }))
+							.filter(mine => guesses.has(sanitizeAnswer(mine)))
+							.map(mine => ({ index: q, mine: mine.substr(1) }))
 					);
 				}
 			}
@@ -1054,46 +1054,46 @@ const MODES: { [k: string]: GameMode | string } = {
 
 				// elimination
 				if (!game.playerlist) {
-					game.playerlist = this.completed.map((entry) =>
+					game.playerlist = this.completed.map(entry =>
 						toID(entry.name)
 					);
 					this.announce(
 						`Round ${game.round} - ${Chat.toListString(
-							this.completed.map((p) => `<em>${p.name}</em>`)
+							this.completed.map(p => `<em>${p.name}</em>`)
 						)} have successfully completed the last hunt and have moved on to the next round!`
 					);
 				} else {
 					let eliminated = [];
-					const completed = this.completed.map((entry) =>
+					const completed = this.completed.map(entry =>
 						toID(entry.name)
 					) as string[];
 					if (completed.length === game.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
-						game.playerlist = game.playerlist.filter((userid) =>
+						game.playerlist = game.playerlist.filter(userid =>
 							completed.includes(userid)
 						);
 					} else {
 						eliminated = game.playerlist.filter(
-							(userid) => !completed.includes(userid)
+							userid => !completed.includes(userid)
 						);
 						for (const username of eliminated) {
 							const userid = toID(username);
 							game.playerlist = game.playerlist.filter(
-								(pid) => pid !== userid
+								pid => pid !== userid
 							);
 						}
 					}
 
 					this.announce(
 						`Round ${game.round} - ${Chat.toListString(
-							eliminated.map((n) => `<em>${n}</em>`)
+							eliminated.map(n => `<em>${n}</em>`)
 						)} ${Chat.plural(
 							eliminated,
 							"have",
 							"has"
 						)} been eliminated! ${Chat.toListString(
 							game.playerlist.map(
-								(p) => `<em>${this.playerTable[p].name}</em>`
+								p => `<em>${this.playerTable[p].name}</em>`
 							)
 						)} have successfully completed the last hunt and have moved on to the next round!`
 					);
@@ -1102,9 +1102,9 @@ const MODES: { [k: string]: GameMode | string } = {
 				// process end of game
 				if (game.playerlist.length === 1) {
 					const winningUser = Users.get(game.playerlist[0]);
-					const winner = winningUser
-						? winningUser.name
-						: game.playerlist[0];
+					const winner = winningUser ?
+						winningUser.name :
+						game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
 					game.destroy();
@@ -1162,37 +1162,37 @@ const MODES: { [k: string]: GameMode | string } = {
 				let eliminated: string[] = [];
 				if (!game.playerlist) {
 					game.playerlist = this.completed.map(
-						(entry) => toID(entry.name) as string
+						entry => toID(entry.name) as string
 					);
 				} else {
 					const completed = this.completed.map(
-						(entry) => toID(entry.name) as string
+						entry => toID(entry.name) as string
 					);
 					eliminated = game.playerlist.filter(
-						(userid) => !completed.includes(userid)
+						userid => !completed.includes(userid)
 					);
 					for (const username of eliminated) {
 						const userid = toID(username);
 						game.playerlist = game.playerlist.filter(
-							(pid) => pid !== userid
+							pid => pid !== userid
 						);
 					}
 				}
 
 				this.announce(
 					`Round ${game.round} - ${Chat.toListString(
-						eliminated.map((n) => `<em>${n}</em>`)
+						eliminated.map(n => `<em>${n}</em>`)
 					)} ${
-						eliminated.length
-							? `${Chat.plural(
-									eliminated,
-									"have",
-									"has"
-							  )} been eliminated!`
-							: ""
+						eliminated.length ?
+							`${Chat.plural(
+								eliminated,
+								"have",
+								"has"
+							)} been eliminated!` :
+							""
 					} ${Chat.toListString(
 						game.playerlist.map(
-							(p) => `<em>${this.playerTable[p].name}</em>`
+							p => `<em>${this.playerTable[p].name}</em>`
 						)
 					)} have successfully completed the last hunt and have moved on to the next round!`
 				);
@@ -1200,9 +1200,9 @@ const MODES: { [k: string]: GameMode | string } = {
 				// process end of game
 				if (game.playerlist.length === 1) {
 					const winningUser = Users.get(game.playerlist[0]);
-					const winner = winningUser
-						? winningUser.name
-						: game.playerlist[0];
+					const winner = winningUser ?
+						winningUser.name :
+						game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
 					game.destroy();
@@ -1239,7 +1239,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			onAfterEnd() {
 				const game = this.room.scavgame!;
 				for (const [i, completed] of this.completed
-					.map((e) => e.name)
+					.map(e => e.name)
 					.entries()) {
 					const points =
 						game.pointDistribution[i] ||
@@ -1330,11 +1330,12 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
+			onViewHuntPriority: 1,
 			onViewHunt(user) {
 				if (
 					this.modData[TwistType.JumpStart].answerLock &&
 					!(
-						this.hosts.some((h) => h.id === user.id) ||
+						this.hosts.some(h => h.id === user.id) ||
 						user.id === this.staffHostId
 					)
 				) {
@@ -1346,17 +1347,17 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (this.modData[TwistType.JumpStart].answerLock) {
 					return (
 						`|raw|<div class="broadcast-blue"><strong>${
-							["official", "unrated"].includes(this.gameType)
-								? "An"
-								: "A"
+							["official", "unrated"].includes(this.gameType) ?
+								"An" :
+								"A"
 						} ${this.gameType} ` +
 						`Scavenger Hunt by <em>${Utils.escapeHTML(
-							Chat.toListString(this.hosts.map((h) => h.name))
+							Chat.toListString(this.hosts.map(h => h.name))
 						)}</em> ` +
 						`has been started${
-							this.hosts.some((h) => h.id === this.staffHostId)
-								? ""
-								: ` by <em>${Utils.escapeHTML(this.staffHostName)}</em>`
+							this.hosts.some(h => h.id === this.staffHostId) ?
+								"" :
+								` by <em>${Utils.escapeHTML(this.staffHostName)}</em>`
 						}.` +
 						`<br />The first hint is currently being handed out to early finishers.`
 					);
@@ -1374,7 +1375,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				const game = this.room.scavgame!;
 				if (!reset) {
 					if (game.round === 0) {
-						game.completed = this.completed.map((entry) =>
+						game.completed = this.completed.map(entry =>
 							toID(entry.name)
 						);
 						game.round++;
@@ -1615,7 +1616,7 @@ export class ScavengerGameTemplate {
 
 	eliminate(userid: string) {
 		if (!this.playerlist?.includes(userid)) return false;
-		this.playerlist = this.playerlist.filter((pid) => pid !== userid);
+		this.playerlist = this.playerlist.filter(pid => pid !== userid);
 
 		if (this.leaderboard) delete this.leaderboard.data[userid];
 		return true;
