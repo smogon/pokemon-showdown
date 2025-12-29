@@ -2936,8 +2936,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Super Type Moves Rule', 'Data Preview', 'Sprite Viewer'],
 		banlist: [
-			'All Pokemon', 'Crystal Heart', 'Wild Heart', 'Bright Powder', 'Lax Incense',
-			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Double Team', 'Snow Cloak', 'Sand Veil',
+			'All Pokemon', 'Crystal Heart', 'Wild Heart',
+			'King\'s Rock', 'Razor Fang', 'Baton Pass',
 		],
 		unbanlist: [
 			'Arbrella', 'Krachiten', 'Scalaron', 'Rantler', 'Woolora', 'Albatrygon', 'Orchile',
