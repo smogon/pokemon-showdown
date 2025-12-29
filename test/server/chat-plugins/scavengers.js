@@ -187,6 +187,8 @@ describe('Scavengers', () => {
 
 	context('finishing a hunt', () => {
 		beforeEach(async function () {
+			this.room.log.log = []; // Reset chat logs
+
 			await runCommand(
 				this.staffUser,
 				"/starthunt PartMan | Question 1 | Answer 1 | Question 2 | Answer 2 | Question 3 | Answer 3; Answer 3 alt"
@@ -210,6 +212,16 @@ describe('Scavengers', () => {
 
 			await runCommand(this.user1, '/scavenge Answer 3');
 			assert.equal(player.completed, true);
+		});
+
+		it('should broadcast completion', async function () {
+			const log = this.room.log.log;
+			assert(!log.some(message => message.includes('<em>FakePart</em> has finished the hunt')));
+			await runCommand(this.user1, '/scavenge Answer 1');
+			await runCommand(this.user1, '/scavenge Answer 2');
+			await runCommand(this.user1, '/scavenge Answer 3');
+
+			assert(log.some(message => message.includes('<em>FakePart</em> has finished the hunt')));
 		});
 
 		it('should track completion order', async function () {
