@@ -50,12 +50,15 @@ try {
 }
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
-// can successfully print the "We require Node.js 22+" message.
+// can successfully print the "We require Node.js 24+" message.
 
 // I've gotten enough reports by people who don't use the launch
 // script that this is worth repeating here
 if (!Set.prototype.intersection) {
-	throw new Error("We require Node.js version 22 or later; you're using " + process.version);
+	// Set#intersection was introduced in Node 22, which is currently in maintenance
+	// Might as well ask for the most recent "Active LTS" to be safe
+	// https://nodejs.org/en/about/previous-releases
+	throw new Error("We require Node.js version 24 or later; you're using " + process.version);
 }
 
 try {
