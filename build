@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-try {
-	// fetch was introduced in Node 18, which is EOL,
-	// so we'll ask for the most recent "Active LTS" with it to be safe
-	// https://nodejs.org/en/about/previous-releases
-	fetch;
-} catch (e) {
+if (!Set.prototype.intersection) {
 	console.error("We require Node.js version 22 or later; you're using " + process.version);
 	process.exit(1);
 }

@@ -84,7 +84,6 @@ function showHelp() {
 }
 
 if (!Set.prototype.intersection) {
-	// Set.prototype.intersection was introduced in Node 22, though that's EOL
 	// https://nodejs.org/en/about/previous-releases
 	console.error("We require Node.js version 22 or later; you're using " + process.version);
 	process.exit(1);
