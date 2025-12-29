@@ -22,33 +22,15 @@
  * *-1 - For when something must be run AFTER all other logic. Must handle potential logic from previous twists.
  */
 
+import { sanitizeAnswer, ScavengerHunt, type Scavenger } from "./scavengers";
+import { Utils } from "../../../lib";
 import {
-	type ModEvents,
-	sanitizeAnswer,
-	ScavengerHunt,
-	type Scavenger,
+	TwistType,
+	GameModeType,
+	type Twist,
+	type GameMode,
 	type ScavengerHuntFinish,
-} from "./scavengers";
-import { Utils } from "../../lib";
-
-export enum TwistType {
-	PerfectScore = "perfectscore",
-	BonusRound = "bonusround",
-	Incognito = "incognito",
-	SpamFilter = "spamfilter",
-	BlindIncognito = "blindincognito",
-	TimeTrial = "timetrial",
-	ScavengersFeud = "scavengersfeud",
-	Minesweeper = "minesweeper",
-	Pointless = "pointless",
-}
-export enum GameModeType {
-	JumpStart = "jumpstart",
-	KOGames = "kogames",
-	ScavengerGames = "scavengergames",
-	PointRally = "pointrally",
-	TeamScavengers = "teamscavengers",
-}
+} from "./types";
 
 // Team Scavengers has all other twists disabled, apart from these combos
 export const INVALID_TWIST_COMBOS: [
@@ -57,126 +39,6 @@ export const INVALID_TWIST_COMBOS: [
 ][] = [
 	[new Set([TwistType.ScavengersFeud]), new Set([TwistType.BonusRound])], // Both insert a fourth question
 ];
-
-export declare namespace Twists {
-	/**
-	 * This is the base interface for any hunt that applies one or more twists.
-	 * In order to allow mods to stack, we need to make sure that hunt-level mod-specific data (eg: 'leftGame')
-	 * doesn't get affected by other mods. We also make sure that mod-specific data inside fields (eg: 'completed')
-	 * can all exist without conflicting keys.
-	 */
-	export interface TwistedHunt<T extends TwistType | GameModeType = never>
-		extends Omit<ScavengerHunt, "playerTable"> {
-		modData: T extends keyof CommonModData ?
-			Required<Pick<CommonModData, T>> & CommonModData :
-			CommonModData;
-		playerTable: Record<string, TwistPlayer<T>>;
-		completed: TwistResult<T>[];
-	}
-
-	type CommonModData = Partial<{
-		[TwistType.PerfectScore]: {
-			leftGame: Set<string>,
-		},
-		[TwistType.Incognito]: {
-			preCompleted: ScavengerHuntFinish[],
-		},
-		[TwistType.TimeTrial]: {
-			altIps: Record<string, { id: string, name: string }>,
-			startTimes: Record<string, number>,
-		},
-		[TwistType.ScavengersFeud]: {
-			guesses: Record<string, string[]>,
-			incorrect: Record<string, Set<string>>[],
-		},
-		[TwistType.Pointless]: {
-			correct: Record<string, string[]>[],
-		},
-		[TwistType.Minesweeper]: {
-			mines: string[][],
-			guesses: { [playerId: string]: Set<string> }[],
-		},
-		[GameModeType.JumpStart]: {
-			jumpstartTimers: NodeJS.Timeout[],
-			answerLock: boolean,
-		},
-	}>;
-
-	type CommonModResult = Partial<{
-		[TwistType.PerfectScore]: { isPerfect?: boolean },
-		[TwistType.BonusRound]: { noSkipBonus?: boolean },
-		[TwistType.SpamFilter]: { totalTime: number, penalty: number },
-		[TwistType.TimeTrial]: { duration: number },
-	}>;
-	export type TwistResult<T extends TwistType | GameModeType = never> =
-		ScavengerHuntFinish & {
-			modData: T extends keyof CommonModResult ?
-				Required<Pick<CommonModResult, T>> & CommonModResult :
-				CommonModResult,
-		};
-
-	type CommonTwistPlayer = Scavenger & {
-		modData: Partial<{
-			[TwistType.PerfectScore]: { answers: Record<number, string[]> },
-			[TwistType.BonusRound]: { skippedQuestion: boolean },
-			[TwistType.BlindIncognito]: { preCompleted?: boolean },
-			[TwistType.SpamFilter]: { incorrect: string[] },
-			[TwistType.Minesweeper]: { mines: { index: number, mine: string }[] },
-		}>,
-	};
-	export type TwistPlayer<T extends TwistType | GameModeType = never> =
-		CommonTwistPlayer & {
-			modData: T extends keyof CommonTwistPlayer["modData"] ?
-				Required<Pick<CommonTwistPlayer["modData"], T>> :
-				unknown,
-		};
-}
-
-type ScavengerAsTwistPlayer<
-	Params extends readonly unknown[],
-	T extends TwistType | GameModeType = never,
-> = {
-	[P in keyof Params]: Params[P] extends Scavenger ?
-		Twists.TwistPlayer<T> :
-		Params[P];
-};
-type ScavengerFinishAsTwistFinish<
-	Params extends readonly unknown[],
-	T extends TwistType | GameModeType = never,
-> = {
-	[P in keyof Params]: Params[P] extends ScavengerHuntFinish ?
-		Twists.TwistResult<T> :
-		Params[P];
-};
-export type Twist<T extends TwistType | GameModeType = never> = {
-	name: string,
-	id: TwistType | GameModeType,
-	isGameMode?: true,
-	desc?: string,
-} & {
-	[E in keyof ModEvents as `on${E}`]?: (
-		this: Twists.TwistedHunt<T>,
-		...args: ScavengerFinishAsTwistFinish<
-			ScavengerAsTwistPlayer<Parameters<ModEvents[E]>, T>,
-			T
-		>
-	) => ReturnType<ModEvents[E]>;
-} & {
-	[E in keyof ModEvents as `on${E}Priority`]?: number;
-};
-
-type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
-interface GameMode {
-	name: string;
-	id: string;
-	mod: Twist;
-	round?: number;
-	leaderboard?: true;
-	teamAnnounce?: GameModeFunction;
-	getPlayerTeam?: GameModeFunction;
-	advanceTeam?: GameModeFunction;
-	[k: string]: any;
-}
 
 function toSeconds(time: string) {
 	// hhmmss => ss

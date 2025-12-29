@@ -8,66 +8,16 @@
  * @license MIT license
  */
 
-import { FS, Utils } from '../../lib';
-import { GameModeType, INVALID_TWIST_COMBOS, ScavMods, TwistType, type Twist } from './scavenger-games';
-import { type ChatHandler } from '../chat';
-
-type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
-
-export interface QueuedHunt {
-	hosts: { id: string, name: string, noUpdate?: boolean }[];
-	questions: (string | string[])[];
-	isHTML: boolean;
-	staffHostId: string;
-	staffHostName: string;
-	gameType: GameTypes;
-}
-export interface FakeUser {
-	name: string;
-	id: string;
-	noUpdate?: boolean;
-}
-interface ModEvent {
-	priority: number;
-	exec: ModEvents[keyof ModEvents];
-}
-
-export type ModEvents = {
-	AfterEnd: (isReset?: boolean) => void,
-	AfterLoad: () => void,
-	AnySubmit: (player: Scavenger, value: string, originalValue: string) => void,
-	Complete: (finish: ScavengerHuntFinish, player: Scavenger) => ScavengerHuntFinish | boolean | void,
-	ConfirmCompletion: (
-		player: Scavenger,
-		time: string,
-		blitz: boolean,
-		place: string,
-		result: ScavengerHuntFinish
-	) => string | 'silent' | void,
-	Connect: (user: User, connection: Connection) => void,
-	CorrectAnswer: (player: Scavenger, value: string) => void,
-	CreateCallback: () => string | undefined,
-	EditQuestion: (questionNumber: number, questionAnswer: string, value: string) => void,
-	End: (isReset?: boolean) => void,
-	GivePoints: () => boolean,
-	HideCompletion: () => boolean,
-	IncorrectAnswer: (player: Scavenger, value: string) => void,
-	Join: (player: User) => void,
-	Leave: (player: Scavenger) => void,
-	Load: (questions: (string | string[])[]) => void,
-	NotifyChange: (num: number) => void,
-	PreComplete: (player: Scavenger) => void,
-	SendQuestion: (player: Scavenger, showHints?: boolean) => void,
-	ShowEndBoard: (endedBy?: User) => void,
-	Submit: (player: Scavenger, value: string, originalValue: string) => void,
-	ViewHunt: (user: User) => void,
-};
+import { FS, Utils } from '../../../lib';
+import { INVALID_TWIST_COMBOS, ScavMods } from './scavenger-games';
+import type { ChatHandler } from '../../chat';
+import { type QueuedHunt, type FakeUser, type ScavengerHuntFinish, type ModEvents, type ModEvent, TwistType, GameModeType, type GameTypes, type Twist } from './types';
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
 const DEFAULT_POINTS: { [k: string]: number[] } = {
 	official: [20, 15, 10, 5, 1],
 };
-const DEFAULT_BLITZ_POINTS: { [k: string]: number } = {
+const DEFAULT_BLITZ_POINTS: Record<string, number> = {
 	official: 10,
 };
 const DEFAULT_HOST_POINTS = 4;
@@ -354,13 +304,6 @@ class ScavengerHuntDatabase {
 	}
 }
 
-export interface ScavengerHuntFinish {
-	name: string;
-	id: string;
-	time: string;
-	blitz?: boolean;
-	modData: Record<string, any>;
-}
 export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 	override readonly gameid = 'scavengerhunt' as ID;
 	override title = 'Scavenger Hunt';
