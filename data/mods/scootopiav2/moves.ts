@@ -322,7 +322,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(pokemon, source) {
 			let b: BoostID;
 			let didBoost = false;
-			const negBoosts = {};
+			const negBoosts: Partial<Record<BoostID, number>> = {};
 			for (b in source.boosts) {
 				if (source.boosts[b] < 0) negBoosts[b] = source.boosts[b] * -1;
 				didBoost = true;

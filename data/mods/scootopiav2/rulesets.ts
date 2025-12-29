@@ -4,7 +4,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		name: 'Super Type Moves Rule',
 		desc: 'Prevents pokemon from using Crystal or Feral moves unless they have a matching type.',
 		onBeforeMove(pokemon, target, move) {
-			move = Dex.mod("scootopiav2").moves.get(move);
+			move = {
+				...Dex.mod("scootopiav2").moves.get(move),
+				hit: move.hit,
+			};
 			if (move.type === "Crystal" && !pokemon.hasType("Crystal")) return false;
 			if (move.type === "Feral" && !pokemon.hasType("Feral")) return false;
 		},
