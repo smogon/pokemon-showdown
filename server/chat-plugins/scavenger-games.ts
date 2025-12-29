@@ -41,13 +41,20 @@ export enum TwistType {
 	ScavengersFeud = "scavengersfeud",
 	Minesweeper = "minesweeper",
 	Pointless = "pointless",
-
+}
+export enum GameModeType {
 	JumpStart = "jumpstart",
+	KOGames = "kogames",
+	ScavengerGames = "scavengergames",
+	PointRally = "pointrally",
 	TeamScavengers = "teamscavengers",
 }
 
 // Team Scavengers has all other twists disabled, apart from these combos
-export const INVALID_TWIST_COMBOS: [Set<TwistType>, Set<TwistType>][] = [
+export const INVALID_TWIST_COMBOS: [
+	Set<TwistType | GameModeType>,
+	Set<TwistType | GameModeType>,
+][] = [
 	[new Set([TwistType.ScavengersFeud]), new Set([TwistType.BonusRound])], // Both insert a fourth question
 ];
 
@@ -58,7 +65,7 @@ export declare namespace Twists {
 	 * doesn't get affected by other mods. We also make sure that mod-specific data inside fields (eg: 'completed')
 	 * can all exist without conflicting keys.
 	 */
-	export interface TwistedHunt<T extends TwistType = never>
+	export interface TwistedHunt<T extends TwistType | GameModeType = never>
 		extends Omit<ScavengerHunt, "playerTable"> {
 		modData: T extends keyof CommonModData ?
 			Required<Pick<CommonModData, T>> & CommonModData :
@@ -89,7 +96,7 @@ export declare namespace Twists {
 			mines: string[][],
 			guesses: { [playerId: string]: Set<string> }[],
 		},
-		[TwistType.JumpStart]: {
+		[GameModeType.JumpStart]: {
 			jumpstartTimers: NodeJS.Timeout[],
 			answerLock: boolean,
 		},
@@ -101,7 +108,7 @@ export declare namespace Twists {
 		[TwistType.SpamFilter]: { totalTime: number, penalty: number },
 		[TwistType.TimeTrial]: { duration: number },
 	}>;
-	export type TwistResult<T extends TwistType = never> =
+	export type TwistResult<T extends TwistType | GameModeType = never> =
 		ScavengerHuntFinish & {
 			modData: T extends keyof CommonModResult ?
 				Required<Pick<CommonModResult, T>> & CommonModResult :
@@ -117,16 +124,17 @@ export declare namespace Twists {
 			[TwistType.Minesweeper]: { mines: { index: number, mine: string }[] },
 		}>,
 	};
-	export type TwistPlayer<T extends TwistType = never> = CommonTwistPlayer & {
-		modData: T extends keyof CommonTwistPlayer["modData"] ?
-			Required<Pick<CommonTwistPlayer["modData"], T>> :
-			unknown,
-	};
+	export type TwistPlayer<T extends TwistType | GameModeType = never> =
+		CommonTwistPlayer & {
+			modData: T extends keyof CommonTwistPlayer["modData"] ?
+				Required<Pick<CommonTwistPlayer["modData"], T>> :
+				unknown,
+		};
 }
 
 type ScavengerAsTwistPlayer<
 	Params extends readonly unknown[],
-	T extends TwistType = never,
+	T extends TwistType | GameModeType = never,
 > = {
 	[P in keyof Params]: Params[P] extends Scavenger ?
 		Twists.TwistPlayer<T> :
@@ -134,15 +142,15 @@ type ScavengerAsTwistPlayer<
 };
 type ScavengerFinishAsTwistFinish<
 	Params extends readonly unknown[],
-	T extends TwistType = never,
+	T extends TwistType | GameModeType = never,
 > = {
 	[P in keyof Params]: Params[P] extends ScavengerHuntFinish ?
 		Twists.TwistResult<T> :
 		Params[P];
 };
-export type Twist<T extends TwistType = never> = {
+export type Twist<T extends TwistType | GameModeType = never> = {
 	name: string,
-	id: string,
+	id: TwistType | GameModeType,
 	isGameMode?: true,
 	desc?: string,
 } & {
@@ -244,10 +252,10 @@ class Leaderboard {
 	}
 }
 
-const TWISTS: Partial<Record<TwistType, Twist>> = {
+const TWISTS: Record<TwistType, Twist> = {
 	[TwistType.PerfectScore]: {
 		name: "Perfect Score",
-		id: "perfectscore",
+		id: TwistType.PerfectScore,
 		desc: "Players who finish the hunt without submitting a single wrong answer get a shoutout!",
 
 		onAfterLoad() {
@@ -298,38 +306,18 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 
 	[TwistType.BonusRound]: {
 		name: "Bonus Round",
-		id: "bonusround",
+		id: TwistType.BonusRound,
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
 
-		// TODO: this validation needs to be done without huntLocked
-		onLoadPriority: 4,
-		onLoad(q: (string | string[])[]) {
-			if (q.length < 8) {
-				throw new Chat.ErrorMessage(
-					"This twist requires at least four questions. Please reset the hunt and make it again."
-				);
-			}
-		},
 		onAfterLoadPriority: 4,
 		onAfterLoad() {
 			if (this.questions.length === 3) {
-				this.announce(
-					"This twist requires at least four questions. Please reset the hunt and make it again."
+				throw new Chat.ErrorMessage(
+					"This twist requires at least four questions."
 				);
-				this.huntLocked = true;
 			} else {
 				this.questions[this.questions.length - 1].hint +=
 					" (You may choose to skip this question using ``/scavenge skip``.)";
-			}
-		},
-
-		onAnySubmitPriority: 4,
-		onAnySubmit(player) {
-			if (this.huntLocked) {
-				player.sendRoom(
-					"The hunt was not set up correctly. Please wait for the host to reset the hunt and create a new one."
-				);
-				return true;
 			}
 		},
 
@@ -372,13 +360,14 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 
 	[TwistType.Incognito]: {
 		name: "Incognito",
-		id: "incognito",
+		id: TwistType.Incognito,
 		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room! Results will only be known at the end of the hunt.",
 
 		onCorrectAnswerPriority: 1,
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
-				this.runEvent("PreComplete", player);
+				player.currentQuestion++;
+				this.onComplete(player);
 
 				player.sendRoom(
 					`Congratulations! You have gotten the correct answer.`
@@ -394,17 +383,11 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onHideCompletion() {
 			return true;
 		},
-
-		onEndPriority: 2,
-		onEnd() {
-			this.completed = this.preCompleted || [];
-		},
 	} satisfies Twist<TwistType.Incognito>,
 
 	[TwistType.SpamFilter]: {
 		name: "Spam Filter",
-		id: "spamfilter",
-
+		id: TwistType.SpamFilter,
 		desc: "Every wrong answer adds 30 seconds to your final time!",
 
 		onIncorrectAnswer(player, value) {
@@ -456,7 +439,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 
 	[TwistType.BlindIncognito]: {
 		name: "Blind Incognito",
-		id: "blindincognito",
+		id: TwistType.BlindIncognito,
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct! You may be in for a nasty surprise when the hunt ends!",
 
 		onAnySubmitPriority: 4,
@@ -472,7 +455,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 		onCorrectAnswerPriority: 2, // Overrides Incognito
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
-				this.runEvent("PreComplete", player);
+				player.currentQuestion++;
+				this.onComplete(player);
 
 				player.sendRoom(
 					`That may or may not be the right answer - if you aren't confident, you can try again!`
@@ -491,29 +475,29 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
+		onHideCompletionPriority: 4,
+		onHideCompletion() {
+			return true;
+		},
+
 		onCompletePriority: 1,
 		onComplete(finish, player) {
 			player.completed = false; // Hide completion and store it in mod info instead
 			finish.modData[TwistType.BlindIncognito].preCompleted = true;
 		},
-
-		onEnd() {
-			this.completed = this.preCompleted || [];
-		},
 	} satisfies Twist<TwistType.BlindIncognito>,
 
 	[TwistType.TimeTrial]: {
 		name: "Time Trial",
-		id: "timetrial",
+		id: TwistType.TimeTrial,
 		desc: "Time starts when the player starts the hunt!",
 
 		onAfterLoadPriority: 4,
 		onAfterLoad() {
 			if (this.questions.length === 3) {
-				this.announce(
-					"This twist requires at least four questions. Please reset the hunt and make it again."
+				throw new Chat.ErrorMessage(
+					"This twist requires at least four questions."
 				);
-				this.huntLocked = true;
 			}
 			const modData = this.modData[TwistType.TimeTrial];
 			modData.altIps = {};
@@ -559,16 +543,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			}
 		},
 
-		onAnySubmit(player) {
-			if (this.huntLocked) {
-				player.sendRoom(
-					"The hunt was not set up correctly. Please wait for the host to reset the hunt and create a new one."
-				);
-				return true;
-			}
-		},
-
-		onCompletePriority: -1, // Handles cases from SpamFilter
+		onCompletePriority: -1, // Handles cases from SpamFilter and the Incognitos
 		onComplete(finish, player) {
 			const now = Date.now();
 			const takenTime =
@@ -578,6 +553,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 			this.completed.push(finish);
 
 			const place = Utils.formatOrder(this.completed.length);
+
+			const hideFinish = this.runEvent('HideCompletion');
 
 			this.announce(
 				Utils.html`<em>${
@@ -611,8 +588,8 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 	} satisfies Twist<TwistType.TimeTrial>,
 
 	[TwistType.ScavengersFeud]: {
-		id: "scavengersfeud",
 		name: "Scavengers Feud",
+		id: TwistType.ScavengersFeud,
 		desc: "After completing the hunt, players will guess what the most common incorrect answer for each question is.",
 		onAfterLoadPriority: 4,
 		onAfterLoad() {
@@ -701,7 +678,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 	} satisfies Twist<TwistType.ScavengersFeud>,
 
 	[TwistType.Pointless]: {
-		id: "pointless",
+		id: TwistType.Pointless,
 		name: "Pointless",
 		desc: "Players get bonus points for guessing the least commonly guessed answers.",
 		onAfterLoad() {
@@ -762,7 +739,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 	} satisfies Twist<TwistType.Pointless>,
 
 	[TwistType.Minesweeper]: {
-		id: "minesweeper",
+		id: TwistType.Minesweeper,
 		name: "Minesweeper",
 		desc: "The huntmaker adds 'mines' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.",
 		onLoadPriority: 4,
@@ -982,7 +959,7 @@ const TWISTS: Partial<Record<TwistType, Twist>> = {
 	} satisfies Twist<TwistType.Minesweeper>,
 };
 
-const MODES: { [k: string]: GameMode | string } = {
+const MODES: Record<GameModeType | string, GameMode | string> = {
 	ko: "kogames",
 	kogames: {
 		name: "KO Games",
@@ -990,7 +967,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 		mod: {
 			name: "KO Games",
-			id: "KO Games",
+			id: GameModeType.KOGames,
 			isGameMode: true,
 
 			onLoad() {
@@ -1097,7 +1074,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 		mod: {
 			name: "Scavenger Games",
-			id: "scavengergames",
+			id: GameModeType.ScavengerGames,
 			isGameMode: true,
 
 			onLoad() {
@@ -1196,7 +1173,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 		mod: {
 			name: "Point Rally",
-			id: "pointrally",
+			id: GameModeType.PointRally,
 			isGameMode: true,
 
 			onLoad() {
@@ -1235,7 +1212,7 @@ const MODES: { [k: string]: GameMode | string } = {
 		round: 0,
 		mod: {
 			name: "Jump Start",
-			id: "jumpstart",
+			id: GameModeType.JumpStart,
 			isGameMode: true,
 
 			onLoad() {
@@ -1243,10 +1220,10 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (game.round === 0) return;
 				const maxTime = Math.max(...game.jumpstart);
 
-				this.modData[TwistType.JumpStart].jumpstartTimers = [];
+				this.modData[GameModeType.JumpStart].jumpstartTimers = [];
 				const jumpstartTimers =
-					this.modData[TwistType.JumpStart].jumpstartTimers;
-				this.modData[TwistType.JumpStart].answerLock = true;
+					this.modData[GameModeType.JumpStart].jumpstartTimers;
+				this.modData[GameModeType.JumpStart].answerLock = true;
 
 				for (const [i, time] of game.jumpstart.entries()) {
 					if (!game.completed[i]) break;
@@ -1282,7 +1259,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 				// when the jump starts are all given to eligible players
 				jumpstartTimers[jumpstartTimers.length] = setTimeout(() => {
-					this.modData[TwistType.JumpStart].answerLock = false;
+					this.modData[GameModeType.JumpStart].answerLock = false;
 					const message = this.getCreationMessage(true);
 					this.room.add(message).update();
 					this.announce("You may start guessing!");
@@ -1292,7 +1269,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 			onJoinPriority: 4,
 			onJoin(user) {
-				if (this.modData[TwistType.JumpStart].answerLock) {
+				if (this.modData[GameModeType.JumpStart].answerLock) {
 					user.sendTo(this.room, `The hunt is not open for guesses yet!`);
 					return true;
 				}
@@ -1301,7 +1278,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			onViewHuntPriority: 4,
 			onViewHunt(user) {
 				if (
-					this.modData[TwistType.JumpStart].answerLock &&
+					this.modData[GameModeType.JumpStart].answerLock &&
 					!(
 						this.hosts.some(h => h.id === user.id) ||
 						user.id === this.staffHostId
@@ -1312,7 +1289,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			},
 
 			onCreateCallback() {
-				if (this.modData[TwistType.JumpStart].answerLock) {
+				if (this.modData[GameModeType.JumpStart].answerLock) {
 					return (
 						`|raw|<div class="broadcast-blue"><strong>${
 							["official", "unrated"].includes(this.gameType) ?
@@ -1334,7 +1311,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 			onEnd(reset) {
 				const jumpstartTimers =
-					this.modData[TwistType.JumpStart].jumpstartTimers;
+					this.modData[GameModeType.JumpStart].jumpstartTimers;
 				if (jumpstartTimers) {
 					for (const timer of jumpstartTimers) {
 						clearTimeout(timer);
@@ -1352,7 +1329,7 @@ const MODES: { [k: string]: GameMode | string } = {
 					}
 				}
 			},
-		} satisfies Twist<TwistType.JumpStart>,
+		} satisfies Twist<GameModeType.JumpStart>,
 	},
 
 	ts: "teamscavs",
@@ -1416,7 +1393,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 		mod: {
 			name: "Team Scavs",
-			id: "teamscavs",
+			id: GameModeType.TeamScavengers,
 			isGameMode: true,
 
 			onLoad() {
@@ -1484,11 +1461,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				const game = this.room.scavgame!;
 
 				if (Object.keys(game.teams).length === 0) {
-					this.announce(
-						"Teams have not been set up yet. Please reset the hunt."
-					);
-					this.huntLocked = true;
-					return true;
+					throw new Chat.ErrorMessage("Teams have not been set up.");
 				}
 			},
 

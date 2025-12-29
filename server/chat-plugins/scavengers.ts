@@ -9,7 +9,7 @@
  */
 
 import { FS, Utils } from '../../lib';
-import { INVALID_TWIST_COMBOS, ScavMods, TwistType, type Twist } from './scavenger-games';
+import { GameModeType, INVALID_TWIST_COMBOS, ScavMods, TwistType, type Twist } from './scavenger-games';
 import { type ChatHandler } from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
@@ -374,7 +374,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 	leftHunt: { [userid: string]: 1 | undefined };
 	hosts: FakeUser[];
 	isHTML: boolean;
-	modsList: string[];
+	modsList: (TwistType | GameModeType)[];
 	mods: Partial<{ [E in keyof ModEvents as `on${E}`]: ModEvent[] }>;
 	staffHostId: string;
 	staffHostName: string;
@@ -441,13 +441,20 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 			throw err;
 		}
 		this.onLoad(questions);
-		this.runEvent('AfterLoad');
+
+		try {
+			this.runEvent('AfterLoad');
+		} catch (err) {
+			this.destroy();
+			throw err;
+		}
+		this.onAfterLoad();
 	}
 
 	loadMods(modInformation: any) {
 		if (Array.isArray(modInformation)) {
-			const modIds = new Set(modInformation.map(toID)) as Set<TwistType>;
-			if (modIds.has(TwistType.TeamScavengers)) {
+			const modIds = new Set(modInformation.map(toID)) as Set<TwistType | GameModeType>;
+			if (modIds.has(GameModeType.TeamScavengers)) {
 				if (modIds.size >= 2) return this.announce("Team Scavengers cannot be used with other twists.");
 			}
 			for (const invalidCombo of INVALID_TWIST_COMBOS) {
@@ -475,6 +482,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 			twist = modData as Twist;
 		}
 		this.modsList.push(twist.id);
+		if (!this.modData[twist.id]) this.modData[twist.id] = {};
 		for (const _key in twist) {
 			const key = _key as `on${keyof ModEvents}`;
 			if (!key.startsWith('on')) continue;
@@ -485,8 +493,6 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		}
 		if (twist.isGameMode) {
 			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
-		} else {
-			this.announce(`This hunt uses the twist ${twist.name}.`);
 		}
 	}
 
@@ -503,7 +509,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 
 	getCreationMessage(newHunt?: boolean): string {
 		const message = this.runEvent('CreateCallback');
-		if (message) return message;
+		if (typeof message === 'string') return message;
 
 		const hosts = Utils.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)));
 		const staffHost = this.hosts.some(h => h.id === this.staffHostId) ?
@@ -513,7 +519,12 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		const article = ['official', 'unrated'].includes(this.gameType) && !newHunt ? 'An' : 'A';
 		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
 
-		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
+		const twists = this.modsList.filter((mod): mod is TwistType =>
+			mod in ScavMods.twists
+		).map(mod => ScavMods.twists[mod].name);
+		const twistMessage = twists.length > 0 ? ` This hunt uses the following twists: ${Chat.toListString(twists)}.` : '';
+
+		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.${twistMessage}</strong>` +
 			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:auto; max-height: 50vh">` +
 			`<strong><em>Hint #1:</em> ${this.formatOutput(this.questions[0].hint)}</strong>` +
 			`</div>` +
@@ -574,13 +585,15 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 
 			this.questions.push({ hint, answer, spoilers: [] });
 		}
+	}
 
-		const message = this.getCreationMessage(true);
-		this.room.add(message).update();
+	onAfterLoad() {
+		const creationMessage = this.getCreationMessage(true);
+		this.room.add(creationMessage).update();
 	}
 
 	// returns whether the next action should be stopped
-	runEvent<E extends keyof ModEvents>(eventId: E, ...args: Parameters<ModEvents[E]>) {
+	runEvent<E extends keyof ModEvents>(eventId: E, ...args: Parameters<ModEvents[E]>): ReturnType<ModEvents[E]> | true | undefined {
 		const events = this.mods[`on${eventId}`];
 		if (!events) return;
 
@@ -773,10 +786,10 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 
 		if (!hiddenFinish) {
 			const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
-				this.announce(
-					completionMessage ||
-					Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
-				);
+			this.announce(
+				typeof completionMessage === 'string' ? completionMessage :
+				Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
+			);
 		}
 
 		player.destroy(); // remove from user.games;
@@ -802,6 +815,9 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		}
 
 		this.runEvent('End', reset);
+		if (this.preCompleted) {
+			this.completed = this.preCompleted;
+		}
 		if (!ScavengerHuntDatabase.isEmpty() && this.room.settings.scavSettings?.addRecycledHuntsToQueueAutomatically) {
 			if (!this.room.settings.scavQueue) this.room.settings.scavQueue = [];
 
@@ -1075,6 +1091,7 @@ export class Scavenger extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	joinIps: string[];
 	currentQuestion: number;
 	infracted?: boolean;
+	modData: Record<string, unknown>;
 
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
@@ -1084,6 +1101,11 @@ export class Scavenger extends Rooms.RoomGamePlayer<ScavengerHunt> {
 		this.currentQuestion = 0;
 		this.completed = false;
 		this.lastGuess = 0;
+
+		this.modData = {};
+		game.modsList.forEach(mod => {
+			this.modData[mod] = {};
+		});
 	}
 
 	getCurrentQuestion() {
