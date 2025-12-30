@@ -882,7 +882,7 @@
         ]
     },
     "rhydon": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -933,7 +933,7 @@
         ]
     },
     "seaking": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1437,7 +1437,7 @@
         ]
     },
     "ampharosmega": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1549,7 +1549,7 @@
         ]
     },
     "espeon": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1686,7 +1686,7 @@
         ]
     },
     "steelixmega": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1863,7 +1863,7 @@
         ]
     },
     "skarmory": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1888,7 +1888,7 @@
         ]
     },
     "houndoommega": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2454,7 +2454,7 @@
         ]
     },
     "sableyemega": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2562,7 +2562,7 @@
         ]
     },
     "minun": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2731,7 +2731,7 @@
         ]
     },
     "cacturne": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3042,7 +3042,7 @@
         ]
     },
     "gorebyss": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3368,7 +3368,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3749,7 +3749,7 @@
         ]
     },
     "honchkrow": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -4970,7 +4970,7 @@
         ]
     },
     "swoobat": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5551,7 +5551,7 @@
         ]
     },
     "stunfisk": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5802,7 +5802,7 @@
         ]
     },
     "thundurus": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -5933,7 +5933,7 @@
         ]
     },
     "kyuremwhite": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -6051,7 +6051,7 @@
         ]
     },
     "diggersby": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6436,7 +6436,7 @@
         ]
     },
     "gourgeistsmall": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -6446,7 +6446,7 @@
         ]
     },
     "gourgeistlarge": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -6944,7 +6944,7 @@
         ]
     },
     "comfey": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -7459,7 +7459,7 @@
         ]
     },
     "nihilego": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Support",
@@ -7548,7 +7548,7 @@
         ]
     },
     "guzzlord": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "AV Pivot",

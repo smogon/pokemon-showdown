@@ -342,7 +342,7 @@
         ]
     },
     "arcanine": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -510,7 +510,7 @@
         ]
     },
     "dodrio": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1176,7 +1176,7 @@
         ]
     },
     "noctowl": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Staller",
@@ -2613,7 +2613,7 @@
         ]
     },
     "cacturne": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Staller",
@@ -2781,7 +2781,7 @@
         ]
     },
     "kecleon": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3024,7 +3024,7 @@
         ]
     },
     "latios": {
-        "level": 67,
+        "level": 66,
         "sets": [
             {
                 "role": "Bulky Setup",
