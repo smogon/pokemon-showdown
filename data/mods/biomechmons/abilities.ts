@@ -28,10 +28,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					const isItem = (target.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (isItem >= 0) {
 						target.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
-					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
-						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
-						target.moveSlots.splice(
-							target.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id), 1);
+					} else if ((target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+						const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+						const indexOfMove = target.moveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id);
+						if (indexOfMove >= 0) target.moveSlots.splice(indexOfMove, 1);
 					}
 				}
 			}
@@ -71,7 +71,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					if (isItem >= 0) {
 						pokemon.addVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
 					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
-						// pokemon.moveSlots.push()
+						const findMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+						const findSlot = pokemon.baseMoveSlots.find(e => e.id === this.toID(pokemon.m.scrambled.moves[findMove].thing));
+						pokemon.moveSlots.push(this.dex.deepClone(findSlot));
 					}
 				}
 			}

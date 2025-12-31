@@ -103,10 +103,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (!isTransform) {
-						this.baseMoveSlots.splice(
-							this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
-						this.moveSlots.splice(
-							this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
+						let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+						if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
+						indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+						if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					}
 					this.m.scrambled.moves.splice(isMove, 1);
 				}
@@ -189,10 +189,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.m.scrambled.abilities.splice(wrongSlot, 1);
 				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
 					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-					this.baseMoveSlots.splice(
-						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
-					this.moveSlots.splice(
-						this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
+					let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
+					if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
+					indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
+					if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					this.m.scrambled.moves.splice(wrongSlot, 1);
 				}
 				const oldItemState = this.itemState;
@@ -246,10 +246,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.m.scrambled.abilities.splice(isAbil, 1);
 				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
 					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-					this.baseMoveSlots.splice(
-						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
-					this.moveSlots.splice(
-						this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
+					let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
+					indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					this.m.scrambled.moves.splice(isMove, 1);
 				}
 			}

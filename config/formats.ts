@@ -941,15 +941,30 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			return null;
 		},
 		onBeforeSwitchIn(pokemon) {
+			let ngas = false;
+			for (const poke of this.getAllActive()) {
+				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
+					ngas = true;
+					break;
+				}
+			}
 			for (const ability of pokemon.m.scrambled.abilities) {
 				const effect = 'ability:' + this.toID(ability.thing);
 				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
 				pokemon.volatiles[effect].inSlot = ability.inSlot;
 			}
 			for (const item of pokemon.m.scrambled.items) {
+				if (ngas && item.inSlot === 'Ability') continue;
 				const effect = 'item:' + this.toID(item.thing);
 				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
 				pokemon.volatiles[effect].inSlot = item.inSlot;
+			}
+			if (ngas) {
+				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
+				}
 			}
 		},
 		onBegin() {
