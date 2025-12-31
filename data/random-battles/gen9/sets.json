@@ -60,13 +60,13 @@
                 "teraTypes": ["Dark", "Ground"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Grass", "Ground"]
             },
             {
-                "role": "Fast Bulky Setup",
+                "role": "Bulky Attacker",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Sucker Punch"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Dark", "Ground"]
@@ -2265,7 +2265,7 @@
                 "teraTypes": ["Dark", "Fire", "Grass", "Ground", "Poison"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Earthquake", "Gunk Shot", "Swords Dance", "Trailblaze"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Grass", "Ground"]
@@ -3185,7 +3185,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Knock Off", "Stealth Rock"],
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Knock Off", "Stealth Rock", "Trailblaze"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Ground", "Ice"]
             }
@@ -3910,7 +3910,7 @@
                 "teraTypes": ["Fire"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Bulk Up", "Drain Punch", "Flare Blitz", "Trailblaze"],
                 "abilities": ["Reckless"],
                 "teraTypes": ["Fighting", "Grass"]

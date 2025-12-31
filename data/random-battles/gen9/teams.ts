@@ -1335,7 +1335,7 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
+		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m));
 
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= moves.size) &&
