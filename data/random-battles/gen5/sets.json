@@ -3432,12 +3432,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "iceshard", "iciclecrash", "stealthrock"],
-                "abilities": ["Thick Fat"]
-            },
-            {
-                "role": "Fast Attacker",
-                "movepool": ["earthquake", "iceshard", "iciclecrash", "stoneedge", "superpower"],
+                "movepool": ["earthquake", "iceshard", "iciclecrash", "stealthrock", "stoneedge", "superpower"],
                 "abilities": ["Thick Fat"]
             }
         ]
