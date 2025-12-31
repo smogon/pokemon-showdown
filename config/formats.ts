@@ -949,6 +949,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 			}
 			for (const ability of pokemon.m.scrambled.abilities) {
+				if (this.field.getPseudoWeather('magicroom') && ability.inSlot === 'Item') continue;
 				const effect = 'ability:' + this.toID(ability.thing);
 				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
 				pokemon.volatiles[effect].inSlot = ability.inSlot;
@@ -962,6 +963,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (ngas) {
 				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
+				}
+			} else if (this.field.getPseudoWeather('magicroom')) {
+				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
 					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
 				}

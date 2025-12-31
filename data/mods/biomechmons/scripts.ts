@@ -58,15 +58,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.battle.dex.abilities.get(ability).exists) {
 					ability = this.battle.dex.abilities.get(ability);
 				} else {
-					let abil = this.battle.dex.items.getByID(this.ability) as Item | Move;
-					if (!abil.exists) abil = this.battle.dex.moves.getByID(this.ability);
+					const abilString = ability;
+					let abil = this.battle.dex.items.get(abilString) as Item | Move;
+					if (!abil.exists) abil = this.battle.dex.moves.get(abilString);
 					ability = {
-						id: this.ability,
-						name: abil.name || this.ability,
+						id: abil.id || abilString,
+						name: abil.name || abilString,
 						flags: {},
 						effectType: "Ability",
 						toString() {
-							return abil.name || this.id;
+							return abil.name || abilString;
 						},
 					} as Ability;
 				}
@@ -76,13 +77,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.dex.abilities.get(this.ability).exists) {
 				oldAbility = this.battle.dex.abilities.get(this.ability);
 			} else {
+				let abil = this.battle.dex.items.getByID(this.ability) as Item | Move;
+				if (!abil.exists) abil = this.battle.dex.moves.getByID(this.ability);
 				oldAbility = {
 					id: this.ability,
-					name: this.ability,
+					name: abil.name || this.ability,
 					flags: {},
 					effectType: "Ability",
 					toString() {
-						return this.id;
+						return abil.name || this.id;
 					},
 				} as Ability;
 				isOldBMMAbil = true;
@@ -105,7 +108,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (!isTransform) {
 						let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
 						if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
-						indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+						if (oldAbility.id !== 'mimic') {
+							indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+						}
 						if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					}
 					this.m.scrambled.moves.splice(isMove, 1);
@@ -191,7 +196,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
 					if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
-					indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
+					if (item.id !== 'mimic'){
+						indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
+					} 
 					if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					this.m.scrambled.moves.splice(wrongSlot, 1);
 				}
@@ -213,14 +220,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.battle.dex.items.get(item).exists) {
 					item = this.battle.dex.items.get(item);
 				} else {
-					let newData = this.battle.dex.abilities.getByID(this.item) as Ability | Move;
-					if (!newData.exists) newData = this.battle.dex.moves.getByID(this.item);
+					const itemString = item;
+					let newData = this.battle.dex.abilities.get(itemString) as Ability | Move;
+					if (!newData.exists) newData = this.battle.dex.moves.get(itemString);
 					item = {
-						id: this.item,
-						name: newData.name || this.name,
+						id: newData.id || itemString,
+						name: newData.name || itemString,
 						effectType: "Item",
 						toString() {
-							return newData.name || this.id;
+							return newData.name || itemString;
 						},
 					} as Item;
 				}
@@ -248,7 +256,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
 					if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
-					indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+					if (oldItem.id !== 'mimic') {
+						indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id);
+					}
 					if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					this.m.scrambled.moves.splice(isMove, 1);
 				}

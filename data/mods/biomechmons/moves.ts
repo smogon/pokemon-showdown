@@ -24,7 +24,95 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-item', source, yourItem, '[from] move: Covet', `[of] ${target}`);
 		},
 	},
-
+	embargo: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Embargo');
+				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
+				if (!this.dex.items.get(pokemon.item).exists) {
+					const isAbil = (pokemon.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+					if (isAbil >= 0) {
+						pokemon.removeVolatile('ability:' + this.toID(pokemon.m.scrambled.abilities[isAbil].thing));
+					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+						const slotNo = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+						if (slotNo >= 0) pokemon.moveSlots.splice(slotNo, 1);
+					}
+				}
+			},
+			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			onResidualOrder: 21,
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Embargo');
+				if (!this.dex.items.get(pokemon.item).exists) {
+					const isAbil = (pokemon.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+					if (isAbil >= 0) {
+						pokemon.addVolatile('ability:' + this.toID(pokemon.m.scrambled.abilities[isAbil].thing));
+					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+						const findMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+						const findSlot = pokemon.baseMoveSlots.find(e => e.id === this.toID(pokemon.m.scrambled.moves[findMove].thing));
+						pokemon.moveSlots.push(this.dex.deepClone(findSlot));
+					}
+				}
+			},
+		},
+	},
+	magicroom: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
+					return 7;
+				}
+				return 5;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`);
+				}
+				for (const mon of this.getAllActive()) {
+					this.singleEvent('End', mon.getItem(), mon.itemState, mon);
+					if (!this.dex.items.get(mon.item).exists) {
+						const isAbil = (mon.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+						if (isAbil >= 0) {
+							mon.removeVolatile('ability:' + this.toID(mon.m.scrambled.abilities[isAbil].thing));
+						} else if ((mon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+							const isMove = (mon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+							const slotNo = mon.moveSlots.findIndex(m => this.toID(mon.m.scrambled.moves[isMove].thing) === m.id);
+							if (slotNo >= 0) mon.moveSlots.splice(slotNo, 1);
+						}
+					}
+				}
+			},
+			onFieldRestart(target, source) {
+				this.field.removePseudoWeather('magicroom');
+			},
+			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 6,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectState.source);
+				for (const pokemon of this.getAllActive()) {
+					if (!this.dex.items.get(pokemon.item).exists) {
+						const isAbil = (pokemon.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+						if (isAbil >= 0) {
+							pokemon.addVolatile('ability:' + this.toID(pokemon.m.scrambled.abilities[isAbil].thing));
+						} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+							const findMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+							const findSlot = pokemon.baseMoveSlots.find(e => e.id === this.toID(pokemon.m.scrambled.moves[findMove].thing));
+							pokemon.moveSlots.push(this.dex.deepClone(findSlot));
+						}
+					}
+				}
+			},
+		},
+	},
 	gastroacid: {
 		inherit: true,
 		condition: {
