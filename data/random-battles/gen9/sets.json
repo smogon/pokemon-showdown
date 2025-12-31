@@ -1417,6 +1417,12 @@
                 "movepool": ["Body Press", "Iron Head", "Rapid Spin", "Spikes", "Stealth Rock"],
                 "abilities": ["Sturdy"],
                 "teraTypes": ["Fighting", "Water"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Iron Head", "Rapid Spin", "Spikes", "Stealth Rock", "Thunder Wave"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Water"]
             }
         ]
     },

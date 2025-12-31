@@ -1041,7 +1041,7 @@
                 "role": "Offensive Protect",
                 "movepool": ["Hurricane", "Hyper Voice", "Protect", "Tailwind"],
                 "abilities": ["Tinted Lens"],
-                "teraTypes": ["Flying"]
+                "teraTypes": ["Normal", "Steel"]
             }
         ]
     },
