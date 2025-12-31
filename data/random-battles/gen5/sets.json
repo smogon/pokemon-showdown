@@ -1381,7 +1381,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["earthquake", "healbell", "return", "thunderwave"],
                 "abilities": ["Intimidate"]
             },
