@@ -453,8 +453,8 @@
         "level": 93,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "encore", "focusblast", "icebeam", "scald"],
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "encore", "focusblast", "icebeam", "scald", "substitute"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "preferredTypes": ["Ice"]
             },
