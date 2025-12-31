@@ -1,5 +1,30 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Remember, everything deals with SLOTS not with properties as they are!
+	covet: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (source.item || source.volatiles['gem']) {
+				return;
+			}
+			const yourItem = target.takeItem(source);
+			if (!yourItem) {
+				return;
+			}
+			if (
+				!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
+				!source.setItem(yourItem)
+			) {
+				if (!this.dex.items.get(yourItem.id).exists) {
+					target.setItem(yourItem.id);
+					return;
+				}
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
+			}
+			this.add('-item', source, yourItem, '[from] move: Covet', `[of] ${target}`);
+		},
+	},
+
 	gastroacid: {
 		inherit: true,
 		condition: {
@@ -7,13 +32,105 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
-				const keys = Object.keys(pokemon.volatiles).filter(x => x.startsWith("ability:"));
-				if (keys.length) {
-					for (const abil of keys) {
-						pokemon.removeVolatile(abil);
+				if (!this.dex.abilities.get(pokemon.ability).exists) {
+					const isItem = (pokemon.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+					if (isItem >= 0) {
+						pokemon.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
+					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+						pokemon.moveSlots.splice(
+							pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id), 1);
 					}
 				}
 			},
+		},
+	},
+	trick: {
+		inherit: true,
+		onHit(target, source, move) {
+			const yourItem = target.takeItem(source);
+			const myItem = source.takeItem();
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) {
+					if (!this.dex.items.get(yourItem.id).exists) {
+						target.setItem(yourItem.id);
+					} else {
+						target.item = yourItem.id;
+					}
+				}
+				if (myItem) {
+					if (!this.dex.items.get(myItem.id).exists) {
+						source.setItem(myItem.id);
+					} else {
+						source.item = myItem.id;
+					}
+				}
+				return false;
+			}
+			if (
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
+			) {
+				if (yourItem) {
+					if (!this.dex.items.get(yourItem.id).exists) {
+						target.setItem(yourItem.id);
+					} else {
+						target.item = yourItem.id;
+					}
+				}
+				if (myItem) {
+					if (!this.dex.items.get(myItem.id).exists) {
+						source.setItem(myItem.id);
+					} else {
+						source.item = myItem.id;
+					}
+				}
+				return false;
+			}
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
+			if (myItem) {
+				target.setItem(myItem);
+				this.add('-item', target, myItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Trick');
+			}
+			if (yourItem) {
+				source.setItem(yourItem);
+				this.add('-item', source, yourItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Trick');
+			}
+		},
+	},
+	sketch: {
+		inherit: true,
+		onHit(target, source) {
+			const move = target.lastMove;
+			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
+			const sketchIndex = source.moves.indexOf('sketch');
+			if (sketchIndex < 0) return false;
+			if (toID(source.item) === 'sketch') {
+				source.setItem(move.name);
+				this.add('-activate', source, 'move: Sketch', move.name);
+				return;
+			} else if (toID(source.ability) === 'sketch') {
+				source.setAbility(move.name);
+				this.add('-activate', source, 'move: Sketch', move.name);
+				return;
+			}
+			const sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[sketchIndex] = sketchedMove;
+			source.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-activate', source, 'move: Sketch', move.name);
 		},
 	},
 	skillswap: {
@@ -21,8 +138,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			const sourceIsBMM = this.dex.abilities.get(sourceAbility).exists;
-			const targetIsBMM = this.dex.abilities.get(targetAbility).exists;
+			const sourceIsBMM = !this.dex.abilities.get(sourceAbility).exists;
+			const targetIsBMM = !this.dex.abilities.get(targetAbility).exists;
 			if (target.isAlly(source)) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', `[of] ${target}`);
 			} else {
@@ -61,10 +178,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			target.ability = target.baseAbility = sourceAbility.id;
 			source.abilityState = this.initEffectState({ id: this.toID(source.ability), target: source });
 			target.abilityState = this.initEffectState({ id: this.toID(target.ability), target });
-			
+
 			source.volatileStaleness = undefined;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
-			
+
 			this.singleEvent('Start', targetAbility, source.abilityState, source);
 			if (targetIsBMM) {
 				if (this.dex.items.get(targetAbility.id).exists) {
@@ -74,13 +191,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					source.volatiles[effect].inSlot = 'Ability';
 				} else {
 					source.m.scrambled.moves.push({ thing: targetAbility.id, inSlot: 'Ability' });
-					const move = Dex.moves.get(targetAbility.id);
+					const bmmMove = Dex.moves.get(targetAbility.id);
 					const newMove = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
+						move: bmmMove.name,
+						id: bmmMove.id,
+						pp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						maxpp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						target: bmmMove.target,
 						disabled: false,
 						used: false,
 					};
@@ -96,19 +213,99 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					target.volatiles[effect].inSlot = 'Ability';
 				} else {
 					target.m.scrambled.moves.push({ thing: targetAbility.id, inSlot: 'Ability' });
-					const move = Dex.moves.get(targetAbility.id);
+					const bmmMove = Dex.moves.get(targetAbility.id);
 					const newMove = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
+						move: bmmMove.name,
+						id: bmmMove.id,
+						pp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						maxpp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						target: bmmMove.target,
 						disabled: false,
 						used: false,
 					};
 					target.baseMoveSlots.push(newMove);
 				}
 			}
+		},
+	},
+	switcheroo: {
+		inherit: true,
+		onHit(target, source, move) {
+			const yourItem = target.takeItem(source);
+			const myItem = source.takeItem();
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) {
+					if (!this.dex.items.get(yourItem.id).exists) {
+						target.setItem(yourItem.id);
+					} else {
+						target.item = yourItem.id;
+					}
+				}
+				if (myItem) {
+					if (!this.dex.items.get(myItem.id).exists) {
+						source.setItem(myItem.id);
+					} else {
+						source.item = myItem.id;
+					}
+				}
+				return false;
+			}
+			if (
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
+			) {
+				if (yourItem) {
+					if (!this.dex.items.get(yourItem.id).exists) {
+						target.setItem(yourItem.id);
+					} else {
+						target.item = yourItem.id;
+					}
+				}
+				if (myItem) {
+					if (!this.dex.items.get(myItem.id).exists) {
+						source.setItem(myItem.id);
+					} else {
+						source.item = myItem.id;
+					}
+				}
+				return false;
+			}
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
+			if (myItem) {
+				target.setItem(myItem);
+				this.add('-item', target, myItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Switcheroo');
+			}
+			if (yourItem) {
+				source.setItem(yourItem);
+				this.add('-item', source, yourItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Switcheroo');
+			}
+		},
+	},
+	thief: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (source.item || source.volatiles['gem']) {
+				return;
+			}
+			const yourItem = target.takeItem(source);
+			if (!yourItem) {
+				return;
+			}
+			if (!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
+				!source.setItem(yourItem)) {
+				if (!this.dex.items.get(yourItem.id).exists) {
+					target.setItem(yourItem.id);
+					return;
+				}
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
+			}
+			this.add('-enditem', target, yourItem, '[silent]', '[from] move: Thief', `[of] ${source}`);
+			this.add('-item', source, yourItem, '[from] move: Thief', `[of] ${target}`);
 		},
 	},
 };
