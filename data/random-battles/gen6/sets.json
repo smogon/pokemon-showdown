@@ -5303,7 +5303,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["darkpulse", "dracometeor", "fireblast", "roost", "uturn"],
+                "movepool": ["darkpulse", "dracometeor", "fireblast", "roost", "toxic", "uturn"],
                 "abilities": ["Levitate"]
             },
             {
