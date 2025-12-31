@@ -98,9 +98,11 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.m.scrambled.items.splice(isItem, 1);
 				} else if ((this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 					const isMove = (this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Ability');
-					if (!isTransform) this.baseMoveSlots.splice(
-						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
-					this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					if (!isTransform) {
+						this.baseMoveSlots.splice(
+							this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
+							this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					}
 					this.m.scrambled.moves.splice(isMove, 1);
 				}
 			}

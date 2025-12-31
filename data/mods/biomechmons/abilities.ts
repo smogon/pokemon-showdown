@@ -71,7 +71,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					if (isItem >= 0) {
 						pokemon.addVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
 					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
-						pokemon.moveSlots = pokemon.baseMoveSlots;
+						// pokemon.moveSlots.push()
 					}
 				}
 			}
