@@ -1682,7 +1682,7 @@
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic", "Trick"],
+                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Fairy", "Fire", "Steel"]
             }
@@ -2575,7 +2575,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Hydro Pump", "Tailwind"],
+                "movepool": ["Encore", "Helping Hand", "Hydro Pump", "Icy Wind", "Tailwind"],
                 "abilities": ["Storm Drain"],
                 "teraTypes": ["Fire", "Ground"]
             }
