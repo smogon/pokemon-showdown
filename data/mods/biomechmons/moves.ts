@@ -38,9 +38,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						pokemon.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
 					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
-						let slotNo = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
-						// slight hack
-						pokemon.moveSlots[slotNo].virtual = true;
+						const slotNo = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
 						pokemon.moveSlots.splice(slotNo, 1);
 					}
 				}
@@ -157,7 +155,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const isMove = (source.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					source.baseMoveSlots.splice(
 						source.baseMoveSlots.findIndex(m => this.toID(source.m.scrambled.moves[isMove].thing) === m.id), 1);
-					source.moveSlots.splice(source.moveSlots.findIndex(m => this.toID(source.m.scrambled.items[isMove].thing) === m.id), 1);
+					source.moveSlots.splice(source.moveSlots.findIndex(m => this.toID(source.m.scrambled.moves[isMove].thing) === m.id), 1);
 					source.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
@@ -171,7 +169,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					target.baseMoveSlots.splice(
 						target.baseMoveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id), 1);
-					target.moveSlots.splice(target.moveSlots.findIndex(m => this.toID(target.m.scrambled.items[isMove].thing) === m.id), 1);
+					target.moveSlots.splice(target.moveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id), 1);
 					target.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
