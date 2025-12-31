@@ -4575,14 +4575,12 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["bugbuzz", "hiddenpowerice", "thunder", "voltswitch"],
-                "abilities": ["Compound Eyes"],
-                "preferredTypes": ["Bug"]
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Wallbreaker",
                 "movepool": ["bugbuzz", "energyball", "thunder", "voltswitch"],
-                "abilities": ["Compound Eyes"],
-                "preferredTypes": ["Bug"]
+                "abilities": ["Compound Eyes"]
             }
         ]
     },
