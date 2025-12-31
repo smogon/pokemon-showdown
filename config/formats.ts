@@ -966,7 +966,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
 					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
 				}
-			} else if (this.field.getPseudoWeather('magicroom')) {
+			}
+			if (this.field.getPseudoWeather('magicroom')) {
 				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
 					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
