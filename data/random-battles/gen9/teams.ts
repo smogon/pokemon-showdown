@@ -815,6 +815,12 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce Encore on Whimsicott
+		if (movePool.includes('encore') && species.id === 'whimsicott') {
+			counter = this.addMove('encore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['mortalspin', 'spore'];
@@ -1211,7 +1217,7 @@ export class RandomTeams {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
-		if (ability === 'Anger Shell') return this.sample(['Expert Belt', 'Lum Berry', 'Scope Lens', 'Sitrus Berry']);
+		if (ability === 'Anger Shell') return this.sample(['Expert Belt', 'Scope Lens', 'Sitrus Berry']);
 		if (moves.has('dragondance') && isDoubles) return 'Clear Amulet';
 		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
 		if (ability === 'Unburden') {
@@ -1339,7 +1345,7 @@ export class RandomTeams {
 				role !== 'Wallbreaker' &&
 				(species.baseStats.atk >= 100 || ability === 'Huge Power' || ability === 'Pure Power') &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				ability !== 'Speed Boost' && !counter.get('priority') && !moves.has('aquastep')
+				ability !== 'Speed Boost' && !counter.get('priority')
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
@@ -1378,6 +1384,7 @@ export class RandomTeams {
 		) return 'Heavy-Duty Boots';
 
 		// Low Priority
+		if (moves.has('dragondance') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (
 			ability === 'Rough Skin' || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&

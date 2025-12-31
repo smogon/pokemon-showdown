@@ -283,7 +283,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthpower", "fireblast", "icebeam", "sludgewave", "stealthrock", "toxicspikes"],
+                "movepool": ["earthpower", "fireblast", "icebeam", "poisonjab", "sludgewave", "stealthrock", "toxicspikes"],
                 "abilities": ["Sheer Force"],
                 "preferredTypes": ["Ice"]
             }
@@ -294,7 +294,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthpower", "fireblast", "icebeam", "sludgewave", "substitute", "superpower"],
+                "movepool": ["earthpower", "fireblast", "icebeam", "poisonjab", "sludgewave", "substitute", "throatchop"],
                 "abilities": ["Sheer Force"],
                 "preferredTypes": ["Ice"]
             }
@@ -453,10 +453,16 @@
         "level": 93,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["calmmind", "encore", "focusblast", "hydropump", "icebeam", "scald"],
+                "role": "Bulky Attacker",
+                "movepool": ["calmmind", "encore", "focusblast", "icebeam", "scald"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["calmmind", "encore", "focusblast", "hydropump", "icebeam"],
+                "abilities": ["Cloud Nine", "Swift Swim"],
+                "preferredTypes": ["Ice"] 
             }
         ]
     },
@@ -1269,7 +1275,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"],
+                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "signalbeam"],
                 "abilities": ["Unnerve"]
             }
         ]
@@ -1289,7 +1295,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"],
+                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "signalbeam"],
                 "abilities": ["Unnerve"]
             }
         ]
@@ -2749,6 +2755,11 @@
         "level": 92,
         "sets": [
             {
+                "role": "Bulky Setup",
+                "movepool": ["dragondance", "earthquake", "outrage", "roost"],
+                "abilities": ["Natural Cure"]
+            },
+            {
                 "role": "Bulky Support",
                 "movepool": ["defog", "dracometeor", "earthquake", "fireblast", "healbell", "roost", "toxic"],
                 "abilities": ["Natural Cure"]
@@ -4115,7 +4126,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "knockoff", "leafblade", "swordsdance", "synthesis", "xscissor"],
+                "movepool": ["doubleedge", "knockoff", "leafblade", "substitute", "swordsdance", "synthesis"],
                 "abilities": ["Chlorophyll"],
                 "preferredTypes": ["Dark"]
             }
@@ -4406,9 +4417,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["drainpunch", "knockoff", "return", "substitute", "thunderwave"],
-                "abilities": ["Slow Start"],
-                "preferredTypes": ["Dark"]
+                "movepool": ["drainpunch", "knockoff", "return", "thunderwave"],
+                "abilities": ["Slow Start"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["knockoff", "return", "substitute", "thunderwave"],
+                "abilities": ["Slow Start"]
             }
         ]
     },
@@ -5200,9 +5215,9 @@
         "level": 84,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["dragondance", "highjumpkick", "ironhead", "knockoff"],
-                "abilities": ["Intimidate", "Moxie"]
+                "role": "Bulky Attacker",
+                "movepool": ["dragondance", "drainpunch", "ironhead", "knockoff"],
+                "abilities": ["Intimidate"]
             },
             {
                 "role": "Bulky Setup",
@@ -5315,7 +5330,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam"],
+                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover"],
                 "abilities": ["Magic Guard"]
             }
         ]
@@ -5429,7 +5444,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["bugbuzz", "gigadrain", "stickyweb", "thunder", "voltswitch"],
+                "movepool": ["bugbuzz", "energyball", "stickyweb", "thunder", "voltswitch"],
                 "abilities": ["Compound Eyes"],
                 "preferredTypes": ["Bug"]
             }
@@ -7615,9 +7630,10 @@
         "level": 77,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Z-Move user",
                 "movepool": ["calmmind", "flashcannon", "fleurcannon", "shiftgear"],
-                "abilities": ["Soul-Heart"]
+                "abilities": ["Soul-Heart"],
+                "preferredTypes": ["Fairy"]
             },
             {
                 "role": "Bulky Support",
@@ -7625,10 +7641,9 @@
                 "abilities": ["Soul-Heart"]
             },
             {
-                "role": "Z-Move user",
+                "role": "Bulky Setup",
                 "movepool": ["aurasphere", "fleurcannon", "ironhead", "shiftgear"],
-                "abilities": ["Soul-Heart"],
-                "preferredTypes": ["Fairy", "Steel"]
+                "abilities": ["Soul-Heart"]
             }
         ]
     },
