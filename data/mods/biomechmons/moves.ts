@@ -39,7 +39,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 						const slotNo = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
-						pokemon.moveSlots.splice(slotNo, 1);
+						if (slotNo >= 0) pokemon.moveSlots.splice(slotNo, 1);
 					}
 				}
 			},
