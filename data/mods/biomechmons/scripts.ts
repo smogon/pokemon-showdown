@@ -29,9 +29,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				// can't use hasAbility because it would lead to infinite recursion
 				if (
 					(pokemon.ability === ('neutralizinggas' as ID) ||
-						(pokemon.m.scrambled.abilities as { thing: string }[]).some(
+						(pokemon.m.scrambled.abilities as { thing: string; }[]).some(
 							abils => this.battle.toID(abils.thing) === 'neutralizinggas')) &&
-							!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
+					!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
 				) {
 					neutralizinggas = true;
 					break;
@@ -42,7 +42,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				(this.battle.gen >= 5 && !this.isActive) ||
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-						(this.m.scrambled.abilities as { thing: string }[]).some(abils => this.battle.toID(abils.thing) === 'neutralizinggas'))
+						(this.m.scrambled.abilities as { thing: string; }[]).some(abils => this.battle.toID(abils.thing) === 'neutralizinggas'))
 					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
@@ -92,15 +92,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
 			if (isOldBMMAbil) {
-				const isItem = (this.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+				const isItem = (this.m.scrambled.items as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Ability');
 				if (isItem >= 0) {
 					this.removeVolatile('item:' + this.battle.toID(this.m.scrambled.items[isItem].thing));
 					this.m.scrambled.items.splice(isItem, 1);
-				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
-					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
-					if (!this.transformInto) this.baseMoveSlots.splice(
+				} else if ((this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+					const isMove = (this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Ability');
+					if (!isTransform) this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
-					// this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
 					this.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
@@ -137,7 +137,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						disabled: false,
 						used: false,
 					};
-					if (!this.transformInto) this.baseMoveSlots.push(newMove);
+					if (!isTransform) {
+						this.baseMoveSlots.push(newMove);
+						this.moveSlots.push(newMove);
+					}
 				}
 			}
 			return oldAbility.id;
@@ -171,14 +174,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			const item = this.getItem();
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 				this.item = '';
-				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item');
 				if (wrongSlot >= 0) {
-					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.items[wrongSlot].thing));
-					this.m.scrambled.abilties.splice(wrongSlot, 1);
-				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
-					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-					if (!this.transformInto) this.baseMoveSlots.splice(
-						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
+					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.abilities[wrongSlot].thing));
+					this.m.scrambled.abilities.splice(wrongSlot, 1);
+				} else if ((this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+					wrongSlot = (this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item');
+					this.baseMoveSlots.splice(this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
+					this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id), 1);
 					this.m.scrambled.moves.splice(wrongSlot, 1);
 				}
 				const oldItemState = this.itemState;
@@ -194,6 +197,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let isBMMItem = false;
 			let isOldBMMItem = false;
 			if (!this.hp || !this.isActive) return false;
+			if (!this.battle.dex.items.get(item).exists) isBMMItem = true;
 			if (typeof item === 'string') {
 				if (this.battle.dex.items.get(item).exists) {
 					item = this.battle.dex.items.get(item);
@@ -206,7 +210,6 @@ export const Scripts: ModdedBattleScriptsData = {
 							return this.id;
 						},
 					} as Item;
-					isBMMItem = true;
 				}
 			}
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
@@ -224,40 +227,41 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.itemState = this.battle.initEffectState({ id: item.id, target: this });
 			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 			if (isOldBMMItem) {
-				const isAbil = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+				const isAbil = (this.m.scrambled.abilities as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item');
 				if (isAbil >= 0) {
 					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.items[isAbil].thing));
 					this.m.scrambled.abilities.splice(isAbil, 1);
-				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
-					const isMove = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
-					if (!this.transformInto) this.baseMoveSlots.splice(
+				} else if ((this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+					const isMove = (this.m.scrambled.moves as { inSlot: string; }[]).findIndex(e => e.inSlot === 'Item');
+					this.baseMoveSlots.splice(
 						this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[isMove].thing) === m.id), 1);
-					// this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
 					this.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
 			if (item.id) {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
-				if (isBMMItem) {
-					if (this.battle.dex.abilities.get(item.id).exists) {
-						this.m.scrambled.abilities.push({ thing: item.id, inSlot: 'Item' });
-						const abileffect = 'ability:' + this.battle.toID(item.id);
-						this.addVolatile(abileffect);
-						this.volatiles[abileffect].inSlot = 'Item';
-					} else {
-						this.m.scrambled.moves.push({ thing: item.id, inSlot: 'Item' });
-						const move = Dex.moves.get(item.id);
-						const newMove = {
-							move: move.name,
-							id: move.id,
-							pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-							maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-							target: move.target,
-							disabled: false,
-							used: false,
-						};
-						if (!this.transformInto) this.baseMoveSlots.push(newMove);
-					}
+			}
+			if (isBMMItem) {
+				if (this.battle.dex.abilities.get(item.id).exists) {
+					this.m.scrambled.abilities.push({ thing: item.id, inSlot: 'Item' });
+					const abileffect = 'ability:' + this.battle.toID(item.id);
+					this.addVolatile(abileffect);
+					this.volatiles[abileffect].inSlot = 'Item';
+				} else {
+					this.m.scrambled.moves.push({ thing: item.id, inSlot: 'Item' });
+					const move = Dex.moves.get(item.id);
+					const newMove = {
+						move: move.name,
+						id: move.id,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					this.baseMoveSlots.push(newMove);
+					this.moveSlots.push(newMove);
 				}
 			}
 			return true;
@@ -287,12 +291,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (RESTORATIVE_BERRIES.has(item.id)) {
 					switch (this.pendingStaleness) {
-					case 'internal':
-						if (this.staleness !== 'external') this.staleness = 'internal';
-						break;
-					case 'external':
-						this.staleness = 'external';
-						break;
+						case 'internal':
+							if (this.staleness !== 'external') this.staleness = 'internal';
+							break;
+						case 'external':
+							this.staleness = 'external';
+							break;
 					}
 					this.pendingStaleness = undefined;
 				}
@@ -300,7 +304,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string; }[]).findIndex(e =>
 						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {
@@ -331,16 +335,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			// }
 			if (this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name))) {
 				switch (item.id) {
-				case 'redcard':
-					this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
-					break;
-				default:
-					if (item.isGem) {
-						this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
-					} else {
-						this.battle.add('-enditem', this, Dex.items.get(item.name));
-					}
-					break;
+					case 'redcard':
+						this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
+						break;
+					default:
+						if (item.isGem) {
+							this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
+						} else {
+							this.battle.add('-enditem', this, Dex.items.get(item.name));
+						}
+						break;
 				}
 				if (item.boosts) {
 					this.battle.boost(item.boosts, this, source, Dex.items.get(item.name));
@@ -351,7 +355,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
+					this.m.scrambled.items.splice((this.m.scrambled.items as { thing: string, inSlot: string; }[]).findIndex(e =>
 						e.thing === this.battle.toID(item.name) && e.inSlot === isBMM), 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
 				} else {

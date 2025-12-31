@@ -984,6 +984,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				for (let i = 0; i < pokemon.baseMoveSlots.length; i++) {
 					if (!Dex.moves.get(pokemon.baseMoveSlots[i].id).exists) {
 						pokemon.baseMoveSlots.splice(i, 1);
+						pokemon.moveSlots.splice(i, 1);
 						i--;
 					}
 				}
@@ -1000,9 +1001,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						used: false,
 					};
 					pokemon.baseMoveSlots.push(newMove);
+					pokemon.moveSlots.push(newMove);
 				}
-
-				pokemon.moveSlots = pokemon.baseMoveSlots;
 			}
 		},
 	},

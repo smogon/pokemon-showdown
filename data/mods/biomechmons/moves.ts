@@ -38,8 +38,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						pokemon.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
 					} else if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 						const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
-						pokemon.moveSlots.splice(
-							pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id), 1);
+						let slotNo = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+						// slight hack
+						pokemon.moveSlots[slotNo].virtual = true;
+						pokemon.moveSlots.splice(slotNo, 1);
 					}
 				}
 			},
@@ -155,7 +157,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const isMove = (source.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					source.baseMoveSlots.splice(
 						source.baseMoveSlots.findIndex(m => this.toID(source.m.scrambled.moves[isMove].thing) === m.id), 1);
-					// this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					source.moveSlots.splice(source.moveSlots.findIndex(m => this.toID(source.m.scrambled.items[isMove].thing) === m.id), 1);
 					source.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
@@ -169,7 +171,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					target.baseMoveSlots.splice(
 						target.baseMoveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id), 1);
-					// this.moveSlots.splice(this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.items[isMove].thing) === m.id), 1);
+					target.moveSlots.splice(target.moveSlots.findIndex(m => this.toID(target.m.scrambled.items[isMove].thing) === m.id), 1);
 					target.m.scrambled.moves.splice(isMove, 1);
 				}
 			}
@@ -202,18 +204,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						used: false,
 					};
 					source.baseMoveSlots.push(newMove);
+					source.moveSlots.push(newMove);
 				}
 			}
 			this.singleEvent('Start', sourceAbility, target.abilityState, target);
 			if (sourceIsBMM) {
-				if (this.dex.items.get(targetAbility.id).exists) {
-					target.m.scrambled.items.push({ thing: targetAbility.id, inSlot: 'Ability' });
-					const effect = 'item:' + this.toID(targetAbility.id);
+				if (this.dex.items.get(sourceAbility.id).exists) {
+					target.m.scrambled.items.push({ thing: sourceAbility.id, inSlot: 'Ability' });
+					const effect = 'item:' + this.toID(sourceAbility.id);
 					target.addVolatile(effect);
 					target.volatiles[effect].inSlot = 'Ability';
 				} else {
-					target.m.scrambled.moves.push({ thing: targetAbility.id, inSlot: 'Ability' });
-					const bmmMove = Dex.moves.get(targetAbility.id);
+					target.m.scrambled.moves.push({ thing: sourceAbility.id, inSlot: 'Ability' });
+					const bmmMove = Dex.moves.get(sourceAbility.id);
 					const newMove = {
 						move: bmmMove.name,
 						id: bmmMove.id,
@@ -224,6 +227,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						used: false,
 					};
 					target.baseMoveSlots.push(newMove);
+					target.moveSlots.push(newMove);
 				}
 			}
 		},
