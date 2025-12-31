@@ -196,9 +196,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					wrongSlot = (this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 					let indexOfMove = this.baseMoveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
 					if (indexOfMove >= 0) this.baseMoveSlots.splice(indexOfMove, 1);
-					if (item.id !== 'mimic'){
+					if (item.id !== 'mimic') {
 						indexOfMove = this.moveSlots.findIndex(m => this.battle.toID(this.m.scrambled.moves[wrongSlot].thing) === m.id);
-					} 
+					}
 					if (indexOfMove >= 0) this.moveSlots.splice(indexOfMove, 1);
 					this.m.scrambled.moves.splice(wrongSlot, 1);
 				}
