@@ -1999,7 +1999,7 @@
                 "ability": "Unseen Fist",
                 "nature": "Adamant",
                 "evs": {"hp": 160, "atk": 92, "def": 16, "spd": 160, "spe": 80},
-                "moves": [["Wicked Blow"], ["Low Kick"], ["Rock Tomb"], ["Iron Head", "Sucker Punch", "U-Turn"]],
+                "moves": [["Wicked Blow"], ["Low Kick"], ["Rock Tomb"], ["Iron Head", "Sucker Punch", "U-turn"]],
                 "weight": 20
             }
         ]
