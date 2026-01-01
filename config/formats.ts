@@ -19,6 +19,28 @@ The column value will be ignored for repeat sections.
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
+	// Likeshop Spotlight
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Likeshop Spotlight",
+	},
+	{
+		name: "[Gen 9] OU + Solgaleo",
+		desc: `S/V OU but with Solgaleo.`,
+		threads: [`&bullet; THREAD COMING SOON&trade;`],
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU', '+Solgaleo'],
+	},
+	{
+		name: "[Gen 9] 1v1 Factory",
+		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
+		mod: 'gen9',
+		team: 'random1v1Factory',
+		bestOfDefault: true,
+		ruleset: ['[Gen 9] 1v1'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
