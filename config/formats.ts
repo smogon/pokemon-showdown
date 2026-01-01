@@ -579,27 +579,35 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const allThings = [set.ability, set.item, ...set.moves];
+			const allThings = [set.ability, set.item, ...set.moves].map(e => e.replace(/^(item|move|ability):?/i, ''));
 			if (
 				allThings.some(y => effectFunctions.some(x => x.get(y).isNonstandard &&
 					!this.ruleTable.has(`+pokemontag:${this.toID(x.get(y).isNonstandard)}`)))
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const moves = allThings.filter(thing => thing !== 'metronome' && dex.moves.get(thing).exists);
+			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' && dex.moves.get(thing).exists);
+			for (const m of moves) {
+				if (this.ruleTable.isBanned(`move:${this.toID(m)}`)) return [`${set.species}'s move ${m} is banned.`];
+			}
 			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists);
+			for (const a of abilities) {
+				if (this.ruleTable.isBanned(`ability:${this.toID(a)}`)) return [`${set.species}'s ability ${a} is banned.`];
+			}
 			const items = allThings.filter(thing => dex.items.get(thing).exists);
+			for (const i of items) {
+				if (this.ruleTable.isBanned(`item:${this.toID(i)}`)) return [`${set.species}'s item ${i} is banned.`];
+			}
 			const normalAbility = set.ability;
 			if (!abilities.length) {
 				set.ability = 'noability';
 			} else {
 				set.ability = this.toID(abilities[0]);
 			}
-			if (
-				!Object.values(species.abilities).map(this.toID).includes(this.toID(set.ability)) &&
-				this.ruleTable.has('obtainableabilities')
+			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(this.toID(abil)))
+				&& this.ruleTable.has('obtainableabilities')
 			) {
-				if (set.ability !== 'noability') return [`${set.ability} is not a valid ability for ${set.species}.`];
+				if (set.ability !== 'noability') return [`${set.species} has illegal abilities.`];
 			}
 			if (requiredAbility && !abilities.map(this.toID).includes(this.toID(requiredAbility))) {
 				return [`${set.species} requires ${requiredAbility} on its set.`];
