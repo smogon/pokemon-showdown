@@ -606,6 +606,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				let itemName = this.dex.items.get(i).name;
 				if (this.ruleTable.isBanned(`item:${this.toID(itemName)}`)) return [`${set.species}'s item ${itemName} is banned.`];
 			}
+			const setHas: { [k: string]: true } = {};
+			for (const thing of allThings) {
+				if (setHas[this.toID(thing)]) return [`${set.species} has multiple copies of ${thing}.`];
+				setHas[this.toID(thing)] = true;
+			}
 			const normalAbility = set.ability;
 			if (!abilities.length) {
 				set.ability = 'noability';
