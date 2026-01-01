@@ -579,7 +579,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const allThings = [set.ability, set.item, ...set.moves].map(e => e.replace(/^(item|move|ability):?/i, ''));
+			const allThings = [set.ability, set.item, ...set.moves].map(e => e.replace(/^(item|move|ability):?/i, '')).filter(e => e.length);
 			for (const thing of allThings) {
 				if (!dex.moves.get(thing).exists && !dex.abilities.get(thing).exists && !dex.items.get(thing).exists) {
 					return [`${thing} does not exist.`];
