@@ -579,7 +579,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const allThings = [set.ability, set.item, ...set.moves].map(e => e.replace(/^(item|move|ability):?/i, '')).filter(e => e.length);
+			const allThings = [set.ability, set.item, ...set.moves]
+				.map(e => e.replace(/^(item|move|ability):?/i, '')).filter(e => e.length);
 			for (const thing of allThings) {
 				if (!dex.moves.get(thing).exists && !dex.abilities.get(thing).exists && !dex.items.get(thing).exists) {
 					return [`${thing} does not exist.`];
@@ -593,17 +594,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' && dex.moves.get(thing).exists);
 			for (const m of moves) {
-				let moveName = this.dex.moves.get(m).name;
+				const moveName = this.dex.moves.get(m).name;
 				if (this.ruleTable.isBanned(`move:${this.toID(moveName)}`)) return [`${set.species}'s move ${moveName} is banned.`];
 			}
 			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists);
 			for (const a of abilities) {
-				let abilName = this.dex.abilities.get(a).name;
-				if (this.ruleTable.isBanned(`ability:${this.toID(abilName)}`)) return [`${set.species}'s ability ${abilName} is banned.`];
+				const abilName = this.dex.abilities.get(a).name;
+				if (this.ruleTable.isBanned(`ability:${this.toID(abilName)}`)) {
+					return [`${set.species}'s ability ${abilName} is banned.`];
+				}
 			}
 			const items = allThings.filter(thing => dex.items.get(thing).exists);
 			for (const i of items) {
-				let itemName = this.dex.items.get(i).name;
+				const itemName = this.dex.items.get(i).name;
 				if (this.ruleTable.isBanned(`item:${this.toID(itemName)}`)) return [`${set.species}'s item ${itemName} is banned.`];
 			}
 			const setHas: { [k: string]: true } = {};
