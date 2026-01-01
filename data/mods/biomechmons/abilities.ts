@@ -52,7 +52,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (!this.dex.abilities.get(target.ability).exists) {
 					const isItem = (target.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (isItem >= 0) {
-						target.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
+						target.removeVolatile('item:' + this.toID(target.m.scrambled.items[isItem].thing));
 					} else if ((target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 						const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 						const indexOfMove = target.moveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id);
