@@ -607,6 +607,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!moves.length) {
 				return [`${set.species} requires at least one move.`];
 			}
+			if (set.moves.length > this.ruleTable.maxMoveCount) {
+				return [`${set.name} has ${set.moves.length} moves, which is more than the limit of ${this.ruleTable.maxMoveCount}.`];
+			}
 			const normalMoves = set.moves;
 			set.moves = [moves[0]];
 			if (
