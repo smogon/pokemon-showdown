@@ -3100,7 +3100,7 @@ export class RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: (typeof species.battleOnly === 'string') ? species.battleOnly : species.name,
-			gender:	setData.set.gender || species.gender || this.sample(['M', 'F']), // F for Cute Charm Enamorus
+			gender:	setData.set.gender || species.gender || this.sample(['M', 'F']),
 			item,
 			ability: this.sampleIfArray(setData.set.ability),
 			shiny: setData.set.shiny || this.randomChance(1, 1024),
@@ -3108,7 +3108,7 @@ export class RandomTeams {
 			happiness: 255,
 			evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs },
 			ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs },
-			nature: this.sample(setData.set.nature) || "Serious",
+			nature: this.sampleIfArray(setData.set.nature) || "Serious",
 			moves,
 		};
 	}
