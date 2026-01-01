@@ -78,7 +78,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	heatranmega: {
 		inherit: true,
-		abilities: { 0: "Earth Eater" },
+		abilities: { 0: "Filter" },
 	},
 	darkraimega: {
 		inherit: true,
@@ -170,7 +170,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	golisopodmega: {
 		inherit: true,
-		abilities: { 0: "Regenerator" },
+		abilities: { 0: "Heatproof" },
 	},
 	drampamega: {
 		inherit: true,
