@@ -694,7 +694,7 @@ export class RandomSCTeams extends RandomTeams {
 			if (move.includes('crystal')) return "Crystal";
 			if (move.includes('feral')) return "Feral";
 		}
-		return ""
+		return "";
 	}
 
 	override randomSet(
@@ -739,7 +739,7 @@ export class RandomSCTeams extends RandomTeams {
 		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
-		let types = [];
+		const types = [];
 		types[0] = species.types[0];
 		if (species.types[1]) types[1] = species.types[1];
 		const abilities = set.abilities!;
@@ -854,7 +854,7 @@ export class RandomSCTeams extends RandomTeams {
 
 		const baseFormes: { [k: string]: number } = {};
 
-		let superTypeCount = 0
+		// const superTypeCount = 0;
 		const typeCount: { [k: string]: number } = {};
 		const typeComboCount: { [k: string]: number } = {};
 		const typeWeaknesses: { [k: string]: number } = {};
@@ -942,7 +942,7 @@ export class RandomSCTeams extends RandomTeams {
 			}
 
 			// Increment item counter
-			if (set.item == "Crystal Orb" || set.item == "Feral Orb"){
+			if (set.item === "Crystal Orb" || set.item === "Feral Orb") {
 				teamDetails.teraBlast = 1;
 			}
 
