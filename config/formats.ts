@@ -546,6 +546,193 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Arceus-Bug', 'Arceus-Grass', 'Arceus-Ice'],
 	},
 	{
+		name: "[Gen 9] Bio Mech Mons",
+		desc: `Items, abilites, and moves a Pok&eacute;mon has access to can be put in any item/move/ability slot.`,
+		mod: 'biomechmons',
+		// searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
+		banlist: [
+			'Annihilape​', 'Arceus​', 'Archaludon​', 'Baxcalibur​', 'Calyrex-Ice​', 'Calyrex-Shadow​', 'Chien-Pao​', 'Chi-Yu​', 'Deoxys​', 'Deoxys-Attack​', 'Dialga​', 'Dialga-Origin​',
+			'Espathra​', 'Eternatus​', 'Flutter Mane​', 'Giratina​', 'Giratina-Origin​', 'Gouging Fire​', 'Groudon​', 'Ho-Oh​', 'Iron Bundle​', 'Koraidon​', 'Kyogre​', 'Kyurem-Black​', 'Kyurem-White​',
+			'Landorus-Incarnate', 'Lugia​', 'Lunala​', 'Magearna​', 'Mewtwo​', 'Miraidon​', 'Necrozma-Dawn-Wings​', 'Necrozma-Dusk-Mane​', 'Ogerpon-Hearthflame​', 'Palafin​', 'Palkia​', 'Palkia-Origin​',
+			'Rayquaza​', 'Regieleki​', 'Regigigas​', 'Reshiram​', 'Roaring Moon​', 'Slaking​', 'Shaymin-Sky​', 'Sneasler​', 'Solgaleo​', 'Spectrier​', 'Terapagos​', 'Ursaluna-Bloodmoon​', 'Urshifu',
+			'Urshifu-Rapid-Strike​', 'Volcarona​', 'Zacian​', 'Zacian-Crowned​', 'Zamazenta-Crowned', 'Zekrom​', 'Arena Trap​', 'Moody​', 'Sand Veil​', 'Shadow Tag​', 'Snow Cloak​', '​Bright Powder​',
+			'Choice Band​', 'Choice Specs​', 'King\'s Rock​', 'Razor Fang​', 'Baton Pass​', 'Last Respects​', 'Shed Tail​',
+		],
+		validateSet(set, teamHas) {
+			const dex = this.dex;
+			let species = dex.species.get(set.species);
+			let requiredItems: string[] = [];
+			let requiredMove = '';
+			let requiredAbility = '';
+			if (species.battleOnly) {
+				if (species.requiredItems) requiredItems = species.requiredItems;
+				if (species.requiredMove) requiredMove = species.requiredMove;
+				if (species.requiredAbility) requiredAbility = species.requiredAbility;
+				species = dex.species.get(species.battleOnly as string);
+			}
+			const effectFunctions = [dex.abilities, dex.items, dex.moves];
+			if (
+				!effectFunctions.some(f => f.get(set.ability).exists) &&
+				!(set.item && effectFunctions.some(f => f.get(set.item).exists)) &&
+				!set.moves.every(move => effectFunctions.some(f => f.get(move).exists))
+			) {
+				return this.validateSet(set, teamHas);
+			}
+			const allThings = [set.ability, set.item, ...set.moves];
+			if (
+				allThings.some(y => effectFunctions.some(x => x.get(y).isNonstandard &&
+					!this.ruleTable.has(`+pokemontag:${this.toID(x.get(y).isNonstandard)}`)))
+			) {
+				return this.validateSet(set, teamHas);
+			}
+			const moves = allThings.filter(thing => thing !== 'metronome' && dex.moves.get(thing).exists);
+			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists);
+			const items = allThings.filter(thing => dex.items.get(thing).exists);
+			const normalAbility = set.ability;
+			if (!abilities.length) {
+				set.ability = 'noability';
+			} else {
+				set.ability = this.toID(abilities[0]);
+			}
+			if (
+				!Object.values(species.abilities).map(this.toID).includes(this.toID(set.ability)) &&
+				this.ruleTable.has('obtainableabilities')
+			) {
+				if (set.ability !== 'noability') return [`${set.ability} is not a valid ability for ${set.species}.`];
+			}
+			if (requiredAbility && !abilities.map(this.toID).includes(this.toID(requiredAbility))) {
+				return [`${set.species} requires ${requiredAbility} on its set.`];
+			}
+			if (!moves.length) {
+				return [`${set.species} requires at least one move.`];
+			}
+			const normalMoves = set.moves;
+			set.moves = [moves[0]];
+			if (
+				moves.some(move => this.checkCanLearn(dex.moves.get(move), species)) &&
+				this.ruleTable.has('obtainablemoves')
+			) {
+				return [`${set.species} has illegal moves.`];
+			}
+			if (requiredMove && !moves.map(this.toID).includes(this.toID(requiredMove))) {
+				return [`${set.species} requires ${requiredMove} on its set.`];
+			}
+			if (!items.length && requiredItems.length) {
+				return [`${set.species} requires ${requiredItems.join(', ')} on its set.`];
+			}
+			const normalItem = set.item;
+			if (items.length) {
+				set.item = items.find(i => dex.items.get(i).forcedForme || dex.items.get(i).itemUser) || items[0];
+			} else {
+				set.item = '';
+			}
+			if (!this.ruleTable.has('+ability:noability')) {
+				this.ruleTable.set('+ability:noability', '');
+			}
+			let problems = this.validateSet(set, teamHas);
+			if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
+			if (problems?.length) return problems;
+			set.ability = normalAbility;
+			set.item = normalItem;
+			set.moves = normalMoves;
+			return null;
+		},
+		onBeforeSwitchIn(pokemon) {
+			let ngas = false;
+			for (const poke of this.getAllActive()) {
+				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
+					ngas = true;
+					break;
+				}
+			}
+			if (pokemon.hasItem('abilityshield') ||
+				pokemon.m.scrambled.items.some((e: { thing: string }) => this.toID(e.thing) === 'abilityshield')) {
+				ngas = false;
+			}
+			for (const ability of pokemon.m.scrambled.abilities) {
+				if (this.field.getPseudoWeather('magicroom') && ability.inSlot === 'Item') continue;
+				const effect = 'ability:' + this.toID(ability.thing);
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
+				pokemon.volatiles[effect].inSlot = ability.inSlot;
+			}
+			for (const item of pokemon.m.scrambled.items) {
+				if (ngas && item.inSlot === 'Ability') continue;
+				const effect = 'item:' + this.toID(item.thing);
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
+				pokemon.volatiles[effect].inSlot = item.inSlot;
+			}
+			if (ngas) {
+				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
+				}
+			}
+			if (this.field.getPseudoWeather('magicroom')) {
+				if ((pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
+					const isMove = (pokemon.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
+					const indexOfMove = pokemon.moveSlots.findIndex(m => this.toID(pokemon.m.scrambled.moves[isMove].thing) === m.id);
+					if (indexOfMove >= 0) pokemon.moveSlots.splice(indexOfMove, 1);
+				}
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				// for everything not in the correct slot
+				pokemon.m.scrambled = {
+					abilities: [] as object[],
+					items: [] as object[],
+					moves: [] as object[],
+				};
+
+				if (this.dex.items.get(pokemon.set.ability).exists) {
+					pokemon.m.scrambled.items.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
+				} else if (this.dex.moves.get(pokemon.set.ability).exists) {
+					pokemon.m.scrambled.moves.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
+				}
+
+				if (this.dex.abilities.get(pokemon.set.item).exists) {
+					pokemon.m.scrambled.abilities.push({ thing: pokemon.set.item, inSlot: 'Item' });
+				} else if (this.dex.moves.get(pokemon.set.item).exists) {
+					pokemon.m.scrambled.moves.push({ thing: pokemon.set.item, inSlot: 'Item' });
+				}
+
+				for (const move of pokemon.set.moves) {
+					if (this.dex.abilities.get(move).exists) {
+						pokemon.m.scrambled.abilities.push({ thing: move, inSlot: 'Move' });
+					} else if (this.dex.items.get(move).exists) {
+						pokemon.m.scrambled.items.push({ thing: move, inSlot: 'Move' });
+					}
+				}
+
+				const newMoveSlots = [];
+				for (const moveSlot of pokemon.baseMoveSlots) {
+					if (!this.dex.moves.get(moveSlot.id).exists) continue;
+					newMoveSlots.push(moveSlot);
+				}
+				// Do not let these be pointed at the same thing. Causes bugs otherwise.
+				(pokemon as any).baseMoveSlots = newMoveSlots;
+				pokemon.moveSlots = this.dex.deepClone(newMoveSlots);
+
+				for (const scrambledMove of pokemon.m.scrambled.moves) {
+					const move = this.dex.moves.get(scrambledMove.thing);
+					const newMove = {
+						move: move.name,
+						id: move.id,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.baseMoveSlots.push(newMove);
+					pokemon.moveSlots.push(newMove);
+				}
+			}
+		},
+	},
+	{
 		name: "[Gen 9] NatDex Camove Chaos",
 		desc: `National Dex-based format where Pokemon can use almost any move in the game, and their first two move types determine their type.`,
 		mod: 'gen9',
