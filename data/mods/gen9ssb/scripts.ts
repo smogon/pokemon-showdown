@@ -1104,7 +1104,9 @@ export const Scripts: ModdedBattleScriptsData = {
 							this.battle.attrLastMove('[still]');
 							this.battle.add('-message', `But it was misspelled!`);
 						} else {
-							if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+							if (!move.spreadHit && !move.flags['futuremove']) {
+								this.battle.attrLastMove('[miss]');
+							}
 							this.battle.add('-miss', pokemon, target);
 						}
 					}
