@@ -1046,8 +1046,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					if (!this.dex.moves.get(moveSlot.id).exists) continue;
 					newMoveSlots.push(moveSlot);
 				}
-				pokemon.moveSlots = newMoveSlots;
+				// Do not let these be pointed at the same thing. Causes bugs otherwise.
 				(pokemon as any).baseMoveSlots = newMoveSlots;
+				pokemon.moveSlots = this.dex.deepClone(newMoveSlots);
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
 					const move = this.dex.moves.get(scrambledMove.thing);
