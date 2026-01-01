@@ -15,7 +15,7 @@
         ]
     },
     "venusaurmega": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -105,7 +105,7 @@
         ]
     },
     "beedrillmega": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -828,7 +828,7 @@
         ]
     },
     "pinsir": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -865,7 +865,7 @@
         ]
     },
     "gyarados": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1182,7 +1182,7 @@
         ]
     },
     "crobat": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1394,7 +1394,7 @@
         ]
     },
     "wobbuffet": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1506,7 +1506,7 @@
         ]
     },
     "scizor": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1667,7 +1667,7 @@
         ]
     },
     "houndoom": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1854,7 +1854,7 @@
         ]
     },
     "lugia": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Staller",
@@ -4728,7 +4728,7 @@
         ]
     },
     "scolipede": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Support",
@@ -4783,7 +4783,7 @@
         ]
     },
     "krookodile": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5196,7 +5196,7 @@
         ]
     },
     "druddigon": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -5695,7 +5695,7 @@
         ]
     },
     "pangoro": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -6011,7 +6011,7 @@
         ]
     },
     "gourgeistsuper": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",

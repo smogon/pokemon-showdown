@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Staller",
@@ -522,7 +522,7 @@
         ]
     },
     "cloyster": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -651,7 +651,7 @@
         ]
     },
     "rhydon": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -920,7 +920,7 @@
         ]
     },
     "articuno": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Staller",
@@ -1196,7 +1196,7 @@
         ]
     },
     "jumpluff": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1317,7 +1317,7 @@
         ]
     },
     "forretress": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1444,7 +1444,7 @@
         ]
     },
     "ursaring": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1479,7 +1479,7 @@
         ]
     },
     "octillery": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1717,7 +1717,7 @@
         ]
     },
     "celebi": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2193,7 +2193,7 @@
         ]
     },
     "grumpig": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2394,7 +2394,7 @@
         ]
     },
     "castform": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2404,7 +2404,7 @@
         ]
     },
     "kecleon": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2548,7 +2548,7 @@
         ]
     },
     "salamence": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2708,7 +2708,7 @@
         ]
     },
     "jirachi": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2783,7 +2783,7 @@
         ]
     },
     "infernape": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2854,7 +2854,7 @@
         ]
     },
     "luxray": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2940,7 +2940,7 @@
         ]
     },
     "wormadamtrash": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Staller",
@@ -3514,7 +3514,7 @@
         ]
     },
     "rotomwash": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3564,7 +3564,7 @@
         ]
     },
     "mesprit": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3663,7 +3663,7 @@
         ]
     },
     "giratinaorigin": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3977,7 +3977,7 @@
         ]
     },
     "serperior": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4423,7 +4423,7 @@
         ]
     },
     "garbodor": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4621,7 +4621,7 @@
         ]
     },
     "beheeyem": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -4631,7 +4631,7 @@
         ]
     },
     "chandelure": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4935,7 +4935,7 @@
         ]
     },
     "zekrom": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4950,7 +4950,7 @@
         ]
     },
     "landorus": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Wallbreaker",
