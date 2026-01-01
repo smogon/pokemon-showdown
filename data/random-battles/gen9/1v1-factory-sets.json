@@ -1461,7 +1461,7 @@
                 "ability": "Solid Rock",
                 "nature": "Adamant",
                 "evs": {"hp": 248, "atk": 252, "def": 8},
-                "moves": [["Earthquake"], ["Rock Wrecker"], ["Rock Blast"], ["Avalanch"]],
+                "moves": [["Earthquake"], ["Rock Wrecker"], ["Rock Blast"], ["Avalanche"]],
                 "weight": 40
             }
         ]
