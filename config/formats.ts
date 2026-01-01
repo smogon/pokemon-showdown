@@ -3024,20 +3024,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// Randomized Format Spotlight
 	///////////////////////////////////////////////////////////////////
-
 	{
 		section: "Randomized Format Spotlight",
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Force of the Fallen Random Roulette",
-		desc: `Random Battles in a random generation! [Gen 1] Random Battle - [Gen 9] Random Battle. Once a pokemon is defeated, the last move in its moveset will be inherited by all its teammates.`,
-		mod: 'randomroulette',
-		team: 'random',
-		ruleset: ['Force of the Fallen Mod'],
-		bestOfDefault: true,
+		name: "[Gen 9] BSS Factory (Bo3)",
+		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
+		mod: 'gen9',
+		team: 'randomBSSFactory',
+		ruleset: ['Flat Rules', 'VGC Timer', 'Best of = 3',],
 		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">The Ladder Achievements Project for Force of the Fallen Random Roulette has officially started! Check <a href="https://www.smogon.com/forums/threads/3773734">this thread</a> to see what the project is all about and the challenges for this cycle!</div>`);
+			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
 		},
 	},
 
