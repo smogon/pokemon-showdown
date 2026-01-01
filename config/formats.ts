@@ -549,6 +549,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Bio Mech Mons",
 		desc: `Items, abilites, and moves a Pok&eacute;mon has access to can be put in any item/move/ability slot.`,
 		mod: 'biomechmons',
+		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
 			'Annihilape​', 'Arceus​', 'Archaludon​', 'Baxcalibur​', 'Calyrex-Ice​', 'Calyrex-Shadow​', 'Chien-Pao​', 'Chi-Yu​', 'Deoxys​', 'Deoxys-Attack​', 'Dialga​', 'Dialga-Origin​',
