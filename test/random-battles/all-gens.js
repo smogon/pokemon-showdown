@@ -465,7 +465,7 @@ describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
 
 describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
 	it(`gen9/1v1-factory-sets.json should contain valid sets`, function () {
-		// this.timeout(0);
+		this.timeout(0);
 		const setsJSON = require(`../../dist/data/random-battles/gen9/1v1-factory-sets.json`);
 		const mod = 'gen9';
 
