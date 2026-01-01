@@ -3024,6 +3024,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// Randomized Format Spotlight
 	///////////////////////////////////////////////////////////////////
+
 	{
 		section: "Randomized Format Spotlight",
 		column: 3,
