@@ -26,7 +26,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 					target.item = '';
 					this.clearEffectState(target.itemState);
 				} else {
-					const isBMM = target.volatiles['item:airballoon'].inSlot;
+					const isBMM = target.volatiles['item:airballoon']?.inSlot;
 					if (isBMM) {
 						target.removeVolatile('item:airballoon');
 						target.m.scrambled.items.splice((target.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
