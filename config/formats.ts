@@ -4947,6 +4947,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'Swagger'],
 	},
 	{
+		name: "[Gen 3] ADV 200 Doubles",
+		mod: 'gen3rs',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard', '!Switch Priority Clause Mod'],
+		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Swagger'],
+		unbanlist: ['Wobbuffet', 'Wynaut'],
+	},
+	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
