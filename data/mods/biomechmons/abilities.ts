@@ -157,32 +157,34 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (this.toID(pokemon.item) === 'trace') {
-				this.add('-ability', pokemon, ability.name, 'Trace',);
+				this.add('-ability', pokemon, ability.name, 'Trace');
 				pokemon.setItem(ability.name);
 				return;
 			} else if (pokemon.volatiles['ability:trace']?.inSlot === 'Move') {
 				if (this.dex.abilities.get(ability.name).exists) {
 					pokemon.removeVolatile('ability:trace');
-					pokemon.m.scrambled.abilities.splice((target.m.scrambled.abilities as { thing: string, inSlot: string; }[]).findIndex(e =>
-						this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
-					this.add('-ability', pokemon, ability.name, 'Trace',);
+					pokemon.m.scrambled.abilities.splice(
+						(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+							this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+					this.add('-ability', pokemon, ability.name, 'Trace');
 					pokemon.addVolatile(`ability:${ability.id}`);
 					pokemon.m.scrambled.abilities.push({ thing: ability.name, inSlot: 'Move' });
 				} else if (this.dex.items.get(ability.name).exists) {
 					pokemon.removeVolatile('ability:trace');
-					pokemon.m.scrambled.abilities.splice((target.m.scrambled.abilities as { thing: string, inSlot: string; }[]).findIndex(e =>
-						this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
-					this.add('-ability', pokemon, ability.name, 'Trace',);
+					pokemon.m.scrambled.abilities.splice(
+						(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+							this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+					this.add('-ability', pokemon, ability.name, 'Trace');
 					pokemon.addVolatile(`item:${ability.id}`);
-					pokemon.m.scrambled.items.push({ thing: ability.name, inSlot: 'Move' });
+					pokemon.m.scrambled.items.push({ thing: this.dex.items.get(ability.name).name, inSlot: 'Move' });
 				} else {
 					const move = this.dex.moves.get(ability.name);
 					if (move.exists) {
 						pokemon.removeVolatile('ability:trace');
-						pokemon.m.scrambled.abilities.splice((target.m.scrambled.abilities as { thing: string, inSlot: string; }[]).findIndex(e =>
-							this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
-						this.add('-ability', pokemon, ability.name, 'Trace',);
-						const move = this.dex.moves.get(ability.name);
+						pokemon.m.scrambled.abilities.splice(
+							(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+								this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+						this.add('-ability', pokemon, move.name, 'Trace');
 						const newMove = {
 							move: move.name,
 							id: move.id,
