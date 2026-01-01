@@ -469,8 +469,8 @@ describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
 		const setsJSON = require(`../../dist/data/random-battles/gen9/1v1-factory-sets.json`);
 		const mod = 'gen9';
 
-		for (const species in setsJSON) {
-			const speciesData = setsJSON[species];
+		for (const speciesName in setsJSON) {
+			const speciesData = setsJSON[speciesName];
 			for (const set of speciesData.sets) {
 				const species = Dex.species.get(set.species);
 				assert(species.exists, `invalid species "${set.species}" of ${species}`);
@@ -512,7 +512,7 @@ describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
 				// Check that no moves appear more than once in a set
 				assert.equal(set.moves.flat(1).length, new Set(set.moves.flat(1)).size, `${species} has repeat moves`);
 
-				if (species === 'Carbink') continue;
+				if (species.name === 'Carbink') continue;
 				assert(!!set.evs, `Set of ${species} has no EVs specified`);
 				const keys = Object.keys(set.evs);
 				let totalEVs = 0;
