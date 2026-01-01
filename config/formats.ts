@@ -948,6 +948,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					break;
 				}
 			}
+			if (pokemon.hasItem('abilityshield') ||
+				pokemon.m.scrambled.items.some((e: { thing: string }) => this.toID(e.thing) === 'abilityshield')) {
+				ngas = false;
+			}
 			for (const ability of pokemon.m.scrambled.abilities) {
 				if (this.field.getPseudoWeather('magicroom') && ability.inSlot === 'Item') continue;
 				const effect = 'ability:' + this.toID(ability.thing);
@@ -1009,7 +1013,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					if (!this.dex.moves.get(moveSlot.id).exists) continue;
 					newMoveSlots.push(moveSlot);
 				}
-				pokemon.moveSlots = (pokemon as any).baseMoveSlots = newMoveSlots;
+				pokemon.moveSlots = newMoveSlots;
+				(pokemon as any).baseMoveSlots = newMoveSlots;
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
 					const move = this.dex.moves.get(scrambledMove.thing);

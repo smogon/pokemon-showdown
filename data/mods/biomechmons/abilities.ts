@@ -1,4 +1,29 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+	magician: {
+		inherit: true,
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
+				move.id === 'fling' || move.category === 'Status') return;
+			const hitTargets = move.hitTargets;
+			this.speedSort(hitTargets);
+			for (const pokemon of hitTargets) {
+				if (pokemon !== source) {
+					const yourItem = pokemon.takeItem(source);
+					if (!yourItem) continue;
+					if (!source.setItem(yourItem)) {
+						if (!this.dex.items.get(yourItem.id).exists) {
+							pokemon.setItem(yourItem.id);
+							continue;
+						}
+						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+						continue;
+					}
+					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
+					return;
+				}
+			}
+		},
+	},
 	neutralizinggas: {
 		inherit: true,
 		onSwitchIn(pokemon) {
@@ -76,6 +101,30 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 						pokemon.moveSlots.push(this.dex.deepClone(findSlot));
 					}
 				}
+			}
+		},
+	},
+	pickpocket: {
+		inherit: true,
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && move?.flags['contact']) {
+				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
+					return;
+				}
+				const yourItem = source.takeItem(target);
+				if (!yourItem) {
+					return;
+				}
+				if (!target.setItem(yourItem)) {
+					if (!this.dex.items.get(yourItem.id).exists) {
+						target.setItem(yourItem.id);
+						return;
+					}
+					source.item = yourItem.id;
+					return;
+				}
+				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${source}`);
+				this.add('-item', target, yourItem, '[from] ability: Pickpocket', `[of] ${source}`);
 			}
 		},
 	},
