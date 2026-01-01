@@ -125,6 +125,8 @@ export interface RoomSettings {
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
 	topics?: string[];
+	// auto start thing of the day
+	autoStartOtd?: boolean;
 	autoModchat?: {
 		rank: GroupSymbol,
 		time: number,
