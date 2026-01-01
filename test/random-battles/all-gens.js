@@ -529,7 +529,7 @@ describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
 			for (const set of speciesData.sets) {
 				totalWeight += set.weight;
 			}
-			assert.equal(totalWeight, 100, `Total set weight for ${species} is ${totalWeight < 100 ? 'less' : 'greater'} than 100%`);
+			assert.equal(totalWeight, 100, `Total set weight for ${speciesName} is ${totalWeight < 100 ? 'less' : 'greater'} than 100%`);
 		}
 	});
 });
