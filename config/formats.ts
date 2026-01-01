@@ -984,36 +984,35 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					moves: [] as object[],
 				};
 
-				if (Dex.items.get(pokemon.set.ability)?.exists) {
+				if (this.dex.items.get(pokemon.set.ability).exists) {
 					pokemon.m.scrambled.items.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
-				} else if (Dex.moves.get(pokemon.set.ability)?.exists) {
+				} else if (this.dex.moves.get(pokemon.set.ability).exists) {
 					pokemon.m.scrambled.moves.push({ thing: pokemon.set.ability, inSlot: 'Ability' });
 				}
 
-				if (Dex.abilities.get(pokemon.set.item)?.exists) {
+				if (this.dex.abilities.get(pokemon.set.item).exists) {
 					pokemon.m.scrambled.abilities.push({ thing: pokemon.set.item, inSlot: 'Item' });
-				} else if (Dex.moves.get(pokemon.set.item)?.exists) {
+				} else if (this.dex.moves.get(pokemon.set.item).exists) {
 					pokemon.m.scrambled.moves.push({ thing: pokemon.set.item, inSlot: 'Item' });
 				}
 
 				for (const move of pokemon.set.moves) {
-					if (Dex.abilities.get(move)?.exists) {
+					if (this.dex.abilities.get(move).exists) {
 						pokemon.m.scrambled.abilities.push({ thing: move, inSlot: 'Move' });
-					} else if (Dex.items.get(move)?.exists) {
+					} else if (this.dex.items.get(move).exists) {
 						pokemon.m.scrambled.items.push({ thing: move, inSlot: 'Move' });
 					}
 				}
 
-				for (let i = 0; i < pokemon.baseMoveSlots.length; i++) {
-					if (!Dex.moves.get(pokemon.baseMoveSlots[i].id).exists) {
-						pokemon.baseMoveSlots.splice(i, 1);
-						pokemon.moveSlots.splice(i, 1);
-						i--;
-					}
+				const newMoveSlots = [];
+				for (const moveSlot of pokemon.baseMoveSlots) {
+					if (!this.dex.moves.get(moveSlot.id).exists) continue;
+					newMoveSlots.push(moveSlot);
 				}
+				pokemon.moveSlots = (pokemon as any).baseMoveSlots = newMoveSlots;
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
-					const move = Dex.moves.get(scrambledMove.thing);
+					const move = this.dex.moves.get(scrambledMove.thing);
 					const newMove = {
 						move: move.name,
 						id: move.id,
