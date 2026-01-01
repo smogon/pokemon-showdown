@@ -979,7 +979,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	meloettapirouette: {
 	},
 	genesect: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	genesectdouse: {
 	},
