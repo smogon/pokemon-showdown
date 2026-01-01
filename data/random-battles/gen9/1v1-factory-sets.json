@@ -2068,7 +2068,7 @@
                 "ability": "Water Absorb",
                 "nature": "Modest",
                 "evs": {"hp": 244, "spa": 184, "spd": 80},
-                "moves": [["Overheat"], ["Steam Eruption"], ["Sludge Wave"], ["Earth Power", "Flame Charge", "Focus Bla"]],
+                "moves": [["Overheat"], ["Steam Eruption"], ["Sludge Wave"], ["Earth Power", "Flame Charge", "Focus Blast"]],
                 "weight": 25
             },
             {
