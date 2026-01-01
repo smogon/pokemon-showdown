@@ -617,8 +617,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			} else {
 				set.ability = this.toID(abilities[0]);
 			}
-			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(this.toID(abil)))
-				&& this.ruleTable.has('obtainableabilities')
+			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(this.toID(abil))) &&
+				this.ruleTable.has('obtainableabilities')
 			) {
 				if (set.ability !== 'noability') return [`${set.species} has illegal abilities.`];
 			}
