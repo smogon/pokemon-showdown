@@ -689,7 +689,7 @@ export class RandomSCTeams extends RandomTeams {
 		}
 	}
 
-	getSuperType(moves: Set<string>): string {
+	getSuperType(moves): string {
 		for (const move of moves) {
 			if (move.includes('crystal')) return "Crystal";
 			if (move.includes('feral')) return "Feral";
