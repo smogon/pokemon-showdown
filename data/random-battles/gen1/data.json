@@ -245,7 +245,7 @@
     "persian": {
         "level": 73,
         "moves": ["bodyslam", "bubblebeam", "slash"],
-        "exclusiveMoves": ["hyperbeam", "thunderbolt"]
+        "exclusiveMoves": ["hyperbeam", "thunderbolt", "thunderbolt", "thunderbolt"]
     },
     "psyduck": {
         "level": 89,

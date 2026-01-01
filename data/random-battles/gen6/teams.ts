@@ -227,7 +227,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['hornleech', 'woodhammer'],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
-			['gunkshot', 'poisonjab'],
+			[['gunkshot', 'sludgewave'], 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
 			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],

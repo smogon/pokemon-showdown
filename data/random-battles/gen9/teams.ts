@@ -816,6 +816,12 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce Encore on Whimsicott
+		if (movePool.includes('encore') && species.id === 'whimsicott') {
+			counter = this.addMove('encore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['mortalspin', 'spore'];
@@ -1176,7 +1182,7 @@ export class RandomTeams {
 		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
 		if (
 			(species.baseSpecies === 'Magearna' && role === 'Tera Blast user') ||
-			species.id === 'necrozmaduskmane' || (species.id === 'calyrexice' && isDoubles)
+			((species.id === 'calyrexice' || species.id === 'necrozmaduskmane') && isDoubles)
 		) return 'Weakness Policy';
 		if (['dragonenergy', 'lastrespects', 'waterspout'].some(m => moves.has(m))) return 'Choice Scarf';
 		if (
@@ -1330,17 +1336,17 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
+		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m));
 
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= moves.size) &&
-			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
+			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
 				(species.baseStats.atk >= 100 || ability === 'Huge Power' || ability === 'Pure Power') &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				ability !== 'Speed Boost' && !counter.get('priority') && !moves.has('aquastep')
+				ability !== 'Speed Boost' && !counter.get('priority')
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
@@ -1379,6 +1385,7 @@ export class RandomTeams {
 		) return 'Heavy-Duty Boots';
 
 		// Low Priority
+		if (moves.has('dragondance') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (
 			ability === 'Rough Skin' || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&

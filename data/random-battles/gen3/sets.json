@@ -806,7 +806,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "hiddenpowerfire", "icebeam", "lovelykiss", "psychic", "substitute"],
+                "movepool": ["calmmind", "icebeam", "lovelykiss", "psychic", "substitute"],
                 "abilities": ["Oblivious"]
             }
         ]
@@ -1753,7 +1753,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "icebeam", "recover", "surf", "toxic"],
+                "movepool": ["calmmind", "explosion", "icebeam", "recover", "surf", "toxic"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -2690,7 +2690,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "explosion", "overheat", "rockslide", "shadowball"],
+                "movepool": ["earthquake", "explosion", "rockslide", "shadowball"],
                 "abilities": ["Levitate"],
                 "preferredTypes": ["Ground"]
             }

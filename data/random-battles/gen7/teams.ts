@@ -345,7 +345,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['hornleech', 'woodhammer'],
 			[['gigadrain', 'leafstorm'], ['energyball', 'leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
-			['gunkshot', 'poisonjab'],
+			[['gunkshot', 'sludgewave'], 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
@@ -933,7 +933,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
-		if (role === 'Bulky Setup' && !!counter.get('speedsetup') && !moves.has('swordsdance')) {
+		if (role === 'Bulky Setup' && (!!counter.get('speedsetup') || moves.has('shiftgear')) && !moves.has('swordsdance')) {
 			return 'Weakness Policy';
 		}
 		if (species.id === 'palkia') return 'Lustrous Orb';

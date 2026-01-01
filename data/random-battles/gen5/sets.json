@@ -322,8 +322,14 @@
         "level": 88,
         "sets": [
             {
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "encore", "focusblast", "icebeam", "scald", "substitute"],
+                "abilities": ["Cloud Nine", "Swift Swim"],
+                "preferredTypes": ["Ice"]
+            },
+            {
                 "role": "Fast Attacker",
-                "movepool": ["calmmind", "encore", "focusblast", "hydropump", "icebeam", "scald"],
+                "movepool": ["calmmind", "encore", "focusblast", "hydropump", "icebeam"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "preferredTypes": ["Ice"]
             }
@@ -418,7 +424,8 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["haze", "icebeam", "rapidspin", "scald", "sludgebomb", "toxicspikes"],
-                "abilities": ["Clear Body", "Liquid Ooze"]
+                "abilities": ["Clear Body", "Liquid Ooze"],
+                "preferredTypes": ["Poison"]
             }
         ]
     },
@@ -529,7 +536,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "painsplit", "shadowball", "sludgewave", "substitute", "trick", "willowisp"],
+                "movepool": ["destinybond", "focusblast", "painsplit", "shadowball", "sludgewave", "substitute", "trick", "willowisp"],
                 "abilities": ["Levitate"],
                 "preferredTypes": ["Fighting"]
             }
@@ -983,7 +990,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"],
+                "movepool": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "signalbeam"],
                 "abilities": ["Unnerve"]
             }
         ]
@@ -1374,8 +1381,13 @@
         "level": 90,
         "sets": [
             {
+                "role": "Bulky Support",
+                "movepool": ["earthquake", "healbell", "return", "thunderwave"],
+                "abilities": ["Intimidate"]
+            },
+            {
                 "role": "Bulky Attacker",
-                "movepool": ["closecombat", "crunch", "healbell", "return", "thunderwave"],
+                "movepool": ["closecombat", "crunch", "return", "thunderwave"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -1545,14 +1557,8 @@
         "level": 82,
         "sets": [
             {
-                "role": "Spinner",
+                "role": "Bulky Support",
                 "movepool": ["earthquake", "iceshard", "rapidspin", "stealthrock", "stoneedge", "toxic"],
-                "abilities": ["Sturdy"],
-                "preferredTypes": ["Rock"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["earthquake", "gunkshot", "iceshard", "stealthrock", "stoneedge"],
                 "abilities": ["Sturdy"],
                 "preferredTypes": ["Rock"]
             }
@@ -2413,7 +2419,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["hiddenpowerfighting", "shadowclaw", "shadowsneak", "thunderwave", "willowisp"],
-                "abilities": ["Cursed Body", "Frisk", "Insomnia"]
+                "abilities": ["Insomnia"]
             }
         ]
     },
@@ -3426,12 +3432,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "iceshard", "iciclecrash", "stealthrock"],
-                "abilities": ["Thick Fat"]
-            },
-            {
-                "role": "Fast Attacker",
-                "movepool": ["earthquake", "iceshard", "iciclecrash", "stoneedge", "superpower"],
+                "movepool": ["earthquake", "iceshard", "iciclecrash", "stealthrock", "stoneedge", "superpower"],
                 "abilities": ["Thick Fat"]
             }
         ]
@@ -4274,7 +4275,7 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["hurricane", "leechseed", "protect", "substitute"],
+                "movepool": ["encore", "hurricane", "leechseed", "substitute"],
                 "abilities": ["Prankster"]
             }
         ]
@@ -4353,12 +4354,12 @@
         "level": 82,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["crunch", "dragondance", "highjumpkick", "stoneedge", "zenheadbutt"],
-                "abilities": ["Intimidate", "Moxie"]
+                "role": "Bulky Setup",
+                "movepool": ["crunch", "dragondance", "drainpunch", "stoneedge", "zenheadbutt"],
+                "abilities": ["Intimidate"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Attacker",
                 "movepool": ["bulkup", "crunch", "drainpunch", "rest"],
                 "abilities": ["Shed Skin"]
             }
@@ -4466,7 +4467,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam"],
+                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover"],
                 "abilities": ["Magic Guard"]
             }
         ]
@@ -4568,9 +4569,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["bugbuzz", "gigadrain", "hiddenpowerice", "thunder", "voltswitch"],
-                "abilities": ["Compound Eyes"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["bugbuzz", "hiddenpowerice", "thunder", "voltswitch"],
+                "abilities": ["Compound Eyes"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["bugbuzz", "energyball", "thunder", "voltswitch"],
+                "abilities": ["Compound Eyes"]
             }
         ]
     },
@@ -4956,7 +4961,8 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["calmmind", "earthpower", "focusblast", "psychic", "rockpolish", "sludgewave"],
-                "abilities": ["Sheer Force"]
+                "abilities": ["Sheer Force"],
+                "preferredTypes": ["Poison"]
             }
         ]
     },
