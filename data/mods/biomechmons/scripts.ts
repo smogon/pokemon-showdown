@@ -1,7 +1,6 @@
 import { RESTORATIVE_BERRIES } from "../../../sim/pokemon";
 
 export const Scripts: ModdedBattleScriptsData = {
-
 	pokemon: {
 		getAbility() {
 			const ability = this.battle.dex.abilities.getByID(this.ability);
