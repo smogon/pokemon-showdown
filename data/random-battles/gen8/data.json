@@ -458,7 +458,7 @@
     },
     "mewtwo": {
         "level": 70,
-        "moves": ["fireblast", "nastyplot", "psystrike", "recover", "shadowball"],
+        "moves": ["aurasphere", "fireblast", "nastyplot", "psystrike", "recover"],
         "doublesLevel": 74,
         "doublesMoves": ["aurasphere", "icebeam", "nastyplot", "psystrike", "recover"]
     },
