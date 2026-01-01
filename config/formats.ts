@@ -553,7 +553,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Annihilape​', 'Arceus​', 'Archaludon​', 'Baxcalibur​', 'Calyrex-Ice​', 'Calyrex-Shadow​', 'Chien-Pao​', 'Chi-Yu​', 'Deoxys​', 'Deoxys-Attack​', 'Dialga​', 'Dialga-Origin​',
 			'Espathra​', 'Eternatus​', 'Flutter Mane​', 'Giratina​', 'Giratina-Origin​', 'Gouging Fire​', 'Groudon​', 'Ho-Oh​', 'Iron Bundle​', 'Koraidon​', 'Kyogre​', 'Kyurem-Black​', 'Kyurem-White​',
-			'Landorus​', 'Lugia​', 'Lunala​', 'Magearna​', 'Mewtwo​', 'Miraidon​', 'Necrozma-Dawn-Wings​', 'Necrozma-Dusk-Mane​', 'Ogerpon-Hearthflame​', 'Palafin​', 'Palkia​', 'Palkia-Origin​',
+			'Landorus-Incarnate', 'Lugia​', 'Lunala​', 'Magearna​', 'Mewtwo​', 'Miraidon​', 'Necrozma-Dawn-Wings​', 'Necrozma-Dusk-Mane​', 'Ogerpon-Hearthflame​', 'Palafin​', 'Palkia​', 'Palkia-Origin​',
 			'Rayquaza​', 'Regieleki​', 'Regigigas​', 'Reshiram​', 'Roaring Moon​', 'Slaking​', 'Shaymin-Sky​', 'Sneasler​', 'Solgaleo​', 'Spectrier​', 'Terapagos​', 'Ursaluna-Bloodmoon​', 'Urshifu',
 			'Urshifu-Rapid-Strike​', 'Volcarona​', 'Zacian​', 'Zacian-Crowned​', 'Zamazenta-Crowned', 'Zekrom​', 'Arena Trap​', 'Moody​', 'Sand Veil​', 'Shadow Tag​', 'Snow Cloak​', '​Bright Powder​',
 			'Choice Band​', 'Choice Specs​', 'King\'s Rock​', 'Razor Fang​', 'Baton Pass​', 'Last Respects​', 'Shed Tail​',
