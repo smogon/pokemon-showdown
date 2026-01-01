@@ -117,7 +117,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.ability = ability.id;
 			// ability changes are permanent in BioMechMons
-			if (!isTransform) this.baseAbility = ability.id;
+			if (!isTransform && !this.transformed) this.baseAbility = ability.id;
 			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (sourceEffect && !isFromFormeChange && !isTransform) {
 				if (source) {
