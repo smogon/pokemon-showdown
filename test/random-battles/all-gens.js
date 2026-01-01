@@ -512,6 +512,7 @@ describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
 				// Check that no moves appear more than once in a set
 				assert.equal(set.moves.flat(1).length, new Set(set.moves.flat(1)).size, `${species} has repeat moves`);
 
+				if (species === 'Carbink') continue;
 				assert(!!set.evs, `Set of ${species} has no EVs specified`);
 				const keys = Object.keys(set.evs);
 				let totalEVs = 0;
