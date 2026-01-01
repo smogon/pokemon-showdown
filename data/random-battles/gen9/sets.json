@@ -3226,7 +3226,7 @@
         ]
     },
     "probopass": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3754,7 +3754,7 @@
         ]
     },
     "arceusgrass": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3794,7 +3794,7 @@
         ]
     },
     "arceusice": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -7286,7 +7286,7 @@
         ]
     },
     "ironjugulis": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -7320,7 +7320,7 @@
         ]
     },
     "ironbundle": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",

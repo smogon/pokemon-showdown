@@ -408,7 +408,7 @@
         ]
     },
     "slowbrogalar": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -586,7 +586,7 @@
         ]
     },
     "weezing": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1096,7 +1096,7 @@
         ]
     },
     "azumarill": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -1414,7 +1414,7 @@
         ]
     },
     "donphan": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1847,7 +1847,7 @@
                 "role": "Doubles Support",
                 "movepool": ["Encore", "Struggle Bug", "Tailwind", "Thunder Wave"],
                 "abilities": ["Prankster"],
-                "teraTypes": ["Steel", "Water"] 
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -2030,7 +2030,7 @@
         ]
     },
     "chimecho": {
-        "level": 95,
+        "level": 94,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2091,7 +2091,7 @@
         ]
     },
     "regirock": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2901,7 +2901,7 @@
         ]
     },
     "uxie": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -4366,7 +4366,7 @@
         ]
     },
     "goodrahisui": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4405,7 +4405,7 @@
         ]
     },
     "avalugg": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -5410,7 +5410,7 @@
         ]
     },
     "indeedeef": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -5673,7 +5673,7 @@
         ]
     },
     "calyrexshadow": {
-        "level": 62,
+        "level": 63,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5712,7 +5712,7 @@
         ]
     },
     "ursaluna": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -6745,7 +6745,7 @@
         ]
     },
     "walkingwake": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",

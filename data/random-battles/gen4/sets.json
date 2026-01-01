@@ -137,7 +137,7 @@
         ]
     },
     "sandslash": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Spinner",
@@ -173,7 +173,7 @@
         ]
     },
     "clefable": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -234,7 +234,7 @@
         ]
     },
     "parasect": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -856,7 +856,7 @@
         ]
     },
     "snorlax": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -877,7 +877,7 @@
         ]
     },
     "articuno": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Staller",
@@ -902,7 +902,7 @@
         ]
     },
     "moltres": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1181,7 +1181,6 @@
                 "abilities": ["Water Absorb"]
             },
             {
-            
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "recover", "toxic", "waterfall"],
                 "abilities": ["Water Absorb"]
@@ -1246,7 +1245,7 @@
         ]
     },
     "wobbuffet": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1357,7 +1356,7 @@
         ]
     },
     "heracross": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1641,7 +1640,7 @@
         ]
     },
     "hooh": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2146,7 +2145,7 @@
         ]
     },
     "torkoal": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2365,7 +2364,7 @@
         ]
     },
     "kecleon": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2664,7 +2663,7 @@
         ]
     },
     "jirachi": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2695,7 +2694,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2720,7 +2719,7 @@
         ]
     },
     "deoxysspeed": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Support",
@@ -2940,7 +2939,7 @@
         ]
     },
     "floatzel": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2956,7 +2955,7 @@
         ]
     },
     "cherrim": {
-        "level": 96,
+        "level": 95,
         "sets": [
             {
                 "role": "Staller",
@@ -3137,7 +3136,7 @@
         ]
     },
     "hippowdon": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3506,7 +3505,7 @@
         ]
     },
     "rotomfan": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3626,7 +3625,7 @@
         ]
     },
     "regigigas": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Staller",
@@ -3696,7 +3695,7 @@
         ]
     },
     "darkrai": {
-        "level": 69,
+        "level": 68,
         "sets": [
             {
                 "role": "Setup Sweeper",
