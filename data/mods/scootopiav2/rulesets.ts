@@ -13,7 +13,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = Dex.mod("scootopiav2").moves.get(moveSlot.id);
+				const move = this.dex.moves.get(moveSlot.id);
 				if ((move.type === "Crystal" && !pokemon.hasType("Crystal")) || (move.type === "Feral" && !pokemon.hasType("Feral"))) {
 					pokemon.disableMove(moveSlot.id, false);
 				}
