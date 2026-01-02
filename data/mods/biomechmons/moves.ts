@@ -198,11 +198,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			if (toID(source.item) === 'sketch') {
+			if (this.toID(source.item) === 'sketch') {
 				source.setItem(move.name);
 				this.add('-activate', source, 'move: Sketch', move.name);
 				return;
-			} else if (toID(source.ability) === 'sketch') {
+			} else if (this.toID(source.ability) === 'sketch') {
 				source.setAbility(move.name);
 				this.add('-activate', source, 'move: Sketch', move.name);
 				return;

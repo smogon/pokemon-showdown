@@ -12,7 +12,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				if (isBMM) {
 					target.removeVolatile('item:airballoon');
 					target.m.scrambled.items.splice((target.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
-						e.thing === 'airballoon' && e.inSlot === isBMM), 1);
+						this.toID(e.thing) === 'airballoon' && e.inSlot === isBMM), 1);
 					if (isBMM === 'Ability') target.setAbility('No Ability');
 				}
 			}
@@ -30,7 +30,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 					if (isBMM) {
 						target.removeVolatile('item:airballoon');
 						target.m.scrambled.items.splice((target.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
-							e.thing === 'airballoon' && e.inSlot === isBMM), 1);
+							this.toID(e.thing) === 'airballoon' && e.inSlot === isBMM), 1);
 						if (isBMM === 'Ability') target.setAbility('No Ability');
 					}
 				}
