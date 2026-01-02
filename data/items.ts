@@ -8049,6 +8049,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 388,
 		onUpdate(pokemon) {
 			if (pokemon.useItem()) {
+				pokemon.removeVolatile('confusion');
 				pokemon.addVolatile('confusion');
 			}
 		},
