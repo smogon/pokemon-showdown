@@ -54,9 +54,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 9] Unrated Random Battle",
@@ -199,9 +196,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 9] Doubles OU",
@@ -3301,9 +3295,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'randomBSSFactory',
 		ruleset: ['Flat Rules', 'VGC Timer', 'Best of = 3'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 
 	// Randomized Metas
@@ -3319,9 +3310,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'randomroulette',
 		team: 'random',
 		bestOfDefault: true,
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 9] Monkey's Paw Random Battle",
@@ -3491,9 +3479,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomBSSFactory',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 9] Draft Factory",
@@ -3543,9 +3528,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['CAP', 'Custom', 'Future', 'LGPE', 'MissingNo.', 'Pikachu-Cosplay', 'Pichu-Spiky-eared', 'Xerneas-Neutral'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 9] Doubles Hackmons Cup",
@@ -3743,9 +3725,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 8] Random Doubles Battle",
@@ -3839,9 +3818,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 7] Battle Factory",
@@ -3888,9 +3864,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 6] Battle Factory",
@@ -3910,9 +3883,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 4] Random Battle",
@@ -3920,9 +3890,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 3] Random Battle",
@@ -3930,9 +3897,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Standard'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 2] Random Battle",
@@ -3940,9 +3904,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Standard'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 1] Random Battle",
@@ -3950,9 +3911,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['Standard'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Player Signups for <b>Random Battles Team Tournament IX</b> are now open! If you enjoy Random Battles, want the chance to rep a team's mascot with a custom avatar, and are raring to compete at the highest level, <a href="https://www.smogon.com/forums/threads/3775536">sign up now</a> and battle with the best of the best!</div>`);
-		},
 	},
 	{
 		name: "[Gen 1] Challenge Cup",
