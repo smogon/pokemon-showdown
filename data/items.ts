@@ -8334,8 +8334,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		forcedForme: "Venomicon-Epilogue",
 		itemUser: ["Venomicon-Epilogue"],
-		num: -2,
+		num: -3,
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+
+	// Light and Dark items
+
+	pharaoniccrown: {
+		name: "Pharaonic Crown",
+		spritenum: 0,
+		fling: {
+			basePower: 80,
+		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd) {
+			return this.chainModify(1.5);
+		},
+		
+		num: -2,
+		gen: 8,
+	}
 };
