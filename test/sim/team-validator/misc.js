@@ -233,10 +233,10 @@ describe('Team Validator', () => {
 			))
 			.reduce((x, y) => x + y);
 
-		// Dex.species.all skips over cosmetic formes
 		const accepted = Dex.species.all().filter(species => !(
 			// ruleTable.isBannedSpecies blind spots
-			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
+			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP' ||
+			Dex.species.get(species.baseSpecies).cosmeticFormes?.includes(species.name)
 		) && !ruleTable.isBannedSpecies(species)).length;
 
 		assert.equal(accepted, allowed);
