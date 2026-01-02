@@ -1362,7 +1362,7 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
+		if (counter.get('speedsetup') && !counter.get('physicalsetup') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (
 			!counter.get('Status') &&
 			!['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role)
