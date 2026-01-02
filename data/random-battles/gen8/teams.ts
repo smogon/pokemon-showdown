@@ -1526,7 +1526,7 @@ export class RandomGen8Teams {
 		case 'Cloud Nine':
 			return (!isNoDynamax || species.id !== 'golduck');
 		case 'Competitive':
-			return (moves.has('rest') && moves.has('sleeptalk'));
+			return (!counter.get('Special') || moves.has('rest') && moves.has('sleeptalk'));
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Cursed Body':
