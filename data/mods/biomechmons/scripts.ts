@@ -117,7 +117,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.ability = ability.id;
 			// ability changes are permanent in BioMechMons
-			if (!isTransform) this.baseAbility = ability.id;
+			if (!isTransform && !this.transformed) this.baseAbility = ability.id;
 			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (sourceEffect && !isFromFormeChange && !isTransform) {
 				if (source) {
@@ -181,8 +181,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!source) source = this;
 			if (this.battle.gen <= 4) {
 				if (source.itemKnockedOff) return false;
-				if (toID(this.ability) === 'multitype') return false;
-				if (toID(source.ability) === 'multitype') return false;
+				if (this.battle.toID(this.ability) === 'multitype') return false;
+				if (this.battle.toID(source.ability) === 'multitype') return false;
 			}
 			const item = this.getItem();
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {

@@ -52,7 +52,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (!this.dex.abilities.get(target.ability).exists) {
 					const isItem = (target.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (isItem >= 0) {
-						target.removeVolatile('item:' + this.toID(pokemon.m.scrambled.items[isItem].thing));
+						target.removeVolatile('item:' + this.toID(target.m.scrambled.items[isItem].thing));
 					} else if ((target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
 						const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 						const indexOfMove = target.moveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id);
@@ -126,6 +126,81 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${source}`);
 				this.add('-item', target, yourItem, '[from] ability: Pickpocket', `[of] ${source}`);
 			}
+		},
+	},
+	trace: {
+		inherit: true,
+		onStart(pokemon) {
+			this.effectState.seek = true;
+			// n.b. only affects Hackmons
+			// interaction with No Ability is complicated: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/page-76#post-7790209
+			if (pokemon.adjacentFoes().some(foeActive => foeActive.ability === 'noability')) {
+				this.effectState.seek = false;
+			}
+			// interaction with Ability Shield is similar to No Ability
+			if (pokemon.hasItem('Ability Shield') && this.toID(pokemon.ability) === 'trace') {
+				this.add('-block', pokemon, 'item: Ability Shield');
+				this.effectState.seek = false;
+			}
+			if (this.effectState.seek) {
+				this.singleEvent('Update', this.effect, this.effectState, pokemon);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.seek) return;
+
+			const possibleTargets = pokemon.adjacentFoes().filter(
+				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
+			);
+			if (!possibleTargets.length) return;
+
+			const target = this.sample(possibleTargets);
+			const ability = target.getAbility();
+			if (this.toID(pokemon.item) === 'trace') {
+				this.add('-ability', pokemon, ability.name, 'Trace');
+				pokemon.setItem(ability.name);
+				return;
+			} else if (pokemon.volatiles['ability:trace']?.inSlot === 'Move') {
+				if (this.dex.abilities.get(ability.name).exists) {
+					pokemon.removeVolatile('ability:trace');
+					pokemon.m.scrambled.abilities.splice(
+						(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+							this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+					this.add('-ability', pokemon, ability.name, 'Trace');
+					pokemon.addVolatile(`ability:${ability.id}`);
+					pokemon.m.scrambled.abilities.push({ thing: ability.name, inSlot: 'Move' });
+				} else if (this.dex.items.get(ability.name).exists) {
+					pokemon.removeVolatile('ability:trace');
+					pokemon.m.scrambled.abilities.splice(
+						(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+							this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+					this.add('-ability', pokemon, ability.name, 'Trace');
+					pokemon.addVolatile(`item:${ability.id}`);
+					pokemon.m.scrambled.items.push({ thing: this.dex.items.get(ability.name).name, inSlot: 'Move' });
+				} else {
+					const move = this.dex.moves.get(ability.name);
+					if (move.exists) {
+						pokemon.removeVolatile('ability:trace');
+						pokemon.m.scrambled.abilities.splice(
+							(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
+								this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
+						this.add('-ability', pokemon, move.name, 'Trace');
+						const newMove = {
+							move: move.name,
+							id: move.id,
+							pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+							maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+							target: move.target,
+							disabled: false,
+							used: false,
+						};
+						pokemon.baseMoveSlots.push(newMove);
+						pokemon.moveSlots.push(newMove);
+					}
+				}
+				return;
+			}
+			pokemon.setAbility(ability, target);
 		},
 	},
 };
