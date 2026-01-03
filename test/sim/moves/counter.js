@@ -174,6 +174,18 @@ describe('Counter', () => {
 		battle.destroy();
 	});
 
+	it(`[Gen 2] should be callable by Sleep Talk`, () => {
+		battle = common.gen(2).createBattle({ seed: [1, 2, 3, 3] }, [[
+			{ species: 'Espeon', moves: ['spore', 'tackle'] },
+		], [
+			{ species: 'Umbreon', moves: ['sleeptalk', 'counter'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move tackle', 'move sleeptalk');
+		assert.equal(battle.p2.active[0].status, 'slp');
+		assert.false.fullHP(battle.p1.active[0]);
+	});
+
 	it(`[Gen 1] Counter Desync Clause`, () => {
 		// seed chosen so Water Gun succeeds and Pound full paras
 		battle = common.gen(1).createBattle({ seed: [1, 2, 3, 3] }, [[
