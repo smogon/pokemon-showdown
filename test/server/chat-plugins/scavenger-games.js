@@ -583,4 +583,245 @@ describe("Scavenger Twists", () => {
 			assert.deepEqual(correct[2]["a3"], [this.user1.id]);
 		});
 	});
+
+	/**
+	 * All Compatible Twists Combined
+	 * Tests that all compatible twists can run simultaneously without conflicts.
+	 * Note: BonusRound and ScavengersFeud cannot be combined (both insert a 4th question).
+	 * This test uses all twists except ScavengersFeud.
+	 */
+	context("All twists combined (except ScavengersFeud)", () => {
+		beforeEach(async function () {
+			// Using: perfectscore, bonusround, incognito, spamfilter, blindincognito, timetrial, minesweeper, pointless
+			// Requires 4+ questions for TimeTrial and BonusRound
+			// Requires mines (!) for Minesweeper
+			await runCommand(
+				this.staffUser,
+				"/starttwisthunt perfectscore, bonusround, incognito, spamfilter, blindincognito, timetrial, minesweeper, pointless | PartMan | Q1 | A1; !mine1 | Q2 | A2; !mine2 | Q3 | A3; !mine3 | Q4 Bonus | A4; !mine4"
+			);
+		});
+
+		it("should allow a player to complete the hunt with all twists active", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			// Complete all questions
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			// BlindIncognito marks completion differently
+			const finisher = getFinisher(this.user1.id);
+			assert.equal(finisher.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
+		});
+
+		it("should track wrong answers across multiple twists", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			// Make some wrong guesses (tracked by SpamFilter, PerfectScore, and Minesweeper)
+			await runCommand(this.user1, "/scavenge wrong1");
+			await runCommand(this.user1, "/scavenge mine1"); // Hit a mine
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			const player = this.room.game.playerTable[this.user1.id];
+			const finisher = getFinisher(this.user1.id);
+
+			// SpamFilter should track incorrect answers
+			assert(player.modData.spamfilter.incorrect.length === 2, "Spam Filter should track wrong answers");
+
+			// PerfectScore should mark as not perfect
+			assert.equal(finisher.modData.perfectscore.isPerfect, false, "should not be perfect with wrong answers");
+
+			// Pointless should track correct answer
+			const correct = this.room.game.modData.pointless.correct;
+			assert.deepEqual(correct[0]["a1"], [this.user1.id], "Pointless should track correct answers");
+
+			await runCommand(this.staffUser, "/endhunt");
+			const log = this.room.log.log;
+			const finishMessage = log.find(message => message.includes('ended by'));
+			assert(finishMessage);
+			assert(finishMessage.includes("mine1: FakePart"));
+		});
+
+		it("should allow skipping bonus question with all twists", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+
+			// Skip the bonus question (BonusRound feature)
+			await runCommand(this.user1, "/scavenge skip");
+
+			const finisher = getFinisher(this.user1.id);
+			assert(finisher, "player should have finished");
+			assert.equal(finisher.modData.bonusround.noSkipBonus, false, "Bonus Round should track that skip was used");
+		});
+
+		it("should handle multiple players completing with all twists", async function () {
+			await runCommand(this.user1, "/joinhunt");
+			await sleep(10);
+			await runCommand(this.user2, "/joinhunt");
+
+			// User1 completes with no mistakes
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			// User2 completes with some mistakes
+			await runCommand(this.user2, "/scavenge wrong");
+			await runCommand(this.user2, "/scavenge mine1");
+			await runCommand(this.user2, "/scavenge A1");
+			await runCommand(this.user2, "/scavenge A2");
+			await runCommand(this.user2, "/scavenge A3");
+			await runCommand(this.user2, "/scavenge A4");
+
+			const finisher1 = getFinisher(this.user1.id);
+			const finisher2 = getFinisher(this.user2.id);
+
+			// Both should have finished (BlindIncognito)
+			assert(finisher1, "user1 should have finished");
+			assert(finisher2, "user2 should have finished");
+
+			// PerfectScore differentiation
+			assert.equal(finisher1.modData.perfectscore.isPerfect, true, "user1 should be perfect");
+			assert.equal(finisher2.modData.perfectscore.isPerfect, false, "user2 should not be perfect");
+
+			// TimeTrial should have different start times
+			const modData = this.room.game.modData.timetrial;
+			assert(modData.startTimes[this.user1.id] <= modData.startTimes[this.user2.id], "user1 should have earlier or equal start time");
+		});
+
+		it("should hide completions due to BlindIncognito and Incognito", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			const log = this.room.log.log;
+			const finishMessage = log.find(message => message.includes('ended by'));
+			assert(!finishMessage, "completion should be hidden");
+		});
+
+		it("should track Minesweeper mines correctly with all twists", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			// Hit mines on different questions
+			await runCommand(this.user1, "/scavenge mine1");
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge mine2");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			const guesses = this.room.game.modData.minesweeper.guesses;
+
+			// Should have recorded mine hits
+			assert(guesses[0][this.user1.id], "should track guesses for Q1");
+			assert(guesses[0][this.user1.id].has("mine1"), "should have recorded mine1 hit");
+			assert(guesses[1][this.user1.id], "should track guesses for Q2");
+			assert(guesses[1][this.user1.id].has("mine2"), "should have recorded mine2 hit");
+		});
+	});
+
+	/**
+	 * All Compatible Twists Combined (alternate combo)
+	 * Uses ScavengersFeud instead of BonusRound
+	 */
+	context("All twists combined (except BonusRound)", () => {
+		beforeEach(async function () {
+			// Using: perfectscore, incognito, spamfilter, blindincognito, timetrial, scavengersfeud, minesweeper, pointless
+			// ScavengersFeud adds a 4th question automatically for guessing common wrong answers
+			await runCommand(
+				this.staffUser,
+				"/starttwisthunt perfectscore, incognito, spamfilter, blindincognito, timetrial, scavengersfeud, minesweeper, pointless | PartMan | Q1 | A1; !mine1 | Q2 | A2; !mine2 | Q3 | A3; !mine3 | Q4 | A4; !mine4"
+			);
+		});
+
+		it("should initialize all twist modData correctly", async function () {
+			const game = this.room.game;
+
+			// ScavengersFeud should have added a 5th question
+			assert.equal(game.questions.length, 5, "scavengersfeud should have added a guess question");
+
+			assert(game.modData.scavengersfeud, "scavengersfeud modData should exist");
+			assert(game.modData.scavengersfeud.guesses, "scavengersfeud.guesses should exist");
+			assert(Array.isArray(game.modData.scavengersfeud.incorrect), "scavengersfeud.incorrect should be an array");
+
+			assert(game.modData.perfectscore.leftGame instanceof Set, "perfectscore.leftGame should be a Set");
+			assert(game.modData.timetrial.startTimes, "timetrial.startTimes should exist");
+			assert(Array.isArray(game.modData.minesweeper.mines), "minesweeper.mines should be an array");
+			assert(Array.isArray(game.modData.pointless.correct), "pointless.correct should be an array");
+		});
+
+		it("should allow completing the hunt with ScavengersFeud guess question", async function () {
+			await runCommand(this.user1, "/joinhunt");
+
+			// Complete regular questions
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+
+			// ScavengersFeud's guess question - any answer completes
+			await runCommand(this.user1, "/scavenge guess1, guess2, guess3, guess4");
+
+			// BlindIncognito hides completion status, so check finish record instead
+			const finisher = getFinisher(this.user1.id);
+			assert(finisher, "player should have a finish record");
+			assert.equal(finisher.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
+
+			// Check guesses were recorded
+			const guesses = this.room.game.modData.scavengersfeud.guesses[this.user1.id];
+			assert(guesses, "guesses should be recorded");
+			assert.equal(guesses.length, 4, "should have 4 guesses");
+		});
+
+		it("should track wrong answers for ScavengersFeud while other twists work", async function () {
+			await runCommand(this.user1, "/joinhunt");
+			await runCommand(this.user2, "/joinhunt");
+
+			// Both users make the same wrong guess
+			await runCommand(this.user1, "/scavenge commonwrong");
+			await runCommand(this.user2, "/scavenge commonwrong");
+
+			// ScavengersFeud should track this
+			const incorrect = this.room.game.modData.scavengersfeud.incorrect;
+			assert(incorrect[0]["commonwrong"], "should track common wrong answer");
+			assert.equal(incorrect[0]["commonwrong"].size, 2, "should track both users guessing wrong");
+
+			// SpamFilter should also track for each user
+			const player1 = this.room.game.playerTable[this.user1.id];
+			const player2 = this.room.game.playerTable[this.user2.id];
+			assert(player1.modData.spamfilter.incorrect.length >= 1, "spamfilter should track user1 wrong answer");
+			assert(player2.modData.spamfilter.incorrect.length >= 1, "spamfilter should track user2 wrong answer");
+		});
+
+		it("should handle player leaving with all twists active", async function () {
+			await runCommand(this.user1, "/joinhunt");
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/leavehunt");
+
+			// PerfectScore should track that player left
+			assert(this.room.game.modData.perfectscore.leftGame.has(this.user1.id), "perfectscore should track player leaving");
+
+			// TimeTrial should still have altIps recorded
+			await runCommand(this.user1, "/joinhunt");
+			await runCommand(this.user1, "/scavenge A1");
+			await runCommand(this.user1, "/scavenge A2");
+			await runCommand(this.user1, "/scavenge A3");
+			await runCommand(this.user1, "/scavenge A4");
+			await runCommand(this.user1, "/scavenge guess1, guess2, guess3, guess4");
+
+			const finisher = getFinisher(this.user1.id);
+			// Should not be perfect since they left and rejoined
+			assert.equal(finisher.modData.perfectscore.isPerfect, false, "should not be perfect after leaving");
+		});
+	});
 });
