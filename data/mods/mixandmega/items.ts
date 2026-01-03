@@ -69,7 +69,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 					pokemon.baseSpecies = species;
 					this.add('-start', pokemon, 'Blue Orb', '[silent]');
 				}
-				pokemon.canTerastallize = null;
 			}
 		},
 		onTakeItem: false,
@@ -230,7 +229,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 						this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 					}
 				}
-				pokemon.canTerastallize = null;
 			}
 		},
 		onTakeItem: false,

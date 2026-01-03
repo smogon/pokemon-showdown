@@ -296,7 +296,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
-				if (side.canDynamaxNow()) {
+				if (this.actions.canDynamaxSide(side)) {
 					if (this.turn === 1) {
 						this.addSplit(side.id, ['-candynamax', side.id]);
 					} else {
@@ -471,11 +471,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-
-			// Pokemon transformed into Ogerpon cannot Terastallize
-			// restoring their ability to tera after they untransform is handled ELSEWHERE
-			if (this.species.baseSpecies === 'Ogerpon' && this.canTerastallize) this.canTerastallize = false;
-			if (this.species.baseSpecies === 'Terapagos' && this.canTerastallize) this.canTerastallize = false;
 
 			return true;
 		},
