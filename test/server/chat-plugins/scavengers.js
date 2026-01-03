@@ -110,7 +110,7 @@ describe('Scavengers', () => {
 
 		it('should not allow users with the same IP to join', async function () {
 			await runCommand(this.user1, '/joinhunt');
-			const sameIpUser = makeScavUser('SameIPUser', '127.0.0.2');
+			const sameIpUser = makeScavUser('SameIPUser', '192.168.1.2');
 			await runCommand(sameIpUser, '/joinhunt');
 			assert.equal(this.room.game.playerCount, 1);
 			destroyUser(sameIpUser);
