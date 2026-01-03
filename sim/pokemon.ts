@@ -230,9 +230,16 @@ export class Pokemon {
 	 * The undynamaxed HP value this Pokemon was reduced to by damage this turn,
 	 * or false if it hasn't taken damage yet this turn
 	 *
-	 * Used for Assurance, Emergency Exit, and Wimp Out
+	 * Used for Assurance
 	 */
 	hurtThisTurn: number | null;
+	/**
+	 * The undynamaxed HP value this Pokemon was reduced to by damage during the current move,
+	 * or false if it hasn't taken damage
+	 *
+	 * Used for Emergency Exit and Wimp Out
+	 */
+	hurtThisMove: number | null;
 	lastDamage: number;
 	attackedBy: Attacker[];
 	timesAttacked: number;
@@ -461,6 +468,7 @@ export class Pokemon {
 		this.statsRaisedThisTurn = false;
 		this.statsLoweredThisTurn = false;
 		this.hurtThisTurn = null;
+		this.hurtThisMove = null;
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.timesAttacked = 0;
@@ -1521,6 +1529,7 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.hurtThisTurn = null;
+		this.hurtThisMove = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
