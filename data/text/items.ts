@@ -2547,5 +2547,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 
 
+	// Light and Dark items
 
+	pharaoniccrown: {
+		name: "Pharaonic Crown",
+		shortDesc: "Holder's Sp. Def is 1.5x, but most holders lose 1/8 max HP each turn.",
+	},
 };
