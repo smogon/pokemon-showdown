@@ -236,15 +236,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (abilities.includes('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
 
 		// Cull filler moves for otherwise fixed set Stealth Rock users
-		if (!teamDetails.stealthRock) {
-			if (species.id === 'registeel' && role === 'Staller') {
-				if (movePool.includes('thunderwave')) this.fastPop(movePool, movePool.indexOf('thunderwave'));
-				if (moves.size + movePool.length <= this.maxMoveCount) return;
-			}
-			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
-				if (moves.size + movePool.length <= this.maxMoveCount) return;
-			}
+		if (species.id === 'mamoswine') {
+			this.incompatibleMoves(moves, movePool, ['stealthrock', 'stoneedge'], ['stoneedge', 'superpower']);
 		}
 	}
 

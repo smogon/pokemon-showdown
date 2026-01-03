@@ -22,13 +22,14 @@ const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
 	'filletaway', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
 	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'trickroom', 'workup', 'victorydance',
+	'feralresilience', 'feralspray', 'crystalfortification',
 ];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
 ];
 // Hazard-setting moves
 const HAZARDS = [
-	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
+	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'crystalshard',
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
@@ -68,7 +69,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomMHSTeams extends RandomTeams {
+export class RandomSCTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -264,6 +265,7 @@ export class RandomMHSTeams extends RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): Set<string> {
 		const moves = new Set<string>();
+		if (this.getSuperType(moves)) types[1] = this.getSuperType(moves);
 		let counter = this.queryMoves(moves, species, teraType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 
@@ -605,6 +607,7 @@ export class RandomMHSTeams extends RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	) {
+		if (this.getSuperType(moves)) return this.getSuperType(moves) + " Orb";
 		if (!isDoubles) {
 			if (role === 'Fast Bulky Setup' && (ability === 'Quark Drive' || ability === 'Protosynthesis')) {
 				return 'Booster Energy';
@@ -621,7 +624,9 @@ export class RandomMHSTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		// MHS hardcodes
+		// Super Type hardcodes
+		if (species.id === 'cyllindrake' && moves.has('shiftgear')) return 'Throat Spray';
+		if (species.id === 'albatrygon' && moves.has('acrobatics')) return 'Sitrus Berry';
 		if (species.id === 'yiankutku' && moves.has('facade') || species.id === 'bluekutku' && moves.has('facade')) {
 			return 'Frost Orb';
 		}
@@ -684,6 +689,14 @@ export class RandomMHSTeams extends RandomTeams {
 		}
 	}
 
+	getSuperType(moves: Set<string> | string[]): string {
+		for (const move of moves) {
+			if (move.includes('crystal')) return "Crystal";
+			if (move.includes('feral')) return "Feral";
+		}
+		return "";
+	}
+
 	override randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -695,7 +708,7 @@ export class RandomMHSTeams extends RandomTeams {
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		// const ruleTable = this.dex.formats.getRuleTable(this.format);
 
 		for (const set of sets) {
 			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
@@ -705,7 +718,8 @@ export class RandomMHSTeams extends RandomTeams {
 				set.role === 'Fast Bulky Setup'
 			) continue;
 			// Prevent Tera Blast user if the team already has one, or if Terastallizion is prevented.
-			if ((teamDetails.teraBlast || ruleTable.has('terastalclause')) && set.role === 'Tera Blast user') {
+			// used here to limit team to 1 Super Types user
+			if (teamDetails.teraBlast && set.role === 'Tera Blast user') {
 				continue;
 			}
 			possibleSets.push(set);
@@ -725,12 +739,16 @@ export class RandomMHSTeams extends RandomTeams {
 		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
-		const types = species.types;
+		const types = [];
+		types[0] = species.types[0];
+		if (species.types[1]) types[1] = species.types[1];
 		const abilities = set.abilities!;
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		const counter = this.queryMoves(moves, species, teraType, abilities);
+
+		if (this.getSuperType(moves)) types[1] = this.getSuperType(moves);
 
 		// Get ability
 		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
@@ -817,7 +835,7 @@ export class RandomMHSTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomMHSTeam() {
+	randomSCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -836,6 +854,7 @@ export class RandomMHSTeams extends RandomTeams {
 
 		const baseFormes: { [k: string]: number } = {};
 
+		// const superTypeCount = 0;
 		const typeCount: { [k: string]: number } = {};
 		const typeComboCount: { [k: string]: number } = {};
 		const typeWeaknesses: { [k: string]: number } = {};
@@ -888,14 +907,17 @@ export class RandomMHSTeams extends RandomTeams {
 				) {
 					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
 					set = this.randomSet(species, teamDetails, false, isDoubles);
+					if (teamDetails.teraBlast && this.getSuperType(set.moves)) continue;
 					pokemon.push(set);
 				} else {
 					set = this.randomSet(species, teamDetails, true, isDoubles);
+					if (teamDetails.teraBlast && this.getSuperType(set.moves)) continue;
 					pokemon.unshift(set);
 					leadsRemaining--;
 				}
 			} else {
 				set = this.randomSet(species, teamDetails, false, isDoubles);
+				if (teamDetails.teraBlast && this.getSuperType(set.moves)) continue;
 				pokemon.push(set);
 			}
 
@@ -917,6 +939,11 @@ export class RandomMHSTeams extends RandomTeams {
 				typeComboCount[typeCombo]++;
 			} else {
 				typeComboCount[typeCombo] = 1;
+			}
+
+			// Increment item counter
+			if (set.item === "Crystal Orb" || set.item === "Feral Orb") {
+				teamDetails.teraBlast = 1;
 			}
 
 			// Increment weakness counter
@@ -971,4 +998,4 @@ export class RandomMHSTeams extends RandomTeams {
 	}
 }
 
-export default RandomMHSTeams;
+export default RandomSCTeams;

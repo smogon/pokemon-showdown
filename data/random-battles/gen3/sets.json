@@ -342,7 +342,7 @@
         ]
     },
     "arcanine": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -510,7 +510,7 @@
         ]
     },
     "dodrio": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -806,7 +806,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "hiddenpowerfire", "icebeam", "lovelykiss", "psychic", "substitute"],
+                "movepool": ["calmmind", "icebeam", "lovelykiss", "psychic", "substitute"],
                 "abilities": ["Oblivious"]
             }
         ]
@@ -1176,7 +1176,7 @@
         ]
     },
     "noctowl": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Staller",
@@ -1753,7 +1753,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "icebeam", "recover", "surf", "toxic"],
+                "movepool": ["calmmind", "explosion", "icebeam", "recover", "surf", "toxic"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -2613,7 +2613,7 @@
         ]
     },
     "cacturne": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Staller",
@@ -2690,7 +2690,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "explosion", "overheat", "rockslide", "shadowball"],
+                "movepool": ["earthquake", "explosion", "rockslide", "shadowball"],
                 "abilities": ["Levitate"],
                 "preferredTypes": ["Ground"]
             }
@@ -2781,7 +2781,7 @@
         ]
     },
     "kecleon": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3024,7 +3024,7 @@
         ]
     },
     "latios": {
-        "level": 67,
+        "level": 66,
         "sets": [
             {
                 "role": "Bulky Setup",
