@@ -31,13 +31,13 @@ describe('Scavengers', () => {
 	});
 
 	beforeEach(function () {
-		this.staffUser = makeScavUser('PartMan', '127.0.0.1');
+		this.staffUser = makeScavUser('PartMan', '192.168.1.1');
 		this.staffUser.tempGroup = '@';
 
-		this.user1 = makeScavUser('FakePart', '127.0.0.2');
-		this.user2 = makeScavUser('Azref', '127.0.0.3');
-		this.user3 = makeScavUser('Zwelte', '127.0.0.4');
-		this.user4 = makeScavUser('Nalsei', '127.0.0.5');
+		this.user1 = makeScavUser('FakePart', '192.168.1.2');
+		this.user2 = makeScavUser('Azref', '192.168.1.3');
+		this.user3 = makeScavUser('Zwelte', '192.168.1.4');
+		this.user4 = makeScavUser('Nalsei', '192.168.1.5');
 	});
 
 	afterEach(function () {
