@@ -13,6 +13,7 @@ interface StoneDeltas {
 	weighthg: number;
 	heightm: number;
 	type?: string;
+	primaryTypeChange?: boolean;
 }
 
 type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'ZUBL' | 'ZU' | 'NFE' | 'LC';
@@ -153,10 +154,13 @@ export const commands: Chat.ChatCommands = {
 			deltas.type = dex.gen === 8 ? 'mono' : baseSpecies.types[0];
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
+		} else if (megaSpecies.types[0] !== baseSpecies.types[0]) {
+			deltas.type = megaSpecies.types[0];
+			deltas.primaryTypeChange = true;
 		}
 		const mixedSpecies = Utils.deepClone(species);
 		mixedSpecies.abilities = Utils.deepClone(megaSpecies.abilities);
-		if (['Arceus', 'Silvally'].includes(baseSpecies.name)) {
+		if (['Arceus', 'Silvally'].includes(baseSpecies.name) || deltas.primaryTypeChange) {
 			const secondType = mixedSpecies.types[1];
 			mixedSpecies.types = [deltas.type];
 			if (secondType && secondType !== deltas.type) mixedSpecies.types.push(secondType);
@@ -230,7 +234,7 @@ export const commands: Chat.ChatCommands = {
 		const stones = [];
 		if (!stone) {
 			const formeIdRegex = new RegExp(
-				`(?:mega[xy]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame|douse|shock|chill|burn|${dex.types.all().map(x => x.id).filter(x => x !== 'normal').join('|')})$`
+				`(?:mega[xyz]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame|douse|shock|chill|burn|${dex.types.all().map(x => x.id).filter(x => x !== 'normal').join('|')})$`
 			);
 			const species = dex.species.get(targetid.replace(formeIdRegex, ''));
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
@@ -301,6 +305,8 @@ export const commands: Chat.ChatCommands = {
 				deltas.type = dex.gen === 8 ? 'mono' : megaSpecies.types[0];
 			} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 				deltas.type = megaSpecies.types[1];
+			} else if (megaSpecies.types[0] !== baseSpecies.types[0]) {
+				deltas.type = megaSpecies.types[0];
 			}
 			const details = {
 				Gen: aStone.gen,
