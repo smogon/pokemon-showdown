@@ -103,6 +103,7 @@
         ]
     },
     "pikachu": {
+        "level": 73,
         "sets": [
             {
                 "role": "Fast Attacker",
