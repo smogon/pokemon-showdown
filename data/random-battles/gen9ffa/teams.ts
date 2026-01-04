@@ -631,6 +631,9 @@ export class RandomFFATeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
+		if (ability === 'Unburden') {
+			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
+		}
 		if (moves.has('acrobatics')) {
 			return (ability === 'Protosynthesis') ? 'Booster Energy' : '';
 		}
@@ -683,9 +686,6 @@ export class RandomFFATeams extends RandomTeams {
 		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (moves.has('dragondance')) return 'Clear Amulet';
 		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
-		if (ability === 'Unburden') {
-			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
-		}
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
@@ -864,7 +864,7 @@ export class RandomFFATeams extends RandomTeams {
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
-		if (noAttackStatMoves) {
+		if (noAttackStatMoves && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
