@@ -85,8 +85,7 @@ function showHelp() {
 
 if (!Set.prototype.intersection) {
 	// Set#intersection was introduced in Node 22, which is currently in maintenance
-	// Might as well ask for the most recent "Active LTS" to be safe
-	// https://nodejs.org/en/about/previous-releases
+	// Might as well ask for the most recent Active LTS to be safe (https://nodejs.org/en/about/previous-releases)
 	console.error("We require Node.js version 24 or later; you're using " + process.version);
 	process.exit(1);
 }

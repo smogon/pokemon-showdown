@@ -54,11 +54,13 @@ try {
 
 // I've gotten enough reports by people who don't use the launch
 // script that this is worth repeating here
-if (!Set.prototype.intersection) {
-	// Set#intersection was introduced in Node 22, which is currently in maintenance
-	// Might as well ask for the most recent "Active LTS" to be safe
-	// https://nodejs.org/en/about/previous-releases
-	throw new Error("We require Node.js version 24 or later; you're using " + process.version);
+if (typeof fetch === 'undefined') {
+	// We use v22 in server chat code currently (checked in the launcher), which is currently in maintenance
+	// Might as well ask for the most recent Active LTS to be safe (https://nodejs.org/en/about/previous-releases)
+	// fetch was introduced in Node v18, but people can also run this while bypassing
+	// the launcher if they want to run PS on an older version of Node
+	console.error("We require Node.js version 24 or later; you're using " + process.version);
+	process.exit(1);
 }
 
 try {
