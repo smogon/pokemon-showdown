@@ -54,7 +54,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		HPivs: {},
 	},
 	dragon: {
-		num 15,
+		num: 15,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -81,7 +81,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		HPdvs: { def: 14 },
 	},
 	electric: {
-		num 12,
+		num: 12,
 		damageTaken: {
 			par: 3,
 			Bug: 0,
