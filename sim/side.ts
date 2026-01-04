@@ -182,7 +182,7 @@ export class Side {
 	/** only used by Gen 1 Counter */
 	lastSelectedMove: ID = '';
 	/** only used by Gen 2 Confusion + Berserk Gene */
-	confusionCounter: number = 0;
+	confusionCounter = 0;
 
 	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: { [id: string]: EffectState };
