@@ -1,12 +1,10 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
-	watershuriken: {
+	volttackle: {
 		inherit: true,
-		basePowerCallback(pokemon, target, move) {
-			if (pokemon.species.name === 'Greninja-Mega' && pokemon.hasAbility('battlebond') &&
-				!pokemon.transformed) {
-				return move.basePower * 5;
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.baseSpecies.name === "Raichu-Mega-X") {
+				move.self = { boosts: { atk: 1 } };
 			}
-			return move.basePower;
 		},
 	},
 };
