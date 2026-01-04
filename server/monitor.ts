@@ -50,7 +50,7 @@ export class TimedCounter extends Map<string, [number, number]> {
 // 3 = warning
 // (4 is currently unused)
 // 5 = supposedly completely silent, but for now a lot of PS output doesn't respect loglevel
-if (('Config' in global) &&
+if (("Config" in global) &&
 	(typeof Config.loglevel !== 'number' || Config.loglevel < 0 || Config.loglevel > 5)) {
 	Config.loglevel = 2;
 }
@@ -62,6 +62,7 @@ export const Monitor = new class {
 	battlePreps = new TimedCounter();
 	groupChats = new TimedCounter();
 	tickets = new TimedCounter();
+	sizeOfObjectCalls = new TimedCounter();
 
 	activeIp: string | null = null;
 	networkUse: { [k: string]: number } = {};
@@ -178,6 +179,7 @@ export const Monitor = new class {
 		this.battlePreps.clear();
 		this.battles.clear();
 		this.connections.clear();
+		this.sizeOfObjectCalls.clear();
 		IPTools.dnsblCache.clear();
 	}
 
@@ -280,6 +282,16 @@ export const Monitor = new class {
 	}
 
 	/**
+	 * Throttles sizeOfObject calls. Returns true if the call should be skipped.
+	 */
+	countSizeOfObject(key: string) {
+		if (Config.nothrottle) return false;
+		const [count] = this.sizeOfObjectCalls.increment(key, 1000);
+		// Allow 1 call per second per key
+		return count > 1;
+	}
+
+	/**
 	 * Counts the data length received by the last connection to send a
 	 * message, as well as the data length in the server's response.
 	 */
@@ -317,7 +329,12 @@ export const Monitor = new class {
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
 	 */
-	sizeOfObject(object: AnyObject) {
+	sizeOfObject(object: AnyObject, throttleKey?: string) {
+		// Throttle if a key is provided
+		if (throttleKey && this.countSizeOfObject(throttleKey)) {
+			return 0;
+		}
+
 		const objectCache = new Set<[] | object>();
 		const stack: any[] = [object];
 		let bytes = 0;
@@ -335,7 +352,8 @@ export const Monitor = new class {
 				bytes += 8;
 				break;
 			case 'object':
-				if (!objectCache.has(value)) objectCache.add(value);
+				if (objectCache.has(value)) break;
+				objectCache.add(value);
 				if (Array.isArray(value)) {
 					for (const el of value) stack.push(el);
 				} else {
