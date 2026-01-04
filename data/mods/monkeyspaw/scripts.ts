@@ -188,6 +188,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
@@ -205,7 +206,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
 				pokemon.details = pokemon.getUpdatedDetails();
-				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.setAbility(species.abilities['0'], null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 
 				const behemothMove: { [k: string]: string } = {
@@ -228,11 +229,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {

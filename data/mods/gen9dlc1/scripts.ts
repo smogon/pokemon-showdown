@@ -35,13 +35,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (pokemon.species.name === 'Terapagos-Terastal') {
 				pokemon.formeChange('Terapagos-Stellar', null, true);
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
 			if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 				pokemon.baseSpecies.id !== pokemon.species.id
@@ -135,7 +128,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.knownType = true;
 				this.apparentType = this.terastallized;
 			}
-			if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true, true);
+			if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, null, true, true);
 
 			// Change formes based on held items (for Transform)
 			// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes

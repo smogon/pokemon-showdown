@@ -1341,6 +1341,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 		doublesTier: "DUU",
 	},
+	castformsunny: {
+	},
+	castformrainy: {
+	},
+	castformsnowy: {
+	},
 	kecleon: {
 		tier: "PU",
 		doublesTier: "DUU",
@@ -1374,7 +1380,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	absol: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	snorunt: {
@@ -1622,7 +1628,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	drifblim: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	buneary: {
@@ -1654,7 +1660,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DOU",
 	},
 	chatot: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	spiritomb: {
