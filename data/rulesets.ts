@@ -2070,6 +2070,21 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			return problems;
 		},
 	},
+	gametype: {
+		effectType: 'Rule',
+		name: 'Game Type',
+		desc: "Overrides the format's default game type (Singles, Doubles, Triples, Multi, or Free-For-All)",
+		hasValue: true,
+		onValidateRule(value) {
+			const gameType = this.dex.toID(value);
+			const validGameTypes = ['singles', 'doubles', 'triples', 'multi', 'freeforall'];
+			if (!validGameTypes.includes(gameType)) {
+				throw new Error(`Invalid game type "${value}". Valid game types are: ${validGameTypes.join(', ')}`);
+			}
+			return gameType;
+		},
+		// applied in sim/dex-formats resolveNumbers to override format.gameType
+	},
 	pickedteamsize: {
 		effectType: 'Rule',
 		name: 'Picked Team Size',
@@ -2915,8 +2930,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (num > 9 || num < 3 || num % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
-			if (!['singles', 'doubles'].includes(this.format.gameType)) {
-				throw new Error("Only single and doubles battles can be a Best-of series.");
+			if (this.format.gameType === 'freeforall') {
+				throw new Error("Free-For-All battles cannot be a Best-of series.");
 			}
 			return value;
 		},
