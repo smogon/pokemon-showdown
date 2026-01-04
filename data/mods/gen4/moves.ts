@@ -1817,7 +1817,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
+				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel') || pokemon.hasAbility('magicguard')) {
 					// do nothing
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);

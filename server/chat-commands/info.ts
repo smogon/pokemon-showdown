@@ -587,7 +587,7 @@ export const commands: Chat.ChatCommands = {
 
 		const { dex, format, targets } = this.splitFormat(target, true, true);
 
-		const prefix = `|c|${user.getIdentity()}|/raw `;
+		const prefix = `|c|${user.getIdentity(room)}|/raw `;
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -1586,7 +1586,7 @@ export const commands: Chat.ChatCommands = {
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
 		`Inputting 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
-		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
+		`An actual stat can be given in place of a base stat or EVs. In this case, the minimum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
 	/*********************************************************
@@ -1720,7 +1720,7 @@ export const commands: Chat.ChatCommands = {
 
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/posts/10715136/">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 	staffhelp: [`/staff - View the staff list.`],
 
@@ -1788,8 +1788,8 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
 			`- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
-			`- <a href="https://www.smogon.com/dex/ss/formats/">What are the rules for each format?</a><br />` +
-			`- <a href="https://www.smogon.com/ss/articles/clauses">What is 'Sleep Clause' and other clauses?</a><br />` +
+			`- <a href="https://www.smogon.com/dex/sv/formats/">What are the rules for each format?</a><br />` +
+			`- <a href="https://www.smogon.com/sv/articles/clauses">What is 'Sleep Clause' and other clauses?</a><br />` +
 			`- <a href="https://www.smogon.com/articles/getting-started">Next Steps for Competitive Battling</a>`
 		);
 	},
@@ -1984,7 +1984,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		return this.sendReply(`|c|${user.getIdentity()}|/raw ${buf.join("")}`);
+		return this.sendReply(`|c|${user.getIdentity(room)}|/raw ${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,

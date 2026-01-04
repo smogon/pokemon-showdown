@@ -364,6 +364,12 @@
                 "movepool": ["Fire Punch", "High Horsepower", "Rock Slide", "Stone Edge"],
                 "abilities": ["Sturdy"],
                 "teraTypes": ["Grass"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["High Horsepower", "Protect", "Rock Polish", "Rock Slide"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Grass", "Rock"]
             }
         ]
     },
@@ -402,7 +408,7 @@
         ]
     },
     "slowbrogalar": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -580,7 +586,7 @@
         ]
     },
     "weezing": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1035,7 +1041,7 @@
                 "role": "Offensive Protect",
                 "movepool": ["Hurricane", "Hyper Voice", "Protect", "Tailwind"],
                 "abilities": ["Tinted Lens"],
-                "teraTypes": ["Flying"]
+                "teraTypes": ["Normal", "Steel"]
             }
         ]
     },
@@ -1044,7 +1050,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Megahorn", "Protect", "Rage Powder", "Sticky Web"],
+                "movepool": ["Knock Off", "Megahorn", "Protect", "Rage Powder", "Sticky Web"],
                 "abilities": ["Insomnia", "Swarm"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             }
@@ -1090,7 +1096,7 @@
         ]
     },
     "azumarill": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -1174,7 +1180,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Gunk Shot", "Helping Hand", "High Horsepower", "Recover", "Toxic Spikes"],
                 "abilities": ["Unaware", "Water Absorb"],
-                "teraTypes": ["Flying", "Ground", "Steel"]
+                "teraTypes": ["Flying", "Steel"]
             }
         ]
     },
@@ -1408,7 +1414,7 @@
         ]
     },
     "donphan": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1474,7 +1480,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Heal Pulse", "Helping Hand", "Hyper Voice", "Protect", "Seismic Toss", "Soft-Boiled", "Thunder Wave"],
+                "movepool": ["Helping Hand", "Hyper Voice", "Life Dew", "Soft-Boiled", "Thunder Wave"],
                 "abilities": ["Healer"],
                 "teraTypes": ["Fairy", "Ghost", "Poison"]
             }
@@ -1532,13 +1538,13 @@
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Dragon Dance", "High Horsepower", "Knock Off", "Protect", "Rock Slide", "Stone Edge"],
                 "abilities": ["Sand Stream"],
-                "teraTypes": ["Ghost", "Rock", "Steel"]
+                "teraTypes": ["Ghost", "Rock"]
             },
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Rock Slide", "Stone Edge"],
                 "abilities": ["Sand Stream"],
-                "teraTypes": ["Flying", "Ghost", "Steel"]
+                "teraTypes": ["Flying", "Ghost"]
             }
         ]
     },
@@ -1671,6 +1677,12 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic", "Trick"],
+                "abilities": ["Trace"],
+                "teraTypes": ["Fairy", "Fire", "Steel"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Fairy", "Fire", "Steel"]
             }
@@ -1830,6 +1842,12 @@
                 "movepool": ["Bug Buzz", "Encore", "Tailwind", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Encore", "Struggle Bug", "Tailwind", "Thunder Wave"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -1849,7 +1867,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Earth Power", "Heat Wave", "Helping Hand", "Protect", "Stealth Rock"],
+                "movepool": ["Earth Power", "Heat Wave", "Protect", "Stealth Rock", "Will-O-Wisp"],
                 "abilities": ["Solid Rock"],
                 "teraTypes": ["Water"]
             }
@@ -1871,7 +1889,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dazzling Gleam", "Earth Power", "Nasty Plot", "Psychic"],
+                "movepool": ["Dazzling Gleam", "Earth Power", "Nasty Plot", "Protect", "Psychic"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Fairy", "Ground"]
             }
@@ -2005,14 +2023,14 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Hurricane", "Leaf Storm", "Protect", "Tailwind", "Wide Guard"],
+                "movepool": ["Energy Ball", "Hurricane", "Protect", "Tailwind", "Wide Guard"],
                 "abilities": ["Harvest"],
                 "teraTypes": ["Steel"]
             }
         ]
     },
     "chimecho": {
-        "level": 95,
+        "level": 94,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2073,7 +2091,7 @@
         ]
     },
     "regirock": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2326,7 +2344,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Bug Bite", "Helping Hand", "Knock Off", "Sticky Web", "Taunt"],
                 "abilities": ["Technician"],
-                "teraTypes": ["Bug", "Steel"]
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -2490,7 +2508,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Foul Play", "Helping Hand", "Icy Wind", "Shadow Sneak", "Will-O-Wisp"],
+                "movepool": ["Foul Play", "Helping Hand", "Icy Wind", "Will-O-Wisp"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Steel"]
             },
@@ -2557,7 +2575,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Hydro Pump", "Icy Wind", "Tailwind", "Tickle"],
+                "movepool": ["Encore", "Helping Hand", "Hydro Pump", "Icy Wind", "Tailwind"],
                 "abilities": ["Storm Drain"],
                 "teraTypes": ["Fire", "Ground"]
             }
@@ -2593,6 +2611,12 @@
                 "movepool": ["Close Combat", "Dire Claw", "Fake Out", "Throat Chop", "U-turn"],
                 "abilities": ["Poison Touch"],
                 "teraTypes": ["Dark", "Fighting", "Poison"]
+            },
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Close Combat", "Dire Claw", "Protect", "Swords Dance"],
+                "abilities": ["Unburden"],
+                "teraTypes": ["Dark", "Fighting", "Poison"]
             }
         ]
     },
@@ -2617,8 +2641,8 @@
                 "teraTypes": ["Dragon", "Flying", "Ghost", "Ground"]
             },
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Dragon Tail", "Heat Crash", "High Horsepower", "Ice Punch", "Megahorn", "Protect", "Rock Slide"],
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Heat Crash", "High Horsepower", "Ice Punch", "Megahorn", "Rock Slide"],
                 "abilities": ["Solid Rock"],
                 "teraTypes": ["Dragon", "Flying", "Water"]
             }
@@ -2877,7 +2901,7 @@
         ]
     },
     "uxie": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3062,7 +3086,7 @@
                 "role": "Bulky Protect",
                 "movepool": ["Ice Beam", "Protect", "Scald", "Tail Glow"],
                 "abilities": ["Hydration"],
-                "teraTypes": ["Grass", "Steel", "Water"]
+                "teraTypes": ["Grass", "Steel"]
             },
             {
                 "role": "Doubles Bulky Setup",
@@ -3334,7 +3358,7 @@
                 "role": "Offensive Protect",
                 "movepool": ["Dragon Pulse", "Glare", "Knock Off", "Leaf Storm", "Protect"],
                 "abilities": ["Contrary"],
-                "teraTypes": ["Dragon", "Grass"]
+                "teraTypes": ["Dragon"]
             },
             {
                 "role": "Tera Blast user",
@@ -3461,20 +3485,8 @@
         "level": 80,
         "sets": [
             {
-                "role": "Doubles Support",
-                "movepool": ["Encore", "Moonblast", "Stun Spore", "Tailwind"],
-                "abilities": ["Prankster"],
-                "teraTypes": ["Fire", "Ghost", "Steel"]
-            },
-            {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Encore", "Moonblast", "Tailwind", "Taunt"],
-                "abilities": ["Prankster"],
-                "teraTypes": ["Fire", "Ghost", "Steel"]
-            },
-            {
-                "role": "Doubles Bulky Setup",
-                "movepool": ["Encore", "Helping Hand", "Moonblast", "Tailwind"],
+                "movepool": ["Encore", "Helping Hand", "Moonblast", "Tailwind", "Taunt"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Fire", "Ghost", "Steel"]
             }
@@ -4280,7 +4292,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Muddy Water", "U-turn"],
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Muddy Water"],
                 "abilities": ["Mega Launcher"],
                 "teraTypes": ["Dark", "Dragon", "Fighting"]
             },
@@ -4354,7 +4366,7 @@
         ]
     },
     "goodrahisui": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4393,7 +4405,7 @@
         ]
     },
     "avalugg": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -4528,6 +4540,12 @@
                 "movepool": ["Flip Turn", "Hydro Pump", "Hyper Voice", "Moonblast"],
                 "abilities": ["Liquid Voice"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Protect",
+                "movepool": ["Calm Mind", "Hyper Voice", "Moonblast", "Protect"],
+                "abilities": ["Liquid Voice"],
+                "teraTypes": ["Grass", "Steel"]
             }
         ]
     },
@@ -4586,7 +4604,13 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Hurricane", "Protect", "Quiver Dance", "Revelation Dance", "Tailwind"],
+                "movepool": ["Hurricane", "Protect", "Revelation Dance", "Tailwind"],
+                "abilities": ["Dancer"],
+                "teraTypes": ["Ground"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Air Slash", "Protect", "Quiver Dance", "Revelation Dance"],
                 "abilities": ["Dancer"],
                 "teraTypes": ["Ground"]
             }
@@ -4597,7 +4621,13 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Hurricane", "Protect", "Quiver Dance", "Revelation Dance", "Tailwind"],
+                "movepool": ["Hurricane", "Protect", "Revelation Dance", "Tailwind"],
+                "abilities": ["Dancer"],
+                "teraTypes": ["Ground"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Air Slash", "Protect", "Quiver Dance", "Revelation Dance"],
                 "abilities": ["Dancer"],
                 "teraTypes": ["Ground"]
             }
@@ -4608,7 +4638,13 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Hurricane", "Protect", "Quiver Dance", "Revelation Dance", "Tailwind"],
+                "movepool": ["Hurricane", "Protect", "Revelation Dance", "Tailwind"],
+                "abilities": ["Dancer"],
+                "teraTypes": ["Fighting", "Ground"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Air Slash", "Protect", "Quiver Dance", "Revelation Dance"],
                 "abilities": ["Dancer"],
                 "teraTypes": ["Fighting", "Ground"]
             }
@@ -4619,7 +4655,13 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Hurricane", "Protect", "Quiver Dance", "Revelation Dance", "Tailwind"],
+                "movepool": ["Hurricane", "Protect", "Revelation Dance", "Tailwind"],
+                "abilities": ["Dancer"],
+                "teraTypes": ["Fighting", "Ground"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Air Slash", "Protect", "Quiver Dance", "Revelation Dance"],
                 "abilities": ["Dancer"],
                 "teraTypes": ["Fighting", "Ground"]
             }
@@ -4980,7 +5022,7 @@
             {
                 "role": "Bulky Protect",
                 "movepool": ["Body Press", "Iron Defense", "Protect", "Throat Chop"],
-                "abilities": ["Soundproof"],
+                "abilities": ["Bulletproof"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -5135,8 +5177,8 @@
                 "teraTypes": ["Dragon", "Steel"]
             },
             {
-                "role": "Doubles Support",
-                "movepool": ["Glare", "High Horsepower", "Rest", "Stealth Rock", "Stone Edge"],
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Glare", "High Horsepower", "Rest", "Stone Edge"],
                 "abilities": ["Shed Skin"],
                 "teraTypes": ["Dragon", "Steel"]
             }
@@ -5158,7 +5200,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Poison Jab", "Protect", "Psychic Fangs", "Waterfall"],
+                "movepool": ["Close Combat", "Flip Turn", "Poison Jab", "Protect", "Waterfall"],
                 "abilities": ["Propeller Tail"],
                 "teraTypes": ["Fighting"]
             }
@@ -5268,6 +5310,12 @@
                 "movepool": ["Alluring Voice", "Dazzling Gleam", "Decorate", "Encore", "Protect"],
                 "abilities": ["Aroma Veil"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Alluring Voice", "Dazzling Gleam", "Decorate", "Helping Hand", "Protect"],
+                "abilities": ["Aroma Veil"],
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -5287,9 +5335,9 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Electroweb", "Recover", "Thunderbolt", "Toxic Spikes"],
+                "movepool": ["Electroweb", "Recover", "Scald", "Thunderbolt"],
                 "abilities": ["Electric Surge"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Grass", "Water"]
             }
         ]
     },
@@ -5362,7 +5410,7 @@
         ]
     },
     "indeedeef": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -5467,7 +5515,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Coaching", "Crunch", "Howl", "Iron Head", "Psychic Fangs", "Stone Edge"],
+                "movepool": ["Close Combat", "Coaching", "Crunch", "Howl", "Stone Edge"],
                 "abilities": ["Dauntless Shield"],
                 "teraTypes": ["Dark", "Fighting", "Steel"]
             },
@@ -5625,7 +5673,7 @@
         ]
     },
     "calyrexshadow": {
-        "level": 62,
+        "level": 63,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5664,7 +5712,7 @@
         ]
     },
     "ursaluna": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -6073,7 +6121,7 @@
                 "role": "Doubles Support",
                 "movepool": ["Energy Ball", "Fire Blast", "Protect", "Rage Powder", "Will-O-Wisp"],
                 "abilities": ["Chlorophyll"],
-                "teraTypes": ["Fire", "Grass", "Steel"]
+                "teraTypes": ["Fire", "Steel"]
             }
         ]
     },
@@ -6312,7 +6360,13 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Hyper Voice", "Nasty Plot", "Protect", "Psychic", "Trick Room"],
+                "movepool": ["Hyper Voice", "Protect", "Psychic", "Trick Room"],
+                "abilities": ["Armor Tail"],
+                "teraTypes": ["Fairy"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Hyper Voice", "Nasty Plot", "Psychic", "Trick Room"],
                 "abilities": ["Armor Tail"],
                 "teraTypes": ["Fairy"]
             }
@@ -6374,9 +6428,15 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Close Combat", "Crunch", "Protect", "Rage Powder", "Seed Bomb", "Spore", "Sucker Punch"],
+                "movepool": ["Close Combat", "Crunch", "Protect", "Seed Bomb", "Spore", "Sucker Punch"],
                 "abilities": ["Protosynthesis"],
                 "teraTypes": ["Dark", "Poison"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Rage Powder", "Seed Bomb", "Spore", "Sucker Punch"],
+                "abilities": ["Protosynthesis"],
+                "teraTypes": ["Ghost", "Poison"]
             }
         ]
     },
@@ -6621,7 +6681,13 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Knock Off", "Leech Seed", "Pollen Puff", "Protect", "Ruination"],
+                "movepool": ["Knock Off", "Leech Seed", "Pollen Puff", "Protect"],
+                "abilities": ["Tablets of Ruin"],
+                "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Bulky Protect",
+                "movepool": ["Knock Off", "Leech Seed", "Protect", "Ruination"],
                 "abilities": ["Tablets of Ruin"],
                 "teraTypes": ["Poison"]
             }
@@ -6652,6 +6718,12 @@
                 "movepool": ["Collision Course", "Dragon Claw", "Flare Blitz", "U-turn"],
                 "abilities": ["Orichalcum Pulse"],
                 "teraTypes": ["Fire"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Collision Course", "Dragon Claw", "Flare Blitz", "Protect"],
+                "abilities": ["Orichalcum Pulse"],
+                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -6673,7 +6745,7 @@
         ]
     },
     "walkingwake": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
