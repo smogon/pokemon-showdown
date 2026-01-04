@@ -569,7 +569,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Encore", "Moonblast", "Recover", "Scald", "Thunder Wave"],
+                "movepool": ["Moonblast", "Recover", "Scald", "Thunder Wave"],
                 "abilities": ["Multiscale", "Rough Skin"],
                 "teraTypes": ["Poison", "Steel"]
             }
@@ -606,6 +606,17 @@
                 "movepool": ["Discharge", "Ice Beam", "Knock Off", "Milk Drink", "Thunderbolt"],
                 "abilities": ["Electromorphosis"],
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
+            }
+        ]
+    },
+    "ramnarok": {
+        "level": 72,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Blizzard", "Inferno", "Polar Flare", "Thunder"],
+                "abilities": ["No Guard"],
+                "teraTypes": ["Electric", "Flying", "Water"]
             }
         ]
     }
