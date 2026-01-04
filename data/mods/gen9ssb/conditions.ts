@@ -2034,7 +2034,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onTryHit(target, source, move) {
 			if (!target.illusion && target !== source && move.type === 'Fire') {
-				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[from] ability: Flash Fire');
 				}
@@ -2982,9 +2981,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				return this.chainModify(0.7);
 			}
 		},
-		onAccuracy(accuracy, attacker, defender, move) {
-			if (move?.flags['wind'] && !attacker.hasItem('utilityumbrella')) return true;
-			return accuracy;
+		onCheckAccuracy(target, source, move) {
+			if (move.flags['wind'] && !source.hasItem('utilityumbrella')) return false;
 		},
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {

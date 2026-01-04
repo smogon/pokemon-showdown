@@ -63,7 +63,7 @@ describe('Substitute', () => {
 		assert.equal(subhp, hitmonchan.volatiles['substitute'].hp);
 
 		// Modding accuracy so High Jump Kick will miss and cause recoil
-		battle.onEvent('Accuracy', battle.format, false);
+		battle.onEvent('ModifyAccuracy', battle.format, 0);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.
@@ -74,11 +74,11 @@ describe('Substitute', () => {
 		assert.equal(hitmonchan.volatiles['substitute'].hp, subhp - 1);
 
 		// Modding accuracy so High Jump Kick will hit and break Substitute
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('ModifyAccuracy', battle.format, true);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Modding accuracy so High Jump Kick will miss and cause recoil
-		battle.onEvent('Accuracy', battle.format, false);
+		battle.onEvent('ModifyAccuracy', battle.format, 0);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Only P1 has a substitute, so no one takes recoil damage.
