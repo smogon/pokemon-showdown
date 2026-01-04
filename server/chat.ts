@@ -1303,6 +1303,9 @@ export class CommandContext extends MessageContext {
 		if (setting === true && !user.can('lock')) return false; // this is to appease TS
 		const friends = targetUser.friends || new Set();
 		if (setting === 'friends') return friends.has(user.id);
+		if (setting === 'trustedfriends') {
+			return friends.has(user.id) || Users.globalAuth.atLeast(user, 'trusted');
+		}
 		return Users.globalAuth.atLeast(user, setting as AuthLevel);
 	}
 	checkPMHTML(targetUser: User) {
@@ -1310,11 +1313,17 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
 		const friends = targetUser.friends || new Set();
+		const setting = targetUser.settings.blockPMs;
+		const isTrustedFriendsBlocked = setting === 'trustedfriends' &&
+			!friends.has(this.user.id) && !Users.globalAuth.atLeast(this.user, 'trusted');
+		const isOtherAuthBlocked = !['friends', 'trustedfriends'].includes(setting as string) &&
+			!Users.globalAuth.atLeast(this.user, setting as AuthLevel);
 		if (
-			targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true ||
-				(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
-				!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
+			setting &&
+			(setting === true ||
+				(setting === 'friends' && !friends.has(this.user.id)) ||
+				isTrustedFriendsBlocked ||
+				isOtherAuthBlocked) &&
 				!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
