@@ -469,6 +469,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.id === 'shedinja') return 'Lum Berry';
 		if (species.id === 'shuckle') return 'Leftovers';
 		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
+		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
 		if (moves.has('trick')) return 'Choice Band';
 		if (
@@ -514,8 +515,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
-
 		// Default to Leftovers
 		return 'Leftovers';
 	}
@@ -525,6 +524,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -598,7 +599,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('transform')) {
+		if (!counter.get('Physical') && !moves.has('transform') && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
 		}
