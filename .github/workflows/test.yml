@@ -17,7 +17,15 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        # Testing multiple Node versions makes CI take forever, and basically
+        # never actually finds anything we care about. Testing one is enough.
+        #
+        # This number should be left at the oldest Node LTS version capable of
+        # running Node without errors (it doesn't matter if it's unsupported).
+        # Please freely bump this version (and the check in `pokemon-showdown`
+        # and `server/index.ts`) if you want to use features from newer versions;
+        # this is purely for our own reference, not to constrain programmers.
+        node-version: ['18.x']
 
     steps:
     - uses: actions/checkout@v4
@@ -65,7 +73,7 @@ jobs:
           data/**
           sim/**
 
-    - name: Run selective lint & neccessary tests (if pull request)
+    - name: Run selective lint & necessary tests (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       run: npm run full-test-ci
       env:

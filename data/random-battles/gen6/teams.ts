@@ -227,7 +227,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['hornleech', 'woodhammer'],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
-			['gunkshot', 'poisonjab'],
+			[['gunkshot', 'sludgewave'], 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
 			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],
@@ -636,6 +636,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
+		if (species.name === 'Honchkrow') return 'Life Orb';
 		if (ability === 'Harvest' || ability === 'Cheek Pouch') return 'Sitrus Berry';
 		if (species.name === 'Ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
@@ -768,6 +769,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -815,7 +818,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
 			(!counter.get('Physical') || (counter.get('Physical') <= 1 && (moves.has('foulplay') || moves.has('rapidspin')))) &&
-			!moves.has('copycat') && !moves.has('transform')
+			!moves.has('copycat') && !moves.has('transform') &&
+			!ruleTable.has('forceofthefallenmod')
 		) {
 			evs.atk = 0;
 			ivs.atk = 0;
@@ -883,7 +887,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.gender,
+			gender: species.gender || (this.random(2) ? 'F' : 'M'),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
@@ -1129,7 +1133,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, ++depth);
 			}
 		}
-
 		return pokemon;
 	}
 }

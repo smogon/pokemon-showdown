@@ -499,6 +499,54 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
+	// Cassiopeia
+	hacking: {
+		name: "Hacking",
+		shortDesc: "Hacks into PS and finds out if the enemy has any super effective moves.",
+		onStart(pokemon) {
+			const name = (pokemon.illusion || pokemon).name;
+			this.add(`c:|${getName(name)}|One moment, please. One does not simply go into battle blind.`);
+			const side = pokemon.side.id === 'p1' ? 'p2' : 'p1';
+			this.add(
+				`message`,
+				(
+					`ssh sim@pokemonshowdown.com && nc -U logs/repl/sim <<< ` +
+					`"Users.get('${this.toID(name)}').popup(battle.sides.get('${side}').pokemon.map(m => Teams.exportSet(m)))"`
+				)
+			);
+			let warnMoves: (Move | Pokemon)[][] = [];
+			let warnBp = 1;
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					let bp = move.basePower;
+					if (move.ohko) bp = 150;
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (bp === 1) bp = 80;
+					if (!bp && move.category !== 'Status') bp = 80;
+					if (bp > warnBp) {
+						warnMoves = [[move, target]];
+						warnBp = bp;
+					} else if (bp === warnBp) {
+						warnMoves.push([move, target]);
+					}
+				}
+			}
+			if (!warnMoves.length) {
+				this.add(`c:|${getName(name)}|Fascinating. None of your sets have any moves of interest.`);
+				return;
+			}
+			const [warnMoveName, warnTarget] = this.sample(warnMoves);
+			this.add(
+				'message',
+				`${name} hacked into PS and looked at ${name === 'Cassiopeia' ? 'her' : 'their'} opponent's sets. ` +
+				`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Cassiopeia' ? 'her' : 'their'} eye.`
+			);
+			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
+		},
+		flags: {},
+	},
+
 	// Chloe
 	acetosa: {
 		shortDesc: "This Pokemon's moves are changed to be Grass type and have 1.2x power.",
@@ -613,7 +661,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -625,7 +673,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
@@ -933,54 +981,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
-		flags: {},
-	},
-
-	// Hecate
-	hacking: {
-		name: "Hacking",
-		shortDesc: "Hacks into PS and finds out if the enemy has any super effective moves.",
-		onStart(pokemon) {
-			const name = (pokemon.illusion || pokemon).name;
-			this.add(`c:|${getName(name)}|One moment, please. One does not simply go into battle blind.`);
-			const side = pokemon.side.id === 'p1' ? 'p2' : 'p1';
-			this.add(
-				`message`,
-				(
-					`ssh sim@pokemonshowdown.com && nc -U logs/repl/sim <<< ` +
-					`"Users.get('${this.toID(name)}').popup(battle.sides.get('${side}').pokemon.map(m => Teams.exportSet(m)))"`
-				)
-			);
-			let warnMoves: (Move | Pokemon)[][] = [];
-			let warnBp = 1;
-			for (const target of pokemon.foes()) {
-				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.moves.get(moveSlot.move);
-					let bp = move.basePower;
-					if (move.ohko) bp = 150;
-					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
-					if (bp === 1) bp = 80;
-					if (!bp && move.category !== 'Status') bp = 80;
-					if (bp > warnBp) {
-						warnMoves = [[move, target]];
-						warnBp = bp;
-					} else if (bp === warnBp) {
-						warnMoves.push([move, target]);
-					}
-				}
-			}
-			if (!warnMoves.length) {
-				this.add(`c:|${getName(name)}|Fascinating. None of your sets have any moves of interest.`);
-				return;
-			}
-			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add(
-				'message',
-				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
-				`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
-			);
-			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
-		},
 		flags: {},
 	},
 
@@ -1935,7 +1935,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
 				target.removeVolatile('ultramystik');
-				target.setAbility('Healer', null, true);
+				target.setAbility('Healer', null, null, true);
 				target.baseAbility = target.ability;
 			}
 		},
@@ -2094,15 +2094,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
-				const move = this.queue.willMove(pokemon.foes()[0]);
+				const foe = pokemon.foes()[0];
+				const move = foe ? this.queue.willMove(foe) : null;
 				const moveName = move && move.moveid ? move.moveid.toString() : "";
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				pokemon.removeVolatile('destinybond');
 				for (const source of this.effectState.sources) {
 					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon.foes()[0], 'ability: Hot Pursuit');
+					if (!alreadyAdded && foe) {
+						this.add('-activate', foe, 'ability: Hot Pursuit');
 						alreadyAdded = true;
 					}
 					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.

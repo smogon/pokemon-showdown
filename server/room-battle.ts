@@ -12,9 +12,10 @@
  */
 
 import { execSync } from "child_process";
-import { Repl, ProcessManager, type Streams } from '../lib';
+import { ProcessManager, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
+import * as ConfigLoader from './config-loader';
 import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
@@ -276,7 +277,6 @@ export class RoomBattleTimer {
 				// first request of a mid-turn request (U-turn or faint-switch)
 				this.isFirstRequest = false;
 				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
-				this.battle.room.add(`||adding ${addPerMidTurnRequest} to each for mid turn request`);
 				for (const curPlayer of this.battle.players) {
 					curPlayer.secondsLeft += addPerMidTurnRequest;
 				}
@@ -302,14 +302,16 @@ export class RoomBattleTimer {
 			}
 		}
 
-		this.battle.room.add(`||adding ${addPerTurn} for new turn`);
 		for (const player of this.battle.players) {
 			player.secondsLeft = Math.min(player.secondsLeft + addPerTurn, this.settings.starting);
 		}
 	}
 	nextRequest(player: RoomBattlePlayer) {
 		if (player.secondsLeft <= 0) return;
-		if (player.request.isWait) return;
+		if (player.request.isWait) {
+			player.turnSecondsLeft = this.settings.maxPerTurn;
+			return;
+		}
 
 		if (this.timer) {
 			clearTimeout(this.timer);
@@ -519,6 +521,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
+	password = "";
 	replaySaved: boolean | 'auto' = false;
 	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	p1: RoomBattlePlayer = null!;
@@ -802,7 +805,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				};
 				this.requestCount++;
 				player?.sendRoom(`|request|${requestJSON}`);
-				this.timer.nextRequest(player);
+				if (!request.update) this.timer.nextRequest(player);
 				break;
 			}
 			player?.sendRoom(lines[2]);
@@ -876,11 +879,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (winner && !winner.registered) {
 			this.room.sendUser(winner, '|askreg|' + winner.id);
 		}
+		const p1 = this.p1.name;
+		const p2 = this.p2.name;
 		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
-			this.p1.name, this.p2.name, p1score, this.room
+			p1, p2, p1score, this.room
 		);
 		void this.logBattle(score, p1rating, p2rating);
-		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [this.p1.id, this.p2.id]);
+		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
@@ -1296,7 +1301,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
 		}
 	}
-	async getLog(): Promise<string[] | void> {
+	async getInputLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
 		void this.stream.write('>requestlog');
 		const logPromise = new Promise<string[]>((resolve, reject) => {
@@ -1353,16 +1358,21 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream(), message => {
+export const PM = new ProcessManager.StreamProcessManager('sim', module, () => new RoomBattleStream(), message => {
 	if (message.startsWith(`SLOW\n`)) {
 		Monitor.slow(message.slice(5));
 	}
 });
 
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['simulator'] ?? 1);
+}
+
 if (!PM.isParentProcess) {
-	// This is a child process!
-	require('source-map-support').install();
-	global.Config = require('./config-loader').Config;
+	ConfigLoader.ensureLoaded();
+	try {
+		require('source-map-support').install();
+	} catch {}
 	global.Dex = require('../sim/dex').Dex;
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
@@ -1397,7 +1407,5 @@ if (!PM.isParentProcess) {
 	}
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(global.Config ? Config.simulatorprocesses : 1);
+	PM.startRepl(cmd => eval(cmd));
 }
