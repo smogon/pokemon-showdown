@@ -1754,7 +1754,7 @@ export const commands: Chat.ChatCommands = {
 	bugs(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room?.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://play.pokemonshowdown.com/bugs">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button data-cmd="/savereplay" name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://play.pokemonshowdown.com/bugs">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
@@ -1768,7 +1768,7 @@ export const commands: Chat.ChatCommands = {
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
+		this.sendReplyBox(`<button data-href="options" name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 	optionsbuttonhelp: [`/optionsbutton - Provides a button to the Options menu.`],
 
@@ -1776,7 +1776,7 @@ export const commands: Chat.ChatCommands = {
 	volumebutton: 'soundbutton',
 	soundbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
+		this.sendReplyBox(`<button data-href="volume" name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 	soundbuttonhelp: [`/soundbutton - Provides a button to the Sounds menu.`],
 
@@ -2438,7 +2438,7 @@ export const commands: Chat.ChatCommands = {
 
 	register() {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
+		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button data-href="options" name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
 	},
 	registerhelp: [`/register - Provides information on how to register.`],
 

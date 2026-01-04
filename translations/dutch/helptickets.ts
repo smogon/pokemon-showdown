@@ -8,7 +8,7 @@ export const translations: Translations = {
 		"You are banned from creating tickets": "Je bent verbannen van het maken van help tickets",
 		", because you have the same IP as ${ticket.banned}.": ", omdat je hetzelfde IP hebt als $(ticket.banned}.",
 		"Request help from global staff": "Vraag hulp van globaal personeel",
-		'Please <button name="login" class="button">Log In</button> to request help.': '<button name="login" class="button">Log alsjeblieft in</button> om hulp te vragen.',
+		'Please <button data-href="login" name="login" class="button">Log In</button> to request help.': '<button data-href="login" name="login" class="button">Log alsjeblieft in</button> om hulp te vragen.',
 		"Request Help": "Vraag Hulp",
 		"You already have a Help ticket.": "Je hebt al een Help Ticket.",
 		"Back": "Terug",

@@ -3354,7 +3354,7 @@ export const commands: Chat.ChatCommands = {
 			this.requireGame(Mafia);
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) {
-				return this.sendReplyBox(`<button name="joinRoom" value="view-mafia-${room.roomid}" class="button"><strong>Spectate the game</strong></button>`);
+				return this.sendReplyBox(`<button data-href="view-mafia-${room.roomid}" name="joinRoom" value="view-mafia-${room.roomid}" class="button"><strong>Spectate the game</strong></button>`);
 			}
 			return this.parse(`/join view-mafia-${room.roomid}`);
 		},
@@ -3814,7 +3814,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (cmd === 'lb') cmd = 'leaderboard';
 			if (this.broadcasting) {
-				return this.sendReplyBox(`<button name="joinRoom" value="view-mafialadder-${cmd}" class="button"><strong>${cmd}</strong></button>`);
+				return this.sendReplyBox(`<button data-href="view-mafialadder-${cmd}" name="joinRoom" value="view-mafialadder-${cmd}" class="button"><strong>${cmd}</strong></button>`);
 			}
 			return this.parse(`/join view-mafialadder-${cmd}`);
 		},
