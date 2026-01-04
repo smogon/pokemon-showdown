@@ -68392,6 +68392,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			trailblaze: ["9M"],
 			upperhand: ["9M"],
 			uturn: ["9M", "7M"],
+			vacuumwave: ["9M"],
 			waterfall: ["9M", "7M"],
 			watergun: ["9M"],
 			waterpledge: ["9M", "7T"],
