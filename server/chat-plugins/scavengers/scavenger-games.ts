@@ -293,7 +293,11 @@ const TWISTS: Record<TwistType, Twist> = {
 		onCompletePriority: 1,
 		onComplete(finish, player) {
 			player.completed = false; // Hide completion and store it in mod info instead
-			finish.modData[TwistType.BlindIncognito].preCompleted = true;
+			player.modData[TwistType.BlindIncognito].preCompleted = true;
+		},
+
+		onAfterComplete() {
+			return true; // don't remove player from the game
 		},
 	} satisfies Twist<TwistType.BlindIncognito>,
 
@@ -422,7 +426,7 @@ const TWISTS: Record<TwistType, Twist> = {
 				this.announce(
 					Utils.html`<em>${
 						finish.name
-					}</em> is the ${place} player to finish the hunt! (${takenTime}${
+					}</em> is the ${place} player to finish the hunt! (${Chat.toDurationString(takenTime, { hhmmss: true })}${
 						finish.blitz ? " - BLITZ" : ""
 					})`
 				);
@@ -481,9 +485,12 @@ const TWISTS: Record<TwistType, Twist> = {
 			const currentQuestion = player.currentQuestion;
 
 			if (currentQuestion + 1 === this.questions.length) {
-				this.modData[TwistType.ScavengersFeud].guesses[player.id] = value
-					.split(",")
-					.map((part: string) => sanitizeAnswer(part));
+				const guesses = value.split(',').map(sanitizeAnswer);
+				if (guesses.length !== this.questions.length - 1) {
+					player.sendRoom(`You must enter guesses for all questions (you entered ${guesses.length} guesses, but there are ${this.questions.length - 1} questions.)`);
+					return true;
+				}
+				this.modData[TwistType.ScavengersFeud].guesses[player.id] = guesses;
 
 				this.onComplete(player);
 				return true;
@@ -713,7 +720,7 @@ const TWISTS: Record<TwistType, Twist> = {
 
 			for (const player of Object.values(this.playerTable)) {
 				if (!player) continue;
-				const playerMines = player.modData[TwistType.Minesweeper].mines;
+				const playerMines = player.modData[TwistType.Minesweeper].mines ?? [];
 				for (const { index, mine } of playerMines) {
 					mines[index]
 						.find(obj => obj.mine === mine)

@@ -381,10 +381,15 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		if (this.room.scavgame) {
 			this.loadMods(this.room.scavgame.mod);
 		}
-		if (mod) {
-			this.loadMods(mod);
-		} else if (this.gameType === 'official' && this.room.settings.scavSettings?.officialtwist) {
-			this.loadMod(this.room.settings.scavSettings?.officialtwist);
+		try {
+			if (mod) {
+				this.loadMods(mod);
+			} else if (this.gameType === 'official' && this.room.settings.scavSettings?.officialtwist) {
+				this.loadMod(this.room.settings.scavSettings?.officialtwist);
+			}
+		} catch (err) {
+			this.destroy();
+			throw err;
 		}
 
 		try {
@@ -408,13 +413,13 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		if (Array.isArray(modInformation)) {
 			const modIds = new Set(modInformation.map(toID)) as Set<TwistType | GameModeType>;
 			if (modIds.has(GameModeType.TeamScavengers)) {
-				if (modIds.size >= 2) return this.announce("Team Scavengers cannot be used with other twists.");
+				if (modIds.size >= 2) throw new Chat.ErrorMessage("Team Scavengers cannot be used with other twists.");
 			}
 			for (const invalidCombo of INVALID_TWIST_COMBOS) {
 				const firstMatch = invalidCombo[0].intersection(modIds);
 				const secondMatch = invalidCombo[1].intersection(modIds);
 				if (firstMatch.size > 0 && secondMatch.size > 0) {
-					return this.announce(`${[...firstMatch.values()]} and ${[...secondMatch.values()]} cannot be used together.`);
+					throw new Chat.ErrorMessage(`${[...firstMatch.values()]} and ${[...secondMatch.values()]} cannot be used together.`);
 				}
 			}
 			for (const mod of modIds) {
@@ -430,7 +435,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		if (typeof modData === 'string') {
 			const modId = toID(modData) as string;
 			if (modId in ScavMods.twists) twist = ScavMods.twists[modId as TwistType]!;
-			else return this.announce(`Invalid mod. Starting the hunt without the mod ${modId}.`);
+			else throw new Chat.ErrorMessage(`Invalid mod ${modId}.`);
 		} else {
 			twist = modData as Twist;
 		}
@@ -475,7 +480,11 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 		const twists = this.modsList.filter((mod): mod is TwistType =>
 			mod in ScavMods.twists
 		).map(mod => ScavMods.twists[mod].name);
-		const twistMessage = twists.length > 0 ? ` This hunt uses the following twists: ${Chat.toListString(twists)}.` : '';
+		const twistMessage = twists.length > 0 ?
+			twists.length === 1 ?
+				` This hunt uses the ${twists[0]} twist.` :
+				` This hunt uses the following twists: ${Chat.toListString(twists)}.` :
+			'';
 
 		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.${twistMessage}</strong>` +
 			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:auto; max-height: 50vh">` +
@@ -747,6 +756,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 			);
 		}
 
+		if (this.runEvent('AfterComplete', player)) return;
 		player.destroy(); // remove from user.games;
 	}
 
@@ -1515,7 +1525,16 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
-		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+		const twists = game.modsList
+			.filter((mod): mod is TwistType => mod in ScavMods.twists)
+			.map(mod => ScavMods.twists[mod].name);
+		const twistMsg = twists.length > 0 ? `(with the ${Chat.toListString(twists)} twist${Chat.plural(twists)}) ` : '';
+		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt ${twistMsg}by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}` +
+			`<br />${
+				!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${
+					Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })
+				}`
+			}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		if (game.modsList.includes(TwistType.TimeTrial)) {
 			const finisher = game.completed.find(player => player.id === user.id);
 			const timeTrialMsg = finisher ?
@@ -1542,7 +1561,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 					).join(", ");
 				}
 			}
-			const completed: AnyObject[] = game.preCompleted ? game.preCompleted : game.completed;
+			const completed = game.preCompleted ?? game.completed;
 			str += Utils.html`<tr><td>Completed</td><td>${completed.length ? completed.map(pl => pl.name).join(", ") : 'None'}`;
 			return this.sendReply(`|raw|${str}</table></div>${buffer}`);
 		}

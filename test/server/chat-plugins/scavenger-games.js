@@ -335,9 +335,7 @@ describe("Scavenger Twists", () => {
 			// TODO: Check that scavenging A3 again, or A4, shows the same message
 
 			// Player should be marked completed but completion should be hidden
-			const finisher = getFinisher(this.user1.id);
-			assert(finisher);
-			assert.equal(finisher.modData.blindincognito.preCompleted, true);
+			assert.equal(player.modData.blindincognito.preCompleted, true);
 		});
 
 		it("should accept wrong answers on last question without advancing", async function () {
@@ -611,8 +609,8 @@ describe("Scavenger Twists", () => {
 			await runCommand(this.user1, "/scavenge A4");
 
 			// BlindIncognito marks completion differently
-			const finisher = getFinisher(this.user1.id);
-			assert.equal(finisher.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
+			const player = this.room.game.playerTable[this.user1.id];
+			assert.equal(player.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
 		});
 
 		it("should track wrong answers across multiple twists", async function () {
@@ -773,9 +771,8 @@ describe("Scavenger Twists", () => {
 			await runCommand(this.user1, "/scavenge guess1, guess2, guess3, guess4");
 
 			// BlindIncognito hides completion status, so check finish record instead
-			const finisher = getFinisher(this.user1.id);
-			assert(finisher, "player should have a finish record");
-			assert.equal(finisher.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
+			const player = this.room.game.playerTable[this.user1.id];
+			assert.equal(player.modData.blindincognito.preCompleted, true, "blindincognito should mark preCompleted");
 
 			// Check guesses were recorded
 			const guesses = this.room.game.modData.scavengersfeud.guesses[this.user1.id];

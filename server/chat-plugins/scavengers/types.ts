@@ -59,6 +59,7 @@ export enum GameModeType {
 }
 
 export type ModEvents = {
+	AfterComplete: (player: Scavenger) => void,
 	AfterEnd: (isReset?: boolean) => void,
 	AfterLoad: () => void,
 	AnySubmit: (player: Scavenger, value: string, originalValue: string) => void,
@@ -166,7 +167,7 @@ type CommonTwistPlayer = Scavenger & {
 		[TwistType.BonusRound]: { skippedQuestion: boolean },
 		[TwistType.BlindIncognito]: { preCompleted?: boolean },
 		[TwistType.SpamFilter]: { incorrect: string[] },
-		[TwistType.Minesweeper]: { mines: { index: number, mine: string }[] },
+		[TwistType.Minesweeper]: { mines?: { index: number, mine: string }[] },
 	}>,
 };
 
