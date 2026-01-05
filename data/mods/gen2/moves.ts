@@ -438,10 +438,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			const lastMove = target?.lastMove;
-			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
+			if (!pokemon.activeTurns && !target.moveThisTurn) {
 				return false;
 			}
-			if (!lastMove.flags['mirror'] || pokemon.moves.includes(lastMove.id)) {
+			if (!lastMove?.flags['mirror'] || pokemon.moves.includes(lastMove.id)) {
 				return false;
 			}
 			this.actions.useMove(lastMove, pokemon);
