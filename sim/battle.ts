@@ -3144,9 +3144,9 @@ export class Battle {
 		this.log[this.lastMoveLine] = parts.join('|');
 	}
 
-	debug(activity: string | string[]) {
+	debug(...activity: string[]) {
 		if (this.debugMode) {
-			this.add('debug', Array.isArray(activity) ? activity.join('|') : activity);
+			this.add('debug', activity.join('|'));
 		}
 	}
 
