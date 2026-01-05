@@ -21,6 +21,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			poke.gender = 'N';
 			poke.eggGroups = null;
 		}
+		for (const i in this.data.Moves) {
+			if (i === 'mirrormove') {
+				delete this.modData('Moves', i).flags.mirror;
+			} else {
+				this.modData('Moves', i).flags.mirror = 1;
+			}
+		}
 	},
 	// BattlePokemon scripts.
 	pokemon: {

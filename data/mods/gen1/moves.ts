@@ -485,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onHit(pokemon) {
 			const foe = pokemon.side.foe.active[0];
-			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
+			if (!foe?.lastMove || !foe.lastMove.flags['mirror']) { // only Mirror Move isn't mirrorable
 				return false;
 			}
 			pokemon.side.lastSelectedMove = foe.lastMove.id;
