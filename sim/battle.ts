@@ -3146,7 +3146,7 @@ export class Battle {
 
 	debug(...activity: Part[]) {
 		if (this.debugMode) {
-			this.add('debug', activity.join('|'));
+			this.add('debug', ...activity);
 		}
 	}
 
