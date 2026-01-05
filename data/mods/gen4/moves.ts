@@ -1333,8 +1333,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon) {
-			if (pokemon.status === 'frz' || pokemon.status === 'slp' ||
-				pokemon.volatiles['truant'] || pokemon.truantTurn) return;
+			if (['frz', 'slp'].includes(pokemon.status) || (pokemon.hasAbility('truant') &&
+				(pokemon.volatiles['truant'] || pokemon.truantTurn))) return;
 			for (const side of this.sides) {
 				if (side.hasAlly(pokemon)) continue;
 				side.addSideCondition('pursuit', pokemon);
