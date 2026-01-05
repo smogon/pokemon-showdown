@@ -313,7 +313,7 @@ function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<
 			return format.id.includes('ubers') || !hasMove('Dragon Ascent');
 		} else {
 			const item = dex.items.get(set.item);
-			return !item.megaStone || !Object.values(item.megaStone)[0].includes(pokemon);
+			return !item.megaStone || !Object.values(item.megaStone).includes(pokemon);
 		}
 	}
 	if (pokemon === 'Necrozma-Ultra' && set.item !== 'Ultranecrozium Z') return true;
