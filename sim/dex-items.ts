@@ -169,7 +169,7 @@ export class DexItems {
 	}
 
 	getByID(id: ID): Item {
-		if (id === '') return EMPTY_ITEM;
+		if (id === '' || id === 'constructor') return EMPTY_ITEM;
 		let item = this.itemCache.get(id);
 		if (item) return item;
 		if (this.dex.getAlias(id)) {
