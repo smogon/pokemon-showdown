@@ -259,7 +259,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
 	},
 	{
