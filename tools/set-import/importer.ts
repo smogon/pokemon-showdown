@@ -427,7 +427,7 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 		}
 
 		const analysesByFormat = new Map<Format, smogon.Analysis[]>();
-		for (const [tier, analyses] of analysesByTier.entries()) {
+		for (const [tier, analyses] of analysesByTier.analyses.entries()) {
 			let t = toID(tier);
 			// Dumb hack, need to talk to BSS people
 			if (gen === 9 && t === 'battlestadiumsingles') {
