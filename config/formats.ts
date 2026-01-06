@@ -255,7 +255,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 9] VGC 2025 Reg I",
+		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
 		mod: 'gen9',
 		gameType: 'doubles',
 		bestOfDefault: true,
