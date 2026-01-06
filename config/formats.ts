@@ -161,7 +161,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] BSS Reg I",
 		mod: 'gen9',
-		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
@@ -169,6 +168,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] BSS Reg J",
 		mod: 'gen9',
+		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary', 'Mythical'],
@@ -255,29 +255,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 9] VGC 2025 Reg I",
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary'],
-	},
-	{
-		name: "[Gen 9] VGC 2025 Reg J",
+		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
 		mod: 'gen9',
 		gameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary', 'Mythical'],
-	},
-	{
-		name: "[Gen 9] VGC 2025 Reg J (Bo3)",
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary', 'Mythical'],
+		restricted: ['Restricted Legendary'],
 	},
 	{
 		name: "[Gen 9] VGC 2026 Reg F",
@@ -546,12 +529,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
-			'Annihilape​', 'Arceus​', 'Archaludon​', 'Baxcalibur​', 'Calyrex-Ice​', 'Calyrex-Shadow​', 'Chien-Pao​', 'Chi-Yu​', 'Deoxys-Normal​', 'Deoxys-Attack​', 'Dialga​', 'Dialga-Origin​',
-			'Espathra​', 'Eternatus​', 'Flutter Mane​', 'Giratina​', 'Giratina-Origin​', 'Gouging Fire​', 'Groudon​', 'Ho-Oh​', 'Iron Bundle​', 'Koraidon​', 'Kyogre​', 'Kyurem-Black​', 'Kyurem-White​',
-			'Landorus-Incarnate', 'Lugia​', 'Lunala​', 'Magearna​', 'Mewtwo​', 'Miraidon​', 'Necrozma-Dawn-Wings​', 'Necrozma-Dusk-Mane​', 'Ogerpon-Hearthflame​', 'Palafin​', 'Palkia​', 'Palkia-Origin​',
-			'Rayquaza​', 'Regieleki​', 'Regigigas​', 'Reshiram​', 'Roaring Moon​', 'Slaking​', 'Shaymin-Sky​', 'Sneasler​', 'Solgaleo​', 'Spectrier​', 'Terapagos​', 'Ursaluna-Bloodmoon​', 'Urshifu',
-			'Urshifu-Rapid-Strike​', 'Volcarona​', 'Zacian​', 'Zacian-Crowned​', 'Zamazenta-Crowned', 'Zekrom​', 'Arena Trap​', 'Moody​', 'Sand Veil​', 'Shadow Tag​', 'Snow Cloak​', '​Bright Powder​',
-			'Choice Band​', 'Choice Specs​', 'King\'s Rock​', 'Razor Fang​', 'Baton Pass​', 'Last Respects​', 'Shed Tail​',
+			'Annihilape', 'Arceus', 'Archaludon', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Chi-Yu', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin',
+			'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Regieleki', 'Regigigas', 'Reshiram', 'Roaring Moon', 'Slaking', 'Shaymin-Sky', 'Sneasler', 'Solgaleo', 'Spectrier', 'Terapagos', 'Ursaluna-Bloodmoon', 'Urshifu',
+			'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Bright Powder',
+			'Choice Band', 'Choice Specs', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		validateSet(set, teamHas) {
 			const dex = this.dex;
@@ -605,8 +588,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const setHas: { [k: string]: true } = {};
 			for (const thing of allThings) {
-				if (setHas[this.toID(thing)]) return [`${set.species} has multiple copies of ${thing}.`];
-				setHas[this.toID(thing)] = true;
+				let sanitizedThing: Item | Move | Ability = this.dex.items.get(thing);
+				if (!sanitizedThing.exists) sanitizedThing = this.dex.abilities.get(thing);
+				if (!sanitizedThing.exists) sanitizedThing = this.dex.moves.get(thing);
+				if (setHas[sanitizedThing.id]) return [`${set.species} has multiple copies of ${sanitizedThing.name}.`];
+				setHas[sanitizedThing.id] = true;
 			}
 			const normalAbility = set.ability;
 			if (!abilities.length) {
