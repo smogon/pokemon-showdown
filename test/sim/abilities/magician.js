@@ -201,6 +201,22 @@ describe('Magician', () => {
 		assert(terapagos.hp > terapagos.maxhp / 2);
 	});
 
+	it(`should activate after the last hit of a multi-hit move`, () => {
+		battle = common.createBattle([[
+			{ species: 'Urshifu-Rapid-Strike', ability: 'magician', moves: ['surgingstrikes'] },
+		], [
+			{ species: 'Terapagos', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+		const debugLog = battle.getDebugLog();
+		const magician = debugLog.indexOf('Magician');
+		const hitCount = debugLog.indexOf('hitcount');
+		assert(-1 < hitCount);
+		assert(hitCount < magician);
+	});
+
 	it.skip(`should not steal an item through Substitute`, () => {
 		battle = common.createBattle([[
 			{ species: 'Urshifu', ability: 'magician', moves: ['wickedblow'] },
@@ -213,5 +229,22 @@ describe('Magician', () => {
 		assert.equal(scolipede.hp, scolipede.maxhp - Math.floor(scolipede.maxhp / 4));
 		assert.false.holdsItem(battle.p1.active[0]);
 		assert.holdsItem(battle.p2.active[0]);
+	});
+
+	it.skip(`should activate before Relic Song`, () => {
+		battle = common.createBattle([[
+			{ species: 'Meloetta', ability: 'magician', moves: ['relicsong'] },
+		], [
+			{ species: 'Scolipede', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+		assert.species(battle.p1.active[0], 'Meloetta-Pirouette');
+		const debugLog = battle.getDebugLog();
+		const magician = debugLog.indexOf('Magician');
+		const pirouette = debugLog.indexOf('Meloetta-Pirouette');
+		assert(-1 < magician);
+		assert(magician < pirouette);
 	});
 });
