@@ -4835,7 +4835,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 4] UU",
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['[Gen 4] OU', '!Baton Pass Stat Trap Clause', '!Freeze Clause Mod', , '!Sleep Moves Clause', 'Sleep Clause Mod'],
+		ruleset: ['[Gen 4] OU', '!Baton Pass Stat Trap Clause', '!Freeze Clause Mod', '!Sleep Moves Clause', 'Sleep Clause Mod'],
 		banlist: ['OU', 'UUBL', 'Baton Pass'],
 		unbanlist: ['Arena Trap', 'Snow Cloak', 'Quick Claw', 'Swagger'],
 	},
