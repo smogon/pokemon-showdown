@@ -331,7 +331,8 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		}
 	} else {
 		const format = Dex.formats.get(`${gen}${is1v1 ? '1v1' : 'bss'}factory`);
-		if (!((is1v1 ? species.name : species.id) in statsFile)) throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${format.name}.`);
+		if (!((is1v1 ? species.name : species.id) in statsFile))
+			throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${format.name}.`);
 		const setObj = statsFile[is1v1 ? species.name : species.id];
 		if (genNum >= 9) {
 			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
