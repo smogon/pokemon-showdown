@@ -142,27 +142,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angershell: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			target.blockHealingBerries = target.blockHealingBerries || (
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedAngerShell = false;
-			} else {
-				this.effectState.checkedAngerShell = true;
-			}
-		},
-		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
-				return this.effectState.checkedAngerShell;
-			}
-			return true;
+			);
 		},
 		onAfterMoveSecondary(target, source, move) {
-			this.effectState.checkedAngerShell = true;
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
@@ -408,27 +393,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			target.blockHealingBerries = target.blockHealingBerries || (
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedBerserk = false;
-			} else {
-				this.effectState.checkedBerserk = true;
-			}
-		},
-		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
-				return this.effectState.checkedBerserk;
-			}
-			return true;
+			);
 		},
 		onAfterMoveSecondary(target, source, move) {
-			this.effectState.checkedBerserk = true;
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
@@ -2420,22 +2390,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 98,
 	},
 	magician: {
+		onSourceDamagingHit(damage, target, source, move) {
+			target.blockHealingBerries = target.blockHealingBerries || (
+				!move.multihit && !move.hasSheerForce && !move.flags['futuremove']
+			);
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
 				move.id === 'fling' || move.category === 'Status') return;
-			const hitTargets = move.hitTargets;
-			this.speedSort(hitTargets);
-			for (const pokemon of hitTargets) {
-				if (pokemon !== source) {
-					const yourItem = pokemon.takeItem(source);
-					if (!yourItem) continue;
-					if (!source.setItem(yourItem)) {
-						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-						continue;
-					}
-					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
-					return;
+			this.speedSort(move.hitTargets, this.comparePriorityFoesFirst(source));
+			this.debug('Magician targets', ...move.hitTargets);
+			for (const pokemon of move.hitTargets) {
+				if (pokemon === source) continue;
+				const yourItem = pokemon.takeItem(source);
+				if (!yourItem) continue;
+				if (!source.setItem(yourItem)) {
+					pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+					continue;
 				}
+				this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
+				return;
 			}
 		},
 		flags: {},
