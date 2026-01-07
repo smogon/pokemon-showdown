@@ -111,6 +111,36 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen4ou');
 	});
 
+	it.skip('should allow move-based evolutions at the level those moves are learned', () => {
+		// The the tests that should be failing are passing
+		let team = [
+			{ species: 'tangrowth', level: 24, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen8anythinggoes');
+
+		team = [
+			{ species: 'wyrdeer', level: 1, ability: 'intimidate', moves: ['psyshieldbash'], evs: { hp: 1 } },
+			{ species: 'overqwil', level: 15, ability: 'poisonpoint', moves: ['barbbarrage'], evs: { hp: 1 } },
+			{ species: 'annihilape', level: 35, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9anythinggoes');
+
+		team = [
+			{ species: 'tangrowth', level: 23, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen8anythinggoes');
+
+		team = [
+			{ species: 'overqwil', level: 14, ability: 'poisonpoint', moves: ['barbbarrage'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+		
+		team = [
+			{ species: 'annihilape', level: 34, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+	});
+
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
 	describe(`Hackmons formes`, () => {
 		it(`should reject battle-only formes in Gen 9, even in Hackmons`, () => {
