@@ -64,10 +64,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		setAbility(ability, source, sourceEffect, isFromFormeChange = false, isTransform = false) {
 			const allThings = new Set([
-				...(this.m.scrambled.abilities as { thing: string }[]).map(e  => e.thing),
-				...(this.m.scrambled.items as { thing: string }[]).map(e  => e.thing),
-				...(this.m.scrambled.moves as { thing: string }[]).map(e  => e.thing),
-				this.ability, this.moveSlots.map(e => e.id), this.item
+				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
+				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
+				...(this.m.scrambled.moves as { thing: string }[]).map(e => e.thing),
+				this.ability, this.moveSlots.map(e => e.id), this.item,
 			].map(this.battle.toID));
 
 			let isBMMAbil = false;
@@ -240,10 +240,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		setItem(item, source, effect) {
 			const allThings = new Set([
-				...(this.m.scrambled.abilities as { thing: string }[]).map(e  => e.thing),
-				...(this.m.scrambled.items as { thing: string }[]).map(e  => e.thing),
-				...(this.m.scrambled.moves as { thing: string }[]).map(e  => e.thing),
-				this.ability, this.moveSlots.map(e => e.id), this.item
+				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
+				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
+				...(this.m.scrambled.moves as { thing: string }[]).map(e => e.thing),
+				this.ability, this.moveSlots.map(e => e.id), this.item,
 			].map(this.battle.toID));
 
 			let isBMMItem = false;
