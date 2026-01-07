@@ -622,6 +622,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			for (const curMove of moves) {
 				set.moves = [curMove];
+				if (requiredMove && moves.map(this.toID).includes(this.toID(curMove))
+					&& this.toID(curMove) !== this.toID(requiredMove)) {
+					set.moves.push(requiredMove);
+				}
 				let problems = this.validateSet(set, teamHas);
 				if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
 				if (problems?.length) return problems;
