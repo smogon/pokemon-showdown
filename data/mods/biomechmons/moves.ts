@@ -233,7 +233,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!this.dex.abilities.get(sourceAbility).exists && this.dex.items.get(sourceAbility.id).exists) {
 				sourceCanBeSet = this.runEvent('TakeItem', source, source, this.effect, this.dex.items.get(sourceAbility.id));
 			}
-			
+
 			if (!sourceCanBeSet) return sourceCanBeSet;
 			let targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
 			if (!this.dex.abilities.get(targetAbility).exists && this.dex.items.get(targetAbility.id).exists) {
