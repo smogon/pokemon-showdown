@@ -852,11 +852,11 @@ export class TeamValidator {
 					requiredLevel = evoSpecies.evoLevel;
 					break;
 				}
-				// Species that exist in Legends games don't need to level up to evolve
 				if (levelMoveEvolution) {
 					// FIXME: instead of checking level 1, check the minimum level at which evoSpecies can learn the evo move
-					const minMoveLevel = 1;
-					if (set.level > minMoveLevel || (set.level === minMoveLevel && this.existsInLegends(evoSpecies))) {
+					const moveLevel = 1;
+					// Species that exist in Legends games don't need to level up to evolve
+					if (set.level > moveLevel || (set.level === moveLevel && this.existsInLegends(evoSpecies))) {
 						levelMoveEvolution = false;
 					}
 				}
