@@ -556,8 +556,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const allThings = [set.ability, set.item, ...set.moves]
-				.map(e => e.replace(/^(item|move|ability):?(?!\s*shield)/i, '')).filter(e => e.length);
+			const allThings = [set.ability, set.item, ...set.moves].filter(e => e.length);
 			for (const thing of allThings) {
 				if (!dex.moves.get(thing).exists && !dex.abilities.get(thing).exists && !dex.items.get(thing).exists) {
 					return [`${thing} does not exist.`];
@@ -569,30 +568,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' && dex.moves.get(thing).exists);
-			for (const m of moves) {
-				const moveName = this.dex.moves.get(m).name;
-				if (this.ruleTable.isBanned(`move:${this.toID(moveName)}`)) return [`${set.species}'s move ${moveName} is banned.`];
-			}
-			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists);
-			for (const a of abilities) {
-				const abilName = this.dex.abilities.get(a).name;
-				if (this.ruleTable.isBanned(`ability:${this.toID(abilName)}`)) {
-					return [`${set.species}'s ability ${abilName} is banned.`];
-				}
-			}
-			const items = allThings.filter(thing => dex.items.get(thing).exists);
-			for (const i of items) {
-				const itemName = this.dex.items.get(i).name;
-				if (this.ruleTable.isBanned(`item:${this.toID(itemName)}`)) return [`${set.species}'s item ${itemName} is banned.`];
-			}
+			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' && dex.moves.get(thing).exists).map(e => this.dex.moves.get(e).name);
+			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists).map(e => this.dex.abilities.get(e).name);
+			const items = allThings.filter(thing => dex.items.get(thing).exists).map(e => this.dex.items.get(e).name);
+
 			const setHas: { [k: string]: true } = {};
 			for (const thing of allThings) {
-				let sanitizedThing: Item | Move | Ability = this.dex.items.get(thing);
-				if (!sanitizedThing.exists) sanitizedThing = this.dex.abilities.get(thing);
-				if (!sanitizedThing.exists) sanitizedThing = this.dex.moves.get(thing);
-				if (setHas[sanitizedThing.id]) return [`${set.species} has multiple copies of ${sanitizedThing.name}.`];
-				setHas[sanitizedThing.id] = true;
+				if (setHas[this.toID(thing)]) return [`${set.species} has multiple copies of ${thing}.`];
+				setHas[this.toID(thing)] = true;
 			}
 			const normalAbility = set.ability;
 			if (!abilities.length) {
@@ -637,8 +620,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!this.ruleTable.has('+ability:noability')) {
 				this.ruleTable.set('+ability:noability', '');
 			}
-			for (let i = 0; i < moves.length; i++) {
-				set.moves = [this.dex.moves.get(moves[i]).name];
+			for (const curMove of moves) {
+				set.moves = [curMove];
 				let problems = this.validateSet(set, teamHas);
 				if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
 				if (problems?.length) return problems;
@@ -709,6 +692,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 
 				for (const move of pokemon.set.moves) {
+					if (this.dex.moves.get(move).id === 'metronome') continue;
 					if (this.dex.abilities.get(move).exists) {
 						pokemon.m.scrambled.abilities.push({ thing: this.dex.abilities.get(move).name, inSlot: 'Move' });
 					} else if (this.dex.items.get(move).exists) {
@@ -718,6 +702,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				const newMoveSlots = [];
 				for (const moveSlot of pokemon.baseMoveSlots) {
+					if (this.dex.moves.get(moveSlot.id).id === 'metronome') {
+						const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
+							require('../sim/team-validator').TeamValidator;
+						const canThisLearnMetronome = TeamValidator.get(this.format).checkCanLearn(this.dex.moves.get('metronome'), pokemon.species);
+						if (canThisLearnMetronome) {
+							newMoveSlots.push(moveSlot);
+						} else {
+							pokemon.m.scrambled.items.push({ thing: this.dex.items.get('metronome').name, inSlot: 'Move' });
+						}
+						continue;
+					}
 					if (!this.dex.moves.get(moveSlot.id).exists) continue;
 					newMoveSlots.push(moveSlot);
 				}

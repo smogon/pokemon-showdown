@@ -63,6 +63,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			);
 		},
 		setAbility(ability, source, sourceEffect, isFromFormeChange = false, isTransform = false) {
+			const allThings = new Set([
+				...(this.m.scrambled.abilities as { thing: string }[]).map(e  => e.thing),
+				...(this.m.scrambled.items as { thing: string }[]).map(e  => e.thing),
+				...(this.m.scrambled.moves as { thing: string }[]).map(e  => e.thing),
+				this.ability, this.moveSlots.map(e => e.id), this.item
+			].map(this.battle.toID));
+
 			let isBMMAbil = false;
 			let isOldBMMAbil = false;
 			if (!this.hp) return false;
@@ -91,7 +98,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				oldAbility = this.battle.dex.abilities.get(this.ability);
 			} else {
 				let abil = this.battle.dex.items.getByID(this.ability) as Item | Move;
-				if (!abil.exists) abil = this.battle.dex.moves.getByID(this.ability);
+				if (!abil.exists) {
+					abil = this.battle.dex.moves.getByID(this.ability);
+				} else {
+					if (!this.battle.runEvent('TakeItem', this, source, null, this.battle.dex.items.get(abil as Item))) return false;
+				}
 				oldAbility = {
 					id: this.ability,
 					name: abil.name || this.ability,
@@ -103,6 +114,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				} as Ability;
 				isOldBMMAbil = true;
 			}
+
+			if (allThings.has(ability.id)) return false;
+
 			if (!isFromFormeChange) {
 				if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
 			}
@@ -225,6 +239,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		},
 		setItem(item, source, effect) {
+			const allThings = new Set([
+				...(this.m.scrambled.abilities as { thing: string }[]).map(e  => e.thing),
+				...(this.m.scrambled.items as { thing: string }[]).map(e  => e.thing),
+				...(this.m.scrambled.moves as { thing: string }[]).map(e  => e.thing),
+				this.ability, this.moveSlots.map(e => e.id), this.item
+			].map(this.battle.toID));
+
 			let isBMMItem = false;
 			let isOldBMMItem = false;
 			if (!this.hp || !this.isActive) return false;
@@ -246,6 +267,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					} as Item;
 				}
 			}
+			if (allThings.has(item.id)) return false;
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
 			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 				const inflicted = ['trick', 'switcheroo'].includes(effectid);
@@ -341,7 +363,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					let itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
+					const itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						this.battle.toID(e.thing) === item.id && e.inSlot === isBMM);
 					if (itemIndex >= 0) this.m.scrambled.items.splice(itemIndex, 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
@@ -393,7 +415,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
 					this.removeVolatile(item.id);
-					let itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
+					const itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						this.battle.toID(e.thing) === item.id && e.inSlot === isBMM);
 					if (itemIndex >= 0) this.m.scrambled.items.splice(itemIndex, 1);
 					if (isBMM === 'Ability') this.setAbility('No Ability');
