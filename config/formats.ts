@@ -573,7 +573,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const items = allThings.filter(thing => dex.items.get(thing).exists).map(e => this.dex.items.get(e).name);
 
 			const setHas: { [k: string]: true } = {};
-			for (const thing of allThings) {
+			for (const thing of [...moves, ...items, ...abilities]) {
 				if (setHas[this.toID(thing)]) return [`${set.species} has multiple copies of ${thing}.`];
 				setHas[this.toID(thing)] = true;
 			}
