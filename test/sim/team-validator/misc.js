@@ -214,6 +214,35 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen8ou');
 	});
 
+	it('should allow move-based evolutions at the level those moves are learned', () => {
+		let team = [
+			{ species: 'tangrowth', level: 2, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen7anythinggoes');
+
+		team = [
+			{ species: 'tangrowth', level: 1, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen7anythinggoes');
+
+		team = [
+			{ species: 'tangrowth', level: 1, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen8anythinggoes');
+
+		team = [
+			{ species: 'wyrdeer', level: 1, ability: 'intimidate', moves: ['psyshieldbash'], evs: { hp: 1 } },
+			{ species: 'overqwil', level: 1, ability: 'poisonpoint', moves: ['barbbarrage'], evs: { hp: 1 } },
+			{ species: 'annihilape', level: 35, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9anythinggoes');
+		
+		team = [
+			{ species: 'annihilape', level: 34, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+	});
+
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
 	it('should should validate exactly as many species as are in the unbanlist for 35 Pokes', () => {
 		const formatid = 'gen9nationaldex35pokes';
