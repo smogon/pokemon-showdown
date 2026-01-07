@@ -842,8 +842,8 @@ export class TeamValidator {
 		}
 		let isUnderleveled;
 		let requiredLevel;
-		let levelMoveEvolution = species.evoType === 'levelMove'; // all levelMove evolutions are last stage evolutions
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
+			let levelMoveEvolution = species.evoType === 'levelMove'; // all levelMove evolutions are last stage evolutions
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
@@ -862,9 +862,9 @@ export class TeamValidator {
 				}
 				evoSpecies = dex.species.get(evoSpecies.prevo);
 			}
-		}
-		if (levelMoveEvolution) {
-			problems.push(`${name} must be at least level ${requiredLevel} to have evolved knowing ${species.evoMove}.`);
+			if (levelMoveEvolution) {
+				problems.push(`${name} must be at least level ${requiredLevel} to have evolved knowing ${species.evoMove}.`);
+			}
 		}
 
 		let moveProblems;
