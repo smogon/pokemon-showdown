@@ -622,8 +622,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			for (const curMove of moves) {
 				set.moves = [curMove];
-				if (requiredMove && moves.map(this.toID).includes(this.toID(curMove))
-					&& this.toID(curMove) !== this.toID(requiredMove)) {
+				if (requiredMove && moves.map(this.toID).includes(this.toID(curMove)) &&
+					this.toID(curMove) !== this.toID(requiredMove)) {
 					set.moves.push(requiredMove);
 				}
 				let problems = this.validateSet(set, teamHas);
