@@ -637,9 +637,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!this.ruleTable.has('+ability:noability')) {
 				this.ruleTable.set('+ability:noability', '');
 			}
-			let problems = this.validateSet(set, teamHas);
-			if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
-			if (problems?.length) return problems;
+			for (let i = 0; i < moves.length; i++) {
+				set.moves = [this.dex.moves.get(moves[i]).name];
+				let problems = this.validateSet(set, teamHas);
+				if (problems) problems = problems.filter(p => !p.endsWith('needs to have an ability.'));
+				if (problems?.length) return problems;
+			}
 			set.ability = normalAbility;
 			set.item = normalItem;
 			set.moves = normalMoves;
