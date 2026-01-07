@@ -101,7 +101,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!abil.exists) {
 					abil = this.battle.dex.moves.getByID(this.ability);
 				} else {
-					if (!this.battle.runEvent('TakeItem', this, source, null, this.battle.dex.items.get(abil as Item))) return false;
+					if (!this.battle.runEvent('TakeItem', this, source, null, abil as Item)) return false;
 				}
 				oldAbility = {
 					id: this.ability,
