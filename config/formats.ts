@@ -542,12 +542,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			let requiredItems: string[] = [];
 			let requiredMove = '';
 			let requiredAbility = '';
-			if (species.battleOnly) {
-				if (species.requiredItems) requiredItems = species.requiredItems;
-				if (species.requiredMove) requiredMove = species.requiredMove;
-				if (species.requiredAbility) requiredAbility = species.requiredAbility;
-				species = dex.species.get(species.battleOnly as string);
-			}
+			if (species.requiredItems) requiredItems = species.requiredItems;
+			if (species.requiredMove) requiredMove = species.requiredMove;
+			if (species.requiredAbility) requiredAbility = species.requiredAbility;
+			if (species.battleOnly) species = dex.species.get(species.battleOnly as string);
+
 			const effectFunctions = [dex.abilities, dex.items, dex.moves];
 			if (
 				!effectFunctions.some(f => f.get(set.ability).exists) &&
