@@ -569,8 +569,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' &&
 				dex.moves.get(thing).exists).map(e => this.dex.moves.get(e).name);
+			for (const m of moves) {
+				if (this.ruleTable.isBanned(`move:${this.toID(m)}`)) return [`${set.species}'s move ${m} is banned.`];
+			}
+
 			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists).map(e => this.dex.abilities.get(e).name);
+			for (const a of abilities) {
+				if (this.ruleTable.isBanned(`ability:${this.toID(a)}`)) return [`${set.species}'s ability ${a} is banned.`];
+			}
+
 			const items = allThings.filter(thing => dex.items.get(thing).exists).map(e => this.dex.items.get(e).name);
+			for (const i of items) {
+				if (this.ruleTable.isBanned(`item:${i}`)) return [`${set.species}'s item ${i} is banned.`];
+			}
 
 			const setHas: { [k: string]: true } = {};
 			for (const thing of [...moves, ...items, ...abilities]) {
