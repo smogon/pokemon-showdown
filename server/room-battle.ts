@@ -1382,7 +1382,7 @@ if (!PM.isParentProcess) {
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
-	};
+	} as typeof Monitor;
 	global.__version = { head: '' };
 	try {
 		const head = execSync('git rev-parse HEAD', {
