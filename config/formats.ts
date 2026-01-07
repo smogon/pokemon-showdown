@@ -568,7 +568,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' && dex.moves.get(thing).exists).map(e => this.dex.moves.get(e).name);
+			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' &&
+				dex.moves.get(thing).exists).map(e => this.dex.moves.get(e).name);
 			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists).map(e => this.dex.abilities.get(e).name);
 			const items = allThings.filter(thing => dex.items.get(thing).exists).map(e => this.dex.items.get(e).name);
 
@@ -687,7 +688,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				if (this.dex.abilities.get(pokemon.set.item).exists) {
 					pokemon.m.scrambled.abilities.push({ thing: this.dex.abilities.get(pokemon.set.item).name, inSlot: 'Item' });
-				} else if (this.dex.moves.get(pokemon.set.item).exists) {
+				} else if (this.dex.moves.get(pokemon.set.item).exists && this.dex.moves.get(pokemon.set.item).id !== 'metronome') {
 					pokemon.m.scrambled.moves.push({ thing: this.dex.moves.get(pokemon.set.item).name, inSlot: 'Item' });
 				}
 
@@ -705,8 +706,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					if (this.dex.moves.get(moveSlot.id).id === 'metronome') {
 						const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
 							require('../sim/team-validator').TeamValidator;
-						const canThisLearnMetronome = TeamValidator.get(this.format).checkCanLearn(this.dex.moves.get('metronome'), pokemon.species);
-						if (canThisLearnMetronome) {
+						const cantMetronome = TeamValidator.get(this.format).checkCanLearn(this.dex.moves.get('metronome'), pokemon.species);
+						if (!cantMetronome) {
 							newMoveSlots.push(moveSlot);
 						} else {
 							pokemon.m.scrambled.items.push({ thing: this.dex.items.get('metronome').name, inSlot: 'Move' });
