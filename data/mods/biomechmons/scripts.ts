@@ -212,7 +212,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.battle.toID(this.ability) === 'multitype' || (this.m.scrambled.abilities as { thing: string }[])
 					.findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
 					return false;
-				} 
+				}
 				if (this.battle.toID(source.ability) === 'multitype' || (source.m.scrambled.abilities as { thing: string }[])
 					.findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
 					return false;
