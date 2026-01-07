@@ -209,14 +209,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!source) source = this;
 			if (this.battle.gen <= 4) {
 				if (source.itemKnockedOff) return false;
-				if (this.battle.toID(this.ability) === 'multitype') return false;
-				if (this.battle.toID(source.ability) === 'multitype') return false;
+				if (this.battle.toID(this.ability) === 'multitype' ||
+					(this.m.scrambled.abilities as { thing: string }[]).findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
+					return false;
+				} 
+				if (this.battle.toID(source.ability) === 'multitype' ||
+					(source.m.scrambled.abilities as { thing: string }[]).findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
+					return false;
+				}
 			}
 			const item = this.getItem();
 			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 				this.item = '';
 				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 				if (wrongSlot >= 0) {
+					const dexAbil = this.battle.dex.abilities.get(this.m.scrambled.abilities[wrongSlot].thing);
+					if (dexAbil.flags['failskillswap']) return false;
 					this.removeVolatile('ability:' + this.battle.toID(this.m.scrambled.abilities[wrongSlot].thing));
 					this.m.scrambled.abilities.splice(wrongSlot, 1);
 				} else if ((this.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item') >= 0) {
@@ -256,7 +264,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					const itemString = item;
 					let newData = this.battle.dex.abilities.get(itemString) as Ability | Move;
-					if (!newData.exists) newData = this.battle.dex.moves.get(itemString);
+					if (!newData.exists) {
+						newData = this.battle.dex.moves.get(itemString);
+					} else {
+						if ((newData as Ability).flags['failskillswap']) return false;
+					}
 					item = {
 						id: newData.id || itemString,
 						name: newData.name || itemString,
