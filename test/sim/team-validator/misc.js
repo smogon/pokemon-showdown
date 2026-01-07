@@ -243,6 +243,18 @@ describe('Team Validator', () => {
 		assert.false.legalTeam(team, 'gen9anythinggoes');
 	});
 
+	it.skip('should not allow move-based evolutions at egg level if already has 4 egg moves', () => {
+		// Mime Jr. and Mr. Mime learn Mimic at level 15
+		let team = [
+			{ species: 'mrmime', level: 16, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen7anythinggoes');
+		team = [
+			{ species: 'mrmime', level: 15, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen7anythinggoes');
+	});
+
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
 	it('should should validate exactly as many species as are in the unbanlist for 35 Pokes', () => {
 		const formatid = 'gen9nationaldex35pokes';
