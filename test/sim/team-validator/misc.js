@@ -243,7 +243,7 @@ describe('Team Validator', () => {
 		assert.false.legalTeam(team, 'gen9anythinggoes');
 	});
 
-	it.skip('should not allow move-based evolutions at egg level if already has 4 egg moves', () => {
+	it.skip('should not allow move-based evolutions at egg level if already has 4 egg moves until Gen 7', () => {
 		// Mime Jr. and Mr. Mime learn Mimic at level 15
 		let team = [
 			{ species: 'mrmime', level: 16, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
@@ -252,7 +252,11 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'mrmime', level: 15, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
 		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
+		assert.false.legalTeam(team, 'gen7anythinggoes'); // this assertion is failing
+		team = [
+			{ species: 'mrmime', level: 1, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen8anythinggoes');
 	});
 
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
