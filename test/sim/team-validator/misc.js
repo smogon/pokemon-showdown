@@ -236,7 +236,7 @@ describe('Team Validator', () => {
 			{ species: 'annihilape', level: 35, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen9anythinggoes');
-		
+
 		team = [
 			{ species: 'annihilape', level: 34, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
 		];

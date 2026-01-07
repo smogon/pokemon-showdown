@@ -2755,7 +2755,7 @@ export class TeamValidator {
 				if (learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
 				}
-				/* Uncomment with Z-A HOME integration
+				/* Uncomment after Z-A HOME integration
 				learnsetData = this.getExternalLearnsetData(species.id, 'gen9legends');
 				if (learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
@@ -2914,8 +2914,8 @@ export class TeamValidator {
 	}
 
 	existsInLegends(species: Species) {
-		// Uncomment with Z-A HOME integration
-		return this.gen >= 8 && ['gen8legends'/*, 'gen9legends'*/].some(mod => !!this.getExternalLearnsetData(species.id, mod));
+		// Add gen9legends after Z-A HOME integration
+		return this.gen >= 8 && ['gen8legends'].some(mod => !!this.getExternalLearnsetData(species.id, mod));
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
