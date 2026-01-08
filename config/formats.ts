@@ -717,7 +717,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				const newMoveSlots = [];
 				for (const moveSlot of pokemon.baseMoveSlots) {
-					if (this.dex.moves.get(moveSlot.id).id === 'metronome') {
+					if (moveSlot.id === 'metronome') {
 						const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
 							require('../sim/team-validator').TeamValidator;
 						const cantMetronome = TeamValidator.get(this.format).checkCanLearn(this.dex.moves.get('metronome'), pokemon.species);
