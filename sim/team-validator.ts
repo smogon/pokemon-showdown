@@ -843,7 +843,6 @@ export class TeamValidator {
 		let isUnderleveled;
 		let requiredLevel;
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
-			let levelMoveEvolution = species.evoType === 'levelMove'; // all levelMove evolutions are last stage evolutions
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
@@ -852,18 +851,7 @@ export class TeamValidator {
 					requiredLevel = evoSpecies.evoLevel;
 					break;
 				}
-				if (levelMoveEvolution) {
-					// FIXME: instead of checking level 1, check the minimum level at which evoSpecies can learn the evo move
-					const moveLevel = 1;
-					// Species that exist in Legends games don't need to level up to evolve
-					if (set.level > moveLevel || (set.level === moveLevel && this.existsInLegends(evoSpecies))) {
-						levelMoveEvolution = false;
-					}
-				}
 				evoSpecies = dex.species.get(evoSpecies.prevo);
-			}
-			if (levelMoveEvolution) {
-				problems.push(`${name} must be at least level ${requiredLevel} to have evolved knowing ${species.evoMove}.`);
 			}
 		}
 
@@ -2755,11 +2743,6 @@ export class TeamValidator {
 				if (learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
 				}
-				/* Uncomment after Z-A HOME integration
-				learnsetData = this.getExternalLearnsetData(species.id, 'gen9legends');
-				if (learnsetData?.learnset?.[move.id]) {
-					fullSources.push(...learnsetData.learnset[move.id]);
-				} */
 				for (const source of fullSources) {
 					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
 					// assuming the Pokemon's level is high enough
@@ -2911,11 +2894,6 @@ export class TeamValidator {
 		const moddedDex = this.dex.mod(mod);
 		if (moddedDex.species.get(species).isNonstandard) return null;
 		return moddedDex.species.getLearnsetData(species);
-	}
-
-	existsInLegends(species: Species) {
-		// Add gen9legends after Z-A HOME integration
-		return this.gen >= 8 && ['gen8legends'].some(mod => !!this.getExternalLearnsetData(species.id, mod));
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {

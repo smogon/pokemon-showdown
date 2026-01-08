@@ -214,51 +214,6 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen8ou');
 	});
 
-	it('should allow move-based evolutions at the level those moves are learned', () => {
-		let team = [
-			{ species: 'tangrowth', level: 2, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
-		];
-		assert.legalTeam(team, 'gen7anythinggoes');
-
-		team = [
-			{ species: 'tangrowth', level: 1, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes');
-
-		team = [
-			{ species: 'tangrowth', level: 1, ability: 'chlorophyll', moves: ['ancientpower'], evs: { hp: 1 } },
-		];
-		assert.legalTeam(team, 'gen8anythinggoes');
-
-		team = [
-			{ species: 'wyrdeer', level: 1, ability: 'intimidate', moves: ['psyshieldbash'], evs: { hp: 1 } },
-			{ species: 'overqwil', level: 1, ability: 'poisonpoint', moves: ['barbbarrage'], evs: { hp: 1 } },
-			{ species: 'annihilape', level: 35, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
-		];
-		assert.legalTeam(team, 'gen9anythinggoes');
-
-		team = [
-			{ species: 'annihilape', level: 34, ability: 'vitalspirit', moves: ['ragefist'], evs: { hp: 1 } },
-		];
-		assert.false.legalTeam(team, 'gen9anythinggoes');
-	});
-
-	it.skip('should not allow move-based evolutions at egg level if already has 4 egg moves until Gen 7', () => {
-		// Mime Jr. and Mr. Mime learn Mimic at level 15
-		let team = [
-			{ species: 'mrmime', level: 16, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
-		];
-		assert.legalTeam(team, 'gen7anythinggoes');
-		team = [
-			{ species: 'mrmime', level: 15, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
-		];
-		assert.false.legalTeam(team, 'gen7anythinggoes'); // this assertion is failing
-		team = [
-			{ species: 'mrmime', level: 1, ability: 'soundproof', moves: ['confuseray', 'fakeout', 'nastyplot', 'powersplit'], evs: { hp: 1 } },
-		];
-		assert.legalTeam(team, 'gen8anythinggoes');
-	});
-
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
 	it('should should validate exactly as many species as are in the unbanlist for 35 Pokes', () => {
 		const formatid = 'gen9nationaldex35pokes';
