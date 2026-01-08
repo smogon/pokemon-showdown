@@ -539,7 +539,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 }
 
 export class QueryProcessManager<T = string, U = string> extends ProcessManager<QueryProcessWrapper<T, U>> {
-	_query: (input: T) => U | Promise<U>;
+	_query: null | ((input: T) => U | Promise<U>);
 	messageCallback?: (message: string) => any;
 	timeout: number;
 
@@ -549,7 +549,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	constructor(
 		id: string,
 		ctx: NodeJS.Module,
-		query: (input: T) => U | Promise<U>,
+		query: null | ((input: T) => U | Promise<U>),
 		timeout = 15 * 60 * 1000,
 		debugCallback?: (message: string) => any
 	) {
@@ -560,8 +560,11 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 
 		processManagers.push(this);
 	}
+	setQuery(query: (input: T) => U | Promise<U>) {
+		this._query = query;
+	}
 	async query(input: T, process = this.acquire()) {
-		if (!process) return this._query(input);
+		if (!process) return this._query!(input);
 
 		const timeout = setTimeout(() => {
 			const debugInfo = process.debug || "No debug information found.";
@@ -601,7 +604,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 				return;
 			}
 
-			void Promise.resolve(this._query(JSON.parse(message))).then(
+			void Promise.resolve(this._query!(JSON.parse(message))).then(
 				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
 			);
 		});
