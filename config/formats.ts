@@ -3681,7 +3681,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const item = this.dex.items.get(set.item);
 			if (set.item && item.megaStone) {
 				const megaSpecies = this.dex.species.get(item.megaStone[species.baseSpecies]);
-				if (megaSpecies && megaSpecies.bst > 625) {
+				if (megaSpecies.bst > 625) {
 					return [
 						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
 					];
