@@ -1500,17 +1500,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				const item = this.dex.items.get(set.item);
-				if (item.megaStone) {
-					if (Array.isArray(item.megaStone)) {
-						const index = (item.megaEvolves as string[]).indexOf(species.name);
-						if (index >= 0) {
-							species = this.dex.species.get(item.megaStone[index]);
-							typeTable = typeTable.filter(type => species.types.includes(type));
-						}
-					} else {
-						species = this.dex.species.get(item.megaStone);
-						typeTable = typeTable.filter(type => species.types.includes(type));
-					}
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
+					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
 					species = this.dex.species.get("Necrozma-Ultra");
@@ -1549,17 +1541,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				color = species.color;
 				const item = this.dex.items.get(set.item);
-				if (item.megaStone) {
-					if (Array.isArray(item.megaStone)) {
-						const index = (item.megaEvolves as string[]).indexOf(species.name);
-						if (index >= 0) {
-							species = this.dex.species.get(item.megaStone[index]);
-							color = species.color;
-						}
-					} else {
-						species = this.dex.species.get(item.megaStone);
-						color = species.color;
-					}
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
+					color = species.color;
 				}
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
 					species = this.dex.species.get("Necrozma-Ultra");
@@ -2651,12 +2635,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				) {
 					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
 				}
-				if (set.item && this.dex.items.get(set.item).megaStone) {
+				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves?.includes(species.name)) {
-						species = this.dex.species.get(Array.isArray(item.megaEvolves) ?
-							(item.megaStone as string[])[item.megaEvolves.indexOf(species.name)] :
-							item.megaStone as string);
+					if (item.megaStone?.[species.name]) {
+						species = this.dex.species.get(item.megaStone[species.name]);
 					}
 				}
 				if (this.ruleTable.isRestrictedSpecies(species) ||
@@ -2678,10 +2660,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves?.includes(set.species)) {
-						godSpecies = this.dex.species.get(Array.isArray(item.megaEvolves) ?
-							(item.megaStone as string[])[item.megaEvolves.indexOf(set.species)] :
-							item.megaStone as string);
+					if (item.megaStone?.[set.species]) {
+						godSpecies = this.dex.species.get(item.megaStone[set.species]);
 					}
 					if (["Zacian", "Zamazenta"].includes(godSpecies.baseSpecies) && item.id.startsWith('rusted')) {
 						godSpecies = this.dex.species.get(set.species + "-Crowned");

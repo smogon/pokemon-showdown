@@ -932,15 +932,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
-			if (!item.megaStone) return false;
-			if (Array.isArray(item.megaStone)) {
-				const index = (item.megaEvolves as string[]).indexOf(species.baseSpecies);
-				if (index < 0) return false;
-				return item.megaStone[index];
-			} else if (item.megaEvolves === species.name) {
-				return item.megaStone;
-			}
-			return false;
+			const megaEvolution = item.megaStone?.[species.baseSpecies];
+			return megaEvolution && megaEvolution !== species.name ? megaEvolution : false;
 		},
 		canUltraBurst(pokemon: Pokemon) {
 			if (pokemon.m.ultraBurstUsed) return false;

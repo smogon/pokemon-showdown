@@ -59,15 +59,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
-			if (!item.megaStone) return false;
-			if (Array.isArray(item.megaStone)) {
-				const index = (item.megaEvolves as string[]).indexOf(species.baseSpecies);
-				if (index < 0) return false;
-				return item.megaStone[index];
-			} else if (item.megaEvolves === species.name) {
-				return item.megaStone;
-			}
-			return false;
+			return item.megaStone?.[species.name] || false;
 		},
 		runMegaEvo(pokemon) {
 			const speciesid = this.canMegaEvo(pokemon) || this.canUltraBurst(pokemon);
