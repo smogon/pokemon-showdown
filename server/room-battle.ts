@@ -96,6 +96,15 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
  	*/
 	dcSecondsLeft: number;
 	/**
+	 * Time spent on the current turn.
+	 *
+	 * Starts at 0 each turn. Goes up by 5 every tick.
+	 * Exists to flag whether or not the '10 seconds remaining'
+	 * messages should be highlighted or not, so that they aren't
+	 * disruptive in blitz contexts.
+	 */
+	turnSecondsPassed: number;
+	/**
 	 * Is the user actually in the room?
 	 */
 	active: boolean;
@@ -130,6 +139,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		this.secondsLeft = 1;
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;
+		this.turnSecondsPassed = 0;
 
 		this.knownActive = true;
 		this.invite = '';
@@ -325,6 +335,7 @@ export class RoomBattleTimer {
 		this.updateTurn();
 		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
+		player.turnSecondsPassed = 0;
 
 		const secondsLeft = player.turnSecondsLeft;
 		let grace = player.secondsLeft - this.settings.starting;
@@ -352,6 +363,7 @@ export class RoomBattleTimer {
 			if (player.knownActive) {
 				player.secondsLeft -= TICK_TIME;
 				player.turnSecondsLeft -= TICK_TIME;
+				player.turnSecondsPassed += TICK_TIME;
 			} else {
 				player.dcSecondsLeft -= TICK_TIME;
 				if (!this.settings.dcTimerBank) {
@@ -366,6 +378,7 @@ export class RoomBattleTimer {
 			}
 			const secondsLeft = player.turnSecondsLeft;
 			if (!secondsLeft) continue;
+			const secondsPassed = player.turnSecondsPassed;
 
 			if (!player.knownActive && (dcSecondsLeft <= secondsLeft || this.settings.dcTimerBank)) {
 				// dc timer is shown only if it's lower than turn timer or you're in timer bank mode
@@ -376,6 +389,10 @@ export class RoomBattleTimer {
 				// regular turn timer shown
 				if (secondsLeft % 30 === 0 || secondsLeft <= 20) {
 					room.add(`|inactive|${player.name} has ${secondsLeft} seconds left.`);
+				}
+				// sends clear warning when timeout is near, with safeguard for blitz modes
+				if (secondsLeft === 10 && secondsPassed >= 20) {
+					room.send(`|raw|<div class="broadcast-red"><strong>${player.name}: low timer warning</strong></div>`);
 				}
 			}
 			if (this.debug) {
