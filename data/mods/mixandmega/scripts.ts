@@ -385,12 +385,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.species.isMega) return null;
 
 			const item = pokemon.getItem();
-			if (item.megaStone) {
-				if (item.megaStone.includes(pokemon.baseSpecies.name)) return null;
-				return Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone;
-			} else {
-				return null;
-			}
+			if (!item.megaStone || item.megaStone[pokemon.baseSpecies.name]) return null;
+			return Object.values(item.megaStone)[0];
 		},
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return false;
