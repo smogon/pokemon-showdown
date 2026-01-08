@@ -545,10 +545,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// Pokemon transformed into Ogerpon cannot Terastallize
-			// restoring their ability to tera after they untransform is handled ELSEWHERE
-			if (['Ogerpon', 'Terapagos'].includes(this.species.baseSpecies) && this.canTerastallize) this.canTerastallize = false;
-
 			for (const volatile in this.volatiles) {
 				if (this.volatiles[volatile].inSlot && this.volatiles[volatile].inSlot === 'Move') {
 					this.removeVolatile(volatile);

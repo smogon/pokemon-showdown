@@ -21,12 +21,15 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		canMegaEvo(pokemon) {
+			if (pokemon.side.megaEvoUsed) return false;
 			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle) || false;
 		},
 		canMegaEvoX(pokemon) {
+			if (pokemon.side.megaEvoUsed) return false;
 			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle) || false;
 		},
 		canMegaEvoY(pokemon) {
+			if (pokemon.side.megaEvoUsed) return false;
 			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle) || false;
 		},
 		runMegaEvo(pokemon) {
