@@ -85,7 +85,7 @@ export class DexAbilities {
 	}
 
 	getByID(id: ID): Ability {
-		if (id === '') return EMPTY_ABILITY;
+		if (id === '' || id === 'constructor') return EMPTY_ABILITY;
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 

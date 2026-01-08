@@ -172,7 +172,7 @@ export class DexNatures {
 		return this.getByID(toID(name));
 	}
 	getByID(id: ID): Nature {
-		if (id === '') return EMPTY_NATURE;
+		if (id === '' || id === 'constructor') return EMPTY_NATURE;
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
@@ -293,7 +293,7 @@ export class DexTypes {
 	}
 
 	getByID(id: ID): TypeInfo {
-		if (id === '') return EMPTY_TYPE_INFO;
+		if (id === '' || id === 'constructor') return EMPTY_TYPE_INFO;
 		let type = this.typeCache.get(id);
 		if (type) return type;
 

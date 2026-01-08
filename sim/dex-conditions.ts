@@ -665,7 +665,7 @@ export class DexConditions {
 	}
 
 	getByID(id: ID): Condition {
-		if (id === '') return EMPTY_CONDITION;
+		if (id === '' || id === 'constructor') return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
 		if (condition) return condition;

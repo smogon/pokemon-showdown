@@ -436,7 +436,7 @@ export class DexSpecies {
 	}
 
 	getByID(id: ID): Species {
-		if (id === '') return EMPTY_SPECIES;
+		if (id === '' || id === 'constructor') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 

@@ -312,7 +312,8 @@ function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<
 		if (pokemon === 'Rayquaza-Mega') {
 			return format.id.includes('ubers') || !hasMove('Dragon Ascent');
 		} else {
-			return dex.items.get(set.item).megaStone !== pokemon;
+			const item = dex.items.get(set.item);
+			return !item.megaStone || !Object.values(item.megaStone).includes(pokemon);
 		}
 	}
 	if (pokemon === 'Necrozma-Ultra' && set.item !== 'Ultranecrozium Z') return true;
