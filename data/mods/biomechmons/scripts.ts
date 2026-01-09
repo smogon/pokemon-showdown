@@ -374,7 +374,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
-					let dexItem = this.battle.dex.items.get(item.name);
+					const dexItem = this.battle.dex.items.get(item.name);
 					this.removeVolatile(item.id);
 					const itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						this.battle.toID(e.thing) === dexItem.id && e.inSlot === isBMM);
@@ -427,7 +427,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
-					let dexItem = this.battle.dex.items.get(item.name);
+					const dexItem = this.battle.dex.items.get(item.name);
 					this.removeVolatile(item.id);
 					const itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
 						this.battle.toID(e.thing) === dexItem.id && e.inSlot === isBMM);
