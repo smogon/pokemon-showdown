@@ -47,8 +47,8 @@ describe('Explosion', () => {
 			{ species: 'aerodactyl', moves: ['rage'] },
 		]]);
 		// Modding accuracy so Explosion always misses
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
-			return move.id === 'rage';
+		battle.onEvent('ModifyAccuracy', battle.format, (accuracy, target, pokemon, move) => {
+			return move.id === 'explosion' ? 0 : accuracy;
 		});
 		battle.makeChoices('move explosion', 'move rage');
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
