@@ -593,7 +593,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			} else {
 				set.ability = abilities[0].id;
 			}
-			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(this.toID(abil))) &&
+			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(abil.id)) &&
 				this.ruleTable.has('obtainableabilities')
 			) {
 				if (set.ability !== 'noability') return [`${set.species} has illegal abilities.`];
@@ -609,10 +609,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const normalMoves = set.moves;
 			set.moves = [moves[0].id];
-			if (
-				moves.some(move => this.checkCanLearn(move, species)) &&
-				this.ruleTable.has('obtainablemoves')
-			) {
+			if (moves.some(move => this.checkCanLearn(move, species)) && this.ruleTable.has('obtainablemoves')) {
 				return [`${set.species} has illegal moves.`];
 			}
 			if (requiredMove && !moves.map(m => m.id).includes(this.toID(requiredMove))) {
