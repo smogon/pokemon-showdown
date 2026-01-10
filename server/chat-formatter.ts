@@ -422,7 +422,12 @@ class TextFormatter {
 				let i = start + 2;
 				// Find </a> or </u>.
 				// We need to check the location of `>` to disambiguate from </small>.
-				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') i++;
+				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') {
+					if (i >= this.str.length) {
+						throw new Error(`Unclosed URL span when parsing: ${this.str}`);
+					}
+					i++;
+				}
 				i += 4;
 				this.pushSlice(i);
 			}
