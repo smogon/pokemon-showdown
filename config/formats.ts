@@ -567,39 +567,38 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			) {
 				return this.validateSet(set, teamHas);
 			}
-			const moves = allThings.filter(thing => this.toID(thing) !== 'metronome' &&
-				dex.moves.get(thing).exists).map(e => this.dex.moves.get(e).name);
+			const moves = allThings.map(e => this.dex.moves.get(e)).filter(thing => thing.id !== 'metronome' && thing.exists);
 			for (const m of moves) {
-				if (this.ruleTable.isBanned(`move:${this.toID(m)}`)) return [`${set.species}'s move ${m} is banned.`];
+				if (this.ruleTable.isBanned(`move:${m.id}`)) return [`${set.species}'s move ${m.name} is banned.`];
 			}
 
-			const abilities = allThings.filter(thing => dex.abilities.get(thing).exists).map(e => this.dex.abilities.get(e).name);
+			const abilities = allThings.map(e => this.dex.abilities.get(e)).filter(thing => thing.exists);
 			for (const a of abilities) {
-				if (this.ruleTable.isBanned(`ability:${this.toID(a)}`)) return [`${set.species}'s ability ${a} is banned.`];
+				if (this.ruleTable.isBanned(`ability:${a.id}`)) return [`${set.species}'s ability ${a.name} is banned.`];
 			}
 
-			const items = allThings.filter(thing => dex.items.get(thing).exists).map(e => this.dex.items.get(e).name);
+			const items = allThings.map(e => this.dex.items.get(e)).filter(thing => thing.exists);
 			for (const i of items) {
-				if (this.ruleTable.isBanned(`item:${i}`)) return [`${set.species}'s item ${i} is banned.`];
+				if (this.ruleTable.isBanned(`item:${i.id}`)) return [`${set.species}'s item ${i.name} is banned.`];
 			}
 
 			const setHas: { [k: string]: true } = {};
 			for (const thing of [...moves, ...items, ...abilities]) {
-				if (setHas[this.toID(thing)]) return [`${set.species} has multiple copies of ${thing}.`];
-				setHas[this.toID(thing)] = true;
+				if (setHas[thing.id]) return [`${set.species} has multiple copies of ${thing.name}.`];
+				setHas[thing.id] = true;
 			}
 			const normalAbility = set.ability;
 			if (!abilities.length) {
 				set.ability = 'noability';
 			} else {
-				set.ability = this.toID(abilities[0]);
+				set.ability = abilities[0].id;
 			}
 			if (abilities.some(abil => !Object.values(species.abilities).map(this.toID).includes(this.toID(abil))) &&
 				this.ruleTable.has('obtainableabilities')
 			) {
 				if (set.ability !== 'noability') return [`${set.species} has illegal abilities.`];
 			}
-			if (requiredAbility && !abilities.map(this.toID).includes(this.toID(requiredAbility))) {
+			if (requiredAbility && !abilities.map(a => a.id).includes(this.toID(requiredAbility))) {
 				return [`${set.species} requires ${requiredAbility} on its set.`];
 			}
 			if (!moves.length) {
@@ -609,14 +608,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				return [`${set.name} has ${set.moves.length} moves, which is more than the limit of ${this.ruleTable.maxMoveCount}.`];
 			}
 			const normalMoves = set.moves;
-			set.moves = [moves[0]];
+			set.moves = [moves[0].id];
 			if (
-				moves.some(move => this.checkCanLearn(dex.moves.get(move), species)) &&
+				moves.some(move => this.checkCanLearn(move, species)) &&
 				this.ruleTable.has('obtainablemoves')
 			) {
 				return [`${set.species} has illegal moves.`];
 			}
-			if (requiredMove && !moves.map(this.toID).includes(this.toID(requiredMove))) {
+			if (requiredMove && !moves.map(m => m.id).includes(this.toID(requiredMove))) {
 				return [`${set.species} requires ${requiredMove} on its set.`];
 			}
 			if (!items.length && requiredItems.length) {
@@ -624,7 +623,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const normalItem = set.item;
 			if (items.length) {
-				set.item = items.find(i => dex.items.get(i).forcedForme || dex.items.get(i).itemUser) || items[0];
+				set.item = (items.find(i => i.forcedForme || i.itemUser) || items[0]).id;
 			} else {
 				set.item = '';
 			}
@@ -632,9 +631,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.ruleTable.set('+ability:noability', '');
 			}
 			for (const curMove of moves) {
-				set.moves = [curMove];
-				if (requiredMove && moves.map(this.toID).includes(this.toID(curMove)) &&
-					this.toID(curMove) !== this.toID(requiredMove)) {
+				set.moves = [curMove.id];
+				if (requiredMove && moves.map(m => m.id).includes(curMove.id) &&
+					curMove.id !== this.toID(requiredMove)) {
 					set.moves.push(requiredMove);
 				}
 				let problems = this.validateSet(set, teamHas);
