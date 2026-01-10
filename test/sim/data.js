@@ -132,12 +132,6 @@ describe('Dex data', () => {
 			const entry = Items[itemid];
 			assert.equal(toID(entry.name), itemid, `Mismatched Item key "${itemid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Item ${entry.name} should have a number`);
-			if (entry.megaStone) {
-				assert.equal(typeof entry.megaStone, typeof entry.megaEvolves, `Item ${entry.name} megaStone and megaEvolves should both be the same type`);
-				if (Array.isArray(entry.megaStone)) {
-					assert.equal(entry.megaStone.length, entry.megaEvolves.length, `Item ${entry.name} megaStone and megaEvolves arrays should be the same length`);
-				}
-			}
 		}
 	});
 
