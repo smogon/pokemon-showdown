@@ -163,6 +163,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
+		banlist: ['Raichu-Alola + Volt Tackle'],
 		restricted: ['Restricted Legendary'],
 	},
 	{
@@ -171,6 +172,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit Two Restricted'],
+		banlist: ['Raichu-Alola + Volt Tackle'],
 		restricted: ['Restricted Legendary', 'Mythical'],
 	},
 	{
