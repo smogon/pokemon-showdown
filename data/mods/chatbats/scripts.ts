@@ -295,4 +295,17 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'glimmora').learnset.icebeam = ['9L1'];
 		this.modData('Learnsets', 'glimmora').learnset.malignantchain = ['9L1'];
 	},
+	actions: {
+		inherit: true,
+		canTerastallize(pokemon: Pokemon) {
+			if (pokemon.hasAbility('terawheel')) return false;
+			if (pokemon.side.terastallizationUsed || pokemon.getItem().megaStone || pokemon.getItem().zMove) {
+				return false;
+			}
+			if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
+				return false;
+			}
+			return pokemon.teraType;
+		},
+	},
 };

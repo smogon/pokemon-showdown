@@ -146,13 +146,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra") {
-					pokemon.canTerastallize = null;
-				}
-			}
-		},
 	},
 	standarddraft: {
 		effectType: 'ValidatorRule',
@@ -1564,16 +1557,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Mega Rayquaza Clause',
 		desc: "Prevents Rayquaza from mega evolving",
 		onBegin() {
+			// implemented in BattleActions#canMegaEvo
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.id === 'rayquaza') {
-					pokemon.canMegaEvo = null;
-					// ability to terastal was determined before the clause activated, causing incorrect behavior
-					if (!this.ruleTable.has('terastalclause')) {
-						pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
-					}
-				}
-			}
 		},
 	},
 	dynamaxclause: {
@@ -1600,8 +1585,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Terastal Clause',
 		desc: "Prevents Pok&eacute;mon from Terastallizing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canTerastallize = null;
+			for (const side of this.sides) {
+				side.terastallizationUsed = true;
 			}
 			this.add('rule', 'Terastal Clause: You cannot Terastallize');
 		},
