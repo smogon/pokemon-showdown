@@ -1161,7 +1161,9 @@ export class Pokemon {
 		if (!this.isActive) return false;
 		const allyActive = this.side.active;
 		for (let i = this.position + 1; i < allyActive.length; i++) {
-			if (allyActive[i] && !allyActive[i].fainted) return false;
+			if (allyActive[i] && !allyActive[i].fainted && !allyActive[i].volatiles['commanding']) {
+				return false;
+			}
 		}
 		return true;
 	}
