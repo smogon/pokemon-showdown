@@ -170,43 +170,43 @@ export const Replays = new class {
 			if (args.username2) {
 				const userid2 = toID(args.username2);
 				if (format) {
-					return replays.query()`SELECT 
-							p1.uploadtime AS uploadtime, p1.id AS id, p1.format AS format, p1.players AS players, 
-							p1.rating AS rating, p1.password AS password, p1.private AS private 
-						FROM replayplayers p1 INNER JOIN replayplayers p2 ON p2.id = p1.id 
+					return replays.query()`SELECT
+							p1.uploadtime AS uploadtime, p1.id AS id, p1.format AS format, p1.players AS players,
+							p1.rating AS rating, p1.password AS password, p1.private AS private
+						FROM replayplayers p1 INNER JOIN replayplayers p2 ON p2.id = p1.id
 						WHERE p1.playerid = ${userid} AND p1.formatid = ${format} AND p1.private = ${isPrivate}
-							AND p2.playerid = ${userid2} 
+							AND p2.playerid = ${userid2}
 						${order} LIMIT ${limit1}, 51;`.then(this.toReplays);
 				} else {
-					return replays.query()`SELECT 
-							p1.uploadtime AS uploadtime, p1.id AS id, p1.format AS format, p1.players AS players, 
-							p1.rating AS rating, p1.password AS password, p1.private AS private 
-						FROM replayplayers p1 INNER JOIN replayplayers p2 ON p2.id = p1.id 
+					return replays.query()`SELECT
+							p1.uploadtime AS uploadtime, p1.id AS id, p1.format AS format, p1.players AS players,
+							p1.rating AS rating, p1.password AS password, p1.private AS private
+						FROM replayplayers p1 INNER JOIN replayplayers p2 ON p2.id = p1.id
 						WHERE p1.playerid = ${userid} AND p1.private = ${isPrivate}
-							AND p2.playerid = ${userid2} 
+							AND p2.playerid = ${userid2}
 						${order} LIMIT ${limit1}, 51;`.then(this.toReplays);
 				}
 			} else {
 				if (format) {
-					return replays.query()`SELECT uploadtime, id, format, players, rating, password FROM replayplayers 
-						WHERE playerid = ${userid} AND formatid = ${format} AND private = ${isPrivate} 
+					return replays.query()`SELECT uploadtime, id, format, players, rating, password FROM replayplayers
+						WHERE playerid = ${userid} AND formatid = ${format} AND private = ${isPrivate}
 						${order} LIMIT ${limit1}, 51;`.then(this.toReplays);
 				} else {
-					return replays.query()`SELECT uploadtime, id, format, players, rating, password FROM replayplayers 
-						WHERE playerid = ${userid} private = ${isPrivate} 
+					return replays.query()`SELECT uploadtime, id, format, players, rating, password FROM replayplayers
+						WHERE playerid = ${userid} AND private = ${isPrivate}
 						${order} LIMIT ${limit1}, 51;`.then(this.toReplays);
 				}
 			}
 		}
 
 		if (args.byRating) {
-			return replays.query()`SELECT uploadtime, id, format, players, rating, password 
-				FROM replays 
+			return replays.query()`SELECT uploadtime, id, format, players, rating, password
+				FROM replays
 				WHERE private = ${isPrivate} AND formatid = ${format} ORDER BY rating DESC LIMIT ${limit1}, 51`
 				.then(this.toReplays);
 		} else {
-			return replays.query()`SELECT uploadtime, id, format, players, rating, password 
-				FROM replays 
+			return replays.query()`SELECT uploadtime, id, format, players, rating, password
+				FROM replays
 				WHERE private = ${isPrivate} AND formatid = ${format} ORDER BY uploadtime DESC LIMIT ${limit1}, 51`
 				.then(this.toReplays);
 		}
@@ -223,8 +223,8 @@ export const Replays = new class {
 
 		const secondPattern = patterns.length >= 2 ? SQL`AND log LIKE ${patterns[1]} ` : undefined;
 
-		return replays.query()`SELECT /*+ MAX_EXECUTION_TIME(10000) */ 
-			uploadtime, id, format, players, rating FROM ps_replays 
+		return replays.query()`SELECT /*+ MAX_EXECUTION_TIME(10000) */
+			uploadtime, id, format, players, rating FROM ps_replays
 			WHERE private = 0 AND log LIKE ${patterns[0]} ${secondPattern}
 			ORDER BY uploadtime DESC LIMIT 10;`.then(this.toReplays);
 	}
