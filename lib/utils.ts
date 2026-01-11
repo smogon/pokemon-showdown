@@ -202,7 +202,7 @@ export function sortBy<T>(array: T[], callback: (a: T) => Comparable): T[];
  * this to sort numbers.
  */
 export function sortBy<T extends Comparable>(array: T[]): T[];
-export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
+export function sortBy<T>(array: T[], callback?: (a: T) => Comparable): T[] {
 	if (!callback) return (array as any[]).sort(compare);
 	return array.sort((a, b) => compare(callback(a), callback(b)));
 }
