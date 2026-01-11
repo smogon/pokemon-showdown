@@ -1607,8 +1607,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (isMonotype) {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
-					const megaSpecies = this.dex.species.get(Array.isArray(itemData.megaStone) ?
-						itemData.megaStone[0] : itemData.megaStone);
+					const megaSpecies = this.dex.species.get(Object.values(itemData.megaStone)[0]);
 					if (types.length > megaSpecies.types.length) types = [species.types[0]];
 					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
 					if (megaSpecies.types[1] && types[1] && megaSpecies.types[1] !== types[1]) {
