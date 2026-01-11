@@ -49,6 +49,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 	},
+	choicelock: {
+		inherit: true,
+		onStart(pokemon) {
+			if (!pokemon.lastMove || ['mimic', 'sketch', 'transform'].includes(pokemon.lastMove.id)) return false;
+			this.effectState.move = pokemon.lastMove.id;
+		},
+	},
 	sandstorm: {
 		inherit: true,
 		onModifySpD() {},
