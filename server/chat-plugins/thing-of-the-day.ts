@@ -1021,3 +1021,13 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		] : [['disabled', true]],
 	}),
 ];
+
+export const destroy = () => {
+	for (const [, v] of otds) {
+		if (v.autoStartTimer) {
+			clearInterval(v.autoStartTimer);
+			v.autoStartTimer = null;
+			v.room.modlog({ action: `${v.id.toUpperCase()} TIMER RESTART` });
+		}
+	}
+};
