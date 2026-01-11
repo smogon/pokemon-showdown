@@ -528,21 +528,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mirrormove: {
 		inherit: true,
 		flags: { metronome: 1, failencore: 1, nosleeptalk: 1, noassist: 1 },
-		onTryHit() { },
-		onHit(pokemon) {
-			const noMirror = [
-				'assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform',
-			];
-			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
-				return false;
-			}
-			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
-				return false;
-			}
-			this.actions.useMove(lastAttackedBy.move, pokemon);
-		},
-		target: "self",
 	},
 	naturepower: {
 		inherit: true,
