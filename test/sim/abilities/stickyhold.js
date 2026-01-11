@@ -37,4 +37,30 @@ describe('Sticky Hold', () => {
 		battle.makeChoices('move knockoff', 'move rest');
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
+
+	it('should not prevent item theft if the holder faints', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: 'Smeargle', moves: ['thief'] }] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Fennekin', level: 1, ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] },
+			{ species: 'Squirtle', moves: ['sleeptalk'] },
+		] });
+		battle.makeChoices('move thief', 'move sleeptalk');
+		assert.fainted(battle.p2.active[0]);
+		assert.holdsItem(battle.p1.active[0]);
+	});
+
+	describe('[Gen 4]', () => {
+		it('should prevent item theft if the holder faints', () => {
+			battle = common.gen(4).createBattle();
+			battle.setPlayer('p1', { team: [{ species: 'Smeargle', moves: ['thief'] }] });
+			battle.setPlayer('p2', { team: [
+				{ species: 'Fennekin', level: 1, ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] },
+				{ species: 'Squirtle', moves: ['sleeptalk'] },
+			] });
+			battle.makeChoices('move thief', 'move sleeptalk');
+			assert.fainted(battle.p2.active[0]);
+			assert.false.holdsItem(battle.p1.active[0]);
+		});
+	});
 });
