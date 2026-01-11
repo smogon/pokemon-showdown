@@ -1526,9 +1526,6 @@ export class Pokemon {
 
 		this.volatileStaleness = undefined;
 
-		delete this.abilityState.started;
-		delete this.itemState.started;
-
 		this.setSpecies(this.baseSpecies);
 	}
 
