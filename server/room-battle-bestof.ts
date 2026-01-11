@@ -180,6 +180,10 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.updateDisplay();
 	}
 	clearWaiting() {
+		// clear the ready notification from the waiting battle room before resetting state
+		if (this.waitingBattle) {
+			this.waitingBattle.send(`|tempnotifyoff|choice`);
+		}
 		this.waitingBattle = null;
 		for (const player of this.players) {
 			player.ready = null;
