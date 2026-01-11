@@ -6,9 +6,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard === "Past" || item.isNonstandard === "Future") this.modData('Items', i).isNonstandard = null;
-			/* if (item.megaStone) {
-				this.modData('FormatsData', this.toID(item.megaStone)).isNonstandard = null;
-			} */
+			if (item.megaStone) {
+				for (const megaEvo of Object.values(item.megaStone)) {
+					this.modData('FormatsData', this.toID(megaEvo)).isNonstandard = null;
+				}
+			}
 		}
 	},
 	start() {
@@ -385,12 +387,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.species.isMega) return null;
 
 			const item = pokemon.getItem();
-			if (item.megaStone) {
-				if (item.megaStone.includes(pokemon.baseSpecies.name)) return null;
-				return Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone;
-			} else {
-				return null;
-			}
+			if (!item.megaStone) return null;
+			return Object.values(item.megaStone)[0];
 		},
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return false;
