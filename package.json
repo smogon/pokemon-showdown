@@ -69,7 +69,7 @@
     "@stylistic/eslint-plugin": "^5.2.2",
     "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
-    "@types/node": "^14.18.63",
+    "@types/node": "^22.x",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.5",
     "@types/sockjs": "^0.3.33",
