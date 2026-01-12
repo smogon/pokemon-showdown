@@ -1871,21 +1871,15 @@ export class BattleActions {
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
+		if (!item.megaStone) return null;
 		// Temporary hardcode until generation shift
-		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaEvolves === species.name) {
-			return item.megaStone as string;
+		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaStone[species.name]) {
+			return item.megaStone[species.name];
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (Array.isArray(item.megaStone)) {
-			// FIXME: Change to species.name when champions comes
-			const index = (item.megaEvolves as string[]).indexOf(species.baseSpecies);
-			if (index < 0) return null;
-			return item.megaStone[index];
-			// FIXME: Change to species.name when champions comes
-		} else if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-			return item.megaStone;
-		}
-		return null;
+		// FIXME: Change to species.name when champions comes
+		const megaEvolution = item.megaStone[species.baseSpecies];
+		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {

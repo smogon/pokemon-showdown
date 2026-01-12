@@ -29,14 +29,23 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 				id: move.id,
 				name: move.name,
 				fullname: move.name,
-				megaEvolves: 'Rayquaza',
-				megaStone: 'Rayquaza-Mega',
+				megaStone: { 'Rayquaza': 'Rayquaza-Mega' },
 				exists: true,
 				// Adding extra values to appease typescript
 				gen: 6,
 				num: -1,
 				effectType: 'Item',
 				sourceEffect: '',
+				isBerry: false,
+				ignoreKlutz: false,
+				isGem: false,
+				isPokeball: false,
+				isPrimalOrb: false,
+				shortDesc: "",
+				desc: "",
+				isNonstandard: null,
+				noCopy: false,
+				affectsFainted: false,
 			} as Item;
 		} else {
 			return null;
@@ -131,8 +140,8 @@ export const commands: Chat.ChatCommands = {
 				megaSpecies = dex.species.get(forcedForme);
 				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
-				megaSpecies = dex.species.get(Array.isArray(stone.megaStone) ? stone.megaStone[0] : stone.megaStone);
-				baseSpecies = dex.species.get(Array.isArray(stone.megaEvolves) ? stone.megaEvolves[0] : stone.megaEvolves);
+				megaSpecies = dex.species.get(Object.values(stone.megaStone!)[0]);
+				baseSpecies = dex.species.get(Object.keys(stone.megaStone!)[0]);
 			}
 			break;
 		}
@@ -282,8 +291,8 @@ export const commands: Chat.ChatCommands = {
 					megaSpecies = dex.species.get(forcedForme);
 					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
-					megaSpecies = dex.species.get(Array.isArray(aStone.megaStone) ? aStone.megaStone[0] : aStone.megaStone);
-					baseSpecies = dex.species.get(Array.isArray(aStone.megaEvolves) ? aStone.megaEvolves[0] : aStone.megaEvolves);
+					megaSpecies = dex.species.get(Object.values(aStone.megaStone!)[0]);
+					baseSpecies = dex.species.get(Object.keys(aStone.megaStone!)[0]);
 				}
 				break;
 			}

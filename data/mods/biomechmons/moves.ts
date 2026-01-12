@@ -223,6 +223,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	skillswap: {
 		inherit: true,
+		onTryHit(target, source) {
+			const targetAbility = target.getAbility();
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap'] || target.volatiles['dynamax']) {
+				return false;
+			}
+			let sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
+			if (!this.dex.abilities.get(sourceAbility).exists && this.dex.items.get(sourceAbility.id).exists) {
+				sourceCanBeSet = this.runEvent('TakeItem', source, source, this.effect, this.dex.items.get(sourceAbility.id));
+			}
+
+			if (!sourceCanBeSet) return sourceCanBeSet;
+			let targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
+			if (!this.dex.abilities.get(targetAbility).exists && this.dex.items.get(targetAbility.id).exists) {
+				targetCanBeSet = this.runEvent('TakeItem', target, source, this.effect, this.dex.items.get(targetAbility.id));
+			}
+			if (!targetCanBeSet) return targetCanBeSet;
+		},
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
