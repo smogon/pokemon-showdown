@@ -926,7 +926,7 @@
         ]
     },
     "swanna": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -937,7 +937,7 @@
         ]
     },
     "typhlosionmega": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -954,7 +954,7 @@
         ]
     },
     "terapagos": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -982,7 +982,7 @@
         ]
     },
     "genesectburn": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1004,7 +1004,7 @@
         ]
     },
     "genesectdouse": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1015,7 +1015,7 @@
         ]
     },
     "genesectshock": {
-        "level": 84,
+        "level": 80,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1180,7 +1180,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Super Fang", "Hyper Fang", "Last Breakfast", "U-turn"],
-                "abilities": ["Nibble Nibble"],
+                "abilities": ["Hustle"],
                 "teraTypes": ["Normal"]
             }
         ]
