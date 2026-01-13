@@ -970,4 +970,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: -122,
 		shortDesc: "Immune to pivot moves, heals 50% HP when hit by one. All moves drain 50%.",
 	},
+	nibblenibble: {
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax || !move.flags['bite']) return;
+			move.multihit = 2;
+			move.multihitType = 'parentalbond';
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		flags: {},
+		name: "Nibble Nibble",
+		rating: 5,
+		num: -123,
+	},
 };
