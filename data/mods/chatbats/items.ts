@@ -130,6 +130,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 			else {
 				return target.hp - 5;
+			}
 		},
 		num: 230,
 		gen: 2,
