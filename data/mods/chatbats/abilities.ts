@@ -988,5 +988,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Nibble Nibble",
 		rating: 5,
 		num: -123,
+		shortDesc: "Parental Bond but for Bite moves.",
 	},
 };
