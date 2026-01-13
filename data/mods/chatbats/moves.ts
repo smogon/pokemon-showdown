@@ -1718,7 +1718,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-message', numberBerries);
 			for (let i = 0; i < numberBerries; i++) {
 				const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry', 'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry', 'marangaberry', 'micleberry', 'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry', 'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
-				const berry = this.sample(possibleBerries);
+				const chosenBerry = this.sample(possibleBerries);
+				const berry = this.dex.items.get(chosenBerry);
 				this.add('-message', berry);
 				if (source.hp && berry.isBerry) {
 					if (this.singleEvent('Eat', berry, null, source, source, move)) {
