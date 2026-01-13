@@ -1311,10 +1311,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fail', source, 'move: Crowverload');
 				return this.NOT_FAIL;
 			}
-			if (source.hp <= source.maxhp / 4) {
-				this.add('-fail', source, 'move: Substitute', '[weak]');
-				return this.NOT_FAIL;
-			}
 		},
 		onAfterMove(source, target, move) {
 			this.actions.useMove('substitute', source, { });
