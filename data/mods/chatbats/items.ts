@@ -129,7 +129,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return target.hp - 1;
 			}
 			else {
-				return target.hp - 5;
+				return damage;
 			}
 		},
 		num: 230,
