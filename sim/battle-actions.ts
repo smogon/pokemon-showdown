@@ -488,7 +488,6 @@ export class BattleActions {
 
 		if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
 			!this.battle.runEvent('TryMove', pokemon, target, move)) {
-			move.mindBlownRecoil = false;
 			return false;
 		}
 
@@ -524,7 +523,13 @@ export class BattleActions {
 		}
 
 		if (!moveResult) {
+			const originalHp = pokemon.hp;
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
+			if (pokemon && pokemon !== target && move.category !== 'Status') {
+				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
 			return false;
 		}
 
@@ -961,7 +966,6 @@ export class BattleActions {
 			if (move.mindBlownRecoil) {
 				const hpBeforeRecoil = pokemon.hp;
 				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
-				move.mindBlownRecoil = false;
 				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
