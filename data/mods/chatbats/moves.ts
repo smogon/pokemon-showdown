@@ -1711,7 +1711,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Last Breakfast",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1, bite: 1 },
 		onHit(target, source, move) {
 			this.add('-message', `starting last breakfast`);
 			const numberBerries = 0 + 1 * source.side.totalFainted;
@@ -1739,5 +1739,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cute",
+	},
+	superfang: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 	},
 };
