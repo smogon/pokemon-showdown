@@ -1717,4 +1717,37 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		category: "Special",
 	},
+	lastbreakfast: {
+		num: -1020,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Last Breakfast",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
+		onHit(target, source, move) {
+			const numberBerries = 0 + 1 * source.side.totalFainted;
+			for (let i = 0; i < numberBerries; i++) {
+			const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry', 'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry', 'marangaberry', 'micleberry', 'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry', 'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
+			const berry = this.sample(possibleBerries);
+			if (source.hp && berry.isBerry) {
+				if (this.singleEvent('Eat', berry, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
+				}
+				if (item.onEat) source.ateBerry = true;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Bug Bite', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cute",
+	},
 };
