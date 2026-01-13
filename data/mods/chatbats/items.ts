@@ -128,9 +128,23 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
 			}
+			else {
+				return target.hp - 5;
 		},
 		num: 230,
 		gen: 2,
 		desc: "Chance to survive attack equal to percentage of remaining HP, minimum 10%.",
+	},
+	raticite: {
+		name: "Raticite",
+		spritenum: 1,
+		megaStone: { "Raticate": "Raticate-Mega" },
+		itemUser: ["Raticate"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: -3,
+		gen: 9,
+		desc: "If held by a Raticate, this item allows it to Mega Evolve in battle.",
 	},
 };
