@@ -1370,15 +1370,14 @@ export class BattleActions {
 		return retVal === true ? undefined : retVal;
 	}
 
-	calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
-		if (damageDealt === 0) return 0;
-		const hpBeforeRecoil = pokemon.hp;
-
-		let recoilDamage = 0;
+	calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+		let recoilDamage = null;
 		if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
-		if (move.mindBlownRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
-		if (move.recoil) recoilDamage = this.battle.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		else if (move.mindBlownRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
+		else if (move.recoil) recoilDamage = this.battle.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		else return null;
 
+		const hpBeforeRecoil = pokemon.hp;
 		if (move.struggleRecoil) {
 			this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
 		} else {

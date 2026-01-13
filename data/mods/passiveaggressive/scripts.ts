@@ -166,20 +166,18 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
-			if (damageDealt === 0) return 0;
-			const hpBeforeRecoil = pokemon.hp;
-
+		calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
 			const calc = calculate(this.battle, pokemon, pokemon, move.id);
 			if (!calc) return 0;
 
 			let recoilDamage = 0;
 			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
-			if (move.mindBlownRecoil) recoilDamage = Math.round(calc * pokemon.maxhp / 2);
-			if (move.recoil) {
+			else if (move.mindBlownRecoil) recoilDamage = Math.round(calc * pokemon.maxhp / 2);
+			else if (move.recoil) {
 				recoilDamage = this.battle.clampIntRange(Math.round(damageDealt * calc * move.recoil[0] / move.recoil[1]), 1);
-			}
+			} else return null;
 
+			const hpBeforeRecoil = pokemon.hp;
 			if (move.struggleRecoil) {
 				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
 			} else {
