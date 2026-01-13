@@ -236,6 +236,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'feraligatrmega') this.incompatibleMoves(moves, movePool, 'thunderfang', 'poisonfang');
 		if (species.id === 'salazzle') this.incompatibleMoves(moves, movePool, 'malignantchain', 'venoshock');
 		if (species.id === 'glimmora') this.incompatibleMoves(moves, movePool, 'powergem', 'meteorbeam');
+		if (species.id === 'wobbuffet') this.incompatibleMoves(moves, movePool, 'shedtail', 'encore');
+		if (species.id === 'wobbuffet') this.incompatibleMoves(moves, movePool, 'nightshade', 'guillotine');
 	}
 
 	override randomMoveset(
@@ -724,6 +726,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'ogerponcornerstone') return 'Cornerstone Mask';
 		if (species.id === 'glimmora' && moves.has('meteorbeam')) return 'Power Herb';
 		if (species.id === 'glimmora') return 'Air Balloon';
+		if (species.id === 'wobbuffet') return 'Covert Cloak';
 	}
 
 	override randomSet(
@@ -915,7 +918,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			const species = this.sample(currentSpeciesPool);
+			let species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -1008,7 +1011,12 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Feraligatr-Mega');
+			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Raticate-Mega');
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Wobbuffet');
+			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Azelf');
+			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Honchkrow');
+			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Volbeat');
+			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Rillaboom');
 
 			let set: RandomTeamsTypes.RandomSet;
 
