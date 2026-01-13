@@ -1621,6 +1621,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Cute",
+		shortDesc: "Present but better.",
 	},
 	sinisterarrows: {
 		num: -1016,
@@ -1698,6 +1699,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Clever",
+		shortDesc: "Hits for 4 turns, even if user switches out.",
 	},
 	mortalspin: {
 		inherit: true,
@@ -1713,14 +1715,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1, bite: 1 },
 		onHit(target, source, move) {
-			this.add('-message', `starting last breakfast`);
 			const numberBerries = 0 + 1 * source.side.totalFainted;
-			this.add('-message', numberBerries);
 			for (let i = 0; i < numberBerries; i++) {
 				const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry', 'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry', 'marangaberry', 'micleberry', 'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry', 'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
 				const chosenBerry = this.sample(possibleBerries);
 				const berry = this.dex.items.get(chosenBerry);
-				this.add('-message', berry);
 				if (source.hp && berry.isBerry) {
 					if (this.singleEvent('Eat', berry, null, source, source, move)) {
 						this.runEvent('EatItem', source, source, move, berry);
@@ -1740,6 +1739,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cute",
+		shortDesc: "Eats X random berries, where X is fainted teammates.",
 	},
 	superfang: {
 		inherit: true,
