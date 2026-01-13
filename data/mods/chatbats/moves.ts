@@ -1721,7 +1721,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const berry = this.sample(possibleBerries);
 				this.add('-message', berry);
 				if (source.hp && berry.isBerry) {
-					if (this.singleEvent('Eat', berry, target.itemState, source, source, move)) {
+					if (this.singleEvent('Eat', berry, null, source, source, move)) {
 						this.runEvent('EatItem', source, source, move, item);
 					}
 					if (item.onEat) source.ateBerry = true;
