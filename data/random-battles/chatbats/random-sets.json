@@ -1162,5 +1162,27 @@
                 "teraTypes": ["Grass"]
             }
         ]
+    },
+    "wobbuffet": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Counter", "Mirror Coat", "Shed Tail", "Encore", "Guillotine", "Night Shade"],
+                "abilities": ["Jello Body"],
+                "teraTypes": ["Dark", "Steel"]
+            }
+        ]
+    },
+    "raticatemega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Super Fang", "Hyper Fang", "Last Breakfast", "U-turn"],
+                "abilities": ["Nibble Nibble"],
+                "teraTypes": ["Normal"]
+            }
+        ]
     }
 }
