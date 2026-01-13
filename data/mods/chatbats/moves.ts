@@ -1713,10 +1713,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
 		onHit(target, source, move) {
+			this.add('-message', `starting last breakfast`);
 			const numberBerries = 0 + 1 * source.side.totalFainted;
+			this.add('-message', numberBerries);
 			for (let i = 0; i < numberBerries; i++) {
 				const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry', 'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry', 'marangaberry', 'micleberry', 'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry', 'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
 				const berry = this.sample(possibleBerries);
+				this.add('-message', berry);
 				if (source.hp && berry.isBerry) {
 					if (this.singleEvent('Eat', berry, target.itemState, source, source, move)) {
 						this.runEvent('EatItem', source, source, move, item);
