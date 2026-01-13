@@ -957,7 +957,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(pokemon, target, move) {
 			if (move.selfSwitch) {
 				this.add('-immune', pokemon, '[from] ability: Jello Body');
-				this.heal(target.baseMaxhp / 2)
+				this.heal(target.baseMaxhp / 2);
 				return null;
 			}
 		},
