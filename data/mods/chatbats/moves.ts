@@ -1532,16 +1532,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return false;
 				}
 			},
-			onTryHeal(damage, target, source, effect) {
-				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
-				if (source && target !== source && target.hp !== target.maxhp && effect.name === "Pollen Puff" && !(target.species.name === 'Volbeat' || target.species.name === 'Illumise')) {
-					this.attrLastMove('[still]');
-					// FIXME: Wrong error message, correct one not supported yet
-					this.add('cant', source, 'move: Electric Terrain', effect);
-					return null;
-				}
-				return false;
-			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
