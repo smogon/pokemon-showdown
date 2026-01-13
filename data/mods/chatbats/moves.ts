@@ -1718,10 +1718,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const numberBerries = 0 + 1 * Number(source.side.totalFainted);
 			for (let i = 0; i < numberBerries; i++) {
 				const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry',
-												'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry',
-												'marangaberry', 'micleberry',
-												'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry',
-												'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
+					'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry',
+					'marangaberry', 'micleberry',
+					'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry',
+					'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
 				const chosenBerry = this.sample(possibleBerries);
 				const berry = this.dex.items.get(chosenBerry);
 				if (source.hp && berry.isBerry) {
