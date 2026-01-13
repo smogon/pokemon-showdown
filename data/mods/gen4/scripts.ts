@@ -182,8 +182,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
+		calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
+			if (damageDealt === 0) return 0;
+			let recoilDamage = 0;
+			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
+			if (move.recoil) recoilDamage = this.battle.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+
+			if (move.struggleRecoil) {
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
+			} else {
+				this.battle.damage(recoilDamage, pokemon, pokemon, 'recoil');
+			}
+			return recoilDamage;
 		},
 	},
 };
