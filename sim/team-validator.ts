@@ -526,9 +526,8 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.megaEvolves === species.name) {
-				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				tierSpecies = dex.species.get(item.megaStone);
+			if (item.megaStone?.[species.name]) {
+				tierSpecies = dex.species.get(item.megaStone[species.name]);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {

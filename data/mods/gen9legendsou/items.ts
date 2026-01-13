@@ -2,36 +2,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	slowbronite: {
 		inherit: true,
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name || item.megaStone === source.baseSpecies.name) return false;
-			return true;
+			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(source.baseSpecies.name));
 		},
 	},
 	greninjite: {
 		inherit: true,
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.name || item.megaStone === source.baseSpecies.name) return false;
-			return true;
+			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(source.baseSpecies.name));
 		},
-	},
-	chesnaughtite: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	delphoxite: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	mewtwonitex: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	mewtwonitey: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	diancite: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
 	},
 	zygardite: {
 		inherit: true,

@@ -329,7 +329,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
-		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
+		this.isMega = this.forme.includes('Mega') || undefined;
 		this.isPrimal = this.forme === 'Primal' || undefined;
 		this.canGigantamax = data.canGigantamax || undefined;
 		this.gmaxUnreleased = !!data.gmaxUnreleased;
@@ -436,7 +436,7 @@ export class DexSpecies {
 	}
 
 	getByID(id: ID): Species {
-		if (id === '') return EMPTY_SPECIES;
+		if (id === '' || id === 'constructor') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 

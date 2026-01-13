@@ -1507,8 +1507,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				const item = this.dex.items.get(set.item);
-				if (item.megaStone && species.baseSpecies === item.megaEvolves) {
-					species = this.dex.species.get(item.megaStone);
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
@@ -1548,8 +1548,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				color = species.color;
 				const item = this.dex.items.get(set.item);
-				if (item.megaStone && species.baseSpecies === item.megaEvolves) {
-					species = this.dex.species.get(item.megaStone);
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
 					color = species.color;
 				}
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
@@ -2650,10 +2650,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				) {
 					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
 				}
-				if (set.item && this.dex.items.get(set.item).megaStone) {
+				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves === species.baseSpecies) {
-						species = this.dex.species.get(item.megaStone);
+					if (item.megaStone?.[species.name]) {
+						species = this.dex.species.get(item.megaStone[species.name]);
 					}
 				}
 				if (this.ruleTable.isRestrictedSpecies(species) ||
@@ -2675,7 +2675,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
+					if (item.megaStone?.[set.species]) {
+						godSpecies = this.dex.species.get(item.megaStone[set.species]);
+					}
 					if (["Zacian", "Zamazenta"].includes(godSpecies.baseSpecies) && item.id.startsWith('rusted')) {
 						godSpecies = this.dex.species.get(set.species + "-Crowned");
 					}

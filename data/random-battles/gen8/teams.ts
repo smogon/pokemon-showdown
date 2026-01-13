@@ -1526,7 +1526,7 @@ export class RandomGen8Teams {
 		case 'Cloud Nine':
 			return (!isNoDynamax || species.id !== 'golduck');
 		case 'Competitive':
-			return (counter.get('Special') < 2 || (moves.has('rest') && moves.has('sleeptalk')));
+			return (!counter.get('Special') || moves.has('rest') && moves.has('sleeptalk'));
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Cursed Body':
@@ -2156,10 +2156,11 @@ export class RandomGen8Teams {
 		if (species.name.endsWith('-Gmax')) return species.name.slice(0, -5);
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (['Magearna', 'Polteageist', 'Zarude'].includes(species.baseSpecies)) {
+		if (['Polteageist', 'Zarude'].includes(species.baseSpecies)) {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
 		if (species.baseSpecies === 'Pikachu' && this.dex.currentMod === 'gen8') {
 			return 'Pikachu' + this.sample(
