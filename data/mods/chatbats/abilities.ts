@@ -953,4 +953,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		shortDesc: "This Pokemon can poison a Pokemon regardless of its typing and hit them with Poison moves.",
 	},
+	jellobody: {
+		onTryHit(pokemon, target, move) {
+			if (move.selfSwitch) {
+				this.add('-immune', pokemon, '[from] ability: Jello Body');
+				this.heal(target.baseMaxhp / 2)
+				return null;
+			}
+		},
+		onModifyMove(move, source, target) {
+			move.drain = [1, 2];
+		},
+		flags: { breakable: 1 },
+		name: "Jello Body",
+		rating: 5,
+		num: -122,
+		shortDesc: "Immune to pivot moves, heals 50% HP when hit by one. All moves drain 50%.",
+	},
 };
