@@ -970,7 +970,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Axe Kick'));
 		},
 		secondary: {
 			chance: 30,
