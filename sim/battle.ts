@@ -2066,7 +2066,7 @@ export class Battle {
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
-			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
+			if (effect.id !== 'strugglerecoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
 					this.debug('weather immunity');
 					retVals[i] = 0;
@@ -2115,12 +2115,6 @@ export class Battle {
 			}
 
 			if (targetDamage && effect.effectType === 'Move') {
-				if (this.gen <= 1 && effect.recoil && source) {
-					if (this.dex.currentMod !== 'gen1stadium' || target.hp > 0) {
-						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
-						this.damage(amount, source, target, 'recoil');
-					}
-				}
 				if (this.gen <= 4 && effect.drain && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					// Draining can be countered in gen 1
