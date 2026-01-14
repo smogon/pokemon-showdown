@@ -16,7 +16,7 @@ Introduction
 
 Pokémon Showdown is many things:
 
-- A **web site** you can use for Pokémon battling
+- A **website** you can use for Pokémon battling
 
   - http://pokemonshowdown.com/
 
