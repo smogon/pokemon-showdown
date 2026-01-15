@@ -3019,7 +3019,8 @@ export const commands: Chat.ChatCommands = {
 	randtopichelp: [
 		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
 		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # ~`,
-		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # ~`,
+		`/edittopic [index], [new topic content] - Edits the topic at the given index. Requires: % @ # ~`,
+		`/removetopic [index1], [index2], ... - Removes topics from the room's topic pool. Comma-separated indices supported. Requires: % @ # ~`,
 		`/randomtopics - View the discussion topic pool for the current room.`,
 	],
 
@@ -3038,25 +3039,71 @@ export const commands: Chat.ChatCommands = {
 	},
 	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # ~`],
 
-	removetopic(target, room, user) {
+	edittopic(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
-		if (!toID(target)) {
+		if (!target) {
 			return this.parse(`/help randtopic`);
 		}
-		const index = Number(toID(target)) - 1;
+		const [indexStr, ...contentParts] = target.split(',');
+		const newContent = contentParts.join(',').trim();
+		if (!newContent) {
+			throw new Chat.ErrorMessage(`Usage: /edittopic [index], [new topic content]`);
+		}
+		const index = Number(toID(indexStr)) - 1;
 		if (isNaN(index)) {
-			throw new Chat.ErrorMessage(`Invalid topic index: ${target}. Must be a number.`);
+			throw new Chat.ErrorMessage(`Invalid topic index: ${indexStr}. Must be a number.`);
+		}
+		if (index < 0) {
+			throw new Chat.ErrorMessage(`Invalid topic index: ${indexStr}. Topic indices start at 1.`);
 		}
 		if (!room.settings.topics?.[index]) {
 			throw new Chat.ErrorMessage(`Topic ${index + 1} not found.`);
 		}
-		const topic = room.settings.topics.splice(index, 1)[0];
+		const oldTopic = room.settings.topics[index];
+		room.settings.topics[index] = newContent;
 		room.saveSettings();
-		this.privateModAction(`${user.name} removed topic ${index + 1} from the random topic pool.`);
-		this.modlog('REMOVETOPIC', null, topic);
+		this.privateModAction(`${user.name} edited topic ${index + 1} in the random topic pool.`);
+		this.modlog('EDITTOPIC', null, `[${index + 1}] "${oldTopic}" to "${newContent}"`);
 	},
-	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # ~`],
+	edittopichelp: [`/edittopic [index], [new topic content] - Edits the topic at the given index. Requires: % @ # ~`],
+
+	removetopic(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!target.trim()) {
+			return this.parse(`/help randtopic`);
+		}
+		if (!room.settings.topics?.length) {
+			throw new Chat.ErrorMessage(`This room has no topics to remove.`);
+		}
+		const indices = target.split(',').map(part => {
+			const index = Number(toID(part)) - 1;
+			if (isNaN(index)) {
+				throw new Chat.ErrorMessage(`Invalid topic index: ${part.trim()}. Must be a number.`);
+			}
+			if (index < 0) {
+				throw new Chat.ErrorMessage(`Invalid topic index: ${part.trim()}. Topic indices start at 1.`);
+			}
+			return index;
+		}).sort((a, b) => b - a);
+		const removedTopics = [];
+		for (const index of indices) {
+			if (index >= room.settings.topics.length) {
+				throw new Chat.ErrorMessage(`Topic ${index + 1} not found.`);
+			}
+			const topic = room.settings.topics.splice(index, 1)[0];
+			removedTopics.push(`${index + 1}: "${topic}"`);
+		}
+		room.saveSettings();
+		if (removedTopics.length === 1) {
+			this.privateModAction(`${user.name} removed topic ${removedTopics[0]} from the random topic pool.`);
+		} else {
+			this.privateModAction(`${user.name} removed ${removedTopics.length} topics from the random topic pool: ${removedTopics.join(', ')}`);
+		}
+		this.modlog('REMOVETOPIC', null, removedTopics.join('; '));
+	},
+	removetopichelp: [`/removetopic [index1], [index2], ... - Removes topics from the room's topic pool. Comma-separated indices supported. Requires: % @ # ~`],
 
 	listtopics: 'randomtopics',
 	randtopics: 'randomtopics',
