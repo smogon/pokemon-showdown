@@ -1,0 +1,8 @@
+>start {"formatid": "gen4ou"}
+>player p1 {"name": "Player 1", "team": "Hitmontop|||Technician|FakeOut||,,,,,252|M||||"}
+>player p2 {"name": "Player 2", "team": "Mew|||Synchronize|Psychic|Modest|,,,252,,||,0,,,,|||"}
+>p1 move 1
+>p2 move 1
+>p1 move 1
+>p2 move 1
+
