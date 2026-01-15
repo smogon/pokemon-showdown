@@ -1,9 +1,0 @@
->start {"formatid": "gen4ou"}
->player p1 {"name": "Player 1", "team": "Wingull|||KeenEye|Uturn||252,,,,,|||||]Celebi||KingsRock|NaturalCure|GrassKnot|Modest|,,,252,,||,0,,,,|||"}
->player p2 {"name": "Player 2", "team": "Regirock|||ClearBody|Curse|Bold|,,252,,,||,0,,,,|||"}
->p1 move 1
->p2 move 1
->p1 switch 2
->p1 move 1
->p2 move 1
-
