@@ -205,6 +205,14 @@ export class RuleTable extends Map<string, string> {
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
+		// override gameType if specified by value rule (cast needed as format.gameType is readonly)
+		if (this.valueRules.has('gametype')) {
+			const gameType = dex.toID(this.valueRules.get('gametype')!) as GameType;
+			(format as any).gameType = gameType;
+			// update playerCount based on new gameType
+			(format as any).playerCount = (gameType === 'multi' || gameType === 'freeforall' ? 4 : 2);
+		}
+
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
 			format.gameType === 'doubles' ? 2 :
 			1;
@@ -976,6 +984,11 @@ export class DexFormats {
 				);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
+		}
+
+		// if gameType was overridden, validate format's onValidateRule to catch format-specific restrictions
+		if (ruleTable.valueRules.has('gametype')) {
+			format.onValidateRule?.call({ format, ruleTable, dex: this.dex }, '');
 		}
 
 		if (!repeals) format.ruleTable = ruleTable;
