@@ -110,7 +110,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 
 		if (sanitized.length > 1) {
-			if (!this.banwordCheck(this.room, sanitized)) {
+			if (!this.isSafeGuess(this.room, sanitized)) {
 				throw new Chat.ErrorMessage(`Your guess contained a phrase banned by this room.`);
 			} else if (!this.guessWord(sanitized, user.name)) {
 				throw new Chat.ErrorMessage(`Your guess "${sanitized}" is invalid.`);
@@ -124,7 +124,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	banwordCheck(room: BasicRoom, message: string): boolean {
+	isSafeGuess(room: BasicRoom, message: string): boolean {
 		{
 			if (!room) return true;
 			if (!room.banwordRegex) {
@@ -138,7 +138,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 			if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
 				return false;
 			}
-			return this.banwordCheck(room.parent as ChatRoom, message);
+			return this.isSafeGuess(room.parent as ChatRoom, message);
 		}
 	}
 
