@@ -27,10 +27,46 @@ describe('Gigaton Hammer', () => {
 		battle = common.createBattle([[
 			{ species: 'Tinkaton', moves: ['gigatonhammer'] },
 		], [
-			{ species: 'Oranguru', moves: ['instruct'] },
+			{ species: 'Oranguru', ability: 'shellarmor', moves: ['instruct'] },
 		]]);
 		const oranguru = battle.p2.active[0];
 		battle.makeChoices();
 		assert.fainted(oranguru);
+	});
+
+	it(`should be able to be used twice in a row if Encore'd by a faster Pokemon and had other selectable moves`, () => {
+		battle = common.createBattle([[
+			{ species: 'Tinkaton', moves: ['gigatonhammer', 'sleeptalk'] },
+		], [
+			{ species: 'Hawlucha', ability: 'shellarmor', moves: ['sleeptalk', 'encore'] },
+		]]);
+		const hawlucha = battle.p2.active[0];
+		battle.makeChoices('move gigatonhammer', 'move sleeptalk');
+		battle.makeChoices('move sleeptalk', 'move encore');
+		assert.fainted(hawlucha);
+	});
+
+	it(`should struggle if Encore'd by a faster Pokemon and had no other selectable moves`, () => {
+		battle = common.createBattle([[
+			{ species: 'Tinkaton', moves: ['gigatonhammer'] },
+		], [
+			{ species: 'Hawlucha', ability: 'shellarmor', moves: ['sleeptalk', 'encore'] },
+		]]);
+		const hawlucha = battle.p2.active[0];
+		battle.makeChoices('move gigatonhammer', 'move sleeptalk');
+		battle.makeChoices('auto', 'move encore');
+		assert.false.fainted(hawlucha);
+	});
+
+	it(`should struggle if Encore'd by a slower Pokemon`, () => {
+		battle = common.createBattle([[
+			{ species: 'Tinkaton', moves: ['gigatonhammer', 'sleeptalk'] },
+		], [
+			{ species: 'Oranguru', ability: 'shellarmor', moves: ['encore', 'sleeptalk'] },
+		]]);
+		const oranguru = battle.p2.active[0];
+		battle.makeChoices('move gigatonhammer', 'move encore');
+		battle.makeChoices('auto', 'move sleeptalk');
+		assert.false.fainted(oranguru);
 	});
 });
