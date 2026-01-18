@@ -112,9 +112,6 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		// Necessary so pokemon doesn't get 8 moves
 		(pokemon as any).baseMoveSlots = newMoves;
 	}
-	pokemon.canMegaEvo = context.actions.canMegaEvo(pokemon);
-	pokemon.canUltraBurst = context.actions.canUltraBurst(pokemon);
-	pokemon.canTerastallize = (pokemon.canTerastallize === null) ? null : context.actions.canTerastallize(pokemon);
 	context.add('message', `${pokemon.name} changed form!`);
 }
 
@@ -684,9 +681,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const type = pokemon.teraType;
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
-			for (const ally of pokemon.side.pokemon) {
-				ally.canTerastallize = null;
-			}
+			pokemon.side.terastallizationUsed = true;
 			pokemon.addedType = '';
 			pokemon.knownType = true;
 			pokemon.apparentType = type;
@@ -701,6 +696,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add(`c:|${getName('Neko')}|Possible thermal failure if operation continues (Meow on fire ?)`);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
+			return true;
 		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;
@@ -918,16 +914,37 @@ export const Scripts: ModdedBattleScriptsData = {
 		canTerastallize(pokemon) {
 			if (
 				pokemon.terastallized || pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
-				pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9
+				pokemon.getItem().zMove || this.battle.actions.canMegaEvo(pokemon) || this.battle.actions.canDynamax(pokemon)
 			) {
-				return null;
+				return false;
 			}
-			if (pokemon.baseSpecies.id === 'arceus') return null;
+			if (pokemon.baseSpecies.id === 'arceus') return false;
 			return pokemon.teraType;
 		},
-		// 1 mega per pokemon
+		// 1 mega per pokemon and modded for Mega Rayquaza
+		canMegaEvo(pokemon: Pokemon) {
+			if (pokemon.m.megaEvoUsed) return false;
+			const species = pokemon.baseSpecies;
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+			// Mega Rayquaza
+			if (altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
+				return altForme.name;
+			}
+			const megaEvolution = item.megaStone?.[species.baseSpecies];
+			return megaEvolution && megaEvolution !== species.name ? megaEvolution : false;
+		},
+		canUltraBurst(pokemon: Pokemon) {
+			if (pokemon.m.ultraBurstUsed) return false;
+			if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
+				pokemon.getItem().id === 'ultranecroziumz') {
+				return "Necrozma-Ultra";
+			}
+			return false;
+		},
 		runMegaEvo(pokemon) {
-			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+			const speciesid = this.battle.actions.canMegaEvo(pokemon) || this.battle.actions.canUltraBurst(pokemon);
 			if (!speciesid) return false;
 
 			if (speciesid === 'Trapinch' && pokemon.name === 'Arya') {
@@ -935,10 +952,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
-			if (pokemon.canMegaEvo) {
-				pokemon.canMegaEvo = false;
+			if (speciesid === 'Necrozma-Ultra') {
+				pokemon.m.ultraBurstUsed = true;
 			} else {
-				pokemon.canUltraBurst = null;
+				pokemon.m.megaEvoUsed = true;
 			}
 
 			this.battle.runEvent('AfterMega', pokemon);
@@ -951,23 +968,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.add('-ability', pokemon, `${pokemon.getAbility().name}`);
 
 			return true;
-		},
-
-		// Modded for Mega Rayquaza
-		canMegaEvo(pokemon) {
-			const species = pokemon.baseSpecies;
-			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
-			const item = pokemon.getItem();
-			// Mega Rayquaza
-			if (altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
-				return altForme.name;
-			}
-			if (!item.megaStone) return null;
-			// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-			// FIXME: Change to species.name when champions comes
-			const megaEvolution = item.megaStone[species.baseSpecies];
-			return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 		},
 
 		// 1 Z per pokemon
