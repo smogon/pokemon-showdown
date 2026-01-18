@@ -125,6 +125,20 @@ describe(`Pursuit`, () => {
 		assert.false.fullHP(gengar);
 	});
 
+	it(`should be able to be paralyzed to prevent activation`, () => {
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: "Tyranitar", moves: ['pursuit', 'sleeptalk'] },
+		], [
+			{ species: "Jolteon", moves: ['thunderwave'] },
+			{ species: "Clefable", moves: ['calmmind'] },
+		]]);
+		const jolteon = battle.p2.pokemon[0];
+		battle.makeChoices('move sleeptalk', 'move thunderwave');
+		assert.equal(battle.p1.active[0].status, 'par');
+		battle.makeChoices('move pursuit', 'switch 2');
+		assert.fullHP(jolteon);
+	});
+
 	describe(`[Gen 4]`, () => {
 		it(`should continue the switch`, () => {
 			battle = common.gen(4).createBattle([[
@@ -153,6 +167,20 @@ describe(`Pursuit`, () => {
 			const activeBreloom = battle.p2.active[0];
 			assert.bounded(activeBreloom.maxhp - activeBreloom.hp, [33, 40]);
 			assert.fullHP(battle.p2.pokemon[1].hp);
+		});
+
+		it(`should be able to be paralyzed to prevent activation`, () => {
+			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+				{ species: "Tyranitar", moves: ['pursuit', 'sleeptalk'] },
+			], [
+				{ species: "Jolteon", moves: ['thunderwave'] },
+				{ species: "Clefable", moves: ['calmmind'] },
+			]]);
+			const jolteon = battle.p2.pokemon[0];
+			battle.makeChoices('move sleeptalk', 'move thunderwave');
+			assert.equal(battle.p1.active[0].status, 'par');
+			battle.makeChoices('move pursuit', 'switch 2');
+			assert.false.fullHP(jolteon);
 		});
 	});
 
@@ -197,6 +225,20 @@ describe(`Pursuit`, () => {
 			assert.fullHP(battle.p2.active[0].hp);
 			const inactiveParasect = battle.p2.pokemon[1];
 			assert.bounded(inactiveParasect.maxhp - inactiveParasect.hp, [42, 50]);
+		});
+
+		it(`should be able to be paralyzed to prevent activation`, () => {
+			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
+				{ species: "Tyranitar", moves: ['pursuit', 'sleeptalk'] },
+			], [
+				{ species: "Jolteon", moves: ['thunderwave'] },
+				{ species: "Clefable", moves: ['calmmind'] },
+			]]);
+			const jolteon = battle.p2.pokemon[0];
+			battle.makeChoices('move sleeptalk', 'move thunderwave');
+			assert.equal(battle.p1.active[0].status, 'par');
+			battle.makeChoices('move pursuit', 'switch 2');
+			assert.fullHP(jolteon);
 		});
 	});
 });
