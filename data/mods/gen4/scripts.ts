@@ -1,7 +1,18 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
-
+	init() {
+		const noMirror = [
+			'acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport',
+		];
+		for (const i in this.data.Moves) {
+			if (noMirror.includes(i)) {
+				delete this.modData('Moves', i).flags.mirror;
+			} else {
+				this.modData('Moves', i).flags.mirror = 1;
+			}
+		}
+	},
 	actions: {
 		inherit: true,
 		runSwitch(pokemon) {
