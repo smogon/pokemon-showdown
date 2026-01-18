@@ -9768,13 +9768,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onAfterHit(target, source) {
-			if (source.hp) {
-				this.field.clearTerrain();
-			}
-		},
-		onAfterSubDamage(damage, target, source) {
-			if (source.hp) {
+		onAfterMoveSecondaryLast(target, source) {
+			if (source.hp && !source.forceSwitchFlag) {
 				this.field.clearTerrain();
 			}
 		},
