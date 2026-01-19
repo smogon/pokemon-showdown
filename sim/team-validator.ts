@@ -2204,20 +2204,29 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				if (!isHidden && eventData.isHidden && dex.gen <= 8) {
-					if (fastReturn) return true;
-					problems.push(`${name} must have its Hidden Ability${etc}.`);
-				}
-
 				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
-				if (isHidden && !eventData.isHidden && !canUseAbilityPatch) {
-					if (fastReturn) return true;
-					problems.push(`${name} must not have its Hidden Ability${etc}.`);
+				if (!isHidden || !canUseAbilityPatch) {
+					const hiddenAbilityProblem = this.validateEventHiddenAbility(name, isHidden, eventData, etc);
+					if (hiddenAbilityProblem) {
+						if (fastReturn) return true;
+						problems.push(hiddenAbilityProblem);
+					}
 				}
 			}
 		}
 		if (problems.length) return problems;
 		if (eventData.gender) set.gender = eventData.gender;
+	}
+
+	validateEventHiddenAbility(name: string, isHidden: boolean, eventData: EventInfo, etc?: string) {
+		if (!isHidden && eventData.isHidden) {
+			return `${name} must have its Hidden Ability${etc}.`;
+		}
+
+		if (isHidden && !eventData.isHidden) {
+			return `${name} must not have its Hidden Ability${etc}.`;
+		}
+		return null;
 	}
 
 	allSources(species?: Species) {
@@ -2257,16 +2266,14 @@ export class TeamValidator {
 				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${species.prevo}.`);
 			}
 		}
-
 		if (problems.length) return problems;
-
-		if (setSources.isHidden) {
+		const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+		if (setSources.isHidden && !canUseAbilityPatch) {
 			setSources.sources = setSources.sources.filter(
 				source => parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
-			const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
-			if (!setSources.size() && !canUseAbilityPatch) {
+			if (!setSources.size()) {
 				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				return problems;
 			}
