@@ -348,7 +348,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	hitmontop: {
-		tier: "PU",
+		tier: "NU",
 	},
 	lickitung: {
 		tier: "NU",
