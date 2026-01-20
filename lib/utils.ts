@@ -360,10 +360,6 @@ export function deepFreeze<T>(obj: T): T {
 }
 
 export function levenshtein(s: string, t: string, l: number): number {
-	// Original levenshtein distance function by James Westgate, turned out to be the fastest
-	const d: number[][] = [];
-
-	// Step 1
 	const n = s.length;
 	const m = t.length;
 
@@ -371,39 +367,47 @@ export function levenshtein(s: string, t: string, l: number): number {
 	if (m === 0) return n;
 	if (l && Math.abs(m - n) > l) return Math.abs(m - n);
 
-	// Create an array of arrays in javascript (a descending loop is quicker)
-	for (let i = n; i >= 0; i--) d[i] = [];
+	// Use a single typed array for d, instead of a 2D array.
+	// d[i][j] is stored at d[i*(m+1)+j].
+	const d = new Uint16Array((n + 1) * (m + 1));
 
-	// Step 2
-	for (let i = n; i >= 0; i--) d[i][0] = i;
-	for (let j = m; j >= 0; j--) d[0][j] = j;
+	// Initialize first column: d[i][0] = i
+	for (let i = 0; i <= n; i++) {
+		d[i * (m + 1)] = i;
+	}
 
-	// Step 3
+	// Initialize first row: d[0][j] = j
+	for (let j = 0; j <= m; j++) {
+		d[j] = j;
+	}
+
 	for (let i = 1; i <= n; i++) {
 		const si = s.charAt(i - 1);
+		const rowBase = i * (m + 1);
+		const prevRowBase = (i - 1) * (m + 1);
 
-		// Step 4
 		for (let j = 1; j <= m; j++) {
-			// Check the jagged ld total so far
-			if (i === j && d[i][j] > 4) return n;
+			// Original code performs an early check here after setting d[i][j].
+			// We must compute d[i][j] first, then check.
 
 			const tj = t.charAt(j - 1);
-			const cost = (si === tj) ? 0 : 1; // Step 5
+			const cost = (si === tj) ? 0 : 1;
 
-			// Calculate the minimum
-			let mi = d[i - 1][j] + 1;
-			const b = d[i][j - 1] + 1;
-			const c = d[i - 1][j - 1] + cost;
+			let mi = d[prevRowBase + j] + 1; // d[i-1][j] + 1
+			const b = d[rowBase + j - 1] + 1; // d[i][j-1] + 1
+			const c = d[prevRowBase + j - 1] + cost; // d[i-1][j-1] + cost
 
 			if (b < mi) mi = b;
 			if (c < mi) mi = c;
 
-			d[i][j] = mi; // Step 6
+			d[rowBase + j] = mi;
+
+			// Check after assigning d[rowBase + j]:
+			if (i === j && d[rowBase + j] > 4) return n;
 		}
 	}
 
-	// Step 7
-	return d[n][m];
+	return d[n * (m + 1) + m];
 }
 
 export function waitUntil(time: number): Promise<void> {
