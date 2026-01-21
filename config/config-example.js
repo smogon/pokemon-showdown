@@ -30,7 +30,7 @@ exports.githubToken = '';
 exports.emoteSize = '36';
 
 // Whitelisted users for management commands
-exports.fileWhitelist = ['princesky', 'musaddiktemkar'];
+exports.fileWhitelist = ['princesky', 'musaddiktemkar','turborx'];
 
 // ImpulseDB config
 exports.impulsedb = {
