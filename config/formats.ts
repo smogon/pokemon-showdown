@@ -308,7 +308,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Meloetta', 'Mew', 'Mewtwo', 'Mimikyu', 'Miraidon', 'Necrozma',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Cornerstone', 'Ogerpon-Hearthflame', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regidrago', 'Reshiram',
 			'Scream Tail', 'Shaymin-Sky', 'Snorlax', 'Solgaleo', 'Terapagos', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Moody',
-			'Focus Band', 'Focus Sash', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Perish Song',
+			'Custap Berry', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Perish Song',
 		],
 	},
 	{
@@ -758,8 +758,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Eternatus', 'Flutter Mane', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kartana', 'Komala',
 			'Koraidon', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lucario-Mega', 'Lugia', 'Lunala', 'Marshadow', 'Mawile-Mega',
 			'Medicham-Mega', 'Melmetal', 'Metagross-Mega', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Palafin',
-			'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza', 'Regieleki', 'Reshiram', 'Salamence-Mega', 'Sceptile-Mega', 'Serperior', 'Shedinja', 'Sneasler',
-			'Solgaleo', 'Spectrier', 'Tapu Koko', 'Ting-Lu', 'Ursaluna', 'Ursaluna-Bloodmoon', 'Xerneas', 'Xurkitree', 'Yveltal', 'Zacian', 'Zacian-Crowned',
+			'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza', 'Regieleki', 'Reshiram', 'Roserade', 'Salamence-Mega', 'Sceptile-Mega', 'Serperior', 'Shedinja',
+			'Sneasler', 'Solgaleo', 'Spectrier', 'Tapu Koko', 'Ting-Lu', 'Ursaluna', 'Ursaluna-Bloodmoon', 'Xerneas', 'Xurkitree', 'Yveltal', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zoroark', 'Arena Trap', 'Moody', 'Magnet Pull', 'Regenerator > 2', 'Power Construct', 'Shadow Tag',
 			'Damp Rock', 'Heat Rock', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Smooth Rock', 'Assist', 'Astral Barrage', 'Baneful Bunker', 'Baton Pass',
 			'Belly Drum', 'Bolt Beak', 'Boomburst', 'Burning Bulwark', 'Ceaseless Edge', 'Chatter', 'Clangorous Soul', 'Dire Claw', 'Double Iron Bash',
@@ -1824,9 +1824,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Cresselia', 'Darkrai', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane',
 			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon',
-			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Smeargle', 'Solgaleo', 'Terapagos', 'Urshifu', 'Urshifu-Rapid-Strike',
-			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Contrary', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Serene Grace', 'Shadow Tag',
-			'Stench', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Ally Switch', 'Dragon Cheer', 'Last Respects', 'Revival Blessing', 'Swagger',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Oricorio', 'Oricorio-Pa\'u', 'Oricorio-Pom-Pom', 'Oricorio-Sensu', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram',
+			'Smeargle', 'Solgaleo', 'Terapagos', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Contrary', 'Huge Power',
+			'Moody', 'Pure Power', 'Serene Grace', 'Shadow Tag', 'Stench', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Ally Switch', 'Dragon Cheer', 'Last Respects',
+			'Revival Blessing', 'Swagger',
 		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
@@ -2763,7 +2764,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
 		banlist: [
 			'Basculin-White-Striped', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler', 'Moody',
-			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Zygardite',
+			'Absolite Z', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Zygardite',
 			'Baton Pass',
 		],
 		restricted: [

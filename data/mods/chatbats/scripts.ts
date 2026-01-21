@@ -294,5 +294,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.modData('Learnsets', 'glimmora').learnset.icebeam = ['9L1'];
 		this.modData('Learnsets', 'glimmora').learnset.malignantchain = ['9L1'];
+
+		this.modData('Learnsets', 'wobbuffet').learnset.nightshade = ['9L1'];
+		this.modData('Learnsets', 'wobbuffet').learnset.guillotine = ['9L1'];
+		this.modData('Learnsets', 'wobbuffet').learnset.shedtail = ['9L1'];
+
+		this.modData('Learnsets', 'raticate').learnset.lastbreakfast = ['9L1'];
 	},
 };
