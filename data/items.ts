@@ -2134,6 +2134,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 82,
 		gen: 1,
+		rating: 0,
 	},
 	firiumz: {
 		name: "Firium Z",
@@ -4022,6 +4023,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 761,
 		num: 2482,
 		gen: 9,
+		rating: 0,
 	},
 	metalcoat: {
 		name: "Metal Coat",
@@ -4914,6 +4916,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 571,
 		gen: 5,
+		rating: 0,
 	},
 	primariumz: {
 		name: "Primarium Z",
@@ -7777,6 +7780,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 84,
 		gen: 1,
+		rating: 0,
 	},
 	watmelberry: {
 		name: "Watmel Berry",
