@@ -116,7 +116,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 		this.fullname = `item: ${this.name}`;
 		this.effectType = 'Item';
-		this.rating = data.rating || 2;
+		this.rating = data.rating || undefined;
 		this.fling = data.fling || undefined;
 		this.onDrive = data.onDrive || undefined;
 		this.onMemory = data.onMemory || undefined;
