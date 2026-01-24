@@ -1889,9 +1889,6 @@ export class Pokemon {
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const oldAbility = this.battle.dex.abilities.get(this.ability);
-		if (!isFromFormeChange) {
-			if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
-		}
 		if (!isFromFormeChange && !isTransform) {
 			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, sourceEffect, ability);
 			if (!setAbilityEvent) return setAbilityEvent;
