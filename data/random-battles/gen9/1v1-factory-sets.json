@@ -589,7 +589,7 @@
                 "ability": "Unnerve",
                 "nature": "Adamant",
                 "evs": {"atk": 252, "def": 4, "spe": 252},
-                "moves": [["Outrage"], ["Close Combat"], ["Rock Slide", "Poison Jab", "Iron Tail", "Earthquake"], ["X-Scissor", "Poison Jab", "Iron Tail", "Earthquake"]],
+                "moves": [["Outrage"], ["Close Combat"], ["Rock Slide", "X-Scissor"], ["Poison Jab", "Iron Tail", "Earthquake"]],
                 "weight": 40
             }
         ]
