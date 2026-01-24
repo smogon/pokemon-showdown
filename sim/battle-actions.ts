@@ -1,4 +1,5 @@
-import { Dex, toID } from './dex';
+import { Dex } from './dex';
+import { toID } from './../lib/to-id';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 

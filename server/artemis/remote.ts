@@ -4,7 +4,7 @@
  */
 import { ProcessManager, Net } from '../../lib';
 import * as ConfigLoader from '../config-loader';
-import { toID } from '../../sim/dex-data';
+import { toID } from '../../lib/to-id';
 
 // 20m. this is mostly here so we can use Monitor.slow()
 const PM_TIMEOUT = 20 * 60 * 1000;
