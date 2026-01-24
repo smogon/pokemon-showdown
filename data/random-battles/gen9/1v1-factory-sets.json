@@ -1935,6 +1935,7 @@
                 "item": "Shell Bell",
                 "ability": "Sturdy",
                 "nature": "Quirky",
+                "level": 1,
                 "evs": {},
                 "moves": [["Endeavor"], ["Sand Tomb"], ["Sandstorm"], ["Trick Room", "Protect", "Moonblast"]],
                 "weight": 100
