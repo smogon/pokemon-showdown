@@ -675,9 +675,9 @@ export const commands: Chat.ChatCommands = {
 		if (!target) target = user.name;
 
 		const values = await Ladders.visualizeAll(target);
-		let buffer = `<div class="ladder"><table>`;
-		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
-
+		let buffer = `<div class="ladder">`;
+		buffer += Utils.html`<div>User: <strong>${target}</strong></div>`;
+		buffer += `<div style="overflow-x: auto;"><table>`;
 		const ratings = values.join(``);
 		if (!ratings) {
 			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
@@ -685,8 +685,7 @@ export const commands: Chat.ChatCommands = {
 			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
 			buffer += ratings;
 		}
-		buffer += `</table></div>`;
-
+		buffer += `</table></div></div>`;
 		this.sendReply(`|raw|${buffer}`);
 	},
 	rankhelp: [
