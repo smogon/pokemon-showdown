@@ -122,7 +122,7 @@ export function visualize(value: any, depth = 0): string {
 		return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
 	case 'Set':
 		if (depth > 2) return `Set`;
-		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v), depth + 1).join(', ')} }`;
+		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v, depth + 1)).join(', ')} }`;
 	}
 
 	if (value.toString) {
