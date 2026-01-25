@@ -28,13 +28,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] OU + Solgaleo",
 		desc: `S/V OU but with Solgaleo.`,
-		threads: [`&bullet; THREAD COMING SOON&trade;`],
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3775713/">OU + Solgaleo Metagame Discussion</a>`],
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', '+Solgaleo'],
 	},
 	{
 		name: "[Gen 9] 1v1 Factory",
 		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3775744/">1v1 Factory Set Discussion</a>`],
 		mod: 'gen9',
 		team: 'random1v1Factory',
 		bestOfDefault: true,
@@ -2900,12 +2901,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!item.megaStone && !item.isPrimalOrb && item.id !== 'ultranecroziumz') continue;
 				const species = this.dex.species.get(set.species);
 				const ability = this.dex.abilities.get(set.ability);
-				if (
-					((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies)) ||
-					(item.id === 'ultranecroziumz' && species.name.startsWith('Necrozma-'))
-				) continue;
-				if (this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
-					this.ruleTable.isRestricted(`ability:${ability.id}`)) {
+				if ((this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
+					this.ruleTable.isRestricted(`ability:${ability.id}`)) &&
+					!(((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies) ||
+						(item.id === 'ultranecroziumz' && species.name.startsWith('Necrozma-'))))) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
@@ -2958,8 +2957,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				const item = this.dex.items.get(set.item);
 				if (!item.megaStone && !item.isPrimalOrb) continue;
 				const species = this.dex.species.get(set.species);
-				if ((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies)) continue;
-				if (this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`)) {
+				if ((this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`)) &&
+					!((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies))) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {

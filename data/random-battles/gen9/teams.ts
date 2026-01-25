@@ -3020,7 +3020,6 @@ export class RandomTeams {
 	): RandomTeamsTypes.RandomFactorySet | null {
 		const setList = this.random1v1FactorySets[species.name].sets;
 
-		const itemsLimited = ['choicespecs', 'choiceband', 'choicescarf'];
 		const movesLimited: { [k: string]: string } = {};
 		const abilitiesLimited: { [k: string]: string } = {};
 
@@ -3039,7 +3038,8 @@ export class RandomTeams {
 			if (!Array.isArray(ogItem)) ogItem = [ogItem];
 			for (const itemString of ogItem) {
 				const itemId = toID(itemString);
-				if (itemsLimited.includes(itemId) && teamData.has[itemId]) continue;
+				if (teamData.has[itemId]) continue;
+				teamData.has[itemId] = 1;
 				allowedItems.push(itemString);
 			}
 			if (!allowedItems.length) continue;
@@ -3130,14 +3130,6 @@ export class RandomTeams {
 			weaknesses: {},
 			resistances: {},
 		};
-		const resistanceAbilities: { [k: string]: string[] } = {
-			dryskin: ['Water'], waterabsorb: ['Water'], stormdrain: ['Water'],
-			flashfire: ['Fire'], heatproof: ['Fire'], waterbubble: ['Fire'], wellbakedbody: ['Fire'],
-			lightningrod: ['Electric'], motordrive: ['Electric'], voltabsorb: ['Electric'],
-			sapsipper: ['Grass'],
-			thickfat: ['Ice', 'Fire'],
-			eartheater: ['Ground'], levitate: ['Ground'],
-		};
 		const movesLimited: { [k: string]: string } = {};
 		const abilitiesLimited: { [k: string]: string } = {};
 		const limitFactor = Math.ceil(this.maxTeamSize / 3);
@@ -3185,7 +3177,7 @@ export class RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
-						if (teamData.weaknesses[typeName] >= 2 * limitFactor) {
+						if (teamData.weaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}
@@ -3196,6 +3188,22 @@ export class RandomTeams {
 
 			const set = this.random1v1FactorySet(species, teamData);
 			if (!set) continue;
+			teamData.has[toID(set.item)] = 1;
+
+			const atkEVs = set.evs['atk'];
+			const spaEVs = set.evs['spa'];
+			const physMoveCount = set.moves.map(x => this.dex.moves.get(x).category).filter(x => x === 'Physical').length;
+			const specMoveCount = set.moves.map(x => this.dex.moves.get(x).category).filter(x => x === 'Special').length;
+			const atkBoostingMoves = set.moves.map(x => this.dex.moves.get(x))
+				.filter(x => (x.target === 'self' && x.boosts?.atk) || (x.id === 'curse' && !species.types.includes('Ghost'))).length;
+			const spaBoostingMoves = set.moves.map(x => this.dex.moves.get(x))
+				.filter(x => (x.target === 'self' && x.boosts?.spa) || x.id === 'takeheart').length;
+			if (teamData.has['physical'] && (atkEVs || physMoveCount >= 2 || atkBoostingMoves)) continue;
+			if (teamData.has['special'] && (spaEVs || specMoveCount >= 2 || spaBoostingMoves)) continue;
+			if (!teamData.has['physical']) teamData.has['physical'] = 0;
+			if (!teamData.has['special']) teamData.has['special'] = 0;
+			if (atkEVs || physMoveCount >= 2 || atkBoostingMoves) teamData.has['physical']++;
+			if (spaEVs || specMoveCount >= 2 || spaBoostingMoves) teamData.has['special']++;
 
 			// Limit 1 of any type combination
 			let typeCombo = types.slice().sort().join();
@@ -3240,16 +3248,7 @@ export class RandomTeams {
 
 			for (const typeName of this.dex.types.names()) {
 				const typeMod = this.dex.getEffectiveness(typeName, types);
-				// Track resistances because we will require it for triple weaknesses
-				if (
-					typeMod < 0 ||
-					resistanceAbilities[ability.id]?.includes(typeName) ||
-					!this.dex.getImmunity(typeName, types)
-				) {
-					// We don't care about the number of resistances, so just set to 1
-					teamData.resistances[typeName] = 1;
-				// Track weaknesses
-				} else if (typeMod > 0) {
+				if (typeMod > 0) {
 					teamData.weaknesses[typeName] = (teamData.weaknesses[typeName] || 0) + 1;
 				}
 			}
@@ -3259,9 +3258,7 @@ export class RandomTeams {
 		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
-				// We reject if our team is triple weak to any type without having a resist
-				if (teamData.resistances[type]) continue;
-				if (teamData.weaknesses[type] >= 2 * limitFactor) return this.random1v1FactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= limitFactor) return this.random1v1FactoryTeam(side, ++depth);
 			}
 		}
 		return pokemon;
