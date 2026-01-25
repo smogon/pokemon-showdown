@@ -1332,6 +1332,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pursuit: {
 		inherit: true,
+		beforeTurnCallback(pokemon) {
+			if (['frz', 'slp'].includes(pokemon.status) || (pokemon.hasAbility('truant') &&
+				(pokemon.volatiles['truant'] || pokemon.truantTurn))) return;
+			for (const side of this.sides) {
+				if (side.hasAlly(pokemon)) continue;
+				side.addSideCondition('pursuit', pokemon);
+				const data = side.getSideConditionData('pursuit');
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
+			}
+		},
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
@@ -1354,7 +1367,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+					this.actions.useMove('pursuit', source, { target: pokemon });
 				}
 			},
 		},
