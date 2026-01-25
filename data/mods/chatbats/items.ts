@@ -13,12 +13,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	masquerainite: {
 		name: "Masquerainite",
 		spritenum: 1,
-		megaStone: "Masquerain-Mega",
-		megaEvolves: "Masquerain",
+		megaStone: { "Masquerain": "Masquerain-Mega" },
 		itemUser: ["Masquerain"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: -1,
 		gen: 9,
@@ -59,12 +57,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	typhlosionite: {
 		name: "Typhlosionite",
 		spritenum: 1,
-		megaStone: "Typhlosion-Mega",
-		megaEvolves: "Typhlosion",
+		megaStone: { "Typhlosion": "Typhlosion-Mega" },
 		itemUser: ["Typhlosion"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: -2,
 		gen: 9,
@@ -127,14 +123,28 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onDamagePriority: -40,
 		onDamage(damage, target, source, effect) {
-			const chance = Math.max(Math.floor(target.hp / target.maxhp), 10);
+			const chance = Math.max(Math.floor(100 - (target.maxhp - target.hp)), 10);
 			if (this.randomChance(chance, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
+			} else {
+				return damage;
 			}
 		},
 		num: 230,
 		gen: 2,
 		desc: "Chance to survive attack equal to percentage of remaining HP, minimum 10%.",
+	},
+	raticite: {
+		name: "Raticite",
+		spritenum: 1,
+		megaStone: { "Raticate": "Raticate-Mega" },
+		itemUser: ["Raticate"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: -3,
+		gen: 9,
+		desc: "If held by a Raticate, this item allows it to Mega Evolve in battle.",
 	},
 };
