@@ -25,6 +25,15 @@ exports.bindaddress = '0.0.0.0';
  */
 exports.wsdeflate = null;
 
+/**
+ * lazysockets - disables eager initialization of network services
+ *  Turn this on if you'd prefer to manually connect Showdown to the network,
+ *  or you intend to run it offline.
+ *
+ * @type {boolean}
+ */
+exports.lazysockets = false;
+
 /*
 // example:
 exports.wsdeflate = {
