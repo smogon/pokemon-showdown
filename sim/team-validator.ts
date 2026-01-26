@@ -2093,6 +2093,25 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
 		}
+		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs) {
+			let statName: StatID;
+			for (statName in set.evs) {
+				const ev = set.evs[statName];
+				if (ev > 100) {
+					problems.push(
+						`${name} can't have more than 100 EVs in any stat, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which are capped at 100 EVs.`,
+					);
+				}
+				if (!(
+					ev % 10 === 0 ||
+					(ev % 10 === 8 && ev % 4 === 0)
+				)) {
+					problems.push(
+						`${name} can only have EVs that are multiples of 10, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which boost in multiples of 10.`,
+					);
+				}
+			}
+		}
 		if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
 			if (fastReturn) return true;
 			const shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
