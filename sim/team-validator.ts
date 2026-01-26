@@ -817,10 +817,10 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
+		if (ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
-				if (encounter.generation !== 1) continue;
+				if (encounter.generation > this.gen) continue;
 				if (!encounter.level) continue;
 				if (lowestEncounterLevel && encounter.level > lowestEncounterLevel) continue;
 
@@ -829,7 +829,7 @@ export class TeamValidator {
 
 			if (lowestEncounterLevel) {
 				if (set.level < lowestEncounterLevel) {
-					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen ${this.gen}.`);
 				}
 				isFromRBYEncounter = true;
 			}
@@ -2065,7 +2065,7 @@ export class TeamValidator {
 		const dex = this.dex;
 		let name = set.species;
 		const species = dex.species.get(set.species);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(dex.gen + 1, 1, 8) : dex.gen;
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(dex.gen + 1, 1, Dex.gen) : dex.gen;
 		if (!eventSpecies) eventSpecies = species;
 		if (set.name && set.species !== set.name && species.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
@@ -2204,7 +2204,7 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				if (!isHidden && eventData.isHidden && dex.gen <= 8) {
+				if (!isHidden && eventData.isHidden && (dex.gen <= 7 || (this.gen === 8 && !this.ruleTable.has('allowtradeback')))) {
 					if (fastReturn) return true;
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
@@ -2224,7 +2224,7 @@ export class TeamValidator {
 		let minSourceGen = this.minSourceGen;
 		if (this.dex.gen >= 3 && minSourceGen < 3) minSourceGen = 3;
 		if (species) minSourceGen = Math.max(minSourceGen, species.gen);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, 8) : this.dex.gen;
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, Dex.gen) : this.dex.gen;
 		return new PokemonSources(maxSourceGen, minSourceGen);
 	}
 
@@ -2490,7 +2490,7 @@ export class TeamValidator {
 
 		/**
 		 * The format doesn't allow Pokemon traded from the future
-		 * (This is everything except in Gen 1 Tradeback)
+		 * (This is everything except in Gen 1 and Gen 8 Tradeback)
 		 */
 		const noFutureGen = !ruleTable.has('allowtradeback');
 		/**

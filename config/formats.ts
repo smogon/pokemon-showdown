@@ -4307,6 +4307,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['PU', 'ZUBL', 'Damp Rock', 'Grassy Seed'],
 	},
 	{
+		name: "[Gen 8] Tradebacks OU",
+		desc: `SS OU with Virtual Console moves and non-Hidden Abilities.`,
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] OU', 'Allow Tradeback'],
+	},
+	{
 		name: "[Gen 8] CAP",
 		desc: "The Create-A-Pok&eacute;mon project is a community dedicated to exploring and understanding the competitive Pok&eacute;mon metagame by designing, creating, and playtesting new Pok&eacute;mon concepts.",
 		mod: 'gen8',
