@@ -1606,6 +1606,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Terastal Clause: You cannot Terastallize');
 		},
 	},
+	arceusevlimitmod: {
+		effectType: 'ValidatorRule',
+		name: 'Arceus EV Limit Mod',
+		desc: "Removes Arceus EV limit restriction",
+	},
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',

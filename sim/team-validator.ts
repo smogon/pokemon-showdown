@@ -2093,7 +2093,8 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
 		}
-		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs) {
+		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs &&
+			!(this.ruleTable.has('arceusevlimitmod') && eventSpecies.name === 'Arceus')) {
 			let statName: StatID;
 			for (statName in set.evs) {
 				const ev = set.evs[statName];
