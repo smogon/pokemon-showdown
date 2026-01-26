@@ -825,7 +825,7 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && this.maxSourceGen >= 2) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
@@ -2211,8 +2211,8 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				const canUseAbilityPatchReverse = dex.gen === 9 || (
-					dex.gen === 8 && this.maxSourceGen === 9 && !Dex.mod('gen9').species.get(species.name).isNonstandard
+				const canUseAbilityPatchReverse = dex.gen >= 9 || (
+					dex.gen === 8 && this.maxSourceGen >= 9 && !Dex.mod('gen9').species.get(species.name).isNonstandard
 				);
 				if (!isHidden && eventData.isHidden && !canUseAbilityPatchReverse) {
 					if (fastReturn) return true;
