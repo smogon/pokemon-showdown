@@ -230,22 +230,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		desc: "Active Pokemon without this Ability have their Defense multiplied by 0.85x. This Pokemon's moves and their effects ignore certain Abilities of other Pokemon.",
 		name: "Quag of Ruin",
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Quag of Ruin');
+			this.field.addSourcedPseudoWeather('quagofruin', pokemon, this.effect);
 		},
-		onAnyModifyDef(def, target, source, move) {
-			if (!move) return;
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Quag of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Quag of Ruin')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
-			this.debug('Quag of Ruin Def drop');
-			return this.chainModify(0.85);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('quagofruin', pokemon);
+		},
+		condition: {
+			onModifyDef(def, target, source, move) {
+				if (this.field.pseudoWeather['quagofruin'].activeSources.includes(target)) return;
+				this.debug('Quag of Ruin Def drop');
+				return this.chainModify(0.85);
+			},
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
-		flags: {},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 	clodofruin: {
@@ -254,15 +255,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Clod of Ruin",
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Clod of Ruin');
+			this.field.addSourcedPseudoWeather('clodofruin', pokemon, this.effect);
 		},
-		onAnyModifyAtk(atk, target, source, move) {
-			if (!move) return;
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Clod of Ruin')) return;
-			if (!move.ruinedAtk?.hasAbility('Clod of Ruin')) move.ruinedAtk = abilityHolder;
-			if (move.ruinedAtk !== abilityHolder) return;
-			this.debug('Clod of Ruin Atk drop');
-			return this.chainModify(0.85);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('clodofruin', pokemon);
+		},
+		condition: {
+			onModifyAtk(atk, target, source, move) {
+				if (this.field.pseudoWeather['clodofruin'].activeSources.includes(target)) return;
+				this.debug('Clod of Ruin Atk drop');
+				return this.chainModify(0.85);
+			},
 		},
 		onAnyModifyBoost(boosts, pokemon) {
 			const unawareUser = this.effectState.target;
@@ -474,11 +477,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Blitz of Ruin');
 			this.add('-message', `${pokemon.name}'s Blitz of Ruin lowered the Speed of all surrounding Pokémon!`);
+			this.field.addSourcedPseudoWeather('blitzofruin', pokemon, this.effect);
 		},
-		onAnyModifySpe(spe, pokemon) {
-			if (!pokemon.hasAbility('Blitz of Ruin')) {
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('blitzofruin', pokemon);
+		},
+		condition: {
+			onModifySpe(spe, target) {
+				if (this.field.pseudoWeather['blitzofruin'].activeSources.includes(target)) return;
+				this.debug('Blitz of Ruin Spe drop');
 				return this.chainModify(0.75);
-			}
+			},
 		},
 		flags: { breakable: 1 },
 	},
