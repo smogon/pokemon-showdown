@@ -53586,7 +53586,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 6, level: 1, moves: ["tailglow", "bubble", "watersport", "heartswap"], pokeball: "cherishball"},
 			{generation: 6, level: 100, moves: ["tailglow", "bubble", "watersport"], pokeball: "cherishball"},
 			{generation: 7, level: 15, moves: ["tailglow", "waterpulse", "aquaring", "heartswap"], pokeball: "cherishball"},
-			{generation: 8, moves: ['tailglow', 'watergun'], pokeball: 'pokeball', source: "gen8bdsp"},
+			{generation: 8, level: 1, moves: ['tailglow', 'watergun'], pokeball: 'pokeball', source: "gen8bdsp"},
 			{generation: 8, level: 50, moves: ["waterpulse", "zenheadbutt", "moonblast", "bubble"], source: "gen8legends"},
 			{generation: 9, level: 50, shiny: true, nature: "Calm", ivs: {hp: 31, atk: 20, def: 31, spa: 20, spd: 31, spe: 20}, moves: ["bubblebeam", "acidarmor", "whirlpool", "waterpulse"], pokeball: "cherishball"},
 		],
@@ -89288,7 +89288,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M"],
 		},
 		eventData: [
-			{generation: 9, moves: ["bodyslam", "amnesia", "icespinner", "doubleedge"]},
+			{generation: 9, level: 50, moves: ["bodyslam", "amnesia", "icespinner", "doubleedge"]},
 		],
 	},
 	frigibax: {
