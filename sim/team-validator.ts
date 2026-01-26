@@ -817,10 +817,10 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
-		if (ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
-				if (encounter.generation > this.gen) continue;
+				if (encounter.generation !== 1) continue;
 				if (!encounter.level) continue;
 				if (lowestEncounterLevel && encounter.level > lowestEncounterLevel) continue;
 
@@ -829,7 +829,7 @@ export class TeamValidator {
 
 			if (lowestEncounterLevel) {
 				if (set.level < lowestEncounterLevel) {
-					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen ${this.gen}.`);
+					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
 				}
 				isFromRBYEncounter = true;
 			}
