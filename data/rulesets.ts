@@ -1609,7 +1609,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	arceusevlimitmod: {
 		effectType: 'ValidatorRule',
 		name: 'Arceus EV Limit Mod',
-		desc: "Removes Arceus EV limit restriction",
+		desc: "Removes Arceus's EV limit restriction",
 	},
 	inversemod: {
 		effectType: 'Rule',
