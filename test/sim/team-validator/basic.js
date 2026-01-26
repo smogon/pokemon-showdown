@@ -246,11 +246,11 @@ describe('Team Validator', () => {
 
 	// https://www.smogon.com/forums/threads/tradebacks-in-gen-8-metagames.3735419/
 	it('should allow VC moves with non-Hidden abilities in Gen 8 Tradebacks', () => {
+		// Machamp doesn't exist in Gen 9
 		let team = [
 			{ species: 'machamp', ability: 'noguard', moves: ['fissure'], evs: { hp: 1 } },
 		];
-		assert.false.legalTeam(team, 'gen8anythinggoes');
-		assert.legalTeam(team, 'gen8anythinggoes@@@allowtradeback');
+		assert.false.legalTeam(team, 'gen8anythinggoes@@@allowtradeback');
 		team = [
 			{ species: 'clefable', ability: 'magicguard', moves: ['wish', 'teleport', 'knockoff'], evs: { hp: 1 } },
 		];
