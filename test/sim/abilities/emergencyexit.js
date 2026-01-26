@@ -381,6 +381,32 @@ describe(`Emergency Exit`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should request a switchout after crash damage`, () => {
+		battle = common.createBattle([[
+			{ species: 'Golisopod', ability: 'Emergency Exit', moves: ['highjumpkick'], evs: { hp: 4 } },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Chansey', moves: ['protect'] },
+		]]);
+		const eePokemon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it(`should request a switchout after Mind Blown recoil damage`, () => {
+		battle = common.createBattle([[
+			{ species: 'Golisopod', ability: 'Emergency Exit', moves: ['mindblown'], evs: { hp: 4 } },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Chansey', moves: ['protect'] },
+		]]);
+		const eePokemon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should request a switchout after taking struggle recoil damage`, () => {
 		battle = common.createBattle([[
 			{ species: 'Golisopod', item: 'Assault Vest', ability: 'Emergency Exit', moves: ['protect'] },
