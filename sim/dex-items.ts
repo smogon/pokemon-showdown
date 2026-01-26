@@ -26,6 +26,16 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 	/** just controls location on the item spritesheet */
 	declare readonly num: number;
+	/**
+	 * Rating that shows up in teambuilder:
+	 * 3: Popular items
+	 * 2: Items
+	 * 1: Usually useless items
+	 * 0: Useless items
+	 * Species-specific items are determined separately and ignore
+	 * the rating value.
+	**/
+	readonly rating: number;
 
 	/**
 	 * A Move-like object depicting what happens when Fling is used on
@@ -106,6 +116,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 		this.fullname = `item: ${this.name}`;
 		this.effectType = 'Item';
+		this.rating = data.rating || undefined;
 		this.fling = data.fling || undefined;
 		this.onDrive = data.onDrive || undefined;
 		this.onMemory = data.onMemory || undefined;
