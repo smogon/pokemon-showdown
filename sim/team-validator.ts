@@ -825,7 +825,7 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && ruleTable.has('obtainablemisc') && this.maxSourceGen >= 2) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && this.maxSourceGen === 1) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
