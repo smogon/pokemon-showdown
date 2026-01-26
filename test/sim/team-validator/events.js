@@ -167,7 +167,7 @@ describe('Team Validator', () => {
 
 	it(`should force Gen 4 Arceus to have max 100 EVs in any one stat and only multiples of 10`, () => {
 		let team = [
-			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 252 } },
+			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 110 } },
 		];
 		assert.false.legalTeam(team, 'gen4anythinggoes');
 
