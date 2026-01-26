@@ -2224,7 +2224,8 @@ export class TeamValidator {
 		let minSourceGen = this.minSourceGen;
 		if (this.dex.gen >= 3 && minSourceGen < 3) minSourceGen = 3;
 		if (species) minSourceGen = Math.max(minSourceGen, species.gen);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, Dex.gen) : this.dex.gen;
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, Dex.gen) :
+			this.dex.gen;
 		return new PokemonSources(maxSourceGen, minSourceGen);
 	}
 
