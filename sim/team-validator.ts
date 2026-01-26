@@ -2211,16 +2211,16 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				const canAbilityPatchRegular = dex.gen === 9 || (
+				const canUseAbilityPatchReverse = dex.gen === 9 || (
 					dex.gen === 8 && this.maxSourceGen === 9 && !Dex.mod('gen9').species.get(species.name).isNonstandard
 				);
-				if (!isHidden && eventData.isHidden && !canAbilityPatchRegular) {
+				if (!isHidden && eventData.isHidden && !canUseAbilityPatchReverse) {
 					if (fastReturn) return true;
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
 
-				const canAbilityPatchHidden = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
-				if (isHidden && !eventData.isHidden && !canAbilityPatchHidden) {
+				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+				if (isHidden && !eventData.isHidden && !canUseAbilityPatch) {
 					if (fastReturn) return true;
 					problems.push(`${name} must not have its Hidden Ability${etc}.`);
 				}
