@@ -64,6 +64,57 @@ describe(`Pursuit`, () => {
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
+	it(`should activate on the first target switching out`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Beedrill", moves: ['pursuit'] },
+			{ species: "Furret", moves: ['pursuit'] },
+		], [
+			{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
+			{ species: "Toxapex", moves: ['calmmind'] },
+			{ species: "Wynaut", moves: ['calmmind'] },
+			{ species: "Alakazam", moves: ['calmmind'] },
+		]]);
+		const [clefable, toxapex, wynaut, alakazam] = battle.p2.pokemon;
+		battle.makeChoices('move pursuit 1, move pursuit 2', 'switch 3, switch 4'); // Does not matter who Pursuit targets
+		assert.bounded(clefable.maxhp - clefable.hp, [34 + 30, 40 + 35]);
+		assert.fullHP(toxapex);
+		assert.fullHP(wynaut);
+		assert.fullHP(alakazam);
+	});
+
+	it(`should activate on the second target switching out, if the first fainted`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Beedrill", moves: ['pursuit'] },
+			{ species: "Furret", moves: ['pursuit'] },
+		], [
+			{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
+			{ species: "Shedinja", moves: ['calmmind'], evs: { spe: 252 } },
+			{ species: "Wynaut", moves: ['calmmind'] },
+			{ species: "Alakazam", moves: ['calmmind'] },
+		]]);
+		const [clefable, shedinja, wynaut, alakazam] = battle.p2.pokemon;
+		battle.makeChoices('move pursuit 1, move pursuit 2', 'switch 3, switch 4');
+		assert.bounded(clefable.maxhp - clefable.hp, [34, 40]);
+		assert.fainted(shedinja);
+		assert.fullHP(wynaut);
+		assert.fullHP(alakazam);
+	});
+
+	it(`should activate on a switching opponent even if targeting an ally`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Beedrill", item: 'beedrillite', moves: ['pursuit'] },
+			{ species: "Clefable", moves: ['calmmind'] },
+			{ species: "Furret", moves: ['calmmind'] },
+		], [
+			{ species: "Clefable", moves: ['calmmind'] },
+			{ species: "Alakazam", moves: ['calmmind'] },
+			{ species: "Roserade", moves: ['calmmind'] },
+		]]);
+		const clefable = battle.p2.pokemon[0];
+		battle.makeChoices('move pursuit mega -2, switch 3', 'switch 3, move calmmind');
+		assert.bounded(clefable.maxhp - clefable.hp, [53, 63]);
+	});
+
 	it(`should not double in power or activate before a switch triggered by Red Card`, () => {
 		battle = common.createBattle([[
 			{ species: 'Steelix', item: 'redcard', moves: ['pursuit'] },
@@ -194,6 +245,41 @@ describe(`Pursuit`, () => {
 			]]);
 			battle.makeChoices('move Pursuit', 'switch 2');
 			assert(battle.p2.active[0].hp);
+		});
+
+		it(`should only activate on the targeted opponent`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Beedrill", moves: ['pursuit'] },
+				{ species: "Furret", moves: ['pursuit'] },
+			], [
+				{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
+				{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
+				{ species: "Wynaut", moves: ['calmmind'] },
+				{ species: "Alakazam", moves: ['calmmind'] },
+			]]);
+			const [clefable, clefable2, wynaut, alakazam] = battle.p2.pokemon;
+			battle.makeChoices('move pursuit 1, move pursuit 2', 'switch 3, switch 4');
+			assert.bounded(clefable.maxhp - clefable.hp, [35, 42]);
+			assert.bounded(clefable2.maxhp - clefable2.hp, [35, 42]);
+			assert.fullHP(wynaut);
+			assert.fullHP(alakazam);
+		});
+
+		it(`should not activate on a switching opponent if targeting an ally`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Beedrill", moves: ['pursuit'] },
+				{ species: "Clefable", moves: ['calmmind'] },
+				{ species: "Furret", moves: ['calmmind'] },
+			], [
+				{ species: "Clefable", moves: ['calmmind'] },
+				{ species: "Alakazam", moves: ['calmmind'] },
+				{ species: "Roserade", moves: ['calmmind'] },
+			]]);
+			const clefable = battle.p2.pokemon[0];
+			battle.makeChoices('move pursuit -2, switch 3', 'switch 3, move calmmind');
+			assert.fullHP(clefable);
+			const furret = battle.p1.pokemon[1];
+			assert.bounded(furret.maxhp - furret.hp, [25, 30]);
 		});
 	});
 
