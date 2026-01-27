@@ -165,6 +165,13 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen5ou');
 	});
 
+	it(`should validate Gigantamax Melmetal`, () => {
+		const team = [
+			{ species: 'melmetal', level: 100, ability: 'ironfist', moves: ['doubleironbash'], evs: { hp: 1 }, gigantamax: true },
+		];
+		assert.legalTeam(team, 'gen8anythinggoes');
+	});
+
 	it(`should force Gen 4 Arceus to have max 100 EVs in any one stat and only multiples of 10`, () => {
 		let team = [
 			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 110 } },
@@ -180,5 +187,19 @@ describe('Team Validator', () => {
 			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 10 } },
 		];
 		assert.legalTeam(team, 'gen4anythinggoes');
+	});
+
+	it(`should allow Hall of Origin Arceus with Full Arceus Clause`, () => {
+		let team = [
+			{ species: 'arceus', level: 80, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.false.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+
+		team = [
+			{ species: 'arceus', level: 100, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
 	});
 });

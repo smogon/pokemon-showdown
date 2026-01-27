@@ -1609,7 +1609,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	fullarceusclause: {
 		effectType: 'ValidatorRule',
 		name: 'Full Arceus Clause',
-		desc: "Removes Arceus's EV limit restriction",
+		desc: "Allows Level 80 Arceus from Hall of Origin",
 		// Implemented in sim/team-validator.ts
 	},
 	inversemod: {

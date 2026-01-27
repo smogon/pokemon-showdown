@@ -649,10 +649,6 @@ export class TeamValidator {
 				set.gender = 'M';
 			}
 		}
-		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
-			setSources.sourcesBefore = 0;
-			setSources.sources = ['8S0 melmetal'];
-		}
 		if (!species.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}
@@ -955,7 +951,12 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const { species: eventSpecies, eventData } = eventOnlyData;
+			const { species: eventSpecies } = eventOnlyData;
+			let { eventData } = eventOnlyData;
+			// Add Hall of Origin Arceus event if Full Arceus Clause is active
+			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
+				eventData = [...eventData, {generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam']}];
+			}
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
@@ -2093,8 +2094,7 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
 		}
-		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs &&
-			!(this.ruleTable.has('fullarceusclause') && eventSpecies.name === 'Arceus')) {
+		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs) {
 			let statName: StatID;
 			for (statName in set.evs) {
 				const ev = set.evs[statName];
