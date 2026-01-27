@@ -954,6 +954,7 @@ export class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
+					...(moveSlot.target === 'randomNormal' && { target: 'randomNormal' }),
 				}];
 			}
 			// does this happen?
