@@ -1606,9 +1606,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Terastal Clause: You cannot Terastallize');
 		},
 	},
-	arceusevlimitmod: {
+	fullarceusclause: {
 		effectType: 'ValidatorRule',
-		name: 'Arceus EV Limit Mod',
+		name: 'Full Arceus Clause',
 		desc: "Removes Arceus's EV limit restriction",
 		// Implemented in sim/team-validator.ts
 	},
