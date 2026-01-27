@@ -650,6 +650,7 @@ export class TeamValidator {
 			}
 		}
 		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
+			// Melmetal cannot be obtained through the Max Soup
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
