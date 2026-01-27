@@ -951,8 +951,8 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const { species: eventSpecies } = eventOnlyData;
-			let { eventData } = eventOnlyData;
+			const eventSpecies = eventOnlyData.species;
+			let eventData = eventOnlyData.eventData;
 			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
 				// Hall of Origin Arceus
 				eventData = [...eventData, { generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam'] }];
