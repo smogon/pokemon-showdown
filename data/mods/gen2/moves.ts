@@ -436,13 +436,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { metronome: 1, failencore: 1, nosketch: 1 },
 		onHit(pokemon) {
-			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
-			const lastMove = target?.lastMove && target?.lastMove.id;
-			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
-				return false;
-			}
-			if (noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
+			const lastMove = target?.lastMove;
+			if (!lastMove?.flags['mirror'] || pokemon.moves.includes(lastMove.id) ||
+				(!pokemon.activeTurns && !target.moveThisTurn)) {
 				return false;
 			}
 			this.actions.useMove(lastMove, pokemon);

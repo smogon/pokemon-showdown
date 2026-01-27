@@ -1148,13 +1148,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
 				return false;
 			}
-			const noMirror = [
-				'acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport',
-			];
-			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+			const move = this.dex.moves.get(lastAttackedBy.move);
+			if (!move.flags['mirror'] || !lastAttackedBy.source.hasMove(move.id)) {
 				return false;
 			}
-			this.actions.useMove(lastAttackedBy.move, pokemon);
+			this.actions.useMove(move, pokemon);
 		},
 		target: "self",
 	},
