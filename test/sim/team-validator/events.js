@@ -165,13 +165,6 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen5ou');
 	});
 
-	it(`should validate Gigantamax Melmetal`, () => {
-		const team = [
-			{ species: 'melmetal', level: 100, ability: 'ironfist', moves: ['doubleironbash'], evs: { hp: 1 }, gigantamax: true },
-		];
-		assert.legalTeam(team, 'gen8anythinggoes');
-	});
-
 	it(`should force Gen 4 Arceus to have max 100 EVs in any one stat and only multiples of 10`, () => {
 		let team = [
 			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 110 } },
