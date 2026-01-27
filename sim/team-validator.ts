@@ -955,7 +955,7 @@ export class TeamValidator {
 			let { eventData } = eventOnlyData;
 			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
 				// Hall of Origin Arceus
-				eventData = [...eventData, {generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam']}];
+				eventData = [...eventData, { generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam'] }];
 			}
 			let legal = false;
 			for (const event of eventData) {
