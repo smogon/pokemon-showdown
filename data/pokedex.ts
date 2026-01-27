@@ -13465,7 +13465,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	xerneas: {
 		num: 716,
 		name: "Xerneas",
-		baseForme: "Active", // Neutral is technically the base, but it can't be used in battle
+		baseForme: "Neutral",
 		types: ["Fairy"],
 		gender: "N",
 		baseStats: { hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99 },
@@ -13475,14 +13475,14 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
 		tags: ["Restricted Legendary"],
-		otherFormes: ["Xerneas-Neutral"],
-		formeOrder: ["Xerneas-Neutral", "Xerneas"],
+		otherFormes: ["Xerneas-Active"],
+		formeOrder: ["Xerneas", "Xerneas-Active"],
 	},
-	xerneasneutral: {
+	xerneasactive: {
 		num: 716,
-		name: "Xerneas-Neutral",
+		name: "Xerneas-Active",
 		baseSpecies: "Xerneas",
-		forme: "Neutral",
+		forme: "Active",
 		types: ["Fairy"],
 		gender: "N",
 		baseStats: { hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99 },
@@ -13491,6 +13491,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 215,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		battleOnly: "Xerneas",
 	},
 	yveltal: {
 		num: 717,

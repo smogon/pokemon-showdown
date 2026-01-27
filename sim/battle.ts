@@ -1950,7 +1950,7 @@ export class Battle {
 				// Still need to hide these formes since they change on battle start
 				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
-					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+					.replace(/(Xerneas)(?!-Active)/g, '$1-*');
 				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
 			}
 			this.makeRequest('teampreview');
@@ -2639,6 +2639,7 @@ export class Battle {
 
 			this.add('start');
 
+			// Change Xerneas into its Active forme
 			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
 				let rawSpecies: Species | null = null;
@@ -2646,6 +2647,8 @@ export class Battle {
 					rawSpecies = this.dex.species.get('Zacian-Crowned');
 				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
 					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
+				} else if (pokemon.species.id === 'xerneas') {
+					rawSpecies = this.dex.species.get('Xerneas-Active');
 				}
 				if (!rawSpecies) continue;
 				const species = pokemon.setSpecies(rawSpecies);
@@ -2659,7 +2662,7 @@ export class Battle {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
 				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHeadIndex >= 0) {
+				if (ironHeadIndex >= 0 && behemothMove[rawSpecies.name]) {
 					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
 					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
