@@ -649,6 +649,10 @@ export class TeamValidator {
 				set.gender = 'M';
 			}
 		}
+		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
+			setSources.sourcesBefore = 0;
+			setSources.sources = ['8S0 melmetal'];
+		}
 		if (!species.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}
