@@ -167,7 +167,7 @@ export class FriendsDatabase {
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
-		if (!process || !Config.usesqlite) {
+		if (!process || !Config.usesqlite || !Config.usesqlitefriends) {
 			return null;
 		}
 		const result = await process.query(input);
@@ -431,7 +431,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 
 if (!PM.isParentProcess) {
 	ConfigLoader.ensureLoaded();
-	if (Config.usesqlite) {
+	if (Config.usesqlite && Config.usesqlitefriends) {
 		FriendsDatabase.setupDatabase();
 	}
 	global.Monitor = {
