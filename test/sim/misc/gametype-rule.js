@@ -21,17 +21,17 @@ describe('Game Type Rule', () => {
 	});
 
 	it('should override format to triples', () => {
-		battle = common.createBattle({ customRules: ['Game Type = Triples'] });
+		battle = common.createBattle({ gameType: 'doubles', customRules: ['Game Type = Triples'] });
 		assert.equal(battle.gameType, 'triples');
 	});
 
-	it('should support multi game type', () => {
-		battle = common.createBattle({ customRules: ['Game Type = Multi'] });
+	it('should support multi game type when format is already multi or ffa', () => {
+		battle = common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Multi'] });
 		assert.equal(battle.gameType, 'multi');
 	});
 
-	it('should support freeforall game type', () => {
-		battle = common.createBattle({ customRules: ['Game Type = FreeForAll'] });
+	it('should support freeforall game type when format is already multi or ffa', () => {
+		battle = common.createBattle({ gameType: 'multi', customRules: ['Game Type = FreeForAll'] });
 		assert.equal(battle.gameType, 'freeforall');
 	});
 
@@ -73,17 +73,17 @@ describe('Game Type Rule', () => {
 		battle = common.createBattle({ customRules: ['Game Type = Doubles', 'Best Of = 3'] });
 		assert.equal(battle.gameType, 'doubles');
 		battle.destroy();
-		battle = common.createBattle({ customRules: ['Game Type = Triples', 'Best Of = 3'] });
+		battle = common.createBattle({ gameType: 'doubles', customRules: ['Game Type = Triples', 'Best Of = 3'] });
 		assert.equal(battle.gameType, 'triples');
 		battle.destroy();
-		battle = common.createBattle({ customRules: ['Game Type = Multi', 'Best Of = 3'] });
+		battle = common.createBattle({ gameType: 'multi', customRules: ['Best Of = 3'] });
 		assert.equal(battle.gameType, 'multi');
 	});
 
 	it('should reject freeforall with Best Of', () => {
 		battle = null;
 		assert.throws(
-			() => common.createBattle({ customRules: ['Game Type = FreeForAll', 'Best Of = 3'] }),
+			() => common.createBattle({ gameType: 'freeforall', customRules: ['Best Of = 3'] }),
 			/Free-For-All battles cannot be a Best-of series/
 		);
 	});
@@ -95,5 +95,71 @@ describe('Game Type Rule', () => {
 			() => common.createBattle({ formatid: '[Gen 9] Shared Power @@@Game Type = Doubles' }),
 			/Shared Power currently does not support/
 		);
+	});
+
+	it('should reject changing from 2-player to 4-player game types', () => {
+		battle = null;
+		// Singles to Multi/FFA
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = Multi'] }),
+			/Changing between 2-player and 4-player game types is not supported/
+		);
+		assert.throws(
+			() => common.createBattle({ customRules: ['Game Type = FreeForAll'] }),
+			/Changing between 2-player and 4-player game types is not supported/
+		);
+		// Doubles to Multi/FFA
+		assert.throws(
+			() => common.createBattle({ gameType: 'doubles', customRules: ['Game Type = Multi'] }),
+			/Changing between 2-player and 4-player game types is not supported/
+		);
+		assert.throws(
+			() => common.createBattle({ gameType: 'doubles', customRules: ['Game Type = FreeForAll'] }),
+			/Changing between 2-player and 4-player game types is not supported/
+		);
+	});
+
+	it('should reject changing from 4-player to 2-player game types', () => {
+		battle = null;
+		// Multi to Singles/Doubles
+		assert.throws(
+			() => common.createBattle({ gameType: 'multi', customRules: ['Game Type = Singles'] }),
+			/Changing between 4-player and 2-player game types is not supported/
+		);
+		assert.throws(
+			() => common.createBattle({ gameType: 'multi', customRules: ['Game Type = Doubles'] }),
+			/Changing between 4-player and 2-player game types is not supported/
+		);
+		// FFA to Singles/Doubles
+		assert.throws(
+			() => common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Singles'] }),
+			/Changing between 4-player and 2-player game types is not supported/
+		);
+		assert.throws(
+			() => common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Doubles'] }),
+			/Changing between 4-player and 2-player game types is not supported/
+		);
+	});
+
+	it('should allow changing between 2-player game types', () => {
+		// Singles <-> Doubles
+		battle = common.createBattle({ customRules: ['Game Type = Doubles'] });
+		assert.equal(battle.gameType, 'doubles');
+		battle.destroy();
+		battle = common.createBattle({ gameType: 'doubles', customRules: ['Game Type = Singles'] });
+		assert.equal(battle.gameType, 'singles');
+		battle.destroy();
+		// Doubles <-> using existing format
+		battle = common.createBattle({ formatid: '[Gen 9] Doubles OU @@@Game Type = Singles' });
+		assert.equal(battle.gameType, 'singles');
+	});
+
+	it('should allow changing between 4-player game types', () => {
+		// Multi <-> FFA
+		battle = common.createBattle({ gameType: 'multi', customRules: ['Game Type = FreeForAll'] });
+		assert.equal(battle.gameType, 'freeforall');
+		battle.destroy();
+		battle = common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Multi'] });
+		assert.equal(battle.gameType, 'multi');
 	});
 });
