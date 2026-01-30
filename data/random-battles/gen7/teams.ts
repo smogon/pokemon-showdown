@@ -135,7 +135,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
-					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
+					types.has('Fighting') || types.has('Fairy') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),

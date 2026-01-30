@@ -97,7 +97,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Normal: movePool => movePool.includes('boomburst'),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
+				!counter.get('Psychic') && (types.has('Fighting') || types.has('Fairy') || movePool.includes('calmmind'))
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
 			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
