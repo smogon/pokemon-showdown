@@ -6587,7 +6587,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Play Rough", "Protect", "Yawn", "Wish"],
+                "movepool": ["Body Press", "Play Rough", "Protect", "Wish", "Yawn"],
                 "abilities": ["Well-Baked Body"],
                 "teraTypes": ["Steel"]
             }
