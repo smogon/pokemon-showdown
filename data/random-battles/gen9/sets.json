@@ -3191,7 +3191,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Knock Off", "Stealth Rock", "Trailblaze"],
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Knock Off", "Stealth Rock"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Ground", "Ice"]
             }
@@ -3253,7 +3253,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Pain Split", "Poltergeist", "Will-O-Wisp"],
+                "movepool": ["Earthquake", "Pain Split", "Poltergeist", "Shadow Sneak", "Will-O-Wisp"],
                 "abilities": ["Frisk"],
                 "teraTypes": ["Dark", "Fairy"]
             },
@@ -4036,6 +4036,12 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Encore", "Giga Drain", "Leech Seed", "Moonblast", "Stun Spore", "Substitute", "U-turn"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Encore", "Leech Seed", "Moonblast", "Substitute"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Poison", "Steel"]
             }

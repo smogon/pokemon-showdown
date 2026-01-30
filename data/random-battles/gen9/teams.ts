@@ -816,12 +816,6 @@ export class RandomTeams {
 			}
 		}
 
-		// Enforce Encore on Whimsicott
-		if (movePool.includes('encore') && species.id === 'whimsicott') {
-			counter = this.addMove('encore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['mortalspin', 'spore'];
