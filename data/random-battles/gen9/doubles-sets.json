@@ -3540,7 +3540,13 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Encore", "Helping Hand", "Moonblast", "Tailwind", "Taunt"],
+                "movepool": ["Encore", "Moonblast", "Tailwind", "Taunt"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Fire", "Ghost", "Steel"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Encore", "Helping Hand", "Moonblast", "Tailwind"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Fire", "Ghost", "Steel"]
             }
