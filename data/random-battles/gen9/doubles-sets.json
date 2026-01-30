@@ -5327,7 +5327,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Fake Out", "Light Screen", "Parting Shot", "Reflect", "Spirit Break"],
+                "movepool": ["Fake Out", "Light Screen", "Parting Shot", "Reflect", "Spirit Break", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Steel"]
             },
