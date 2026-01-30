@@ -2070,7 +2070,7 @@ export class Pokemon {
 			// No Pokemon should be able to have Stellar as a base type
 			if (typeof newType === 'string' ? newType === 'Stellar' : newType.includes('Stellar')) return false;
 			// First type of Arceus, Silvally cannot be normally changed
-			if ((this.battle.gen >= 5 && (this.species.num === 493 || this.species.num === 773)) ||
+			if ((this.battle.gen >= 5 && (this.baseSpecies.num === 493 || this.baseSpecies.num === 773)) ||
 				(this.battle.gen === 4 && this.hasAbility('multitype'))) {
 				return false;
 			}
