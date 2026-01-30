@@ -589,7 +589,7 @@
         "level": 91,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Clear Smog", "Fire Blast", "Gunk Shot", "Poison Gas", "Protect", "Taunt", "Will-O-Wisp"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Dark"]
@@ -602,13 +602,13 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Gunk Shot", "Poison Gas", "Protect", "Strange Steam", "Taunt", "Will-O-Wisp"],
-                "abilities": ["Levitate", "Neutralizing Gas"],
+                "abilities": ["Levitate"],
                 "teraTypes": ["Dark", "Steel"]
             },
             {
                 "role": "Offensive Protect",
                 "movepool": ["Dazzling Gleam", "Fire Blast", "Gunk Shot", "Protect"],
-                "abilities": ["Levitate", "Neutralizing Gas"],
+                "abilities": ["Levitate"],
                 "teraTypes": ["Fire"]
             }
         ]
@@ -2654,7 +2654,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Electroweb", "Flash Cannon", "Protect", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Sturdy"],
                 "teraTypes": ["Flying"]

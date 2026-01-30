@@ -2390,7 +2390,13 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Endeavor", "Flip Turn", "Substitute", "Surf", "Whirlpool"],
+                "movepool": ["Endeavor", "Flip Turn", "Substitute", "Surf"],
+                "abilities": ["Swift Swim"],
+                "teraTypes": ["Ghost", "Ground"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Endeavor", "Substitute", "Surf", "Whirlpool"],
                 "abilities": ["Swift Swim"],
                 "teraTypes": ["Ghost", "Ground"]
             }
