@@ -102,7 +102,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	pikachu: {
 		inherit: true,
 		baseStats: { hp: 35, atk: 55, def: 30, spa: 50, spd: 50, spe: 90 },
-		prevo: undefined,
 	},
 	raichu: {
 		inherit: true,
@@ -143,7 +142,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	clefairy: {
 		inherit: true,
 		baseStats: { hp: 70, atk: 45, def: 48, spa: 60, spd: 60, spe: 35 },
-		prevo: undefined,
 	},
 	clefable: {
 		inherit: true,
@@ -160,7 +158,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	jigglypuff: {
 		inherit: true,
 		baseStats: { hp: 115, atk: 45, def: 20, spa: 25, spd: 25, spe: 20 },
-		prevo: undefined,
 	},
 	wigglytuff: {
 		inherit: true,
@@ -431,12 +428,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	hitmonlee: {
 		inherit: true,
 		baseStats: { hp: 50, atk: 120, def: 53, spa: 35, spd: 35, spe: 87 },
-		prevo: undefined,
 	},
 	hitmonchan: {
 		inherit: true,
 		baseStats: { hp: 50, atk: 105, def: 79, spa: 35, spd: 35, spe: 76 },
-		prevo: undefined,
 	},
 	lickitung: {
 		inherit: true,
@@ -505,17 +500,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	jynx: {
 		inherit: true,
 		baseStats: { hp: 65, atk: 50, def: 35, spa: 95, spd: 95, spe: 95 },
-		prevo: undefined,
 	},
 	electabuzz: {
 		inherit: true,
 		baseStats: { hp: 65, atk: 83, def: 57, spa: 85, spd: 85, spe: 105 },
-		prevo: undefined,
 	},
 	magmar: {
 		inherit: true,
 		baseStats: { hp: 65, atk: 95, def: 57, spa: 85, spd: 85, spe: 93 },
-		prevo: undefined,
 	},
 	pinsir: {
 		inherit: true,

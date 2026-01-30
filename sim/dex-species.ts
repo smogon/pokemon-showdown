@@ -419,7 +419,7 @@ export class DexSpecies {
 		this.dex = dex;
 	}
 
-	get(name?: string | Species): Species {
+	get(name?: string | Species, updatePrevo = true): Species {
 		if (name && typeof name !== 'string') return name;
 
 		let id = '' as ID;
@@ -432,10 +432,10 @@ export class DexSpecies {
 				id = 'nidoranm' as ID;
 			}
 		}
-		return this.getByID(id);
+		return this.getByID(id, updatePrevo);
 	}
 
-	getByID(id: ID): Species {
+	getByID(id: ID, updatePrevo = true): Species {
 		if (id === '' || id === 'constructor') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
@@ -584,13 +584,32 @@ export class DexSpecies {
 					species.tier = species.doublesTier = species.natDexTier = 'Illegal';
 				}
 			}
-			species.nfe = species.evos.some(evo => {
-				const evoSpecies = this.get(evo);
+
+			// Do not recursively look for both prevos and evos
+			if (updatePrevo) {
+				const prevoSpecies = this.get(species.prevo, true);
+				if (prevoSpecies.isNonstandard &&
+					prevoSpecies.isNonstandard !== species?.isNonstandard &&
+					prevoSpecies.isNonstandard !== "Unobtainable")
+					species.prevo = '';
+			}
+
+			species.evos = species.evos.filter(evo => {
+				const evoSpecies = this.get(evo, false);
 				return !evoSpecies.isNonstandard ||
 					evoSpecies.isNonstandard === species?.isNonstandard ||
 					// Pokemon with Hisui evolutions
 					evoSpecies.isNonstandard === "Unobtainable";
 			});
+
+			species.nfe = species.evos.some(evo => {
+				const evoSpecies = this.get(evo, false);
+				return !evoSpecies.isNonstandard ||
+					evoSpecies.isNonstandard === species?.isNonstandard ||
+					// Pokemon with Hisui evolutions
+					evoSpecies.isNonstandard === "Unobtainable";
+			});
+
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
