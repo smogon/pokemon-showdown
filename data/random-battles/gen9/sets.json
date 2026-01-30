@@ -3764,14 +3764,8 @@
         "level": 69,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Focus Blast", "Judgment", "Recover", "Will-O-Wisp"],
-                "abilities": ["Multitype"],
-                "teraTypes": ["Dark", "Fighting"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Focus Blast", "Judgment", "Recover"],
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Focus Blast", "Judgment", "Recover", "Will-O-Wisp"],
                 "abilities": ["Multitype"],
                 "teraTypes": ["Dark", "Fighting"]
             }
