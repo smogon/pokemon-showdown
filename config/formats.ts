@@ -5251,7 +5251,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Swagger'],
-		unbanlist: ['Wobbuffet', 'Wynaut'],
 	},
 	{
 		name: "[Gen 3] Orre Colosseum",
