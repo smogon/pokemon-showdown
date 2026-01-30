@@ -4302,13 +4302,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Fake Out", "Fake Tears", "Helping Hand", "Light Screen", "Psychic", "Reflect"],
-                "abilities": ["Prankster"],
-                "teraTypes": ["Dark", "Steel"]
-            },
-            {
-                "role": "Doubles Support",
-                "movepool": ["Fake Out", "Helping Hand", "Psychic", "Thunder Wave"],
+                "movepool": ["Fake Out", "Helping Hand", "Light Screen", "Psychic", "Reflect", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Dark", "Steel"]
             }
