@@ -587,7 +587,7 @@ export class DexSpecies {
 
 			// Do not recursively look for both prevos and evos
 			if (updatePrevo) {
-				const prevoSpecies = this.get(species.prevo, true);
+				const prevoSpecies = this.get(species.prevo);
 				if (prevoSpecies.isNonstandard &&
 					prevoSpecies.isNonstandard !== species?.isNonstandard &&
 					prevoSpecies.isNonstandard !== "Unobtainable")
