@@ -4035,7 +4035,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Encore", "Giga Drain", "Leech Seed", "Moonblast", "Stun Spore", "Substitute", "U-turn"],
+                "movepool": ["Encore", "Giga Drain", "Moonblast", "Stun Spore", "U-turn"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Poison", "Steel"]
             },
