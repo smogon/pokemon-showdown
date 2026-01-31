@@ -14915,7 +14915,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		beforeTurnCallback(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (pokemon.isAlly(target)) return;
 				target.addVolatile('pursuit');
 				const data = target.volatiles['pursuit'];
 				if (!data.sources) {
