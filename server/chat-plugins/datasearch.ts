@@ -1552,7 +1552,8 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					let matchRule = false;
 					let numMoveValidationRules = 0;
 					for (const rule of rules) {
-						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name)) && !supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name)) &&
+							!supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
 						else numMoveValidationRules++;
 						matchRule = !rule.checkCanLearn?.call(
 							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
