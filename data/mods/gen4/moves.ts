@@ -1367,7 +1367,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							}
 						}
 					}
-					this.actions.useMove('pursuit', source, { target: pokemon });
+					if (this.actions.useMove('pursuit', source, { target: pokemon }) && source.getItem().isChoice) {
+						source.addVolatile('choicelock');
+					}
 				}
 			},
 		},
