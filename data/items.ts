@@ -1058,7 +1058,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		num: 100,
-		gen: 3,
+		gen: 4,
 		isNonstandard: "Past",
 	},
 	clearamulet: {
@@ -1427,7 +1427,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		num: 102,
-		gen: 3,
+		gen: 4,
 		isNonstandard: "Past",
 	},
 	dousedrive: {
@@ -2866,7 +2866,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		num: 101,
-		gen: 3,
+		gen: 4,
 		isNonstandard: "Past",
 	},
 	heracronite: {
@@ -4386,7 +4386,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		num: 103,
-		gen: 3,
+		gen: 4,
 		isNonstandard: "Past",
 	},
 	oranberry: {
@@ -5333,7 +5333,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		num: 99,
-		gen: 3,
+		gen: 4,
 		isNonstandard: "Past",
 	},
 	roseincense: {
