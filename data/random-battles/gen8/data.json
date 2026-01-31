@@ -2149,7 +2149,7 @@
     },
     "silvallyice": {
         "level": 83,
-        "moves": ["flamecharge", "multiattack", "psychicfangs", "swordsdance"],
+        "moves": ["flamecharge", "multiattack", "rockslide", "swordsdance"],
         "doublesLevel": 88,
         "doublesMoves": ["flamethrower", "multiattack", "partingshot", "tailwind", "thunderbolt"]
     },
@@ -2161,7 +2161,7 @@
     },
     "silvallypsychic": {
         "level": 83,
-        "moves": ["crunch", "multiattack", "swordsdance", "uturn"],
+        "moves": ["flamecharge", "multiattack", "swordsdance", "xscissor"],
         "doublesLevel": 88,
         "doublesMoves": ["flamethrower", "multiattack", "partingshot", "tailwind", "xscissor"]
     },
