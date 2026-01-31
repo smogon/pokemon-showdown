@@ -1524,10 +1524,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onCheckAccuracy(target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return false;
 		},
 		secondary: {
 			chance: 30,
@@ -1547,8 +1545,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snowscape'])) move.accuracy = true;
+		onCheckAccuracy() {
+			if (this.field.isWeather(['hail', 'snowscape'])) return false;
 		},
 		secondary: {
 			chance: 10,
@@ -6897,9 +6895,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Glaive Rush', '[silent]');
 			},
-			onAccuracy() {
-				return true;
-			},
 			onSourceModifyDamage() {
 				return this.chainModify(2);
 			},
@@ -6908,6 +6903,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.debug('removing Glaive Rush drawback before attack');
 				pokemon.removeVolatile('glaiverush');
 			},
+			// No Guard-like effect for Poison-type users implemented in Battle#checkAlwaysHit
 		},
 		secondary: null,
 		target: "normal",
@@ -9364,17 +9360,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
+		onCheckAccuracy(target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return false;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) return 50;
 		},
 		secondary: {
 			chance: 30,
@@ -10803,8 +10793,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSourceInvulnerability(target, source, move) {
 				if (move && source === this.effectState.target && target === this.effectState.source) return 0;
 			},
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target && target === this.effectState.source) return true;
+			onSourceCheckAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectState.target && target === this.effectState.source) return false;
 			},
 		},
 		secondary: null,
@@ -12372,14 +12362,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return this.chainModify(2);
 				}
 			},
-			onAccuracy(accuracy, target, source, move) {
+			onCheckAccuracy(target, source, move) {
 				const boostedMoves = [
 					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault', 'supercellslam',
 				];
 				if (boostedMoves.includes(move.id)) {
-					return true;
+					return false;
 				}
-				return accuracy;
 			},
 		},
 		boosts: {
@@ -14924,8 +14913,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				data.sources.push(pokemon);
 			}
 		},
-		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
+		onCheckAccuracy(target, source, move) {
+			if (target.beingCalledBack || target.switchFlag) return false;
 		},
 		onTryHit(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
@@ -16267,10 +16256,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onCheckAccuracy(target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return false;
 		},
 		secondary: {
 			chance: 20,
@@ -19884,9 +19871,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('-start', target, 'Telekinesis');
 			},
-			onAccuracyPriority: -1,
-			onAccuracy(accuracy, target, source, move) {
-				if (move && !move.ohko) return true;
+			onCheckAccuracyPriority: -1,
+			onCheckAccuracy(target, source, move) {
+				if (!move.ohko) return false;
 			},
 			onImmunity(type) {
 				if (type === 'Ground') return false;
@@ -20197,17 +20184,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
+		onCheckAccuracy(target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return false;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) return 50;
 		},
 		secondary: {
 			chance: 30,
@@ -20499,8 +20480,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
-		// No Guard-like effect for Poison-type users implemented in Scripts#tryMoveHit
 		status: 'tox',
+		onPrepareHit(target, source) {
+			if (source.hasType('Poison')) source.addVolatile('toxic');
+		},
+		onAfterMove(pokemon) {
+			pokemon.removeVolatile('toxic');
+		},
+		// No Guard-like effect for Poison-type users implemented in Battle#checkAlwaysHit
+		condition: {
+			duration: 1,
+		},
 		secondary: null,
 		target: "normal",
 		type: "Poison",
@@ -21668,10 +21658,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onCheckAccuracy(target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return false;
 		},
 		secondary: {
 			chance: 20,
