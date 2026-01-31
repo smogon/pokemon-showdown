@@ -375,6 +375,7 @@ export class BattleActions {
 		const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
 		const moveResult = this.useMoveInner(move, pokemon, options);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
+		for (const active of this.battle.getAllActive()) active.blockHealingBerries = false;
 		return moveResult;
 	}
 	useMoveInner(
