@@ -57,7 +57,8 @@ const MAX_RANDOM_RESULTS = 30;
 const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
 	typeeffectiveness: ['inversemod'],
-	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality', 'convergencelegality'],
+	setvalidation: ['convergencelegality'],
+	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
 	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'tiershiftmod'],
 	banlist: [
 		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
@@ -1406,33 +1407,32 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (!move.type) move = new DataMove({
 					name: targetResist, exists: false, type: targetResist,
 				});
-				const immuneOHKO =
-					(move.ohko && (!mod.getImmunity(move.type, dex[mon]) ||
-						(move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'))));
+				const immuneOHKO = (move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'));
+				let negateImmunity = false;
 				if (!move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
 						let baseMod = mod.getEffectiveness(move.type, defenderType);
-
 						const moveMod = move.onEffectiveness?.call(
 							{ dex: mod } as Battle, baseMod, null, defenderType, move as ActiveMove,
 						);
-
-						baseMod = moveMod ? moveMod : baseMod;
+						baseMod = typeof moveMod === 'number' ? moveMod : baseMod;
 
 						for (const rule of rules) {
+							if (!supportedDexsearchRules['typeeffectiveness'].includes(toID(rule.name))) continue;
+							if (!rule.onNegateImmunity) negateImmunity = true;
 							const ruleMod = rule.onEffectiveness?.call(
 								{ dex: mod } as Battle, baseMod, null, defenderType, move as ActiveMove,
 							);
 							baseMod = ruleMod ? ruleMod : baseMod;
 						}
-
 						effectiveness += baseMod;
 					}
 				}
+				const notImmune = (negateImmunity || move.id === 'thousandarrows' || mod.getImmunity(move.type, dex[mon]));
 				if (!alts.resists[targetResist]) {
-					if (!immuneOHKO && effectiveness >= 0) matched = true;
+					if (notImmune && !immuneOHKO && effectiveness >= 0) matched = true;
 				} else {
-					if (immuneOHKO || effectiveness < 0) matched = true;
+					if (!notImmune || immuneOHKO || effectiveness < 0) matched = true;
 				}
 			}
 			if (matched) continue;
@@ -1443,33 +1443,32 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (!move.type) move = new DataMove({
 					name: targetWeak, exists: false, type: targetWeak,
 				});
-				const immuneOHKO =
-					(move.ohko && (!mod.getImmunity(move.type, dex[mon]) ||
-						(move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'))));
+				const immuneOHKO = (move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'));
+				let negateImmunity = false;
 				if (!move.ohko && move.damage === undefined) {
 					for (const defenderType of dex[mon].types) {
 						let baseMod = mod.getEffectiveness(move.type, defenderType);
-
 						const moveMod = move.onEffectiveness?.call(
 							{ dex: mod } as Battle, baseMod, null, defenderType, move as ActiveMove,
 						);
-
-						baseMod = moveMod ? moveMod : baseMod;
+						baseMod = typeof moveMod === 'number' ? moveMod : baseMod;
 
 						for (const rule of rules) {
+							if (!supportedDexsearchRules['typeeffectiveness'].includes(toID(rule.name))) continue;
+							if (!rule.onNegateImmunity) negateImmunity = true;
 							const ruleMod = rule.onEffectiveness?.call(
 								{ dex: mod } as Battle, baseMod, null, defenderType, move as ActiveMove,
 							);
 							baseMod = ruleMod ? ruleMod : baseMod;
 						}
-
 						effectiveness += baseMod;
 					}
 				}
+				const notImmune = (negateImmunity || move.id === 'thousandarrows' || mod.getImmunity(move.type, dex[mon]));
 				if (alts.weak[targetWeak]) {
-					if (!immuneOHKO && effectiveness >= 1) matched = true;
+					if (notImmune && !immuneOHKO && effectiveness >= 1) matched = true;
 				} else {
-					if (immuneOHKO || effectiveness < 1) matched = true;
+					if (!notImmune || immuneOHKO || effectiveness < 1) matched = true;
 				}
 			}
 			if (matched) continue;
@@ -1481,7 +1480,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					let matchRule = false;
 					let numAbilityValidationRules = 0;
 					for (const rule of rules) {
-						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
+						if (!supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
 						else numAbilityValidationRules++;
 						matchRule = !rule.onValidateSet?.call(validator,
 							{ name: dex[mon].name, species: dex[mon].id, ability } as PokemonSet, validator.format, {}, {});
@@ -1553,7 +1552,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					let matchRule = false;
 					let numMoveValidationRules = 0;
 					for (const rule of rules) {
-						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name)) && !supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
 						else numMoveValidationRules++;
 						matchRule = !rule.checkCanLearn?.call(
 							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
