@@ -34,6 +34,8 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
+	/** [Gen 3] Whether or not this ability should be activated right after switch-in. */
+	readonly earlyActivation: boolean;
 	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
 
@@ -43,6 +45,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
+		this.earlyActivation = !!data.earlyActivation;
 		this.flags = data.flags || {};
 		this.rating = data.rating || 0;
 

@@ -1018,11 +1018,17 @@ export class Battle {
 
 	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
+		// Weather related abilities are manually activated during `switchIn` in Gen 3
+		// they should not reactivate during the field event during `runSwitch`
+		if (target instanceof Pokemon && callbackName === 'onSwitchIn' && this.gen === 3 &&
+			effect.effectType === 'Ability' && effect.earlyActivation && this.turn > 0) {
+			return undefined;
+		}
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
 		// during the SwitchIn event instead of running the Start event during switch-ins
 		// gens 4 and before still use the old system, though
 		if (
-			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
+			callback === undefined && target instanceof Pokemon && callbackName === 'onSwitchIn' &&
 			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
 				// Innate abilities/items
 				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
@@ -2817,6 +2823,9 @@ export class Battle {
 			break;
 		}
 
+		// Gen 4 and earlier: clear active move so Mold Breaker doesn't make hazards bypass Clear Body and Levitate
+		if (this.gen <= 4) this.clearActiveMove();
+
 		// phazing (Roar, etc)
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
@@ -2827,7 +2836,7 @@ export class Battle {
 			}
 		}
 
-		this.clearActiveMove();
+		if (this.gen > 4) this.clearActiveMove();
 
 		// fainting
 

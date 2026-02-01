@@ -1,17 +1,13 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	cloudnine: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	cutecharm: {
 		inherit: true,
@@ -25,17 +21,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	drizzle: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	drought: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	effectspore: {
 		inherit: true,
@@ -81,10 +73,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 		flags: {},
 	},
 	hustle: {
@@ -98,6 +88,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	intimidate: {
 		inherit: true,
+		onSwitchInPriority: 2, // before Trace
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
@@ -209,10 +200,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	sandstream: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	shadowtag: {
 		inherit: true,
@@ -222,10 +211,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	snowwarning: {
 		inherit: true,
-		onSwitchIn(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-			pokemon.isStarted = true;
-		},
+		onSwitchInPriority: 3,
+		earlyActivation: true,
 	},
 	static: {
 		inherit: true,
@@ -240,6 +227,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	trace: {
 		inherit: true,
 		onUpdate() {},
+		onSwitchInPriority: 1, // after Intimidate, before items
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;

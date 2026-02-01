@@ -1,7 +1,9 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
-		onSwitchIn() {},
+		onSwitchIn(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -36,7 +38,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cloudnine: {
 		inherit: true,
-		onSwitchIn() {},
+		onSwitchIn(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -525,17 +529,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	trace: {
 		inherit: true,
-		onUpdate(pokemon) {
-			if (!this.effectState.seek) return;
-			const target = pokemon.side.randomFoe();
-			if (!target || target.fainted) return;
-			const ability = target.getAbility();
-			const bannedAbilities = ['forecast', 'multitype', 'trace'];
-			if (bannedAbilities.includes(target.ability)) {
-				return;
-			}
-			pokemon.setAbility(ability, target);
-		},
 		flags: { notrace: 1 },
 	},
 	vitalspirit: {
