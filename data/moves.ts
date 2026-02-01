@@ -14914,10 +14914,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('pursuit', pokemon);
-				const data = side.getSideConditionData('pursuit');
+			for (const target of pokemon.foes()) {
+				target.addVolatile('pursuit');
+				const data = target.volatiles['pursuit'];
 				if (!data.sources) {
 					data.sources = [];
 				}
@@ -14926,9 +14925,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
-		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('pursuit');
 		},
 		condition: {
 			duration: 1,
