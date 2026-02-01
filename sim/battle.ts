@@ -1019,7 +1019,7 @@ export class Battle {
 	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
 		// Weather related abilities are manually activated during `switchIn` in Gen 3
-		// they should not reactivate during the field event during `runSwitch`
+		// they should not reactivate with the field event during `runSwitch`
 		if (target instanceof Pokemon && callbackName === 'onSwitchIn' && this.gen === 3 &&
 			effect.effectType === 'Ability' && effect.earlyActivation && this.turn > 0) {
 			return undefined;
