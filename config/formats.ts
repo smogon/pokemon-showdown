@@ -3122,14 +3122,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		banlist: [
 			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
-			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Tangled Feet', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
-			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
+			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Tangled Feet', 'Berserk Gene', 'Booster Energy', 'King\'s Rock', 'Quick Claw',
+			'Razor Fang', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Carracosta', 'Celebi', 'Cinccino', 'Cobalion', 'Cradily', 'Dedenne', 'Fezandipiti', 'Gabite', 'Granbull', 'Greedent', 'Hatterene', 'Heatmor',
-			'Houndstone', 'Indeedee-M', 'Lilligant-Base', 'Medicham-Base', 'Orbeetle', 'Oricorio-Pom-Pom', 'Overqwil', 'Pincurchin', 'Pinsir-Base', 'Rotom-Wash',
-			'Samurott-Base', 'Scovillain-Base', 'Sharpedo-Base', 'Shedinja', 'Shiftry', 'Steelix-Base', 'Tropius', 'Type: Null', 'Typhlosion-Hisui', 'Tyrantrum',
-			'Veluza', 'Vivillon', 'Whimsicott', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
+			'Articuno-Galar', 'Aurorus', 'Bellossom', 'Bewear', 'Blastoise-Base', 'Dodrio', 'Entei', 'Falinks-Base', 'Flygon', 'Furret', 'Goodra-Hisui',
+			'Gumshoos-Base', 'Heliolisk', 'Hydrapple', 'Indeedee-F', 'Iron Thorns', 'Leavanny', 'Lickilicky', 'Ludicolo', 'Maractus', 'Meganium-Base',
+			'Polteageist', 'Probopass', 'Regieleki', 'Rhyperior', 'Seismitoad', 'Shiinotic', 'Slaking', 'Spidops', 'Spiritomb', 'Unfezant', 'Vanilluxe',
+			'Victreebel-Base', 'Weezing-Galar', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
