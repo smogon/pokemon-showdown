@@ -2823,7 +2823,7 @@ export class Battle {
 			break;
 		}
 
-		// Gen 4 and earlier: clear active move so Mold Breaker doesn't make hazards bypass Clear Body and Levitate
+		// Gen 4 and earlier: clear active move so Mold Breaker doesn't allow hazards to bypass Clear Body and Levitate
 		if (this.gen <= 4) this.clearActiveMove();
 
 		// phazing (Roar, etc)
