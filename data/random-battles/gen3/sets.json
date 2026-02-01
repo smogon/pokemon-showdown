@@ -387,7 +387,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "encore", "firepunch", "icepunch", "psychic", "recover", "substitute", "thunderpunch"],
+                "movepool": ["calmmind", "encore", "firepunch", "hiddenpowerdark", "psychic", "recover", "substitute", "thunderpunch"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Fire"]
             }
@@ -474,7 +474,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "psychic", "rest", "surf"],
+                "movepool": ["calmmind", "psychic", "surf", "thunderwave"],
                 "abilities": ["Own Tempo"]
             },
             {
@@ -544,13 +544,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["explosion", "fireblast", "hiddenpowerground", "rest", "sludgebomb", "toxic"],
+                "movepool": ["explosion", "fireblast", "hiddenpowerground", "sludgebomb", "toxic"],
                 "abilities": ["Sticky Hold"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "hiddenpowerground", "rest", "sludgebomb"],
+                "movepool": ["curse", "explosion", "hiddenpowerground", "sludgebomb"],
                 "abilities": ["Sticky Hold"]
             }
         ]
@@ -1063,7 +1063,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "dragondance", "earthquake", "healbell", "hiddenpowerflying", "rest", "substitute"],
+                "movepool": ["doubleedge", "dragondance", "earthquake", "healbell", "hiddenpowerflying", "substitute"],
                 "abilities": ["Inner Focus"],
                 "preferredTypes": ["Ground"]
             },
@@ -1479,7 +1479,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "psychic", "rest", "surf"],
+                "movepool": ["calmmind", "psychic", "surf", "thunderwave"],
                 "abilities": ["Own Tempo"]
             },
             {
@@ -1564,7 +1564,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["bodyslam", "curse", "earthquake", "rest", "shadowball"],
+                "movepool": ["bodyslam", "curse", "earthquake", "rest", "shadowball", "sleeptalk"],
                 "abilities": ["Serene Grace"]
             },
             {
@@ -2482,11 +2482,6 @@
                 "role": "Bulky Support",
                 "movepool": ["encore", "moonlight", "seismictoss", "thunderwave", "toxic"],
                 "abilities": ["Oblivious"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["batonpass", "encore", "seismictoss", "substitute", "thunderwave", "toxic"],
-                "abilities": ["Oblivious"]
             }
         ]
     },
@@ -2561,7 +2556,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["explosion", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "toxic"],
+                "movepool": ["explosion", "fireblast", "flamethrower", "hiddenpowergrass", "toxic"],
                 "abilities": ["White Smoke"]
             }
         ]
@@ -2571,7 +2566,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "firepunch", "psychic", "substitute", "thunderpunch"],
+                "movepool": ["calmmind", "firepunch", "hiddenpowerdark", "psychic", "substitute"],
                 "abilities": ["Thick Fat"],
                 "preferredTypes": ["Fire"]
             }
@@ -2602,11 +2597,11 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["dragonclaw", "earthquake", "fireblast", "protect", "toxic"],
+                "movepool": ["dragonclaw", "earthquake", "fireblast", "protect", "rockslide", "toxic"],
                 "abilities": ["Levitate"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Staller",
                 "movepool": ["dragonclaw", "earthquake", "fireblast", "rockslide", "substitute", "toxic"],
                 "abilities": ["Levitate"]
             }
@@ -3053,7 +3048,12 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "hiddenpowerbug", "overheat", "rockslide", "substitute", "swordsdance", "thunderwave"],
+                "movepool": ["earthquake", "overheat", "rockslide", "thunderwave"],
+                "abilities": ["Drought"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "substitute", "swordsdance", "thunderwave"],
                 "abilities": ["Drought"],
                 "preferredTypes": ["Rock"]
             }
@@ -3086,9 +3086,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "firepunch", "icepunch", "psychic", "substitute", "thunderbolt"],
-                "abilities": ["Serene Grace"],
-                "preferredTypes": ["Fire"]
+                "movepool": ["calmmind", "firepunch", "icepunch", "psychic", "thunderbolt"],
+                "abilities": ["Serene Grace"]
             }
         ]
     },
@@ -3097,7 +3096,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
+                "movepool": ["extremespeed", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]
             }
@@ -3108,7 +3107,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
+                "movepool": ["extremespeed", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]
             }
