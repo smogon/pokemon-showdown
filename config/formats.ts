@@ -676,6 +676,48 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
+		name: "[Gen 9] Six by Six Random Battle",
+		desc: `A Gen 9 micrometa featuring only 6 Pokemon with 6 forms each.`,
+		mod: 'sixbysix',
+		team: 'random6x6',
+		ruleset: [
+			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
+			'Terastal Clause', 'Data Preview', 'Sprite Viewer',
+		],
+		onBegin() {
+			this.add('-message', `Welcome to Six by Six!`);
+			this.add('-message', `This is a micrometa featuring just 6 Pokemon, each with 6 forms each!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3769141/`);
+		},
+		onSwitchInPriority: 100,
+		onSwitchIn(pokemon) {
+			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
+				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
+				!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] ChatBats",
+		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
+		mod: 'chatbats',
+		team: 'randomChatBats',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+		},
+		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky sets?<br />Then make sure to check out the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/post-10645803" target="_blank">ChatBats Compendium</a> or use /dt!</b></div>`);
+			this.add(`raw|Welcome to ChatBats!`);
+			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
+			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
+			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
+		},
+	},
+	{
 		name: "[Gen 3] Ubers",
 		mod: 'gen3',
 		// searchShow: false,
@@ -3385,58 +3427,31 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Scootopia Random Battle",
-		desc: `A Gen 9 Fakemon micrometa featuring the Super Types mechanic, granting 1 Pokemon per team an additional and powerful new typing.`,
-		mod: 'scootopiav2',
-		team: 'randomSC',
-		ruleset: [
-			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
-			'Terastal Clause', 'Super Type Moves Rule', 'Data Preview', 'Sprite Viewer',
-		],
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1khgnzqe3xldhLw1LbfjyYDcsltZrgyo8by4Y8EDE4vQ/edit#gid=524466747" target="_blank">Scootopia Spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Scootopia!`);
-			this.add('-message', `This is a fakemon micrometa created by Scoopapa, featuring the Super Types mechanic!`);
-			this.add('-message', `Super Types are powerful additional types that a Pokemon can gain by holding a specific Super Type Orb!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3742131/`);
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
-		},
-	},
-	{
-		name: "[Gen 9] Scootopia", // Roomtours
-		desc: `A Gen 9 Fakemon micrometa featuring the Super Types mechanic, granting 1 Pokemon per team an additional and powerful new typing.`,
-		mod: 'scootopiav2',
+		name: "[Gen 9] Six by Six", // Roomtours
+		desc: `A Gen 9 micrometa featuring only 6 Pokemon with 6 forms each.`,
+		mod: 'sixbysix',
 		searchShow: false,
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', 'Super Type Moves Rule', 'Data Preview', 'Sprite Viewer'],
+		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Terastal Clause', 'Data Preview', 'Sprite Viewer'],
 		banlist: [
-			'All Pokemon', 'Crystal Heart', 'Wild Heart',
+			'All Pokemon', 'Last Respects', 'Shed Tail',
 			'King\'s Rock', 'Razor Fang', 'Baton Pass',
 		],
 		unbanlist: [
-			'Arbrella', 'Krachiten', 'Scalaron', 'Rantler', 'Woolora', 'Albatrygon', 'Orchile',
-			'Embuck', 'Cindoe', 'Cobracotta', 'Minillow', 'Crossont', 'Torgeist', 'Platypad', 'Lumoth',
-			'Aurorowl', 'Carapex', 'Dojodo', 'Nunopod', 'Zeploom', 'Brawnkey', 'Salamalix', 'Cinnastar',
-			'MuabBoa', 'Sturgard', 'Harzodia', 'Cyllindrake', 'Kodokai', 'Electangle', 'Dolphena', 'Soleron',
-			'Soleron-Awakened', 'Jaegorm', 'Jaegorm-Collective', 'Elemadillo', 'Axolacred', 'Roscenti',
-			'Blunderbusk', 'Barracoth', 'Jamborai', 'Dracoil', 'Celespirit', 'Noxtrice', 'Avastar',
-			'Faerenheit', 'Cellsius', 'Kelven', 'Salaos', 'Morndos', 'Pythos', 'Corundell', 'Quadringo',
-			'Saphor', 'Fenreil', 'Efflor', 'Flocura', 'Flocura-Nexus',
+			'Kingdra-Classic', 'Kingdra-Brinepool', 'Kingdra-Druid', 'Kingdra-Bard', 'Kingdra-Gourmet', 'Kingdra-Ancient',
+			'Nidoqueen-Classic', 'Nidoqueen-Erudite', 'Nidoqueen-Volcanic',
+			'Nidoqueen-Rosegold', 'Nidoqueen-Shaman', 'Nidoqueen-Jasper',
+			'Bisharp-Centurion', 'Bisharp-Savage', 'Bisharp-Ronin', 'Bisharp-Mantis', 'Bisharp-Revenant', 'Bisharp-Assassin',
+			'Corviknight-Thunderbird', 'Corviknight-Genie', 'Corviknight-Yeti',
+			'Corviknight-Analytical', 'Corviknight-Martian', 'Corviknight-Falcon',
+			'Krookodile-Infernal', 'Krookodile-Abyssal', 'Krookodile-Wetlander',
+			'Krookodile-Cave Dweller', 'Krookodile-Cliffside', 'Krookodile-Quantum',
+			'Ogerpon-Muerta', 'Ogerpon-Easter', 'Ogerpon-Ankh', 'Ogerpon-Eid', 'Ogerpon-Vessel', 'Ogerpon-Kitsune',
 		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1khgnzqe3xldhLw1LbfjyYDcsltZrgyo8by4Y8EDE4vQ/edit#gid=524466747" target="_blank">Scootopia Spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Scootopia!`);
-			this.add('-message', `This is a fakemon micrometa created by Scoopapa, featuring the Super Types mechanic!`);
-			this.add('-message', `Super Types are powerful additional types that a Pokemon can gain by holding a specific Super Type Orb!`);
+			this.add('-message', `Welcome to Six by Six!`);
+			this.add('-message', `This is a micrometa featuring just 6 Pokemon, each with 6 forms each!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3742131/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3769141/`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
@@ -3445,24 +3460,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				!pokemon.terastallized) {
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
-		},
-	},
-	{
-		name: "[Gen 9] ChatBats",
-		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
-		mod: 'chatbats',
-		team: 'randomChatBats',
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-		},
-		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky sets?<br />Then make sure to check out the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/post-10645803" target="_blank">ChatBats Compendium</a> or use /dt!</b></div>`);
-			this.add(`raw|Welcome to ChatBats!`);
-			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
-			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
-			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
 		},
 	},
 	{

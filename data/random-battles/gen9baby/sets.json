@@ -1101,7 +1101,7 @@
         "level": 5,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Dual Wingbeat", "Earthquake", "Knock Off", "Swords Dance"],
                 "abilities": ["Immunity"],
                 "teraTypes": ["Steel", "Water"]
@@ -1970,7 +1970,7 @@
         "level": 6,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Iron Head", "Night Slash", "Sucker Punch", "Swords Dance"],
                 "abilities": ["Defiant"],
                 "teraTypes": ["Dark", "Fairy", "Steel"]
@@ -2599,7 +2599,7 @@
         ]
     },
     "skiddo": {
-        "level": 7,
+        "level": 6,
         "sets": [
             {
                 "role": "Bulky Setup",

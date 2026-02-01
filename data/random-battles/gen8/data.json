@@ -418,7 +418,7 @@
     },
     "articunogalar": {
         "level": 81,
-        "moves": ["airslash", "calmmind", "freezingglare", "recover"],
+        "moves": ["calmmind", "freezingglare", "hurricane", "recover"],
         "doublesLevel": 81,
         "doublesMoves": ["calmmind", "freezingglare", "hurricane", "recover", "tailwind"],
         "noDynamaxMoves": ["calmmind", "freezingglare", "hurricane", "recover"]
@@ -458,7 +458,7 @@
     },
     "mewtwo": {
         "level": 71,
-        "moves": ["fireblast", "nastyplot", "psystrike", "recover", "shadowball"],
+        "moves": ["aurasphere", "fireblast", "nastyplot", "psystrike", "recover"],
         "doublesLevel": 74,
         "doublesMoves": ["aurasphere", "icebeam", "nastyplot", "psystrike", "recover"]
     },
@@ -1820,7 +1820,7 @@
     },
     "sylveon": {
         "level": 83,
-        "moves": ["calmmind", "hypervoice", "mysticalfire", "protect", "psyshock", "shadowball", "wish"],
+        "moves": ["calmmind", "hypervoice", "mysticalfire", "protect", "psyshock", "wish"],
         "doublesLevel": 80,
         "doublesMoves": ["calmmind", "hypervoice", "mysticalfire", "protect", "psyshock"]
     },
@@ -2149,7 +2149,7 @@
     },
     "silvallyice": {
         "level": 83,
-        "moves": ["flamecharge", "multiattack", "psychicfangs", "swordsdance"],
+        "moves": ["flamecharge", "multiattack", "rockslide", "swordsdance"],
         "doublesLevel": 88,
         "doublesMoves": ["flamethrower", "multiattack", "partingshot", "tailwind", "thunderbolt"]
     },
@@ -2161,7 +2161,7 @@
     },
     "silvallypsychic": {
         "level": 83,
-        "moves": ["crunch", "multiattack", "swordsdance", "uturn"],
+        "moves": ["flamecharge", "multiattack", "swordsdance", "xscissor"],
         "doublesLevel": 88,
         "doublesMoves": ["flamethrower", "multiattack", "partingshot", "tailwind", "xscissor"]
     },
