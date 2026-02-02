@@ -202,8 +202,10 @@ export class BattleQueue {
 				}
 			}
 		}
-		if (this.battle.gen <= 4 && this.battle.turn > 0 && ['switch', 'instaswitch'].includes(action.choice) &&
-			!this.battle.ruleTable.has('switchpriorityclausemod')) {
+		if (this.battle.turn > 0 && !this.battle.ruleTable.has('switchpriorityclausemod') && (
+			(this.battle.gen <= 4 && action.choice === 'instaswitch') ||
+			(this.battle.gen <= 3 && action.choice === 'switch')
+		)) {
 			// Port switch priority goes: p1 pos1, p2 pos1, p1 pos2, p2 pos2
 			// TODO: in Gen 1, each trainer sees his own Pokemon switch first
 			const pokemon = (action as SwitchAction).pokemon;
