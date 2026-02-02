@@ -2494,11 +2494,21 @@ export class Battle {
 
 	checkFainted(pokemon?: Pokemon | Pokemon[]) {
 		if (!pokemon) pokemon = this.getAllActive(true);
-		if (!Array.isArray(pokemon)) pokemon = [pokemon];
+		else if (!Array.isArray(pokemon)) pokemon = [pokemon];
+		else pokemon = pokemon.slice();
+
+		// In Gen 4, you can only switch one Pokémon at a time
+		const faintedCounter = Array(this.sides.length).fill(0);
+		if (this.gen === 4 && this.ruleTable.has('switchpriorityclausemod')) {
+			this.speedSort(pokemon);
+		}
+
 		for (const poke of pokemon) {
+			if (this.gen === 4 && faintedCounter[poke.side.n] >= 1) continue;
 			if (poke.fainted) {
 				poke.status = 'fnt' as ID;
 				poke.switchFlag = true;
+				faintedCounter[poke.side.n]++;
 			}
 		}
 	}
@@ -2848,10 +2858,10 @@ export class Battle {
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
 		if (this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) {
-			// in gen 3, switching in fainted pokemon is done after every switch
+			// in gen 3, switching in after a Pokemon faints is done after every switch
 			this.checkFainted(action.target);
 		} else if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
-			// in gen 3 or earlier, switching in fainted pokemon is done after
+			// in gen 3 or earlier, switching in after a Pokemon faints is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {

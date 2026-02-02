@@ -206,11 +206,10 @@ export class BattleActions {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
 			poke.draggedIn = null;
-		}
-		if (this.battle.gen === 4) {
-			const foes = switchersIn.flatMap(p => p.foes());
-			for (const foeActive of foes) {
-				foeActive.removeVolatile('substitutebroken');
+			if (this.battle.gen === 4) {
+				for (const foeActive of poke.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
 			}
 		}
 		return true;

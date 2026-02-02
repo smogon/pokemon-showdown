@@ -189,24 +189,54 @@ describe('Switching in', () => {
 		assert.equal(battle.field.weather, 'desolateland', 'Groudon should have reverted after Kyogre in spite of Sticky Web because it was slower before the SwitchIn event started');
 	});
 
+	describe('[Gen 4]', () => {
+		it (`should not choose more than one switch at a time`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", level: 100, moves: ['spikes'] },
+				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
+				{ species: "snorlax", moves: ['sleeptalk'] },
+				{ species: "weavile", moves: ['sleeptalk'] },
+			], [
+				{ species: "alakazam", level: 99, moves: ['sleeptalk'] },
+				{ species: "alakazam", level: 97, moves: ['explosion'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "gardevoir", moves: ['sleeptalk'] },
+				{ species: "azumarill", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 3', 'switch 3');
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 4', 'switch 4');
+			assert.equal(battle.p1.requestState, '');
+			assert(battle.p1.activeRequest.wait);
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('', 'switch 5');
+		});
+	});
+
 	describe('[Gen 3]', () => {
 		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
 			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 99, moves: ['spikes'] },
-				{ species: "alakazam", level: 97, moves: ['sleeptalk'] },
+				{ species: "alakazam", level: 97, moves: ['explosion'] },
 				{ species: "shedinja", moves: ['sleeptalk'] },
 				{ species: "shedinja", moves: ['sleeptalk'] },
 				{ species: "castform", ability: 'forecast', moves: ['sleeptalk'] },
 				{ species: "groudon", ability: 'drought', moves: ['sleeptalk'] },
 			], [
-				{ species: "alakazam", level: 100, moves: ['spikes', 'explosion'] },
+				{ species: "alakazam", level: 100, moves: ['spikes'] },
 				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
 				{ species: "kyogre", ability: 'drizzle', moves: ['sleeptalk'] },
 				{ species: "shedinja", moves: ['sleeptalk'] },
 				{ species: "gyarados", ability: 'intimidate', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
-			battle.makeChoices('auto', 'move explosion, move sleeptalk');
 			assert.equal(battle.p1.requestState, 'switch');
 			assert.equal(battle.p2.requestState, 'switch');
 
