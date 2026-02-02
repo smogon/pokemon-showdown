@@ -531,6 +531,8 @@ export class Battle {
 					expectedStateLocation = handler.state.target.itemState;
 				} else if (effect.effectType === 'Status') {
 					expectedStateLocation = handler.state.target.statusState;
+				} else if (effect.effectType === 'Pokemon') {
+					expectedStateLocation = handler.state.target.speciesState;
 				} else {
 					expectedStateLocation = handler.state.target.volatiles[effect.id];
 				}
