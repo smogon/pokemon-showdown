@@ -573,6 +573,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pursuit: {
 		inherit: true,
+		beforeTurnCallback(pokemon, target) {
+			if (pokemon.isAlly(target)) return;
+			target.addVolatile('pursuit');
+			const data = target.volatiles['pursuit'];
+			if (!data.sources) {
+				data.sources = [];
+			}
+			data.sources.push(pokemon);
+		},
 		onModifyMove() {},
 		condition: {
 			duration: 1,
