@@ -190,7 +190,7 @@ describe('Switching in', () => {
 	});
 
 	describe('[Gen 4]', () => {
-		it (`should not choose more than one switch at a time`, () => {
+		it(`should not choose more than one switch at a time`, () => {
 			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 100, moves: ['spikes'] },
 				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
