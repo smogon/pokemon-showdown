@@ -526,14 +526,8 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.megaEvolves?.includes(species.name)) {
-				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				if (Array.isArray(item.megaEvolves)) {
-					const idx = item.megaEvolves.indexOf(species.name);
-					tierSpecies = dex.species.get(item.megaStone[idx]);
-				} else {
-					tierSpecies = dex.species.get(item.megaStone as string);
-				}
+			if (item.megaStone?.[species.name]) {
+				tierSpecies = dex.species.get(item.megaStone[species.name]);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
@@ -2098,6 +2092,25 @@ export class TeamValidator {
 		if (eventData.level && (set.level || 0) < eventData.level) {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
+		}
+		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs) {
+			let statName: StatID;
+			for (statName in set.evs) {
+				const ev = set.evs[statName];
+				if (ev > 100) {
+					problems.push(
+						`${name} can't have more than 100 EVs in any stat, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which are capped at 100 EVs.`,
+					);
+				}
+				if (!(
+					ev % 10 === 0 ||
+					(ev % 10 === 8 && ev % 4 === 0)
+				)) {
+					problems.push(
+						`${name} can only have EVs that are multiples of 10, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which boost in multiples of 10.`,
+					);
+				}
+			}
 		}
 		if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
 			if (fastReturn) return true;

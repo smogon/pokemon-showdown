@@ -1790,7 +1790,7 @@ export class Battle {
 		if (this.turn <= 100) return;
 
 		// the turn limit is not a part of Endless Battle Clause
-		if (this.turn >= 1000) {
+		if (this.turn > 1000) {
 			this.add('message', `It is turn 1000. You have hit the turn limit!`);
 			this.tie();
 			return true;
@@ -3144,9 +3144,9 @@ export class Battle {
 		this.log[this.lastMoveLine] = parts.join('|');
 	}
 
-	debug(activity: string) {
+	debug(...activity: Part[]) {
 		if (this.debugMode) {
-			this.add('debug', activity);
+			this.add('debug', ...activity);
 		}
 	}
 
