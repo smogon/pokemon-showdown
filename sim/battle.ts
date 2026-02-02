@@ -1129,7 +1129,7 @@ export class Battle {
 				effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
 			}, callbackName));
 		}
-		const species = pokemon.baseSpecies;
+		const species = this.gen >= 5 ? pokemon.baseSpecies : pokemon.species;
 		callback = this.getCallback(pokemon, species, callbackName);
 		if (callback !== undefined) {
 			handlers.push(this.resolvePriority({

@@ -139,25 +139,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	flowergift: {
 		inherit: true,
-		onWeatherChange(pokemon) {
-			if (!pokemon.isActive || !pokemon.hp || pokemon.species.baseSpecies !== 'Cherrim') return;
-			if (pokemon.effectiveWeather() !== 'sunnyday') {
-				if (pokemon.species.id !== 'cherrimsunshine') {
-					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
-				}
-			} else {
-				if (pokemon.species.id === 'cherrimsunshine') {
-					pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
-				}
-			}
-		},
+		onStart() {},
+		onWeatherChange() {},
 		onEnd() {},
-		onAllyModifyAtk(atk) {
+		onAllyModifyAtk() {
 			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
 		},
-		onAllyModifySpD(spd) {
+		onAllyModifySpD() {
 			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
