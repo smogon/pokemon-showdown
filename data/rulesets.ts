@@ -2689,34 +2689,59 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: "Convergence Legality",
 		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
 		onValidateSet(set, format) {
+			if (!(this.format as any).legalAbilitiesCache) (this.format as any).legalAbilitiesCache = new Map<string, ID[]>;
+
 			const curSpecies = this.dex.species.get(set.species);
-			const obtainableAbilityPool = new Set<string>();
-			const matchingSpecies = this.dex.species.all()
-				.filter(species => (
-					(!species.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(species.isNonstandard)}`)) &&
-					species.types.every(type => curSpecies.types.includes(type)) &&
-					species.types.length === curSpecies.types.length && !this.ruleTable.isBannedSpecies(species)
-				));
-			for (const species of matchingSpecies) {
-				for (const abilityName of Object.values(species.abilities)) {
-					const abilityid = this.toID(abilityName);
-					obtainableAbilityPool.add(abilityid);
+			const types = [...curSpecies.types].sort().join();
+
+			if (!(this.format as any).legalAbilitiesCache.has(types)) {
+				// Type not memoized
+				const obtainableAbilityPool = new Set<string>();
+				const matchingSpecies = this.dex.species.all()
+					.filter(species => (
+						(!species.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(species.isNonstandard)}`)) &&
+						species.types.every(type => curSpecies.types.includes(type)) &&
+						species.types.length === curSpecies.types.length && !this.ruleTable.isBannedSpecies(species)
+					));
+				for (const species of matchingSpecies) {
+					for (const abilityName of Object.values(species.abilities)) {
+						const abilityid = this.toID(abilityName);
+						obtainableAbilityPool.add(abilityid);
+					}
 				}
+
+				// Memoize potential abilities
+				(this.format as any).legalAbilitiesCache.set(types, obtainableAbilityPool);
 			}
-			if (!obtainableAbilityPool.has(this.toID(set.ability))) {
+
+			if (!(this.format as any).legalAbilitiesCache.get(types).has(this.toID(set.ability))) {
 				return [`${curSpecies.name} doesn't have access to ${this.dex.abilities.get(set.ability).name}.`];
 			}
 		},
 		checkCanLearn(move, species, setSources, set) {
-			const matchingSpecies = this.dex.species.all()
-				.filter(s => (
-					(!s.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(s.isNonstandard)}`)) &&
-					s.types.every(type => species.types.includes(type)) &&
-					s.types.length === species.types.length && !this.ruleTable.isBannedSpecies(s)
-				));
-			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
-			if (someCanLearn) return null;
-			return this.checkCanLearn(move, species, setSources, set);
+			if (!(this.format as any).legalMovesCache) (this.format as any).legalMovesCache = new Map<string, ID[]>;
+
+			const curSpecies = this.dex.species.get(set.species);
+			const types = [...curSpecies.types].sort().join();
+
+			if (!(this.format as any).legalMovesCache.has(types)) {
+				const mod = Dex.mod(this.format.mod || 'base');
+				const matchingSpecies = this.dex.species.all()
+					.filter(s => (
+						(!s.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(s.isNonstandard)}`)) &&
+						s.types.every(type => species.types.includes(type)) &&
+						s.types.length === species.types.length && !this.ruleTable.isBannedSpecies(s)
+					));
+
+				// Memoize movepool
+				(this.format as any).legalMovesCache.set(types, new Set(...matchingSpecies.map(s => mod.species.getMovePool(s.id))));
+			}
+
+			if (!(this.format as any).legalMovesCache.get(types).has(this.toID(move))) {
+				return `${curSpecies.name} doesn't have access to ${this.dex.moves.get(move).name}.`;
+			}
+
+			return null;
 		},
 	},
 	hackmonsformelegality: {
