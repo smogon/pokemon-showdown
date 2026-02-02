@@ -173,7 +173,7 @@ describe('Switching out', () => {
 	});
 
 	describe(`Switch Priority Clause Mod`, () => {
-		it('should default to switch priority order', () => {
+		it('should default to speed switch priority', () => {
 			battle = common.createBattle({ formatid: 'gen3doublesou' }, [[
 				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 0 } },
 				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 4 } },
