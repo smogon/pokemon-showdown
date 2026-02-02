@@ -1431,6 +1431,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
 		desc: "Makes a faster Pokémon switch first when double-switching, unlike in link battles, where player 1's Pokémon would switch first",
+		// Implemented in battle-queue.ts
+		// This mod is automatically added to all Gens 1-3 formats by default (can be disabled with '!Switch Priority Clause Mod')
 		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},

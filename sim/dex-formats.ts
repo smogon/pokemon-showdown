@@ -740,6 +740,10 @@ export class DexFormats {
 		const ruleTable = new RuleTable();
 
 		const ruleset = format.ruleset.slice();
+		// Add Switch Priority Clause Mod by default
+		if (this.dex.gen <= 3 && format.effectType === 'Format') {
+			ruleset.unshift('Switch Priority Clause Mod');
+		}
 		for (const ban of format.banlist) {
 			ruleset.push('-' + ban);
 		}

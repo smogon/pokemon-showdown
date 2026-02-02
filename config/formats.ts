@@ -4191,7 +4191,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard', '!Switch Priority Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Explosion', 'Self-Destruct', 'Swagger'],
 		unbanlist: ['Wobbuffet', 'Wynaut'],
 	},
@@ -5241,7 +5241,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3rs',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard', '!Switch Priority Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Swagger'],
 	},
 	{
