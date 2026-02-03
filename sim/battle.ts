@@ -2495,9 +2495,13 @@ export class Battle {
 	}
 
 	checkFainted(pokemon?: Pokemon | Pokemon[]) {
-		if (!pokemon) pokemon = this.getAllActive(true);
-		else if (!Array.isArray(pokemon)) pokemon = [pokemon];
-		else pokemon = pokemon.slice();
+		if (!pokemon) {
+			pokemon = this.getAllActive(true);
+		} else if (Array.isArray(pokemon)) {
+			pokemon = pokemon.slice();
+		} else {
+			pokemon = [pokemon];
+		}
 
 		// In Gen 4, you can only switch one Pokémon at a time
 		const faintedCounter = Array(this.sides.length).fill(0);
