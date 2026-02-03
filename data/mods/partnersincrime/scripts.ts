@@ -30,7 +30,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						// @ts-expect-error dynamic lookup
 						let callback = volatile[callbackName];
 						// @ts-expect-error dynamic lookup
-						if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
+						if (this.gen >= 5 && !volatile.onSwitchIn) {
 							callback = volatile.onStart;
 						}
 						if (callback !== undefined) {

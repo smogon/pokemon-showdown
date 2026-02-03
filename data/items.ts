@@ -7684,6 +7684,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (ready) (this.effectState.target as Pokemon).useItem();
 			delete this.effectState.boosts;
 		},
+		onSwitchIn() {},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);

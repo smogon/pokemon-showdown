@@ -690,6 +690,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onStart() {
 			this.add(`c:|${getName('Clem')}|Je suis peut-être con comme une table`);
 		},
+		onSwitchIn() {},
 		onSwitchOut(pokemon) {
 			if (pokemon.volatiles['flipped']) {
 				pokemon.removeVolatile('flipped');
@@ -1194,6 +1195,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add('-start', target, 'typechange', target.getTypes(true, true).join('/'), '[silent]');
 			}
 		},
+		onSwitchIn() {},
 		onSwitchOut() {
 			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I'm gone!`); // TODO replace
 		},
@@ -1756,6 +1758,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 			if (message) this.add(`c:|${getName('PartMan')}|${message}`);
 		},
+		onSwitchIn() {},
 		onSwitchOut() {
 			this.add(`c:|${getName('PartMan')}|Deez nuts`);
 		},
