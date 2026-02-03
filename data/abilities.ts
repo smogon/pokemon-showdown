@@ -1290,6 +1290,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
+			if (pokemon.beingCalledBack) return;
 			pokemon.removeVolatile('flashfire');
 		},
 		condition: {
@@ -4682,6 +4683,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
+			if (pokemon.beingCalledBack) return;
 			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
 		},
 		onBasePowerPriority: 21,
