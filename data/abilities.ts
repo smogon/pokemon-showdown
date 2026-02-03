@@ -2028,6 +2028,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onSwitchOut() {},
 		onFaint(pokemon) {
 			pokemon.illusion = null;
 		},
@@ -4256,9 +4257,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.beingCalledBack) return;
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
+		onSwitchOut() {},
 		flags: {},
 		name: "Slow Start",
 		rating: -1,

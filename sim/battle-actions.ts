@@ -100,8 +100,6 @@ export class BattleActions {
 
 			// will definitely switch out at this point
 
-			oldActive.illusion = null;
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
 
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move

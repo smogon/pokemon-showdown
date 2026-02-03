@@ -1018,17 +1018,27 @@ export class Battle {
 
 	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
+		const hasOtherHandlers = () => ['onAlly', 'onFoe', 'onAny', 'onSource'].some(prefix => {
+			return (effect as any)[`${prefix}${callbackName.slice(2)}`] !== undefined;
+		});
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
 		// during the SwitchIn event instead of running the Start event during switch-ins
 		// gens 4 and before still use the old system, though
 		if (
 			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
-			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
+			(['Ability', 'Item'].includes(effect.effectType) || (
 				// Innate abilities/items
 				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
-			))
+			)) && !hasOtherHandlers()
 		) {
 			callback = (effect as any).onStart;
+		}
+		if (
+			callback === undefined && target instanceof Pokemon && callbackName === 'onSwitchOut' &&
+			(effect.effectType === 'Ability' || (effect.effectType === 'Status' && effect.id.startsWith('ability:'))) &&
+			!hasOtherHandlers()
+		) {
+			callback = (effect as any).onEnd;
 		}
 		return callback;
 	}
