@@ -154,12 +154,9 @@ export class BattleActions {
 		if (this.battle.gen <= 4) {
 			this.battle.runEvent('EntryHazard', pokemon);
 			if (this.battle.gen === 3 && this.battle.turn > 0) {
-				// In gen 3, Weather-related abilities activate before other Pokemon switch in
-				const ability = pokemon.getAbility();
-				if (ability.earlyActivation) {
-					const callbackName = 'onSwitchIn' in ability ? 'SwitchIn' : 'Start';
-					this.battle.singleEvent(callbackName, ability, pokemon.abilityState, pokemon);
-				}
+				// Gen 3 Weather-related abilities and Gen 4 Healing Wish and Lunar Dance
+				// activate before other Pokemon switch in
+				this.battle.runEvent('AfterEntryHazard', pokemon);
 			}
 			if (this.battle.gen <= 2) {
 				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.

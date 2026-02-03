@@ -2,12 +2,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	airlock: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	cloudnine: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	cutecharm: {
 		inherit: true,
@@ -22,12 +28,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	drizzle: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	drought: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	effectspore: {
 		inherit: true,
@@ -74,7 +86,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	forecast: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 		flags: {},
 	},
 	hustle: {
@@ -201,7 +216,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sandstream: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	shadowtag: {
 		inherit: true,
@@ -212,7 +230,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	snowwarning: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		earlyActivation: true,
+		onAfterEntryHazard(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onSwitchIn() {},
 	},
 	static: {
 		inherit: true,
