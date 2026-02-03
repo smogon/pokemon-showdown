@@ -1,6 +1,7 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
+		onSwitchInPriority: 13,
 		onSwitchIn(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -42,6 +43,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cloudnine: {
 		inherit: true,
+		onSwitchInPriority: 13,
 		onSwitchIn(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
