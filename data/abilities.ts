@@ -2017,7 +2017,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.illusion) {
+			if (pokemon.illusion && !pokemon.beingCalledBack) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.getUpdatedDetails();
