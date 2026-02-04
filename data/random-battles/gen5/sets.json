@@ -3065,9 +3065,14 @@
                 "abilities": ["Levitate"]
             },
             {
-                "role": "Wallbreaker",
-                "movepool": ["hiddenpowerfighting", "nastyplot", "shadowball", "thunderbolt", "trick"],
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerfighting", "nastyplot", "shadowball", "substitute", "thunderbolt"],
                 "abilities": ["Levitate"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["hiddenpowerfighting", "shadowball", "thunderbolt", "trick"],
+                "abilities": ["Levitate"] 
             }
         ]
     },
@@ -3274,7 +3279,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["flashcannon", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerice", "thunderbolt", "voltswitch"],
-                "abilities": ["Magnet Pull"]
+                "abilities": ["Analytic", "Magnet Pull"]
             },
             {
                 "role": "Staller",
@@ -4574,7 +4579,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["bugbuzz", "energyball", "thunder", "voltswitch"],
+                "movepool": ["bugbuzz", "gigadrain", "thunder", "voltswitch"],
                 "abilities": ["Compound Eyes"]
             }
         ]

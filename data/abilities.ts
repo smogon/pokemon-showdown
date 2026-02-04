@@ -2017,7 +2017,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.illusion) {
+			if (pokemon.illusion && !pokemon.beingCalledBack) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.getUpdatedDetails();
@@ -4254,6 +4254,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.counter) {
 				return this.chainModify(0.5);
 			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.beingCalledBack) return;
+			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		flags: {},
 		name: "Slow Start",

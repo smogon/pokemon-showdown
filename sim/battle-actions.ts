@@ -100,7 +100,6 @@ export class BattleActions {
 
 			// will definitely switch out at this point
 
-			oldActive.illusion = null;
 			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
 

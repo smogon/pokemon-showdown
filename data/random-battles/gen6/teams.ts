@@ -97,7 +97,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Normal: movePool => movePool.includes('boomburst'),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
+				!counter.get('Psychic') && (types.has('Fighting') || types.has('Fairy') || movePool.includes('calmmind'))
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
 			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
@@ -250,6 +250,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
+			// Bastiodon
+			[['roar', 'protect'], ['metalburst', 'protect']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -732,12 +734,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)
 		) return 'Rocky Helmet';
 		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (
-			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate'
-		) {
-			return 'Air Balloon';
-		}
 		if (
 			(role === 'Fast Support' || moves.has('stickyweb')) && isLead && defensiveStatTotal < 255 &&
 			!counter.get('recovery') && (counter.get('hazards') || counter.get('setup')) &&

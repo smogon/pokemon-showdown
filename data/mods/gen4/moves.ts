@@ -1332,6 +1332,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pursuit: {
 		inherit: true,
+		beforeTurnCallback(pokemon) {
+			if (['frz', 'slp'].includes(pokemon.status) ||
+				(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
+			for (const target of pokemon.foes()) {
+				target.addVolatile('pursuit');
+				const data = target.volatiles['pursuit'];
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
+			}
+		},
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
@@ -1354,7 +1366,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+					const move = this.dex.getActiveMove('pursuit');
+					source.moveUsed(move, pokemon.position);
+					if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
+						source.addVolatile('choicelock');
+					}
 				}
 			},
 		},
