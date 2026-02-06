@@ -574,7 +574,8 @@
     },
     "mrmime": {
         "level": 75,
-        "moves": ["psychic", "seismictoss", "thunderbolt", "thunderwave"]
+        "moves": ["psychic", "thunderbolt", "thunderwave"],
+        "exclusiveMoves": ["counter", "seismictoss", "seismictoss"]
     },
     "scyther": {
         "level": 75,
@@ -608,7 +609,8 @@
     },
     "gyarados": {
         "level": 74,
-        "moves": ["blizzard", "bodyslam", "bodyslam", "hyperbeam", "thunderbolt"],
+        "moves": ["blizzard", "hyperbeam", "thunderbolt"],
+        "essentialMoves": ["bodyslam"],
         "exclusiveMoves": ["hydropump", "surf", "surf"]
     },
     "lapras": {
@@ -658,8 +660,7 @@
     },
     "kabuto": {
         "level": 88,
-        "moves": ["blizzard", "bodyslam", "slash"],
-        "exclusiveMoves": ["hydropump", "surf", "surf"]
+        "moves": ["blizzard", "bodyslam", "slash", "surf"]
     },
     "kabutops": {
         "level": 75,
@@ -704,8 +705,8 @@
     },
     "dragonite": {
         "level": 74,
-        "moves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave", "thunderwave"],
-        "essentialMoves": ["blizzard"]
+        "moves": ["bodyslam", "hyperbeam", "thunderbolt"],
+        "essentialMoves": ["blizzard", "thunderwave"]
     },
     "mewtwo": {
         "level": 60,

@@ -127,7 +127,9 @@ function setupGlobals() {
 	global.TeamValidatorAsync = TeamValidatorAsync;
 
 	global.Sockets = Sockets;
-	Sockets.start(Config.subprocessescache);
+	if (!Config.lazysockets) {
+		Sockets.start(Config.subprocessescache);
+	}
 }
 
 export const readyPromise = cleanupStale().then(() => {

@@ -259,8 +259,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 	sendBidInfo() {
 		let buf = `<div class="infobox">`;
 		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
-		if (this.type === 'auction') buf += `Top bid: <b>${this.highestBid}</b> `;
-		if (this.type === 'auction') buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
+		if (this.type === 'auction') {
+			buf += `Top bid: <b>${this.highestBid}</b> `;
+			buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b> `;
+			buf += `Managers: ${this.highestBidder.getManagers().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}<br/>`;
+		}
 		buf += Utils.html`Tiers Played: <b>${this.nominatedPlayer.tiersPlayed.length ? `${this.nominatedPlayer.tiersPlayed.join(', ')}` : 'N/A'}</b><br/>`;
 		buf += Utils.html`Tiers Not Played: <b>${this.nominatedPlayer.tiersNotPlayed.length ? `${this.nominatedPlayer.tiersNotPlayed.join(', ')}` : 'N/A'}</b>`;
 		buf += `</div>`;
