@@ -1087,9 +1087,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1 },
 		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
+				move.flags['metronome'] && !pokemon.moves.includes(move.id) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				move.flags['metronome'] &&
 				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
 				!(pokemon.volatiles['healblock'] && move.flags['heal'])
 			));
