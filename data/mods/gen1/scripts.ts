@@ -185,7 +185,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Two-turn moves like Sky Attack deduct PP on their second turn.
 			if (!lockedMove || pokemon.volatiles['twoturnmove']) {
 				const ppMove = pokemon.volatiles['twoturnmove']?.ppMove || move.id;
-				console.log(`Deducting PP for ${ppMove} (locked move: ${!!lockedMove}, two-turn move: ${!!pokemon.volatiles['twoturnmove']})`);
 				pokemon.deductPP(ppMove, null, target);
 				const moveSlot = pokemon.getMoveData(ppMove);
 				if (moveSlot && moveSlot.pp < 0) {
