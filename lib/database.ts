@@ -6,13 +6,30 @@
  * @author Zarel
  */
 
-import * as mysql from 'mysql2';
-import * as pg from 'pg';
+import type * as mysql from 'mysql2';
+import type * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
 export type SQLRow = { [k: string]: BasicSQLValue };
 export type SQLValue =
 	BasicSQLValue | SQLStatement | SQLStatement[] | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
+
+let mysqlRuntime: typeof import('mysql2');
+let pgRuntime: typeof import('pg');
+
+// Lazy-load mysql2
+try {
+	mysqlRuntime = require('mysql2');
+} catch {
+	// Only throw if someone tries to use MySQL
+}
+
+// Lazy-load pg
+try {
+	pgRuntime = require('pg');
+} catch {
+	// Only throw if someone tries to use Postgres
+}
 
 export function isSQL(value: any): value is SQLStatement {
 	/**
@@ -333,12 +350,13 @@ export class DatabaseTable<Row, DB extends Database> {
 export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 	override type = 'mysql' as const;
 	constructor(config: mysql.PoolOptions & { prefix?: string }) {
+		if (!mysqlRuntime) throw new Error(`Install the 'mysql2' module to use a MySQL database`);
 		const prefix = config.prefix || "";
 		if (config.prefix) {
 			config = { ...config };
 			delete config.prefix;
 		}
-		super(mysql.createPool(config), prefix);
+		super(mysqlRuntime.createPool(config), prefix);
 	}
 	override _resolveSQL(query: SQLStatement): [query: string, values: BasicSQLValue[]] {
 		let sql = query.sql[0];
@@ -375,14 +393,16 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		return this._query(sql, values);
 	}
 	override escapeId(id: string) {
-		return mysql.escapeId(id);
+		if (!mysqlRuntime) throw new Error(`Install the 'mysql2' module to use a MySQL database`);
+		return mysqlRuntime.escapeId(id);
 	}
 }
 
 export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null }> {
 	override type = 'pg' as const;
 	constructor(config: pg.PoolConfig) {
-		super(config ? new pg.Pool(config) : null!);
+		if (!pgRuntime) throw new Error(`Install the 'pg' module to use a Postgres database`);
+		super(config ? new pgRuntime.Pool(config) : null!);
 	}
 	override _resolveSQL(query: SQLStatement): [query: string, values: BasicSQLValue[]] {
 		let sql = query.sql[0];
@@ -407,7 +427,7 @@ export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null 
 		return this.connection.query<never>(query, values).then(res => ({ affectedRows: res.rowCount }));
 	}
 	override escapeId(id: string) {
-		// @ts-expect-error @types/pg really needs to be updated
-		return pg.escapeIdentifier(id);
+		if (!pgRuntime) throw new Error(`Install the 'pg' module to use a Postgres database`);
+		return (pgRuntime as any).escapeIdentifier(id);
 	}
 }
