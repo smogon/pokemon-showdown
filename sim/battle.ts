@@ -1298,6 +1298,39 @@ export class Battle {
 		return !!move.flags['contact'];
 	}
 
+	skillSwap(source: Pokemon, target: Pokemon) {
+		if (source.fainted || target.fainted) return false;
+		if (source.volatiles['dynamax'] || target.volatiles['dynamax']) return false;
+		const sourceAbility = source.getAbility();
+		const targetAbility = target.getAbility();
+		if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap']) return false;
+		if (this.gen <= 5 && sourceAbility.id === targetAbility.id) return false;
+
+		const sourceEffect = this.dex.conditions.get('skillswap');
+		const targetCanBeSet = this.runEvent('SetAbility', target, source, sourceEffect, sourceAbility);
+		if (!targetCanBeSet) return targetCanBeSet;
+		const sourceCanBeSet = this.runEvent('SetAbility', source, source, sourceEffect, targetAbility);
+		if (!sourceCanBeSet) return sourceCanBeSet;
+
+		if (this.gen <= 4 || source.isAlly(target)) {
+			this.add('-activate', source, 'Skill Swap');
+		} else {
+			this.add('-activate', source, 'Skill Swap', target, `[ability] ${targetAbility.name}`, `[ability2] ${sourceAbility.name}`);
+		}
+		this.singleEvent('End', sourceAbility, source.abilityState, source);
+		this.singleEvent('End', targetAbility, target.abilityState, target);
+		source.ability = targetAbility.id;
+		target.ability = sourceAbility.id;
+		source.abilityState = this.initEffectState({ id: toID(source.ability), target: source });
+		target.abilityState = this.initEffectState({ id: toID(target.ability), target });
+		source.volatileStaleness = undefined;
+		if (!source.isAlly(target)) target.volatileStaleness = 'external';
+		if (this.gen > 3) {
+			this.singleEvent('Start', sourceAbility, target.abilityState, target);
+			this.singleEvent('Start', targetAbility, source.abilityState, source);
+		}
+	}
+
 	getPokemon(fullname: string | Pokemon) {
 		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {

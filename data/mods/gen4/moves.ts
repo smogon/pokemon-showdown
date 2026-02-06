@@ -1554,19 +1554,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-activate', source, 'move: Mimic', move.name);
 		},
 	},
-	skillswap: {
-		inherit: true,
-		onHit(target, source) {
-			const targetAbility = target.ability;
-			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility || source.hasItem('griseousorb') || target.hasItem('griseousorb')) {
-				return false;
-			}
-			this.add('-activate', source, 'move: Skill Swap');
-			source.setAbility(targetAbility);
-			target.setAbility(sourceAbility);
-		},
-	},
 	sleeptalk: {
 		inherit: true,
 		onTryHit(pokemon) {
