@@ -99,8 +99,7 @@ export class Field {
 	}
 
 	effectiveWeather() {
-		if (this.suppressingWeather()) return '';
-		return this.weather;
+		return this.suppressingWeather() ? '' : this.weather;
 	}
 
 	suppressingWeather() {

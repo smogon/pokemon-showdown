@@ -25,9 +25,12 @@ function appendCause(error: any) {
 	let stack = ``;
 	if (typeof error.cause === 'string') {
 		stack += `\n\n[cause]: ${error.cause}\n`;
-	} else {
-		stack += `\n\n[cause]: ${(error.cause as Error).message}\n`;
-		stack += `  ${(error.cause as Error)?.stack}`;
+	} else if (error.cause && typeof error.cause === 'object') {
+		const cause = error.cause as unknown as Partial<Error>;
+		stack += `\n\n[cause]: ${cause.message || 'Unknown error'}\n`;
+		if (cause.stack) {
+			stack += `  ${cause.stack}`;
+		}
 	}
 	return stack;
 }
@@ -44,10 +47,17 @@ export function crashlogger(
 ): string | null {
 	const datenow = Date.now();
 
-	let stack = (typeof error === 'string' ? error : (error as Error)?.stack) || '';
-	if ((error as any)?.cause) {
-		stack += appendCause(error as Error);
+	let stack = '';
+	if (typeof error === 'string') {
+		stack = error;
+	} else if (error && typeof error === 'object' && 'stack' in error) {
+		stack = ((error as unknown) as Partial<Error>).stack || '';
 	}
+
+	if (error && typeof error === 'object' && 'cause' in error && (error as any).cause) {
+		stack += appendCause(error as any);
+	}
+
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
