@@ -135,7 +135,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
-					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
+					types.has('Fighting') || types.has('Fairy') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
@@ -367,6 +367,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
+			// Bastiodon
+			[['roar', 'protect'], ['metalburst', 'protect']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -955,12 +957,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			)
 		) return 'Rocky Helmet';
 		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (
-			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate' && species.id !== 'golemalola'
-		) {
-			return 'Air Balloon';
-		}
 		if (
 			(role === 'Fast Support' || moves.has('stickyweb')) && isLead && defensiveStatTotal < 255 &&
 			!counter.get('recovery') && (counter.get('hazards') || counter.get('setup')) &&
@@ -1607,8 +1603,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (isMonotype) {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
-					const megaSpecies = this.dex.species.get(Array.isArray(itemData.megaStone) ?
-						itemData.megaStone[0] : itemData.megaStone);
+					const megaSpecies = this.dex.species.get(Object.values(itemData.megaStone)[0]);
 					if (types.length > megaSpecies.types.length) types = [species.types[0]];
 					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
 					if (megaSpecies.types[1] && types[1] && megaSpecies.types[1] !== types[1]) {

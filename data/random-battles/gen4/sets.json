@@ -1325,7 +1325,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["destinybond", "explosion", "spikes", "thunderwave", "toxicspikes", "waterfall"],
+                "movepool": ["destinybond", "explosion", "poisonjab", "spikes", "thunderwave", "toxicspikes", "waterfall"],
                 "abilities": ["Poison Point", "Swift Swim"]
             }
         ]
@@ -2123,9 +2123,14 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "selfdestruct", "waterspout"],
+                "movepool": ["hydropump", "icebeam", "selfdestruct", "waterspout"],
                 "abilities": ["Water Veil"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icebeam", "selfdestruct", "surf", "toxic"],
+                "abilities": ["Water Veil"]
             }
         ]
     },
@@ -3023,8 +3028,13 @@
                 "abilities": ["Levitate"]
             },
             {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerfighting", "nastyplot", "shadowball", "substitute", "thunderbolt"],
+                "abilities": ["Levitate"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerfighting", "nastyplot", "shadowball", "thunderbolt", "trick"],
+                "movepool": ["hiddenpowerfighting", "shadowball", "thunderbolt", "trick"],
                 "abilities": ["Levitate"]
             }
         ]

@@ -137,8 +137,8 @@ export class ExhaustiveRunner {
 		const signatures = new Map();
 		for (const id of pools.items.possible) {
 			const item = dex.data.Items[id];
-			if (item.megaEvolves) {
-				const pokemon = toID(item.megaEvolves);
+			if (item.megaStone) {
+				const pokemon = toID(Object.keys(item.megaStone)[0]);
 				const combo = { item: id };
 				let combos = signatures.get(pokemon);
 				if (!combos) {
