@@ -49808,7 +49808,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "9L15", "8L15", "7T", "7L1", "6T", "6L1", "5L1", "4M", "4L1"],
 			weatherball: ["9M", "8M"],
 			whirlpool: ["9M", "8M", "4M"],
-			yawn: ["8S1", "9S2", "9S3"],
+			yawn: ["9S2", "9S3", "8S1"],
 		},
 		eventData: [
 			{generation: 8, level: 50, gender: "F", nature: "Quiet", abilities: ["stormdrain"], ivs: {hp: 31, atk: 2, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["protect", "surf", "icebeam", "earthpower"], pokeball: "cherishball"},

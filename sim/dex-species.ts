@@ -742,7 +742,9 @@ export class DexSpecies {
 		// different learnsets. To prevent a leak, we make them show up as their
 		// base forme, but hardcode their learnsets into Rockruff-Dusk and
 		// Greninja-Ash
-		if (species.prevo) {
+		if (!this.getLearnsetData(species.id).learnset && species.forme) {
+			return this.get(species.changesFrom || species.baseSpecies);
+		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
 			species = this.get(species.prevo);
