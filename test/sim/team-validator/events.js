@@ -181,4 +181,18 @@ describe('Team Validator', () => {
 		];
 		assert.legalTeam(team, 'gen4anythinggoes');
 	});
+
+	it(`should allow Hall of Origin Arceus with Full Arceus Clause`, () => {
+		let team = [
+			{ species: 'arceus', level: 80, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.false.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+
+		team = [
+			{ species: 'arceus', level: 100, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+	});
 });
