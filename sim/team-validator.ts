@@ -650,6 +650,7 @@ export class TeamValidator {
 			}
 		}
 		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
+			// Gigantamax Melmetal cannot be obtained through the Max Soup
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
@@ -955,7 +956,12 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const { species: eventSpecies, eventData } = eventOnlyData;
+			const eventSpecies = eventOnlyData.species;
+			let eventData = eventOnlyData.eventData;
+			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
+				// Hall of Origin Arceus
+				eventData = [...eventData, { generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam'] }];
+			}
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
