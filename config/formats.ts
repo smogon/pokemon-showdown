@@ -343,7 +343,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Pawniard', 'Salandit', 'Sandshrew-Alola', 'Shellder', 'Shellos', 'Snover', 'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull',
 			'Zorua-Hisui',
 			// LC UUBL
-			'Deerling', 'Minccino',
+			'Deerling', 'Minccino', 'Light Clay',
 		],
 	},
 	{
