@@ -2860,6 +2860,16 @@ export class Battle {
 			}
 		}
 
+		if (action.choice === 'move' && action.pokemon && action.move && pokemonOriginalHP) {
+			const pokemon = action.pokemon;
+			const target = this.getTarget(pokemon, action.move, action.targetLoc);
+			if (pokemon !== target && action.move.category !== 'Status') {
+				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon);
+				}
+			}
+		}
+
 		this.clearActiveMove();
 
 		// fainting

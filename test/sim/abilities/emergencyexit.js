@@ -134,7 +134,7 @@ describe(`Emergency Exit`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking recoil and dragging in an opponent', () => {
+	it('should request switch-out after taking recoil and dragging in an opponent', () => {
 		battle = common.createBattle([[
 			{ species: "Golisopod", ability: 'emergencyexit', moves: ['dragontail'] },
 			{ species: "Wynaut", moves: ['sleeptalk'] },

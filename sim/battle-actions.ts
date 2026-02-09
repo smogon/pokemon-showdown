@@ -532,7 +532,7 @@ export class BattleActions {
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
-				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+				if (!move.forceSwitch && pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
@@ -1142,7 +1142,7 @@ export class BattleActions {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
 			}
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
+			if (!moveData.forceSwitch && pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
 			}
 		}
