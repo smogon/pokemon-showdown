@@ -13,12 +13,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	substitute: {
 		inherit: true,
 		condition: {
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4) + 1;
-				delete target.volatiles['partiallytrapped'];
-			},
-			onTryHitPriority: -1,
+			inherit: true,
 			onTryHit(target, source, move) {
 				if (move.drain) {
 					this.add('-miss', source);
@@ -75,9 +70,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return true;
 				}
 				return accuracy;
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Substitute');
 			},
 		},
 	},

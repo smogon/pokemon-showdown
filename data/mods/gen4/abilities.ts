@@ -128,18 +128,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		condition: {
-			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(target) {
-				this.add('-start', target, 'ability: Flash Fire');
-			},
+			inherit: true,
+			onModifyAtk() {},
+			onModifyDef() {},
 			onModifyDamagePhase1(atk, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
-			},
-			onEnd(target) {
-				this.add('-end', target, 'ability: Flash Fire', '[silent]');
 			},
 		},
 	},

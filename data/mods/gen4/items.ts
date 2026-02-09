@@ -144,7 +144,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	focussash: {
 		inherit: true,
-		onDamage() { },
+		onDamage() {},
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
 				target.addVolatile('focussash');
@@ -306,11 +306,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	metronome: {
 		inherit: true,
 		condition: {
-			onStart(pokemon) {
-				this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = '';
-			},
-			onTryMovePriority: -2,
+			inherit: true,
 			onTryMove(pokemon, target, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
@@ -323,6 +319,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				this.effectState.lastMove = move.id;
 			},
+			onModifyDamage() {},
 			onModifyDamagePhase2(damage, source, target, move) {
 				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},
@@ -331,7 +328,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	micleberry: {
 		inherit: true,
 		condition: {
-			duration: 2,
+			inherit: true,
 			onSourceModifyAccuracyPriority: 3,
 			onSourceModifyAccuracy(accuracy, target, source) {
 				this.add('-enditem', source, 'Micle Berry');
