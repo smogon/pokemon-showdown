@@ -355,15 +355,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 	mist: {
-		num: 54,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Mist",
-		pp: 30,
-		priority: 0,
-		flags: { metronome: 1 },
+		inherit: true,
 		volatileStatus: 'mist',
+		sideCondition: undefined,
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
@@ -384,9 +378,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		secondary: null,
 		target: "self",
-		type: "Ice",
 	},
 	moonlight: {
 		inherit: true,
