@@ -485,8 +485,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'PotD',
 		desc: "Forces the Pokemon of the Day onto every random team.",
 		onBegin() {
-			if (global.Config?.potd) {
-				this.add('rule', "Pokemon of the Day: " + this.dex.species.get(Config.potd).name);
+			if ((global as any).Config?.potd) {
+				this.add('rule', "Pokemon of the Day: " + this.dex.species.get((global as any).Config.potd).name);
 			}
 		},
 	},
@@ -2683,7 +2683,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				const isGod = this.ruleTable.isRestrictedSpecies(godSpecies);
 				return isGod;
 			}) || target.side.team[0];
-			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
+			const stat: keyof StatsTable = this.dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
 			if (typeof godSpecies.battleOnly === 'string') {
@@ -3059,17 +3059,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let buf = '<li class="result">';
 			buf += `<span class="col numcol">${species.tier}</span> `;
 			buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${(global as any).Config?.routes?.dex || 'dex.pokemonshowdown.com'}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
 			buf += '<span class="col typecol">';
 			if (species.types) {
 				for (const type of species.types) {
-					buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+					buf += `<img src="https://${(global as any).Config?.routes?.client || 'play.pokemonshowdown.com'}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
 				}
 			}
 			buf += '</span> ';
 			if (gen >= 3) {
 				buf += '<span style="float:left;min-height:26px">';
-				if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
+				if (species.abilities['1'] && (gen >= 4 || this.dex.abilities.get(species.abilities['1']).gen === 3)) {
 					buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
 				} else {
 					buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
@@ -3113,17 +3113,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				let buf = '<li class="result">';
 				buf += `<span class="col numcol">${species.tier}</span> `;
 				buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${(global as any).Config?.routes?.dex || 'dex.pokemonshowdown.com'}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
 				buf += '<span class="col typecol">';
 				if (species.types) {
 					for (const type of species.types) {
-						buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+						buf += `<img src="https://${(global as any).Config?.routes?.client || 'play.pokemonshowdown.com'}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
 					}
 				}
 				buf += '</span> ';
 				if (gen >= 3) {
 					buf += '<span style="float:left;min-height:26px">';
-					if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
+					if (species.abilities['1'] && (gen >= 4 || this.dex.abilities.get(species.abilities['1']).gen === 3)) {
 						buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
 					} else {
 						buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;

@@ -709,7 +709,9 @@ export const Teams = new class Teams {
 			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
 		} else {
 			// @pokebedrock - use generated static module map to avoid dynamic requires
-			TeamGenerator = getRandomBattlesModule(mod).default;
+			const rbModule = getRandomBattlesModule(mod);
+			if (!rbModule) throw new Error(`Random battles module not found for mod: ${mod}`);
+			TeamGenerator = rbModule.default;
 		}
 
 		return new TeamGenerator(format, seed);

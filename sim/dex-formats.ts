@@ -624,7 +624,10 @@ export class DexFormats {
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
-			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+			// @pokebedrock - lazily create ModdedDex for mods not pre-registered in DataRegistry
+			if (!this.dex.dexes[format.mod]) {
+				this.dex.dexes[format.mod] = new this.dex.ModdedDex(format.mod);
+			}
 
 			const ruleset = new Format(format);
 			this.rulesetCache.set(id, ruleset);

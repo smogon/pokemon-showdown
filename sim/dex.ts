@@ -36,8 +36,41 @@ import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
 import { Aliases, CompoundWordNames } from '../data/aliases';
 
-// @pokebedrock - use generated static module map to avoid dynamic requires
-import { DexMods, DexModuleMap } from './dex-module-map';
+// @pokebedrock - static imports for base data (replaces dex-module-map.ts)
+import * as DataAbilities from '../data/abilities';
+import * as DataRulesets from '../data/rulesets';
+import * as DataFormatsData from '../data/formats-data';
+import * as DataItems from '../data/items';
+import * as DataLearnsets from '../data/learnsets';
+import * as DataMoves from '../data/moves';
+import * as DataNatures from '../data/natures';
+import * as DataPokedex from '../data/pokedex';
+import * as DataPokemonGo from '../data/pokemongo';
+import * as DataScripts from '../data/scripts';
+import * as DataConditions from '../data/conditions';
+import * as DataTypeChart from '../data/typechart';
+
+// @pokebedrock - static imports for pokebedrock mod
+import * as ModPBPokedex from '../data/mods/pokebedrock/pokedex';
+import * as ModPBScripts from '../data/mods/pokebedrock/scripts';
+
+// @pokebedrock - minimal data registry (base + pokebedrock mod only)
+const DataRegistry: Record<string, any> = {
+	'../data/abilities': DataAbilities,
+	'../data/rulesets': DataRulesets,
+	'../data/formats-data': DataFormatsData,
+	'../data/items': DataItems,
+	'../data/learnsets': DataLearnsets,
+	'../data/moves': DataMoves,
+	'../data/natures': DataNatures,
+	'../data/pokedex': DataPokedex,
+	'../data/pokemongo': DataPokemonGo,
+	'../data/scripts': DataScripts,
+	'../data/conditions': DataConditions,
+	'../data/typechart': DataTypeChart,
+	'../data/mods/pokebedrock/pokedex': ModPBPokedex,
+	'../data/mods/pokebedrock/scripts': ModPBScripts,
+};
 
 const BASE_MOD = 'gen9' as ID;
 
@@ -168,7 +201,10 @@ export class ModdedDex {
 
 	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'].includeData();
+		const modId = mod || 'base';
+		// @pokebedrock - lazily create ModdedDex for mods not pre-registered
+		if (!dexes[modId]) dexes[modId] = new ModdedDex(modId);
+		return dexes[modId].includeData();
 	}
 
 	forGen(gen: number) {
@@ -179,9 +215,10 @@ export class ModdedDex {
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.formats.get(format).mod;
-		const moddedDex = dexes[mod || BASE_MOD];
-		if (!moddedDex) throw new Error(`ModdedDex ${mod || BASE_MOD} not found`);
-		return moddedDex.includeData();
+		const modId = mod || BASE_MOD;
+		// @pokebedrock - lazily create ModdedDex for mods not pre-registered
+		if (!dexes[modId]) dexes[modId] = new ModdedDex(modId);
+		return dexes[modId].includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
@@ -448,10 +485,11 @@ export class ModdedDex {
 	loadDataFile(basePath: string, dataType: DataType): AnyObject | void {
 		try {
 			const filePath = basePath + DATA_FILES[dataType];
-			// @pokebedrock - use generated static import map to avoid dynamic requires
-			const dataObject = DexModuleMap[filePath];
-			// @pokebedrock - Return empty for non-specified 'pokebedrock' mods
-			if (!dataObject && basePath.includes('mods/pokebedrock')) return;
+			// @pokebedrock - use inline data registry to avoid dynamic requires
+			const dataObject = DataRegistry[filePath];
+			// @pokebedrock - Return empty for any mod whose data isn't in the registry
+			// (mods will gracefully inherit from their parent instead)
+			if (!dataObject && basePath.includes('mods/')) return;
 			if (!dataObject || typeof dataObject !== 'object') {
 				throw new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
@@ -497,10 +535,8 @@ export class ModdedDex {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		// @pokebedrock - use generated mods map to fs reading
-		for (const mod of DexMods) {
-			dexes[mod] = new ModdedDex(mod);
-		}
+		// @pokebedrock - only the pokebedrock mod is needed
+		dexes['pokebedrock'] = new ModdedDex('pokebedrock');
 		this.modsLoaded = true;
 
 		return this;
