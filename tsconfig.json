@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es2020"],
+        "lib": ["ESNext"],
         "noEmit": true,
         "jsx": "react",
         "jsxFactory": "Chat.h",
