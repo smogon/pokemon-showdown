@@ -609,6 +609,7 @@ export const commands: Chat.ChatCommands = {
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 9. If used in a battle, defaults to the gen of that battle.`,
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Same as above, but instead displays Random Doubles Battle moves.`,
+		'/randffats [pokemon] - (Gen 9 only) Shows the potential moves for a Pok\u00e9mon in Free-For-All Random Battle.',
 	],
 
 	'1v1factory': 'battlefactory',
