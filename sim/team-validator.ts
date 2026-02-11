@@ -2351,10 +2351,10 @@ export class TeamValidator {
 		if (dex.gen < 8 || this.format.mod === 'gen8dlc1') return null;
 		if (!pokemonGoData) {
 			// Handles forms and evolutions not obtainable from Pokemon GO
-			const otherSpecies = this.dex.species.learnsetParent(species);
+			const otherSpecies = this.dex.species.get(species.changesFrom || species.prevo);
 			// If a Pokemon is somehow not obtainable from Pokemon GO and it must be leveled up to be evolved,
 			// validation for the game should stop because it's more optimal to get the Pokemon outside of the game
-			if (otherSpecies && !species.evoLevel) {
+			if (otherSpecies.name && !species.evoLevel) {
 				const otherProblems = this.validatePokemonGo(otherSpecies, set, setSources, name);
 				if (otherProblems) {
 					problems = otherProblems;
@@ -2861,7 +2861,7 @@ export class TeamValidator {
 			if (!dex.species.getLearnsetData(nextSpecies.id).learnset) {
 				nextSpecies = dex.species.get(nextSpecies.changesFrom || nextSpecies.baseSpecies);
 			}
-			while (nextSpecies) {
+			while (nextSpecies.name) {
 				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
 					/**
 					 * Case 1: The species can learn the move - allow moves of the species from all gens
@@ -2880,7 +2880,7 @@ export class TeamValidator {
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
-				nextSpecies = dex.species.learnsetParent(nextSpecies);
+				nextSpecies = dex.species.get(nextSpecies.prevo);
 			}
 		}
 
