@@ -13524,7 +13524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!pokemon.volatiles['commanded']) return;
 			const tatsugiri = pokemon.volatiles['commanded'].source;
-			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
+			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return;
 			switch (tatsugiri.baseSpecies.forme) {
 			case 'Droopy':
 				this.boost({ def: 1 }, pokemon, pokemon);
@@ -13538,6 +13538,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: null,
+		alwaysAfterMoveSecondarySelf: true,
 		hasSheerForce: true,
 		target: "normal",
 		type: "Dragon",
