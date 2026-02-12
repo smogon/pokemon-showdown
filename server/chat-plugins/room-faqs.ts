@@ -181,7 +181,7 @@ export const commands: Chat.ChatCommands = {
 					'lostpassword', 'password', 'lostpass',
 				];
 				if (!validTopics.includes(normalized)) {
-					return this.errorReply(`'${target}' is an invalid topic.`);
+					return this.errorReply(`'${target}' is an invalid topic. Use /${cmd} to see all available topics.`);
 				}
 				if (!this.runBroadcast()) return;
 				return faqCommand.call(this, target, room, user, connection, 'faq', '!');
