@@ -485,13 +485,13 @@ export class BattleActions {
 			}
 		}
 
-		const tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
-		if (!tryMoveResult || !this.battle.runEvent('TryMove', pokemon, target, move)) {
-			if (tryMoveResult === null) {
-				pokemon.moveThisTurnResult = null;
-			}
+		let tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
+		if (tryMoveResult) {
+			tryMoveResult = this.battle.runEvent('TryMove', pokemon, target, move);
+		}
+		if (!tryMoveResult) {
 			move.mindBlownRecoil = false;
-			return false;
+			return tryMoveResult;
 		}
 
 		this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
