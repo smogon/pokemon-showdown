@@ -486,7 +486,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Flipped Mod'],
 		banlist: [
-			'Araquanid', 'Arceus', 'Azumarill', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Cloyster', 'Cyclizar', 'Deoxys-Attack', 'Deoxys-Normal', 'Deoxys-Speed',
+			'Annihilape', 'Araquanid', 'Arceus', 'Azumarill', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Cloyster', 'Cyclizar', 'Deoxys-Attack', 'Deoxys-Normal', 'Deoxys-Speed',
 			'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Kyurem-Black',
 			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Mienshao', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin',
 			'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky', 'Snorlax', 'Solgaleo', 'Sylveon', 'Terapagos', 'Torkoal', 'Tornadus-Therian', 'Zacian', 'Zacian-Crowned',
