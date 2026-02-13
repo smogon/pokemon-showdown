@@ -440,6 +440,35 @@ export class DexSpecies {
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
+		species = this.getSpeciesDataById(id);
+
+		// Update relatives separately to avoid looping them infinitely
+		species.nfe = species.evos.some(evo => {
+			const evoSpecies = this.getSpeciesDataById(toID(evo));
+			return !evoSpecies.isNonstandard ||
+				evoSpecies.isNonstandard === species?.isNonstandard ||
+				// Pokemon with Hisui evolutions
+				evoSpecies.isNonstandard === "Unobtainable";
+		});
+		species.evos = species.evos.filter(evo => {
+			const evoSpecies = this.getSpeciesDataById(toID(evo));
+			return !evoSpecies.isNonstandard ||
+				evoSpecies.isNonstandard === species?.isNonstandard ||
+				// Pokemon with Hisui evolutions
+				evoSpecies.isNonstandard === "Unobtainable";
+		});
+		const prevoSpecies = this.getSpeciesDataById(toID(species.prevo));
+		if (prevoSpecies.isNonstandard &&
+			prevoSpecies.isNonstandard !== species?.isNonstandard &&
+			prevoSpecies.isNonstandard !== "Unobtainable")
+			species.prevo = '';
+
+		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
+		return species;
+	}
+
+	getSpeciesDataById(id: ID): Mutable<Species> {
+		let species: Mutable<Species>;
 		const alias = this.dex.getAlias(id);
 		if (alias) {
 			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
@@ -451,7 +480,7 @@ export class DexSpecies {
 				});
 				species.abilities = { 0: species.abilities['S']! };
 			} else {
-				species = this.get(alias);
+				species = this.getSpeciesDataById(alias);
 				if (this.dex.data.Pokedex?.[id]?.isCosmeticForme) {
 					const cosmeticForme = this.dex.data.Pokedex[id];
 					species = new Species({
@@ -482,7 +511,6 @@ export class DexSpecies {
 					}
 				}
 			}
-			this.speciesCache.set(id, this.dex.deepFreeze(species));
 			return species;
 		}
 
@@ -512,7 +540,7 @@ export class DexSpecies {
 				}
 			}
 			if (aliasTo) {
-				species = this.get(aliasTo);
+				species = this.getSpeciesDataById(toID(aliasTo));
 				if (species.exists) {
 					this.speciesCache.set(id, species);
 					return species;
@@ -584,13 +612,6 @@ export class DexSpecies {
 					species.tier = species.doublesTier = species.natDexTier = 'Illegal';
 				}
 			}
-			species.nfe = species.evos.some(evo => {
-				const evoSpecies = this.get(evo);
-				return !evoSpecies.isNonstandard ||
-					evoSpecies.isNonstandard === species?.isNonstandard ||
-					// Pokemon with Hisui evolutions
-					evoSpecies.isNonstandard === "Unobtainable";
-			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
@@ -604,7 +625,7 @@ export class DexSpecies {
 				// if this species is exactly identical to parentMod's species, reuse parentMod's copy
 				const parentMod = this.dex.mod(this.dex.parentMod);
 				if (this.dex.data.Pokedex[id] === parentMod.data.Pokedex[id]) {
-					const parentSpecies = parentMod.species.getByID(id);
+					const parentSpecies = parentMod.species.getSpeciesDataById(id);
 					// checking tier cheaply filters out some non-matches.
 					// The construction logic is very complex so we ultimately need to do a deep equality check
 					if (species.tier === parentSpecies.tier && isDeepStrictEqual(species, parentSpecies)) {
@@ -618,7 +639,6 @@ export class DexSpecies {
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
-		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
 	}
 
