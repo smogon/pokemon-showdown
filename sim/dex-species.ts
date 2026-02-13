@@ -419,7 +419,7 @@ export class DexSpecies {
 		this.dex = dex;
 	}
 
-	get(name?: string | Species, updatePrevo = true): Species {
+	get(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
 		let id = '' as ID;
@@ -432,10 +432,38 @@ export class DexSpecies {
 				id = 'nidoranm' as ID;
 			}
 		}
-		return this.getByID(id, updatePrevo);
+		return this.getSpeciesWithRelatives(id);
 	}
 
-	getByID(id: ID, updatePrevo = true): Species {
+	getSpeciesWithRelatives(id: ID): Species {
+		let species = {...this.getByID(id)};
+
+		const prevoSpecies = this.getByID(toID(species.prevo));
+		if (prevoSpecies.isNonstandard &&
+			prevoSpecies.isNonstandard !== species?.isNonstandard &&
+			prevoSpecies.isNonstandard !== "Unobtainable")
+			species.prevo = '';
+
+		species.evos = species.evos.filter(evo => {
+			const evoSpecies = this.getByID(toID(evo));
+			return !evoSpecies.isNonstandard ||
+				evoSpecies.isNonstandard === species?.isNonstandard ||
+				// Pokemon with Hisui evolutions
+				evoSpecies.isNonstandard === "Unobtainable";
+		});
+
+		species.nfe = species.evos.some(evo => {
+			const evoSpecies = this.getByID(toID(evo));
+			return !evoSpecies.isNonstandard ||
+				evoSpecies.isNonstandard === species?.isNonstandard ||
+				// Pokemon with Hisui evolutions
+				evoSpecies.isNonstandard === "Unobtainable";
+		});
+
+		return species;
+	}
+
+	getByID(id: ID): Species {
 		if (id === '' || id === 'constructor') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
@@ -584,31 +612,6 @@ export class DexSpecies {
 					species.tier = species.doublesTier = species.natDexTier = 'Illegal';
 				}
 			}
-
-			// Do not recursively look for both prevos and evos
-			if (updatePrevo) {
-				const prevoSpecies = this.get(species.prevo);
-				if (prevoSpecies.isNonstandard &&
-					prevoSpecies.isNonstandard !== species?.isNonstandard &&
-					prevoSpecies.isNonstandard !== "Unobtainable")
-					species.prevo = '';
-			}
-
-			species.evos = species.evos.filter(evo => {
-				const evoSpecies = this.get(evo, false);
-				return !evoSpecies.isNonstandard ||
-					evoSpecies.isNonstandard === species?.isNonstandard ||
-					// Pokemon with Hisui evolutions
-					evoSpecies.isNonstandard === "Unobtainable";
-			});
-
-			species.nfe = species.evos.some(evo => {
-				const evoSpecies = this.get(evo, false);
-				return !evoSpecies.isNonstandard ||
-					evoSpecies.isNonstandard === species?.isNonstandard ||
-					// Pokemon with Hisui evolutions
-					evoSpecies.isNonstandard === "Unobtainable";
-			});
 
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
