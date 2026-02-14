@@ -541,27 +541,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
-	sameletterrule: {
-		effectType: 'ValidatorRule',
-		name: 'Same Letter Rule',
-		desc: "Each Pokémon's name on the team must start with the same English letter.",
-		onValidateTeam(team) {
-			let requiredLetter: string | null = null;
-			for (const set of team) {
-				const species = this.dex.species.get(set.species);
-				const match = species.name.match(/[A-Za-z]/);
-				if (!match) {
-					return [`${species.name} cannot be used, as its name does not begin with a valid English letter.`];
-				}
-				const firstLetter = match[0].toUpperCase();
-				if (!requiredLetter) {
-					requiredLetter = firstLetter;
-				} else if (firstLetter !== requiredLetter) {
-					return [`All Pokémon must have species names starting with the same letter (currently: ${requiredLetter}); ${species.name} starts with ${firstLetter}.`];
-				}
-			}
-		},
-	},
 	forceteratype: {
 		effectType: 'ValidatorRule',
 		name: 'Force Tera Type',
@@ -1576,6 +1555,28 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
 					species = this.dex.species.get("Necrozma-Ultra");
 					color = species.color;
+				}
+			}
+		},
+	},
+		sameletterclause: {
+		effectType: 'ValidatorRule',
+		name: 'Same Letter Clause',
+		desc: "Forces all Pok&eacute;mon on a team to have names starting with the same letter",
+		onValidateTeam(team) {
+			let requiredLetter: string | null = null;
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				const match = /[A-Za-z]/.exec(species.name);
+				if (!match) {
+					return [`${species.name} cannot be used, as its name does not begin with a valid English letter.`];
+				}
+				const firstLetter = match[0].toUpperCase();
+				if (!requiredLetter) {
+					requiredLetter = firstLetter;
+				} else if (firstLetter !== requiredLetter) {
+					return [
+						`All Pokémon must have species names starting with the same letter (currently: ${requiredLetter}); ${species.name} starts with ${firstLetter}.`];
 				}
 			}
 		},
