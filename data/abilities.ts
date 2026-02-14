@@ -2395,9 +2395,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				!move.multihit && !move.hasSheerForce && !move.flags['futuremove']
 			);
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
+		onSourceAfterMoveSecondary(target, source, move) {
 			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
-				move.id === 'fling' || move.category === 'Status') return;
+				move.id === 'fling' || move.category === 'Status' || move.flags['futuremove']) return;
 			this.speedSort(move.hitTargets, this.comparePriorityFoesFirst(source));
 			this.debug('Magician targets', ...move.hitTargets);
 			for (const pokemon of move.hitTargets) {

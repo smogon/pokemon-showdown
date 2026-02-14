@@ -1023,7 +1023,8 @@ export class BattleActions {
 
 		this.battle.eachEvent('Update');
 
-		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
+		move.hitTargets = targetsCopy.filter(val => !!val);
+		this.afterMoveSecondaryEvent(move.hitTargets, pokemon, move);
 
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {

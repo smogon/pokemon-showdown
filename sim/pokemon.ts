@@ -1748,8 +1748,7 @@ export class Pokemon {
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
 		if (!this.item) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
-		if (this.blockHealingBerries && this.hasAbility(['angershell', 'berserk', 'magician']) &&
-			RESTORATIVE_BERRIES.has(this.item) && this.item !== 'leppaberry') return false;
+		if (this.blockHealingBerries && RESTORATIVE_BERRIES.has(this.item) && this.item !== 'leppaberry') return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
