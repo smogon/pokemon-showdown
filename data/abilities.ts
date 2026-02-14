@@ -5186,7 +5186,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	unseenfist: {
 		onModifyMove(move) {
-			if (move.flags['contact']) delete move.flags['protect'];
+			const baseMove = this.dex.moves.get(move.id);
+			if (move.flags['contact'] || baseMove.flags['contact']) delete move.flags['protect'];
 		},
 		flags: {},
 		name: "Unseen Fist",
