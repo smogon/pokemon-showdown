@@ -2689,6 +2689,8 @@ export class TeamValidator {
 					//   available as long as the source gen was or was before this gen
 					if (learned.charAt(1) === 'R') {
 						moveSources.restrictedMove = moveid;
+						// Gen 9 is not the actual source for Volt Tackle on Cap Pikachu
+						if (learnedGen === 9 && species.baseSpecies === "Pikachu") continue;
 					}
 					limit1 = false;
 					moveSources.addGen(learnedGen);
@@ -2755,17 +2757,17 @@ export class TeamValidator {
 			if (canUseHomeRelearner) {
 				const fullSources = [];
 				let learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
-				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
-					fullSources.push(...learnsetData.learnset[move.id]);
+				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[moveid]) {
+					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
-				if (learnsetData?.learnset?.[move.id]) {
-					fullSources.push(...learnsetData.learnset[move.id]);
+				if (baseSpecies.id !== 'raichualola' && learnsetData?.learnset?.[moveid]) {
+					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				for (const source of fullSources) {
 					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
 					// assuming the Pokemon's level is high enough
-					if (source.charAt(1) === 'S') continue;
+					if ('RS'.includes(source.charAt(1))) continue;
 					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
 					return null;
 				}
