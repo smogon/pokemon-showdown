@@ -619,13 +619,11 @@ export class BattleActions {
 		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
 		const hitResults: boolean[] = [];
 		for (const [i, target] of targets.entries()) {
-			if (target.volatiles['commanding']) {
-				hitResults[i] = false;
-			} else if (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison')) {
+			if (this.checkAlwaysHit(pokemon, target)) {
 				hitResults[i] = true;
-			} else {
-				hitResults[i] = this.battle.runEvent('Invulnerability', target, pokemon, move);
+				continue;
 			}
+			hitResults[i] = this.battle.runEvent('Invulnerability', target, pokemon, move);
 			if (hitResults[i] === false) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
@@ -688,62 +686,40 @@ export class BattleActions {
 		const hitResults = [];
 		for (const [i, target] of targets.entries()) {
 			this.battle.activeTarget = target;
-			// calculate true accuracy
-			let accuracy = move.accuracy;
 			if (move.ohko) { // bypasses accuracy modifiers
 				if (!target.isSemiInvulnerable()) {
-					accuracy = 30;
-					if (move.ohko === 'Ice' && this.battle.gen >= 7 && !pokemon.hasType('Ice')) {
-						accuracy = 20;
-					}
-					if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
-						(move.ohko === true || !target.hasType(move.ohko))) {
-						accuracy += (pokemon.level - target.level);
-					} else {
+					if (
+						target.volatiles['dynamax'] || pokemon.level < target.level ||
+						(move.ohko !== true && target.hasType(move.ohko))
+					) {
 						this.battle.add('-immune', target, '[ohko]');
 						hitResults[i] = false;
 						continue;
 					}
+					if (!this.checkAlwaysHit(pokemon, target)) {
+						let accuracy = 30;
+						if (this.battle.gen >= 7 && move.ohko !== true && !pokemon.hasType(move.ohko)) accuracy = 20;
+						accuracy += pokemon.level - target.level;
+						if (!this.battle.randomChance(accuracy, 100)) {
+							this.battle.attrLastMove('[miss]');
+							this.battle.add('-miss', pokemon, target);
+							hitResults[i] = false;
+							continue;
+						}
+					}
 				}
 			} else {
-				accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-				if (accuracy !== true) {
-					let boost = 0;
-					if (!move.ignoreAccuracy) {
-						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-						boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
+				if (!this.accuracyCheck(pokemon, target, move)) {
+					if (move.smartTarget) {
+						move.smartTarget = false;
+					} else {
+						if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+						this.battle.add('-miss', pokemon, target);
 					}
-					if (!move.ignoreEvasion) {
-						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-						boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
-					}
-					if (boost > 0) {
-						accuracy = this.battle.trunc(accuracy * (3 + boost) / 3);
-					} else if (boost < 0) {
-						accuracy = this.battle.trunc(accuracy * 3 / (3 - boost));
-					}
+					this.battle.runEvent('MoveMiss', target, pokemon, move);
+					hitResults[i] = false;
+					continue;
 				}
-			}
-			if (
-				move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-				(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())
-			) {
-				accuracy = true; // bypasses ohko accuracy modifiers
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-				if (move.smartTarget) {
-					move.smartTarget = false;
-				} else {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
-				}
-				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-					this.battle.boost({ spe: 2 }, pokemon);
-				}
-				hitResults[i] = false;
-				continue;
 			}
 			hitResults[i] = true;
 		}
@@ -905,35 +881,7 @@ export class BattleActions {
 			}
 
 			// like this (Triple Kick)
-			if (target && move.multiaccuracy && hit > 1) {
-				let accuracy = move.accuracy;
-				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-				if (accuracy !== true) {
-					if (!move.ignoreAccuracy) {
-						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-						const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-						if (boost > 0) {
-							accuracy *= boostTable[boost];
-						} else {
-							accuracy /= boostTable[-boost];
-						}
-					}
-					if (!move.ignoreEvasion) {
-						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-						const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
-						if (boost > 0) {
-							accuracy /= boostTable[boost];
-						} else if (boost < 0) {
-							accuracy *= boostTable[-boost];
-						}
-					}
-				}
-				accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-				if (!move.alwaysHit) {
-					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-					if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
-				}
-			}
+			if (target && move.multiaccuracy && hit > 1 && !this.accuracyCheck(pokemon, target, move)) break;
 
 			const moveData = move;
 			if (!moveData.flags) moveData.flags = {};
@@ -1574,6 +1522,47 @@ export class BattleActions {
 		} else {
 			return right;
 		}
+	}
+
+	checkAlwaysHit(attacker: Pokemon, defender: Pokemon) {
+		if (defender.volatiles['commanding']) return false;
+		if (attacker.hasAbility('noguard') || defender.hasAbility('noguard')) return true;
+		if (attacker.volatiles['toxic']) return true;
+		if (attacker.volatiles['lockon'] && attacker.volatiles['lockon'].source === defender) return true;
+		if (defender.volatiles['glaiverush']) return true;
+		return false;
+	}
+
+	accuracyCheck(attacker: Pokemon, defender: Pokemon, move: ActiveMove) {
+		if (
+			(move.target === 'self' && move.category === 'Status' && !defender.isSemiInvulnerable()) ||
+			this.checkAlwaysHit(attacker, defender) ||
+			!this.battle.singleEvent('CheckAccuracy', move, null, defender, attacker, move) ||
+			!this.battle.runEvent('CheckAccuracy', defender, attacker, move)
+		) {
+			return true;
+		}
+
+		let accuracy = move.accuracy;
+		accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, defender, attacker, move, accuracy);
+		accuracy = this.battle.runEvent('ModifyAccuracy', defender, attacker, move, accuracy);
+		if (accuracy === true) return true;
+
+		let boost = 0;
+		if (!move.ignoreAccuracy) {
+			const boosts = this.battle.runEvent('ModifyBoost', attacker, null, null, { ...attacker.boosts });
+			boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
+		}
+		if (!move.ignoreEvasion) {
+			const boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
+			boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
+		}
+		if (boost > 0) {
+			accuracy = this.battle.trunc(accuracy * (3 + boost) / 3);
+		} else if (boost < 0) {
+			accuracy = this.battle.trunc(accuracy * 3 / (3 - boost));
+		}
+		return this.battle.randomChance(accuracy, 100);
 	}
 
 	/**

@@ -262,6 +262,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
+			// OHKO moves only have a chance to hit if the user is at least as fast as the target
+			if (move.ohko) {
+				if (target.speed > pokemon.speed) {
+					this.battle.add('-immune', target, '[ohko]');
+					return false;
+				}
+			}
+
 			// Now, let's calculate the accuracy.
 			let accuracy = move.accuracy;
 
@@ -276,12 +284,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// OHKO moves only have a chance to hit if the user is at least as fast as the target
-			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
-					this.battle.add('-immune', target, '[ohko]');
-					return false;
-				}
+			if (
+				!this.battle.singleEvent('CheckAccuracy', move, null, target, pokemon, move) ||
+				!this.battle.runEvent('CheckAccuracy', target, pokemon, move)
+			) {
+				accuracy = true;
 			}
 
 			// Calculate true accuracy for gen 1, which uses 0-255.
@@ -298,8 +305,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				accuracy = Math.min(accuracy, 255);
 			}
-			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-
+			accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
+			accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 			// Stadium attempts to fix the 1/256 miss by rerolling if the first value
 			// would trigger the 1/256 miss.
 			let randomValue = this.battle.random(256);

@@ -49,8 +49,8 @@ describe('Dragon Darts', () => {
 		const shaymin = battle.p2.active[1];
 
 		// Modding accuracy so Dragon Darts always misses Mew
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
-			return target.species.id !== 'mew';
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, (accuracy, target, source, move) => {
+			return target.name === 'Mew' ? 0 : accuracy;
 		});
 
 		battle.makeChoices();

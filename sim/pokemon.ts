@@ -1804,8 +1804,8 @@ export class Pokemon {
 				}
 				break;
 			}
-			if (item.boosts) {
-				this.battle.boost(item.boosts, this, source, item);
+			if (item.boosts && !this.battle.boost(item.boosts, this, source, item)) {
+				return false;
 			}
 
 			this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
@@ -2128,7 +2128,7 @@ export class Pokemon {
 
 	isSemiInvulnerable() {
 		return (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] ||
-			this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped());
+			this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.volatiles['commanding'] || this.isSkyDropped());
 	}
 
 	isSkyDropped() {

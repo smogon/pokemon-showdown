@@ -1238,11 +1238,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyInvulnerability(target, source, move) {
 			if (move && (source === this.effectState.target || target === this.effectState.target)) return 0;
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAnyCheckAccuracy(accuracy, target, source, move) {
 			if (move && (source === this.effectState.target || target === this.effectState.target)) {
-				return true;
+				return false;
 			}
-			return accuracy;
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') {
@@ -2442,11 +2441,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyInvulnerability(target, source, move) {
 			if (move && (source === this.effectState.target || target === this.effectState.target)) return 0;
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAnyCheckAccuracy(accuracy, target, source, move) {
 			if (move && (source === this.effectState.target || target === this.effectState.target)) {
-				return true;
+				return false;
 			}
-			return accuracy;
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
@@ -2577,10 +2575,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		onSourceAccuracy(accuracy, target, source, move) {
-			if (!source.species.id.startsWith('ogerponwellspring')) return;
-			if (typeof accuracy !== 'number') return;
-			return true;
+		onSourceCheckAccuracy(accuracy, target, source, move) {
+			if (source.species.id.startsWith('ogerponwellspring')) return false;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!source.species.id.startsWith('ogerponwellspring')) return;

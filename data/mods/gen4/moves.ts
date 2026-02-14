@@ -977,8 +977,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSourceInvulnerability(target, source, move) {
 				if (move && source === this.effectState.target && target === this.effectState.source) return 0;
 			},
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target && target === this.effectState.source) return true;
+			onSourceCheckAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectState.target && target === this.effectState.source) return false;
 			},
 		},
 	},
