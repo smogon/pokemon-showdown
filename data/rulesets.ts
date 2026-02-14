@@ -1567,7 +1567,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let requiredLetter: string | null = null;
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
-				const match = /[A-Za-z]/.exec(species.name);
+				const match = /^[A-Za-z]/.exec(species.name);
 				if (!match) {
 					return [`${species.name} cannot be used, as its name does not begin with a valid English letter.`];
 				}
