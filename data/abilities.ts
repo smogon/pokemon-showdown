@@ -1104,7 +1104,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	earlybird: {
 		flags: {},
 		name: "Early Bird",
-		// Implemented in statuses.js
+		// Implemented in conditions.ts
 		rating: 1.5,
 		num: 48,
 	},
