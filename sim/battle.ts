@@ -2557,10 +2557,6 @@ export class Battle {
 					pokemon.baseAbility = toID(pokemon.set.ability);
 				}
 				pokemon.clearVolatile(false);
-				pokemon.fainted = true;
-				pokemon.illusion = null;
-				pokemon.isActive = false;
-				pokemon.isStarted = false;
 				delete pokemon.terastallized;
 				if (pokemon.formeRegression) {
 					// after clearing volatiles
@@ -2569,6 +2565,11 @@ export class Battle {
 					pokemon.updateMaxHp();
 					pokemon.formeRegression = false;
 				}
+				this.runEvent('AfterFaint', pokemon, faintData.source, faintData.effect);
+				pokemon.fainted = true;
+				pokemon.illusion = null;
+				pokemon.isActive = false;
+				pokemon.isStarted = false;
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
@@ -2602,7 +2603,7 @@ export class Battle {
 		if (checkWin && this.checkWin(faintData)) return true;
 
 		if (faintData && length) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+			this.runEvent('FaintCount', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
 	}
