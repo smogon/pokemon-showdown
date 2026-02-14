@@ -1576,7 +1576,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					requiredLetter = firstLetter;
 				} else if (firstLetter !== requiredLetter) {
 					return [
-						`All Pokémon must have species names starting with the same letter (currently: ${requiredLetter}); ${species.name} starts with ${firstLetter}.`];
+						`All Pokémon must belong to species starting with the same letter (currently: ${requiredLetter}); ${species.name} starts with ${firstLetter}.`];
 				}
 			}
 		},
