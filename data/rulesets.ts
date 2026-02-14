@@ -1559,7 +1559,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
-		sameletterclause: {
+	sameletterclause: {
 		effectType: 'ValidatorRule',
 		name: 'Same Letter Clause',
 		desc: "Forces all Pok&eacute;mon on a team to have names starting with the same letter",
