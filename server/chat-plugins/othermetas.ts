@@ -46,6 +46,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 				isNonstandard: null,
 				noCopy: false,
 				affectsFainted: false,
+				rating: 0,
 			} as Item;
 		} else {
 			return null;
