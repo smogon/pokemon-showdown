@@ -178,6 +178,46 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
+		spreadMoveHit(targets, pokemon, move, hitEffect, isSecondary, isSelf) {
+			// https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/page-11#post-9880360
+			if (this.battle.gen < 4) {
+				return this.spreadMoveHitInner(targets, pokemon, move, hitEffect, isSecondary, isSelf);
+			}
+			const targetsEntries = Array.from(targets.slice(0).entries());
+			this.battle.speedSort(targetsEntries as [number, Pokemon][], (a, b) => this.battle.comparePriority(a[1], b[1]));
+			const spreadMoveDamage: SpreadMoveDamage = [];
+			const spreadMoveTarget: SpreadMoveTargets = [];
+			// moves hit and apply effects one target at a time in speed order
+			for (const [_, target] of targetsEntries) {
+				// spread moves hit for 100% of the damage if there is only one target left and all the other targets have fainted
+				// if the move hits all adjacent Pokemon, the threshold is 2 targets counting the user
+				if (move.spreadHit && (
+					(move.target === 'allAdjacentFoes' && targets.filter(t => t && !t.fainted).length <= 1) ||
+					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length <= 2)
+				)) {
+					move.spreadModifier = 1;
+				}
+				const [d, t] = this.spreadMoveHitInner([target], pokemon, move, hitEffect, isSecondary, isSelf);
+				spreadMoveDamage.push(d[0]);
+				spreadMoveTarget.push(t[0]);
+				this.battle.faintMessages(false, false, !pokemon.hp);
+				// There are no spread moves with recoil
+				if (move.recoil && d[0]) {
+					this.battle.damage(this.calcRecoilDamage(d[0] as number, move, pokemon), pokemon, target as Pokemon, 'recoil');
+				}
+				this.battle.faintMessages();
+			}
+			// Sort the targets back to the original order
+			for (const [i, [j, _]] of targetsEntries.entries()) {
+				const auxDamage = spreadMoveDamage[i];
+				spreadMoveDamage[i] = spreadMoveDamage[j];
+				spreadMoveDamage[j] = auxDamage;
+				const auxTarget = spreadMoveTarget[i];
+				spreadMoveTarget[i] = spreadMoveTarget[j];
+				spreadMoveTarget[j] = auxTarget;
+			}
+			return [spreadMoveDamage, spreadMoveTarget];
+		},
 		calcRecoilDamage(damageDealt, move) {
 			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 		},

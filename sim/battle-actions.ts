@@ -982,7 +982,7 @@ export class BattleActions {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
 
-		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
+		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage && this.battle.gen >= 5) {
 			const hpBeforeRecoil = pokemon.hp;
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
 			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
@@ -1043,6 +1043,13 @@ export class BattleActions {
 		return damage;
 	}
 	spreadMoveHit(
+		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
+		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
+	): [SpreadMoveDamage, SpreadMoveTargets] {
+		// Buffer method used by gen4
+		return this.spreadMoveHitInner(targets, pokemon, moveOrMoveName, hitEffect, isSecondary, isSelf);
+	}
+	spreadMoveHitInner(
 		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
 	): [SpreadMoveDamage, SpreadMoveTargets] {
