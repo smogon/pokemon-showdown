@@ -361,8 +361,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				move = this.getActiveMaxMove(baseMove, pokemon);
 			}
 
-			move.isExternal = externalMove;
-
 			this.battle.setActiveMove(move, pokemon, target);
 
 			/* if (pokemon.moveThisTurn) {
@@ -415,10 +413,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.moveUsed(move, targetLoc);
 			}
 
-			// Dancer Petal Dance hack
-			// TODO: implement properly
-			const noLock = externalMove && !pokemon.volatiles.lockedmove;
-
 			if (zMove) {
 				if (pokemon.illusion) {
 					this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
@@ -432,31 +426,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
 
-			// Dancer's activation order is completely different from any other event, so it's handled separately
-			if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
-				const dancers = [];
-				for (const currentPoke of this.battle.getAllActive()) {
-					if (pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
-				}
-				// Dancer activates in order of lowest speed stat to highest
-				// Note that the speed stat used is after any volatile replacements like Speed Swap,
-				// but before any multipliers like Agility or Choice Scarf
-				// Ties go to whichever Pokemon has had the ability for the least amount of time
-				dancers.sort((a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) ||
-					b.abilityState.effectOrder - a.abilityState.effectOrder);
-				for (const dancer of dancers) {
-					if (this.battle.faintMessages()) break;
-					if (dancer.fainted) continue;
-					this.battle.add('-activate', dancer, 'ability: Dancer');
-					const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
-					this.runMove(move.id, dancer, dancer.getLocOf(dancersTarget),
-						{ sourceEffect: this.dex.abilities.get('dancer'), externalMove: true });
-				}
-			}
-			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 			this.battle.faintMessages();
 			this.battle.checkWin();
 		},
