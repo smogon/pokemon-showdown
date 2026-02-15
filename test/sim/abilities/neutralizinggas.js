@@ -415,5 +415,20 @@ describe('Neutralizing Gas', () => {
 			assert(unnerveIndex > 0, 'Unnerve should have an activation message');
 			assert(pressureIndex < unnerveIndex, 'Faster Pressure should activate before slower Unnerve');
 		});
+
+		it(`should allow abilities to activate before instaswitch requests`, () => {
+			battle = common.createBattle([[
+				{ species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
+			], [
+				{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk', 'uturn'] },
+				{ species: 'corviknight', moves: ['sleeptalk'] },
+			]]);
+			const weezing = battle.p2.active[0];
+			battle.makeChoices();
+			assert.equal(weezing.boosts['atk'], 0);
+			battle.makeChoices('auto', 'move 2');
+			assert.equal(weezing.boosts['atk'], -1);
+			battle.makeChoices();
+		});
 	});
 });
