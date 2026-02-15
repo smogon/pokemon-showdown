@@ -23,8 +23,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+					.replace(/(Arceus|Greninja|Gourgeist|Pumpkaboo|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*') // Hacked-in Crowned formes will be revealed
+					.replace(/(Xerneas)(?!-Active)/g, '$1-*'); // Hacked-in Xerneas-Active will be revealed
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
