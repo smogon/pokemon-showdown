@@ -167,14 +167,18 @@ export class Side {
 	active: Pokemon[];
 
 	pokemonLeft: number;
+	megaEvoUsed: boolean;
+	ultraBurstUsed: boolean;
 	zMoveUsed: boolean;
 	/**
 	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
 	 *
-	 * Use Side.canDynamaxNow() to check if a side can dynamax instead of this property because only one
-	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
+	 * Use BattleActions.canDynamax(p: Pokemon) or BattleActions.canDynamaxSide(s: Side) to check if a pokemon/side
+	 * can dynamax instead of this property because only one player per team can dynamax on any given turn of a
+	 * gen 8 Multi Battle.
 	 */
 	dynamaxUsed: boolean;
+	terastallizationUsed: boolean;
 
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
@@ -230,8 +234,12 @@ export class Side {
 		this.faintedLastTurn = null;
 		this.faintedThisTurn = null;
 		this.totalFainted = 0;
+
+		this.megaEvoUsed = false;
+		this.ultraBurstUsed = false;
 		this.zMoveUsed = false;
 		this.dynamaxUsed = this.battle.gen !== 8;
+		this.terastallizationUsed = this.battle.gen !== 9;
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -275,17 +283,6 @@ export class Side {
 		this.pokemon.push(newPokemon);
 		this.pokemonLeft++;
 		return newPokemon;
-	}
-
-	canDynamaxNow(): boolean {
-		if (this.battle.gen !== 8) return false;
-		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
-		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
-		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;
-		// if (this.battle.gameType === 'multitriples' && this.battle.turn % 3 !== [1, 1, 2, 2, 0, 0][this.side.n]) {
-		//		return false;
-		// }
-		return !this.dynamaxUsed;
 	}
 
 	/** convert a Choice into a choice string */
@@ -720,20 +717,20 @@ export class Side {
 		const mega = (event === 'mega');
 		const megax = (event === 'megax');
 		const megay = (event === 'megay');
-		if (mega && !pokemon.canMegaEvo) {
+		if (mega && !this.battle.actions.canMegaEvo(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
-		if (megax && !pokemon.canMegaEvoX) {
+		if (megax && !this.battle.actions.canMegaEvoX?.(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve X`);
 		}
-		if (megay && !pokemon.canMegaEvoY) {
+		if (megay && !this.battle.actions.canMegaEvoY?.(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve Y`);
 		}
 		if ((mega || megax || megay) && this.choice.mega && !mixandmega) {
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 		const ultra = (event === 'ultra');
-		if (ultra && !pokemon.canUltraBurst) {
+		if (ultra && !this.battle.actions.canUltraBurst(pokemon)) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
 		}
 		if (ultra && this.choice.ultra && !mixandmega) {
@@ -747,16 +744,16 @@ export class Side {
 			} else {
 				if (this.battle.gen !== 8) {
 					return this.emitChoiceError(`Can't move: Dynamaxing doesn't outside of Gen 8.`);
-				} else if (pokemon.side.canDynamaxNow()) {
+				} else if (this.battle.actions.canDynamax(pokemon)) {
 					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
-				} else if (pokemon.side.allySide?.canDynamaxNow()) {
+				} else if (pokemon.side.allySide && this.battle.actions.canDynamaxSide(pokemon.side.allySide)) {
 					return this.emitChoiceError(`Can't move: It's your partner's turn to Dynamax.`);
 				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}
 		const terastallize = (event === 'terastallize');
-		if (terastallize && !pokemon.canTerastallize) {
+		if (terastallize && !this.battle.actions.canTerastallize(pokemon)) {
 			// Make this work properly
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
 		}

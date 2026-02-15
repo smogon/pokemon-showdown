@@ -268,16 +268,6 @@ export class Pokemon {
 	weighthg: number;
 	speed: number;
 
-	canMegaEvo: string | false | null | undefined;
-	canMegaEvoX: string | false | null | undefined;
-	canMegaEvoY: string | false | null | undefined;
-	canUltraBurst: string | null | undefined;
-	readonly canGigantamax: string | null;
-	/**
-	 * A Pokemon's Tera type if it can Terastallize, false if it is temporarily unable to tera and should have its
-	 * ability restored upon switching out, or null if its inability to tera is permanent.
-	 */
-	canTerastallize: string | false | null;
 	teraType: string;
 	baseTypes: string[];
 	terastallized?: string;
@@ -481,13 +471,6 @@ export class Pokemon {
 
 		this.weighthg = 1;
 		this.speed = 0;
-
-		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
-		this.canMegaEvoX = this.battle.actions.canMegaEvoX?.(this);
-		this.canMegaEvoY = this.battle.actions.canMegaEvoY?.(this);
-		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
-		this.canGigantamax = this.baseSpecies.canGigantamax || null;
-		this.canTerastallize = this.battle.actions.canTerastallize(this);
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -1029,17 +1012,7 @@ export class Pokemon {
 
 	getDynamaxRequest(skipChecks?: boolean) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
-		if (!skipChecks) {
-			if (!this.side.canDynamaxNow()) return;
-			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.canMegaEvo
-			) {
-				return;
-			}
-			// Some pokemon species are unable to dynamax
-			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
-		}
+		if (!skipChecks && !this.battle.actions.canDynamax(this)) return;
 		const result: DynamaxOptions = { maxMoves: [] };
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
@@ -1055,7 +1028,7 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.canGigantamax && this.gigantamax) result.gigantamax = this.canGigantamax;
+		if (this.baseSpecies.canGigantamax && this.gigantamax) result.gigantamax = this.baseSpecies.canGigantamax;
 		return result;
 	}
 
@@ -1103,16 +1076,18 @@ export class Pokemon {
 		}
 
 		if (!lockedMove) {
-			if (this.canMegaEvo) data.canMegaEvo = true;
-			if (this.canMegaEvoX) data.canMegaEvoX = true;
-			if (this.canMegaEvoY) data.canMegaEvoY = true;
-			if (this.canUltraBurst) data.canUltraBurst = true;
+			if (this.battle.actions.canMegaEvo(this)) data.canMegaEvo = true;
+			if (this.battle.actions.canMegaEvoX?.(this)) data.canMegaEvoX = true;
+			if (this.battle.actions.canMegaEvoY?.(this)) data.canMegaEvoY = true;
+			if (this.battle.actions.canUltraBurst(this)) data.canUltraBurst = true;
 			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;
 			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
-			if (this.canTerastallize) data.canTerastallize = this.canTerastallize;
+
+			const canTerastallize = this.battle.actions.canTerastallize(this);
+			if (canTerastallize) data.canTerastallize = canTerastallize;
 		}
 
 		return data;
@@ -1337,11 +1312,6 @@ export class Pokemon {
 				}
 			}
 		}
-
-		// Pokemon transformed into Ogerpon cannot Terastallize
-		// restoring their ability to tera after they untransform is handled ELSEWHERE
-		if (['Ogerpon', 'Terapagos'].includes(this.species.baseSpecies) && this.canTerastallize) this.canTerastallize = false;
-
 		return true;
 	}
 
@@ -1416,7 +1386,6 @@ export class Pokemon {
 				// Ogerpon/Terapagos text goes here
 				this.formeRegression = true;
 			} else if (source.effectType === 'Item') {
-				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
@@ -1495,7 +1464,6 @@ export class Pokemon {
 		this.ability = this.baseAbility;
 		this.hpType = this.baseHpType;
 		this.hpPower = this.baseHpPower;
-		if (this.canTerastallize === false) this.canTerastallize = this.teraType;
 		for (const i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
