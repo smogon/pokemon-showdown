@@ -378,18 +378,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	beadsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Beads of Ruin');
+			this.field.addSourcedPseudoWeather('beadsofruin', pokemon, this.effect);
 		},
-		onAnyModifySpD(spd, target, source, move) {
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Beads of Ruin')) return;
-			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
-			if (move.ruinedSpD !== abilityHolder) return;
-			this.debug('Beads of Ruin SpD drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('beadsofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifySpD(spd, target, source, move) {
+				if (this.field.pseudoWeather['beadsofruin'].activeSources.includes(target)) return;
+				this.debug('Beads of Ruin SpD drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Beads of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -2835,60 +2837,56 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
-			pokemon.abilityState.ending = false;
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			for (const target of this.getAllActive()) {
-				if (target.hasItem('Ability Shield')) {
-					this.add('-block', target, 'item: Ability Shield');
-					continue;
-				}
-				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
-					continue;
-				}
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
-				}
-				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
-			}
+			this.field.addSourcedPseudoWeather('neutralizinggas', pokemon, this.effect);
 		},
-		onEnd(source) {
-			if (source.transformed) return;
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
-					return;
-				}
+		onEnd(pokemon) {
+			if (!this.getAllActive().some(active => active !== pokemon && active.hasAbility('neutralizinggas'))) {
+				this.add('-end', pokemon, 'ability: Neutralizing Gas');
 			}
-			this.add('-end', source, 'ability: Neutralizing Gas');
 
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
 			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
 			// (If you're tackling this, do note extreme weathers have the same issue)
 
-			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityState.ending) return;
-			source.abilityState.ending = true;
-			const sortedActive = this.getAllActive();
-			this.speedSort(sortedActive);
-			for (const pokemon of sortedActive) {
-				if (pokemon !== source) {
+			this.field.removePseudoWeatherSource('neutralizinggas', pokemon);
+		},
+		condition: {
+			onFieldStart() {
+				const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+				for (const target of this.getAllActive()) {
+					if (target.hasItem('Ability Shield')) {
+						this.add('-block', target, 'item: Ability Shield');
+						continue;
+					}
+					// Can't suppress a Tatsugiri inside of Dondozo already
+					if (target.volatiles['commanding']) continue;
+					if (target.illusion) {
+						this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, null, 'neutralizinggas');
+					}
+					if (target.volatiles['slowstart']) {
+						delete target.volatiles['slowstart'];
+						this.add('-end', target, 'Slow Start', '[silent]');
+					}
+					if (strongWeathers.includes(target.getAbility().id)) {
+						this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, null, 'neutralizinggas');
+					}
+				}
+			},
+			onFieldEnd() {
+				const sortedActive = this.getAllActive();
+				this.speedSort(sortedActive);
+				for (const pokemon of sortedActive) {
 					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.ability === "gluttony") {
+					if (pokemon.ability === 'gluttony') {
 						pokemon.abilityState.gluttony = false;
 					}
 				}
-			}
+			},
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Neutralizing Gas",
@@ -4722,18 +4720,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	swordofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Sword of Ruin');
+			this.field.addSourcedPseudoWeather('swordofruin', pokemon, this.effect);
 		},
-		onAnyModifyDef(def, target, source, move) {
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Sword of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
-			this.debug('Sword of Ruin Def drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('swordofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifyDef(def, target, source, move) {
+				if (this.field.pseudoWeather['swordofruin'].activeSources.includes(target)) return;
+				this.debug('Sword of Ruin Def drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Sword of Ruin",
 		rating: 4.5,
 		num: 285,
@@ -4775,18 +4775,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	tabletsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Tablets of Ruin');
+			this.field.addSourcedPseudoWeather('tabletsofruin', pokemon, this.effect);
 		},
-		onAnyModifyAtk(atk, source, target, move) {
-			const abilityHolder = this.effectState.target;
-			if (source.hasAbility('Tablets of Ruin')) return;
-			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
-			if (move.ruinedAtk !== abilityHolder) return;
-			this.debug('Tablets of Ruin Atk drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('tabletsofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifyAtk(atk, target, source, move) {
+				if (this.field.pseudoWeather['tabletsofruin'].activeSources.includes(target)) return;
+				this.debug('Tablets of Ruin Atk drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Tablets of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -5195,18 +5197,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	vesselofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Vessel of Ruin');
+			this.field.addSourcedPseudoWeather('vesselofruin', pokemon, this.effect);
 		},
-		onAnyModifySpA(spa, source, target, move) {
-			const abilityHolder = this.effectState.target;
-			if (source.hasAbility('Vessel of Ruin')) return;
-			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
-			if (move.ruinedSpA !== abilityHolder) return;
-			this.debug('Vessel of Ruin SpA drop');
-			return this.chainModify(0.75);
+		onEnd(pokemon) {
+			this.field.removePseudoWeatherSource('vesselofruin', pokemon);
 		},
-		flags: {},
+		condition: {
+			onModifySpA(spa, target, source, move) {
+				if (this.field.pseudoWeather['vesselofruin'].activeSources.includes(target)) return;
+				this.debug('Vessel of Ruin SpA drop');
+				return this.chainModify(0.75);
+			},
+		},
+		flags: { breakable: 1 },
 		name: "Vessel of Ruin",
 		rating: 4.5,
 		num: 284,
