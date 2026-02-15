@@ -531,6 +531,8 @@ export class Battle {
 					expectedStateLocation = handler.state.target.itemState;
 				} else if (effect.effectType === 'Status') {
 					expectedStateLocation = handler.state.target.statusState;
+				} else if (effect.effectType === 'Pokemon') {
+					expectedStateLocation = handler.state.target.speciesState;
 				} else {
 					expectedStateLocation = handler.state.target.volatiles[effect.id];
 				}
@@ -1018,11 +1020,19 @@ export class Battle {
 
 	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
-		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
-		// during the SwitchIn event instead of running the Start event during switch-ins
-		// gens 4 and before still use the old system, though
+
 		if (
-			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
+			// In Gen 3, on turn 0, Weather related abilities that usually activate right after entry hazards
+			// need to be triggered manually
+			target instanceof Pokemon && callbackName === 'onSwitchIn' && this.gen === 3 &&
+			this.turn === 0 && effect.effectType === 'Ability' && (effect as any).onAfterEntryHazard
+		) {
+			callback = (effect as any).onAfterEntryHazard;
+		} else if (
+			// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
+			// during the SwitchIn event instead of running the Start event during switch-ins
+			// gens 4 and before still use the old system, though
+			callback === undefined && target instanceof Pokemon && callbackName === 'onSwitchIn' &&
 			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
 				// Innate abilities/items
 				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
@@ -2517,13 +2527,27 @@ export class Battle {
 		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
 	}
 
-	checkFainted() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				}
+	checkFainted(pokemon?: Pokemon | Pokemon[]) {
+		if (!pokemon) {
+			pokemon = this.getAllActive(true);
+		} else if (Array.isArray(pokemon)) {
+			pokemon = pokemon.slice();
+		} else {
+			pokemon = [pokemon];
+		}
+
+		// In Gen 4, you can only switch one Pokémon at a time
+		const faintedCounter = Array(this.sides.length).fill(0);
+		if (this.gen === 4 && this.ruleTable.has('switchpriorityclausemod')) {
+			this.speedSort(pokemon);
+		}
+
+		for (const poke of pokemon) {
+			if (this.gen === 4 && faintedCounter[poke.side.n] >= 1) continue;
+			if (poke.fainted) {
+				poke.status = 'fnt' as ID;
+				poke.switchFlag = true;
+				faintedCounter[poke.side.n]++;
 			}
 		}
 	}
@@ -2850,6 +2874,9 @@ export class Battle {
 			break;
 		}
 
+		// Gen 4 and earlier: clear active move so Mold Breaker doesn't allow hazards to bypass Clear Body and Levitate
+		if (this.gen <= 4) this.clearActiveMove();
+
 		// phazing (Roar, etc)
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
@@ -2860,7 +2887,7 @@ export class Battle {
 			}
 		}
 
-		this.clearActiveMove();
+		if (this.gen > 4) this.clearActiveMove();
 
 		// fainting
 
@@ -2869,8 +2896,11 @@ export class Battle {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
-			// in gen 3 or earlier, switching in fainted pokemon is done after
+		if (this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) {
+			// in gen 3, switching in after a Pokemon faints is done after every switch
+			this.checkFainted(action.target);
+		} else if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
+			// in gen 3 or earlier, switching in after a Pokemon faints is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {

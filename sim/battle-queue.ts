@@ -361,6 +361,12 @@ export class BattleQueue {
 		return null;
 	}
 
+	getSwitches(side: Side) {
+		return this.list.filter(
+			action => ['switch', 'instaswitch'].includes(action.choice) && (action as SwitchAction).pokemon.side === side
+		) as SwitchAction[];
+	}
+
 	/**
 	 * Inserts the passed action into the action queue when it normally
 	 * would have happened (sorting by priority/speed), without

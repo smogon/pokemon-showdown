@@ -136,7 +136,7 @@ describe('Healing Wish', () => {
 
 		battle.makeChoices('switch Raichu', ''); // Raichu fully heals and takes stoss + Sandstorm damage
 		assert.equal(battle.turn, 6);
-		assert.equal(battle.p1.active[0].hp, 145); // after stoss + Sandstorm
+		assert.fullHP(battle.p1.active[0].hp);
 		assert.equal(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 });

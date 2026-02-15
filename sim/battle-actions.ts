@@ -150,8 +150,23 @@ export class BattleActions {
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if (isDrag && this.battle.gen >= 5) {
-			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+		if (this.battle.gen <= 4) {
+			this.battle.runEvent('EntryHazard', pokemon);
+			if (this.battle.gen === 3 && this.battle.turn > 0) {
+				// Gen 3 Weather-related abilities and Gen 4 Healing Wish and Lunar Dance
+				// activate before other Pokemon switch in
+				this.battle.runEvent('AfterEntryHazard', pokemon);
+			}
+			if (this.battle.gen <= 2) {
+				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+					this.battle.runEvent('AfterSwitchInSelf', pokemon);
+				}
+			}
+		}
+
+		if (isDrag) {
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
@@ -187,6 +202,11 @@ export class BattleActions {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
 			poke.draggedIn = null;
+			if (this.battle.gen === 4) {
+				for (const foeActive of poke.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
 		}
 		return true;
 	}

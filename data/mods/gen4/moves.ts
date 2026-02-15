@@ -829,8 +829,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onSwitchInPriority: -1,
-			onSwitchIn(target) {
+			onAfterEntryHazard(target) {
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
 					target.clearStatus();
@@ -1008,8 +1007,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side) {
 				this.debug('Lunar Dance started on ' + side.name);
 			},
-			onSwitchInPriority: -1,
-			onSwitchIn(target) {
+			onAfterEntryHazard(target) {
 				if (target.getSlot() !== this.effectState.sourceSlot) {
 					return;
 				}
@@ -1622,6 +1620,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
+			onEntryHazardPriority: -1,
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
@@ -1816,6 +1815,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
+			onEntryHazardPriority: 1,
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
