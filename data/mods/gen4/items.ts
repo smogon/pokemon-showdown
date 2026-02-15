@@ -186,6 +186,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ironball: {
 		inherit: true,
+		ignoreKlutz: true,
 		onEffectiveness() {},
 	},
 	ironplate: {

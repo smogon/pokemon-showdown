@@ -866,13 +866,16 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem(isFling = false) {
+	ignoringItem(isFling = false, forceKlutz = false) {
+		const ignoreKlutz = !forceKlutz && this.getItem().ignoreKlutz;
 		if (this.getItem().isPrimalOrb) return false;
 		if (this.battle.gen >= 5 && !this.isActive) return true;
+		// in gen 4, items that ignore Klutz also ignore Embargo
+		if (this.battle.gen <= 4 && ignoreKlutz) return false;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
 		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
-		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
+		return !ignoreKlutz && this.hasAbility('klutz');
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -2116,7 +2119,7 @@ export class Pokemon {
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
-		const item = (this.ignoringItem() ? '' : this.item);
+		const item = (this.ignoringItem(false, this.item === 'ironball' && this.battle.gen <= 4) ? '' : this.item);
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
