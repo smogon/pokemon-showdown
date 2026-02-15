@@ -512,6 +512,8 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
+			if ((handler.effectHolder as Pokemon).switchFlag &&
+				(handler.effectHolder as Pokemon).volatiles['emergencyexiting']) continue;
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -559,7 +561,11 @@ export class Battle {
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
+				const possibleTargets: [Pokemon, number][] = this.getAllActive().map(pokemon => [pokemon, pokemon.hp]);
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
+				for (const [pokemon, originalHp] of possibleTargets) {
+					this.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, undefined, undefined, originalHp);
+				}
 			}
 
 			this.faintMessages();
@@ -991,7 +997,10 @@ export class Battle {
 				}
 			}
 		}
-		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget') ||
+			// Destiny Bond does not follow effectOrder
+			(callbackName.endsWith('Residual') && handler.effect.effectType === 'Condition' &&
+				(handler.state?.target instanceof Side || handler.state?.target instanceof Field))) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
 			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
 			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
@@ -1667,6 +1676,7 @@ export class Battle {
 					// It shouldn't be possible in a normal battle for a Pokemon to be damaged before turn 1's move selection
 					// However, this could be potentially relevant in certain OMs
 					pokemon.hurtThisTurn = null;
+					pokemon.hurtThisMove = null;
 				}
 
 				pokemon.maybeDisabled = false;
@@ -2122,7 +2132,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
-			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
+			if (targetDamage !== 0) target.hurtThisTurn = target.hurtThisMove = target.hp;
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
@@ -2165,6 +2175,8 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
+			// for moves, it needs to run after the 'AfterHit' event
+			if (effect.effectType !== 'Move') this.runEvent('AfterDamage', target, source, effect, targetDamage);
 		}
 
 		if (instafaint) {
@@ -2257,6 +2269,7 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
+		this.runEvent('AfterDamage', target, source, effect, damage);
 		if (target.fainted) this.faint(target);
 		return damage;
 	}
@@ -2660,8 +2673,6 @@ export class Battle {
 	}
 
 	runAction(action: Action) {
-		const pokemonOriginalHP = action.pokemon?.hp;
-		let residualPokemon: (readonly [Pokemon, number])[] = [];
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -2844,7 +2855,6 @@ export class Battle {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
@@ -2891,18 +2901,14 @@ export class Battle {
 
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
-			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
-			}
 		}
 
-		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
+		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag && pokemon.volatiles['emergencyexiting'])) {
+			// reject switch requests of other Pokemon
+			for (const pokemon of this.getAllActive(true)) {
+				if (!pokemon.volatiles['emergencyexiting']) {
+					pokemon.switchFlag = false;
+				}
 			}
 		}
 

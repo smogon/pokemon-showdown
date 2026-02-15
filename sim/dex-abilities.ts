@@ -4,6 +4,7 @@ import { Utils } from '../lib/utils';
 
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
+	onEmergencyExit?: (this: Battle, originalHp: number, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
