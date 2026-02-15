@@ -203,7 +203,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			let damage: number | false | undefined | '' = false;
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 				damage = this.tryMoveHit(target, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -281,8 +281,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				if (move.target === 'all') {
+			if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
+				if (move.target === 'field') {
 					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
 				} else {
 					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);

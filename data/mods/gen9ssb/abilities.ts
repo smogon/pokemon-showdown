@@ -2386,10 +2386,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onFoeTryMove(target, source, move) {
 			if (target.volatiles['foresight']) {
-				const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-				if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-					return;
-				}
+				if (move.target === 'foeSide' || move.target === 'field') return;
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');

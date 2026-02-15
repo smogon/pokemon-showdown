@@ -505,7 +505,7 @@ export class BattleActions {
 		}
 
 		let damage: number | false | undefined | '' = false;
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+		if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 			damage = this.tryMoveHit(targets, pokemon, move);
 			if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -832,7 +832,7 @@ export class BattleActions {
 		}
 
 		const isFFAHazard = move.target === 'foeSide' && this.battle.gameType === 'freeforall';
-		if (move.target === 'all') {
+		if (move.target === 'field') {
 			hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
 		} else if (isFFAHazard) {
 			const hitResults: any[] = this.battle.runEvent('TryHitSide', targets, pokemon, move);
@@ -1046,24 +1046,26 @@ export class BattleActions {
 		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
 	): [SpreadMoveDamage, SpreadMoveTargets] {
-		// Hardcoded for single-target purposes
-		// (no spread moves have any kind of onTryHit handler)
-		const target = targets[0];
 		let damage: (number | boolean | undefined)[] = [];
 		for (const i of targets.keys()) {
 			damage[i] = true;
 		}
 		const move = this.dex.getActiveMove(moveOrMoveName);
-		let hitResult: boolean | number | null = true;
+		let hitResult: number | boolean | null | "" = true;
 		let moveData = hitEffect as ActiveMove;
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
-		if (move.target === 'all' && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
+		if (move.target === 'field' && !isSelf) {
+			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, targets[0] || null, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
-		} else if (target) {
-			hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, targets[0] || null, pokemon, move);
+		} else {
+			for (const [i, target] of targets.entries()) {
+				if (!target) continue;
+				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+				if (!hitResult) targets[i] = hitResult as false | null;
+			}
+			hitResult = true;
 		}
 		if (!hitResult) {
 			if (hitResult === false) {
@@ -1072,10 +1074,17 @@ export class BattleActions {
 			}
 			return [[false], targets]; // single-target only
 		}
+		if (targets.every(val => !val)) {
+			if (targets.includes(false)) {
+				this.battle.add('-fail', pokemon);
+				this.battle.attrLastMove('[still]');
+			}
+			return [new Array(targets.length).fill(false), targets];
+		}
 
 		// 0. check for substitute
 		if (!isSecondary && !isSelf) {
-			if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			if (!['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 				damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 			}
 		}
@@ -1281,7 +1290,7 @@ export class BattleActions {
 				// Hit events
 				//   These are like the TryHit events, except we don't need a FieldHit event.
 				//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
-				if (move.target === 'all' && !isSelf) {
+				if (move.target === 'field' && !isSelf) {
 					if (moveData.onHitField) {
 						hitResult = this.battle.singleEvent('HitField', moveData, {}, target, source, move);
 						didSomething = this.combineResults(didSomething, hitResult);
@@ -1319,7 +1328,8 @@ export class BattleActions {
 
 		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
 			if (!isSelf && !isSecondary) {
-				if (didAnything === false) {
+				// Tea Time should announce failure
+				if (didAnything === false || moveData.target === 'all') {
 					this.battle.add('-fail', source);
 					this.battle.attrLastMove('[still]');
 				}
