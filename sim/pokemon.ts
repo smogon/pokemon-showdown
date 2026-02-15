@@ -1900,18 +1900,13 @@ export class Pokemon {
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 		if (sourceEffect && !isFromFormeChange && !isTransform) {
-			switch (sourceEffect.id) {
-			case 'mummy':
-			case 'lingeringaroma':
-				this.battle.add('-activate', source, sourceEffect.fullname, this, '[ability] ' + oldAbility.name);
-				break;
-			default:
-				if (source) {
-					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
-				} else {
-					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
-				}
-				break;
+			if (sourceEffect.effectType === 'Ability' && this !== this.battle.effectState.target) {
+				this.battle.add('-activate', source, sourceEffect.fullname);
+			}
+			if (source) {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
+			} else {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
 			}
 		}
 		if (ability.id && this.battle.gen > 3 &&
