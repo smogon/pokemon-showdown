@@ -123,9 +123,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return false;
 		},
-		beforeTurnCallback() {},
 		onTry() {},
-		condition: {},
+		onModifyTarget() {},
 		priority: -1,
 	},
 	crabhammer: {
@@ -427,9 +426,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return false;
 		},
-		beforeTurnCallback() {},
 		onTry() {},
-		condition: {},
+		onModifyTarget() {},
 		priority: -1,
 	},
 	mirrormove: {
