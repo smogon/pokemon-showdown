@@ -187,10 +187,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.slot = null;
 				this.effectState.damage = 0;
 			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
+			onModifyTarget(targetRelayVar, source, target, move) {
+				if (move.id !== 'counter') return;
+				if (source !== this.effectState.target || !this.effectState.slot) {
+					targetRelayVar.target = source; // do not deduct PP against Pressure targets
+				}
+				targetRelayVar.target = this.getAtSlot(this.effectState.slot);
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
@@ -508,10 +510,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.slot = null;
 				this.effectState.damage = 0;
 			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
+			onModifyTarget(targetRelayVar, source, target, move) {
+				if (move.id !== 'mirrorcoat') return;
+				if (source !== this.effectState.target || !this.effectState.slot) {
+					targetRelayVar.target = source; // do not deduct PP against Pressure targets
+				}
+				targetRelayVar.target = this.getAtSlot(this.effectState.slot);
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {

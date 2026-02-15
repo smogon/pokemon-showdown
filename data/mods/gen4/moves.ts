@@ -860,7 +860,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	imprison: {
 		inherit: true,
-		flags: { bypasssub: 1, metronome: 1 },
+		flags: { bypasssub: 1, metronome: 1, mustpressure: 1 },
 		onTryHit(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
@@ -1040,7 +1040,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.removeVolatile('magiccoat');
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
-				this.actions.useMove(newMove, target, { target: source });
+				this.actions.useMove(newMove, target, {
+					target: source,
+					sourceEffect: this.effectState.sourceEffect, // deduct PP against Pressure targets
+				});
 				return null;
 			},
 		},
@@ -1571,16 +1574,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onAnyPrepareHitPriority: -1,
 			onAnyPrepareHit(source, target, move) {
-				const snatchUser = this.effectState.source;
+				const snatchUser = this.effectState.source as Pokemon;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				if (this.actions.useMove(move.id, snatchUser)) {
-					snatchUser.deductPP('snatch');
+				const ppDrop = this.runEvent('DeductPP', source, snatchUser, move);
+				if (ppDrop !== true && ppDrop > 0) {
+					snatchUser.deductPP('snatch', ppDrop);
 				}
+				this.actions.useMove(move.id, snatchUser);
 				return null;
 			},
 		},
