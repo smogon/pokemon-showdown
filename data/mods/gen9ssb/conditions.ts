@@ -3,6 +3,64 @@ import { changeSet, getName, enemyStaff } from './scripts';
 import type { ModdedConditionData } from "../../../sim/dex-conditions";
 
 export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: string } } = {
+	zacian: {
+		inherit: true,
+		onBattleStart(pokemon) {
+			if (pokemon.item !== 'rustedsword') return;
+			const rawSpecies = this.dex.species.get('Zacian-Crowned');
+			const species = pokemon.setSpecies(rawSpecies);
+			if (!species) return;
+			pokemon.baseSpecies = rawSpecies;
+			pokemon.details = pokemon.getUpdatedDetails();
+			// pokemon.setAbility(species.abilities['0'], null, null, true);
+			// pokemon.baseAbility = pokemon.ability;
+
+			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+			if (ironHeadIndex >= 0) {
+				const move = this.dex.moves.get('behemothblade');
+				pokemon.baseMoveSlots[ironHeadIndex] = {
+					move: move.name,
+					id: move.id,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					disabledSource: '',
+					used: false,
+				};
+				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
+			}
+		},
+	},
+	zamazenta: {
+		inherit: true,
+		onBattleStart(pokemon) {
+			if (pokemon.item !== 'rustedshield') return;
+			const rawSpecies = this.dex.species.get('Zamazenta-Crowned');
+			const species = pokemon.setSpecies(rawSpecies);
+			if (!species) return;
+			pokemon.baseSpecies = rawSpecies;
+			pokemon.details = pokemon.getUpdatedDetails();
+			// pokemon.setAbility(species.abilities['0'], null, null, true);
+			// pokemon.baseAbility = pokemon.ability;
+
+			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+			if (ironHeadIndex >= 0) {
+				const move = this.dex.moves.get('behemothbash');
+				pokemon.baseMoveSlots[ironHeadIndex] = {
+					move: move.name,
+					id: move.id,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					disabledSource: '',
+					used: false,
+				};
+				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
+			}
+		},
+	},
 	/*
 	// Example:
 	userid: {
