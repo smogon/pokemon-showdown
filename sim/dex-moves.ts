@@ -333,7 +333,6 @@ export interface ActiveMove extends MutableMove {
 	stellarBoosted?: boolean;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
-	willChangeForme?: boolean;
 	infiltrates?: boolean;
 	ruinedAtk?: Pokemon;
 	ruinedDef?: Pokemon;
