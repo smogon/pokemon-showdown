@@ -202,6 +202,16 @@ export class BattleQueue {
 				}
 			}
 		}
+		if (this.battle.turn > 0 && !this.battle.ruleTable.has('switchpriorityclausemod') && (
+			(this.battle.gen <= 4 && action.choice === 'instaswitch') ||
+			(this.battle.gen <= 3 && action.choice === 'switch')
+		)) {
+			// Port switch priority goes: p1 pos1, p2 pos1, p1 pos2, p2 pos2
+			// TODO: in Gen 1, each trainer sees his own Pokemon switch first
+			const pokemon = (action as SwitchAction).pokemon;
+			action.order += pokemon.position * 0.1;
+			action.order += pokemon.side.n * 0.01;
+		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
 				if (!action.maxMove && !action.zmove && action.move.beforeTurnCallback) {

@@ -726,6 +726,19 @@ export class DexFormats {
 			ruleSpec.slice(1).startsWith('basepokemon:')
 		);
 	}
+
+	getDefaultRules() {
+		const rules = ['Cancel Mod'];
+		// only for rules applied to all formats
+		if (this.dex.gen === 1) {
+			rules.push('Desync Clause Mod');
+		}
+		if (this.dex.gen <= 4) {
+			rules.push('Switch Priority Clause Mod');
+		}
+		return rules;
+	}
+
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
 		if (format.name.length > 50) {
@@ -738,8 +751,10 @@ export class DexFormats {
 			}
 		}
 		const ruleTable = new RuleTable();
-
 		const ruleset = format.ruleset.slice();
+		if (format.effectType === 'Format') {
+			ruleset.unshift(...this.getDefaultRules());
+		}
 		for (const ban of format.banlist) {
 			ruleset.push('-' + ban);
 		}
