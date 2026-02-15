@@ -651,6 +651,15 @@ export class ModdedDex {
 						// instead of overwriting entirely
 						delete childTypedData[entryId].inherit;
 
+						// {inherit: true} can also be used to inherit parts of conditions
+						if (childTypedData[entryId].condition?.inherit) {
+							delete childTypedData[entryId].condition.inherit;
+							childTypedData[entryId].condition = {
+								...parentTypedData[entryId].condition,
+								...childTypedData[entryId].condition,
+							};
+						}
+
 						// Merge parent and child's entry, with child overwriting parent.
 						childTypedData[entryId] = { ...parentTypedData[entryId], ...childTypedData[entryId] };
 					}
