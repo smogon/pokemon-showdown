@@ -431,7 +431,7 @@ export class RandomTeams {
 				}
 			}
 			// Moves with secondary effects:
-			if (move.secondary || move.hasSheerForce) {
+			if (move.secondary || move.hasSheerForceBoost) {
 				counter.add('sheerforce');
 				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
