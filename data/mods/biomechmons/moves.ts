@@ -117,9 +117,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
-			onStart(pokemon) {
+			onStart(pokemon, source, sourceEffect) {
 				this.add('-endability', pokemon);
-				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, sourceEffect);
 				if (!this.dex.abilities.get(pokemon.ability).exists) {
 					const isItem = (pokemon.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (isItem >= 0) {

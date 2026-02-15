@@ -866,12 +866,17 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem(isFling = false) {
+	ignoringItem(source?: Pokemon | null, effect?: Effect | null) {
+		const isFlingSource = effect?.id === 'fling' && source === this;
+		const isFlingTarget = effect?.id === 'fling' && source !== this;
 		if (this.getItem().isPrimalOrb) return false;
 		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.battle.gen >= 5 && (
+			isFlingTarget || effect?.id === 'bugbite' || effect?.id === 'pluck'
+		)) return false;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
-		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
+		if (isFlingSource) return this.battle.gen >= 5 && this.hasAbility('klutz');
 		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
