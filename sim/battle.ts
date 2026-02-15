@@ -1625,30 +1625,6 @@ export class Battle {
 			pokemon.removeVolatile('dynamax');
 		}
 
-		// Gen 1 partial trapping ends when either Pokemon or a switch in faints to residual damage
-		if (this.gen === 1) {
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['partialtrappinglock']) {
-					const target = pokemon.volatiles['partialtrappinglock'].locked;
-					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
-						delete pokemon.volatiles['partialtrappinglock'];
-					}
-				}
-				if (pokemon.volatiles['partiallytrapped']) {
-					const source = pokemon.volatiles['partiallytrapped'].source;
-					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
-						delete pokemon.volatiles['partiallytrapped'];
-					}
-				}
-				if (pokemon.volatiles['fakepartiallytrapped']) {
-					const counterpart = pokemon.volatiles['fakepartiallytrapped'].counterpart;
-					if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
-						delete pokemon.volatiles['fakepartiallytrapped'];
-					}
-				}
-			}
-		}
-
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
@@ -1710,7 +1686,8 @@ export class Battle {
 					}
 				}
 
-				pokemon.trapped = pokemon.maybeTrapped = false;
+				pokemon.trapped = false;
+				pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
 				if (!pokemon.knownType || this.dex.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
