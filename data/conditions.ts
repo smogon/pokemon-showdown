@@ -368,7 +368,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
-			pokemon.removeVolatile('truant');
+			if (pokemon.hasAbility('truant')) delete pokemon.abilityState.truantTurn;
 			return null;
 		},
 		onStart(pokemon) {
