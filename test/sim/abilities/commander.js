@@ -271,4 +271,37 @@ describe('Commander', () => {
 
 		assert.equal(tatsugiri.status, 'psn');
 	});
+
+	it('should retain the stall counter while commanding', () => {
+		battle = common.createBattle({ gameType: 'doubles', seed: [0, 0, 0, 0] }, [[
+			{ species: 'regieleki', moves: ['thunderbolt', 'sleeptalk'] },
+			{ species: 'registeel', moves: ['thunderbolt', 'sleeptalk'] },
+		], [
+			{ species: 'tatsugiri', level: 1, ability: 'commander', moves: ['protect'] },
+			{ species: 'palafin', level: 1, moves: ['sleeptalk'] },
+			{ species: 'dondozo', level: 1, moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move thunderbolt 1, move thunderbolt 2', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('move thunderbolt 2, move sleeptalk', 'auto');
+		battle.makeChoices('move thunderbolt 1, move thunderbolt 1', 'auto');
+		assert.fainted(battle.p2.active[0]);
+
+		battle = common.createBattle({ gameType: 'doubles', seed: [0, 0, 0, 1] }, [[
+			{ species: 'regieleki', moves: ['thunderbolt', 'sleeptalk'] },
+			{ species: 'registeel', moves: ['thunderbolt', 'sleeptalk'] },
+		], [
+			{ species: 'tatsugiri', level: 1, ability: 'commander', moves: ['protect'] },
+			{ species: 'shuckle', moves: ['uturn'] },
+			{ species: 'dondozo', level: 1, moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move thunderbolt 1, move thunderbolt 2', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('move thunderbolt 2, move sleeptalk', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('move thunderbolt 1, move thunderbolt 1', 'auto');
+		assert.fainted(battle.p2.active[0]);
+	});
 });

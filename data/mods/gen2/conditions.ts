@@ -221,19 +221,22 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 	},
 	stall: {
-		name: 'stall',
-		duration: 2,
+		inherit: true,
 		onStart() {
 			this.effectState.counter = 127;
 		},
-		onStallMove() {
+		// if Protect is used and the user gets paralyzed, the stall counter doesn't change
+		onBeforeMovePriority: 300,
+		onMoveAborted() {},
+		onStallMove(pokemon) {
 			const counter = Math.floor(this.effectState.counter) || 127;
 			this.debug(`Success chance: ${Math.round(counter * 1000 / 255) / 10}% (${counter}/255)`);
-			return this.randomChance(counter, 255);
+			const success = this.randomChance(counter, 255);
+			if (!success) delete pokemon.volatiles['stall'];
+			return success;
 		},
 		onRestart() {
 			this.effectState.counter /= 2;
-			this.effectState.duration = 2;
 		},
 	},
 	residualdmg: {
