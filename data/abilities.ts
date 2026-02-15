@@ -2842,10 +2842,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
-				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
-					continue;
-				}
+				if (pokemon.volatiles['commanding']) continue; // Can't suppress a Tatsugiri inside of Dondozo already
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
@@ -2880,11 +2877,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
 					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
-					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
+					if (pokemon.hasItem('Ability Shield')) continue; // don't restart abilities that weren't suppressed
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.ability === "gluttony") {
+					if (pokemon.ability === 'gluttony') {
 						pokemon.abilityState.gluttony = false;
 					}
 				}

@@ -15,6 +15,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			this.add('-block', target, 'item: Ability Shield');
 			return null;
 		},
+		onSwitchIn() {}, // don't run the Start event on switch-in
+		onStart(pokemon) {
+			if (pokemon.getAbility().flags['cantsuppress']) return;
+
+			let neutralizingGasActive = false;
+			for (const active of this.getAllActive()) {
+				if (active.ability === ('neutralizinggas' as ID) && !active.volatiles['gastroacid'] &&
+					!active.transformed && !active.abilityState.ending && !pokemon.volatiles['commanding']) {
+					neutralizingGasActive = true;
+				}
+			}
+			if (!neutralizingGasActive) return;
+
+			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			if (pokemon.ability === 'gluttony') {
+				pokemon.abilityState.gluttony = false;
+			}
+		},
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
 		num: 1881,
 		gen: 9,
