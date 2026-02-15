@@ -531,12 +531,20 @@ export class BattleActions {
 		}
 
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
-			const originalHp = pokemon.hp;
+			let originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
 				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
+			for (const curTarget of targets) {
+				originalHp = curTarget.hp;
+				this.battle.singleEvent('AfterMoveSecondaryLast', move, null, curTarget, pokemon, move);
+				this.battle.runEvent('AfterMoveSecondaryLast', curTarget, pokemon, move);
+				if (curTarget.hp <= curTarget.maxhp / 2 && originalHp > curTarget.maxhp / 2) {
+					this.battle.runEvent('EmergencyExit', curTarget, curTarget);
 				}
 			}
 		}

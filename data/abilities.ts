@@ -3165,7 +3165,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 253,
 	},
 	pickpocket: {
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMoveSecondaryLast(target, source, move) {
 			if (source && source !== target && move?.flags['contact']) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
 					return;

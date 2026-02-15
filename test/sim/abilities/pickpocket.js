@@ -46,7 +46,7 @@ describe('Pickpocket', () => {
 		assert.holdsItem(battle.p2.active[0]);
 	});
 
-	it.skip(`should steal items back and forth when hit by a Magician user`, () => {
+	it(`should steal items back and forth when hit by a Magician user`, () => {
 		battle = common.createBattle([[
 			{ species: 'Weavile', ability: 'pickpocket', item: 'cheriberry', moves: ['agility'] },
 		], [
