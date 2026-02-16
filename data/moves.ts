@@ -584,25 +584,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, distance: 1, metronome: 1 },
-		onHit(target, source, move) {
+		onPrepareHit(target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			let success = false;
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-			for (const ally of allies) {
-				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbility('sapsipper')) {
-						this.add('-immune', ally, '[from] ability: Sap Sipper');
-						continue;
-					}
-					if (ally.hasAbility('goodasgold')) {
-						this.add('-immune', ally, '[from] ability: Good as Gold');
-						continue;
-					}
-					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
-				}
-				if (ally.cureStatus()) success = true;
-			}
-			return success;
+		},
+		onHit(target) {
+			target.cureStatus();
 		},
 		target: "allyTeam",
 		type: "Grass",
@@ -8543,24 +8529,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHit(target, source) {
+		onPrepareHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			let success = false;
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-			for (const ally of allies) {
-				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbility('soundproof')) {
-						this.add('-immune', ally, '[from] ability: Soundproof');
-						continue;
-					}
-					if (ally.hasAbility('goodasgold')) {
-						this.add('-immune', ally, '[from] ability: Good as Gold');
-						continue;
-					}
-				}
-				if (ally.cureStatus()) success = true;
-			}
-			return success;
+		},
+		onHit(target, source, move) {
+			target.cureStatus();
 		},
 		target: "allyTeam",
 		type: "Normal",
@@ -18034,7 +18007,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1 },
 		self: {
 			onHit(pokemon, source, move) {
-				this.add('-activate', source, 'move: Aromatherapy');
 				for (const ally of source.side.pokemon) {
 					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
 						continue;

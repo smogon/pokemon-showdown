@@ -779,7 +779,6 @@ export class Pokemon {
 		case 'all':
 		case 'foeSide':
 		case 'allySide':
-		case 'allyTeam':
 			if (!move.target.startsWith('foe')) {
 				targets.push(...this.alliesAndSelf());
 			}
@@ -788,6 +787,12 @@ export class Pokemon {
 			}
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
+			}
+			break;
+		case 'allyTeam':
+			targets.push(...this.side.pokemon.filter(ally => ally.hp));
+			if (this.side.allySide) {
+				targets.push(...this.side.allySide.pokemon.filter(ally => ally.hp));
 			}
 			break;
 		case 'allAdjacent':

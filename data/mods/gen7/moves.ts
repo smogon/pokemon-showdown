@@ -362,22 +362,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	healbell: {
-		inherit: true,
-		onHit(target, source) {
-			this.add('-activate', source, 'move: Heal Bell');
-			let success = false;
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-			for (const ally of allies) {
-				if (ally.hasAbility('soundproof') && !this.suppressingAbility(ally)) {
-					this.add('-immune', ally, '[from] ability: Soundproof');
-					continue;
-				}
-				if (ally.cureStatus()) success = true;
-			}
-			return success;
-		},
-	},
 	healblock: {
 		inherit: true,
 		isNonstandard: null,

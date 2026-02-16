@@ -25,18 +25,29 @@ describe('Heal Bell', () => {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it(`should not heal the major status conditions of a Pokemon with Soundproof`, () => {
-		battle = common.createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Kommo-o', ability: 'soundproof', moves: ['sleeptalk'] },
-			{ species: 'Chansey', moves: ['sleeptalk', 'healbell'] },
-		], [
-			{ species: 'Nidoking', moves: ['sleeptalk', 'toxic'] },
-			{ species: 'Wynaut', moves: ['sleeptalk'] },
-		]]);
-		battle.makeChoices('auto', 'move toxic 1, move sleeptalk');
-		battle.makeChoices('move sleeptalk, move healbell', 'auto');
-		assert.equal(battle.p1.pokemon[0].status, 'tox');
-	});
+	for (let gen = Dex.gen; gen >= 3; gen--) {
+		it(`should handle the interaction with Soundproof correctly in Gen ${gen}`, () => {
+			battle = common.gen(gen).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Meganium', ability: 'soundproof', moves: ['sleeptalk'] },
+				{ species: 'Typhlosion', ability: 'soundproof', moves: ['sleeptalk', 'healbell'] },
+				{ species: 'Feraligatr', ability: 'soundproof', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['glare', 'sleeptalk'] },
+				{ species: 'Wynaut', moves: ['glare', 'sleeptalk'] },
+			]]);
+			battle.forceRandomChance = true;
+			battle.makeChoices('auto', 'move glare 1, move glare 2');
+			battle.makeChoices('switch 3, move sleeptalk', 'move glare 1, move glare 2');
+			battle.forceRandomChance = false;
+			battle.makeChoices('move sleeptalk, move healbell', 'move sleeptalk, move sleeptalk');
+			const self = battle.p1.pokemon[1];
+			const active = battle.p1.pokemon[0];
+			const back = battle.p1.pokemon[2];
+			assert.equal(self.status, gen >= 8 || gen === 5 ? '' : 'par');
+			assert.equal(active.status, gen === 5 ? '' : 'par');
+			assert.equal(back.status, gen > 4 ? '' : 'par');
+		});
+	}
 
 	it(`with Mold Breaker should heal the major status conditions of a Pokemon with Soundproof`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[

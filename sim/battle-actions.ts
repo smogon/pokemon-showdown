@@ -505,7 +505,8 @@ export class BattleActions {
 		}
 
 		let damage: number | false | undefined | '' = false;
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' ||
+			(move.target === 'allyTeam' && this.battle.gen <= 5)) {
 			damage = this.tryMoveHit(targets, pokemon, move);
 			if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -616,7 +617,7 @@ export class BattleActions {
 		return moveResult;
 	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
+		if (['aromatherapy', 'healbell', 'helpinghand'].includes(move.id)) return new Array(targets.length).fill(true);
 		const hitResults: boolean[] = [];
 		for (const [i, target] of targets.entries()) {
 			if (target.volatiles['commanding']) {
@@ -1060,7 +1061,8 @@ export class BattleActions {
 		if (!moveData.flags) moveData.flags = {};
 		if (move.target === 'all' && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
-		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
+		} else if ((move.target === 'foeSide' || move.target === 'allySide' ||
+			(move.target === 'allyTeam' && this.battle.gen <= 5)) && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
 		} else if (target) {
 			hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
@@ -1075,7 +1077,8 @@ export class BattleActions {
 
 		// 0. check for substitute
 		if (!isSecondary && !isSelf) {
-			if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			if (move.target !== 'all' && move.target !== 'allySide' && move.target !== 'foeSide' &&
+				(move.target !== 'allyTeam' || this.battle.gen > 5)) {
 				damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 			}
 		}

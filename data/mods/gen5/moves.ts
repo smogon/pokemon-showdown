@@ -17,6 +17,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	aromatherapy: {
 		inherit: true,
+		onPrepareHit() {},
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
@@ -345,6 +346,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	healbell: {
 		inherit: true,
 		flags: { snatch: 1, sound: 1, metronome: 1 },
+		onPrepareHit() {},
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
