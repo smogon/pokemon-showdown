@@ -1541,7 +1541,6 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 						if (matchRule === !isNotSearch) break;
 					}
 					const matchNormally = !validator.checkCanLearn(move, dex[mon], pokemonSource) === !isNotSearch;
-					
 					if ((!isNotSearch && (matchNormally || (numMoveValidationRules > 0 && matchRule))) ||
 						(isNotSearch && matchNormally && (numMoveValidationRules === 0 || matchRule))) {
 						matched = true;
