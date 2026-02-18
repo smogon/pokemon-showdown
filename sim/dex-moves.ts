@@ -117,6 +117,7 @@ export interface MoveEventMethods {
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
+	onBasePowerPriority?: number;
 
 	onEffectiveness?: (
 		this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove
