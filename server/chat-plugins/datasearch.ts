@@ -57,7 +57,6 @@ const MAX_RANDOM_RESULTS = 30;
 const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
 	typeeffectiveness: ['inversemod'],
-	setvalidation: ['convergencelegality'],
 	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
 	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'tiershiftmod'],
 	banlist: [
@@ -1472,27 +1471,11 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				}
 			}
 			if (matched) continue;
-			if (validator) {
-				for (const ability in alts.abilities) {
-					pokemonSource = validator.allSources();
-					const isNotSearch = !alts.abilities[ability];
 
-					let matchRule = false;
-					let numAbilityValidationRules = 0;
-					for (const rule of rules) {
-						if (!supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
-						else numAbilityValidationRules++;
-						matchRule = !rule.onValidateSet?.call(validator,
-							{ name: dex[mon].name, species: dex[mon].id, ability } as PokemonSet, validator.format, {}, {});
-						if (matchRule === !isNotSearch) break;
-					}
-					const matchNormally = Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability];
-					if ((!isNotSearch && (matchNormally || (numAbilityValidationRules > 0 && matchRule))) ||
-						(isNotSearch && matchNormally && (numAbilityValidationRules === 0 || matchRule))) {
-						matched = true;
-						break;
-					}
-					if (pokemonSource && !pokemonSource.size()) break;
+			for (const ability in alts.abilities) {
+				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
+					matched = true;
+					break;
 				}
 			}
 			if (matched) continue;
@@ -1552,8 +1535,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					let matchRule = false;
 					let numMoveValidationRules = 0;
 					for (const rule of rules) {
-						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name)) &&
-							!supportedDexsearchRules['setvalidation'].includes(toID(rule.name))) continue;
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
 						else numMoveValidationRules++;
 						matchRule = !rule.checkCanLearn?.call(
 							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
