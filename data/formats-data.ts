@@ -5209,7 +5209,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	zamazentacrowned: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	eternatus: {
 		tier: "Uber",
