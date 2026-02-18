@@ -639,6 +639,7 @@ export class Condition extends BasicEffect implements
 	declare readonly onStart?: (
 		this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
+	declare readonly onBattleStart?: (this: Battle, pokemon: Pokemon) => void;
 
 	constructor(data: AnyObject) {
 		super(data);
