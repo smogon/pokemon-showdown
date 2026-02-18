@@ -1341,6 +1341,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 		doublesTier: "DUU",
 	},
+	castformsunny: {
+	},
+	castformrainy: {
+	},
+	castformsnowy: {
+	},
 	kecleon: {
 		tier: "PU",
 		doublesTier: "DUU",
@@ -1374,7 +1380,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	absol: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	snorunt: {

@@ -27,9 +27,9 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Move Name',
 		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', teraType: 'Type',
 	},
-	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
+	// Species, ability, and item need to be capitalized properly ex: Ludicolo, Swift Swim, Life Orb
 	// Gender can be M, F, N, or left as an empty string
-	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
+	// each slot in moves needs to be a string (the move name, capitalized properly ex: Hydro Pump), or an array of strings (also move names)
 	// signatureMove also needs to be capitalized properly ex: Scripting
 	// You can skip Evs (defaults to 84 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
 	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
@@ -264,6 +264,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Good Vibes Only',
 		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
+	Cassiopeia: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -432,12 +438,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],
 		signatureMove: 'Augur of Ebrietas',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Ghost',
-	},
-	Hecate: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
 	},
 	HiZo: {
 		species: 'Zoroark-Hisui', ability: 'Justified', item: 'Heavy-Duty Boots', gender: 'M',

@@ -12,7 +12,7 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'batonpass'], evs: { hp: 1 } },
 		];
-		assert.legalTeam(team, 'gen3ou');
+		assert.legalTeam(team, 'gen31v1');
 
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance', 'batonpass'], evs: { hp: 1 } },
@@ -233,10 +233,10 @@ describe('Team Validator', () => {
 			))
 			.reduce((x, y) => x + y);
 
-		// Dex.species.all skips over cosmetic formes
 		const accepted = Dex.species.all().filter(species => !(
 			// ruleTable.isBannedSpecies blind spots
-			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
+			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP' ||
+			Dex.species.get(species.baseSpecies).cosmeticFormes?.includes(species.name)
 		) && !ruleTable.isBannedSpecies(species)).length;
 
 		assert.equal(accepted, allowed);
@@ -246,6 +246,9 @@ describe('Team Validator', () => {
 		const team = [
 			{ species: 'bronzor', level: 1, ability: 'levitate', moves: ['hypnosis'] },
 			{ species: 'porygon', level: 25, ability: 'trace', moves: ['triattack'], evs: { hp: 1 } },
+			// Darkrai from Pokemon GO with Dream Eater learned via BDSP TM
+			{ species: 'darkrai', level: 15, ability: 'baddreams', moves: ['dreameater'], evs: { hp: 1 } },
+			{ species: 'phione', level: 46, ability: 'hydration', moves: ['takeheart'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen9ubers');
 	});

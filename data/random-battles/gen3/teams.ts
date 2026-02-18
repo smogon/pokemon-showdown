@@ -467,15 +467,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja') return 'Lum Berry';
-		if (species.id === 'shuckle') return 'Leftovers';
 		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
+		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
 		if (moves.has('trick')) return 'Choice Band';
-		if (
-			moves.has('rest') && !moves.has('sleeptalk') &&
-			// Altaria wants Chesto Berry on Dragon Dance + Rest
-			(moves.has('dragondance') || !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability))
-		) return 'Chesto Berry';
 
 		// Medium priority items
 		if (counter.get('Physical') >= 4) return 'Choice Band';
@@ -514,8 +509,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
-
 		// Default to Leftovers
 		return 'Leftovers';
 	}
@@ -525,6 +518,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -598,7 +593,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('transform')) {
+		if (!counter.get('Physical') && !moves.has('transform') && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
 		}

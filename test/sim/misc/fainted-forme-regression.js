@@ -116,7 +116,6 @@ describe(`Fainted forme regression`, () => {
 
 		const pokemon = battle.p1.active[0];
 		assert.species(pokemon, 'Mimikyu-Busted');
-		assert(pokemon.abilityState.busted);
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
@@ -135,7 +134,6 @@ describe(`Fainted forme regression`, () => {
 
 		const pokemon = battle.p1.active[0];
 		assert.species(pokemon, 'Mimikyu');
-		assert.false(pokemon.abilityState.busted);
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
@@ -154,7 +152,6 @@ describe(`Fainted forme regression`, () => {
 
 		const pokemon = battle.p1.active[0];
 		assert.species(pokemon, 'Mimikyu');
-		assert.false(pokemon.abilityState.busted);
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 

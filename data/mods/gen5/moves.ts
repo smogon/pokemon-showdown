@@ -599,6 +599,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		type: "Normal",
 	},
+	muddywater: {
+		inherit: true,
+		basePower: 95,
+	},
 	mudsport: {
 		inherit: true,
 		pseudoWeather: undefined,
@@ -616,10 +620,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-	},
-	muddywater: {
-		inherit: true,
-		basePower: 95,
 	},
 	naturepower: {
 		inherit: true,
@@ -661,6 +661,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 70,
 	},
+	psychoshift: {
+		inherit: true,
+		accuracy: 90,
+	},
 	psychup: {
 		inherit: true,
 		onHit(target, source) {
@@ -670,10 +674,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
-	},
-	psychoshift: {
-		inherit: true,
-		accuracy: 90,
 	},
 	psywave: {
 		inherit: true,
@@ -793,19 +793,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	sing: {
 		inherit: true,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
-	},
-	skillswap: {
-		inherit: true,
-		onHit(target, source) {
-			const targetAbility = target.ability;
-			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility) {
-				return false;
-			}
-			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), `[of] ${target}`);
-			source.setAbility(targetAbility);
-			target.setAbility(sourceAbility);
-		},
 	},
 	skullbash: {
 		inherit: true,

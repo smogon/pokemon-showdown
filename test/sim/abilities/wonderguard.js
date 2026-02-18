@@ -53,4 +53,39 @@ describe('Wonder Guard', () => {
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-immune|p2a: Muk|[from] ability: Wonder Guard')));
 	});
+
+	it('should not make the user immune to Struggle', () => {
+		battle = common.createBattle([[
+			{ species: 'Pawmot', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['sleeptalk', 'disable'] },
+		]]);
+		battle.makeChoices('move sleeptalk', 'move disable');
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices());
+	});
+
+	it('should make the user immune to typeless moves', () => {
+		battle = common.createBattle([[
+			{ species: 'Arcanine', moves: ['burnup', 'revelationdance'] },
+		], [
+			{ species: 'Clefable', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move burnup', 'move sleeptalk');
+		battle.makeChoices('move revelationdance', 'switch 2');
+		assert.fullHP(battle.p2.active[0]);
+	});
+
+	describe('[Gen 4]', () => {
+		it('should not make the user immune to typeless moves', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Jirachi', moves: ['doomdesire', 'beatup', 'sleeptalk'] },
+			], [
+				{ species: 'Clefable', ability: 'wonderguard', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move doomdesire', 'move sleeptalk');
+			assert.hurts(battle.p2.active[0], () => battle.makeChoices('move beatup', 'move sleeptalk'));
+			assert.hurts(battle.p2.active[0], () => battle.makeChoices('move sleeptalk', 'move sleeptalk'));
+		});
+	});
 });

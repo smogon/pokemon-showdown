@@ -410,7 +410,8 @@ export class RandomGen8Teams {
 					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			}
+			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
@@ -1525,7 +1526,7 @@ export class RandomGen8Teams {
 		case 'Cloud Nine':
 			return (!isNoDynamax || species.id !== 'golduck');
 		case 'Competitive':
-			return (counter.get('Special') < 2 || (moves.has('rest') && moves.has('sleeptalk')));
+			return (!counter.get('Special') || moves.has('rest') && moves.has('sleeptalk'));
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Cursed Body':
@@ -2155,10 +2156,11 @@ export class RandomGen8Teams {
 		if (species.name.endsWith('-Gmax')) return species.name.slice(0, -5);
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (['Magearna', 'Polteageist', 'Zarude'].includes(species.baseSpecies)) {
+		if (['Polteageist', 'Zarude'].includes(species.baseSpecies)) {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
 		if (species.baseSpecies === 'Pikachu' && this.dex.currentMod === 'gen8') {
 			return 'Pikachu' + this.sample(
@@ -2175,6 +2177,8 @@ export class RandomGen8Teams {
 		isDoubles = false,
 		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const gmax = species.name.endsWith('-Gmax');
@@ -2412,7 +2416,10 @@ export class RandomGen8Teams {
 			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical' || move.id === 'bodypress';
 		});
-		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
+		if (
+			noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status')) &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
@@ -2425,6 +2432,9 @@ export class RandomGen8Teams {
 			ivs.spe = 0;
 		}
 
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -2432,7 +2442,7 @@ export class RandomGen8Teams {
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability,
 			evs,
 			ivs,

@@ -3,6 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen9',
 	init() {
 		for (const id in this.data.Pokedex) {
+			if (this.species.get(id).isCosmeticForme) continue;
 			const types = Array.from(new Set(this.data.Pokedex[id].types.map(type => (
 				type.replace(/(Ghost|Fairy)/g, 'Psychic')
 					.replace(/Bug/g, 'Grass')

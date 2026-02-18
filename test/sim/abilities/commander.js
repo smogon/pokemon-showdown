@@ -160,7 +160,7 @@ describe('Commander', () => {
 		// Kill turns for Toxic Orb to KO Tatsugiri
 		for (let i = 0; i < 7; i++) battle.makeChoices();
 		battle.makeChoices('', 'switch teddiursa');
-		assert.cantMove(() => battle.p2.choose('move sleeptalk, switch tatsugiri'));
+		assert.cantMove(() => battle.p2.choose('move sleeptalk, switch tatsugiridroopy'));
 		battle.makeChoices('auto', 'switch tatsugiridroopy, move orderup 1');
 		assert.statStage(battle.p2.pokemon[1], 'atk', 3);
 	});

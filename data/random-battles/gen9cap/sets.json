@@ -569,7 +569,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Encore", "Moonblast", "Recover", "Scald", "Thunder Wave"],
+                "movepool": ["Moonblast", "Recover", "Scald", "Thunder Wave"],
                 "abilities": ["Multiscale", "Rough Skin"],
                 "teraTypes": ["Poison", "Steel"]
             }

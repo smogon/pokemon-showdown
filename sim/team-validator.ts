@@ -325,7 +325,7 @@ export class TeamValidator {
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
 		if (this.format.effectType !== 'Format') {
-			throw new Error(`format should be a 'Format', but was a '${this.format.effectType}'`);
+			throw new Error(`format '${format}' should be a 'Format', but was a '${this.format.effectType}'`);
 		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
@@ -510,7 +510,8 @@ export class TeamValidator {
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
-		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja' &&
+			this.format.mod !== 'gen9legendsou') {
 			outOfBattleSpecies = dex.species.get('greninjabond');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
@@ -525,9 +526,8 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.megaEvolves === species.name) {
-				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				tierSpecies = dex.species.get(item.megaStone);
+			if (item.megaStone?.[species.name]) {
+				tierSpecies = dex.species.get(item.megaStone[species.name]);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
@@ -635,6 +635,11 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
+		if (!['M', 'F'].includes(set.gender)) set.gender = '';
+		if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+			set.gender = species.gender || set.gender;
+		}
+
 		const { outOfBattleSpecies, tierSpecies } = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
@@ -645,6 +650,7 @@ export class TeamValidator {
 			}
 		}
 		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
+			// Gigantamax Melmetal cannot be obtained through the Max Soup
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
@@ -950,7 +956,12 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const { species: eventSpecies, eventData } = eventOnlyData;
+			const eventSpecies = eventOnlyData.species;
+			let eventData = eventOnlyData.eventData;
+			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
+				// Hall of Origin Arceus
+				eventData = [...eventData, { generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam'] }];
+			}
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
@@ -1087,12 +1098,8 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (!set.gender) {
-				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
-					set.gender = species.gender || ['M', 'F'][Math.floor(Math.random() * 2)];
-				} else {
-					set.gender = 'N';
-				}
+			if (this.gen > 5 && !ruleTable.has('obtainablemisc')) {
+				set.gender ||= 'N';
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
@@ -1579,8 +1586,13 @@ export class TeamValidator {
 			} else {
 				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z. Please specify which Necrozma it should start as.`);
 			}
-		} else if (species.name === 'Zygarde-Complete') {
-			problems.push(`Zygarde-Complete must start the battle as Zygarde or Zygarde-10% with Power Construct. Please specify which Zygarde it should start as.`);
+		} else if (species.baseSpecies === 'Zygarde') {
+			if (species.name === 'Zygarde-Complete' || species.name === 'Zygarde-Mega') {
+				problems.push(`${species.name} must start the battle as Zygarde or Zygarde-10% with Power Construct. Please specify which Zygarde it should start as.`);
+			}
+			if (item.id === 'zygardite' && set.ability !== 'Power Construct') {
+				problems.push(`Zygarde holding Zygardite can only Mega Evolve with the Power Construct ability.`);
+			}
 		} else if (species.baseSpecies === 'Terapagos') {
 			set.species = 'Terapagos';
 			set.ability = 'Tera Shift';
@@ -2087,6 +2099,25 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
 		}
+		if ((dex.gen === 3 || dex.gen === 4) && eventData.level === 100 && set.evs) {
+			let statName: StatID;
+			for (statName in set.evs) {
+				const ev = set.evs[statName];
+				if (ev > 100) {
+					problems.push(
+						`${name} can't have more than 100 EVs in any stat, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which are capped at 100 EVs.`,
+					);
+				}
+				if (!(
+					ev % 10 === 0 ||
+					(ev % 10 === 8 && ev % 4 === 0)
+				)) {
+					problems.push(
+						`${name} can only have EVs that are multiples of 10, because it is only obtainable from level 100 events. Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which boost in multiples of 10.`,
+					);
+				}
+			}
+		}
 		if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
 			if (fastReturn) return true;
 			const shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
@@ -2320,10 +2351,10 @@ export class TeamValidator {
 		if (dex.gen < 8 || this.format.mod === 'gen8dlc1') return null;
 		if (!pokemonGoData) {
 			// Handles forms and evolutions not obtainable from Pokemon GO
-			const otherSpecies = this.dex.species.learnsetParent(species);
+			const otherSpecies = this.dex.species.get(species.changesFrom || species.prevo);
 			// If a Pokemon is somehow not obtainable from Pokemon GO and it must be leveled up to be evolved,
 			// validation for the game should stop because it's more optimal to get the Pokemon outside of the game
-			if (otherSpecies && !species.evoLevel) {
+			if (otherSpecies.name && !species.evoLevel) {
 				const otherProblems = this.validatePokemonGo(otherSpecies, set, setSources, name);
 				if (otherProblems) {
 					problems = otherProblems;
@@ -2721,6 +2752,24 @@ export class TeamValidator {
 				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
+			if (canUseHomeRelearner) {
+				const fullSources = [];
+				let learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
+				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
+				if (learnsetData?.learnset?.[move.id]) {
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				for (const source of fullSources) {
+					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
+					// assuming the Pokemon's level is high enough
+					if (source.charAt(1) === 'S') continue;
+					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
+					return null;
+				}
+			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
@@ -2778,7 +2827,7 @@ export class TeamValidator {
 			// Pokemon that cannot be sent from Pokemon GO to Let's Go can only access Let's Go moves through HOME
 			// It can only obtain a chain of four level up moves and cannot have TM moves
 			const pokemonGoData = dex.species.getPokemonGoData(checkedSpecies.id);
-			if (pokemonGoData.LGPERestrictiveMoves) {
+			if (pokemonGoData?.LGPERestrictiveMoves) {
 				let levelUpMoveCount = 0;
 				const restrictiveMovesToID = [];
 				for (const moveName of setSources.restrictiveMoves) {
@@ -2812,7 +2861,7 @@ export class TeamValidator {
 			if (!dex.species.getLearnsetData(nextSpecies.id).learnset) {
 				nextSpecies = dex.species.get(nextSpecies.changesFrom || nextSpecies.baseSpecies);
 			}
-			while (nextSpecies) {
+			while (nextSpecies.name) {
 				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
 					/**
 					 * Case 1: The species can learn the move - allow moves of the species from all gens
@@ -2831,7 +2880,7 @@ export class TeamValidator {
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
-				nextSpecies = dex.species.learnsetParent(nextSpecies);
+				nextSpecies = dex.species.get(nextSpecies.prevo);
 			}
 		}
 
@@ -2858,6 +2907,12 @@ export class TeamValidator {
 
 		if (babyOnly) setSources.babyOnly = babyOnly;
 		return null;
+	}
+
+	getExternalLearnsetData(species: ID, mod: string) {
+		const moddedDex = this.dex.mod(mod);
+		if (moddedDex.species.get(species).isNonstandard) return null;
+		return moddedDex.species.getLearnsetData(species);
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {

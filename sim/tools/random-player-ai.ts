@@ -48,7 +48,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				const canSwitch = range(1, 6).filter(j => (
 					pokemon[j - 1] &&
 					// not active
-					j > request.forceSwitch.length &&
+					(j > request.forceSwitch.length || pokemon[i].reviving) &&
 					// not chosen for a simultaneous switch
 					!chosen.includes(j) &&
 					// not fainted or fainted and using Revival Blessing

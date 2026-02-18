@@ -48,7 +48,7 @@ export interface EventMethods {
 	onDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void;
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
-	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon, source?: Pokemon, effect?: Effect) => void;
 	onEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
@@ -639,6 +639,7 @@ export class Condition extends BasicEffect implements
 	declare readonly onStart?: (
 		this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
+	declare readonly onBattleStart?: (this: Battle, pokemon: Pokemon) => void;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -665,7 +666,7 @@ export class DexConditions {
 	}
 
 	getByID(id: ID): Condition {
-		if (id === '') return EMPTY_CONDITION;
+		if (id === '' || id === 'constructor') return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
 		if (condition) return condition;

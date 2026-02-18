@@ -10,7 +10,7 @@ describe('Zen Mode', () => {
 		battle.destroy();
 	});
 
-	it(`can't be overriden in Gen 7 or later`, () => {
+	it(`can't be overridden in Gen 7 or later`, () => {
 		battle = common.createBattle([[
 			{ species: "Darmanitan", ability: 'zenmode', moves: ['entrainment'] },
 		], [
@@ -25,7 +25,7 @@ describe('Zen Mode', () => {
 		assert.equal(darm.ability, 'zenmode');
 	});
 
-	it(`can be overriden in Gen 6 and earlier`, () => {
+	it(`can be overridden in Gen 6 and earlier`, () => {
 		battle = common.gen(6).createBattle([[
 			{ species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk'] },
 		], [

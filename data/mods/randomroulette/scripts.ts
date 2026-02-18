@@ -6,7 +6,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	start() {
 		// Choose a random format
 		this.gen = this.random(1, 10);
-		const format = Dex.formats.get(`gen${this.gen}randombattle@@@${(this.format.customRules || []).join(',')}`);
+		const format = Dex.formats.get(
+			`gen${this.gen}randombattle@@@${[...this.format.ruleset, ...(this.format.customRules || [])].join(',')}`
+		);
 		this.dex = Dex.forFormat(format);
 		this.ruleTable = this.dex.formats.getRuleTable(format);
 		this.teamGenerator = Teams.getGenerator(format);
@@ -88,7 +90,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		format.onBegin?.call(this);
+		this.format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);

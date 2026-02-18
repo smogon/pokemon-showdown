@@ -27,7 +27,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 
 		this.dcAutoloseTime = null;
 		const room = this.game.room;
-		const battleRoom = this.game.games[this.game.games.length - 1]?.room as Room | undefined;
+		const battleRoom = Rooms.get(this.game.games[this.game.games.length - 1]?.room);
 		const gameNum = this.game.games.length + 1;
 
 		if (this.ready === false) {
@@ -72,7 +72,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	options: Omit<RoomBattleOptions, 'players'> & { parent: Room, players: null };
 	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	ties = 0;
-	games: { room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number }[] = [];
+	games: { room: RoomID, winner: BestOfPlayer | null | undefined, rated: number }[] = [];
 	playerNum = 0;
 	/** null = tie, undefined = not ended */
 	winner: BestOfPlayer | null | undefined = undefined;
@@ -166,8 +166,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	setPrivacyOfGames(privacy: PrivacySetting) {
 		for (let i = 0; i < this.games.length; i++) {
-			const room = this.games[i].room;
-			const prevRoom = this.games[i - 1]?.room;
+			const room = Rooms.get(this.games[i].room)!;
+			const prevRoom = Rooms.get(this.games[i - 1]?.room);
 			const gameNum = i + 1;
 
 			room.setPrivate(privacy);
@@ -225,7 +225,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		// shouldn't happen even in lockdown
 		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
 		this.games.push({
-			room: battleRoom,
+			room: battleRoom.roomid,
 			winner: undefined,
 			rated: battleRoom.rated,
 		});
@@ -334,7 +334,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			let progress = `being played`;
 			if (winner) progress = Utils.html`won by ${winner.name}`;
 			if (winner === null) progress = `tied`;
-			return Utils.html`<p>Game ${index + 1}: <a href="/${room.roomid}"><strong>${progress}</strong></a></p>`;
+			return Utils.html`<p>Game ${index + 1}: <a href="/${room}"><strong>${progress}</strong></a></p>`;
 		}).join('');
 		if (this.winner) {
 			buf += Utils.html`<p>${this.winner.name} won!</p>`;
@@ -348,7 +348,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	override startTimer() {
 		this.needsTimer = true;
 		for (const { room } of this.games) {
-			room.battle?.timer.start();
+			Rooms.get(room)?.battle?.timer.start();
 		}
 	}
 
@@ -464,7 +464,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 
 		const { rated, room } = this.games[this.games.length - 1];
 		if (rated) {
-			void room.battle?.updateLadder(p1score, winnerid);
+			void Rooms.get(room)?.battle?.updateLadder(p1score, winnerid);
 		}
 	}
 	override forfeit(user: User | string, message = '') {
@@ -480,13 +480,13 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
 		this.end(this.winner.id);
 
-		const lastBattle = this.games[this.games.length - 1].room.battle;
+		const lastBattle = Rooms.get(this.games[this.games.length - 1].room)?.battle;
 		if (lastBattle && !lastBattle.ended) lastBattle.forfeit(loser.id, message);
 		return true;
 	}
 	override destroy() {
 		this.setEnded();
-		for (const { room } of this.games) room.expire();
+		for (const { room } of this.games) Rooms.get(room)?.setParent(null);
 		this.games = [];
 		for (const p of this.players) p.destroy();
 		this.players = [];

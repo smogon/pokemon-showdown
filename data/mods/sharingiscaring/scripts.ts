@@ -115,7 +115,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		setItem(item, source, effect) {
 			if (!this.hp || !this.isActive) return false;
-			if (this.itemState.knockedOff) return false;
+			if (this.itemKnockedOff) return false;
 			if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
