@@ -1276,8 +1276,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 	// These only ever get accessed if there are moves or banlists to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search =>
-		!!Object.keys(search.moves).length || !!Object.keys(search.abilities).length)) {
+	if (Object.values(searches).some(search => !!Object.keys(search.moves).length)) {
 		validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
 	}
 
