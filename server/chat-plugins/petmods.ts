@@ -32,14 +32,14 @@ function formatAbility(ability: Ability | string) {
 		`<a href="https://${Config.routes.dex}/moves/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
 }
 
-function getSets(species: string | Species): {
+function getSets(species: string | Species, format: Format | string): {
 	level: number,
 	sets: any[],
 } | null {
-	const dex = Dex.forFormat('gen9chatbats');
-	const format = Dex.formats.get('gen9chatbats');
+	const dex = Dex.forFormat(format);
+	const dexFormat = Dex.formats.get(format);
 	species = dex.species.get(species);
-	const folderName = format.mod;
+	const folderName = dexFormat.mod;
 	const setsFile = JSON.parse(
 		FS(`data/random-battles/${folderName}/random-sets.json`)
 			.readIfExistsSync() || '{}'
@@ -50,68 +50,83 @@ function getSets(species: string | Species): {
 }
 
 export const commands: Chat.ChatCommands = {
-	chatbats(target, room, user, connection, cmd) {
-		if (!this.runBroadcast()) return;
+	...Object.fromEntries(
+		Dex.formats
+			.all()
+			.filter(format => format.exists && format.team !== undefined)
+			.map(format => [
+				format.id,
+				function (this: Chat.CommandContext, target, room, user, connection, cmd) {
+					if (!this.runBroadcast()) return;
+					const args = target.split(',');
+					if (!args[0]) return this.parse(`/help ${format.id}`);
 
-		const args = target.split(',');
-		if (!args[0]) return this.parse(`/help chatbats`);
+					const dex = Dex.forFormat(`${format}`);
 
-		const dex = Dex.forFormat('gen9chatbats');
+					const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
-		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
+					if (!searchResults?.length) {
+						throw new Chat.ErrorMessage(`No Pok\u00e9mon named '${args[0]}' was found in ${format}. (Check your spelling?)`);
+					}
 
-		if (!searchResults?.length) {
-			throw new Chat.ErrorMessage(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
-		}
+					let inexactMsg = '';
+					if (searchResults[0].isInexact) {
+						inexactMsg = `No Pok\u00e9mon named '${args[0]}' was found in ${format}. Searching for '${searchResults[0].name}' instead.`;
+					}
+					const species = dex.species.get(searchResults[0].name);
+					const movesets = [];
+					let setCount = 0;
+					const setsToCheck = [species];
+					if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
+					for (const pokemon of setsToCheck) {
+						const data = getSets(pokemon, format);
+						if (!data) continue;
+						const sets = data.sets;
+						const level = data.level;
+						let buf = `<span class="gray">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
+						buf += `<b>Level</b>: ${level}`;
+						for (const set of sets) {
+							buf += `<details class="details"><summary>${set.role}</summary>`;
+							if (dex.gen === 9) {
+								buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
+							} else if (([2, 3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
+								buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
+							}
+							buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
+							if (set.abilities) {
+								buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil)).join(', ')}`;
+							}
+							buf += '</details>';
+							setCount++;
+						}
+						movesets.push(buf);
+					}
 
-		let inexactMsg = '';
-		if (searchResults[0].isInexact) {
-			inexactMsg = `No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`;
-		}
-		const species = dex.species.get(searchResults[0].name);
-		const formatName = `gen9chatbats`;
-		const format = dex.formats.get(formatName);
+					if (!movesets.length) {
+						this.sendReply(inexactMsg);
+						throw new Chat.ErrorMessage(`Error: ${species.name} has no data in ${format.name}`);
+					}
+					let buf = movesets.join('<hr/>');
+					if (setCount <= 2) {
+						buf = buf.replace(/<details>/g, '<details open>');
+					}
+					this.sendReply(inexactMsg);
+					this.sendReplyBox(buf);
 
-		const movesets = [];
-		let setCount = 0;
-		const setsToCheck = [species];
-		if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-		for (const pokemon of setsToCheck) {
-			const data = getSets(pokemon);
-			if (!data) continue;
-			const sets = data.sets;
-			const level = data.level;
-			let buf = `<span class="gray">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
-			buf += `<b>Level</b>: ${level}`;
-			for (const set of sets) {
-				buf += `<details class="details"><summary>${set.role}</summary>`;
-				if (dex.gen === 9) {
-					buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
-				} else if (([2, 3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
-					buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
+					this.sendReply(`You used ${format.name}`);
 				}
-				buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
-				if (set.abilities) {
-					buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil)).join(', ')}`;
+			])
+	),
+	...Object.fromEntries(
+		Dex.formats
+			.all()
+			.filter(f => f.exists)
+			.map(format => [
+				format.id + 'help',
+				function (this: Chat.CommandContext, target, room, user, connection, cmd) {
+					// cmd === the format id used
+					this.sendReply(`/${format.id} [pokemon] - Displays a Pok\u00e9mon's ${format.name} Moves.`);
 				}
-				buf += '</details>';
-				setCount++;
-			}
-			movesets.push(buf);
-		}
-
-		if (!movesets.length) {
-			this.sendReply(inexactMsg);
-			throw new Chat.ErrorMessage(`Error: ${species.name} has no data in ${format.name}`);
-		}
-		let buf = movesets.join('<hr/>');
-		if (setCount <= 2) {
-			buf = buf.replace(/<details>/g, '<details open>');
-		}
-		this.sendReply(inexactMsg);
-		this.sendReplyBox(buf);
-	},
-	chatbatshelp: [
-		`/chatbats [pokemon] - Displays a Pok\u00e9mon's ChatBats Moves.`,
-	],
+			])
+	),
 };
