@@ -7,25 +7,25 @@
 import { FS } from '../../lib';
 import { toID } from "../../sim/dex-data";
 
-function formatMove(move: Move | string) {
+function formatMove(move: Move | string, format: Format) {
 	move = Dex.moves.get(move);
-	const id = toID(move.name);
-	const dex = Dex.forFormat('gen9chatbats');
+	const id = move.id;
+	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
 	const custom = (dex.data.Moves[id] as any) !== (parentDex.data.Moves[id] as any);
-	return custom ? `<button name="send" value="/dt ${move.name}, chatbats"\
+	return custom ? `<button name="send" value="/dt ${move.name}, ${format.name}"\
 		style="display: inline; padding: 0; border: 0; font: inherit; font-style: italic; cursor: pointer;\
 		background: transparent; color: currentColor; -webkit-appearance: none;">${move.name}</i></button>` :
 		`<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
 }
 
-function formatAbility(ability: Ability | string) {
+function formatAbility(ability: Ability | string, format: Format) {
 	ability = Dex.abilities.get(ability);
 	const id = toID(ability.name);
-	const dex = Dex.forFormat('gen9chatbats');
+	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
 	const custom = (dex.data.Abilities[id] as any) !== (parentDex.data.Abilities[id] as any);
-	return custom ? `<button name="send" value="/dt ${ability.name}, chatbats"\
+	return custom ? `<button name="send" value="/dt ${ability.name}, ${format.name}"\
 		style="display: inline; padding: 0; border: 0; font: inherit;\
 		font-style: italic; cursor: pointer; background: transparent;\
 		color: currentColor; -webkit-appearance: none;">${ability.name}</i></button>` :
@@ -50,13 +50,26 @@ function getSets(species: string | Species, format: Format | string): {
 }
 
 export const commands: Chat.ChatCommands = {
+	// Filter on Data Preview for Pet Mods and format.team for random battles
 	...Object.fromEntries(
 		Dex.formats
 			.all()
-			.filter(format => format.exists && format.team !== undefined)
+			.filter(format =>
+				format.exists && format.team !== undefined && format.ruleset.includes('Data Preview') &&
+				format.id.startsWith(`gen${Dex.gen}`))
+			.map(format => {
+				const alias = format.id.slice(`gen${Dex.gen}`.length);
+				return [alias, format.id];
+			})
+	),
+	...Object.fromEntries(
+		Dex.formats
+			.all()
+			.filter(format => format.exists && format.team !== undefined && format.ruleset.includes('Data Preview'))
 			.map(format => [
 				format.id,
 				function (this: Chat.CommandContext, target, room, user, connection, cmd) {
+					// Reuse code from /randbats
 					if (!this.runBroadcast()) return;
 					const args = target.split(',');
 					if (!args[0]) return this.parse(`/help ${format.id}`);
@@ -87,14 +100,14 @@ export const commands: Chat.ChatCommands = {
 						buf += `<b>Level</b>: ${level}`;
 						for (const set of sets) {
 							buf += `<details class="details"><summary>${set.role}</summary>`;
-							if (dex.gen === 9) {
+							if (dex.gen === 9 && set.teraTypes) {
 								buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 							} else if (([2, 3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
 								buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
 							}
-							buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
+							buf += `<b>Moves</b>: ${set.movepool.sort().map((move: any) => formatMove(move, format)).join(', ')}<br/>`;
 							if (set.abilities) {
-								buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil)).join(', ')}`;
+								buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil, format)).join(', ')}`;
 							}
 							buf += '</details>';
 							setCount++;
@@ -112,21 +125,18 @@ export const commands: Chat.ChatCommands = {
 					}
 					this.sendReply(inexactMsg);
 					this.sendReplyBox(buf);
-
-					this.sendReply(`You used ${format.name}`);
-				}
+				},
 			])
 	),
 	...Object.fromEntries(
 		Dex.formats
 			.all()
-			.filter(f => f.exists)
+			.filter(format => format.exists && format.team !== undefined && format.ruleset.includes('Data Preview'))
 			.map(format => [
 				format.id + 'help',
 				function (this: Chat.CommandContext, target, room, user, connection, cmd) {
-					// cmd === the format id used
 					this.sendReply(`/${format.id} [pokemon] - Displays a Pok\u00e9mon's ${format.name} Moves.`);
-				}
+				},
 			])
 	),
 };
