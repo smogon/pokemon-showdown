@@ -8,10 +8,10 @@ import { FS } from '../../lib';
 import { toID } from "../../sim/dex-data";
 
 function formatMove(move: Move | string, format: Format) {
-	move = Dex.moves.get(move);
-	const id = move.id;
 	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
+	move = dex.moves.get(move);
+	const id = move.id;
 	const custom = (dex.data.Moves[id] as any) !== (parentDex.data.Moves[id] as any);
 	return custom ? `<button name="send" value="/dt ${move.name}, ${format.name}"\
 		style="display: inline; padding: 0; border: 0; font: inherit; font-style: italic; cursor: pointer;\
@@ -20,10 +20,10 @@ function formatMove(move: Move | string, format: Format) {
 }
 
 function formatAbility(ability: Ability | string, format: Format) {
-	ability = Dex.abilities.get(ability);
-	const id = toID(ability.name);
 	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
+	ability = dex.abilities.get(ability);
+	const id = toID(ability.name);
 	const custom = (dex.data.Abilities[id] as any) !== (parentDex.data.Abilities[id] as any);
 	return custom ? `<button name="send" value="/dt ${ability.name}, ${format.name}"\
 		style="display: inline; padding: 0; border: 0; font: inherit;\
