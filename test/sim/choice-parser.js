@@ -478,7 +478,7 @@ describe('Choice parser', () => {
 			battle.makeChoices('switch Magikarp', 'move splash');
 			assert.species(battle.p1.active[0], 'Magikarp');
 
-			battle.makeChoices(`switch ${p1.pokemon[1].species.name}`, 'move splash');
+			battle.makeChoices(`switch ${battle.p1.pokemon[1].species.name}`, 'move splash');
 			assert(battle.p1.active[0].species.isMega);
 		});
 
