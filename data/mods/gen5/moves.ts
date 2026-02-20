@@ -794,19 +794,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
 	},
-	skillswap: {
-		inherit: true,
-		onHit(target, source) {
-			const targetAbility = target.ability;
-			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility) {
-				return false;
-			}
-			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), `[of] ${target}`);
-			source.setAbility(targetAbility);
-			target.setAbility(sourceAbility);
-		},
-	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,

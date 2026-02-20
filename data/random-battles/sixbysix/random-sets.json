@@ -139,7 +139,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Accelerock", "Earthquake", "Gunk Rock", "Stone Edge"],
+                "movepool": ["Accelerock", "Earthquake", "Gunk Shot", "Stone Edge"],
                 "abilities": ["Earth Eater"]
             }
         ]
@@ -555,3 +555,4 @@
         ]
     }
 }
+
