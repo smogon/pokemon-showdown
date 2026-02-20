@@ -401,4 +401,156 @@ describe('Choice parser', () => {
 			});
 		});
 	});
+
+	describe('Switch by name', () => {
+		it('should prefer nickname over species name', () => {
+			battle = common.createBattle([[
+				{ species: 'Magikarp', moves: ['splash'] },
+				{ species: 'Charizard', name: "Pikachu", moves: ['tackle'] },
+				{ species: 'Pikachu', name: "Charizard", moves: ['tackle'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('switch Charizard', 'move splash');
+			assert.species(battle.p1.active[0], 'Pikachu');
+		});
+
+		it('should support nicknames starting with a digit', () => {
+			battle = common.createBattle([[
+				{ species: 'Magikarp', moves: ['splash'] },
+				{ species: 'Dusclops', name: "1-Eyed", moves: ['tackle'] },
+				{ species: 'Ariados', name: "4-Legged", moves: ['tackle'] },
+				{ species: 'Durant', name: "6-Legged", moves: ['tackle'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('switch 1-Eyed', 'move splash');
+			assert.species(battle.p1.active[0], 'Dusclops');
+			battle.makeChoices('switch 4-Legged', 'move splash');
+			assert.species(battle.p1.active[0], 'Ariados');
+			battle.makeChoices('switch 6-Legged', 'move splash');
+			assert.species(battle.p1.active[0], 'Durant');
+		});
+
+		it('should ignore temporarily transformed species', () => {
+			battle = common.createBattle([[
+				{ species: 'Ditto', ability: 'imposter', moves: ['transform'] },
+				{ species: 'Pikachu', moves: ['splash'] },
+			], [
+				{ species: 'Pikachu', moves: ['splash'] },
+			]]);
+
+			assert(battle.p1.active[0].transformed);
+			assert.species(battle.p1.active[0], 'Pikachu');
+
+			battle.makeChoices('switch Pikachu', 'move splash');
+
+			assert(!battle.p1.active[0].transformed);
+			assert.species(battle.p1.active[0], 'Pikachu');
+		});
+
+		it('should error when attempting to switch to an active Pokémon', () => {
+			battle = common.createBattle([[
+				{ species: 'Pikachu', moves: ['tackle'] },
+				{ species: 'Charizard', moves: ['tackle'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			assert.throws(() => {
+				battle.makeChoices('switch Pikachu', 'move splash');
+			});
+		});
+
+		it('should match final formes after Mega-Evolution', () => {
+			battle = common.gen(9).createBattle({ formatid: 'gen9nationaldex@@@!teampreview' }, [[
+				{ species: 'Magearna-Original', name: "Magi", item: 'magearnite', moves: ['agility'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('move agility mega', 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+
+			battle.makeChoices('switch Magikarp', 'move splash');
+			assert.species(battle.p1.active[0], 'Magikarp');
+
+			battle.makeChoices(`switch ${p1.pokemon[1].species.name}`, 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+		});
+
+		it('should match base formes after Mega-Evolution', () => {
+			battle = common.gen(9).createBattle({ formatid: 'gen9nationaldex@@@!teampreview' }, [[
+				{ species: 'Magearna-Original', name: "Magi", item: 'magearnite', moves: ['agility'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('move agility mega', 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+
+			battle.makeChoices('switch Magikarp', 'move splash');
+			assert.species(battle.p1.active[0], 'Magikarp');
+
+			battle.makeChoices('switch Magearna', 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+		});
+
+		it('should match cosmetic formes after Mega-Evolution', () => {
+			battle = common.gen(9).createBattle({ formatid: 'gen9nationaldex@@@!teampreview' }, [[
+				{ species: 'Magearna-Original', name: "Magi", item: 'magearnite', moves: ['agility'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('move agility mega', 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+
+			battle.makeChoices('switch Magikarp', 'move splash');
+			assert.species(battle.p1.active[0], 'Magikarp');
+
+			battle.makeChoices('switch Magearna-Original', 'move splash');
+			assert(battle.p1.active[0].species.isMega);
+		});
+
+		it('should allow switching into two identical Pokémon in the same turn', () => {
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Pikachu', moves: ['tackle'] },
+				{ species: 'Eevee', moves: ['tackle'] },
+				{ species: 'Garchomp', moves: ['tackle'] },
+				{ species: 'Garchomp', moves: ['tackle'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			battle.makeChoices('switch Garchomp, switch Garchomp', 'move splash, move splash');
+			assert.species(battle.p1.active[0], 'Garchomp');
+			assert.species(battle.p1.active[1], 'Garchomp');
+			assert.notEqual(battle.p1.active[0], battle.p1.active[1]);
+		});
+
+		it('should reject switching into the same Pokémon twice in the same turn', () => {
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Pikachu', moves: ['tackle'] },
+				{ species: 'Eevee', moves: ['tackle'] },
+				{ species: 'Garchomp', moves: ['tackle'] },
+				{ species: 'Salamence', moves: ['tackle'] },
+			], [
+				{ species: 'Magikarp', moves: ['splash'] },
+				{ species: 'Magikarp', moves: ['splash'] },
+			]]);
+
+			assert.throws(() => {
+				battle.makeChoices('switch Garchomp, switch Garchomp', 'move splash, move splash');
+			});
+			assert.species(battle.p1.active[0], 'Pikachu');
+			assert.species(battle.p1.active[1], 'Eevee');
+		});
+	});
 });
