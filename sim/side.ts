@@ -894,7 +894,7 @@ export class Side {
 			for (const [i, mon] of this.pokemon.entries()) {
 				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id) {
 					slot = i;
-					if (!mon.isActive) break;
+					if (!mon.transformed) break;
 				}
 			}
 			if (slot < 0) {
