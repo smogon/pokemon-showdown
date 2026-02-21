@@ -323,7 +323,7 @@ const noopWorker = new StreamWorker(new NoopStream());
 let botCounter = 0;
 
 /** Maps active bot user IDs to the battle callback for AI responses. */
-const botBattleHandlers = new Map<string, (roomid: string, slot: string) => void>();
+const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
  * Creates a temporary bot User with a noop connection.
