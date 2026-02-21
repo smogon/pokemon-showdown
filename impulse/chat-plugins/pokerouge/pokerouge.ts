@@ -827,7 +827,7 @@ function startBattle(user: User, state: PokeRougeState): void {
 	let battleRoom: AnyObject | null = null;
 	try {
 		battleRoom = Rooms.createBattle({
-			format: 'gen9customgame',
+			format: 'rougelikebattle',
 			players: [
 				{ user, team: playerTeam },
 				{ user: botUser, team: botTeam },
@@ -1347,6 +1347,20 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state) {
 				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
+			}
+
+			// Ensure shop inventory is rolled before validating
+			if (!state.shopInventory) {
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+			}
+
+			// Enforce the rotation — only items currently in the shop can be purchased
+			if (!state.shopInventory.includes(itemId)) {
+				return this.errorReply(
+					`${item.name} is not in your current shop. Use /pokerouge shop to see what's available, ` +
+					`or /pokerouge refreshshop to reroll for 🪙 5.`
+				);
 			}
 
 			const coins = state.coins ?? 0;
