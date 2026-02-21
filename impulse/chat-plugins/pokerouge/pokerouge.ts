@@ -567,6 +567,8 @@ function startBattle(user: User, state: PokeRougeState): void {
 
 	// Join the human player to the battle room
 	user.joinRoom?.(battleRoom);
+	// Join the bot user to the battle room for consistent lifecycle handling
+	botUser.joinRoom?.(battleRoom);
 
 	// Track this battle
 	state.battleRoomId = battleRoom.roomid;
