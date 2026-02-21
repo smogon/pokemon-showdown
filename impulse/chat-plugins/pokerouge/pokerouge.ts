@@ -1184,7 +1184,7 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(
 					`<b>Warning: You already have an active PokéRogue run!</b><br>` +
 					`Floor: <b>${existing.floor}</b> &nbsp;|&nbsp; ` +
-					`Team: <b>${existing.team.length} Pokémon</b> &nbsp;|&nbsp; ` +
+					`Team: <b>${existing.team?.length ?? 0} Pokémon</b> &nbsp;|&nbsp; ` +
 					`🪙 Coins: <b>${existing.coins ?? 0}</b><br><br>` +
 					`Starting a fresh run will permanently delete your current progress.<br>` +
 					`<button name="send" value="/pokerouge newgame confirm" class="button">` +
