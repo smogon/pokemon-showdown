@@ -636,9 +636,8 @@ function buildBotTeam(floor: number): string {
  * Creates the bot, registers AI handlers and tracks the room.
  */
 function startBattle(user: User, state: PokeRougeState): void {
+	// Pack the team BEFORE clearing held items — packTeam reads them to embed in the team string
 	const playerTeam = packTeam(state.team);
-	// Clear held items — they're consumed each battle
-	for (const mon of state.team) delete mon.heldItem;
 	const botTeam = buildBotTeam(state.floor);
 
 	const trainerName = 'PokeRouge Trainer';
@@ -668,6 +667,9 @@ function startBattle(user: User, state: PokeRougeState): void {
 		user.popup('Failed to start the PokeRouge battle. Please try again.');
 		return;
 	}
+
+	// Clear held items now that battle creation succeeded — they're consumed each battle
+	for (const mon of state.team) delete mon.heldItem;
 
 	// Join the human player to the battle room
 	user.joinRoom?.(battleRoom);
