@@ -861,14 +861,20 @@ export const handlers: Chat.Handlers = {
 			const messages: string[] = [];
 
 			for (const mon of state.team) {
+				// Capture the original species name before any potential evolution
+				const oldSpeciesData = Dex.species.get(toID(mon.species));
+				const oldName = oldSpeciesData.exists ? oldSpeciesData.name : mon.species;
+
 				const { evolved, oldLevel } = applyExpAndLevelUp(mon, reward);
 				if (mon.level > oldLevel) {
-					const speciesData = Dex.species.get(toID(mon.species));
-					const name = speciesData.exists ? speciesData.name : mon.species;
+					const newSpeciesData = Dex.species.get(toID(mon.species));
+					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
 					if (evolved) {
-						messages.push(`🌟 <b>${name}</b> evolved and is now <b>Lv.${mon.level}</b>!`);
+						messages.push(
+							`🌟 <b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
+						);
 					} else {
-						messages.push(`⬆ <b>${name}</b> grew to <b>Lv.${mon.level}</b>!`);
+						messages.push(`⬆ <b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
 					}
 				}
 			}
