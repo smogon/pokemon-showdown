@@ -134,7 +134,7 @@ function getLevelUpEvo(speciesId: string): { evoTo: string; evoLevel: number } |
 		if (evo.evoType === 'other') continue;
 
 		// Use the Pokemon's own evoLevel if present; otherwise use the fallback for this evo type
-		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 0;
+		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 36;
 		const evoLevel = evo.evoLevel ?? fallback;
 		if (evoLevel > 0) {
 			return { evoTo: toID(evoName), evoLevel };
