@@ -1378,10 +1378,6 @@ export const commands: Chat.ChatCommands = {
 // Battle end handler — handle win / loss
 // ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
-// Battle end handler — handle win / loss
-// ---------------------------------------------------------------------------
-
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {
 		const match = activeMatches.get(battle.roomid);
