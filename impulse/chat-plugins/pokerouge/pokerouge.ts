@@ -1483,8 +1483,12 @@ export const handlers: Chat.Handlers = {
 					`Use /pokerouge start to try again.`
 				);
 			} else {
-				// Run over — reset
+				// Run over — reset active run, but preserve leaderboard data
+				const {highestFloor, displayName} = state;
 				deleteState(match.userId);
+				if (highestFloor !== undefined || displayName !== undefined) {
+					setState(match.userId, {highestFloor, displayName} as any);
+				}
 				humanUser?.popup(
 					`❌ You were defeated on Floor ${match.floor}!\n` +
 					`Your PokeRouge run has ended.\n` +
