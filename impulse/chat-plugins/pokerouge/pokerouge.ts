@@ -244,13 +244,15 @@ function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: bo
 	while (mon.level < 100 && mon.exp >= expForLevel(mon.level + 1)) {
 		mon.level++;
 	}
-	// Check evolution
-	const evo = EVOLUTIONS[mon.species];
-	if (evo && mon.level >= evo.evoLevel) {
+	// Check evolution chain: evolve as many times as allowed by current level
+	let evolved = false;
+	while (true) {
+		const evo = EVOLUTIONS[mon.species];
+		if (!evo || mon.level < evo.evoLevel) break;
 		mon.species = evo.evoTo;
-		return { evolved: true, oldLevel };
+		evolved = true;
 	}
-	return { evolved: false, oldLevel };
+	return { evolved, oldLevel };
 }
 
 // ---------------------------------------------------------------------------
