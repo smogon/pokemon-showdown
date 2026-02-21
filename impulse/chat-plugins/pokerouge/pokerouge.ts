@@ -2,14 +2,28 @@
  * PokeRouge - Pokemon Roguelike Battle Tower Plugin
  * A battle-tower-based roguelike game for Pokemon Showdown (Impulse server).
  *
- * Commands:
- *   /pokerouge start        (alias: /pr start)
+ * Player commands:
+ *   /pokerouge start
  *   /pokerouge choose [1|2|3]
  *   /pokerouge shop
  *   /pokerouge buy <item>
  *   /pokerouge use <item> [team slot]
  *   /pokerouge status
+ *   /pokerouge top
  *   /pokerouge quit
+ *   /pokerouge help
+ *
+ * Staff commands (Global Driver+):
+ *   /pokerouge givemoney [user] [amount]
+ *   /pokerouge removecoins [user],[amount]
+ *   /pokerouge resetcoins [user]
+ *   /pokerouge setfloor [user],[floor]
+ *   /pokerouge addmon [user],[pokemon]
+ *   /pokerouge removemon [user],[slot]
+ *   /pokerouge givemon [user],[pokemon]
+ *   /pokerouge viewteam [user]
+ *   /pokerouge healteam [user]
+ *   /pokerouge resetfloor [user]
  *
  * Flow:
  *   1. Player types /pokerouge start and sees 3 random level-1 Pokemon to choose from.
@@ -242,6 +256,10 @@ interface PokeRougeState {
 	doubleExpFloors?: number;
 	/** If true, the next loss will retry the same floor instead of resetting the run. */
 	hasRevive?: boolean;
+	/** Highest floor ever reached — tracked for the leaderboard. */
+	highestFloor?: number;
+	/** Display name (updated each login) — used for the leaderboard. */
+	displayName?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -795,6 +813,45 @@ function renderShop(coins: number): string {
 	return `<table style="border-collapse:separate;border-spacing:0 8px">${rows.join('')}</table>`;
 }
 
+/** Builds the Top-100 leaderboard HTML sorted by highestFloor descending. */
+function renderLeaderboard(): string {
+	const entries = Object.entries(savedData)
+		.filter(([, s]) => (s.highestFloor ?? 0) > 0)
+		.sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0))
+		.slice(0, 100);
+
+	if (!entries.length) {
+		return '<em>No records yet — be the first to complete a floor!</em>';
+	}
+
+	const rows = entries.map(([userid, s], i) => {
+		const rank = i + 1;
+		const display = s.displayName || userid;
+		const nameHtml = Impulse.nameColor(display, true, true);
+		const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+		const teamStr = (s.team ?? [])
+			.map(m => Dex.species.get(toID(m.species)).name || m.species)
+			.join(', ') || '—';
+		const bg = rank <= 3 ? 'background:#fffaf0' : '';
+		return `<tr style="${bg}">` +
+			`<td style="padding:3px 8px;font-weight:bold">${medal}</td>` +
+			`<td style="padding:3px 8px">${nameHtml}</td>` +
+			`<td style="padding:3px 8px;text-align:center"><b>Floor ${s.highestFloor ?? 0}</b></td>` +
+			`<td style="padding:3px 8px;font-size:11px;color:#555">${teamStr}</td>` +
+			`</tr>`;
+	}).join('');
+
+	return `<table style="border-collapse:collapse;width:100%">` +
+		`<tr style="background:#eee">` +
+		`<th style="padding:4px 8px">#</th>` +
+		`<th style="padding:4px 8px">Player</th>` +
+		`<th style="padding:4px 8px">Best Floor</th>` +
+		`<th style="padding:4px 8px">Last Team</th>` +
+		`</tr>` +
+		rows +
+		`</table>`;
+}
+
 // ---------------------------------------------------------------------------
 // Chat command handlers
 // ---------------------------------------------------------------------------
@@ -1098,14 +1155,15 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('You have no active PokeRouge run.');
 			}
 			if (state.battleRoomId) {
-				// Clean up activeMatches before forfeiting in case onBattleEnd isn't called
+				// Clean up activeMatches and bot user before forfeiting,
+				// in case onBattleEnd fails to fire (server crash, external room destruction, etc.)
 				const battleRoomId = state.battleRoomId as RoomID;
 				const match = activeMatches.get(battleRoomId);
-				if (match && (match as any).botUserId) {
-					// Ensure the bot user is explicitly destroyed even if onBattleEnd fails to fire
-					destroyBotUser((match as any).botUserId);
+				if (match) {
+					const botUser = Users.get(match.botUserId);
+					if (botUser) destroyBotUser(botUser);
+					activeMatches.delete(battleRoomId);
 				}
-				activeMatches.delete(battleRoomId);
 				const br = Rooms.get(state.battleRoomId);
 				if (br?.battle) br.battle.forfeit(user);
 			}
@@ -1113,32 +1171,212 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply('Your PokeRouge run has been abandoned. Use /pokerouge start to begin a new run.');
 		},
 
-		help(target, room, user) {
+		// -----------------------------------------------------------------------
+		// Staff commands — require Global Driver+ (checkCan 'lock')
+		// -----------------------------------------------------------------------
+
+		givemoney(target, room, user) {
+			this.checkCan('lock');
+			const parts = target.trim().split(/\s+/);
+			// If only a number is given, give to self
+			const isNumber = (s: string) => /^\d+$/.test(s);
+			let targetName: string;
+			let amount: number;
+			if (parts.length === 1 && isNumber(parts[0])) {
+				targetName = user.name;
+				amount = parseInt(parts[0]);
+			} else if (parts.length >= 2 && isNumber(parts[parts.length - 1])) {
+				amount = parseInt(parts[parts.length - 1]);
+				targetName = parts.slice(0, -1).join(' ');
+			} else {
+				targetName = parts.join(' ') || user.name;
+				amount = 100;
+			}
+			const targetId = toID(targetName) || user.id;
+			const targetState = getState(targetId);
+			if (!targetState) {
+				return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			}
+			targetState.coins = (targetState.coins ?? 0) + amount;
+			setState(targetId, targetState);
+			this.sendReply(`Gave 🪙 ${amount} coins to ${targetName}. They now have ${targetState.coins} coins.`);
+			this.modlog('POKEROUGE GIVEMONEY', targetId, `${amount} coins`);
+		},
+
+		removecoins(target, room, user) {
+			this.checkCan('lock');
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) return this.errorReply('Usage: /pokerouge removecoins <user>, <amount>');
+			const amount = parseInt(parts[1]);
+			if (isNaN(amount) || amount <= 0) return this.errorReply('Amount must be a positive number.');
+			const targetId = toID(parts[0]);
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			targetState.coins = Math.max(0, (targetState.coins ?? 0) - amount);
+			setState(targetId, targetState);
+			this.sendReply(`Removed 🪙 ${amount} coins from ${parts[0]}. They now have ${targetState.coins} coins.`);
+			this.modlog('POKEROUGE REMOVECOINS', targetId, `${amount} coins`);
+		},
+
+		resetcoins(target, room, user) {
+			this.checkCan('lock');
+			const targetId = toID(target.trim());
+			if (!targetId) return this.errorReply('Usage: /pokerouge resetcoins <user>');
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${target} has no active PokeRouge run.`);
+			targetState.coins = 0;
+			setState(targetId, targetState);
+			this.sendReply(`Reset ${target}'s coins to 0.`);
+			this.modlog('POKEROUGE RESETCOINS', targetId);
+		},
+
+		setfloor(target, room, user) {
+			this.checkCan('lock');
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) return this.errorReply('Usage: /pokerouge setfloor <user>, <floor>');
+			const floor = parseInt(parts[1]);
+			if (isNaN(floor) || floor < 1) return this.errorReply('Floor must be a positive number.');
+			const targetId = toID(parts[0]);
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			targetState.floor = floor;
+			setState(targetId, targetState);
+			this.sendReply(`Set ${parts[0]}'s floor to ${floor}.`);
+			this.modlog('POKEROUGE SETFLOOR', targetId, `floor ${floor}`);
+		},
+
+		resetfloor(target, room, user) {
+			this.checkCan('lock');
+			const targetId = toID(target.trim());
+			if (!targetId) return this.errorReply('Usage: /pokerouge resetfloor <user>');
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${target} has no active PokeRouge run.`);
+			targetState.floor = 1;
+			setState(targetId, targetState);
+			this.sendReply(`Reset ${target}'s floor to 1.`);
+			this.modlog('POKEROUGE RESETFLOOR', targetId);
+		},
+
+		viewteam(target, room, user) {
+			if (!this.runBroadcast()) return;
+			this.checkCan('lock');
+			const targetId = toID(target.trim());
+			if (!targetId) return this.errorReply('Usage: /pokerouge viewteam <user>');
+			const targetState = getState(targetId);
+			if (!targetState) return this.sendReplyBox(`${target} has no active PokeRouge run.`);
+			const targetDisplay = targetState.displayName || target;
+			this.sendReplyBox(
+				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
+				`<b>Floor:</b> ${targetState.floor} &nbsp;|&nbsp; <b>🪙 Coins:</b> ${targetState.coins ?? 0}<br>` +
+				`<b>Team:</b><br>${renderTeam(targetState.team)}`
+			);
+		},
+
+		addmon(target, room, user) {
+			this.checkCan('lock');
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) return this.errorReply('Usage: /pokerouge addmon <user>, <pokemon>');
+			const targetId = toID(parts[0]);
+			const speciesId = toID(parts[1]);
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			if (targetState.team.length >= 6) return this.errorReply(`${parts[0]}'s team is full (6 Pokémon).`);
+			const species = Dex.species.get(speciesId);
+			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${parts[1]}`);
+			const addLevel = Math.max(1, targetState.floor - 2);
+			targetState.team.push({ species: speciesId, level: addLevel, exp: expForLevel(addLevel) });
+			setState(targetId, targetState);
+			this.sendReply(`Added ${species.name} (Lv.${addLevel}) to ${parts[0]}'s team.`);
+			this.modlog('POKEROUGE ADDMON', targetId, species.name);
+		},
+
+		givemon(target, room, user) {
+			// Alias for addmon
+			return this.parse(`/pokerouge addmon ${target}`);
+		},
+
+		removemon(target, room, user) {
+			this.checkCan('lock');
+			const parts = target.split(',').map(p => p.trim());
+			if (parts.length < 2) return this.errorReply('Usage: /pokerouge removemon <user>, <slot>');
+			const slot = parseInt(parts[1]) - 1;
+			const targetId = toID(parts[0]);
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			if (slot < 0 || slot >= targetState.team.length) {
+				return this.errorReply(`Invalid slot. ${parts[0]} has ${targetState.team.length} Pokémon (1-${targetState.team.length}).`);
+			}
+			if (targetState.team.length === 1) return this.errorReply(`Cannot remove the last Pokémon from a team.`);
+			const removed = targetState.team.splice(slot, 1)[0];
+			const removedName = Dex.species.get(toID(removed.species)).name || removed.species;
+			setState(targetId, targetState);
+			this.sendReply(`Removed ${removedName} (slot ${slot + 1}) from ${parts[0]}'s team.`);
+			this.modlog('POKEROUGE REMOVEMON', targetId, removedName);
+		},
+
+		healteam(target, room, user) {
+			this.checkCan('lock');
+			const targetId = toID(target.trim());
+			if (!targetId) return this.errorReply('Usage: /pokerouge healteam <user>');
+			const targetState = getState(targetId);
+			if (!targetState) return this.errorReply(`${target} has no active PokeRouge run.`);
+			// Reset EXP to the baseline for each Pokémon's current level so they're "fresh"
+			for (const mon of targetState.team) {
+				mon.exp = expForLevel(mon.level);
+			}
+			setState(targetId, targetState);
+			this.sendReply(`Healed ${target}'s team (EXP reset to current level baseline).`);
+			this.modlog('POKEROUGE HEALTEAM', targetId);
+		},
+
+		// /pokerouge top — Top 100 leaderboard
+		top(target, room, user) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<b>PokeRouge Commands:</b><br>` +
-				`<code>/pokerouge start</code> — Start or resume a PokeRouge run.<br>` +
-				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or new team addition.<br>` +
-				`<code>/pokerouge shop</code> — View and buy items using coins.<br>` +
-				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item from the shop.<br>` +
-				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Use or equip an item (slot = team position 1-6).<br>` +
-				`<code>/pokerouge status</code> — View your floor, coins, items and team.<br>` +
-				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
-				`<br>Aliases: <code>/pr start</code>, <code>/pr shop</code>, <code>/pr status</code>, etc.<br>` +
-				`<br><b>Tips:</b> Win floors to earn 🪙 coins. Spend them in the shop for EXP boosts, held items and second chances. ` +
-				`Legendary Pokémon may appear as team additions at Floor 20+!`
+				`<b style="font-size:15px">🏆 PokeRouge Top 100 Leaderboard</b><br><br>` +
+				renderLeaderboard()
 			);
+		},
+
+		help(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const isStaff = user.can('lock');
+			let html =
+				`<b>PokeRouge — Player Commands:</b><br>` +
+				`<code>/pokerouge start</code> — Start a new run or resume your current one.<br>` +
+				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
+				`<code>/pokerouge shop</code> — View the item shop.<br>` +
+				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item (costs 🪙 coins).<br>` +
+				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
+				`<code>/pokerouge status</code> — View your floor, 🪙 coins, inventory and team.<br>` +
+				`<code>/pokerouge top</code> — View the Top 100 leaderboard by highest floor.<br>` +
+				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
+				`<br><b>Shop Items:</b> Rare Candy · Lucky Charm · Revive · Focus Sash · Leftovers · Choice Band · Life Orb · Assault Vest<br>` +
+				`<br><b>Tips:</b> Win floors to earn 🪙 coins. Legendary Pokémon may appear as team additions at Floor 20+!`;
+			if (isStaff) {
+				html +=
+					`<br><br><b>Staff Commands (Global Driver+):</b><br>` +
+					`<code>/pokerouge givemoney &lt;user&gt; [amount]</code> — Give coins (default 100). Omit user to give to yourself.<br>` +
+					`<code>/pokerouge removecoins &lt;user&gt;, &lt;amount&gt;</code> — Remove coins from a user.<br>` +
+					`<code>/pokerouge resetcoins &lt;user&gt;</code> — Set a user's coins to 0.<br>` +
+					`<code>/pokerouge setfloor &lt;user&gt;, &lt;floor&gt;</code> — Set a user's current floor.<br>` +
+					`<code>/pokerouge resetfloor &lt;user&gt;</code> — Reset a user's floor to 1.<br>` +
+					`<code>/pokerouge viewteam &lt;user&gt;</code> — View another user's team.<br>` +
+					`<code>/pokerouge addmon &lt;user&gt;, &lt;pokemon&gt;</code> — Add a Pokémon to a user's team (max 6).<br>` +
+					`<code>/pokerouge givemon &lt;user&gt;, &lt;pokemon&gt;</code> — Same as addmon.<br>` +
+					`<code>/pokerouge removemon &lt;user&gt;, &lt;slot&gt;</code> — Remove the Pokémon in the given team slot.<br>` +
+					`<code>/pokerouge healteam &lt;user&gt;</code> — Reset a user's team EXP to their current level baseline.<br>`;
+			}
+			this.sendReplyBox(html);
 		},
 
 		'': 'help',
 	},
-
-	/** Alias: /pr [subcommand] */
-	pr(target, room, user) {
-		const [sub = '', ...rest] = target.trim().split(/\s+/);
-		this.parse(`/pokerouge ${sub} ${rest.join(' ')}`);
-	},
 };
+
+// ---------------------------------------------------------------------------
+// Battle end handler — handle win / loss
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Battle end handler — handle win / loss
@@ -1201,6 +1439,11 @@ export const handlers: Chat.Handlers = {
 
 			const prevFloor = state.floor;
 			state.floor++;
+
+			// Update highest floor for leaderboard
+			if (state.floor > (state.highestFloor ?? 0)) state.highestFloor = state.floor;
+			// Keep display name up-to-date
+			if (humanUser) state.displayName = humanUser.name;
 
 			// Every 5 floors, offer a new Pokemon
 			const offerNewPokemon = state.floor > 1 && (state.floor - 1) % 5 === 0 && state.team.length < 6;
