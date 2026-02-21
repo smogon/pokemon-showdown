@@ -1135,7 +1135,7 @@ export const commands: Chat.ChatCommands = {
 
 	/** Alias: /pr [subcommand] */
 	pr(target, room, user) {
-		const [sub, ...rest] = target.trim().split(/\s+/);
+		const [sub = '', ...rest] = target.trim().split(/\s+/);
 		this.parse(`/pokerouge ${sub} ${rest.join(' ')}`);
 	},
 };
