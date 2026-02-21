@@ -827,7 +827,7 @@ function startBattle(user: User, state: PokeRougeState): void {
 	let battleRoom: AnyObject | null = null;
 	try {
 		battleRoom = Rooms.createBattle({
-			format: 'gen9customgame',
+			format: 'rougelikebattle',
 			players: [
 				{ user, team: playerTeam },
 				{ user: botUser, team: botTeam },
@@ -1854,4 +1854,47 @@ export const handlers: Chat.Handlers = {
 			}
 		}
 	},
+};
+
+// ---------------------------------------------------------------------------
+// Plugin start hook — register the private "Rougelike Battle" format at
+// startup so battles can use it without touching config/formats.ts.
+// The format is hidden from all public-facing lists.
+// ---------------------------------------------------------------------------
+
+export const start = (): void => {
+	const { Dex } = require('../../../sim/dex') as typeof import('../../../sim/dex');
+	const { Format } = require('../../../sim/dex-formats') as typeof import('../../../sim/dex-formats');
+
+	const FORMAT_ID = 'rougelikebattle' as ID;
+
+	// Skip if already registered (e.g. hot-reload)
+	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
+
+	// Ensure the base format list is loaded before we append
+	Dex.formats.load();
+
+	const formatData = {
+		name: 'Rougelike Battle',
+		mod: 'gen9',
+		effectType: 'Format' as const,
+		// Hidden from all public lists
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		debug: false,
+		battle: { trunc: Math.trunc },
+		section: 'Rougelike',
+		baseRuleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: [],
+		restricted: [],
+		unbanlist: [],
+		rated: false,
+	};
+
+	const format = new Format(formatData);
+	Dex.formats.rulesetCache.set(FORMAT_ID, format);
+	// Append to the immutable list cache so Dex.formats.all() includes it
+	(Dex.formats.formatsListCache as Format[])?.push(format);
 };
