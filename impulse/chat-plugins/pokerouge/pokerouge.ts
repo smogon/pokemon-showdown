@@ -958,7 +958,7 @@ function renderPokemonChoice(
 		const teraBadge = `<span style="background:#${typeColor(teraType)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">Tera: ${teraType}</span>`;
 
 		const legendaryBadge = isLegendary ?
-			`<br><span style="color:#e67e22;font-size:11px;font-weight:bold">⭐ Legendary</span>` : '';
+			`<br><span style="color:#e67e22;font-size:11px;font-weight:bold">Legendary</span>` : '';
 		const borderColor = isLegendary ? '#e67e22' : '#aaa';
 		const bg = isLegendary ? '#fffaf0' : '#fafafa';
 
@@ -995,7 +995,7 @@ function typeColor(type: string): string {
 /** Renders the PokeRouge "Start Fresh Run" welcome page. */
 function renderStartPage(): string {
 	return `<div style="text-align:center;padding:16px 8px">` +
-		`<b style="font-size:18px">⚔️ PokéRogue</b><br>` +
+		`<b style="font-size:18px">PokéRogue</b><br>` +
 		`<span style="font-size:12px;color:#555">Battle Tower Roguelike — floors get harder as you progress. Lose and start over!</span><br><br>` +
 		`<button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">` +
 		`Start Fresh Run</button>` +
@@ -1008,7 +1008,7 @@ function renderStartPage(): string {
  */
 function renderWinScreen(floor: number, streaks: number, coins: number): string {
 	return `<div style="text-align:center;padding:12px 8px">` +
-		`<b style="font-size:18px">🎉 Good Win!</b><br><br>` +
+		`<b style="font-size:18px">Good Win!</b><br><br>` +
 		`<table style="margin:0 auto;border-collapse:collapse">` +
 		`<tr>` +
 		`<td style="padding:4px 16px;font-size:13px"><b>Current Match:</b> Floor ${floor}</td>` +
@@ -1070,11 +1070,11 @@ function renderShop(coins: number, inventory?: string[]): string {
 	// Action bar at the top
 	const actionBar =
 		`<div style="margin-bottom:10px">` +
-		`<button name="send" value="/pokerouge refreshshop" class="button">🔄 Refresh Shop (5 🪙)</button>` +
+		`<button name="send" value="/pokerouge refreshshop" class="button">Refresh Shop (5 🪙)</button>` +
 		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge status" class="button">🎒 Check Your Team</button>` +
+		`<button name="send" value="/pokerouge status" class="button">Check Your Team</button>` +
 		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge start" class="button" style="float:right">⚔️ Start Next Battle!</button>` +
+		`<button name="send" value="/pokerouge start" class="button" style="float:right">Start Next Battle!</button>` +
 		`</div>`;
 
 	return actionBar + shopTable;
@@ -1095,7 +1095,7 @@ function renderLeaderboard(): string {
 		const rank = i + 1;
 		const display = s.displayName || userid;
 		const nameHtml = Impulse.nameColor(display, true, true);
-		const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+		const medal = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`;
 		const teamStr = (s.team ?? [])
 			.map(m => Dex.species.get(toID(m.species)).name || m.species)
 			.join(', ') || '—';
@@ -1145,7 +1145,7 @@ export const commands: Chat.ChatCommands = {
 			if (existing?.pendingChoice) {
 				const isAdd = existing.pendingChoiceType === 'add';
 				const title = isAdd ?
-					`🏆 Milestone reached! Add a new Pokémon to your team:` :
+					`Milestone reached! Add a new Pokemon to your team:` :
 					`Choose your starter Pokémon:`;
 				return this.sendReplyBox(
 					`<b>${title}</b><br><br>` +
@@ -1165,7 +1165,7 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReplyBox(
 					`<b>PokéRogue — Floor ${existing.floor}</b><br>` +
 					`Your team:<br>${renderTeam(existing.team)}<br><br>` +
-					`⚔️ Battle started! <a href="/${existing.battleRoomId}">Click here to go to your battle.</a>`
+					`Battle started! <a href="/${existing.battleRoomId}">Click here to go to your battle.</a>`
 				);
 			}
 
@@ -1182,7 +1182,7 @@ export const commands: Chat.ChatCommands = {
 
 			if (hasProgress && target.trim().toLowerCase() !== 'confirm') {
 				return this.sendReplyBox(
-					`<b>⚠️ Warning: You already have an active PokéRogue run!</b><br>` +
+					`<b>Warning: You already have an active PokéRogue run!</b><br>` +
 					`Floor: <b>${existing.floor}</b> &nbsp;|&nbsp; ` +
 					`Team: <b>${existing.team.length} Pokémon</b> &nbsp;|&nbsp; ` +
 					`🪙 Coins: <b>${existing.coins ?? 0}</b><br><br>` +
@@ -1279,7 +1279,7 @@ export const commands: Chat.ChatCommands = {
 				const isAdd = state.pendingChoiceType === 'add';
 				return this.sendReplyBox(
 					`<b>PokeRouge — Floor ${state.floor} — Pending Choice</b><br><br>` +
-					`<b>${isAdd ? '🏆 Choose a Pokémon to add to your team:' : 'Choose your starter Pokémon:'}</b><br><br>` +
+					`<b>${isAdd ? 'Choose a Pokemon to add to your team:' : 'Choose your starter Pokemon:'}</b><br><br>` +
 					renderPokemonChoice(
 						state.pendingChoice,
 						isAdd ? 'Add to Team' : 'Choose Starter'
@@ -1317,7 +1317,7 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 			}
 			this.sendReplyBox(
-				`<b style="font-size:15px">🛒 PokéRogue Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
+				`<b style="font-size:15px">PokéRogue Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
 				`<small>Items are permanent unless marked "(held item, 1 battle)".</small><br><br>` +
 				renderShop(coins, state?.shopInventory)
 			);
@@ -1359,7 +1359,7 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, state);
 
 			this.sendReplyBox(
-				`🛒 Purchased <b>${item.name}</b> for 🪙 ${item.cost}!<br>` +
+				`Purchased <b>${item.name}</b> for 🪙 ${item.cost}!<br>` +
 				`Remaining coins: 🪙 ${state.coins}<br>` +
 				(item.heldItem ?
 					`Use <code>/pokerouge use ${itemId} [team slot]</code> to equip it before the next battle.` :
@@ -1417,21 +1417,21 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 				const oldName = Dex.species.get(toID(oldSpecies)).name || oldSpecies;
 				return this.sendReplyBox(
-					`🍬 <b>${evolved ? `${oldName} evolved into ${newName}` : newName}</b> grew to <b>Lv.${mon.level}</b>!`
+					`<b>${evolved ? `${oldName} evolved into ${newName}` : newName}</b> grew to <b>Lv.${mon.level}</b>!`
 				);
 			}
 			case 'luckycharm': {
 				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
 				setState(user.id, state);
 				return this.sendReplyBox(
-					`🍀 <b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`
+					`<b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`
 				);
 			}
 			case 'revive': {
 				state.hasRevive = true;
 				setState(user.id, state);
 				return this.sendReplyBox(
-					`💊 <b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`
+					`<b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`
 				);
 			}
 			default: {
@@ -1455,7 +1455,7 @@ export const commands: Chat.ChatCommands = {
 				mon.heldItem = item.heldItem;
 				setState(user.id, state);
 				const monName = Dex.species.get(toID(mon.species)).name || mon.species;
-				return this.sendReplyBox(`🎒 Equipped <b>${item.name}</b> to <b>${monName}</b>!`);
+				return this.sendReplyBox(`Equipped <b>${item.name}</b> to <b>${monName}</b>!`);
 			}
 			}
 		},
@@ -1652,7 +1652,7 @@ export const commands: Chat.ChatCommands = {
 		top(target, room, user) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<b style="font-size:15px">🏆 PokeRouge Top 100 Leaderboard</b><br><br>` +
+				`<b style="font-size:15px">PokéRogue Top 100 Leaderboard</b><br><br>` +
 				renderLeaderboard()
 			);
 		},
@@ -1744,10 +1744,10 @@ export const handlers: Chat.Handlers = {
 					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
 					if (evolved) {
 						levelUpMsgs.push(
-							`🌟 <b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
+							`<b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
 						);
 					} else {
-						levelUpMsgs.push(`⬆ <b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
+						levelUpMsgs.push(`<b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
 					}
 				}
 			}
@@ -1790,10 +1790,10 @@ export const handlers: Chat.Handlers = {
 				`<div style="margin:6px 0;font-size:12px">${levelUpMsgs.join('<br>')}</div>` :
 				'';
 			const coinMsg = doubleActive ?
-				`<small>🍀 Lucky Charm active — coins doubled!</small><br>` :
+				`<small>Lucky Charm active — coins doubled!</small><br>` :
 				'';
 			const milestoneMsg = offerNewPokemon ?
-				`<br><b>🏆 Milestone!</b> Use <code>/pokerouge choose [1/2/3]</code> to add a new Pokémon to your team.<br>` :
+				`<br><b>Milestone!</b> Use <code>/pokerouge choose [1/2/3]</code> to add a new Pokemon to your team.<br>` :
 				'';
 
 			humanUser?.popup(
@@ -1812,7 +1812,7 @@ export const handlers: Chat.Handlers = {
 				delete state.battleRoomId;
 				setState(match.userId, state);
 				humanUser?.popup(
-					`💊 Your Revive activated! You get to retry Floor ${match.floor}.\n` +
+					`Your Revive activated! You get to retry Floor ${match.floor}.\n` +
 					`Use /pokerouge start to try again.`
 				);
 			} else {
@@ -1831,7 +1831,7 @@ export const handlers: Chat.Handlers = {
 				delete state.shopInventory;
 				setState(match.userId, state);
 				humanUser?.popup(
-					`❌ Defeated on Floor ${finalFloor}!\n` +
+					`Defeated on Floor ${finalFloor}!\n` +
 					`Streaks Won: ${finalStreaks} | Best Floor: ${state.highestFloor ?? finalFloor}\n\n` +
 					`Your PokéRogue run has ended.\n` +
 					`Use /pokerouge start to begin a new run with a fresh starter.`
