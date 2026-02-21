@@ -1310,16 +1310,17 @@ export const commands: Chat.ChatCommands = {
 		shop(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const state = getState(user.id);
-			const coins = state?.coins ?? 0;
+			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
+			const coins = state.coins ?? 0;
 			// Ensure a shop inventory exists for this player
-			if (state && !state.shopInventory) {
+			if (!state.shopInventory) {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
 			this.sendReplyBox(
 				`<b style="font-size:15px">PokéRogue Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
 				`<small>Items are permanent unless marked "(held item, 1 battle)".</small><br><br>` +
-				renderShop(coins, state?.shopInventory)
+				renderShop(coins, state.shopInventory)
 			);
 		},
 
