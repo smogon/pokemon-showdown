@@ -30,19 +30,18 @@ const DATA_FILE = 'impulse/db/pokerouge.json';
 /**
  * Official starter Pokemon (gens 1-9) — kept as a reference list (currently unused in gameplay).
  * Both player and bot now pick from the full Pokedex.
+ *
+ * Reference list:
+ *   bulbasaur, charmander, squirtle,
+ *   chikorita, cyndaquil, totodile,
+ *   treecko, torchic, mudkip,
+ *   turtwig, chimchar, piplup,
+ *   snivy, tepig, oshawott,
+ *   chespin, fennekin, froakie,
+ *   rowlet, litten, popplio,
+ *   grookey, scorbunny, sobble,
+ *   sprigatito, fuecoco, quaxly
  */
-const _BOT_STARTERS_UNUSED: string[] = [
-	'bulbasaur', 'charmander', 'squirtle',
-	'chikorita', 'cyndaquil', 'totodile',
-	'treecko', 'torchic', 'mudkip',
-	'turtwig', 'chimchar', 'piplup',
-	'snivy', 'tepig', 'oshawott',
-	'chespin', 'fennekin', 'froakie',
-	'rowlet', 'litten', 'popplio',
-	'grookey', 'scorbunny', 'sobble',
-	'sprigatito', 'fuecoco', 'quaxly',
-];
-void _BOT_STARTERS_UNUSED; // suppress unused warning
 
 /** Cached list of all base-form, official Pokemon IDs usable as starters. */
 let baseFormPokemonCache: string[] | null = null;
