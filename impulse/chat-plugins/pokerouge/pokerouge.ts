@@ -1173,9 +1173,27 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(renderStartPage());
 		},
 
-		// /pokerouge newgame — triggered by the "Start Fresh Run" button;
-		// clears any existing run and presents the starter selection UI.
+		// /pokerouge newgame [confirm] — triggered by the "Start Fresh Run" button.
+		// If the player has an active run (team or floor > 1), show a warning and
+		// require `/pokerouge newgame confirm` to permanently wipe progress.
 		newgame(target, room, user) {
+			const existing = getState(user.id);
+			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
+
+			if (hasProgress && target.trim().toLowerCase() !== 'confirm') {
+				return this.sendReplyBox(
+					`<b>⚠️ Warning: You already have an active PokéRogue run!</b><br>` +
+					`Floor: <b>${existing.floor}</b> &nbsp;|&nbsp; ` +
+					`Team: <b>${existing.team.length} Pokémon</b> &nbsp;|&nbsp; ` +
+					`🪙 Coins: <b>${existing.coins ?? 0}</b><br><br>` +
+					`Starting a fresh run will permanently delete your current progress.<br>` +
+					`<button name="send" value="/pokerouge newgame confirm" class="button">` +
+					`Yes, start a fresh run</button> &nbsp; ` +
+					`<button name="send" value="/pokerouge start" class="button">` +
+					`Keep my current run</button>`
+				);
+			}
+
 			const options = pickStarterOptions();
 			const newState: PokeRougeState = {
 				floor: 1,
