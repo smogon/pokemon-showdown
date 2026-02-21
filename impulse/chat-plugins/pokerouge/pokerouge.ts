@@ -79,72 +79,26 @@ function pickRandomPokemon(n: number, exclude: string[] = []): string[] {
 	return shuffled.slice(0, n);
 }
 
-/** Evolution table: species -> { evoTo, evoLevel }. */
-const EVOLUTIONS: Record<string, { evoTo: string; evoLevel: number }> = {
-	// Gen 1
-	bulbasaur: { evoTo: 'ivysaur', evoLevel: 16 },
-	ivysaur: { evoTo: 'venusaur', evoLevel: 32 },
-	charmander: { evoTo: 'charmeleon', evoLevel: 16 },
-	charmeleon: { evoTo: 'charizard', evoLevel: 36 },
-	squirtle: { evoTo: 'wartortle', evoLevel: 16 },
-	wartortle: { evoTo: 'blastoise', evoLevel: 36 },
-	// Gen 2
-	chikorita: { evoTo: 'bayleef', evoLevel: 16 },
-	bayleef: { evoTo: 'meganium', evoLevel: 32 },
-	cyndaquil: { evoTo: 'quilava', evoLevel: 14 },
-	quilava: { evoTo: 'typhlosion', evoLevel: 36 },
-	totodile: { evoTo: 'croconaw', evoLevel: 18 },
-	croconaw: { evoTo: 'feraligatr', evoLevel: 30 },
-	// Gen 3
-	treecko: { evoTo: 'grovyle', evoLevel: 16 },
-	grovyle: { evoTo: 'sceptile', evoLevel: 36 },
-	torchic: { evoTo: 'combusken', evoLevel: 16 },
-	combusken: { evoTo: 'blaziken', evoLevel: 36 },
-	mudkip: { evoTo: 'marshtomp', evoLevel: 16 },
-	marshtomp: { evoTo: 'swampert', evoLevel: 36 },
-	// Gen 4
-	turtwig: { evoTo: 'grotle', evoLevel: 18 },
-	grotle: { evoTo: 'torterra', evoLevel: 32 },
-	chimchar: { evoTo: 'monferno', evoLevel: 14 },
-	monferno: { evoTo: 'infernape', evoLevel: 36 },
-	piplup: { evoTo: 'prinplup', evoLevel: 16 },
-	prinplup: { evoTo: 'empoleon', evoLevel: 36 },
-	// Gen 5
-	snivy: { evoTo: 'servine', evoLevel: 17 },
-	servine: { evoTo: 'serperior', evoLevel: 36 },
-	tepig: { evoTo: 'pignite', evoLevel: 17 },
-	pignite: { evoTo: 'emboar', evoLevel: 36 },
-	oshawott: { evoTo: 'dewott', evoLevel: 17 },
-	dewott: { evoTo: 'samurott', evoLevel: 36 },
-	// Gen 6
-	chespin: { evoTo: 'quilladin', evoLevel: 16 },
-	quilladin: { evoTo: 'chesnaught', evoLevel: 36 },
-	fennekin: { evoTo: 'braixen', evoLevel: 16 },
-	braixen: { evoTo: 'delphox', evoLevel: 36 },
-	froakie: { evoTo: 'frogadier', evoLevel: 16 },
-	frogadier: { evoTo: 'greninja', evoLevel: 36 },
-	// Gen 7
-	rowlet: { evoTo: 'dartrix', evoLevel: 17 },
-	dartrix: { evoTo: 'decidueye', evoLevel: 34 },
-	litten: { evoTo: 'torracat', evoLevel: 17 },
-	torracat: { evoTo: 'incineroar', evoLevel: 34 },
-	popplio: { evoTo: 'brionne', evoLevel: 17 },
-	brionne: { evoTo: 'primarina', evoLevel: 34 },
-	// Gen 8
-	grookey: { evoTo: 'thwackey', evoLevel: 16 },
-	thwackey: { evoTo: 'rillaboom', evoLevel: 35 },
-	scorbunny: { evoTo: 'raboot', evoLevel: 16 },
-	raboot: { evoTo: 'cinderace', evoLevel: 35 },
-	sobble: { evoTo: 'drizzile', evoLevel: 16 },
-	drizzile: { evoTo: 'inteleon', evoLevel: 35 },
-	// Gen 9
-	sprigatito: { evoTo: 'floragato', evoLevel: 16 },
-	floragato: { evoTo: 'meowscarada', evoLevel: 36 },
-	fuecoco: { evoTo: 'crocalor', evoLevel: 16 },
-	crocalor: { evoTo: 'skeledirge', evoLevel: 36 },
-	quaxly: { evoTo: 'quaxwell', evoLevel: 16 },
-	quaxwell: { evoTo: 'quaquaval', evoLevel: 36 },
-};
+/**
+ * Returns the simple level-up evolution for a species, if one exists.
+ * Only considers evolutions triggered by levelling up without items, trading,
+ * or other special conditions (evoType must be undefined).
+ * For species with multiple evolutions (e.g. Wurmple), the first level-up
+ * branch is used.
+ */
+function getLevelUpEvo(speciesId: string): { evoTo: string; evoLevel: number } | null {
+	const species = Dex.species.get(toID(speciesId));
+	if (!species.exists || !species.evos.length) return null;
+
+	for (const evoName of species.evos) {
+		const evo = Dex.species.get(toID(evoName));
+		// Only pure level-up evolutions: no special evoType, must have a level threshold
+		if (!evo.evoType && evo.evoLevel) {
+			return { evoTo: toID(evoName), evoLevel: evo.evoLevel };
+		}
+	}
+	return null;
+}
 
 // ---------------------------------------------------------------------------
 // Data types
@@ -218,7 +172,7 @@ function floorExpReward(floor: number): number {
 	return 50 + floor * 15;
 }
 
-/** Bot Pokemon level for a given floor. */
+/** Bot Pokemon level for a given floor: starts at 5 and grows by ~1.5 per floor, capped at 100. */
 function botLevel(floor: number): number {
 	return Math.min(100, 5 + Math.floor((floor - 1) * 1.5));
 }
@@ -247,7 +201,7 @@ function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: bo
 	// Check evolution chain: evolve as many times as allowed by current level
 	let evolved = false;
 	while (true) {
-		const evo = EVOLUTIONS[mon.species];
+		const evo = getLevelUpEvo(mon.species);
 		if (!evo || mon.level < evo.evoLevel) break;
 		mon.species = evo.evoTo;
 		evolved = true;
@@ -520,10 +474,10 @@ function buildBotTeam(floor: number): string {
 	return picks.map(starter => {
 		let species = starter;
 		// Walk the evolution chain to find the right form for the bot's level
-		let evo = EVOLUTIONS[species];
+		let evo = getLevelUpEvo(species);
 		while (evo && level >= evo.evoLevel) {
 			species = evo.evoTo;
-			evo = EVOLUTIONS[species];
+			evo = getLevelUpEvo(species);
 		}
 		return packPokemon(species, level);
 	}).join(']');
@@ -741,6 +695,18 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('You have no pending Pokemon choice. Use /pokerouge start first.');
 			}
 
+			// Guard against starting a second battle while one is active
+			if (state.battleRoomId) {
+				const activeBattleRoom = Rooms.get(state.battleRoomId);
+				if (activeBattleRoom) {
+					return this.sendReplyBox(
+						`You already have an active PokeRouge battle! ` +
+						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
+					);
+				}
+				delete state.battleRoomId;
+			}
+
 			const options = state.pendingChoice;
 			if (n > options.length) return this.errorReply('Invalid choice.');
 
@@ -807,6 +773,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('You have no active PokeRouge run.');
 			}
 			if (state.battleRoomId) {
+				// Clean up activeMatches before forfeiting in case onBattleEnd isn't called
+				activeMatches.delete(state.battleRoomId as RoomID);
 				const br = Rooms.get(state.battleRoomId);
 				if (br?.battle) br.battle.forfeit(user);
 			}
