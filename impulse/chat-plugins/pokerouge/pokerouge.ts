@@ -644,23 +644,22 @@ function startBattle(user: User, state: PokeRougeState): void {
 	const botUser = createBotUser(trainerName);
 	const botSlot: 'p2' = 'p2';
 
-	// Register the AI callback BEFORE the battle begins
-	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
-		const room = Rooms.get(roomid as RoomID);
-		if (!room?.battle) return;
-		const choice = makeAIChoice(requestLine, state.floor);
-		void room.battle.stream.write(`>${botSlot} ${choice}`);
-	});
-
-	const battleRoom = Rooms.createBattle({
-		format: 'gen9customgame',
-		players: [
-			{ user, team: playerTeam },
-			{ user: botUser, team: botTeam },
-		],
-		rated: false,
-		title: `PokeRouge — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
-	});
+	let battleRoom: AnyObject | null = null;
+	try {
+		battleRoom = Rooms.createBattle({
+			format: 'gen9customgame',
+			players: [
+				{ user, team: playerTeam },
+				{ user: botUser, team: botTeam },
+			],
+			rated: false,
+			title: `PokeRouge — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
+		});
+	} catch (e) {
+		destroyBotUser(botUser);
+		user.popup('Failed to start the PokeRouge battle. Please try again.');
+		return;
+	}
 
 	if (!battleRoom) {
 		destroyBotUser(botUser);
@@ -668,13 +667,21 @@ function startBattle(user: User, state: PokeRougeState): void {
 		return;
 	}
 
+	// Register the AI callback AFTER confirming the battle exists
+	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
+		const room = Rooms.get(roomid as RoomID);
+		if (!room?.battle) return;
+		const choice = makeAIChoice(requestLine, state.floor);
+		void room.battle.stream.write(`>${botSlot} ${choice}`);
+	});
+
 	// Clear held items now that battle creation succeeded — they're consumed each battle
 	for (const mon of state.team) delete mon.heldItem;
 
 	// Join the human player to the battle room
-	user.joinRoom?.(battleRoom);
+	user.joinRoom?.(battleRoom as unknown as Room);
 	// Join the bot user to the battle room for consistent lifecycle handling
-	botUser.joinRoom?.(battleRoom);
+	botUser.joinRoom?.(battleRoom as unknown as Room);
 
 	// Track this battle
 	state.battleRoomId = battleRoom.roomid;
@@ -713,8 +720,8 @@ function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): stri
 		const legendaries = pickRandom(getLegendaryPokemon(), 1, existing);
 		if (legendaries.length) {
 			const regular = pickRandomPokemon(2, [...existing, ...legendaries]);
-			// Shuffle so the legendary position is random
-			return [...regular, ...legendaries].sort(() => Math.random() - 0.5);
+			// Use Fisher-Yates (via pickRandom) for uniform shuffle
+			return pickRandom([...regular, ...legendaries], 3);
 		}
 	}
 	return pickRandomPokemon(3, existing);
@@ -1196,6 +1203,7 @@ export const commands: Chat.ChatCommands = {
 				amount = 100;
 			}
 			const targetId = toID(targetName) || user.id;
+			if (amount <= 0 || isNaN(amount)) return this.errorReply('Amount must be a positive number.');
 			const targetState = getState(targetId);
 			if (!targetState) {
 				return this.errorReply(`${targetName} has no active PokeRouge run.`);
@@ -1241,7 +1249,8 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(floor) || floor < 1) return this.errorReply('Floor must be a positive number.');
 			const targetId = toID(parts[0]);
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${parts[0]} has no PokeRouge data.`);
+			if (!targetState.team) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
 			targetState.floor = floor;
 			setState(targetId, targetState);
 			this.sendReply(`Set ${parts[0]}'s floor to ${floor}.`);
@@ -1253,7 +1262,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target.trim());
 			if (!targetId) return this.errorReply('Usage: /pokerouge resetfloor <user>');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${target} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${target} has no PokeRouge data.`);
+			if (!targetState.team) return this.errorReply(`${target} has no active PokeRouge run.`);
 			targetState.floor = 1;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${target}'s floor to 1.`);
@@ -1266,7 +1276,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target.trim());
 			if (!targetId) return this.errorReply('Usage: /pokerouge viewteam <user>');
 			const targetState = getState(targetId);
-			if (!targetState) return this.sendReplyBox(`${target} has no active PokeRouge run.`);
+			if (!targetState) return this.sendReplyBox(`${target} has no PokeRouge data.`);
+			if (!targetState.team) return this.sendReplyBox(`${target} has no active PokeRouge run.`);
 			const targetDisplay = targetState.displayName || target;
 			this.sendReplyBox(
 				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
@@ -1282,7 +1293,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(parts[0]);
 			const speciesId = toID(parts[1]);
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${parts[0]} has no PokeRouge data.`);
+			if (!targetState.team) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
 			if (targetState.team.length >= 6) return this.errorReply(`${parts[0]}'s team is full (6 Pokémon).`);
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${parts[1]}`);
@@ -1305,7 +1317,8 @@ export const commands: Chat.ChatCommands = {
 			const slot = parseInt(parts[1]) - 1;
 			const targetId = toID(parts[0]);
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${parts[0]} has no PokeRouge data.`);
+			if (!targetState.team) return this.errorReply(`${parts[0]} has no active PokeRouge run.`);
 			if (slot < 0 || slot >= targetState.team.length) {
 				return this.errorReply(`Invalid slot. ${parts[0]} has ${targetState.team.length} Pokémon (1-${targetState.team.length}).`);
 			}
@@ -1322,7 +1335,8 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(target.trim());
 			if (!targetId) return this.errorReply('Usage: /pokerouge healteam <user>');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${target} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${target} has no PokeRouge data.`);
+			if (!targetState.team) return this.errorReply(`${target} has no active PokeRouge run.`);
 			// Reset EXP to the baseline for each Pokémon's current level so they're "fresh"
 			for (const mon of targetState.team) {
 				mon.exp = expForLevel(mon.level);
@@ -1486,12 +1500,16 @@ export const handlers: Chat.Handlers = {
 					`Use /pokerouge start to try again.`
 				);
 			} else {
-				// Run over — reset active run, but preserve leaderboard data
-				const {highestFloor, displayName} = state;
-				deleteState(match.userId);
-				if (highestFloor !== undefined || displayName !== undefined) {
-					setState(match.userId, {highestFloor, displayName} as any);
-				}
+				// Run over — reset to initial state while preserving leaderboard data
+				state.floor = 1;
+				state.team = [];
+				state.coins = 0;
+				state.hasRevive = false;
+				state.items = {};
+				delete state.battleRoomId;
+				delete state.pendingChoice;
+				delete state.doubleExpFloors;
+				setState(match.userId, state);
 				humanUser?.popup(
 					`❌ You were defeated on Floor ${match.floor}!\n` +
 					`Your PokeRouge run has ended.\n` +
