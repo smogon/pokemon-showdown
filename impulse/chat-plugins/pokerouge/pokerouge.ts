@@ -1099,7 +1099,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (state.battleRoomId) {
 				// Clean up activeMatches before forfeiting in case onBattleEnd isn't called
-				activeMatches.delete(state.battleRoomId as RoomID);
+				const battleRoomId = state.battleRoomId as RoomID;
+				const match = activeMatches.get(battleRoomId);
+				if (match && (match as any).botUserId) {
+					// Ensure the bot user is explicitly destroyed even if onBattleEnd fails to fire
+					destroyBotUser((match as any).botUserId);
+				}
+				activeMatches.delete(battleRoomId);
 				const br = Rooms.get(state.battleRoomId);
 				if (br?.battle) br.battle.forfeit(user);
 			}
