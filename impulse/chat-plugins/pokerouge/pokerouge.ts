@@ -1284,7 +1284,7 @@ export const commands: Chat.ChatCommands = {
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${parts[1]}`);
 			const addLevel = Math.max(1, targetState.floor - 2);
-			targetState.team.push({ species: speciesId, level: addLevel, exp: expForLevel(addLevel) });
+			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
 			setState(targetId, targetState);
 			this.sendReply(`Added ${species.name} (Lv.${addLevel}) to ${parts[0]}'s team.`);
 			this.modlog('POKEROUGE ADDMON', targetId, species.name);
