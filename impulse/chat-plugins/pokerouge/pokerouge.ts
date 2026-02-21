@@ -869,8 +869,9 @@ export const commands: Chat.ChatCommands = {
 						`<a href="/${existing.battleRoomId}">Click here</a> to go to your battle.`
 					);
 				}
-				// Battle room no longer exists — clear it
+				// Battle room no longer exists — clear it and persist the change
 				delete existing.battleRoomId;
+				setState(user.id, existing);
 			}
 
 			if (existing?.pendingChoice) {
