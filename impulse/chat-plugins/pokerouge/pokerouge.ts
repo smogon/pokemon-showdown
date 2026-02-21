@@ -827,7 +827,7 @@ function startBattle(user: User, state: PokeRougeState): void {
 	let battleRoom: AnyObject | null = null;
 	try {
 		battleRoom = Rooms.createBattle({
-			format: 'rougelikebattle',
+			format: 'gen9customgame',
 			players: [
 				{ user, team: playerTeam },
 				{ user: botUser, team: botTeam },

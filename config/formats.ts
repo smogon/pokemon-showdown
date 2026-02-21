@@ -5439,22 +5439,4 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-
-	// ---------------------------------------------------------------------------
-	// Internal: PokéRogue roguelike battles — not shown in any format list
-	// ---------------------------------------------------------------------------
-	{
-		section: "Rougelike",
-		column: 3,
-	},
-	{
-		name: "Rougelike Battle",
-		mod: 'gen9',
-		// Hidden from all public-facing lists
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		battle: { trunc: Math.trunc },
-		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
-	},
 ];
