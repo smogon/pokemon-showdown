@@ -849,7 +849,6 @@ function startBattle(user: User, state: PokeRougeState): boolean {
 
 	if (!battleRoom) {
 		destroyBotUser(botUser);
-		user.popup('Failed to start the PokéRogue battle. Please try again.');
 		return false;
 	}
 
