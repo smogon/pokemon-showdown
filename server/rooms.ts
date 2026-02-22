@@ -1145,8 +1145,10 @@ export abstract class BasicRoom {
 
 		Chat.runHandlers('onRoomDestroy', this.roomid);
 
-		Rooms.global.deregisterChatRoom(this.roomid);
-		Rooms.global.delistChatRoom(this.roomid);
+		if (Rooms.global) {
+			Rooms.global.deregisterChatRoom(this.roomid);
+			Rooms.global.delistChatRoom(this.roomid);
+		}
 
 		if (this.settings.aliases) {
 			for (const alias of this.settings.aliases) {
