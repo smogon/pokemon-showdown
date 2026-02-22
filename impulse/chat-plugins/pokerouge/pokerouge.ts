@@ -1874,7 +1874,21 @@ export const start = (): void => {
 			this: InstanceType<typeof Rooms.BasicRoom>
 		) {
 			if (!Rooms.global) {
-				Monitor.warn(`[pokerouge] BasicRoom.destroy: Rooms.global is null, skipping destroy for ${this.roomid}`);
+				Monitor.warn(`[pokerouge] BasicRoom.destroy: Rooms.global is null for ${this.roomid}, using no-op stubs`);
+				// Provide minimal stubs so the rest of destroy() runs fully —
+				// clearing timers, logs, Rooms.rooms entry, etc. — and does not
+				// leave a zombie room. Only the deregisterChatRoom / delistChatRoom
+				// calls are no-ops when Rooms.global is unavailable.
+				const roomsGlobalStub = {deregisterChatRoom: () => {}, delistChatRoom: () => {}};
+				(Rooms as any).global = roomsGlobalStub as any;
+				try {
+					_origDestroy.call(this);
+				} finally {
+					// Restore null only if our stub is still in place.
+					// Node.js is single-threaded so no concurrent write can race
+					// between the assignment and this check.
+					if ((Rooms as any).global === roomsGlobalStub) (Rooms as any).global = null;
+				}
 				return;
 			}
 			return _origDestroy.call(this);
