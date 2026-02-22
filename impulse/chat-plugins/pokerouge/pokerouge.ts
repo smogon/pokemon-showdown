@@ -37,7 +37,7 @@
  *      At higher floors, rare Legendary/Mythical Pokemon may appear as options.
  *   6. Losing on any floor resets progress back to floor 1 with a fresh random starter
  *      (unless the player has a Revive item).
- *   7. The opponent AI auto-generates a "PokeRouge Trainer" bot whose team scales with the floor.
+ *   7. The opponent AI auto-generates a "PokéRogue Trainer" bot whose team scales with the floor.
  *   8. ALL Pokemon evolve by gaining EXP levels — no items or trading required.
  */
 
@@ -1230,7 +1230,7 @@ export const commands: Chat.ChatCommands = {
 
 			// Battle started — the PS client will navigate to the battle room automatically.
 			// Send a brief confirmation in chat so the user knows what happened.
-			this.sendReplyBox(`You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now…`);
+			this.sendReplyBox(`You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now...`);
 		},
 
 		// /pokerouge battle — starts the next floor battle for a player mid-run.
