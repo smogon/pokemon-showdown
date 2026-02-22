@@ -1863,6 +1863,25 @@ export const handlers: Chat.Handlers = {
 // ---------------------------------------------------------------------------
 
 export const start = (): void => {
+	// Guard BasicRoom.prototype.destroy against the null Rooms.global crash:
+	//   TypeError: Cannot read properties of null (reading 'deregisterChatRoom')
+	// This happens when an expire timer fires while Rooms.global is not yet
+	// initialised (server startup) or has been reset (hot-reload).
+	// The flag makes the patch idempotent across hot-reloads.
+	if (!(Rooms.BasicRoom.prototype as any).__pokerougeDestroyPatched) {
+		const _origDestroy = Rooms.BasicRoom.prototype.destroy;
+		Rooms.BasicRoom.prototype.destroy = function(
+			this: InstanceType<typeof Rooms.BasicRoom>
+		) {
+			if (!Rooms.global) {
+				Monitor.warn(`[pokerouge] BasicRoom.destroy: Rooms.global is null, skipping destroy for ${this.roomid}`);
+				return;
+			}
+			return _origDestroy.call(this);
+		};
+		(Rooms.BasicRoom.prototype as any).__pokerougeDestroyPatched = true;
+	}
+
 	const { Dex } = require('../../../sim/dex') as typeof import('../../../sim/dex');
 	const { Format } = require('../../../sim/dex-formats') as typeof import('../../../sim/dex-formats');
 
