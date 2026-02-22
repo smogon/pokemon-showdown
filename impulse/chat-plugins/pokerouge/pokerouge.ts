@@ -1863,6 +1863,39 @@ export const handlers: Chat.Handlers = {
 // ---------------------------------------------------------------------------
 
 export const start = (): void => {
+	// Guard BasicRoom.prototype.destroy against the null Rooms.global crash:
+	//   TypeError: Cannot read properties of null (reading 'deregisterChatRoom')
+	// This happens when an expire timer fires while Rooms.global is not yet
+	// initialised (server startup) or has been reset (hot-reload).
+	// The flag makes the patch idempotent across hot-reloads.
+	if (!(Rooms.BasicRoom.prototype as any).__pokerougeDestroyPatched) {
+		const _origDestroy = Rooms.BasicRoom.prototype.destroy;
+		Rooms.BasicRoom.prototype.destroy = function(
+			this: InstanceType<typeof Rooms.BasicRoom>
+		) {
+			if (!Rooms.global) {
+				Monitor.warn(`[pokerouge] BasicRoom.destroy: Rooms.global is null for ${this.roomid}, using no-op stubs`);
+				// Provide minimal stubs so the rest of destroy() runs fully —
+				// clearing timers, logs, Rooms.rooms entry, etc. — and does not
+				// leave a zombie room. Only the deregisterChatRoom / delistChatRoom
+				// calls are no-ops when Rooms.global is unavailable.
+				const roomsGlobalStub = {deregisterChatRoom: () => {}, delistChatRoom: () => {}};
+				(Rooms as any).global = roomsGlobalStub as any;
+				try {
+					_origDestroy.call(this);
+				} finally {
+					// Restore null only if our stub is still in place.
+					// Node.js is single-threaded so no concurrent write can race
+					// between the assignment and this check.
+					if ((Rooms as any).global === roomsGlobalStub) (Rooms as any).global = null;
+				}
+				return;
+			}
+			return _origDestroy.call(this);
+		};
+		(Rooms.BasicRoom.prototype as any).__pokerougeDestroyPatched = true;
+	}
+
 	const { Dex } = require('../../../sim/dex') as typeof import('../../../sim/dex');
 	const { Format } = require('../../../sim/dex-formats') as typeof import('../../../sim/dex-formats');
 
