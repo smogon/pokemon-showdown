@@ -3,12 +3,13 @@
  * A battle-tower-based roguelike game for Pokemon Showdown (Impulse server).
  *
  * Player commands:
- *   /pokerouge start
- *   /pokerouge choose [1|2|3]
- *   /pokerouge shop
+ *   /pokerouge start           — Opens the interactive PokéRogue game page.
+ *   /pokerouge battle          — Starts the next floor battle (also via page button).
+ *   /pokerouge choose [1|2|3]  — Choose a starter or add a Pokémon to your team.
+ *   /pokerouge shop            — Opens the shop on the game page.
  *   /pokerouge buy <item>
  *   /pokerouge use <item> [team slot]
- *   /pokerouge status
+ *   /pokerouge status          — Redirects to the game page.
  *   /pokerouge top
  *   /pokerouge quit
  *   /pokerouge help
@@ -26,16 +27,18 @@
  *   /pokerouge resetfloor [user]
  *
  * Flow:
- *   1. Player types /pokerouge start and sees 3 random level-1 Pokemon to choose from.
+ *   1. Player types /pokerouge start — the interactive game page (view-pokerouge) opens.
+ *   2. On the page, the player sees 3 random level-1 Pokemon to choose from.
  *      Legendary/Mythical Pokemon are excluded from the initial starter pool.
- *   2. After clicking "Choose Starter", a battle starts on Floor 1.
- *   3. Winning a floor awards EXP and coins; Pokemon may level up and evolve.
- *   4. Every 5 floors the player may add a new Pokemon to their team.
+ *   3. After clicking "Choose Starter", a battle starts on Floor 1.
+ *      Rooms.createBattle navigates the player to the battle room automatically.
+ *   4. Winning a floor awards EXP and coins; Pokemon may level up and evolve.
+ *   5. Every 5 floors the player may add a new Pokemon to their team (shown on page).
  *      At higher floors, rare Legendary/Mythical Pokemon may appear as options.
- *   5. Losing on any floor resets progress back to floor 1 with a fresh random starter
+ *   6. Losing on any floor resets progress back to floor 1 with a fresh random starter
  *      (unless the player has a Revive item).
- *   6. The opponent AI auto-generates a "PokeRouge Trainer" bot whose team scales with the floor.
- *   7. ALL Pokemon evolve by gaining EXP levels — no items or trading required.
+ *   7. The opponent AI auto-generates a "PokéRogue Trainer" bot whose team scales with the floor.
+ *   8. ALL Pokemon evolve by gaining EXP levels — no items or trading required.
  */
 
 import { FS } from '../../../lib';
@@ -814,8 +817,10 @@ function buildBotTeam(floor: number): string {
 /**
  * Starts a PokeRouge battle on the current floor for `user`.
  * Creates the bot, registers AI handlers and tracks the room.
+ * Returns true on success; on failure, the user has already received a popup
+ * with the error message and false is returned.
  */
-function startBattle(user: User, state: PokeRougeState): void {
+function startBattle(user: User, state: PokeRougeState): boolean {
 	// Pack the team BEFORE clearing held items — packTeam reads them to embed in the team string
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
@@ -839,13 +844,12 @@ function startBattle(user: User, state: PokeRougeState): void {
 		destroyBotUser(botUser);
 		user.popup('Failed to start the PokéRogue battle. Please try again.');
 		Monitor.crashlog(e as Error, 'PokéRogue battle creation');
-		return;
+		return false;
 	}
 
 	if (!battleRoom) {
 		destroyBotUser(botUser);
-		user.popup('Failed to start the PokéRogue battle. Please try again.');
-		return;
+		return false;
 	}
 
 	// Register the AI callback AFTER confirming the battle exists
@@ -859,10 +863,10 @@ function startBattle(user: User, state: PokeRougeState): void {
 	// Clear held items now that battle creation succeeded — they're consumed each battle
 	for (const mon of state.team) delete mon.heldItem;
 
-	// Join the human player to the battle room
-	user.joinRoom?.(battleRoom as unknown as Room);
-	// Join the bot user to the battle room for consistent lifecycle handling
-	botUser.joinRoom?.(battleRoom as unknown as Room);
+	// NOTE: Rooms.createBattle already calls p.joinRoom(room) for each player,
+	// navigating them to the battle room. Do NOT call user.joinRoom again here —
+	// a duplicate join would re-send room-init data and cause the client to show
+	// the replay interface instead of the active battle controls.
 
 	// Track this battle
 	state.battleRoomId = battleRoom.roomid;
@@ -873,6 +877,8 @@ function startBattle(user: User, state: PokeRougeState): void {
 		botUserId: botUser.id,
 		floor: state.floor,
 	});
+
+	return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -1018,7 +1024,7 @@ function renderWinScreen(floor: number, streaks: number, coins: number): string 
 		`</table><br>` +
 		`<button name="send" value="/pokerouge shop" class="button">View Shop</button>` +
 		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge start" class="button">Next Battle →</button>` +
+		`<button name="send" value="/pokerouge start" class="button">Open Game Page →</button>` +
 		`</div>`;
 }
 
@@ -1072,9 +1078,9 @@ function renderShop(coins: number, inventory?: string[]): string {
 		`<div style="margin-bottom:10px">` +
 		`<button name="send" value="/pokerouge refreshshop" class="button">Refresh Shop (5 🪙)</button>` +
 		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge status" class="button">Check Your Team</button>` +
+		`<button name="send" value="/pokerouge start" class="button">← Back to Dashboard</button>` +
 		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge start" class="button" style="float:right">Start Next Battle!</button>` +
+		`<button name="send" value="/pokerouge battle" class="button" style="float:right">Start Next Battle!</button>` +
 		`</div>`;
 
 	return actionBar + shopTable;
@@ -1125,58 +1131,17 @@ function renderLeaderboard(): string {
 
 export const commands: Chat.ChatCommands = {
 	pokerouge: {
-		// /pokerouge start — entry point; shows the "Start Fresh Run" page for new players,
-		// or immediately begins the next floor battle for players already mid-run.
+		// /pokerouge start — opens the interactive PokéRogue game page.
+		// All game state is managed there; battles, shop, and choices happen via page buttons.
 		start(target, room, user) {
-			const existing = getState(user.id);
-			if (existing?.battleRoomId) {
-				const battleRoom = Rooms.get(existing.battleRoomId);
-				if (battleRoom) {
-					return this.sendReplyBox(
-						`You already have an active PokéRogue battle! ` +
-						`<a href="/${existing.battleRoomId}">Click here</a> to go to your battle.`
-					);
-				}
-				// Battle room no longer exists — clear it and persist the change
-				delete existing.battleRoomId;
-				setState(user.id, existing);
-			}
-
-			if (existing?.pendingChoice) {
-				const isAdd = existing.pendingChoiceType === 'add';
-				const title = isAdd ?
-					`Milestone reached! Add a new Pokemon to your team:` :
-					`Choose your starter Pokémon:`;
-				return this.sendReplyBox(
-					`<b>${title}</b><br><br>` +
-					renderPokemonChoice(
-						existing.pendingChoice,
-						isAdd ? 'Add to Team' : 'Choose Starter'
-					)
-				);
-			}
-
-			if (existing?.team?.length) {
-				// Resume existing run — start the next battle immediately
-				startBattle(user, existing);
-				if (!existing.battleRoomId) {
-					return this.errorReply('Failed to start the PokéRogue battle. Please try again.');
-				}
-				return this.sendReplyBox(
-					`<b>PokéRogue — Floor ${existing.floor}</b><br>` +
-					`Your team:<br>${renderTeam(existing.team)}<br><br>` +
-					`Battle started! <a href="/${existing.battleRoomId}">Click here to go to your battle.</a>`
-				);
-			}
-
-			// No active run — show the start page with "Start Fresh Run" button
-			this.sendReplyBox(renderStartPage());
+			return this.parse('/join view-pokerouge');
 		},
 
 		// /pokerouge newgame [confirm] — triggered by the "Start Fresh Run" button.
 		// If the player has an active run (team or floor > 1), show a warning and
 		// require `/pokerouge newgame confirm` to permanently wipe progress.
 		newgame(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const existing = getState(user.id);
 			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
 
@@ -1205,14 +1170,13 @@ export const commands: Chat.ChatCommands = {
 			};
 			setState(user.id, newState);
 
-			this.sendReplyBox(
-				`<b style="font-size:16px">Choose your starter Pokémon (all at Lv. 1):</b><br><br>` +
-				renderPokemonChoice(options, 'Choose Starter')
-			);
+			// Redirect to the game page to display the starter-selection UI
+			return this.parse('/join view-pokerouge');
 		},
 
 		// /pokerouge choose <1|2|3>
 		choose(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const n = parseInt(target.trim());
 			if (!n || n < 1 || n > 3) {
 				return this.errorReply('Usage: /pokerouge choose [1, 2, or 3]');
@@ -1256,76 +1220,85 @@ export const commands: Chat.ChatCommands = {
 			delete state.pendingChoice;
 			delete state.pendingChoiceType;
 
-			this.sendReplyBox(
-				`You chose <b>${name}</b>!<br>` +
-				(isStarter ?
-					`Your journey begins on Floor 1.<br>Starting battle...` :
-					`${name} joined your team!`)
-			);
+			// Persist state BEFORE attempting battle creation so the team update and choice
+			// deletion are not lost if battle creation fails (e.g. server lockdown).
+			setState(user.id, state);
 
-			startBattle(user, state);
+			// Start the battle — Rooms.createBattle will navigate the user to the battle room
+			const ok = startBattle(user, state);
+			if (!ok) {
+				// startBattle already sent a popup; redirect to page so the user can retry
+				return this.parse('/join view-pokerouge');
+			}
+
+			// Battle started — the PS client will navigate to the battle room automatically.
+			// Send a brief confirmation in chat so the user knows what happened.
+			this.sendReplyBox(`You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now...`);
+		},
+
+		// /pokerouge battle — starts the next floor battle for a player mid-run.
+		// Called from the game page "Start Battle" button.
+		battle(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+			const state = getState(user.id);
+			if (!state) {
+				return this.errorReply('No active PokéRogue run. Use /pokerouge start to open the game page!');
+			}
+
+			if (state.battleRoomId) {
+				const battleRoom = Rooms.get(state.battleRoomId as RoomID);
+				if (battleRoom) {
+					return this.sendReplyBox(
+						`You already have an active PokéRogue battle! ` +
+						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
+					);
+				}
+				// Stale reference — clear and continue
+				delete state.battleRoomId;
+				setState(user.id, state);
+			}
+
+			if (state.pendingChoice) {
+				return this.sendReplyBox(
+					`You have a pending Pokémon choice! ` +
+					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
+				);
+			}
+
+			if (!state.team?.length) {
+				return this.errorReply('No team to battle with. Use /pokerouge start to begin a new run!');
+			}
+
+			// Start the battle — Rooms.createBattle navigates the user to the battle room
+			const ok = startBattle(user, state);
+			if (!ok) {
+				// startBattle already sent a popup with the error; open the page for retry
+				return this.parse('/join view-pokerouge');
+			}
+			// Battle started — PS client navigates automatically via p.joinRoom inside Rooms.createBattle
 		},
 
 		// /pokerouge status
 		status(target, room, user) {
-			if (!this.runBroadcast()) return;
-			const state = getState(user.id);
-			if (!state) {
-				return this.sendReplyBox('You have no active PokeRouge run. Use <code>/pokerouge start</code> to begin!');
-			}
-
-			// If there's a pending choice, show the card UI
-			if (state.pendingChoice) {
-				const isAdd = state.pendingChoiceType === 'add';
-				return this.sendReplyBox(
-					`<b>PokeRouge — Floor ${state.floor} — Pending Choice</b><br><br>` +
-					`<b>${isAdd ? 'Choose a Pokemon to add to your team:' : 'Choose your starter Pokemon:'}</b><br><br>` +
-					renderPokemonChoice(
-						state.pendingChoice,
-						isAdd ? 'Add to Team' : 'Choose Starter'
-					)
-				);
-			}
-
-			const coins = state.coins ?? 0;
-			const items = state.items ?? {};
-			const itemList = Object.entries(items)
-				.filter(([, qty]) => qty > 0)
-				.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} ×${qty}`)
-				.join(', ') || 'None';
-			const activeEffects: string[] = [];
-			if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
-			if (state.hasRevive) activeEffects.push('Revive (active)');
-
-			this.sendReplyBox(
-				`<b>PokeRouge Status for ${Impulse.nameColor(user.name, true)}</b><br>` +
-				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>🪙 Coins:</b> ${coins}<br>` +
-				(activeEffects.length ? `<b>Active Effects:</b> ${activeEffects.join(', ')}<br>` : '') +
-				`<b>Items:</b> ${itemList}<br>` +
-				`<b>Team:</b><br>${renderTeam(state.team)}`
-			);
+			return this.parse('/join view-pokerouge');
 		},
 
-		// /pokerouge shop
+		// /pokerouge shop — opens the game page at the shop view
 		shop(target, room, user) {
-			if (!this.runBroadcast()) return;
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
-			const coins = state.coins ?? 0;
 			// Ensure a shop inventory exists for this player
 			if (!state.shopInventory) {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
-			this.sendReplyBox(
-				`<b style="font-size:15px">PokéRogue Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
-				`<small>Items are permanent unless marked "(held item, 1 battle)".</small><br><br>` +
-				renderShop(coins, state.shopInventory)
-			);
+			return this.parse('/join view-pokerouge-shop');
 		},
 
 		// /pokerouge refreshshop — reroll the shop inventory for 5 coins
 		refreshshop(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			const coins = state.coins ?? 0;
@@ -1333,11 +1306,12 @@ export const commands: Chat.ChatCommands = {
 			state.coins = coins - 5;
 			state.shopInventory = rollShopInventory();
 			setState(user.id, state);
-			return this.parse('/pokerouge shop');
+			return this.parse('/join view-pokerouge-shop');
 		},
 
 		// /pokerouge buy <item>
 		buy(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const itemId = toID(target.trim());
 			const item = SHOP_ITEMS[itemId];
 			if (!item) {
@@ -1373,17 +1347,13 @@ export const commands: Chat.ChatCommands = {
 			state.items[itemId] = (state.items[itemId] ?? 0) + 1;
 			setState(user.id, state);
 
-			this.sendReplyBox(
-				`Purchased <b>${item.name}</b> for 🪙 ${item.cost}!<br>` +
-				`Remaining coins: 🪙 ${state.coins}<br>` +
-				(item.heldItem ?
-					`Use <code>/pokerouge use ${itemId} [team slot]</code> to equip it before the next battle.` :
-					`Use <code>/pokerouge use ${itemId}${item.id !== 'rarecandy' ? '' : ' [team slot]'}</code> to activate it.`)
-			);
+			// Return to the shop page so the user can continue shopping
+			return this.parse('/join view-pokerouge-shop');
 		},
 
 		// /pokerouge use <item> [team slot 1-6]
 		use(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const parts = target.trim().split(/\s+/);
 			const itemId = toID(parts[0] ?? '');
 			const slotArg = parseInt(parts[1] ?? '0');
@@ -1477,6 +1447,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge quit
 		quit(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) {
 				return this.errorReply('You have no active PokeRouge run.');
@@ -1496,6 +1467,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			deleteState(user.id);
 			this.sendReply('Your PokeRouge run has been abandoned. Use /pokerouge start to begin a new run.');
+			return this.parse('/join view-pokerouge');
 		},
 
 		// -----------------------------------------------------------------------
@@ -1677,15 +1649,17 @@ export const commands: Chat.ChatCommands = {
 			const isStaff = user.can('lock');
 			let html =
 				`<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerouge start</code> (or <code>/rougelike start</code>) — Start a new run or jump to the next battle.<br>` +
+				`<code>/pokerouge start</code> (or <code>/rougelike start</code>) — Open the interactive PokéRogue game page.<br>` +
+				`<code>/pokerouge battle</code> — Start the next floor battle (also available from the game page).<br>` +
 				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
-				`<code>/pokerouge shop</code> — View the item shop.<br>` +
+				`<code>/pokerouge shop</code> — Open the item shop on the game page.<br>` +
 				`<code>/pokerouge refreshshop</code> — Reroll shop items for 🪙 5 coins.<br>` +
 				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item (costs 🪙 coins).<br>` +
 				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
-				`<code>/pokerouge status</code> — View your floor, 🪙 coins, inventory and team.<br>` +
+				`<code>/pokerouge status</code> — View your floor, 🪙 coins, inventory and team (opens game page).<br>` +
 				`<code>/pokerouge top</code> — View the Top 100 leaderboard by highest floor.<br>` +
 				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
+				`<br><b>Tip:</b> Type <code>/pokerouge start</code> to open the interactive game page — all actions are available there as clickable buttons!<br>` +
 				`<br><b>Shop Items:</b> 30+ PS items including Choice Band/Specs/Scarf, Life Orb, Assault Vest, Heavy-Duty Boots, and more.<br>` +
 				`<br><b>Tips:</b> Win floors to earn 🪙 coins. Legendary Pokémon may appear as team additions at Floor 20+!`;
 			if (isStaff) {
@@ -1808,7 +1782,7 @@ export const handlers: Chat.Handlers = {
 				`<small>Lucky Charm active — coins doubled!</small><br>` :
 				'';
 			const milestoneMsg = offerNewPokemon ?
-				`<br><b>Milestone!</b> Use <code>/pokerouge choose [1/2/3]</code> to add a new Pokemon to your team.<br>` :
+				`<br><b>🎉 Milestone!</b> Open the game page to choose a new Pokémon for your team!<br>` :
 				'';
 
 			humanUser?.popup(
@@ -1853,6 +1827,127 @@ export const handlers: Chat.Handlers = {
 				);
 			}
 		}
+	},
+};
+
+// ---------------------------------------------------------------------------
+// Interactive page — view-pokerouge (main) and view-pokerouge-shop (shop)
+// ---------------------------------------------------------------------------
+
+export const pages: Chat.PageTable = {
+	pokerouge(args, user) {
+		this.title = 'PokéRogue';
+		const sub = args[0] || '';
+
+		// Guests have throwaway IDs — their state cannot be resumed after reconnect
+		// and would accumulate indefinitely in savedData.
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+
+		const state = getState(user.id);
+
+		let buf = `<div class="pad">`;
+		buf += `<h2>PokéRogue</h2>`;
+
+		if (!state) {
+			buf += `<p>Battle Tower Roguelike — floors get harder as you progress. Lose and start over!</p>`;
+			buf += `<p><button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">🚀 Start Fresh Run</button></p>`;
+			buf += `</div>`;
+			return buf;
+		}
+
+		// Check for stale battle room reference
+		if (state.battleRoomId) {
+			const battleRoom = Rooms.get(state.battleRoomId as RoomID);
+			if (battleRoom) {
+				buf += `<p><b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>🪙 Coins:</b> ${state.coins ?? 0}</p>`;
+				buf += `<p>You have an active battle in progress!</p>`;
+				buf += `<p>` +
+					`<a href="/${state.battleRoomId}" class="button" style="font-size:14px;padding:6px 16px">⚔️ Go to Battle</a>` +
+					` &nbsp; ` +
+					`<button name="send" value="/pokerouge start" class="button">🔄 Refresh</button>` +
+					`</p>`;
+				buf += `</div>`;
+				return buf;
+			}
+			// Battle room gone — clear stale reference
+			delete state.battleRoomId;
+			setState(user.id, state);
+		}
+
+		// Pending Pokémon choice (starter or milestone add)
+		if (state.pendingChoice) {
+			const isAdd = state.pendingChoiceType === 'add';
+			if (state.team?.length) {
+				buf += `<p><b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>🪙 Coins:</b> ${state.coins ?? 0}</p>`;
+			}
+			buf += `<p><b>${isAdd ? '🎉 Milestone! Choose a Pokémon to add to your team:' : 'Choose your starter Pokémon (all at Lv. 1):'}</b></p>`;
+			buf += renderPokemonChoice(state.pendingChoice, isAdd ? 'Add to Team' : 'Choose Starter');
+			buf += `</div>`;
+			return buf;
+		}
+
+		if (!state.team?.length) {
+			buf += `<p>No active team. Start a new run!</p>`;
+			buf += `<p><button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">🚀 Start Fresh Run</button></p>`;
+			buf += `</div>`;
+			return buf;
+		}
+
+		// Active run dashboard
+		const coins = state.coins ?? 0;
+		const items = state.items ?? {};
+		const itemList = Object.entries(items)
+			.filter(([, qty]) => qty > 0)
+			.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} ×${qty}`)
+			.join(', ') || 'None';
+		const activeEffects: string[] = [];
+		if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
+		if (state.hasRevive) activeEffects.push('Revive (active)');
+
+		// Status bar
+		buf += `<p>`;
+		buf += `<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; `;
+		buf += `<b>🪙 Coins:</b> ${coins} &nbsp;|&nbsp; `;
+		buf += `<b>Streaks:</b> ${state.streaksWon ?? 0}`;
+		if (state.highestFloor) buf += ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}`;
+		buf += `</p>`;
+
+		if (activeEffects.length) {
+			buf += `<p><b>Active Effects:</b> ${activeEffects.join(', ')}</p>`;
+		}
+
+		// Team
+		buf += `<h3 style="margin-bottom:6px">Your Team</h3>`;
+		buf += `<div style="margin-bottom:12px">${renderTeam(state.team)}</div>`;
+
+		// Inventory
+		buf += `<p><b>Inventory:</b> ${itemList}</p>`;
+
+		// Action buttons
+		buf += `<p>`;
+		buf += `<button name="send" value="/pokerouge battle" class="button" style="font-size:14px;padding:6px 16px">⚔️ Start Floor ${state.floor} Battle</button>`;
+		buf += ` &nbsp; `;
+		buf += `<button name="send" value="/pokerouge shop" class="button">🛒 Open Shop</button>`;
+		buf += ` &nbsp; `;
+		buf += `<button name="send" value="/pokerouge top" class="button">🏆 Leaderboard</button>`;
+		buf += ` &nbsp; `;
+		buf += `<button name="send" value="/pokerouge quit" class="button">🚪 Quit Run</button>`;
+		buf += `</p>`;
+
+		// Shop sub-view (view-pokerouge-shop)
+		if (sub === 'shop') {
+			if (!state.shopInventory) {
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+			}
+			buf += `<hr />`;
+			buf += `<h3 style="margin-bottom:4px">Item Shop &nbsp; <small style="font-weight:normal;font-size:13px">🪙 ${coins} coins</small></h3>`;
+			buf += `<p><small>Items are permanent unless marked "(held item, 1 battle)".</small></p>`;
+			buf += renderShop(coins, state.shopInventory);
+		}
+
+		buf += `</div>`;
+		return buf;
 	},
 };
 
