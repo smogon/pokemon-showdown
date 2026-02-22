@@ -1221,6 +1221,10 @@ export const commands: Chat.ChatCommands = {
 			delete state.pendingChoice;
 			delete state.pendingChoiceType;
 
+			// Persist state BEFORE attempting battle creation so the team update and choice
+			// deletion are not lost if battle creation fails (e.g. server lockdown).
+			setState(user.id, state);
+
 			// Start the battle — Rooms.createBattle will navigate the user to the battle room
 			const ok = startBattle(user, state);
 			if (!ok) {
