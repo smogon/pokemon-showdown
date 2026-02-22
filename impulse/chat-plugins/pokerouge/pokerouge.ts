@@ -138,7 +138,7 @@ const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
  * For species with multiple evolutions (e.g. Wurmple), the first usable branch
  * is returned.
  */
-function getLevelUpEvo(speciesId: string): { evoTo: string; evoLevel: number } | null {
+function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
 	const species = Dex.species.get(toID(speciesId));
 	if (!species.exists || !species.evos.length) return null;
 
@@ -172,6 +172,7 @@ interface ShopItem {
 
 /** All purchasable items in the PokeRouge shop. */
 const SHOP_ITEMS: Record<string, ShopItem> = {
+	// ---- Special roguelite consumables ----
 	rarecandy: {
 		id: 'rarecandy',
 		name: 'Rare Candy',
@@ -190,40 +191,206 @@ const SHOP_ITEMS: Record<string, ShopItem> = {
 		description: 'Grants a second chance — if you lose your next battle you retry the same floor.',
 		cost: 200,
 	},
+	// ---- Survival / bulk items ----
 	focussash: {
 		id: 'focussash',
 		name: 'Focus Sash',
-		description: 'Equip to a Pokemon: it will survive any one-hit KO at 1 HP.',
+		description: 'Survive any one-hit KO at 1 HP.',
 		cost: 120,
 		heldItem: 'focussash',
 	},
 	leftovers: {
 		id: 'leftovers',
 		name: 'Leftovers',
-		description: 'Equip to a Pokemon: gradually restores HP each turn in battle.',
+		description: 'Gradually restores HP each turn.',
 		cost: 100,
 		heldItem: 'leftovers',
 	},
+	eviolite: {
+		id: 'eviolite',
+		name: 'Eviolite',
+		description: 'Boosts Defense and Sp. Def by 50% for unevolved Pokemon.',
+		cost: 100,
+		heldItem: 'eviolite',
+	},
+	rockyhelmet: {
+		id: 'rockyhelmet',
+		name: 'Rocky Helmet',
+		description: 'Damages the attacker 1/6 max HP when hit by a contact move.',
+		cost: 80,
+		heldItem: 'rockyhelmet',
+	},
+	heavydutyboots: {
+		id: 'heavydutyboots',
+		name: 'Heavy-Duty Boots',
+		description: 'Prevents all entry hazard damage.',
+		cost: 100,
+		heldItem: 'heavydutyboots',
+	},
+	airballoon: {
+		id: 'airballoon',
+		name: 'Air Balloon',
+		description: 'Makes the holder immune to Ground-type moves until hit.',
+		cost: 60,
+		heldItem: 'airballoon',
+	},
+	blacksludge: {
+		id: 'blacksludge',
+		name: 'Black Sludge',
+		description: 'Restores HP for Poison-types; damages all other types.',
+		cost: 80,
+		heldItem: 'blacksludge',
+	},
+	// ---- Offensive choice items ----
 	choiceband: {
 		id: 'choiceband',
 		name: 'Choice Band',
-		description: 'Equip to a Pokemon: boosts Attack by 50%, but locks it into one move.',
+		description: 'Boosts Attack by 50%, but locks into one move.',
 		cost: 80,
 		heldItem: 'choiceband',
+	},
+	choicespecs: {
+		id: 'choicespecs',
+		name: 'Choice Specs',
+		description: 'Boosts Sp. Atk by 50%, but locks into one move.',
+		cost: 80,
+		heldItem: 'choicespecs',
+	},
+	choicescarf: {
+		id: 'choicescarf',
+		name: 'Choice Scarf',
+		description: 'Boosts Speed by 50%, but locks into one move.',
+		cost: 80,
+		heldItem: 'choicescarf',
 	},
 	lifeorb: {
 		id: 'lifeorb',
 		name: 'Life Orb',
-		description: 'Equip to a Pokemon: boosts all moves by 30% with some recoil.',
+		description: 'Boosts all moves by 30% at the cost of 10% HP per hit.',
 		cost: 120,
 		heldItem: 'lifeorb',
 	},
+	expertbelt: {
+		id: 'expertbelt',
+		name: 'Expert Belt',
+		description: 'Boosts super-effective moves by 20% with no drawback.',
+		cost: 80,
+		heldItem: 'expertbelt',
+	},
+	wiseglasses: {
+		id: 'wiseglasses',
+		name: 'Wise Glasses',
+		description: 'Boosts Sp. Atk by 10% without any downside.',
+		cost: 60,
+		heldItem: 'wiseglasses',
+	},
+	muscleband: {
+		id: 'muscleband',
+		name: 'Muscle Band',
+		description: 'Boosts Attack by 10% without any downside.',
+		cost: 60,
+		heldItem: 'muscleband',
+	},
+	// ---- Defensive / utility items ----
 	assaultvest: {
 		id: 'assaultvest',
 		name: 'Assault Vest',
-		description: 'Equip to a Pokemon: boosts Sp. Def by 50%, but prevents status moves.',
+		description: 'Boosts Sp. Def by 50%; prevents status moves.',
 		cost: 100,
 		heldItem: 'assaultvest',
+	},
+	clearamulet: {
+		id: 'clearamulet',
+		name: 'Clear Amulet',
+		description: 'Prevents the holder\'s stats from being lowered by opponents.',
+		cost: 80,
+		heldItem: 'clearamulet',
+	},
+	boosterenergy: {
+		id: 'boosterenergy',
+		name: 'Booster Energy',
+		description: 'Activates the highest stat of a Paradox Pokemon.',
+		cost: 120,
+		heldItem: 'boosterenergy',
+	},
+	protectivepads: {
+		id: 'protectivepads',
+		name: 'Protective Pads',
+		description: 'Prevents the effects of contact moves from activating.',
+		cost: 70,
+		heldItem: 'protectivepads',
+	},
+	safetygoggles: {
+		id: 'safetygoggles',
+		name: 'Safety Goggles',
+		description: 'Protects from weather damage and powder/spore moves.',
+		cost: 70,
+		heldItem: 'safetygoggles',
+	},
+	// ---- Berries ----
+	sitrusberry: {
+		id: 'sitrusberry',
+		name: 'Sitrus Berry',
+		description: 'Restores 25% HP when below 50% HP.',
+		cost: 40,
+		heldItem: 'sitrusberry',
+	},
+	aguavberry: {
+		id: 'aguavberry',
+		name: 'Aguav Berry',
+		description: 'Restores 1/3 HP when below 25% HP (may cause confusion).',
+		cost: 30,
+		heldItem: 'aguavberry',
+	},
+	// ---- Status / misc ----
+	flameorb: {
+		id: 'flameorb',
+		name: 'Flame Orb',
+		description: 'Burns the holder at end of turn (great with Guts/Marvel Scale).',
+		cost: 60,
+		heldItem: 'flameorb',
+	},
+	toxicorb: {
+		id: 'toxicorb',
+		name: 'Toxic Orb',
+		description: 'Badly poisons the holder at end of turn (great with Poison Heal).',
+		cost: 60,
+		heldItem: 'toxicorb',
+	},
+	whiteherb: {
+		id: 'whiteherb',
+		name: 'White Herb',
+		description: 'Restores any lowered stats once, then is consumed.',
+		cost: 50,
+		heldItem: 'whiteherb',
+	},
+	powerherb: {
+		id: 'powerherb',
+		name: 'Power Herb',
+		description: 'Allows a two-turn move to fire immediately once, then is consumed.',
+		cost: 40,
+		heldItem: 'powerherb',
+	},
+	throatspray: {
+		id: 'throatspray',
+		name: 'Throat Spray',
+		description: 'Boosts Sp. Atk after using a sound-based move once.',
+		cost: 60,
+		heldItem: 'throatspray',
+	},
+	blunderpolicy: {
+		id: 'blunderpolicy',
+		name: 'Blunder Policy',
+		description: 'Sharply boosts Speed when a move misses.',
+		cost: 80,
+		heldItem: 'blunderpolicy',
+	},
+	shedshell: {
+		id: 'shedshell',
+		name: 'Shed Shell',
+		description: 'Allows the holder to switch out regardless of trapping moves.',
+		cost: 50,
+		heldItem: 'shedshell',
 	},
 };
 
@@ -260,6 +427,10 @@ interface PokeRougeState {
 	highestFloor?: number;
 	/** Display name (updated each login) — used for the leaderboard. */
 	displayName?: string;
+	/** Number of floors won in the current run. */
+	streaksWon?: number;
+	/** Current shop rotation — item IDs available this refresh. */
+	shopInventory?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -337,7 +508,7 @@ function botTeamSize(floor: number): number {
  * Level up a Pokemon entry, applying EXP.
  * Returns true if the Pokemon evolved.
  */
-function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean; oldLevel: number } {
+function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
 	// Level up as many times as earned
@@ -364,7 +535,7 @@ function getLevelUpMoves(speciesId: string, level: number): string[] {
 	const learnset = learnsetData?.learnset;
 	if (!learnset) return ['tackle'];
 
-	const available: { move: string; learnLevel: number }[] = [];
+	const available: { move: string, learnLevel: number }[] = [];
 
 	for (const [moveid, sources] of Object.entries(learnset)) {
 		for (const src of sources) {
@@ -450,24 +621,33 @@ function createBotUser(displayName: string): User {
 	const botUser = new Users.User(conn);
 	conn.user = botUser;
 
-	// Rename: forceRename needs unique name not already taken
-	const safeName = `${displayName} ${uid}`;
+	// Use the clean display name; only append a counter if that name is already taken
+	// (prevents conflicts for concurrent battles while keeping the name clean for
+	// sequential battles by the same player, where the old bot is already destroyed).
+	let safeName = displayName;
+	let attempt = 0;
+	while (Users.get(toID(safeName))) {
+		attempt++;
+		safeName = `${displayName} ${attempt}`;
+	}
 	botUser.forceRename(safeName, true);
 
-	// Override sendTo so that battle |request| messages trigger AI moves
-	(botUser as any).sendTo = function(roomid: RoomID | BasicRoom | null, data: string) {
+	// Override sendTo so that battle |request| messages trigger AI moves.
+	// Handler lookup is deferred inside the setTimeout to avoid a race condition
+	// where sendTo fires before botBattleHandlers.set() is called in startBattle.
+	(botUser as any).sendTo = function (roomid: RoomID | BasicRoom | null, data: string) {
 		if (typeof data === 'string') {
 			// The data may have a room prefix like ">battle-xxx\n|request|..."
 			const lines = data.split('\n');
 			for (const line of lines) {
 				if (line.startsWith('|request|')) {
-					const handler = botBattleHandlers.get(botUser.id);
-					if (handler) {
-						const roomidStr = typeof roomid === 'string' ? roomid
-							: (roomid as any)?.roomid ?? '';
-						// Defer so the battle state is fully initialised
-						setTimeout(() => handler(roomidStr, line), 150);
-					}
+					const roomidStr = typeof roomid === 'string' ? roomid :
+						(roomid as any)?.roomid ?? '';
+					// Defer handler lookup so it runs AFTER botBattleHandlers.set()
+					setTimeout(() => {
+						const handler = botBattleHandlers.get(botUser.id);
+						if (handler) handler(roomidStr, line);
+					}, 150);
 					break;
 				}
 			}
@@ -521,15 +701,15 @@ function makeAIChoice(requestJson: string, floor: number): string {
 		const pokemon = request.side?.pokemon ?? [];
 		const chosen: number[] = [];
 
-		for (let i = 0; i < (request.forceSwitch as boolean[]).length; i++) {
-			if (!(request.forceSwitch as boolean[])[i]) {
+		for (const forceSwitchEntry of (request.forceSwitch as boolean[])) {
+			if (!forceSwitchEntry) {
 				choices.push('pass');
 				continue;
 			}
 			// Find a benched, non-fainted Pokemon
 			const available = pokemon
 				.map((p: any, idx: number) => ({ p, idx: idx + 1 }))
-				.filter(({ p, idx }: { p: any; idx: number }) =>
+				.filter(({ p, idx }: { p: any, idx: number }) =>
 					idx > (request.forceSwitch as boolean[]).length &&
 					!p.condition?.endsWith(' fnt') &&
 					!chosen.includes(idx)
@@ -640,14 +820,14 @@ function startBattle(user: User, state: PokeRougeState): void {
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
 
-	const trainerName = 'PokeRouge Trainer';
+	const trainerName = 'PokéRogue Trainer';
 	const botUser = createBotUser(trainerName);
-	const botSlot: 'p2' = 'p2';
+	const botSlot = 'p2' as const;
 
 	let battleRoom: AnyObject | null = null;
 	try {
 		battleRoom = Rooms.createBattle({
-			format: 'gen9customgame',
+			format: 'rougelikebattle',
 			players: [
 				{ user, team: playerTeam },
 				{ user: botUser, team: botTeam },
@@ -657,13 +837,14 @@ function startBattle(user: User, state: PokeRougeState): void {
 		});
 	} catch (e) {
 		destroyBotUser(botUser);
-		user.popup('Failed to start the PokeRouge battle. Please try again.');
+		user.popup('Failed to start the PokéRogue battle. Please try again.');
+		Monitor.crashlog(e as Error, 'PokéRogue battle creation');
 		return;
 	}
 
 	if (!battleRoom) {
 		destroyBotUser(botUser);
-		user.popup('Failed to start the PokeRouge battle. Please try again.');
+		user.popup('Failed to start the PokéRogue battle. Please try again.');
 		return;
 	}
 
@@ -738,11 +919,9 @@ function getSprite(species: string): string {
 
 /**
  * Renders the starter / new-Pokemon selection UI as an HTML table with cards.
- * Each card shows the sprite, name, type, and a "Choose Starter" button.
- *
- * @param options  Array of species IDs (length 3).
- * @param label    Button label text (default: "Choose Starter").
- * @param cmdPrefix  Chat command prefix for the choose action (default: "/pokerouge choose").
+ * Each card shows the sprite, name, types, abilities, base stats, level-up moves,
+ * tera type, level, held item, and a "Choose Starter" button using the PS default
+ * button style (class="button").
  */
 function renderPokemonChoice(
 	options: string[],
@@ -753,24 +932,48 @@ function renderPokemonChoice(
 		const speciesData = Dex.species.get(toID(s));
 		const name = speciesData.exists ? speciesData.name : s;
 		const isLegendary = speciesData.tags?.some(tag => LEGENDARY_TAGS.has(tag));
-		// Colour the type badge similarly to the PS type chart
-		const typeBadge = (speciesData.types ?? []).map(t =>
+
+		// Types
+		const types = speciesData.types ?? [];
+		const typeBadge = types.map(t =>
 			`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">${t}</span>`
 		).join(' ');
-		const legendaryBadge = isLegendary
-			? `<br><span style="color:#e67e22;font-size:11px;font-weight:bold">⭐ Legendary</span>` : '';
-		const borderColor = isLegendary ? '#e67e22' : '#ccc';
+
+		// Abilities
+		const ab = (speciesData.abilities ?? {}) as unknown as Record<string, string>;
+		const abilityList = [ab['0'], ab['1'], ab['H']].filter(Boolean);
+		const abilitiesStr = abilityList.join(' / ') || '—';
+
+		// Base stats
+		const bs = speciesData.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		const statsStr = `HP <b>${bs.hp}</b> · Atk <b>${bs.atk}</b> · Def <b>${bs.def}</b> · SpA <b>${bs.spa}</b> · SpD <b>${bs.spd}</b> · Spe <b>${bs.spe}</b> <small>(BST ${bst})</small>`;
+
+		// Level-1 moves
+		const moveIds = getLevelUpMoves(toID(s), 1);
+		const movesStr = moveIds.map(m => Dex.moves.get(m).name || m).join(', ') || 'Tackle';
+
+		// Tera type = first type
+		const teraType = types[0] ?? 'Normal';
+		const teraBadge = `<span style="background:#${typeColor(teraType)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">Tera: ${teraType}</span>`;
+
+		const legendaryBadge = isLegendary ?
+			`<br><span style="color:#e67e22;font-size:11px;font-weight:bold">Legendary</span>` : '';
+		const borderColor = isLegendary ? '#e67e22' : '#aaa';
 		const bg = isLegendary ? '#fffaf0' : '#fafafa';
-		const btnColor = isLegendary ? '#e67e22' : '#4caf50';
+
 		return `<td style="text-align:center;padding:10px 14px;border:2px solid ${borderColor};` +
-			`border-radius:10px;background:${bg};min-width:110px">` +
+			`border-radius:10px;background:${bg};min-width:140px;vertical-align:top">` +
 			`${getSprite(s)}<br>` +
-			`<b style="font-size:14px">${name}</b><br>` +
-			`<span style="font-size:12px">Lv. 1</span><br>` +
-			`${typeBadge}${legendaryBadge}<br>` +
-			`<button name="send" value="${cmdPrefix} ${i + 1}" ` +
-			`style="margin-top:8px;padding:4px 10px;font-weight:bold;` +
-			`border-radius:5px;background:${btnColor};color:#fff;border:none;cursor:pointer">` +
+			`<b style="font-size:14px">${name}</b>${legendaryBadge}<br>` +
+			`<span style="font-size:12px">Lv. 1 &nbsp;|&nbsp; Item: None</span><br>` +
+			`${typeBadge} ${teraBadge}<br>` +
+			`<div style="font-size:11px;color:#555;margin:4px 0;text-align:left">` +
+			`<b>Abilities:</b> ${abilitiesStr}<br>` +
+			`<b>Moves:</b> ${movesStr}<br>` +
+			`<b>Stats:</b> ${statsStr}` +
+			`</div>` +
+			`<button name="send" value="${cmdPrefix} ${i + 1}" class="button" style="margin-top:6px">` +
 			`${label}</button>` +
 			`</td>`;
 	}).join('<td style="width:10px"></td>');
@@ -789,6 +992,36 @@ function typeColor(type: string): string {
 	return colors[type] ?? '68a090';
 }
 
+/** Renders the PokeRouge "Start Fresh Run" welcome page. */
+function renderStartPage(): string {
+	return `<div style="text-align:center;padding:16px 8px">` +
+		`<b style="font-size:18px">PokéRogue</b><br>` +
+		`<span style="font-size:12px;color:#555">Battle Tower Roguelike — floors get harder as you progress. Lose and start over!</span><br><br>` +
+		`<button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">` +
+		`Start Fresh Run</button>` +
+		`</div>`;
+}
+
+/**
+ * Renders the post-win "Good Win!" screen shown after each floor victory.
+ * Includes floor number, total streaks, coins, and action buttons.
+ */
+function renderWinScreen(floor: number, streaks: number, coins: number): string {
+	return `<div style="text-align:center;padding:12px 8px">` +
+		`<b style="font-size:18px">Good Win!</b><br><br>` +
+		`<table style="margin:0 auto;border-collapse:collapse">` +
+		`<tr>` +
+		`<td style="padding:4px 16px;font-size:13px"><b>Current Match:</b> Floor ${floor}</td>` +
+		`<td style="padding:4px 16px;font-size:13px"><b>Streaks Won:</b> ${streaks}</td>` +
+		`<td style="padding:4px 16px;font-size:13px"><b>Coins:</b> 🪙 ${coins}</td>` +
+		`</tr>` +
+		`</table><br>` +
+		`<button name="send" value="/pokerouge shop" class="button">View Shop</button>` +
+		`&nbsp;&nbsp;` +
+		`<button name="send" value="/pokerouge start" class="button">Next Battle →</button>` +
+		`</div>`;
+}
+
 function renderTeam(team: PokemonEntry[]): string {
 	return team.map((mon, idx) => {
 		const speciesData = Dex.species.get(toID(mon.species));
@@ -799,27 +1032,52 @@ function renderTeam(team: PokemonEntry[]): string {
 	}).join('<br>');
 }
 
-/** Renders the item shop as an HTML card grid. */
-function renderShop(coins: number): string {
-	const cards = Object.values(SHOP_ITEMS).map(item => {
+/** Returns a random selection of `n` shop item IDs from the full SHOP_ITEMS list. */
+function rollShopInventory(n = 8): string[] {
+	const all = Object.keys(SHOP_ITEMS);
+	const shuffled = all.slice();
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled.slice(0, n);
+}
+
+/** Renders the item shop as an HTML card grid with action buttons. */
+function renderShop(coins: number, inventory?: string[]): string {
+	const itemIds = inventory ?? Object.keys(SHOP_ITEMS);
+	const cards = itemIds.map(id => {
+		const item = SHOP_ITEMS[id];
+		if (!item) return '';
 		const canAfford = coins >= item.cost;
-		const btnStyle = canAfford
-			? 'background:#e67e22;color:#fff;border:none;border-radius:5px;padding:4px 10px;font-weight:bold;cursor:pointer'
-			: 'background:#bbb;color:#fff;border:none;border-radius:5px;padding:4px 10px;cursor:not-allowed';
-		return `<td style="text-align:center;padding:8px 12px;border:2px solid #ccc;border-radius:8px;background:#fffaf5;min-width:120px;vertical-align:top">` +
+		const buyBtn = canAfford ?
+			`<button name="send" value="/pokerouge buy ${item.id}" class="button" style="margin-top:6px">Buy 🪙 ${item.cost}</button>` :
+			`<button class="button" style="margin-top:6px" disabled>Buy 🪙 ${item.cost}</button>`;
+		return `<td style="text-align:center;padding:8px 12px;border:1px solid #ccc;border-radius:8px;background:#fafafa;min-width:120px;vertical-align:top">` +
 			`<b style="font-size:13px">${item.name}</b><br>` +
 			`<span style="font-size:11px;color:#555">${item.description}</span><br>` +
-			`<span style="color:#e67e22;font-weight:bold">🪙 ${item.cost}</span><br>` +
 			(item.heldItem ? `<small style="color:#888">(held item, 1 battle)</small><br>` : '') +
-			`<button name="send" value="/pokerouge buy ${item.id}" style="${btnStyle};margin-top:6px" ${canAfford ? '' : 'disabled'}>Buy</button>` +
+			buyBtn +
 			`</td>`;
-	});
+	}).filter(Boolean);
 	// Chunk into rows of 4
 	const rows: string[] = [];
 	for (let i = 0; i < cards.length; i += 4) {
 		rows.push(`<tr>${cards.slice(i, i + 4).join('<td style="width:8px"></td>')}</tr>`);
 	}
-	return `<table style="border-collapse:separate;border-spacing:0 8px">${rows.join('')}</table>`;
+	const shopTable = `<table style="border-collapse:separate;border-spacing:0 8px">${rows.join('')}</table>`;
+
+	// Action bar at the top
+	const actionBar =
+		`<div style="margin-bottom:10px">` +
+		`<button name="send" value="/pokerouge refreshshop" class="button">Refresh Shop (5 🪙)</button>` +
+		`&nbsp;&nbsp;` +
+		`<button name="send" value="/pokerouge status" class="button">Check Your Team</button>` +
+		`&nbsp;&nbsp;` +
+		`<button name="send" value="/pokerouge start" class="button" style="float:right">Start Next Battle!</button>` +
+		`</div>`;
+
+	return actionBar + shopTable;
 }
 
 /** Builds the Top-100 leaderboard HTML sorted by highestFloor descending. */
@@ -837,7 +1095,7 @@ function renderLeaderboard(): string {
 		const rank = i + 1;
 		const display = s.displayName || userid;
 		const nameHtml = Impulse.nameColor(display, true, true);
-		const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+		const medal = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`;
 		const teamStr = (s.team ?? [])
 			.map(m => Dex.species.get(toID(m.species)).name || m.species)
 			.join(', ') || '—';
@@ -867,14 +1125,15 @@ function renderLeaderboard(): string {
 
 export const commands: Chat.ChatCommands = {
 	pokerouge: {
-		// /pokerouge start
+		// /pokerouge start — entry point; shows the "Start Fresh Run" page for new players,
+		// or immediately begins the next floor battle for players already mid-run.
 		start(target, room, user) {
 			const existing = getState(user.id);
 			if (existing?.battleRoomId) {
 				const battleRoom = Rooms.get(existing.battleRoomId);
 				if (battleRoom) {
 					return this.sendReplyBox(
-						`You already have an active PokeRouge battle! ` +
+						`You already have an active PokéRogue battle! ` +
 						`<a href="/${existing.battleRoomId}">Click here</a> to go to your battle.`
 					);
 				}
@@ -885,9 +1144,9 @@ export const commands: Chat.ChatCommands = {
 
 			if (existing?.pendingChoice) {
 				const isAdd = existing.pendingChoiceType === 'add';
-				const title = isAdd
-					? `🏆 Milestone reached! Add a new Pokémon to your team:`
-					: `Choose your starter Pokémon:`;
+				const title = isAdd ?
+					`Milestone reached! Add a new Pokemon to your team:` :
+					`Choose your starter Pokémon:`;
 				return this.sendReplyBox(
 					`<b>${title}</b><br><br>` +
 					renderPokemonChoice(
@@ -897,30 +1156,57 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 
-			if (existing) {
-				// Resume existing run — start the next battle
+			if (existing?.team?.length) {
+				// Resume existing run — start the next battle immediately
 				startBattle(user, existing);
+				if (!existing.battleRoomId) {
+					return this.errorReply('Failed to start the PokéRogue battle. Please try again.');
+				}
 				return this.sendReplyBox(
-					`<b>PokeRouge — Floor ${existing.floor}</b><br>` +
-					`Your team:<br>${renderTeam(existing.team)}<br>` +
-					`<br>Battle started! Check the new battle room.`
+					`<b>PokéRogue — Floor ${existing.floor}</b><br>` +
+					`Your team:<br>${renderTeam(existing.team)}<br><br>` +
+					`Battle started! <a href="/${existing.battleRoomId}">Click here to go to your battle.</a>`
 				);
 			}
 
-			// New game — offer 3 completely random level-1 Pokemon
+			// No active run — show the start page with "Start Fresh Run" button
+			this.sendReplyBox(renderStartPage());
+		},
+
+		// /pokerouge newgame [confirm] — triggered by the "Start Fresh Run" button.
+		// If the player has an active run (team or floor > 1), show a warning and
+		// require `/pokerouge newgame confirm` to permanently wipe progress.
+		newgame(target, room, user) {
+			const existing = getState(user.id);
+			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
+
+			if (hasProgress && target.trim().toLowerCase() !== 'confirm') {
+				return this.sendReplyBox(
+					`<b>Warning: You already have an active PokéRogue run!</b><br>` +
+					`Floor: <b>${existing.floor}</b> &nbsp;|&nbsp; ` +
+					`Team: <b>${existing.team?.length ?? 0} Pokémon</b> &nbsp;|&nbsp; ` +
+					`🪙 Coins: <b>${existing.coins ?? 0}</b><br><br>` +
+					`Starting a fresh run will permanently delete your current progress.<br>` +
+					`<button name="send" value="/pokerouge newgame confirm" class="button">` +
+					`Yes, start a fresh run</button> &nbsp; ` +
+					`<button name="send" value="/pokerouge start" class="button">` +
+					`Keep my current run</button>`
+				);
+			}
+
 			const options = pickStarterOptions();
 			const newState: PokeRougeState = {
 				floor: 1,
 				team: [],
 				pendingChoice: options,
 				pendingChoiceType: 'starter',
+				coins: 0,
+				streaksWon: 0,
 			};
 			setState(user.id, newState);
 
 			this.sendReplyBox(
-				`<b style="font-size:16px">⚔️ Welcome to PokeRouge!</b><br>` +
-				`<small>Battle Tower Roguelike — floors get harder as you progress. Lose and start over!</small><br><br>` +
-				`<b>Choose your starter Pokémon (all at Lv. 1):</b><br><br>` +
+				`<b style="font-size:16px">Choose your starter Pokémon (all at Lv. 1):</b><br><br>` +
 				renderPokemonChoice(options, 'Choose Starter')
 			);
 		},
@@ -972,9 +1258,9 @@ export const commands: Chat.ChatCommands = {
 
 			this.sendReplyBox(
 				`You chose <b>${name}</b>!<br>` +
-				(isStarter
-					? `Your journey begins on Floor 1.<br>Starting battle...`
-					: `${name} joined your team!`)
+				(isStarter ?
+					`Your journey begins on Floor 1.<br>Starting battle...` :
+					`${name} joined your team!`)
 			);
 
 			startBattle(user, state);
@@ -993,7 +1279,7 @@ export const commands: Chat.ChatCommands = {
 				const isAdd = state.pendingChoiceType === 'add';
 				return this.sendReplyBox(
 					`<b>PokeRouge — Floor ${state.floor} — Pending Choice</b><br><br>` +
-					`<b>${isAdd ? '🏆 Choose a Pokémon to add to your team:' : 'Choose your starter Pokémon:'}</b><br><br>` +
+					`<b>${isAdd ? 'Choose a Pokemon to add to your team:' : 'Choose your starter Pokemon:'}</b><br><br>` +
 					renderPokemonChoice(
 						state.pendingChoice,
 						isAdd ? 'Add to Team' : 'Choose Starter'
@@ -1024,13 +1310,30 @@ export const commands: Chat.ChatCommands = {
 		shop(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const state = getState(user.id);
-			const coins = state?.coins ?? 0;
+			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
+			const coins = state.coins ?? 0;
+			// Ensure a shop inventory exists for this player
+			if (!state.shopInventory) {
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+			}
 			this.sendReplyBox(
-				`<b style="font-size:15px">🛒 PokeRouge Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
-				`<small>Items are permanent unless marked "(held item, 1 battle)".` +
-				` Use <code>/pokerouge use &lt;item&gt;</code> to apply items to your team.</small><br><br>` +
-				renderShop(coins)
+				`<b style="font-size:15px">PokéRogue Item Shop</b> &nbsp; <b>🪙 ${coins} coins</b><br>` +
+				`<small>Items are permanent unless marked "(held item, 1 battle)".</small><br><br>` +
+				renderShop(coins, state.shopInventory)
 			);
+		},
+
+		// /pokerouge refreshshop — reroll the shop inventory for 5 coins
+		refreshshop(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
+			const coins = state.coins ?? 0;
+			if (coins < 5) return this.errorReply(`Not enough coins. You need 🪙 5 but have 🪙 ${coins}.`);
+			state.coins = coins - 5;
+			state.shopInventory = rollShopInventory();
+			setState(user.id, state);
+			return this.parse('/pokerouge shop');
 		},
 
 		// /pokerouge buy <item>
@@ -1046,6 +1349,20 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
 			}
 
+			// Ensure shop inventory is rolled before validating
+			if (!state.shopInventory) {
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+			}
+
+			// Enforce the rotation — only items currently in the shop can be purchased
+			if (!state.shopInventory.includes(itemId)) {
+				return this.errorReply(
+					`${item.name} is not in your current shop. Use /pokerouge shop to see what's available, ` +
+					`or /pokerouge refreshshop to reroll for 🪙 5.`
+				);
+			}
+
 			const coins = state.coins ?? 0;
 			if (coins < item.cost) {
 				return this.errorReply(`Not enough coins. You have 🪙 ${coins} but need 🪙 ${item.cost}.`);
@@ -1057,11 +1374,11 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, state);
 
 			this.sendReplyBox(
-				`🛒 Purchased <b>${item.name}</b> for 🪙 ${item.cost}!<br>` +
+				`Purchased <b>${item.name}</b> for 🪙 ${item.cost}!<br>` +
 				`Remaining coins: 🪙 ${state.coins}<br>` +
-				(item.heldItem
-					? `Use <code>/pokerouge use ${itemId} [team slot]</code> to equip it before the next battle.`
-					: `Use <code>/pokerouge use ${itemId}${item.id !== 'rarecandy' ? '' : ' [team slot]'}</code> to activate it.`)
+				(item.heldItem ?
+					`Use <code>/pokerouge use ${itemId} [team slot]</code> to equip it before the next battle.` :
+					`Use <code>/pokerouge use ${itemId}${item.id !== 'rarecandy' ? '' : ' [team slot]'}</code> to activate it.`)
 			);
 		},
 
@@ -1081,7 +1398,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
 			}
 
-			const qty = (state.items ?? {})[itemId] ?? 0;
+			const qty = state.items?.[itemId] ?? 0;
 			if (qty < 1) {
 				return this.errorReply(`You don't have any ${item.name}. Use /pokerouge buy ${itemId} to get one.`);
 			}
@@ -1115,21 +1432,21 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 				const oldName = Dex.species.get(toID(oldSpecies)).name || oldSpecies;
 				return this.sendReplyBox(
-					`🍬 <b>${evolved ? `${oldName} evolved into ${newName}` : newName}</b> grew to <b>Lv.${mon.level}</b>!`
+					`<b>${evolved ? `${oldName} evolved into ${newName}` : newName}</b> grew to <b>Lv.${mon.level}</b>!`
 				);
 			}
 			case 'luckycharm': {
 				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
 				setState(user.id, state);
 				return this.sendReplyBox(
-					`🍀 <b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`
+					`<b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`
 				);
 			}
 			case 'revive': {
 				state.hasRevive = true;
 				setState(user.id, state);
 				return this.sendReplyBox(
-					`💊 <b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`
+					`<b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`
 				);
 			}
 			default: {
@@ -1153,7 +1470,7 @@ export const commands: Chat.ChatCommands = {
 				mon.heldItem = item.heldItem;
 				setState(user.id, state);
 				const monName = Dex.species.get(toID(mon.species)).name || mon.species;
-				return this.sendReplyBox(`🎒 Equipped <b>${item.name}</b> to <b>${monName}</b>!`);
+				return this.sendReplyBox(`Equipped <b>${item.name}</b> to <b>${monName}</b>!`);
 			}
 			}
 		},
@@ -1350,7 +1667,7 @@ export const commands: Chat.ChatCommands = {
 		top(target, room, user) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<b style="font-size:15px">🏆 PokeRouge Top 100 Leaderboard</b><br><br>` +
+				`<b style="font-size:15px">PokéRogue Top 100 Leaderboard</b><br><br>` +
 				renderLeaderboard()
 			);
 		},
@@ -1359,16 +1676,17 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const isStaff = user.can('lock');
 			let html =
-				`<b>PokeRouge — Player Commands:</b><br>` +
-				`<code>/pokerouge start</code> — Start a new run or resume your current one.<br>` +
+				`<b>PokéRogue — Player Commands:</b><br>` +
+				`<code>/pokerouge start</code> (or <code>/rougelike start</code>) — Start a new run or jump to the next battle.<br>` +
 				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
 				`<code>/pokerouge shop</code> — View the item shop.<br>` +
+				`<code>/pokerouge refreshshop</code> — Reroll shop items for 🪙 5 coins.<br>` +
 				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item (costs 🪙 coins).<br>` +
 				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
 				`<code>/pokerouge status</code> — View your floor, 🪙 coins, inventory and team.<br>` +
 				`<code>/pokerouge top</code> — View the Top 100 leaderboard by highest floor.<br>` +
 				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
-				`<br><b>Shop Items:</b> Rare Candy · Lucky Charm · Revive · Focus Sash · Leftovers · Choice Band · Life Orb · Assault Vest<br>` +
+				`<br><b>Shop Items:</b> 30+ PS items including Choice Band/Specs/Scarf, Life Orb, Assault Vest, Heavy-Duty Boots, and more.<br>` +
 				`<br><b>Tips:</b> Win floors to earn 🪙 coins. Legendary Pokémon may appear as team additions at Floor 20+!`;
 			if (isStaff) {
 				html +=
@@ -1388,6 +1706,14 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		'': 'help',
+	},
+
+	// /roguelike and /rougelike are aliases for /pokerouge
+	roguelike(target, room, user) {
+		return this.parse(`/pokerouge ${target}`);
+	},
+	rougelike(target, room, user) {
+		return this.parse(`/pokerouge ${target}`);
 	},
 };
 
@@ -1420,7 +1746,7 @@ export const handlers: Chat.Handlers = {
 
 			// Award EXP to all team members
 			const expReward = floorExpReward(match.floor) * multiplier;
-			const messages: string[] = [];
+			const levelUpMsgs: string[] = [];
 
 			for (const mon of state.team) {
 				// Capture the original species name before any potential evolution
@@ -1432,11 +1758,11 @@ export const handlers: Chat.Handlers = {
 					const newSpeciesData = Dex.species.get(toID(mon.species));
 					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
 					if (evolved) {
-						messages.push(
-							`🌟 <b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
+						levelUpMsgs.push(
+							`<b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
 						);
 					} else {
-						messages.push(`⬆ <b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
+						levelUpMsgs.push(`<b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
 					}
 				}
 			}
@@ -1452,6 +1778,10 @@ export const handlers: Chat.Handlers = {
 
 			const prevFloor = state.floor;
 			state.floor++;
+			state.streaksWon = (state.streaksWon ?? 0) + 1;
+
+			// Reset shop inventory so the shop refreshes after each win
+			delete state.shopInventory;
 
 			// Update highest floor for leaderboard
 			if (state.floor > (state.highestFloor ?? 0)) state.highestFloor = state.floor;
@@ -1466,28 +1796,29 @@ export const handlers: Chat.Handlers = {
 				state.pendingChoice = opts;
 				state.pendingChoiceType = 'add';
 				setState(match.userId, state);
-
-				const msg = [
-					`✅ Floor ${prevFloor} cleared! You advance to Floor ${state.floor}!`,
-					...(messages.map(m => m.replace(/<[^>]+>/g, ''))),
-					`🪙 +${coinsEarned} coins${doubleActive ? ' (2×!)' : ''}  |  Total: ${state.coins}`,
-					``,
-					`🏆 MILESTONE! Use /pokerouge choose [1/2/3] to add a new Pokemon to your team,`,
-					`or /pokerouge start to skip and battle Floor ${state.floor}.`,
-				].join('\n');
-				humanUser?.popup(msg);
 			} else {
 				setState(match.userId, state);
-
-				const msg = [
-					`✅ Floor ${prevFloor} cleared! You advance to Floor ${state.floor}!`,
-					...(messages.map(m => m.replace(/<[^>]+>/g, ''))),
-					`🪙 +${coinsEarned} coins${doubleActive ? ' (2×!)' : ''}  |  Total: ${state.coins}`,
-					``,
-					`Use /pokerouge start to battle Floor ${state.floor}.`,
-				].join('\n');
-				humanUser?.popup(msg);
 			}
+
+			// Build the rich HTML win screen popup
+			const levelUpHtml = levelUpMsgs.length ?
+				`<div style="margin:6px 0;font-size:12px">${levelUpMsgs.join('<br>')}</div>` :
+				'';
+			const coinMsg = doubleActive ?
+				`<small>Lucky Charm active — coins doubled!</small><br>` :
+				'';
+			const milestoneMsg = offerNewPokemon ?
+				`<br><b>Milestone!</b> Use <code>/pokerouge choose [1/2/3]</code> to add a new Pokemon to your team.<br>` :
+				'';
+
+			humanUser?.popup(
+				renderWinScreen(prevFloor, state.streaksWon, state.coins) +
+				levelUpHtml +
+				coinMsg +
+				`<div style="font-size:11px;color:#555;margin-top:4px">` +
+				`🪙 +${coinsEarned} coins${doubleActive ? ' (2×!)' : ''}</div>` +
+				milestoneMsg
+			);
 		} else {
 			// Loss
 			if (state.hasRevive) {
@@ -1496,26 +1827,74 @@ export const handlers: Chat.Handlers = {
 				delete state.battleRoomId;
 				setState(match.userId, state);
 				humanUser?.popup(
-					`💊 Your Revive activated! You get to retry Floor ${match.floor}.\n` +
+					`Your Revive activated! You get to retry Floor ${match.floor}.\n` +
 					`Use /pokerouge start to try again.`
 				);
 			} else {
 				// Run over — reset to initial state while preserving leaderboard data
+				const finalFloor = match.floor;
+				const finalStreaks = state.streaksWon ?? 0;
 				state.floor = 1;
 				state.team = [];
 				state.coins = 0;
+				state.streaksWon = 0;
 				state.hasRevive = false;
 				state.items = {};
 				delete state.battleRoomId;
 				delete state.pendingChoice;
 				delete state.doubleExpFloors;
+				delete state.shopInventory;
 				setState(match.userId, state);
 				humanUser?.popup(
-					`❌ You were defeated on Floor ${match.floor}!\n` +
-					`Your PokeRouge run has ended.\n` +
+					`Defeated on Floor ${finalFloor}!\n` +
+					`Streaks Won: ${finalStreaks} | Best Floor: ${state.highestFloor ?? finalFloor}\n\n` +
+					`Your PokéRogue run has ended.\n` +
 					`Use /pokerouge start to begin a new run with a fresh starter.`
 				);
 			}
 		}
 	},
+};
+
+// ---------------------------------------------------------------------------
+// Plugin start hook — register the private "Rougelike Battle" format at
+// startup so battles can use it without touching config/formats.ts.
+// The format is hidden from all public-facing lists.
+// ---------------------------------------------------------------------------
+
+export const start = (): void => {
+	const { Dex } = require('../../../sim/dex') as typeof import('../../../sim/dex');
+	const { Format } = require('../../../sim/dex-formats') as typeof import('../../../sim/dex-formats');
+
+	const FORMAT_ID = 'rougelikebattle' as ID;
+
+	// Skip if already registered (e.g. hot-reload)
+	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
+
+	// Ensure the base format list is loaded before we append
+	Dex.formats.load();
+
+	const formatData = {
+		name: 'Rougelike Battle',
+		mod: 'gen9',
+		effectType: 'Format' as const,
+		// Hidden from all public lists
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		debug: false,
+		battle: { trunc: Math.trunc },
+		section: 'Rougelike',
+		baseRuleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: [],
+		restricted: [],
+		unbanlist: [],
+		rated: false,
+	};
+
+	const format = new Format(formatData);
+	Dex.formats.rulesetCache.set(FORMAT_ID, format);
+	// Append to the immutable list cache so Dex.formats.all() includes it
+	(Dex.formats.formatsListCache as Format[])?.push(format);
 };
