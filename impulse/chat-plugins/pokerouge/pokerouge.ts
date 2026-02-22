@@ -1141,6 +1141,7 @@ export const commands: Chat.ChatCommands = {
 		// If the player has an active run (team or floor > 1), show a warning and
 		// require `/pokerouge newgame confirm` to permanently wipe progress.
 		newgame(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const existing = getState(user.id);
 			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
 
@@ -1175,6 +1176,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge choose <1|2|3>
 		choose(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const n = parseInt(target.trim());
 			if (!n || n < 1 || n > 3) {
 				return this.errorReply('Usage: /pokerouge choose [1, 2, or 3]');
@@ -1237,6 +1239,7 @@ export const commands: Chat.ChatCommands = {
 		// /pokerouge battle — starts the next floor battle for a player mid-run.
 		// Called from the game page "Start Battle" button.
 		battle(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) {
 				return this.errorReply('No active PokéRogue run. Use /pokerouge start to open the game page!');
@@ -1282,6 +1285,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge shop — opens the game page at the shop view
 		shop(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			// Ensure a shop inventory exists for this player
@@ -1294,6 +1298,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge refreshshop — reroll the shop inventory for 5 coins
 		refreshshop(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			const coins = state.coins ?? 0;
@@ -1306,6 +1311,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge buy <item>
 		buy(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const itemId = toID(target.trim());
 			const item = SHOP_ITEMS[itemId];
 			if (!item) {
@@ -1347,6 +1353,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge use <item> [team slot 1-6]
 		use(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const parts = target.trim().split(/\s+/);
 			const itemId = toID(parts[0] ?? '');
 			const slotArg = parseInt(parts[1] ?? '0');
@@ -1440,6 +1447,7 @@ export const commands: Chat.ChatCommands = {
 
 		// /pokerouge quit
 		quit(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) {
 				return this.errorReply('You have no active PokeRouge run.');
