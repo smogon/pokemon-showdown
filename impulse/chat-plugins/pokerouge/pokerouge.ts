@@ -817,10 +817,8 @@ function buildBotTeam(floor: number): string {
 /**
  * Starts a PokeRouge battle on the current floor for `user`.
  * Creates the bot, registers AI handlers and tracks the room.
- */
-/**
- * Returns true on success, false on failure.
- * On failure the user has already received a popup with the error.
+ * Returns true on success; on failure, the user has already received a popup
+ * with the error message and false is returned.
  */
 function startBattle(user: User, state: PokeRougeState): boolean {
 	// Pack the team BEFORE clearing held items — packTeam reads them to embed in the team string
@@ -1833,6 +1831,11 @@ export const pages: Chat.PageTable = {
 	pokerouge(args, user) {
 		this.title = 'PokéRogue';
 		const sub = args[0] || '';
+
+		// Guests have throwaway IDs — their state cannot be resumed after reconnect
+		// and would accumulate indefinitely in savedData.
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+
 		const state = getState(user.id);
 
 		let buf = `<div class="pad">`;
