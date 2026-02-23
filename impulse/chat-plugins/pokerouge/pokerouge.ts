@@ -763,7 +763,7 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 				chosen = 'move 1'; // struggle
 			}
 
-			// Use mega/tera whenever available
+			// Probabilistically use mega/tera whenever the option is available
 			if (active.canMegaEvo && Math.random() < 0.5) chosen += ' mega';
 			else if (active.canTerastallize && Math.random() < 0.4) chosen += ' terastallize';
 
