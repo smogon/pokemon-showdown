@@ -685,10 +685,9 @@ function destroyBotUser(botUser: User): void {
 
 /**
  * Parse a |request| JSON and return a valid choice string.
- * Basic AI: picks a random available move (or switch for forceSwitch).
- * Advanced AI (floors > 20): prefer higher base-power moves.
+ * Always prefers higher base-power moves for the best AI from the start.
  */
-function makeAIChoice(requestJson: string, floor: number): string {
+function makeAIChoice(requestJson: string, _floor: number): string {
 	let request: any;
 	try {
 		request = JSON.parse(requestJson.startsWith('|request|') ? requestJson.slice(9) : requestJson);
@@ -753,25 +752,20 @@ function makeAIChoice(requestJson: string, floor: number): string {
 
 			let chosen = '';
 			if (usableMoves.length > 0) {
-				// Advanced AI (floor > 20): prefer higher base-power moves
-				if (floor > 20) {
-					usableMoves.sort((a: any, b: any) => {
-						const bpA = Dex.moves.get(a.id)?.basePower ?? 0;
-						const bpB = Dex.moves.get(b.id)?.basePower ?? 0;
-						return bpB - bpA;
-					});
-					chosen = `move ${moves.indexOf(usableMoves[0]) + 1}`;
-				} else {
-					const pick = usableMoves[Math.floor(Math.random() * usableMoves.length)];
-					chosen = `move ${moves.indexOf(pick) + 1}`;
-				}
+				// Always prefer higher base-power moves
+				usableMoves.sort((a: any, b: any) => {
+					const bpA = Dex.moves.get(a.id)?.basePower ?? 0;
+					const bpB = Dex.moves.get(b.id)?.basePower ?? 0;
+					return bpB - bpA;
+				});
+				chosen = `move ${moves.indexOf(usableMoves[0]) + 1}`;
 			} else {
 				chosen = 'move 1'; // struggle
 			}
 
-			// Can we also mega/tera? Randomly do so on higher floors
-			if (floor > 15 && active.canMegaEvo && Math.random() < 0.5) chosen += ' mega';
-			else if (floor > 25 && active.canTerastallize && Math.random() < 0.4) chosen += ' terastallize';
+			// Use mega/tera whenever available
+			if (active.canMegaEvo && Math.random() < 0.5) chosen += ' mega';
+			else if (active.canTerastallize && Math.random() < 0.4) chosen += ' terastallize';
 
 			choicesList.push(chosen);
 		}
@@ -1034,33 +1028,26 @@ function renderShop(coins: number, inventory?: string[]): string {
 		if (!item) return '';
 		const canAfford = coins >= item.cost;
 		const buyBtn = canAfford ?
-			`<button name="send" value="/pokerouge buy ${item.id}" class="button" style="margin-top:6px">Buy (${item.cost} coins)</button>` :
-			`<button class="button" style="margin-top:6px" disabled>Buy (${item.cost} coins)</button>`;
-		return `<td style="text-align:center;padding:8px 12px;border:1px solid #ccc;border-radius:8px;background:#fafafa;min-width:120px;vertical-align:top">` +
-			`<b style="font-size:13px">${item.name}</b><br>` +
-			`<span style="font-size:11px;color:#555">${item.description}</span><br>` +
-			(item.heldItem ? `<small style="color:#888">(held item, 1 battle)</small><br>` : '') +
+			`<button name="send" value="/pokerouge buy ${item.id}" class="button pr-shop-buy">Buy (${item.cost} coins)</button>` :
+			`<button class="button pr-shop-buy" disabled>Buy (${item.cost} coins)</button>`;
+		return `<div class="pr-shop-card">` +
+			`<b class="pr-shop-item-name">${item.name}</b>` +
+			`<span class="pr-shop-item-desc">${item.description}</span>` +
+			(item.heldItem ? `<small class="pr-shop-held">(held item, 1 battle)</small>` : '') +
 			buyBtn +
-			`</td>`;
+			`</div>`;
 	}).filter(Boolean);
-	// Chunk into rows of 4
-	const rows: string[] = [];
-	for (let i = 0; i < cards.length; i += 4) {
-		rows.push(`<tr>${cards.slice(i, i + 4).join('<td style="width:8px"></td>')}</tr>`);
-	}
-	const shopTable = `<table style="border-collapse:separate;border-spacing:0 8px">${rows.join('')}</table>`;
 
-	// Action bar at the top
+	const shopGrid = `<div class="pr-shop-grid">${cards.join('')}</div>`;
+
 	const actionBar =
-		`<div style="margin-bottom:10px">` +
+		`<div class="pr-shop-actions">` +
 		`<button name="send" value="/pokerouge refreshshop" class="button">Refresh Shop (5 coins)</button>` +
-		`&nbsp;&nbsp;` +
 		`<button name="send" value="/pokerouge start" class="button">Back to Dashboard</button>` +
-		`&nbsp;&nbsp;` +
-		`<button name="send" value="/pokerouge battle" class="button" style="float:right">Start Next Battle!</button>` +
+		`<button name="send" value="/pokerouge battle" class="button pr-shop-next">Start Next Battle!</button>` +
 		`</div>`;
 
-	return actionBar + shopTable;
+	return actionBar + shopGrid;
 }
 
 /** Builds the Top-100 leaderboard HTML sorted by highestFloor descending. */
@@ -1821,6 +1808,24 @@ export const pages: Chat.PageTable = {
 		const state = getState(user.id);
 
 		let buf = `<div class="pad">`;
+		buf += `<style>
+.pr-shop-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pr-shop-card{display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1px solid #ccc;border-radius:8px;background:#fafafa;min-width:130px;flex:1 1 130px;max-width:200px;box-sizing:border-box;text-align:center;gap:4px}
+.pr-shop-item-name{font-size:13px;font-weight:bold}
+.pr-shop-item-desc{font-size:11px;color:#555;flex:1}
+.pr-shop-held{font-size:10px;color:#888}
+.pr-shop-buy{margin-top:4px;width:100%}
+.pr-shop-actions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.pr-shop-next{margin-left:auto}
+.pr-stat-bar{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0}
+.pr-stat-bar span{white-space:nowrap}
+.pr-action-bar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+@media(max-width:500px){.pr-shop-card{min-width:110px;max-width:none;flex:1 1 45%}.pr-shop-next{margin-left:0}}
+.dark .pr-shop-card{background:#2a2a2a;border-color:#444}
+.dark .pr-shop-item-desc{color:#aaa}
+.dark .pr-shop-held{color:#888}
+.dark .pr-stat-bar{color:#ddd}
+</style>`;
 		buf += `<h2>PokéRogue</h2>`;
 
 		if (!state) {
@@ -1880,12 +1885,12 @@ export const pages: Chat.PageTable = {
 		if (state.hasRevive) activeEffects.push('Revive (active)');
 
 		// Status bar
-		buf += `<p>`;
-		buf += `<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; `;
-		buf += `<b>Coins:</b> ${coins} &nbsp;|&nbsp; `;
-		buf += `<b>Streaks:</b> ${state.streaksWon ?? 0}`;
-		if (state.highestFloor) buf += ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}`;
-		buf += `</p>`;
+		buf += `<div class="pr-stat-bar">`;
+		buf += `<span><b>Floor:</b> ${state.floor}</span>`;
+		buf += `<span><b>Coins:</b> ${coins}</span>`;
+		buf += `<span><b>Streaks:</b> ${state.streaksWon ?? 0}</span>`;
+		if (state.highestFloor) buf += `<span><b>Best Floor:</b> ${state.highestFloor}</span>`;
+		buf += `</div>`;
 
 		if (activeEffects.length) {
 			buf += `<p><b>Active Effects:</b> ${activeEffects.join(', ')}</p>`;
@@ -1899,15 +1904,12 @@ export const pages: Chat.PageTable = {
 		buf += `<p><b>Inventory:</b> ${itemList}</p>`;
 
 		// Action buttons
-		buf += `<p>`;
+		buf += `<div class="pr-action-bar">`;
 		buf += `<button name="send" value="/pokerouge battle" class="button" style="font-size:14px;padding:6px 16px">Start Floor ${state.floor} Battle</button>`;
-		buf += ` &nbsp; `;
 		buf += `<button name="send" value="/pokerouge shop" class="button">Open Shop</button>`;
-		buf += ` &nbsp; `;
 		buf += `<button name="send" value="/pokerouge top" class="button">Leaderboard</button>`;
-		buf += ` &nbsp; `;
 		buf += `<button name="send" value="/pokerouge quit" class="button">Quit Run</button>`;
-		buf += `</p>`;
+		buf += `</div>`;
 
 		// Shop sub-view (view-pokerouge-shop)
 		if (sub === 'shop') {
