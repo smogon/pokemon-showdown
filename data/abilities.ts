@@ -2430,6 +2430,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 						continue;
 					}
+					this.add('-enditem', pokemon, yourItem, '[silent]', '[from] ability: Magician', `[of] ${source}`);
 					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
 					return;
 				}
