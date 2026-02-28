@@ -153,10 +153,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedAngerShell;
 			}
 			return true;
@@ -169,6 +166,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({ atk: 1, spa: 1, spe: 1, def: -1, spd: -1 }, target, target);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
 		},
 		flags: {},
@@ -419,10 +418,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedBerserk;
 			}
 			return true;
@@ -435,6 +431,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({ spa: 1 }, target, target);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
 		},
 		flags: {},
@@ -1212,15 +1210,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 302,
 	},
 	emergencyexit: {
-		onEmergencyExit(target) {
+		onEmergencyExit(originalHp, target) {
+			if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (!active.volatiles['emergencyexiting']) {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = true;
-			this.add('-activate', target, 'ability: Emergency Exit');
+			target.addVolatile('emergencyexiting');
+			this.effectState.announced = false;
+			if (!this.activeMove) {
+				// retrieve in the middle of switching in and residual effects
+				// FIXME: The timing of the announcement is actually the timing of switching out.
+				// This becomes important once we separate switching out from switching in.
+				this.effectState.announced = true;
+				this.add('-activate', target, 'ability: Emergency Exit');
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.volatiles['emergencyexiting'] && !this.effectState.announced) {
+				this.add('-activate', pokemon, 'ability: Emergency Exit');
+			}
 		},
 		flags: {},
 		name: "Emergency Exit",
@@ -1562,7 +1576,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.abilityState.gluttony = true;
 		},
-		onDamage(item, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			pokemon.abilityState.gluttony = true;
 		},
 		flags: {},
@@ -5402,15 +5416,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 73,
 	},
 	wimpout: {
-		onEmergencyExit(target) {
+		onEmergencyExit(originalHp, target) {
+			if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (!active.volatiles['emergencyexiting']) {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = true;
-			this.add('-activate', target, 'ability: Wimp Out');
+			target.addVolatile('emergencyexiting');
+			this.effectState.announced = false;
+			if (!this.activeMove) {
+				// retrieve in the middle of switching in and residual effects
+				// FIXME: The timing of the announcement is actually the timing of switching out.
+				// This becomes important once we separate switching out from switching in.
+				this.effectState.announced = true;
+				this.add('-activate', target, 'ability: Wimp Out');
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.volatiles['emergencyexiting'] && !this.effectState.announced) {
+				this.add('-activate', pokemon, 'ability: Wimp Out');
+			}
 		},
 		flags: {},
 		name: "Wimp Out",
