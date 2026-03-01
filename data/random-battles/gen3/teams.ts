@@ -618,6 +618,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -628,6 +629,35 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const incompatibilityList = [
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Shedinja + Tyranitar
+			['shedinja', 'tyranitar'],
+			// Prevent Reversal/Flail users + Tyranitar
+			[['dodrio', 'raticate', 'primeape', 'hitmonlee', 'furret', 'yanma', 'heracross', 'blaziken', 'medicham'], 'tyranitar'],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 
 	override randomTeam() {
@@ -658,9 +688,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
-
-			// Prevent Shedinja from generating after Tyranitar
-			if (species.name === 'Shedinja' && teamDetails.sand) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (species.name === 'Wobbuffet' && this.battleHasWobbuffet) continue;
@@ -707,6 +734,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 					continue;
 				}
+
+				// Check compatibility with team
+				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
 			// Okay, the set passes, add it to our team

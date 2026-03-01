@@ -473,6 +473,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			level,
 			moves: shuffledMoves,
 			ability: 'No Ability',
@@ -484,6 +485,33 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			shiny: false,
 			gender: species.gender ? species.gender : 'M',
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const spikesSetters = ['cloyster', 'delibird', 'qwilfish', 'forretress', 'smeargle'];
+		const incompatibilityList = [
+			// These combinations are prevented to avoid double spikes.
+			[spikesSetters, spikesSetters],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 }
 

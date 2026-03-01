@@ -188,8 +188,13 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "icebeam", "shadowball", "sludgebomb", "substitute", "thunderbolt"],
+                "abilities": ["Poison Point"]
+            },
+                        {
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "rockslide", "shadowball", "sludgebomb"],
                 "abilities": ["Poison Point"]
             }
         ]
@@ -198,8 +203,13 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "shadowball", "sludgebomb", "substitute", "thunderbolt"],
+                "abilities": ["Poison Point"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "rockslide", "shadowball", "sludgebomb"],
                 "abilities": ["Poison Point"]
             }
         ]
@@ -607,6 +617,11 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["doubleedge", "hiddenpowerghost", "hiddenpowerground", "surf", "swordsdance"],
+                "abilities": ["Hyper Cutter"]
+            },
+                        {
+                "role": "Bulky Setup",
+                "movepool": ["doubleedge", "hiddenpowerghost", "mudshot", "swordsdance"],
                 "abilities": ["Hyper Cutter"]
             }
         ]
@@ -1544,7 +1559,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "protect", "psychic", "return", "shadowball", "thunderbolt", "thunderwave", "toxic", "wish"],
+                "movepool": ["doubleedge", "earthquake", "protect", "psychic", "return", "thunderwave", "toxic", "wish"],
                 "abilities": ["Early Bird"]
             }
         ]

@@ -458,20 +458,15 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["fireblast", "icebeam", "psyshock", "scald", "slackoff", "thunderwave", "toxic"],
-                "abilities": ["Regenerator"]
+                "abilities": ["Regenerator"],
+                "preferredTypes": ["Psychic"]
             },
             {
                 "role": "Staller",
                 "movepool": ["calmmind", "psyshock", "scald", "slackoff"],
                 "abilities": ["Regenerator"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["fireblast", "icebeam", "psyshock", "surf", "trick", "trickroom"],
-                "abilities": ["Regenerator"],
-                "preferredTypes": ["Psychic"]
             }
         ]
     },
@@ -1274,13 +1269,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["fireblast", "icebeam", "psyshock", "scald", "slackoff", "thunderwave", "toxic"],
-                "abilities": ["Regenerator"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["fireblast", "icebeam", "psyshock", "surf", "trick", "trickroom"],
                 "abilities": ["Regenerator"],
                 "preferredTypes": ["Psychic"]
             }
@@ -1397,7 +1387,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["destinybond", "spikes", "taunt", "thunderwave", "toxicspikes", "waterfall"],
+                "movepool": ["destinybond", "poisonjab", "spikes", "taunt", "thunderwave", "toxicspikes", "waterfall"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -1579,7 +1569,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "hypnosis", "jumpkick", "megahorn", "suckerpunch", "thunderwave"],
+                "movepool": ["doubleedge", "earthquake", "hypnosis", "jumpkick", "megahorn", "return", "suckerpunch", "thunderwave"],
                 "abilities": ["Intimidate"],
                 "preferredTypes": ["Ground"]
             }
@@ -3319,12 +3309,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "leechseed", "morningsun", "powerwhip", "rockslide", "sleeppowder"],
+                "movepool": ["earthquake", "gigadrain", "hiddenpowerfire", "leafstorm", "leechseed", "morningsun", "rockslide", "sleeppowder"],
                 "abilities": ["Regenerator"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "powerwhip", "rockslide", "sleeppowder"],
+                "movepool": ["earthquake", "gigadrain", "hiddenpowerfire", "leafstorm", "rockslide", "sleeppowder"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -4020,13 +4010,18 @@
         "level": 86,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["aquajet", "grassknot", "hydropump", "icebeam", "megahorn", "superpower"],
                 "abilities": ["Torrent"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["aquajet", "megahorn", "superpower", "swordsdance", "waterfall"],
+                "abilities": ["Torrent"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["grassknot", "hydropump", "icebeam", "scald"],
                 "abilities": ["Torrent"]
             }
         ]

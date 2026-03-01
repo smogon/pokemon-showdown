@@ -830,6 +830,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -840,6 +841,39 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const incompatibilityList = [
+			// These Pokemon with support roles are considered too similar to each other.
+			['blissey', 'chansey'],
+			['illumise', 'volbeat'],
+
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Dry Skin + sun setting ability
+			[['parasect', 'jynx', 'toxicroak'], ['ninetales', 'groudon']],
+			// Prevent Shedinja + sand/hail setting ability
+			['shedinja', ['tyranitar', 'hippowdon', 'abomasnow']],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 
 	override randomTeam() {
@@ -873,9 +907,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			// Illusion shouldn't be in the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-
-			// Prevent Shedinja from generating after Sandstorm/Hail setters
-			if (species.name === 'Shedinja' && (teamDetails.sand || teamDetails.hail)) continue;
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
@@ -924,6 +955,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 					continue;
 				}
+
+				// Check compatibility with team
+				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);

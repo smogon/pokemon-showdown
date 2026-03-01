@@ -1512,7 +1512,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "hypnosis", "megahorn", "return", "suckerpunch", "thunderbolt"],
+                "movepool": ["doubleedge", "earthquake", "hypnosis", "megahorn", "return", "suckerpunch", "thunderbolt", "thunderwave"],
                 "abilities": ["Intimidate"],
                 "preferredTypes": ["Ground"]
             }
