@@ -3204,10 +3204,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Articuno-Galar', 'Aurorus', 'Bellossom', 'Bewear', 'Blastoise-Base', 'Dodrio', 'Entei', 'Falinks-Base', 'Flygon', 'Furret', 'Goodra-Hisui',
-			'Gumshoos-Base', 'Heliolisk', 'Hydrapple', 'Indeedee-F', 'Iron Thorns', 'Leavanny', 'Lickilicky', 'Ludicolo', 'Maractus', 'Meganium-Base',
-			'Polteageist', 'Probopass', 'Regieleki', 'Rhyperior', 'Seismitoad', 'Shiinotic', 'Slaking', 'Spidops', 'Spiritomb', 'Unfezant', 'Vanilluxe',
-			'Victreebel-Base', 'Weezing-Galar', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Aerodactyl-Base', 'Arctozolt', 'Armaldo', 'Armarouge', 'Bronzong', 'Centiskorch', 'Cherrim-Base', 'Cyclizar', 'Dhelmise', 'Dondozo',
+			'Drakloak', 'Empoleon', 'Glaceon', 'Golduck', 'Gyarados-Base', 'Jellicent', 'Jumpluff', 'Kecleon', 'Kilowattrel', 'Kingdra', 'Lunatone',
+			'Musharna', 'Noivern', 'Palossand', 'Pincurchin', 'Reuniclus', 'Revavroom', 'Sandslash-Alola', 'Snorlax', 'Solrock', 'Stonjourner',
+			'Tyranitar-Base', 'Vaporeon', 'Virizion', 'Wigglytuff', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
