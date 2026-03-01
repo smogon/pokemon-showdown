@@ -1,35 +1,38 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
-		beforeTurnCallback(pokemon, target) {
+		beforeTurnCallback(pokemon) {
 			// @ts-expect-error modded
 			const linkedMoves: [string, string] = pokemon.getLinkedMoves();
 			if (linkedMoves.length) {
 				if (linkedMoves[0] !== 'pursuit' && linkedMoves[1] === 'pursuit') return;
 			}
 
-			target.side.addSideCondition('pursuit', pokemon);
-			if (!target.side.sideConditions['pursuit'].sources) {
-				target.side.sideConditions['pursuit'].sources = [];
+			for (const target of pokemon.foes()) {
+				target.addVolatile('pursuit');
+				const data = target.volatiles['pursuit'];
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
 			}
-			target.side.sideConditions['pursuit'].sources.push(pokemon);
 		},
 	},
 	mefirst: {
 		inherit: true,
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
-			if (action) {
-				// Mod-specific: Me First copies the first move in the link
-				// @ts-expect-error modded
-				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
-				if (move.category !== 'Status' && !move.flags['failmefirst']) {
-					pokemon.addVolatile('mefirst');
-					this.actions.useMove(move, pokemon, { target });
-					return null;
-				}
-			}
-			return false;
+			if (!action) return false;
+			// Mod-specific: Me First copies the first move in the link
+			// @ts-expect-error modded
+			const move = this.dex.getActiveMove(action.linked?.[0] || action.move.id);
+			if (action.zmove || move.isZ || move.isMax) return false;
+			if (target.volatiles['mustrecharge']) return false;
+			if (move.category === 'Status' || move.flags['failmefirst']) return false;
+
+			pokemon.addVolatile('mefirst');
+			this.actions.useMove(move, pokemon, { target });
+			return null;
 		},
 	},
 
@@ -38,7 +41,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move') {
+			if (!action || action.choice !== 'move' ||
+				// @ts-expect-error modded
+				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
 				this.attrLastMove('[still]');
 				this.add('-fail', source);
 				return null;
@@ -51,13 +56,67 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 			// @ts-expect-error modded
-			if (!action.linked) {
-				if (action.move.category === 'Status' && action.move.id !== 'mefirst') {
-					this.attrLastMove('[still]');
-					this.add('-fail', source);
-					return null;
+			if (action.linked) {
+				// @ts-expect-error modded
+				for (const linkedMove of action.linked) {
+					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
 				}
-			} else {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+		},
+	},
+	thunderclap: {
+		inherit: true,
+		onTry(source, target) {
+			const action = this.queue.willMove(target);
+			if (!action || action.choice !== 'move' ||
+				// @ts-expect-error modded
+				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
+				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
+				// i.e. if Sucker Punch is linked with a negative priority move
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+			// @ts-expect-error modded
+			if (action.linked) {
+				// @ts-expect-error modded
+				for (const linkedMove of action.linked) {
+					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
+				}
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+		},
+	},
+	upperhand: {
+		inherit: true,
+		onTry(source, target) {
+			const action = this.queue.willMove(target);
+			if (!action || action.choice !== 'move' || action.move.priority < 0.1 ||
+				// @ts-expect-error modded
+				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
+				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
+				// i.e. if Sucker Punch is linked with a negative priority move
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return null;
+			}
+			// @ts-expect-error modded
+			if (action.linked) {
 				// @ts-expect-error modded
 				for (const linkedMove of action.linked) {
 					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
@@ -73,13 +132,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	sketch: {
 		inherit: true,
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
-			const lastMove: Move = target.m.lastMoveAbsolute;
-			if (source.transformed || !lastMove || disallowedMoves.includes(lastMove.id) ||
-				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
+			const move = target.m.lastMoveAbsolute;
+			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			const move = this.dex.moves.get(lastMove);
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
@@ -97,12 +154,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mimic: {
 		inherit: true,
 		onHit(target, source) {
-			const lastMove: Move = target.m.lastMoveAbsolute;
-			if (source.transformed || !lastMove || lastMove.flags['failmimic'] ||
-				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
+			const move = target.m.lastMoveAbsolute;
+			if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
+				return false;
+			}
+			if (move.isZ || move.isMax) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
-			const move = this.dex.moves.get(lastMove);
+
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
@@ -121,25 +180,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	instruct: {
 		inherit: true,
 		onHit(target, source) {
-			const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
+			const lastMove = target.m.lastMoveAbsolute;
 			if (!lastMove || target.volatiles['dynamax']) return false;
-			const moveIndex = target.moves.indexOf(lastMove.id);
+			const moveSlot = target.getMoveData(lastMove.id);
 			if (
 				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
-				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
+				(moveSlot && moveSlot.pp <= 0)
 			) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', `[of] ${source}`);
-			this.actions.runMove(lastMove.id, target, target.lastMoveTargetLoc!);
+			this.queue.prioritizeAction(this.queue.resolveAction({
+				choice: 'move',
+				pokemon: target,
+				moveid: lastMove.id,
+				targetLoc: target.lastMoveTargetLoc!,
+			})[0] as MoveAction);
 		},
 	},
 	mirrormove: {
 		inherit: true,
 		onTryHit(target, pokemon) {
-			const move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
+			const move = target.m.lastMoveAbsolute;
 			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
@@ -155,15 +219,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				const lastMove: Move | ActiveMove | null = pokemon.m.lastMoveAbsolute;
+				// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
 				if (
 					this.queue.willMove(pokemon) ||
 					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
 				) {
 					this.effectState.duration!--;
 				}
+				const lastMove = pokemon.m.lastMoveAbsolute;
 				if (!lastMove) {
-					this.debug('pokemon hasn\'t moved yet');
+					this.debug(`Pokemon hasn't moved yet`);
 					return false;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
@@ -171,18 +236,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						if (!moveSlot.pp) {
 							this.debug('Move out of PP');
 							return false;
-						} else {
-							if (effect.id === 'cursedbody') {
-								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', `[of] ${source}`);
-							} else {
-								this.add('-start', pokemon, 'Disable', moveSlot.move);
-							}
-							this.effectState.move = lastMove.id;
-							return;
 						}
 					}
 				}
-				return false;
+				if (effect.effectType === 'Ability') {
+					this.add('-start', pokemon, 'Disable', lastMove.name, '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-start', pokemon, 'Disable', lastMove.name);
+				}
+				this.effectState.move = lastMove.id;
 			},
 			onResidualOrder: 14,
 			onEnd(pokemon) {
@@ -190,7 +252,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.id === this.effectState.move) {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
@@ -210,28 +272,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
-				let lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-				if (!lastMove || target.volatiles['dynamax']) return false;
-				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.moves.get(lastMove.baseMove);
+				let move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
+				if (!move || target.volatiles['dynamax']) return false;
+				// Encore only works on Max Moves if the base move is not itself a Max Move
+				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				// @ts-expect-error modded
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
-				const moveIndex = target.moves.indexOf(lastMove.id);
-				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['failencore'] &&
-					this.dex.moves.get((linkedMoves[1])).flags['failencore']) {
+				const moveSlot = target.getMoveData(move.id);
+				if (linkedMoves.includes(move.id) && linkedMoves.every(m => !!this.dex.moves.get(m).flags['failencore'])) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
 				}
-				if (lastMove.isZ || lastMove.flags['failencore'] ||
-					(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				if (move.isZ || move.isMax || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
-					delete target.volatiles['encore'];
 					return false;
 				}
-				this.effectState.turnsActivated = {};
-				this.effectState.move = lastMove.id;
+				this.effectState.timesActivated = {};
+				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
-				if (linkedMoves.includes(lastMove.id)) {
+				if (linkedMoves.includes(move.id)) {
 					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
@@ -239,51 +299,50 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 			onOverrideAction(pokemon, target, move) {
-				if (!this.effectState.turnsActivated[this.turn]) {
+				if (!this.effectState.timesActivated[this.turn]) {
 					// Initialize Encore effect for this turn
-					this.effectState.turnsActivated[this.turn] = 0;
-				} else if (
-					this.effectState.turnsActivated[this.turn] >= (Array.isArray(this.effectState.move) ?
-						this.effectState.move.length : 1)) {
+					this.effectState.timesActivated[this.turn] = 0;
+				} else if (this.effectState.timesActivated[this.turn] >= (Array.isArray(this.effectState.move) ?
+					this.effectState.move.length : 1)) {
 					// Finish Encore effect for this turn
 					return;
 				}
-				this.effectState.turnsActivated[this.turn]++;
+				this.effectState.timesActivated[this.turn]++;
 				if (!Array.isArray(this.effectState.move)) {
 					this.queue.cancelAction(pokemon);
 					if (move.id !== this.effectState.move) return this.effectState.move;
-					return;
-				}
-
+				} else {
 				// Locked into a link
-				switch (this.effectState.turnsActivated[this.turn]) {
-				case 1: {
-					if (this.effectState.move[0] !== move.id) return this.effectState.move[0];
-					return;
-				}
-				case 2:
-					if (this.effectState.move[1] !== move.id) return this.effectState.move[1];
-					return;
+					switch (this.effectState.timesActivated[this.turn]) {
+					case 1: {
+						if (this.effectState.move[0] !== move.id) return this.effectState.move[0];
+						return;
+					}
+					case 2:
+						if (this.effectState.move[1] !== move.id) return this.effectState.move[1];
+						return;
+					}
 				}
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
 				// early termination if you run out of PP
 				const lastMove = target.m.lastMoveAbsolute;
-				const index = target.moves.indexOf(lastMove.id);
-				if (index === -1) return; // no last move
+				const moveSlot = target.getMoveData(lastMove);
+				if (!moveSlot) {
+					target.removeVolatile('encore');
+					return; // no last move
+				}
 
 				// @ts-expect-error modded
 				if (target.hasLinkedMove(lastMove.id)) {
 					// TODO: Check instead whether the last executed move was linked
 					if (target.moveSlots[0].pp <= 0 || target.moveSlots[1].pp <= 0) {
-						delete target.volatiles.encore;
-						this.add('-end', target, 'Encore');
+						target.removeVolatile('encore');
 					}
 				} else {
-					if (target.moveSlots[index].pp <= 0) {
-						delete target.volatiles.encore;
-						this.add('-end', target, 'Encore');
+					if (moveSlot.pp <= 0) {
+						target.removeVolatile('encore');
 					}
 				}
 			},
@@ -313,22 +372,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			noCopy: true,
-			onStart(pokemon) {
+			onStart(pokemon, source, effect) {
 				if (pokemon.volatiles['dynamax']) {
 					delete pokemon.volatiles['torment'];
 					return false;
 				}
+				if (effect?.id === 'gmaxmeltdown') this.effectState.duration = 3;
 				this.add('-start', pokemon, 'Torment');
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Torment');
 			},
 			onDisableMove(pokemon) {
-				const lastMove = pokemon.lastMove;
+				const lastMove = pokemon.m.lastMoveAbsolute;
 				if (!lastMove || lastMove.id === 'struggle') return;
 
-				if (Array.isArray(lastMove)) {
-					for (const move of lastMove) {
+				// @ts-expect-error
+				if (pokemon.hasLinkedMove(lastMove.id)) {
+				// @ts-expect-error
+					for (const move of pokemon.getLinkedMoves()) {
 						pokemon.disableMove(move.id);
 					}
 				} else {
@@ -347,12 +409,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
-				const lastMove: Move | ActiveMove | null = source.m.lastMoveAbsolute;
-				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && lastMove) {
+				let move = source.m.lastMoveAbsolute;
+				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && move) {
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 					for (const moveSlot of source.moveSlots) {
-						if (moveSlot.id === lastMove.id) {
+						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
-							this.add('-activate', source, 'move: Grudge', this.dex.moves.get(lastMove.id).name);
+							this.add('-activate', source, 'move: Grudge', move.name);
 						}
 					}
 				}
@@ -368,11 +431,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	spite: {
 		inherit: true,
 		onHit(target) {
-			const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-			if (!lastMove || lastMove.isZ || lastMove.isMax) return false;
-			const ppDeducted = target.deductPP(lastMove.id, 4);
+			let move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
+			if (!move || move.isZ) return false;
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+			const ppDeducted = target.deductPP(move.id, 4);
 			if (!ppDeducted) return false;
-			this.add("-activate", target, 'move: Spite', lastMove.name, ppDeducted);
+			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
 		},
 	},
 
@@ -407,7 +472,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.side === source.side) return;
+				if (!source || !effect || target.isAlly(source)) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
