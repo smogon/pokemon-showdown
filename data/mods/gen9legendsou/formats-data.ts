@@ -366,7 +366,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	slowking: {
-		tier: "OU",
+		tier: "UU",
 	},
 	slowkinggalar: {
 		tier: "OU",
@@ -600,7 +600,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	absolmegaz: {
-		tier: "UU",
+		tier: "OU",
 	},
 	snorunt: {
 		tier: "LC",
@@ -723,7 +723,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	hippowdon: {
-		tier: "OU",
+		tier: "UU",
 	},
 	snover: {
 		tier: "LC",
@@ -1295,7 +1295,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	volcanion: {
-		tier: "UU",
+		tier: "OU",
 	},
 	crabrawler: {
 		tier: "LC",
