@@ -21,7 +21,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frz: {
 		inherit: true,
 		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
+			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			if (this.effectState.durationRolled !== this.turn && this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
@@ -46,17 +46,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(1, 3)) {
+			if (!this.randomChance(33, 100)) {
 				return;
 			}
 			this.activeTarget = pokemon;
-			const damage = this.actions.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			this.damage(damage, pokemon, pokemon, {
-				id: 'confused' as ID,
-				effectType: 'Move',
-				type: '???',
-			} as unknown as ActiveMove);
+			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
+			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
 		},
 	},

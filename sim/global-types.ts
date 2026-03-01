@@ -496,6 +496,7 @@ declare namespace RandomTeamsTypes {
 	export interface RandomSet {
 		name: string;
 		species: string;
+		speciesId?: string;
 		gender: string | boolean;
 		moves: string[];
 		ability: string;
