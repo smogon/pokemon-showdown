@@ -62,6 +62,20 @@ describe('Heal Bell', () => {
 		assert.equal(battle.p1.pokemon[0].status, '');
 	});
 
+	it(`with Electrify should trigger an ally's Volt Absorb`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Raichu', ability: 'voltabsorb', moves: ['electrify'] },
+			{ species: 'Chansey', moves: ['healbell'] },
+		], [
+			{ species: 'Regieleki', moves: ['tackle'] },
+			{ species: 'Deoxys', moves: ['toxic'] },
+		]]);
+		battle.makeChoices('move electrify -2, move healbell', 'move tackle 1, move toxic 1');
+		const voltAbsorb = battle.p1.pokemon[0];
+		assert.equal(voltAbsorb.status, 'tox');
+		assert.equal(voltAbsorb.maxhp - voltAbsorb.hp, Math.floor(voltAbsorb.maxhp / 16));
+	});
+
 	it(`in a Multi Battle, should heal the major status conditions of the ally's team`, () => {
 		battle = common.createBattle({ gameType: 'multi' }, [[
 			{ species: 'Machamp', ability: 'noguard', moves: ['poisongas'] },

@@ -10,44 +10,71 @@ describe('Aromatherapy', () => {
 		battle.destroy();
 	});
 
-	for (let gen = Dex.gen; gen >= 3; gen--) {
-		it(`should handle the interaction with Sap Sipper and Substitute correctly in Gen ${gen}`, () => {
-			const existsSapSipper = gen >= 5;
-			const ability = existsSapSipper ? 'sapsipper' : '';
+	it(`should heal the major status conditions of the user's team`, () => {
+		battle = common.createBattle([[
+			{ species: 'Dunsparce', moves: ['sleeptalk'] },
+			{ species: 'Chansey', moves: ['aromatherapy'] },
+		], [
+			{ species: 'Nidoking', moves: ['toxic', 'glare'] },
+		]]);
+		battle.makeChoices('auto', 'move glare');
+		battle.makeChoices('switch chansey', 'auto');
+		battle.makeChoices();
+		assert.equal(battle.p1.pokemon[0].status, '');
+		assert.equal(battle.p1.pokemon[1].status, '');
+	});
 
-			battle = common.gen(gen).createBattle({ gameType: 'doubles' }, [[
-				{ species: 'Meganium', ability, moves: ['sleeptalk'] },
-				{ species: 'Typhlosion', ability, moves: ['sleeptalk', 'substitute', 'aromatherapy'] },
-				{ species: 'Feraligatr', ability, moves: ['sleeptalk'] },
-				{ species: 'Furret', moves: ['sleeptalk', 'substitute'] },
+	it(`should not heal the major status conditions of a Pokemon with Sap Sipper`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Azumarill', ability: 'sapsipper', moves: ['sleeptalk'] },
+			{ species: 'Chansey', moves: ['sleeptalk', 'aromatherapy'] },
+		], [
+			{ species: 'Nidoking', moves: ['sleeptalk', 'toxic'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('auto', 'move toxic 1, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move aromatherapy', 'auto');
+		assert.equal(battle.p1.pokemon[0].status, 'tox');
+	});
+
+	it(`should not heal the major status conditions of a Pokemon behind a Substitute`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Azumarill', moves: ['sleeptalk', 'substitute'] },
+			{ species: 'Chansey', moves: ['sleeptalk', 'aromatherapy'] },
+		], [
+			{ species: 'Nidoking', moves: ['sleeptalk', 'toxic'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move substitute, move sleeptalk', 'move toxic 1, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move aromatherapy', 'move sleeptalk, move sleeptalk');
+		assert.equal(battle.p1.pokemon[0].status, 'tox');
+	});
+
+	describe('[Gen 5]', () => {
+		it(`should heal the major status conditions of a Pokemon with Sap Sipper`, () => {
+			battle = common.gen(5).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Azumarill', ability: 'sapsipper', moves: ['sleeptalk'] },
+				{ species: 'Chansey', moves: ['sleeptalk', 'aromatherapy'] },
 			], [
-				{ species: 'Wynaut', moves: ['glare', 'sleeptalk'] },
-				{ species: 'Wynaut', moves: ['glare', 'sleeptalk'] },
-				{ species: 'Wynaut', moves: ['glare', 'sleeptalk'] },
+				{ species: 'Nidoking', moves: ['sleeptalk', 'toxic'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
 			]]);
-			if (existsSapSipper) {
-				battle.forceRandomChance = true;
-				battle.makeChoices('auto', 'move glare 1, move glare 2');
-				battle.makeChoices('switch 3, move sleeptalk', 'move glare 1, move glare 2');
-				battle.forceRandomChance = false;
-				battle.makeChoices('move sleeptalk, move aromatherapy', 'move sleeptalk, move sleeptalk');
-				const self = battle.p1.pokemon[1];
-				const active = battle.p1.pokemon[0];
-				const back = battle.p1.pokemon[2];
-				assert.equal(self.status, '');
-				assert.equal(active.status, gen <= 5 && existsSapSipper ? '' : 'par');
-				assert.equal(back.status, '');
-			}
-
-			battle.forceRandomChance = true;
-			battle.makeChoices('switch 4, move sleeptalk', 'move glare 1, move glare 2');
-			battle.forceRandomChance = false;
-			battle.makeChoices('move substitute, move substitute', 'move sleeptalk, move sleeptalk');
-			battle.makeChoices('move sleeptalk, move aromatherapy', 'move sleeptalk, move sleeptalk');
-			const self = battle.p1.pokemon[1];
-			const substitute = battle.p1.pokemon[0];
-			assert.equal(self.status, '');
-			assert.equal(substitute.status, gen <= 5 ? '' : 'par');
+			battle.makeChoices('auto', 'move toxic 1, move sleeptalk');
+			battle.makeChoices('move sleeptalk, move aromatherapy', 'auto');
+			assert.equal(battle.p1.pokemon[0].status, '');
 		});
-	}
+
+		it(`should heal the major status conditions of a Pokemon behind a Substitute`, () => {
+			battle = common.gen(5).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Azumarill', moves: ['sleeptalk', 'substitute'] },
+				{ species: 'Chansey', moves: ['sleeptalk', 'aromatherapy'] },
+			], [
+				{ species: 'Nidoking', moves: ['sleeptalk', 'toxic'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move substitute, move sleeptalk', 'move toxic 1, move sleeptalk');
+			battle.makeChoices('move sleeptalk, move aromatherapy', 'move sleeptalk, move sleeptalk');
+			assert.equal(battle.p1.pokemon[0].status, '');
+		});
+	});
 });
