@@ -627,27 +627,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['ND UU', 'ND RUBL', 'Slowbronite'],
 	},
 	{
-		name: "[Gen 9] Six by Six Random Battle",
-		desc: `A Gen 9 micrometa featuring only 6 Pokemon with 6 forms each.`,
-		mod: 'sixbysix',
-		team: 'random6x6',
-		ruleset: [
-			'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
-			'Terastal Clause', 'Data Preview', 'Sprite Viewer',
-		],
+		name: "[Gen 6] Megas Revisited Random Battle",
+		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
+		mod: 'gen6megasrevisited',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Mega Data Mod'],
 		onBegin() {
-			this.add('-message', `Welcome to Six by Six!`);
-			this.add('-message', `This is a micrometa featuring just 6 Pokemon, each with 6 forms each!`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Megas Revisited!`);
+			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3769141/`);
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
+			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
 		},
 	},
 	{
@@ -3469,39 +3460,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Six by Six", // Roomtours
-		desc: `A Gen 9 micrometa featuring only 6 Pokemon with 6 forms each.`,
-		mod: 'sixbysix',
+		name: "[Gen 6] Megas Revisited", // Roomtours
+		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
+		mod: 'gen6megasrevisited',
 		searchShow: false,
-		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Terastal Clause', 'Data Preview', 'Sprite Viewer'],
-		banlist: [
-			'All Pokemon', 'Last Respects', 'Shed Tail',
-			'King\'s Rock', 'Razor Fang', 'Baton Pass',
-		],
-		unbanlist: [
-			'Kingdra-Classic', 'Kingdra-Brinepool', 'Kingdra-Druid', 'Kingdra-Bard', 'Kingdra-Gourmet', 'Kingdra-Ancient',
-			'Nidoqueen-Classic', 'Nidoqueen-Erudite', 'Nidoqueen-Volcanic',
-			'Nidoqueen-Rosegold', 'Nidoqueen-Shaman', 'Nidoqueen-Jasper',
-			'Bisharp-Centurion', 'Bisharp-Savage', 'Bisharp-Ronin', 'Bisharp-Mantis', 'Bisharp-Revenant', 'Bisharp-Assassin',
-			'Corviknight-Thunderbird', 'Corviknight-Genie', 'Corviknight-Yeti',
-			'Corviknight-Analytical', 'Corviknight-Martian', 'Corviknight-Falcon',
-			'Krookodile-Infernal', 'Krookodile-Abyssal', 'Krookodile-Wetlander',
-			'Krookodile-Cave Dweller', 'Krookodile-Cliffside', 'Krookodile-Quantum',
-			'Ogerpon-Muerta', 'Ogerpon-Easter', 'Ogerpon-Ankh', 'Ogerpon-Eid', 'Ogerpon-Vessel', 'Ogerpon-Kitsune',
-		],
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Data Mod'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'Blaziken + Speed Boost'],
 		onBegin() {
-			this.add('-message', `Welcome to Six by Six!`);
-			this.add('-message', `This is a micrometa featuring just 6 Pokemon, each with 6 forms each!`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to Megas Revisited!`);
+			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3769141/`);
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
+			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
 		},
 	},
 	{
