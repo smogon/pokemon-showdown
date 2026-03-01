@@ -670,11 +670,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] NU",
 		mod: 'gen6',
 		// searchShow: false,
-		ruleset: [
-			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Team Preview', 'NC 1997 Sleep Clause', 'Species Clause', 'Nickname Clause', 'Cancel Mod', 'NC 1997 Move Legality',
-		],
-		banlist: ['Uber'],
 		ruleset: ['[Gen 6] RU'],
 		banlist: ['RU', 'NUBL'],
 	},
