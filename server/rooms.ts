@@ -30,8 +30,8 @@ const RETRY_AFTER_LOGIN = null;
 
 import { FS, Utils, Streams } from '../lib';
 import { type RoomSection, RoomSections } from './chat-commands/room-settings';
-import { type QueuedHunt } from './chat-plugins/scavengers';
-import { type ScavengerGameTemplate } from './chat-plugins/scavenger-games';
+import { type QueuedHunt } from './chat-plugins/scavengers/types';
+import { type ScavengerGameTemplate } from './chat-plugins/scavengers/scavenger-games';
 import { type RepeatedPhrase } from './chat-plugins/repeats';
 import {
 	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
