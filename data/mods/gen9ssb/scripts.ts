@@ -1325,7 +1325,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let damage: number | false | undefined | '' = false;
 			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' ||
-			(move.target === 'allyTeam' && this.battle.gen <= 5)) {
+				(move.target === 'allyTeam' && this.battle.gen <= 5)) {
 				damage = this.tryMoveHit(targets, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -1596,7 +1596,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.target === 'all' && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
 			} else if ((move.target === 'foeSide' || move.target === 'allySide' ||
-			(move.target === 'allyTeam' && this.battle.gen <= 5)) && !isSelf) {
+				(move.target === 'allyTeam' && this.battle.gen <= 5)) && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
 			} else if (target) {
 				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
