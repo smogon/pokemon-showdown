@@ -31,6 +31,7 @@
  *   pokerouge.ts         — HTML rendering, commands, handlers, pages, start hook (this file)
  */
 
+import { Utils } from '../../../lib';
 import { Table } from '../../utils';
 import {
 	SHOP_ITEMS, LEGENDARY_TAGS,
@@ -50,23 +51,10 @@ import {
 // HTML helpers
 // ---------------------------------------------------------------------------
 
-function escapeHTML(str: string): string {
-	return str.replace(/[&<>"']/g, ch => {
-		switch (ch) {
-		case '&': return '&amp;';
-		case '<': return '&lt;';
-		case '>': return '&gt;';
-		case '"': return '&quot;';
-		case '\'': return '&#39;';
-		default: return ch;
-		}
-	});
-}
-
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
 	const name = Dex.species.get(id).name || species;
-	const altName = escapeHTML(name);
+	const altName = Utils.escapeHTML(name);
 	return `<img src="https://play.pokemonshowdown.com/sprites/gen5/${id}.png" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
