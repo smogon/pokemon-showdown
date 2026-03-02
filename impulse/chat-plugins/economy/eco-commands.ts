@@ -6,7 +6,7 @@
 
 import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
-import { generateThemedTable } from '../../utils';
+import { Table } from '../../utils';
 
 const CURRENCYNAME = CURRENCY.name;
 
@@ -159,7 +159,7 @@ export const commands: Chat.ChatCommands = {
 				Economy.formatMoney(totalMoney.totalBalance),
 			]];
 
-			const tableHtml = generateThemedTable(
+			const tableHtml = Table(
 				"Economy Statistics",
 				headerRow,
 				dataRows
@@ -193,7 +193,7 @@ export const commands: Chat.ChatCommands = {
 				];
 			});
 
-			const tableHtml = generateThemedTable(
+			const tableHtml = Table(
 				`Economy Leaderboard - Page ${page} of ${totalPages}`,
 				headerRow,
 				dataRows
