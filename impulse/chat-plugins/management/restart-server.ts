@@ -12,7 +12,14 @@ export const commands: Chat.ChatCommands = {
 		if (!Config.usepostgres) noSave = true;
 
 		if (Rooms.global.lockdown !== true && noSave) {
-			throw new Chat.ErrorMessage("For safety reasons, using /restartserver without saving battles can only be done during lockdown.");
+			if (!Config.usepostgres) {
+				throw new Chat.ErrorMessage(
+					"This server has battle saving disabled, so /restartserver can only be used once the server is already in lockdown."
+				);
+			}
+			throw new Chat.ErrorMessage(
+				"For safety reasons, using /restartserver with the `nosave` option can only be done during lockdown."
+			);
 		}
 
 		if (Monitor.updateServerLock) {
