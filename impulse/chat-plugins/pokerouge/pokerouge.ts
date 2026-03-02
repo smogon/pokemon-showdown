@@ -677,8 +677,16 @@ export const commands: Chat.ChatCommands = {
 				targetName = user.name;
 				amount = parseInt(parts[0]);
 			} else if (parts.length >= 2) {
-				targetId = toID(parts[0]);
-				targetName = parts[0];
+				const rawName = parts[0];
+				const parsedId = toID(rawName);
+				if (!rawName || !parsedId) {
+					// Empty or invalid username segment: default target to self
+					targetId = user.id;
+					targetName = user.name;
+				} else {
+					targetId = parsedId;
+					targetName = rawName;
+				}
 				amount = parseInt(parts[1]);
 			} else {
 				return this.errorReply('Usage: /pokerouge removecoins [user], <amount>');
