@@ -377,7 +377,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			this.incompatibleMoves(moves, movePool, 'knockoff', ['pursuit', 'suckerpunch']);
 		}
 
-		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
+		const statusInflictingMoves = ["nuzzle", 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.includes('Prankster') && role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
@@ -1172,6 +1172,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -1182,6 +1183,60 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const webSetters = [
+			'ariados', 'shuckle', 'smeargle', 'masquerain', 'kricketune', 'leavanny', 'galvantula', 'ribombee', 'araquanid',
+		];
+
+		// Some pokes are setters in gen 7 but not gen 6
+		const gen6ScreenSetters = ['meowstic', 'carbink'];
+		const screenSetters = (this.gen === 7) ? [...gen6ScreenSetters, 'electrode', 'ninetalesalola'] : gen6ScreenSetters;
+
+		const gen6SunSetters = ['charizardmegay', 'ninetales', 'groudon'];
+		const sunSetters = (this.gen === 7) ? [...gen6SunSetters, 'torkoal'] : gen6SunSetters;
+
+		const gen6SandSetters = ['tyranitar', 'tyranitarmega', 'hippowdon'];
+		const sandSetters = (this.gen === 7) ? [...gen6SandSetters, 'gigalith'] : gen6SandSetters;
+
+		const gen6HailSetters = ['abomasnow', 'abomasnowmega', 'aurorus'];
+		const hailSetters = (this.gen === 7) ? [...gen6HailSetters, 'vanilluxe', 'ninetalesalola'] : gen6HailSetters;
+
+		const incompatibilityList = [
+			// These Pokemon with support roles are considered too similar to each other.
+			['blissey', 'chansey'],
+			['illumise', 'volbeat'],
+
+			// These combinations are prevented to avoid double webs or screens.
+			[webSetters, webSetters],
+			[screenSetters, screenSetters],
+
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Dry Skin + sun setting ability
+			['parasect', 'jynx', 'toxicroak', 'heliolisk', sunSetters],
+			// Prevent Shedinja + sand/hail setting ability
+			['shedinja', [...sandSetters, ...hailSetters]],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 
 	override randomTeam() {
@@ -1300,6 +1355,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 							continue;
 						}
+
+						// Check compatibility with team
+						if (!this.getPokemonCompatibility(species, pokemon)) continue;
 					}
 
 					// Limit three of any type combination in Monotype

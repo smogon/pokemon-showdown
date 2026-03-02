@@ -727,9 +727,9 @@ export class DexFormats {
 		);
 	}
 
-	getDefaultRules() {
+	getDefaultMods() {
 		const rules = ['Cancel Mod'];
-		// only for rules applied to all formats
+		// only for mods applied to all formats
 		if (this.dex.gen === 1) {
 			rules.push('Desync Clause Mod');
 		}
@@ -751,9 +751,10 @@ export class DexFormats {
 			}
 		}
 		const ruleTable = new RuleTable();
+
 		const ruleset = format.ruleset.slice();
 		if (format.effectType === 'Format') {
-			ruleset.unshift(...this.getDefaultRules());
+			ruleset.unshift(...this.getDefaultMods());
 		}
 		for (const ban of format.banlist) {
 			ruleset.push('-' + ban);
