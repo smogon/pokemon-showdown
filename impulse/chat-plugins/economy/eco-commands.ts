@@ -181,7 +181,8 @@ export const commands: Chat.ChatCommands = {
 
 			const { docs, totalPages } = await Economy.getLeaderboard(page, limit);
 
-			const headerRow = ["Rank", "User", "" + CURRENCYNAME + ""];\n			const dataRows = docs.map((u, i) => {
+			const headerRow = ["Rank", "User", "" + CURRENCYNAME + ""];
+			const dataRows = docs.map((u, i) => {
 				const rank = (page - 1) * limit + i + 1;
 				const userName = Users.getExact(u._id)?.name || u._id;
 				const userNameColor = nameColor(userName);
@@ -222,7 +223,8 @@ export const commands: Chat.ChatCommands = {
 			const targetNameColor = nameColor(targetDisplayName);
 			const startingBalance = Economy.formatMoney(Economy.CONFIG.startingBalance);
 			const msg = `Economy data for ${targetNameColor} has been reset. They now have a ` +
-				`starting balance of ${startingBalance} ${CURRENCYNAME}.`;\n			this.sendReplyBox(msg);
+				`starting balance of ${startingBalance} ${CURRENCYNAME}.`;
+			this.sendReplyBox(msg);
 			const resetterNameColor = nameColor(user.name, false, true);
 			const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
 			const notifyMsg = `Your economy data has been reset by ${resetterNameColor}. ` +
