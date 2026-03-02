@@ -36,41 +36,30 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
+		let saveDetail = 'nosave';
 		if (!noSave) {
 			this.sendReply('Saving battles...');
 			Rooms.global.lockdown = true;
 			try {
 				const count = await Rooms.global.saveBattles();
+				saveDetail = `${count} battles saved`;
 				this.sendReply(`DONE.`);
 				this.sendReply(`${count} battles saved.`);
 			} catch (error) {
+				saveDetail = 'save failed';
 				console.error('Failed to save battles during /restartserver:', error);
 				this.sendReply("Failed to save battles; proceeding with restart anyway.");
-				this.privateGlobalModAction(
-					`${user.name} used /restartserver; failed to save battles before restart.`
-				);
-				this.globalModlog(
-					'RESTARTSERVER_SAVE_FAILED',
-					null,
-					`by ${user.name}: ${String(error)}`
-				);
-				const logRoomOnError = Rooms.get('staff') || Rooms.lobby || room;
-				if (logRoomOnError?.log.roomlogStream) {
-					logRoomOnError.roomlog(
-						`${user.name} used /restartserver; failed to save battles before restart: ${String(error)}`
-					);
-				}
 			}
 		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
 
-		this.privateGlobalModAction(`${user.name} used /restartserver.`);
-		this.globalModlog('RESTARTSERVER', null, `by ${user.name}`);
+		this.privateGlobalModAction(`${user.name} used /restartserver (${saveDetail}).`);
+		this.globalModlog('RESTARTSERVER', null, `by ${user.name}: ${saveDetail}`);
 
 		if (!logRoom?.log.roomlogStream) return process.exit(0);
 
-		logRoom.roomlog(`${user.name} used /restartserver`);
+		logRoom.roomlog(`${user.name} used /restartserver (${saveDetail})`);
 
 		const exitTimer = setTimeout(() => {
 			process.exit(0);
