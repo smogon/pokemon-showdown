@@ -53,12 +53,16 @@ import {
 
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
-	const name = Dex.species.get(id).name || species;
+	const sp = Dex.species.get(id);
+	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
-	// Fall back to the animated sprite set which covers all forms (Mega, regional, Gen 6+)
-	// when the Gen 5 static sprite is not available.
-	const fallback = `https://play.pokemonshowdown.com/sprites/ani/${id}.gif`;
-	return `<img src="https://play.pokemonshowdown.com/sprites/gen5/${id}.png" onerror="this.onerror=null;this.src='${fallback}'" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
+	// Use the animated sprite set (covers all gens/forms) for Gen 6+ Pokémon or any
+	// forme variant (Mega, Alolan, Galarian, etc.) that lacks a Gen5 static sprite.
+	const useAni = sp.exists && (sp.gen > 5 || !!sp.forme);
+	const src = useAni
+		? `https://play.pokemonshowdown.com/sprites/ani/${id}.gif`
+		: `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
+	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
 /** Returns a hex colour string for a Pokemon type (no leading #). */
@@ -840,6 +844,7 @@ export const commands: Chat.ChatCommands = {
 					targetName = user.name;
 					speciesStr = parts[0];
 					levelOverride = parseInt(parts[1]);
+					if (levelOverride > 100) return this.errorReply('Level must be between 1 and 100.');
 				} else {
 					// /pokerouge addmon <user>, <pokemon>  — user, floor-level
 					if (!parts[0]) {
@@ -865,8 +870,8 @@ export const commands: Chat.ChatCommands = {
 					targetName = parts[0];
 				}
 				speciesStr = parts[1];
-				if (!parts[2] || !isPositiveInt(parts[2])) {
-					return this.errorReply('Level must be a positive integer from 1 to 100.');
+				if (!parts[2] || !isPositiveInt(parts[2]) || parseInt(parts[2]) > 100) {
+					return this.errorReply('Level must be between 1 and 100.');
 				}
 				levelOverride = parseInt(parts[2]);
 			}
@@ -879,7 +884,7 @@ export const commands: Chat.ChatCommands = {
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${speciesStr}`);
 			const floorLevel = Math.max(1, targetState.floor - 2);
-			const addLevel = levelOverride !== null ? Math.min(100, Math.max(1, levelOverride)) : floorLevel;
+			const addLevel = levelOverride ?? floorLevel;
 			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
 			setState(targetId, targetState);
 			this.sendReplyBox(
