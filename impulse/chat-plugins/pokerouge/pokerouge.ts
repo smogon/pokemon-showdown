@@ -930,7 +930,10 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply('Usage: /pokerouge removemon [user], <slot>');
 			}
-			const slotNum = parseInt(slotStr);
+			if (!slotStr || !isNumber(slotStr)) {
+				return this.errorReply('Invalid slot: must be a positive integer.');
+			}
+			const slotNum = parseInt(slotStr, 10);
 			if (isNaN(slotNum)) return this.errorReply('Invalid slot: must be a number.');
 			const slot = slotNum - 1;
 			const targetState = getState(targetId);
