@@ -29,9 +29,14 @@ export const commands: Chat.ChatCommands = {
 					`After the restart, you will be able to resume your battles from where you left off.`
 				);
 			}
-			const count = await Rooms.global.saveBattles();
-			this.sendReply(`DONE.`);
-			this.sendReply(`${count} battles saved.`);
+			try {
+				const count = await Rooms.global.saveBattles();
+				this.sendReply(`DONE.`);
+				this.sendReply(`${count} battles saved.`);
+			} catch (error) {
+				console.error('Failed to save battles during /restartserver:', error);
+				this.sendReply("Failed to save battles; proceeding with restart anyway.");
+			}
 		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
