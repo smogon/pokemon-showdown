@@ -47,10 +47,14 @@ export const commands: Chat.ChatCommands = {
 			process.exit(0);
 		}, 10000);
 
-		void logRoom.log.roomlogStream.writeEnd().then(() => {
-			clearTimeout(exitTimer);
-			process.exit(0);
-		});
+		void logRoom.log.roomlogStream.writeEnd()
+			.catch(error => {
+				console.error('Failed to flush roomlog stream on /restartserver:', error);
+			})
+			.finally(() => {
+				clearTimeout(exitTimer);
+				process.exit(0);
+			});
 	},
 	restartserverhelp: [
 		`/restartserver - Restarts the server. Saves battles by default; use \`nosave\` during lockdown to skip. Requires: ~`,
