@@ -785,8 +785,14 @@ export const commands: Chat.ChatCommands = {
 				targetName = user.name;
 				speciesStr = parts[0];
 			} else {
-				targetId = toID(parts[0]);
-				targetName = parts[0];
+				// Two+ args: [user], <pokemon>. If user segment is empty, default to self.
+				if (!parts[0]) {
+					targetId = user.id;
+					targetName = user.name;
+				} else {
+					targetId = toID(parts[0]);
+					targetName = parts[0];
+				}
 				speciesStr = parts[1];
 			}
 			const speciesId = toID(speciesStr);
