@@ -46,6 +46,20 @@ export const commands: Chat.ChatCommands = {
 			} catch (error) {
 				console.error('Failed to save battles during /restartserver:', error);
 				this.sendReply("Failed to save battles; proceeding with restart anyway.");
+				this.privateGlobalModAction(
+					`${user.name} used /restartserver; failed to save battles before restart.`
+				);
+				this.globalModlog(
+					'RESTARTSERVER_SAVE_FAILED',
+					null,
+					`by ${user.name}: ${String(error)}`
+				);
+				const logRoomOnError = Rooms.get('staff') || Rooms.lobby || room;
+				if (logRoomOnError?.log.roomlogStream) {
+					logRoomOnError.roomlog(
+						`${user.name} used /restartserver; failed to save battles before restart: ${String(error)}`
+					);
+				}
 			}
 		}
 
