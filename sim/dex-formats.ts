@@ -728,8 +728,8 @@ export class DexFormats {
 	}
 
 	getDefaultMods() {
-		const rules = ['Cancel Mod'];
 		// only for mods applied to all formats
+		const rules = ['Cancel Mod'];
 		if (this.dex.gen === 1) {
 			rules.push('Desync Clause Mod');
 		}
