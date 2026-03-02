@@ -235,18 +235,10 @@ const PAGE_CSS = `<style>
 export const commands: Chat.ChatCommands = {
 	pokerouge: {
 		// /pokerouge start — opens the PokéRogue game page.
-		// Fixes blank page: auto-triggers newgame if the player has no active run
-		// (state is null) OR has lost their run (state exists but team is empty and
-		// there is no pending starter/add choice).
+		// The page handler auto-initialises a new run when there is no active state,
+		// so this command simply navigates to the page in all cases.
 		start(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state || (!state.team?.length && !state.pendingChoice)) {
-				// No active run, or post-loss state with no team and no pending choice —
-				// auto-start a new game so the user immediately gets starter choices
-				// instead of seeing an empty "No active team" page.
-				return this.parse('/pokerouge newgame');
-			}
 			return this.parse('/join view-pokerouge');
 		},
 
@@ -990,18 +982,33 @@ export const pages: Chat.PageTable = {
 		// and would accumulate indefinitely in savedData.
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 
-		const state = getState(user.id);
+		let state = getState(user.id);
+
+		// Auto-start: if the player has no state (new player) or is in a post-loss
+		// state (no team, no pending choice, no active battle), automatically roll
+		// starter options and show the selection screen instead of a blank page.
+		// This mirrors the behaviour of /pokerouge start and ensures the page always
+		// shows meaningful content when navigated to directly.
+		if (!state || (!state.team?.length && !state.pendingChoice && !state.battleRoomId)) {
+			const options = pickStarterOptions();
+			const fresh: PokeRougeState = {
+				floor: 1,
+				team: [],
+				pendingChoice: options,
+				pendingChoiceType: 'starter',
+				coins: 0,
+				streaksWon: 0,
+			};
+			if (state?.highestFloor) fresh.highestFloor = state.highestFloor;
+			if (state?.displayName) fresh.displayName = state.displayName;
+			setState(user.id, fresh);
+			state = fresh;
+			// Falls through to the pendingChoice rendering block below.
+		}
 
 		let buf = `<div class="pad">`;
 		buf += PAGE_CSS;
 		buf += `<h2>PokéRogue</h2>`;
-
-		if (!state) {
-			buf += `<p>Battle Tower Roguelike — floors get harder as you progress. Lose and start over!</p>`;
-			buf += `<p><button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">Start Fresh Run</button></p>`;
-			buf += `</div>`;
-			return buf;
-		}
 
 		// Check for stale battle room reference
 		if (state.battleRoomId) {
@@ -1035,6 +1042,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		if (!state.team?.length) {
+			// Fallback: state exists with no team and no pending choice (unexpected path).
 			buf += `<p>No active team. Start a new run!</p>`;
 			buf += `<p><button name="send" value="/pokerouge newgame" class="button" style="font-size:14px;padding:6px 18px">Start Fresh Run</button></p>`;
 			buf += `</div>`;
