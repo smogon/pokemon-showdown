@@ -7,7 +7,7 @@
 
 export const commands: Chat.ChatCommands = {
 	async restartserver(target, room, user): Promise<void> {
-		this.checkCan('lockdown');
+		this.checkCan('makeroom');
 		let noSave = toID(target) === 'nosave';
 		if (!Config.usepostgres) noSave = true;
 
@@ -53,6 +53,6 @@ export const commands: Chat.ChatCommands = {
 		});
 	},
 	restartserverhelp: [
-		`/restartserver - Restarts the server. Saves battles by default; use \`nosave\` during lockdown to skip. Requires: ~`,
+		`/restartserver - Restarts the server. Saves battles by default; use \`nosave\` during lockdown to skip. Requires: &`,
 	],
 };
