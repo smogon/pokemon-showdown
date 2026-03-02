@@ -177,7 +177,7 @@ function renderLeaderboard(): string {
 		const rank = i + 1;
 		const display = s.displayName || userid;
 		const nameHtml = Impulse.nameColor(display, true, true);
-		const medal = rank === 1 ? '🥇 #1' : rank === 2 ? '🥈 #2' : rank === 3 ? '🥉 #3' : `${rank}.`;
+		const medal = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`;
 		const teamStr = (s.team ?? [])
 			.map(m => {
 				const spr = getSprite(m.species, 30);
@@ -419,7 +419,7 @@ export const commands: Chat.ChatCommands = {
 				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
 				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
 				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
-				(state.pendingChoice ? `<br><br>⚠️ <b>You have a pending Pokémon choice!</b> ` +
+				(state.pendingChoice ? `<br><br><b>You have a pending Pokémon choice!</b> ` +
 					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.` : '') +
 				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
 				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
