@@ -29,9 +29,9 @@ let botCounter = 0;
 export const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
- * The fixed display name for the PokeRouge AI trainer.
- * A single account is reused across battles; any stale bot is destroyed
- * before a new one is created so the name never gets a numeric suffix.
+ * Display name prefix for all PokeRouge AI trainer bots.
+ * Each bot's full name is `${TRAINER_NAME} <playerId>` so concurrent battles
+ * for different players each get their own uniquely named bot without collision.
  */
 export const TRAINER_NAME = 'PokeRouge Trainer';
 
@@ -50,19 +50,22 @@ export function destroyBotUser(botUser: User): void {
 }
 
 /**
- * Creates the PokeRouge AI trainer bot.
- * If a stale bot with TRAINER_NAME already exists it is destroyed first, so
- * the trainer always appears under the same account name.
+ * Creates the PokeRouge AI trainer bot for a specific player.
+ * Any stale bot for the same player is destroyed first.
+ * The bot name is player-specific (`PokeRouge Trainer <playerId>`) so that
+ * two concurrent battles never share a bot and destroying one can never
+ * corrupt another player's match.
  * The bot is marked as unnamed after forceRename so that:
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
  */
-export function createBotUser(): User {
+export function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerouge-bot-${uid}`;
+	const botDisplayName = `${TRAINER_NAME} ${playerId}`;
 
-	// Destroy any stale bot with the same name before creating the new one
-	const existingBot = Users.get(toID(TRAINER_NAME));
+	// Destroy any stale bot for this player before creating a new one
+	const existingBot = Users.get(toID(botDisplayName));
 	if (existingBot) {
 		destroyBotUser(existingBot);
 	}
@@ -80,7 +83,7 @@ export function createBotUser(): User {
 	const botUser = new Users.User(conn);
 	conn.user = botUser;
 
-	botUser.forceRename(TRAINER_NAME, true);
+	botUser.forceRename(botDisplayName, true);
 
 	// Mark as unnamed so the bot is:
 	//   1. NOT shown in the battle room user list (onJoin only broadcasts named users)
@@ -249,7 +252,7 @@ export function startBattle(user: User, state: PokeRougeState): boolean {
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
 
-	const botUser = createBotUser();
+	const botUser = createBotUser(user.id);
 	const botSlot = 'p2' as const;
 
 	let battleRoom: AnyObject | null = null;
