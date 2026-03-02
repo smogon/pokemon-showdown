@@ -390,7 +390,19 @@ export const commands: Chat.ChatCommands = {
 		status(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
-			if (!state || !state.team?.length) {
+			if (!state) {
+				return this.sendReplyBox(
+					`You have no active PokéRogue run. ` +
+					`<button name="send" value="/pokerouge start" class="button">Start a run</button>`
+				);
+			}
+			if (state.pendingChoice && !state.team?.length) {
+				return this.sendReplyBox(
+					`You have a pending Pokémon choice! ` +
+					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
+				);
+			}
+			if (!state.team?.length) {
 				return this.sendReplyBox(
 					`You have no active PokéRogue run. ` +
 					`<button name="send" value="/pokerouge start" class="button">Start a run</button>`
