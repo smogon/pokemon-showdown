@@ -10,7 +10,7 @@ import { FS } from '../../../lib';
 // Constants
 // ---------------------------------------------------------------------------
 
-export const DATA_FILE = 'impulse/db/pokerouge.json';
+const DATA_FILE = 'impulse/db/pokerouge.json';
 
 /**
  * Tags that identify Legendary / Mythical / Special Pokemon.
@@ -25,7 +25,7 @@ export const LEGENDARY_TAGS = new Set<string>([
  * Default level thresholds for evolution types that don't have a natural level.
  * In PokeRouge, ALL evolutions happen by gaining levels — no items or trading needed.
  */
-export const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
+const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
 	useItem: 36,
 	levelFriendship: 20,
