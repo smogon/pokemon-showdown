@@ -914,8 +914,21 @@ export const commands: Chat.ChatCommands = {
 
 		healteam(target, room, user) {
 			this.checkCan('lock');
-			const targetId = toID(target.trim()) || user.id;
-			const targetName = target.trim() || user.name;
+			const trimmed = target.trim();
+			let targetId: string;
+			let targetName: string;
+			if (!trimmed) {
+				// No target provided: default to self
+				targetId = user.id;
+				targetName = user.name;
+			} else {
+				const maybeId = toID(trimmed);
+				if (!maybeId) {
+					return this.errorReply(`Invalid username: "${trimmed}".`);
+				}
+				targetId = maybeId;
+				targetName = trimmed;
+			}
 			const targetState = getState(targetId);
 			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
 			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
