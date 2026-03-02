@@ -297,6 +297,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ice",
 		},
+		onAfterSetStatusPriority: -1,
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'frz') {
+				pokemon.eatItem();
+			}
+		},
 		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.eatItem();
@@ -841,6 +847,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fire",
 		},
+		onAfterSetStatusPriority: -1,
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'par') {
+				pokemon.eatItem();
+			}
+		},
 		onUpdate(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.eatItem();
@@ -881,6 +893,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 80,
 			type: "Water",
+		},
+		onAfterSetStatusPriority: -1,
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'slp') {
+				pokemon.eatItem();
+			}
 		},
 		onUpdate(pokemon) {
 			if (pokemon.status === 'slp') {
@@ -4497,6 +4515,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Electric",
 		},
+		onAfterSetStatusPriority: -1,
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'psn' || status.id === 'tox') {
+				pokemon.eatItem();
+			}
+		},
 		onUpdate(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.eatItem();
@@ -5067,6 +5091,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 80,
 			type: "Grass",
+		},
+		onAfterSetStatusPriority: -1,
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'brn') {
+				pokemon.eatItem();
+			}
 		},
 		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
