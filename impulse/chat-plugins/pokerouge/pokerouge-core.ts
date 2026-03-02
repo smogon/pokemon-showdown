@@ -477,12 +477,12 @@ export function floorCoinReward(floor: number): number {
 }
 
 /** Bot Pokemon level for a given floor: starts at 5 and grows by ~1.5 per floor, capped at 100. */
-export function botLevel(floor: number): number {
+function botLevel(floor: number): number {
 	return Math.min(100, 5 + Math.floor((floor - 1) * 1.5));
 }
 
 /** Number of Pokemon on the bot's team for a given floor. */
-export function botTeamSize(floor: number): number {
+function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
 	if (floor <= 10) return 2;
 	if (floor <= 20) return 3;
