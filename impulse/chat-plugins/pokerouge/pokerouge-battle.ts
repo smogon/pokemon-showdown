@@ -8,7 +8,7 @@ import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
 import {
 	PokemonEntry, PokeRougeState,
-	botLevel, botTeamSize, getLevelUpEvo,
+	getLevelUpEvo,
 	packPokemon, packTeam, pickRandomPokemon,
 	setState,
 } from './pokerouge-core';
