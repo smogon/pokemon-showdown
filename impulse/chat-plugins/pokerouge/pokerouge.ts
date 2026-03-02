@@ -696,6 +696,9 @@ export const commands: Chat.ChatCommands = {
 					targetId = parsedId;
 					targetName = rawName;
 				}
+				if (!isNumber(parts[1])) {
+					return this.errorReply('Amount must be a positive number.');
+				}
 				amount = parseInt(parts[1]);
 			} else {
 				return this.errorReply('Usage: /pokerouge removecoins [user], <amount>');
