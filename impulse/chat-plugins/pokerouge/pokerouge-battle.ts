@@ -264,7 +264,7 @@ export function startBattle(user: User, state: PokeRougeState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${TRAINER_NAME}`,
+			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);
