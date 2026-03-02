@@ -2,7 +2,7 @@
  * Pokemon Showdown
  * Restart Server Command
  * Allows restarting the server directly from a chatroom.
- * @author Impulse
+ * @author TurboRx
  */
 
 export const commands: Chat.ChatCommands = {
