@@ -883,7 +883,7 @@ export const commands: Chat.ChatCommands = {
 			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
 			setState(targetId, targetState);
 			this.sendReplyBox(
-				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${targetName}'s team.`
+				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${Utils.escapeHTML(targetName)}'s team.`
 			);
 			this.modlog('POKEROUGE ADDMON', targetId, `${species.name} Lv.${addLevel}`);
 		},
