@@ -812,8 +812,9 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmedVT;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.sendReplyBox(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.sendReplyBox(`${targetName} has no active PokeRouge run.`);
+			const targetNameHtml = Utils.escapeHTML(targetName);
+			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokeRouge data.`);
+			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokeRouge run.`);
 			const targetDisplay = targetState.displayName || targetName;
 			this.sendReplyBox(
 				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
