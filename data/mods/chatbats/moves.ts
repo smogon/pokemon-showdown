@@ -1311,10 +1311,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fail', source, 'move: Crowverload');
 				return this.NOT_FAIL;
 			}
-			if (source.hp <= source.maxhp / 4) {
-				this.add('-fail', source, 'move: Substitute', '[weak]');
-				return this.NOT_FAIL;
-			}
 		},
 		onAfterMove(source, target, move) {
 			this.actions.useMove('substitute', source, { });
@@ -1532,16 +1528,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return false;
 				}
 			},
-			onTryHeal(damage, target, source, effect) {
-				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
-				if (source && target !== source && target.hp !== target.maxhp && effect.name === "Pollen Puff") {
-					this.attrLastMove('[still]');
-					// FIXME: Wrong error message, correct one not supported yet
-					this.add('cant', source, 'move: Electric Terrain', effect);
-					return null;
-				}
-				return false;
-			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
@@ -1635,6 +1621,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Cute",
+		shortDesc: "Present but better.",
 	},
 	sinisterarrows: {
 		num: -1016,
@@ -1712,9 +1699,54 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Clever",
+		shortDesc: "Hits for 4 turns, even if user switches out.",
 	},
 	mortalspin: {
 		inherit: true,
 		category: "Special",
+	},
+	lastbreakfast: {
+		num: -1020,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Last Breakfast",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1, bite: 1 },
+		onHit(target, source, move) {
+			const numberBerries = 0 + 1 * Number(source.side.totalFainted);
+			for (let i = 0; i < numberBerries; i++) {
+				const possibleBerries = ['aguavberry', 'apicotberry', 'enigmaberry', 'figyberry', 'ganlonberry', 'iapapaberry',
+					'keeberry', 'lansatberry', 'leppaberry', 'liechiberry', 'lumberry', 'magoberry',
+					'marangaberry', 'micleberry',
+					'oranberry', 'petayaberry', 'salacberry', 'sitrusberry', 'starfberry', 'wikiberry',
+					'aspearberry', 'cheriberry', 'chestoberry', 'lumberry', 'pechaberry', 'rawstberry', 'persimberry'];
+				const chosenBerry = this.sample(possibleBerries);
+				const berry = this.dex.items.get(chosenBerry);
+				if (source.hp && berry.isBerry) {
+					if (this.singleEvent('Eat', berry, null, source, source, move)) {
+						this.runEvent('EatItem', source, source, move, berry);
+					}
+					if (berry.onEat) source.ateBerry = true;
+				}
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Bug Bite', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cute",
+		shortDesc: "Eats X random berries, where X is fainted teammates.",
+	},
+	superfang: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 	},
 };

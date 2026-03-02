@@ -640,6 +640,7 @@ export class Condition extends BasicEffect implements
 	declare readonly onStart?: (
 		this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
+	declare readonly onBattleStart?: (this: Battle, pokemon: Pokemon) => void;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -666,7 +667,7 @@ export class DexConditions {
 	}
 
 	getByID(id: ID): Condition {
-		if (id === '') return EMPTY_CONDITION;
+		if (id === '' || id === 'constructor') return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
 		if (condition) return condition;

@@ -926,7 +926,7 @@
         ]
     },
     "swanna": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -937,7 +937,7 @@
         ]
     },
     "typhlosionmega": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -954,7 +954,7 @@
         ]
     },
     "terapagos": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -982,7 +982,7 @@
         ]
     },
     "genesectburn": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1004,7 +1004,7 @@
         ]
     },
     "genesectdouse": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1015,7 +1015,7 @@
         ]
     },
     "genesectshock": {
-        "level": 84,
+        "level": 80,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1160,6 +1160,28 @@
                 "movepool": ["Mortal Spin", "Meteor Beam", "Power Gem", "Ice Beam", "Malignant Chain"],
                 "abilities": ["Corrosion"],
                 "teraTypes": ["Grass"]
+            }
+        ]
+    },
+    "wobbuffet": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Counter", "Mirror Coat", "Shed Tail", "Encore", "Guillotine", "Night Shade"],
+                "abilities": ["Jello Body"],
+                "teraTypes": ["Dark", "Steel"]
+            }
+        ]
+    },
+    "raticatemega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Super Fang", "Hyper Fang", "Last Breakfast", "U-turn"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Normal"]
             }
         ]
     }

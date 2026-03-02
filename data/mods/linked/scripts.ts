@@ -1,6 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
-	inherit: 'gen8',
-	gen: 8,
+	gen: 9,
 	getActionSpeed(action) {
 		if (action.choice === 'move') {
 			let move = action.move;
@@ -70,40 +69,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.add('start');
 
-			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
-				let rawSpecies: Species | null = null;
-				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-					rawSpecies = this.dex.species.get('Zacian-Crowned');
-				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-				}
-				if (!rawSpecies) continue;
-				const species = pokemon.setSpecies(rawSpecies);
-				if (!species) continue;
-				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getUpdatedDetails();
-				// pokemon.setAbility(species.abilities['0'], null, null, true);
-				// pokemon.baseAbility = pokemon.ability;
-
-				const behemothMove: { [k: string]: string } = {
-					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				}
+				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 
 			this.format.onBattleStart?.call(this);
@@ -125,9 +92,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
-			}
 			this.midTurn = true;
 			break;
 		}
@@ -141,8 +105,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				// @ts-expect-error modded
 				const linkedMoves: ActiveMove[] = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
-					const validTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
-					const targetLoc = validTarget ? action.targetLoc : 0;
+					const isValidTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
+					const targetLoc = isValidTarget ? action.targetLoc :
+						action.pokemon.getLocOf(this.getRandomTarget(action.pokemon, linkedMoves[i])!);
 					const pseudoAction: Action = {
 						choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon,
 						targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega,
@@ -367,15 +332,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				// THIS IS PURELY A SANITY CHECK
 				// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 				// USE this.queue.cancelMove INSTEAD
-				this.debug(`${pokemon.id} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
-				this.clearActiveMove(true);
+				this.battle.debug(`${pokemon.id} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
+				this.battle.clearActiveMove(true);
 				return;
-				} */
+			} */
 			const willTryMove = this.battle.runEvent('BeforeMove', pokemon, target, move);
 			if (!willTryMove) {
-				if (pokemon.volatiles['twoturnmove']?.move === move.id) {
-					pokemon.removeVolatile('twoturnmove');
-				}
 				this.battle.runEvent('MoveAborted', pokemon, target, move);
 				this.battle.clearActiveMove(true);
 				// The event 'BeforeMove' could have returned false or null
@@ -384,6 +346,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.moveThisTurnResult = willTryMove;
 				return;
 			}
+
+			// Used exclusively for a hint later
+			if (move.flags['cantusetwice'] && pokemon.m.lastMoveAbsolute?.id === move.id) {
+				pokemon.addVolatile(move.id);
+			}
+
 			if (move.beforeMoveCallback) {
 				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
 					this.battle.clearActiveMove(true);
@@ -399,10 +367,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!lockedMove) {
 					if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 						this.battle.add('cant', pokemon, 'nopp', move);
-						const gameConsole = [
-							null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS',
-						][this.battle.gen] || 'Switch';
-						this.battle.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 						this.battle.clearActiveMove(true);
 						pokemon.moveThisTurnResult = false;
 						return;
@@ -420,14 +384,25 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-zpower', pokemon);
 				pokemon.side.zMoveUsed = true;
 			}
+
+			const oldActiveMove = move;
+
 			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
+			if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
+				this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
+			}
 
 			this.battle.faintMessages();
 			this.battle.checkWin();
+
+			if (this.battle.gen <= 4) {
+				// In gen 4, the outermost move is considered the last move for Copycat
+				this.battle.activeMove = oldActiveMove;
+			}
 		},
 	},
 	queue: {
@@ -445,13 +420,16 @@ export const Scripts: ModdedBattleScriptsData = {
 					instaswitch: 3,
 					beforeTurn: 4,
 					beforeTurnMove: 5,
+					revivalblessing: 6,
 
-					runUnnerve: 100,
 					runSwitch: 101,
-					// runPrimal: 102, (deprecated)
 					switch: 103,
 					megaEvo: 104,
+					megaEvoX: 104,
+					megaEvoY: 104,
 					runDynamax: 105,
+					terastallize: 106,
+					priorityChargeMove: 107,
 
 					shift: 200,
 					// default is 200 (for moves)
@@ -480,10 +458,35 @@ export const Scripts: ModdedBattleScriptsData = {
 							pokemon: action.pokemon,
 						}));
 					}
+					if (action.megax && !action.pokemon.isSkyDropped()) {
+						actions.unshift(...this.resolveAction({
+							choice: 'megaEvoX',
+							pokemon: action.pokemon,
+						}));
+					}
+					if (action.megay && !action.pokemon.isSkyDropped()) {
+						actions.unshift(...this.resolveAction({
+							choice: 'megaEvoY',
+							pokemon: action.pokemon,
+						}));
+					}
+					if (action.terastallize && !action.pokemon.terastallized) {
+						actions.unshift(...this.resolveAction({
+							choice: 'terastallize',
+							pokemon: action.pokemon,
+						}));
+					}
 					if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
 						actions.unshift(...this.resolveAction({
 							choice: 'runDynamax',
 							pokemon: action.pokemon,
+						}));
+					}
+					if (!action.maxMove && !action.zmove && action.move.priorityChargeCallback) {
+						actions.unshift(...this.resolveAction({
+							choice: 'priorityChargeMove',
+							pokemon: action.pokemon,
+							move: action.move,
 						}));
 					}
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);

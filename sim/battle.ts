@@ -1301,6 +1301,39 @@ export class Battle {
 		return !!move.flags['contact'];
 	}
 
+	skillSwap(source: Pokemon, target: Pokemon) {
+		if (source.fainted || target.fainted) return false;
+		if (source.volatiles['dynamax'] || target.volatiles['dynamax']) return false;
+		const sourceAbility = source.getAbility();
+		const targetAbility = target.getAbility();
+		if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap']) return false;
+		if (this.gen <= 5 && sourceAbility.id === targetAbility.id) return false;
+
+		const sourceEffect = this.dex.conditions.get('skillswap');
+		const targetCanBeSet = this.runEvent('SetAbility', target, source, sourceEffect, sourceAbility);
+		if (!targetCanBeSet) return targetCanBeSet;
+		const sourceCanBeSet = this.runEvent('SetAbility', source, source, sourceEffect, targetAbility);
+		if (!sourceCanBeSet) return sourceCanBeSet;
+
+		if (this.gen <= 4 || source.isAlly(target)) {
+			this.add('-activate', source, 'Skill Swap');
+		} else {
+			this.add('-activate', source, 'Skill Swap', target, `[ability] ${targetAbility.name}`, `[ability2] ${sourceAbility.name}`);
+		}
+		this.singleEvent('End', sourceAbility, source.abilityState, source);
+		this.singleEvent('End', targetAbility, target.abilityState, target);
+		source.ability = targetAbility.id;
+		target.ability = sourceAbility.id;
+		source.abilityState = this.initEffectState({ id: toID(source.ability), target: source });
+		target.abilityState = this.initEffectState({ id: toID(target.ability), target });
+		source.volatileStaleness = undefined;
+		if (!source.isAlly(target)) target.volatileStaleness = 'external';
+		if (this.gen > 3) {
+			this.singleEvent('Start', sourceAbility, target.abilityState, target);
+			this.singleEvent('Start', targetAbility, source.abilityState, source);
+		}
+	}
+
 	getPokemon(fullname: string | Pokemon) {
 		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {
@@ -1793,7 +1826,7 @@ export class Battle {
 		if (this.turn <= 100) return;
 
 		// the turn limit is not a part of Endless Battle Clause
-		if (this.turn >= 1000) {
+		if (this.turn > 1000) {
 			this.add('message', `It is turn 1000. You have hit the turn limit!`);
 			this.tie();
 			return true;
@@ -2642,40 +2675,8 @@ export class Battle {
 
 			this.add('start');
 
-			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
-				let rawSpecies: Species | null = null;
-				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-					rawSpecies = this.dex.species.get('Zacian-Crowned');
-				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-				}
-				if (!rawSpecies) continue;
-				const species = pokemon.setSpecies(rawSpecies);
-				if (!species) continue;
-				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getUpdatedDetails();
-				pokemon.setAbility(species.abilities['0'], null, null, true);
-				pokemon.baseAbility = pokemon.ability;
-
-				const behemothMove: { [k: string]: string } = {
-					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-				};
-				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHeadIndex >= 0) {
-					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHeadIndex] = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				}
+				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 
 			this.format.onBattleStart?.call(this);
@@ -2696,9 +2697,6 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -3147,9 +3145,9 @@ export class Battle {
 		this.log[this.lastMoveLine] = parts.join('|');
 	}
 
-	debug(activity: string) {
+	debug(...activity: Part[]) {
 		if (this.debugMode) {
-			this.add('debug', activity);
+			this.add('debug', ...activity);
 		}
 	}
 

@@ -100,7 +100,6 @@ export class BattleActions {
 
 			// will definitely switch out at this point
 
-			oldActive.illusion = null;
 			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
 
@@ -452,10 +451,13 @@ export class BattleActions {
 			}
 		}
 
-		if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-			!this.battle.runEvent('TryMove', pokemon, target, move)) {
+		let tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
+		if (tryMoveResult) {
+			tryMoveResult = this.battle.runEvent('TryMove', pokemon, target, move);
+		}
+		if (!tryMoveResult) {
 			move.mindBlownRecoil = false;
-			return false;
+			return tryMoveResult;
 		}
 
 		this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
@@ -1837,21 +1839,15 @@ export class BattleActions {
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
+		if (!item.megaStone) return null;
 		// Temporary hardcode until generation shift
-		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaEvolves === species.name) {
-			return item.megaStone as string;
+		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaStone[species.name]) {
+			return item.megaStone[species.name];
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (Array.isArray(item.megaStone)) {
-			// FIXME: Change to species.name when champions comes
-			const index = (item.megaEvolves as string[]).indexOf(species.baseSpecies);
-			if (index < 0) return null;
-			return item.megaStone[index];
-			// FIXME: Change to species.name when champions comes
-		} else if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-			return item.megaStone;
-		}
-		return null;
+		// FIXME: Change to species.name when champions comes
+		const megaEvolution = item.megaStone[species.baseSpecies];
+		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {

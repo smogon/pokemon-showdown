@@ -135,7 +135,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
-					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
+					types.has('Fighting') || types.has('Fairy') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
@@ -345,7 +345,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['hornleech', 'woodhammer'],
 			[['gigadrain', 'leafstorm'], ['energyball', 'leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
-			['gunkshot', 'poisonjab'],
+			[['gunkshot', 'sludgewave'], 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
@@ -367,6 +367,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
+			// Bastiodon
+			[['roar', 'protect'], ['metalburst', 'protect']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -375,7 +377,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			this.incompatibleMoves(moves, movePool, 'knockoff', ['pursuit', 'suckerpunch']);
 		}
 
-		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
+		const statusInflictingMoves = ["nuzzle", 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.includes('Prankster') && role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
@@ -933,7 +935,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
-		if (role === 'Bulky Setup' && !!counter.get('speedsetup') && !moves.has('swordsdance')) {
+		if (role === 'Bulky Setup' && (!!counter.get('speedsetup') || moves.has('shiftgear')) && !moves.has('swordsdance')) {
 			return 'Weakness Policy';
 		}
 		if (species.id === 'palkia') return 'Lustrous Orb';
@@ -955,12 +957,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			)
 		) return 'Rocky Helmet';
 		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (
-			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate' && species.id !== 'golemalola'
-		) {
-			return 'Air Balloon';
-		}
 		if (
 			(role === 'Fast Support' || moves.has('stickyweb')) && isLead && defensiveStatTotal < 255 &&
 			!counter.get('recovery') && (counter.get('hazards') || counter.get('setup')) &&
@@ -1176,6 +1172,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -1186,6 +1183,60 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const webSetters = [
+			'ariados', 'shuckle', 'smeargle', 'masquerain', 'kricketune', 'leavanny', 'galvantula', 'ribombee', 'araquanid',
+		];
+
+		// Some pokes are setters in gen 7 but not gen 6
+		const gen6ScreenSetters = ['meowstic', 'carbink'];
+		const screenSetters = (this.gen === 7) ? [...gen6ScreenSetters, 'electrode', 'ninetalesalola'] : gen6ScreenSetters;
+
+		const gen6SunSetters = ['charizardmegay', 'ninetales', 'groudon'];
+		const sunSetters = (this.gen === 7) ? [...gen6SunSetters, 'torkoal'] : gen6SunSetters;
+
+		const gen6SandSetters = ['tyranitar', 'tyranitarmega', 'hippowdon'];
+		const sandSetters = (this.gen === 7) ? [...gen6SandSetters, 'gigalith'] : gen6SandSetters;
+
+		const gen6HailSetters = ['abomasnow', 'abomasnowmega', 'aurorus'];
+		const hailSetters = (this.gen === 7) ? [...gen6HailSetters, 'vanilluxe', 'ninetalesalola'] : gen6HailSetters;
+
+		const incompatibilityList = [
+			// These Pokemon with support roles are considered too similar to each other.
+			['blissey', 'chansey'],
+			['illumise', 'volbeat'],
+
+			// These combinations are prevented to avoid double webs or screens.
+			[webSetters, webSetters],
+			[screenSetters, screenSetters],
+
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Dry Skin + sun setting ability
+			['parasect', 'jynx', 'toxicroak', 'heliolisk', sunSetters],
+			// Prevent Shedinja + sand/hail setting ability
+			['shedinja', [...sandSetters, ...hailSetters]],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 
 	override randomTeam() {
@@ -1304,6 +1355,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 							continue;
 						}
+
+						// Check compatibility with team
+						if (!this.getPokemonCompatibility(species, pokemon)) continue;
 					}
 
 					// Limit three of any type combination in Monotype
@@ -1607,8 +1661,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (isMonotype) {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
-					const megaSpecies = this.dex.species.get(Array.isArray(itemData.megaStone) ?
-						itemData.megaStone[0] : itemData.megaStone);
+					const megaSpecies = this.dex.species.get(Object.values(itemData.megaStone)[0]);
 					if (types.length > megaSpecies.types.length) types = [species.types[0]];
 					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
 					if (megaSpecies.types[1] && types[1] && megaSpecies.types[1] !== types[1]) {

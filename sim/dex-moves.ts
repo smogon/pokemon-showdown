@@ -621,7 +621,7 @@ export class DexMoves {
 	}
 
 	getByID(id: ID): Move {
-		if (id === '') return EMPTY_MOVE;
+		if (id === '' || id === 'constructor') return EMPTY_MOVE;
 		let move = this.moveCache.get(id);
 		if (move) return move;
 		if (this.dex.getAlias(id)) {

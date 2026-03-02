@@ -879,7 +879,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	sceptilemega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	torchic: {
 		isNonstandard: null,
@@ -891,7 +891,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	blazikenmega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	mudkip: {
 		isNonstandard: null,
@@ -903,7 +903,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	swampertmega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	poochyena: {
 		isNonstandard: "Past",
@@ -2260,13 +2260,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	sliggoohisui: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	goodra: {
 		isNonstandard: null,
 	},
 	goodrahisui: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	klefki: {
 		isNonstandard: null,
@@ -2308,7 +2308,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	avalugghisui: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	noibat: {
 		isNonstandard: null,
@@ -2569,6 +2569,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	magearnaoriginal: {
+		isNonstandard: "Unobtainable",
 	},
 	magearnamega: {
 		isNonstandard: null,
@@ -3179,7 +3180,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: null,
 	},
 	baxcaliburmega: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	gimmighoul: {
 		isNonstandard: null,

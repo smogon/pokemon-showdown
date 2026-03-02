@@ -35,7 +35,7 @@ SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 			(
 				# characters allowed inside URL paths
 				(
-					[^\s()&<>[\]] | &amp; | &quot;
+					[^\s()&<>[\]`] | &amp; | &quot;
 				|
 					# parentheses in URLs should be matched, so they're not confused
 					# for parentheses around URLs
@@ -60,7 +60,7 @@ SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>[\]]|&amp;|&quot;|\((?:[^\s()<>&[\]]|&amp;)*\)|\[(?:[^\s()<>&[\]]|&amp;)*])*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&[\]]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>[\]`]|&amp;|&quot;|\((?:[^\s()<>&[\]]|&amp;)*\)|\[(?:[^\s()<>&[\]]|&amp;)*])*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&[\]]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
 /**
  * A span is a part of the text that's formatted. In the text:
@@ -422,7 +422,12 @@ class TextFormatter {
 				let i = start + 2;
 				// Find </a> or </u>.
 				// We need to check the location of `>` to disambiguate from </small>.
-				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') i++;
+				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') {
+					if (i >= this.str.length) {
+						throw new Error(`Unclosed URL span when parsing: ${this.str}`);
+					}
+					i++;
+				}
 				i += 4;
 				this.pushSlice(i);
 			}
