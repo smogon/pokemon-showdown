@@ -682,10 +682,12 @@ export const commands: Chat.ChatCommands = {
 			} else if (parts.length >= 2) {
 				const rawName = parts[0];
 				const parsedId = toID(rawName);
-				if (!rawName || !parsedId) {
-					// Empty or invalid username segment: default target to self
+				if (!rawName) {
+					// Empty username segment: default target to self
 					targetId = user.id;
 					targetName = user.name;
+				} else if (!parsedId) {
+					return this.errorReply(`Invalid username: "${rawName}".`);
 				} else {
 					targetId = parsedId;
 					targetName = rawName;
