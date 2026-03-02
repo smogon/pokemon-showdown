@@ -829,7 +829,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onAfterEntryHazard(target) {
+			onEntryHazardPriority: -2,
+			onEntryHazard(target) {
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
 					target.clearStatus();
@@ -1004,10 +1005,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onSideStart(side) {
-				this.debug('Lunar Dance started on ' + side.name);
+			onStart(target) {
+				this.debug('Lunar Dance started on ' + target.getSlot());
 			},
-			onAfterEntryHazard(target) {
+			onEntryHazardPriority: -2,
+			onEntryHazard(target) {
 				if (target.getSlot() !== this.effectState.sourceSlot) {
 					return;
 				}

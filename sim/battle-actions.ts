@@ -148,22 +148,22 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
 		if (this.battle.gen <= 4) {
+			// Gen 4 Healing Wish and Lunar Dance activate here
 			this.battle.runEvent('EntryHazard', pokemon);
-			if (this.battle.gen === 3 && this.battle.turn > 0) {
-				// Gen 3 Weather-related abilities and Gen 4 Healing Wish and Lunar Dance
-				// activate before other Pokemon switch in
-				this.battle.runEvent('AfterEntryHazard', pokemon);
-			}
 			if (this.battle.gen <= 2) {
 				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
-				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+				if (!pokemon.side.faintedThisTurn && !isDrag) {
 					this.battle.runEvent('AfterSwitchInSelf', pokemon);
 				}
+			}
+			if (!pokemon.hp) return false;
+			if (this.battle.turn > 0) {
+				// Gen 3 Weather-related abilities activate before other Pokemon switch in
+				this.battle.runEvent('AfterEntryHazard', pokemon);
 			}
 		}
 
@@ -173,7 +173,7 @@ export class BattleActions {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
 
-		return true;
+		return !!pokemon.hp;
 	}
 	dragIn(side: Side, pos: number) {
 		const pokemon = this.battle.getRandomSwitchable(side);
@@ -202,7 +202,6 @@ export class BattleActions {
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
-			poke.draggedIn = null;
 			if (this.battle.gen === 4) {
 				for (const foeActive of poke.foes()) {
 					foeActive.removeVolatile('substitutebroken');
