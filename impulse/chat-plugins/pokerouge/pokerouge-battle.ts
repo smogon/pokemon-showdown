@@ -10,7 +10,7 @@ import {
 	PokemonEntry, PokeRougeState,
 	botLevel, botTeamSize, getLevelUpEvo,
 	packPokemon, packTeam, pickRandomPokemon,
-	getState, setState,
+	setState,
 } from './pokerouge-core';
 
 // ---------------------------------------------------------------------------
