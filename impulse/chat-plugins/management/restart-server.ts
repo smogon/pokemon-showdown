@@ -59,9 +59,32 @@ export const commands: Chat.ChatCommands = {
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
 
 		this.privateGlobalModAction(`${user.name} used /restartserver (${saveDetail}).`);
-		this.globalModlog('RESTARTSERVER', null, `by ${user.name}: ${saveDetail}`);
+		const modlogResult = this.globalModlog('RESTARTSERVER', null, `by ${user.name}: ${saveDetail}`);
+		const modlogPromise: Promise<unknown> | null =
+			modlogResult && typeof (modlogResult as any).then === 'function'
+				? (modlogResult as Promise<unknown>)
+				: null;
 
-		if (!logRoom?.log.roomlogStream) return process.exit(0);
+		const waitForModlog = async () => {
+			if (!modlogPromise) return;
+			try {
+				await modlogPromise;
+			} catch (error) {
+				console.error('Failed to write modlog entry on /restartserver:', error);
+			}
+		};
+
+		if (!logRoom?.log.roomlogStream) {
+			const exitTimer = setTimeout(() => {
+				process.exit(0);
+			}, 10000);
+			try {
+				await waitForModlog();
+			} finally {
+				clearTimeout(exitTimer);
+				process.exit(0);
+			}
+		}
 
 		logRoom.roomlog(`${user.name} used /restartserver (${saveDetail})`);
 
@@ -69,14 +92,15 @@ export const commands: Chat.ChatCommands = {
 			process.exit(0);
 		}, 10000);
 
-		void logRoom.log.roomlogStream.writeEnd()
-			.catch(error => {
-				console.error('Failed to flush roomlog stream on /restartserver:', error);
-			})
-			.finally(() => {
-				clearTimeout(exitTimer);
-				process.exit(0);
-			});
+		try {
+			await waitForModlog();
+			await logRoom.log.roomlogStream.writeEnd();
+		} catch (error) {
+			console.error('Failed to flush roomlog stream on /restartserver:', error);
+		} finally {
+			clearTimeout(exitTimer);
+			process.exit(0);
+		}
 	},
 	restartserverhelp: [
 		`/restartserver - Restarts the server. On servers with battle saving enabled, saves battles by default; use \`nosave\` during lockdown to skip saving. On servers without battle saving, battles cannot be saved and the server must already be in lockdown. Requires: ~`,
