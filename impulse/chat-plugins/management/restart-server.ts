@@ -6,36 +6,53 @@
  */
 
 export const commands: Chat.ChatCommands = {
-	restartserver(target, room, user): void {
-		this.checkCan('bypassall');
+	async restartserver(target, room, user): Promise<void> {
+		this.checkCan('lockdown');
+		let noSave = toID(target) === 'nosave';
+		if (!Config.usepostgres) noSave = true;
+
+		if (Rooms.global.lockdown !== true && noSave) {
+			throw new Chat.ErrorMessage("For safety reasons, using /restartserver without saving battles can only be done during lockdown.");
+		}
+
 		if (Monitor.updateServerLock) {
-			return this.errorReply(`The server is currently updating. Please try again once the update is complete.`);
+			throw new Chat.ErrorMessage("Wait for /updateserver to finish before using /restartserver.");
+		}
+
+		if (!noSave) {
+			this.sendReply('Saving battles...');
+			Rooms.global.lockdown = true;
+			for (const u of Users.users.values()) {
+				u.send(
+					`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
+					`While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+					`After the restart, you will be able to resume your battles from where you left off.`
+				);
+			}
+			const count = await Rooms.global.saveBattles();
+			this.sendReply(`DONE.`);
+			this.sendReply(`${count} battles saved.`);
 		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
-		logRoom?.roomlog(`${user.name} used /restartserver`);
-
-		for (const u of Users.users.values()) {
-			u.send(
-				`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red">` +
-				`<b>The server is restarting.</b><br />` +
-				`You will be able to reconnect shortly.</div>`
-			);
-		}
 
 		this.privateGlobalModAction(`${user.name} used /restartserver.`);
 		this.globalModlog('RESTARTSERVER', null, `by ${user.name}`);
+
+		if (!logRoom?.log.roomlogStream) return process.exit(0);
+
+		logRoom.roomlog(`${user.name} used /restartserver`);
 
 		const exitTimer = setTimeout(() => {
 			process.exit(0);
 		}, 10000);
 
-		void (logRoom?.log.roomlogStream?.writeEnd() ?? Promise.resolve()).then(() => {
+		void logRoom.log.roomlogStream.writeEnd().then(() => {
 			clearTimeout(exitTimer);
 			process.exit(0);
 		});
 	},
 	restartserverhelp: [
-		`/restartserver - Restarts the server. Requires: ~`,
+		`/restartserver - Restarts the server. Saves battles by default; use \`nosave\` during lockdown to skip. Requires: ~`,
 	],
 };
