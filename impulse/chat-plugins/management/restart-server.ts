@@ -31,8 +31,8 @@ export const commands: Chat.ChatCommands = {
 				`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
 				(noSave
 					? `The server will restart shortly.`
-					: `While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
-					`After the restart, you will be able to resume your battles from where you left off.`)
+					: `While we attempt to save ongoing battles, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+					`After the restart, you should be able to resume your battles from where you left off, unless saving unexpectedly fails.`)
 			);
 		}
 
