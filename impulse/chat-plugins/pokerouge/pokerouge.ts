@@ -826,8 +826,15 @@ export const commands: Chat.ChatCommands = {
 				targetName = user.name;
 				slotStr = parts[0];
 			} else if (parts.length >= 2) {
-				targetId = toID(parts[0]);
-				targetName = parts[0];
+				const maybeId = toID(parts[0]);
+				if (maybeId) {
+					targetId = maybeId;
+					targetName = parts[0];
+				} else {
+					// Empty or invalid username segment: default to self
+					targetId = user.id;
+					targetName = user.name;
+				}
 				slotStr = parts[1];
 			} else {
 				return this.errorReply('Usage: /pokerouge removemon [user], <slot>');
