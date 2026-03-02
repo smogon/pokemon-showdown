@@ -26,16 +26,19 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("Wait for /updateserver to finish before using /restartserver.");
 		}
 
+		for (const u of Users.users.values()) {
+			u.send(
+				`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
+				(noSave
+					? `The server will restart shortly.`
+					: `While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+					`After the restart, you will be able to resume your battles from where you left off.`)
+			);
+		}
+
 		if (!noSave) {
 			this.sendReply('Saving battles...');
 			Rooms.global.lockdown = true;
-			for (const u of Users.users.values()) {
-				u.send(
-					`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
-					`While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
-					`After the restart, you will be able to resume your battles from where you left off.`
-				);
-			}
 			try {
 				const count = await Rooms.global.saveBattles();
 				this.sendReply(`DONE.`);
