@@ -927,7 +927,9 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply('Usage: /pokerouge removemon [user], <slot>');
 			}
-			const slot = parseInt(slotStr) - 1;
+			const slotNum = parseInt(slotStr);
+			if (isNaN(slotNum)) return this.errorReply('Invalid slot: must be a number.');
+			const slot = slotNum - 1;
 			const targetState = getState(targetId);
 			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
 			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
