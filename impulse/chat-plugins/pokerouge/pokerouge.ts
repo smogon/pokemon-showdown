@@ -762,6 +762,7 @@ export const commands: Chat.ChatCommands = {
 					}
 					targetName = rawUser;
 				}
+				if (!isNumber(parts[1])) return this.errorReply('Floor must be a positive number.');
 				floor = parseInt(parts[1]);
 			} else {
 				return this.errorReply('Usage: /pokerouge setfloor [user], <floor>');
@@ -842,13 +843,14 @@ export const commands: Chat.ChatCommands = {
 				targetName = user.name;
 				speciesStr = parts[0];
 			} else if (parts.length === 2) {
-				if (isPositiveInt(parts[1])) {
+				if (/^\d+$/.test(parts[1])) {
 					// /pokerouge addmon <pokemon>, <level>  — self, custom level
+					const lvl = parseInt(parts[1]);
+					if (lvl < 1 || lvl > 100) return this.errorReply('Level must be between 1 and 100.');
 					targetId = user.id;
 					targetName = user.name;
 					speciesStr = parts[0];
-					levelOverride = parseInt(parts[1]);
-					if (levelOverride > 100) return this.errorReply('Level must be between 1 and 100.');
+					levelOverride = lvl;
 				} else {
 					// /pokerouge addmon <user>, <pokemon>  — user, floor-level
 					if (!parts[0]) {
@@ -1010,9 +1012,9 @@ export const commands: Chat.ChatCommands = {
 				html +=
 					`<br><br><b>Staff Commands (Global Driver+):</b><br>` +
 					`<code>/pokerouge givemoney [user] [amount]</code> — Give coins (default 100). Omit user to give to yourself.<br>` +
-					`<code>/pokerouge removecoins [user], &lt;amount&gt;</code> — Remove coins (omit user to target yourself).<br>` +
+					`<code>/pokerouge removecoins [user], &lt;amount&gt;</code> — Remove coins (omit user to target yourself). Short form: <code>/pokerouge removecoins &lt;amount&gt;</code> targets yourself.<br>` +
 					`<code>/pokerouge resetcoins [user]</code> — Set coins to 0 (omit user to target yourself).<br>` +
-					`<code>/pokerouge setfloor [user], &lt;floor&gt;</code> — Set current floor (omit user to target yourself).<br>` +
+					`<code>/pokerouge setfloor [user], &lt;floor&gt;</code> — Set current floor (omit user to target yourself). Short form: <code>/pokerouge setfloor &lt;floor&gt;</code> targets yourself.<br>` +
 					`<code>/pokerouge resetfloor [user]</code> — Reset floor to 1 (omit user to target yourself).<br>` +
 					`<code>/pokerouge viewteam [user]</code> — View a user's team with sprites (omit user for your own team).<br>` +
 					`<code>/pokerouge addmon [user], &lt;pokemon&gt; [, &lt;level&gt;]</code> (alias: <code>givemon</code>) — Add a Pokémon to a team at an optional level (default: floor-based). Omit user to target yourself.<br>` +
