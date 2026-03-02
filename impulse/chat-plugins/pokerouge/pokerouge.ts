@@ -771,8 +771,18 @@ export const commands: Chat.ChatCommands = {
 
 		resetfloor(target, room, user) {
 			this.checkCan('lock');
-			const targetId = toID(target.trim()) || user.id;
-			const targetName = target.trim() || user.name;
+			const trimmedFloor = target.trim();
+			let targetId: string;
+			let targetName: string;
+			if (!trimmedFloor) {
+				targetId = user.id;
+				targetName = user.name;
+			} else {
+				const parsedId = toID(trimmedFloor);
+				if (!parsedId) return this.errorReply(`Invalid username: "${trimmedFloor}".`);
+				targetId = parsedId;
+				targetName = trimmedFloor;
+			}
 			const targetState = getState(targetId);
 			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
 			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
@@ -785,8 +795,18 @@ export const commands: Chat.ChatCommands = {
 		viewteam(target, room, user) {
 			if (!this.runBroadcast()) return;
 			this.checkCan('lock');
-			const targetId = toID(target.trim()) || user.id;
-			const targetName = target.trim() || user.name;
+			const trimmedVT = target.trim();
+			let targetId: string;
+			let targetName: string;
+			if (!trimmedVT) {
+				targetId = user.id;
+				targetName = user.name;
+			} else {
+				const parsedId = toID(trimmedVT);
+				if (!parsedId) return this.errorReply(`Invalid username: "${trimmedVT}".`);
+				targetId = parsedId;
+				targetName = trimmedVT;
+			}
 			const targetState = getState(targetId);
 			if (!targetState) return this.sendReplyBox(`${targetName} has no PokeRouge data.`);
 			if (!targetState.team) return this.sendReplyBox(`${targetName} has no active PokeRouge run.`);
@@ -826,7 +846,9 @@ export const commands: Chat.ChatCommands = {
 						targetId = user.id;
 						targetName = user.name;
 					} else {
-						targetId = toID(parts[0]);
+						const maybeId = toID(parts[0]);
+						if (!maybeId) return this.errorReply(`Invalid username: "${parts[0]}".`);
+						targetId = maybeId;
 						targetName = parts[0];
 					}
 					speciesStr = parts[1];
@@ -837,7 +859,9 @@ export const commands: Chat.ChatCommands = {
 					targetId = user.id;
 					targetName = user.name;
 				} else {
-					targetId = toID(parts[0]);
+					const maybeId = toID(parts[0]);
+					if (!maybeId) return this.errorReply(`Invalid username: "${parts[0]}".`);
+					targetId = maybeId;
 					targetName = parts[0];
 				}
 				speciesStr = parts[1];
