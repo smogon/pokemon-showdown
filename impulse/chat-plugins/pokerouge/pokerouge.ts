@@ -232,6 +232,31 @@ const PAGE_CSS = `<style>
 </style>`;
 
 // ---------------------------------------------------------------------------
+// Fresh-run state factory — used by /pokerouge start, /pokerouge newgame, and the page handler.
+// Centralised so every new-game path starts with the same fields.
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a fresh PokéRouge state with a new starter-choice pending.
+ * Leaderboard fields (highestFloor, displayName) are preserved from the
+ * previous state when provided so records are never lost on reset.
+ */
+function buildFreshState(existing: PokeRougeState | null): PokeRougeState {
+	const options = pickStarterOptions();
+	const fresh: PokeRougeState = {
+		floor: 1,
+		team: [],
+		pendingChoice: options,
+		pendingChoiceType: 'starter',
+		coins: 0,
+		streaksWon: 0,
+	};
+	if (existing?.highestFloor) fresh.highestFloor = existing.highestFloor;
+	if (existing?.displayName) fresh.displayName = existing.displayName;
+	return fresh;
+}
+
+// ---------------------------------------------------------------------------
 // Chat command handlers
 // ---------------------------------------------------------------------------
 
@@ -244,18 +269,7 @@ export const commands: Chat.ChatCommands = {
 			// Auto-initialize state before navigating so the page always has content to display.
 			const state = getState(user.id);
 			if (!state || (!state.team?.length && !state.pendingChoice && !state.battleRoomId)) {
-				const options = pickStarterOptions();
-				const fresh: PokeRougeState = {
-					floor: 1,
-					team: [],
-					pendingChoice: options,
-					pendingChoiceType: 'starter',
-					coins: 0,
-					streaksWon: 0,
-				};
-				if (state?.highestFloor) fresh.highestFloor = state.highestFloor;
-				if (state?.displayName) fresh.displayName = state.displayName;
-				setState(user.id, fresh);
+				setState(user.id, buildFreshState(state));
 			}
 			return this.parse('/join view-pokerouge');
 		},
@@ -282,18 +296,7 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 
-			const options = pickStarterOptions();
-			const newState: PokeRougeState = {
-				floor: 1,
-				team: [],
-				pendingChoice: options,
-				pendingChoiceType: 'starter',
-				coins: 0,
-				streaksWon: 0,
-			};
-			// Preserve leaderboard data across runs so records aren't lost on reset
-			if (existing?.highestFloor) newState.highestFloor = existing.highestFloor;
-			if (existing?.displayName) newState.displayName = existing.displayName;
+			const newState = buildFreshState(existing);
 			setState(user.id, newState);
 
 			// Redirect to the game page to display the starter-selection UI
@@ -786,14 +789,35 @@ export const commands: Chat.ChatCommands = {
 			let targetId: string;
 			let targetName: string;
 			let speciesStr: string;
-			if (parts.length < 2) {
-				// Single arg: treat as pokemon name and default target to self
-				if (!parts[0]) return this.errorReply('Usage: /pokerouge addmon [user], <pokemon>');
+			let levelOverride: number | null = null;
+			const isPositiveInt = (s: string) => /^\d+$/.test(s) && parseInt(s) > 0;
+
+			if (parts.length === 1) {
+				// /pokerouge addmon <pokemon>  — self, floor-level
+				if (!parts[0]) return this.errorReply('Usage: /pokerouge addmon [user], <pokemon> [, <level>]');
 				targetId = user.id;
 				targetName = user.name;
 				speciesStr = parts[0];
+			} else if (parts.length === 2) {
+				if (isPositiveInt(parts[1])) {
+					// /pokerouge addmon <pokemon>, <level>  — self, custom level
+					targetId = user.id;
+					targetName = user.name;
+					speciesStr = parts[0];
+					levelOverride = parseInt(parts[1]);
+				} else {
+					// /pokerouge addmon <user>, <pokemon>  — user, floor-level
+					if (!parts[0]) {
+						targetId = user.id;
+						targetName = user.name;
+					} else {
+						targetId = toID(parts[0]);
+						targetName = parts[0];
+					}
+					speciesStr = parts[1];
+				}
 			} else {
-				// Two+ args: [user], <pokemon>. If user segment is empty, default to self.
+				// /pokerouge addmon <user>, <pokemon>, <level>
 				if (!parts[0]) {
 					targetId = user.id;
 					targetName = user.name;
@@ -802,7 +826,9 @@ export const commands: Chat.ChatCommands = {
 					targetName = parts[0];
 				}
 				speciesStr = parts[1];
+				if (isPositiveInt(parts[2])) levelOverride = parseInt(parts[2]);
 			}
+
 			const speciesId = toID(speciesStr);
 			const targetState = getState(targetId);
 			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
@@ -810,13 +836,14 @@ export const commands: Chat.ChatCommands = {
 			if (targetState.team.length >= 6) return this.errorReply(`${targetName}'s team is full (6 Pokémon).`);
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${speciesStr}`);
-			const addLevel = Math.max(1, targetState.floor - 2);
+			const floorLevel = Math.max(1, targetState.floor - 2);
+			const addLevel = levelOverride !== null ? Math.min(100, Math.max(1, levelOverride)) : floorLevel;
 			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
 			setState(targetId, targetState);
 			this.sendReplyBox(
 				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${targetName}'s team.`
 			);
-			this.modlog('POKEROUGE ADDMON', targetId, species.name);
+			this.modlog('POKEROUGE ADDMON', targetId, `${species.name} Lv.${addLevel}`);
 		},
 
 		givemon: 'addmon',
@@ -914,7 +941,7 @@ export const commands: Chat.ChatCommands = {
 					`<code>/pokerouge setfloor [user], &lt;floor&gt;</code> — Set current floor (omit user to target yourself).<br>` +
 					`<code>/pokerouge resetfloor [user]</code> — Reset floor to 1 (omit user to target yourself).<br>` +
 					`<code>/pokerouge viewteam [user]</code> — View a user's team with sprites (omit user for your own team).<br>` +
-					`<code>/pokerouge addmon [user], &lt;pokemon&gt;</code> (alias: <code>givemon</code>) — Add a Pokémon to a team (omit user to target yourself).<br>` +
+					`<code>/pokerouge addmon [user], &lt;pokemon&gt; [, &lt;level&gt;]</code> (alias: <code>givemon</code>) — Add a Pokémon to a team at an optional level (default: floor-based). Omit user to target yourself.<br>` +
 					`<code>/pokerouge removemon [user], &lt;slot&gt;</code> — Remove a Pokémon by slot (omit user to target yourself).<br>` +
 					`<code>/pokerouge healteam [user]</code> — Reset team EXP to current level baseline (omit user for yourself).<br>`;
 			}
@@ -1091,17 +1118,7 @@ export const pages: Chat.PageTable = {
 		// This mirrors the behaviour of /pokerouge start and ensures the page always
 		// shows meaningful content when navigated to directly.
 		if (!state || (!state.team?.length && !state.pendingChoice && !state.battleRoomId)) {
-			const options = pickStarterOptions();
-			const fresh: PokeRougeState = {
-				floor: 1,
-				team: [],
-				pendingChoice: options,
-				pendingChoiceType: 'starter',
-				coins: 0,
-				streaksWon: 0,
-			};
-			if (state?.highestFloor) fresh.highestFloor = state.highestFloor;
-			if (state?.displayName) fresh.displayName = state.displayName;
+			const fresh = buildFreshState(state);
 			setState(user.id, fresh);
 			state = fresh;
 			// Falls through to the pendingChoice rendering block below.
