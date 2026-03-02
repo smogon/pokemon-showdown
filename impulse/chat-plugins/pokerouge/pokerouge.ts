@@ -826,7 +826,10 @@ export const commands: Chat.ChatCommands = {
 					targetName = parts[0];
 				}
 				speciesStr = parts[1];
-				if (isPositiveInt(parts[2])) levelOverride = parseInt(parts[2]);
+				if (!parts[2] || !isPositiveInt(parts[2])) {
+					return this.errorReply('Level must be a positive integer from 1 to 100.');
+				}
+				levelOverride = parseInt(parts[2]);
 			}
 
 			const speciesId = toID(speciesStr);
