@@ -59,31 +59,10 @@ export const commands: Chat.ChatCommands = {
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
 
 		this.privateGlobalModAction(`${user.name} used /restartserver (${saveDetail}).`);
-		const modlogResult = this.globalModlog('RESTARTSERVER', null, `by ${user.name}: ${saveDetail}`);
-		const modlogPromise: Promise<unknown> | null =
-			modlogResult && typeof (modlogResult as any).then === 'function'
-				? (modlogResult as Promise<unknown>)
-				: null;
-
-		const waitForModlog = async () => {
-			if (!modlogPromise) return;
-			try {
-				await modlogPromise;
-			} catch (error) {
-				console.error('Failed to write modlog entry on /restartserver:', error);
-			}
-		};
+		this.globalModlog('RESTARTSERVER', null, `by ${user.name}: ${saveDetail}`);
 
 		if (!logRoom?.log.roomlogStream) {
-			const exitTimer = setTimeout(() => {
-				process.exit(0);
-			}, 10000);
-			try {
-				await waitForModlog();
-			} finally {
-				clearTimeout(exitTimer);
-				process.exit(0);
-			}
+			process.exit(0);
 		}
 
 		logRoom.roomlog(`${user.name} used /restartserver (${saveDetail})`);
@@ -93,7 +72,6 @@ export const commands: Chat.ChatCommands = {
 		}, 10000);
 
 		try {
-			await waitForModlog();
 			await logRoom.log.roomlogStream.writeEnd();
 		} catch (error) {
 			console.error('Failed to flush roomlog stream on /restartserver:', error);
