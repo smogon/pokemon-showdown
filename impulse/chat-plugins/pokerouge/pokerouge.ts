@@ -3,13 +3,13 @@
  * A battle-tower-based roguelike game for Pokemon Showdown (Impulse server).
  *
  * Player commands:
- *   /pokerouge start           — Opens the interactive PokéRogue game page.
+ *   /pokerouge start           — Opens the PokéRogue game page (auto-starts new run if needed).
  *   /pokerouge battle          — Starts the next floor battle (also via page button).
  *   /pokerouge choose [1|2|3]  — Choose a starter or add a Pokémon to your team.
  *   /pokerouge shop            — Opens the shop on the game page.
  *   /pokerouge buy <item>
  *   /pokerouge use <item> [team slot]
- *   /pokerouge status          — Redirects to the game page.
+ *   /pokerouge status          — Shows current run status with Pokémon sprites.
  *   /pokerouge top
  *   /pokerouge quit
  *   /pokerouge help
@@ -21,970 +21,39 @@
  *   /pokerouge setfloor [user],[floor]
  *   /pokerouge addmon [user],[pokemon]
  *   /pokerouge removemon [user],[slot]
- *   /pokerouge givemon [user],[pokemon]
  *   /pokerouge viewteam [user]
  *   /pokerouge healteam [user]
  *   /pokerouge resetfloor [user]
  *
- * Flow:
- *   1. Player types /pokerouge start — the interactive game page (view-pokerouge) opens.
- *   2. On the page, the player sees 3 random level-1 Pokemon to choose from.
- *      Legendary/Mythical Pokemon are excluded from the initial starter pool.
- *   3. After clicking "Choose Starter", a battle starts on Floor 1.
- *      Rooms.createBattle navigates the player to the battle room automatically.
- *   4. Winning a floor awards EXP and coins; Pokemon may level up and evolve.
- *   5. Every 5 floors the player may add a new Pokemon to their team (shown on page).
- *      At higher floors, rare Legendary/Mythical Pokemon may appear as options.
- *   6. Losing on any floor resets progress back to floor 1 with a fresh random starter
- *      (unless the player has a Revive item).
- *   7. The opponent AI auto-generates a "Roguelike Trainer" bot whose team scales with the floor.
- *   8. ALL Pokemon evolve by gaining EXP levels — no items or trading required.
+ * Files:
+ *   pokerouge-core.ts    — types, constants, data persistence, game helpers
+ *   pokerouge-battle.ts  — bot creation, AI logic, battle start
+ *   pokerouge.ts         — HTML rendering, commands, handlers, pages, start hook (this file)
  */
 
-import { FS } from '../../../lib';
-import { ObjectReadWriteStream } from '../../../lib/streams';
-import { StreamWorker } from '../../../lib/process-manager';
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-const DATA_FILE = 'impulse/db/pokerouge.json';
-
-/**
- * Tags that identify Legendary / Mythical / Special Pokemon.
- * These are excluded from normal starters but can appear in milestone rewards
- * at higher floors.
- */
-const LEGENDARY_TAGS = new Set<string>([
-	'Sub-Legendary', 'Restricted Legendary', 'Mythical', 'Ultra Beast', 'Paradox',
-]);
-
-/** Cached list of non-legendary base-form official Pokemon IDs. */
-let regularPokemonCache: string[] | null = null;
-/** Cached list of legendary/mythical base-form official Pokemon IDs. */
-let legendaryPokemonCache: string[] | null = null;
-
-/** Returns all regular (non-legendary) base-form official Pokemon IDs. */
-function getRegularPokemon(): string[] {
-	if (regularPokemonCache) return regularPokemonCache;
-	const all = Dex.species.all();
-	regularPokemonCache = all
-		.filter(s =>
-			s.exists &&
-			s.num > 0 &&
-			!s.isNonstandard &&
-			!s.prevo &&
-			s.baseSpecies === s.name &&
-			!s.tags.some(tag => LEGENDARY_TAGS.has(tag))
-		)
-		.map(s => toID(s.name));
-	return regularPokemonCache;
-}
-
-/** Returns all legendary/mythical base-form official Pokemon IDs. */
-function getLegendaryPokemon(): string[] {
-	if (legendaryPokemonCache) return legendaryPokemonCache;
-	const all = Dex.species.all();
-	legendaryPokemonCache = all
-		.filter(s =>
-			s.exists &&
-			s.num > 0 &&
-			!s.isNonstandard &&
-			!s.prevo &&
-			s.baseSpecies === s.name &&
-			s.tags.some(tag => LEGENDARY_TAGS.has(tag))
-		)
-		.map(s => toID(s.name));
-	return legendaryPokemonCache;
-}
-
-/** Fisher-Yates shuffle a copy of `pool` and return `n` items, excluding `exclude`. */
-function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
-	const filtered = pool.filter(id => !exclude.includes(id));
-	const shuffled = filtered.slice();
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled.slice(0, n);
-}
-
-/**
- * Pick `n` completely random regular (non-legendary) base-form Pokemon,
- * excluding any already in `exclude`.
- */
-function pickRandomPokemon(n: number, exclude: string[] = []): string[] {
-	return pickRandom(getRegularPokemon(), n, exclude);
-}
-
-/**
- * Default level thresholds for evolution types that don't have a natural level.
- * In PokeRouge, ALL evolutions happen by gaining levels — no items or trading needed.
- */
-const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
-	trade: 36,
-	useItem: 36,
-	levelFriendship: 20,
-	levelMove: 30,
-	levelExtra: 20,
-	levelHold: 30,
-	// 'other' (e.g. Shedinja) is skipped — too special to auto-handle
-};
-
-/**
- * Returns the level-based evolution for a species, if one exists.
- * In PokeRouge all evolutions are unlocked by levelling up:
- *   - Natural level-up evolutions use their own evoLevel.
- *   - Trade / item / friendship / etc. evolutions use a fallback level from
- *     EVO_TYPE_FALLBACK_LEVEL so every Pokemon in the Dex can evolve.
- * For species with multiple evolutions (e.g. Wurmple), the first usable branch
- * is returned.
- */
-function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
-	const species = Dex.species.get(toID(speciesId));
-	if (!species.exists || !species.evos.length) return null;
-
-	for (const evoName of species.evos) {
-		const evo = Dex.species.get(toID(evoName));
-		// Skip 'other' evolutions (e.g. Shedinja) — too special to auto-handle
-		if (evo.evoType === 'other') continue;
-
-		// Use the Pokemon's own evoLevel if present; otherwise use the fallback for this evo type
-		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 36;
-		const evoLevel = evo.evoLevel ?? fallback;
-		if (evoLevel > 0) {
-			return { evoTo: toID(evoName), evoLevel };
-		}
-	}
-	return null;
-}
-
-// ---------------------------------------------------------------------------
-// Shop item definitions
-// ---------------------------------------------------------------------------
-
-interface ShopItem {
-	id: string;
-	name: string;
-	description: string;
-	cost: number;
-	/** If set, this item is a held item equipped to one Pokemon for the next battle. */
-	heldItem?: string;
-}
-
-/** All purchasable items in the PokeRouge shop. */
-const SHOP_ITEMS: Record<string, ShopItem> = {
-	// ---- Special roguelite consumables ----
-	rarecandy: {
-		id: 'rarecandy',
-		name: 'Rare Candy',
-		description: 'Instantly grants +5 levels to one of your Pokemon.',
-		cost: 100,
-	},
-	luckycharm: {
-		id: 'luckycharm',
-		name: 'Lucky Charm',
-		description: 'Doubles EXP and coins earned for the next 3 floors.',
-		cost: 150,
-	},
-	revive: {
-		id: 'revive',
-		name: 'Revive',
-		description: 'Grants a second chance — if you lose your next battle you retry the same floor.',
-		cost: 200,
-	},
-	// ---- Survival / bulk items ----
-	focussash: {
-		id: 'focussash',
-		name: 'Focus Sash',
-		description: 'Survive any one-hit KO at 1 HP.',
-		cost: 120,
-		heldItem: 'focussash',
-	},
-	leftovers: {
-		id: 'leftovers',
-		name: 'Leftovers',
-		description: 'Gradually restores HP each turn.',
-		cost: 100,
-		heldItem: 'leftovers',
-	},
-	eviolite: {
-		id: 'eviolite',
-		name: 'Eviolite',
-		description: 'Boosts Defense and Sp. Def by 50% for unevolved Pokemon.',
-		cost: 100,
-		heldItem: 'eviolite',
-	},
-	rockyhelmet: {
-		id: 'rockyhelmet',
-		name: 'Rocky Helmet',
-		description: 'Damages the attacker 1/6 max HP when hit by a contact move.',
-		cost: 80,
-		heldItem: 'rockyhelmet',
-	},
-	heavydutyboots: {
-		id: 'heavydutyboots',
-		name: 'Heavy-Duty Boots',
-		description: 'Prevents all entry hazard damage.',
-		cost: 100,
-		heldItem: 'heavydutyboots',
-	},
-	airballoon: {
-		id: 'airballoon',
-		name: 'Air Balloon',
-		description: 'Makes the holder immune to Ground-type moves until hit.',
-		cost: 60,
-		heldItem: 'airballoon',
-	},
-	blacksludge: {
-		id: 'blacksludge',
-		name: 'Black Sludge',
-		description: 'Restores HP for Poison-types; damages all other types.',
-		cost: 80,
-		heldItem: 'blacksludge',
-	},
-	// ---- Offensive choice items ----
-	choiceband: {
-		id: 'choiceband',
-		name: 'Choice Band',
-		description: 'Boosts Attack by 50%, but locks into one move.',
-		cost: 80,
-		heldItem: 'choiceband',
-	},
-	choicespecs: {
-		id: 'choicespecs',
-		name: 'Choice Specs',
-		description: 'Boosts Sp. Atk by 50%, but locks into one move.',
-		cost: 80,
-		heldItem: 'choicespecs',
-	},
-	choicescarf: {
-		id: 'choicescarf',
-		name: 'Choice Scarf',
-		description: 'Boosts Speed by 50%, but locks into one move.',
-		cost: 80,
-		heldItem: 'choicescarf',
-	},
-	lifeorb: {
-		id: 'lifeorb',
-		name: 'Life Orb',
-		description: 'Boosts all moves by 30% at the cost of 10% HP per hit.',
-		cost: 120,
-		heldItem: 'lifeorb',
-	},
-	expertbelt: {
-		id: 'expertbelt',
-		name: 'Expert Belt',
-		description: 'Boosts super-effective moves by 20% with no drawback.',
-		cost: 80,
-		heldItem: 'expertbelt',
-	},
-	wiseglasses: {
-		id: 'wiseglasses',
-		name: 'Wise Glasses',
-		description: 'Boosts Sp. Atk by 10% without any downside.',
-		cost: 60,
-		heldItem: 'wiseglasses',
-	},
-	muscleband: {
-		id: 'muscleband',
-		name: 'Muscle Band',
-		description: 'Boosts Attack by 10% without any downside.',
-		cost: 60,
-		heldItem: 'muscleband',
-	},
-	// ---- Defensive / utility items ----
-	assaultvest: {
-		id: 'assaultvest',
-		name: 'Assault Vest',
-		description: 'Boosts Sp. Def by 50%; prevents status moves.',
-		cost: 100,
-		heldItem: 'assaultvest',
-	},
-	clearamulet: {
-		id: 'clearamulet',
-		name: 'Clear Amulet',
-		description: 'Prevents the holder\'s stats from being lowered by opponents.',
-		cost: 80,
-		heldItem: 'clearamulet',
-	},
-	boosterenergy: {
-		id: 'boosterenergy',
-		name: 'Booster Energy',
-		description: 'Activates the highest stat of a Paradox Pokemon.',
-		cost: 120,
-		heldItem: 'boosterenergy',
-	},
-	protectivepads: {
-		id: 'protectivepads',
-		name: 'Protective Pads',
-		description: 'Prevents the effects of contact moves from activating.',
-		cost: 70,
-		heldItem: 'protectivepads',
-	},
-	safetygoggles: {
-		id: 'safetygoggles',
-		name: 'Safety Goggles',
-		description: 'Protects from weather damage and powder/spore moves.',
-		cost: 70,
-		heldItem: 'safetygoggles',
-	},
-	// ---- Berries ----
-	sitrusberry: {
-		id: 'sitrusberry',
-		name: 'Sitrus Berry',
-		description: 'Restores 25% HP when below 50% HP.',
-		cost: 40,
-		heldItem: 'sitrusberry',
-	},
-	aguavberry: {
-		id: 'aguavberry',
-		name: 'Aguav Berry',
-		description: 'Restores 1/3 HP when below 25% HP (may cause confusion).',
-		cost: 30,
-		heldItem: 'aguavberry',
-	},
-	// ---- Status / misc ----
-	flameorb: {
-		id: 'flameorb',
-		name: 'Flame Orb',
-		description: 'Burns the holder at end of turn (great with Guts/Marvel Scale).',
-		cost: 60,
-		heldItem: 'flameorb',
-	},
-	toxicorb: {
-		id: 'toxicorb',
-		name: 'Toxic Orb',
-		description: 'Badly poisons the holder at end of turn (great with Poison Heal).',
-		cost: 60,
-		heldItem: 'toxicorb',
-	},
-	whiteherb: {
-		id: 'whiteherb',
-		name: 'White Herb',
-		description: 'Restores any lowered stats once, then is consumed.',
-		cost: 50,
-		heldItem: 'whiteherb',
-	},
-	powerherb: {
-		id: 'powerherb',
-		name: 'Power Herb',
-		description: 'Allows a two-turn move to fire immediately once, then is consumed.',
-		cost: 40,
-		heldItem: 'powerherb',
-	},
-	throatspray: {
-		id: 'throatspray',
-		name: 'Throat Spray',
-		description: 'Boosts Sp. Atk after using a sound-based move once.',
-		cost: 60,
-		heldItem: 'throatspray',
-	},
-	blunderpolicy: {
-		id: 'blunderpolicy',
-		name: 'Blunder Policy',
-		description: 'Sharply boosts Speed when a move misses.',
-		cost: 80,
-		heldItem: 'blunderpolicy',
-	},
-	shedshell: {
-		id: 'shedshell',
-		name: 'Shed Shell',
-		description: 'Allows the holder to switch out regardless of trapping moves.',
-		cost: 50,
-		heldItem: 'shedshell',
-	},
-};
-
-// ---------------------------------------------------------------------------
-// Data types
-// ---------------------------------------------------------------------------
-
-interface PokemonEntry {
-	species: string;
-	level: number;
-	exp: number;
-	/** Held item to equip in the next battle (cleared after battle ends). */
-	heldItem?: string;
-}
-
-interface PokeRougeState {
-	floor: number;
-	team: PokemonEntry[];
-	/** If set, player is being prompted to choose a starter (or a new team addition). */
-	pendingChoice?: string[];
-	/** 'starter' | 'add' — what the pending choice is for. */
-	pendingChoiceType?: 'starter' | 'add';
-	/** roomid of an ongoing battle, if any. */
-	battleRoomId?: string;
-	/** Coins earned from floor victories (used in the item shop). */
-	coins?: number;
-	/** Inventory: item ID → quantity. */
-	items?: Record<string, number>;
-	/** Floors remaining where EXP and coins are doubled (Lucky Charm effect). */
-	doubleExpFloors?: number;
-	/** If true, the next loss will retry the same floor instead of resetting the run. */
-	hasRevive?: boolean;
-	/** Highest floor ever reached — tracked for the leaderboard. */
-	highestFloor?: number;
-	/** Display name (updated each login) — used for the leaderboard. */
-	displayName?: string;
-	/** Number of floors won in the current run. */
-	streaksWon?: number;
-	/** Current shop rotation — item IDs available this refresh. */
-	shopInventory?: string[];
-}
-
-// ---------------------------------------------------------------------------
-// Persistence
-// ---------------------------------------------------------------------------
-
-type SavedData = Record<string, PokeRougeState>;
-let savedData: SavedData = {};
-
-function saveData(): void {
-	FS(DATA_FILE).writeUpdate(() => JSON.stringify(savedData), { throttle: 3000 });
-}
-
-async function loadData(): Promise<void> {
-	try {
-		const raw = await FS(DATA_FILE).readIfExists();
-		if (raw) savedData = JSON.parse(raw);
-	} catch {
-		savedData = {};
-	}
-}
-
-void loadData();
-
-function getState(userid: string): PokeRougeState | null {
-	return savedData[userid] ?? null;
-}
-
-function setState(userid: string, state: PokeRougeState): void {
-	savedData[userid] = state;
-	saveData();
-}
-
-function deleteState(userid: string): void {
-	delete savedData[userid];
-	saveData();
-}
-
-// ---------------------------------------------------------------------------
-// EXP / levelling / evolution helpers
-// ---------------------------------------------------------------------------
-
-/** Total EXP needed to reach a given level from level 1. */
-function expForLevel(level: number): number {
-	// EXP to go from N to N+1 is N * 30; cumulative = sum_{k=1}^{level-1} k*30 = 15*level*(level-1)
-	return 15 * level * (level - 1);
-}
-
-/** EXP awarded for winning a floor. */
-function floorExpReward(floor: number): number {
-	return 50 + floor * 15;
-}
-
-/** Coins awarded for winning a floor. */
-function floorCoinReward(floor: number): number {
-	return 30 + floor * 10;
-}
-
-/** Bot Pokemon level for a given floor: starts at 5 and grows by ~1.5 per floor, capped at 100. */
-function botLevel(floor: number): number {
-	return Math.min(100, 5 + Math.floor((floor - 1) * 1.5));
-}
-
-/** Number of Pokemon on the bot's team for a given floor. */
-function botTeamSize(floor: number): number {
-	if (floor <= 5) return 1;
-	if (floor <= 10) return 2;
-	if (floor <= 20) return 3;
-	if (floor <= 30) return 4;
-	if (floor <= 40) return 5;
-	return 6;
-}
-
-/**
- * Level up a Pokemon entry, applying EXP.
- * Returns true if the Pokemon evolved.
- */
-function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
-	const oldLevel = mon.level;
-	mon.exp += expGained;
-	// Level up as many times as earned
-	while (mon.level < 100 && mon.exp >= expForLevel(mon.level + 1)) {
-		mon.level++;
-	}
-	// Check evolution chain: evolve as many times as allowed by current level
-	let evolved = false;
-	while (true) {
-		const evo = getLevelUpEvo(mon.species);
-		if (!evo || mon.level < evo.evoLevel) break;
-		mon.species = evo.evoTo;
-		evolved = true;
-	}
-	return { evolved, oldLevel };
-}
-
-// ---------------------------------------------------------------------------
-// Learnset helpers — fetch up-to-4 gen-9 level-up moves for a species / level
-// ---------------------------------------------------------------------------
-
-function getLevelUpMoves(speciesId: string, level: number): string[] {
-	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
-	const learnset = learnsetData?.learnset;
-	if (!learnset) return ['tackle'];
-
-	const available: { move: string, learnLevel: number }[] = [];
-
-	for (const [moveid, sources] of Object.entries(learnset)) {
-		for (const src of sources) {
-			// Only gen-9 level-up entries: "9Lxx"
-			const match = /^9L(\d+)$/.exec(src);
-			if (match) {
-				const learnLvl = parseInt(match[1]);
-				if (learnLvl <= level) {
-					available.push({ move: moveid, learnLevel: learnLvl });
-				}
-				break;
-			}
-		}
-	}
-
-	if (!available.length) return ['tackle'];
-
-	// Sort by learn level descending so we pick the latest/strongest moves
-	available.sort((a, b) => b.learnLevel - a.learnLevel);
-	return available.slice(0, 4).map(m => m.move);
-}
-
-// ---------------------------------------------------------------------------
-// Team packing helpers
-// ---------------------------------------------------------------------------
-
-function packPokemon(mon: PokemonEntry): string {
-	const speciesData = Dex.species.get(toID(mon.species));
-	const name = speciesData.exists ? speciesData.name : mon.species;
-
-	// Ability: first available
-	const abilities = speciesData.abilities ?? {};
-	const ability = (abilities as unknown as Record<string, string>)['0'] || '';
-
-	const moves = getLevelUpMoves(toID(mon.species), mon.level);
-	const movesStr = moves.join(',');
-
-	const item = mon.heldItem ?? '';
-
-	// Packed team format: name|species|item|ability|moves|nature|evs|gender|ivs|shiny|level
-	// Empty species = same as name
-	return `${name}||${item}|${ability}|${movesStr}|Hardy||M||||${mon.level}`;
-}
-
-function packTeam(mons: PokemonEntry[]): string {
-	return mons.map(m => packPokemon(m)).join(']');
-}
-
-// ---------------------------------------------------------------------------
-// Bot user creation
-// ---------------------------------------------------------------------------
-
-/** A noop stream — discards everything written to it. */
-class NoopStream extends ObjectReadWriteStream<string> {
-	override _write(_data: string): void { /* discard */ }
-}
-
-const noopWorker = new StreamWorker(new NoopStream());
-let botCounter = 0;
-
-/** Maps active bot user IDs to the battle callback for AI responses. */
-const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
-
-/**
- * Creates a temporary bot User with a noop connection.
- * The bot is registered in the Users table and will auto-respond to battle
- * requests by writing choices directly to the battle stream.
- */
-function createBotUser(displayName: string): User {
-	const uid = ++botCounter;
-	const connId = `pokerouge-bot-${uid}`;
-
-	// Create a minimal noop connection
-	const conn = new Users.Connection(
-		connId,
-		noopWorker,
-		String(uid),
-		null,
-		'127.0.0.1',
-		null
-	);
-
-	const botUser = new Users.User(conn);
-	conn.user = botUser;
-
-	// Use the clean display name; only append a counter if that name is already taken
-	// (prevents conflicts for concurrent battles while keeping the name clean for
-	// sequential battles by the same player, where the old bot is already destroyed).
-	let safeName = displayName;
-	let attempt = 0;
-	while (Users.get(toID(safeName))) {
-		attempt++;
-		safeName = `${displayName} ${attempt}`;
-	}
-	botUser.forceRename(safeName, true);
-
-	// Override sendTo so that battle |request| messages trigger AI moves.
-	// Handler lookup is deferred inside the setTimeout to avoid a race condition
-	// where sendTo fires before botBattleHandlers.set() is called in startBattle.
-	(botUser as any).sendTo = function (roomid: RoomID | BasicRoom | null, data: string) {
-		if (typeof data === 'string') {
-			// The data may have a room prefix like ">battle-xxx\n|request|..."
-			const lines = data.split('\n');
-			for (const line of lines) {
-				if (line.startsWith('|request|')) {
-					const roomidStr = typeof roomid === 'string' ? roomid :
-						(roomid as any)?.roomid ?? '';
-					// Defer handler lookup so it runs AFTER botBattleHandlers.set()
-					setTimeout(() => {
-						const handler = botBattleHandlers.get(botUser.id);
-						if (handler) handler(roomidStr, line);
-					}, 150);
-					break;
-				}
-			}
-		}
-		// Do NOT forward to the noop socket — the bot has no real connection
-	};
-
-	return botUser;
-}
-
-/**
- * Destroy a bot user, removing it from the Users table.
- */
-function destroyBotUser(botUser: User): void {
-	botBattleHandlers.delete(botUser.id);
-	// Disconnect all fake connections, then fully remove from the users map.
-	// Without the explicit destroy() call the user stays in the users map in a
-	// disconnected state (because it's "named") until pruneInactive runs,
-	// which causes subsequent bots to receive numbered suffixes.
-	for (const c of botUser.connections.slice()) {
-		c.onDisconnect();
-	}
-	// Only destroy if not already removed (e.g. by onDisconnect's own destroy path)
-	if (Users.get(botUser.id) === botUser) {
-		Users.delete(botUser);
-	}
-}
-
-// ---------------------------------------------------------------------------
-// AI move logic
-// ---------------------------------------------------------------------------
-
-/**
- * Parse a |request| JSON and return a valid choice string.
- * Always prefers higher base-power moves for the best AI from the start.
- */
-function makeAIChoice(requestJson: string, _floor: number): string {
-	let request: any;
-	try {
-		request = JSON.parse(requestJson.startsWith('|request|') ? requestJson.slice(9) : requestJson);
-	} catch {
-		return 'move 1';
-	}
-
-	if (!request || request.wait) return 'pass';
-
-	// Team preview
-	if (request.teamPreview) {
-		const count = request.side?.pokemon?.length ?? 1;
-		const order = Array.from({ length: count }, (_, i) => i + 1);
-		return `team ${order.join('')}`;
-	}
-
-	// Force switch
-	if (request.forceSwitch) {
-		const choices: string[] = [];
-		const pokemon = request.side?.pokemon ?? [];
-		const chosen: number[] = [];
-
-		for (const forceSwitchEntry of (request.forceSwitch as boolean[])) {
-			if (!forceSwitchEntry) {
-				choices.push('pass');
-				continue;
-			}
-			// Find a benched, non-fainted Pokemon
-			const available = pokemon
-				.map((p: any, idx: number) => ({ p, idx: idx + 1 }))
-				.filter(({ p, idx }: { p: any, idx: number }) =>
-					idx > (request.forceSwitch as boolean[]).length &&
-					!p.condition?.endsWith(' fnt') &&
-					!chosen.includes(idx)
-				);
-			if (available.length) {
-				const pick = available[Math.floor(Math.random() * available.length)];
-				chosen.push(pick.idx);
-				choices.push(`switch ${pick.idx}`);
-			} else {
-				choices.push('pass');
-			}
-		}
-		return choices.join(', ');
-	}
-
-	// Move request
-	if (request.active) {
-		const choicesList: string[] = [];
-
-		for (let i = 0; i < (request.active as any[]).length; i++) {
-			const active = (request.active as any[])[i];
-			const pokemon = request.side?.pokemon?.[i];
-
-			if (!pokemon || pokemon.condition?.endsWith(' fnt') || pokemon.commanding) {
-				choicesList.push('pass');
-				continue;
-			}
-
-			const moves: any[] = active?.moves ?? [];
-			const usableMoves = moves.filter((m: any) => !m.disabled && (m.pp ?? 1) > 0);
-
-			let chosen = '';
-			if (usableMoves.length > 0) {
-				// Always prefer higher base-power moves
-				usableMoves.sort((a: any, b: any) => {
-					const bpA = Dex.moves.get(a.id)?.basePower ?? 0;
-					const bpB = Dex.moves.get(b.id)?.basePower ?? 0;
-					return bpB - bpA;
-				});
-				chosen = `move ${moves.indexOf(usableMoves[0]) + 1}`;
-			} else {
-				chosen = 'move 1'; // struggle
-			}
-
-			// Probabilistically use mega/tera whenever the option is available
-			if (active.canMegaEvo && Math.random() < 0.5) chosen += ' mega';
-			else if (active.canTerastallize && Math.random() < 0.4) chosen += ' terastallize';
-
-			choicesList.push(chosen);
-		}
-
-		return choicesList.join(', ') || 'move 1';
-	}
-
-	return 'move 1';
-}
-
-// ---------------------------------------------------------------------------
-// Active battle tracking
-// ---------------------------------------------------------------------------
-
-interface ActiveRougeMatch {
-	userId: ID;
-	botUserId: ID;
-	floor: number;
-}
-
-const activeMatches = new Map<RoomID, ActiveRougeMatch>();
-
-// ---------------------------------------------------------------------------
-// Core battle creation
-// ---------------------------------------------------------------------------
-
-/**
- * Builds an AI bot team as a packed string for the given floor.
- * Picks random Pokemon scaled to floor-appropriate levels.
- */
-function buildBotTeam(floor: number): string {
-	const level = botLevel(floor);
-	const size = botTeamSize(floor);
-
-	// For the bot, pick randomly from the full Pokedex at the appropriate level
-	const picks = pickRandomPokemon(size);
-
-	return picks.map(starter => {
-		let species = starter;
-		// Walk the evolution chain to find the right form for the bot's level
-		let evo = getLevelUpEvo(species);
-		while (evo && level >= evo.evoLevel) {
-			species = evo.evoTo;
-			evo = getLevelUpEvo(species);
-		}
-		return packPokemon({ species, level, exp: 0 });
-	}).join(']');
-}
-
-/**
- * Starts a PokeRouge battle on the current floor for `user`.
- * Creates the bot, registers AI handlers and tracks the room.
- * Returns true on success; on failure, the user has already received a popup
- * with the error message and false is returned.
- */
-function startBattle(user: User, state: PokeRougeState): boolean {
-	// Pack the team BEFORE clearing held items — packTeam reads them to embed in the team string
-	const playerTeam = packTeam(state.team);
-	const botTeam = buildBotTeam(state.floor);
-
-	const trainerName = 'Roguelike Trainer';
-	const botUser = createBotUser(trainerName);
-	const botSlot = 'p2' as const;
-
-	let battleRoom: AnyObject | null = null;
-	try {
-		battleRoom = Rooms.createBattle({
-			format: 'roguelikebattle',
-			players: [
-				{ user, team: playerTeam },
-				{ user: botUser, team: botTeam },
-			],
-			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
-		});
-	} catch (e) {
-		destroyBotUser(botUser);
-		user.popup('Failed to start the PokéRogue battle. Please try again.');
-		Monitor.crashlog(e as Error, 'PokéRogue battle creation');
-		return false;
-	}
-
-	if (!battleRoom) {
-		destroyBotUser(botUser);
-		return false;
-	}
-
-	// Register the AI callback AFTER confirming the battle exists
-	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
-		const room = Rooms.get(roomid as RoomID);
-		if (!room?.battle) return;
-		const choice = makeAIChoice(requestLine, state.floor);
-		void room.battle.stream.write(`>${botSlot} ${choice}`);
-	});
-
-	// Clear held items now that battle creation succeeded — they're consumed each battle
-	for (const mon of state.team) delete mon.heldItem;
-
-	// NOTE: Rooms.createBattle already calls p.joinRoom(room) for each player,
-	// navigating them to the battle room. Do NOT call user.joinRoom again here —
-	// a duplicate join would re-send room-init data and cause the client to show
-	// the replay interface instead of the active battle controls.
-
-	// Track this battle
-	state.battleRoomId = battleRoom.roomid;
-	setState(user.id, state);
-
-	activeMatches.set(battleRoom.roomid, {
-		userId: user.id,
-		botUserId: botUser.id,
-		floor: state.floor,
-	});
-
-	return true;
-}
-
-// ---------------------------------------------------------------------------
-// Offer random starters / new Pokemon choice
-// ---------------------------------------------------------------------------
-
-/**
- * Pick 3 completely random level-1 base-form Pokemon for the starter selection screen.
- * Legendary/Mythical Pokemon are always excluded from the starter pool.
- */
-function pickStarterOptions(): string[] {
-	return pickRandomPokemon(3);
-}
-
-/**
- * Returns 3 random Pokemon for the "add to team" milestone offer.
- * At floor 20+ there is a small chance that one Legendary/Mythical appears.
- * At floor 40+ that chance doubles.
- */
-function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
-	const existing = currentTeam.map(m => m.species);
-	const legendaryChance = floor >= 40 ? 0.25 : floor >= 20 ? 0.12 : 0;
-
-	if (legendaryChance > 0 && Math.random() < legendaryChance) {
-		// Replace one of the three options with a rare legendary
-		const legendaries = pickRandom(getLegendaryPokemon(), 1, existing);
-		if (legendaries.length) {
-			const regular = pickRandomPokemon(2, [...existing, ...legendaries]);
-			// Use Fisher-Yates (via pickRandom) for uniform shuffle
-			return pickRandom([...regular, ...legendaries], 3);
-		}
-	}
-	return pickRandomPokemon(3, existing);
-}
+import { Table } from '../../utils';
+import {
+	SHOP_ITEMS, LEGENDARY_TAGS,
+	PokemonEntry, PokeRougeState,
+	getState, setState, deleteState, savedData,
+	pickStarterOptions, pickNewPokemonOptions,
+	expForLevel, floorExpReward, floorCoinReward,
+	applyExpAndLevelUp, getLevelUpEvo,
+	getLevelUpMoves, rollShopInventory,
+} from './pokerouge-core';
+import {
+	activeMatches,
+	startBattle, destroyBotUser,
+} from './pokerouge-battle';
 
 // ---------------------------------------------------------------------------
 // HTML helpers
 // ---------------------------------------------------------------------------
 
-function getSprite(species: string): string {
+function getSprite(species: string, size = 80): string {
 	const id = toID(species);
-	return `<img src="https://play.pokemonshowdown.com/sprites/gen5/${id}.png" width="80" height="80" alt="${species}" style="image-rendering:pixelated" />`;
-}
-
-/**
- * Renders the starter / new-Pokemon selection UI as an HTML table with cards.
- * Each card shows the sprite, name, types, abilities, base stats, level-up moves,
- * tera type, level, held item, and a "Choose Starter" button using the PS default
- * button style (class="button").
- */
-function renderPokemonChoice(
-	options: string[],
-	label = 'Choose Starter',
-	cmdPrefix = '/pokerouge choose'
-): string {
-	const cards = options.map((s, i) => {
-		const speciesData = Dex.species.get(toID(s));
-		const name = speciesData.exists ? speciesData.name : s;
-		const isLegendary = speciesData.tags?.some(tag => LEGENDARY_TAGS.has(tag));
-
-		// Types
-		const types = speciesData.types ?? [];
-		const typeBadge = types.map(t =>
-			`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">${t}</span>`
-		).join(' ');
-
-		// Abilities
-		const ab = (speciesData.abilities ?? {}) as unknown as Record<string, string>;
-		const abilityList = [ab['0'], ab['1'], ab['H']].filter(Boolean);
-		const abilitiesStr = abilityList.join(' / ') || '—';
-
-		// Base stats
-		const bs = speciesData.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-		const statsStr = `HP <b>${bs.hp}</b> · Atk <b>${bs.atk}</b> · Def <b>${bs.def}</b> · SpA <b>${bs.spa}</b> · SpD <b>${bs.spd}</b> · Spe <b>${bs.spe}</b> <small>(BST ${bst})</small>`;
-
-		// Level-1 moves
-		const moveIds = getLevelUpMoves(toID(s), 1);
-		const movesStr = moveIds.map(m => Dex.moves.get(m).name || m).join(', ') || 'Tackle';
-
-		// Tera type = first type
-		const teraType = types[0] ?? 'Normal';
-		const teraBadge = `<span style="background:#${typeColor(teraType)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">Tera: ${teraType}</span>`;
-
-		const legendaryBadge = isLegendary ?
-			`<br><span style="color:#e67e22;font-size:11px;font-weight:bold">Legendary</span>` : '';
-		const borderColor = isLegendary ? '#e67e22' : '#aaa';
-		const bg = isLegendary ? '#fffaf0' : '#fafafa';
-
-		return `<td style="text-align:center;padding:10px 14px;border:2px solid ${borderColor};` +
-			`border-radius:10px;background:${bg};min-width:140px;vertical-align:top">` +
-			`${getSprite(s)}<br>` +
-			`<b style="font-size:14px">${name}</b>${legendaryBadge}<br>` +
-			`<span style="font-size:12px">Lv. 1 &nbsp;|&nbsp; Item: None</span><br>` +
-			`${typeBadge} ${teraBadge}<br>` +
-			`<div style="font-size:11px;color:#555;margin:4px 0;text-align:left">` +
-			`<b>Abilities:</b> ${abilitiesStr}<br>` +
-			`<b>Moves:</b> ${movesStr}<br>` +
-			`<b>Stats:</b> ${statsStr}` +
-			`</div>` +
-			`<button name="send" value="${cmdPrefix} ${i + 1}" class="button" style="margin-top:6px">` +
-			`${label}</button>` +
-			`</td>`;
-	}).join('<td style="width:10px"></td>');
-	return `<table style="border-collapse:separate;border-spacing:0"><tr>${cards}</tr></table>`;
+	const name = Dex.species.get(id).name || species;
+	return `<img src="https://play.pokemonshowdown.com/sprites/gen5/${id}.png" width="${size}" height="${size}" alt="${name} sprite" style="image-rendering:pixelated" />`;
 }
 
 /** Returns a hex colour string for a Pokemon type (no leading #). */
@@ -999,25 +68,68 @@ function typeColor(type: string): string {
 	return colors[type] ?? '68a090';
 }
 
-function renderTeam(team: PokemonEntry[]): string {
+/**
+ * Renders the starter / new-Pokemon selection UI as an HTML table with cards.
+ * Supports dark mode via .pr-choice-card CSS class.
+ */
+function renderPokemonChoice(
+	options: string[],
+	label = 'Choose Starter',
+	cmdPrefix = '/pokerouge choose'
+): string {
+	const cards = options.map((s, i) => {
+		const speciesData = Dex.species.get(toID(s));
+		const name = speciesData.exists ? speciesData.name : s;
+		const isLegendary = speciesData.tags?.some(tag => LEGENDARY_TAGS.has(tag));
+
+		const types = speciesData.types ?? [];
+		const typeBadge = types.map(t =>
+			`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">${t}</span>`
+		).join(' ');
+
+		const ab = (speciesData.abilities ?? {}) as unknown as Record<string, string>;
+		const abilityList = [ab['0'], ab['1'], ab['H']].filter(Boolean);
+		const abilitiesStr = abilityList.join(' / ') || '—';
+
+		const bs = speciesData.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		const statsStr = `HP <b>${bs.hp}</b> · Atk <b>${bs.atk}</b> · Def <b>${bs.def}</b> · SpA <b>${bs.spa}</b> · SpD <b>${bs.spd}</b> · Spe <b>${bs.spe}</b> <small>(BST ${bst})</small>`;
+
+		const moveIds = getLevelUpMoves(toID(s), 1);
+		const movesStr = moveIds.map(m => Dex.moves.get(m).name || m).join(', ') || 'Tackle';
+
+		const teraType = types[0] ?? 'Normal';
+		const teraBadge = `<span style="background:#${typeColor(teraType)};color:#fff;border-radius:3px;padding:1px 5px;font-size:11px">Tera: ${teraType}</span>`;
+
+		const legendaryBadge = isLegendary ?
+			`<br><span class="pr-choice-legendary">Legendary</span>` : '';
+
+		return `<td class="pr-choice-card${isLegendary ? ' pr-choice-card--legendary' : ''}">` +
+			`${getSprite(s)}<br>` +
+			`<b style="font-size:14px">${name}</b>${legendaryBadge}<br>` +
+			`<span style="font-size:12px">Lv. 1 &nbsp;|&nbsp; Item: None</span><br>` +
+			`${typeBadge} ${teraBadge}<br>` +
+			`<div class="pr-choice-stats">` +
+			`<b>Abilities:</b> ${abilitiesStr}<br>` +
+			`<b>Moves:</b> ${movesStr}<br>` +
+			`<b>Stats:</b> ${statsStr}` +
+			`</div>` +
+			`<button name="send" value="${cmdPrefix} ${i + 1}" class="button" style="margin-top:6px">` +
+			`${label}</button>` +
+			`</td>`;
+	}).join('<td style="width:10px"></td>');
+	return `<table style="border-collapse:separate;border-spacing:0"><tr>${cards}</tr></table>`;
+}
+
+function renderTeam(team: PokemonEntry[], withSprites = false): string {
 	return team.map((mon, idx) => {
 		const speciesData = Dex.species.get(toID(mon.species));
 		const name = speciesData.exists ? speciesData.name : mon.species;
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const heldLabel = mon.heldItem ? ` [${mon.heldItem}]` : '';
-		return `<b>${idx + 1}. ${name}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
+		const sprite = withSprites ? getSprite(mon.species, 40) + ' ' : '';
+		return `${sprite}<b>${idx + 1}. ${name}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
 	}).join('<br>');
-}
-
-/** Returns a random selection of `n` shop item IDs from the full SHOP_ITEMS list. */
-function rollShopInventory(n = 8): string[] {
-	const all = Object.keys(SHOP_ITEMS);
-	const shuffled = all.slice();
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled.slice(0, n);
 }
 
 /** Renders the item shop as an HTML card grid with action buttons. */
@@ -1050,7 +162,7 @@ function renderShop(coins: number, inventory?: string[]): string {
 	return actionBar + shopGrid;
 }
 
-/** Builds the Top-100 leaderboard HTML sorted by highestFloor descending. */
+/** Builds the Top-100 leaderboard HTML using the server's themed table CSS. */
 function renderLeaderboard(): string {
 	const entries = Object.entries(savedData)
 		.filter(([, s]) => (s.highestFloor ?? 0) > 0)
@@ -1065,29 +177,54 @@ function renderLeaderboard(): string {
 		const rank = i + 1;
 		const display = s.displayName || userid;
 		const nameHtml = Impulse.nameColor(display, true, true);
-		const medal = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`;
+		const medal = rank === 1 ? '🥇 #1' : rank === 2 ? '🥈 #2' : rank === 3 ? '🥉 #3' : `${rank}.`;
 		const teamStr = (s.team ?? [])
-			.map(m => Dex.species.get(toID(m.species)).name || m.species)
-			.join(', ') || '—';
-		const bg = rank <= 3 ? 'background:#fffaf0' : '';
-		return `<tr style="${bg}">` +
-			`<td style="padding:3px 8px;font-weight:bold">${medal}</td>` +
-			`<td style="padding:3px 8px">${nameHtml}</td>` +
-			`<td style="padding:3px 8px;text-align:center"><b>Floor ${s.highestFloor ?? 0}</b></td>` +
-			`<td style="padding:3px 8px;font-size:11px;color:#555">${teamStr}</td>` +
-			`</tr>`;
-	}).join('');
+			.map(m => {
+				const spr = getSprite(m.species, 30);
+				const sname = Dex.species.get(toID(m.species)).name || m.species;
+				return `${spr}<small>${sname}</small>`;
+			})
+			.join(' ') || '—';
+		return [medal, nameHtml, `Floor ${s.highestFloor ?? 0}`, teamStr];
+	});
 
-	return `<table style="border-collapse:collapse;width:100%">` +
-		`<tr style="background:#eee">` +
-		`<th style="padding:4px 8px">#</th>` +
-		`<th style="padding:4px 8px">Player</th>` +
-		`<th style="padding:4px 8px">Best Floor</th>` +
-		`<th style="padding:4px 8px">Last Team</th>` +
-		`</tr>` +
-		rows +
-		`</table>`;
+	return Table(
+		'PokéRogue Top 100',
+		['#', 'Player', 'Best Floor', 'Last Team'],
+		rows
+	);
 }
+
+// ---------------------------------------------------------------------------
+// Shared page CSS (includes dark mode support)
+// ---------------------------------------------------------------------------
+
+const PAGE_CSS = `<style>
+.pr-shop-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pr-shop-card{display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1px solid #ccc;border-radius:8px;background:#fafafa;min-width:130px;flex:1 1 130px;max-width:200px;box-sizing:border-box;text-align:center;gap:4px}
+.pr-shop-item-name{font-size:13px;font-weight:bold}
+.pr-shop-item-desc{font-size:11px;color:#555;flex:1}
+.pr-shop-held{font-size:10px;color:#888}
+.pr-shop-buy{margin-top:4px;width:100%}
+.pr-shop-actions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.pr-shop-next{margin-left:auto}
+.pr-stat-bar{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0}
+.pr-stat-bar span{white-space:nowrap}
+.pr-action-bar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.pr-choice-card{text-align:center;padding:10px 14px;border:2px solid #aaa;border-radius:10px;background:#fafafa;min-width:140px;vertical-align:top}
+.pr-choice-card--legendary{border-color:#e67e22;background:#fffaf0}
+.pr-choice-legendary{color:#e67e22;font-size:11px;font-weight:bold}
+.pr-choice-stats{font-size:11px;color:#555;margin:4px 0;text-align:left}
+@media(max-width:500px){.pr-shop-card{min-width:110px;max-width:none;flex:1 1 45%}.pr-shop-next{margin-left:0}}
+.dark .pr-shop-card{background:#2a2a2a;border-color:#444}
+.dark .pr-shop-item-desc{color:#aaa}
+.dark .pr-shop-held{color:#888}
+.dark .pr-stat-bar{color:#ddd}
+.dark .pr-choice-card{background:#2a2a2a;border-color:#555;color:#ddd}
+.dark .pr-choice-card--legendary{background:#2d2414;border-color:#c0701a}
+.dark .pr-choice-legendary{color:#f0a050}
+.dark .pr-choice-stats{color:#aaa}
+</style>`;
 
 // ---------------------------------------------------------------------------
 // Chat command handlers
@@ -1095,9 +232,16 @@ function renderLeaderboard(): string {
 
 export const commands: Chat.ChatCommands = {
 	pokerouge: {
-		// /pokerouge start — opens the interactive PokéRogue game page.
-		// All game state is managed there; battles, shop, and choices happen via page buttons.
+		// /pokerouge start — opens the PokéRogue game page.
+		// Fixes blank page: auto-triggers newgame if the player has no active run.
 		start(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+			const state = getState(user.id);
+			if (!state) {
+				// No active run — auto-start a new game so the user immediately gets
+				// starter choices instead of seeing an empty page.
+				return this.parse('/pokerouge newgame');
+			}
 			return this.parse('/join view-pokerouge');
 		},
 
@@ -1148,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 
 			const state = getState(user.id);
 			if (!state?.pendingChoice) {
-				return this.errorReply('You have no pending Pokemon choice. Use /pokerouge start first.');
+				return this.errorReply('You have no pending Pokémon choice. Use /pokerouge start first.');
 			}
 
 			// Guard against starting a second battle while one is active
@@ -1197,7 +341,7 @@ export const commands: Chat.ChatCommands = {
 
 			// Battle started — the PS client will navigate to the battle room automatically.
 			// Send a brief confirmation in chat so the user knows what happened.
-			this.sendReplyBox(`You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now...`);
+			this.sendReplyBox(`${getSprite(chosen, 40)} You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now...`);
 		},
 
 		// /pokerouge battle — starts the next floor battle for a player mid-run.
@@ -1242,9 +386,30 @@ export const commands: Chat.ChatCommands = {
 			// Battle started — PS client navigates automatically via p.joinRoom inside Rooms.createBattle
 		},
 
-		// /pokerouge status
+		// /pokerouge status — shows current run info with sprites
 		status(target, room, user) {
-			return this.parse('/join view-pokerouge');
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+			const state = getState(user.id);
+			if (!state || !state.team?.length) {
+				return this.sendReplyBox(
+					`You have no active PokéRogue run. ` +
+					`<button name="send" value="/pokerouge start" class="button">Start a run</button>`
+				);
+			}
+			const coins = state.coins ?? 0;
+			const items = state.items ?? {};
+			const itemList = Object.entries(items)
+				.filter(([, qty]) => qty > 0)
+				.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} x${qty}`)
+				.join(', ') || 'None';
+			this.sendReplyBox(
+				`<b>PokéRogue Status</b><br>` +
+				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
+				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
+				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
+				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
+				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
+			);
 		},
 
 		// /pokerouge shop — opens the game page at the shop view
@@ -1535,7 +700,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(
 				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
 				`<b>Floor:</b> ${targetState.floor} &nbsp;|&nbsp; <b>Coins:</b> ${targetState.coins ?? 0}<br>` +
-				`<b>Team:</b><br>${renderTeam(targetState.team)}`
+				`<b>Team:</b><br>${renderTeam(targetState.team, true)}`
 			);
 		},
 
@@ -1554,14 +719,13 @@ export const commands: Chat.ChatCommands = {
 			const addLevel = Math.max(1, targetState.floor - 2);
 			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
 			setState(targetId, targetState);
-			this.sendReply(`Added ${species.name} (Lv.${addLevel}) to ${parts[0]}'s team.`);
+			this.sendReplyBox(
+				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${parts[0]}'s team.`
+			);
 			this.modlog('POKEROUGE ADDMON', targetId, species.name);
 		},
 
-		givemon(target, room, user) {
-			// Alias for addmon
-			return this.parse(`/pokerouge addmon ${target}`);
-		},
+		givemon: 'addmon',
 
 		removemon(target, room, user) {
 			this.checkCan('lock');
@@ -1613,14 +777,14 @@ export const commands: Chat.ChatCommands = {
 			const isStaff = user.can('lock');
 			let html =
 				`<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerouge start</code> (or <code>/roguelike start</code>) — Open the interactive PokéRogue game page.<br>` +
+				`<code>/pokerouge start</code> (or <code>/roguelike start</code>) — Open the interactive PokéRogue game page (auto-starts new run if needed).<br>` +
 				`<code>/pokerouge battle</code> — Start the next floor battle (also available from the game page).<br>` +
 				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
 				`<code>/pokerouge shop</code> — Open the item shop on the game page.<br>` +
 				`<code>/pokerouge refreshshop</code> — Reroll shop items for 5 coins.<br>` +
 				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item (costs coins).<br>` +
 				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
-				`<code>/pokerouge status</code> — View your floor, coins, inventory and team (opens game page).<br>` +
+				`<code>/pokerouge status</code> — View your floor, coins, inventory and team with sprites.<br>` +
 				`<code>/pokerouge top</code> — View the Top 100 leaderboard by highest floor.<br>` +
 				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
 				`<br><b>Tip:</b> Type <code>/pokerouge start</code> to open the interactive game page — all actions are available there as clickable buttons!<br>` +
@@ -1634,9 +798,8 @@ export const commands: Chat.ChatCommands = {
 					`<code>/pokerouge resetcoins &lt;user&gt;</code> — Set a user's coins to 0.<br>` +
 					`<code>/pokerouge setfloor &lt;user&gt;, &lt;floor&gt;</code> — Set a user's current floor.<br>` +
 					`<code>/pokerouge resetfloor &lt;user&gt;</code> — Reset a user's floor to 1.<br>` +
-					`<code>/pokerouge viewteam &lt;user&gt;</code> — View another user's team.<br>` +
-					`<code>/pokerouge addmon &lt;user&gt;, &lt;pokemon&gt;</code> — Add a Pokémon to a user's team (max 6).<br>` +
-					`<code>/pokerouge givemon &lt;user&gt;, &lt;pokemon&gt;</code> — Same as addmon.<br>` +
+					`<code>/pokerouge viewteam &lt;user&gt;</code> — View another user's team (with sprites).<br>` +
+					`<code>/pokerouge addmon &lt;user&gt;, &lt;pokemon&gt;</code> (alias: <code>givemon</code>) — Add a Pokémon to a user's team (max 6).<br>` +
 					`<code>/pokerouge removemon &lt;user&gt;, &lt;slot&gt;</code> — Remove the Pokémon in the given team slot.<br>` +
 					`<code>/pokerouge healteam &lt;user&gt;</code> — Reset a user's team EXP to their current level baseline.<br>`;
 			}
@@ -1808,24 +971,7 @@ export const pages: Chat.PageTable = {
 		const state = getState(user.id);
 
 		let buf = `<div class="pad">`;
-		buf += `<style>
-.pr-shop-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.pr-shop-card{display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1px solid #ccc;border-radius:8px;background:#fafafa;min-width:130px;flex:1 1 130px;max-width:200px;box-sizing:border-box;text-align:center;gap:4px}
-.pr-shop-item-name{font-size:13px;font-weight:bold}
-.pr-shop-item-desc{font-size:11px;color:#555;flex:1}
-.pr-shop-held{font-size:10px;color:#888}
-.pr-shop-buy{margin-top:4px;width:100%}
-.pr-shop-actions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
-.pr-shop-next{margin-left:auto}
-.pr-stat-bar{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0}
-.pr-stat-bar span{white-space:nowrap}
-.pr-action-bar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-@media(max-width:500px){.pr-shop-card{min-width:110px;max-width:none;flex:1 1 45%}.pr-shop-next{margin-left:0}}
-.dark .pr-shop-card{background:#2a2a2a;border-color:#444}
-.dark .pr-shop-item-desc{color:#aaa}
-.dark .pr-shop-held{color:#888}
-.dark .pr-stat-bar{color:#ddd}
-</style>`;
+		buf += PAGE_CSS;
 		buf += `<h2>PokéRogue</h2>`;
 
 		if (!state) {
@@ -1896,9 +1042,9 @@ export const pages: Chat.PageTable = {
 			buf += `<p><b>Active Effects:</b> ${activeEffects.join(', ')}</p>`;
 		}
 
-		// Team
+		// Team with sprites
 		buf += `<h3 style="margin-bottom:6px">Your Team</h3>`;
-		buf += `<div style="margin-bottom:12px">${renderTeam(state.team)}</div>`;
+		buf += `<div style="margin-bottom:12px">${renderTeam(state.team, true)}</div>`;
 
 		// Inventory
 		buf += `<p><b>Inventory:</b> ${itemList}</p>`;
