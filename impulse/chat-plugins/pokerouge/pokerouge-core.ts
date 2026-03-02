@@ -315,14 +315,14 @@ export interface PokeRougeState {
 // Persistence
 // ---------------------------------------------------------------------------
 
-export type SavedData = Record<string, PokeRougeState>;
+type SavedData = Record<string, PokeRougeState>;
 export let savedData: SavedData = {};
 
-export function saveData(): void {
+function saveData(): void {
 	FS(DATA_FILE).writeUpdate(() => JSON.stringify(savedData), { throttle: 3000 });
 }
 
-export async function loadData(): Promise<void> {
+async function loadData(): Promise<void> {
 	try {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) savedData = JSON.parse(raw);
@@ -357,7 +357,7 @@ let regularPokemonCache: string[] | null = null;
 let legendaryPokemonCache: string[] | null = null;
 
 /** Returns all regular (non-legendary) base-form official Pokemon IDs. */
-export function getRegularPokemon(): string[] {
+function getRegularPokemon(): string[] {
 	if (regularPokemonCache) return regularPokemonCache;
 	const all = Dex.species.all();
 	regularPokemonCache = all
@@ -374,7 +374,7 @@ export function getRegularPokemon(): string[] {
 }
 
 /** Returns all legendary/mythical base-form official Pokemon IDs. */
-export function getLegendaryPokemon(): string[] {
+function getLegendaryPokemon(): string[] {
 	if (legendaryPokemonCache) return legendaryPokemonCache;
 	const all = Dex.species.all();
 	legendaryPokemonCache = all
@@ -391,7 +391,7 @@ export function getLegendaryPokemon(): string[] {
 }
 
 /** Fisher-Yates shuffle a copy of `pool` and return `n` items, excluding `exclude`. */
-export function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
+function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
 	const filtered = pool.filter(id => !exclude.includes(id));
 	const shuffled = filtered.slice();
 	for (let i = shuffled.length - 1; i > 0; i--) {

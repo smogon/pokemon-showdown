@@ -59,7 +59,7 @@ export function destroyBotUser(botUser: User): void {
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
  */
-export function createBotUser(playerId: string): User {
+function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerouge-bot-${uid}`;
 	const botDisplayName = `${TRAINER_NAME} ${playerId}`;
@@ -121,7 +121,7 @@ export function createBotUser(playerId: string): User {
  * Parse a |request| JSON and return a valid choice string.
  * Always prefers higher base-power moves for the best AI from the start.
  */
-export function makeAIChoice(requestJson: string, _floor: number): string {
+function makeAIChoice(requestJson: string, _floor: number): string {
 	let request: any;
 	try {
 		request = JSON.parse(requestJson.startsWith('|request|') ? requestJson.slice(9) : requestJson);
@@ -211,7 +211,7 @@ export function makeAIChoice(requestJson: string, _floor: number): string {
 // Active battle tracking
 // ---------------------------------------------------------------------------
 
-export interface ActiveRougeMatch {
+interface ActiveRougeMatch {
 	userId: ID;
 	botUserId: ID;
 	floor: number;

@@ -419,6 +419,8 @@ export const commands: Chat.ChatCommands = {
 				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
 				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
 				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
+				(state.pendingChoice ? `<br><br>⚠️ <b>You have a pending Pokémon choice!</b> ` +
+					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.` : '') +
 				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
 				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
 			);
