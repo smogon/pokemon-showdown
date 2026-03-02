@@ -707,8 +707,21 @@ export const commands: Chat.ChatCommands = {
 
 		resetcoins(target, room, user) {
 			this.checkCan('lock');
-			const targetId = toID(target.trim()) || user.id;
-			const targetName = target.trim() || user.name;
+			const trimmed = target.trim();
+			let targetId: string;
+			let targetName: string;
+			if (!trimmed) {
+				// No target provided: default to self
+				targetId = user.id;
+				targetName = user.name;
+			} else {
+				const parsedId = toID(trimmed);
+				if (!parsedId) {
+					return this.errorReply('Invalid username.');
+				}
+				targetId = parsedId;
+				targetName = trimmed;
+			}
 			const targetState = getState(targetId);
 			if (!targetState) return this.errorReply(`${targetName} has no active PokeRouge run.`);
 			targetState.coins = 0;
