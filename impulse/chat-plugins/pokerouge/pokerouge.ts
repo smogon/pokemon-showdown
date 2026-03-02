@@ -235,13 +235,16 @@ const PAGE_CSS = `<style>
 export const commands: Chat.ChatCommands = {
 	pokerouge: {
 		// /pokerouge start — opens the PokéRogue game page.
-		// Fixes blank page: auto-triggers newgame if the player has no active run.
+		// Fixes blank page: auto-triggers newgame if the player has no active run
+		// (state is null) OR has lost their run (state exists but team is empty and
+		// there is no pending starter/add choice).
 		start(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
-			if (!state) {
-				// No active run — auto-start a new game so the user immediately gets
-				// starter choices instead of seeing an empty page.
+			if (!state || (!state.team?.length && !state.pendingChoice)) {
+				// No active run, or post-loss state with no team and no pending choice —
+				// auto-start a new game so the user immediately gets starter choices
+				// instead of seeing an empty "No active team" page.
 				return this.parse('/pokerouge newgame');
 			}
 			return this.parse('/join view-pokerouge');
@@ -278,6 +281,9 @@ export const commands: Chat.ChatCommands = {
 				coins: 0,
 				streaksWon: 0,
 			};
+			// Preserve leaderboard data across runs so records aren't lost on reset
+			if (existing?.highestFloor) newState.highestFloor = existing.highestFloor;
+			if (existing?.displayName) newState.displayName = existing.displayName;
 			setState(user.id, newState);
 
 			// Redirect to the game page to display the starter-selection UI
