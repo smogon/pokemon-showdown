@@ -6,7 +6,7 @@
 
 import { Economy, CURRENCY } from '../../economy';
 import { nameColor } from '../../colors';
-import { Table } from '../../utils';
+import { generateThemedTable } from '../../utils';
 
 const CURRENCYNAME = CURRENCY.name;
 
@@ -58,7 +58,7 @@ export const commands: Chat.ChatCommands = {
 			const fromUser = await Economy.getUser(user.id);
 			if (fromUser.balance < amount) {
 				const msg = `You do not have enough money to transfer ` +
-				`${Economy.formatMoney(amount)}. You have ${Economy.formatMoney(fromUser.balance)}.`;
+					`${Economy.formatMoney(amount)}. You have ${Economy.formatMoney(fromUser.balance)}.`;
 				return this.errorReply(msg);
 			}
 
@@ -78,7 +78,7 @@ export const commands: Chat.ChatCommands = {
 			const notifyMsg = `You received a transfer of ${Economy.formatMoney(amount)} from ` +
 				`${fromNameColor}. Your new balance is ${toBalanceDisplay} ${CURRENCYNAME}.`;
 			notifyUser(targetUserid, notifyMsg);
-			},
+		},
 
 		async give(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
@@ -109,7 +109,7 @@ export const commands: Chat.ChatCommands = {
 				`${giverNameColor} ${CURRENCYNAME}. Your new balance is ` +
 				`${newBalanceDisplay} ${CURRENCYNAME}.`;
 			notifyUser(targetUserid, notifyMsg);
-			},
+		},
 
 		async take(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
@@ -129,7 +129,7 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = await Economy.getUser(targetUserid);
 			if (targetUser.balance < amount) {
 				const msg = `${targetUserid} only has ${Economy.formatMoney(targetUser.balance)} ` +
-				`and cannot have ${Economy.formatMoney(amount)} taken.`;
+					`and cannot have ${Economy.formatMoney(amount)} taken.`;
 				return this.errorReply(msg);
 			}
 
@@ -145,7 +145,7 @@ export const commands: Chat.ChatCommands = {
 			const notifyMsg = `${takerNameColor} has taken ${Economy.formatMoney(amount)} ` +
 				`${CURRENCYNAME} from you.`;
 			notifyUser(targetUserid, notifyMsg);
-			},
+		},
 
 		async stats(): Promise<void> {
 			if (!this.runBroadcast()) return;
@@ -159,14 +159,14 @@ export const commands: Chat.ChatCommands = {
 				Economy.formatMoney(totalMoney.totalBalance),
 			]];
 
-			const tableHtml = Table(
+			const tableHtml = generateThemedTable(
 				"Economy Statistics",
 				headerRow,
 				dataRows
 			);
 
 			this.sendReply(`|html|${tableHtml}`);
-			},
+		},
 
 		async ladder(target, room, user): Promise<void> {
 			if (!this.runBroadcast()) return;
@@ -193,14 +193,14 @@ export const commands: Chat.ChatCommands = {
 				];
 			});
 
-			const tableHtml = Table(
+			const tableHtml = generateThemedTable(
 				`Economy Leaderboard - Page ${page} of ${totalPages}`,
 				headerRow,
 				dataRows
 			);
 
 			this.sendReply(`|html|${tableHtml}`);
-			},
+		},
 
 		async reset(target, room, user): Promise<void> {
 			this.checkCan('roomowner');
@@ -213,7 +213,7 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = await Economy.getUser(targetUserid);
 			if (targetUser.balance === Economy.CONFIG.startingBalance) {
 				const msg = `${targetUserid} already has the starting balance, ` +
-				`so there is nothing to reset.`;
+					`so there is nothing to reset.`;
 				return this.errorReply(msg);
 			}
 
@@ -225,12 +225,13 @@ export const commands: Chat.ChatCommands = {
 			const msg = `Economy data for ${targetNameColor} has been reset. They now have a ` +
 				`starting balance of ${startingBalance} ${CURRENCYNAME}.`;
 			this.sendReplyBox(msg);
+
 			const resetterNameColor = nameColor(user.name, false, true);
 			const startingBalanceDisplay = Economy.formatMoney(Economy.CONFIG.startingBalance);
 			const notifyMsg = `Your economy data has been reset by ${resetterNameColor}. ` +
 				`Your new balance is ${startingBalanceDisplay} ${CURRENCYNAME}.`;
 			notifyUser(targetUserid, notifyMsg);
-			},
+		},
 
 		help(): void {
 			if (!this.runBroadcast()) return;
@@ -238,7 +239,7 @@ export const commands: Chat.ChatCommands = {
 				{
 					cmd: "/balance [user]",
 					desc: `Shows a user's ${CURRENCYNAME} balance. ` +
-					`Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>`,
+						`Aliases: <b>/bal</b>, <b>/money</b>, <b>/atm</b>`,
 				},
 				{
 					cmd: "/eco stats",
@@ -272,7 +273,7 @@ export const commands: Chat.ChatCommands = {
 				).join('') +
 				`</ul>`;
 			this.sendReplyBox(html);
-			},
+		},
 	},
-economy: 'eco',
+	economy: 'eco',
 };
