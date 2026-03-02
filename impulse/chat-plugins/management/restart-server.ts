@@ -26,6 +26,11 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("Wait for /updateserver to finish before using /restartserver.");
 		}
 
+		let saveDetail = 'nosave';
+		if (!noSave) {
+			Rooms.global.lockdown = true;
+		}
+
 		for (const u of Users.users.values()) {
 			u.send(
 				`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
@@ -37,10 +42,8 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		let saveDetail = 'nosave';
 		if (!noSave) {
 			this.sendReply('Saving battles...');
-			Rooms.global.lockdown = true;
 			try {
 				const count = await Rooms.global.saveBattles();
 				saveDetail = `${count} battles saved`;
