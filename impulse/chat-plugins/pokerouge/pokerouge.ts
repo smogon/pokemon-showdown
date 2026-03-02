@@ -405,7 +405,7 @@ export const commands: Chat.ChatCommands = {
 			if (!state.team?.length) {
 				return this.sendReplyBox(
 					`You have no active PokéRogue run. ` +
-					`<button name="send" value="/pokerouge start" class="button">Start a run</button>`
+					`<button name="send" value="/pokerouge newgame" class="button">Start a run</button>`
 				);
 			}
 			const coins = state.coins ?? 0;
