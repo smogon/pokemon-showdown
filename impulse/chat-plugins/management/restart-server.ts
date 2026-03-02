@@ -8,6 +8,9 @@
 export const commands: Chat.ChatCommands = {
 	restartserver(target, room, user): void {
 		this.checkCan('bypassall');
+		if (Monitor.updateServerLock) {
+			return this.errorReply(`The server is currently updating. Please try again once the update is complete.`);
+		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
 		logRoom?.roomlog(`${user.name} used /restartserver`);
