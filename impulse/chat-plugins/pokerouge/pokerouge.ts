@@ -717,8 +717,18 @@ export const commands: Chat.ChatCommands = {
 				targetName = user.name;
 				floor = parseInt(parts[0]);
 			} else if (parts.length >= 2) {
-				targetId = toID(parts[0]);
-				targetName = parts[0];
+				const rawUser = parts[0];
+				if (!rawUser) {
+					// Empty username (e.g., "/pokerouge setfloor , 10"): default to self
+					targetId = user.id;
+					targetName = user.name;
+				} else {
+					targetId = toID(rawUser);
+					if (!targetId) {
+						return this.errorReply('Invalid username for setfloor.');
+					}
+					targetName = rawUser;
+				}
 				floor = parseInt(parts[1]);
 			} else {
 				return this.errorReply('Usage: /pokerouge setfloor [user], <floor>');
