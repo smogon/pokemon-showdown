@@ -206,11 +206,9 @@ export class BattleQueue {
 			(this.battle.gen <= 4 && action.choice === 'instaswitch') ||
 			(this.battle.gen <= 3 && action.choice === 'switch')
 		)) {
-			// Port switch priority goes: p1 pos1, p2 pos1, p1 pos2, p2 pos2
+			// Port switch priority goes: p1a, p2a, p1b, p2b
 			// Not supported: in Gen 1, each trainer sees his own Pokemon switch first
-			const pokemon = (action as SwitchAction).pokemon;
-			action.order += pokemon.position * 0.1;
-			action.order += pokemon.side.n * 0.01;
+			action.order += (action as SwitchAction).pokemon.getFieldPositionValue() / (this.battle.activePerHalf * 2);
 		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
