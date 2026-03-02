@@ -26,14 +26,14 @@ const noopWorker = new StreamWorker(new NoopStream());
 let botCounter = 0;
 
 /** Maps active bot user IDs to the battle callback for AI responses. */
-export const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
+const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
  * Display name prefix for all PokeRouge AI trainer bots.
  * Each bot's full name is `${TRAINER_NAME} <playerId>` so concurrent battles
  * for different players each get their own uniquely named bot without collision.
  */
-export const TRAINER_NAME = 'PokeRouge Trainer';
+const TRAINER_NAME = 'PokeRouge Trainer';
 
 /**
  * Destroys a bot user, removing it from the Users table.
