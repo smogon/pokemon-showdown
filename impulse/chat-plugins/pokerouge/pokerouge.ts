@@ -630,7 +630,7 @@ export const commands: Chat.ChatCommands = {
 			state.coins = coins - 5;
 			state.shopInventory = rollShopInventory();
 			setState(user.id, state);
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge buy <item>
