@@ -490,7 +490,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Godly Gift Random Battle",
 		desc: `Each Pok&eacute;mon receives one base stat from the God in the first slot depending on its position in the team.`,
-		mod: 'gen9godlygift',
 		team: 'randomGodlyGift',
 		ruleset: ['[Gen 9] Random Battle', 'Godly Gift Mod', 'Team Preview'],
 		onBegin() {

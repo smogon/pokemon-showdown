@@ -1920,7 +1920,7 @@ export class RandomTeams {
 		return pokemon;
 	}
 
-	RandomGodlyGiftTeam() {
+	randomGodlyGiftTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
