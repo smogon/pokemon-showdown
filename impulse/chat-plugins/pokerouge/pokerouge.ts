@@ -123,32 +123,6 @@ function renderLeaderboard(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Popup UI CSS — dark-themed panel matching the rpg-wip style
-// ---------------------------------------------------------------------------
-
-const POPUP_CSS = `<style>
-.pr-popup{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#e0e0e0;border-radius:12px;border:2px solid #4a90d9;padding:16px;max-width:740px;box-sizing:border-box;font-size:13px;font-family:Arial,sans-serif}
-.pr-popup h2{margin:0;color:#4a90d9;font-size:18px}
-.pr-popup h3{margin:8px 0 4px;color:#7ec8e3;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
-.pr-popup-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2a4a7a;padding-bottom:8px;margin-bottom:10px}
-.pr-popup-stats{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0}
-.pr-popup-stats span{white-space:nowrap;color:#bbb;font-size:12px}
-.pr-popup-stats b{color:#e0e0e0}
-.pr-popup-actions{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.pr-btn{background:#1e3a5f;color:#e0e0e0;border:1px solid #4a90d9;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px}
-.pr-btn:hover{background:#2a5080}
-.pr-btn.primary{background:#2563a8;border-color:#5ba4f0;font-weight:bold}
-.pr-btn.danger{background:#5c1a1a;border-color:#c05050;color:#ffaaaa}
-.pr-popup-team{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
-.pr-popup-mon{display:flex;align-items:center;gap:6px;background:#0d2040;border:1px solid #2a4a7a;border-radius:8px;padding:4px 8px;min-width:160px;flex:1 1 160px;max-width:240px}
-.pr-choice-grid{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-.pr-choice-card{flex:1 1 170px;max-width:210px;background:#0d2040;border:2px solid #4a90d9;border-radius:10px;padding:10px;text-align:center;box-sizing:border-box}
-.pr-choice-card.legendary{border-color:#e67e22;background:#1a1000}
-.pr-shop-grid{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
-.pr-shop-card{flex:1 1 150px;max-width:200px;background:#0d2040;border:1px solid #2a4a7a;border-radius:8px;padding:8px;text-align:center;box-sizing:border-box}
-</style>`;
-
-// ---------------------------------------------------------------------------
 // Fresh-run state factory — used by /pokerouge start, /pokerouge newgame, and the page handler.
 // Centralised so every new-game path starts with the same fields.
 // ---------------------------------------------------------------------------
@@ -178,8 +152,7 @@ function buildFreshState(existing: PokeRougeState | null): PokeRougeState {
  * view = 'main' (default dashboard) | 'shop' (item shop sub-view)
  */
 function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'): string {
-	let buf = POPUP_CSS;
-	buf += `<div class="pr-popup">`;
+	let buf = `<div class="pr-popup">`;
 
 	// ── Header ──────────────────────────────────────────────────────────────
 	buf += `<div class="pr-popup-header">`;
@@ -365,7 +338,7 @@ function repairEmptyPendingChoice(state: PokeRougeState, userId: string): void {
 	setState(userId, state);
 }
 
-const NO_RUN_POPUP_HTML = POPUP_CSS +
+const NO_RUN_POPUP_HTML =
 	`<div class="pr-popup">` +
 	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
 	`<p>No active run.</p>` +
