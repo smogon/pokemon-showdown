@@ -354,10 +354,6 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	return buf;
 }
 
-/**
- * Sends or refreshes the game popup for a user across all their active connections.
- * Uses |uhtml| so it creates the block if it doesn't exist, or replaces if it does.
- */
 const NO_RUN_POPUP_HTML = POPUP_CSS +
 	`<div class="pr-popup">` +
 	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
@@ -366,6 +362,10 @@ const NO_RUN_POPUP_HTML = POPUP_CSS +
 	`<button name="send" value="/pokerouge newgame" class="pr-btn primary">New Run</button>` +
 	`</div></div>`;
 
+/**
+ * Sends or refreshes the game popup for a user across all their active connections.
+ * Uses |uhtml| so it creates the block if it doesn't exist, or replaces if it does.
+ */
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
 	// Repair a defined-but-empty pendingChoice (can happen if pickNewPokemonOptions/
 	// pickStarterOptions ran before the Dex was ready and cached []).  Re-roll so the
@@ -1204,6 +1204,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(html);
 		},
 
+		// /pokerouge popup [shop] — opens or refreshes the game popup; used by inline popup buttons.
 		popup(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const view = target.trim() === 'shop' ? 'shop' : 'main';
