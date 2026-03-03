@@ -338,7 +338,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		// Static server
 		try {
 			const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
-			const cssServer = new StaticServer('./config');
 			const avatarServer = new StaticServer('./config/avatars');
 			const staticServer = new StaticServer('./server/static');
 			const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
@@ -352,7 +351,16 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 					let server = staticServer;
 					if (req.url) {
 						if (req.url === '/custom.css' || req.url.startsWith('/custom.css?')) {
-							server = cssServer;
+							const baseCSS = (() => {
+								try { return fs.readFileSync('impulse/css/custom.css', 'utf8'); } catch { return ''; }
+							})();
+							const userCSS = (() => {
+								try { return fs.readFileSync('config/custom.css', 'utf8'); } catch { return ''; }
+							})();
+							const combined = baseCSS + (userCSS ? '\n' + userCSS : '');
+							res.writeHead(200, { 'Content-Type': 'text/css;charset=utf-8', 'Cache-Control': 'no-cache' });
+							res.end(combined);
+							return;
 						} else if (req.url.startsWith('/avatars/')) {
 							req.url = req.url.slice(8);
 							server = avatarServer;
