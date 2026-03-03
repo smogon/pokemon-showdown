@@ -1214,8 +1214,12 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 			}
 			// Repair empty pendingChoice (same logic as sendGamePopup)
-			if (state && state.pendingChoice && !state.pendingChoice.length && !state.team?.length) {
-				state.pendingChoice = pickStarterOptions();
+			if (state && state.pendingChoice && !state.pendingChoice.length) {
+				if (state.pendingChoiceType === 'add' && state.team?.length) {
+					state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
+				} else {
+					state.pendingChoice = pickStarterOptions();
+				}
 				setState(user.id, state);
 			}
 			if (!state?.team?.length && !state?.pendingChoice?.length && !state?.battleRoomId) {
