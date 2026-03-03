@@ -1213,6 +1213,11 @@ export const commands: Chat.ChatCommands = {
 				delete state.battleRoomId;
 				setState(user.id, state);
 			}
+			// Repair empty pendingChoice (same logic as sendGamePopup)
+			if (state && state.pendingChoice && !state.pendingChoice.length && !state.team?.length) {
+				state.pendingChoice = pickStarterOptions();
+				setState(user.id, state);
+			}
 			if (!state?.team?.length && !state?.pendingChoice?.length && !state?.battleRoomId) {
 				return this.sendReply(`|uhtml|pokerouge-${user.id}|${NO_RUN_POPUP_HTML}`);
 			}
