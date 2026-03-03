@@ -518,6 +518,11 @@ export class Pokemon {
 		return (this.side.id + positionLetter) as PokemonSlot;
 	}
 
+	getFieldPositionValue() {
+		// p1a, p2a, p3a, ..., p1b, p2b, p3b, ...
+		return this.side.n + this.battle.sides.length * this.position;
+	}
+
 	toString() {
 		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
