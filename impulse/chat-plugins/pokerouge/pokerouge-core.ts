@@ -358,7 +358,9 @@ let legendaryPokemonCache: string[] | null = null;
 
 /** Returns all regular (non-legendary) base-form official Pokemon IDs. */
 function getRegularPokemon(): string[] {
-	if (regularPokemonCache) return regularPokemonCache;
+	// Only use the cache if it's non-empty — an empty cache means the Dex wasn't
+	// loaded yet when it was first called, so we must retry the lookup.
+	if (regularPokemonCache?.length) return regularPokemonCache;
 	const all = Dex.species.all();
 	regularPokemonCache = all
 		.filter(s =>
@@ -375,7 +377,9 @@ function getRegularPokemon(): string[] {
 
 /** Returns all legendary/mythical base-form official Pokemon IDs. */
 function getLegendaryPokemon(): string[] {
-	if (legendaryPokemonCache) return legendaryPokemonCache;
+	// Only use the cache if it's non-empty — an empty cache means the Dex wasn't
+	// loaded yet when it was first called, so we must retry the lookup.
+	if (legendaryPokemonCache?.length) return legendaryPokemonCache;
 	const all = Dex.species.all();
 	legendaryPokemonCache = all
 		.filter(s =>
