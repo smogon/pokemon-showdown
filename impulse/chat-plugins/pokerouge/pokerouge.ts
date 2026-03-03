@@ -1208,7 +1208,7 @@ export const commands: Chat.ChatCommands = {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state!, user.id, view)}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state!, user.id, view)}`);
 		},
 
 		'': 'help',
