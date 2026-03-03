@@ -672,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, state);
 
 			// Return to the shop so the user can continue shopping
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge use <item> [team slot 1-6]
