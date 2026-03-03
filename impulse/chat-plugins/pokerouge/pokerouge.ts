@@ -275,13 +275,19 @@ export const commands: Chat.ChatCommands = {
 			// means starter options couldn't be generated (e.g. Dex not yet loaded) and must be
 			// regenerated now.
 			const state = getState(user.id);
+			let newState = state;
+			let stateChanged = false;
 			// Clear stale battle room reference so the auto-start condition can properly evaluate.
-			if (state?.battleRoomId && !Rooms.get(state.battleRoomId as RoomID)) {
-				delete state.battleRoomId;
-				setState(user.id, state);
+			if (newState?.battleRoomId && !Rooms.get(newState.battleRoomId as RoomID)) {
+				delete newState.battleRoomId;
+				stateChanged = true;
 			}
-			if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
-				setState(user.id, buildFreshState(state));
+			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId)) {
+				newState = buildFreshState(newState);
+				stateChanged = true;
+			}
+			if (stateChanged && newState) {
+				setState(user.id, newState);
 			}
 			return this.parse('/join view-pokerouge');
 		},
