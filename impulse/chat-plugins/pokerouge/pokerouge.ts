@@ -607,7 +607,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 
-		// /pokerouge shop — opens the game page at the shop view
+		// /pokerouge shop — opens the game popup at the shop view
 		shop(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
@@ -617,7 +617,7 @@ export const commands: Chat.ChatCommands = {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge refreshshop — reroll the shop inventory for 5 coins
@@ -1175,17 +1175,17 @@ export const commands: Chat.ChatCommands = {
 			const isStaff = user.can('lock');
 			let html =
 				`<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerouge start</code> (or <code>/roguelike start</code>) — Open the interactive PokéRogue game page (auto-starts new run if needed).<br>` +
-				`<code>/pokerouge battle</code> — Start the next floor battle (also available from the game page).<br>` +
+				`<code>/pokerouge start</code> (or <code>/roguelike start</code>) — Open the interactive PokéRogue game popup (auto-starts new run if needed).<br>` +
+				`<code>/pokerouge battle</code> — Start the next floor battle (also available from the game popup).<br>` +
 				`<code>/pokerouge choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
-				`<code>/pokerouge shop</code> — Open the item shop on the game page.<br>` +
+				`<code>/pokerouge shop</code> — Open the item shop in the game popup.<br>` +
 				`<code>/pokerouge refreshshop</code> — Reroll shop items for 5 coins.<br>` +
 				`<code>/pokerouge buy &lt;item&gt;</code> — Purchase an item (costs coins).<br>` +
 				`<code>/pokerouge use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
 				`<code>/pokerouge status</code> — View your floor, coins, inventory and team with sprites.<br>` +
 				`<code>/pokerouge top</code> — View the Top 100 leaderboard by highest floor.<br>` +
 				`<code>/pokerouge quit</code> — Abandon your current run.<br>` +
-				`<br><b>Tip:</b> Type <code>/pokerouge start</code> to open the interactive game page — all actions are available there as clickable buttons!<br>` +
+				`<br><b>Tip:</b> Type <code>/pokerouge start</code> to open the interactive game popup — all actions are available there as clickable buttons!<br>` +
 				`<br><b>Shop Items:</b> 30+ PS items including Choice Band/Specs/Scarf, Life Orb, Assault Vest, Heavy-Duty Boots, and more.<br>` +
 				`<br><b>Tips:</b> Win floors to earn coins. Legendary Pokémon may appear as team additions at Floor 20+!`;
 			if (isStaff) {
