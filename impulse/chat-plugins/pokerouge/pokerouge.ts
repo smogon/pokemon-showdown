@@ -275,6 +275,11 @@ export const commands: Chat.ChatCommands = {
 			// means starter options couldn't be generated (e.g. Dex not yet loaded) and must be
 			// regenerated now.
 			const state = getState(user.id);
+			// Clear stale battle room reference so the auto-start condition can properly evaluate.
+			if (state?.battleRoomId && !Rooms.get(state.battleRoomId as RoomID)) {
+				delete state.battleRoomId;
+				setState(user.id, state);
+			}
 			if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
 				setState(user.id, buildFreshState(state));
 			}
@@ -348,6 +353,13 @@ export const commands: Chat.ChatCommands = {
 				state.team = [{ species: chosen, level: 1, exp: 0 }];
 				state.floor = 1;
 			} else {
+				// Guard: don't exceed the 6-Pokemon team size limit
+				if (state.team.length >= 6) {
+					delete state.pendingChoice;
+					delete state.pendingChoiceType;
+					setState(user.id, state);
+					return this.errorReply('Your team is already full (6 Pokémon). The pending choice has been cleared.');
+				}
 				// Add the Pokemon to the team at floor-appropriate level
 				const addLevel = Math.max(1, state.floor - 2);
 				state.team.push({ species: chosen, level: addLevel, exp: expForLevel(addLevel) });
@@ -1162,6 +1174,7 @@ export const handlers: Chat.Handlers = {
 				state.items = {};
 				delete state.battleRoomId;
 				delete state.pendingChoice;
+				delete state.pendingChoiceType;
 				delete state.doubleExpFloors;
 				delete state.shopInventory;
 				setState(match.userId, state);
@@ -1223,9 +1236,16 @@ export const pages: Chat.PageTable = {
 				buf += `</div>`;
 				return buf;
 			}
-			// Battle room gone — clear stale reference
+			// Battle room gone — clear stale reference and re-check auto-start so the
+			// user sees fresh starter options instead of the "No active team" fallback.
 			delete state.battleRoomId;
-			setState(user.id, state);
+			if (!state.team?.length && !state.pendingChoice?.length) {
+				const fresh = buildFreshState(state);
+				setState(user.id, fresh);
+				state = fresh;
+			} else {
+				setState(user.id, state);
+			}
 		}
 
 		// Repair a defined-but-empty pendingChoice (can happen if pickNewPokemonOptions or
