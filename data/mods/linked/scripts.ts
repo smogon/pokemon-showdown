@@ -126,12 +126,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
 			break;
+		case 'megaEvoX':
+			this.actions.runMegaEvoX?.(action.pokemon);
+			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY?.(action.pokemon);
+			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
-		case 'beforeTurnMove': {
+		case 'terastallize':
+			this.actions.terastallize(action.pokemon);
+			break;
+		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
@@ -140,7 +149,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
-		}
+		case 'priorityChargeMove':
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('priority charge callback: ' + action.move.id);
+			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
+			action.move.priorityChargeCallback.call(this, action.pokemon);
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
@@ -176,6 +191,24 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			break;
+		case 'revivalblessing':
+			action.pokemon.side.pokemonLeft++;
+			if (action.target.position < action.pokemon.side.active.length) {
+				this.queue.addChoice({
+					choice: 'instaswitch',
+					pokemon: action.target,
+					target: action.target,
+				});
+			}
+			action.target.fainted = false;
+			action.target.faintQueued = false;
+			action.target.subFainted = false;
+			action.target.status = '';
+			action.target.hp = 1; // Needed so hp functions works
+			action.target.sethp(action.target.maxhp / 2);
+			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
+			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
 			break;
@@ -194,7 +227,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
-			this.add('upkeep');
+			if (!this.ended) this.add('upkeep');
 			break;
 		}
 
@@ -221,7 +254,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (action.choice === 'megaEvo' && this.gen === 7) {
+		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.list.entries()) {
@@ -237,7 +270,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -259,14 +292,22 @@ export const Scripts: ModdedBattleScriptsData = {
 		);
 
 		for (let i = 0; i < this.sides.length; i++) {
+			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
+					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing']) {
+						reviveSwitch = true;
+						continue;
+					}
 					pokemon.switchFlag = false;
 				}
-				switches[i] = false;
+				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (
+						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
+						!pokemon.skipBeforeSwitchOutEventFlag
+					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -289,7 +330,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen < 5) this.eachEvent('Update');
 
 		const nextAction = this.queue.peek();
-		if (this.gen >= 8 && nextAction?.choice === 'move' && nextAction?.pokemon !== action.pokemon) {
+		if (this.gen >= 8 && (nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
