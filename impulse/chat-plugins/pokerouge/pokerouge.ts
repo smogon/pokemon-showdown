@@ -183,18 +183,18 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 
 	// ── Header ──────────────────────────────────────────────────────────────
 	buf += `<div class="pr-popup-header">`;
-	buf += `<h2>🎮 PokéRogue</h2>`;
+	buf += `<h2>PokéRogue</h2>`;
 	if (state.team?.length) {
 		buf += `<div style="font-size:12px;color:#aaa">` +
 			`Floor <b style="color:#7ec8e3">${state.floor}</b>` +
-			` &nbsp;|&nbsp; 💰 <b style="color:#f5c518">${state.coins ?? 0}</b>` +
+			` &nbsp;|&nbsp; Coins: <b style="color:#f5c518">${state.coins ?? 0}</b>` +
 			`</div>`;
 	}
 	buf += `</div>`;
 
 	// ── Active battle ────────────────────────────────────────────────────────
 	if (state.battleRoomId && Rooms.get(state.battleRoomId as RoomID)) {
-		buf += `<p>⚔️ <b>Battle in progress!</b></p>`;
+		buf += `<p><b>Battle in progress!</b></p>`;
 		buf += `<div class="pr-popup-actions">` +
 			`<a href="/${state.battleRoomId}" class="pr-btn primary">Go to Battle</a>` +
 			`<button name="send" value="/pokerouge start" class="pr-btn">Refresh</button>` +
@@ -207,8 +207,8 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 	if (state.pendingChoice?.length) {
 		const isAdd = state.pendingChoiceType === 'add';
 		buf += `<p><b>${isAdd
-			? '🎉 Milestone! Choose a Pokémon to add to your team:'
-			: '✨ Choose your starter Pokémon (all at Lv. 1):'
+			? 'Milestone! Choose a Pokemon to add to your team:'
+			: 'Choose your starter Pokemon (all at Lv. 1):'
 		}</b></p>`;
 		buf += `<div class="pr-choice-grid">`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
@@ -229,7 +229,7 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 			buf += `<div class="pr-choice-card${isLegendary ? ' legendary' : ''}">`;
 			buf += getSprite(s, 64);
 			buf += `<br><b style="font-size:13px">${Utils.escapeHTML(name)}</b>`;
-			if (isLegendary) buf += `<br><span style="color:#e67e22;font-size:10px">⭐ Legendary</span>`;
+			if (isLegendary) buf += `<br><span style="color:#e67e22;font-size:10px">Legendary</span>`;
 			buf += `<br>${typeBadge}`;
 			buf += `<br><span style="font-size:10px;color:#aaa">BST ${bst}</span>`;
 			buf += `<div style="font-size:10px;color:#999;margin:3px 0;text-align:left">` +
@@ -255,7 +255,7 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 	if (!state.team?.length) {
 		buf += `<p>No active run. Start a new adventure!</p>`;
 		buf += `<div class="pr-popup-actions">` +
-			`<button name="send" value="/pokerouge newgame" class="pr-btn primary">▶ New Run</button>` +
+			`<button name="send" value="/pokerouge newgame" class="pr-btn primary">New Run</button>` +
 			`</div>`;
 		buf += `</div>`;
 		return buf;
@@ -269,11 +269,11 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 		}
 		const shopCoins = state.coins ?? 0;
 		buf += `<div class="pr-popup-actions">` +
-			`<button name="send" value="/pokerouge start" class="pr-btn">◀ Dashboard</button>` +
-			`<button name="send" value="/pokerouge refreshshop" class="pr-btn">🔄 Refresh (5💰)</button>` +
-			`<button name="send" value="/pokerouge battle" class="pr-btn primary">⚔️ Start Battle!</button>` +
+			`<button name="send" value="/pokerouge start" class="pr-btn">Back to Dashboard</button>` +
+			`<button name="send" value="/pokerouge refreshshop" class="pr-btn">Refresh Shop (5 coins)</button>` +
+			`<button name="send" value="/pokerouge battle" class="pr-btn primary">Start Battle!</button>` +
 			`</div>`;
-		buf += `<h3>🛒 Item Shop &nbsp;<small style="color:#aaa;font-weight:normal;text-transform:none">${shopCoins} coins</small></h3>`;
+		buf += `<h3>Item Shop &nbsp;<small style="color:#aaa;font-weight:normal;text-transform:none">${shopCoins} coins</small></h3>`;
 		buf += `<p style="font-size:10px;color:#888;margin:2px 0">Items are permanent unless marked "(held item, 1 battle)".</p>`;
 		buf += `<div class="pr-shop-grid">`;
 		for (const itemId of (state.shopInventory ?? [])) {
@@ -287,10 +287,10 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 			buf += `<br>`;
 			if (canAfford) {
 				buf += `<button name="send" value="/pokerouge buy ${item.id}" class="pr-btn primary" style="width:100%;margin-top:4px">` +
-					`Buy (${item.cost}💰)</button>`;
+					`Buy (${item.cost} coins)</button>`;
 			} else {
 				buf += `<button class="pr-btn" style="width:100%;margin-top:4px;opacity:0.5" disabled>` +
-					`Buy (${item.cost}💰)</button>`;
+					`Buy (${item.cost} coins)</button>`;
 			}
 			buf += `</div>`;
 		}
@@ -306,14 +306,14 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 		.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} ×${qty}`)
 		.join(', ') || 'None';
 	const activeEffects: string[] = [];
-	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`✨ Lucky Charm (${state.doubleExpFloors} floors left)`);
-	if (state.hasRevive) activeEffects.push('💊 Revive (active)');
+	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
+	if (state.hasRevive) activeEffects.push('Revive (active)');
 
 	buf += `<div class="pr-popup-stats">`;
-	buf += `<span>🏆 Floor <b>${state.floor}</b></span>`;
-	buf += `<span>💰 Coins <b>${coins}</b></span>`;
-	buf += `<span>🔥 Streaks <b>${state.streaksWon ?? 0}</b></span>`;
-	if (state.highestFloor) buf += `<span>⭐ Best <b>${state.highestFloor}</b></span>`;
+	buf += `<span>Floor <b>${state.floor}</b></span>`;
+	buf += `<span>Coins <b>${coins}</b></span>`;
+	buf += `<span>Streaks <b>${state.streaksWon ?? 0}</b></span>`;
+	if (state.highestFloor) buf += `<span>Best <b>${state.highestFloor}</b></span>`;
 	buf += `</div>`;
 
 	if (activeEffects.length) {
@@ -332,7 +332,7 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 		buf += getSprite(mon.species, 48);
 		buf += `<div>` +
 			`<b>${Utils.escapeHTML(name)}</b>` +
-			(heldLabel ? `<br><small style="color:#aaa;font-size:10px">🎒 ${Utils.escapeHTML(heldLabel)}</small>` : '') +
+			(heldLabel ? `<br><small style="color:#aaa;font-size:10px">Item: ${Utils.escapeHTML(heldLabel)}</small>` : '') +
 			`<br><span style="font-size:11px">Lv.${mon.level}` +
 			(mon.level < 100
 				? ` <span style="color:#777">(${expNeeded} EXP)</span>`
@@ -348,10 +348,10 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 	}
 
 	buf += `<div class="pr-popup-actions">`;
-	buf += `<button name="send" value="/pokerouge battle" class="pr-btn primary">⚔️ Battle! (Floor ${state.floor})</button>`;
-	buf += `<button name="send" value="/pokerouge popup shop" class="pr-btn">🛒 Shop</button>`;
-	buf += `<button name="send" value="/pokerouge top" class="pr-btn">🏅 Leaderboard</button>`;
-	buf += `<button name="send" value="/pokerouge quit" class="pr-btn danger">🚪 Quit</button>`;
+	buf += `<button name="send" value="/pokerouge battle" class="pr-btn primary">Start Battle! (Floor ${state.floor})</button>`;
+	buf += `<button name="send" value="/pokerouge popup shop" class="pr-btn">Shop</button>`;
+	buf += `<button name="send" value="/pokerouge top" class="pr-btn">Leaderboard</button>`;
+	buf += `<button name="send" value="/pokerouge quit" class="pr-btn danger">Quit</button>`;
 	buf += `</div>`;
 
 	buf += `</div>`;
@@ -362,19 +362,18 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
  * Sends or refreshes the game popup for a user across all their active connections.
  * Uses |uhtml| so it creates the block if it doesn't exist, or replaces if it does.
  */
+const NO_RUN_POPUP_HTML = POPUP_CSS +
+	`<div class="pr-popup">` +
+	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
+	`<p>No active run.</p>` +
+	`<div class="pr-popup-actions">` +
+	`<button name="send" value="/pokerouge newgame" class="pr-btn primary">New Run</button>` +
+	`</div></div>`;
+
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
-	let html: string;
-	if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
-		html = POPUP_CSS +
-			`<div class="pr-popup">` +
-			`<div class="pr-popup-header"><h2>🎮 PokéRogue</h2></div>` +
-			`<p>No active run.</p>` +
-			`<div class="pr-popup-actions">` +
-			`<button name="send" value="/pokerouge newgame" class="pr-btn primary">▶ New Run</button>` +
-			`</div></div>`;
-	} else {
-		html = renderGamePopup(state, user.id, view);
-	}
+	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId))
+		? NO_RUN_POPUP_HTML
+		: renderGamePopup(state, user.id, view);
 	for (const conn of user.connections) {
 		conn.send(`|uhtml|pokerouge-${user.id}|${html}`);
 	}
@@ -784,7 +783,7 @@ export const commands: Chat.ChatCommands = {
 				if (br?.battle) br.battle.forfeit(user);
 			}
 			deleteState(user.id);
-			this.sendReply(`|uhtml|pokerouge-${user.id}|${POPUP_CSS}<div class="pr-popup"><div class="pr-popup-header"><h2>🎮 PokéRogue</h2></div><p>Your run has been abandoned.</p><div class="pr-popup-actions"><button name="send" value="/pokerouge newgame" class="pr-btn primary">▶ New Run</button></div></div>`);
+			this.sendReply(`|uhtml|pokerouge-${user.id}|${NO_RUN_POPUP_HTML}`);
 			return;
 		},
 
@@ -1203,16 +1202,13 @@ export const commands: Chat.ChatCommands = {
 			const view = target.trim() === 'shop' ? 'shop' : 'main';
 			const state = getState(user.id);
 			if (!state?.team?.length && !state?.pendingChoice?.length) {
-				return this.sendReply(`|uhtml|pokerouge-${user.id}|${POPUP_CSS}<div class="pr-popup"><div class="pr-popup-header"><h2>🎮 PokéRogue</h2></div><p>No active run.</p><div class="pr-popup-actions"><button name="send" value="/pokerouge newgame" class="pr-btn primary">▶ New Run</button></div></div>`);
+				return this.sendReply(`|uhtml|pokerouge-${user.id}|${NO_RUN_POPUP_HTML}`);
 			}
-			if (view === 'shop' && state) {
-				if (!state.shopInventory) {
-					state.shopInventory = rollShopInventory();
-					setState(user.id, state);
-				}
+			if (view === 'shop' && state?.shopInventory === undefined) {
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
 			}
-			if (!state) return this.errorReply('No active PokéRogue run. Use /pokerouge start to open the game!');
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, user.id, view)}`);
+			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state!, user.id, view)}`);
 		},
 
 		'': 'help',
