@@ -1228,6 +1228,18 @@ export const pages: Chat.PageTable = {
 			setState(user.id, state);
 		}
 
+		// Repair a defined-but-empty pendingChoice (can happen if pickNewPokemonOptions or
+		// pickStarterOptions ran before the Dex was ready and cached []).  Re-roll the
+		// appropriate options so the choice UI always shows valid Pokémon cards.
+		if (state.pendingChoice && !state.pendingChoice.length) {
+			if (state.pendingChoiceType === 'add' && state.team?.length) {
+				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
+			} else {
+				state.pendingChoice = pickStarterOptions();
+			}
+			setState(user.id, state);
+		}
+
 		// Pending Pokémon choice (starter or milestone add)
 		if (state.pendingChoice?.length) {
 			const isAdd = state.pendingChoiceType === 'add';
