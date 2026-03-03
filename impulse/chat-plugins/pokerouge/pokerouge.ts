@@ -561,7 +561,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ok) {
 				// startBattle already sent a popup with the error; refresh the game UI for retry
 				const updatedState = getState(user.id);
-				if (updatedState) this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
+				if (updatedState) this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
 				return;
 			}
 			// Battle started — PS client navigates automatically via p.joinRoom inside Rooms.createBattle
