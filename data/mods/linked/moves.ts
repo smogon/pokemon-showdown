@@ -128,151 +128,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 
-	// Copy the last used move of a link
-	sketch: {
-		inherit: true,
-		onHit(target, source) {
-			const move = target.m.lastMoveAbsolute;
-			if (source.transformed || !move || source.moves.includes(move.id)) return false;
-			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
-			const sketchIndex = source.moves.indexOf('sketch');
-			if (sketchIndex < 0) return false;
-			const sketchedMove = {
-				move: move.name,
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
-				disabled: false,
-				used: false,
-			};
-			source.moveSlots[sketchIndex] = sketchedMove;
-			source.baseMoveSlots[sketchIndex] = sketchedMove;
-			this.add('-activate', source, 'move: Sketch', move.name);
-		},
-	},
-	mimic: {
-		inherit: true,
-		onHit(target, source) {
-			const move = target.m.lastMoveAbsolute;
-			if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
-				return false;
-			}
-			if (move.isZ || move.isMax) return false;
-			const mimicIndex = source.moves.indexOf('mimic');
-			if (mimicIndex < 0) return false;
-
-			source.moveSlots[mimicIndex] = {
-				move: move.name,
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
-				disabled: false,
-				used: false,
-				virtual: true,
-			};
-			this.add('-start', source, 'Mimic', move.name);
-		},
-	},
-
-	// Copy/call last move of a link
-	instruct: {
-		inherit: true,
-		onHit(target, source) {
-			const lastMove = target.m.lastMoveAbsolute;
-			if (!lastMove || target.volatiles['dynamax']) return false;
-			const moveSlot = target.getMoveData(lastMove.id);
-			if (
-				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
-				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
-				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
-				(moveSlot && moveSlot.pp <= 0)
-			) {
-				return false;
-			}
-			this.add('-singleturn', target, 'move: Instruct', `[of] ${source}`);
-			this.queue.prioritizeAction(this.queue.resolveAction({
-				choice: 'move',
-				pokemon: target,
-				moveid: lastMove.id,
-				targetLoc: target.lastMoveTargetLoc!,
-			})[0] as MoveAction);
-		},
-	},
-	mirrormove: {
-		inherit: true,
-		onTryHit(target, pokemon) {
-			const move = target.m.lastMoveAbsolute;
-			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
-				return false;
-			}
-			this.actions.useMove(move.id, pokemon, { target });
-			return null;
-		},
-	},
-
-	// Disabling effects
-	disable: {
-		inherit: true,
-		condition: {
-			duration: 5,
-			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(pokemon, source, effect) {
-				// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
-				if (
-					this.queue.willMove(pokemon) ||
-					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
-				) {
-					this.effectState.duration!--;
-				}
-				const lastMove = pokemon.m.lastMoveAbsolute;
-				if (!lastMove) {
-					this.debug(`Pokemon hasn't moved yet`);
-					return false;
-				}
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === lastMove.id) {
-						if (!moveSlot.pp) {
-							this.debug('Move out of PP');
-							return false;
-						}
-					}
-				}
-				if (effect.effectType === 'Ability') {
-					this.add('-start', pokemon, 'Disable', lastMove.name, '[from] ability: ' + effect.name, `[of] ${source}`);
-				} else {
-					this.add('-start', pokemon, 'Disable', lastMove.name);
-				}
-				this.effectState.move = lastMove.id;
-			},
-			onResidualOrder: 14,
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Disable');
-			},
-			onBeforeMovePriority: 7,
-			onBeforeMove(attacker, defender, move) {
-				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move) {
-					this.add('cant', attacker, 'Disable', move);
-					return false;
-				}
-			},
-			onDisableMove(pokemon) {
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === this.effectState.move) {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
-			},
-		},
-	},
 	encore: {
 		inherit: true,
 		condition: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
-				let move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
+				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 				// Encore only works on Max Moves if the base move is not itself a Max Move
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
@@ -377,7 +239,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-end', pokemon, 'Torment');
 			},
 			onDisableMove(pokemon) {
-				const lastMove = pokemon.m.lastMoveAbsolute;
+				const lastMove = pokemon.lastMove;
 				if (!lastMove || lastMove.id === 'struggle') return;
 
 				// @ts-expect-error
@@ -402,9 +264,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
-				let move = source.m.lastMoveAbsolute;
+				let move = source.lastMove;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && move) {
-					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove) as ActiveMove;
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
@@ -421,43 +283,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
-	spite: {
-		inherit: true,
-		onHit(target) {
-			let move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-			if (!move || move.isZ) return false;
-			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-
-			const ppDeducted = target.deductPP(move.id, 4);
-			if (!ppDeducted) return false;
-			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
-		},
-	},
 
 	// Other lastMove checks
-	conversion2: {
-		inherit: true,
-		onHit(target, source) {
-			const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-			if (!lastMove) return false;
-			const possibleTypes = [];
-			const attackType = lastMove.type;
-			for (const typeName of this.dex.types.names()) {
-				if (source.hasType(typeName)) continue;
-				const typeCheck = this.dex.types.get(typeName).damageTaken[attackType];
-				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(typeName);
-				}
-			}
-			if (!possibleTypes.length) {
-				return false;
-			}
-			const randomType = this.sample(possibleTypes);
-
-			if (!source.setType(randomType)) return false;
-			this.add('-start', source, 'typechange', randomType);
-		},
-	},
 	destinybond: {
 		inherit: true,
 		condition: {
@@ -484,40 +311,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onMoveAborted(pokemon, target, move) {
 				pokemon.removeVolatile('destinybond');
-			},
-		},
-	},
-	iceball: {
-		inherit: true,
-		condition: {
-			duration: 1,
-			onLockMove: 'iceball',
-			onStart() {
-				this.effectState.hitCount = 0;
-			},
-			onResidual(target) {
-				// This is just to ensure the volatile is deleted correctly
-				const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-				if (lastMove?.id === 'struggle') {
-					delete target.volatiles['iceball'];
-				}
-			},
-		},
-	},
-	rollout: {
-		inherit: true,
-		condition: {
-			duration: 1,
-			onLockMove: 'rollout',
-			onStart() {
-				this.effectState.hitCount = 0;
-			},
-			onResidual(target) {
-				// This is just to ensure the volatile is deleted correctly
-				const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-				if (lastMove?.id === 'struggle') {
-					delete target.volatiles['rollout'];
-				}
 			},
 		},
 	},
