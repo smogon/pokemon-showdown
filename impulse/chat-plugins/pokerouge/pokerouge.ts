@@ -271,8 +271,11 @@ export const commands: Chat.ChatCommands = {
 		start(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			// Auto-initialize state before navigating so the page always has content to display.
+			// Treat an empty pendingChoice array the same as no pending choice — an empty array
+			// means starter options couldn't be generated (e.g. Dex not yet loaded) and must be
+			// regenerated now.
 			const state = getState(user.id);
-			if (!state || (!state.team?.length && !state.pendingChoice && !state.battleRoomId)) {
+			if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
 				setState(user.id, buildFreshState(state));
 			}
 			return this.parse('/join view-pokerouge');
@@ -316,7 +319,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const state = getState(user.id);
-			if (!state?.pendingChoice) {
+			if (!state?.pendingChoice?.length) {
 				return this.errorReply('You have no pending Pokémon choice. Use /pokerouge start first.');
 			}
 
@@ -391,7 +394,7 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 			}
 
-			if (state.pendingChoice) {
+			if (state.pendingChoice?.length) {
 				return this.sendReplyBox(
 					`You have a pending Pokémon choice! ` +
 					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
@@ -421,7 +424,7 @@ export const commands: Chat.ChatCommands = {
 					`<button name="send" value="/pokerouge start" class="button">Start a run</button>`
 				);
 			}
-			if (state.pendingChoice && !state.team?.length) {
+			if (state.pendingChoice?.length && !state.team?.length) {
 				return this.sendReplyBox(
 					`You have a pending Pokémon choice! ` +
 					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
@@ -444,7 +447,7 @@ export const commands: Chat.ChatCommands = {
 				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
 				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
 				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
-				(state.pendingChoice ? `<br><br><b>You have a pending Pokémon choice!</b> ` +
+				(state.pendingChoice?.length ? `<br><br><b>You have a pending Pokémon choice!</b> ` +
 					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.` : '') +
 				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
 				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
@@ -1193,7 +1196,9 @@ export const pages: Chat.PageTable = {
 		// starter options and show the selection screen instead of a blank page.
 		// This mirrors the behaviour of /pokerouge start and ensures the page always
 		// shows meaningful content when navigated to directly.
-		if (!state || (!state.team?.length && !state.pendingChoice && !state.battleRoomId)) {
+		// An empty pendingChoice array is treated the same as no pending choice —
+		// it means starter options couldn't be generated earlier and must be retried.
+		if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
 			const fresh = buildFreshState(state);
 			setState(user.id, fresh);
 			state = fresh;
@@ -1224,7 +1229,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		// Pending Pokémon choice (starter or milestone add)
-		if (state.pendingChoice) {
+		if (state.pendingChoice?.length) {
 			const isAdd = state.pendingChoiceType === 'add';
 			if (state.team?.length) {
 				buf += `<p><b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${state.coins ?? 0}</p>`;
