@@ -70,10 +70,9 @@ export function destroyBotUser(botUser: User): void {
 
 /**
  * Creates the PokeRouge AI trainer bot for a specific player.
- * Any stale bot for the same player is destroyed first.
- * The bot name is player-specific (`PokeRouge Trainer <playerId>`) so that
- * two concurrent battles never share a bot and destroying one can never
- * corrupt another player's match.
+ * Any stale bot for the same player is destroyed first (via activeMatches lookup).
+ * All bots share the display name TRAINER_NAME so the opponent always appears as
+ * "PokeRouge Trainer" without the player's own username being appended.
  * The bot is marked as unnamed after forceRename so that:
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
@@ -81,12 +80,30 @@ export function destroyBotUser(botUser: User): void {
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerouge-bot-${uid}`;
-	const botDisplayName = `${TRAINER_NAME} ${playerId}`;
+	const botDisplayName = TRAINER_NAME;
 
-	// Destroy any stale bot for this player before creating a new one
-	const existingBot = Users.get(toID(botDisplayName));
-	if (existingBot) {
-		destroyBotUser(existingBot);
+	// Destroy any stale bot for this player via the activeMatches map.
+	// Collect the roomId first to avoid mutating the map while iterating.
+	let staleRoomId: RoomID | undefined;
+	for (const [roomId, match] of activeMatches) {
+		if (match.userId === toID(playerId)) {
+			staleRoomId = roomId;
+			break;
+		}
+	}
+	if (staleRoomId !== undefined) {
+		const staleMatch = activeMatches.get(staleRoomId);
+		if (staleMatch) {
+			const staleBot = Users.get(staleMatch.botUserId);
+			if (staleBot) destroyBotUser(staleBot);
+		}
+		activeMatches.delete(staleRoomId);
+	}
+
+	// Destroy any currently-registered trainer bot to avoid name collision
+	const existingTrainer = Users.get(toID(TRAINER_NAME));
+	if (existingTrainer) {
+		destroyBotUser(existingTrainer);
 	}
 
 	// Create a minimal noop connection
@@ -283,7 +300,7 @@ export function startBattle(user: User, state: PokeRougeState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
+			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${TRAINER_NAME}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);
