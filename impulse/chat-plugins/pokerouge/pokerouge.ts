@@ -177,7 +177,7 @@ function buildFreshState(existing: PokeRougeState | null): PokeRougeState {
  * Renders the full interactive game popup HTML.
  * view = 'main' (default dashboard) | 'shop' (item shop sub-view)
  */
-function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | 'shop' = 'main'): string {
+function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'): string {
 	let buf = POPUP_CSS;
 	buf += `<div class="pr-popup">`;
 
@@ -263,10 +263,6 @@ function renderGamePopup(state: PokeRougeState, userId: string, view: 'main' | '
 
 	// ── Shop sub-view ────────────────────────────────────────────────────────
 	if (view === 'shop') {
-		if (!state.shopInventory) {
-			state.shopInventory = rollShopInventory();
-			setState(userId, state);
-		}
 		const shopCoins = state.coins ?? 0;
 		buf += `<div class="pr-popup-actions">` +
 			`<button name="send" value="/pokerouge start" class="pr-btn">Back to Dashboard</button>` +
@@ -371,9 +367,20 @@ const NO_RUN_POPUP_HTML = POPUP_CSS +
 	`</div></div>`;
 
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
+	// Repair a defined-but-empty pendingChoice (can happen if pickNewPokemonOptions/
+	// pickStarterOptions ran before the Dex was ready and cached []).  Re-roll so the
+	// choice UI always shows valid Pokemon cards instead of silently falling through.
+	if (state?.pendingChoice && !state.pendingChoice.length) {
+		if (state.pendingChoiceType === 'add' && state.team?.length) {
+			state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
+		} else {
+			state.pendingChoice = pickStarterOptions();
+		}
+		setState(user.id, state);
+	}
 	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId))
 		? NO_RUN_POPUP_HTML
-		: renderGamePopup(state, user.id, view);
+		: renderGamePopup(state, view);
 	for (const conn of user.connections) {
 		conn.send(`|uhtml|pokerouge-${user.id}|${html}`);
 	}
@@ -409,7 +416,7 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, newState);
 			}
 			const currentState = getState(user.id)!;
-			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(currentState, user.id)}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(currentState)}`);
 		},
 
 		// /pokerouge newgame [confirm] — triggered by the "Start Fresh Run" button.
@@ -438,7 +445,7 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, newState);
 
 			// Display the starter-selection UI directly in the popup
-			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(newState, user.id)}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(newState)}`);
 		},
 
 		// /pokerouge choose <1|2|3>
@@ -506,7 +513,7 @@ export const commands: Chat.ChatCommands = {
 				// startBattle already sent a popup; refresh the game UI
 				const updatedState = getState(user.id);
 				if (updatedState) {
-					this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState, user.id)}`);
+					this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
 				}
 				return;
 			}
@@ -540,8 +547,8 @@ export const commands: Chat.ChatCommands = {
 
 			if (state.pendingChoice?.length) {
 				return this.sendReplyBox(
-					`You have a pending Pokémon choice! ` +
-					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
+					`You have a pending Pokemon choice! ` +
+					`<button name="send" value="/pokerouge start" class="button">Open PokéRogue</button> to choose.`
 				);
 			}
 
@@ -554,7 +561,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ok) {
 				// startBattle already sent a popup with the error; refresh the game UI for retry
 				const updatedState = getState(user.id);
-				if (updatedState) this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState, user.id)}`);
+				if (updatedState) this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
 				return;
 			}
 			// Battle started — PS client navigates automatically via p.joinRoom inside Rooms.createBattle
@@ -572,8 +579,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (state.pendingChoice?.length && !state.team?.length) {
 				return this.sendReplyBox(
-					`You have a pending Pokémon choice! ` +
-					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.`
+					`You have a pending Pokemon choice! ` +
+					`<button name="send" value="/pokerouge start" class="button">Open PokéRogue</button> to choose.`
 				);
 			}
 			if (!state.team?.length) {
@@ -593,8 +600,8 @@ export const commands: Chat.ChatCommands = {
 				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
 				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
 				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
-				(state.pendingChoice?.length ? `<br><br><b>You have a pending Pokémon choice!</b> ` +
-					`<a href="/view-pokerouge">Open the PokéRogue page</a> to choose.` : '') +
+				(state.pendingChoice?.length ? `<br><br><b>You have a pending Pokemon choice!</b> ` +
+					`<button name="send" value="/pokerouge start" class="button">Open PokéRogue</button> to choose.` : '') +
 				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
 				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
 			);
@@ -610,7 +617,7 @@ export const commands: Chat.ChatCommands = {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, user.id, 'shop')}`);
+			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge refreshshop — reroll the shop inventory for 5 coins
@@ -623,7 +630,7 @@ export const commands: Chat.ChatCommands = {
 			state.coins = coins - 5;
 			state.shopInventory = rollShopInventory();
 			setState(user.id, state);
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, user.id, 'shop')}`);
+			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge buy <item>
@@ -665,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, state);
 
 			// Return to the shop so the user can continue shopping
-			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, user.id, 'shop')}`);
+			return this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(state, 'shop')}`);
 		},
 
 		// /pokerouge use <item> [team slot 1-6]
@@ -1200,15 +1207,20 @@ export const commands: Chat.ChatCommands = {
 		popup(target, room, user) {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const view = target.trim() === 'shop' ? 'shop' : 'main';
-			const state = getState(user.id);
-			if (!state?.team?.length && !state?.pendingChoice?.length) {
+			let state = getState(user.id);
+			// Clear stale battle room reference (same logic as /pokerouge start)
+			if (state?.battleRoomId && !Rooms.get(state.battleRoomId as RoomID)) {
+				delete state.battleRoomId;
+				setState(user.id, state);
+			}
+			if (!state?.team?.length && !state?.pendingChoice?.length && !state?.battleRoomId) {
 				return this.sendReply(`|uhtml|pokerouge-${user.id}|${NO_RUN_POPUP_HTML}`);
 			}
 			if (view === 'shop' && state?.shopInventory === undefined) {
-				state.shopInventory = rollShopInventory();
-				setState(user.id, state);
+				state!.shopInventory = rollShopInventory();
+				setState(user.id, state!);
 			}
-			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state!, user.id, view)}`);
+			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(state!, view)}`);
 		},
 
 		'': 'help',
