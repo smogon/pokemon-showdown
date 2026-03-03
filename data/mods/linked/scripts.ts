@@ -30,7 +30,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Linked mod
 			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
+			if (linkedMoves.length && !move.isZ && !move.isMax &&
+				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
 				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
