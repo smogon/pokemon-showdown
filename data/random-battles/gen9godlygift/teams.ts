@@ -44,7 +44,7 @@ export class RandomGodlyGiftTeams extends RandomTeams {
 				baseSpecies = this.sampleNoReplace(godBaseSpeciesPool);
 				species = this.dex.species.get(this.sample(godPokemonPool[baseSpecies]));
 			} else {
-				baseSpecies = this.sampleNoReplace(baseSpeciesPool)
+				baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 				species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			}
 			if (!species.exists) continue;
