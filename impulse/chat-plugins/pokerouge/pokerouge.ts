@@ -1238,6 +1238,19 @@ export const pages: Chat.PageTable = {
 				state.pendingChoice = pickStarterOptions();
 			}
 			setState(user.id, state);
+
+			// If the Dex is still not ready, the re-rolled options can still be empty.
+			// In that case, show an explicit loading/refresh state instead of silently
+			// falling through to the dashboard or "No active team" fallback.
+			if (!state.pendingChoice.length) {
+				if (state.team?.length) {
+					buf += `<p><b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${state.coins ?? 0}</p>`;
+				}
+				buf += `<p><b>Loading Pokémon options...</b></p>`;
+				buf += `<p>If this message does not disappear after a few seconds, please refresh the page.</p>`;
+				buf += `</div>`;
+				return buf;
+			}
 		}
 
 		// Pending Pokémon choice (starter or milestone add)
