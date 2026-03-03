@@ -24,9 +24,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
-			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 			// Linked mod
 			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
@@ -34,8 +31,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
-				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
-				const thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, altMove.priority);
+				let thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
+				let thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, altMove.priority);
+				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
 				priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
@@ -45,6 +44,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					altMove.priority = priority;
 				}
 			} else {
+				priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 				action.priority = priority + action.fractionalPriority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 				if (this.gen > 5) action.move.priority = priority;
