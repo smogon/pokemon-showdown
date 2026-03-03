@@ -1,56 +1,76 @@
 /*
-* Pokemon Showdown - Impulse Server
-* Emoticons chat-plugin.
-* @author PrinceSky-Git
-* Refactored By @ClarkJ338
-*/
+ * Pokemon Showdown - Impulse Server
+ * Emoticons chat-plugin.
+ * @author PrinceSky-Git
+ * Refactored By @ClarkJ338
+ */
+
 import { FS, Utils } from '../../../lib';
 import { Table } from '../../utils';
-import { toID } from '../../../sim/dex';
 
 const DATA_FILE = 'impulse/db/emoticons.json';
 
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
 interface EmoticonEntry {
-	url: string;
-	addedBy: string;
-	addedAt: number;
+	readonly url: string;
+	readonly addedBy: string;
+	readonly addedAt: number;
 }
 
 interface EmoticonData {
-	emoticons: { [name: string]: EmoticonEntry };
+	emoticons: Record<string, EmoticonEntry>;
 	emoteSize: number;
-	ignores: { [userId: string]: boolean };
+	ignores: Record<string, boolean>;
 }
+
+// ---------------------------------------------------------------------------
+// Constants & validation helpers
+// ---------------------------------------------------------------------------
+
+const MIN_EMOTE_SIZE = 16;
+const MAX_EMOTE_SIZE = 256;
+const DEFAULT_EMOTE_SIZE = 32;
+const MAX_EMOTE_NAME_LENGTH = 10;
+
+/**
+ * Allowlist for emoticon image URLs.
+ * Only https:// URLs pointing to common image extensions are accepted.
+ */
+const VALID_URL_RE = /^https:\/\/[^\s"'<>]+\.(?:png|gif|jpg|jpeg|webp)(?:\?[^\s"'<>]*)?$/i;
+
+const isValidEmoticonUrl = (url: string): boolean => VALID_URL_RE.test(url);
+
+/**
+ * Emoticon names must be non-empty, ≤ MAX_EMOTE_NAME_LENGTH characters,
+ * and consist only of word characters or common punctuation used in
+ * emoticons (colons, underscores, hyphens, parentheses).
+ */
+const VALID_NAME_RE = /^[\w:)(|\-]{1,10}$/;
+
+const isValidEmoticonName = (name: string): boolean => VALID_NAME_RE.test(name);
+
+// ---------------------------------------------------------------------------
+// Module state
+// ---------------------------------------------------------------------------
 
 let data: EmoticonData = {
 	emoticons: {},
-	emoteSize: 32,
+	emoteSize: DEFAULT_EMOTE_SIZE,
 	ignores: {},
 };
 
-let emoticons: { [key: string]: string } = {};
-let emoteRegex = /^$/g;
+/** Flat name→url map kept in sync with `data.emoticons` for fast lookups. */
+let emoticons: Record<string, string> = {};
 
-Impulse.ignoreEmotes = {} as { [userId: string]: boolean };
+/** Pre-compiled regex rebuilt whenever the emoticon set changes. */
+let emoteRegex: RegExp = /^$/g;
 
-const getEmoteSize = (): string => (data.emoteSize || 32).toString();
-
-function parseMessage(message: string): string {
-	if (message.substr(0, 5) === "/html") {
-		message = message.substr(5);
-		message = message.replace(/&#x2f;/g, '/');
-		return message;
-	}
-	return Chat.formatText(message).replace(/&#x2f;/g, '/');
-}
-Impulse.parseMessage = parseMessage;
-
-const escapeRegExp = (str: string): string => str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
-
-const buildEmoteRegex = (): void => {
-	const emoteArray = Object.keys(emoticons).map(e => escapeRegExp(e));
-	emoteRegex = emoteArray.length > 0 ? new RegExp(`(${emoteArray.join('|')})`, 'g') : /^$/g;
-};
+// ---------------------------------------------------------------------------
+// Persistence helpers
+// ---------------------------------------------------------------------------
 
 const saveData = (): void => {
 	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
@@ -60,39 +80,49 @@ const loadEmoticons = async (): Promise<void> => {
 	try {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
-			const json = JSON.parse(raw);
+			const json: Partial<EmoticonData> = JSON.parse(raw);
 			data = {
-				emoticons: json.emoticons || {},
-				emoteSize: json.emoteSize || 32,
-				ignores: json.ignores || {},
+				emoticons: json.emoticons ?? {},
+				emoteSize: json.emoteSize ?? DEFAULT_EMOTE_SIZE,
+				ignores: json.ignores ?? {},
 			};
 		} else {
 			saveData();
 		}
 
-		emoticons = {};
-		for (const [name, entry] of Object.entries(data.emoticons)) {
-			emoticons[name] = entry.url;
-		}
+		emoticons = Object.fromEntries(
+			Object.entries(data.emoticons).map(([name, entry]) => [name, entry.url])
+		);
 
-		Impulse.ignoreEmotes = data.ignores || {};
-		
+		Impulse.ignoreEmotes = { ...data.ignores };
+
 		buildEmoteRegex();
-	} catch (e) {
-		console.error('Failed to load emoticons:', e);
-		data = { emoticons: {}, emoteSize: 32, ignores: {} };
+	} catch (err) {
+		console.error('Failed to load emoticons:', err);
+		data = { emoticons: {}, emoteSize: DEFAULT_EMOTE_SIZE, ignores: {} };
 		emoticons = {};
+		buildEmoteRegex();
 	}
 };
 
-const saveEmoteSize = async (size: number): Promise<void> => {
-	data.emoteSize = size;
-	saveData();
+// ---------------------------------------------------------------------------
+// Emoticon management
+// ---------------------------------------------------------------------------
+
+const escapeRegExp = (str: string): string =>
+	str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const buildEmoteRegex = (): void => {
+	const keys = Object.keys(emoticons);
+	emoteRegex =
+		keys.length > 0
+			? new RegExp(`(${keys.map(escapeRegExp).join('|')})`, 'g')
+			: /^$/g;
 };
 
-const addEmoticon = async (name: string, url: string, user: User): Promise<void> => {
-	if (!data.emoticons) data.emoticons = {};
-	
+const getEmoteSize = (): string => String(data.emoteSize || DEFAULT_EMOTE_SIZE);
+
+const addEmoticon = (name: string, url: string, user: User): void => {
 	data.emoticons[name] = {
 		url,
 		addedBy: user.name,
@@ -103,34 +133,84 @@ const addEmoticon = async (name: string, url: string, user: User): Promise<void>
 	buildEmoteRegex();
 };
 
-const deleteEmoticon = async (name: string): Promise<void> => {
-	if (!data.emoticons) return;
+const deleteEmoticon = (name: string): void => {
+	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 	delete data.emoticons[name];
+	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 	delete emoticons[name];
 	saveData();
 	buildEmoteRegex();
 };
 
-const parseEmoticons = (message: string, room?: Room): string | false => {
-	if (emoteRegex.test(message)) {
-		const size = getEmoteSize();
-		message = Impulse.parseMessage(message).replace(emoteRegex, (match: string) =>
-			`<img src="${emoticons[match]}" title="${match}" height="${size}" width="${size}">`
-		);
-		return message;
+const saveEmoteSize = (size: number): void => {
+	data.emoteSize = size;
+	saveData();
+};
+
+// ---------------------------------------------------------------------------
+// Message parsing
+// ---------------------------------------------------------------------------
+
+function parseMessage(message: string): string {
+	if (message.startsWith('/html')) {
+		return message.slice(5).replace(/&#x2f;/g, '/');
 	}
-	return false;
+	return Chat.formatText(message).replace(/&#x2f;/g, '/');
+}
+Impulse.parseMessage = parseMessage;
+
+const parseEmoticons = (message: string, _room?: Room): string | false => {
+	// Reset lastIndex before testing to avoid stateful regex bugs.
+	emoteRegex.lastIndex = 0;
+	if (!emoteRegex.test(message)) return false;
+
+	const size = getEmoteSize();
+	emoteRegex.lastIndex = 0;
+
+	const parsed = Impulse.parseMessage(message).replace(
+		emoteRegex,
+		(match: string) => {
+			const url = emoticons[match];
+			// url was loaded from disk and validated on write, but double-check
+			// before injecting into HTML to prevent stored-XSS.
+			if (!url || !isValidEmoticonUrl(url)) return Utils.escapeHTML(match);
+			return `<img src="${Utils.escapeHTML(url)}" title="${Utils.escapeHTML(match)}" height="${size}" width="${size}" loading="lazy">`;
+		}
+	);
+
+	return parsed;
 };
 Impulse.parseEmoticons = parseEmoticons;
 
+// ---------------------------------------------------------------------------
+// Grid renderer
+// ---------------------------------------------------------------------------
+
+const renderEmoticonCell = (id: string, url: string): string =>
+	`<div style="text-align:center;padding:10px;">` +
+	`<img src="${Utils.escapeHTML(url)}" height="40" width="40" style="display:block;margin:0 auto;" loading="lazy">` +
+	`<br><small>${Utils.escapeHTML(id)}</small>` +
+	`</div>`;
+
+// ---------------------------------------------------------------------------
+// Initialise
+// ---------------------------------------------------------------------------
+
+Impulse.ignoreEmotes = {} as Record<string, boolean>;
 void loadEmoticons();
 
-const renderEmoticonGrid = (emotes: { _id: string, url: string }[]): string[] =>
-	emotes.map(e =>
-		`<div style="text-align: center; padding: 10px;"><img src="${e.url}" height="40" width="40" style="display: block; margin: 0 auto;"><br><small>${Utils.escapeHTML(e._id)}</small></div>`
-	);
+// ---------------------------------------------------------------------------
+// Chat filter
+// ---------------------------------------------------------------------------
 
-export const chatfilter = function (message, user, room, connection, pmTarget, originalMessage): string {
+export const chatfilter: Chat.ChatFilter = function (
+	message,
+	user,
+	room,
+	_connection,
+	_pmTarget,
+	_originalMessage
+): string {
 	if (room?.disableEmoticons) return message;
 	if (Impulse.ignoreEmotes[user.id]) return message;
 	const parsed = Impulse.parseEmoticons(message, room);
@@ -138,41 +218,59 @@ export const chatfilter = function (message, user, room, connection, pmTarget, o
 	return message;
 };
 
+// ---------------------------------------------------------------------------
+// Commands
+// ---------------------------------------------------------------------------
+
 export const commands: Chat.ChatCommands = {
 	emoticon: {
-		async add(target, room, user): Promise<void> {
+		add(target, room, user): void {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
-			if (!target) return this.parse("/emoticon help");
+			if (!target) return this.parse('/emoticon help');
 
-			const [name, url] = target.split(",").map(s => s.trim());
-			if (!url) return this.parse("/emoticon help");
-			
-			if (name.length > 10) {
-				throw new Chat.ErrorMessage("Emoticons may not be longer than 10 characters.");
+			const commaIndex = target.indexOf(',');
+			if (commaIndex === -1) return this.parse('/emoticon help');
+
+			const name = target.slice(0, commaIndex).trim();
+			const url = target.slice(commaIndex + 1).trim();
+
+			if (!name || !url) return this.parse('/emoticon help');
+
+			if (!isValidEmoticonName(name)) {
+				throw new Chat.ErrorMessage(
+					`Emoticon names must be 1–${MAX_EMOTE_NAME_LENGTH} characters and may only contain letters, digits, :_-|()`
+				);
 			}
-			
-			if (data.emoticons && data.emoticons[name]) {
-				throw new Chat.ErrorMessage(`${name} is already an emoticon.`);
+
+			if (!isValidEmoticonUrl(url)) {
+				throw new Chat.ErrorMessage(
+					'Emoticon URL must start with https:// and point to a png, gif, jpg, jpeg, or webp image.'
+				);
 			}
 
-			await addEmoticon(name, url, user);
+			if (data.emoticons[name]) {
+				throw new Chat.ErrorMessage(`"${name}" is already an emoticon.`);
+			}
 
-			this.sendReply(`|raw|Emoticon ${Utils.escapeHTML(name)} added: <img src="${url}" width="40" height="40">`);
+			addEmoticon(name, url, user);
+			this.sendReply(
+				`|raw|Emoticon ${Utils.escapeHTML(name)} added: ` +
+				`<img src="${Utils.escapeHTML(url)}" width="40" height="40" loading="lazy">`
+			);
 		},
 
-		async delete(target, room, user): Promise<void> {
+		delete(target, room, user): void {
 			room = this.requireRoom();
 			this.checkCan('roomowner');
-			if (!target) return this.parse("/emoticon help");
+			if (!target) return this.parse('/emoticon help');
 
-			if (!data.emoticons || !data.emoticons[target]) {
-				throw new Chat.ErrorMessage("That emoticon does not exist.");
+			if (!data.emoticons[target]) {
+				throw new Chat.ErrorMessage('That emoticon does not exist.');
 			}
 
-			await deleteEmoticon(target);
-
-			this.sendReply("Emoticon removed.");
+			deleteEmoticon(target);
+			this.sendReply('Emoticon removed.');
 		},
 
 		toggle(target, room, user): void {
@@ -180,106 +278,110 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('roommod');
 			room.disableEmoticons = !room.disableEmoticons;
 			Rooms.global.writeChatRoomData();
-			const action = room.disableEmoticons ? 'Disabled' : 'Enabled';
-			this.privateModAction(`(${user.name} ${action.toLowerCase()} emoticons.)`);
+			const action = room.disableEmoticons ? 'disabled' : 'enabled';
+			this.privateModAction(`(${user.name} ${action} emoticons.)`);
 		},
 
 		''(target, room, user): void {
 			if (!this.runBroadcast()) return;
+
 			const emoteKeys = Object.keys(emoticons);
 			if (emoteKeys.length === 0) return this.sendReplyBox('No emoticons available.');
 
 			const rows: string[][] = [];
 			for (let i = 0; i < emoteKeys.length; i += 5) {
-				const row = [];
+				const row: string[] = [];
 				for (let j = i; j < i + 5 && j < emoteKeys.length; j++) {
-					row.push(renderEmoticonGrid([{ _id: emoteKeys[j], url: emoticons[emoteKeys[j]] }])[0]);
+					row.push(renderEmoticonCell(emoteKeys[j], emoticons[emoteKeys[j]]));
 				}
 				rows.push(row);
 			}
 
-			const tableHTML = Table('Available Emoticons', [], rows);
-			this.sendReply(`|html|${tableHTML}`);
+			this.sendReply(`|html|${Table('Available Emoticons', [], rows)}`);
 		},
 
-		async ignore(target, room, user): Promise<void> {
+		ignore(target, room, user): void {
 			if (Impulse.ignoreEmotes[user.id]) {
 				throw new Chat.ErrorMessage('Already ignoring emoticons.');
 			}
-			
-			if (!data.ignores) data.ignores = {};
+
 			data.ignores[user.id] = true;
 			Impulse.ignoreEmotes[user.id] = true;
 			saveData();
-
 			this.sendReply('Ignoring emoticons. Note: Chat history may still show emoticons when rejoining.');
 		},
 
-		async unignore(target, room, user): Promise<void> {
+		unignore(target, room, user): void {
 			if (!Impulse.ignoreEmotes[user.id]) {
 				throw new Chat.ErrorMessage('Not ignoring emoticons.');
 			}
-			
-			if (data.ignores) delete data.ignores[user.id];
+
+			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+			delete data.ignores[user.id];
+			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 			delete Impulse.ignoreEmotes[user.id];
 			saveData();
-
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
-		async size(target, room, user): Promise<void> {
+		size(target, room, user): void {
 			this.checkCan('roomowner');
-			if (!target) throw new Chat.ErrorMessage('Specify a size (16-256).');
+			if (!target) throw new Chat.ErrorMessage(`Specify a size (${MIN_EMOTE_SIZE}–${MAX_EMOTE_SIZE}).`);
 
-			const size = parseInt(target);
-			if (isNaN(size) || size < 16 || size > 256) {
-				throw new Chat.ErrorMessage('Size must be 16-256.');
+			const size = Number(target);
+			if (!Number.isInteger(size) || size < MIN_EMOTE_SIZE || size > MAX_EMOTE_SIZE) {
+				throw new Chat.ErrorMessage(`Size must be an integer between ${MIN_EMOTE_SIZE} and ${MAX_EMOTE_SIZE}.`);
 			}
 
-			await saveEmoteSize(size);
-
+			saveEmoteSize(size);
 			this.sendReply(`Emoticon size set to ${size}px.`);
 		},
 
-		async info(target, room, user): Promise<void> {
+		info(target, room, user): void {
 			if (!this.runBroadcast()) return;
 			if (!target) throw new Chat.ErrorMessage('Usage: /emoticon info <name>');
 
-			const emote = data.emoticons ? data.emoticons[target] : null;
-			if (!emote) throw new Chat.ErrorMessage(`Emoticon "${target}" not found.`);
+			const emote = data.emoticons[target] ?? null;
+			if (!emote) throw new Chat.ErrorMessage(`Emoticon "${Utils.escapeHTML(target)}" not found.`);
 
-			const rows = [
-				[`<img src="${emote.url}" height="40" width="40">`],
-				[`<b>URL:</b> ${Utils.escapeHTML(emote.url || '')}`],
+			const rows: string[][] = [
+				[`<img src="${Utils.escapeHTML(emote.url)}" height="40" width="40" loading="lazy">`],
+				[`<b>URL:</b> ${Utils.escapeHTML(emote.url)}`],
 				[`<b>Added by:</b> ${Impulse.nameColor(emote.addedBy || 'Unknown', true, true)}`],
 				[`<b>Added:</b> ${emote.addedAt ? new Date(emote.addedAt).toUTCString() : 'Unknown'}`],
 			];
 
-			const tableHTML = Table(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows);
-			this.sendReply(`|html|${tableHTML}`);
+			this.sendReply(`|html|${Table(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows)}`);
 		},
 
 		help(): void {
 			if (!this.runBroadcast()) return;
-			const helpList = [
-				{ cmd: "/emoticon", desc: "Shows all emoticons" },
-				{ cmd: "/emoticon add [name], [url]", desc: "Add emoticon. Requires: &." },
-				{ cmd: "/emoticon delete [name]", desc: "Remove emoticon. Requires: &." },
-				{ cmd: "/emoticon toggle", desc: "Enable/disable emoticons in room. Requires: #." },
-				{ cmd: "/emoticon ignore", desc: "Ignore emoticons" },
-				{ cmd: "/emoticon unignore", desc: "Show emoticons" },
-				{ cmd: "/emoticon size [px]", desc: "Set size of emoticons. Requires: &." },
-				{ cmd: "/emoticon info [name]", desc: "Info about emoticon" },
-				{ cmd: "<small>Note: History may show emoticons even if ignored</small>", desc: "" },
+
+			const helpList: { cmd: string; desc: string }[] = [
+				{ cmd: '/emoticon',                   desc: 'Shows all emoticons' },
+				{ cmd: '/emoticon add [name], [url]', desc: 'Add emoticon. Requires: &.' },
+				{ cmd: '/emoticon delete [name]',     desc: 'Remove emoticon. Requires: &.' },
+				{ cmd: '/emoticon toggle',            desc: 'Enable/disable emoticons in room. Requires: #.' },
+				{ cmd: '/emoticon ignore',            desc: 'Ignore emoticons' },
+				{ cmd: '/emoticon unignore',          desc: 'Show emoticons' },
+				{ cmd: '/emoticon size [px]',         desc: 'Set size of emoticons. Requires: &.' },
+				{ cmd: '/emoticon info [name]',       desc: 'Info about emoticon' },
+				{ cmd: '<small>Note: History may show emoticons even if ignored</small>', desc: '' },
 			];
-			const html = `<center><strong>Emoticon Commands:<br>Alias: /emote, /emotes, /emoticons</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b>${desc ? " - " + desc : ""}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(html);
+
+			const items = helpList
+				.map(({ cmd, desc }, i) =>
+					`<li><b>${cmd}</b>${desc ? ` - ${desc}` : ''}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
+				)
+				.join('');
+
+			this.sendReplyBox(
+				`<center><strong>Emoticon Commands:<br>Alias: /emote, /emotes, /emoticons</strong></center>` +
+				`<hr><ul style="list-style-type:none;padding-left:0;">${items}</ul>`
+			);
 		},
 	},
+
 	emote: 'emoticon',
 	emotes: 'emoticon',
 	emoticons: 'emoticon',
