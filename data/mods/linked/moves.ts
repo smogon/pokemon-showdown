@@ -279,8 +279,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// @ts-expect-error modded
 				const linkedMoves: [ActiveMove, ActiveMove] = target.getLinkedMoves(true);
 				const moveSlot = target.getMoveData(move.id);
-				const hasLinkedMove = linkedMoves.some(x => x.id === move.id);
-				if (hasLinkedMove && linkedMoves.every(m => !!m.flags['failencore'])) {
+				const isLinkedMove = linkedMoves.some(x => x.id === move.id);
+				if (isLinkedMove && linkedMoves.every(m => !!m.flags['failencore'])) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
@@ -292,7 +292,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.timesActivated = {};
 				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
-				if (hasLinkedMove) {
+				if (isLinkedMove) {
 					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
@@ -313,7 +313,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.queue.cancelAction(pokemon);
 					if (move.id !== this.effectState.move) return this.effectState.move;
 				} else {
-				// Locked into a link
+					// Locked into a link
 					switch (this.effectState.timesActivated[this.turn]) {
 					case 1: {
 						if (this.effectState.move[0] !== move.id) return this.effectState.move[0];
@@ -327,22 +327,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				// early termination if you run out of PP
-				const lastMove = target.m.lastMoveAbsolute;
-				const moveSlot = target.getMoveData(lastMove);
-				if (!moveSlot) {
-					target.removeVolatile('encore');
-					return; // no last move
-				}
-
-				// @ts-expect-error modded
-				if (target.hasLinkedMove(lastMove)) {
-					// TODO: Check instead whether the last executed move was linked
-					if (target.moveSlots[0].pp <= 0 || target.moveSlots[1].pp <= 0) {
+				if (Array.isArray(this.effectState.move)) {
+					if (this.effectState.move.map(move => target.getMoveData(move)).some(moveSlot => !moveSlot || moveSlot.pp <= 0)) {
 						target.removeVolatile('encore');
 					}
 				} else {
-					if (moveSlot.pp <= 0) {
+					const moveSlot = target.getMoveData(this.effectState.move);
+					if (!moveSlot || moveSlot.pp <= 0) {
 						target.removeVolatile('encore');
 					}
 				}
@@ -351,19 +342,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
+				if (!this.effectState.move) return;
 				if (Array.isArray(this.effectState.move)) {
+					if (this.effectState.move.every(move => !pokemon.hasMove(move))) return;
 					for (const moveSlot of pokemon.moveSlots) {
-						if (moveSlot.id !== this.effectState.move[0] && moveSlot.id !== this.effectState.move[1]) {
+						if (!this.effectState.move.map(move => move.id).includes(moveSlot.id)) {
 							pokemon.disableMove(moveSlot.id);
 						}
 					}
-				}
-				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
-					return;
-				}
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== this.effectState.move) {
-						pokemon.disableMove(moveSlot.id);
+				} else {
+					if (!pokemon.hasMove(this.effectState.move)) return;
+					for (const moveSlot of pokemon.moveSlots) {
+						if (moveSlot.id !== this.effectState.move) {
+							pokemon.disableMove(moveSlot.id);
+						}
 					}
 				}
 			},
