@@ -510,10 +510,10 @@ export const commands: Chat.ChatCommands = {
 			// Start the battle — Rooms.createBattle will navigate the user to the battle room
 			const ok = startBattle(user, state);
 			if (!ok) {
-				// startBattle already sent a popup; refresh the game UI
+				// startBattle already sent a popup; refresh or create the game UI
 				const updatedState = getState(user.id);
 				if (updatedState) {
-					this.sendReply(`|uhtmlchange|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
+					this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(updatedState)}`);
 				}
 				return;
 			}
