@@ -126,12 +126,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
 			break;
+		case 'megaEvoX':
+			this.actions.runMegaEvoX?.(action.pokemon);
+			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY?.(action.pokemon);
+			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
-		case 'beforeTurnMove': {
+		case 'terastallize':
+			this.actions.terastallize(action.pokemon);
+			break;
+		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
@@ -140,7 +149,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
-		}
+		case 'priorityChargeMove':
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('priority charge callback: ' + action.move.id);
+			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
+			action.move.priorityChargeCallback.call(this, action.pokemon);
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
@@ -176,6 +191,24 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			break;
+		case 'revivalblessing':
+			action.pokemon.side.pokemonLeft++;
+			if (action.target.position < action.pokemon.side.active.length) {
+				this.queue.addChoice({
+					choice: 'instaswitch',
+					pokemon: action.target,
+					target: action.target,
+				});
+			}
+			action.target.fainted = false;
+			action.target.faintQueued = false;
+			action.target.subFainted = false;
+			action.target.status = '';
+			action.target.hp = 1; // Needed so hp functions works
+			action.target.sethp(action.target.maxhp / 2);
+			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
+			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
 			break;
@@ -194,7 +227,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
-			this.add('upkeep');
+			if (!this.ended) this.add('upkeep');
 			break;
 		}
 
@@ -221,7 +254,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (action.choice === 'megaEvo' && this.gen === 7) {
+		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.list.entries()) {
@@ -237,7 +270,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -259,14 +292,22 @@ export const Scripts: ModdedBattleScriptsData = {
 		);
 
 		for (let i = 0; i < this.sides.length; i++) {
+			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
+					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing']) {
+						reviveSwitch = true;
+						continue;
+					}
 					pokemon.switchFlag = false;
 				}
-				switches[i] = false;
+				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (
+						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
+						!pokemon.skipBeforeSwitchOutEventFlag
+					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -289,7 +330,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen < 5) this.eachEvent('Update');
 
 		const nextAction = this.queue.peek();
-		if (this.gen >= 8 && nextAction?.choice === 'move' && nextAction?.pokemon !== action.pokemon) {
+		if (this.gen >= 8 &&
+			(nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
@@ -299,6 +341,51 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		return false;
+	},
+	getTarget(pokemon, move, targetLoc, originalTarget) {
+		move = this.dex.moves.get(move);
+
+		// Delete tracksTarget stuff because it's useless in Linked anyway
+
+		// banning Dragon Darts from directly targeting itself is done in side.ts, but
+		// Dragon Darts can target itself if Ally Switch is used afterwards
+		if (move.smartTarget) {
+			const curTarget = pokemon.getAtLoc(targetLoc);
+			return curTarget && !curTarget.fainted ? curTarget : this.getRandomTarget(pokemon, move);
+		}
+
+		// Fails if the target is the user and the move can't target its own position
+		const selfLoc = pokemon.getLocOf(pokemon);
+		if (
+			['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
+			!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']
+		) {
+			return move.flags['futuremove'] ? pokemon : null;
+		}
+		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
+			const target = pokemon.getAtLoc(targetLoc);
+			if (target?.fainted) {
+				if (this.gameType === 'freeforall') {
+					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
+					return target;
+				}
+				if (target.isAlly(pokemon)) {
+					if (move.target === 'adjacentAllyOrSelf' && this.gen !== 5) {
+						return pokemon;
+					}
+					// Target is a fainted ally: attack shouldn't retarget
+					return target;
+				}
+			}
+			if (target && !target.fainted) {
+				// Target is unfainted: use selected target location
+				return target;
+			}
+
+			// Chosen target not valid,
+			// retarget randomly with getRandomTarget
+		}
+		return this.getRandomTarget(pokemon, move);
 	},
 	actions: {
 		runMove(moveOrMoveName, pokemon, targetLoc, options) {
@@ -546,6 +633,14 @@ export const Scripts: ModdedBattleScriptsData = {
 									targetLoc: action.targetLoc,
 								});
 							}
+							if (linkedOtherMove.priorityChargeCallback) {
+								this.addChoice({
+									choice: 'priorityChargeMove',
+									pokemon: action.pokemon,
+									move: linkedOtherMove,
+									targetLoc: action.targetLoc,
+								});
+							}
 						}
 					}
 				} else if (['switch', 'instaswitch'].includes(action.choice)) {
@@ -573,6 +668,67 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	pokemon: {
+		clearVolatile(includeSwitchFlags = true) {
+			this.boosts = {
+				atk: 0,
+				def: 0,
+				spa: 0,
+				spd: 0,
+				spe: 0,
+				accuracy: 0,
+				evasion: 0,
+			};
+
+			if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
+				const moveslot = this.baseMoves.indexOf('mimic' as ID);
+				const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
+				this.moveSlots = this.baseMoveSlots.slice();
+				this.moveSlots[moveslot].pp = mimicPP;
+			} else {
+				this.moveSlots = this.baseMoveSlots.slice();
+			}
+
+			this.transformed = false;
+			this.ability = this.baseAbility;
+			this.hpType = this.baseHpType;
+			this.hpPower = this.baseHpPower;
+			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
+			for (const i in this.volatiles) {
+				if (this.volatiles[i].linkedStatus) {
+					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
+				}
+			}
+			if (this.species.name === 'Eternatus-Eternamax' && this.volatiles['dynamax']) {
+				this.volatiles = { dynamax: this.volatiles['dynamax'] };
+			} else {
+				this.volatiles = {};
+			}
+			if (includeSwitchFlags) {
+				this.switchFlag = false;
+				this.forceSwitchFlag = false;
+			}
+
+			this.m.lastMoveAbsolute = null;
+			this.lastMove = null;
+			if (this.battle.gen === 2) this.lastMoveEncore = null;
+			this.lastMoveUsed = null;
+			this.moveThisTurn = '';
+			this.moveLastTurnResult = undefined;
+			this.moveThisTurnResult = undefined;
+
+			this.lastDamage = 0;
+			this.attackedBy = [];
+			this.hurtThisTurn = null;
+			this.newlySwitched = true;
+			this.beingCalledBack = false;
+
+			this.volatileStaleness = undefined;
+
+			delete this.abilityState.started;
+			delete this.itemState.started;
+
+			this.setSpecies(this.baseSpecies);
+		},
 		moveUsed(move, targetLoc) {
 			if (!this.moveThisTurn) this.m.lastMoveAbsolute = move;
 			this.lastMove = move;
