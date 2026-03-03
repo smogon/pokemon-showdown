@@ -415,7 +415,7 @@ export const commands: Chat.ChatCommands = {
 			if (stateChanged && newState) {
 				setState(user.id, newState);
 			}
-			const currentState = getState(user.id)!;
+			const currentState = newState!;
 			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(currentState)}`);
 		},
 
