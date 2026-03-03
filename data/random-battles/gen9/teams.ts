@@ -2121,7 +2121,6 @@ export class RandomTeams {
 		return pokemon;
 	}
 
-
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
