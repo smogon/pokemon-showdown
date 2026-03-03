@@ -3,9 +3,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		beforeTurnCallback(pokemon) {
 			// @ts-expect-error modded
-			const linkedMoves: [string, string] = pokemon.getLinkedMoves();
+			const linkedMoves: [ActiveMove, ActiveMove] = pokemon.getLinkedMoves();
 			if (linkedMoves.length) {
-				if (linkedMoves[0] !== 'pursuit' && linkedMoves[1] === 'pursuit') return;
+				if (linkedMoves[0].id !== 'pursuit' && linkedMoves[1].id === 'pursuit') return;
 			}
 
 			for (const target of pokemon.foes()) {
@@ -277,9 +277,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Encore only works on Max Moves if the base move is not itself a Max Move
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				// @ts-expect-error modded
-				const linkedMoves: [string, string] = target.getLinkedMoves(true);
+				const linkedMoves: [ActiveMove, ActiveMove] = target.getLinkedMoves(true);
 				const moveSlot = target.getMoveData(move.id);
-				if (linkedMoves.includes(move.id) && linkedMoves.every(m => !!this.dex.moves.get(m).flags['failencore'])) {
+				const hasLinkedMove = linkedMoves.some(x => x.id === move.id);
+				if (hasLinkedMove && linkedMoves.every(m => !!m.flags['failencore'])) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
@@ -291,7 +292,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.timesActivated = {};
 				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
-				if (linkedMoves.includes(move.id)) {
+				if (hasLinkedMove) {
 					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
@@ -335,7 +336,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 
 				// @ts-expect-error modded
-				if (target.hasLinkedMove(lastMove.id)) {
+				if (target.hasLinkedMove(lastMove)) {
 					// TODO: Check instead whether the last executed move was linked
 					if (target.moveSlots[0].pp <= 0 || target.moveSlots[1].pp <= 0) {
 						target.removeVolatile('encore');
@@ -388,7 +389,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!lastMove || lastMove.id === 'struggle') return;
 
 				// @ts-expect-error
-				if (pokemon.hasLinkedMove(lastMove.id)) {
+				if (pokemon.hasLinkedMove(lastMove)) {
 				// @ts-expect-error
 					for (const move of pokemon.getLinkedMoves()) {
 						pokemon.disableMove(move.id);

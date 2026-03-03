@@ -327,8 +327,8 @@ interface ModdedBattlePokemon {
 	ignoringItem?: (this: Pokemon) => boolean;
 
 	// OM
-	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => string[];
-	hasLinkedMove?: (this: Pokemon, moveid: string) => boolean;
+	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => [ActiveMove, ActiveMove] | [];
+	hasLinkedMove?: (this: Pokemon, move: ActiveMove) => boolean;
 }
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
