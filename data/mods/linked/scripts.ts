@@ -330,7 +330,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen < 5) this.eachEvent('Update');
 
 		const nextAction = this.queue.peek();
-		if (this.gen >= 8 && (nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
+		if (this.gen >= 8 &&
+			(nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
