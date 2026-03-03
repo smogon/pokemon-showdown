@@ -11,7 +11,7 @@ import type { TcgUserProfile } from '../tcg/interface';
 import { toID } from '../../../sim/dex';
 import { getTotalOntime, getCurrentSessionTime } from './ontime';
 
-const getAvatarBaseUrl = () => Config.avatarUrl || 'impulse-ps.mooo.com/avatars/';
+const getAvatarBaseUrl = () => Config.avatarUrl || 'https://impulse-ps.mooo.com/avatars/';
 
 interface ProfileSettingsDocument {
 	_id: string;
