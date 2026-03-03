@@ -354,6 +354,17 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	return buf;
 }
 
+/** Repairs a defined-but-empty `pendingChoice` array by re-rolling starter or add options. */
+function repairEmptyPendingChoice(state: PokeRougeState, userId: string): void {
+	if (!state.pendingChoice || state.pendingChoice.length) return;
+	if (state.pendingChoiceType === 'add' && state.team?.length) {
+		state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
+	} else {
+		state.pendingChoice = pickStarterOptions();
+	}
+	setState(userId, state);
+}
+
 const NO_RUN_POPUP_HTML = POPUP_CSS +
 	`<div class="pr-popup">` +
 	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
@@ -367,17 +378,8 @@ const NO_RUN_POPUP_HTML = POPUP_CSS +
  * Uses |uhtml| so it creates the block if it doesn't exist, or replaces if it does.
  */
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
-	// Repair a defined-but-empty pendingChoice (can happen if pickNewPokemonOptions/
-	// pickStarterOptions ran before the Dex was ready and cached []).  Re-roll so the
-	// choice UI always shows valid Pokemon cards instead of silently falling through.
-	if (state?.pendingChoice && !state.pendingChoice.length) {
-		if (state.pendingChoiceType === 'add' && state.team?.length) {
-			state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
-		} else {
-			state.pendingChoice = pickStarterOptions();
-		}
-		setState(user.id, state);
-	}
+	// Repair a defined-but-empty pendingChoice before rendering.
+	if (state) repairEmptyPendingChoice(state, user.id);
 	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId))
 		? NO_RUN_POPUP_HTML
 		: renderGamePopup(state, view);
@@ -415,6 +417,7 @@ export const commands: Chat.ChatCommands = {
 			if (stateChanged && newState) {
 				setState(user.id, newState);
 			}
+			if (newState) repairEmptyPendingChoice(newState, user.id);
 			const currentState = newState!;
 			return this.sendReply(`|uhtml|pokerouge-${user.id}|${renderGamePopup(currentState)}`);
 		},
@@ -1214,15 +1217,8 @@ export const commands: Chat.ChatCommands = {
 				delete state.battleRoomId;
 				setState(user.id, state);
 			}
-			// Repair empty pendingChoice (same logic as sendGamePopup)
-			if (state && state.pendingChoice && !state.pendingChoice.length) {
-				if (state.pendingChoiceType === 'add' && state.team?.length) {
-					state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
-				} else {
-					state.pendingChoice = pickStarterOptions();
-				}
-				setState(user.id, state);
-			}
+			// Repair empty pendingChoice
+			if (state) repairEmptyPendingChoice(state, user.id);
 			if (!state?.team?.length && !state?.pendingChoice?.length && !state?.battleRoomId) {
 				return this.sendReply(`|uhtml|pokerouge-${user.id}|${NO_RUN_POPUP_HTML}`);
 			}
