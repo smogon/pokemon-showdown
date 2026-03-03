@@ -691,6 +691,9 @@ export const commands: Chat.ChatCommands = {
 			targetState.coins = (targetState.coins ?? 0) + amount;
 			setState(targetId, targetState);
 			this.sendReply(`Gave ${amount} coins to ${targetName}. They now have ${targetState.coins} coins.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member gave you ${amount} coins. You now have ${targetState.coins} coins.`);
+			}
 			this.modlog('POKEROUGE GIVEMONEY', targetId, `${amount} coins`);
 		},
 
@@ -732,6 +735,9 @@ export const commands: Chat.ChatCommands = {
 			targetState.coins = Math.max(0, (targetState.coins ?? 0) - amount);
 			setState(targetId, targetState);
 			this.sendReply(`Removed ${amount} coins from ${targetName}. They now have ${targetState.coins} coins.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed ${amount} coins from your account. You now have ${targetState.coins} coins.`);
+			}
 			this.modlog('POKEROUGE REMOVECOINS', targetId, `${amount} coins`);
 		},
 
@@ -757,6 +763,9 @@ export const commands: Chat.ChatCommands = {
 			targetState.coins = 0;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s coins to 0.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member reset your coin balance to 0.`);
+			}
 			this.modlog('POKEROUGE RESETCOINS', targetId);
 		},
 
@@ -797,6 +806,9 @@ export const commands: Chat.ChatCommands = {
 			targetState.floor = floor;
 			setState(targetId, targetState);
 			this.sendReply(`Set ${targetName}'s floor to ${floor}.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member set your floor to ${floor}.`);
+			}
 			this.modlog('POKEROUGE SETFLOOR', targetId, `floor ${floor}`);
 		},
 
@@ -820,6 +832,9 @@ export const commands: Chat.ChatCommands = {
 			targetState.floor = 1;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s floor to 1.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member reset your floor to 1.`);
+			}
 			this.modlog('POKEROUGE RESETFLOOR', targetId);
 		},
 
@@ -919,6 +934,9 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(
 				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${Utils.escapeHTML(targetName)}'s team.`
 			);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member added ${species.name} (Lv.${addLevel}) to your team.`);
+			}
 			this.modlog('POKEROUGE ADDMON', targetId, `${species.name} Lv.${addLevel}`);
 		},
 
@@ -972,6 +990,9 @@ export const commands: Chat.ChatCommands = {
 			const removedName = Dex.species.get(toID(removed.species)).name || removed.species;
 			setState(targetId, targetState);
 			this.sendReply(`Removed ${removedName} (slot ${slot + 1}) from ${targetName}'s team.`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed ${removedName} (slot ${slot + 1}) from your team.`);
+			}
 			this.modlog('POKEROUGE REMOVEMON', targetId, removedName);
 		},
 
@@ -1001,6 +1022,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			setState(targetId, targetState);
 			this.sendReply(`Healed ${targetName}'s team (EXP reset to current level baseline).`);
+			if (targetId !== user.id) {
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member healed your team.`);
+			}
 			this.modlog('POKEROUGE HEALTEAM', targetId);
 		},
 
@@ -1157,8 +1181,13 @@ export const handlers: Chat.Handlers = {
 				(levelUpLines ? '\n' + levelUpLines : '') +
 				(coinBoostLine ? coinBoostLine : '') +
 				(milestoneLine ? '\n' + milestoneLine : '') +
-				`\nUse /pokerouge start to continue.`
+				`\nOpening PokéRogue...`
 			);
+			if (humanUser) {
+				for (const conn of humanUser.connections) {
+					void Chat.parse('/join view-pokerouge', null, humanUser, conn);
+				}
+			}
 		} else {
 			// Loss
 			if (state.hasRevive) {
@@ -1168,8 +1197,13 @@ export const handlers: Chat.Handlers = {
 				setState(match.userId, state);
 				humanUser?.popup(
 					`Your Revive activated! You get to retry Floor ${match.floor}.\n` +
-					`Use /pokerouge start to try again.`
+					`Opening PokéRogue...`
 				);
+				if (humanUser) {
+					for (const conn of humanUser.connections) {
+						void Chat.parse('/join view-pokerouge', null, humanUser, conn);
+					}
+				}
 			} else {
 				// Run over — reset to initial state while preserving leaderboard data
 				const finalFloor = match.floor;
@@ -1190,8 +1224,13 @@ export const handlers: Chat.Handlers = {
 					`Defeated on Floor ${finalFloor}!\n` +
 					`Streaks Won: ${finalStreaks} | Best Floor: ${state.highestFloor ?? finalFloor}\n\n` +
 					`Your PokéRogue run has ended.\n` +
-					`Use /pokerouge start to begin a new run with a fresh starter.`
+					`Opening PokéRogue to start a new run...`
 				);
+				if (humanUser) {
+					for (const conn of humanUser.connections) {
+						void Chat.parse('/join view-pokerouge', null, humanUser, conn);
+					}
+				}
 			}
 		}
 	},
@@ -1333,7 +1372,7 @@ export const pages: Chat.PageTable = {
 
 		// Action buttons
 		buf += `<div class="pr-action-bar">`;
-		buf += `<button name="send" value="/pokerouge battle" class="button" style="font-size:14px;padding:6px 16px">Start Floor ${state.floor} Battle</button>`;
+		buf += `<button name="send" value="/pokerouge battle" class="button" style="font-size:14px;padding:6px 16px">▶ Start Next Match! (Floor ${state.floor})</button>`;
 		buf += `<button name="send" value="/pokerouge shop" class="button">Open Shop</button>`;
 		buf += `<button name="send" value="/pokerouge top" class="button">Leaderboard</button>`;
 		buf += `<button name="send" value="/pokerouge quit" class="button">Quit Run</button>`;
