@@ -31,7 +31,7 @@
  *   pokerouge.ts         — HTML rendering, commands, handlers, pages, start hook (this file)
  */
 
-import { Utils } from '../../../lib';
+import { FS, Utils } from '../../../lib';
 import { Table } from '../../utils';
 import {
 	SHOP_ITEMS, LEGENDARY_TAGS,
@@ -123,8 +123,13 @@ function renderLeaderboard(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Popup UI CSS — defined in impulse/css/custom.css (pr-popup, pr-btn, etc.)
+// Popup UI CSS — loaded from pokerouge.css in this directory
 // ---------------------------------------------------------------------------
+
+const POPUP_CSS = (() => {
+	const raw = FS('impulse/chat-plugins/pokerouge/pokerouge.css').readIfExistsSync();
+	return raw ? `<style>${raw}</style>` : '';
+})();
 
 // ---------------------------------------------------------------------------
 // Fresh-run state factory — used by /pokerouge start, /pokerouge newgame, and the page handler.
@@ -156,7 +161,8 @@ function buildFreshState(existing: PokeRougeState | null): PokeRougeState {
  * view = 'main' (default dashboard) | 'shop' (item shop sub-view)
  */
 function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'): string {
-	let buf = `<div class="pr-popup">`;
+	let buf = POPUP_CSS;
+	buf += `<div class="pr-popup">`;
 
 	// ── Header ──────────────────────────────────────────────────────────────
 	buf += `<div class="pr-popup-header">`;
@@ -342,7 +348,7 @@ function repairEmptyPendingChoice(state: PokeRougeState, userId: string): void {
 	setState(userId, state);
 }
 
-const NO_RUN_POPUP_HTML =
+const NO_RUN_POPUP_HTML = POPUP_CSS +
 	`<div class="pr-popup">` +
 	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
 	`<p>No active run.</p>` +
