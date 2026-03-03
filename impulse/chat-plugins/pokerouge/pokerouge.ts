@@ -352,7 +352,9 @@ export const commands: Chat.ChatCommands = {
 			const chosen = options[n - 1];
 			const speciesData = Dex.species.get(toID(chosen));
 			const name = speciesData.exists ? speciesData.name : chosen;
-			const isStarter = state.pendingChoiceType === 'starter';
+			// Treat any non-'add' type (including missing/undefined) as a starter choice,
+			// matching the page UI which also defaults to 'Choose Starter' when type is absent.
+			const isStarter = state.pendingChoiceType !== 'add';
 
 			if (isStarter) {
 				// Begin the run with this starter at level 1
