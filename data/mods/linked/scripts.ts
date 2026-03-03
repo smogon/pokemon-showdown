@@ -27,7 +27,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Linked mod
 			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax &&
+			if (linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
+				!action.pokemon.hasAbility('gorillatactics') && !move.isZ && !move.isMax &&
 				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
@@ -618,9 +619,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 					if (
-						linkedMoves.length &&
-						!(action.pokemon.getItem().isChoice || action.pokemon.hasAbility('gorillatactics')) &&
-						!action.zmove && !action.maxMove
+						linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
+						!action.pokemon.hasAbility('gorillatactics') && !action.zmove && !action.maxMove
 					) {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.some(x => x.id === decisionMove)) {
