@@ -1,5 +1,5 @@
 /*
- * PokeRouge Core — types, constants, data persistence, and game helpers.
+ * PokéRogue Core — types, constants, data persistence, and game helpers.
  * Imported by pokerouge.ts and pokerouge-battle.ts.
  * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
  */
@@ -23,7 +23,7 @@ export const LEGENDARY_TAGS = new Set<string>([
 
 /**
  * Default level thresholds for evolution types that don't have a natural level.
- * In PokeRouge, ALL evolutions happen by gaining levels — no items or trading needed.
+ * In PokéRogue, ALL evolutions happen by gaining levels — no items or trading needed.
  */
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
@@ -48,7 +48,7 @@ export interface ShopItem {
 	heldItem?: string;
 }
 
-/** All purchasable items in the PokeRouge shop. */
+/** All purchasable items in the PokéRogue shop. */
 export const SHOP_ITEMS: Record<string, ShopItem> = {
 	// ---- Special roguelite consumables ----
 	rarecandy: {
@@ -510,7 +510,7 @@ export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number
 
 /**
  * Returns the level-based evolution for a species, if one exists.
- * In PokeRouge all evolutions are unlocked by levelling up.
+ * In PokéRogue all evolutions are unlocked by levelling up.
  */
 export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
 	const species = Dex.species.get(toID(speciesId));

@@ -1,5 +1,5 @@
 /*
- * PokeRouge Battle — bot user creation, AI move logic, and battle start.
+ * PokéRogue Battle — bot user creation, AI move logic, and battle start.
  * Imported by pokerouge.ts.
  * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
  */
@@ -48,11 +48,11 @@ let botCounter = 0;
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
- * Display name prefix for all PokeRouge AI trainer bots.
+ * Display name prefix for all PokéRogue AI trainer bots.
  * Each bot's full name is `${TRAINER_NAME} <playerId>` so concurrent battles
  * for different players each get their own uniquely named bot without collision.
  */
-const TRAINER_NAME = 'PokeRouge Trainer';
+const TRAINER_NAME = 'PokéRogue Trainer';
 
 /**
  * Destroys a bot user, removing it from the Users table.
@@ -69,10 +69,10 @@ export function destroyBotUser(botUser: User): void {
 }
 
 /**
- * Creates the PokeRouge AI trainer bot for a specific player.
+ * Creates the PokéRogue AI trainer bot for a specific player.
  * Any stale bot for the same player is destroyed first (via activeMatches lookup).
  * All bots share the display name TRAINER_NAME so the opponent always appears as
- * "PokeRouge Trainer" without the player's own username being appended.
+ * "PokéRogue Trainer" without the player's own username being appended.
  * The bot is marked as unnamed after forceRename so that:
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
@@ -280,7 +280,7 @@ function buildBotTeam(floor: number): string {
 }
 
 /**
- * Starts a PokeRouge battle on the current floor for `user`.
+ * Starts a PokéRogue battle on the current floor for `user`.
  * Creates the bot, registers AI handlers and tracks the room.
  * Returns true on success; on failure, the user has already received a popup.
  */

@@ -1,5 +1,5 @@
 /*
- * PokeRouge - Pokemon Roguelike Battle Tower Plugin
+ * PokéRogue - Pokemon Roguelike Battle Tower Plugin
  * A battle-tower-based roguelike game for Pokemon Showdown (Impulse server).
  *
  * Player commands:
@@ -517,7 +517,7 @@ export const commands: Chat.ChatCommands = {
 				const activeBattleRoom = Rooms.get(state.battleRoomId);
 				if (activeBattleRoom) {
 					return this.sendReplyBox(
-						`You already have an active PokeRouge battle! ` +
+						`You already have an active PokéRogue battle! ` +
 						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
 					);
 				}
@@ -695,7 +695,7 @@ export const commands: Chat.ChatCommands = {
 
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
+				return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			}
 
 			// Ensure shop inventory is rolled before validating
@@ -740,7 +740,7 @@ export const commands: Chat.ChatCommands = {
 
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
+				return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			}
 
 			const qty = state.items?.[itemId] ?? 0;
@@ -825,7 +825,7 @@ export const commands: Chat.ChatCommands = {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run.');
+				return this.errorReply('You have no active PokéRogue run.');
 			}
 			if (state.battleRoomId) {
 				// Clean up activeMatches and bot user before forfeiting,
@@ -870,7 +870,7 @@ export const commands: Chat.ChatCommands = {
 			if (amount <= 0 || isNaN(amount)) return this.errorReply('Amount must be a positive number.');
 			const targetState = getState(targetId);
 			if (!targetState) {
-				return this.errorReply(`${targetName} has no active PokeRouge run.`);
+				return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			}
 			targetState.coins = (targetState.coins ?? 0) + amount;
 			setState(targetId, targetState);
@@ -915,7 +915,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (isNaN(amount) || amount <= 0) return this.errorReply('Amount must be a positive number.');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.coins = Math.max(0, (targetState.coins ?? 0) - amount);
 			setState(targetId, targetState);
 			this.sendReply(`Removed ${amount} coins from ${targetName}. They now have ${targetState.coins} coins.`);
@@ -943,7 +943,7 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmed;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.coins = 0;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s coins to 0.`);
@@ -985,8 +985,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (isNaN(floor) || floor < 1) return this.errorReply('Floor must be a positive number.');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.floor = floor;
 			setState(targetId, targetState);
 			this.sendReply(`Set ${targetName}'s floor to ${floor}.`);
@@ -1011,8 +1011,8 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmedFloor;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.floor = 1;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s floor to 1.`);
@@ -1039,11 +1039,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const targetState = getState(targetId);
 			const targetNameHtml = Utils.escapeHTML(targetName);
-			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokeRouge data.`);
-			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokeRouge run.`);
+			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokéRogue data.`);
+			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokéRogue run.`);
 			const targetDisplay = targetState.displayName || targetName;
 			this.sendReplyBox(
-				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
+				`<b>PokéRogue Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
 				`<b>Floor:</b> ${targetState.floor} &nbsp;|&nbsp; <b>Coins:</b> ${targetState.coins ?? 0}<br>` +
 				`<b>Team:</b><br>${renderTeam(targetState.team, true)}`
 			);
@@ -1106,8 +1106,8 @@ export const commands: Chat.ChatCommands = {
 
 			const speciesId = toID(speciesStr);
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			if (targetState.team.length >= 6) return this.errorReply(`${targetName}'s team is full (6 Pokémon).`);
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${speciesStr}`);
@@ -1180,8 +1180,8 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmed;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			// Reset EXP to the baseline for each Pokémon's current level so they're "fresh"
 			for (const mon of targetState.team) {
 				mon.exp = expForLevel(mon.level);
