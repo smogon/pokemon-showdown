@@ -24,18 +24,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
-			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 			// Linked mod
 			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax &&
+			if (linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
+				!action.pokemon.hasAbility('gorillatactics') && !move.isZ && !move.isMax &&
 				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
-				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
-				const thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, altMove.priority);
+				let thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
+				let thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, altMove.priority);
+				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
 				priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
@@ -45,6 +45,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					altMove.priority = priority;
 				}
 			} else {
+				priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 				action.priority = priority + action.fractionalPriority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 				if (this.gen > 5) action.move.priority = priority;
@@ -439,7 +441,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Used exclusively for a hint later
-			if (move.flags['cantusetwice'] && pokemon.m.lastMoveAbsolute?.id === move.id) {
+			if (move.flags['cantusetwice'] && pokemon.lastMove?.id === move.id) {
 				pokemon.addVolatile(move.id);
 			}
 
@@ -617,9 +619,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 					if (
-						linkedMoves.length &&
-						!(action.pokemon.getItem().isChoice || action.pokemon.hasAbility('gorillatactics')) &&
-						!action.zmove && !action.maxMove
+						linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
+						!action.pokemon.hasAbility('gorillatactics') && !action.zmove && !action.maxMove
 					) {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.some(x => x.id === decisionMove)) {
@@ -668,69 +669,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	pokemon: {
-		clearVolatile(includeSwitchFlags = true) {
-			this.boosts = {
-				atk: 0,
-				def: 0,
-				spa: 0,
-				spd: 0,
-				spe: 0,
-				accuracy: 0,
-				evasion: 0,
-			};
-
-			if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
-				const moveslot = this.baseMoves.indexOf('mimic' as ID);
-				const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
-				this.moveSlots = this.baseMoveSlots.slice();
-				this.moveSlots[moveslot].pp = mimicPP;
-			} else {
-				this.moveSlots = this.baseMoveSlots.slice();
-			}
-
-			this.transformed = false;
-			this.ability = this.baseAbility;
-			this.hpType = this.baseHpType;
-			this.hpPower = this.baseHpPower;
-			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
-			for (const i in this.volatiles) {
-				if (this.volatiles[i].linkedStatus) {
-					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
-				}
-			}
-			if (this.species.name === 'Eternatus-Eternamax' && this.volatiles['dynamax']) {
-				this.volatiles = { dynamax: this.volatiles['dynamax'] };
-			} else {
-				this.volatiles = {};
-			}
-			if (includeSwitchFlags) {
-				this.switchFlag = false;
-				this.forceSwitchFlag = false;
-			}
-
-			this.m.lastMoveAbsolute = null;
-			this.lastMove = null;
-			if (this.battle.gen === 2) this.lastMoveEncore = null;
-			this.lastMoveUsed = null;
-			this.moveThisTurn = '';
-			this.moveLastTurnResult = undefined;
-			this.moveThisTurnResult = undefined;
-
-			this.lastDamage = 0;
-			this.attackedBy = [];
-			this.hurtThisTurn = null;
-			this.newlySwitched = true;
-			this.beingCalledBack = false;
-
-			this.volatileStaleness = undefined;
-
-			delete this.abilityState.started;
-			delete this.itemState.started;
-
-			this.setSpecies(this.baseSpecies);
-		},
 		moveUsed(move, targetLoc) {
-			if (!this.moveThisTurn) this.m.lastMoveAbsolute = move;
 			this.lastMove = move;
 			this.moveThisTurn = move.id;
 			this.lastMoveTargetLoc = targetLoc;
