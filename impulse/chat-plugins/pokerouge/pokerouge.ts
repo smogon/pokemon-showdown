@@ -1141,34 +1141,19 @@ export const commands: Chat.ChatCommands = {
 
 		removemon(target, room, user) {
 			this.checkCan('lock');
-			// Support "/pokerouge removemon <userid> --confirm" to skip the confirmation prompt.
-			// Using "--confirm" avoids any collision with real usernames (which cannot start with "-").
-			const CONFIRM_FLAG = ' --confirm';
 			const trimmedTarget = target.trim();
-			const confirmed = trimmedTarget.endsWith(CONFIRM_FLAG);
-			const rawTarget = confirmed ? trimmedTarget.slice(0, -CONFIRM_FLAG.length).trim() : trimmedTarget;
 			let targetId: string;
 			let targetName: string;
-			if (!rawTarget) {
+			if (!trimmedTarget) {
 				targetId = user.id;
 				targetName = user.name;
 			} else {
-				const maybeId = toID(rawTarget);
-				if (!maybeId) return this.errorReply(`Invalid username: "${rawTarget}".`);
+				const maybeId = toID(trimmedTarget);
+				if (!maybeId) return this.errorReply(`Invalid username: "${trimmedTarget}".`);
 				targetId = maybeId;
-				targetName = rawTarget;
+				targetName = trimmedTarget;
 			}
 			if (!getState(targetId)) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			if (!confirmed) {
-				const s = getState(targetId)!;
-				return this.sendReplyBox(
-					`<b>Warning:</b> This will permanently delete all PokéRogue data for ` +
-					`<b>${Utils.escapeHTML(targetName)}</b> ` +
-					`(Floor ${s.floor}, ${s.team?.length ?? 0} Pokémon, ${s.coins ?? 0} coins).<br>` +
-					`<button name="send" value="/pokerouge removemon ${targetId} --confirm" class="button">` +
-					`Confirm delete</button>`
-				);
-			}
 			deleteState(targetId);
 			this.sendReply(`Deleted all PokéRogue data for ${targetName}.`);
 			if (targetId !== user.id) {
