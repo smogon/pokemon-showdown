@@ -11,7 +11,7 @@ import {
 	getLevelUpEvo,
 	packPokemon, packTeam, pickRandomPokemon,
 	setState,
-} from './pokerouge-core';
+} from './pokerogue-core';
 
 // ---------------------------------------------------------------------------
 // Bot level/team-size helpers (battle-subsystem only)
