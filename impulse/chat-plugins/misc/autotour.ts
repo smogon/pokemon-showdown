@@ -4,8 +4,8 @@
 * @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
+import { nameColor } from '../customization/custom-colors';
 
 const AUTOTOUR_COLLECTION = 'autotour_configs';
 
@@ -444,7 +444,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Player Cap:</b>`, config.playerCap || '(none)'],
 				[`<b>Name:</b>`, config.name || '(none)'],
 			];
-			const tableHTML = generateThemedTable(`Autotour settings for ${roomid}`, [], rows);
+			const tableHTML = Table(`Autotour settings for ${roomid}`, [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 		nextrun(target, room, user) {
@@ -462,7 +462,7 @@ export const commands: Chat.ChatCommands = {
 
 			const minutes = Math.floor(timeRemaining / 60000);
 			const seconds = Math.floor((timeRemaining % 60000) / 1000);
-			const tableHTML = generateThemedTable(`Next Autotour in ${roomid}`, [], [
+			const tableHTML = Table(`Next Autotour in ${roomid}`, [], [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
 				[`<b>Time Remaining:</b>`, `<b>${minutes}m ${seconds}s</b>`],
 				[`<b>Interval:</b>`, `${config.interval} min`],
