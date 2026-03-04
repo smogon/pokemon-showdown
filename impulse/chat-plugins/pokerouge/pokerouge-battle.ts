@@ -48,9 +48,10 @@ let botCounter = 0;
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
- * Display name used for all PokéRogue AI trainer bots.
- * All bots share this same display name; uniqueness per battle is handled
- * internally via user IDs and the botBattleHandlers mapping.
+ * Display name prefix for all PokéRogue AI trainer bots.
+ * Each bot appends its unique counter (e.g. "PokéRogue Trainer 42") so that
+ * concurrent battles work correctly — every bot user needs a unique user ID.
+ * The battle title still uses `TRAINER_NAME` directly for a clean opponent label.
  */
 const TRAINER_NAME = 'PokéRogue Trainer';
 
@@ -71,8 +72,8 @@ export function destroyBotUser(botUser: User): void {
 /**
  * Creates the PokéRogue AI trainer bot for a specific player.
  * Any stale bot for the same player is destroyed first (via activeMatches lookup).
- * All bots share the display name TRAINER_NAME so the opponent always appears as
- * "PokéRogue Trainer" without the player's own username being appended.
+ * Each bot gets a unique display name (`TRAINER_NAME + uid`) so that concurrent
+ * battles work correctly — every User object needs a unique user ID.
  * The bot is marked as unnamed after forceRename so that:
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
@@ -80,7 +81,7 @@ export function destroyBotUser(botUser: User): void {
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerouge-bot-${uid}`;
-	const botDisplayName = TRAINER_NAME;
+	const botDisplayName = `${TRAINER_NAME} ${uid}`;
 
 	// Destroy any stale bot for this player via the activeMatches map.
 	// Collect the roomId first to avoid mutating the map while iterating.

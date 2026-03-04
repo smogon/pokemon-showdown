@@ -1130,9 +1130,11 @@ export const commands: Chat.ChatCommands = {
 		removemon(target, room, user) {
 			this.checkCan('lock');
 			// Support "/pokerouge removemon <user> confirm" to skip the confirmation prompt.
+			// Require at least 2 tokens so a bare "/pokerouge removemon confirm" is treated
+			// as targeting a user named "confirm" rather than bypassing the prompt silently.
 			const parts = target.trim().split(/\s+/);
-			const confirmed = parts[parts.length - 1].toLowerCase() === 'confirm';
-			const rawTarget = confirmed ? parts.slice(0, -1).join(' ') : parts.join(' ');
+			const confirmed = parts.length >= 2 && parts[parts.length - 1].toLowerCase() === 'confirm';
+			const rawTarget = confirmed ? parts.slice(0, -1).join(' ') : target.trim();
 			let targetId: string;
 			let targetName: string;
 			if (!rawTarget) {
@@ -1144,7 +1146,7 @@ export const commands: Chat.ChatCommands = {
 				targetId = maybeId;
 				targetName = rawTarget;
 			}
-			if (!getState(targetId)) return this.errorReply(`${Utils.escapeHTML(targetName)} has no PokéRogue data.`);
+			if (!getState(targetId)) return this.errorReply(`${targetName} has no PokéRogue data.`);
 			if (!confirmed) {
 				const s = getState(targetId)!;
 				return this.sendReplyBox(
@@ -1156,7 +1158,7 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 			deleteState(targetId);
-			this.sendReply(`Deleted all PokéRogue data for ${Utils.escapeHTML(targetName)}.`);
+			this.sendReply(`Deleted all PokéRogue data for ${targetName}.`);
 			if (targetId !== user.id) {
 				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed your PokéRogue data.`);
 			}
