@@ -70,7 +70,7 @@ function getSprite(species: string, size = 80): string {
 function getItemSprite(itemId: string): string {
 	const safeId = encodeURIComponent(toID(itemId));
 	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${safeId}.png"` +
-		` width="24" height="24" alt="" style="vertical-align:middle;image-rendering:pixelated" />`;
+		` loading="lazy" decoding="async" width="24" height="24" alt="" style="vertical-align:middle;image-rendering:pixelated" />`;
 }
 
 /** Renders a single coloured stat bar row (label | bar | value). */
