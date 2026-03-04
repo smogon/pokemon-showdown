@@ -7,7 +7,7 @@
 import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
 import {
-	PokemonEntry, PokeRogueState,
+	type PokemonEntry, type PokeRogueState,
 	getLevelUpEvo,
 	packPokemon, packTeam, pickRandomPokemon,
 	setState,
@@ -49,11 +49,11 @@ const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) 
 
 /**
  * Display name prefix for all PokéRogue AI trainer bots.
- * Each bot appends its unique counter (e.g. "PokéRogue Trainer 42") so that
+ * Each bot appends its unique counter (e.g. "PokeRogue Challenger 42") so that
  * concurrent battles work correctly — every bot user needs a unique user ID.
  * The battle title still uses `TRAINER_NAME` directly for a clean opponent label.
  */
-const TRAINER_NAME = 'PokéRogue Trainer';
+const TRAINER_NAME = 'PokeRogue Challenger';
 
 /**
  * Destroys a bot user, removing it from the Users table.
@@ -97,7 +97,7 @@ function createBotUser(playerId: string): User {
 		// Treat the match as stale when the room is gone OR the battle has ended.
 		// A room can persist after a battle finishes (room.battle is falsy or
 		// room.battle.ended is true), so checking both avoids leaking bot users.
-		const battleEnded = !room || !room.battle || room.battle.ended;
+		const battleEnded = !room?.battle || room.battle.ended;
 		if (battleEnded) {
 			const staleMatch = activeMatches.get(staleRoomId);
 			if (staleMatch) {
@@ -157,9 +157,12 @@ function createBotUser(playerId: string): User {
 
 /**
  * Parse a |request| JSON and return a valid choice string.
- * Always prefers higher base-power moves for the best AI from the start.
+ * Uses a type-effectiveness scoring system to prioritise super-effective moves
+ * and avoid immunities, providing smarter AI from the start.
+ * `defenderTypes` should be the live types of the foe's active Pokémon, extracted
+ * from `room.battle` by the caller. When absent, scoring falls back to base power only.
  */
-function makeAIChoice(requestJson: string, _floor: number): string {
+function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
 	try {
 		request = JSON.parse(requestJson.startsWith('|request|') ? requestJson.slice(9) : requestJson);
@@ -169,14 +172,14 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 
 	if (!request || request.wait) return 'pass';
 
-	// Team preview
+	// team preview
 	if (request.teamPreview) {
 		const count = request.side?.pokemon?.length ?? 1;
 		const order = Array.from({ length: count }, (_, i) => i + 1);
 		return `team ${order.join('')}`;
 	}
 
-	// Force switch
+	// force switch
 	if (request.forceSwitch) {
 		const choices: string[] = [];
 		const pokemon = request.side?.pokemon ?? [];
@@ -205,7 +208,7 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 		return choices.join(', ');
 	}
 
-	// Move request
+	// move request — score each move by type effectiveness
 	if (request.active) {
 		const choicesList: string[] = [];
 
@@ -223,12 +226,25 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 
 			let chosen = '';
 			if (usableMoves.length > 0) {
-				usableMoves.sort((a: any, b: any) => {
-					const bpA = Dex.moves.get(a.id)?.basePower ?? 0;
-					const bpB = Dex.moves.get(b.id)?.basePower ?? 0;
-					return bpB - bpA;
+				// score each move: bp × type-effectiveness multiplier
+				// getEffectiveness returns: 1=super-effective, -1=resist, 0=neutral (additive across types)
+				// convert additive value to multiplier via 2^n
+				const scored = usableMoves.map((m: any) => {
+					const moveData = Dex.moves.get(m.id);
+					const bp = moveData.basePower ?? 0;
+					if (!bp) return { m, score: 0 };
+					// immunity check (false = immune)
+					if (defenderTypes.length && !Dex.getImmunity(moveData.type, defenderTypes)) {
+						return { m, score: 0 };
+					}
+					// effectiveness: additive sum, then convert 2^n to get multiplier
+					const typeMod = defenderTypes.length ?
+						Dex.getEffectiveness(moveData.type, defenderTypes) :
+						0;
+					return { m, score: bp * (2 ** typeMod) };
 				});
-				chosen = `move ${moves.indexOf(usableMoves[0]) + 1}`;
+				scored.sort((a: any, b: any) => b.score - a.score);
+				chosen = `move ${moves.indexOf(scored[0].m) + 1}`;
 			} else {
 				chosen = 'move 1'; // struggle
 			}
@@ -320,7 +336,12 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
 		const room = Rooms.get(roomid as RoomID);
 		if (!room?.battle) return;
-		const choice = makeAIChoice(requestLine, state.floor);
+		// extract live defender types from the player's (p1 = sides[0]) active pokemon
+		const foeSide = room.battle.sides[0];
+		const liveDefenderTypes: string[] = foeSide.active
+			.filter(p => !!p && p.hp > 0)
+			.flatMap(p => p!.getTypes());
+		const choice = makeAIChoice(requestLine, state.floor, liveDefenderTypes);
 		void room.battle.stream.write(`>${botSlot} ${choice}`);
 	});
 
