@@ -1214,7 +1214,7 @@ export const commands: Chat.ChatCommands = {
 			const isStaff = user.can('lock');
 			let html =
 				`<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerogue start</code> (or <code>/roguelike start</code>) — Open the interactive PokéRogue game popup (auto-starts new run if needed).<br>` +
+				`<code>/pokerogue start</code> — Open the interactive PokéRogue game popup (auto-starts new run if needed).<br>` +
 				`<code>/pokerogue battle</code> — Start the next floor battle (also available from the game popup).<br>` +
 				`<code>/pokerogue choose [1/2/3]</code> — Choose a starter or add a new Pokémon to your team.<br>` +
 				`<code>/pokerogue shop</code> — Open the item shop in the game popup.<br>` +
@@ -1268,10 +1268,6 @@ export const commands: Chat.ChatCommands = {
 		'': 'help',
 	},
 
-	// /roguelike is an alias for /pokerogue
-	roguelike(target, room, user) {
-		return this.parse(`/pokerogue ${target}`);
-	},
 };
 
 // ---------------------------------------------------------------------------
