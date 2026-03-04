@@ -156,7 +156,7 @@ export function generateWarCard(
 			html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PENDING</span>`;
 		} else if (war.status === 'active') {
 			if (war.paused) {
-				html += `<strong>Status:</strong> <span style"color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
+				html += `<strong>Status:</strong> <span style="color: #E8A337; font-weight: bold;">PAUSED</span><br />`;
 			} else {
 				html += `<strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">ACTIVE</span><br />`;
 			}
@@ -189,7 +189,7 @@ export function generateWarCard(
 		} else if (war.status === 'pending') {
 			if (perspective === 'challenger') {
 				html += `<em>Waiting for ${clan2.name} to respond...</em><br />`;
-				html += `<button class"button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
+				html += `<button class="button" name="send" value="/clan war cancel ${clan2._id}">Withdraw Challenge</button>`;
 			} else if (perspective === 'target') {
 				html += `<strong>${clan1.name} has challenged you!</strong><br />`;
 				html += `<button class="button" name="send" value="/clan war accept ${clan1._id}" style="background-color: #4CAF50; color: white;">Accept</button> `;
