@@ -5,7 +5,7 @@
 */
 import { ImpulseCollection } from '../../impulse-db';
 import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { nameColor } from '../customization/custom-colors';
 
 const AUTOTOUR_COLLECTION = 'autotour_configs';
 
