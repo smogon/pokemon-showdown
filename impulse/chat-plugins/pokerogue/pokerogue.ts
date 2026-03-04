@@ -41,7 +41,7 @@ import {
 	expForLevel, floorExpReward, floorCoinReward,
 	applyExpAndLevelUp, getLevelUpEvo,
 	getLevelUpMoves, rollShopInventory,
-} from './pokerouge-core';
+} from './pokerogue-core';
 import {
 	activeMatches,
 	startBattle, destroyBotUser,
