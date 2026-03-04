@@ -679,7 +679,7 @@ export const commands: Chat.ChatCommands = {
 				state.shopInventory = rollShopInventory();
 				setState(user.id, state);
 			}
-			return this.parse('/join view-pokerogue');
+			return this.parse('/join view-pokerogue-shop');
 		},
 
 		// /pokerogue refreshshop — reroll the shop inventory for 5 coins
@@ -692,7 +692,7 @@ export const commands: Chat.ChatCommands = {
 			state.coins = coins - 5;
 			state.shopInventory = rollShopInventory();
 			setState(user.id, state);
-			this.refreshPage('pokerogue');
+			this.refreshPage('pokerogue-shop');
 		},
 
 		// /pokerogue buy <item>
@@ -733,8 +733,8 @@ export const commands: Chat.ChatCommands = {
 			state.items[itemId] = (state.items[itemId] ?? 0) + 1;
 			setState(user.id, state);
 
-			// refresh the page so the ui reflects changes instantly
-			this.refreshPage('pokerogue');
+			// refresh the shop page so the ui reflects changes instantly
+			this.refreshPage('pokerogue-shop');
 		},
 
 		// /pokerogue use <item> [team slot 1-6]

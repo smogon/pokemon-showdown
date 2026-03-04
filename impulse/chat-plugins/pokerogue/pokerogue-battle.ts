@@ -159,8 +159,10 @@ function createBotUser(playerId: string): User {
  * Parse a |request| JSON and return a valid choice string.
  * Uses a type-effectiveness scoring system to prioritise super-effective moves
  * and avoid immunities, providing smarter AI from the start.
+ * `defenderTypes` should be the live types of the foe's active Pokémon, extracted
+ * from `room.battle` by the caller. When absent, scoring falls back to base power only.
  */
-function makeAIChoice(requestJson: string, _floor: number): string {
+function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
 	try {
 		request = JSON.parse(requestJson.startsWith('|request|') ? requestJson.slice(9) : requestJson);
@@ -209,15 +211,6 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 	// move request — score each move by type effectiveness
 	if (request.active) {
 		const choicesList: string[] = [];
-		// get defender types for scoring
-		// NOTE: standard PS request JSON does not include opponent typing.
-		// Callers that have access to the live battle (e.g. room.battle) should
-		// compute the opponent's active types there and attach them as
-		// `request.defenderTypes` (string[]). If absent, we fall back to
-		// base-power-only scoring.
-		const defenderTypes: string[] = Array.isArray((request as any).defenderTypes)
-			? [...(request as any).defenderTypes]
-			: [];
 
 		for (let i = 0; i < (request.active as any[]).length; i++) {
 			const active = (request.active as any[])[i];
@@ -343,7 +336,12 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
 		const room = Rooms.get(roomid as RoomID);
 		if (!room?.battle) return;
-		const choice = makeAIChoice(requestLine, state.floor);
+		// extract live defender types from the player's (p1 = sides[0]) active pokemon
+		const foeSide = room.battle.sides[0];
+		const liveDefenderTypes: string[] = foeSide.active
+			.filter(p => !!p && p.hp > 0)
+			.flatMap(p => p!.getTypes());
+		const choice = makeAIChoice(requestLine, state.floor, liveDefenderTypes);
 		void room.battle.stream.write(`>${botSlot} ${choice}`);
 	});
 
