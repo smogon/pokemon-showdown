@@ -1162,7 +1162,7 @@ export const commands: Chat.ChatCommands = {
 			if (targetId !== user.id) {
 				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed your PokéRogue data.`);
 			}
-			this.modlog('POKEROUGE REMOVEMON', targetId);
+			this.modlog('POKEROUGE WIPEUSERDATA', targetId, 'wiped all PokéRogue data');
 		},
 
 		healteam(target, room, user) {
