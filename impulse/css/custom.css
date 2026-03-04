@@ -2815,13 +2815,13 @@ width: 200px;
 /* PokéRogue Plugin — popup UI styles */
 
 .pr-popup {
-	background: linear-gradient(160deg, #0d0d1f 0%, #14102b 40%, #0a1628 100%);
+	background: linear-gradient(160deg, #080818 0%, #0f0c22 35%, #091525 100%);
 	color: #dde6f0;
-	border-radius: 14px;
-	border: 2px solid #5a3fa0;
-	box-shadow: 0 0 24px rgba(90, 63, 160, 0.4);
-	padding: 16px 18px;
-	max-width: 760px;
+	border-radius: 16px;
+	border: 1px solid rgba(120, 80, 220, 0.5);
+	box-shadow: 0 0 40px rgba(90, 63, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	padding: 18px 20px;
+	max-width: 780px;
 	box-sizing: border-box;
 	font-size: 13px;
 	font-family: Arial, sans-serif;
@@ -2829,64 +2829,106 @@ width: 200px;
 
 .pr-popup h2 {
 	margin: 0;
-	font-size: 20px;
+	font-size: 22px;
 	color: #c4a8ff;
-	letter-spacing: 1px;
+	background: linear-gradient(90deg, #c4a8ff, #7eb8ff);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	letter-spacing: 1.5px;
+	font-weight: 800;
 }
 
 .pr-popup h3 {
-	margin: 10px 0 5px;
-	font-size: 11px;
+	margin: 12px 0 6px;
+	font-size: 10px;
 	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #8ab4f8;
+	letter-spacing: 1.5px;
+	color: #7090b8;
 	border-left: 3px solid #5a3fa0;
-	padding-left: 7px;
+	padding-left: 8px;
 }
 
 .pr-popup-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 1px solid rgba(90, 63, 160, 0.5);
-	padding-bottom: 10px;
-	margin-bottom: 12px;
+	border-bottom: 1px solid rgba(90, 63, 160, 0.4);
+	padding-bottom: 12px;
+	margin-bottom: 14px;
 }
 
 .pr-floor-badge {
-	display: inline-block;
-	background: rgba(59, 130, 246, 0.15);
-	border: 1px solid rgba(59, 130, 246, 0.4);
-	border-radius: 12px;
-	padding: 2px 10px;
-	color: #60a5fa;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.08));
+	border: 1px solid rgba(59, 130, 246, 0.45);
+	border-radius: 20px;
+	padding: 3px 12px;
+	color: #7eb8ff;
 	font-size: 11px;
 	font-weight: bold;
+	letter-spacing: 0.3px;
 }
 
 .pr-coin-badge {
-	display: inline-block;
-	background: rgba(245, 197, 24, 0.15);
-	border: 1px solid rgba(245, 197, 24, 0.4);
-	border-radius: 12px;
-	padding: 2px 10px;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: linear-gradient(135deg, rgba(245, 197, 24, 0.2), rgba(245, 197, 24, 0.08));
+	border: 1px solid rgba(245, 197, 24, 0.45);
+	border-radius: 20px;
+	padding: 3px 12px;
 	color: #f5c518;
 	font-size: 11px;
 	font-weight: bold;
+	letter-spacing: 0.3px;
+}
+
+.pr-notification {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 10px;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.25), rgba(59, 130, 246, 0.12));
+	border: 1px solid rgba(120, 80, 220, 0.5);
+	border-left: 4px solid #7b5ea8;
+	border-radius: 10px;
+	padding: 10px 14px;
+	margin-bottom: 12px;
+	font-size: 12px;
+	color: #d4c8ff;
+	line-height: 1.6;
+}
+
+.pr-notification-dismiss {
+	background: none;
+	border: none;
+	color: #665580;
+	cursor: pointer;
+	font-size: 13px;
+	padding: 0 2px;
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+.pr-notification-dismiss:hover {
+	color: #c4a8ff;
 }
 
 .pr-popup-stats {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 5px;
-	margin: 8px 0;
+	gap: 6px;
+	margin: 10px 0;
 }
 
 .pr-popup-stats span {
-	background: rgba(90, 63, 160, 0.2);
-	border: 1px solid rgba(90, 63, 160, 0.4);
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.22), rgba(90, 63, 160, 0.08));
+	border: 1px solid rgba(90, 63, 160, 0.45);
 	border-radius: 20px;
-	padding: 3px 12px;
+	padding: 4px 14px;
 	color: #b8c8e8;
 	font-size: 12px;
 	white-space: nowrap;
@@ -2899,117 +2941,142 @@ width: 200px;
 .pr-popup-actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 6px;
-	margin: 10px 0;
+	gap: 7px;
+	margin: 12px 0;
 }
 
 .pr-popup-team {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: 10px;
 	margin: 6px 0;
 }
 
 .pr-popup-mon {
 	display: flex;
 	align-items: flex-start;
-	gap: 8px;
-	background: linear-gradient(135deg, rgba(90, 63, 160, 0.15) 0%, rgba(14, 26, 50, 0.9) 100%);
-	border: 1px solid rgba(90, 63, 160, 0.5);
-	border-radius: 10px;
-	padding: 6px 10px;
+	gap: 10px;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.18) 0%, rgba(8, 16, 36, 0.9) 100%);
+	border: 1px solid rgba(90, 63, 160, 0.4);
+	border-radius: 12px;
+	padding: 8px 12px;
 	min-width: 170px;
 	flex: 1 1 170px;
-	max-width: 250px;
+	max-width: 260px;
+	transition: border-color 0.2s;
+}
+
+.pr-popup-mon:hover {
+	border-color: rgba(120, 80, 220, 0.7);
 }
 
 .pr-expbar {
-	height: 4px;
-	background: rgba(255, 255, 255, 0.1);
-	border-radius: 2px;
-	margin-top: 4px;
+	height: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 3px;
+	margin-top: 5px;
 	overflow: hidden;
 }
 
 .pr-expbar-fill {
 	height: 100%;
-	background: linear-gradient(90deg, #3b82f6, #a855f7);
-	border-radius: 2px;
+	background: linear-gradient(90deg, #6366f1, #a855f7);
+	border-radius: 3px;
+	transition: width 0.4s ease;
 }
 
 .pr-choice-grid {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 10px;
-	margin: 10px 0;
+	gap: 12px;
+	margin: 12px 0;
 }
 
 .pr-choice-card {
-	flex: 1 1 180px;
-	max-width: 220px;
-	background: linear-gradient(160deg, #0f1d3e 0%, #1a1040 100%);
-	border: 2px solid #3b82f6;
-	border-radius: 12px;
-	padding: 10px;
+	flex: 1 1 185px;
+	max-width: 225px;
+	background: linear-gradient(160deg, #0d1a3a 0%, #160e38 100%);
+	border: 1px solid rgba(59, 130, 246, 0.5);
+	border-radius: 14px;
+	padding: 12px;
 	text-align: center;
 	box-sizing: border-box;
-	box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+	box-shadow: 0 4px 20px rgba(59, 130, 246, 0.12);
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pr-choice-card:hover {
+	border-color: rgba(99, 102, 241, 0.8);
+	box-shadow: 0 4px 24px rgba(99, 102, 241, 0.25);
 }
 
 .pr-choice-card.legendary {
-	border-color: #f59e0b;
-	background: linear-gradient(160deg, #1f1300 0%, #1a0d00 100%);
-	box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+	border-color: rgba(245, 158, 11, 0.6);
+	background: linear-gradient(160deg, #1f1300 0%, #170a00 100%);
+	box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2);
+}
+
+.pr-choice-card.legendary:hover {
+	border-color: rgba(245, 158, 11, 0.9);
+	box-shadow: 0 4px 28px rgba(245, 158, 11, 0.35);
 }
 
 .pr-statbar-row {
 	display: flex;
 	align-items: center;
 	gap: 4px;
-	margin: 1px 0;
+	margin: 2px 0;
 }
 
 .pr-statbar-label {
-	width: 26px;
+	width: 28px;
 	font-size: 9px;
-	color: #888;
+	color: #7090b8;
 	text-align: right;
+	font-weight: bold;
 }
 
 .pr-statbar-track {
 	flex: 1;
-	height: 4px;
-	background: rgba(255, 255, 255, 0.1);
-	border-radius: 2px;
+	height: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 3px;
 	overflow: hidden;
 }
 
 .pr-statbar-fill {
 	height: 100%;
-	border-radius: 2px;
+	border-radius: 3px;
+	opacity: 0.85;
 }
 
 .pr-statbar-val {
-	width: 24px;
+	width: 26px;
 	font-size: 9px;
-	color: #aaa;
+	color: #99b0cc;
 	text-align: right;
 }
 
 .pr-shop-grid {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin: 8px 0;
+	gap: 10px;
+	margin: 10px 0;
 }
 
 .pr-shop-card {
-	flex: 1 1 150px;
-	max-width: 195px;
-	background: linear-gradient(135deg, rgba(90, 63, 160, 0.12) 0%, rgba(10, 18, 35, 0.95) 100%);
+	flex: 1 1 155px;
+	max-width: 200px;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.14) 0%, rgba(8, 14, 30, 0.95) 100%);
 	border: 1px solid rgba(90, 63, 160, 0.4);
-	border-radius: 10px;
-	padding: 8px;
+	border-radius: 12px;
+	padding: 10px;
 	text-align: center;
 	box-sizing: border-box;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pr-shop-card:hover {
+	border-color: rgba(120, 80, 220, 0.7);
+	box-shadow: 0 2px 14px rgba(90, 63, 160, 0.2);
 }
