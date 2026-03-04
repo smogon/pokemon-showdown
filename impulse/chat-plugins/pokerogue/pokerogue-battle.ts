@@ -209,17 +209,15 @@ function makeAIChoice(requestJson: string, _floor: number): string {
 	// move request — score each move by type effectiveness
 	if (request.active) {
 		const choicesList: string[] = [];
-		// get defender types for scoring (from the opponent's active pokemon condition)
-		// foe.ident format from PS request JSON is 'p1a: PokemonName' (side + slot + name)
-		const defenderTypes: string[] = [];
-		const opponentPokemon = request.side?.foe?.active ?? [];
-		for (const foe of opponentPokemon) {
-			if (!foe) continue;
-			const foeSpecies = Dex.species.get(toID(foe.ident?.split(': ')[1] ?? ''));
-			if (foeSpecies.exists) {
-				for (const t of foeSpecies.types) defenderTypes.push(t);
-			}
-		}
+		// get defender types for scoring
+		// NOTE: standard PS request JSON does not include opponent typing.
+		// Callers that have access to the live battle (e.g. room.battle) should
+		// compute the opponent's active types there and attach them as
+		// `request.defenderTypes` (string[]). If absent, we fall back to
+		// base-power-only scoring.
+		const defenderTypes: string[] = Array.isArray((request as any).defenderTypes)
+			? [...(request as any).defenderTypes]
+			: [];
 
 		for (let i = 0; i < (request.active as any[]).length; i++) {
 			const active = (request.active as any[])[i];
