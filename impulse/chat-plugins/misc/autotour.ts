@@ -4,8 +4,8 @@
 * @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
-import { Table } from '../../utils';
-import { nameColor } from '../customization/custom-colors';
+import { generateThemedTable } from '../../utils';
+import { nameColor } from '../../colors';
 
 const AUTOTOUR_COLLECTION = 'autotour_configs';
 
@@ -162,14 +162,23 @@ function runAutotour(roomid: RoomID): void {
 	if (!liveRoom || liveRoom.type !== 'chat') return;
 
 	const mockContext: Chat.CommandContext = {
-		sendReply: (msg: string) => liveRoom.add(msg),
-		errorReply: (msg: string) => liveRoom.add(msg),
+		sendReply: (msg: string) => liveRoom.add(msg).update(),
+		errorReply: (msg: string) => liveRoom.add(`|error|${msg}`).update(),
 		modlog: () => {},
 		privateModAction: () => {},
+		addModAction: () => {},
 		parse: () => {},
 		checkCan: () => {},
+		checkChat: () => {},
+		checkGame: () => {},
+		checkRoom: () => {},
+		can: () => false,
 		runBroadcast: () => true,
 		requireRoom: () => liveRoom,
+		targetUser: null,
+		user: { id: 'autotour', name: 'Autotour' } as unknown as User,
+		room: liveRoom,
+		connection: null as unknown as Connection,
 	} as unknown as Chat.CommandContext;
 
 	try {
@@ -435,7 +444,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Player Cap:</b>`, config.playerCap || '(none)'],
 				[`<b>Name:</b>`, config.name || '(none)'],
 			];
-			const tableHTML = Table(`Autotour settings for ${roomid}`, [], rows);
+			const tableHTML = generateThemedTable(`Autotour settings for ${roomid}`, [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 		nextrun(target, room, user) {
@@ -453,7 +462,7 @@ export const commands: Chat.ChatCommands = {
 
 			const minutes = Math.floor(timeRemaining / 60000);
 			const seconds = Math.floor((timeRemaining % 60000) / 1000);
-			const tableHTML = Table(`Next Autotour in ${roomid}`, [], [
+			const tableHTML = generateThemedTable(`Next Autotour in ${roomid}`, [], [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
 				[`<b>Time Remaining:</b>`, `<b>${minutes}m ${seconds}s</b>`],
 				[`<b>Interval:</b>`, `${config.interval} min`],
