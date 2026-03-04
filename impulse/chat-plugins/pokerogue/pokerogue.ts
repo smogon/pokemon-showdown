@@ -45,7 +45,7 @@ import {
 import {
 	activeMatches,
 	startBattle, destroyBotUser,
-} from './pokerouge-battle';
+} from './pokerogue-battle';
 
 // ---------------------------------------------------------------------------
 // HTML helpers
