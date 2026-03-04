@@ -293,7 +293,7 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	scopelens: { id: 'scopelens', name: 'Scope Lens', description: 'Raises the holder\'s critical-hit ratio by one stage.', cost: 80, heldItem: 'scopelens' },
 	widelens: { id: 'widelens', name: 'Wide Lens', description: 'Boosts all move accuracy by 10%.', cost: 60, heldItem: 'widelens' },
 	brightpowder: { id: 'brightpowder', name: 'Bright Powder', description: 'Lowers the opponent\'s accuracy by 10%.', cost: 60, heldItem: 'brightpowder' },
-	laxincense: { id: 'laxincense', name: 'Lax Incense', description: 'Lowers the opponent\'s accuracy by 5%.', cost: 40, heldItem: 'laxincense' },
+	laxincense: { id: 'laxincense', name: 'Lax Incense', description: 'Lowers the opponent\'s accuracy by 10%.', cost: 40, heldItem: 'laxincense' },
 	// ---- Priority / speed items ----
 	quickclaw: { id: 'quickclaw', name: 'Quick Claw', description: '20% chance to move first regardless of Speed.', cost: 60, heldItem: 'quickclaw' },
 	// ---- Powerful combat items ----
