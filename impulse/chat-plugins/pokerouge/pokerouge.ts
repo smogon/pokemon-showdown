@@ -68,7 +68,8 @@ function getSprite(species: string, size = 80): string {
 
 /** Returns a 24x24 item icon img tag using PS's item icon sprites. Works for every PS item. */
 function getItemSprite(itemId: string): string {
-	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${itemId}.png"` +
+	const safeId = encodeURIComponent(toID(itemId));
+	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${safeId}.png"` +
 		` width="24" height="24" alt="" style="vertical-align:middle;image-rendering:pixelated" />`;
 }
 
