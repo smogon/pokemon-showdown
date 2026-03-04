@@ -1262,11 +1262,8 @@ export const commands: Chat.ChatCommands = {
 		'': 'help',
 	},
 
-	// /roguelike and /rougelike are aliases for /pokerogue
+	// /roguelike is an alias for /pokerogue
 	roguelike(target, room, user) {
-		return this.parse(`/pokerogue ${target}`);
-	},
-	rougelike(target, room, user) {
 		return this.parse(`/pokerogue ${target}`);
 	},
 };
