@@ -332,16 +332,14 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 		return false;
 	}
 
-	// Register the AI callback AFTER confirming the battle exists
+	// Register the AI callback AFTER confirming the battle exists.
+	// Type-effectiveness scoring requires access to the sim-side Battle object (battle.sides),
+	// which runs in a worker process and is not accessible from the server-side RoomBattle.
+	// We therefore score moves by base power only (defenderTypes left empty).
 	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
 		const room = Rooms.get(roomid as RoomID);
 		if (!room?.battle) return;
-		// extract live defender types from the player's (p1 = sides[0]) active pokemon
-		const foeSide = room.battle.sides[0];
-		const liveDefenderTypes: string[] = foeSide.active
-			.filter(p => !!p && p.hp > 0)
-			.flatMap(p => p!.getTypes());
-		const choice = makeAIChoice(requestLine, state.floor, liveDefenderTypes);
+		const choice = makeAIChoice(requestLine, state.floor);
 		void room.battle.stream.write(`>${botSlot} ${choice}`);
 	});
 
