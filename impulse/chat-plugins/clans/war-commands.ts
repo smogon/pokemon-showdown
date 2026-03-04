@@ -77,11 +77,8 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`${targetClan.name} is already in a ${targetClanExistingWar.status} war with ${opponent?.name || opponentId}.`);
 		}
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { 'stats.lastWarChallenge': Date.now() } }
-		);
-
+		// FIX: cooldown is now set AFTER the war document is successfully inserted,
+		// so a DB failure doesn't burn the 24h cooldown for nothing
 		const newWar: Omit<ClanWar, '_id'> = {
 			clans: [clanId, toID(targetClanId)],
 			scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
@@ -92,13 +89,18 @@ export const warCommands: Chat.ChatCommands = {
 		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
 		const warId = insertResult.insertedId;
 		if (!warId) {
-			this.errorReply("There was an error creating the war document. Aborting.");
-			return;
+			return this.errorReply("There was an error creating the war document. Aborting.");
 		}
+
+		// Only set the cooldown once we know the war was created successfully
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { 'stats.lastWarChallenge': Date.now() } }
+		);
+
 		const war = await ClanWars.findOne({ _id: warId });
 		if (!war) {
-			this.errorReply("Failed to fetch the newly created war. Aborting.");
-			return;
+			return this.errorReply("Failed to fetch the newly created war. Aborting.");
 		}
 
 		this.sendReply(`You have challenged ${targetClan.name} to a Best of ${bestOf} War!`);
@@ -282,8 +284,12 @@ export const warCommands: Chat.ChatCommands = {
 		const targetClanId = toID(target);
 		if (!targetClanId) return this.errorReply("Specify the clan ID. Usage: /clan war cancel [clanid]");
 
+		// FIX: was using ordered array match [clanId, targetClanId] which only works
+		// if the challenger is exactly clans[0] — replaced with $all so the query
+		// finds the war regardless of storage order, then we verify challenger identity
+		// separately below
 		const war = await ClanWars.findOne({
-			clans: [clanId, targetClanId],
+			clans: { $all: [clanId, targetClanId] },
 			status: 'pending',
 		});
 
@@ -291,6 +297,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`No pending war challenge found with '${targetClanId}'.`);
 		}
 
+		// clans[0] is always the challenger (documented in interface.ts)
 		if (war.clans[0] !== clanId) {
 			return this.errorReply("Only the challenging clan can cancel a pending war.");
 		}
@@ -393,11 +400,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`${targetClan.name} is already in a ${targetClanExistingWar.status} war with ${opponent?.name || opponentId}.`);
 		}
 
-		await Clans.updateOne(
-			{ _id: clanId },
-			{ $set: { 'stats.lastWarChallenge': Date.now() } }
-		);
-
 		const newWar: Omit<ClanWar, '_id'> = {
 			clans: [clanId, toID(targetClanId)],
 			scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
@@ -408,13 +410,18 @@ export const warCommands: Chat.ChatCommands = {
 		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
 		const warId = insertResult.insertedId;
 		if (!warId) {
-			this.errorReply("There was an error creating the war document. Aborting.");
-			return;
+			return this.errorReply("There was an error creating the war document. Aborting.");
 		}
+
+		// Consistent with challenge: cooldown set after successful insert
+		await Clans.updateOne(
+			{ _id: clanId },
+			{ $set: { 'stats.lastWarChallenge': Date.now() } }
+		);
+
 		const war = await ClanWars.findOne({ _id: warId });
 		if (!war) {
-			this.errorReply("Failed to fetch the newly created war. Aborting.");
-			return;
+			return this.errorReply("Failed to fetch the newly created war. Aborting.");
 		}
 
 		this.sendReply(`You have challenged ${targetClan.name} to a rematch (Best of ${bestOf})!`);
@@ -909,13 +916,20 @@ export const warCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${clan.name} has no pending or active wars.`);
 		}
 
+		// FIX: N+1 query — collect all opponent IDs then fetch in one query
+		const opponentIds = wars.map(war =>
+			war.clans[0] === clanId ? war.clans[1] : war.clans[0]
+		);
+		const opponentClans = await Clans.find({ _id: { $in: opponentIds } });
+		const opponentMap = new Map(opponentClans.map(c => [c._id, c]));
+
 		const headerRow = ['Opponent', 'Status', 'Battle Score (Us - Them)', 'Type', 'Started'];
 		const dataRows: string[][] = [];
 		const title = `${clan.name} War Status`;
 
 		for (const war of wars) {
 			const opponentId = war.clans[0] === clanId ? war.clans[1] : war.clans[0];
-			const opponentClan = await Clans.findOne({ _id: opponentId });
+			const opponentClan = opponentMap.get(opponentId);
 			const myScore = war.scores[clanId] || 0;
 			const opponentScore = war.scores[opponentId] || 0;
 
@@ -1149,13 +1163,20 @@ export const warCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${clan.name} has no completed war history.`);
 		}
 
+		// FIX: N+1 query — collect all opponent IDs then fetch in one query
+		const opponentIds = wars.map(war =>
+			war.clans[0] === clanId ? war.clans[1] : war.clans[0]
+		);
+		const opponentClans = await Clans.find({ _id: { $in: opponentIds } });
+		const opponentMap = new Map(opponentClans.map(c => [c._id, c]));
+
 		const headerRow = ['Opponent', 'Result', 'Battle Score', 'Format', 'Date'];
 		const dataRows: string[][] = [];
 		const title = `${clan.name} War History (Last ${wars.length} Wars)`;
 
 		for (const war of wars) {
 			const opponentId = war.clans[0] === clanId ? war.clans[1] : war.clans[0];
-			const opponentClan = await Clans.findOne({ _id: opponentId });
+			const opponentClan = opponentMap.get(opponentId);
 			const myScore = war.scores[clanId] || 0;
 			const opponentScore = war.scores[opponentId] || 0;
 
@@ -1793,13 +1814,11 @@ export const warCommands: Chat.ChatCommands = {
 		const insertResult = await ClanWars.insertOne(newWar as ClanWarDoc);
 		const warId = insertResult.insertedId;
 		if (!warId) {
-			this.errorReply("There was an error creating the war document. Aborting.");
-			return;
+			return this.errorReply("There was an error creating the war document. Aborting.");
 		}
 		const war = await ClanWars.findOne({ _id: warId });
 		if (!war) {
-			this.errorReply("Failed to fetch the newly created war. Aborting.");
-			return;
+			return this.errorReply("Failed to fetch the newly created war. Aborting.");
 		}
 
 		const uhtmlId = `clan-war-card-${war._id}`;
