@@ -1,10 +1,5 @@
 /**
  * Impulse-DB: MongoDB Integration Layer
- * MongoDB Atlas M0 (Free) Limitations (for reference):
- * - 512 MB storage, 100 max connections (maxPoolSize: 10)
- * - Aggregation timeout: 60s, Sort memory: 100MB (no allowDiskUse)
- * - No collection rename, JavaScript operations (mapReduce, $where)
- * - Cannot access 'local'/'config' databases
  *
  * @license MIT
  * @author PrinceSky-Git
@@ -51,8 +46,6 @@ export const init = async (config: ImpulseDBConfig): Promise<void> => {
 
 const ensureConnection = (): Db => {
 	if (!state.db || !state.client) throw new Error('ImpulseDB not initialized. Call ImpulseDB.init()');
-	// MongoDB driver handles connection pooling and automatic reconnection,
-	// so no manual ping/health check is needed
 	return state.db;
 };
 
@@ -102,8 +95,9 @@ export class ImpulseCollection<T extends Document = Document> {
 		return this.getCollection().find(filter, options).toArray();
 	}
 
-	findCursor(filter: Filter<T>, options?: FindOptions): Promise<ReturnType<Collection<T>['find']>> {
-		return this.getCollection().then(col => col.find(filter, options));
+	// FIX: getCollection() is synchronous — removed incorrect .then() call
+	findCursor(filter: Filter<T>, options?: FindOptions): ReturnType<Collection<T>['find']> {
+		return this.getCollection().find(filter, options);
 	}
 
 	async updateOne(filter: Filter<T>, update: UpdateFilter<T>, options?: UpdateOptions): Promise<ReturnType<Collection<T>['updateOne']>> {
@@ -142,8 +136,9 @@ export class ImpulseCollection<T extends Document = Document> {
 		return this.getCollection().aggregate<R>(pipeline, options).toArray();
 	}
 
-	aggregateCursor<R = unknown>(pipeline: Document[], options?: AggregateOptions): Promise<ReturnType<Collection<T>['aggregate']>> {
-		return this.getCollection().then(col => col.aggregate<R>(pipeline, options));
+	// FIX: getCollection() is synchronous — removed incorrect .then() call
+	aggregateCursor<R = unknown>(pipeline: Document[], options?: AggregateOptions): ReturnType<Collection<T>['aggregate']> {
+		return this.getCollection().aggregate<R>(pipeline, options);
 	}
 
 	async createIndex(indexSpec: IndexSpecification, options?: CreateIndexesOptions): Promise<string> {
@@ -322,29 +317,34 @@ export class ImpulseCollection<T extends Document = Document> {
 	}
 
 	async batchUpdate(filter: Filter<T>, updateFn: (doc: T) => UpdateFilter<T> | null, batchSize = 100): Promise<BatchUpdateResult> {
-		const cursor = await this.findCursor(filter, {});
+		const cursor = this.findCursor(filter, {});
 		let processed = 0, updated = 0;
 
-		while (await cursor.hasNext()) {
-			const batch: T[] = [];
-			for (let i = 0; i < batchSize && await cursor.hasNext(); i++) {
-				const doc = await cursor.next();
-				if (doc) batch.push(doc);
+		try {
+			while (await cursor.hasNext()) {
+				const batch: T[] = [];
+				for (let i = 0; i < batchSize && await cursor.hasNext(); i++) {
+					const doc = await cursor.next();
+					if (doc) batch.push(doc as T);
+				}
+
+				const ops = batch
+					.map(doc => {
+						const upd = updateFn(doc);
+						return !upd ? null : { updateOne: { filter: { _id: (doc as Document)._id } as Filter<T>, update: upd } };
+					})
+					.filter((op): op is NonNullable<typeof op> => op !== null);
+
+				if (ops.length) {
+					const res = await this.bulkWrite(ops);
+					updated += res.modifiedCount;
+				}
+
+				processed += batch.length;
 			}
-
-			const ops = batch
-				.map(doc => {
-					const upd = updateFn(doc);
-					return !upd ? null : { updateOne: { filter: { _id: doc._id } as Filter<T>, update: upd } };
-				})
-				.filter((op): op is NonNullable<typeof op> => op !== null);
-
-			if (ops.length) {
-				const res = await this.bulkWrite(ops);
-				updated += res.modifiedCount;
-			}
-
-			processed += batch.length;
+		} finally {
+			// Always close the cursor to free server-side resources
+			await cursor.close();
 		}
 
 		return { processed, updated };
@@ -352,24 +352,44 @@ export class ImpulseCollection<T extends Document = Document> {
 
 	async clone(newName: string, copyIndexes = true): Promise<CloneResult> {
 		const db = ensureConnection();
+		const targetCollection = db.collection(newName);
+
+		const targetInfo = await db.listCollections({ name: newName }).toArray();
+		if (targetInfo.length > 0) {
+			throw new Error(`Cannot clone: target collection '${newName}' already exists. Drop it first or choose a different name.`);
+		}
+
 		const docs = await this.find({});
+		let copied = 0;
 
 		if (docs.length) {
-			await db.collection(newName).insertMany(docs);
+			// ordered: false allows the insert to continue past duplicate key errors
+			// and report them rather than throwing and leaving a partial clone silently
+			const result = await targetCollection.insertMany(
+				docs as OptionalId<Document>[],
+				{ ordered: false }
+			);
+			copied = result.insertedCount;
+
+			if (copied < docs.length) {
+				Monitor.warn(
+					`[ImpulseDB] clone('${newName}'): ${docs.length - copied} document(s) failed to insert due to duplicate keys.`
+				);
+			}
 		}
 
 		if (copyIndexes) {
 			const indexes = await this.listIndexes();
-			const newCollection = new ImpulseCollection(newName);
+			const newCol = new ImpulseCollection(newName);
 			for (const idx of indexes) {
 				if (idx.name !== '_id_') {
 					const { key, name, v, ns, ...opts } = idx;
-					await newCollection.createIndex(key, opts);
+					await newCol.createIndex(key, opts);
 				}
 			}
 		}
 
-		return { copied: docs.length };
+		return { copied };
 	}
 }
 
@@ -386,13 +406,19 @@ export const withTransaction = async <T>(
 	options?: TransactionOptions
 ): Promise<T> => {
 	const session = await startSession();
+	let transactionStarted = false;
+
 	try {
 		session.startTransaction(options);
+		transactionStarted = true;
+
 		const result = await callback(session);
 		await session.commitTransaction();
 		return result;
 	} catch (error) {
-		await session.abortTransaction();
+		if (transactionStarted) {
+			await session.abortTransaction();
+		}
 		throw error;
 	} finally {
 		await session.endSession();
