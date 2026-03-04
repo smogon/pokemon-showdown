@@ -94,8 +94,11 @@ function createBotUser(playerId: string): User {
 	}
 	if (staleRoomId !== undefined) {
 		const room = Rooms.get(staleRoomId);
-		// Only clean up matches whose room no longer exists to avoid orphaning live battles.
-		if (!room) {
+		// Treat the match as stale when the room is gone OR the battle has ended.
+		// A room can persist after a battle finishes (room.battle is falsy or
+		// room.battle.ended is true), so checking both avoids leaking bot users.
+		const battleEnded = !room || !room.battle || room.battle.ended;
+		if (battleEnded) {
 			const staleMatch = activeMatches.get(staleRoomId);
 			if (staleMatch) {
 				const staleBot = Users.get(staleMatch.botUserId);
