@@ -186,10 +186,10 @@ function runAutotour(roomid: RoomID): void {
 			liveRoom,
 			format,
 			type,
-			config.playerCap,
+			config.playerCap || undefined,
 			false,
 			modifier,
-			config.name,
+			config.name || undefined,
 			mockContext
 		);
 		if (tour) {
