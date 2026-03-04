@@ -47,7 +47,7 @@ export const DEFAULT_RANKS: { [rankId: string]: CustomClanRank } = {
 			canPromote: true,
 			canDemote: true,
 			canEditDesc: true,
-			canSetMotw: true, // FIX: was canSetMotd (typo), correct key is canSetMotw
+			canSetMotw: true,
 			canManageChat: true,
 			canAnnounce: true,
 			canWar: true,
@@ -301,7 +301,6 @@ export const commands: Chat.ChatCommands = {
 
 			if (!clanId) return this.errorReply("Specify the ID of the clan you wish to join.");
 
-			// FIX: check ban status before any other clan lookups
 			const banInfo = await ClanBans.findOne({ _id: userId });
 			if (banInfo?.banned) {
 				return this.errorReply("You are banned from joining clans.");
@@ -399,9 +398,6 @@ export const commands: Chat.ChatCommands = {
 				note: `User left the clan.`,
 			});
 
-			// FIX: clanRoom could be null/undefined if the room is inactive —
-			// room auth cleanup and user removal are now safely inside the null check,
-			// and leaveRoom is only called when the room actually exists
 			const clanRoom = Rooms.get(clan.chatRoom);
 			if (clanRoom) {
 				clanRoom.auth.delete(userId);
@@ -642,8 +638,7 @@ export const commands: Chat.ChatCommands = {
 									to(new Date(invite.timestamp), { date: true, time: true }),
 								]);
 							});
-
-							// FIX: was generateThemedTable (undefined) — replaced with Table from utils
+							
 							output += Table(sentTitle, sentHeaderRow, sentDataRows);
 						} else {
 							output += `<div class="infobox">${clan.name} has no pending outgoing invitations.</div>`;
@@ -669,7 +664,6 @@ export const commands: Chat.ChatCommands = {
 					});
 
 					if (output) output += '<hr />';
-					// FIX: was generateThemedTable (undefined) — replaced with Table from utils
 					output += Table(title, headerRow, dataRows);
 				} else if (!output) {
 					return this.errorReply("You have no pending clan invitations.");
@@ -1386,8 +1380,6 @@ export const commands: Chat.ChatCommands = {
 			const actorId = user.id;
 
 			if (!tag) return this.errorReply("You must specify a tag.");
-			// FIX: check was `> 4` but error said "3 characters or less" — standardized
-			// to a 4 character max and updated the error message to match
 			if (tag.length > 4) return this.errorReply("Clan tag must be 4 characters or less.");
 			if (!/^[A-Z]+$/.test(tag)) return this.errorReply("Clan tag must contain only uppercase letters.");
 
@@ -1833,10 +1825,6 @@ export const commands: Chat.ChatCommands = {
 			const output = Table(title, headerRow, dataRows);
 			this.sendReply(`|html|${output}`);
 		},
-
-		// FIX: all admin stat/points/level/wins commands now accept an explicit
-		// [clanid] as the first argument so admins don't need to be members of
-		// the target clan. Usage updated in help list accordingly.
 
 		async addpoints(target, room, user) {
 			this.checkCan('roomowner');
