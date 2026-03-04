@@ -1,13 +1,13 @@
 /*
  * PokéRogue Battle — bot user creation, AI move logic, and battle start.
- * Imported by pokerouge.ts.
+ * Imported by pokerogue.ts.
  * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
  */
 
 import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
 import {
-	PokemonEntry, PokeRougeState,
+	PokemonEntry, PokeRogueState,
 	getLevelUpEvo,
 	packPokemon, packTeam, pickRandomPokemon,
 	setState,
@@ -80,7 +80,7 @@ export function destroyBotUser(botUser: User): void {
  */
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
-	const connId = `pokerouge-bot-${uid}`;
+	const connId = `pokerogue-bot-${uid}`;
 	const botDisplayName = `${TRAINER_NAME} ${uid}`;
 
 	// Destroy any stale bot for this player via the activeMatches map.
@@ -286,7 +286,7 @@ function buildBotTeam(floor: number): string {
  * Creates the bot, registers AI handlers and tracks the room.
  * Returns true on success; on failure, the user has already received a popup.
  */
-export function startBattle(user: User, state: PokeRougeState): boolean {
+export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
 
