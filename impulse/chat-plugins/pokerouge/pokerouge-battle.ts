@@ -100,12 +100,6 @@ function createBotUser(playerId: string): User {
 		activeMatches.delete(staleRoomId);
 	}
 
-	// Destroy any currently-registered trainer bot to avoid name collision
-	const existingTrainer = Users.get(toID(TRAINER_NAME));
-	if (existingTrainer) {
-		destroyBotUser(existingTrainer);
-	}
-
 	// Create a minimal noop connection
 	const conn = new Users.Connection(
 		connId,
