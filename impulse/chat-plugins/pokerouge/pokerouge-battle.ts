@@ -93,12 +93,16 @@ function createBotUser(playerId: string): User {
 		}
 	}
 	if (staleRoomId !== undefined) {
-		const staleMatch = activeMatches.get(staleRoomId);
-		if (staleMatch) {
-			const staleBot = Users.get(staleMatch.botUserId);
-			if (staleBot) destroyBotUser(staleBot);
+		const room = Rooms.get(staleRoomId);
+		// Only clean up matches whose room no longer exists to avoid orphaning live battles.
+		if (!room) {
+			const staleMatch = activeMatches.get(staleRoomId);
+			if (staleMatch) {
+				const staleBot = Users.get(staleMatch.botUserId);
+				if (staleBot) destroyBotUser(staleBot);
+			}
+			activeMatches.delete(staleRoomId);
 		}
-		activeMatches.delete(staleRoomId);
 	}
 
 	// Create a minimal noop connection
