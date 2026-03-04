@@ -88,7 +88,7 @@ export type ClanLogType =
 	'ADMIN_POINTS' | 'ADMIN_TOURWIN' | 'ADMIN_EVENTWIN' | 'ADMIN_CLEARMEMBERS' |
 	'ADMIN_TRANSFEROWNER' | 'ADMIN_CLEARINVITES' | 'ADMIN_KICKALL' | 'ADMIN_SETICON' |
 	'ADMIN_SETTAG' | 'ADMIN_SETDESC' | 'ADMIN_RESETSTATS' | 'ADMIN_REMOVELEVEL' |
-	'ADMIN_ADDLEVEL' | 'ADMIN_SETLEVEL' | 'RANK_EDIT';
+	'ADMIN_ADDLEVEL' | 'ADMIN_SETLEVEL' | 'RANK_EDIT' | 'ANNOUNCE';
 
 export interface ClanLog {
 	timestamp: number;
@@ -118,7 +118,7 @@ export interface ClanPointsLogs {
 
 export interface ClanWar {
 	_id: ID;
-	clans: [ID, ID];
+	clans: [ID, ID]; // Index 0 is always the challenger, index 1 is always the target
 	scores: { [clanId: string]: number };
 	status: 'pending' | 'active' | 'completed';
 	startDate: number;
