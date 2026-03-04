@@ -4,8 +4,8 @@
 * @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
-import { generateThemedTable } from '../../utils';
-import { nameColor } from '../../colors';
+import { Table } from '../../utils';
+import { nameColor } from '../customization/custom-colors';
 
 const AUTOTOUR_COLLECTION = 'autotour_configs';
 
@@ -34,7 +34,7 @@ const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 		'gen9randombattle', 'gen9randomdoublesbattle',
 		'gen9blankcanvasrandombattle', 'gen9monotyperandombattle',
 		'gen9randombattlemayhem', 'gen9babyrandombattle',
-		'gen9randombattle', 'gen8randomdoublesbattle',
+		'gen8randombattle', 'gen8randomdoublesbattle',
 		'gen7randombattle', 'gen6randombattle',
 		'gen5randombattle', 'gen4randombattle',
 		'gen3randombattle', 'gen2randombattle',
@@ -53,6 +53,7 @@ const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 const autotourCollection = new ImpulseCollection<PerRoomAutotourConfig>(AUTOTOUR_COLLECTION);
 let autotourConfig: { [roomid: string]: PerRoomAutotourConfig } = {};
 const autotourIntervals: { [roomid: string]: NodeJS.Timeout } = {};
+const autotourIsInterval: { [roomid: string]: boolean } = {};
 
 async function saveConfig(roomid: RoomID): Promise<void> {
 	const config = autotourConfig[roomid];
@@ -70,7 +71,6 @@ async function loadConfig(): Promise<void> {
 		autotourConfig[config.roomid] = config;
 	}
 }
-void loadConfig();
 
 function pickRandom<T>(arr: T[]): T {
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -107,26 +107,49 @@ function startRoomAutotourScheduler(roomid: RoomID): void {
 	const intervalMs = min * 60 * 1000;
 
 	const now = Date.now();
-	const lastRun = config.lastTourTime || now;
-	const nextRun = lastRun + intervalMs;
-	const timeUntilNext = Math.max(0, nextRun - now);
-
-	const delay = timeUntilNext === 0 ? intervalMs : timeUntilNext;
+	const lastRun = config.lastTourTime || 0;
+	const delay = lastRun === 0 ? 0 : Math.max(0, (lastRun + intervalMs) - now);
 
 	autotourIntervals[roomid] = setTimeout(() => {
 		runAutotour(roomid);
-		autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), intervalMs);
+		autotourIsInterval[roomid] = true;
+		autotourIntervals[roomid] = setInterval(() => {
+			const cfg = autotourConfig[roomid];
+			const rm = Rooms.get(roomid);
+			if (rm?.game && rm.game.gameid === 'tournament') {
+				// A tour is already running — skip this tick without updating lastTourTime,
+				// but reschedule from now so we don't stack up on the next tick.
+				clearInterval(autotourIntervals[roomid]);
+				autotourIsInterval[roomid] = false;
+				autotourIntervals[roomid] = setTimeout(() => {
+					runAutotour(roomid);
+					autotourIsInterval[roomid] = true;
+					autotourIntervals[roomid] = setInterval(() => runAutotour(roomid), intervalMs);
+				}, intervalMs);
+				return;
+			}
+			runAutotour(roomid);
+		}, intervalMs);
 	}, delay);
+	autotourIsInterval[roomid] = false;
 }
 
 function stopRoomAutotourScheduler(roomid: RoomID): void {
-	if (autotourIntervals[roomid]) clearInterval(autotourIntervals[roomid]);
+	if (autotourIntervals[roomid]) {
+		if (autotourIsInterval[roomid]) {
+			clearInterval(autotourIntervals[roomid]);
+		} else {
+			clearTimeout(autotourIntervals[roomid]);
+		}
+	}
 	delete autotourIntervals[roomid];
+	delete autotourIsInterval[roomid];
 }
 
 function runAutotour(roomid: RoomID): void {
 	const config = autotourConfig[roomid];
 	if (!config?.enabled) return;
+	if (!config.formats.length || !config.types.length) return;
 	const room = Rooms.get(roomid);
 	if (!room || room.type !== 'chat') return;
 	if (room.game && room.game.gameid === 'tournament') return;
@@ -134,20 +157,24 @@ function runAutotour(roomid: RoomID): void {
 	const format = pickRandom(config.formats);
 	const { type, modifier } = pickTourTypeAndModifier(config.types);
 
+	// Re-fetch room immediately before creating to guard against it closing
+	const liveRoom = Rooms.get(roomid);
+	if (!liveRoom || liveRoom.type !== 'chat') return;
+
 	const mockContext: Chat.CommandContext = {
-		sendReply: (msg: string) => room.add(msg),
-		errorReply: (msg: string) => room.add(msg),
+		sendReply: (msg: string) => liveRoom.add(msg),
+		errorReply: (msg: string) => liveRoom.add(msg),
 		modlog: () => {},
 		privateModAction: () => {},
 		parse: () => {},
 		checkCan: () => {},
 		runBroadcast: () => true,
-		requireRoom: () => room,
+		requireRoom: () => liveRoom,
 	} as unknown as Chat.CommandContext;
 
 	try {
 		const tour = Tournaments.createTournament(
-			room,
+			liveRoom,
 			format,
 			type,
 			config.playerCap,
@@ -157,14 +184,20 @@ function runAutotour(roomid: RoomID): void {
 			mockContext
 		);
 		if (tour) {
-			tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
-			tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
+			if (config.autostart > 0) {
+				tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
+			}
+			if (config.autodq > 0) {
+				tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
+			}
 			const now = Date.now();
 			autotourConfig[roomid].lastTourTime = now;
 			void saveConfig(roomid);
 		}
-	} catch {
-		// Silently fail
+	} catch (err) {
+		const msg = `[autotour] Failed to start tournament in ${roomid}: ${(err as Error)?.message ?? err}`;
+		if (liveRoom) liveRoom.add(`|error|${msg}`).update();
+		console.error(msg);
 	}
 }
 
@@ -402,7 +435,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Player Cap:</b>`, config.playerCap || '(none)'],
 				[`<b>Name:</b>`, config.name || '(none)'],
 			];
-			const tableHTML = generateThemedTable(`Autotour settings for ${roomid}`, [], rows);
+			const tableHTML = Table(`Autotour settings for ${roomid}`, [], rows);
 			this.sendReply(`|html|${tableHTML}`);
 		},
 		nextrun(target, room, user) {
@@ -414,17 +447,13 @@ export const commands: Chat.ChatCommands = {
 
 			const now = Date.now();
 			const intervalMs = config.interval * 60 * 1000;
-			const lastRun = config.lastTourTime || (now - intervalMs);
-			const nextRun = lastRun + intervalMs;
-			let timeRemaining = Math.max(0, nextRun - now);
-
-			if (timeRemaining === 0) {
-				timeRemaining = intervalMs;
-			}
+			const lastRun = config.lastTourTime || 0;
+			const nextRun = lastRun > 0 ? lastRun + intervalMs : now;
+			const timeRemaining = Math.max(0, nextRun - now);
 
 			const minutes = Math.floor(timeRemaining / 60000);
 			const seconds = Math.floor((timeRemaining % 60000) / 1000);
-			const tableHTML = generateThemedTable(`Next Autotour in ${roomid}`, [], [
+			const tableHTML = Table(`Next Autotour in ${roomid}`, [], [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
 				[`<b>Time Remaining:</b>`, `<b>${minutes}m ${seconds}s</b>`],
 				[`<b>Interval:</b>`, `${config.interval} min`],
@@ -464,7 +493,7 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const destroy = (): void => {
-	for (const roomid in autotourIntervals) {
+	for (const roomid of Object.keys(autotourIntervals)) {
 		stopRoomAutotourScheduler(roomid as RoomID);
 	}
 };
