@@ -212,15 +212,6 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	buf += `</div>`;
 
 	// ── Active battle ────────────────────────────────────────────────────────
-	// Clear stale battleRoomId when the room is gone or its battle has ended,
-	// so users never get permanently stuck on the "Battle in progress" screen
-	// after a crash or hot-reload.
-	if (state.battleRoomId) {
-		const bRoom = Rooms.get(state.battleRoomId as RoomID);
-		if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
-			delete state.battleRoomId;
-		}
-	}
 	if (state.battleRoomId) {
 		buf += `<div style="text-align:center;padding:14px 0">` +
 			`<p style="color:#f5c518;font-weight:bold;font-size:14px">Battle in progress!</p>` +
@@ -438,6 +429,15 @@ const NO_RUN_POPUP_HTML =
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
 	// Repair a defined-but-empty pendingChoice before rendering.
 	if (state) repairEmptyPendingChoice(state, user.id);
+	// Clear stale battleRoomId (room gone or battle ended) before rendering, and
+	// persist the change so the stale id doesn't linger on disk across restarts.
+	if (state?.battleRoomId) {
+		const bRoom = Rooms.get(state.battleRoomId as RoomID);
+		if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
+			delete state.battleRoomId;
+			setState(user.id, state);
+		}
+	}
 	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId))
 		? NO_RUN_POPUP_HTML
 		: renderGamePopup(state, view);
@@ -464,9 +464,12 @@ export const commands: Chat.ChatCommands = {
 			let newState = state;
 			let stateChanged = false;
 			// Clear stale battle room reference so the auto-start condition can properly evaluate.
-			if (newState?.battleRoomId && !Rooms.get(newState.battleRoomId as RoomID)) {
-				delete newState.battleRoomId;
-				stateChanged = true;
+			if (newState?.battleRoomId) {
+				const bRoom = Rooms.get(newState.battleRoomId as RoomID);
+				if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
+					delete newState.battleRoomId;
+					stateChanged = true;
+				}
 			}
 			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId)) {
 				newState = buildFreshState(newState);
@@ -1138,15 +1141,12 @@ export const commands: Chat.ChatCommands = {
 
 		removemon(target, room, user) {
 			this.checkCan('lock');
-			// Support "/pokerouge removemon <userid> confirm" to skip the confirmation prompt.
-			// Only treat a trailing "confirm" as a flag when the target is a single user ID
-			// token; this avoids ambiguity with multi-word usernames ending in "confirm".
-			const parts = target.trim().split(/\s+/);
-			const confirmed =
-				parts.length === 2 &&
-				parts[1].toLowerCase() === 'confirm' &&
-				toID(parts[0]) === parts[0];
-			const rawTarget = confirmed ? parts[0] : target.trim();
+			// Support "/pokerouge removemon <userid> --confirm" to skip the confirmation prompt.
+			// Using "--confirm" avoids any collision with real usernames (which cannot start with "-").
+			const CONFIRM_FLAG = ' --confirm';
+			const trimmedTarget = target.trim();
+			const confirmed = trimmedTarget.endsWith(CONFIRM_FLAG);
+			const rawTarget = confirmed ? trimmedTarget.slice(0, -CONFIRM_FLAG.length).trim() : trimmedTarget;
 			let targetId: string;
 			let targetName: string;
 			if (!rawTarget) {
@@ -1165,7 +1165,7 @@ export const commands: Chat.ChatCommands = {
 					`<b>Warning:</b> This will permanently delete all PokéRogue data for ` +
 					`<b>${Utils.escapeHTML(targetName)}</b> ` +
 					`(Floor ${s.floor}, ${s.team?.length ?? 0} Pokémon, ${s.coins ?? 0} coins).<br>` +
-					`<button name="send" value="/pokerouge removemon ${targetId} confirm" class="button">` +
+					`<button name="send" value="/pokerouge removemon ${targetId} --confirm" class="button">` +
 					`Confirm delete</button>`
 				);
 			}
