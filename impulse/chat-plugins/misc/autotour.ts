@@ -45,7 +45,7 @@ const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 	autostart: 5,
 	autodq: 2,
 	playerCap: '',
-	name: '',
+	name: formats,
 	enabled: false,
 	lastTourTime: 0,
 };
