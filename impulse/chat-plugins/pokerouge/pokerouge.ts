@@ -212,7 +212,16 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	buf += `</div>`;
 
 	// ── Active battle ────────────────────────────────────────────────────────
-	if (state.battleRoomId && Rooms.get(state.battleRoomId as RoomID)) {
+	// Clear stale battleRoomId when the room is gone or its battle has ended,
+	// so users never get permanently stuck on the "Battle in progress" screen
+	// after a crash or hot-reload.
+	if (state.battleRoomId) {
+		const bRoom = Rooms.get(state.battleRoomId as RoomID);
+		if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
+			delete state.battleRoomId;
+		}
+	}
+	if (state.battleRoomId) {
 		buf += `<div style="text-align:center;padding:14px 0">` +
 			`<p style="color:#f5c518;font-weight:bold;font-size:14px">Battle in progress!</p>` +
 			`<div class="pr-popup-actions" style="justify-content:center">` +
