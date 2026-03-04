@@ -337,7 +337,7 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	buf += `<div class="pr-popup-stats">`;
 	buf += `<span>Floor <b>${state.floor}</b></span>`;
 	buf += `<span>Coins <b>${coins}</b></span>`;
-	buf += `<span>Wins <b>${state.streaksWon ?? 0}</b></span>`;
+	buf += `<span>Streaks <b>${state.streaksWon ?? 0}</b></span>`;
 	if (state.highestFloor) buf += `<span>Best <b>${state.highestFloor}</b></span>`;
 	buf += `</div>`;
 
