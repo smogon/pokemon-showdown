@@ -77,8 +77,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply(`${targetClan.name} is already in a ${targetClanExistingWar.status} war with ${opponent?.name || opponentId}.`);
 		}
 
-		// FIX: cooldown is now set AFTER the war document is successfully inserted,
-		// so a DB failure doesn't burn the 24h cooldown for nothing
 		const newWar: Omit<ClanWar, '_id'> = {
 			clans: [clanId, toID(targetClanId)],
 			scores: { [clanId]: 0, [toID(targetClanId)]: 0 },
@@ -284,10 +282,6 @@ export const warCommands: Chat.ChatCommands = {
 		const targetClanId = toID(target);
 		if (!targetClanId) return this.errorReply("Specify the clan ID. Usage: /clan war cancel [clanid]");
 
-		// FIX: was using ordered array match [clanId, targetClanId] which only works
-		// if the challenger is exactly clans[0] — replaced with $all so the query
-		// finds the war regardless of storage order, then we verify challenger identity
-		// separately below
 		const war = await ClanWars.findOne({
 			clans: { $all: [clanId, targetClanId] },
 			status: 'pending',
@@ -916,7 +910,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${clan.name} has no pending or active wars.`);
 		}
 
-		// FIX: N+1 query — collect all opponent IDs then fetch in one query
 		const opponentIds = wars.map(war =>
 			war.clans[0] === clanId ? war.clans[1] : war.clans[0]
 		);
@@ -1163,7 +1156,6 @@ export const warCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`${clan.name} has no completed war history.`);
 		}
 
-		// FIX: N+1 query — collect all opponent IDs then fetch in one query
 		const opponentIds = wars.map(war =>
 			war.clans[0] === clanId ? war.clans[1] : war.clans[0]
 		);
