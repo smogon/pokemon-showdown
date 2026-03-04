@@ -48,9 +48,9 @@ let botCounter = 0;
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
- * Display name prefix for all PokéRogue AI trainer bots.
- * Each bot's full name is `${TRAINER_NAME} <playerId>` so concurrent battles
- * for different players each get their own uniquely named bot without collision.
+ * Display name used for all PokéRogue AI trainer bots.
+ * All bots share this same display name; uniqueness per battle is handled
+ * internally via user IDs and the botBattleHandlers mapping.
  */
 const TRAINER_NAME = 'PokéRogue Trainer';
 
