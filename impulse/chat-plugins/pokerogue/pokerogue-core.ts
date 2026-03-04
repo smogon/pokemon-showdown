@@ -1,6 +1,6 @@
 /*
  * PokéRogue Core — types, constants, data persistence, and game helpers.
- * Imported by pokerouge.ts and pokerouge-battle.ts.
+ * Imported by pokerogue.ts and pokerogue-battle.ts.
  * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
  */
 
@@ -10,7 +10,7 @@ import { FS } from '../../../lib';
 // Constants
 // ---------------------------------------------------------------------------
 
-const DATA_FILE = 'impulse/db/pokerouge.json';
+const DATA_FILE = 'impulse/db/pokerogue.json';
 
 /**
  * Tags that identify Legendary / Mythical / Special Pokemon.
@@ -426,7 +426,7 @@ export interface PokemonEntry {
 	heldItem?: string;
 }
 
-export interface PokeRougeState {
+export interface PokeRogueState {
 	floor: number;
 	team: PokemonEntry[];
 	/** If set, player is being prompted to choose a starter (or a new team addition). */
@@ -457,7 +457,7 @@ export interface PokeRougeState {
 // Persistence
 // ---------------------------------------------------------------------------
 
-type SavedData = Record<string, PokeRougeState>;
+type SavedData = Record<string, PokeRogueState>;
 export let savedData: SavedData = {};
 
 function saveData(): void {
@@ -475,11 +475,11 @@ async function loadData(): Promise<void> {
 
 void loadData();
 
-export function getState(userid: string): PokeRougeState | null {
+export function getState(userid: string): PokeRogueState | null {
 	return savedData[userid] ?? null;
 }
 
-export function setState(userid: string, state: PokeRougeState): void {
+export function setState(userid: string, state: PokeRogueState): void {
 	savedData[userid] = state;
 	saveData();
 }
