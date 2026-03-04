@@ -300,8 +300,8 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	weaknesspolicy: { id: 'weaknesspolicy', name: 'Weakness Policy', description: 'Sharply raises Atk and Sp. Atk when hit by a super-effective move.', cost: 150, heldItem: 'weaknesspolicy' },
 	covertcloak: { id: 'covertcloak', name: 'Covert Cloak', description: 'Protects the holder from secondary effects of moves.', cost: 80, heldItem: 'covertcloak' },
 	mirrorherb: { id: 'mirrorherb', name: 'Mirror Herb', description: 'Copies the opponent\'s stat boosts once, then is consumed.', cost: 100, heldItem: 'mirrorherb' },
-	loadeddice: { id: 'loadeddice', name: 'Loaded Dice', description: 'Multi-hit moves always hit the maximum number of times.', cost: 120, heldItem: 'loadeddice' },
-	metronome: { id: 'metronome', name: 'Metronome', description: 'Boosts a move used consecutively — 10% per use up to 100%.', cost: 80, heldItem: 'metronome' },
+	loadeddice: { id: 'loadeddice', name: 'Loaded Dice', description: 'Makes most 2–5-hit moves strike 4–5 times instead of 2–5.', cost: 120, heldItem: 'loadeddice' },
+	metronome: { id: 'metronome', name: 'Metronome', description: 'Boosts a move used consecutively — ~20% per use up to 2× power.', cost: 80, heldItem: 'metronome' },
 	// ---- Switch / eject items ----
 	ejectbutton: { id: 'ejectbutton', name: 'Eject Button', description: 'Immediately switches the holder out when it is hit by a move.', cost: 70, heldItem: 'ejectbutton' },
 	ejectpack: { id: 'ejectpack', name: 'Eject Pack', description: 'Switches out the holder when any of its stats are lowered.', cost: 80, heldItem: 'ejectpack' },
