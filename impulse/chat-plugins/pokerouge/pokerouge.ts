@@ -1129,12 +1129,15 @@ export const commands: Chat.ChatCommands = {
 
 		removemon(target, room, user) {
 			this.checkCan('lock');
-			// Support "/pokerouge removemon <user> confirm" to skip the confirmation prompt.
-			// Require at least 2 tokens so a bare "/pokerouge removemon confirm" is treated
-			// as targeting a user named "confirm" rather than bypassing the prompt silently.
+			// Support "/pokerouge removemon <userid> confirm" to skip the confirmation prompt.
+			// Only treat a trailing "confirm" as a flag when the target is a single user ID
+			// token; this avoids ambiguity with multi-word usernames ending in "confirm".
 			const parts = target.trim().split(/\s+/);
-			const confirmed = parts.length >= 2 && parts[parts.length - 1].toLowerCase() === 'confirm';
-			const rawTarget = confirmed ? parts.slice(0, -1).join(' ') : target.trim();
+			const confirmed =
+				parts.length === 2 &&
+				parts[1].toLowerCase() === 'confirm' &&
+				toID(parts[0]) === parts[0];
+			const rawTarget = confirmed ? parts[0] : target.trim();
 			let targetId: string;
 			let targetName: string;
 			if (!rawTarget) {
