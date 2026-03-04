@@ -1,5 +1,5 @@
 /*
- * PokeRouge Battle — bot user creation, AI move logic, and battle start.
+ * PokéRogue Battle — bot user creation, AI move logic, and battle start.
  * Imported by pokerouge.ts.
  * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
  */
@@ -48,11 +48,12 @@ let botCounter = 0;
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
 /**
- * Display name prefix for all PokeRouge AI trainer bots.
- * Each bot's full name is `${TRAINER_NAME} <playerId>` so concurrent battles
- * for different players each get their own uniquely named bot without collision.
+ * Display name prefix for all PokéRogue AI trainer bots.
+ * Each bot appends its unique counter (e.g. "PokéRogue Trainer 42") so that
+ * concurrent battles work correctly — every bot user needs a unique user ID.
+ * The battle title still uses `TRAINER_NAME` directly for a clean opponent label.
  */
-const TRAINER_NAME = 'PokeRouge Trainer';
+const TRAINER_NAME = 'PokéRogue Trainer';
 
 /**
  * Destroys a bot user, removing it from the Users table.
@@ -69,11 +70,10 @@ export function destroyBotUser(botUser: User): void {
 }
 
 /**
- * Creates the PokeRouge AI trainer bot for a specific player.
- * Any stale bot for the same player is destroyed first.
- * The bot name is player-specific (`PokeRouge Trainer <playerId>`) so that
- * two concurrent battles never share a bot and destroying one can never
- * corrupt another player's match.
+ * Creates the PokéRogue AI trainer bot for a specific player.
+ * Any stale bot for the same player is destroyed first (via activeMatches lookup).
+ * Each bot gets a unique display name (`TRAINER_NAME + uid`) so that concurrent
+ * battles work correctly — every User object needs a unique user ID.
  * The bot is marked as unnamed after forceRename so that:
  *   - It does NOT appear in the battle room's user list.
  *   - It does NOT get tracked by the /seen plugin when it disconnects.
@@ -81,12 +81,31 @@ export function destroyBotUser(botUser: User): void {
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerouge-bot-${uid}`;
-	const botDisplayName = `${TRAINER_NAME} ${playerId}`;
+	const botDisplayName = `${TRAINER_NAME} ${uid}`;
 
-	// Destroy any stale bot for this player before creating a new one
-	const existingBot = Users.get(toID(botDisplayName));
-	if (existingBot) {
-		destroyBotUser(existingBot);
+	// Destroy any stale bot for this player via the activeMatches map.
+	// Collect the roomId first to avoid mutating the map while iterating.
+	let staleRoomId: RoomID | undefined;
+	for (const [roomId, match] of activeMatches) {
+		if (match.userId === toID(playerId)) {
+			staleRoomId = roomId;
+			break;
+		}
+	}
+	if (staleRoomId !== undefined) {
+		const room = Rooms.get(staleRoomId);
+		// Treat the match as stale when the room is gone OR the battle has ended.
+		// A room can persist after a battle finishes (room.battle is falsy or
+		// room.battle.ended is true), so checking both avoids leaking bot users.
+		const battleEnded = !room || !room.battle || room.battle.ended;
+		if (battleEnded) {
+			const staleMatch = activeMatches.get(staleRoomId);
+			if (staleMatch) {
+				const staleBot = Users.get(staleMatch.botUserId);
+				if (staleBot) destroyBotUser(staleBot);
+			}
+			activeMatches.delete(staleRoomId);
+		}
 	}
 
 	// Create a minimal noop connection
@@ -263,7 +282,7 @@ function buildBotTeam(floor: number): string {
 }
 
 /**
- * Starts a PokeRouge battle on the current floor for `user`.
+ * Starts a PokéRogue battle on the current floor for `user`.
  * Creates the bot, registers AI handlers and tracks the room.
  * Returns true on success; on failure, the user has already received a popup.
  */
@@ -283,7 +302,7 @@ export function startBattle(user: User, state: PokeRougeState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${botUser.name}`,
+			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${TRAINER_NAME}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);

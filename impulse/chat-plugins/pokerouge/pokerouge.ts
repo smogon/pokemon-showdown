@@ -1,5 +1,5 @@
 /*
- * PokeRouge - Pokemon Roguelike Battle Tower Plugin
+ * PokéRogue - Pokemon Roguelike Battle Tower Plugin
  * A battle-tower-based roguelike game for Pokemon Showdown (Impulse server).
  *
  * Player commands:
@@ -20,7 +20,7 @@
  *   /pokerouge resetcoins [user]
  *   /pokerouge setfloor [user],[floor]
  *   /pokerouge addmon [user],[pokemon]
- *   /pokerouge removemon [user],[slot]
+ *   /pokerouge removemon [user]       — Delete all PokéRogue data for a user
  *   /pokerouge viewteam [user]
  *   /pokerouge healteam [user]
  *   /pokerouge resetfloor [user]
@@ -66,6 +66,37 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
+/** Returns a 24x24 item icon img tag using PS's item icon sprites. Works for every PS item. */
+function getItemSprite(itemId: string): string {
+	const safeId = encodeURIComponent(toID(itemId));
+	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${safeId}.png"` +
+		` loading="lazy" decoding="async" width="24" height="24" alt="" style="vertical-align:middle;image-rendering:pixelated" />`;
+}
+
+/** Renders a single coloured stat bar row (label | bar | value). */
+function renderStatBar(label: string, value: number, color: string): string {
+	const pct = Math.min(100, Math.round((value / 255) * 100));
+	return `<div class="pr-statbar-row">` +
+		`<span class="pr-statbar-label">${label}</span>` +
+		`<div class="pr-statbar-track">` +
+		`<div class="pr-statbar-fill" style="background:${color};width:${pct}%"></div>` +
+		`</div>` +
+		`<span class="pr-statbar-val">${value}</span>` +
+		`</div>`;
+}
+
+/** Renders a thin EXP progress bar for a team member. */
+function renderExpBar(mon: PokemonEntry): string {
+	let pct = 100;
+	if (mon.level < 100) {
+		const expAtCurrent = expForLevel(mon.level);
+		const expAtNext = expForLevel(mon.level + 1);
+		const range = expAtNext - expAtCurrent;
+		pct = range > 0 ? Math.max(0, Math.min(100, Math.round(((mon.exp - expAtCurrent) / range) * 100))) : 0;
+	}
+	return `<div class="pr-expbar"><div class="pr-expbar-fill" style="width:${pct}%"></div></div>`;
+}
+
 /** Returns a hex colour string for a Pokemon type (no leading #). */
 function typeColor(type: string): string {
 	const colors: Record<string, string> = {
@@ -77,6 +108,21 @@ function typeColor(type: string): string {
 	};
 	return colors[type] ?? '68a090';
 }
+
+/** Builds type badge HTML for a list of types. `large` = choice-card size; default = team-card size. */
+function renderTypeBadge(types: string[], large = false): string {
+	if (large) {
+		return types.map(t =>
+			`<span style="background:#${typeColor(t)};color:#fff;border-radius:4px;` +
+			`padding:2px 6px;font-size:10px;font-weight:bold">${t}</span>`
+		).join(' ');
+	}
+	return types.map(t =>
+		`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;` +
+		`padding:1px 5px;font-size:9px;font-weight:bold">${t}</span>`
+	).join(' ');
+}
+
 
 function renderTeam(team: PokemonEntry[], withSprites = false): string {
 	return team.map((mon, idx) => {
@@ -158,20 +204,21 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	buf += `<div class="pr-popup-header">`;
 	buf += `<h2>PokéRogue</h2>`;
 	if (state.team?.length) {
-		buf += `<div style="font-size:12px;color:#aaa">` +
-			`Floor <b style="color:#7ec8e3">${state.floor}</b>` +
-			` &nbsp;|&nbsp; Coins: <b style="color:#f5c518">${state.coins ?? 0}</b>` +
+		buf += `<div style="display:flex;gap:6px;align-items:center">` +
+			`<span class="pr-floor-badge">Floor ${state.floor}</span>` +
+			`<span class="pr-coin-badge">${state.coins ?? 0} Coins</span>` +
 			`</div>`;
 	}
 	buf += `</div>`;
 
 	// ── Active battle ────────────────────────────────────────────────────────
-	if (state.battleRoomId && Rooms.get(state.battleRoomId as RoomID)) {
-		buf += `<p><b>Battle in progress!</b></p>`;
-		buf += `<div class="pr-popup-actions">` +
-			`<a href="/${state.battleRoomId}" class="pr-btn primary">Go to Battle</a>` +
-			`<button name="send" value="/pokerouge start" class="pr-btn">Refresh</button>` +
-			`</div>`;
+	if (state.battleRoomId) {
+		buf += `<div style="text-align:center;padding:14px 0">` +
+			`<p style="color:#f5c518;font-weight:bold;font-size:14px">Battle in progress!</p>` +
+			`<div class="pr-popup-actions" style="justify-content:center">` +
+			`<a href="/${state.battleRoomId}" class="button" style="color:#fff;text-decoration:none">Go to Battle</a>` +
+			`<button name="send" value="/pokerouge start" class="button">Refresh</button>` +
+			`</div></div>`;
 		buf += `</div>`;
 		return buf;
 	}
@@ -179,10 +226,10 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	// ── Pending Pokémon choice ───────────────────────────────────────────────
 	if (state.pendingChoice?.length) {
 		const isAdd = state.pendingChoiceType === 'add';
-		buf += `<p><b>${isAdd
+		buf += `<p style="color:#c4a8ff;font-weight:bold;font-size:13px;margin:8px 0">${isAdd
 			? 'Milestone! Choose a Pokemon to add to your team:'
-			: 'Choose your starter Pokemon (all at Lv. 1):'
-		}</b></p>`;
+			: 'Choose your starter Pokemon — all at Lv. 1:'
+		}</p>`;
 		buf += `<div class="pr-choice-grid">`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const s = state.pendingChoice[i];
@@ -190,9 +237,7 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 			const name = sp.exists ? sp.name : s;
 			const isLegendary = sp.tags?.some(tag => LEGENDARY_TAGS.has(tag));
 			const types = sp.types ?? [];
-			const typeBadge = types.map(t =>
-				`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;padding:1px 4px;font-size:10px">${t}</span>`
-			).join(' ');
+			const typeBadge = renderTypeBadge(types, true);
 			const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 			const ab = (sp.abilities ?? {}) as unknown as Record<string, string>;
@@ -200,24 +245,35 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 			const moveIds = getLevelUpMoves(toID(s), isAdd ? Math.max(1, state.floor - 2) : 1);
 			const movesStr = moveIds.map(m => Dex.moves.get(m).name || m).join(', ') || 'Tackle';
 			buf += `<div class="pr-choice-card${isLegendary ? ' legendary' : ''}">`;
-			buf += getSprite(s, 64);
-			buf += `<br><b style="font-size:13px">${Utils.escapeHTML(name)}</b>`;
-			if (isLegendary) buf += `<br><span style="color:#e67e22;font-size:10px">Legendary</span>`;
-			buf += `<br>${typeBadge}`;
-			buf += `<br><span style="font-size:10px;color:#aaa">BST ${bst}</span>`;
-			buf += `<div style="font-size:10px;color:#999;margin:3px 0;text-align:left">` +
-				`<b>Abilities:</b> ${Utils.escapeHTML(abilityList)}<br>` +
-				`<b>Moves:</b> ${Utils.escapeHTML(movesStr)}` +
+			buf += getSprite(s, 72);
+			buf += `<br><b style="font-size:13px;color:#e8e0ff">${Utils.escapeHTML(name)}</b>`;
+			if (isLegendary) {
+				buf += `<br><span style="color:#f59e0b;font-size:10px;font-weight:bold;` +
+					`letter-spacing:0.5px">LEGENDARY</span>`;
+			}
+			buf += `<br><div style="margin:4px 0">${typeBadge}</div>`;
+			buf += `<div style="font-size:10px;color:#8ab4f8;margin:2px 0">` +
+				`BST <b style="color:#c4a8ff">${bst}</b></div>`;
+			buf += `<div style="margin:5px 0">`;
+			buf += renderStatBar('HP', bs.hp, '#ff6060');
+			buf += renderStatBar('Atk', bs.atk, '#f5a623');
+			buf += renderStatBar('Def', bs.def, '#f5e642');
+			buf += renderStatBar('SpA', bs.spa, '#6495f5');
+			buf += renderStatBar('SpD', bs.spd, '#7ecf6e');
+			buf += renderStatBar('Spe', bs.spe, '#f564a9');
+			buf += `</div>`;
+			buf += `<div style="font-size:10px;color:#888;margin:4px 0;text-align:left">` +
+				`<b style="color:#aaa">Ability:</b> ${Utils.escapeHTML(abilityList)}<br>` +
+				`<b style="color:#aaa">Moves:</b> ${Utils.escapeHTML(movesStr)}` +
 				`</div>`;
-			buf += `<button name="send" value="/pokerouge choose ${i + 1}" class="pr-btn primary" style="margin-top:6px;width:100%">` +
-				`${isAdd ? 'Add to Team' : 'Choose!'}` +
-				`</button>`;
+			buf += `<button name="send" value="/pokerouge choose ${i + 1}" class="button"` +
+				` style="width:100%;margin-top:6px">${isAdd ? 'Add to Team' : 'Choose!'}</button>`;
 			buf += `</div>`;
 		}
 		buf += `</div>`;
 		if (state.team?.length) {
 			buf += `<div class="pr-popup-actions">` +
-				`<button name="send" value="/pokerouge start" class="pr-btn">Refresh</button>` +
+				`<button name="send" value="/pokerouge start" class="button">Refresh</button>` +
 				`</div>`;
 		}
 		buf += `</div>`;
@@ -226,9 +282,9 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 
 	// ── No team ──────────────────────────────────────────────────────────────
 	if (!state.team?.length) {
-		buf += `<p>No active run. Start a new adventure!</p>`;
-		buf += `<div class="pr-popup-actions">` +
-			`<button name="send" value="/pokerouge newgame" class="pr-btn primary">New Run</button>` +
+		buf += `<div style="text-align:center;padding:16px 0">` +
+			`<p style="color:#8ab4f8;font-size:13px;margin:0 0 12px">No active run. Start a new adventure!</p>` +
+			`<button name="send" value="/pokerouge newgame" class="button">New Run</button>` +
 			`</div>`;
 		buf += `</div>`;
 		return buf;
@@ -238,28 +294,32 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
 		buf += `<div class="pr-popup-actions">` +
-			`<button name="send" value="/pokerouge start" class="pr-btn">Back to Dashboard</button>` +
-			`<button name="send" value="/pokerouge refreshshop" class="pr-btn">Refresh Shop (5 coins)</button>` +
-			`<button name="send" value="/pokerouge battle" class="pr-btn primary">Start Battle!</button>` +
+			`<button name="send" value="/pokerouge start" class="button">Back</button>` +
+			`<button name="send" value="/pokerouge refreshshop" class="button">Reroll Shop (5 coins)</button>` +
+			`<button name="send" value="/pokerouge battle" class="button">Start Battle</button>` +
 			`</div>`;
-		buf += `<h3>Item Shop &nbsp;<small style="color:#aaa;font-weight:normal;text-transform:none">${shopCoins} coins</small></h3>`;
-		buf += `<p style="font-size:10px;color:#888;margin:2px 0">Items are permanent unless marked "(held item, 1 battle)".</p>`;
+		buf += `<h3>Item Shop &nbsp;<span class="pr-coin-badge">${shopCoins} coins</span></h3>`;
+		buf += `<p style="font-size:10px;color:#666;margin:2px 0 8px">` +
+			`Held items are consumed after the next battle.</p>`;
 		buf += `<div class="pr-shop-grid">`;
 		for (const itemId of (state.shopInventory ?? [])) {
 			const item = SHOP_ITEMS[itemId];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
 			buf += `<div class="pr-shop-card">`;
-			buf += `<b style="color:#7ec8e3;font-size:12px">${Utils.escapeHTML(item.name)}</b><br>`;
-			buf += `<small style="color:#aaa;font-size:10px">${Utils.escapeHTML(item.description)}</small>`;
-			if (item.heldItem) buf += `<br><small style="color:#888;font-size:9px">(held item, 1 battle)</small>`;
+			buf += `<div style="margin-bottom:5px">${getItemSprite(itemId)}</div>`;
+			buf += `<b style="color:#c4a8ff;font-size:12px">${Utils.escapeHTML(item.name)}</b><br>`;
+			buf += `<small style="color:#8ab4f8;font-size:10px">${Utils.escapeHTML(item.description)}</small>`;
+			if (item.heldItem) {
+				buf += `<br><small style="color:#555;font-size:9px">[held — 1 battle]</small>`;
+			}
 			buf += `<br>`;
 			if (canAfford) {
-				buf += `<button name="send" value="/pokerouge buy ${item.id}" class="pr-btn primary" style="width:100%;margin-top:4px">` +
-					`Buy (${item.cost} coins)</button>`;
+				buf += `<button name="send" value="/pokerouge buy ${item.id}" class="button"` +
+					` style="width:100%;margin-top:5px">Buy — ${item.cost}c</button>`;
 			} else {
-				buf += `<button class="pr-btn" style="width:100%;margin-top:4px;opacity:0.5" disabled>` +
-					`Buy (${item.cost} coins)</button>`;
+				buf += `<button class="button" style="width:100%;margin-top:5px;opacity:0.45" disabled>` +
+					`${item.cost}c (need more)</button>`;
 			}
 			buf += `</div>`;
 		}
@@ -270,10 +330,6 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	// ── Main dashboard ───────────────────────────────────────────────────────
 	const coins = state.coins ?? 0;
 	const items = state.items ?? {};
-	const itemList = Object.entries(items)
-		.filter(([, qty]) => qty > 0)
-		.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} ×${qty}`)
-		.join(', ') || 'None';
 	const activeEffects: string[] = [];
 	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
 	if (state.hasRevive) activeEffects.push('Revive (active)');
@@ -286,8 +342,10 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	buf += `</div>`;
 
 	if (activeEffects.length) {
-		buf += `<p style="font-size:11px;color:#aaa;margin:4px 0">` +
-			`<b>Effects:</b> ${activeEffects.join(' &nbsp; ')}</p>`;
+		buf += `<div style="font-size:11px;color:#8ab4f8;` +
+			`background:rgba(90,63,160,0.15);border:1px solid rgba(90,63,160,0.3);` +
+			`border-radius:6px;padding:4px 10px;margin:6px 0">` +
+			`<b>Active:</b> ${activeEffects.join(' &nbsp; ')}</div>`;
 	}
 
 	buf += `<h3>Your Team</h3>`;
@@ -295,32 +353,50 @@ function renderGamePopup(state: PokeRougeState, view: 'main' | 'shop' = 'main'):
 	for (const mon of state.team) {
 		const sp = Dex.species.get(toID(mon.species));
 		const name = sp.exists ? sp.name : mon.species;
+		const types = sp.types ?? [];
+		const typeBadge = renderTypeBadge(types);
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const heldLabel = mon.heldItem ? SHOP_ITEMS[mon.heldItem]?.name ?? mon.heldItem : '';
 		buf += `<div class="pr-popup-mon">`;
-		buf += getSprite(mon.species, 48);
-		buf += `<div>` +
-			`<b>${Utils.escapeHTML(name)}</b>` +
-			(heldLabel ? `<br><small style="color:#aaa;font-size:10px">Item: ${Utils.escapeHTML(heldLabel)}</small>` : '') +
-			`<br><span style="font-size:11px">Lv.${mon.level}` +
+		buf += getSprite(mon.species, 52);
+		buf += `<div style="flex:1;min-width:0">`;
+		buf += `<b style="color:#e8e0ff;font-size:12px">${Utils.escapeHTML(name)}</b><br>`;
+		buf += `<span style="font-size:10px">${typeBadge}</span><br>`;
+		buf += `<span style="font-size:11px;color:#8ab4f8">Lv.${mon.level}` +
 			(mon.level < 100
-				? ` <span style="color:#777">(${expNeeded} EXP)</span>`
+				? ` <span style="color:#555">(${expNeeded} EXP)</span>`
 				: ` <span style="color:#f5c518">MAX</span>`) +
-			`</span>` +
-			`</div>`;
-		buf += `</div>`;
+			`</span>`;
+		buf += renderExpBar(mon);
+		if (heldLabel) {
+			buf += `<br><span style="font-size:10px;color:#8ab4f8">` +
+				`${getItemSprite(mon.heldItem!)} ${Utils.escapeHTML(heldLabel)}</span>`;
+		}
+		buf += `</div></div>`;
 	}
 	buf += `</div>`;
 
-	if (itemList !== 'None') {
-		buf += `<p style="font-size:11px;color:#bbb;margin:4px 0"><b>Inventory:</b> ${Utils.escapeHTML(itemList)}</p>`;
+	const ownedItems = Object.entries(items).filter(([, qty]) => qty > 0);
+	if (ownedItems.length) {
+		buf += `<h3>Inventory</h3>`;
+		buf += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin:4px 0">`;
+		for (const [id, qty] of ownedItems) {
+			const iname = SHOP_ITEMS[id]?.name ?? id;
+			buf += `<span style="background:rgba(90,63,160,0.2);` +
+				`border:1px solid rgba(90,63,160,0.4);border-radius:6px;` +
+				`padding:3px 8px;font-size:11px">` +
+				`${getItemSprite(id)} ${Utils.escapeHTML(iname)} \u00d7${qty}</span>`;
+		}
+		buf += `</div>`;
 	}
 
-	buf += `<div class="pr-popup-actions">`;
-	buf += `<button name="send" value="/pokerouge battle" class="pr-btn primary">Start Battle! (Floor ${state.floor})</button>`;
-	buf += `<button name="send" value="/pokerouge popup shop" class="pr-btn">Shop</button>`;
-	buf += `<button name="send" value="/pokerouge top" class="pr-btn">Leaderboard</button>`;
-	buf += `<button name="send" value="/pokerouge quit" class="pr-btn danger">Quit</button>`;
+	buf += `<div class="pr-popup-actions" style="margin-top:12px">`;
+	buf += `<button name="send" value="/pokerouge battle" class="button">` +
+		`Start Battle — Floor ${state.floor}</button>`;
+	buf += `<button name="send" value="/pokerouge popup shop" class="button">Shop</button>`;
+	buf += `<button name="send" value="/pokerouge top" class="button">Leaderboard</button>`;
+	buf += `<button name="send" value="/pokerouge quit" class="button" style="color:#ff8080">` +
+		`Quit Run</button>`;
 	buf += `</div>`;
 
 	buf += `</div>`;
@@ -341,9 +417,9 @@ function repairEmptyPendingChoice(state: PokeRougeState, userId: string): void {
 const NO_RUN_POPUP_HTML =
 	`<div class="pr-popup">` +
 	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
-	`<p>No active run.</p>` +
-	`<div class="pr-popup-actions">` +
-	`<button name="send" value="/pokerouge newgame" class="pr-btn primary">New Run</button>` +
+	`<div style="text-align:center;padding:16px 0">` +
+	`<p style="color:#8ab4f8;font-size:13px;margin:0 0 12px">No active run.</p>` +
+	`<button name="send" value="/pokerouge newgame" class="button">New Run</button>` +
 	`</div></div>`;
 
 /**
@@ -353,6 +429,15 @@ const NO_RUN_POPUP_HTML =
 function sendGamePopup(user: User, state: PokeRougeState | null, view: 'main' | 'shop' = 'main'): void {
 	// Repair a defined-but-empty pendingChoice before rendering.
 	if (state) repairEmptyPendingChoice(state, user.id);
+	// Clear stale battleRoomId (room gone or battle ended) before rendering, and
+	// persist the change so the stale id doesn't linger on disk across restarts.
+	if (state?.battleRoomId) {
+		const bRoom = Rooms.get(state.battleRoomId as RoomID);
+		if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
+			delete state.battleRoomId;
+			setState(user.id, state);
+		}
+	}
 	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId))
 		? NO_RUN_POPUP_HTML
 		: renderGamePopup(state, view);
@@ -379,9 +464,12 @@ export const commands: Chat.ChatCommands = {
 			let newState = state;
 			let stateChanged = false;
 			// Clear stale battle room reference so the auto-start condition can properly evaluate.
-			if (newState?.battleRoomId && !Rooms.get(newState.battleRoomId as RoomID)) {
-				delete newState.battleRoomId;
-				stateChanged = true;
+			if (newState?.battleRoomId) {
+				const bRoom = Rooms.get(newState.battleRoomId as RoomID);
+				if (!bRoom || !bRoom.battle || bRoom.battle.ended) {
+					delete newState.battleRoomId;
+					stateChanged = true;
+				}
 			}
 			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId)) {
 				newState = buildFreshState(newState);
@@ -442,7 +530,7 @@ export const commands: Chat.ChatCommands = {
 				const activeBattleRoom = Rooms.get(state.battleRoomId);
 				if (activeBattleRoom) {
 					return this.sendReplyBox(
-						`You already have an active PokeRouge battle! ` +
+						`You already have an active PokéRogue battle! ` +
 						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
 					);
 				}
@@ -620,7 +708,7 @@ export const commands: Chat.ChatCommands = {
 
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
+				return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			}
 
 			// Ensure shop inventory is rolled before validating
@@ -665,7 +753,7 @@ export const commands: Chat.ChatCommands = {
 
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run. Use /pokerouge start first.');
+				return this.errorReply('You have no active PokéRogue run. Use /pokerouge start first.');
 			}
 
 			const qty = state.items?.[itemId] ?? 0;
@@ -750,7 +838,7 @@ export const commands: Chat.ChatCommands = {
 			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
 			if (!state) {
-				return this.errorReply('You have no active PokeRouge run.');
+				return this.errorReply('You have no active PokéRogue run.');
 			}
 			if (state.battleRoomId) {
 				// Clean up activeMatches and bot user before forfeiting,
@@ -795,7 +883,7 @@ export const commands: Chat.ChatCommands = {
 			if (amount <= 0 || isNaN(amount)) return this.errorReply('Amount must be a positive number.');
 			const targetState = getState(targetId);
 			if (!targetState) {
-				return this.errorReply(`${targetName} has no active PokeRouge run.`);
+				return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			}
 			targetState.coins = (targetState.coins ?? 0) + amount;
 			setState(targetId, targetState);
@@ -840,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (isNaN(amount) || amount <= 0) return this.errorReply('Amount must be a positive number.');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.coins = Math.max(0, (targetState.coins ?? 0) - amount);
 			setState(targetId, targetState);
 			this.sendReply(`Removed ${amount} coins from ${targetName}. They now have ${targetState.coins} coins.`);
@@ -868,7 +956,7 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmed;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.coins = 0;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s coins to 0.`);
@@ -910,8 +998,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (isNaN(floor) || floor < 1) return this.errorReply('Floor must be a positive number.');
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.floor = floor;
 			setState(targetId, targetState);
 			this.sendReply(`Set ${targetName}'s floor to ${floor}.`);
@@ -936,8 +1024,8 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmedFloor;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			targetState.floor = 1;
 			setState(targetId, targetState);
 			this.sendReply(`Reset ${targetName}'s floor to 1.`);
@@ -964,11 +1052,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const targetState = getState(targetId);
 			const targetNameHtml = Utils.escapeHTML(targetName);
-			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokeRouge data.`);
-			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokeRouge run.`);
+			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokéRogue data.`);
+			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokéRogue run.`);
 			const targetDisplay = targetState.displayName || targetName;
 			this.sendReplyBox(
-				`<b>PokeRouge Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
+				`<b>PokéRogue Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
 				`<b>Floor:</b> ${targetState.floor} &nbsp;|&nbsp; <b>Coins:</b> ${targetState.coins ?? 0}<br>` +
 				`<b>Team:</b><br>${renderTeam(targetState.team, true)}`
 			);
@@ -1031,8 +1119,8 @@ export const commands: Chat.ChatCommands = {
 
 			const speciesId = toID(speciesStr);
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			if (targetState.team.length >= 6) return this.errorReply(`${targetName}'s team is full (6 Pokémon).`);
 			const species = Dex.species.get(speciesId);
 			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${speciesStr}`);
@@ -1053,56 +1141,25 @@ export const commands: Chat.ChatCommands = {
 
 		removemon(target, room, user) {
 			this.checkCan('lock');
-			const parts = target.split(',').map(p => p.trim());
+			const trimmedTarget = target.trim();
 			let targetId: string;
 			let targetName: string;
-			let slotStr: string;
-			const isNumber = (s: string) => /^\d+$/.test(s);
-			if (parts.length === 1 && isNumber(parts[0])) {
-				// Single numeric arg: treat as slot and default target to self
+			if (!trimmedTarget) {
 				targetId = user.id;
 				targetName = user.name;
-				slotStr = parts[0];
-			} else if (parts.length >= 2) {
-				const rawUser = parts[0];
-				const rawSlot = parts[1];
-				if (!rawUser) {
-					// Empty username segment (e.g. leading comma): default to self
-					targetId = user.id;
-					targetName = user.name;
-				} else {
-					const maybeId = toID(rawUser);
-					if (!maybeId) {
-						return this.errorReply(`Invalid username: "${rawUser}".`);
-					}
-					targetId = maybeId;
-					targetName = rawUser;
-				}
-				slotStr = rawSlot;
 			} else {
-				return this.errorReply('Usage: /pokerouge removemon [user], <slot>');
+				const maybeId = toID(trimmedTarget);
+				if (!maybeId) return this.errorReply(`Invalid username: "${trimmedTarget}".`);
+				targetId = maybeId;
+				targetName = trimmedTarget;
 			}
-			if (!slotStr || !isNumber(slotStr)) {
-				return this.errorReply('Invalid slot: must be a positive integer.');
-			}
-			const slotNum = parseInt(slotStr, 10);
-			if (isNaN(slotNum)) return this.errorReply('Invalid slot: must be a number.');
-			const slot = slotNum - 1;
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
-			if (slot < 0 || slot >= targetState.team.length) {
-				return this.errorReply(`Invalid slot. ${targetName} has ${targetState.team.length} Pokémon (1-${targetState.team.length}).`);
-			}
-			if (targetState.team.length === 1) return this.errorReply(`Cannot remove the last Pokémon from a team.`);
-			const removed = targetState.team.splice(slot, 1)[0];
-			const removedName = Dex.species.get(toID(removed.species)).name || removed.species;
-			setState(targetId, targetState);
-			this.sendReply(`Removed ${removedName} (slot ${slot + 1}) from ${targetName}'s team.`);
+			if (!getState(targetId)) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			deleteState(targetId);
+			this.sendReply(`Deleted all PokéRogue data for ${targetName}.`);
 			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed ${removedName} (slot ${slot + 1}) from your team.`);
+				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed your PokéRogue data.`);
 			}
-			this.modlog('POKEROUGE REMOVEMON', targetId, removedName);
+			this.modlog('POKEROUGE WIPEUSERDATA', targetId, 'wiped all PokéRogue data');
 		},
 
 		healteam(target, room, user) {
@@ -1123,8 +1180,8 @@ export const commands: Chat.ChatCommands = {
 				targetName = trimmed;
 			}
 			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokeRouge data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokeRouge run.`);
+			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
+			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
 			// Reset EXP to the baseline for each Pokémon's current level so they're "fresh"
 			for (const mon of targetState.team) {
 				mon.exp = expForLevel(mon.level);
@@ -1174,7 +1231,7 @@ export const commands: Chat.ChatCommands = {
 					`<code>/pokerouge resetfloor [user]</code> — Reset floor to 1 (omit user to target yourself).<br>` +
 					`<code>/pokerouge viewteam [user]</code> — View a user's team with sprites (omit user for your own team).<br>` +
 					`<code>/pokerouge addmon [user], &lt;pokemon&gt; [, &lt;level&gt;]</code> (alias: <code>givemon</code>) — Add a Pokémon to a team at an optional level (default: floor-based). Omit user to target yourself.<br>` +
-					`<code>/pokerouge removemon [user], &lt;slot&gt;</code> — Remove a Pokémon by slot (omit user to target yourself).<br>` +
+					`<code>/pokerouge removemon [user]</code> — Delete all PokéRogue data for a user (omit user to target yourself).<br>` +
 					`<code>/pokerouge healteam [user]</code> — Reset team EXP to current level baseline (omit user for yourself).<br>`;
 			}
 			this.sendReplyBox(html);
