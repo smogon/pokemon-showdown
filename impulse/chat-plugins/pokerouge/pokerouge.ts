@@ -1151,7 +1151,7 @@ export const commands: Chat.ChatCommands = {
 					`<b>Warning:</b> This will permanently delete all PokéRogue data for ` +
 					`<b>${Utils.escapeHTML(targetName)}</b> ` +
 					`(Floor ${s.floor}, ${s.team?.length ?? 0} Pokémon, ${s.coins ?? 0} coins).<br>` +
-					`<button name="send" value="/pokerouge removemon ${Utils.escapeHTML(targetName)} confirm" class="button">` +
+					`<button name="send" value="/pokerouge removemon ${targetId} confirm" class="button">` +
 					`Confirm delete</button>`
 				);
 			}
