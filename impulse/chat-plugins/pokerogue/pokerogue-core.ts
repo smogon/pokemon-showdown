@@ -451,6 +451,8 @@ export interface PokeRogueState {
 	streaksWon?: number;
 	/** Current shop rotation — item IDs available this refresh. */
 	shopInventory?: string[];
+	/** Last in-game notification to display on the page (replaces chat/popup messages). */
+	notification?: string;
 }
 
 // ---------------------------------------------------------------------------

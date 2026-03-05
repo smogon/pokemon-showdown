@@ -51,6 +51,9 @@ import {
 // HTML helpers
 // ---------------------------------------------------------------------------
 
+/** How often (in seconds) the game page auto-refreshes to surface battle results. */
+const PAGE_REFRESH_SECONDS = 20;
+
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
 	const sp = Dex.species.get(id);
@@ -128,9 +131,9 @@ function renderTeam(team: PokemonEntry[], withSprites = false): string {
 		const speciesData = Dex.species.get(toID(mon.species));
 		const name = speciesData.exists ? speciesData.name : mon.species;
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const heldLabel = mon.heldItem ? ` [${mon.heldItem}]` : '';
+		const heldLabel = mon.heldItem ? ` [${Utils.escapeHTML(mon.heldItem)}]` : '';
 		const sprite = withSprites ? getSprite(mon.species, 40) + ' ' : '';
-		return `${sprite}<b>${idx + 1}. ${name}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
+		return `${sprite}<b>${idx + 1}. ${Utils.escapeHTML(name)}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
 	}).join('<br>');
 }
 
@@ -154,7 +157,7 @@ function renderLeaderboard(): string {
 			.map(m => {
 				const spr = getSprite(m.species, 30);
 				const sname = Dex.species.get(toID(m.species)).name || m.species;
-				return `${spr}<small>${sname}</small>`;
+				return `${spr}<small>${Utils.escapeHTML(sname)}</small>`;
 			})
 			.join(' ') || '—';
 		return [medal, nameHtml, `Floor ${s.highestFloor ?? 0}`, teamStr];
@@ -197,7 +200,12 @@ function buildFreshState(existing: PokeRogueState | null): PokeRogueState {
  * view = 'main' (default dashboard) | 'shop' (item shop sub-view)
  */
 function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'): string {
-	let buf = `<div class="pr-popup">`;
+	// Auto-refresh: only poll when there is transient state that will change —
+	// an active battle waiting to finish, or a notification waiting to be read.
+	// Idle views (no battle, no notification) are stable and don't need churn.
+	let buf = (state.battleRoomId || state.notification) ?
+		`<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
+	buf += `<div class="pr-popup">`;
 
 	// ── Header ──────────────────────────────────────────────────────────────
 	buf += `<div class="pr-popup-header">`;
@@ -209,6 +217,13 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 			`</div>`;
 	}
 	buf += `</div>`;
+
+	// ── Notification banner ──────────────────────────────────────────────────
+	if (state.notification) {
+		buf += `<div class="pr-notification">${state.notification}` +
+			`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">✕</button>` +
+			`</div>`;
+	}
 
 	// ── Active battle ────────────────────────────────────────────────────────
 	if (state.battleRoomId) {
@@ -576,9 +591,7 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// battle started — the PS client will navigate to the battle room automatically.
-			// send a brief confirmation in chat so the user knows what happened.
-			this.sendReplyBox(`${getSprite(chosen, 40)} You chose <b>${name}</b>! ${isStarter ? 'Your journey begins — ' : ''}Starting your battle now...`);
+			// battle started — the page refresh will show the "Battle in progress!" state.
 			this.refreshPage('pokerogue');
 		},
 
@@ -785,29 +798,25 @@ export const commands: Chat.ChatCommands = {
 					evolved = true;
 				}
 				const newName = Dex.species.get(toID(mon.species)).name || mon.species;
-				setState(user.id, state);
 				const oldName = Dex.species.get(toID(oldSpecies)).name || oldSpecies;
-				this.sendReplyBox(
-					`<b>${evolved ? `${oldName} evolved into ${newName}` : newName}</b> grew to <b>Lv.${mon.level}</b>!`
-				);
+				state.notification = evolved ?
+					`${Utils.escapeHTML(oldName)} evolved into <b>${Utils.escapeHTML(newName)}</b> and grew to <b>Lv.${mon.level}</b>!` :
+					`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`;
+				setState(user.id, state);
 				this.refreshPage('pokerogue');
 				return;
 			}
 			case 'luckycharm': {
 				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
+				state.notification = `<b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`;
 				setState(user.id, state);
-				this.sendReplyBox(
-					`<b>Lucky Charm</b> activated! EXP and coins are doubled for the next ${state.doubleExpFloors} floors.`
-				);
 				this.refreshPage('pokerogue');
 				return;
 			}
 			case 'revive': {
 				state.hasRevive = true;
+				state.notification = `<b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`;
 				setState(user.id, state);
-				this.sendReplyBox(
-					`<b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`
-				);
 				this.refreshPage('pokerogue');
 				return;
 			}
@@ -830,9 +839,9 @@ export const commands: Chat.ChatCommands = {
 					state.items![mon.heldItem] = (state.items![mon.heldItem] ?? 0) + 1;
 				}
 				mon.heldItem = item.heldItem;
-				setState(user.id, state);
 				const monName = Dex.species.get(toID(mon.species)).name || mon.species;
-				this.sendReplyBox(`Equipped <b>${item.name}</b> to <b>${monName}</b>!`);
+				state.notification = `Equipped <b>${Utils.escapeHTML(item.name)}</b> to <b>${Utils.escapeHTML(monName)}</b>!`;
+				setState(user.id, state);
 				this.refreshPage('pokerogue');
 				return;
 			}
@@ -1265,7 +1274,24 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply(`|uhtml|pokerogue-${user.id}|${renderGamePopup(state, view)}`);
 		},
 
+		// /pokerogue dismissnotif — dismiss the notification banner on the page
+		dismissnotif(target, room, user) {
+			if (!user.named) return;
+			const state = getState(user.id);
+			if (state?.notification) {
+				delete state.notification;
+				setState(user.id, state);
+			}
+			this.refreshPage('pokerogue');
+			this.refreshPage('pokerogue-shop');
+		},
+
 		'': 'help',
+	},
+
+	// /pokerouge — the old misspelled alias; redirect users to the correct command.
+	pokerouge(target, room, user) {
+		return this.errorReply('/pokerouge is not a valid command. Did you mean /pokerogue? Use /pokerogue start to play!');
 	},
 
 };
@@ -1345,10 +1371,10 @@ export const handlers: Chat.Handlers = {
 					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
 					if (evolved) {
 						levelUpMsgs.push(
-							`<b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
+							`<b>${Utils.escapeHTML(oldName)}</b> evolved into <b>${Utils.escapeHTML(newName)}</b> and is now <b>Lv.${mon.level}</b>!`
 						);
 					} else {
-						levelUpMsgs.push(`<b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
+						levelUpMsgs.push(`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`);
 					}
 				}
 			}
@@ -1377,6 +1403,19 @@ export const handlers: Chat.Handlers = {
 			// every 5 floors, offer a new Pokemon
 			const offerNewPokemon = state.floor > 1 && (state.floor - 1) % 5 === 0 && state.team.length < 6;
 
+			// build notification for the page (replaces the |html| chat log)
+			const coinBoostNote = doubleActive ? ` <b style="color:#fac000">(2× Lucky Charm!)</b>` : '';
+			const levelUpHtml = levelUpMsgs.length ? `<br>${levelUpMsgs.join('<br>')}` : '';
+			const milestoneHtml = offerNewPokemon ?
+				`<br><b style="color:#c4a8ff">🎉 Milestone! Choose a new Pokémon to add to your team!</b>` : '';
+			state.notification =
+				`<b style="font-size:14px">🏆 Floor ${prevFloor} Cleared! Moving to Floor ${state.floor}!</b>` +
+				`<br><span style="font-size:12px">` +
+				`+${coinsEarned} coins${coinBoostNote} (Total: ${state.coins}) · Streaks: ${state.streaksWon}` +
+				`</span>` +
+				levelUpHtml +
+				milestoneHtml;
+
 			if (offerNewPokemon) {
 				const opts = pickNewPokemonOptions(state.team, prevFloor);
 				state.pendingChoice = opts;
@@ -1386,30 +1425,9 @@ export const handlers: Chat.Handlers = {
 				setState(match.userId, state);
 			}
 
-			// send a clean html notification box without forcing a tab switch
+			// refresh the game page so the win result is shown without chat messages
 			if (humanUser) {
-				const coinBoostNote = doubleActive ? ` <b style="color:#fac000">(2× Lucky Charm!)</b>` : '';
-				const levelUpHtml = levelUpMsgs.length ?
-					`<br>${levelUpMsgs.join('<br>')}` :
-					'';
-				const milestoneHtml = offerNewPokemon ?
-					`<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add to your team!</b>` :
-					'';
-				const notifyHtml =
-					`|html|<div style="background:rgba(90,63,160,0.15);border:1px solid rgba(90,63,160,0.4);` +
-					`border-radius:8px;padding:10px 14px;margin:4px 0">` +
-					`<b style="font-size:14px;color:#c4a8ff">Floor ${prevFloor} Cleared! Moving to Next Floor!</b>` +
-					`<br><span style="font-size:12px;color:#8ab4f8">` +
-					`+${coinsEarned} coins${coinBoostNote} (Total: ${state.coins}) · Streaks: ${state.streaksWon}` +
-					`</span>` +
-					levelUpHtml +
-					milestoneHtml +
-					`<br><br><button name="send" value="/join view-pokerogue" class="button">` +
-					`Continue to Floor ${state.floor}</button>` +
-					`</div>`;
-				for (const conn of humanUser.connections) {
-					conn.send(notifyHtml);
-				}
+				sendGamePopup(humanUser, getState(match.userId));
 			}
 		} else {
 			// loss
@@ -1417,11 +1435,8 @@ export const handlers: Chat.Handlers = {
 				// second chance — retry the same floor
 				state.hasRevive = false;
 				delete state.battleRoomId;
+				state.notification = `<b>🛡️ Revive activated!</b> You get to retry Floor ${match.floor}!`;
 				setState(match.userId, state);
-				humanUser?.popup(
-					`Your Revive activated! You get to retry Floor ${match.floor}.\n` +
-					`Opening PokéRogue...`
-				);
 				if (humanUser) {
 					sendGamePopup(humanUser, getState(match.userId));
 				}
@@ -1440,13 +1455,11 @@ export const handlers: Chat.Handlers = {
 				delete state.pendingChoiceType;
 				delete state.doubleExpFloors;
 				delete state.shopInventory;
+				state.notification =
+					`<b>💀 Defeated on Floor ${finalFloor}!</b>` +
+					`<br>Streaks Won: ${finalStreaks} · Best Floor: ${state.highestFloor ?? finalFloor}` +
+					`<br><span style="font-size:11px;color:#aaa">Your run has ended — start a new adventure!</span>`;
 				setState(match.userId, state);
-				humanUser?.popup(
-					`Defeated on Floor ${finalFloor}!\n` +
-					`Streaks Won: ${finalStreaks} | Best Floor: ${state.highestFloor ?? finalFloor}\n\n` +
-					`Your PokéRogue run has ended.\n` +
-					`Opening PokéRogue to start a new run...`
-				);
 				if (humanUser) {
 					sendGamePopup(humanUser, getState(match.userId));
 				}
