@@ -1281,6 +1281,7 @@ export const commands: Chat.ChatCommands = {
 				setState(user.id, state);
 			}
 			this.refreshPage('pokerogue');
+			this.refreshPage('pokerogue-shop');
 		},
 
 		'': 'help',
