@@ -200,9 +200,11 @@ function buildFreshState(existing: PokeRogueState | null): PokeRogueState {
  * view = 'main' (default dashboard) | 'shop' (item shop sub-view)
  */
 function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'): string {
-	// Auto-refresh: use a meta refresh tag (CSP-safe) so battle results,
-	// floor changes, and notifications surface without a manual reload.
-	let buf = `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">`;
+	// Auto-refresh: only poll when there is transient state that will change —
+	// an active battle waiting to finish, or a notification waiting to be read.
+	// Idle views (no battle, no notification) are stable and don't need churn.
+	let buf = (state.battleRoomId || state.notification) ?
+		`<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
 	buf += `<div class="pr-popup">`;
 
 	// ── Header ──────────────────────────────────────────────────────────────
