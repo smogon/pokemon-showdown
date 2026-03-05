@@ -131,9 +131,9 @@ function renderTeam(team: PokemonEntry[], withSprites = false): string {
 		const speciesData = Dex.species.get(toID(mon.species));
 		const name = speciesData.exists ? speciesData.name : mon.species;
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const heldLabel = mon.heldItem ? ` [${mon.heldItem}]` : '';
+		const heldLabel = mon.heldItem ? ` [${Utils.escapeHTML(mon.heldItem)}]` : '';
 		const sprite = withSprites ? getSprite(mon.species, 40) + ' ' : '';
-		return `${sprite}<b>${idx + 1}. ${name}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
+		return `${sprite}<b>${idx + 1}. ${Utils.escapeHTML(name)}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
 	}).join('<br>');
 }
 
@@ -157,7 +157,7 @@ function renderLeaderboard(): string {
 			.map(m => {
 				const spr = getSprite(m.species, 30);
 				const sname = Dex.species.get(toID(m.species)).name || m.species;
-				return `${spr}<small>${sname}</small>`;
+				return `${spr}<small>${Utils.escapeHTML(sname)}</small>`;
 			})
 			.join(' ') || '—';
 		return [medal, nameHtml, `Floor ${s.highestFloor ?? 0}`, teamStr];
@@ -798,8 +798,8 @@ export const commands: Chat.ChatCommands = {
 				const newName = Dex.species.get(toID(mon.species)).name || mon.species;
 				const oldName = Dex.species.get(toID(oldSpecies)).name || oldSpecies;
 				state.notification = evolved ?
-					`${oldName} evolved into <b>${newName}</b> and grew to <b>Lv.${mon.level}</b>!` :
-					`<b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`;
+					`${Utils.escapeHTML(oldName)} evolved into <b>${Utils.escapeHTML(newName)}</b> and grew to <b>Lv.${mon.level}</b>!` :
+					`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`;
 				setState(user.id, state);
 				this.refreshPage('pokerogue');
 				return;
@@ -838,7 +838,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				mon.heldItem = item.heldItem;
 				const monName = Dex.species.get(toID(mon.species)).name || mon.species;
-				state.notification = `Equipped <b>${item.name}</b> to <b>${monName}</b>!`;
+				state.notification = `Equipped <b>${Utils.escapeHTML(item.name)}</b> to <b>${Utils.escapeHTML(monName)}</b>!`;
 				setState(user.id, state);
 				this.refreshPage('pokerogue');
 				return;
@@ -1369,10 +1369,10 @@ export const handlers: Chat.Handlers = {
 					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
 					if (evolved) {
 						levelUpMsgs.push(
-							`<b>${oldName}</b> evolved into <b>${newName}</b> and is now <b>Lv.${mon.level}</b>!`
+							`<b>${Utils.escapeHTML(oldName)}</b> evolved into <b>${Utils.escapeHTML(newName)}</b> and is now <b>Lv.${mon.level}</b>!`
 						);
 					} else {
-						levelUpMsgs.push(`<b>${newName}</b> grew to <b>Lv.${mon.level}</b>!`);
+						levelUpMsgs.push(`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`);
 					}
 				}
 			}
