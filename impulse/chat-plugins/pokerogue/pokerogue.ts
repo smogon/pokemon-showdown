@@ -26,8 +26,8 @@ function getSprite(species: string, size = 80): string {
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
 	// Gen 9+ Pokémon (Scarlet/Violet, Paradox forms, etc.) are not in sprites/dex/ —
-	// use HOME sprites which cover every generation including Gen 9 Paradox Pokémon.
-	// Gen 6–8 (or formes of any gen) use the official dex artwork sprites.
+	// Gen 9+ always uses HOME sprites, which cover every generation including Gen 9 Paradox Pokémon.
+	// Gen 6–8 and pre-Gen6 formes use the official dex artwork sprites.
 	// Gen 1–5 base formes use the classic gen5/BW pixelated sprites.
 	let src: string;
 	if (sp.exists && sp.gen >= 9) {
