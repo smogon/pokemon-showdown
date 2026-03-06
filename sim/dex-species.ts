@@ -443,13 +443,6 @@ export class DexSpecies {
 		species = this.getSpeciesDataById(id);
 
 		// Update relatives separately to avoid looping them infinitely
-		species.nfe = species.evos.some(evo => {
-			const evoSpecies = this.getSpeciesDataById(toID(evo));
-			return !evoSpecies.isNonstandard ||
-				evoSpecies.isNonstandard === species?.isNonstandard ||
-				// Pokemon with Hisui evolutions
-				evoSpecies.isNonstandard === "Unobtainable";
-		});
 		species.evos = species.evos.filter(evo => {
 			const evoSpecies = this.getSpeciesDataById(toID(evo));
 			return !evoSpecies.isNonstandard ||
@@ -457,6 +450,7 @@ export class DexSpecies {
 				// Pokemon with Hisui evolutions
 				evoSpecies.isNonstandard === "Unobtainable";
 		});
+		species.nfe = !!species.evos.length;
 		const prevoSpecies = this.getSpeciesDataById(toID(species.prevo));
 		if (prevoSpecies.isNonstandard &&
 			prevoSpecies.isNonstandard !== species?.isNonstandard &&
