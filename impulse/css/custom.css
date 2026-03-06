@@ -3093,6 +3093,16 @@ width: 200px;
 	-webkit-text-fill-color: unset;
 }
 
+/* Ensure choice heading inside .pr-popup overrides generic .pr-popup h2 styles */
+.pr-popup h2.pr-choice-heading {
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: #fff;
+	margin: 8px 0 14px;
+	letter-spacing: 0.5px;
+	-webkit-text-fill-color: unset;
+}
 .pr-choice-table {
 	width: 100%;
 	border-collapse: collapse;
