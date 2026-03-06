@@ -25,18 +25,11 @@ function getSprite(species: string, size = 80): string {
 	const sp = Dex.species.get(id);
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
-	// Gen 9+ Pokémon (Scarlet/Violet, Paradox forms, etc.) are not in sprites/dex/ —
-	// Gen 9+ always uses HOME sprites, which cover every generation including Gen 9 Paradox Pokémon.
-	// Gen 6–8 and pre-Gen6 formes use the official dex artwork sprites.
-	// Gen 1–5 base formes use the classic gen5/BW pixelated sprites.
-	let src: string;
-	if (sp.exists && sp.gen >= 9) {
-		src = `https://play.pokemonshowdown.com/sprites/home/${id}.png`;
-	} else if (sp.exists && (sp.gen > 5 || !!sp.forme)) {
-		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
-	} else {
-		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
-	}
+	// use dex sprites for gen 6+ or formes, gen5 for older base formes
+	const useDex = sp.exists && (sp.gen > 5 || !!sp.forme);
+	const src = useDex ?
+		`https://play.pokemonshowdown.com/sprites/dex/${id}.png` :
+		`https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
@@ -72,24 +65,17 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
-// base URL for non-ball pokesprite items (fallback for items not served by PS)
+// base URL for non-ball pokesprite items
 const POKESPRITE_ITEM_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/';
 
-// PS item-icon base URL — served from the same domain as the PS client; reliable for real held items.
-const PS_ITEMICONS_BASE = 'https://play.pokemonshowdown.com/sprites/itemicons/';
-
-// explicit sprite URLs for PokéRogue custom items that don't exist in the PS item dex.
-// Real Pokémon held items (focussash, leftovers, etc.) use the default PS itemicons URL.
+// explicit sprite URLs for PokéRogue custom items that don't exist in the PS item dex
 const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
-	// capsule items are custom (no PS icon) — use pokesprite ball images
 	mastercapsule: `${POKESPRITE_BALL_BASE}master.png`,
 	ultracapsule:  `${POKESPRITE_BALL_BASE}ultra.png`,
 	greatcapsule:  `${POKESPRITE_BALL_BASE}great.png`,
-	// rarecandy and revive are real items — use PS itemicons (same domain, always accessible)
-	rarecandy:     `${PS_ITEMICONS_BASE}rarecandy.png`,
-	revive:        `${PS_ITEMICONS_BASE}revive.png`,
-	// luckycharm is a custom roguelite item; visually map to the Lucky Egg icon on PS
-	luckycharm:    `${PS_ITEMICONS_BASE}luckyegg.png`,
+	rarecandy:     `${POKESPRITE_ITEM_BASE}medicine/rare-candy.png`,
+	revive:        `${POKESPRITE_ITEM_BASE}medicine/revive.png`,
+	luckycharm:    `${POKESPRITE_ITEM_BASE}hold-item/lucky-egg.png`,
 };
 
 // returns the item sprite img html for a shop item
@@ -1561,13 +1547,9 @@ export const handlers: Chat.Handlers = {
 					// milestone: show the main page for Pokemon choice
 					refreshGamePage(humanUser);
 				} else {
-					// normal win: open shop page directly so user can buy items.
-					// do NOT call refreshGamePage here — it sends |refresh| to view-pokerogue-shop
-					// right after |init|html, which interferes with the shop auto-open and also
-					// forces the main page tab to update simultaneously, causing two page tabs
-					// to appear at once. the main game page auto-refreshes via its
-					// <meta http-equiv="refresh"> tag (active whenever state.notification is set).
+					// normal win: open shop page directly so user can buy items
 					openShopForUser(humanUser, state);
+					refreshGamePage(humanUser);
 				}
 			}
 		} else {
@@ -1668,15 +1650,4 @@ export const start = (): void => {
 	const format = new Format(formatData);
 	Dex.formats.rulesetCache.set(FORMAT_ID, format);
 	(Dex.formats.formatsListCache as Format[])?.push(format);
-};
-
-// exposed for unit tests only — not part of the public plugin API
-export const testables = {
-	getSprite,
-	getPokeballInfo,
-	getItemSprite,
-	getSpriteWithBall,
-	ITEM_SPRITE_OVERRIDES,
-	PS_ITEMICONS_BASE,
-	POKESPRITE_BALL_BASE,
 };
