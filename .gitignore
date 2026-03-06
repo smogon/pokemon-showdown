@@ -21,8 +21,6 @@ tools/set-import/importer.js
 tools/modlog/converter.js
 *.tsbuildinfo
 **/sourceMaps
-# Runtime data files written by plugins
-/impulse/db/*.json
 
 !test/**/*.js
 tools/modlog/**/*.js

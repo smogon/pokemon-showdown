@@ -33,23 +33,26 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
+// base URL for pokéball sprites (msikma/pokesprite on GitHub, via raw.githubusercontent.com)
+const POKESPRITE_BALL_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/';
+
 // returns the pokeball image src and alt text appropriate for a species's rarity tier
 function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 	const sp = Dex.species.get(toID(speciesId));
 	// Legendary / Mythical / Ultra Beast / Paradox → Master Ball
 	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
-		return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/masterball.png', alt: 'Master Ball' };
+		return { src: `${POKESPRITE_BALL_BASE}master.png`, alt: 'Master Ball' };
 	}
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 		// Pseudo-legendary tier (BST ≥ 580) → Ultra Ball
-		if (bst >= 580) return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/ultraball.png', alt: 'Ultra Ball' };
+		if (bst >= 580) return { src: `${POKESPRITE_BALL_BASE}ultra.png`, alt: 'Ultra Ball' };
 		// Mid-tier (BST ≥ 480) → Great Ball
-		if (bst >= 480) return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/greatball.png', alt: 'Great Ball' };
+		if (bst >= 480) return { src: `${POKESPRITE_BALL_BASE}great.png`, alt: 'Great Ball' };
 	}
 	// Common / starter → normal Poké Ball
-	return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/pokeball.png', alt: 'Poké Ball' };
+	return { src: `${POKESPRITE_BALL_BASE}poke.png`, alt: 'Poké Ball' };
 }
 
 // renders a pokemon sprite with a small pokeball overlay at bottom-right (like official games)
