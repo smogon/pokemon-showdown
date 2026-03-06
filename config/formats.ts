@@ -5281,7 +5281,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		gameType: 'singles',
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
-			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1"],
+			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets'],
 		banlist: ['Soul Dew', 'Deoxys-Defense', 'Deoxys-Attack', 'Deoxys-Speed'],
 		unbanlist: ['Latios', 'Latias', 'Wobbuffet', 'Wynaut'],
 		restricted: ['Restricted Legendary', "Mythical"],
