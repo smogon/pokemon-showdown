@@ -93,32 +93,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		willCrit: false,
 		basePower: 1,
 		damageCallback(pokemon, target) {
-			// Counter mechanics in Stadium 1:
-			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
-			// - Counter succeeds if the target used a Counterable move earlier this turn
+			let damageReceived = 0;
+			let moveUsed: ID | undefined;
 
-			const lastMoveThisTurn = target.side.lastMove && target.side.lastMove.id === target.side.lastSelectedMove &&
-				!this.queue.willMove(target) && this.dex.moves.get(target.side.lastMove.id);
-			if (!lastMoveThisTurn) {
-				this.debug("Stadium 1 Counter: last move was not this turn");
+			// substitute creates multiple attackedBy entries, use the one with damage
+			for (const attacker of pokemon.attackedBy) {
+				if (attacker.thisTurn && attacker.source === target && attacker.damage > damageReceived) {
+					damageReceived = attacker.damage;
+					moveUsed = attacker.move;
+				}
+			}
+
+			if (!moveUsed || !damageReceived) {
+				this.debug("Stadium 1 Counter: no attack from target this turn");
 				this.add('-fail', pokemon);
 				return false;
 			}
 
-			const lastMoveThisTurnIsCounterable = lastMoveThisTurn && lastMoveThisTurn.basePower > 0 &&
-				['Normal', 'Fighting'].includes(lastMoveThisTurn.type) && lastMoveThisTurn.id !== 'counter';
-			if (!lastMoveThisTurnIsCounterable) {
-				this.debug(`Stadium 1 Counter: last move ${lastMoveThisTurn.name} was not Counterable`);
-				this.add('-fail', pokemon);
-				return false;
-			}
-			if (this.lastDamage <= 0) {
-				this.debug("Stadium 1 Counter: no previous damage exists");
+			const lastMove = this.dex.moves.get(moveUsed);
+			const isCounterable = lastMove.basePower > 0 &&
+				['Normal', 'Fighting'].includes(lastMove.type) && lastMove.id !== 'counter';
+			if (!isCounterable) {
+				this.debug(`Stadium 1 Counter: last move ${lastMove.name} was not Counterable`);
 				this.add('-fail', pokemon);
 				return false;
 			}
 
-			return 2 * this.lastDamage;
+			return 2 * damageReceived;
 		},
 	},
 	firespin: {
