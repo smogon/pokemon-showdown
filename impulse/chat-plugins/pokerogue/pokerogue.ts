@@ -33,6 +33,42 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
+// returns the pokeball image src and alt text appropriate for a species's rarity tier
+function getPokeballInfo(speciesId: string): { src: string, alt: string } {
+	const sp = Dex.species.get(toID(speciesId));
+	// Legendary / Mythical / Ultra Beast / Paradox → Master Ball
+	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
+		return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/masterball.png', alt: 'Master Ball' };
+	}
+	if (sp.exists) {
+		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		// Pseudo-legendary tier (BST ≥ 580) → Ultra Ball
+		if (bst >= 580) return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/ultraball.png', alt: 'Ultra Ball' };
+		// Mid-tier (BST ≥ 480) → Great Ball
+		if (bst >= 480) return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/greatball.png', alt: 'Great Ball' };
+	}
+	// Common / starter → normal Poké Ball
+	return { src: 'https://play.pokemonshowdown.com/sprites/itemicons/pokeball.png', alt: 'Poké Ball' };
+}
+
+// renders a pokemon sprite with a small pokeball overlay at bottom-right (like official games)
+function getSpriteWithBall(species: string, size = 80): string {
+	const ball = getPokeballInfo(species);
+	const spriteHtml = getSprite(species, size);
+	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px">` +
+		spriteHtml +
+		`<img src="${ball.src}" alt="${Utils.escapeHTML(ball.alt)}" class="pr-pokeball-overlay" />` +
+		`</div>`;
+}
+
+// returns the item sprite img html for a shop item
+function getItemSprite(itemId: string): string {
+	const id = toID(itemId);
+	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${id}.png" ` +
+		`width="24" height="24" alt="${Utils.escapeHTML(itemId)} icon" style="image-rendering:pixelated" />`;
+}
+
 // exp progress bar for a team member
 function renderExpBar(mon: PokemonEntry): string {
 	let pct = 100;
@@ -195,7 +231,7 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 			buf += `<tr class="pr-choice-row${isLegendary ? ' legendary' : ''}">`;
 			// Status column
 			buf += `<td class="pr-ct-status">`;
-			buf += getSprite(s, 60);
+			buf += getSpriteWithBall(s, 60);
 			buf += `<div class="pr-ct-name"><b>${Utils.escapeHTML(name)}</b>`;
 			if (isLegendary) {
 				buf += ` <span class="pr-legendary-badge">LEGENDARY</span>`;
@@ -266,32 +302,45 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 	// shop sub-view
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
-		buf += `<div class="pr-popup-actions">` +
-			`<a href="/view-pokerogue" class="button">Back</a>` +
-			`<button name="send" value="/pokerogue refreshshop" class="button">Reroll Shop (5 coins)</button>` +
-			`<button name="send" value="/pokerogue battle" class="button">Start Battle</button>` +
-			`</div>`;
-		buf += `<h3>Item Shop &nbsp;<span class="pr-coin-badge">${shopCoins} coins</span></h3>`;
-		buf += `<p style="font-size:10px;color:#666;margin:2px 0 8px">` +
-			`Held items are consumed after the next battle.</p>`;
+		buf += `<div class="pr-shop-header">`;
+		buf += `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`;
+		buf += `<h3 style="margin:0;font-size:15px;color:#c4a8ff;letter-spacing:0.5px">Item Shop</h3>`;
+		buf += `<span class="pr-coin-badge" style="font-size:13px;padding:4px 14px">${shopCoins} Coins</span>`;
+		buf += `</div>`;
+		buf += `<div class="pr-shop-toolbar">`;
+		buf += `<a href="/view-pokerogue" class="button pr-shop-back-btn">&#8592; Back</a>`;
+		buf += `<button name="send" value="/pokerogue refreshshop" class="button pr-shop-reroll-btn">`;
+		buf += `Reroll Shop <span style="font-size:10px;opacity:0.75">(5 coins)</span></button>`;
+		buf += `<button name="send" value="/pokerogue battle" class="button pr-shop-battle-btn">`;
+		buf += `Start Battle</button>`;
+		buf += `</div></div>`;
+
 		buf += `<div class="pr-shop-grid">`;
 		for (const itemId of (state.shopInventory ?? [])) {
 			const item = SHOP_ITEMS[itemId];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
-			buf += `<div class="pr-shop-card">`;
-			buf += `<b style="color:#c4a8ff;font-size:12px">${Utils.escapeHTML(item.name)}</b><br>`;
-			buf += `<small style="color:#8ab4f8;font-size:10px">${Utils.escapeHTML(item.description)}</small>`;
-			if (item.heldItem) {
-				buf += `<br><small style="color:#555;font-size:9px">[held — 1 battle]</small>`;
-			}
-			buf += `<br>`;
+			const isHeld = !!item.heldItem;
+			const categoryLabel = isHeld ? 'Held Item' : 'Consumable';
+			const categoryClass = isHeld ? 'pr-item-tag-held' : 'pr-item-tag-consumable';
+			buf += `<div class="pr-shop-card${canAfford ? '' : ' pr-shop-card-disabled'}">`;
+			// icon + name row
+			buf += `<div class="pr-shop-card-top">`;
+			buf += `<div class="pr-shop-item-icon">${getItemSprite(item.heldItem ?? item.id)}</div>`;
+			buf += `<div style="flex:1;min-width:0">`;
+			buf += `<div class="pr-shop-item-name">${Utils.escapeHTML(item.name)}</div>`;
+			buf += `<span class="${categoryClass}">${categoryLabel}</span>`;
+			buf += `</div>`;
+			buf += `</div>`;
+			// description
+			buf += `<div class="pr-shop-item-desc">${Utils.escapeHTML(item.description)}</div>`;
+			// buy button
 			if (canAfford) {
-				buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button"` +
-					` style="width:100%;margin-top:5px">Buy — ${item.cost}c</button>`;
+				buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn">`;
+				buf += `Buy &mdash; <b>${item.cost}</b> coins</button>`;
 			} else {
-				buf += `<button class="button" style="width:100%;margin-top:5px;opacity:0.45" disabled>` +
-					`${item.cost}c (need more)</button>`;
+				buf += `<button class="button pr-shop-buy-btn pr-shop-buy-disabled" disabled>`;
+				buf += `${item.cost} coins <span style="font-size:9px">(need more)</span></button>`;
 			}
 			buf += `</div>`;
 		}
@@ -330,11 +379,17 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 		const typeBadge = renderTypeBadge(types);
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const heldLabel = mon.heldItem ? SHOP_ITEMS[mon.heldItem]?.name ?? mon.heldItem : '';
+		// show evolution available indicator
+		const evo = getLevelUpEvo(mon.species);
+		const evoHint = evo && mon.level < evo.evoLevel ?
+			`<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
 		buf += `<div class="pr-popup-mon">`;
-		buf += getSprite(mon.species, 52);
+		buf += getSpriteWithBall(mon.species, 52);
 		buf += `<div style="flex:1;min-width:0">`;
 		buf += `<b style="color:#e8e0ff;font-size:12px">${Utils.escapeHTML(name)}</b><br>`;
-		buf += `<span style="font-size:10px">${typeBadge}</span><br>`;
+		buf += `<span style="font-size:10px">${typeBadge}</span>`;
+		if (evoHint) buf += ` ${evoHint}`;
+		buf += `<br>`;
 		const levelStr = mon.level < 100 ?
 			` <span style="color:#555">(${expNeeded} EXP)</span>` :
 			` <span style="color:#f5c518">MAX</span>`;
@@ -400,6 +455,18 @@ function refreshGamePage(user: User): void {
 		for (const pageId of ['view-pokerogue', 'view-pokerogue-shop', 'view-pokerogue-top']) {
 			conn.send(`>${pageId}\n|refresh|`);
 		}
+	}
+}
+
+// pushes the shop page HTML directly to a user so it opens automatically
+function openShopForUser(user: User, state: PokeRogueState): void {
+	if (!state.shopInventory) {
+		state.shopInventory = rollShopInventory();
+		setState(user.id, state);
+	}
+	const shopHtml = renderGamePopup(state, 'shop');
+	for (const conn of user.connections) {
+		conn.send(`>view-pokerogue-shop\n|init|html\n|title|PokéRogue Shop\n|pagehtml|${shopHtml}`);
 	}
 }
 
@@ -1300,7 +1367,14 @@ export const handlers: Chat.Handlers = {
 
 			// refresh the game page to show win result
 			if (humanUser) {
-				refreshGamePage(humanUser);
+				if (offerNewPokemon) {
+					// milestone: show the main page for Pokemon choice
+					refreshGamePage(humanUser);
+				} else {
+					// normal win: open shop page directly so user can buy items
+					openShopForUser(humanUser, state);
+					refreshGamePage(humanUser);
+				}
 			}
 		} else {
 			// loss
