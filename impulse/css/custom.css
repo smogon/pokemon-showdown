@@ -3295,9 +3295,13 @@ width: 200px;
 	font-size: 11px;
 	color: #b8c8e8;
 	white-space: nowrap;
-	margin-right: 8px; /* fallback for browsers/contexts that do not support flex gap */
 }
 
+@supports not (gap: 1rem) {
+	.pr-ct-stats span:not(:last-child) {
+		margin-right: 8px; /* fallback for browsers/contexts that do not support flex gap */
+	}
+}
 .pr-ct-stats b {
 	color: #dde6f0;
 }
