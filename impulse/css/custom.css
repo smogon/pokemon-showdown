@@ -3021,42 +3021,6 @@ width: 200px;
 	box-shadow: 0 4px 28px rgba(245, 158, 11, 0.35);
 }
 
-.pr-statbar-row {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	margin: 2px 0;
-}
-
-.pr-statbar-label {
-	width: 28px;
-	font-size: 9px;
-	color: #7090b8;
-	text-align: right;
-	font-weight: bold;
-}
-
-.pr-statbar-track {
-	flex: 1;
-	height: 5px;
-	background: rgba(255, 255, 255, 0.08);
-	border-radius: 3px;
-	overflow: hidden;
-}
-
-.pr-statbar-fill {
-	height: 100%;
-	border-radius: 3px;
-	opacity: 0.85;
-}
-
-.pr-statbar-val {
-	width: 26px;
-	font-size: 9px;
-	color: #99b0cc;
-	text-align: right;
-}
-
 .pr-shop-grid {
 	display: flex;
 	flex-wrap: wrap;
@@ -3082,16 +3046,6 @@ width: 200px;
 }
 
 /* ── Choice table (starter / add-Pokémon selection) ── */
-
-.pr-choice-heading {
-	text-align: center;
-	font-size: 18px;
-	font-weight: bold;
-	color: #fff;
-	margin: 8px 0 14px;
-	letter-spacing: 0.5px;
-	-webkit-text-fill-color: unset;
-}
 
 /* Ensure choice heading inside .pr-popup overrides generic .pr-popup h2 styles */
 .pr-popup h2.pr-choice-heading {

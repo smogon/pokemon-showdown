@@ -76,18 +76,6 @@ function getItemSprite(itemId: string): string {
 		` loading="lazy" decoding="async" width="24" height="24" alt="" style="vertical-align:middle;image-rendering:pixelated" />`;
 }
 
-/** Renders a single coloured stat bar row (label | bar | value). */
-function renderStatBar(label: string, value: number, color: string): string {
-	const pct = Math.min(100, Math.round((value / 255) * 100));
-	return `<div class="pr-statbar-row">` +
-		`<span class="pr-statbar-label">${label}</span>` +
-		`<div class="pr-statbar-track">` +
-		`<div class="pr-statbar-fill" style="background:${color};width:${pct}%"></div>` +
-		`</div>` +
-		`<span class="pr-statbar-val">${value}</span>` +
-		`</div>`;
-}
-
 /** Renders a thin EXP progress bar for a team member. */
 function renderExpBar(mon: PokemonEntry): string {
 	let pct = 100;
@@ -1340,7 +1328,7 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 		const state = getState(user.id);
 		// build initial state if none exists
-		if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) {
+		if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId && !state.gameOver)) {
 			const fresh = buildFreshState(state ?? null);
 			setState(user.id, fresh);
 			return renderGamePopup(fresh);
