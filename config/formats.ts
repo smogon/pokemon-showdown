@@ -4570,6 +4570,37 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 3] Hoenn Stadium",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3687813/">ADV Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/orre-colosseum-now-playable.3698894/"> Orre Colosseum</a>`,
+			`&bullet; <a href-"https://discord.gg/cSZE6MZX5Q">Join the discord server</a>`,
+		],
+
+		mod: 'gen3colosseum',
+		searchShow: false,
+		gameType: 'singles',
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
+			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1"],
+		banlist: ['Soul Dew', 'Deoxys-Defense', 'Deoxys-Attack', 'Deoxys-Speed'],
+		unbanlist: ['Latios', 'Latias', 'Wobbuffet', 'Wynaut'],
+		restricted: ['Restricted Legendary', "Mythical"],
+		bestOfDefault: true,
+		onBegin() {
+			this.add('rule', 'Self-KO Clause: If your last Pok\u00e9mon faints to a self-KO move or effect you will lose the battle');
+		},
+		onValidateTeam(team) {
+			const restrictedSpecies = [];
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) restrictedSpecies.push(species.name);
+			}
+			if (restrictedSpecies.length > 0) {
+				return [`You can't use any restricted Pok\u00E9mon (you have: ${restrictedSpecies.join(', ')})`];
+			}
+		},
+	},
+	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
