@@ -3361,6 +3361,132 @@ width: 200px;
 	border: 1px solid rgba(180, 140, 255, 0.5) !important;
 }
 
+/* ── Gacha offer ── */
+
+.pr-gacha-offer {
+	background: linear-gradient(160deg, #12082a 0%, #0c1828 100%);
+	border: 1px solid rgba(200, 130, 255, 0.5);
+	border-radius: 16px;
+	padding: 16px;
+	margin: 8px 0;
+	box-shadow: 0 0 30px rgba(160, 80, 255, 0.2);
+}
+
+.pr-gacha-offer-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(200, 130, 255, 0.25);
+}
+
+.pr-gacha-ball-label {
+	font-size: 13px;
+	font-weight: bold;
+	color: #c4a8ff;
+}
+
+.pr-gacha-tier-badge {
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+
+.pr-gacha-offer-body {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.pr-gacha-mon-name {
+	font-size: 15px;
+	font-weight: bold;
+	color: #e8e0ff;
+	margin-top: 6px;
+}
+
+.pr-gacha-offer-info {
+	flex: 1;
+	min-width: 200px;
+}
+
+.pr-gacha-offer-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 10px;
+}
+
+.pr-gacha-accept-btn {
+	background: linear-gradient(135deg, rgba(52, 211, 153, 0.3), rgba(16, 185, 129, 0.2)) !important;
+	border: 1px solid rgba(52, 211, 153, 0.5) !important;
+	color: #6ee7b7 !important;
+	font-size: 12px;
+}
+
+.pr-gacha-accept-btn:hover {
+	background: linear-gradient(135deg, rgba(52, 211, 153, 0.5), rgba(16, 185, 129, 0.35)) !important;
+}
+
+.pr-gacha-decline-btn {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.15)) !important;
+	border: 1px solid rgba(239, 68, 68, 0.4) !important;
+	color: #fca5a5 !important;
+	font-size: 12px;
+}
+
+.pr-gacha-decline-btn:hover {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(185, 28, 28, 0.25)) !important;
+}
+
+/* ── Inventory grid with use/equip buttons ── */
+
+.pr-inventory-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 6px 0 10px;
+}
+
+.pr-inventory-item {
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.18), rgba(8, 12, 24, 0.9));
+	border: 1px solid rgba(90, 63, 160, 0.4);
+	border-radius: 10px;
+	padding: 8px 10px;
+	min-width: 140px;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+}
+
+.pr-inventory-item-top {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.pr-inv-use-btn {
+	width: 100%;
+	font-size: 10px;
+	padding: 3px 6px;
+	border-radius: 6px !important;
+}
+
+.pr-inv-slot-btn {
+	font-size: 10px;
+	padding: 2px 8px;
+	border-radius: 5px !important;
+	min-width: 28px;
+}
+
+.pr-inv-slot-equipped {
+	background: rgba(52, 211, 153, 0.25) !important;
+	border-color: rgba(52, 211, 153, 0.5) !important;
+	color: #6ee7b7 !important;
+}
+
 /* pokerogue — mobile responsive overrides */
 
 .pr-popup {

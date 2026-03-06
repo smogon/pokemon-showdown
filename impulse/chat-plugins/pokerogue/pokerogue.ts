@@ -10,7 +10,7 @@ import {
 	pickStarterOptions, pickNewPokemonOptions,
 	expForLevel, floorExpReward, floorCoinReward,
 	applyExpAndLevelUp, getLevelUpEvo,
-	getLevelUpMoves, rollShopInventory,
+	getLevelUpMoves, rollShopInventory, rollGachaPokemon,
 } from './pokerogue-core';
 import {
 	activeMatches,
@@ -189,6 +189,60 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 		buf += `<div class="pr-notification">${state.notification}` +
 			`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button>` +
 			`</div>`;
+	}
+
+	// ── Pending Gacha Offer ──────────────────────────────────────────────────
+	if (state.pendingGachaOffer && !state.battleRoomId) {
+		const { species, sourceItemId, isFeatured } = state.pendingGachaOffer;
+		const sp = Dex.species.get(toID(species));
+		const name = sp.exists ? sp.name : species;
+		const types = sp.types ?? [];
+		const typeBadge = renderTypeBadge(types, true);
+		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		const sourceItem = SHOP_ITEMS[sourceItemId];
+		const ballType = sourceItemId === 'mastercapsule' ? 'Master Ball' :
+			sourceItemId === 'ultracapsule' ? 'Ultra Ball' : 'Great Ball';
+		const tierLabel = isFeatured ?
+			(sourceItemId === 'mastercapsule' ? 'Legendary!' :
+			sourceItemId === 'ultracapsule' ? 'Pseudo-Legendary!' : 'Mid-Tier!') :
+			'Common Pokemon';
+		const tierColor = isFeatured ?
+			(sourceItemId === 'mastercapsule' ? '#f59e0b' :
+			sourceItemId === 'ultracapsule' ? '#a78bfa' : '#34d399') :
+			'#8ab4f8';
+		const isTeamFull = (state.team?.length ?? 0) >= 6;
+		buf += `<div class="pr-gacha-offer">`;
+		buf += `<div class="pr-gacha-offer-header">`;
+		buf += `<span class="pr-gacha-ball-label">${Utils.escapeHTML(ballType)} Capsule Result</span>`;
+		buf += `<span class="pr-gacha-tier-badge" style="color:${tierColor}">${tierLabel}</span>`;
+		buf += `</div>`;
+		buf += `<div class="pr-gacha-offer-body">`;
+		buf += `<div style="text-align:center">`;
+		buf += getSpriteWithBall(species, 80);
+		buf += `<div class="pr-gacha-mon-name">${Utils.escapeHTML(name)}</div>`;
+		buf += `<div style="margin:4px 0">${typeBadge}</div>`;
+		buf += `<div style="font-size:11px;color:#8ab4f8;margin-top:3px">BST <b style="color:#c4a8ff">${bst}</b></div>`;
+		buf += `</div>`;
+		buf += `<div class="pr-gacha-offer-info">`;
+		if (sourceItem) {
+			buf += `<p style="font-size:11px;color:#9ab4cc;margin:0 0 10px">${Utils.escapeHTML(sourceItem.description)}</p>`;
+		}
+		if (isTeamFull) {
+			buf += `<div style="color:#f87171;font-size:12px;font-weight:bold;margin-bottom:10px">`;
+			buf += `Your team is full (6/6)! You must decline or release a Pokemon first.</div>`;
+		}
+		buf += `<div class="pr-gacha-offer-actions">`;
+		if (!isTeamFull) {
+			buf += `<button name="send" value="/pokerogue gachaaccept" class="button pr-gacha-accept-btn">`;
+			buf += `Accept &mdash; Add <b>${Utils.escapeHTML(name)}</b> to team</button>`;
+		}
+		buf += `<button name="send" value="/pokerogue gachadecline" class="button pr-gacha-decline-btn">`;
+		buf += `Decline &mdash; Don&apos;t add to team</button>`;
+		buf += `</div></div></div></div>`;
+		// close the popup and return early — gacha offer takes priority
+		buf += `</div>`;
+		return buf;
 	}
 
 	// active battle in progress
@@ -405,13 +459,51 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 	const ownedItems = Object.entries(items).filter(([, qty]) => qty > 0);
 	if (ownedItems.length) {
 		buf += `<h3>Inventory</h3>`;
-		buf += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin:4px 0">`;
+		buf += `<div class="pr-inventory-grid">`;
 		for (const [id, qty] of ownedItems) {
-			const iname = SHOP_ITEMS[id]?.name ?? id;
-			buf += `<span style="background:rgba(90,63,160,0.2);` +
-				`border:1px solid rgba(90,63,160,0.4);border-radius:6px;` +
-				`padding:3px 8px;font-size:11px">` +
-				`${Utils.escapeHTML(iname)} x${qty}</span>`;
+			const shopItem = SHOP_ITEMS[id];
+			const iname = shopItem?.name ?? id;
+			buf += `<div class="pr-inventory-item">`;
+			buf += `<div class="pr-inventory-item-top">`;
+			buf += `<div class="pr-shop-item-icon" style="padding:4px">${getItemSprite(shopItem?.heldItem ?? id)}</div>`;
+			buf += `<div style="flex:1;min-width:0">`;
+			buf += `<div style="font-size:11px;font-weight:bold;color:#e0d4ff">${Utils.escapeHTML(iname)}</div>`;
+			buf += `<div style="font-size:10px;color:#8ab4f8">x${qty}</div>`;
+			buf += `</div></div>`;
+			// action buttons
+			if (shopItem?.gachaType) {
+				// gacha capsule — single "Open" button
+				buf += `<button name="send" value="/pokerogue use ${id}" class="button pr-inv-use-btn">`;
+				buf += `Open Capsule</button>`;
+			} else if (shopItem?.heldItem) {
+				// held item — equip to a specific team slot
+				buf += `<div style="font-size:9px;color:#666;margin:4px 0 2px">Equip to slot:</div>`;
+				buf += `<div style="display:flex;flex-wrap:wrap;gap:3px">`;
+				for (let slot = 1; slot <= state.team.length; slot++) {
+					const slotMon = state.team[slot - 1];
+					const isEquipped = slotMon?.heldItem === shopItem.heldItem;
+					const slotName = Dex.species.get(toID(slotMon?.species ?? '')).name || (slotMon?.species ?? `${slot}`);
+					buf += `<button name="send" value="/pokerogue use ${id} ${slot}" ` +
+						`class="button pr-inv-slot-btn${isEquipped ? ' pr-inv-slot-equipped' : ''}" ` +
+						`title="${Utils.escapeHTML(slotName)}">`;
+					buf += `${slot}${isEquipped ? ' ✓' : ''}</button>`;
+				}
+				buf += `</div>`;
+			} else if (id === 'rarecandy') {
+				// rarecandy — apply to a specific team slot
+				buf += `<div style="font-size:9px;color:#666;margin:4px 0 2px">Use on slot:</div>`;
+				buf += `<div style="display:flex;flex-wrap:wrap;gap:3px">`;
+				for (let slot = 1; slot <= state.team.length; slot++) {
+					buf += `<button name="send" value="/pokerogue use ${id} ${slot}" class="button pr-inv-slot-btn">`;
+					buf += `${slot}</button>`;
+				}
+				buf += `</div>`;
+			} else {
+				// consumable (luckycharm, revive) — single "Use" button
+				buf += `<button name="send" value="/pokerogue use ${id}" class="button pr-inv-use-btn">`;
+				buf += `Use</button>`;
+			}
+			buf += `</div>`;
 		}
 		buf += `</div>`;
 	}
@@ -799,6 +891,22 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 			default: {
+				// gacha capsule items
+				if (item.gachaType) {
+					if (state.team.length >= 6) {
+						state.items![itemId] = qty;
+						setState(user.id, state);
+						return this.errorReply(
+							`Your team is full (6 Pokemon). Release a Pokemon or wait until after a battle.`
+						);
+					}
+					const exclude = state.team.map(m => m.species);
+					const { species, isFeatured } = rollGachaPokemon(item.gachaType, item.gachaChance ?? 0, exclude);
+					state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured };
+					setState(user.id, state);
+					this.refreshPage('pokerogue');
+					return;
+				}
 				// held items — equip to a team Pokemon
 				if (!item.heldItem) {
 					state.items![itemId] = qty;
@@ -824,6 +932,41 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 			}
+		},
+
+		// /pokerogue gachaaccept — accept a pending gacha Pokemon offer
+		gachaaccept(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+			const state = getState(user.id);
+			if (!state) return this.errorReply('You have no active PokéRogue run.');
+			if (!state.pendingGachaOffer) return this.errorReply('No pending gacha offer to accept.');
+			if (state.team.length >= 6) {
+				return this.errorReply('Your team is full (6 Pokemon). You must decline this offer.');
+			}
+			const { species } = state.pendingGachaOffer;
+			const addLevel = Math.max(1, state.floor - 2);
+			state.team.push({ species, level: addLevel, exp: expForLevel(addLevel) });
+			const sp = Dex.species.get(toID(species));
+			const name = sp.exists ? sp.name : species;
+			state.notification = `<b>${Utils.escapeHTML(name)}</b> (Lv.${addLevel}) joined your team from the capsule!`;
+			delete state.pendingGachaOffer;
+			setState(user.id, state);
+			this.refreshPage('pokerogue');
+		},
+
+		// /pokerogue gachadecline — decline a pending gacha Pokemon offer
+		gachadecline(target, room, user) {
+			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+			const state = getState(user.id);
+			if (!state) return this.errorReply('You have no active PokéRogue run.');
+			if (!state.pendingGachaOffer) return this.errorReply('No pending gacha offer to decline.');
+			const { species } = state.pendingGachaOffer;
+			const sp = Dex.species.get(toID(species));
+			const name = sp.exists ? sp.name : species;
+			state.notification = `Declined the offer for <b>${Utils.escapeHTML(name)}</b>. The capsule coins are spent.`;
+			delete state.pendingGachaOffer;
+			setState(user.id, state);
+			this.refreshPage('pokerogue');
 		},
 
 		// /pokerogue quit
@@ -1405,6 +1548,7 @@ export const handlers: Chat.Handlers = {
 				delete state.doubleExpFloors;
 				delete state.shopInventory;
 				delete state.notification;
+				delete state.pendingGachaOffer;
 				setState(match.userId, state);
 				if (humanUser) {
 					refreshGamePage(humanUser);
