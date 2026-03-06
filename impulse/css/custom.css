@@ -3021,42 +3021,6 @@ width: 200px;
 	box-shadow: 0 4px 28px rgba(245, 158, 11, 0.35);
 }
 
-.pr-statbar-row {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	margin: 2px 0;
-}
-
-.pr-statbar-label {
-	width: 28px;
-	font-size: 9px;
-	color: #7090b8;
-	text-align: right;
-	font-weight: bold;
-}
-
-.pr-statbar-track {
-	flex: 1;
-	height: 5px;
-	background: rgba(255, 255, 255, 0.08);
-	border-radius: 3px;
-	overflow: hidden;
-}
-
-.pr-statbar-fill {
-	height: 100%;
-	border-radius: 3px;
-	opacity: 0.85;
-}
-
-.pr-statbar-val {
-	width: 26px;
-	font-size: 9px;
-	color: #99b0cc;
-	text-align: right;
-}
-
 .pr-shop-grid {
 	display: flex;
 	flex-wrap: wrap;
@@ -3079,4 +3043,167 @@ width: 200px;
 .pr-shop-card:hover {
 	border-color: rgba(120, 80, 220, 0.7);
 	box-shadow: 0 2px 14px rgba(90, 63, 160, 0.2);
+}
+
+/* ── Choice table (starter / add-Pokémon selection) ── */
+
+/* Ensure choice heading inside .pr-popup overrides generic .pr-popup h2 styles */
+.pr-popup h2.pr-choice-heading {
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: #fff;
+	margin: 8px 0 14px;
+	letter-spacing: 0.5px;
+	-webkit-text-fill-color: unset;
+}
+.pr-choice-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0 0 10px;
+	font-size: 12px;
+}
+
+.pr-choice-table th {
+	background: rgba(90, 63, 160, 0.35);
+	color: #c4a8ff;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 8px 10px;
+	text-align: center;
+	border-bottom: 2px solid rgba(120, 80, 220, 0.5);
+}
+
+.pr-choice-table td {
+	padding: 10px 10px;
+	vertical-align: middle;
+	border-bottom: 1px solid rgba(90, 63, 160, 0.22);
+	color: #dde6f0;
+}
+
+.pr-choice-row:last-child td {
+	border-bottom: none;
+}
+
+.pr-choice-row:hover td {
+	background: rgba(90, 63, 160, 0.1);
+}
+
+.pr-choice-row.legendary td {
+	background: rgba(245, 158, 11, 0.05);
+}
+
+.pr-choice-row.legendary:hover td {
+	background: rgba(245, 158, 11, 0.1);
+}
+
+.pr-ct-status {
+	text-align: center;
+	min-width: 90px;
+	white-space: nowrap;
+}
+
+.pr-ct-name {
+	font-size: 13px;
+	font-weight: bold;
+	color: #e8e0ff;
+	margin: 3px 0 2px;
+}
+
+.pr-legendary-badge {
+	display: inline-block;
+	color: #f59e0b;
+	font-size: 9px;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+	vertical-align: middle;
+}
+
+.pr-ct-meta {
+	font-size: 10px;
+	color: #8ab4f8;
+	margin-top: 3px;
+}
+
+.pr-ct-info {
+	min-width: 130px;
+	vertical-align: middle;
+}
+
+.pr-ct-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3px 10px;
+	margin-bottom: 5px;
+}
+
+.pr-ct-stats span {
+	font-size: 11px;
+	color: #b8c8e8;
+	white-space: nowrap;
+}
+
+.pr-ct-stats b {
+	color: #dde6f0;
+}
+
+.pr-ct-ability {
+	font-size: 11px;
+	color: #8ab4f8;
+}
+
+.pr-ct-ability b {
+	color: #aaa;
+}
+
+.pr-ct-moves {
+	min-width: 90px;
+	font-size: 11px;
+	color: #c4d8f0;
+	line-height: 1.7;
+	vertical-align: middle;
+}
+
+.pr-ct-action {
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.pr-pick-btn {
+	padding: 6px 12px;
+}
+
+/* ── Game over screen ── */
+
+.pr-gameover {
+	text-align: center;
+	padding: 28px 16px 20px;
+}
+
+.pr-gameover-title {
+	font-size: 30px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 20px;
+	text-shadow: 0 0 24px rgba(200, 80, 80, 0.5);
+}
+
+.pr-gameover-stats {
+	margin: 0 auto 8px;
+	font-size: 15px;
+	font-weight: bold;
+	color: #e0d8ff;
+	line-height: 1;
+}
+
+.pr-gameover-stats span {
+	display: block;
+	margin: 10px 0;
+}
+
+.pr-newrun-btn {
+	font-size: 13px;
+	padding: 8px 20px;
+	border: 1px solid rgba(180, 140, 255, 0.5) !important;
 }
