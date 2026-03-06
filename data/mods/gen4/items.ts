@@ -302,6 +302,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 			}
 		},
+		rating: 1,
 	},
 	metronome: {
 		inherit: true,
