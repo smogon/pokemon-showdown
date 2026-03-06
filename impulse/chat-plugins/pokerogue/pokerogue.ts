@@ -65,11 +65,25 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
+// base URL for non-ball pokesprite items
+const POKESPRITE_ITEM_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/';
+
+// explicit sprite URLs for PokéRogue custom items that don't exist in the PS item dex
+const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
+	mastercapsule: `${POKESPRITE_BALL_BASE}master.png`,
+	ultracapsule:  `${POKESPRITE_BALL_BASE}ultra.png`,
+	greatcapsule:  `${POKESPRITE_BALL_BASE}great.png`,
+	rarecandy:     `${POKESPRITE_ITEM_BASE}medicine/rare-candy.png`,
+	revive:        `${POKESPRITE_ITEM_BASE}medicine/revive.png`,
+	luckycharm:    `${POKESPRITE_ITEM_BASE}hold-item/lucky-egg.png`,
+};
+
 // returns the item sprite img html for a shop item
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
-	return `<img src="https://play.pokemonshowdown.com/sprites/itemicons/${id}.png" ` +
-		`width="24" height="24" alt="${Utils.escapeHTML(itemId)} icon" style="image-rendering:pixelated" />`;
+	const src = ITEM_SPRITE_OVERRIDES[id] ??
+		`https://play.pokemonshowdown.com/sprites/itemicons/${id}.png`;
+	return `<img src="${src}" width="24" height="24" alt="${Utils.escapeHTML(itemId)} icon" style="image-rendering:pixelated" />`;
 }
 
 // exp progress bar for a team member
@@ -706,6 +720,13 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 
+			if (state.pendingGachaOffer) {
+				return this.sendReplyBox(
+					`You have a pending gacha offer! ` +
+					`<button name="send" value="/pokerogue start" class="button">Open PokéRogue</button> to accept or decline it first.`
+				);
+			}
+
 			if (!state.team?.length) {
 				return this.errorReply('No team to battle with. Use /pokerogue start to begin a new run!');
 			}
@@ -896,6 +917,15 @@ export const commands: Chat.ChatCommands = {
 			default: {
 				// gacha capsule items
 				if (item.gachaType) {
+					// Block opening a new capsule while an offer is already pending
+					if (state.pendingGachaOffer) {
+						state.items![itemId] = qty; // restore item — capsule not consumed
+						setState(user.id, state);
+						return this.errorReply(
+							`You already have a pending gacha offer! ` +
+							`Accept or decline it first with /pokerogue gachaaccept or /pokerogue gachadecline.`
+						);
+					}
 					if (state.team.length >= 6) {
 						state.items![itemId] = qty;
 						setState(user.id, state);
