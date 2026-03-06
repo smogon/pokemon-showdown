@@ -3182,6 +3182,7 @@ width: 200px;
 	position: relative;
 	display: inline-block;
 	flex-shrink: 0;
+	overflow: visible;
 }
 
 .pr-sprite-wrap img:first-child {
@@ -3190,12 +3191,12 @@ width: 200px;
 
 .pr-pokeball-overlay {
 	position: absolute;
-	bottom: -3px;
-	right: -3px;
-	width: 18px;
-	height: 18px;
+	bottom: -4px;
+	right: -4px;
+	width: 22px;
+	height: 22px;
 	image-rendering: pixelated;
-	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+	filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
 }
 
 /* ── Choice table (starter / add-Pokémon selection) ── */
@@ -3296,6 +3297,11 @@ width: 200px;
 	white-space: nowrap;
 }
 
+@supports not (gap: 1rem) {
+	.pr-ct-stats span:not(:last-child) {
+		margin-right: 8px; /* fallback for browsers/contexts that do not support flex gap */
+	}
+}
 .pr-ct-stats b {
 	color: #dde6f0;
 }
