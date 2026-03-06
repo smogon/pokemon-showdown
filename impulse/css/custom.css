@@ -3022,27 +3022,180 @@ width: 200px;
 }
 
 .pr-shop-grid {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin: 10px 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+	gap: 12px;
+	margin: 14px 0;
 }
 
+/* Shop header bar */
+.pr-shop-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	border-bottom: 1px solid rgba(90, 63, 160, 0.4);
+	padding-bottom: 12px;
+	margin-bottom: 6px;
+}
+
+.pr-shop-toolbar {
+	display: flex;
+	gap: 7px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.pr-shop-back-btn {
+	font-size: 12px;
+}
+
+.pr-shop-reroll-btn {
+	font-size: 12px;
+}
+
+.pr-shop-battle-btn {
+	font-size: 12px;
+}
+
+/* Redesigned shop cards */
 .pr-shop-card {
-	flex: 1 1 155px;
-	max-width: 200px;
-	background: linear-gradient(135deg, rgba(90, 63, 160, 0.14) 0%, rgba(8, 14, 30, 0.95) 100%);
-	border: 1px solid rgba(90, 63, 160, 0.4);
-	border-radius: 12px;
-	padding: 10px;
-	text-align: center;
+	background: linear-gradient(160deg, #0e1530 0%, #0c0f24 60%, #080c1c 100%);
+	border: 1px solid rgba(90, 63, 160, 0.45);
+	border-radius: 14px;
+	padding: 12px 12px 10px;
 	box-sizing: border-box;
-	transition: border-color 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+	position: relative;
+	overflow: hidden;
+}
+
+.pr-shop-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, rgba(120, 80, 220, 0.6), transparent);
+	border-radius: 14px 14px 0 0;
 }
 
 .pr-shop-card:hover {
-	border-color: rgba(120, 80, 220, 0.7);
-	box-shadow: 0 2px 14px rgba(90, 63, 160, 0.2);
+	border-color: rgba(140, 90, 255, 0.75);
+	box-shadow: 0 4px 20px rgba(90, 63, 160, 0.3), 0 0 0 1px rgba(120, 80, 220, 0.1);
+	transform: translateY(-2px);
+}
+
+.pr-shop-card-disabled {
+	opacity: 0.6;
+}
+
+.pr-shop-card-disabled:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+.pr-shop-card-top {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.pr-shop-item-icon {
+	background: rgba(90, 63, 160, 0.2);
+	border: 1px solid rgba(90, 63, 160, 0.3);
+	border-radius: 8px;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.pr-shop-item-name {
+	font-size: 12px;
+	font-weight: bold;
+	color: #e0d4ff;
+	line-height: 1.3;
+	margin-bottom: 3px;
+}
+
+.pr-item-tag-held {
+	display: inline-block;
+	font-size: 9px;
+	font-weight: bold;
+	letter-spacing: 0.4px;
+	color: #f5c518;
+	background: rgba(245, 197, 24, 0.12);
+	border: 1px solid rgba(245, 197, 24, 0.3);
+	border-radius: 4px;
+	padding: 1px 5px;
+}
+
+.pr-item-tag-consumable {
+	display: inline-block;
+	font-size: 9px;
+	font-weight: bold;
+	letter-spacing: 0.4px;
+	color: #7eb8ff;
+	background: rgba(59, 130, 246, 0.12);
+	border: 1px solid rgba(59, 130, 246, 0.3);
+	border-radius: 4px;
+	padding: 1px 5px;
+}
+
+.pr-shop-item-desc {
+	font-size: 10px;
+	color: #9ab4cc;
+	line-height: 1.5;
+	flex: 1;
+}
+
+.pr-shop-buy-btn {
+	width: 100%;
+	text-align: center;
+	font-size: 11px;
+	padding: 5px 8px;
+	border-radius: 8px !important;
+	background: linear-gradient(135deg, rgba(100, 70, 200, 0.35), rgba(70, 50, 140, 0.25)) !important;
+	border: 1px solid rgba(120, 80, 220, 0.5) !important;
+	color: #d0c0ff !important;
+}
+
+.pr-shop-buy-btn:hover {
+	background: linear-gradient(135deg, rgba(120, 80, 220, 0.55), rgba(90, 63, 160, 0.4)) !important;
+	border-color: rgba(160, 110, 255, 0.7) !important;
+}
+
+.pr-shop-buy-disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+/* PokéBall overlay on Pokemon sprites */
+.pr-sprite-wrap {
+	position: relative;
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+.pr-sprite-wrap img:first-child {
+	display: block;
+}
+
+.pr-pokeball-overlay {
+	position: absolute;
+	bottom: -3px;
+	right: -3px;
+	width: 18px;
+	height: 18px;
+	image-rendering: pixelated;
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
 }
 
 /* ── Choice table (starter / add-Pokémon selection) ── */
@@ -3208,6 +3361,132 @@ width: 200px;
 	border: 1px solid rgba(180, 140, 255, 0.5) !important;
 }
 
+/* ── Gacha offer ── */
+
+.pr-gacha-offer {
+	background: linear-gradient(160deg, #12082a 0%, #0c1828 100%);
+	border: 1px solid rgba(200, 130, 255, 0.5);
+	border-radius: 16px;
+	padding: 16px;
+	margin: 8px 0;
+	box-shadow: 0 0 30px rgba(160, 80, 255, 0.2);
+}
+
+.pr-gacha-offer-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(200, 130, 255, 0.25);
+}
+
+.pr-gacha-ball-label {
+	font-size: 13px;
+	font-weight: bold;
+	color: #c4a8ff;
+}
+
+.pr-gacha-tier-badge {
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+
+.pr-gacha-offer-body {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.pr-gacha-mon-name {
+	font-size: 15px;
+	font-weight: bold;
+	color: #e8e0ff;
+	margin-top: 6px;
+}
+
+.pr-gacha-offer-info {
+	flex: 1;
+	min-width: 200px;
+}
+
+.pr-gacha-offer-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 10px;
+}
+
+.pr-gacha-accept-btn {
+	background: linear-gradient(135deg, rgba(52, 211, 153, 0.3), rgba(16, 185, 129, 0.2)) !important;
+	border: 1px solid rgba(52, 211, 153, 0.5) !important;
+	color: #6ee7b7 !important;
+	font-size: 12px;
+}
+
+.pr-gacha-accept-btn:hover {
+	background: linear-gradient(135deg, rgba(52, 211, 153, 0.5), rgba(16, 185, 129, 0.35)) !important;
+}
+
+.pr-gacha-decline-btn {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.15)) !important;
+	border: 1px solid rgba(239, 68, 68, 0.4) !important;
+	color: #fca5a5 !important;
+	font-size: 12px;
+}
+
+.pr-gacha-decline-btn:hover {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(185, 28, 28, 0.25)) !important;
+}
+
+/* ── Inventory grid with use/equip buttons ── */
+
+.pr-inventory-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 6px 0 10px;
+}
+
+.pr-inventory-item {
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.18), rgba(8, 12, 24, 0.9));
+	border: 1px solid rgba(90, 63, 160, 0.4);
+	border-radius: 10px;
+	padding: 8px 10px;
+	min-width: 140px;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+}
+
+.pr-inventory-item-top {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.pr-inv-use-btn {
+	width: 100%;
+	font-size: 10px;
+	padding: 3px 6px;
+	border-radius: 6px !important;
+}
+
+.pr-inv-slot-btn {
+	font-size: 10px;
+	padding: 2px 8px;
+	border-radius: 5px !important;
+	min-width: 28px;
+}
+
+.pr-inv-slot-equipped {
+	background: rgba(52, 211, 153, 0.25) !important;
+	border-color: rgba(52, 211, 153, 0.5) !important;
+	color: #6ee7b7 !important;
+}
+
 /* pokerogue — mobile responsive overrides */
 
 .pr-popup {
@@ -3264,9 +3543,24 @@ width: 200px;
 		min-width: 130px;
 	}
 
+	.pr-shop-grid {
+		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		gap: 8px;
+	}
+
 	.pr-shop-card {
-		flex: 1 1 130px;
-		max-width: 160px;
+		padding: 10px;
+	}
+
+	.pr-shop-toolbar {
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.pr-shop-toolbar .button {
+		width: 100%;
+		text-align: center;
+		box-sizing: border-box;
 	}
 
 	.pr-gameover-title {

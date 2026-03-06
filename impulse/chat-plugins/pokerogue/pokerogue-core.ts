@@ -31,6 +31,11 @@ export interface ShopItem {
 	cost: number;
 	// if set, item is equipped as a held item for the next battle
 	heldItem?: string;
+	// if set, opening this item triggers a gacha pokemon roll
+	// 'legendary' | 'pseudo' | 'midtier'
+	gachaType?: 'legendary' | 'pseudo' | 'midtier';
+	// probability (0-1) of getting the featured tier; fallback is given otherwise
+	gachaChance?: number;
 }
 
 export const SHOP_ITEMS: Record<string, ShopItem> = {
@@ -396,6 +401,31 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	rawstberry: { id: 'rawstberry', name: 'Rawst Berry', description: 'Cures burn once.', cost: 30, heldItem: 'rawstberry' },
 	cheriberry: { id: 'cheriberry', name: 'Cheri Berry', description: 'Cures paralysis once.', cost: 30, heldItem: 'cheriberry' },
 	pechaberry: { id: 'pechaberry', name: 'Pecha Berry', description: 'Cures poison once.', cost: 30, heldItem: 'pechaberry' },
+	// ---- Gacha capsules ----
+	mastercapsule: {
+		id: 'mastercapsule',
+		name: 'Master Ball Capsule',
+		description: '15% chance to get a Legendary/Mythical/UB/Paradox Pokemon; otherwise a powerful mid-tier Pokemon. Team must have room. Can decline the offer.',
+		cost: 1500,
+		gachaType: 'legendary',
+		gachaChance: 0.15,
+	},
+	ultracapsule: {
+		id: 'ultracapsule',
+		name: 'Ultra Ball Capsule',
+		description: '20% chance to get a Pseudo-legendary Pokemon (BST ≥ 580); otherwise a common starter Pokemon. Team must have room. Can decline the offer.',
+		cost: 800,
+		gachaType: 'pseudo',
+		gachaChance: 0.20,
+	},
+	greatcapsule: {
+		id: 'greatcapsule',
+		name: 'Great Ball Capsule',
+		description: '50% chance to get a mid-tier Pokemon (BST 480–579); otherwise a common starter Pokemon. Team must have room. Can decline the offer.',
+		cost: 400,
+		gachaType: 'midtier',
+		gachaChance: 0.50,
+	},
 };
 
 // data types
@@ -441,6 +471,14 @@ export interface PokeRogueState {
 	lastRunFloor?: number;
 	// streaks won during the player's last run.
 	lastRunStreaks?: number;
+	// pending gacha offer waiting for accept/decline (from mastercapsule/ultracapsule/greatcapsule).
+	pendingGachaOffer?: {
+		species: string,
+		// which capsule was opened
+		sourceItemId: string,
+		// whether the rolled pokemon is the featured tier (legendary/pseudo/midtier) or the fallback
+		isFeatured: boolean,
+	};
 }
 
 // persistence
@@ -483,6 +521,10 @@ export function deleteState(userid: string): void {
 let regularPokemonCache: string[] | null = null;
 // cached list of legendary/mythical base-form official pokemon ids.
 let legendaryPokemonCache: string[] | null = null;
+// cached list of pseudo-legendary final-form pokemon ids (non-legendary, BST >= 580, no further evos).
+let pseudoLegendaryCache: string[] | null = null;
+// cached list of mid-tier final-form pokemon ids (non-legendary, BST 480-579, no further evos).
+let midTierCache: string[] | null = null;
 
 // returns all regular (non-legendary) base-form official pokemon ids.
 function getRegularPokemon(): string[] {
@@ -520,6 +562,67 @@ function getLegendaryPokemon(): string[] {
 		)
 		.map(s => toID(s.name));
 	return legendaryPokemonCache;
+}
+
+// returns non-legendary final-form pokemon with BST >= 580 (pseudo-legendary tier).
+// "final-form" means no further evolutions (evos is empty or undefined).
+export function getPseudoLegendaryPokemon(): string[] {
+	if (pseudoLegendaryCache?.length) return pseudoLegendaryCache;
+	const all = Dex.species.all();
+	pseudoLegendaryCache = all
+		.filter(s => {
+			if (!s.exists || s.num <= 0 || s.isNonstandard) return false;
+			if (s.baseSpecies !== s.name) return false; // no formes
+			if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false; // no legendaries
+			if (s.evos && s.evos.length > 0) return false; // must be final form (no further evos)
+			const bs = s.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+			return bst >= 580;
+		})
+		.map(s => toID(s.name));
+	return pseudoLegendaryCache;
+}
+
+// returns non-legendary final-form pokemon with BST 480–579 (mid-tier).
+export function getMidTierPokemon(): string[] {
+	if (midTierCache?.length) return midTierCache;
+	const all = Dex.species.all();
+	midTierCache = all
+		.filter(s => {
+			if (!s.exists || s.num <= 0 || s.isNonstandard) return false;
+			if (s.baseSpecies !== s.name) return false;
+			if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
+			if (s.evos && s.evos.length > 0) return false; // must be final form
+			const bs = s.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+			return bst >= 480 && bst < 580;
+		})
+		.map(s => toID(s.name));
+	return midTierCache;
+}
+
+// rolls a gacha pokemon for the given capsule type. returns { species, isFeatured }.
+// team species (exclude) prevents duplicates.
+export function rollGachaPokemon(
+	gachaType: 'legendary' | 'pseudo' | 'midtier',
+	gachaChance: number,
+	exclude: string[] = []
+): { species: string, isFeatured: boolean } {
+	const isFeatured = Math.random() < gachaChance;
+	if (isFeatured) {
+		const pool = gachaType === 'legendary' ? getLegendaryPokemon() :
+			gachaType === 'pseudo' ? getPseudoLegendaryPokemon() :
+			getMidTierPokemon();
+		const picks = pickRandom(pool, 1, exclude);
+		if (picks.length) return { species: picks[0], isFeatured: true };
+		// If pool is empty or all excluded, fall through to fallback
+	}
+	// fallback: legendary/midtier → mid-tier pool; pseudo/midtier → regular pool
+	const fallbackPool = gachaType === 'legendary' ? getMidTierPokemon() : getRegularPokemon();
+	const fallbackPicks = pickRandom(fallbackPool, 1, exclude);
+	const species = fallbackPicks.length ? fallbackPicks[0] :
+		(pickRandom(getRegularPokemon(), 1)[0] ?? 'bulbasaur');
+	return { species, isFeatured: false };
 }
 
 // fisher-yates shuffle a copy of `pool` and return `n` items, excluding `exclude`.
@@ -657,7 +760,11 @@ export function packPokemon(mon: PokemonEntry): string {
 
 	const item = mon.heldItem ?? '';
 
-	return `${name}||${item}|${ability}|${movesStr}|Hardy||M||||${mon.level}`;
+	// Packed team format: name|species|item|ability|moves|nature|evs|gender|ivs|shiny|level|
+	// Empty species field makes PS use the name as species.
+	// A trailing | after level is required: PS's Teams.unpack reads level by searching for the
+	// next | and stops there; without it, a single-Pokemon team would return null from unpack.
+	return `${name}||${item}|${ability}|${movesStr}|Hardy||M|||${mon.level}|`;
 }
 
 export function packTeam(mons: PokemonEntry[]): string {
