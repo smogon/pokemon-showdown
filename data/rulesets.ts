@@ -1855,13 +1855,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Mimic Glitch Clause: Pokemon with Assist, Copycat, Metronome, Mimic, or Transform can have any move.');
 		}
 	},
-	pomegglitchclausemod: {
+	pomegglitchclause: {
 		effectType: 'ValidatorRule',
-		name: 'Pomeg Glitch Clause Mod',
+		name: 'Pomeg Glitch Clause',
 		desc: "Allows any Pokémon from Generation 3 at level 5 or higher to have any of its level-up moves. This implementation is allowed only to enable an otherwise legal Pokémon to obtain moves it would not normally have access to at an earlier level.",
 		// Implemented in sim/team-validator.ts
 		onBegin() {
-			this.add('rule', 'Pomeg Glitch Clause Mod: Gen 3 Pokémon at level 5+ can have any of their level-up moves.');
+			this.add('rule', 'Pomeg Glitch Clause: Gen 3 Pokémon at level 5+ can have any of their level-up moves.');
 		},
 	},
 	overflowstatmod: {

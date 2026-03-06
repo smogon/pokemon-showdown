@@ -202,7 +202,7 @@ describe('Team Validator', () => {
 			{ species: 'zigzagoon', level: 5, ability: 'pickup', moves: ['bellydrum', 'extremespeed'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen3ou');
-		assert.legalTeam(team, 'gen3ou@@@pomegglitchclausemod');
+		assert.legalTeam(team, 'gen3ou@@@pomegglitchclause');
 	});
 
 	it("should disallow illegal egg move combinations containing past gen universal moves", () => {
