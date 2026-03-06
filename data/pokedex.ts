@@ -19486,7 +19486,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 3.5,
 		weightkg: 590,
 		color: "Brown",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ragingbolt: {
@@ -19499,7 +19498,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 5.2,
 		weightkg: 480,
 		color: "Yellow",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironboulder: {
@@ -19512,7 +19510,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.5,
 		weightkg: 162.5,
 		color: "Gray",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironcrown: {
@@ -19525,7 +19522,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.6,
 		weightkg: 156,
 		color: "Blue",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	terapagos: {
