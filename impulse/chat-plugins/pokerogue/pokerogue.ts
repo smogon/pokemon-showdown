@@ -1547,9 +1547,13 @@ export const handlers: Chat.Handlers = {
 					// milestone: show the main page for Pokemon choice
 					refreshGamePage(humanUser);
 				} else {
-					// normal win: open shop page directly so user can buy items
+					// normal win: open shop page directly so user can buy items.
+					// do NOT call refreshGamePage here — it sends |refresh| to view-pokerogue-shop
+					// right after |init|html, which interferes with the shop auto-open and also
+					// forces the main page tab to update simultaneously, causing two page tabs
+					// to appear at once. the main game page auto-refreshes via its
+					// <meta http-equiv="refresh"> tag (active whenever state.notification is set).
 					openShopForUser(humanUser, state);
-					refreshGamePage(humanUser);
 				}
 			}
 		} else {
