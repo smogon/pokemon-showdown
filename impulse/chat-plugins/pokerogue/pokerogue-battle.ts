@@ -1,8 +1,5 @@
-/*
- * PokéRogue Battle — bot user creation, AI move logic, and battle start.
- * Imported by pokerogue.ts.
- * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
- */
+// pokerogue-battle.ts — bot user creation, ai move logic, and battle start.
+// imported by pokerogue.ts. does not export chat plugin hooks.
 
 import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
@@ -13,16 +10,14 @@ import {
 	setState,
 } from './pokerogue-core';
 
-// ---------------------------------------------------------------------------
-// Bot level/team-size helpers (battle-subsystem only)
-// ---------------------------------------------------------------------------
+// bot level/team-size helpers (battle-subsystem only)
 
-/** Bot Pokemon level for a given floor: starts at 5 and grows by ~1.5 per floor, capped at 100. */
+// bot level for a given floor: starts at 5 and grows ~1.5/floor, capped at 100
 function botLevel(floor: number): number {
 	return Math.min(100, 5 + Math.floor((floor - 1) * 1.5));
 }
 
-/** Number of Pokemon on the bot's team for a given floor. */
+// number of pokemon on the bot's team for a given floor
 function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
 	if (floor <= 10) return 2;
@@ -32,11 +27,9 @@ function botTeamSize(floor: number): number {
 	return 6;
 }
 
-// ---------------------------------------------------------------------------
-// Bot user creation
-// ---------------------------------------------------------------------------
+// bot user creation
 
-/** A noop stream — discards everything written to it. */
+// a noop stream — discards everything written to it.
 class NoopStream extends ObjectReadWriteStream<string> {
 	override _write(_data: string): void { /* discard */ }
 }
@@ -44,21 +37,14 @@ class NoopStream extends ObjectReadWriteStream<string> {
 const noopWorker = new StreamWorker(new NoopStream());
 let botCounter = 0;
 
-/** Maps active bot user IDs to the battle callback for AI responses. */
+// maps active bot user ids to battle ai callbacks
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
 
-/**
- * Display name prefix for all PokéRogue AI trainer bots.
- * Each bot appends its unique counter (e.g. "PokeRogue Challenger 42") so that
- * concurrent battles work correctly — every bot user needs a unique user ID.
- * The battle title still uses `TRAINER_NAME` directly for a clean opponent label.
- */
-const TRAINER_NAME = 'PokeRogue Challenger';
+// display name for all pokerogue ai trainer bots — all bots share this label in battle
+const TRAINER_NAME = 'PokéRogue Challenger';
 
-/**
- * Destroys a bot user, removing it from the Users table.
- * Must be defined before createBotUser so it can be called to clean up stale bots.
- */
+// destroys a bot user, removing it from the users table.
+
 export function destroyBotUser(botUser: User): void {
 	botBattleHandlers.delete(botUser.id);
 	for (const c of botUser.connections.slice()) {
@@ -69,22 +55,15 @@ export function destroyBotUser(botUser: User): void {
 	}
 }
 
-/**
- * Creates the PokéRogue AI trainer bot for a specific player.
- * Any stale bot for the same player is destroyed first (via activeMatches lookup).
- * Each bot gets a unique display name (`TRAINER_NAME + uid`) so that concurrent
- * battles work correctly — every User object needs a unique user ID.
- * The bot is marked as unnamed after forceRename so that:
- *   - It does NOT appear in the battle room's user list.
- *   - It does NOT get tracked by the /seen plugin when it disconnects.
- */
+// creates the pokerogue ai trainer bot for a specific player. each bot gets a unique id (pokeroguebot{n}) so concurrent battles work, but the display name is always trainer_name so battles show a clean label.
+
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerogue-bot-${uid}`;
-	const botDisplayName = `${TRAINER_NAME} ${uid}`;
+	// unique id keeps users map consistent; display name override makes battle show correct label
+	const botInternalName = `pokeroguebot${uid}`;
 
-	// Destroy any stale bot for this player via the activeMatches map.
-	// Collect the roomId first to avoid mutating the map while iterating.
+	// destroy any stale bot for this player via the activeMatches map.
 	let staleRoomId: RoomID | undefined;
 	for (const [roomId, match] of activeMatches) {
 		if (match.userId === toID(playerId)) {
@@ -94,9 +73,6 @@ function createBotUser(playerId: string): User {
 	}
 	if (staleRoomId !== undefined) {
 		const room = Rooms.get(staleRoomId);
-		// Treat the match as stale when the room is gone OR the battle has ended.
-		// A room can persist after a battle finishes (room.battle is falsy or
-		// room.battle.ended is true), so checking both avoids leaking bot users.
 		const battleEnded = !room?.battle || room.battle.ended;
 		if (battleEnded) {
 			const staleMatch = activeMatches.get(staleRoomId);
@@ -108,7 +84,6 @@ function createBotUser(playerId: string): User {
 		}
 	}
 
-	// Create a minimal noop connection
 	const conn = new Users.Connection(
 		connId,
 		noopWorker,
@@ -121,16 +96,15 @@ function createBotUser(playerId: string): User {
 	const botUser = new Users.User(conn);
 	conn.user = botUser;
 
-	botUser.forceRename(botDisplayName, true);
+	botUser.forceRename(botInternalName, true);
 
-	// Mark as unnamed so the bot is:
-	//   1. NOT shown in the battle room user list (onJoin only broadcasts named users)
-	//   2. NOT tracked by the /seen plugin on disconnect (handler checks user.named)
+	// override display name so battle shows 'PokéRogue Challenger' instead of the unique internal id
+	(botUser as any).name = TRAINER_NAME;
+
+	// mark unnamed: hides bot from room user lists and /seen tracking
 	(botUser as any).named = false;
 
-	// Override sendTo so that battle |request| messages trigger AI moves.
-	// Handler lookup is deferred inside the setTimeout to avoid a race condition
-	// where sendTo fires before botBattleHandlers.set() is called in startBattle.
+	// override sendTo so |request| messages trigger ai moves
 	(botUser as any).sendTo = function (roomid: RoomID | BasicRoom | null, data: string) {
 		if (typeof data === 'string') {
 			const lines = data.split('\n');
@@ -151,17 +125,10 @@ function createBotUser(playerId: string): User {
 	return botUser;
 }
 
-// ---------------------------------------------------------------------------
-// AI move logic
-// ---------------------------------------------------------------------------
+// ai move logic
 
-/**
- * Parse a |request| JSON and return a valid choice string.
- * Uses a type-effectiveness scoring system to prioritise super-effective moves
- * and avoid immunities, providing smarter AI from the start.
- * `defenderTypes` should be the live types of the foe's active Pokémon, extracted
- * from `room.battle` by the caller. When absent, scoring falls back to base power only.
- */
+// parse a |request| json and return a valid choice string. uses type-effectiveness scoring to prefer super-effective moves.
+
 function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
 	try {
@@ -226,18 +193,14 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 
 			let chosen = '';
 			if (usableMoves.length > 0) {
-				// score each move: bp × type-effectiveness multiplier
-				// getEffectiveness returns: 1=super-effective, -1=resist, 0=neutral (additive across types)
-				// convert additive value to multiplier via 2^n
+				// score: bp x 2^effectiveness (higher is better)
 				const scored = usableMoves.map((m: any) => {
 					const moveData = Dex.moves.get(m.id);
 					const bp = moveData.basePower ?? 0;
 					if (!bp) return { m, score: 0 };
-					// immunity check (false = immune)
 					if (defenderTypes.length && !Dex.getImmunity(moveData.type, defenderTypes)) {
 						return { m, score: 0 };
 					}
-					// effectiveness: additive sum, then convert 2^n to get multiplier
 					const typeMod = defenderTypes.length ?
 						Dex.getEffectiveness(moveData.type, defenderTypes) :
 						0;
@@ -261,9 +224,7 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 	return 'move 1';
 }
 
-// ---------------------------------------------------------------------------
-// Active battle tracking
-// ---------------------------------------------------------------------------
+// active battle tracking
 
 interface ActiveRougeMatch {
 	userId: ID;
@@ -273,13 +234,7 @@ interface ActiveRougeMatch {
 
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
-// ---------------------------------------------------------------------------
-// Core battle creation
-// ---------------------------------------------------------------------------
-
-/**
- * Builds an AI bot team as a packed string for the given floor.
- */
+// builds an ai bot team as a packed string for the given floor
 function buildBotTeam(floor: number): string {
 	const level = botLevel(floor);
 	const size = botTeamSize(floor);
@@ -297,11 +252,8 @@ function buildBotTeam(floor: number): string {
 	}).join(']');
 }
 
-/**
- * Starts a PokéRogue battle on the current floor for `user`.
- * Creates the bot, registers AI handlers and tracks the room.
- * Returns true on success; on failure, the user has already received a popup.
- */
+// starts a pokerogue battle on the current floor for the given user. creates the bot, registers ai handlers and tracks the active match. returns true on success; on failure the user has already received a popup.
+
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
@@ -332,10 +284,7 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 		return false;
 	}
 
-	// Register the AI callback AFTER confirming the battle exists.
-	// Type-effectiveness scoring requires access to the sim-side Battle object (battle.sides),
-	// which runs in a worker process and is not accessible from the server-side RoomBattle.
-	// We therefore score moves by base power only (defenderTypes left empty).
+	// register the ai callback after confirming the battle exists
 	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
 		const room = Rooms.get(roomid as RoomID);
 		if (!room?.battle) return;
@@ -343,7 +292,7 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 		void room.battle.stream.write(`>${botSlot} ${choice}`);
 	});
 
-	// Clear held items now that battle creation succeeded
+	// clear held items now that battle creation succeeded
 	for (const mon of state.team) delete mon.heldItem;
 
 	state.battleRoomId = battleRoom.roomid;

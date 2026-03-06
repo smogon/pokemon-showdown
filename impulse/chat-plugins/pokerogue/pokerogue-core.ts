@@ -1,30 +1,17 @@
-/*
- * PokéRogue Core — types, constants, data persistence, and game helpers.
- * Imported by pokerogue.ts and pokerogue-battle.ts.
- * This file does NOT export Chat plugin hooks (commands/handlers/pages/start).
- */
+// pokerogue-core.ts — types, constants, data persistence, and game helpers.
+// imported by pokerogue.ts and pokerogue-battle.ts. no chat plugin hooks.
 
 import { FS } from '../../../lib';
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
 const DATA_FILE = 'impulse/db/pokerogue.json';
 
-/**
- * Tags that identify Legendary / Mythical / Special Pokemon.
- * These are excluded from normal starters but can appear in milestone rewards
- * at higher floors.
- */
+// tags that identify legendary / mythical / special pokemon (excluded from normal starters)
 export const LEGENDARY_TAGS = new Set<string>([
 	'Sub-Legendary', 'Restricted Legendary', 'Mythical', 'Ultra Beast', 'Paradox',
 ]);
 
-/**
- * Default level thresholds for evolution types that don't have a natural level.
- * In PokéRogue, ALL evolutions happen by gaining levels — no items or trading needed.
- */
+// default level thresholds for evolution types that don't have a natural level.
+// in pokerogue all evolutions happen by gaining levels — no items or trading needed.
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
 	useItem: 36,
@@ -32,25 +19,22 @@ const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	levelMove: 30,
 	levelExtra: 20,
 	levelHold: 30,
-	// 'other' (e.g. Shedinja) is skipped — too special to auto-handle
+	// 'other' (e.g. shedinja) is skipped — too special to auto-handle
 };
 
-// ---------------------------------------------------------------------------
-// Shop item definitions
-// ---------------------------------------------------------------------------
+// shop item definitions
 
 export interface ShopItem {
 	id: string;
 	name: string;
 	description: string;
 	cost: number;
-	/** If set, this item is a held item equipped to one Pokemon for the next battle. */
+	// if set, item is equipped as a held item for the next battle
 	heldItem?: string;
 }
 
-/** All purchasable items in the PokéRogue shop. */
 export const SHOP_ITEMS: Record<string, ShopItem> = {
-	// ---- Special roguelite consumables ----
+	// special roguelite consumables
 	rarecandy: {
 		id: 'rarecandy',
 		name: 'Rare Candy',
@@ -69,7 +53,7 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 		description: 'Grants a second chance — if you lose your next battle you retry the same floor.',
 		cost: 200,
 	},
-	// ---- Survival / bulk items ----
+	// survival / bulk items
 	focussash: {
 		id: 'focussash',
 		name: 'Focus Sash',
@@ -414,56 +398,52 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	pechaberry: { id: 'pechaberry', name: 'Pecha Berry', description: 'Cures poison once.', cost: 30, heldItem: 'pechaberry' },
 };
 
-// ---------------------------------------------------------------------------
-// Data types
-// ---------------------------------------------------------------------------
+// data types
 
 export interface PokemonEntry {
 	species: string;
 	level: number;
 	exp: number;
-	/** Held item to equip in the next battle (cleared after battle ends). */
+	// held item to equip in the next battle (cleared after battle ends).
 	heldItem?: string;
 }
 
 export interface PokeRogueState {
 	floor: number;
 	team: PokemonEntry[];
-	/** If set, player is being prompted to choose a starter (or a new team addition). */
+	// if set, player is being prompted to choose a starter (or a new team addition).
 	pendingChoice?: string[];
-	/** 'starter' | 'add' — what the pending choice is for. */
+	// 'starter' | 'add' — what the pending choice is for.
 	pendingChoiceType?: 'starter' | 'add';
-	/** roomid of an ongoing battle, if any. */
+	// roomid of an ongoing battle, if any.
 	battleRoomId?: string;
-	/** Coins earned from floor victories (used in the item shop). */
+	// coins earned from floor victories (used in the item shop).
 	coins?: number;
-	/** Inventory: item ID → quantity. */
+	// inventory: item id → quantity.
 	items?: Record<string, number>;
-	/** Floors remaining where EXP and coins are doubled (Lucky Charm effect). */
+	// floors remaining where exp and coins are doubled (lucky charm effect).
 	doubleExpFloors?: number;
-	/** If true, the next loss will retry the same floor instead of resetting the run. */
+	// if true, the next loss will retry the same floor instead of resetting the run.
 	hasRevive?: boolean;
-	/** Highest floor ever reached — tracked for the leaderboard. */
+	// highest floor ever reached — tracked for the leaderboard.
 	highestFloor?: number;
-	/** Display name (updated each login) — used for the leaderboard. */
+	// display name (updated each login) — used for the leaderboard.
 	displayName?: string;
-	/** Number of floors won in the current run. */
+	// number of floors won in the current run.
 	streaksWon?: number;
-	/** Current shop rotation — item IDs available this refresh. */
+	// current shop rotation — item ids available this refresh.
 	shopInventory?: string[];
-	/** Last in-game notification to display on the page (replaces chat/popup messages). */
+	// last in-game notification to display on the page (replaces chat/popup messages).
 	notification?: string;
-	/** Set to true after a run ends in defeat; cleared when a new run starts. */
+	// set to true after a run ends in defeat; cleared when a new run starts.
 	gameOver?: boolean;
-	/** Floor the player was on when their last run ended. */
+	// floor the player was on when their last run ended.
 	lastRunFloor?: number;
-	/** Streaks won during the player's last run. */
+	// streaks won during the player's last run.
 	lastRunStreaks?: number;
 }
 
-// ---------------------------------------------------------------------------
-// Persistence
-// ---------------------------------------------------------------------------
+// persistence
 
 type SavedData = Record<string, PokeRogueState>;
 export let savedData: SavedData = {};
@@ -497,16 +477,14 @@ export function deleteState(userid: string): void {
 	saveData();
 }
 
-// ---------------------------------------------------------------------------
-// Pokemon selection helpers
-// ---------------------------------------------------------------------------
+// pokemon selection helpers
 
-/** Cached list of non-legendary base-form official Pokemon IDs. */
+// cached list of non-legendary base-form official pokemon ids.
 let regularPokemonCache: string[] | null = null;
-/** Cached list of legendary/mythical base-form official Pokemon IDs. */
+// cached list of legendary/mythical base-form official pokemon ids.
 let legendaryPokemonCache: string[] | null = null;
 
-/** Returns all regular (non-legendary) base-form official Pokemon IDs. */
+// returns all regular (non-legendary) base-form official pokemon ids.
 function getRegularPokemon(): string[] {
 	// Only use the cache if it's non-empty — an empty cache means the Dex wasn't
 	// loaded yet when it was first called, so we must retry the lookup.
@@ -525,7 +503,7 @@ function getRegularPokemon(): string[] {
 	return regularPokemonCache;
 }
 
-/** Returns all legendary/mythical base-form official Pokemon IDs. */
+// returns all legendary/mythical base-form official pokemon ids.
 function getLegendaryPokemon(): string[] {
 	// Only use the cache if it's non-empty — an empty cache means the Dex wasn't
 	// loaded yet when it was first called, so we must retry the lookup.
@@ -544,7 +522,7 @@ function getLegendaryPokemon(): string[] {
 	return legendaryPokemonCache;
 }
 
-/** Fisher-Yates shuffle a copy of `pool` and return `n` items, excluding `exclude`. */
+// fisher-yates shuffle a copy of `pool` and return `n` items, excluding `exclude`.
 function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
 	const filtered = pool.filter(id => !exclude.includes(id));
 	const shuffled = filtered.slice();
@@ -555,27 +533,20 @@ function pickRandom(pool: string[], n: number, exclude: string[] = []): string[]
 	return shuffled.slice(0, n);
 }
 
-/**
- * Pick `n` completely random regular (non-legendary) base-form Pokemon,
- * excluding any already in `exclude`.
- */
+// pick `n` completely random regular (non-legendary) base-form pokemon, excluding any already in `exclude`.
+
 export function pickRandomPokemon(n: number, exclude: string[] = []): string[] {
 	return pickRandom(getRegularPokemon(), n, exclude);
 }
 
-/**
- * Pick 3 completely random level-1 base-form Pokemon for the starter selection screen.
- * Legendary/Mythical Pokemon are always excluded from the starter pool.
- */
+// pick 3 completely random level-1 base-form pokemon for the starter selection screen. legendary/mythical pokemon are always excluded from the starter pool.
+
 export function pickStarterOptions(): string[] {
 	return pickRandomPokemon(3);
 }
 
-/**
- * Returns 3 random Pokemon for the "add to team" milestone offer.
- * At floor 20+ there is a small chance that one Legendary/Mythical appears.
- * At floor 40+ that chance doubles.
- */
+// returns 3 random pokemon for the "add to team" milestone offer. at floor 20+ there is a small chance that one legendary/mythical appears. at floor 40+ that chance doubles.
+
 export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
 	const existing = currentTeam.map(m => m.species);
 	const legendaryChance = floor >= 40 ? 0.25 : floor >= 20 ? 0.12 : 0;
@@ -590,14 +561,10 @@ export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number
 	return pickRandomPokemon(3, existing);
 }
 
-// ---------------------------------------------------------------------------
-// EXP / levelling / evolution helpers
-// ---------------------------------------------------------------------------
+// exp / levelling / evolution helpers
 
-/**
- * Returns the level-based evolution for a species, if one exists.
- * In PokéRogue all evolutions are unlocked by levelling up.
- */
+// returns the level-based evolution for a species, if one exists. in pokérogue all evolutions are unlocked by levelling up.
+
 export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
 	const species = Dex.species.get(toID(speciesId));
 	if (!species.exists || !species.evos.length) return null;
@@ -615,25 +582,23 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 	return null;
 }
 
-/** Total EXP needed to reach a given level from level 1. */
+// total exp needed to reach a given level from level 1.
 export function expForLevel(level: number): number {
 	return 15 * level * (level - 1);
 }
 
-/** EXP awarded for winning a floor. */
+// exp awarded for winning a floor.
 export function floorExpReward(floor: number): number {
 	return 50 + floor * 15;
 }
 
-/** Coins awarded for winning a floor. */
+// coins awarded for winning a floor.
 export function floorCoinReward(floor: number): number {
 	return 30 + floor * 10;
 }
 
-/**
- * Level up a Pokemon entry, applying EXP.
- * Returns true if the Pokemon evolved.
- */
+// level up a pokemon entry, applying exp. returns true if the pokemon evolved.
+
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
@@ -650,9 +615,7 @@ export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evol
 	return { evolved, oldLevel };
 }
 
-// ---------------------------------------------------------------------------
-// Learnset helpers — fetch up-to-4 gen-9 level-up moves for a species / level
-// ---------------------------------------------------------------------------
+// learnset helpers — fetch up-to-4 gen-9 level-up moves for a species / level
 
 export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
@@ -680,9 +643,7 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	return available.slice(0, 4).map(m => m.move);
 }
 
-// ---------------------------------------------------------------------------
-// Team packing helpers
-// ---------------------------------------------------------------------------
+// team packing helpers
 
 export function packPokemon(mon: PokemonEntry): string {
 	const speciesData = Dex.species.get(toID(mon.species));
@@ -703,7 +664,7 @@ export function packTeam(mons: PokemonEntry[]): string {
 	return mons.map(m => packPokemon(m)).join(']');
 }
 
-/** Returns a random selection of `n` shop item IDs from the full SHOP_ITEMS list. */
+// returns a random selection of `n` shop item ids from the full shop_items list.
 export function rollShopInventory(n = 8): string[] {
 	const all = Object.keys(SHOP_ITEMS);
 	const shuffled = all.slice();
