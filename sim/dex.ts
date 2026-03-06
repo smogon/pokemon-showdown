@@ -570,6 +570,7 @@ export class ModdedDex {
 						// not doing baseForme as a hack to make aliases point to base forme
 						formeLetter = (species.forme || '').split(/ |-/).map(part => toID(part).charAt(0)).join('') as ID;
 					}
+					addFuzzy(forme, id);
 				}
 
 				addFuzzyForme(toID(name), id, forme, formeLetter);

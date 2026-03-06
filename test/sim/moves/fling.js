@@ -30,7 +30,7 @@ describe('Fling', () => {
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 
-	it(`should not be usuable in Magic Room`, () => {
+	it(`should not be usable in Magic Room`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', item: 'ironball', moves: ['fling'] },
 		], [

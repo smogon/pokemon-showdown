@@ -56,7 +56,7 @@ describe('Download', () => {
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 	});
 
-	describe('Gen 4', () => {
+	describe('[Gen 4]', () => {
 		it('should not trigger if the foe is behind a Substitute', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'furret', moves: ['sleeptalk'] },

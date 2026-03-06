@@ -497,8 +497,9 @@ export const pages: Chat.PageTable = {
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
 					const button = `<button class="button" name="send"value="/msgroom ${room.roomid},/ar remove ${item}, ${index}">Remove</button>`;
-					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
-					if (canChange) buffer += `<td>${button}</td></tr>`;
+					buffer += Utils.html`<tr><td>${index}</td><td><code>${regex}</code></td>`;
+					if (canChange) buffer += `<td>${button}</td>`;
+					buffer += `</tr>`;
 				}
 				buffer += `</details>`;
 				return buffer;
@@ -511,7 +512,7 @@ export const pages: Chat.PageTable = {
 				throw new Chat.ErrorMessage(`No terms on ignore list.`);
 			}
 			for (const term of roomData.ignore) {
-				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
+				buf += `- ${Utils.escapeHTML(term)} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
 			}
 			buf += `</div>`;
 			break;

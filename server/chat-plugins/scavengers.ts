@@ -456,7 +456,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
 
 		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
-			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:scroll; max-height: 50vh">` +
+			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:auto; max-height: 50vh">` +
 			`<strong><em>Hint #1:</em> ${this.formatOutput(this.questions[0].hint)}</strong>` +
 			`</div>` +
 			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
@@ -723,7 +723,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 			`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
 			`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-			`<details style="cursor: pointer; overflow:scroll; max-height: 50vh"><summary>Solution: </summary><br />` +
+			`<details style="cursor: pointer; overflow:auto; max-height: 50vh"><summary>Solution: </summary><br />` +
 			`${this.questions.map((q, i) => `${i + 1}) ${this.formatOutput(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
 			`</details>`
 		);
@@ -1036,7 +1036,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	onNotifyChange(num: number) {
 		this.game.runEvent('NotifyChange', this, num);
 		if (num === this.currentQuestion) {
-			this.sendRoom(`|raw|<div style="overflow:scroll; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
+			this.sendRoom(`|raw|<div style="overflow:auto; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
 		}
 	}
 
@@ -1520,7 +1520,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		const minutes = (toID(target) === 'off' ? 0 : parseFloat(target));
 		if (isNaN(minutes) || minutes < 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
-			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
+			throw new Chat.ErrorMessage(`You must specify a timer length that is a positive number.`);
 		}
 
 		const result = game.setTimer(minutes);
@@ -2057,7 +2057,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		if (!RATED_TYPES.includes(gameType)) throw new Chat.ErrorMessage(`You cannot set blitz points for ${gameType} hunts.`);
 
 		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) {
-			throw new Chat.ErrorMessage("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
+			throw new Chat.ErrorMessage("The points value awarded for blitz must be an integer between 0 and 1000.");
 		}
 		if (!room.settings.scavSettings.blitzPoints) room.settings.scavSettings.blitzPoints = {};
 		room.settings.scavSettings.blitzPoints[gameType] = blitzPoints;
@@ -2092,7 +2092,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			return this.sendReply(`The points rewarded for hosting a regular hunt is ${pointSetting}.`);
 		}
 
-		this.checkCan('declare', null, room); // perms for editting
+		this.checkCan('declare', null, room); // perms for editing
 		const points = parseInt(target);
 		if (isNaN(points)) throw new Chat.ErrorMessage(`${target} is not a valid number of points.`);
 
@@ -2133,7 +2133,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			return this.sendReplyBox(`The points rewarded for winning hunts is:<br />${points.join('<br />')}`);
 		}
 
-		this.checkCan('declare', null, room); // perms for editting
+		this.checkCan('declare', null, room); // perms for editing
 
 		let [type, ...pointsSet] = target.split(',');
 		type = toID(type) as GameTypes;

@@ -60,7 +60,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.typeChangerBoosted = this.effect;
@@ -145,7 +145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedAngerShell = false;
 			} else {
@@ -411,7 +411,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedBerserk = false;
 			} else {
@@ -740,33 +740,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 238,
 	},
 	cudchew: {
-		onEatItem(item, pokemon) {
-			if (item.isBerry && pokemon.addVolatile('cudchew')) {
-				pokemon.volatiles['cudchew'].berry = item;
+		onEatItem(item, pokemon, source, effect) {
+			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
+				this.effectState.berry = item;
+				this.effectState.counter = 2;
+				// This is needed in case the berry was eaten during residuals, preventing the timer from decreasing this turn
+				if (!this.queue.peek()) this.effectState.counter--;
 			}
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['cudchew'];
-		},
-		condition: {
-			noCopy: true,
-			duration: 2,
-			onRestart() {
-				this.effectState.duration = 2;
-			},
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onEnd(pokemon) {
-				if (pokemon.hp) {
-					const item = this.effectState.berry;
-					this.add('-activate', pokemon, 'ability: Cud Chew');
-					this.add('-enditem', pokemon, item.name, '[eat]');
-					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
-						this.runEvent('EatItem', pokemon, null, null, item);
-					}
-					if (item.onEat) pokemon.ateBerry = true;
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!this.effectState.berry || !pokemon.hp) return;
+			if (--this.effectState.counter <= 0) {
+				const item = this.effectState.berry;
+				this.add('-activate', pokemon, 'ability: Cud Chew');
+				this.add('-enditem', pokemon, item.name, '[eat]');
+				if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
+					this.runEvent('EatItem', pokemon, null, null, item);
 				}
-			},
+				if (item.onEat) pokemon.ateBerry = true;
+				delete this.effectState.berry;
+				delete this.effectState.counter;
+			}
 		},
 		flags: {},
 		name: "Cud Chew",
@@ -988,7 +984,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -1000,7 +996,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
@@ -1166,8 +1162,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	embodyaspectcornerstone: {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && pokemon.terastallized &&
-				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
-				this.effectState.embodied = pokemon.previouslySwitchedIn;
+				!this.effectState.embodied) {
+				this.effectState.embodied = true;
 				this.boost({ def: 1 }, pokemon);
 			}
 		},
@@ -1179,8 +1175,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && pokemon.terastallized &&
-				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
-				this.effectState.embodied = pokemon.previouslySwitchedIn;
+				!this.effectState.embodied) {
+				this.effectState.embodied = true;
 				this.boost({ atk: 1 }, pokemon);
 			}
 		},
@@ -1192,8 +1188,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	embodyaspectteal: {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && pokemon.terastallized &&
-				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
-				this.effectState.embodied = pokemon.previouslySwitchedIn;
+				!this.effectState.embodied) {
+				this.effectState.embodied = true;
 				this.boost({ spe: 1 }, pokemon);
 			}
 		},
@@ -1205,8 +1201,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	embodyaspectwellspring: {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && pokemon.terastallized &&
-				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
-				this.effectState.embodied = pokemon.previouslySwitchedIn;
+				!this.effectState.embodied) {
+				this.effectState.embodied = true;
 				this.boost({ spd: 1 }, pokemon);
 			}
 		},
@@ -1547,7 +1543,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.typeChangerBoosted = this.effect;
@@ -1934,7 +1930,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target) return;
 			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -1944,7 +1940,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
@@ -2021,7 +2017,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.illusion) {
+			if (pokemon.illusion && !pokemon.beingCalledBack) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.getUpdatedDetails();
@@ -2263,12 +2259,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero === source.previouslySwitchedIn) return;
+			if (this.effectState.libero) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.libero = source.previouslySwitchedIn;
+				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
@@ -2337,10 +2333,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
-				const oldAbility = source.setAbility('lingeringaroma', target);
-				if (oldAbility) {
-					this.add('-activate', target, 'ability: Lingering Aroma', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
-				}
+				source.setAbility('lingeringaroma', target);
 			}
 		},
 		flags: {},
@@ -2403,10 +2396,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
-		},
-		condition: {
-			duration: 1,
 		},
 		flags: { breakable: 1 },
 		name: "Magic Bounce",
@@ -2720,10 +2711,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
-				const oldAbility = source.setAbility('mummy', target);
-				if (oldAbility) {
-					this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
-				}
+				source.setAbility('mummy', target);
 			}
 		},
 		flags: {},
@@ -2929,9 +2917,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
+			if (!(move.isZ && move.category !== 'Status') &&
 				// TODO: Figure out actual interaction
-				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
 				move.typeChangerBoosted = this.effect;
 			}
@@ -2992,6 +2980,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterMega() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterTerastallization() {
 			if (!this.effectState.boosts) return;
 			this.boost(this.effectState.boosts, this.effectState.target);
 			delete this.effectState.boosts;
@@ -3215,7 +3213,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.typeChangerBoosted = this.effect;
@@ -3305,14 +3303,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
+			pokemon.canMegaEvo = pokemon.canMegaEvo === false ? false : this.actions.canMegaEvo(pokemon);
 			pokemon.formeRegression = true;
-			pokemon.baseMaxhp = Math.floor(Math.floor(
-				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-			) * pokemon.level / 100 + 10);
-			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
-			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-			pokemon.maxhp = newMaxHP;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Power Construct",
@@ -3324,9 +3316,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.effectState.target.hp) return;
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
-			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', `[of] ${target}`);
-			}
+			this.effectState.target.setAbility(ability, target);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Power of Alchemy",
@@ -3420,12 +3410,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean === source.previouslySwitchedIn) return;
+			if (this.effectState.protean) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = source.previouslySwitchedIn;
+				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
@@ -3713,9 +3703,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.effectState.target.hp) return;
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
-			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', `[of] ${target}`);
-			}
+			this.effectState.target.setAbility(ability, target);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Receiver",
@@ -3741,7 +3729,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.typeChangerBoosted = this.effect;
@@ -4236,34 +4224,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slowstart: {
 		onStart(pokemon) {
-			pokemon.addVolatile('slowstart');
+			this.add('-start', pokemon, 'ability: Slow Start');
+			this.effectState.counter = 5;
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns && this.effectState.counter) {
+				this.effectState.counter--;
+				if (!this.effectState.counter) {
+					this.add('-end', pokemon, 'Slow Start');
+					delete this.effectState.counter;
+				}
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.counter) {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.counter) {
+				return this.chainModify(0.5);
+			}
 		},
 		onEnd(pokemon) {
-			delete pokemon.volatiles['slowstart'];
+			if (pokemon.beingCalledBack) return;
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
-		},
-		condition: {
-			duration: 5,
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onStart(target) {
-				this.add('-start', target, 'ability: Slow Start');
-			},
-			onResidual(pokemon) {
-				if (!pokemon.activeTurns) {
-					this.effectState.duration! += 1;
-				}
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
-			},
-			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.5);
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
-			},
 		},
 		flags: {},
 		name: "Slow Start",
@@ -4732,6 +4720,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 33,
 	},
+	swordofruin: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Sword of Ruin');
+		},
+		onAnyModifyDef(def, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (target.hasAbility('Sword of Ruin')) return;
+			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
+			if (move.ruinedDef !== abilityHolder) return;
+			this.debug('Sword of Ruin Def drop');
+			return this.chainModify(0.75);
+		},
+		flags: {},
+		name: "Sword of Ruin",
+		rating: 4.5,
+		num: 285,
+	},
 	symbiosis: {
 		onAllyAfterUseItem(item, pokemon) {
 			if (pokemon.switchFlag) return;
@@ -4766,24 +4772,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Synchronize",
 		rating: 2,
 		num: 28,
-	},
-	swordofruin: {
-		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
-			this.add('-ability', pokemon, 'Sword of Ruin');
-		},
-		onAnyModifyDef(def, target, source, move) {
-			const abilityHolder = this.effectState.target;
-			if (target.hasAbility('Sword of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
-			this.debug('Sword of Ruin Def drop');
-			return this.chainModify(0.75);
-		},
-		flags: {},
-		name: "Sword of Ruin",
-		rating: 4.5,
-		num: 285,
 	},
 	tabletsofruin: {
 		onStart(pokemon) {
@@ -4891,13 +4879,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
@@ -5072,9 +5053,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
-			}
+			pokemon.setAbility(ability, target);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Trace",
@@ -5285,20 +5264,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
-			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
-
-			if (this.checkMoveMakesContact(move, source, target)) {
-				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, source.ability);
-				if (!targetCanBeSet) return targetCanBeSet;
-				const sourceAbility = source.setAbility('wanderingspirit', target);
-				if (!sourceAbility) return;
-				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
-				} else {
-					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
-				}
-				target.setAbility(sourceAbility);
-			}
+			if (this.checkMoveMakesContact(move, source, target)) this.skillSwap(source, target);
 		},
 		flags: {},
 		name: "Wandering Spirit",
@@ -5458,7 +5424,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('charge');
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				pokemon.addVolatile('charge');
@@ -5483,7 +5449,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
@@ -5497,10 +5463,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wonderguard: {
 		onTryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (target === source || move.category === 'Status' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0) {
+			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -5572,13 +5538,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.heroMessageDisplayed = false;
 			}
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
-			if (!this.effectState.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
+			if (!pokemon.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
-				this.effectState.heroMessageDisplayed = true;
+				pokemon.heroMessageDisplayed = true;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
@@ -5604,7 +5571,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Mountaineer",
 		rating: 3,
-		num: -2,
+		num: -1,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5612,32 +5579,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (this.effectState.target.activeTurns) return;
 
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, target, { target: source });
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
 			if (this.effectState.target.activeTurns) return;
 
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
-		},
-		condition: {
-			duration: 1,
 		},
 		flags: { breakable: 1 },
 		name: "Rebound",
 		rating: 3,
-		num: -3,
+		num: -2,
 	},
 	persistent: {
 		isNonstandard: "CAP",
@@ -5645,6 +5612,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Persistent",
 		rating: 3,
-		num: -4,
+		num: -3,
 	},
 };

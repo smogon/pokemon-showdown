@@ -3,7 +3,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	ivysaur: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	venusaur: {
 		tier: "UUBL",
@@ -21,7 +21,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	blastoise: {
 		tier: "UU",
@@ -63,7 +63,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	fearow: {
-		tier: "UU",
+		tier: "RUBL",
 	},
 	ekans: {
 		tier: "LC",
@@ -312,7 +312,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	hypno: {
-		tier: "UU",
+		tier: "RU",
 	},
 	krabby: {
 		tier: "LC",
@@ -762,7 +762,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	grovyle: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	sceptile: {
 		tier: "UUBL",
@@ -879,7 +879,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RUBL",
 	},
 	shedinja: {
-		tier: "ZUBL",
+		tier: "PU",
 	},
 	whismur: {
 		tier: "LC",
@@ -924,13 +924,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	medicham: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	electrike: {
 		tier: "LC",
 	},
 	manectric: {
-		tier: "UU",
+		tier: "RU",
 	},
 	plusle: {
 		tier: "NU",
@@ -1056,13 +1056,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	castformsunny: {
-		tier: "ZU",
 	},
 	castformrainy: {
-		tier: "ZU",
 	},
 	castformsnowy: {
-		tier: "ZU",
 	},
 	kecleon: {
 		tier: "NU",
@@ -1092,7 +1089,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	glalie: {
-		tier: "NU",
+		tier: "NUBL",
 	},
 	spheal: {
 		tier: "LC",
@@ -1104,7 +1101,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	clamperl: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	huntail: {
 		tier: "NU",

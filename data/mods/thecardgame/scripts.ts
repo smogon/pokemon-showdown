@@ -3,6 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen9',
 	init() {
 		for (const id in this.data.Pokedex) {
+			if (this.species.get(id).isCosmeticForme) continue;
 			const types = Array.from(new Set(this.data.Pokedex[id].types.map(type => (
 				type.replace(/(Ghost|Fairy)/g, 'Psychic')
 					.replace(/Bug/g, 'Grass')
@@ -115,12 +116,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		runImmunity(type, message) {
+		runImmunity(source, message) {
+			if (!source) return true;
+			const type: string = typeof source !== 'string' ? source.type : source;
+			if (typeof source !== 'string') {
+				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+					return true;
+				}
+			}
 			if (!type || type === '???') return true;
 			if (!this.battle.dex.types.isName(type)) {
 				throw new Error("Use runStatusImmunity for " + type);
 			}
-			if (this.fainted) return false;
 
 			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
 			const notImmune = type === 'Fighting' ?

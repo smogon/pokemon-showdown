@@ -641,7 +641,9 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'rosa-pokestar3', 'sabrina-frlg', 'selene-masters', 'sierra', 'spark-casual', 'spark', 'spenser', 'toddsnap', 'toddsnap2',
 	'victor-masters', 'vince', 'wally-rse', 'willow-casual', 'willow', 'yancy', 'zinnia-masters',
 	'acerola-masters3', 'bianca-masters', 'cheren-masters', 'gardenia-masters', 'nemona-masters',
-	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace',
+	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace', 'az-lza', 'brendan-masters2', 'bugsy-masters',
+	'cynthia-masters4', 'elesa-masters3', 'elio-masters', 'erika-masters3', 'iono-masters', 'iono-masters2',
+	'lance-masters2', 'marley-masters', 'may-masters4', 'morty-masters3', 'selene-masters2', 'shauntal-masters',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -657,7 +659,7 @@ const OFFICIAL_AVATARS_FIFTY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_HORO = new Set([
-	'florian-bb', 'juliana-bb', 'red-lgpe', 'liko', 'roy',
+	'florian-bb', 'juliana-bb', 'red-lgpe', 'liko', 'roy', 'emma-lza', 'lida', 'mable', 'naveen',
 ]);
 
 const OFFICIAL_AVATARS_SELENA = new Set([

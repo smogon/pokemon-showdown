@@ -11,7 +11,8 @@ import * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
 export type SQLRow = { [k: string]: BasicSQLValue };
-export type SQLValue = BasicSQLValue | SQLStatement | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
+export type SQLValue =
+	BasicSQLValue | SQLStatement | SQLStatement[] | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
 export function isSQL(value: any): value is SQLStatement {
 	/**
@@ -35,61 +36,66 @@ export class SQLStatement {
 	constructor(strings: TemplateStringsArray | string[], values: SQLValue[]) {
 		this.sql = [strings[0]];
 		this.values = [];
-		for (let i = 0; i < strings.length; i++) {
-			this.append(values[i], strings[i + 1]);
+		for (let i = 0; i < strings.length - 1; i++) {
+			this.append(values[i]).appendRaw(strings[i + 1]);
 		}
 	}
-	append(value: SQLValue, nextString = ''): this {
+	appendRaw(str: string): this {
+		this.sql[this.sql.length - 1] += str;
+		return this;
+	}
+	append(value: SQLValue): this {
 		if (isSQL(value)) {
 			if (!value.sql.length) return this;
-			const oldLength = this.sql.length;
+			this.appendRaw(value.sql[0]);
 			this.sql = this.sql.concat(value.sql.slice(1));
-			this.sql[oldLength - 1] += value.sql[0];
 			this.values = this.values.concat(value.values);
-			if (nextString) this.sql[this.sql.length - 1] += nextString;
 		} else if (typeof value === 'string' || typeof value === 'number' || value === null) {
 			this.values.push(value);
-			this.sql.push(nextString);
+			this.sql.push('');
 		} else if (value === undefined) {
-			this.sql[this.sql.length - 1] += nextString;
+			// do nothing
 		} else if (Array.isArray(value)) {
-			if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
+			if (!value.length || isSQL(value[0])) {
+				// array of SQL statements
+				for (const part of value) this.append(part);
+			} else if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
 				// "`a`, `b`" syntax
 				const quoteChar = this.sql[this.sql.length - 1].slice(-1);
 				for (const col of value) {
-					this.append(col, `${quoteChar}, ${quoteChar}`);
+					this.append(col).appendRaw(`${quoteChar}, ${quoteChar}`);
 				}
-				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4) + nextString;
+				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4);
 			} else {
 				// "1, 2" syntax
 				for (const val of value) {
-					this.append(val, `, `);
+					this.append(val).appendRaw(`, `);
 				}
-				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2) + nextString;
+				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2);
 			}
 		} else if (this.sql[this.sql.length - 1].endsWith('(')) {
 			// "(`a`, `b`) VALUES (1, 2)" syntax
-			this.sql[this.sql.length - 1] += `"`;
+			this.appendRaw(`"`);
 			for (const col in value) {
-				this.append(col, `", "`);
+				this.append(col).appendRaw(`", "`);
 			}
 			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4) + `") VALUES (`;
 			for (const col in value) {
-				this.append(value[col], `, `);
+				this.append(value[col]).appendRaw(`, `);
 			}
-			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2) + nextString;
+			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2);
 		} else if (this.sql[this.sql.length - 1].toUpperCase().endsWith(' SET ')) {
 			// "`a` = 1, `b` = 2" syntax
-			this.sql[this.sql.length - 1] += `"`;
+			this.appendRaw(`"`);
 			for (const col in value) {
-				this.append(col, `" = `);
-				this.append(value[col], `, "`);
+				this.append(col).appendRaw(`" = `);
+				this.append(value[col]).appendRaw(`, "`);
 			}
-			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -3) + nextString;
+			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -3);
 		} else {
 			throw new Error(
 				`Objects can only appear in (obj) or after SET; ` +
-				`unrecognized: ${this.sql[this.sql.length - 1]}[obj]${nextString}`
+				`unrecognized: ${this.sql[this.sql.length - 1]}[obj]`
 			);
 		}
 		return this;
@@ -251,10 +257,10 @@ export class DatabaseTable<Row, DB extends Database> {
 		return (strings, ...rest) =>
 			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(strings, rest)}`;
 	}
-	updateOne(partialRow: PartialOrSQL<Row>):
+	updateOne(partialRow: PartialOrSQL<Row> | SQLStatement):
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (s, ...r) =>
-			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)} LIMIT 1`;
+			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)}`;
 	}
 	deleteAll():
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
@@ -296,17 +302,18 @@ export class DatabaseTable<Row, DB extends Database> {
 		if (this.db.type === 'pg') {
 			return this.queryExec(
 			)`INSERT INTO "${this.name}" (${partialRow as any}) ON CONFLICT (${this.primaryKeyName
-			}) DO UPDATE ${partialUpdate as any} ${where}`;
+			}) DO UPDATE SET ${partialUpdate as any} ${where}`;
 		}
 		return this.queryExec(
 		)`INSERT INTO "${this.name}" (${partialRow as any}) ON DUPLICATE KEY UPDATE ${partialUpdate as any} ${where}`;
 	}
-	set(primaryKey: BasicSQLValue, partialRow: PartialOrSQL<Row>, where?: SQLStatement) {
-		if (!this.primaryKeyName) throw new Error(`Cannot set() without a single-column primary key`);
-		partialRow[this.primaryKeyName] = primaryKey as any;
-		return this.replace(partialRow, where);
-	}
 	replace(partialRow: PartialOrSQL<Row>, where?: SQLStatement) {
+		if (this.db.type === 'pg') {
+			if (!this.primaryKeyName) throw new Error(`Cannot replace() without a single-column primary key`);
+			return this.queryExec(
+			)`INSERT INTO "${this.name}" (${partialRow as any}) ON CONFLICT ("${this.primaryKeyName
+			}") DO UPDATE SET ${partialRow as any} ${where}`;
+		}
 		return this.queryExec()`REPLACE INTO "${this.name}" (${partialRow as SQLValue}) ${where}`;
 	}
 	get(primaryKey: BasicSQLValue, entries?: (keyof Row & string)[] | SQLStatement) {
@@ -315,11 +322,11 @@ export class DatabaseTable<Row, DB extends Database> {
 	}
 	delete(primaryKey: BasicSQLValue) {
 		if (!this.primaryKeyName) throw new Error(`Cannot delete() without a single-column primary key`);
-		return this.deleteAll()`WHERE "${this.primaryKeyName}" = ${primaryKey} LIMIT 1`;
+		return this.deleteAll()`WHERE "${this.primaryKeyName}" = ${primaryKey}`;
 	}
 	update(primaryKey: BasicSQLValue, data: PartialOrSQL<Row>) {
 		if (!this.primaryKeyName) throw new Error(`Cannot update() without a single-column primary key`);
-		return this.updateAll(data)`WHERE "${this.primaryKeyName}" = ${primaryKey} LIMIT 1`;
+		return this.updateAll(data)`WHERE "${this.primaryKeyName}" = ${primaryKey}`;
 	}
 }
 
@@ -375,7 +382,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null }> {
 	override type = 'pg' as const;
 	constructor(config: pg.PoolConfig) {
-		super(new pg.Pool(config));
+		super(config ? new pg.Pool(config) : null!);
 	}
 	override _resolveSQL(query: SQLStatement): [query: string, values: BasicSQLValue[]] {
 		let sql = query.sql[0];

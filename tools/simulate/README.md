@@ -57,7 +57,7 @@ games asynchronously.
 The `exhaustive` subcommand cycles through all generations and game types,
 attempting to use as many different effects as possible in the battles it
 randomly simulates. This can be useful as a form of
-['smoke testing'](https://en.wikipedia.org/wiki/Smoke_testing_\(software\)), a
+['smoke testing'](<https://en.wikipedia.org/wiki/Smoke_testing_(software)>), a
 form of sanity testing/build verification which can be used to expose obvious
 critical issues with the application. Making it through a successful cycle of
 smoke tests does *not* mean the application is without bugs, or even that it is

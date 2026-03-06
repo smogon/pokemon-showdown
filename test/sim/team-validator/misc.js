@@ -12,7 +12,7 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'batonpass'], evs: { hp: 1 } },
 		];
-		assert.legalTeam(team, 'gen3ou');
+		assert.legalTeam(team, 'gen31v1');
 
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance', 'batonpass'], evs: { hp: 1 } },
@@ -212,5 +212,44 @@ describe('Team Validator', () => {
 			{ species: 'shelloseast', ability: 'stickyhold', moves: ['infestation', 'stringshot'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen8ou');
+	});
+
+	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
+	it('should should validate exactly as many species as are in the unbanlist for 35 Pokes', () => {
+		const formatid = 'gen9nationaldex35pokes';
+
+		const format = Dex.formats.get(formatid);
+		if (!format.exists) return;
+
+		const ruleTable = Dex.formats.getRuleTable(format);
+
+		// not using Dex.formats.isPokemonRule here because that includes '+pokemontag:unobtainable' and '+pokemontag:past'
+		const allowed = Array.from(ruleTable)
+			.map(([rule, source]) => (
+				// For basepokemon unbans, count all non-cosmetic formes including base forme
+				rule.startsWith('+basepokemon:') ? 1 + (Dex.species.get(rule.slice(13)).otherFormes?.length ?? 0) :
+				// For pokemon unbans, count only if not already unbanned via a basepokemon unban
+				(rule.startsWith('+pokemon:') && !ruleTable.has(`+basepokemon:${toID(Dex.species.get(rule.slice(9)).baseSpecies)}`)) ? 1 : 0
+			))
+			.reduce((x, y) => x + y);
+
+		const accepted = Dex.species.all().filter(species => !(
+			// ruleTable.isBannedSpecies blind spots
+			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP' ||
+			Dex.species.get(species.baseSpecies).cosmeticFormes?.includes(species.name)
+		) && !ruleTable.isBannedSpecies(species)).length;
+
+		assert.equal(accepted, allowed);
+	});
+
+	it('should allow moves learned via HOME relearner', () => {
+		const team = [
+			{ species: 'bronzor', level: 1, ability: 'levitate', moves: ['hypnosis'] },
+			{ species: 'porygon', level: 25, ability: 'trace', moves: ['triattack'], evs: { hp: 1 } },
+			// Darkrai from Pokemon GO with Dream Eater learned via BDSP TM
+			{ species: 'darkrai', level: 15, ability: 'baddreams', moves: ['dreameater'], evs: { hp: 1 } },
+			{ species: 'phione', level: 46, ability: 'hydration', moves: ['takeheart'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9ubers');
 	});
 });

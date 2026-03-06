@@ -151,7 +151,7 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(`All images must have the artist named and a link to the profile of the user who created them.`);
 			}
 			if (rawCredit || rawArtistName) { // if one exists, both should, as verified above
-				const artistUrl = (Chat.linkRegex.exec(rawCredit))?.[0];
+				const artistUrl = Chat.extractLinks(rawCredit)?.[0];
 				if (!artistUrl) {
 					return this.popupReply(`Invalid artist credit URL.`);
 				}
@@ -606,6 +606,6 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/smogtours (add|edit)');
-});
+}

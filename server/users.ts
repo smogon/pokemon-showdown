@@ -610,7 +610,7 @@ export class User extends Chat.MessageContext {
 	 * Permission check for using the dev console
 	 *
 	 * The `console` permission is incredibly powerful because it allows the
-	 * execution of abitrary shell commands on the local computer As such, it
+	 * execution of arbitrary shell commands on the local computer As such, it
 	 * can only be used from a specified whitelist of IPs and userids. A
 	 * special permission check function is required to carry out this check
 	 * because we need to know which socket the client is connected from in
@@ -993,14 +993,17 @@ export class User extends Chat.MessageContext {
 
 		if (!oldUser.semilocked) this.semilocked = null;
 
-		// If either user is unlocked and neither is locked by name, remove the lock.
+		// If either user is unlocked and neither is locked by name/range, remove the lock.
 		// Otherwise, keep any locks that were by name.
 		if (
 			(!oldUser.locked || !this.locked) &&
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
-			// Only unlock if no previous names are locked
-			!oldUser.previousIDs.some(id => !!Punishments.hasPunishType(id, 'LOCK'))
+			// Only unlock if no previous names are locked and the lock isn't a rangelock
+			!(
+				oldUser.ips.some(x => Punishments.ips.get(x)?.some(n => n.id.startsWith('#'))) &&
+				oldUser.previousIDs.some(id => !!Punishments.hasPunishType(id, 'LOCK'))
+			)
 		) {
 			this.locked = null;
 			this.destroyPunishmentTimer();

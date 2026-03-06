@@ -82,4 +82,20 @@ describe('Trace', () => {
 		battle.makeChoices('auto', 'switch 4, move sleeptalk');
 		assert.equal(ralts.ability, 'unburden');
 	});
+
+	// This was an existing bug https://www.smogon.com/forums/threads/trace-triggers-new-ability-twice.3772080/
+	it(`should not activate twice`, () => {
+		battle = common.createBattle([[
+			{ species: "Ralts", ability: 'trace', moves: ['sleeptalk'] },
+			{ species: "Bouffalant", moves: ['sleeptalk'] },
+		], [
+			{ species: "Iron Jugulis", ability: 'quarkdrive', moves: ['sleeptalk'] },
+			{ species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices('switch 2', 'auto');
+		assert.statStage(battle.p2.active[0], 'atk', -1);
+	});
 });

@@ -210,22 +210,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		const statusInflictingMoves = ['hypnosis', 'stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 
-		// Cull filler moves for otherwise fixed set Stealth Rock users
-		if (!teamDetails.stealthRock) {
-			if (species.id === 'registeel' && role === 'Staller') {
-				if (movePool.includes('thunderwave')) this.fastPop(movePool, movePool.indexOf('thunderwave'));
-				if (moves.size + movePool.length <= this.maxMoveCount) return;
-			}
-			if (species.id === 'wormadamtrash' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
-				if (moves.size + movePool.length <= this.maxMoveCount) return;
-			}
-		}
 		if (species.id === 'bastiodon') {
 			// Enforces Toxic too, for good measure.
 			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
@@ -379,6 +368,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						movePool, preferredType, role);
 				}
 			}
+		}
+
+		// Enforce Stealth Rock if the team doesn't already have it
+		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
 		}
 
 		// Enforce recovery
@@ -553,6 +548,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (species.id === 'ditto' || (species.id === 'rampardos' && role === 'Fast Attacker')) return 'Choice Scarf';
+		if (species.id === 'honchkrow') return 'Life Orb';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id === 'yanmega') return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
@@ -655,6 +651,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
@@ -751,7 +749,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('transform')) {
+		if (!counter.get('Physical') && !moves.has('transform') && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
 		}
@@ -768,6 +766,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -778,6 +777,35 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const incompatibilityList = [
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Dry Skin + sun setting ability
+			[['parasect', 'toxicroak'], 'groudon'],
+			// Prevent Shedinja + sand/hail setting ability
+			['shedinja', ['tyranitar', 'hippowdon', 'abomasnow']],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 }
 

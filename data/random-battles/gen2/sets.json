@@ -103,6 +103,7 @@
         ]
     },
     "pikachu": {
+        "level": 73,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -449,7 +450,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
+                "movepool": ["explosion", "icebeam", "spikes", "surf"]
             },
             {
                 "role": "Generalist",
@@ -533,6 +534,10 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "swordsdance"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bodyslam", "earthquake", "rest", "rockslide", "sleeptalk"]
             }
         ]
     },
@@ -604,12 +609,8 @@
     "rhydon": {
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Generalist",
                 "movepool": ["curse", "earthquake", "rest", "roar", "rockslide", "sleeptalk"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
             }
         ]
     },
@@ -1359,11 +1360,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },

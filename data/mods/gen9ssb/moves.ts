@@ -1402,6 +1402,85 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 	},
 
+	// Cassiopeia
+	testinginproduction: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "+2, -2 to random stats, small chance of harm.",
+		desc: "The user boosts a random stat by 2 stages, and the user lowers a random stat by 2 stages. These can be the same stat, and cannot include Accuracy or Evasion. Independently, there is a 10% chance for the user to lose 10% of their maximum HP, and there is a 5% chance for the user to gain a random non-volatile status condition.",
+		name: "Testing in Production",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Curse');
+		},
+		onHit(pokemon) {
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Please don't break...`);
+			let stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 2;
+
+			stats = [];
+			let statMinus: BoostID;
+			for (statMinus in pokemon.boosts) {
+				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
+				if (pokemon.boosts[statMinus] > -6) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) {
+				if (boost[randomStat]) {
+					boost[randomStat] = 0;
+					this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Well. Guess that broke. Time to roll back.`);
+					return;
+				} else {
+					boost[randomStat] = -2;
+				}
+			}
+
+			this.boost(boost, pokemon, pokemon);
+		},
+		onAfterMove(pokemon) {
+			if (this.randomChance(1, 10)) {
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ouch! That crash is really getting on my nerves...`);
+				this.damage(pokemon.baseMaxhp / 10);
+				if (pokemon.hp <= 0) return;
+			}
+
+			if (this.randomChance(1, 20)) {
+				const status = this.sample(['frz', 'brn', 'psn', 'par']);
+				let statusText = status;
+				if (status === 'frz') {
+					statusText = 'froze';
+				} else if (status === 'brn') {
+					statusText = 'burned';
+				} else if (status === 'par') {
+					statusText = 'paralyzed';
+				} else if (status === 'psn') {
+					statusText = 'poisoned';
+				}
+
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Darn. A bug ${statusText} me. Guess I should have tested this first.`);
+				pokemon.setStatus(status);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Electric",
+	},
+
 	// chaos
 	outage: {
 		accuracy: 95,
@@ -2377,85 +2456,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ghost",
 	},
 
-	// Hecate
-	testinginproduction: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "+2, -2 to random stats, small chance of harm.",
-		desc: "The user boosts a random stat by 2 stages, and the user lowers a random stat by 2 stages. These can be the same stat, and cannot include Accuracy or Evasion. Independently, there is a 10% chance for the user to lose 10% of their maximum HP, and there is a 5% chance for the user to gain a random non-volatile status condition.",
-		name: "Testing in Production",
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Curse');
-		},
-		onHit(pokemon) {
-			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Please don't break...`);
-			let stats: BoostID[] = [];
-			const boost: SparseBoostsTable = {};
-			let statPlus: BoostID;
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6) {
-					stats.push(statPlus);
-				}
-			}
-			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 2;
-
-			stats = [];
-			let statMinus: BoostID;
-			for (statMinus in pokemon.boosts) {
-				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
-				if (pokemon.boosts[statMinus] > -6) {
-					stats.push(statMinus);
-				}
-			}
-			randomStat = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) {
-				if (boost[randomStat]) {
-					boost[randomStat] = 0;
-					this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Well. Guess that broke. Time to roll back.`);
-					return;
-				} else {
-					boost[randomStat] = -2;
-				}
-			}
-
-			this.boost(boost, pokemon, pokemon);
-		},
-		onAfterMove(pokemon) {
-			if (this.randomChance(1, 10)) {
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ouch! That crash is really getting on my nerves...`);
-				this.damage(pokemon.baseMaxhp / 10);
-				if (pokemon.hp <= 0) return;
-			}
-
-			if (this.randomChance(1, 20)) {
-				const status = this.sample(['frz', 'brn', 'psn', 'par']);
-				let statusText = status;
-				if (status === 'frz') {
-					statusText = 'froze';
-				} else if (status === 'brn') {
-					statusText = 'burned';
-				} else if (status === 'par') {
-					statusText = 'paralyzed';
-				} else if (status === 'psn') {
-					statusText = 'poisoned';
-				}
-
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Darn. A bug ${statusText} me. Guess I should have tested this first.`);
-				pokemon.setStatus(status);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Electric",
-	},
-
 	// HiZo
 	scapegoat: {
 		accuracy: true,
@@ -2696,7 +2696,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Changes target to a Randbats set.",
-		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, Gen 9 Challenge Cup, or Computer-Generated Teams. In the vast majority of circumstances, this also prevents the target from acting this turn.",
+		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, or Gen 9 Challenge Cup. In the vast majority of circumstances, this also prevents the target from acting this turn.",
 		name: "Bibbidi-Bobbidi-Rands",
 		gen: 9,
 		pp: 1,
@@ -2706,7 +2706,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[anim] Doom Desire');
 		},
 		onHit(target, source) {
-			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1', 'gen9computergeneratedteams'];
+			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1'];
 			const randFormat = this.sample(formats);
 			let msg;
 			switch (randFormat) {
@@ -2718,9 +2718,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				break;
 			case 'gen9challengecup1v1':
 				msg = "The only difference between a Challenge Cup Pokémon and my in-game one is that the former actually surpassed lvl. 60, enjoy n.n";
-				break;
-			case 'gen9computergeneratedteams':
-				msg = "We asked an AI to make a randbats set. YOU WON'T BELIEVE WHAT IT CAME UP WITH N.N";
 				break;
 			}
 			let team = [] as PokemonSet[];
@@ -3410,35 +3407,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-	},
-
-	// Lily
-	powerup: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Power Up",
-		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
-		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
-		pp: 5,
-		priority: 0,
-		flags: { heal: 1 },
-		onModifyMove(move, source, target) {
-			const fntAllies = source.side.pokemon.filter(ally => ally !== source && ally.fainted);
-			if (move.heal) move.heal[0] = 50 + (3 * fntAllies.length);
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Shore Up', pokemon);
-			this.add('-anim', pokemon, 'Charge', pokemon);
-			this.add('-anim', pokemon, 'Moonlight', pokemon);
-		},
-		heal: [50, 100],
-		secondary: null,
-		target: "self",
-		type: "Electric",
 	},
 
 	// Loethalion

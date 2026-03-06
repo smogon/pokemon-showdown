@@ -757,7 +757,7 @@
 				"item": ["Choice Specs"],
 				"ability": ["Infiltrator"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"nature": ["Timid", "Modest"],
+				"nature": ["Timid"],
 				"teraType": ["Dragon", "Ghost"],
 				"moves": [["Draco Meteor"], ["Shadow Ball"], ["Flamethrower"], ["U-turn"]]
 			}, {

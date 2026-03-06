@@ -251,4 +251,35 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		battle.makeChoices();
 		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
 	});
+
+	it('Wrap should damage the target\'s substitute', () => {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', { team: [{ species: "charizard", moves: ['wrap'] }] });
+		battle.setPlayer('p2', { team: [{ species: "alakazam", moves: ['splash', 'substitute'] }] });
+		const alakazam = battle.p2.active[0];
+		battle.makeChoices('move wrap', 'move substitute');
+		for (let i = 0; i < 4; i++) {
+			// run enough turns to break the substitute
+			battle.makeChoices();
+			if (!alakazam.volatiles['substitute']) {
+				break;
+			}
+		}
+		assert.equal(alakazam.hp, 188);
+		assert.false(alakazam.volatiles['substitute']);
+	});
+
+	it(`Wrap should never miss if the target is already trapped`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [ // 3 turns of Wrap
+			[{ species: 'Dragonite', moves: ['wrap'] }],
+			[{ species: 'Cloyster', moves: ['surf'] }],
+		]);
+		const cloyster = battle.p2.active[0];
+		assert.hurts(cloyster, () => battle.makeChoices());
+		assert(cloyster.volatiles['partiallytrapped']);
+
+		battle.forceRandomChance = false;
+		assert.hurts(cloyster, () => battle.makeChoices());
+		assert(cloyster.volatiles['partiallytrapped']);
+	});
 });

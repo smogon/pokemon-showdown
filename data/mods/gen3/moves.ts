@@ -154,6 +154,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', target, 'typechange', type);
 		},
 	},
+	conversion2: {
+		inherit: true,
+		onHit(target, source) {
+			if (!target.lastMoveUsed) {
+				return false;
+			}
+			const possibleTypes = [];
+			const lastMoveUsed = target.lastMoveUsed;
+			const attackType = lastMoveUsed.id === 'struggle' ? 'Normal' : lastMoveUsed.type;
+			for (const typeName of this.dex.types.names()) {
+				const typeCheck = this.dex.types.get(typeName).damageTaken[attackType];
+				if (typeCheck === 2 || typeCheck === 3) {
+					possibleTypes.push(typeName);
+				}
+			}
+			if (!possibleTypes.length) {
+				return false;
+			}
+			const randomType = this.sample(possibleTypes);
+
+			if (!source.setType(randomType)) return false;
+			this.add('-start', source, 'typechange', randomType);
+		},
+	},
 	counter: {
 		inherit: true,
 		condition: {
@@ -553,6 +577,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	petaldance: {
 		inherit: true,
 		basePower: 70,
+	},
+	pursuit: {
+		inherit: true,
+		beforeTurnCallback(pokemon, target) {
+			if (['frz', 'slp'].includes(pokemon.status) ||
+				(pokemon.hasAbility('truant') && pokemon.truantTurn)) return;
+			if (pokemon.isAlly(target)) return;
+			target.addVolatile('pursuit');
+			const data = target.volatiles['pursuit'];
+			if (!data.sources) {
+				data.sources = [];
+			}
+			data.sources.push(pokemon);
+		},
 	},
 	recover: {
 		inherit: true,

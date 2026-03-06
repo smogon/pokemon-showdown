@@ -100,7 +100,6 @@ export class BattleActions {
 
 			// will definitely switch out at this point
 
-			oldActive.illusion = null;
 			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
 
@@ -125,6 +124,10 @@ export class BattleActions {
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
+			if (this.battle.gen <= 4) {
+				pokemon.lastItem = oldActive.lastItem;
+				oldActive.lastItem = '';
+			}
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
@@ -136,8 +139,8 @@ export class BattleActions {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
-		pokemon.abilityState.effectOrder = this.battle.effectOrder++;
-		pokemon.itemState.effectOrder = this.battle.effectOrder++;
+		pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
+		pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
@@ -177,7 +180,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map(a => a.side.n * a.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
@@ -482,10 +485,13 @@ export class BattleActions {
 			}
 		}
 
-		if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-			!this.battle.runEvent('TryMove', pokemon, target, move)) {
+		let tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
+		if (tryMoveResult) {
+			tryMoveResult = this.battle.runEvent('TryMove', pokemon, target, move);
+		}
+		if (!tryMoveResult) {
 			move.mindBlownRecoil = false;
-			return false;
+			return tryMoveResult;
 		}
 
 		this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
@@ -524,11 +530,7 @@ export class BattleActions {
 			return false;
 		}
 
-		if (
-			!move.negateSecondary &&
-			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-			!move.flags['futuremove']
-		) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -653,8 +655,7 @@ export class BattleActions {
 
 		const hitResults = [];
 		for (const i of targets.keys()) {
-			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
-				targets[i].runImmunity(move.type, !move.smartTarget);
+			hitResults[i] = targets[i].runImmunity(move, !move.smartTarget);
 		}
 
 		return hitResults;
@@ -806,7 +807,7 @@ export class BattleActions {
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -1025,7 +1026,7 @@ export class BattleActions {
 
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -1598,13 +1599,11 @@ export class BattleActions {
 			move.hit = 0;
 		}
 
-		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
-				return false;
-			}
+		if (!target.runImmunity(move, !suppressMessages)) {
+			return false;
 		}
 
-		if (move.ohko) return target.maxhp;
+		if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
 		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 		if (move.damage === 'level') {
 			return source.level;
@@ -1658,9 +1657,9 @@ export class BattleActions {
 		}
 
 		const dexMove = this.dex.moves.get(move.id);
-		if (
-			basePower < 60 && source.getTypes(true).includes(move.type) && source.terastallized &&
-			dexMove.priority <= 0 && !dexMove.multihit &&
+		if (source.terastallized && (source.terastallized === 'Stellar' ?
+			!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
+			basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
 		) {
@@ -1733,7 +1732,7 @@ export class BattleActions {
 
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+			const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
@@ -1868,16 +1867,21 @@ export class BattleActions {
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past')) &&
+		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
+			this.battle.ruleTable.has('+pokemontag:future')) &&
 			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
-		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-			return item.megaStone;
+		if (!item.megaStone) return null;
+		// Temporary hardcode until generation shift
+		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaStone[species.name]) {
+			return item.megaStone[species.name];
 		}
-		return null;
+		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
+		// FIXME: Change to species.name when champions comes
+		const megaEvolution = item.megaStone[species.baseSpecies];
+		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {
@@ -1898,7 +1902,7 @@ export class BattleActions {
 		const wasMega = pokemon.canMegaEvo;
 		for (const ally of pokemon.side.pokemon) {
 			if (wasMega) {
-				ally.canMegaEvo = null;
+				ally.canMegaEvo = false;
 			} else {
 				ally.canUltraBurst = null;
 			}
@@ -1948,13 +1952,6 @@ export class BattleActions {
 		}
 		if (pokemon.species.name === 'Terapagos-Terastal') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
-			pokemon.baseMaxhp = Math.floor(Math.floor(
-				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-			) * pokemon.level / 100 + 10);
-			const newMaxHP = pokemon.baseMaxhp;
-			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-			pokemon.maxhp = newMaxHP;
-			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
 		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 			pokemon.baseSpecies.id !== pokemon.species.id

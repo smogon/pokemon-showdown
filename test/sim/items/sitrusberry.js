@@ -64,4 +64,21 @@ describe('Sitrus Berry', () => {
 		battle.makeChoices();
 		assert.species(darm, 'Darmanitan', `Sitrus Berry should heal Darmanitan outside of Zen Mode range.`);
 	});
+
+	describe('[Gen 3]', () => {
+		it('should not activate in the same turn that was put below 50% HP by a status condition', () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'swampert', item: 'sitrusberry', moves: ['sleeptalk'] },
+			], [
+				{ species: 'charizard', moves: ['toxic'] },
+			]]);
+			for (let i = 0; i < 4; i++) {
+				battle.makeChoices();
+			}
+			assert.holdsItem(battle.p1.active[0]);
+			assert(battle.p1.active[0].hp < battle.p1.active[0].maxhp / 2);
+			battle.makeChoices();
+			assert.false.holdsItem(battle.p1.active[0]);
+		});
+	});
 });

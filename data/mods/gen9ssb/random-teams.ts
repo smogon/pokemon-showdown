@@ -27,9 +27,9 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Move Name',
 		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', teraType: 'Type',
 	},
-	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
+	// Species, ability, and item need to be capitalized properly ex: Ludicolo, Swift Swim, Life Orb
 	// Gender can be M, F, N, or left as an empty string
-	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
+	// each slot in moves needs to be a string (the move name, capitalized properly ex: Hydro Pump), or an array of strings (also move names)
 	// signatureMove also needs to be capitalized properly ex: Scripting
 	// You can skip Evs (defaults to 84 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
 	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
@@ -264,6 +264,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Good Vibes Only',
 		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
+	Cassiopeia: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -433,12 +439,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Augur of Ebrietas',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Ghost',
 	},
-	Hecate: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Jolly',
-	},
 	HiZo: {
 		species: 'Zoroark-Hisui', ability: 'Justified', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Last Respects', 'Blood Moon', 'Spirit Break'],
@@ -570,12 +570,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Diamond Storm', 'Headlong Rush', ['Glacial Lance', 'U-turn']],
 		signatureMove: 'Shuckle Power',
 		evs: { hp: 252, def: 252, spd: 4 }, ivs: { spe: 0 }, nature: 'Relaxed', teraType: 'Ground', shiny: 213,
-	},
-	Lily: {
-		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
-		signatureMove: 'Power Up',
-		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
@@ -1111,7 +1105,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
-		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmovesclause') && debug.length;
+		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmoveclause') && !debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
@@ -1124,7 +1118,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 			pool = debug;
 		}
-		if (monotype && !debug.length) {
+		if (monotype && !debug.length && !afd && !meme) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
 		if (global.Config?.disabledssbsets?.length) {

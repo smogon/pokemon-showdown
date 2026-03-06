@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import { Utils } from '../../lib';
+import { Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
 
@@ -178,10 +178,14 @@ export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 };
 
 export const commands: Chat.ChatCommands = {
-	version(target, room, user) {
+	async version(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const version = Chat.packageData.version;
-		this.sendReplyBox(this.tr`Server version: <b>${version}</b>`);
+		let gitVersion;
+		try {
+			gitVersion = (await ProcessManager.exec(['git', 'rev-parse', '--short', 'HEAD'])).stdout.trim();
+		} catch {}
+		this.sendReplyBox(this.tr`Server version: <b>${version}${gitVersion ? ` (commit ${gitVersion})` : ''}</b>`);
 	},
 	versionhelp: [
 		`/version - Get the current server version.`,
@@ -322,6 +326,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	replyhelp: [`/reply OR /r [message] - Send a message to the last user you got a message from, or sent a message to.`],
 
+	dm: 'msg',
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
@@ -670,9 +675,9 @@ export const commands: Chat.ChatCommands = {
 		if (!target) target = user.name;
 
 		const values = await Ladders.visualizeAll(target);
-		let buffer = `<div class="ladder"><table>`;
-		buffer += Utils.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
-
+		let buffer = `<div class="ladder">`;
+		buffer += Utils.html`<div>User: <strong>${target}</strong></div>`;
+		buffer += `<div style="overflow-x: auto;"><table>`;
 		const ratings = values.join(``);
 		if (!ratings) {
 			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
@@ -680,8 +685,7 @@ export const commands: Chat.ChatCommands = {
 			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
 			buffer += ratings;
 		}
-		buffer += `</table></div>`;
-
+		buffer += `</table></div></div>`;
 		this.sendReply(`|raw|${buffer}`);
 	},
 	rankhelp: [

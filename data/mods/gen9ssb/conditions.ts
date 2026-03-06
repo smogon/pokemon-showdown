@@ -3,6 +3,64 @@ import { changeSet, getName, enemyStaff } from './scripts';
 import type { ModdedConditionData } from "../../../sim/dex-conditions";
 
 export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: string } } = {
+	zacian: {
+		inherit: true,
+		onBattleStart(pokemon) {
+			if (pokemon.item !== 'rustedsword') return;
+			const rawSpecies = this.dex.species.get('Zacian-Crowned');
+			const species = pokemon.setSpecies(rawSpecies);
+			if (!species) return;
+			pokemon.baseSpecies = rawSpecies;
+			pokemon.details = pokemon.getUpdatedDetails();
+			// pokemon.setAbility(species.abilities['0'], null, null, true);
+			// pokemon.baseAbility = pokemon.ability;
+
+			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+			if (ironHeadIndex >= 0) {
+				const move = this.dex.moves.get('behemothblade');
+				pokemon.baseMoveSlots[ironHeadIndex] = {
+					move: move.name,
+					id: move.id,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					disabledSource: '',
+					used: false,
+				};
+				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
+			}
+		},
+	},
+	zamazenta: {
+		inherit: true,
+		onBattleStart(pokemon) {
+			if (pokemon.item !== 'rustedshield') return;
+			const rawSpecies = this.dex.species.get('Zamazenta-Crowned');
+			const species = pokemon.setSpecies(rawSpecies);
+			if (!species) return;
+			pokemon.baseSpecies = rawSpecies;
+			pokemon.details = pokemon.getUpdatedDetails();
+			// pokemon.setAbility(species.abilities['0'], null, null, true);
+			// pokemon.baseAbility = pokemon.ability;
+
+			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+			if (ironHeadIndex >= 0) {
+				const move = this.dex.moves.get('behemothbash');
+				pokemon.baseMoveSlots[ironHeadIndex] = {
+					move: move.name,
+					id: move.id,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					disabledSource: '',
+					used: false,
+				};
+				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
+			}
+		},
+	},
 	/*
 	// Example:
 	userid: {
@@ -168,28 +226,28 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	april: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|I said, "Do you have something against dogs?"`);
 			}
 		},
 		onSwitchOut() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|(Is it the chorus yet?)`);
 			}
 		},
 		onFaint() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|Don't get too impressed, you might lose your breath...`);
 			}
 		},
 		onTryHit() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			}
 		},
@@ -355,9 +413,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				break;
 			case 'rumia':
 				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
-				break;
-			case 'lily':
-				this.add(`c:|${getName('ausma')}|togedemaru`);
 				break;
 			case 'lumari':
 				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
@@ -589,6 +644,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('calmvibes ♫')}|The vibes are off... :(`);
+		},
+	},
+	cassiopeia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Cassiopeia')}|git pull ps cassiopeia`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Cassiopeia')}|git switch`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Cassiopeia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
 	chaos: {
@@ -978,18 +1045,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
 		},
 	},
-	hecate: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Hecate')}|git pull ps hecate`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Hecate')}|git switch`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Hecate')}|git checkout --detach HEAD && git commit -m "war crimes"`);
-		},
-	},
 	hizo: {
 		noCopy: true,
 		onStart() {
@@ -1359,18 +1414,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Lets go shuckles')}|He who lives by the Shuckle shall die by the Shuckle.`);
-		},
-	},
-	lily: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Lily')}|buying gf`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lily')}|accidentally burnt the shrimps`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
 		},
 	},
 	loethalion: {
@@ -3099,7 +3142,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 	},
 
-	// Effects needed to be overriden for things to happen
+	// Effects needed to be overridden for things to happen
 	attract: {
 		onStart(pokemon, source, effect) {
 			if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {

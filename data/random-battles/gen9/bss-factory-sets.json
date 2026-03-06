@@ -1613,17 +1613,32 @@
           },
           {
               "species": "Dragapult",
-              "weight": 20,
+              "weight": 10,
               "moves": [
                   ["Shadow Ball"],
                   ["Draco Meteor"],
                   ["Thunderbolt"],
-                  ["Flamethrower", "U-turn"]
+                  ["Flamethrower"]
               ],
               "item": ["Choice Specs"],
               "nature": "Timid",
               "evs": {"spa": 252, "spd": 4, "spe": 252},
               "teraType": ["Electric", "Fighting", "Fire", "Ghost"],
+              "ability": ["Infiltrator"]
+          },
+          {
+              "species": "Dragapult",
+              "weight": 10,
+              "moves": [
+                  ["Shadow Ball"],
+                  ["Draco Meteor"],
+                  ["Thunderbolt"],
+                  ["U-turn"]
+              ],
+              "item": ["Choice Specs"],
+              "nature": "Timid",
+              "evs": {"spa": 252, "spd": 4, "spe": 252},
+              "teraType": ["Electric", "Fighting", "Ghost"],
               "ability": ["Infiltrator"]
           }
       ]
@@ -3162,7 +3177,7 @@
               "item": ["Assault Vest", "Choice Band"],
               "nature": "Adamant",
               "evs": {"hp": 252, "atk": 252, "spd": 4},
-              "teraType": ["Electric", "Fairy", "Fire", "Grass"],
+              "teraType": ["Electric", "Fire", "Grass"],
               "wantsTera": true,
               "ability": ["Huge Power"]
           },
