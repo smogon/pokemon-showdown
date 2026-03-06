@@ -3207,3 +3207,69 @@ width: 200px;
 	padding: 8px 20px;
 	border: 1px solid rgba(180, 140, 255, 0.5) !important;
 }
+
+/* pokerogue — mobile responsive overrides */
+
+.pr-popup {
+width: 100%;
+}
+
+@media (max-width: 600px) {
+.pr-popup {
+padding: 10px 12px;
+font-size: 12px;
+border-radius: 10px;
+}
+
+.pr-popup h2 {
+font-size: 18px;
+}
+
+.pr-popup-header {
+flex-wrap: wrap;
+gap: 6px;
+}
+
+.pr-popup-actions {
+flex-direction: column;
+}
+
+.pr-popup-actions .button,
+.pr-popup-actions a.button {
+width: 100%;
+text-align: center;
+box-sizing: border-box;
+}
+
+.pr-choice-table th,
+.pr-choice-table td {
+padding: 6px 6px;
+font-size: 11px;
+}
+
+.pr-ct-status {
+min-width: 60px;
+}
+
+.pr-ct-info {
+min-width: 100px;
+}
+
+.pr-ct-moves {
+min-width: 70px;
+}
+
+.pr-popup-mon {
+flex: 1 1 130px;
+min-width: 130px;
+}
+
+.pr-shop-card {
+flex: 1 1 130px;
+max-width: 160px;
+}
+
+.pr-gameover-title {
+font-size: 22px;
+}
+}
