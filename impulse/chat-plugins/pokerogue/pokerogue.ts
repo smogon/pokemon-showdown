@@ -209,11 +209,11 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 		const tierLabel = isFeatured ?
 			(sourceItemId === 'mastercapsule' ? 'Legendary!' :
 			sourceItemId === 'ultracapsule' ? 'Pseudo-Legendary!' : 'Mid-Tier!') :
-			'Common Pokemon';
+			(sourceItemId === 'mastercapsule' ? 'Mid-Tier Pokemon' : 'Common Pokemon');
 		const tierColor = isFeatured ?
 			(sourceItemId === 'mastercapsule' ? '#f59e0b' :
 			sourceItemId === 'ultracapsule' ? '#a78bfa' : '#34d399') :
-			'#8ab4f8';
+			(sourceItemId === 'mastercapsule' ? '#34d399' : '#8ab4f8');
 		const isTeamFull = (state.team?.length ?? 0) >= 6;
 		buf += `<div class="pr-gacha-offer">`;
 		buf += `<div class="pr-gacha-offer-header">`;
