@@ -5280,24 +5280,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3colosseum',
 		searchShow: false,
 		gameType: 'singles',
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
-			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets'],
-		banlist: ['Soul Dew', 'Deoxys-Defense', 'Deoxys-Attack', 'Deoxys-Speed'],
-		unbanlist: ['Latios', 'Latias', 'Wobbuffet', 'Wynaut'],
-		restricted: ['Restricted Legendary', "Mythical"],
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
+			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets',
+		],
+		banlist: ['Soul Dew', 'Restricted Legendary', 'Mythical', 'Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
+		restricted: [],
 		bestOfDefault: true,
 		onBegin() {
 			this.add('rule', 'Self-KO Clause: If your last Pok\u00e9mon faints to a self-KO move or effect you will lose the battle');
-		},
-		onValidateTeam(team) {
-			const restrictedSpecies = [];
-			for (const set of team) {
-				const species = this.dex.species.get(set.species);
-				if (this.ruleTable.isRestrictedSpecies(species)) restrictedSpecies.push(species.name);
-			}
-			if (restrictedSpecies.length > 0) {
-				return [`You can't use any restricted Pok\u00E9mon (you have: ${restrictedSpecies.join(', ')})`];
-			}
 		},
 	},
 	{
