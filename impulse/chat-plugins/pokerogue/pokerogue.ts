@@ -397,7 +397,9 @@ const NO_RUN_PAGE_HTML =
 // refreshes the page view for a user after battle-end state changes
 function refreshGamePage(user: User): void {
 	for (const conn of user.connections) {
-		conn.send(`>view-pokerogue\n|refresh|`);
+		for (const pageId of ['view-pokerogue', 'view-pokerogue-shop', 'view-pokerogue-top']) {
+			conn.send(`>${pageId}\n|refresh|`);
+		}
 	}
 }
 
