@@ -12,9 +12,9 @@ import {
 
 // bot level/team-size helpers (battle-subsystem only)
 
-// bot level for a given floor: starts at 5 and grows ~1.5/floor, capped at 100
+// bot level for a given floor: starts at 1 and grows ~1.5/floor, capped at 100
 function botLevel(floor: number): number {
-	return Math.min(100, 5 + Math.floor((floor - 1) * 1.5));
+	return Math.min(100, 1 + Math.floor((floor - 1) * 1.5));
 }
 
 // number of pokemon on the bot's team for a given floor
