@@ -42,10 +42,6 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			'Spore + Spider Web',
 		],
 	},
-	littlecup: {
-		inherit: true,
-		ruleset: ['Max Level = 5'],
-	},
 	nc2000movelegality: {
 		effectType: 'ValidatorRule',
 		name: 'NC 2000 Move Legality',

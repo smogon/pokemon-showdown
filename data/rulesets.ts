@@ -1445,13 +1445,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Hardcoded in gen1/moves.ts
 		// Can't be disabled (no precedent for how else to handle desyncs)
 	},
-	deoxyscamouflageclause: {
+	deoxyscamouflageclausemod: {
 		effectType: 'Rule',
-		name: 'Deoxys Camouflage Clause',
+		name: 'Deoxys Camouflage Clause Mod',
 		desc: "Reveals the Deoxys forme when it is sent in battle.",
 		// Hardcoded into effect, cannot be disabled.
 		onBegin() {
-			this.add('rule', 'Deoxys Camouflage Clause: Reveals the Deoxys forme when it is sent in battle.');
+			this.add('rule', 'Deoxys Camouflage Clause Mod: Reveals the Deoxys forme when it is sent in battle.');
 		},
 	},
 	freezeclausemod: {
@@ -1853,7 +1853,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Implemented in sim/team-validator.ts
 		onBegin() {
 			this.add('rule', 'Mimic Glitch Clause: Pokemon with Assist, Copycat, Metronome, Mimic, or Transform can have any move.');
-		}
+		},
 	},
 	pomegglitchclause: {
 		effectType: 'ValidatorRule',

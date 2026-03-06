@@ -4079,7 +4079,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 5] LC",
 		mod: 'gen5',
 		// searchShow: false,
-		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
+		ruleset: ['Standard', 'Little Cup', 'Pomeg Glitch Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scraggy', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma',
 			'Sand Rush', 'Sand Veil', 'Berry Juice', 'Soul Dew', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
@@ -4657,7 +4657,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] LC",
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Standard', 'Little Cup'],
+		ruleset: ['Standard', 'Little Cup', 'Pomeg Glitch Clause'],
 		banlist: [
 			'Drifloon', 'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma',
 			'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
@@ -5010,7 +5010,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 4] LC",
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Standard', 'Little Cup', 'Evasion Abilities Clause', 'Sleep Moves Clause'],
+		ruleset: ['Standard', 'Little Cup', 'Pomeg Glitch Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
 			'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Sonic Boom', 'Swagger',
@@ -5166,7 +5166,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Ubers",
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard', 'Deoxys Camouflage Clause', 'One Baton Pass Clause'],
+		ruleset: ['Standard', 'Deoxys Camouflage Clause Mod', 'One Baton Pass Clause'],
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
@@ -5201,7 +5201,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] LC",
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause', 'Accuracy Moves Clause'],
+		ruleset: ['Standard', 'Little Cup', 'Pomeg Glitch Clause', 'Sleep Moves Clause', 'Accuracy Moves Clause'],
 		banlist: ['Chansey', 'Diglett', 'Meditite', 'Omanyte', 'Porygon', 'Scyther', 'Wynaut', 'Zigzagoon', 'Deep Sea Tooth', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger', 'Thunder Wave'],
 	},
 	{
