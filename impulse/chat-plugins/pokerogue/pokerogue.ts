@@ -241,10 +241,14 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 	if (state.pendingChoice?.length) {
 		const isAdd = state.pendingChoiceType === 'add';
 		const choiceTitle = isAdd ?
-			'Milestone! Choose a Pokemon to add to your team:' :
-			'Choose your starter Pokemon — all at Lv. 1:';
-		buf += `<p style="color:#c4a8ff;font-weight:bold;font-size:13px;margin:8px 0">${choiceTitle}</p>`;
-		buf += `<div class="pr-choice-grid">`;
+			'Milestone! Choose a Pokémon to add to your team:' :
+			'Choose a starter!';
+		buf += `<h2 class="pr-choice-heading">${choiceTitle}</h2>`;
+		buf += `<table class="pr-choice-table">`;
+		buf += `<thead><tr>` +
+			`<th>Status</th><th>Info</th><th>Moves</th><th></th>` +
+			`</tr></thead>`;
+		buf += `<tbody>`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const s = state.pendingChoice[i];
 			const sp = Dex.species.get(toID(s));
@@ -257,39 +261,70 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 			const ab = (sp.abilities ?? {}) as unknown as Record<string, string>;
 			const abilityList = [ab['0'], ab['1'], ab['H']].filter(Boolean).join(' / ') || '—';
 			const moveIds = getLevelUpMoves(toID(s), isAdd ? Math.max(1, state.floor - 2) : 1);
-			const movesStr = moveIds.map(m => Dex.moves.get(m).name || m).join(', ') || 'Tackle';
-			buf += `<div class="pr-choice-card${isLegendary ? ' legendary' : ''}">`;
-			buf += getSprite(s, 72);
-			buf += `<br><b style="font-size:13px;color:#e8e0ff">${Utils.escapeHTML(name)}</b>`;
+			const moveNames = moveIds.map(m => Dex.moves.get(m).name || m);
+			const addLevel = isAdd ? Math.max(1, state.floor - 2) : 1;
+			buf += `<tr class="pr-choice-row${isLegendary ? ' legendary' : ''}">`;
+			// Status column
+			buf += `<td class="pr-ct-status">`;
+			buf += getSprite(s, 60);
+			buf += `<div class="pr-ct-name"><b>${Utils.escapeHTML(name)}</b>`;
 			if (isLegendary) {
-				buf += `<br><span style="color:#f59e0b;font-size:10px;font-weight:bold;` +
-					`letter-spacing:0.5px">LEGENDARY</span>`;
+				buf += ` <span class="pr-legendary-badge">LEGENDARY</span>`;
 			}
-			buf += `<br><div style="margin:4px 0">${typeBadge}</div>`;
-			buf += `<div style="font-size:10px;color:#8ab4f8;margin:2px 0">` +
+			buf += `</div>`;
+			buf += `<div style="margin:3px 0">${typeBadge}</div>`;
+			buf += `<div class="pr-ct-meta">Lv. ${addLevel} &nbsp;·&nbsp; ` +
 				`BST <b style="color:#c4a8ff">${bst}</b></div>`;
-			buf += `<div style="margin:5px 0">`;
-			buf += renderStatBar('HP', bs.hp, '#ff6060');
-			buf += renderStatBar('Atk', bs.atk, '#f5a623');
-			buf += renderStatBar('Def', bs.def, '#f5e642');
-			buf += renderStatBar('SpA', bs.spa, '#6495f5');
-			buf += renderStatBar('SpD', bs.spd, '#7ecf6e');
-			buf += renderStatBar('Spe', bs.spe, '#f564a9');
-			buf += `</div>`;
-			buf += `<div style="font-size:10px;color:#888;margin:4px 0;text-align:left">` +
-				`<b style="color:#aaa">Ability:</b> ${Utils.escapeHTML(abilityList)}<br>` +
-				`<b style="color:#aaa">Moves:</b> ${Utils.escapeHTML(movesStr)}` +
+			buf += `</td>`;
+			// Info column
+			buf += `<td class="pr-ct-info">`;
+			buf += `<div class="pr-ct-stats">` +
+				`<span><b>HP:</b> ${bs.hp}</span>` +
+				`<span><b>Atk:</b> ${bs.atk}</span>` +
+				`<span><b>Def:</b> ${bs.def}</span>` +
+				`<span><b>SpA:</b> ${bs.spa}</span>` +
+				`<span><b>SpD:</b> ${bs.spd}</span>` +
+				`<span><b>Spe:</b> ${bs.spe}</span>` +
 				`</div>`;
-			buf += `<button name="send" value="/pokerogue choose ${i + 1}" class="button"` +
-				` style="width:100%;margin-top:6px">${isAdd ? 'Add to Team' : 'Choose!'}</button>`;
-			buf += `</div>`;
+			buf += `<div class="pr-ct-ability"><b>Ability:</b> ${Utils.escapeHTML(abilityList)}</div>`;
+			buf += `</td>`;
+			// Moves column
+			buf += `<td class="pr-ct-moves">`;
+			buf += moveNames.map(m => Utils.escapeHTML(m)).join('<br>') || 'Tackle';
+			buf += `</td>`;
+			// Action column
+			buf += `<td class="pr-ct-action">`;
+			buf += `<button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">` +
+				`${isAdd ? 'Add to Team' : 'Pick starter'}</button>`;
+			buf += `</td>`;
+			buf += `</tr>`;
 		}
-		buf += `</div>`;
+		buf += `</tbody></table>`;
 		if (state.team?.length) {
 			buf += `<div class="pr-popup-actions">` +
 				`<button name="send" value="/pokerogue start" class="button">Refresh</button>` +
 				`</div>`;
 		}
+		buf += `</div>`;
+		return buf;
+	}
+
+	// ── Game over screen ─────────────────────────────────────────────────────
+	if (state.gameOver) {
+		buf += `<div class="pr-gameover">`;
+		buf += `<div class="pr-gameover-title">Too bad!</div>`;
+		buf += `<div class="pr-gameover-stats">`;
+		buf += `<span><b>Floor Reached:</b> ${state.lastRunFloor ?? 1}</span>`;
+		buf += `<span><b>Streaks Won:</b> ${state.lastRunStreaks ?? 0}</span>`;
+		if (state.highestFloor) {
+			buf += `<span><b>Best Floor:</b> ${state.highestFloor}</span>`;
+		}
+		buf += `</div>`;
+		buf += `<div class="pr-popup-actions" style="justify-content:center;margin-top:20px">`;
+		buf += `<button name="send" value="/pokerogue newgame" class="button pr-newrun-btn">` +
+			`Start a new run</button>`;
+		buf += `</div>`;
+		buf += `</div>`;
 		buf += `</div>`;
 		return buf;
 	}
@@ -451,7 +486,7 @@ function sendGamePopup(user: User, state: PokeRogueState | null, view: 'main' | 
 			setState(user.id, state);
 		}
 	}
-	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId)) ?
+	const html = (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId && !state.gameOver)) ?
 		NO_RUN_POPUP_HTML :
 		renderGamePopup(state, view);
 	for (const conn of user.connections) {
@@ -484,7 +519,7 @@ export const commands: Chat.ChatCommands = {
 					stateChanged = true;
 				}
 			}
-			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId)) {
+			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId && !newState.gameOver)) {
 				newState = buildFreshState(newState);
 				stateChanged = true;
 			}
@@ -1450,15 +1485,15 @@ export const handlers: Chat.Handlers = {
 				state.streaksWon = 0;
 				state.hasRevive = false;
 				state.items = {};
+				state.gameOver = true;
+				state.lastRunFloor = finalFloor;
+				state.lastRunStreaks = finalStreaks;
 				delete state.battleRoomId;
 				delete state.pendingChoice;
 				delete state.pendingChoiceType;
 				delete state.doubleExpFloors;
 				delete state.shopInventory;
-				state.notification =
-					`<b>💀 Defeated on Floor ${finalFloor}!</b>` +
-					`<br>Streaks Won: ${finalStreaks} · Best Floor: ${state.highestFloor ?? finalFloor}` +
-					`<br><span style="font-size:11px;color:#aaa">Your run has ended — start a new adventure!</span>`;
+				delete state.notification;
 				setState(match.userId, state);
 				if (humanUser) {
 					sendGamePopup(humanUser, getState(match.userId));

@@ -453,6 +453,12 @@ export interface PokeRogueState {
 	shopInventory?: string[];
 	/** Last in-game notification to display on the page (replaces chat/popup messages). */
 	notification?: string;
+	/** Set to true after a run ends in defeat; cleared when a new run starts. */
+	gameOver?: boolean;
+	/** Floor the player was on when their last run ended. */
+	lastRunFloor?: number;
+	/** Streaks won during the player's last run. */
+	lastRunStreaks?: number;
 }
 
 // ---------------------------------------------------------------------------
