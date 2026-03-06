@@ -1087,9 +1087,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1 },
 		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
+				move.flags['metronome'] && !pokemon.moves.includes(move.id) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				move.flags['metronome'] &&
 				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
 				!(pokemon.volatiles['healblock'] && move.flags['heal'])
 			));
@@ -1333,12 +1332,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon) {
-			if (['frz', 'slp'].includes(pokemon.status) || (pokemon.hasAbility('truant') &&
-				(pokemon.volatiles['truant'] || pokemon.truantTurn))) return;
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('pursuit', pokemon);
-				const data = side.getSideConditionData('pursuit');
+			if (['frz', 'slp'].includes(pokemon.status) ||
+				(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
+			for (const target of pokemon.foes()) {
+				target.addVolatile('pursuit');
+				const data = target.volatiles['pursuit'];
 				if (!data.sources) {
 					data.sources = [];
 				}
@@ -1367,7 +1365,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							}
 						}
 					}
-					this.actions.useMove('pursuit', source, { target: pokemon });
+					const move = this.dex.getActiveMove('pursuit');
+					source.deductPP(move.id);
+					source.moveUsed(move, pokemon.position);
+					if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
+						source.addVolatile('choicelock');
+					}
 				}
 			},
 		},
@@ -1549,19 +1552,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.moveSlots[sketchIndex] = sketchedMove;
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Mimic', move.name);
-		},
-	},
-	skillswap: {
-		inherit: true,
-		onHit(target, source) {
-			const targetAbility = target.ability;
-			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility || source.hasItem('griseousorb') || target.hasItem('griseousorb')) {
-				return false;
-			}
-			this.add('-activate', source, 'move: Skill Swap');
-			source.setAbility(targetAbility);
-			target.setAbility(sourceAbility);
 		},
 	},
 	sleeptalk: {

@@ -63,7 +63,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	fearow: {
-		tier: "UU",
+		tier: "RUBL",
 	},
 	ekans: {
 		tier: "LC",
@@ -312,7 +312,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	hypno: {
-		tier: "UU",
+		tier: "RU",
 	},
 	krabby: {
 		tier: "LC",
@@ -930,7 +930,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	manectric: {
-		tier: "UU",
+		tier: "RU",
 	},
 	plusle: {
 		tier: "NU",
