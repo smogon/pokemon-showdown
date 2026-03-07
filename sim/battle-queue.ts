@@ -202,6 +202,14 @@ export class BattleQueue {
 				}
 			}
 		}
+		if (this.battle.turn > 0 && !this.battle.ruleTable.has('switchpriorityclausemod') && (
+			(this.battle.gen <= 4 && action.choice === 'instaswitch') ||
+			(this.battle.gen <= 3 && action.choice === 'switch')
+		)) {
+			// Port switch priority goes: p1a, p2a, p1b, p2b
+			// Not supported: in Gen 1, each trainer sees his own Pokemon switch first
+			action.order += (action as SwitchAction).pokemon.getFieldPositionValue() / (this.battle.activePerHalf * 2);
+		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
 				if (!action.maxMove && !action.zmove && action.move.beforeTurnCallback) {
