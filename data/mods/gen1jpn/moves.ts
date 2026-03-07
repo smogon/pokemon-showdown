@@ -52,8 +52,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
-					if (move.recoil) {
-						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+					if (uncappedDamage) {
+						this.actions.calcRecoilDamage(uncappedDamage, move, source);
 					}
 					if (move.drain) {
 						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');

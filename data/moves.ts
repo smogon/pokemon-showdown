@@ -970,7 +970,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Axe Kick'));
 		},
 		secondary: {
 			chance: 30,
@@ -2527,7 +2527,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		// Recoil implemented in battle-actions.ts
+		mindBlownRecoil: true,
+		// Contrary to Mind Blown, Chloroblast does not implement the MoveFail event
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -12314,14 +12315,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
 		mindBlownRecoil: true,
-		onAfterMove(pokemon, target, move) {
-			if (move.mindBlownRecoil && !move.multihit) {
-				const hpBeforeRecoil = pokemon.hp;
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon, pokemon);
-				}
-			}
+		onMoveFail(target, source, move) {
+			if (move.multihit) return;
+			this.damage(Math.round(source.maxhp / 2), source, source, this.dex.conditions.get('Mind Blown'));
 		},
 		secondary: null,
 		target: "allAdjacent",
@@ -18539,14 +18535,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
 		mindBlownRecoil: true,
-		onAfterMove(pokemon, target, move) {
-			if (move.mindBlownRecoil && !move.multihit) {
-				const hpBeforeRecoil = pokemon.hp;
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon, pokemon);
-				}
-			}
+		onMoveFail(target, source, move) {
+			if (move.multihit) return;
+			this.damage(Math.round(source.maxhp / 2), source, source, this.dex.conditions.get('Steel Beam'));
 		},
 		secondary: null,
 		target: "normal",
@@ -19035,8 +19026,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
-				if (move.recoil || move.id === 'chloroblast') {
-					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				if (damage) {
+					this.actions.calcRecoilDamage(damage, move, source);
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
