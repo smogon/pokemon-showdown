@@ -1646,6 +1646,23 @@ export class Battle {
 					}
 				}
 			}
+		} else {
+			for (const pokemon of this.getAllActive()) {
+				/**
+				 * We need to recheck the source of the partial trapping at the end of every turn
+				 * if the source fainted after the partially trapped residual, the Pokemon would be
+				 * trapped for an extra turn
+				 */
+				if (pokemon.volatiles['partiallytrapped']) {
+					const source = pokemon.volatiles['partiallytrapped'].source;
+					// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
+					const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(pokemon.volatiles['partiallytrapped'].sourceEffect.id);
+					if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
+						delete pokemon.volatiles['partiallytrapped'];
+						this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
+					}
+				}
+			}
 		}
 
 		const trappedBySide: boolean[] = [];
