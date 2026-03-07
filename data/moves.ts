@@ -584,9 +584,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, distance: 1, metronome: 1 },
-		onPrepareHit(target, source) {
-			this.add('-activate', source, 'move: Aromatherapy');
-		},
+		// activation message in sim/battle-actions.ts
 		onHit(target) {
 			target.cureStatus();
 		},
@@ -8529,9 +8527,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onPrepareHit(target, source) {
-			this.add('-activate', source, 'move: Heal Bell');
-		},
+		// activation message in sim/battle-actions.ts
 		onHit(target, source, move) {
 			target.cureStatus();
 		},

@@ -617,7 +617,12 @@ export class BattleActions {
 		return moveResult;
 	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		if (['aromatherapy', 'healbell', 'helpinghand'].includes(move.id)) return new Array(targets.length).fill(true);
+		if (['aromatherapy', 'healbell', 'helpinghand'].includes(move.id)) {
+			if (this.battle.gen > 5 && (move.id === 'aromatherapy' || move.id === 'healbell')) {
+				this.battle.add('-activate', pokemon, `move: ${move.name}`);
+			}
+			return new Array(targets.length).fill(true);
+		}
 		const hitResults: boolean[] = [];
 		for (const [i, target] of targets.entries()) {
 			if (target.volatiles['commanding']) {
