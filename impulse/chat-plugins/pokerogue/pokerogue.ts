@@ -220,6 +220,11 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 		buf += `<div class="pr-notification">${state.notification}` +
 			`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button>` +
 			`</div>`;
+		if (!state.battleRoomId && !state.pendingChoice?.length && view !== 'shop') {
+			buf += `<div style="text-align:center;margin:8px 0">` +
+				`<a href="/view-pokerogue-shop" class="button" style="color:#fff;text-decoration:none">Go to Shop</a>` +
+				`</div>`;
+		}
 	}
 
 	// ── Pending Gacha Offer ──────────────────────────────────────────────────
@@ -280,9 +285,7 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 	if (state.battleRoomId) {
 		buf += `<div style="text-align:center;padding:14px 0">` +
 			`<p style="color:#f5c518;font-weight:bold;font-size:14px">Battle in progress!</p>` +
-			`<div class="pr-popup-actions" style="justify-content:center">` +
-			`<a href="/${state.battleRoomId}" class="button" style="color:#fff;text-decoration:none">Go to Battle</a>` +
-			`</div></div>`;
+			`</div>`;
 		buf += `</div>`;
 		return buf;
 	}
