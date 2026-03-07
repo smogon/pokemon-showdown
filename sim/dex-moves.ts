@@ -161,6 +161,9 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	contestType?: string;
 	noPPBoosts?: boolean;
 
+	status?: string;
+	weather?: string;
+
 	// Z-move data
 	// -----------
 	/**
@@ -429,6 +432,10 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly pp: number;
 	/** Whether or not this move can receive PP boosts. */
 	readonly noPPBoosts: boolean;
+	/** What status does this move set? */
+	readonly status?: ID | undefined;
+	/** What weather does this move set? */
+	readonly weather?: ID | undefined;
 	/** How many times does this move hit? */
 	declare readonly multihit?: number | number[];
 	/** Is this move a Z-Move? */
@@ -497,6 +504,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
 		this.pp = Number(data.pp);
 		this.noPPBoosts = !!(data.noPPBoosts ?? data.isZ);
+		this.status = data.status as ID || undefined;
+		this.weather = data.weather as ID || undefined;
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
