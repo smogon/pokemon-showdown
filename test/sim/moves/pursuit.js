@@ -190,6 +190,44 @@ describe(`Pursuit`, () => {
 		assert.fullHP(jolteon);
 	});
 
+	it(`should not activate if Encored into Pursuit`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Empoleon", moves: ['tackle', 'pursuit'] },
+			{ species: "Carnivine", moves: ['sleeptalk'] },
+		], [
+			{ species: "Deoxys", moves: ['sleeptalk', 'encore'] },
+			{ species: "Infernape", moves: ['sleeptalk', 'uturn'] },
+			{ species: "Carnivine", moves: ['sleeptalk'] },
+		]]);
+		const [deoxys, infernape] = battle.p2.active;
+		battle.makeChoices('move pursuit 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		deoxys.hp = deoxys.maxhp;
+		battle.makeChoices('move tackle 1, move sleeptalk', 'move encore 1, move uturn 2');
+		assert.fullHP(deoxys);
+		assert.fullHP(infernape);
+		battle.makeChoices('', 'switch 3');
+		assert.false.fullHP(deoxys);
+	});
+
+	it(`should not activate other move if Encored out of Pursuit`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Empoleon", moves: ['tackle', 'pursuit'] },
+			{ species: "Carnivine", moves: ['sleeptalk'] },
+		], [
+			{ species: "Deoxys", moves: ['sleeptalk', 'encore'] },
+			{ species: "Infernape", moves: ['sleeptalk', 'uturn'] },
+			{ species: "Carnivine", moves: ['sleeptalk'] },
+		]]);
+		const [deoxys, infernape] = battle.p2.active;
+		battle.makeChoices('move tackle 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		deoxys.hp = deoxys.maxhp;
+		battle.makeChoices('move pursuit 1, move sleeptalk', 'move encore 1, move uturn 2');
+		assert.fullHP(deoxys);
+		assert.fullHP(infernape);
+		battle.makeChoices('', 'switch 3');
+		assert.false.fullHP(deoxys);
+	});
+
 	describe(`[Gen 4]`, () => {
 		it(`should continue the switch`, () => {
 			battle = common.gen(4).createBattle([[
@@ -232,6 +270,44 @@ describe(`Pursuit`, () => {
 			assert.equal(battle.p1.active[0].status, 'par');
 			battle.makeChoices('move pursuit', 'switch 2');
 			assert.false.fullHP(jolteon);
+		});
+
+		it(`should activate if Encored into Pursuit`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Empoleon", moves: ['tackle', 'pursuit'] },
+				{ species: "Carnivine", moves: ['sleeptalk'] },
+			], [
+				{ species: "Deoxys", moves: ['sleeptalk', 'encore'] },
+				{ species: "Infernape", moves: ['sleeptalk', 'uturn'] },
+				{ species: "Carnivine", moves: ['sleeptalk'] },
+			]]);
+			const [deoxys, infernape] = battle.p2.active;
+			battle.makeChoices('move pursuit 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
+			deoxys.hp = deoxys.maxhp;
+			battle.makeChoices('move tackle 1, move sleeptalk', 'move encore 1, move uturn 2');
+			assert.fullHP(deoxys);
+			assert.false.fullHP(infernape);
+			battle.makeChoices('', 'switch 3');
+			assert.fullHP(deoxys);
+		});
+
+		it(`should not activate other move if Encored out of Pursuit`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Empoleon", moves: ['tackle', 'pursuit'] },
+				{ species: "Carnivine", moves: ['sleeptalk'] },
+			], [
+				{ species: "Deoxys", moves: ['sleeptalk', 'encore'] },
+				{ species: "Infernape", moves: ['sleeptalk', 'uturn'] },
+				{ species: "Carnivine", moves: ['sleeptalk'] },
+			]]);
+			const [deoxys, infernape] = battle.p2.active;
+			battle.makeChoices('move tackle 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
+			deoxys.hp = deoxys.maxhp;
+			battle.makeChoices('move pursuit 1, move sleeptalk', 'move encore 1, move uturn 2');
+			assert.fullHP(deoxys);
+			assert.fullHP(infernape);
+			battle.makeChoices('', 'switch 3');
+			assert.false.fullHP(deoxys);
 		});
 	});
 

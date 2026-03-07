@@ -14913,51 +14913,43 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		beforeTurnCallback(pokemon) {
-			for (const target of pokemon.foes()) {
-				target.addVolatile('pursuit');
-				const data = target.volatiles['pursuit'];
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+		beforeTurnCallback(pokemon, target) {
+			pokemon.addVolatile('pursuit');
 		},
 		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
+			if (target?.beingCalledBack || target?.switchFlag) {
+				move.accuracy = true;
+				move.tracksTarget = true;
+			}
 		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Pursuit start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source) {
-								if (action.choice === 'megaEvo') {
-									this.actions.runMegaEvo(source);
-								} else if (action.choice === 'terastallize') {
-									// Also a "forme" change that happens before moves, though only possible in NatDex
-									this.actions.terastallize(source);
-								} else {
-									continue;
-								}
-								this.queue.list.splice(actionIndex, 1);
-								break;
+				if (!source.isAdjacent(pokemon) || !source.hp || (
+					source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit'
+				) || !this.queue.cancelMove(source)) return;
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
+								this.actions.runMegaEvo(source);
+							} else if (action.choice === 'terastallize') {
+								// Also a "forme" change that happens before moves, though only possible in NatDex
+								this.actions.terastallize(source);
+							} else {
+								continue;
 							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
 				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effect });
 			},
 		},
 		secondary: null,
