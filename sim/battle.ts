@@ -1312,9 +1312,9 @@ export class Battle {
 		if (!sourceCanBeSet) return sourceCanBeSet;
 
 		if (this.gen <= 4 || source.isAlly(target)) {
-			this.add('-activate', source, 'Skill Swap');
+			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
 		} else {
-			this.add('-activate', source, 'Skill Swap', target, `[ability] ${targetAbility.name}`, `[ability2] ${sourceAbility.name}`);
+			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
 		this.singleEvent('End', sourceAbility, source.abilityState, source);
 		this.singleEvent('End', targetAbility, target.abilityState, target);
