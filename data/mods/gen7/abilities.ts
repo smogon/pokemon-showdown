@@ -72,14 +72,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost() {},
 	},
 	rattled: {
-		onDamagingHit(damage, target, source, move) {
-			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
-				this.boost({ spe: 1 });
-			}
-		},
-		name: "Rattled",
-		rating: 1.5,
-		num: 155,
+		inherit: true,
+		onAfterBoost() {},
+		rating: 1,
 	},
 	scrappy: {
 		inherit: true,
