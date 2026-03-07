@@ -178,32 +178,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', source, 'typechange', randomType);
 		},
 	},
-	counter: {
-		inherit: true,
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
-				if (
-					effect.effectType === 'Move' && !source.isAlly(target) &&
-					(effect.category === 'Physical' || effect.id === 'hiddenpower')
-				) {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
-		},
-	},
 	covet: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, noassist: 1 },
@@ -498,32 +472,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mimic: {
 		inherit: true,
 		flags: { protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1 },
-	},
-	mirrorcoat: {
-		inherit: true,
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
-				if (
-					effect.effectType === 'Move' && !source.isAlly(target) &&
-					effect.category === 'Special' && effect.id !== 'hiddenpower'
-				) {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
-		},
 	},
 	mirrormove: {
 		inherit: true,
