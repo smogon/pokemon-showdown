@@ -265,22 +265,22 @@ export function getPlayerStreams(stream: BattleStream) {
 		}),
 		p1: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				void stream.write(data.replace(/(^|\n)/g, `$1>p1 `));
+				void stream.write(data.replace(/^/mg, `>p1 `));
 			},
 		}),
 		p2: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				void stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
+				void stream.write(data.replace(/^/mg, `>p2 `));
 			},
 		}),
 		p3: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				void stream.write(data.replace(/(^|\n)/g, `$1>p3 `));
+				void stream.write(data.replace(/^/mg, `>p3 `));
 			},
 		}),
 		p4: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				void stream.write(data.replace(/(^|\n)/g, `$1>p4 `));
+				void stream.write(data.replace(/^/mg, `>p4 `));
 			},
 		}),
 	};
