@@ -1427,6 +1427,26 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	nc1997sleepclause: {
+		effectType: 'Rule',
+		name: 'NC 1997 Sleep Clause',
+		desc: "Prevents players from putting a foe Pok&eacute;mon to sleep if any of the opponent's Pok&eacute;mon are already asleep (including from Rest); violating this clause results in an automatic loss.",
+		onBegin() {
+			this.add('rule', 'NC 1997 Sleep Clause: Putting a second foe to sleep forfeits the match');
+		},
+		onSetStatus(status, target, source) {
+			if (!source || source.isAlly(target)) return;
+			if (status.id === 'slp') {
+				for (const pokemon of target.side.pokemon) {
+					if (pokemon.hp && pokemon.status === 'slp') {
+						this.add('-message', 'Sleep Clause activated. The match is a forfeit.');
+						this.lose(source.side);
+						return false;
+					}
+				}
+			}
+		},
+	},
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
