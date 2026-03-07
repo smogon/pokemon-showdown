@@ -15,6 +15,24 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	pokemon: {
 		inherit: true,
+		deductPP(move, amount, target) {
+			// in Gens 2 and 3, PP can be deducted separately from duplicate moves
+			move = this.battle.dex.moves.get(move);
+			for (const ppData of this.moveSlots) {
+				if (ppData.id !== move.id) continue;
+				ppData.used = true;
+				if (!ppData.pp) continue;
+
+				if (!amount) amount = 1;
+				ppData.pp -= amount;
+				if (ppData.pp < 0) {
+					amount += ppData.pp;
+					ppData.pp = 0;
+				}
+				return amount;
+			}
+			return 0;
+		},
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
 			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
