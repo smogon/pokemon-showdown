@@ -9,26 +9,27 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canMegaEvo(pokemon) {
-			if (pokemon.species.isMega || pokemon.species.isPrimal) return null;
+			if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.m.megaEvoUsed) return false;
 
 			const item = pokemon.getItem();
 			if (item.megaStone) {
 				const values = Object.values(item.megaStone);
-				if (values.includes(pokemon.name)) return null;
+				if (values.includes(pokemon.name)) return false;
 				return values[0];
 			} else if (pokemon.baseMoves.includes('dragonascent')) {
 				return 'Rayquaza-Mega';
 			} else {
-				return null;
+				return false;
 			}
 		},
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega || pokemon.species.isPrimal) return false;
 
-			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo, pokemon);
+			const megaSpecies = this.canMegaEvo(pokemon);
+			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies, megaSpecies, pokemon);
 
 			// Do we have a proper sprite for it? Code for when megas actually exist
-			if (this.dex.species.get(pokemon.canMegaEvo as any).baseSpecies === pokemon.m.originalSpecies) {
+			if (this.dex.species.get(megaSpecies as any).baseSpecies === pokemon.m.originalSpecies) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else {
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
@@ -40,7 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			pokemon.canMegaEvo = false;
+			pokemon.m.megaEvoUsed = true;
 			return true;
 		},
 		getMixedSpecies(originalForme, formeChange, pokemon) {

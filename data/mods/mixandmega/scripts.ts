@@ -384,19 +384,19 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canMegaEvo(pokemon) {
-			if (pokemon.species.isMega) return null;
+			if (pokemon.species.isMega || pokemon.m.megaEvoUsed) return false;
 
 			const item = pokemon.getItem();
-			if (!item.megaStone) return null;
+			if (!item.megaStone) return false;
 			return Object.values(item.megaStone)[0];
 		},
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return false;
 
-			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo, pokemon);
+			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies, this.canMegaEvo(pokemon), pokemon);
 
 			/* Do we have a proper sprite for it? Code for when megas actually exist
-			if (this.dex.species.get(pokemon.canMegaEvo!).baseSpecies === pokemon.m.originalSpecies) {
+			if (this.dex.species.get(this.canMegaEvo(pokemon)!).baseSpecies === pokemon.m.originalSpecies) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else { */
 			const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
@@ -408,7 +408,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			// }
 
-			pokemon.canMegaEvo = false;
+			pokemon.m.megaEvoUsed = true;
 			return true;
 		},
 		terastallize(pokemon) {
@@ -425,9 +425,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
-			for (const ally of pokemon.side.pokemon) {
-				ally.canTerastallize = null;
-			}
+			pokemon.side.terastallizationUsed = true;
 			pokemon.addedType = '';
 			pokemon.knownType = true;
 			pokemon.apparentType = type;
@@ -451,6 +449,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.formeChange('Terapagos-Stellar', null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
+			return true;
 		},
 		getMixedSpecies(originalForme, formeChange, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
