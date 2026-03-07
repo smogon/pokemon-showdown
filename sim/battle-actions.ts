@@ -595,6 +595,13 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
+		return this.spreadMoveHitSteps(targets, pokemon, move, moveSteps);
+	}
+	spreadMoveHitSteps(
+		targets: Pokemon[], pokemon: Pokemon, move: ActiveMove,
+		moveSteps: ((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove)
+		=> (number | boolean | "" | undefined)[] | undefined)[],
+	) {
 		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
@@ -706,7 +713,7 @@ export class BattleActions {
 					}
 				}
 			} else {
-				accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+				if (this.battle.gen > 4) accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 				if (accuracy !== true) {
 					let boost = 0;
 					if (!move.ignoreAccuracy) {
@@ -723,6 +730,7 @@ export class BattleActions {
 						accuracy = this.battle.trunc(accuracy * 3 / (3 - boost));
 					}
 				}
+				if (this.battle.gen <= 4) accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 			}
 			if (
 				move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||

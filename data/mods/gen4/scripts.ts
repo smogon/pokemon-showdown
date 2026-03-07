@@ -111,72 +111,49 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return Math.floor(baseDamage);
 		},
-		hitStepInvulnerabilityEvent(targets, pokemon, move) {
-			const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
-			for (const [i, target] of targets.entries()) {
-				if (hitResults[i] === false) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
-				}
-			}
-			return hitResults;
-		},
-		hitStepAccuracy(targets, pokemon, move) {
-			const hitResults = [];
-			for (const [i, target] of targets.entries()) {
-				this.battle.activeTarget = target;
-				// calculate true accuracy
-				let accuracy = move.accuracy;
-				if (move.ohko) { // bypasses accuracy modifiers
-					if (!target.isSemiInvulnerable()) {
-						if (pokemon.level < target.level) {
-							this.battle.add('-immune', target, '[ohko]');
-							hitResults[i] = false;
-							continue;
-						}
-						accuracy = 30 + pokemon.level - target.level;
-					}
-				} else {
-					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+		spreadMoveHitSteps(targets, pokemon, move, moveSteps) {
+			// in Gen 4, moves hit and apply effects one target at a time in speed order
+			const targetsCopy = targets.slice();
+			this.battle.speedSort(targetsCopy);
+			const hits = Array(targetsCopy.length).fill(true);
+			// accumulate total damage separately since it is used internally
+			let totalDamage = move.totalDamage;
 
-					let boosts;
-					let boost!: number;
-					if (accuracy !== true) {
-						if (!move.ignoreAccuracy) {
-							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-							if (boost > 0) {
-								accuracy *= boostTable[boost];
-							} else {
-								accuracy /= boostTable[-boost];
-							}
-						}
-						if (!move.ignoreEvasion) {
-							boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-							boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
-							if (boost > 0) {
-								accuracy /= boostTable[boost];
-							} else if (boost < 0) {
-								accuracy *= boostTable[-boost];
-							}
-						}
+			let atLeastOneFailure = false;
+			for (const [i, target] of targetsCopy.entries()) {
+				// spread moves hit for 100% of the damage if there is only one target left and all the other targets have fainted
+				// if the move hits all adjacent Pokemon, the threshold is 2 targets counting the user
+				if (move.spreadHit && (
+					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length <= 2) ||
+					targets.filter(t => t && !t.fainted).length <= 1
+				)) {
+					move.spreadModifier = 1;
+				}
+				move.totalDamage = undefined;
+				for (const step of moveSteps) {
+					const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, [target], pokemon, move);
+					if (!hitResults) continue;
+					if (hitResults.length !== 1) {
+						throw new Error(`Expected single target for step ${step.name} in spread move ${move.name}`);
 					}
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					atLeastOneFailure = atLeastOneFailure || hitResults[0] === false;
+					if (move.smartTarget && atLeastOneFailure) move.smartTarget = false;
+					if (!(hitResults[0] || hitResults[0] === 0)) {
+						hits[i] = false;
+						break;
+					}
 				}
-				if (move.alwaysHit) {
-					accuracy = true; // bypasses ohko accuracy modifiers
-				} else {
-					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-				}
-				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
-					hitResults[i] = false;
-					continue;
-				}
-				hitResults[i] = true;
+				if (typeof move.totalDamage === 'number') totalDamage = (totalDamage || 0) + (move.totalDamage as number);
 			}
-			return hitResults;
+			targets = targetsCopy.filter((_, i) => hits[i]);
+			move.totalDamage = totalDamage;
+
+			move.hitTargets = targets;
+			const moveResult = !!targets.length;
+			if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
+			const hitSlot = targets.map(p => p.getSlot());
+			if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlot.join(','));
+			return moveResult;
 		},
 		calcRecoilDamage(damageDealt, move) {
 			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
