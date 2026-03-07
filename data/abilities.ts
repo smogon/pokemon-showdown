@@ -219,10 +219,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	armortail: {
 		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
+			if (move.target === 'foeSide' || move.target === 'field') return;
 
 			const armorTailHolder = this.effectState.target;
 			if ((source.isAlly(armorTailHolder) || move.target === 'all') && move.priority > 0.1) {
@@ -863,10 +860,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	dazzling: {
 		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
+			if (move.target === 'foeSide' || move.target === 'field') return;
 
 			const dazzlingHolder = this.effectState.target;
 			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
@@ -3629,10 +3623,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	queenlymajesty: {
 		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
+			if (move.target === 'foeSide' || move.target === 'field') return;
 
 			const dazzlingHolder = this.effectState.target;
 			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {

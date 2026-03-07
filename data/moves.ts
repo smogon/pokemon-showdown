@@ -2498,7 +2498,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-prepare', source, 'Chilly Reception', '[premajor]');
 			},
 		},
-		target: "all",
+		target: "field",
 		type: "Ice",
 	},
 	chipaway: {
@@ -3201,7 +3201,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.add('-activate', source, 'move: Court Change');
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Normal",
 	},
 	covet: {
@@ -3271,7 +3271,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (['self', 'all'].includes(move.target) || move.category !== 'Status') return;
+				if (['self', 'all', 'field'].includes(move.target) || move.category !== 'Status') return;
 				this.add('-activate', target, 'move: Crafty Shield');
 				return this.NOT_FAIL;
 			},
@@ -4714,7 +4714,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Electric",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
@@ -5249,7 +5249,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Fairy",
 		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
@@ -6062,23 +6062,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { distance: 1, metronome: 1 },
-		onHitField(t, source, move) {
-			const targets: Pokemon[] = [];
-			for (const pokemon of this.getAllActive()) {
-				if (
-					pokemon.hasType('Grass') &&
-					(!pokemon.volatiles['maxguard'] ||
-						this.runEvent('TryHit', pokemon, source, move))
-				) {
-					// This move affects every Grass-type Pokemon in play.
-					targets.push(pokemon);
-				}
-			}
-			let success = false;
-			for (const target of targets) {
-				success = this.boost({ def: 1 }, target, source, move) || success;
-			}
-			return success;
+		onTryHit(target) {
+			if (!target.hasType('Grass')) return false;
+		},
+		boosts: {
+			def: 1,
 		},
 		secondary: null,
 		target: "all",
@@ -6714,20 +6702,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { snatch: 1, bypasssub: 1, metronome: 1 },
-		onHitSide(side, source, move) {
-			const targets = side.allies().filter(target => (
-				target.hasAbility(['plus', 'minus']) &&
-				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
-			));
-			if (!targets.length) return false;
-			let didSomething = false;
-			for (const target of targets) {
-				didSomething = this.boost({ atk: 1, spa: 1 }, target, source, move, false, true) || didSomething;
-			}
-			return didSomething;
+		onTryHit(target, source, move) {
+			if (!target.hasAbility(['plus', 'minus'])) return false;
+		},
+		boosts: {
+			atk: 1,
+			spa: 1,
 		},
 		secondary: null,
-		target: "allySide",
+		target: "allies",
 		type: "Steel",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
@@ -8003,7 +7986,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Grass",
 		zMove: { boost: { def: 1 } },
 		contestType: "Beautiful",
@@ -8116,7 +8099,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Psychic",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
@@ -8366,7 +8349,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { metronome: 1 },
 		weather: 'hail',
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Ice",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
@@ -8399,8 +8382,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { metronome: 1 },
-		onTryHit(target, source) {
-			this.add('-activate', target, 'move: Happy Hour');
+		onTryHitSide(side, source) {
+			this.add('-activate', source, 'move: Happy Hour');
 		},
 		secondary: null,
 		target: "allySide",
@@ -8462,7 +8445,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Ice",
 		zMove: { effect: 'heal' },
 		contestType: "Beautiful",
@@ -10053,7 +10036,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Electric",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Beautiful",
@@ -11190,7 +11173,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Psychic",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Clever",
@@ -11234,21 +11217,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { snatch: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHitSide(side, source, move) {
-			const targets = side.allies().filter(ally => (
-				ally.hasAbility(['plus', 'minus']) &&
-				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
-			));
-			if (!targets.length) return false;
-
-			let didSomething = false;
-			for (const target of targets) {
-				didSomething = this.boost({ def: 1, spd: 1 }, target, source, move, false, true) || didSomething;
-			}
-			return didSomething;
+		onTryHit(target, source, move) {
+			if (!target.hasAbility(['plus', 'minus'])) return false;
+		},
+		boosts: {
+			def: 1,
+			spd: 1,
 		},
 		secondary: null,
-		target: "allySide",
+		target: "allies",
 		type: "Electric",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Clever",
@@ -12651,7 +12628,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Fairy",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Beautiful",
@@ -12935,7 +12912,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Ground",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Cute",
@@ -13724,24 +13701,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHitField(target, source, move) {
-			let result = false;
-			let message = false;
-			for (const pokemon of this.getAllActive()) {
-				if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-					this.add('-miss', source, pokemon);
-					result = true;
-				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
-					result = true;
-				} else if (!pokemon.volatiles['perishsong']) {
-					pokemon.addVolatile('perishsong');
-					this.add('-start', pokemon, 'perish3', '[silent]');
-					result = true;
-					message = true;
-				}
+		volatileStatus: 'perishsong',
+		onTryHit(target) {
+			if (target.volatiles['perishsong']) return false;
+		},
+		onHit(target, source, move) {
+			if (!move.message) {
+				move.message = true;
+				this.add('-fieldactivate', 'move: Perish Song');
 			}
-			if (!result) return false;
-			if (message) this.add('-fieldactivate', 'move: Perish Song');
 		},
 		condition: {
 			duration: 4,
@@ -14666,7 +14634,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Psychic",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
@@ -15230,7 +15198,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { metronome: 1 },
 		weather: 'RainDance',
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Water",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
@@ -16044,24 +16012,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
-		onHitField(target, source) {
-			const targets: Pokemon[] = [];
-			let anyAirborne = false;
-			for (const pokemon of this.getAllActive()) {
-				if (!pokemon.runImmunity('Ground')) {
-					this.add('-immune', pokemon);
-					anyAirborne = true;
-					continue;
-				}
-				if (pokemon.hasType('Grass')) {
-					// This move affects every grounded Grass-type Pokemon in play.
-					targets.push(pokemon);
-				}
-			}
-			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
-			for (const pokemon of targets) {
-				this.boost({ atk: 1, spa: 1 }, pokemon, source);
-			}
+		onTryImmunity(target) {
+			return target.runImmunity('Ground');
+		},
+		onTryHit(target) {
+			if (!target.hasType('Grass')) return false;
+		},
+		boosts: {
+			atk: 1,
+			spa: 1,
 		},
 		secondary: null,
 		target: "all",
@@ -16286,7 +16245,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { metronome: 1, wind: 1 },
 		weather: 'Sandstorm',
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Rock",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Tough",
@@ -17809,7 +17768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {},
 		weather: 'snowscape',
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Ice",
 	},
 	soak: {
@@ -19103,7 +19062,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { metronome: 1 },
 		weather: 'sunnyday',
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Fire",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
@@ -19749,24 +19708,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { bypasssub: 1, metronome: 1 },
-		onHitField(target, source, move) {
-			const targets: Pokemon[] = [];
-			for (const pokemon of this.getAllActive()) {
-				if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-					this.add('-miss', source, pokemon);
-				} else if (this.runEvent('TryHit', pokemon, source, move) && pokemon.getItem().isBerry) {
-					targets.push(pokemon);
-				}
+		onHit(target, source, move) {
+			if (!move.message) {
+				move.message = true;
+				this.add('-fieldactivate', 'move: Teatime');
 			}
-			this.add('-fieldactivate', 'move: Teatime');
-			if (!targets.length) {
-				this.add('-fail', source, 'move: Teatime');
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
-			}
-			for (const pokemon of targets) {
-				pokemon.eatItem(true);
-			}
+			return target.eatItem(true, source, move) || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "all",
@@ -20717,7 +20664,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Psychic",
 		zMove: { boost: { accuracy: 1 } },
 		contestType: "Clever",
@@ -21421,7 +21368,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Water",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Cute",
@@ -21795,7 +21742,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "field",
 		type: "Psychic",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Clever",
