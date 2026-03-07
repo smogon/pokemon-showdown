@@ -12,7 +12,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					continue;
 				}
 				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, this.dex.abilities.get('Neutralizing Gas'));
 				}
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
