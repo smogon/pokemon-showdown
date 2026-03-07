@@ -537,6 +537,8 @@ export class TeamValidator {
 				!ruleTable.has('megarayquazaclause')
 			) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
+			} else if (species.id === 'xerneas') {
+				tierSpecies = dex.species.get('Xerneas-Active');
 			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
 				tierSpecies = dex.species.get('Zacian-Crowned');
 			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
@@ -1717,6 +1719,7 @@ export class TeamValidator {
 
 		// https://www.smogon.com/forums/posts/8659168
 		if (
+			(tierSpecies.id === 'xerneasactive' && species.id === 'xerneas') ||
 			(tierSpecies.id === 'zamazentacrowned' && species.id === 'zamazenta') ||
 			(tierSpecies.id === 'zaciancrowned' && species.id === 'zacian')
 		) {

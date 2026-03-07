@@ -644,10 +644,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(', shiny', '')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*') // Hacked-in Crowned formes will be revealed
+					.replace(/(Xerneas)(?!-Active)/g, '$1-*'); // Hacked-in Xerneas-Active will be revealed
 				if (!this.ruleTable.has('speciesrevealclause')) {
 					details = details
-						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
+						.replace(/(Greninja|Gourgeist|Pumpkaboo|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
 				}
 				this.add('poke', pokemon.side.id, details, '');
 			}
@@ -2756,13 +2757,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let species = this.dex.species.get(set.species);
 			if (
 				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
-				!['Eevee-Starter', 'Floette-Eternal', 'Greninja-Ash', 'Pikachu-Starter', 'Xerneas-Neutral'].includes(species.name) &&
+				!['Eevee-Starter', 'Floette-Eternal', 'Greninja-Ash', 'Pikachu-Starter'].includes(species.name) &&
 				!this.ruleTable.has(`+pokemon:${species.id}`)
 			) {
 				return [`${species.name} is illegal.`];
 			}
 			const problemPokemon = this.dex.species.all().filter(s => (
-				(s.name === 'Xerneas' || s.battleOnly || s.forme === 'Eternamax') &&
+				(s.battleOnly || s.forme === 'Eternamax') &&
 				!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
 				!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
 			));
@@ -2773,8 +2774,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
 					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
 				}
-				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
-					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
+				set.species = (species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
 				species = this.dex.species.get(set.species);
 			}
 			for (const moveid of set.moves) {
@@ -2786,9 +2786,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const item = this.dex.items.get(set.item);
 			if (item.isNonstandard && item.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+item:${item.id}`)) {
 				return [`${item.name} is illegal.`];
-			}
-			if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
-				return [`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`];
 			}
 		},
 	},
