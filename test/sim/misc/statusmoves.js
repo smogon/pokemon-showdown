@@ -81,7 +81,7 @@ describe('Poison-inflicting status moves [Gen 2]', () => {
 			[{ species: "Magneton", moves: ['sleeptalk'] }],
 		]);
 		// Set all moves to perfect accuracy
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('CheckAccuracy', battle.format, false);
 
 		const target = battle.p2.active[0];
 		for (const move of POISON_STATUS_MOVES) {
