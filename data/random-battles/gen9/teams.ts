@@ -1964,6 +1964,15 @@ export class RandomTeams {
 			} else {
 				baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 				species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+
+				// Ensure that the species isn't harmed by Godly Gift stat passing
+				if (pokemon.length < 6) {
+					const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
+					const passedStatName = s[pokemon.length];
+					const passedStat = (this.dex.species.get(pokemon[0].speciesId).baseStats[passedStatName]);
+					// If Deoxys-Attack is the god, just make sure the def/spd stat is <= 50
+					if (Math.max(passedStat, 50) < species.baseStats[passedStatName]) continue;
+				}
 			}
 			if (!species.exists) continue;
 
