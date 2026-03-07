@@ -21,11 +21,11 @@ describe('Partners in Crime', () => {
 		battle.makeChoices();
 		const rampardos = battle.p2.active[0];
 		assert.statStage(rampardos, 'atk', -2);
-		assert.equal(rampardos.volatiles.quarkdrive.bestStat, 'atk',
+		assert.equal(rampardos.volatiles['ability:quarkdrive'].bestStat, 'atk',
 			`Rampardos should be Intimidated exactly once before Quark Drive activates`);
 		const ironvaliant = battle.p2.active[1];
 		assert.statStage(ironvaliant, 'atk', -2);
-		assert.equal(ironvaliant.volatiles.quarkdrive.bestStat, 'spa',
+		assert.equal(ironvaliant.abilityState.bestStat, 'spa',
 			`Iron Valiant should be Intimidated exactly once before Quark Drive activates`);
 		assert.equal(battle.field.terrainState.source.name, 'Incineroar', `Incineroar should set Electric Terrain`);
 
