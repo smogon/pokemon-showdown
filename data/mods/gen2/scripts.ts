@@ -5,6 +5,16 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
+	init() {
+		const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
+		for (const i in this.data.Moves) {
+			if (noMirror.includes(i)) {
+				delete this.modData('Moves', i).flags.mirror;
+			} else {
+				this.modData('Moves', i).flags.mirror = 1;
+			}
+		}
+	},
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {

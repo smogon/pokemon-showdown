@@ -3,6 +3,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 3,
 	init() {
 		const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+		const noMirror = [
+			'assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform',
+		];
 		let newCategory = '';
 		for (const i in this.data.Moves) {
 			if (!this.data.Moves[i]) console.log(i);
@@ -10,6 +13,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
 			if (newCategory !== this.data.Moves[i].category) {
 				this.modData('Moves', i).category = newCategory;
+			}
+			if (noMirror.includes(i)) {
+				delete this.modData('Moves', i).flags.mirror;
+			} else {
+				this.modData('Moves', i).flags.mirror = 1;
 			}
 		}
 	},
