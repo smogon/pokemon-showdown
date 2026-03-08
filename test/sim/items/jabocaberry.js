@@ -58,4 +58,16 @@ describe('Jaboca Berry', () => {
 		assert.false.holdsItem(scizor);
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
+
+	it(`should not steal Tanga Berry after it activates in Gen 5`, () => {
+		battle = common.gen(5).createBattle([[
+			{ species: "Scizor", moves: ['bugbite'] },
+		], [
+			{ species: "Celebi", item: 'tangaberry', moves: ['recover'] },
+		]]);
+
+		battle.makeChoices();
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
 });
