@@ -20687,6 +20687,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.9,
 		weightkg: 66.6,
 		color: "Brown",
+		evos: ["Shox"],
 		eggGroups: ["Field"],
 		gen: 9,
 	},
