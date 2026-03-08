@@ -592,9 +592,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.debug('Pursuit start');
 				if (this.effectState.targetLoc !== source.getLocOf(pokemon) ||
 					['frz', 'slp'].includes(source.status) || (source.hasAbility('truant') && source.truantTurn) ||
-					!source.isAdjacent(pokemon) || !source.hp || (
-					source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit'
-				) || !this.queue.cancelMove(source)) return;
+					!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') ||
+					!this.queue.cancelMove(source)) return;
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
 				if (source.canMegaEvo || source.canUltraBurst) {
