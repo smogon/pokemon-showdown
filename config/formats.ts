@@ -488,11 +488,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] BSS Factory (Bo3)",
-		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
-		mod: 'gen9',
-		team: 'randomBSSFactory',
-		ruleset: ['Flat Rules', 'VGC Timer', 'Best of = 3'],
+		name: "[Gen 9] Godly Gift Random Battle",
+		desc: `Each Pok&eacute;mon receives one base stat from the God in the first slot depending on its position in the team.`,
+		team: 'randomGodlyGift',
+		ruleset: ['[Gen 9] Random Battle', 'Godly Gift Mod', 'Team Preview'],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue"><b>In this format, the "God" in the first slot has "gifted" (shared) its base attack to the Pok&eacute;mon in the second slot, defense to the one in the third slot, etc."`);
+		},
 	},
 	{
 		name: "[Gen 9] Linked",
