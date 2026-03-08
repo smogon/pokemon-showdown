@@ -86,6 +86,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 20,
 	},
+	bugbite: {
+		inherit: true,
+		onHit() {},
+		onAfterHit(target, source, move) {
+			const item = target.getItem();
+			if (source.hp && item.isBerry && target.takeItem(source)) {
+				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
+				if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
+					if (item.id === 'leppaberry') target.staleness = 'external';
+				}
+				if (item.onEat) source.ateBerry = true;
+			}
+		},
+	},
 	bugbuzz: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },

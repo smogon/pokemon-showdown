@@ -45,4 +45,17 @@ describe('Jaboca Berry', () => {
 		assert.fullHP(battle.p1.active[0]);
 		assert.holdsItem(battle.p2.active[0]);
 	});
+
+	it(`should activate before it can be stolen by Bug Bite in Gen 5`, () => {
+		battle = common.gen(5).createBattle([[
+			{ species: "Scizor", evs: { hp: 252 }, moves: ['bugbite'] },
+		], [
+			{ species: "Snorlax", item: 'jabocaberry', moves: ['sleeptalk'] },
+		]]);
+
+		const scizor = battle.p1.active[0];
+		assert.hurtsBy(scizor, scizor.maxhp / 8, () => battle.makeChoices());
+		assert.false.holdsItem(scizor);
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
 });
