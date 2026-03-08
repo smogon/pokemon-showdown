@@ -330,6 +330,12 @@ interface ModdedBattlePokemon {
 	// OM
 	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => [ActiveMove, ActiveMove] | [];
 	hasLinkedMove?: (this: Pokemon, move: ActiveMove) => boolean;
+	getIsMoveLocked?: (this: Pokemon) => boolean;
+	getWillLockMove?: (this: Pokemon) => boolean;
+	getCanLinkMove?: (this: Pokemon, move: ActiveMove) => boolean;
+	queryLinkMove?: (
+		this: Pokemon, move: ActiveMove, ignoreDisabled?: boolean
+	) => { index: number, link: [ActiveMove, ActiveMove] };
 }
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
