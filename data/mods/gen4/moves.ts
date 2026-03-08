@@ -1099,7 +1099,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			pokemon.side.lastSelectedMove = this.toID(randomMove);
 			this.actions.useMove(randomMove, pokemon);
 		},
 	},
