@@ -733,6 +733,9 @@ export class DexFormats {
 		if (this.dex.gen === 1) {
 			rules.push('Desync Clause Mod');
 		}
+		if (this.dex.gen === 3) {
+			rules.push('Deoxys Camouflage Clause Mod');
+		}
 		if (this.dex.gen <= 4) {
 			rules.push('Switch Priority Clause Mod');
 		}

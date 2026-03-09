@@ -1446,13 +1446,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Hardcoded in gen1/moves.ts
 		// Can't be disabled (no precedent for how else to handle desyncs)
 	},
-	deoxyscamouflageclause: {
+	deoxyscamouflageclausemod: {
 		effectType: 'Rule',
-		name: 'Deoxys Camouflage Clause',
+		name: 'Deoxys Camouflage Clause Mod',
 		desc: "Reveals the Deoxys forme when it is sent in battle.",
 		// Hardcoded into effect, cannot be disabled.
 		onBegin() {
-			this.add('rule', 'Deoxys Camouflage Clause: Reveals the Deoxys forme when it is sent in battle.');
+			const deoxys = ['Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed'];
+			for (const forme of deoxys) {
+				const species = this.dex.species.get(forme);
+				if (!this.ruleTable.isBannedSpecies(species)) {
+					this.add('rule', 'Deoxys Camouflage Clause Mod: Reveals the Deoxys forme when it is sent in battle.');
+					break;
+				}
+			}
 		},
 	},
 	freezeclausemod: {
