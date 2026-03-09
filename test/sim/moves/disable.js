@@ -94,7 +94,7 @@ describe('Disable', () => {
 			assert.equal(muk.volatiles.disable.slotIndex, 3);
 		});
 
-		it(`should keep the slot disabled after the Pokémon uses Mimic`, () => {
+		it(`should keep the slot disabled even if the move is replaced by Mimic`, () => {
 			battle = common.gen(1).createBattle({ seed: [2, 0, 0, 0] }, [[
 				{ species: 'Drowzee', moves: ['mimic', 'tackle'] },
 			], [
@@ -105,7 +105,7 @@ describe('Disable', () => {
 			battle.makeChoices('move 1', 'move tackle');
 		});
 
-		it(`should keep the slot disabled after the Pokémon uses Transform`, () => {
+		it(`should keep the slot disabled even if the move is replaced by Transform`, () => {
 			battle = common.gen(1).createBattle({ seed: [2, 0, 0, 0] }, [[
 				{ species: 'Drowzee', moves: ['transform', 'tackle'] },
 			], [
