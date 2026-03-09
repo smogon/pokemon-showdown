@@ -941,12 +941,7 @@ export class Pokemon {
 	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
-	getLockedMove(moveRequest?: boolean): ID | null {
-		if (moveRequest) {
-			if (this.battle.gen === 1 && (['frz', 'slp'].includes(this.status) || this.volatiles['partiallytrapped'])) {
-				return 'fight' as ID;
-			}
-		}
+	getLockedMove(): ID | null {
 		const lockedMove = this.battle.runEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
@@ -1081,7 +1076,7 @@ export class Pokemon {
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.maybeLocked ? null : this.getLockedMove(true);
+		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();

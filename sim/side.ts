@@ -649,7 +649,7 @@ export class Side {
 			}
 		}
 
-		const lockedMove = pokemon.getLockedMove(true);
+		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);

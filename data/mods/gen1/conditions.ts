@@ -80,6 +80,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
+		onLockMovePriority: 1,
+		onLockMove: 'fight',
 	},
 	frz: {
 		name: 'frz',
@@ -98,6 +100,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				target.cureStatus();
 			}
 		},
+		onLockMovePriority: 1,
+		onLockMove: 'fight',
 	},
 	psn: {
 		name: 'psn',
@@ -205,6 +209,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onDisableMove(target) {
 			target.maybeLocked = true;
 		},
+		onLockMovePriority: 1,
+		onLockMove: 'fight',
 	},
 	fakepartiallytrapped: {
 		name: 'fakepartiallytrapped',
