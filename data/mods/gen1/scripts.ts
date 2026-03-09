@@ -186,7 +186,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.id === 'fight') {
 				if (pokemon.side.lastSelectedMove === pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
 					move = this.battle.dex.getActiveMove(pokemon.side.lastSelectedMove);
-					this.battle.hint("In Gen 1, a Pokémon that thaws out might attempt to use the last move used on its side.");
+					this.battle.hint("In Gen 1, a Pokémon that thaws out might be able to use the last move used by its side.");
 				} else {
 					this.battle.hint("Desync Clause Mod activated!");
 					this.battle.hint("In Gen 1, a Pokémon that thaws out might try to use a move without ever selecting one since it switched in.");
