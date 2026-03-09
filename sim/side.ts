@@ -91,8 +91,18 @@ export interface PokemonSwitchRequestData {
 	teraType?: string;
 	terastallized?: string;
 }
+export interface MoveRequestData {
+	move: string,
+	id: ID,
+	pp?: number,
+	maxpp?: number,
+	target?: string,
+	disabled?: string | boolean,
+	disabledSource?: string,
+};
+
 export interface PokemonMoveRequestData {
-	moves: { move: string, id: ID, target?: string, disabled?: string | boolean, disabledSource?: string }[];
+	moves: MoveRequestData[];
 	maybeDisabled?: boolean;
 	maybeLocked?: boolean;
 	trapped?: boolean;
@@ -662,6 +672,15 @@ export class Side {
 				pokemon,
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
+			});
+			return true;
+		} else if (this.battle.gen === 1 &&
+			(['frz', 'slp'].includes(pokemon.status) || pokemon.volatiles['partiallytrapped'])) {
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
+			this.choice.actions.push({
+				choice: 'move',
+				pokemon,
+				moveid: 'fight',
 			});
 			return true;
 		} else if (!moves.length) {
