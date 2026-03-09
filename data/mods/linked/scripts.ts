@@ -36,19 +36,18 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			// take priority from the base move, so abilities like Prankster only apply once
-			// (instead of compounding every time `getActionSpeed` is called)
-			let priority = this.dex.moves.get(move.id).priority;
 			// Linked mod
-			const { index: linkIndex, link: linkedMoves } = action.pokemon.queryLinkMove(action.move);
+			const { linkIndex, linkedMoves } = action.pokemon.queryLinkMove(action.move);
 			if (linkIndex >= 0 && action.pokemon.getCanLinkMove(action.move)) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
-				let thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				let thisPriority = this.dex.moves.get(linkedActions[linkIndex].id).priority;
+				thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, thisPriority);
 				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
-				let thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, altMove.priority);
+				let thatPriority = this.dex.moves.get(altMove.id).priority;
+				thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, thatPriority);
 				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
-				priority = Math.min(thisPriority, thatPriority);
+				const priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
 					// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
@@ -57,6 +56,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					altMove.priority = priority;
 				}
 			} else {
+				// take priority from the base move, so abilities like Prankster only apply once
+				// (instead of compounding every time `getActionSpeed` is called)
+				let priority = this.dex.moves.get(move.id).priority;
 				priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
 				priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 				action.priority = priority + action.fractionalPriority;
@@ -722,8 +724,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		queryLinkMove(move, ignoreDisabled) {
 			// @ts-expect-error modded
 			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves!(ignoreDisabled);
-			if (!linkedMoves.length) return { index: -1, link: linkedMoves };
-			return { index: linkedMoves.findIndex(x => x.id === move.id), link: linkedMoves };
+			if (!linkedMoves.length) return { linkIndex: -1, linkedMoves };
+			return { linkIndex: linkedMoves.findIndex(x => x.id === move.id), linkedMoves };
 		},
 	},
 };
