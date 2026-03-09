@@ -40,6 +40,8 @@ export interface MoveAction {
 	originalTarget: Pokemon;
 	/** a move to use (move action only) */
 	moveid: ID;
+	/** the move's index in the pokemon's moveset */
+	moveSlot?: number;
 	/** a move to use (move action only) */
 	move: Move;
 	/** true if megaing or ultra bursting */
@@ -305,8 +307,10 @@ export class BattleQueue {
 			const resolvedChoices = this.resolveAction(choice);
 			this.list.push(...resolvedChoices);
 			for (const resolvedChoice of resolvedChoices) {
-				if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge') {
+				if (resolvedChoice && resolvedChoice.choice === 'move' &&
+					this.battle.gen === 1 && typeof resolvedChoice.moveSlot === 'number') {
 					resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
+					resolvedChoice.pokemon.side.lastSelectedMoveSlot = resolvedChoice.moveSlot;
 				}
 			}
 		}

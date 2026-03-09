@@ -692,6 +692,11 @@ export class Pokemon {
 		return null;
 	}
 
+	getMoveSlot(slotIndex: number) {
+		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return null;
+		return this.moveSlots[slotIndex];
+	}
+
 	getMoveHitData(move: ActiveMove) {
 		if (!move.moveHitData) move.moveHitData = {};
 		const slot = this.getSlot();
@@ -935,7 +940,12 @@ export class Pokemon {
 	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
-	getLockedMove(): ID | null {
+	getLockedMove(moveRequest?: boolean): ID | null {
+		if (moveRequest) {
+			if (this.battle.gen === 1 && (['frz', 'slp'].includes(this.status) || this.volatiles['partiallytrapped'])) {
+				return 'fight' as ID;
+			}
+		}
 		const lockedMove = this.battle.runEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
@@ -951,6 +961,12 @@ export class Pokemon {
 				return [{
 					move: 'Recharge',
 					id: 'recharge' as ID,
+				}];
+			}
+			if (lockedMove === 'fight') {
+				return [{
+					move: 'Fight',
+					id: 'fight' as ID,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
@@ -1064,7 +1080,7 @@ export class Pokemon {
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
+		let lockedMove = this.maybeLocked ? null : this.getLockedMove(true);
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
@@ -1608,7 +1624,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = isHidden ? 'hidden' : true;
-				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
+				moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 			}
 		}
 	}

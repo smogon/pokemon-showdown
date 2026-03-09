@@ -202,10 +202,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
-		onLockMove() {
-			// exact move doesn't matter, no move is ever actually used
-			return 'struggle';
-		},
 		onDisableMove(target) {
 			target.maybeLocked = true;
 		},

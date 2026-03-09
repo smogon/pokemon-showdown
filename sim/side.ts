@@ -32,6 +32,7 @@ export interface ChosenAction {
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
 	move?: ActiveMove; // the active move corresponding to moveid (move action only)
+	moveSlot?: number; // the move's index in the pokemon's moveset (null if chosen through move name)
 	target?: Pokemon; // the target of the action
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
@@ -179,8 +180,6 @@ export class Side {
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
 	totalFainted: number;
-	/** only used by Gen 1 Counter */
-	lastSelectedMove: ID = '';
 
 	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: { [id: string]: EffectState };
@@ -195,6 +194,13 @@ export class Side {
 	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
+	/**
+	 * The move and the slot are chosen during move selection
+	 * lastSelectedMove never resets
+	 * lastSelectedMoveSlot resets on every switch
+	 */
+	lastSelectedMove: ID = '';
+	lastSelectedMoveSlot = 0;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		const sideScripts = battle.dex.data.Scripts.side;
@@ -535,6 +541,7 @@ export class Side {
 		// If the move is not found, the action is invalid without requiring further inspection.
 
 		const request = pokemon.getMoveRequestData();
+		let moveSlot: number | undefined = undefined;
 		let moveid = '';
 		let targetType = '';
 		if (autoChoose) moveText = 1;
@@ -544,6 +551,7 @@ export class Side {
 			if (moveIndex < 0 || moveIndex >= request.moves.length || !request.moves[moveIndex]) {
 				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`);
 			}
+			moveSlot = moveIndex;
 			moveid = request.moves[moveIndex].id;
 			targetType = request.moves[moveIndex].target!;
 		} else {
@@ -553,8 +561,9 @@ export class Side {
 			if (moveid.startsWith('hiddenpower')) {
 				moveid = 'hiddenpower';
 			}
-			for (const move of request.moves) {
+			for (const [i, move] of request.moves.entries()) {
 				if (move.id !== moveid) continue;
+				moveSlot = i;
 				targetType = move.target || 'normal';
 				break;
 			}
@@ -562,6 +571,7 @@ export class Side {
 				for (const [i, moveRequest] of request.maxMoves.maxMoves.entries()) {
 					if (moveid === moveRequest.move) {
 						moveid = request.moves[i].id;
+						moveSlot = i;
 						targetType = moveRequest.target;
 						event = 'dynamax';
 						break;
@@ -573,6 +583,7 @@ export class Side {
 					if (!moveRequest) continue;
 					if (moveid === toID(moveRequest.move)) {
 						moveid = request.moves[i].id;
+						moveSlot = i;
 						targetType = moveRequest.target;
 						event = 'zmove';
 						break;
@@ -592,6 +603,7 @@ export class Side {
 				if (move.disabled) continue;
 				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
 				moveid = move.id;
+				moveSlot = i;
 				targetType = move.target!;
 				break;
 			}
@@ -637,7 +649,7 @@ export class Side {
 			}
 		}
 
-		const lockedMove = pokemon.getLockedMove();
+		const lockedMove = pokemon.getLockedMove(true);
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);
@@ -676,6 +688,11 @@ export class Side {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
 			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
+			}
+		} else if (this.battle.gen === 1) {
+			// In Gen 1, disabled moves are tracked by slot rather than by move ID
+			if (moves[moveSlot as number].disabled) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
 			}
 		} else if (!zMove) {
 			// Check for disabled moves
@@ -767,12 +784,16 @@ export class Side {
 			// Make this work properly
 			return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
 		}
+		if (moveSlot === undefined) {
+			throw new Error(`moveSlot should have been set by this point`);
+		}
 
 		this.choice.actions.push({
 			choice: 'move',
 			pokemon,
 			targetLoc,
 			moveid,
+			moveSlot,
 			mega: mega || ultra,
 			megax,
 			megay,

@@ -276,10 +276,8 @@ export class BattleActions {
 			}
 		}
 		pokemon.lastDamage = 0;
-		let lockedMove;
 		if (!externalMove) {
-			lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove();
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);
