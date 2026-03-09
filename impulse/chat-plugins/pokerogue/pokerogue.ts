@@ -97,7 +97,14 @@ function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
 	const src = ITEM_SPRITE_OVERRIDES[id] ??
 		`https://play.pokemonshowdown.com/sprites/itemicons/${id}.png`;
-	return `<img src="${src}" width="24" height="24" alt="${Utils.escapeHTML(itemId)} icon" style="image-rendering:pixelated" />`;
+	const letter = Utils.escapeHTML((itemId.charAt(0) || '?').toUpperCase());
+	// onerror: hide broken img and reveal the letter-fallback span
+	return `<img src="${src}" width="40" height="40" alt="" ` +
+		`style="image-rendering:pixelated;display:block;flex-shrink:0" ` +
+		`onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='flex'" />` +
+		`<span style="display:none;width:40px;height:40px;align-items:center;justify-content:center;` +
+		`font-size:17px;font-weight:bold;color:#c4a8ff;background:rgba(90,63,160,0.35);` +
+		`border-radius:7px;flex-shrink:0">${letter}</span>`;
 }
 
 // exp progress bar for a team member
@@ -390,18 +397,15 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 	// shop sub-view
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
-		buf += `<div class="pr-shop-header">`;
-		buf += `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`;
-		buf += `<h3 style="margin:0;font-size:15px;color:#c4a8ff;letter-spacing:0.5px">Item Shop</h3>`;
-		buf += `<span class="pr-coin-badge" style="font-size:13px;padding:4px 14px">${shopCoins} Coins</span>`;
+		// stats bar: Floor | Best | Total Coins
+		buf += `<div class="pr-shop-stats-bar">`;
+		buf += `<span>Floor <b>${state.floor}</b></span>`;
+		if (state.highestFloor) {
+			buf += `<span class="pr-shop-stats-sep">|</span><span>Best <b>${state.highestFloor}</b></span>`;
+		}
+		buf += `<span class="pr-shop-stats-sep">|</span>`;
+		buf += `<span class="pr-shop-coin-total">Total Coins <span class="pr-coin-badge">${shopCoins}</span></span>`;
 		buf += `</div>`;
-		buf += `<div class="pr-shop-toolbar">`;
-		buf += `<a href="/view-pokerogue" class="button pr-shop-back-btn">&#8592; Back</a>`;
-		buf += `<button name="send" value="/pokerogue refreshshop" class="button pr-shop-reroll-btn">`;
-		buf += `Reroll Shop <span style="font-size:10px;opacity:0.75">(5 coins)</span></button>`;
-		buf += `<button name="send" value="/pokerogue battle" class="button pr-shop-battle-btn">`;
-		buf += `Start Battle</button>`;
-		buf += `</div></div>`;
 
 		buf += `<div class="pr-shop-grid">`;
 		for (const itemId of (state.shopInventory ?? [])) {
@@ -425,14 +429,28 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 			// buy button
 			if (canAfford) {
 				buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn">`;
-				buf += `Buy &mdash; <b>${item.cost}</b> coins</button>`;
+				buf += `Buy: <b>${item.cost}</b> Coins</button>`;
 			} else {
 				buf += `<button class="button pr-shop-buy-btn pr-shop-buy-disabled" disabled>`;
-				buf += `${item.cost} coins <span style="font-size:9px">(need more)</span></button>`;
+				buf += `&#128274; Buy: ${item.cost} Coins</button>`;
 			}
 			buf += `</div>`;
 		}
-		buf += `</div></div>`;
+		buf += `</div>`;
+
+		// footer: reroll row then back+battle row
+		buf += `<div class="pr-shop-footer">`;
+		buf += `<div class="pr-shop-reroll-row">`;
+		buf += `<button name="send" value="/pokerogue refreshshop" class="button pr-shop-reroll-btn">`;
+		buf += `Reroll Shop <span class="pr-shop-reroll-cost">(5 coins)</span></button>`;
+		buf += `</div>`;
+		buf += `<div class="pr-shop-footer-nav">`;
+		buf += `<a href="/view-pokerogue" class="button pr-shop-back-btn">&#8592; Back</a>`;
+		buf += `<button name="send" value="/pokerogue battle" class="button pr-shop-battle-btn">Start Battle &#8594;</button>`;
+		buf += `</div>`;
+		buf += `</div>`;
+
+		buf += `</div>`;
 		return buf;
 	}
 
@@ -1679,6 +1697,7 @@ export const testables = {
 	getPokeballInfo,
 	getItemSprite,
 	getSpriteWithBall,
+	renderGamePopup,
 	ITEM_SPRITE_OVERRIDES,
 	PS_ITEMICONS_BASE,
 	POKESPRITE_BALL_BASE,
