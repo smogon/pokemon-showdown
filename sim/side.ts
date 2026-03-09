@@ -32,7 +32,7 @@ export interface ChosenAction {
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
 	move?: ActiveMove; // the active move corresponding to moveid (move action only)
-	moveSlot?: number; // the move's index in the pokemon's moveset (null if chosen through move name)
+	moveSlot?: number; // the move's index in the Pokémon's moveset (undefined if submitted through the "Fight" button)
 	target?: Pokemon; // the target of the action
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
