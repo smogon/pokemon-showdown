@@ -6698,7 +6698,7 @@
         "level": 78,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Wallbreaker",
                 "movepool": ["Encore", "Freeze-Dry", "Hydro Pump", "Icy Wind", "Protect"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Dragon", "Water"]

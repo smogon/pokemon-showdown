@@ -63,4 +63,28 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (pokemon.moveThisTurn) pokemon.removeVolatile('gem');
 		},
 	},
+	// Prior to Gen 9, using these moves as part of a link resulted in locking into an entire link.
+	// However, such behavior has since been deemed counter-intuitive.
+	// https://www.smogon.com/forums/threads/3776838
+	//
+	// Outrage/Thrash/Petal Dance should be consistent with Choice items.
+	lockedmove: {
+		inherit: true,
+		onStart(target, source, effect) {
+			this.effectState.trueDuration = this.random(2, 4);
+			this.effectState.move = effect.id;
+			this.queue.cancelMove(source);
+		},
+	},
+	// A general rule of thumb to keep in mind is that all effects of move 1
+	// will follow through before the next move activates. However, apparently,
+	// moves such as Skull Bash/Meteor Beam/etc never respected that prior to Gen 9.
+	//
+	// Ensure we lock into Skull Bash/Meteor Beam/etc.
+	twoturnmove: {
+		inherit: true,
+		onOverrideAction(pokemon, target, move) {
+			return this.effectState.move;
+		},
+	},
 };

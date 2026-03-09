@@ -242,15 +242,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const lastMove = pokemon.lastMove;
 				if (!lastMove || lastMove.id === 'struggle') return;
 
+				pokemon.disableMove(lastMove.id);
 				// @ts-expect-error
-				if (pokemon.hasLinkedMove(lastMove)) {
-				// @ts-expect-error
-					for (const move of pokemon.getLinkedMoves()) {
-						pokemon.disableMove(move.id);
-					}
-				} else {
-					pokemon.disableMove(lastMove.id);
-				}
+				const { index: linkIndex, link: linkedMoves } = pokemon.queryLinkMove(lastMove);
+				if (linkIndex >= 0) pokemon.disableMove(linkedMoves[1 - linkIndex].id);
 			},
 		},
 	},
