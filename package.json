@@ -5,13 +5,13 @@
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
   "dependencies": {
+    "autolinker": "^4.1.5",
     "esbuild": "^0.25.0",
+    "mongodb": "^6.20.0",
     "mysql2": "^3.14.2",
     "preact": "^10.5.15",
     "preact-render-to-string": "^6.5.13",
     "sockjs": "^0.3.21",
-    "mongodb": "^6.20.0",
-    "autolinker": "^4.1.5",
     "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
@@ -68,6 +68,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
