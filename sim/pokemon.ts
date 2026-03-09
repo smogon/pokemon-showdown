@@ -956,12 +956,6 @@ export class Pokemon {
 					id: 'recharge' as ID,
 				}];
 			}
-			if (lockedMove === 'fight') {
-				return [{
-					move: 'Fight',
-					id: 'fight' as ID,
-				}];
-			}
 			for (const moveSlot of this.moveSlots) {
 				if (moveSlot.id !== lockedMove) continue;
 				return [{
