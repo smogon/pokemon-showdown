@@ -3652,6 +3652,7 @@ width: 200px;
 	.pr-shop-item-icon {
 		width: 44px;
 		height: 44px;
+		padding: 2px;
 	}
 
 	.pr-shop-toolbar {
