@@ -40,10 +40,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			const { linkIndex, linkedMoves } = action.pokemon.queryLinkMove(action.move);
 			if (linkIndex >= 0 && action.pokemon.getCanLinkMove(action.move)) {
 				const linkedActions = action.linked || linkedMoves;
+				const originalMove = linkedActions[linkIndex];
 				const altMove = linkedActions[1 - linkIndex];
-				let thisPriority = this.dex.moves.get(linkedActions[linkIndex].id).priority;
-				thisPriority = this.singleEvent('ModifyPriority', linkedActions[linkIndex], null, action.pokemon, null, null, thisPriority);
-				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
+				let thisPriority = this.dex.moves.get(originalMove.id).priority;
+				thisPriority = this.singleEvent('ModifyPriority', originalMove, null, action.pokemon, null, null, thisPriority);
+				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, originalMove, thisPriority);
 				let thatPriority = this.dex.moves.get(altMove.id).priority;
 				thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, thatPriority);
 				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
@@ -52,7 +53,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.gen > 5) {
 					// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
 					// This also applies to Psychic Terrain.
-					linkedActions[linkIndex].priority = priority;
+					originalMove.priority = priority;
 					altMove.priority = priority;
 				}
 			} else {
