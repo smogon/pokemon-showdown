@@ -92,13 +92,13 @@ export interface PokemonSwitchRequestData {
 	terastallized?: string;
 }
 export interface MoveRequestData {
-	move: string,
-	id: ID,
-	pp?: number,
-	maxpp?: number,
-	target?: string,
-	disabled?: string | boolean,
-	disabledSource?: string,
+	move: string;
+	id: ID;
+	pp?: number;
+	maxpp?: number;
+	target?: string;
+	disabled?: string | boolean;
+	disabledSource?: string;
 };
 
 export interface PokemonMoveRequestData {
