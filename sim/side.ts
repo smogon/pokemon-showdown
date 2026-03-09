@@ -860,6 +860,51 @@ export class Side {
 		return update(req) ?? true;
 	}
 
+	findSwitchTargetByName(slotText: string) {
+		// The official PS client sends switch targets as base-one numbers.
+		// However, we also support raw commands with the Pokémon name.
+		// This is meant for users on assistive devices, as well as a
+		// convenient CLI for developers.
+
+		const targetLowerCase = slotText.toLowerCase();
+		const targetId = toID(targetLowerCase);
+
+		for (let step = 0; step < 10; step++) {
+			// Half of our 10 passes are complementary, ensuring nice error handling
+			// on attempts to switch to an active Pokémon.
+			const isErrorPass = step >= 5;
+			for (let slot = 0; slot < this.pokemon.length; slot++) {
+				const isErrorTarget = (
+					(slot < this.active.length && !this.slotConditions[slot]['revivalblessing']) ||
+					this.choice.switchIns.has(slot)
+				);
+				if (isErrorPass !== isErrorTarget) continue;
+				const pokemon = this.pokemon[slot];
+				switch (step % 5) {
+				case 0:
+					if (pokemon.name.toLowerCase() === targetLowerCase) return slot;
+					break;
+				case 1:
+					if ((pokemon.transformed ? pokemon.matchSetSpecies : pokemon.species.id) === targetId) return slot;
+					break;
+				case 2:
+					if ((pokemon.transformed ? pokemon.matchSetBaseSpecies : pokemon.baseSpecies.id) === targetId) return slot;
+					break;
+				case 3:
+					// Ensure preferred cosmetic form is always supported even after Mega-Evolution.
+					if (!pokemon.transformed && pokemon.matchSetSpecies === targetId) return slot;
+					break;
+				case 4:
+					// Ensure base forme is always supported even after Mega-Evolution.
+					if (!pokemon.transformed && pokemon.matchSetBaseSpecies === targetId) return slot;
+					break;
+				}
+			}
+		}
+
+		return -1;
+	}
+
 	chooseSwitch(slotText?: string) {
 		if (this.requestState !== 'move' && this.requestState !== 'switch') {
 			return this.emitChoiceError(`Can't switch: You need a ${this.requestState} response`);
@@ -872,7 +917,7 @@ export class Side {
 			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
 		}
 		const pokemon = this.active[index];
-		let slot;
+		let slot = -1;
 		if (!slotText) {
 			if (this.requestState !== 'switch') {
 				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
@@ -886,17 +931,11 @@ export class Side {
 				while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 			}
 		} else {
-			slot = parseInt(slotText) - 1;
+			slot = Utils.parseExactInt(slotText) - 1;
 		}
-		if (isNaN(slot) || slot < 0) {
+		if (Number.isNaN(slot) /* only from parseExactInt path */ || slot < 0) {
 			// maybe it's a name/species id!
-			slot = -1;
-			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id) {
-					slot = i;
-					break;
-				}
-			}
+			slot = this.findSwitchTargetByName(slotText!);
 			if (slot < 0) {
 				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
 			}

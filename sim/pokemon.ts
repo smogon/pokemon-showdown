@@ -512,6 +512,14 @@ export class Pokemon {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
+	get matchSetSpecies(): ID {
+		return this.species.name === this.set.species ? this.species.id : toID(this.set.species);
+	}
+
+	get matchSetBaseSpecies(): ID {
+		return toID(this.battle.dex.species.get(this.set.species).baseSpecies);
+	}
+
 	getSlot(): PokemonSlot {
 		const positionOffset = Math.floor(this.side.n / 2) * this.side.active.length;
 		const positionLetter = 'abcdef'.charAt(this.position + positionOffset);
