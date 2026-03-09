@@ -1009,8 +1009,7 @@ export class Battle {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
 				// unique field position in a pre-sorted-by-speed array
-				const fieldPositionValue = pokemon.side.n * this.sides.length + pokemon.position;
-				handler.speed -= this.speedOrder.indexOf(fieldPositionValue) / (this.activePerHalf * 2);
+				handler.speed -= this.speedOrder.indexOf(pokemon.getFieldPositionValue()) / (this.activePerHalf * 2);
 			}
 		}
 		return handler;
@@ -1313,9 +1312,9 @@ export class Battle {
 		if (!sourceCanBeSet) return sourceCanBeSet;
 
 		if (this.gen <= 4 || source.isAlly(target)) {
-			this.add('-activate', source, 'Skill Swap');
+			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
 		} else {
-			this.add('-activate', source, 'Skill Swap', target, `[ability] ${targetAbility.name}`, `[ability2] ${sourceAbility.name}`);
+			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
 		this.singleEvent('End', sourceAbility, source.abilityState, source);
 		this.singleEvent('End', targetAbility, target.abilityState, target);

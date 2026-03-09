@@ -1,5 +1,20 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
+	init() {
+		// Since twoturnmove isn't currently implemented using linked volatiles,
+		// patch related moves so that 'twoturnmove' and e.g. 'skullbash' end simultaneously.
+		const removeTwoTurnMove = function (target: Pokemon) {
+			// Cannot use target.removeVolatile, since it would cause stack overflow.
+			delete target.volatiles['twoturnmove'];
+		};
+		for (const id in this.data.Moves) {
+			if (this.data.Moves[id].flags['charge'] && id !== 'skydrop') {
+				this.modData("Moves", id).condition ||= {};
+				if ('onEnd' in this.modData("Moves", id).condition) throw new Error(`onEnd needs manual override for move ${id}`);
+				this.modData("Moves", id).condition.onEnd = removeTwoTurnMove;
+			}
+		}
+	},
 	getActionSpeed(action) {
 		if (action.choice === 'move') {
 			let move = action.move;
@@ -24,18 +39,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
-			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 			// Linked mod
-			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
-			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax &&
-				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
+			const { index: linkIndex, link: linkedMoves } = action.pokemon.queryLinkMove(action.move);
+			if (linkIndex >= 0 && action.pokemon.getCanLinkMove(action.move)) {
 				const linkedActions = action.linked || linkedMoves;
 				const altMove = linkedActions[1 - linkIndex];
-				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
-				const thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, altMove.priority);
+				let thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
+				let thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, altMove.priority);
+				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
 				priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
@@ -45,6 +57,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					altMove.priority = priority;
 				}
 			} else {
+				priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+				priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 				action.priority = priority + action.fractionalPriority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 				if (this.gen > 5) action.move.priority = priority;
@@ -126,12 +140,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
 			break;
+		case 'megaEvoX':
+			this.actions.runMegaEvoX?.(action.pokemon);
+			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY?.(action.pokemon);
+			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
-		case 'beforeTurnMove': {
+		case 'terastallize':
+			this.actions.terastallize(action.pokemon);
+			break;
+		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
@@ -140,7 +163,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
-		}
+		case 'priorityChargeMove':
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('priority charge callback: ' + action.move.id);
+			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
+			action.move.priorityChargeCallback.call(this, action.pokemon);
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
@@ -176,6 +205,24 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			break;
+		case 'revivalblessing':
+			action.pokemon.side.pokemonLeft++;
+			if (action.target.position < action.pokemon.side.active.length) {
+				this.queue.addChoice({
+					choice: 'instaswitch',
+					pokemon: action.target,
+					target: action.target,
+				});
+			}
+			action.target.fainted = false;
+			action.target.faintQueued = false;
+			action.target.subFainted = false;
+			action.target.status = '';
+			action.target.hp = 1; // Needed so hp functions works
+			action.target.sethp(action.target.maxhp / 2);
+			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
+			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
 			break;
@@ -194,7 +241,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
-			this.add('upkeep');
+			if (!this.ended) this.add('upkeep');
 			break;
 		}
 
@@ -221,7 +268,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (action.choice === 'megaEvo' && this.gen === 7) {
+		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.list.entries()) {
@@ -237,7 +284,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -259,14 +306,22 @@ export const Scripts: ModdedBattleScriptsData = {
 		);
 
 		for (let i = 0; i < this.sides.length; i++) {
+			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
+					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing']) {
+						reviveSwitch = true;
+						continue;
+					}
 					pokemon.switchFlag = false;
 				}
-				switches[i] = false;
+				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (
+						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
+						!pokemon.skipBeforeSwitchOutEventFlag
+					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -289,7 +344,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen < 5) this.eachEvent('Update');
 
 		const nextAction = this.queue.peek();
-		if (this.gen >= 8 && nextAction?.choice === 'move' && nextAction?.pokemon !== action.pokemon) {
+		if (this.gen >= 8 &&
+			(nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
@@ -397,7 +453,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Used exclusively for a hint later
-			if (move.flags['cantusetwice'] && pokemon.m.lastMoveAbsolute?.id === move.id) {
+			if (move.flags['cantusetwice'] && pokemon.lastMove?.id === move.id) {
 				pokemon.addVolatile(move.id);
 			}
 
@@ -576,7 +632,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 					if (
 						linkedMoves.length &&
-						!(action.pokemon.getItem().isChoice || action.pokemon.hasAbility('gorillatactics')) &&
+						!action.pokemon.getWillLockMove!() &&
+						!action.pokemon.getIsMoveLocked!() &&
 						!action.zmove && !action.maxMove
 					) {
 						const decisionMove = this.battle.toID(action.move);
@@ -626,69 +683,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	pokemon: {
-		clearVolatile(includeSwitchFlags = true) {
-			this.boosts = {
-				atk: 0,
-				def: 0,
-				spa: 0,
-				spd: 0,
-				spe: 0,
-				accuracy: 0,
-				evasion: 0,
-			};
-
-			if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
-				const moveslot = this.baseMoves.indexOf('mimic' as ID);
-				const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
-				this.moveSlots = this.baseMoveSlots.slice();
-				this.moveSlots[moveslot].pp = mimicPP;
-			} else {
-				this.moveSlots = this.baseMoveSlots.slice();
-			}
-
-			this.transformed = false;
-			this.ability = this.baseAbility;
-			this.hpType = this.baseHpType;
-			this.hpPower = this.baseHpPower;
-			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
-			for (const i in this.volatiles) {
-				if (this.volatiles[i].linkedStatus) {
-					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
-				}
-			}
-			if (this.species.name === 'Eternatus-Eternamax' && this.volatiles['dynamax']) {
-				this.volatiles = { dynamax: this.volatiles['dynamax'] };
-			} else {
-				this.volatiles = {};
-			}
-			if (includeSwitchFlags) {
-				this.switchFlag = false;
-				this.forceSwitchFlag = false;
-			}
-
-			this.m.lastMoveAbsolute = null;
-			this.lastMove = null;
-			if (this.battle.gen === 2) this.lastMoveEncore = null;
-			this.lastMoveUsed = null;
-			this.moveThisTurn = '';
-			this.moveLastTurnResult = undefined;
-			this.moveThisTurnResult = undefined;
-
-			this.lastDamage = 0;
-			this.attackedBy = [];
-			this.hurtThisTurn = null;
-			this.newlySwitched = true;
-			this.beingCalledBack = false;
-
-			this.volatileStaleness = undefined;
-
-			delete this.abilityState.started;
-			delete this.itemState.started;
-
-			this.setSpecies(this.baseSpecies);
-		},
 		moveUsed(move, targetLoc) {
-			if (!this.moveThisTurn) this.m.lastMoveAbsolute = move;
 			this.lastMove = move;
 			this.moveThisTurn = move.id;
 			this.lastMoveTargetLoc = targetLoc;
@@ -708,9 +703,27 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		hasLinkedMove(move) {
 			// @ts-expect-error modded
-			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves(true);
+			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves!(true);
 			if (!linkedMoves.length) return false;
 			return linkedMoves.some(x => x.id === move.id);
+		},
+		getIsMoveLocked() {
+			// Detects active Outrage.
+			return !!this.volatiles['choicelock'] || !!this.volatiles['lockedmove'];
+		},
+		getWillLockMove() {
+			// Ignores Outrage, etc, since they can miss.
+			return this.hasItem(['choiceband', 'choicescarf', 'choicespecs']) || this.hasAbility('gorillatactics');
+		},
+		getCanLinkMove(move) {
+			// @ts-expect-error modded
+			return !move.isZ && !move.isMax && !this.getWillLockMove() && !this.getIsMoveLocked();
+		},
+		queryLinkMove(move, ignoreDisabled) {
+			// @ts-expect-error modded
+			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves!(ignoreDisabled);
+			if (!linkedMoves.length) return { index: -1, link: linkedMoves };
+			return { index: linkedMoves.findIndex(x => x.id === move.id), link: linkedMoves };
 		},
 	},
 };
