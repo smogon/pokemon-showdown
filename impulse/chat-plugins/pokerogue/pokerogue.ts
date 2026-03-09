@@ -404,8 +404,7 @@ function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'):
 			buf += `<span class="pr-shop-stats-sep">|</span><span>Best <b>${state.highestFloor}</b></span>`;
 		}
 		buf += `<span class="pr-shop-stats-sep">|</span>`;
-		buf += `<span>Total Coins</span>`;
-		buf += `<span class="pr-coin-badge pr-shop-coin-total">${shopCoins}</span>`;
+		buf += `<span class="pr-shop-coin-total">Total Coins <span class="pr-coin-badge">${shopCoins}</span></span>`;
 		buf += `</div>`;
 
 		buf += `<div class="pr-shop-grid">`;
