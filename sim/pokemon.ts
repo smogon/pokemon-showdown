@@ -693,6 +693,7 @@ export class Pokemon {
 	}
 
 	getMoveSlot(slotIndex: number) {
+		// used by Gen 1
 		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return null;
 		return this.moveSlots[slotIndex];
 	}
