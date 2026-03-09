@@ -1434,13 +1434,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'NC 1997 Sleep Clause: Putting a second foe to sleep forfeits the match');
 		},
-		onSetStatus(status, target, source) {
-			if (!source || source.isAlly(target)) return;
+		onAfterSetStatusPriority: 999,
+		onAfterSetStatus(status, target, source) {
+			if (source?.isAlly(target)) {
+				return;
+			}
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
 						this.add('-message', 'Sleep Clause activated. The match is a forfeit.');
-						this.lose(source.side);
+						this.lose((source || target.side.foe).side);
 						return false;
 					}
 				}
