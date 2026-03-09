@@ -26,10 +26,6 @@ tools/modlog/converter.js
 tools/modlog/**/*.js
 tools/set-import/*.js
 
-# Playwright artifacts
-/test-results/
-/playwright-report/
-
 # visual studio live share
 .vs
 
