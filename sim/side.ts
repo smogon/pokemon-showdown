@@ -691,7 +691,7 @@ export class Side {
 			}
 		} else if (this.battle.gen === 1) {
 			// In Gen 1, disabled moves are tracked by slot rather than by move ID
-			if (moves[moveSlot as number].disabled) {
+			if (moves[moveSlot!].disabled) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
 			}
 		} else if (!zMove) {
