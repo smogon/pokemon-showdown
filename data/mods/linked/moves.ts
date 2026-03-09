@@ -244,7 +244,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 				pokemon.disableMove(lastMove.id);
 				// @ts-expect-error
-				const { index: linkIndex, link: linkedMoves } = pokemon.queryLinkMove(lastMove);
+				const { linkIndex, linkedMoves } = pokemon.queryLinkMove(lastMove);
 				if (linkIndex >= 0) pokemon.disableMove(linkedMoves[1 - linkIndex].id);
 			},
 		},
