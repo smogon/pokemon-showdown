@@ -152,7 +152,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
 				move = this.battle.dex.getActiveMove('hyperbeam');
 				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
-					`If the target would have recharged, it will automatically use Hyper Beam instead.`);
+					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
 			}
 
 			if (target?.subFainted) target.subFainted = null;
