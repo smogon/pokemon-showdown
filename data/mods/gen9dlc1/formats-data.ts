@@ -5611,19 +5611,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 		natDexTier: "OU",
 	},
-	brutebonnet: {
-		tier: "NU",
-		doublesTier: "DUU",
-		natDexTier: "RU",
-	},
-	sandyshocks: {
-		tier: "UU",
-		doublesTier: "(DUU)",
-		natDexTier: "RU",
-	},
 	screamtail: {
 		tier: "NU",
 		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	brutebonnet: {
+		tier: "NU",
+		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
 	fluttermane: {
@@ -5636,10 +5631,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	roaringmoon: {
-		tier: "Uber",
-		doublesTier: "DOU",
-		natDexTier: "Uber",
+	sandyshocks: {
+		tier: "UU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
 	},
 	irontreads: {
 		tier: "UU",
@@ -5670,6 +5665,53 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
+	},
+	frigibax: {
+		tier: "LC",
+	},
+	arctibax: {
+		tier: "NFE",
+	},
+	baxcalibur: {
+		tier: "Uber",
+		doublesTier: "DUU",
+		natDexTier: "Uber",
+	},
+	gimmighoul: {
+		tier: "LC",
+	},
+	gimmighoulroaming: {
+		tier: "LC",
+	},
+	gholdengo: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "Uber",
+	},
+	wochien: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	chienpao: {
+		tier: "Uber",
+		doublesTier: "DOU",
+		natDexTier: "Uber",
+	},
+	tinglu: {
+		tier: "OU",
+		doublesTier: "(DUU)",
+		natDexTier: "UU",
+	},
+	chiyu: {
+		tier: "Uber",
+		doublesTier: "DOU",
+		natDexTier: "Uber",
+	},
+	roaringmoon: {
+		tier: "Uber",
+		doublesTier: "DOU",
+		natDexTier: "Uber",
 	},
 	ironvaliant: {
 		tier: "OU",
@@ -5771,5 +5813,4 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-
 };
