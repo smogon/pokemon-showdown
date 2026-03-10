@@ -40,8 +40,6 @@ export interface MoveAction {
 	originalTarget: Pokemon;
 	/** a move to use (move action only) */
 	moveid: ID;
-	/** the move's index in the pokemon's moveset */
-	moveSlot?: number;
 	/** a move to use (move action only) */
 	move: Move;
 	/** true if megaing or ultra bursting */
