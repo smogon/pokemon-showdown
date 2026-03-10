@@ -450,7 +450,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
+                "movepool": ["explosion", "icebeam", "spikes", "surf"]
             },
             {
                 "role": "Generalist",
@@ -1360,11 +1360,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },
