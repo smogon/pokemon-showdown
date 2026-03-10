@@ -1,5 +1,20 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
+	init() {
+		// Since twoturnmove isn't currently implemented using linked volatiles,
+		// patch related moves so that 'twoturnmove' and e.g. 'skullbash' end simultaneously.
+		const removeTwoTurnMove = function (target: Pokemon) {
+			// Cannot use target.removeVolatile, since it would cause stack overflow.
+			delete target.volatiles['twoturnmove'];
+		};
+		for (const id in this.data.Moves) {
+			if (this.data.Moves[id].flags['charge'] && id !== 'skydrop') {
+				this.modData("Moves", id).condition ||= {};
+				if ('onEnd' in this.modData("Moves", id).condition) throw new Error(`onEnd needs manual override for move ${id}`);
+				this.modData("Moves", id).condition.onEnd = removeTwoTurnMove;
+			}
+		}
+	},
 	getActionSpeed(action) {
 		if (action.choice === 'move') {
 			let move = action.move;
@@ -21,30 +36,30 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			// take priority from the base move, so abilities like Prankster only apply once
-			// (instead of compounding every time `getActionSpeed` is called)
-			let priority = this.dex.moves.get(move.id).priority;
 			// Linked mod
-			const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
-			let linkIndex = -1;
-			if (linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
-				!action.pokemon.hasAbility('gorillatactics') && !move.isZ && !move.isMax &&
-				(linkIndex = linkedMoves.findIndex(x => x.id === this.toID(action.move))) >= 0) {
+			const { linkIndex, linkedMoves } = action.pokemon.queryLinkMove(action.move);
+			if (linkIndex >= 0 && action.pokemon.getCanLinkMove(action.move)) {
 				const linkedActions = action.linked || linkedMoves;
+				const originalMove = linkedActions[linkIndex];
 				const altMove = linkedActions[1 - linkIndex];
-				let thisPriority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], thisPriority);
-				let thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, altMove.priority);
+				let thisPriority = this.dex.moves.get(originalMove.id).priority;
+				thisPriority = this.singleEvent('ModifyPriority', originalMove, null, action.pokemon, null, null, thisPriority);
+				thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, originalMove, thisPriority);
+				let thatPriority = this.dex.moves.get(altMove.id).priority;
+				thatPriority = this.singleEvent('ModifyPriority', altMove, null, action.pokemon, null, null, thatPriority);
 				thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, thatPriority);
-				priority = Math.min(thisPriority, thatPriority);
+				const priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
 					// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
 					// This also applies to Psychic Terrain.
-					linkedActions[linkIndex].priority = priority;
+					originalMove.priority = priority;
 					altMove.priority = priority;
 				}
 			} else {
+				// take priority from the base move, so abilities like Prankster only apply once
+				// (instead of compounding every time `getActionSpeed` is called)
+				let priority = this.dex.moves.get(move.id).priority;
 				priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
 				priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 				action.priority = priority + action.fractionalPriority;
@@ -619,8 +634,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [ActiveMove, ActiveMove] = action.pokemon.getLinkedMoves();
 					if (
-						linkedMoves.length && !action.pokemon.hasItem(['choiceband', 'choicescarf', 'choicespecs']) &&
-						!action.pokemon.hasAbility('gorillatactics') && !action.zmove && !action.maxMove
+						linkedMoves.length &&
+						!action.pokemon.getWillLockMove!() &&
+						!action.pokemon.getIsMoveLocked!() &&
+						!action.zmove && !action.maxMove
 					) {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.some(x => x.id === decisionMove)) {
@@ -689,9 +706,27 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		hasLinkedMove(move) {
 			// @ts-expect-error modded
-			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves(true);
+			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves!(true);
 			if (!linkedMoves.length) return false;
 			return linkedMoves.some(x => x.id === move.id);
+		},
+		getIsMoveLocked() {
+			// Detects active Outrage.
+			return !!this.volatiles['choicelock'] || !!this.volatiles['lockedmove'];
+		},
+		getWillLockMove() {
+			// Ignores Outrage, etc, since they can miss.
+			return this.hasItem(['choiceband', 'choicescarf', 'choicespecs']) || this.hasAbility('gorillatactics');
+		},
+		getCanLinkMove(move) {
+			// @ts-expect-error modded
+			return !move.isZ && !move.isMax && !this.getWillLockMove() && !this.getIsMoveLocked();
+		},
+		queryLinkMove(move, ignoreDisabled) {
+			// @ts-expect-error modded
+			const linkedMoves: [ActiveMove, ActiveMove] = this.getLinkedMoves!(ignoreDisabled);
+			if (!linkedMoves.length) return { linkIndex: -1, linkedMoves };
+			return { linkIndex: linkedMoves.findIndex(x => x.id === move.id), linkedMoves };
 		},
 	},
 };
