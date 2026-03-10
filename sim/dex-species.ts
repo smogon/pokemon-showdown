@@ -287,6 +287,21 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	* @pokebedrock
 	*/
 	readonly evoCosmeticForme?: string;
+	/**
+	 * Party forms required for evolution. At least one pokemon with these forms must be present.
+	 * @pokebedrock
+	 */
+	readonly evoPartyForms?: string[];
+	/**
+	 * Nickname required for evolution.
+	 * @pokebedrock
+	 */
+	readonly evoNickname?: string;
+	/**
+	 * Weather condition required for evolution.
+	 * @pokebedrock
+	 */
+	readonly evoWeather?: 'rain' | 'thunder' | 'clear';
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
