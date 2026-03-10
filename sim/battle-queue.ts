@@ -322,8 +322,8 @@ export class BattleQueue {
 				// locked moves (including mustrecharge) dont set lastSelectedMove
 				if (!move) {
 					/**
-					 * if partially trapped put 'cantmove' in lastSelectedMove
-					 * if frozen or asleep will try to reuse the last move,
+					 * if partially trapped: put 'cantmove' in lastSelectedMove
+					 * if frozen or asleep: try to reuse the last move,
 					 *   which can fail if the Pokemon thaws and the move doesn't match lastSelectedMoveSlot
 					 *
 					 * if this happens in the first move selection of a player, put '00' as a placeholder
