@@ -232,6 +232,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const [slotIndex, moveSlot] = this.sample(Array.from(pokemon.moveSlots.entries()).filter(([i, ms]) => ms.pp > 0));
 				this.debug(`Disable: disabling move ${moveSlot.move} in slot ${slotIndex}`);
 				this.add('-start', pokemon, 'Disable', moveSlot.move);
+				this.effectState.move = moveSlot.id;
 				this.effectState.slotIndex = slotIndex;
 				// 1-8 turns (which will in effect translate to 0-7 missed turns for the target)
 				this.effectState.time = this.random(1, 9);
@@ -247,13 +248,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return;
 				}
 				if (pokemon.volatiles['bide']) move = this.dex.getActiveMove('bide');
-				if (pokemon.side.lastSelectedMoveSlot === pokemon.volatiles['disable'].slotIndex) {
+				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
 					pokemon.removeVolatile('twoturnmove');
 					return false;
 				}
 			},
 			onDisableMove(pokemon) {
+				// disable the move slot
 				if (pokemon.moveSlots.length > this.effectState.slotIndex) {
 					pokemon.moveSlots[this.effectState.slotIndex].disabled = true;
 					pokemon.moveSlots[this.effectState.slotIndex].disabledSource = this.effect.name;

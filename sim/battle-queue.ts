@@ -304,15 +304,37 @@ export class BattleQueue {
 	addChoice(choices: ActionChoice | ActionChoice[]) {
 		if (!Array.isArray(choices)) choices = [choices];
 		for (const choice of choices) {
-			const resolvedChoices = this.resolveAction(choice);
-			this.list.push(...resolvedChoices);
-			for (const resolvedChoice of resolvedChoices) {
-				if (resolvedChoice && resolvedChoice.choice === 'move' &&
-					this.battle.gen === 1 && typeof resolvedChoice.moveSlot === 'number') {
-					resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
-					resolvedChoice.pokemon.side.lastSelectedMoveSlot = resolvedChoice.moveSlot;
+			if (this.battle.gen === 1 && choice.choice === 'move') {
+				const pokemon: Pokemon = choice.pokemon;
+				const move: ID | undefined = choice.moveid;
+				if (pokemon.volatiles['partiallytrapped']) {
+					// 'cantmove' is what is set in the cartridge
+					pokemon.side.lastSelectedMove = 'cantmove' as ID;
+				} else if (move === 'struggle') {
+					// saves Struggle
+					pokemon.side.lastSelectedMove = move;
+				} else if (typeof choice.moveSlot === 'number') {
+					if (!move) throw new Error(`Move slot specified without moveid in Gen 1 move choice`);
+					// not locked
+					pokemon.side.lastSelectedMove = move;
+					pokemon.side.lastSelectedMoveSlot = choice.moveSlot;
+				}
+				// locked moves (including mustrecharge) dont set lastSelectedMove
+				if (!move) {
+					/**
+					 * if partially trapped put 'cantmove' in lastSelectedMove
+					 * if frozen or asleep will try to reuse the last move,
+					 *   which can fail if the Pokemon thaws and the move doesn't match lastSelectedMoveSlot
+					 * 
+					 * if this happens in the first move selection of a player, put '00' as a placeholder
+					 */
+					choice.moveid = pokemon.side.lastSelectedMove || '00' as ID;
 				}
 			}
+		}
+		for (const choice of choices) {
+			const resolvedChoices = this.resolveAction(choice);
+			this.list.push(...resolvedChoices);
 		}
 	}
 

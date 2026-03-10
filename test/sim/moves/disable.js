@@ -100,9 +100,15 @@ describe('Disable', () => {
 			], [
 				{ species: 'Abra', moves: ['tackle', 'disable'] },
 			]]);
+			const disabled = battle.p1.active[0];
 			battle.makeChoices('move mimic', 'move disable');
+			assert.equal(disabled.moveSlots[0].id, 'tackle');
+			assert.equal(disabled.volatiles['disable'].slotIndex, 1);
+			assert.equal(disabled.volatiles['disable'].move, 'tackle');
 			assert.cantMove(() => battle.p1.choose('move 2'));
+			// can select the Tackle in the first slot, but the move will still fail
 			battle.makeChoices('move 1', 'move tackle');
+			assert.fullHP(battle.p2.active[0]);
 		});
 
 		it(`should keep the slot disabled even if the move is replaced by Transform`, () => {

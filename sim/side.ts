@@ -680,8 +680,8 @@ export class Side {
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
-				moveid: 'fight',
-			});
+				// don't send a move, handled in battle-queue.ts
+			} as ChosenAction);
 			return true;
 		} else if (!moves.length) {
 			// Override action and use Struggle if there are no enabled moves with PP
