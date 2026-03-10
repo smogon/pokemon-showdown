@@ -152,7 +152,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
 				move = this.battle.dex.getActiveMove('hyperbeam');
 				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
-					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
+					`If the target would have recharged, it will automatically use Hyper Beam instead.`);
 			}
 
 			if (target?.subFainted) target.subFainted = null;
@@ -180,13 +180,16 @@ export const Scripts: ModdedBattleScriptsData = {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
 					if (moveSlot && pokemon.deductPP(moveSlot.id, null, target) && moveSlot.pp < 0) {
 						moveSlot.pp += 64;
-						this.battle.hint("In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+						this.battle.hint("In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 					}
 				}
 
 				if (move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
 					this.battle.hint("Desync Clause Mod activated!");
-					this.battle.hint("In Gen 1, a Pokémon that thaws out might try to use a move without ever selecting one since it switched in.");
+					this.battle.hint(
+						"In Gen 1, a Pokémon that thaws out might try to use a move that doesn't match the move " +
+						"of the slot it last selected (switches reset to the first slot).",
+					);
 					this.battle.clearActiveMove(true);
 					return;
 				}

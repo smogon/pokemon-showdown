@@ -99,7 +99,7 @@ describe(`Hyper Beam [Gen 1]`, () => {
 		battle.makeChoices('move wrap', 'auto');
 		assert.false(battle.p2.active[0].volatiles['partiallytrapped']);
 		assert(battle.p2.active[0].volatiles['mustrecharge']);
-		assert(battle.log.includes("|-hint|In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP."));
+		assert(battle.log.includes("|-hint|In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP."));
 		assert.equal(battle.p2.active[0].moveSlots[0].pp, 63);
 	});
 
