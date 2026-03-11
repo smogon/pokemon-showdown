@@ -2433,16 +2433,18 @@ export class Battle {
 		move = this.dex.moves.get(move);
 
 		let tracksTarget = move.tracksTarget;
-		// Stalwart sets trackTarget in ModifyMove, but ModifyMove happens after getTarget, so
-		// we need to manually check for Stalwart here
-		if (pokemon.hasAbility(['stalwart', 'propellertail'])) tracksTarget = true;
+		if (pokemon.hasAbility(['stalwart', 'propellertail'])) tracksTarget = tracksTarget || 'any';
 		if (tracksTarget && originalTarget?.isActive) {
-			// smart-tracking move's original target is on the field: target it
-			return originalTarget;
-		}
-		if (move.tracksAllyTarget && originalTarget?.isAlly(pokemon) && originalTarget?.isActive) {
-			// ally-only tracking: follow ally through Ally Switch, but not foes
-			return originalTarget;
+			const isAlly = originalTarget.isAlly(pokemon);
+			const shouldTrack = tracksTarget === 'any' ||
+				(tracksTarget === 'ally' && isAlly) ||
+				(tracksTarget === 'foe' && !isAlly);
+			if (shouldTrack) {
+				// 'ally' and 'foe' need validTarget (for triples, the 2 at the side)
+				if (tracksTarget === 'any' || this.validTarget(originalTarget, pokemon, move.target)) {
+					return originalTarget;
+				}
+			}
 		}
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but

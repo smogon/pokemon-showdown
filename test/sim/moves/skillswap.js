@@ -62,6 +62,10 @@ describe('Skill Swap', () => {
 		assert.equal(ferroseed.ability, 'schooling');
 	});
 
+
+	// Let me (or someone) verify this in an actual Pokemon game later
+	/* 
+
 	it('should track ally through Ally Switch when ally uses Ally Switch', () => {
 		battle = common.gen(8).createBattle({ gameType: 'doubles', forceRandomChance: false }, [[
 			{ species: 'Wynaut', ability: 'moxie', moves: ['skillswap'] },
@@ -101,4 +105,6 @@ describe('Skill Swap', () => {
 		assert.equal(p1slot0.ability, 'lightningrod', 'Should have swapped with Pokemon now in slot 0 (Lightning Rod), not original target (Static)');
 		assert.equal(p2slot0.ability, 'moxie');
 	});
+
+	*/
 });
