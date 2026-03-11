@@ -62,9 +62,8 @@ describe('Skill Swap', () => {
 		assert.equal(ferroseed.ability, 'schooling');
 	});
 
-
 	// Let me (or someone) verify this in an actual Pokemon game later
-	/* 
+	/*
 
 	it('should track ally through Ally Switch when ally uses Ally Switch', () => {
 		battle = common.gen(8).createBattle({ gameType: 'doubles', forceRandomChance: false }, [[
