@@ -1,6 +1,6 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
-import { type MoonPhase } from '@minecraft/server';
+import { type MoonPhase, type WeatherType } from '@minecraft/server';
 
 interface SpeciesAbility {
 	0: string;
@@ -201,7 +201,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * to evolve into this Pokémon species.
 	 * @pokebedrock
 	 */
-	readonly evoPartySpecies?: string;
+	readonly evoPartySpecies?: string | string[];
 	/**
 	 * Pokémon species for which this one must be traded.
 	 * @pokebedrock
@@ -301,7 +301,17 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Weather condition required for evolution.
 	 * @pokebedrock
 	 */
-	readonly evoWeather?: 'rain' | 'thunder' | 'clear';
+	readonly evoWeather?: keyof typeof WeatherType;
+	/**
+	 * Minimum damage required for evolution. 
+	 * The evolving Pokémon species must take at least this much damage during the evolution trigger event in order to evolve into this Pokémon species.
+	 */
+	readonly evoMinDamage?: number;
+	/**
+	 * Minimum recoil damage required for evolution. 
+	 * The evolving Pokémon species must take at least this much recoil damage during the evolution trigger event in order to evolve into this Pokémon species.
+	 */
+	readonly evoMinRecoilDamage?: number;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
