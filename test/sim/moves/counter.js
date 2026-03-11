@@ -276,6 +276,31 @@ describe('Counter', () => {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
+	it(`[Gen 1 Stadium] should fail if opponent switches`, () => {
+		battle = common.mod('gen1stadium').createBattle([[
+			{ species: 'Chansey', moves: ['counter', 'splash'] },
+		], [
+			{ species: 'Snorlax', moves: ['bodyslam'] },
+			{ species: 'Tauros', moves: ['tackle'] },
+		]]);
+		battle.makeChoices('move splash', 'move bodyslam');
+		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move counter', 'switch 2');
+		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`[Gen 1 Stadium] should fail if opponent used a status move`, () => {
+		battle = common.mod('gen1stadium').createBattle([[
+			{ species: 'Chansey', moves: ['counter', 'splash'] },
+		], [
+			{ species: 'Snorlax', moves: ['bodyslam', 'rest'] },
+		]]);
+		battle.makeChoices('move splash', 'move bodyslam');
+		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move counter', 'move rest');
+		assert.fullHP(battle.p2.active[0]);
+	});
+
 	it(`[Gen 1] (High) Jump Kick recoil can be countered`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'Gengar', moves: ['counter'] },
