@@ -283,3 +283,41 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		assert(cloyster.volatiles['partiallytrapped']);
 	});
 });
+
+describe('Partial Trapping Moves [Gen 1 Stadium]', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it(`Wrap should not notify players when it ends after the trapper switches out`, () => {
+		battle = common.mod('gen1stadium').createBattle([
+			[{ species: 'Dragonite', moves: ['wrap'] }, { species: 'Snorlax', moves: ['splash'] }],
+			[{ species: 'Blissey', moves: ['splash'] }],
+		]);
+		battle.makeChoices('move wrap', 'move splash');
+		assert(battle.p2.active[0].volatiles['partiallytrapped'], `Wrap should have applied partiallytrapped`);
+		battle.makeChoices('switch 2', 'move splash');
+		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
+		assert(
+			!battle.log.some(line => line.includes('|-end') && line.includes('[partiallytrapped]') && !line.includes('[silent]')),
+			`partiallytrapped should end silently`
+		);
+	});
+
+	it(`Wrap should not notify players when it expires naturally`, () => {
+		battle = common.mod('gen1stadium').createBattle([
+			[{ species: 'Dragonite', moves: ['wrap'] }],
+			[{ species: 'Blissey', moves: ['splash'] }],
+		]);
+		battle.makeChoices('move wrap', 'move splash');
+		assert(battle.p2.active[0].volatiles['partiallytrapped'], `Wrap should have applied partiallytrapped`);
+		// run until partialtrappinglock expires at least once
+		for (let i = 0; i < 5 && battle.p1.active[0].hp > 0 && battle.p2.active[0].hp > 0; i++) {
+			battle.makeChoices();
+		}
+		assert(
+			!battle.log.some(line => line.includes('|-end') && line.includes('[partiallytrapped]') && !line.includes('[silent]')),
+			`partiallytrapped should end silently`
+		);
+	});
+});

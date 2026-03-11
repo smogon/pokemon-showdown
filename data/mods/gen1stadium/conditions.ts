@@ -119,7 +119,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 		onEnd(pokemon) {
-			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
+			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
 		},
 	},
 };
