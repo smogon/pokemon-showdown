@@ -113,7 +113,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onBeforeMove(pokemon) {
 			if (this.effectState.source && (!this.effectState.source.isActive || this.effectState.source.hp <= 0)) {
 				pokemon.removeVolatile('partiallytrapped');
-				return;
+				return false;
 			}
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;

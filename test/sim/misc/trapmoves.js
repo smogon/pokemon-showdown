@@ -283,3 +283,33 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		assert(cloyster.volatiles['partiallytrapped']);
 	});
 });
+
+describe('Partial Trapping Moves [Gen 1 Stadium]', () => {
+	const stadium = common.mod('gen1stadium');
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('the trapped pokemon cannot act the turn the wrapper switches out', () => {
+		battle = stadium.createBattle([
+			[{ species: 'Dragonite', moves: ['wrap'] }, { species: 'Exeggutor', moves: ['splash'] }],
+			[{ species: 'Cloyster', moves: ['surf'] }],
+		]);
+		battle.makeChoices('move wrap', 'move surf');
+		const cloysterHP = battle.p2.active[0].hp;
+		// p1 switches out the wrapper; p2 is trapped and should not act this turn
+		battle.makeChoices('switch 2', 'auto');
+		assert.equal(battle.p2.active[0].hp, cloysterHP, 'trapped pokemon should not have used a move');
+	});
+
+	it('the trapped pokemon is freed after the wrapper switches out', () => {
+		battle = stadium.createBattle([
+			[{ species: 'Dragonite', moves: ['wrap'] }, { species: 'Exeggutor', moves: ['splash'] }],
+			[{ species: 'Cloyster', moves: ['surf'] }],
+		]);
+		battle.makeChoices('move wrap', 'move surf');
+		battle.makeChoices('switch 2', 'auto');
+		// next turn, cloyster should be free (partiallytrapped volatile cleared)
+		assert(!battle.p2.active[0].volatiles['partiallytrapped'], 'partiallytrapped volatile should be cleared');
+	});
+});
