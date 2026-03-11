@@ -260,6 +260,11 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 * situations, rather than just targeting a slot. (Stalwart, Snipe Shot)
 	 */
 	tracksTarget?: boolean;
+	/**
+	 * Tracks the original target through Ally Switch when targeting an ally only.
+	 * Unlike tracksTarget, does not follow foes when the opponent Ally Switches. (Skill Swap)
+	 */
+	tracksAllyTarget?: boolean;
 	willCrit?: boolean;
 	callsMove?: boolean;
 

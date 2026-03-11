@@ -2440,6 +2440,10 @@ export class Battle {
 			// smart-tracking move's original target is on the field: target it
 			return originalTarget;
 		}
+		if (move.tracksAllyTarget && originalTarget?.isAlly(pokemon) && originalTarget?.isActive) {
+			// ally-only tracking: follow ally through Ally Switch, but not foes
+			return originalTarget;
+		}
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but
 		// Dragon Darts can target itself if Ally Switch is used afterwards

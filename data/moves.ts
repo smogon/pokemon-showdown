@@ -17209,6 +17209,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
+		tracksAllyTarget: true,
 		onHit(target, source, move) {
 			return this.skillSwap(source, target);
 		},
