@@ -515,7 +515,7 @@ export class Battle {
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
-					if (effect.displayTurnCount && handler.state.lastDisplay) {
+					if ('displayTurnCount' in effect && effect.displayTurnCount && handler.state.lastDisplay) {
 						this.add('-end', handler.effectHolder as Pokemon, handler.state.lastDisplay);
 					}
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
@@ -523,9 +523,9 @@ export class Battle {
 					if (this.ended) return;
 					continue;
 				}
-				if (effect.displayTurnCount) {
-					this.add('-end', handler.effectHolder as Pokemon, handler.state.lastDisplay!, '[silent]');
-					handler.state.lastDisplay = effect.id + handler.state.duration;
+				if ('displayTurnCount' in effect && effect.displayTurnCount && handler.state.lastDisplay) {
+					this.add('-end', handler.effectHolder as Pokemon, handler.state.lastDisplay, '[silent]');
+					handler.state.lastDisplay = `${effect.id}${handler.state.duration}`;
 					this.add('-start', handler.effectHolder as Pokemon, handler.state.lastDisplay, '[silent]');
 				}
 			}

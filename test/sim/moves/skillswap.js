@@ -61,5 +61,4 @@ describe('Skill Swap', () => {
 		assert.equal(wynaut.ability, 'moxie');
 		assert.equal(ferroseed.ability, 'schooling');
 	});
-
 });

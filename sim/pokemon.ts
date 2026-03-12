@@ -1993,7 +1993,7 @@ export class Pokemon {
 			return result;
 		}
 		if (status.displayTurnCount && this.volatiles[status.id].duration) {
-			this.volatiles[status.id].lastDisplay = status.id + this.volatiles[status.id].duration;
+			this.volatiles[status.id].lastDisplay = `${status.id}${this.volatiles[status.id].duration}`;
 			this.battle.add('-start', this, this.volatiles[status.id].lastDisplay, '[silent]');
 		}
 		if (linkedStatus && source) {
