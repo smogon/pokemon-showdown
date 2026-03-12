@@ -259,7 +259,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 * Tracks the original target through Ally Switch and other switch-out-and-back-in
 	 * situations, rather than just targeting a slot.
 	 * - 'any': follow target regardless of ally/foe (Stalwart, Snipe Shot)
-	 * - 'ally': only follow when targeting an ally (Skill Swap)
+	 * - 'ally': only follow when targeting an ally
 	 * - 'foe': only follow when targeting a foe
 	 */
 	tracksTarget?: 'any' | 'ally' | 'foe';

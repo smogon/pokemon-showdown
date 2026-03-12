@@ -38,6 +38,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 3,
+			displayTurnCount: true,
 			onStart(target) {
 				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
 				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
@@ -45,7 +46,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return false;
 				}
 				this.effectState.move = target.lastMove.id;
-				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
 					this.effectState.duration!++;
 				}
@@ -60,9 +60,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// Encore ends early if you run out of PP
 					target.removeVolatile('encore');
 				}
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
 				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {

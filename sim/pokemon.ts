@@ -1992,6 +1992,10 @@ export class Pokemon {
 			delete this.volatiles[status.id];
 			return result;
 		}
+		if (status.displayTurnCount && this.volatiles[status.id].duration) {
+			this.volatiles[status.id].lastDisplay = status.id + this.volatiles[status.id].duration;
+			this.battle.add('-start', this, this.volatiles[status.id].lastDisplay, '[silent]');
+		}
 		if (linkedStatus && source) {
 			if (!source.volatiles[linkedStatus.toString()]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
@@ -2016,8 +2020,12 @@ export class Pokemon {
 		if (!this.hp) return false;
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.volatiles[status.id]) return false;
-		const { linkedPokemon, linkedStatus } = this.volatiles[status.id];
-		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
+		const state = this.volatiles[status.id];
+		const { linkedPokemon, linkedStatus } = state;
+		if (status.displayTurnCount && state.lastDisplay) {
+			this.battle.add('-end', this, state.lastDisplay);
+		}
+		this.battle.singleEvent('End', status, state, this);
 		delete this.volatiles[status.id];
 		if (linkedPokemon) {
 			this.removeLinkedVolatiles(linkedStatus, linkedPokemon);

@@ -469,6 +469,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(4, 9);
 			},
+			displayTurnCount: true,
 			onStart(target, source) {
 				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
 				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
@@ -476,7 +477,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return false;
 				}
 				this.effectState.move = target.lastMove.id;
-				this.add('-start', target, 'Encore');
 			},
 			onOverrideAction(pokemon) {
 				return this.effectState.move;
@@ -489,9 +489,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
 				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
@@ -1764,14 +1761,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(3, 6);
 			},
-			onStart(target) {
-				this.add('-start', target, 'move: Taunt');
-			},
+			displayTurnCount: true,
 			onResidualOrder: 10,
 			onResidualSubOrder: 15,
-			onEnd(target) {
-				this.add('-end', target, 'move: Taunt');
-			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.dex.moves.get(moveSlot.id).category === 'Status') {

@@ -4905,6 +4905,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
+			displayTurnCount: true,
 			onStart(target) {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
@@ -4917,7 +4918,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return false;
 				}
 				this.effectState.move = move.id;
-				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
 					this.effectState.duration!++;
 				}
@@ -4932,9 +4932,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
 				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
@@ -17210,7 +17207,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
 		// tracksTarget: 'ally',
-		// Commented out for now;
+		// Commented out until I can find proof
 		onHit(target, source, move) {
 			return this.skillSwap(source, target);
 		},
@@ -19691,16 +19688,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'taunt',
 		condition: {
 			duration: 3,
+			displayTurnCount: true,
 			onStart(target) {
 				if (target.activeTurns && !this.queue.willMove(target)) {
 					this.effectState.duration!++;
 				}
-				this.add('-start', target, 'move: Taunt');
 			},
 			onResidualOrder: 15,
-			onEnd(target) {
-				this.add('-end', target, 'move: Taunt');
-			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.id);

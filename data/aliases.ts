@@ -1283,6 +1283,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	dv: "Dark Void",
 	dw: "Dual Wingbeat",
 	dwb: "Dual Wingbeat",
+	enc: "Encore",
 	edge: "Stone Edge",
 	eforce: "Expanding Force",
 	eq: "Earthquake",

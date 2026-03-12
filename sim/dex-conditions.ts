@@ -631,6 +631,7 @@ export class Condition extends BasicEffect implements
 	declare effectOrder?: number;
 
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
+	declare readonly displayTurnCount?: boolean;
 	declare readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 	declare readonly onRestart?: (

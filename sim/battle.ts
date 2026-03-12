@@ -515,10 +515,18 @@ export class Battle {
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
+					if (effect.displayTurnCount && handler.state.lastDisplay) {
+						this.add('-end', handler.effectHolder as Pokemon, handler.state.lastDisplay);
+					}
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
 					handler.end.call(...endCallArgs as [any, ...any[]]);
 					if (this.ended) return;
 					continue;
+				}
+				if (effect.displayTurnCount) {
+					this.add('-end', handler.effectHolder as Pokemon, handler.state.lastDisplay!, '[silent]');
+					handler.state.lastDisplay = effect.id + handler.state.duration;
+					this.add('-start', handler.effectHolder as Pokemon, handler.state.lastDisplay, '[silent]');
 				}
 			}
 
@@ -2433,6 +2441,7 @@ export class Battle {
 		move = this.dex.moves.get(move);
 
 		let tracksTarget = move.tracksTarget;
+		// Stalwart/Propeller Tail set tracksTarget in ModifyMove, but ModifyMove happens after getTarget
 		if (pokemon.hasAbility(['stalwart', 'propellertail'])) tracksTarget = tracksTarget || 'any';
 		if (tracksTarget && originalTarget?.isActive) {
 			const isAlly = originalTarget.isAlly(pokemon);
@@ -2440,7 +2449,7 @@ export class Battle {
 				(tracksTarget === 'ally' && isAlly) ||
 				(tracksTarget === 'foe' && !isAlly);
 			if (shouldTrack) {
-				// 'ally' and 'foe' need validTarget (for triples, the 2 at the side)
+				// 'ally' and 'foe' need validTarget (triples)
 				if (tracksTarget === 'any' || this.validTarget(originalTarget, pokemon, move.target)) {
 					return originalTarget;
 				}
