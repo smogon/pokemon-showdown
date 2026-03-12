@@ -17206,8 +17206,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
-		// tracksTarget: 'ally',
-		// Commented out until I can find proof
 		onHit(target, source, move) {
 			return this.skillSwap(source, target);
 		},
@@ -17771,7 +17769,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		critRatio: 2,
-		tracksTarget: 'any',
+		tracksTarget: true,
 		secondary: null,
 		target: "normal",
 		type: "Water",

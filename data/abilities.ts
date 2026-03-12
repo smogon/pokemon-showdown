@@ -3401,7 +3401,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
-			if (move.target !== 'scripted') move.tracksTarget = 'any';
+			move.tracksTarget = move.target !== 'scripted';
 		},
 		flags: {},
 		name: "Propeller Tail",
@@ -4408,7 +4408,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
-			if (move.target !== 'scripted') move.tracksTarget = 'any';
+			move.tracksTarget = move.target !== 'scripted';
 		},
 		flags: {},
 		name: "Stalwart",
