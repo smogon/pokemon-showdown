@@ -1992,7 +1992,7 @@ export class Pokemon {
 			delete this.volatiles[status.id];
 			return result;
 		}
-		if (status.displayTurnCount && this.volatiles[status.id].duration) {
+		if ('displayTurnCount' in status && status.displayTurnCount && this.volatiles[status.id].duration) {
 			this.volatiles[status.id].lastDisplay = `${status.id}${this.volatiles[status.id].duration}`;
 			this.battle.add('-start', this, this.volatiles[status.id].lastDisplay, '[silent]');
 		}
@@ -2022,7 +2022,7 @@ export class Pokemon {
 		if (!this.volatiles[status.id]) return false;
 		const state = this.volatiles[status.id];
 		const { linkedPokemon, linkedStatus } = state;
-		if (status.displayTurnCount && state.lastDisplay) {
+		if ('displayTurnCount' in status && status.displayTurnCount && state.lastDisplay) {
 			this.battle.add('-end', this, state.lastDisplay);
 		}
 		this.battle.singleEvent('End', status, state, this);
