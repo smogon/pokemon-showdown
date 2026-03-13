@@ -83,6 +83,8 @@ export interface PokemonSwitchRequestData {
 	pokeball: ID;
 	/** Current ability. Only sent in Gen 7+. */
 	ability?: ID;
+	/** Additional abilities currently shared to this Pokemon in Shared Power-style formats. */
+	sharedAbilities?: ID[];
 	/** @see https://dex.pokemonshowdown.com/abilities/commander */
 	commanding?: boolean;
 	/** @see https://dex.pokemonshowdown.com/moves/revivalblessing */
