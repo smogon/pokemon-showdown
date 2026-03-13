@@ -103,63 +103,8 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	};
 	private dbReady = false;
 	constructor(id: string, module: NodeJS.Module, options: SQLOptions) {
-		super(id, module, query => {
-			if (!this.dbReady) {
-				this.setupDatabase();
-			}
-			try {
-				switch (query.type) {
-				case 'load-extension': {
-					if (!this.database) return null;
-					this.loadExtensionFile(query.data);
-					return true;
-				}
-				case 'transaction': {
-					const transaction = this.state.transactions.get(query.name);
-					// !transaction covers db not existing, typically, but this is just to appease ts
-					if (!transaction || !this.database) {
-						return null;
-					}
-					const env: TransactionEnvironment = {
-						db: this.database,
-						statements: this.state.statements,
-					};
-					return transaction(query.data, env) || null;
-				}
-				case 'exec': {
-					if (!this.database) return { changes: 0 };
-					this.database.exec(query.data);
-					return true;
-				}
-				case 'get': {
-					if (!this.database) {
-						return null;
-					}
-					return this.extractStatement(query).get(query.data);
-				}
-				case 'run': {
-					if (!this.database) {
-						return null;
-					}
-					return this.extractStatement(query).run(query.data);
-				}
-				case 'all': {
-					if (!this.database) {
-						return null;
-					}
-					return this.extractStatement(query).all(query.data);
-				}
-				case 'prepare':
-					if (!this.database) {
-						return null;
-					}
-					this.state.statements.set(query.data, this.database.prepare(query.data));
-					return query.data;
-				}
-			} catch (error: any) {
-				return this.onError(error, query);
-			}
-		});
+		super(id, module, null);
+		this.setQuery(this.onQuery.bind(this));
 
 		this.options = options;
 		this.state = {
@@ -167,6 +112,63 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			statements: new Map(),
 		};
 		if (!this.isParentProcess) this.setupDatabase();
+	}
+	private onQuery(query: DatabaseQuery) {
+		if (!this.dbReady) {
+			this.setupDatabase();
+		}
+		try {
+			switch (query.type) {
+			case 'load-extension': {
+				if (!this.database) return null;
+				this.loadExtensionFile(query.data);
+				return true;
+			}
+			case 'transaction': {
+				const transaction = this.state.transactions.get(query.name);
+				// !transaction covers db not existing, typically, but this is just to appease ts
+				if (!transaction || !this.database) {
+					return null;
+				}
+				const env: TransactionEnvironment = {
+					db: this.database,
+					statements: this.state.statements,
+				};
+				return transaction(query.data, env) || null;
+			}
+			case 'exec': {
+				if (!this.database) return { changes: 0 };
+				this.database.exec(query.data);
+				return true;
+			}
+			case 'get': {
+				if (!this.database) {
+					return null;
+				}
+				return this.extractStatement(query).get(query.data);
+			}
+			case 'run': {
+				if (!this.database) {
+					return null;
+				}
+				return this.extractStatement(query).run(query.data);
+			}
+			case 'all': {
+				if (!this.database) {
+					return null;
+				}
+				return this.extractStatement(query).all(query.data);
+			}
+			case 'prepare':
+				if (!this.database) {
+					return null;
+				}
+				this.state.statements.set(query.data, this.database.prepare(query.data));
+				return query.data;
+			}
+		} catch (error: any) {
+			return this.onError(error, query);
+		}
 	}
 	private onError(err: Error, query: DatabaseQuery) {
 		err.message += ` [process ${process.pid}]`;
