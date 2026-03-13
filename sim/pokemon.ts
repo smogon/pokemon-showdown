@@ -1150,6 +1150,13 @@ export class Pokemon {
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
+		let format = this.battle.format;
+		if (!format.getSharedPower && format.mod === 'sharedpower') {
+			format = this.battle.dex.formats.get('gen9sharedpower');
+		}
+		if (format.getSharedPower) {
+			entry.sharedAbilities = [...format.getSharedPower(this)] as ID[];
+		}
 		if (this.battle.gen >= 9) {
 			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
 			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
