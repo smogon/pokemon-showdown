@@ -2519,10 +2519,10 @@ export class Battle {
 	checkFainted() {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				}
+				if (!pokemon) continue;
+				if (!pokemon.fainted) continue;
+				pokemon.status = 'fnt' as ID;
+				pokemon.switchFlag = true;
 			}
 		}
 	}
