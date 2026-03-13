@@ -247,6 +247,20 @@ describe('Choice parser', () => {
 					assert.throws(() => battle.choose('p1', badChoice));
 				}
 			});
+
+			it(`should not reject a switch to a non-transformed Pokémon matching a transformed active Pokémon's species`, () => {
+				battle = common.createBattle();
+				battle.setPlayer('p1', { team: [
+					{ species: "Ditto", ability: 'imposter', moves: ['splash'] },
+					{ species: "Rhydon", ability: 'rockhead', moves: ['splash'] },
+				] });
+				battle.setPlayer('p2', { team: [{ species: "Rhydon", ability: 'lightningrod', moves: ['splash'] }] });
+
+				assert.species(battle.p1.active[0], 'Rhydon');
+				assert(battle.p1.active[0].transformed);
+				assert(battle.choose('p1', 'switch Rhydon'));
+				assert.equal(battle.p1.getChoice(), 'switch 2');
+			});
 		});
 
 		describe('Doubles', () => {
