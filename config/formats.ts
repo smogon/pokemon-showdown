@@ -31,7 +31,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Unrated Random Battle",
@@ -39,7 +39,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		challengeShow: false,
 		rated: false,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Free-For-All Random Battle",
@@ -48,7 +48,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'freeforall',
 		tournamentShow: false,
 		rated: false,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Random Battle (Blitz)",
@@ -67,7 +67,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		rated: false,
 		ruleset: [
 			'Max Team Size = 3',
-			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
+			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
 		],
 	},
 	{
@@ -158,7 +158,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// S/V Doubles
@@ -173,7 +173,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
 	},
 	{
 		name: "[Gen 9] Doubles OU",
@@ -270,7 +270,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// S/V Doubles
@@ -646,7 +646,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6megasrevisited',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Mega Data Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Illusion Level Mod', 'Mega Data Mod'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
 			this.add('-message', `Welcome to Megas Revisited!`);
@@ -660,7 +660,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
 		mod: 'chatbats',
 		team: 'randomChatBats',
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview'],
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 		},
@@ -725,7 +725,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
 		mod: 'gen9',
 		ruleset: [
-			'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause',
+			'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Moves Clause',
 			'Endless Battle Clause', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Terastal Clause',
 		],
 		banlist: [
@@ -896,7 +896,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] Pure Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		mod: 'gen6',
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause', 'EV limit = 510'],
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Endless Battle Clause', 'EV limit = 510'],
 	},
 
 	// Challengeable OMs
@@ -2265,7 +2265,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
+		ruleset: ['Team Preview', 'HP Percentage Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
 	},
 	{
 		name: "[Gen 9] Relay Race",
@@ -2921,7 +2921,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Endless Battle Clause'],
 	},
 
 	// Temporary Tour Metas
@@ -3522,7 +3522,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		team: 'randomStaffBros',
 		bestOfDefault: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin() {
 			// TODO look into making an event to put this right after turn|1
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
@@ -3572,7 +3572,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Random Battle (Shared Power, B12P6)",
@@ -3687,7 +3687,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'randomBaby',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Hackmons Cup",
@@ -3695,7 +3695,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'randomHC',
 		bestOfDefault: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod'],
 		banlist: ['CAP', 'Custom', 'Future', 'LGPE', 'MissingNo.', 'Pikachu-Cosplay', 'Pichu-Spiky-eared', 'Xerneas-Neutral'],
 	},
 	{
@@ -3714,7 +3714,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		team: 'randomHC',
 		bestOfDefault: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod'],
 		banlist: ['All Pokemon', 'All Abilities', 'All Items', 'All Moves'],
 		unbanlist: [
 			'10,000,000 Volt Thunderbolt', 'Abomasnow-Mega', 'Absol-Mega', 'Accelerock', 'Acid Spray', 'Adaptability', 'Aeroblast',
@@ -3828,7 +3828,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'randomCC',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Terastal Clause', 'Picked Team Size = 1'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Team Preview', 'Terastal Clause', 'Picked Team Size = 1'],
 	},
 	{
 		name: "[Gen 9] Challenge Cup 2v2",
@@ -3837,7 +3837,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomCC',
 		gameType: 'doubles',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Picked Team Size = 2'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Team Preview', 'Picked Team Size = 2'],
 	},
 	{
 		name: "[Gen 9] Challenge Cup 6v6",
@@ -3846,14 +3846,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomCC',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 9] Metronome Battle",
 		mod: 'gen9',
 		gameType: 'doubles',
 		bestOfDefault: true,
-		ruleset: ['Max Team Size = 2', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Max Team Size = 2', 'HP Percentage Mod'],
 		banlist: [
 			'Pokestar Spirit', 'Pecharunt', 'Terapagos', 'Shedinja + Sturdy', 'Cheek Pouch', 'Commander', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat',
 			'Gorilla Tactics', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Neutralizing Gas', 'Opportunist', 'Parental Bond', 'Perish Body',
@@ -3893,7 +3893,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 8] Random Doubles Battle",
@@ -3902,7 +3902,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 8] Free-For-All Random Battle",
@@ -3912,7 +3912,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		tournamentShow: false,
 		rated: false,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 8] Multi Random Battle",
@@ -3924,7 +3924,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		rated: false,
 		ruleset: [
 			'Max Team Size = 3',
-			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
+			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Illusion Level Mod',
 		],
 	},
 	{
@@ -3955,7 +3955,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod'],
 		banlist: ['Nonexistent'],
 	},
 	{
@@ -3968,7 +3968,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: [
 			'Picked Team Size = 1',
 			'Max Team Size = 3',
-			'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Dynamax Clause',
+			'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Dynamax Clause',
 		],
 	},
 	{
@@ -3986,7 +3986,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 7] Battle Factory",
@@ -3995,7 +3995,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomFactory',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Mega Rayquaza Clause'],
 		onBegin() {
 			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
 		},
@@ -4016,7 +4016,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		challengeShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod'],
 		banlist: ['Nonexistent'],
 	},
 	{
@@ -4025,14 +4025,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Sleep Clause Mod'],
 	},
 	{
 		name: "[Gen 6] Random Battle",
 		mod: 'gen6',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 6] Battle Factory",
@@ -4041,7 +4041,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomFactory',
 		searchShow: false,
 		challengeShow: false,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Mega Rayquaza Clause'],
 		onBegin() {
 			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
 		},
@@ -4051,14 +4051,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen5',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 4] Random Battle",
 		mod: 'gen4',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 3] Random Battle",
@@ -4088,7 +4088,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomCC',
 		searchShow: false,
 		challengeShow: false,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Sleep Clause Mod', 'Freeze Clause Mod'],
 	},
 	{
 		name: "[Gen 1] Hackmons Cup",
@@ -4097,7 +4097,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		challengeShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
 		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return;
@@ -4218,7 +4218,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard', '!Switch Priority Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Explosion', 'Self-Destruct', 'Swagger'],
 		unbanlist: ['Wobbuffet', 'Wynaut'],
 	},
@@ -4296,7 +4296,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Dynamax Clause', 'Endless Battle Clause',
 		],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Dialga', 'Dragonite', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi',
@@ -4357,7 +4357,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// Sw/Sh Doubles
@@ -4431,7 +4431,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// US/UM Singles
@@ -4508,7 +4508,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Swagger Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Swagger Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Endless Battle Clause',
 		],
 		banlist: [
 			'Arceus', 'Darkrai', 'Deoxys-Normal', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon',
@@ -4561,7 +4561,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// US/UM Doubles
@@ -4635,7 +4635,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// OR/AS Singles
@@ -4704,7 +4704,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: [
 			'Max Team Size = 3', 'Picked Team Size = 1', 'Obtainable', 'Nickname Clause', 'Moody Clause', 'OHKO Clause',
 			'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod',
-			'Cancel Mod', 'Team Preview',
+			'Team Preview',
 		],
 		banlist: [
 			'Arceus', 'Charizard-Mega-X', 'Charizard-Mega-Y', 'Deoxys-Normal', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon',
@@ -4748,7 +4748,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// OR/AS Doubles/Triples
@@ -4802,7 +4802,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Triples",
@@ -4819,7 +4819,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// B2/W2 Singles
@@ -4947,7 +4947,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// B2/W2 Doubles
@@ -4992,7 +4992,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 5] Triples Custom Game",
@@ -5002,7 +5002,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
+		ruleset: ['Team Preview'],
 	},
 
 	// DPP Singles
@@ -5099,7 +5099,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// DPP Doubles
@@ -5165,7 +5165,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
 	// Past Generations
@@ -5179,7 +5179,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Ubers",
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard', 'Deoxys Camouflage Clause', 'One Baton Pass Clause'],
+		ruleset: ['Standard', 'One Baton Pass Clause'],
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
@@ -5262,7 +5262,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3rs',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard', '!Switch Priority Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Swagger'],
 	},
 	{
@@ -5272,7 +5272,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
-			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
+			'Nickname Clause', 'Endless Battle Clause', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
 		],
 		banlist: ['Restricted Legendary', 'Mythical', 'Soul Dew'],
 		bestOfDefault: true,
@@ -5308,7 +5308,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 3] Doubles Custom Game",
@@ -5316,7 +5316,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 2] Ubers",
@@ -5378,7 +5378,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause = 1', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview',
+			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause = 1', 'Endless Battle Clause', 'Event Moves Clause', 'Nickname Clause', 'Team Preview',
 		],
 		banlist: ['Uber'],
 	},
@@ -5395,7 +5395,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 1] Ubers",
@@ -5455,7 +5455,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'Cancel Mod', 'NC 1997 Move Legality',
+			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'NC 1997 Move Legality',
 		],
 		banlist: ['Uber'],
 	},
@@ -5504,6 +5504,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 ];

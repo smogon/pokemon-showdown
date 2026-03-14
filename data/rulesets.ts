@@ -13,7 +13,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard AG',
 		desc: "The minimal ruleset for Anything Goes",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Endless Battle Clause',
 		],
 	},
 	standard: {
@@ -30,7 +30,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard NEXT',
 		desc: "The standard ruleset for the NEXT mod",
 		ruleset: [
-			'+Unreleased', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'+Unreleased', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod',
 		],
 		banlist: ['Soul Dew'],
 	},
@@ -38,7 +38,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto'],
 		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
@@ -159,7 +159,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', 'Nickname Clause', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Nickname Clause', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -1430,7 +1430,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
-		desc: "Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first",
+		desc: "Makes a faster Pokémon switch first when double-switching, unlike in link battles, where player 1's Pokémon would switch first",
+		// Implemented in battle-queue.ts
 		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
@@ -1445,13 +1446,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Hardcoded in gen1/moves.ts
 		// Can't be disabled (no precedent for how else to handle desyncs)
 	},
-	deoxyscamouflageclause: {
+	deoxyscamouflageclausemod: {
 		effectType: 'Rule',
-		name: 'Deoxys Camouflage Clause',
+		name: 'Deoxys Camouflage Clause Mod',
 		desc: "Reveals the Deoxys forme when it is sent in battle.",
 		// Hardcoded into effect, cannot be disabled.
 		onBegin() {
-			this.add('rule', 'Deoxys Camouflage Clause: Reveals the Deoxys forme when it is sent in battle.');
+			const deoxys = ['Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed'];
+			for (const forme of deoxys) {
+				const species = this.dex.species.get(forme);
+				if (!this.ruleTable.isBannedSpecies(species)) {
+					this.add('rule', 'Deoxys Camouflage Clause Mod: Reveals the Deoxys forme when it is sent in battle.');
+					break;
+				}
+			}
 		},
 	},
 	freezeclausemod: {
