@@ -696,7 +696,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	shellder: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	cloyster: {
 		tier: "NUBL",
