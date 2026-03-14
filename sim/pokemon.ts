@@ -782,6 +782,7 @@ export class Pokemon {
 
 		switch (move.target) {
 		case 'all':
+		case 'field':
 		case 'foeSide':
 		case 'allySide':
 		case 'allyTeam':
