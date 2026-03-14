@@ -1982,7 +1982,7 @@ export class Battle {
 				// Still need to hide these formes since they change on battle start
 				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
-					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+					.replace(/(Xerneas)(?!-Active)/g, '$1-*');
 				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
 			}
 			this.makeRequest('teampreview');

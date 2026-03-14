@@ -4069,10 +4069,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
-	xerneasneutral: {
-		isNonstandard: "Custom", // can't be used in battle
-		tier: "Illegal",
-	},
 	yveltal: {
 		tier: "Uber",
 		doublesTier: "DUber",

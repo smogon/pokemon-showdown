@@ -588,7 +588,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	wormadamp: "Wormadam",
 	wormadamplant: "Wormadam",
 	wormadamplantcloak: "Wormadam",
-	xerneasactive: "Xerneas",
+	xerneasneutral: "Xerneas",
 
 	// totem formes --- 1st ordered alphabetically by species, 2nd by alias
 	araquanidt: "Araquanid-Totem",
