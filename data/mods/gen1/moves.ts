@@ -480,8 +480,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source) {
-			const moveslot = source.moves.indexOf('mimic');
-			if (moveslot < 0) return false;
+			const moveslot = source.side.lastSelectedMoveSlot;
 			const moves = target.moves;
 			const moveid = this.sample(moves);
 			if (!moveid) return false;
