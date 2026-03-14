@@ -208,6 +208,7 @@ export class DexNatures {
 }
 
 export interface TypeData {
+	num: number;
 	damageTaken: { [attackingTypeNameOrEffectid: string]: number };
 	HPdvs?: SparseStatsTable;
 	HPivs?: SparseStatsTable;
@@ -226,6 +227,8 @@ export class TypeInfo implements Readonly<TypeData> {
 	 * non-alphanumeric characters removed. e.g. 'flying'
 	 */
 	readonly id: ID;
+	/** Number. e.g. 2 for Flying */
+	readonly num: number;
 	/** Name. e.g. 'Flying' */
 	readonly name: string;
 	/** Effect type. */
@@ -260,6 +263,7 @@ export class TypeInfo implements Readonly<TypeData> {
 	constructor(data: AnyObject) {
 		this.name = data.name;
 		this.id = data.id;
+		this.num = data.num;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = data.exists ?? !!this.id;
 		this.gen = data.gen || 0;
