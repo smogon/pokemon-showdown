@@ -18003,7 +18003,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 100,
 			volatileStatus: 'sparklingaria',
 		},
-		onAfterMove(source, target, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (source.fainted || !move.hitTargets || move.hasSheerForce) {
 				// make sure the volatiles are cleared
 				for (const pokemon of this.getAllActive()) delete pokemon.volatiles['sparklingaria'];
