@@ -100,10 +100,6 @@ export abstract class BasicEffect implements EffectData {
 	noCopy: boolean;
 	/** Whether or not the condition affects fainted Pokemon. */
 	affectsFainted: boolean;
-	/** Moves only: what status does it set? */
-	status?: ID;
-	/** Moves only: what weather does it set? */
-	weather?: ID;
 	/** ??? */
 	sourceEffect: string;
 
@@ -121,8 +117,6 @@ export abstract class BasicEffect implements EffectData {
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
-		this.status = data.status as ID || undefined;
-		this.weather = data.weather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
 	}
 

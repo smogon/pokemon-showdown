@@ -188,6 +188,110 @@ describe('Switching in', () => {
 		assert.statStage(kyogre, 'spe', -1);
 		assert.equal(battle.field.weather, 'desolateland', 'Groudon should have reverted after Kyogre in spite of Sticky Web because it was slower before the SwitchIn event started');
 	});
+
+	describe('[Gen 4]', () => {
+		it(`should not choose more than one switch at a time`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", level: 100, moves: ['spikes'] },
+				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
+				{ species: "snorlax", moves: ['sleeptalk'] },
+				{ species: "weavile", moves: ['sleeptalk'] },
+			], [
+				{ species: "alakazam", level: 99, moves: ['sleeptalk'] },
+				{ species: "alakazam", level: 97, moves: ['explosion'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "gardevoir", moves: ['sleeptalk'] },
+				{ species: "azumarill", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 3', 'switch 3');
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 4', 'switch 4');
+			assert.equal(battle.p1.requestState, '');
+			assert(battle.p1.activeRequest.wait);
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('', 'switch 5');
+		});
+	});
+
+	describe('[Gen 3]', () => {
+		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", level: 99, moves: ['spikes'] },
+				{ species: "alakazam", level: 97, moves: ['explosion'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "castform", ability: 'forecast', moves: ['sleeptalk'] },
+				{ species: "groudon", ability: 'drought', moves: ['sleeptalk'] },
+			], [
+				{ species: "alakazam", level: 100, moves: ['spikes'] },
+				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
+				{ species: "kyogre", ability: 'drizzle', moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "gyarados", ability: 'intimidate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4'); // Switch-in Kyogre
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, '');
+			assert(battle.p2.activeRequest.wait);
+			assert(battle.field.isWeather('raindance'));
+
+			assert.throws(() => battle.choose('p1', 'switch 4'));
+			assert.throws(() => battle.choose('p1', 'switch 5, switch 6'));
+			assert.throws(() => battle.choose('p2', 'auto'));
+			battle.makeChoices('switch 5'); // Switch-in Castform
+			assert.equal(battle.p1.requestState, '');
+			assert(battle.p1.activeRequest.wait);
+			assert.equal(battle.p2.requestState, 'switch');
+			assert.species(battle.p1.active[0], 'Castform-Rainy');
+
+			battle.makeChoices('', 'switch 5'); // Switch-in Gyarados
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, '');
+			assert(battle.p2.activeRequest.wait);
+
+			battle.makeChoices('switch 6'); // Switch-in Groudon
+			assert(battle.field.isWeather('sunnyday'));
+			assert.species(battle.p1.active[0], 'Castform-Sunny');
+			assert.equal(battle.p1.active[0].boosts.atk, -1);
+			assert.equal(battle.p1.active[1].boosts.atk, -1);
+		});
+	});
+
+	describe('[Gen 2]', () => {
+		it.skip(`effects should be applied when the Pokemon enters the field, but fainting should only happen after all Pokemon have switched in`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] }, // I know Shedinja doesn't exist in Gen 2, bite me
+				{ species: "cloyster", moves: ['sleeptalk'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'selfdestruct'] },
+				{ species: "tyranitar", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('auto', 'move selfdestruct');
+			battle.makeChoices();
+			const log = battle.getDebugLog();
+			const hpIndex = log.lastIndexOf('|-damage|p1a: Shedinja|0 fnt');
+			const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
+			const faintingIndex = log.lastIndexOf('|faint|p1a: Shedinja');
+			assert(hpIndex > 0);
+			assert(tyranitarSwitchIndex > 0);
+			assert(faintingIndex > 0);
+			assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
+			assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
+		});
+	});
 });
 
 describe('Speed ties', () => {

@@ -868,7 +868,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 			pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
-			if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 			pokemon.previouslySwitchedIn++;
 
 			if (isDrag && this.battle.gen >= 5) {
