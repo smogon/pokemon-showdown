@@ -30,7 +30,7 @@ export interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
-	moveid: string; // a move to use (move action only)
+	moveid?: string; // a move to use (move action only)
 	move?: ActiveMove; // the active move corresponding to moveid (move action only)
 	moveSlot?: number; // the move's index in the Pokémon's moveset (undefined if submitted through the "Fight" button)
 	target?: Pokemon; // the target of the action
@@ -681,7 +681,7 @@ export class Side {
 				choice: 'move',
 				pokemon,
 				// don't send a move, handled in battle-queue.ts
-			} as ChosenAction);
+			});
 			return true;
 		} else if (!moves.length) {
 			// Override action and use Struggle if there are no enabled moves with PP
@@ -961,7 +961,7 @@ export class Side {
 				choice: 'revivalblessing',
 				pokemon,
 				target: targetPokemon,
-			} as ChosenAction);
+			});
 			return true;
 		}
 
@@ -999,7 +999,7 @@ export class Side {
 			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
 			target: targetPokemon,
-		} as ChosenAction);
+		});
 
 		return true;
 	}
@@ -1065,7 +1065,7 @@ export class Side {
 				index,
 				pokemon: this.pokemon[pos],
 				priority: -index,
-			} as ChosenAction);
+			});
 		}
 
 		return true;
@@ -1087,7 +1087,7 @@ export class Side {
 		this.choice.actions.push({
 			choice: 'shift',
 			pokemon,
-		} as ChosenAction);
+		});
 
 		return true;
 	}
@@ -1114,6 +1114,41 @@ export class Side {
 			dynamax: false,
 			terastallize: false,
 		};
+	}
+
+	commitChoices() {
+		if (this.battle.gen === 1) {
+			for (const choice of this.choice.actions) {
+				if (choice.choice !== 'move' || !choice.pokemon) continue;
+				const move = choice.moveid;
+				if (!move) {
+					const pokemon = choice.pokemon;
+					if (['frz', 'slp'].includes(pokemon.status)) {
+						// do nothing
+					} else if (pokemon.volatiles['partiallytrapped']) {
+						// 'cantmove' is what is set in the cartridge
+						this.lastSelectedMove = 'cantmove' as ID;
+					}
+					/**
+					 * if partially trapped: put 'cantmove' in lastSelectedMove
+					 * if frozen or asleep: try to reuse the last move,
+					 *   which can fail if the Pokemon thaws and the move doesn't match lastSelectedMoveSlot
+					 *
+					 * if this happens in the first move selection of a player, put '00' as a placeholder to avoid errors
+					 */
+					choice.moveid = this.lastSelectedMove || '00' as ID;
+				} else if (move === 'struggle') {
+					// saves Struggle
+					this.lastSelectedMove = move as ID;
+				} else if (typeof choice.moveSlot === 'number') {
+					// not locked
+					this.lastSelectedMove = move as ID;
+					this.lastSelectedMoveSlot = choice.moveSlot;
+				}
+				// locked moves (including mustrecharge) dont set lastSelectedMove
+			}
+		}
+		this.battle.queue.addChoice(this.choice.actions);
 	}
 
 	choose(input: string) {
@@ -1286,7 +1321,7 @@ export class Side {
 
 		this.choice.actions.push({
 			choice: 'pass',
-		} as ChosenAction);
+		});
 		return true;
 	}
 
