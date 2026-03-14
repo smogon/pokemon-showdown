@@ -1804,7 +1804,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	allowtradeback: {
 		effectType: 'ValidatorRule',
 		name: 'Allow Tradeback',
-		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
+		desc: "Allows moves and abilities only obtainable by trading from future generations.",
 		// Implemented in team-validator.js
 	},
 	lgpenormalrules: {
