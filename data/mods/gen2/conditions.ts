@@ -187,7 +187,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			delete target.volatiles['confusion'];
 			if (!target.side.getSideCondition('safeguard')) target.addVolatile('confusion');
 		},
-		onLockMove(pokemon) {
+		onLockMove() {
 			return this.effectState.move;
 		},
 		onMoveAborted(pokemon) {
