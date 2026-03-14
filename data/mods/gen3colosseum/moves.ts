@@ -5,30 +5,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	perishsong: {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
-			let immuneMon = false;
-
-			for (const mon of attacker.side.active) {
-				if (this.runEvent('Immunity', mon, attacker, move)) {
-					immuneMon = true;
-				}
+			if (attacker.side.pokemonLeft === 1) {
+				this.add('-fail', attacker, 'move: Perish Song');
+				this.hint("Self KO Clause: The last pokemon on a team cannot use moves that force fainting");
+				return false;
 			}
-
-			for (const mon of attacker.side.foe.active) {
-				if (this.runEvent('Immunity', mon, attacker, move)) {
-					immuneMon = true;
-				}
-			}
-
-			if (immuneMon) return;
-
-			if (this.format.gameType === 'singles') {
-				if (attacker.side.pokemonLeft === 1 && attacker.side.foe.pokemonLeft === 1) {
-					return false;
-				}
-			} else if (this.format.gameType === 'doubles') {
-				if (attacker.side.pokemonLeft === 2 && attacker.side.foe.pokemonLeft === 2) {
-					return false;
-				}
+		},
+	},
+	destinybond: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.side.pokemonLeft === 1) {
+				this.add('-fail', attacker, 'move: Perish Song');
+				this.hint("Self KO Clause: The last pokemon on a team cannot use moves that force fainting");
+				return false;
 			}
 		},
 	},
