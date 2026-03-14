@@ -5478,6 +5478,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
+		name: "[Gen 1] Stadium Rentals",
+		desc: `Only Pok&eacute;mon sets that can be rented through the American Stadium Pok&eacute; Cup are legal.`,
+		mod: 'gen1stadium',
+		searchShow: false,
+		ruleset: ['Standard', 'Team Preview', 'Stadium Poke Cup Rentals'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Abra', 'Aerodactyl', 'Alakazam', 'Arbok', 'Articuno', 'Chansey', 'Charizard', 'Clefable', 'Cloyster', 'Dewgong', 'Dodrio', 'Dragonair',
+			'Electabuzz', 'Exeggutor', 'Gengar', 'Geodude', 'Graveler', 'Gyarados', 'Haunter', 'Ivysaur', 'Jolteon', 'Jynx', 'Kabutops', 'Kadabra',
+			'Lapras', 'Meowth', 'Moltres', 'Ninetales', 'Omanyte', 'Omastar', 'Paras', 'Persian', 'Poliwhirl', 'Poliwrath', 'Rapidash', 'Raticate',
+			'Rhyhorn', 'Snorlax', 'Starmie', 'Tangela', 'Tauros', 'Wartortle', 'Zapdos',
+		],
+	},
+	{
 		name: "[Gen 1] Tradebacks OU",
 		desc: `RBY OU with movepool additions from the Time Capsule.`,
 		mod: 'gen1',
