@@ -2128,7 +2128,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	faq(target, room, user) {
-		target = toID(target);
+		target = toID(this.splitOne(target)[0]);
 		const showAll = target === 'all';
 		if (showAll && this.shouldBroadcast()) {
 			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
