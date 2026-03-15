@@ -39,6 +39,18 @@ describe('Lum Berry', () => {
 		assert(attacker.volatiles['confusion']);
 	});
 
+	it('should cure Poison from Poison Touch before being knocked off', () => {
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: 'Wynaut', ability: 'poisontouch', moves: ['knockoff'] },
+		], [
+			{ species: 'Shuckle', item: 'lumberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert(battle.getDebugLog().includes('|-status|p2a: Shuckle|psn|[from] ability: Poison Touch'));
+		assert.equal(battle.p2.active[0].status, '');
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
+
 	it('should cure Poison and confusion after Poison Puppeteer activation', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: 'Charizard', item: 'lumberry', moves: ['sleeptalk'] }] });

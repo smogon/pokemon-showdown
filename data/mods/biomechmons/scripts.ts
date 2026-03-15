@@ -67,13 +67,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.moves as { thing: string }[]).map(e => e.thing),
-				this.ability, this.moveSlots.map(e => e.id), this.item,
+				this.ability, ...this.moveSlots.map(e => e.move), this.item,
 			].map(this.battle.toID));
 
 			let isBMMAbil = false;
 			let isOldBMMAbil = false;
 			if (!this.hp) return false;
-			if (!this.battle.dex.abilities.get(ability).exists) isBMMAbil = true;
 			if (typeof ability === 'string') {
 				if (this.battle.dex.abilities.get(ability).exists) {
 					ability = this.battle.dex.abilities.get(ability);
@@ -92,6 +91,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					} as Ability;
 				}
 			}
+			if (ability.name.length && !this.battle.dex.abilities.get(ability).exists) isBMMAbil = true;
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			let oldAbility;
 			if (this.battle.dex.abilities.get(this.ability).exists) {
@@ -251,15 +251,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.moves as { thing: string }[]).map(e => e.thing),
-				this.ability, this.moveSlots.map(e => e.id), this.item,
+				this.ability, ...this.moveSlots.map(e => e.move), this.item,
 			].map(this.battle.toID));
 
 			let isBMMItem = false;
 			let isOldBMMItem = false;
 			if (!this.hp || !this.isActive) return false;
-			if (!this.battle.dex.items.get(item).exists) isBMMItem = true;
 			if (typeof item === 'string') {
-				if (this.battle.dex.items.get(item).exists) {
+				if (!item.length || this.battle.dex.items.get(item).exists) {
 					item = this.battle.dex.items.get(item);
 				} else {
 					const itemString = item;
@@ -279,6 +278,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					} as Item;
 				}
 			}
+			if (item.name.length && !this.battle.dex.items.get(item).exists) isBMMItem = true;
 			if (allThings.has(item.id)) return false;
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
 			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
