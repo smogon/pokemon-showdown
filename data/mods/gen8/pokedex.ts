@@ -93,6 +93,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128 },
 	},
+	urshifu: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Defeat the Single Strike Tower",
+	},
+	urshifurapidstrike: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Defeat the Rapid Strike Tower",
+	},
 	kleavor: {
 		inherit: true,
 		abilities: { 0: "Swarm", 1: "Sheer Force", H: "Steadfast" },

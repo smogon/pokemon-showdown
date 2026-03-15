@@ -3,6 +3,26 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		evos: ["Raichu"],
 	},
+	alakazam: {
+		inherit: true,
+		evoType: "useItem",
+		evoItem: "Linking Cord",
+	},
+	machamp: {
+		inherit: true,
+		evoType: "useItem",
+		evoItem: "Linking Cord",
+	},
+	golem: {
+		inherit: true,
+		evoType: "useItem",
+		evoItem: "Linking Cord",
+	},
+	gengar: {
+		inherit: true,
+		evoType: "useItem",
+		evoItem: "Linking Cord",
+	},
 	quilava: {
 		inherit: true,
 		evos: ["Typhlosion-Hisui"],
@@ -38,5 +58,20 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	dartrix: {
 		inherit: true,
 		evos: ["Decidueye-Hisui"],
+	},
+	basculegion: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Receive 294+ recoil without fainting",
+	},
+	basculegionf: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Receive 294+ recoil without fainting",
+	},
+	overqwil: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Use strong style Barb Barrage 20 times",
 	},
 };
