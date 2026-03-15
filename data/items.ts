@@ -8203,7 +8203,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
-		num: -1,
+		num: 1001,
 		gen: 6,
 		isNonstandard: "CAP",
 	},
@@ -8227,31 +8227,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		forcedForme: "Venomicon-Epilogue",
 		itemUser: ["Venomicon-Epilogue"],
-		num: -2,
+		num: 1002,
 		gen: 8,
 		isNonstandard: "CAP",
-	},
-
-	// main game but not on showdown yet
-
-	blackaugurite: {
-		name: "Black Augurite",
-		spritenum: 782,
-		fling: {
-			basePower: 30,
-		},
-		num: 1691,
-		gen: 9,
-		isNonstandard: "Future",
-	},
-	peatblock: {
-		name: "Peat Block",
-		spritenum: 783,
-		fling: {
-			basePower: 10,
-		},
-		num: 1692,
-		gen: 9,
 	},
 
 	// swse
@@ -8260,16 +8238,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 
 	amazedrive: {
 		name: "Amaze-Drive",
-		spritenum: 799,
+		spritenum: 805,
 		fling: {
-			basePower: 70,
+			basePower: 30,
 		},
-		num: 10017,
+		num: -23,
 		gen: 9,
 	},
 	avocaberry: {
 		name: "Avoca Berry",
-		spritenum: 789,
+		spritenum: 381,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -8285,20 +8263,30 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		num: 10007,
+		num: -1,
 		gen: 9,
 	},
 	bacchuslaurel: {
 		name: "Bacchus Laurel",
-		spritenum: 804,
+		spritenum: 142,
 		fling: {
 			basePower: 30,
 		},
-		num: 10022,
+		num: -17,
 		gen: 9,
 		isNonstandard: "Future",
 	},
-	/* charmingtalisman: {
+	blackaugurite: {
+		name: "Black Augurite",
+		spritenum: 142,
+		fling: {
+			basePower: 30,
+		},
+		num: -17,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	charmingtalisman: {
 		name: "Charming Talisman",
 		spritenum: 754,
 		fling: {
@@ -8310,20 +8298,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		num: -1,
+		num: -3,
 		gen: 9,
-	}, */
-	coffeegeistcappuccino: { // incomplete test fling
+	},
+	coffeegeistcappuccino: {
 		name: "Coffeegeist Cappuccino",
-		spritenum: 794,
-		isDrink: true,
+		spritenum: 796,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('coffeegeistcappuccino');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ spd: 1, spe: 1 });
 			pokemon.addVolatile('coffeegeistcappuccino');
 		},
@@ -8337,23 +8324,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10012,
+		num: -8,
 		gen: 9,
 	},
 	energychannelizer: {
 		name: "Energy Channelizer",
-		spritenum: 786,
+		spritenum: 6,
 		fling: {
-			basePower: 30,
+			basePower: 10,
 		},
-		num: 10003,
+		num: -12,
 		gen: 9,
 	},
 	energynullifier: {
 		name: "Energy Nullifier",
-		spritenum: 788,
+		spritenum: 6,
 		fling: {
-			basePower: 30,
+			basePower: 10,
 		},
 		// Partially implemented in Pokemon.effectiveEnergyWeather() in sim/pokemon.ts
 		onStart(pokemon) {
@@ -8378,20 +8365,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			this.effectState.inactive = true;
 		},
-		num: 10005,
+		num: -14,
 		gen: 9,
 	},
 	flatunovan: {
 		name: "Flat Unovan",
-		spritenum: 795,
-		isDrink: true,
+		spritenum: 797,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('flatunovan');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ spe: 1, accuracy: 1 });
 			pokemon.addVolatile('flatunovan');
 		},
@@ -8405,12 +8391,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10013,
+		num: -9,
 		gen: 9,
 	},
 	frostorb: {
 		name: "Frost Orb",
-		spritenum: 788,
+		spritenum: 145,
 		fling: {
 			basePower: 30,
 			status: 'fst',
@@ -8420,47 +8406,37 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidual(pokemon) {
 			pokemon.trySetStatus('fst', pokemon);
 		},
-		num: 10006,
-		gen: 9,
-	},
-	iridescentscale: {
-		name: "Iridescent Scale",
-		spritenum: 802,
-		fling: {
-			basePower: 110,
-		},
-		num: 10020,
+		num: -2,
 		gen: 9,
 	},
 	keybone: {
 		name: "Keybone",
-		spritenum: 800,
+		spritenum: 802,
 		fling: {
 			basePower: 100,
 		},
-		num: 10019,
+		num: -19,
 		gen: 9,
 	},
 	miststone: {
 		name: "Mist Stone",
-		spritenum: 798,
+		spritenum: 804,
 		fling: {
 			basePower: 30,
 		},
-		num: 10016,
+		num: -24,
 		gen: 9,
 	},
 	mystictamroastdoppio: {
 		name: "Mystic Tamroast Doppio",
-		spritenum: 793,
-		isDrink: true,
+		spritenum: 795,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('mystictamroastdoppio');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ spa: 1, spe: 1 });
 			pokemon.addVolatile('mystictamroastdoppio');
 		},
@@ -8474,20 +8450,28 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10011,
+		num: -7,
+		gen: 9,
+	},
+	peatblock: {
+		name: "Peat Block",
+		spritenum: 142,
+		fling: {
+			basePower: 30,
+		},
+		num: -18,
 		gen: 9,
 	},
 	pikaspresso: {
 		name: "Pikaspresso",
-		spritenum: 790,
-		isDrink: true,
+		spritenum: 792,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('pikaspresso');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ spe: 2 });
 			pokemon.addVolatile('pikaspresso');
 		},
@@ -8501,23 +8485,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10008,
+		num: -4,
 		gen: 9,
 	},
 	portableturbine: {
 		name: "Portable Turbine",
-		spritenum: 787,
+		spritenum: 6,
 		fling: {
 			basePower: 10,
 		},
-		num: 10004,
+		num: -13,
 		gen: 9,
 	},
 	razorhook: {
 		name: "Razor Hook",
 		spritenum: 803,
 		fling: {
-			basePower: 50,
+			basePower: 30,
 			volatileStatus: 'flinch',
 		},
 		onModifyMovePriority: -1,
@@ -8533,20 +8517,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				});
 			}
 		},
-		num: 10018,
+		num: -20,
 		gen: 9,
 	},
 	sandygastmocha: {
 		name: "Sandygast Mocha",
-		spritenum: 792,
-		isDrink: true,
+		spritenum: 794,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('sandygastmocha');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ def: 1, spe: 1 });
 			pokemon.addVolatile('sandygastmocha');
 		},
@@ -8560,68 +8543,61 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10010,
+		num: -6,
 		gen: 9,
 	},
 	volatilespray: {
 		name: "Volatile Spray",
-		spritenum: 785,
+		spritenum: 6,
 		fling: {
-			basePower: 60,
+			basePower: 10,
 		},
-		num: 10002,
+		num: -11,
 		gen: 9,
 	},
 	weatherballoon: {
 		name: "Weather Balloon",
-		spritenum: 784,
+		spritenum: 6,
 		fling: {
 			basePower: 10,
 		},
-		num: 10001,
+		num: -10,
 		gen: 9,
 	},
 	weathervane: { // incomplete
 		name: 'Weather Vane',
-		spritenum: 796,
-		fling: {
-			basePower: 10,
-		},
+		spritenum: 6,
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Castform') return false;
 			return true;
 		},
 		itemUser: ["Castform"],
-		num: 10014,
+		num: -15,
 		gen: 9,
 	},
 	whirligig: {
 		name: "Whirligig",
-		spritenum: 797,
-		fling: {
-			basePower: 30,
-		},
+		spritenum: 64,
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
 				return false;
 			}
 			return true;
 		},
-		itemUser: ["Castform-Whirly"],
-		num: 10015,
+		itemUser: ["Castform"],
+		num: -16,
 		gen: 9,
 	},
 	worcanecoldbrew: {
 		name: "Worcane Cold Brew",
-		spritenum: 791,
-		isDrink: true,
+		spritenum: 793,
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-				pokemon.drinkItem();
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+				pokemon.addVolatile('worcanecoldbrew');
 			}
 		},
-		onDrink(pokemon) {
+		onEat(pokemon) {
 			this.boost({ atk: 1, spe: 1 });
 			pokemon.addVolatile('worcanecoldbrew');
 		},
@@ -8635,16 +8611,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10009,
+		num: -5,
 		gen: 9,
 	},
 	zetacell: {
 		name: "Zeta Cell",
-		spritenum: 803,
+		spritenum: 142,
 		fling: {
 			basePower: 30,
 		},
-		num: 10021,
+		num: -17,
 		gen: 9,
 		isNonstandard: "Future",
 	},

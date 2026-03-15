@@ -155,7 +155,6 @@ class SSBItemHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, base
 					if (sigItem.fling.status) details["Fling Effect"] = sigItem.fling.status;
 					if (sigItem.fling.volatileStatus) details["Fling Effect"] = sigItem.fling.volatileStatus;
 					if (sigItem.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
-					if (sigItem.isDrink) details["Fling Effect"] = "Activates the Drink's effect on the target.";
 					if (sigItem.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
 					if (sigItem.id === 'mentalherb') {
 						const flingEffect = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
