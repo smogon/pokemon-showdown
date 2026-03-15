@@ -144,8 +144,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
 			'Aipom', 'Basculin-White-Striped', 'Cutiefly', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Gastly', 'Girafarig', 'Gligar',
-			'Magby', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
-			'Snivy', 'Stantler', 'Torchic', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Heat Rock', 'Baton Pass', 'Sticky Web',
+			'Magby', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Shellder', 'Sneasel',
+			'Sneasel-Hisui', 'Snivy', 'Stantler', 'Torchic', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Heat Rock', 'Baton Pass',
+			'Sticky Web',
 		],
 	},
 	{
@@ -443,7 +444,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
 			'Chinchou', 'Diglett-Alola', 'Drifloon', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Koffing', 'Mareanie', 'Mienfoo', 'Mudbray',
-			'Pawniard', 'Sandshrew-Alola', 'Shellder', 'Shellos', 'Snover', 'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
+			'Pawniard', 'Sandshrew-Alola', 'Shellos', 'Snover', 'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
 			// LC UUBL
 			'Deerling', 'Minccino', 'Light Clay',
 		],
@@ -3491,7 +3492,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Aerodactyl-Base', 'Arctozolt', 'Armaldo', 'Armarouge', 'Bronzong', 'Centiskorch', 'Cherrim-Base', 'Cyclizar', 'Dhelmise', 'Dondozo',
 			'Drakloak', 'Empoleon', 'Glaceon', 'Golduck', 'Gyarados-Base', 'Jellicent', 'Jumpluff', 'Kecleon', 'Kilowattrel', 'Kingdra', 'Lunatone',
 			'Musharna', 'Noivern', 'Palossand', 'Pincurchin', 'Reuniclus', 'Revavroom', 'Sandslash-Alola', 'Snorlax', 'Solrock', 'Stonjourner',
-			'Tyranitar-Base', 'Vaporeon', 'Virizion', 'Wigglytuff', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Vaporeon', 'Virizion', 'Wigglytuff', 'Wo-Chien', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
