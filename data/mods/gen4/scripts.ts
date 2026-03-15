@@ -121,62 +121,46 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		hitStepAccuracy(targets, pokemon, move) {
-			const hitResults = [];
-			for (const [i, target] of targets.entries()) {
-				this.battle.activeTarget = target;
-				// calculate true accuracy
-				let accuracy = move.accuracy;
-				if (move.ohko) { // bypasses accuracy modifiers
-					if (!target.isSemiInvulnerable()) {
-						if (pokemon.level < target.level) {
-							this.battle.add('-immune', target, '[ohko]');
-							hitResults[i] = false;
-							continue;
-						}
-						accuracy = 30 + pokemon.level - target.level;
-					}
-				} else {
-					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+		accuracyCheck(attacker, defender, move) {
+			if (move.accuracy === true) return true;
 
-					let boosts;
-					let boost!: number;
-					if (accuracy !== true) {
-						if (!move.ignoreAccuracy) {
-							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-							if (boost > 0) {
-								accuracy *= boostTable[boost];
-							} else {
-								accuracy /= boostTable[-boost];
-							}
-						}
-						if (!move.ignoreEvasion) {
-							boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-							boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
-							if (boost > 0) {
-								accuracy /= boostTable[boost];
-							} else if (boost < 0) {
-								accuracy *= boostTable[-boost];
-							}
-						}
-					}
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-				}
-				if (move.alwaysHit) {
-					accuracy = true; // bypasses ohko accuracy modifiers
+			let accuracy = move.accuracy;
+			accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, defender, attacker, move, accuracy);
+
+			const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+			let boosts;
+			let boost: number;
+			if (!move.ignoreAccuracy) {
+				boosts = this.battle.runEvent('ModifyBoost', attacker, null, null, { ...attacker.boosts });
+				boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
+				if (boost > 0) {
+					accuracy *= boostTable[boost];
 				} else {
-					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+					accuracy /= boostTable[-boost];
 				}
-				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
-					hitResults[i] = false;
-					continue;
-				}
-				hitResults[i] = true;
 			}
-			return hitResults;
+			if (!move.ignoreEvasion) {
+				boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
+				boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
+				if (boost > 0) {
+					accuracy /= boostTable[boost];
+				} else if (boost < 0) {
+					accuracy *= boostTable[-boost];
+				}
+			}
+
+			accuracy = this.battle.runEvent('ModifyAccuracy', defender, attacker, move, accuracy);
+			if (!this.battle.randomChance(accuracy, 100)) {
+				if (
+					this.checkAlwaysHit(attacker, defender) ||
+					!this.battle.singleEvent('CheckAccuracy', move, null, defender, attacker, move) ||
+					!this.battle.runEvent('CheckAccuracy', defender, attacker, move)
+				) {
+					return true;
+				}
+				return false;
+			}
+			return true;
 		},
 		calcRecoilDamage(damageDealt, move) {
 			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
