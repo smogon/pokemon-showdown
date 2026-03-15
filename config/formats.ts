@@ -211,6 +211,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "S/V Doubles",
+		column: 4,
 	},
 	{
 		name: "[Gen 9] Random Doubles Battle OLD",
