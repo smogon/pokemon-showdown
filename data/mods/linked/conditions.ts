@@ -21,7 +21,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frz: {
 		inherit: true,
 		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
+			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			if (this.effectState.durationRolled !== this.turn && this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
@@ -46,17 +46,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(1, 3)) {
+			if (!this.randomChance(33, 100)) {
 				return;
 			}
 			this.activeTarget = pokemon;
-			const damage = this.actions.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			this.damage(damage, pokemon, pokemon, {
-				id: 'confused' as ID,
-				effectType: 'Move',
-				type: '???',
-			} as unknown as ActiveMove);
+			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
+			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
 		},
 	},
@@ -64,6 +61,30 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onBeforeMove(pokemon) {
 			if (pokemon.moveThisTurn) pokemon.removeVolatile('gem');
+		},
+	},
+	// Prior to Gen 9, using these moves as part of a link resulted in locking into an entire link.
+	// However, such behavior has since been deemed counter-intuitive.
+	// https://www.smogon.com/forums/threads/3776838
+	//
+	// Outrage/Thrash/Petal Dance should be consistent with Choice items.
+	lockedmove: {
+		inherit: true,
+		onStart(target, source, effect) {
+			this.effectState.trueDuration = this.random(2, 4);
+			this.effectState.move = effect.id;
+			this.queue.cancelMove(source);
+		},
+	},
+	// A general rule of thumb to keep in mind is that all effects of move 1
+	// will follow through before the next move activates. However, apparently,
+	// moves such as Skull Bash/Meteor Beam/etc never respected that prior to Gen 9.
+	//
+	// Ensure we lock into Skull Bash/Meteor Beam/etc.
+	twoturnmove: {
+		inherit: true,
+		onOverrideAction(pokemon, target, move) {
+			return this.effectState.move;
 		},
 	},
 };
