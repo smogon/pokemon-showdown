@@ -2210,6 +2210,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in NC 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
+	stadiumpokecuprentals: {
+		effectType: 'ValidatorRule',
+		name: "Stadium Poke Cup Rentals",
+		desc: `Enforces Stadium Pok&eacute; Cup Rentals legality`,
+		// Implemented in mods/gen1stadium/rulesets.ts
+	},
 	noswitching: {
 		effectType: 'Rule',
 		name: 'No Switching',
@@ -2486,6 +2492,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 								if (item.id === 'leppaberry') foe.staleness = 'external';
 							}
 							if (item.onEat) foe.ateBerry = true;
+							if (this.singleEvent('Drink', item, null, foe, null, null)) {
+								this.runEvent('DrinkItem', foe, null, null, item);
+							}
+							if (item.onDrink) foe.drankItem = true;
 						};
 					} else if (item.fling.effect) {
 						m.onHit = item.fling.effect;

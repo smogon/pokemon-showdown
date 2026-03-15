@@ -281,6 +281,7 @@ interface ModdedBattlePokemon {
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
+	drinkItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
 	effectiveClimateWeather?: (this: Pokemon) => ID;
 	effectiveIrritantWeather?: (this: Pokemon) => ID;
 	effectiveEnergyWeather?: (this: Pokemon) => ID;

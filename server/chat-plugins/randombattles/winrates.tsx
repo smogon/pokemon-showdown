@@ -147,6 +147,10 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Deerling";
 	} else if (species.startsWith("Flabe\u0301be\u0301-")) {
 		return "Flabe\u0301be\u0301";
+	} else if (species === "Castform" && item.name === "Whirligig") {
+		return 'Castform-Whirly';
+	} else if (species.startsWith("Botnyak-")) {
+		return "Botnyak";
 	} else {
 		return species;
 	}

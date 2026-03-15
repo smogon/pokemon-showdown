@@ -282,7 +282,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
 	},
 	caffeinecrash: {
-		startFromItem: "  [POKEMON] crashed!",
+		startFromItem: "  [POKEMON] crashed hard!",
 		end: "  [POKEMON] is feeling better!",
 	},
 

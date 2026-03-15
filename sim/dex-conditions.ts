@@ -49,6 +49,7 @@ export interface EventMethods {
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon, source?: Pokemon, effect?: Effect) => void;
+	onDrinkItem?: (this: Battle, item: Item, pokemon: Pokemon, source?: Pokemon, effect?: Effect) => void;
 	onEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
@@ -116,6 +117,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onTryDrinkItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	onTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void)
 	);
@@ -172,6 +174,7 @@ export interface EventMethods {
 	onFoeDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onFoeEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onFoeDrinkItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onFoeEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onFoeFaint?: CommonHandlers['VoidEffect'];
 	onFoeFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
@@ -235,6 +238,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onFoeTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onFoeTryDrinkItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onFoeTryHeal() is run with two different sets of arguments */
 	onFoeTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -288,6 +292,7 @@ export interface EventMethods {
 	onSourceDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onSourceEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onSourceDrinkItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onSourceEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onSourceFaint?: CommonHandlers['VoidEffect'];
 	onSourceFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
@@ -353,6 +358,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onSourceTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onSourceTryDrinkItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onSourceTryHeal() is run with two different sets of arguments */
 	onSourceTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -408,6 +414,7 @@ export interface EventMethods {
 	onAnyDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onAnyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onAnyDrinkItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAnyEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onAnyFaint?: CommonHandlers['VoidEffect'];
 	onAnyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
@@ -473,6 +480,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onAnyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onAnyTryDrinkItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onAnyTryHeal() is run with two different sets of arguments */
 	onAnyTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
@@ -558,6 +566,7 @@ export interface EventMethods {
 	onTrapPokemonPriority?: number;
 	onTryBoostPriority?: number;
 	onTryEatItemPriority?: number;
+	onTryDrinkItemPriority?: number;
 	onTryHealPriority?: number;
 	onTryHitPriority?: number;
 	onTryMovePriority?: number;
@@ -598,6 +607,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onAllyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
+	onAllyDrinkItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAllyEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onAllyFaint?: CommonHandlers['VoidEffect'];
 	onAllyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
@@ -661,6 +671,7 @@ export interface PokemonEventMethods extends EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onAllyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
+	onAllyTryDrinkItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	/* FIXME: onAllyTryHeal() is run with two different sets of arguments */
 	onAllyTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |

@@ -123,6 +123,7 @@ export class Pokemon {
 	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;
+	drankItem: boolean;
 	// Gens 3-4 only
 	itemKnockedOff: boolean;
 
@@ -423,6 +424,7 @@ export class Pokemon {
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;
+		this.drankItem = false;
 		this.itemKnockedOff = false;
 
 		this.trapped = false;
@@ -1783,6 +1785,36 @@ export class Pokemon {
 			this.battle.clearEffectState(this.itemState);
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
+			this.battle.runEvent('AfterUseItem', this, null, null, item);
+			return true;
+		}
+		return false;
+	}
+
+	drinkItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
+		if (!this.item) return false;
+
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
+		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to drink it but we aren't holding it, we probably shouldn't drink what we are holding
+			return false;
+		}
+		if (
+			this.battle.runEvent('UseItem', this, null, null, item) &&
+			(force || this.battle.runEvent('TryDrinkItem', this, null, null, item))
+		) {
+			this.battle.add('-enditem', this, item, '[drink]');
+
+			this.battle.singleEvent('Drink', item, this.itemState, this, source, sourceEffect);
+			this.battle.runEvent('DrinkItem', this, source, sourceEffect, item);
+
+			this.lastItem = this.item;
+			this.item = '';
+			this.battle.clearEffectState(this.itemState);
+			this.usedItemThisTurn = true;
+			this.drankItem = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
 		}

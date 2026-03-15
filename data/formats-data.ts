@@ -3337,7 +3337,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	rotomsol: {
+	rotomjunk: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 		natDexTier: "OU",
@@ -3357,7 +3357,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	rotomjunk: {
+	rotomsol: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 		natDexTier: "OU",

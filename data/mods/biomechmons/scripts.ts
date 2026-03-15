@@ -393,6 +393,61 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		},
 
+		drinkItem(force, source, sourceEffect) {
+			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
+				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
+			if (!item) return false;
+			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
+				!this.isActive) return false;
+
+			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+			if (!source && this.battle.event?.target) source = this.battle.event.target;
+			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			// 	return false;
+			// }
+			if (
+				this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name)) &&
+				(force || this.battle.runEvent('TryEatItem', this, null, null, Dex.items.get(item.name)))
+			) {
+				this.battle.add('-enditem', this, Dex.items.get(item.name), '[eat]');
+
+				this.battle.singleEvent('Eat', Dex.items.get(item.name), this.itemState, this, source, sourceEffect);
+				this.battle.runEvent('EatItem', this, source, sourceEffect, Dex.items.get(item.name));
+
+				if (RESTORATIVE_BERRIES.has(item.id)) {
+					switch (this.pendingStaleness) {
+					case 'internal':
+						if (this.staleness !== 'external') this.staleness = 'internal';
+						break;
+					case 'external':
+						this.staleness = 'external';
+						break;
+					}
+					this.pendingStaleness = undefined;
+				}
+
+				const isBMM = this.volatiles[item.id]?.inSlot;
+				if (isBMM) {
+					const dexItem = this.battle.dex.items.get(item.name);
+					this.removeVolatile(item.id);
+					const itemIndex = (this.m.scrambled.items as { thing: string, inSlot: string }[]).findIndex(e =>
+						this.battle.toID(e.thing) === dexItem.id && e.inSlot === isBMM);
+					if (itemIndex >= 0) this.m.scrambled.items.splice(itemIndex, 1);
+					if (isBMM === 'Ability') this.setAbility('No Ability');
+				} else {
+					this.lastItem = this.item;
+					this.item = '';
+				}
+				this.battle.clearEffectState(this.itemState);
+				this.usedItemThisTurn = true;
+				this.ateBerry = true;
+				this.battle.runEvent('AfterUseItem', this, null, null, Dex.items.get(item.name));
+				return true;
+			}
+			return false;
+		},
+
 		useItem(source, sourceEffect) {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();

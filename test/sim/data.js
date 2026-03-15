@@ -375,7 +375,7 @@ describe('Dex data', () => {
 	// Castform (17) + Cherrim (1) + Snover (1) + Abomasnow (1) + Rotom (11) + Basculin (1) +
 	// Vivillon (2) + Pumpkaboo (3) + Gourgeist (3) + Mimikyu (1) + Basculegion (1) + Dudunsparce (1) +
 	// Eecroach (1) + Stackem (1) + Mosskrat (1) + Bearvoyance (1)
-	formes[9] = 49;
+	formes[9] = 48;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {
