@@ -3658,9 +3658,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['Standard Draft', '!Team Preview'],
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (!(pokemon.set as any).teraCaptain) pokemon.canTerastallize = null;
-			}
 			this.add('rule', 'Tera Captain Clause: Only Tera Captains can Terastallize');
 		},
 		onTeamPreview() {
@@ -3680,6 +3677,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				this.add(`${buf}`);
 			}
+		},
+		actions: {
+			canTerastallize(pokemon: Pokemon) {
+				if (!(pokemon.set as any).teraCaptain) return false;
+				if (pokemon.side.terastallizationUsed || pokemon.getItem().megaStone || pokemon.getItem().zMove) {
+					return false;
+				}
+				if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
+					return false;
+				}
+				return pokemon.teraType;
+			},
 		},
 	},
 	{
