@@ -23,7 +23,7 @@ export interface EventMethods {
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterTakeItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
-	onAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAfterFaint?: CommonHandlers['VoidEffect'];
 	onAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onAfterMove?: MoveEventMethods['onAfterMove'];
@@ -52,6 +52,7 @@ export interface EventMethods {
 	onEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
+	onFaintCount?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onFractionalPriority?: CommonHandlers['ModifierSourceMove'] | -0.1;
 	onHit?: MoveEventMethods['onHit'];
@@ -131,7 +132,7 @@ export interface EventMethods {
 	onFoeAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onFoeAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
-	onFoeAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onFoeAfterFaint?: CommonHandlers['VoidEffect'];
 	onFoeAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onFoeAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onFoeAfterMove?: MoveEventMethods['onAfterMove'];
@@ -157,6 +158,7 @@ export interface EventMethods {
 	onFoeEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onFoeEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onFoeFaint?: CommonHandlers['VoidEffect'];
+	onFoeFaintCount?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFoeFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onFoeHit?: MoveEventMethods['onHit'];
 	onFoeImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
@@ -229,7 +231,7 @@ export interface EventMethods {
 	onSourceAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onSourceAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
-	onSourceAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onSourceAfterFaint?: CommonHandlers['VoidEffect'];
 	onSourceAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onSourceAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onSourceAfterMove?: MoveEventMethods['onAfterMove'];
@@ -255,6 +257,7 @@ export interface EventMethods {
 	onSourceEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onSourceEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onSourceFaint?: CommonHandlers['VoidEffect'];
+	onSourceFaintCount?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSourceFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onSourceHit?: MoveEventMethods['onHit'];
 	onSourceImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
@@ -329,7 +332,7 @@ export interface EventMethods {
 	onAnyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAnyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
-	onAnyAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAnyAfterFaint?: CommonHandlers['VoidEffect'];
 	onAnyAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAnyAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
@@ -357,6 +360,7 @@ export interface EventMethods {
 	onAnyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAnyEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onAnyFaint?: CommonHandlers['VoidEffect'];
+	onAnyFaintCount?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onAnyHit?: MoveEventMethods['onHit'];
 	onAnyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
@@ -434,7 +438,6 @@ export interface EventMethods {
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
 	onAnyModifyAccuracyPriority?: number;
-	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAnySwitchInPriority?: number;
 	onAnySwitchInSubOrder?: number;
@@ -503,7 +506,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAllyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
-	onAllyAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAllyAfterFaint?: CommonHandlers['VoidEffect'];
 	onAllyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAllyAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onAllyAfterMove?: MoveEventMethods['onAfterMove'];
@@ -529,6 +532,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAllyEffectiveness?: MoveEventMethods['onEffectiveness'];
 	onAllyFaint?: CommonHandlers['VoidEffect'];
+	onAllyFaintCount?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAllyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onAllyHit?: MoveEventMethods['onHit'];
 	onAllyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
