@@ -225,7 +225,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 9] Doubles OU",
+		name: "[Gen 9] Doubles OU OLD",
 		mod: 'gen9',
 		gameType: 'doubles',
 		/* searchShow: false,
