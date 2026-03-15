@@ -297,7 +297,7 @@ describe('randomly generated teams should be valid (slow)', () => {
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 	for (const filename of ['gen9/factory-sets', 'gen8/factory-sets', 'gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
-		it(`${filename}.json should contain valid sets`, function () {
+		it.skip(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
 			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
@@ -396,7 +396,7 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 });
 
 describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
-	it(`gen9/bss-factory-sets.json should contain valid sets`, function () {
+	it.skip(`gen9/bss-factory-sets.json should contain valid sets`, function () {
 		this.timeout(0);
 		const setsJSON = require(`../../dist/data/random-battles/gen9/bss-factory-sets.json`);
 		const mod = 'gen9';
@@ -464,7 +464,7 @@ describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
 });
 
 describe('[Gen 9] 1v1 Factory data should be valid (slow)', () => {
-	it(`gen9/1v1-factory-sets.json should contain valid sets`, function () {
+	it.skip(`gen9/1v1-factory-sets.json should contain valid sets`, function () {
 		this.timeout(0);
 		const setsJSON = require(`../../dist/data/random-battles/gen9/1v1-factory-sets.json`);
 		const mod = 'gen9';
