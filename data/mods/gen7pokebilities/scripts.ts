@@ -1,5 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 9,
+	inherit: 'gen7',
 	field: {
 		suppressingClimateWeather() {
 			for (const pokemon of this.battle.getAllActive()) {
@@ -92,7 +92,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.boosts[boostName] = pokemon.boosts[boostName];
 			}
 			if (this.battle.gen >= 6) {
-				// we need to remove all crit volatiles before adding any crit volatiles
+				// we need to be sure to remove all the overlapping crit volatiles before trying to add any of them
 				const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
 				for (const volatile of volatilesToCopy) this.removeVolatile(volatile);
 				for (const volatile of volatilesToCopy) {

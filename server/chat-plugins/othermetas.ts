@@ -37,7 +37,6 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 				effectType: 'Item',
 				sourceEffect: '',
 				isBerry: false,
-				isDrink: false,
 				ignoreKlutz: false,
 				isGem: false,
 				isPokeball: false,
