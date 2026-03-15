@@ -224,12 +224,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 9] Doubles OU OLD",
+		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
 		gameType: 'doubles',
-		searchShow: false,
+		/* searchShow: false,
 		challengeShow: false,
-		tournamentShow: false,
+		tournamentShow: false, */
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Shadow Tag', 'Commander'],
 	},
@@ -3977,20 +3977,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3775744/">1v1 Factory Set Discussion</a>`],
 		mod: 'gen9',
 		team: 'random1v1Factory',
-		bestOfDefault: true,
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
+		bestOfDefault: true,
 		ruleset: ['[Gen 9] 1v1'],
 	},
 	{
 		name: "[Gen 9] BSS Factory",
 		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
 		mod: 'gen9',
+		team: 'randomBSSFactory',
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		team: 'randomBSSFactory',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer'],
 	},
@@ -3998,10 +3998,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Draft Factory",
 		desc: `Randomized matchups sourced from various 6v6 singles draft leagues.`,
 		mod: 'gen9',
+		team: 'randomDraftFactory',
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		team: 'randomDraftFactory',
 		bestOfDefault: true,
 		ruleset: ['Standard Draft', '!Team Preview'],
 		onBegin() {
@@ -4360,10 +4360,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		mod: 'gen8bdsp',
 		team: 'random',
-		bestOfDefault: true,
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
+		bestOfDefault: true,
 		ruleset: ['[Gen 8] Random Battle', '!PotD'],
 	},
 	{
@@ -6056,10 +6056,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 2] NC 2000",
 		mod: 'gen2stadium2',
-		bestOfDefault: true,
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
+		bestOfDefault: true,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause = 1', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview',
@@ -6153,10 +6153,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 1] NC 1997",
 		mod: 'gen1jpn',
-		bestOfDefault: true,
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
+		bestOfDefault: true,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'Cancel Mod', 'NC 1997 Move Legality',
@@ -6229,7 +6229,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 1,
 	},
 	{
-		name: "[Gen 9] Doubles OU",
+		name: "[Gen 9] NOT Doubles OU IMPLEMENTED",
 		mod: 'swse',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
@@ -6356,7 +6356,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "SwSe Dex-based Metas",
 	},
 	{
-		name: "[Gen 9] Tso-Lo Doubles OU",
+		name: "[Gen 9] Tso-Lo Doubles",
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6365,7 +6365,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 9] Sand Flats Doubles OU",
+		name: "[Gen 9] Sand Flats Doubles",
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6374,7 +6374,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 9] Kaskade Countryside Doubles OU",
+		name: "[Gen 9] Kaskade Countryside Doubles",
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6383,7 +6383,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 9] Alki Marsh Doubles OU",
+		name: "[Gen 9] Alki Marsh Doubles",
 
 		mod: 'swse',
 		gameType: 'doubles',
