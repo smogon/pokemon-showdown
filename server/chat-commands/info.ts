@@ -727,7 +727,6 @@ export const commands: Chat.ChatCommands = {
 							if (item.fling.status) details["Fling Effect"] = item.fling.status;
 							if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
 							if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
-							if (item.isDrink) details["Fling Effect"] = "Activates the Drink's effect on the target.";
 							if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
 							if (item.id === 'mentalherb') {
 								const flingEffect = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";

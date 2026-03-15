@@ -35,63 +35,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
-	neutralizinggas: {
-		inherit: true,
-		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		onSwitchIn(pokemon) {
-			this.add('-ability', pokemon, 'Neutralizing Gas');
-			pokemon.abilityState.ending = false;
-			// Remove setter's innates before the ability starts
-			if (pokemon.m.innates) {
-				for (const innate of pokemon.m.innates) {
-					if (this.dex.abilities.get(innate).flags['cantsuppress'] || innate === 'neutralizinggas') continue;
-					pokemon.removeVolatile('ability:' + innate);
-				}
-			}
-			for (const target of this.getAllActive()) {
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
-				}
-				if (target.m.innates) {
-					for (const innate of target.m.innates) {
-						if (this.dex.abilities.get(innate).flags['cantsuppress']) continue;
-						target.removeVolatile('ability:' + innate);
-					}
-				}
-			}
-		},
-		onEnd(source) {
-			this.add('-end', source, 'ability: Neutralizing Gas');
-
-			// FIXME this happens before the pokemon switches out, should be the opposite order.
-			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
-			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
-			// (If you're tackling this, do note extreme weathers have the same issue)
-
-			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityState.ending) return;
-			source.abilityState.ending = true;
-			const sortedActive = this.getAllActive();
-			this.speedSort(sortedActive);
-			for (const pokemon of sortedActive) {
-				if (pokemon !== source) {
-					// Will be suppressed by Pokemon#ignoringAbility if needed
-					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.m.innates) {
-						for (const innate of pokemon.m.innates) {
-							// permanent abilities
-							if (pokemon.volatiles['ability:' + innate]) continue;
-							pokemon.addVolatile('ability:' + innate, pokemon);
-						}
-					}
-				}
-			}
-		},
-	},
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -168,51 +111,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					pokemon.addVolatile(`ability:${ability}`, pokemon);
 				}
 				return;
-			}
-		},
-	},
-	wanderingspirit: {
-		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			const isAbility = target.ability === 'wanderingspirit';
-			if (isAbility) {
-				if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
-
-				if (this.checkMoveMakesContact(move, source, target)) {
-					const sourceAbility = source.setAbility('wanderingspirit', target);
-					if (!sourceAbility) return;
-					if (target.isAlly(source)) {
-						this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
-					} else {
-						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
-					}
-					target.setAbility(sourceAbility);
-				}
-			} else {
-				// Make Wandering Spirit replace a random ability
-				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).flags['failskillswap']);
-				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
-				if (move.flags['contact']) {
-					const sourceAbility = this.sample(possibleAbilities);
-					if (sourceAbility === source.ability) {
-						if (!source.setAbility('wanderingspirit', target)) return;
-					} else {
-						source.removeVolatile('ability:' + sourceAbility);
-						source.addVolatile('ability:wanderingspirit', source);
-					}
-					if (target.isAlly(source)) {
-						this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
-					} else {
-						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
-					}
-					if (sourceAbility === source.ability) {
-						target.setAbility(sourceAbility);
-					} else {
-						target.removeVolatile('ability:wanderingspirit');
-						target.addVolatile('ability:' + sourceAbility, target);
-					}
-				}
 			}
 		},
 	},
