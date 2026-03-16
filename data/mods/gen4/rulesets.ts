@@ -4,6 +4,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		ruleset: [
 			'Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
+		banlist: [],
 	},
 	standard: {
 		inherit: true,
