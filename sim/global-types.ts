@@ -499,18 +499,21 @@ declare namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
+		climateWeather?: number;
 		sun?: number;
 		rain?: number;
 		hail?: number;
 		snow?: number;
 		bloodMoon?: number;
 		fog?: number;
+		irritantWeather?: number;
 		sand?: number;
 		dust?: number;
 		pollen?: number;
 		pheromones?: number;
 		smog?: number;
 		fairyDust?: number;
+		energyWeather?: number;
 		battleAura?: number;
 		paranormalActivity?: number;
 		dreamscape?: number;
