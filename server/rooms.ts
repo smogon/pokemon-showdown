@@ -301,7 +301,7 @@ export abstract class BasicRoom {
 		if (!options.isPersonal) this.persist = true;
 
 		this.minorActivity = null;
-		this.minorActivityQueue = null;
+		this.minorActivityQueue = this.settings.minorActivityQueue || null;
 		if (options.parentid) {
 			this.setParent(Rooms.get(options.parentid) || null);
 		}
@@ -532,6 +532,7 @@ export abstract class BasicRoom {
 		if (!this.minorActivityQueue) this.minorActivityQueue = [];
 		this.minorActivityQueue.push(activity);
 		this.settings.minorActivityQueue = this.minorActivityQueue;
+		this.saveSettings();
 	}
 	clearMinorActivityQueue(slot?: number, depth = 1) {
 		if (!this.minorActivityQueue) return;
