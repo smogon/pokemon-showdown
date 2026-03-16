@@ -2929,7 +2929,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	maushold: {
 		isNonstandard: "Past",
 	},
-	mausholdfour: {
+	mausholdthree: {
 		isNonstandard: "Past",
 	},
 	fidough: {

@@ -541,7 +541,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	landorusi: "Landorus",
 	landorusincarnate: "Landorus",
 	landorusincarnation: "Landorus",
-	mausholdthree: "Maushold",
+	mausholdfour: "Maushold",
 	melo: "Meloetta",
 	meloettaa: "Meloetta",
 	meloettaaria: "Meloetta",

@@ -1042,7 +1042,7 @@ export const PokemonGoData: import('../sim/dex-species').PokemonGoDataTable = {
 	lokix: { encounters: ['wild'] },
 	tandemaus: { encounters: ['research', 'noshiny'] },
 	maushold: { encounters: ['research', 'noshiny'] },
-	mausholdfour: { encounters: ['research', 'noshiny'] },
+	mausholdthree: { encounters: ['research', 'noshiny'] },
 	fidough: { encounters: ['wild', 'noshiny'] },
 	dachsbun: { encounters: ['wild', 'noshiny'] },
 	pawmi: { encounters: ['wild', 'noshiny'] },

@@ -3730,7 +3730,7 @@
 		"maushold": {
 			"weight": 3,
 			"sets": [{
-				"species": "Maushold",
+				"species": "Maushold-Three",
 				"weight": 100,
 				"item": ["Wide Lens"],
 				"ability": ["Technician"],

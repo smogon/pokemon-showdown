@@ -91,7 +91,7 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Genesect";
 	} else if (species === "Dudunsparce-Three-Segment") {
 		return 'Dudunsparce';
-	} else if (species === "Maushold-Four") {
+	} else if (species === "Maushold-Three") {
 		return 'Maushold';
 	} else if (species === "Greninja-Bond") {
 		return 'Greninja';
