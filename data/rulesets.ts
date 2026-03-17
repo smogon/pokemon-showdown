@@ -1054,24 +1054,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
 	},
-	moodyclause: {
-		effectType: 'ValidatorRule',
-		name: 'Moody Clause',
-		desc: "Bans the ability Moody",
-		banlist: ['Moody'],
-		onBegin() {
-			this.add('rule', 'Moody Clause: Moody is banned');
-		},
-	},
-	swaggerclause: {
-		effectType: 'ValidatorRule',
-		name: 'Swagger Clause',
-		desc: "Bans the move Swagger",
-		banlist: ['Swagger'],
-		onBegin() {
-			this.add('rule', 'Swagger Clause: Swagger is banned');
-		},
-	},
 	drypassclause: {
 		effectType: 'ValidatorRule',
 		name: 'DryPass Clause',
@@ -2209,6 +2191,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: "NC 1997 Move Legality",
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in NC 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
+	},
+	stadiumpokecuprentals: {
+		effectType: 'ValidatorRule',
+		name: "Stadium Poke Cup Rentals",
+		desc: `Enforces Stadium Pok&eacute; Cup Rentals legality`,
+		// Implemented in mods/gen1stadium/rulesets.ts
 	},
 	noswitching: {
 		effectType: 'Rule',
