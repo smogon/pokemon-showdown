@@ -28,12 +28,6 @@ describe('Miracle Eye', () => {
 			{ species: 'Forretress', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
-			if (move.id === 'tackle') {
-				assert.equal(accuracy, 100, `Miracle Eye should ignore positive evasion boosts`);
-			}
-		});
-
 		const forretress = battle.p2.active[0];
 		battle.makeChoices('move miracle eye', 'auto');
 		battle.boost({ evasion: 6 }, forretress);
@@ -47,12 +41,6 @@ describe('Miracle Eye', () => {
 		], [
 			{ species: 'Zapdos', moves: ['sleeptalk'] },
 		]]);
-
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
-			if (move.id === 'zapcannon') {
-				assert(accuracy >= 100, `Miracle Eye should not ignore negative evasion drops`);
-			}
-		});
 
 		const zapdos = battle.p2.active[0];
 		battle.makeChoices('move miracle eye', 'auto');

@@ -1601,9 +1601,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 1,
 		flags: { protect: 1, contact: 1, mirror: 1 },
 		multihit: [3, 7],
-		self: {
-			volatileStatus: 'summonmonsterviiifiendishmonstrouspiplupedecolossal',
-		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1611,13 +1608,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Crunch', target);
 			this.add('-anim', source, 'Fury Swipes', target);
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onAccuracy(accuracy, target, source, move) {
-				if (move.hit <= 2) return 100;
-				return 90;
-			},
+		onModifyAccuracy(accuracy, target, source, move) {
+			if (move.hit <= 2) return 100;
 		},
 		secondaries: [
 			{

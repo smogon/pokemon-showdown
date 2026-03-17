@@ -29,9 +29,9 @@ export interface EventMethods {
 	onAfterMove?: MoveEventMethods['onAfterMove'];
 	onAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onAccuracy?: (
-		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | boolean | null | void;
+	onCheckAccuracy?: (
+		this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove
+	) => boolean | void;
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
 	onBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onBeforeMove?: CommonHandlers['VoidSourceMove'];
@@ -77,6 +77,7 @@ export interface EventMethods {
 	onModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
 	onMoveAborted?: CommonHandlers['VoidMove'];
+	onMoveMiss?: CommonHandlers['VoidMove'];
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean;
 	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void;
 	onPrepareHit?: CommonHandlers['ResultSourceMove'];
@@ -137,9 +138,9 @@ export interface EventMethods {
 	onFoeAfterMove?: MoveEventMethods['onAfterMove'];
 	onFoeAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onFoeAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onFoeAccuracy?: (
+	onFoeCheckAccuracy?: (
 		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | boolean | null | void;
+	) => boolean | void;
 	onFoeBasePower?: CommonHandlers['ModifierSourceMove'];
 	onFoeBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onFoeBeforeMove?: CommonHandlers['VoidSourceMove'];
@@ -235,9 +236,9 @@ export interface EventMethods {
 	onSourceAfterMove?: MoveEventMethods['onAfterMove'];
 	onSourceAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onSourceAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onSourceAccuracy?: (
+	onSourceCheckAccuracy?: (
 		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | boolean | null | void;
+	) => boolean | void;
 	onSourceBasePower?: CommonHandlers['ModifierSourceMove'];
 	onSourceBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onSourceBeforeMove?: CommonHandlers['VoidSourceMove'];
@@ -279,6 +280,7 @@ export interface EventMethods {
 	onSourceModifyTarget?: MoveEventMethods['onModifyTarget'];
 	onSourceModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
 	onSourceMoveAborted?: CommonHandlers['VoidMove'];
+	onSourceMoveMiss?: CommonHandlers['VoidMove'];
 	onSourceNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean;
 	onSourceOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void;
 	onSourcePrepareHit?: CommonHandlers['ResultSourceMove'];
@@ -337,9 +339,9 @@ export interface EventMethods {
 	onAnyAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onAnyAfterTerastallization?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onAnyAccuracy?: (
+	onAnyCheckAccuracy?: (
 		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | boolean | null | void;
+	) => boolean | void;
 	onAnyBasePower?: CommonHandlers['ModifierSourceMove'];
 	onAnyBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onAnyBeforeMove?: CommonHandlers['VoidSourceMove'];
@@ -425,7 +427,7 @@ export interface EventMethods {
 	onAnyModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
 
 	// Priorities (incomplete list)
-	onAccuracyPriority?: number;
+	onCheckAccuracyPriority?: number;
 	onDamagingHitOrder?: number;
 	onAfterMoveSecondaryPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
@@ -509,9 +511,9 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyAfterMove?: MoveEventMethods['onAfterMove'];
 	onAllyAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onAllyAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
-	onAllyAccuracy?: (
+	onAllyCheckAccuracy?: (
 		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | boolean | null | void;
+	) => boolean | void;
 	onAllyBasePower?: CommonHandlers['ModifierSourceMove'];
 	onAllyBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onAllyBeforeMove?: CommonHandlers['VoidSourceMove'];

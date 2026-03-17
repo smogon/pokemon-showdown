@@ -19,8 +19,10 @@ describe("Victory Star", () => {
 			{ species: 'Avalugg', moves: ['poltergeist'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 73);
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, (accuracy, target, source, move) => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 73);
+			return finalAccuracy;
 		});
 
 		battle.makeChoices();
@@ -35,8 +37,10 @@ describe("Victory Star", () => {
 			{ species: 'Avalugg', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 60);
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, accuracy => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 60);
+			return finalAccuracy;
 		});
 
 		battle.makeChoices();
@@ -51,8 +55,10 @@ describe("Victory Star", () => {
 			{ species: 'Avalugg', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 91);
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, accuracy => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 91);
+			return finalAccuracy;
 		});
 
 		battle.makeChoices('move sleeptalk, move irontail -1', 'auto');

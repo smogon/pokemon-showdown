@@ -108,14 +108,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return this.chainModify(2);
 				}
 			},
-			onAccuracy(accuracy, target, source, move) {
+			onCheckAccuracy(target, source, move) {
 				const boostedMoves = [
 					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce',
 				];
 				if (boostedMoves.includes(move.id)) {
-					return true;
+					return false;
 				}
-				return accuracy;
 			},
 		},
 	},

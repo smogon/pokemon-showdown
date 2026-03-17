@@ -98,12 +98,12 @@ describe('Electric Terrain', () => {
 
 	it.skip(`should block Sleep before the move would have missed`, () => {
 		battle = common.createBattle([[
-			{ species: 'tapukoko', moves: ['electricterrain'] },
+			{ species: 'tapukoko', moves: ['sleeptalk'] },
 		], [
 			{ species: 'venusaur', moves: ['sleeppowder'] },
 		]]);
 		// Modding accuracy so Sleep Powder always misses
-		battle.onEvent('Accuracy', battle.format, false);
+		battle.onEvent('ModifyAccuracy', battle.format, 0);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-activate|p1a: Tapu Koko|move: Electric Terrain')));
 	});

@@ -835,8 +835,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 		},
-		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
-		// This is here for moves that manually call this event like Perish Song
 		onInvulnerability: false,
 		onBeforeTurn(pokemon) {
 			this.queue.cancelAction(pokemon);

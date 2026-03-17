@@ -615,7 +615,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		// Item activation located in scripts.js
+		onSourceMoveMiss() {
+			this.effectState.blunder = true;
+		},
+		onAfterMove(source) {
+			if (this.effectState.blunder) {
+				source.useItem();
+				delete this.effectState.blunder;
+			}
+		},
+		boosts: {
+			spe: 2,
+		},
 		num: 1121,
 		gen: 8,
 	},
@@ -4083,13 +4094,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		condition: {
 			duration: 2,
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (!move.ohko) {
-					this.add('-enditem', source, 'Micle Berry');
-					source.removeVolatile('micleberry');
-					if (typeof accuracy === 'number') {
-						return this.chainModify([4915, 4096]);
-					}
+			onSourceModifyAccuracyPriority: -3,
+			onSourceModifyAccuracy(accuracy, target, source, move) {
+				this.add('-enditem', source, 'Micle Berry');
+				source.removeVolatile('micleberry');
+				if (typeof accuracy === 'number') {
+					return this.chainModify([4915, 4096]);
 				}
 			},
 		},

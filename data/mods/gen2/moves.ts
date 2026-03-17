@@ -379,8 +379,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 2,
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target && target === this.effectState.source) return true;
+			onSourceCheckAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectState.target && target === this.effectState.source) return false;
 			},
 		},
 	},

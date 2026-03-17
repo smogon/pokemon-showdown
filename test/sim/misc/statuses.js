@@ -275,7 +275,7 @@ describe('Toxic Poison [Gen 1]', () => {
 		]]);
 
 		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('CheckAccuracy', battle.format, false);
 
 		battle.makeChoices('move toxic', 'move splash');
 		const chansey = battle.p2.active[0];
@@ -314,7 +314,7 @@ describe('Toxic Poison [Gen 2]', () => {
 		]]);
 
 		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('CheckAccuracy', battle.format, false);
 
 		battle.makeChoices('move willowisp', 'move splash');
 		const chansey = battle.p2.active[0];
@@ -362,7 +362,7 @@ describe('Toxic Poison [Gen 2]', () => {
 		]]);
 
 		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('CheckAccuracy', battle.format, false);
 
 		battle.makeChoices('move toxic', 'move splash');
 		const chansey = battle.p2.active[0];

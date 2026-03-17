@@ -47,15 +47,15 @@ for (const move of moves) {
 
 			let ebp = 30;
 			let count = 0;
-			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
-				if (move.id === 'recover') return;
-
-				count++;
-				if (count === 3) {
-					ebp = 30;
-					return false; // Imitate a miss
-				} else {
-					return true;
+			battle.onEvent('ModifyAccuracy', battle.format, (accuracy, target, pokemon, move) => {
+				if (move.id === id) {
+					count++;
+					if (count === 3) {
+						ebp = 30;
+						return 0; // Imitate a miss
+					} else {
+						return true;
+					}
 				}
 			});
 			battle.onEvent('BasePower', battle.format, basePower => {

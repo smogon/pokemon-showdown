@@ -14,7 +14,7 @@ describe('Conversion2', () => {
 		battle = common.createBattle([
 			[{ species: 'porygon2', moves: ['sleeptalk', 'conversion2', 'spore'] }],
 			[{ species: 'raticate', moves: ['tackle'] },
-				{ species: 'zapdos', moves: ['thundershock', 'sleeptalk'] }],
+				{ species: 'zapdos', moves: ['electroball', 'sleeptalk'] }],
 		]);
 		battle.makeChoices('move conversion2', 'move tackle');
 		assert(['Rock', 'Ghost', 'Steel'].includes(battle.p1.active[0].getTypes()[0]));

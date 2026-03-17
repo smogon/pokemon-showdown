@@ -325,7 +325,7 @@ describe('Transform [Gen 1]', () => {
 			{ species: 'Starmie', moves: ['recover'] },
 		]]);
 		// Set all moves to perfect accuracy
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('CheckAccuracy', battle.format, false);
 
 		battle.makeChoices();
 		battle.makeChoices('move thunderbolt', 'switch 2');
