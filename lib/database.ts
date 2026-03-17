@@ -428,6 +428,7 @@ export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null 
 	}
 	override escapeId(id: string) {
 		if (!pgRuntime) throw new Error(`Install the 'pg' module to use a Postgres database`);
-		return (pgRuntime as any).escapeIdentifier(id);
+		// @ts-expect-error @types/pg really needs to be updated
+		return pgRuntime.escapeIdentifier(id);
 	}
 }
