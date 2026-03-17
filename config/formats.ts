@@ -5280,7 +5280,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
-			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
+			'Nickname Clause', 'Beat Up Nicknames Mod', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
 		],
 		banlist: ['Restricted Legendary', 'Mythical', 'Soul Dew'],
 		bestOfDefault: true,
@@ -5301,7 +5301,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'singles',
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
-			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets',
+			'Nickname Clause', 'Beat Up Nicknames Mod', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets',
 		],
 		banlist: ['Soul Dew', 'Restricted Legendary', 'Mythical', 'Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
 		restricted: [],
@@ -5386,7 +5386,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause = 1', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview',
+			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause = 1',
+			'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Beat Up Nicknames Mod',
+			'Team Preview',
 		],
 		banlist: ['Uber'],
 	},

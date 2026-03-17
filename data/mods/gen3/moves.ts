@@ -44,8 +44,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			duration: 1,
 			onModifySpAPriority: -101,
 			onModifySpA(atk, pokemon, defender, move) {
-				// https://www.smogon.com/forums/posts/8992145/
-				// this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				if (!this.ruleTable.has('beatupnicknamesmod')) {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0]!.name);
+				}
 				this.event.modifier = 1;
 				return this.dex.species.get(move.allies!.shift()!.set.species).baseStats.atk;
 			},

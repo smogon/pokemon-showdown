@@ -38,7 +38,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
@@ -159,7 +159,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', 'Nickname Clause', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Nickname Clause', 'Beat Up Nicknames Mod', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -822,6 +822,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			// Illegality of impersonation of other species is
 			// hardcoded in team-validator.js, so we are done.
 		},
+	},
+	beatupnicknamesmod: {
+		effectType: 'Rule',
+		name: 'Beat Up Nicknames Mod',
+		desc: "Prevents Beat Up from revealing any party members, enforcing gameplay that assumes optimal Pok&eacute;mon nicknaming strategies.",
+		onBegin() {
+			if (this.gen <= 4) {
+				this.add('rule', `Beat Up Nicknames Mod: Beat Up will not reveal any party members`);
+			}
+		},
+		// https://www.smogon.com/forums/posts/8992145/
+		// hardcoded in data/mods/gen3/moves.ts, data/mods/gen4/moves.ts
 	},
 	itemclause: {
 		effectType: 'ValidatorRule',
