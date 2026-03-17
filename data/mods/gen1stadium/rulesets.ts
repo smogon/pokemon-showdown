@@ -103,7 +103,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				set.ivs = { hp: 12, atk: 12, def: 10, spa: 12, spd: 12, spe: 10 };
 				set.moves = ['Fly', 'Quick Attack', 'Sand Attack', 'Take Down'];
 				break;
-			case 'Butterfree':
+			case 'Pidgeot':
 				set.evs = { hp: 129, atk: 128, def: 128, spa: 128, spd: 128, spe: 128 };
 				set.ivs = { hp: 10, atk: 8, def: 10, spa: 10, spd: 10, spe: 8 };
 				set.moves = ['Mirror Move', 'Fly', 'Quick Attack', 'Sand Attack'];
