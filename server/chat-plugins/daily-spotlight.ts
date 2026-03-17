@@ -279,7 +279,7 @@ export const commands: Chat.ChatCommands = {
 	daily(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
-		const key = toID(target);
+		const key = toID(this.splitOne(target)[0]);
 		if (!key) return this.parse('/help daily');
 
 		if (!spotlights[room.roomid]?.[key]) {

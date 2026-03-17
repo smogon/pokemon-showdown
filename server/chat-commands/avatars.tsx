@@ -772,12 +772,11 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = this.broadcasting && !target ? null : this.getUserOrSelf(target);
 		const targetUserids = targetUser ? new Set([targetUser.id, ...targetUser.previousIDs]) :
 			target ? new Set([toID(target)]) : null;
-		if (targetUserids && targetUser !== user && !user.can('alts')) {
-			throw new Chat.ErrorMessage("You don't have permission to look at another user's avatars!");
-		}
 
 		const out = [];
-		if (targetUserids) {
+		if (targetUserids && (targetUser === user || user.can('alts'))) {
+			// If the user lacks permission to view avatars, the argument is ignored silently,
+			// so that it can highlight the target user.
 			const hasButton = !this.broadcasting && targetUser === user;
 			for (const id of targetUserids) {
 				const allowed = customAvatars[id]?.allowed;
