@@ -703,17 +703,17 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				set.ivs = { hp: 12, atk: 12, def: 10, spa: 12, spd: 12, spe: 10 };
 				set.moves = ['Surf', 'Ice Beam', 'Double Edge', 'Double Team'];
 				break;
-			case 'Starmie':
+			case 'Omastar':
 				set.evs = { hp: 113, atk: 112, def: 112, spa: 112, spd: 112, spe: 112 };
 				set.ivs = { hp: 4, atk: 4, def: 4, spa: 4, spd: 4, spe: 6 };
 				set.moves = ['Hydro Pump', 'Submission', 'Spike Cannon', 'Withdraw'];
 				break;
-			case 'Staryu':
+			case 'Kabuto':
 				set.evs = { hp: 145, atk: 144, def: 144, spa: 144, spd: 144, spe: 144 };
 				set.ivs = { hp: 12, atk: 12, def: 10, spa: 12, spd: 12, spe: 10 };
 				set.moves = ['Hydro Pump', 'Blizzard', 'Slash', 'Double Team'];
 				break;
-			case 'Starmie':
+			case 'Kabutops':
 				set.evs = { hp: 113, atk: 112, def: 112, spa: 112, spd: 112, spe: 112 };
 				set.ivs = { hp: 4, atk: 4, def: 4, spa: 4, spd: 4, spe: 6 };
 				set.moves = ['Surf', 'Swords Dance', 'Mega Kick', 'Submission'];
