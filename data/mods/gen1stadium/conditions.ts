@@ -49,7 +49,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			this.add('cant', pokemon, 'slp');
