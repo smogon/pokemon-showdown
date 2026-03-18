@@ -41,29 +41,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move' ||
+			if (!action || action.choice !== 'move') return false;
+			// @ts-expect-error modded
+			if (!action.linked) {
+				const move = action.move;
+				if (move.category === 'Status' && move.id !== 'mefirst') {
+					return false;
+				}
+			} else {
 				// @ts-expect-error modded
-				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				if (action.linked.every(move => move.category === 'Status' && move.id !== 'mefirst')) {
+					return false;
+				}
 			}
-			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
+			if (target.volatiles['mustrecharge'] && target.volatiles['mustrecharge'].duration! < 2) {
 				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
 				// i.e. if Sucker Punch is linked with a negative priority move
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
-			}
-			// @ts-expect-error modded
-			if (action.linked) {
-				// @ts-expect-error modded
-				for (const linkedMove of action.linked) {
-					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
-				}
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				return false;
 			}
 		},
 	},
@@ -71,29 +65,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move' ||
+			if (!action || action.choice !== 'move') return false;
+			// @ts-expect-error modded
+			if (!action.linked) {
+				const move = action.move;
+				if (move.category === 'Status' && move.id !== 'mefirst') {
+					return false;
+				}
+			} else {
 				// @ts-expect-error modded
-				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				if (action.linked.every(move => move.category === 'Status' && move.id !== 'mefirst')) {
+					return false;
+				}
 			}
-			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
+			if (target.volatiles['mustrecharge'] && target.volatiles['mustrecharge'].duration! < 2) {
 				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
 				// i.e. if Sucker Punch is linked with a negative priority move
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
-			}
-			// @ts-expect-error modded
-			if (action.linked) {
-				// @ts-expect-error modded
-				for (const linkedMove of action.linked) {
-					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
-				}
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				return false;
 			}
 		},
 	},
@@ -101,29 +89,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move' || action.move.priority < 0.1 ||
+			if (!action || action.choice !== 'move') return false;
+			// @ts-expect-error modded
+			if (!action.linked) {
+				const move = action.move;
+				if (move.priority < 0.1 || move.category === 'Status') {
+					return false;
+				}
+			} else {
 				// @ts-expect-error modded
-				(!action.linked && action.move.category === 'Status' && action.move.id !== 'mefirst')) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				if (action.linked.every(move => move.priority < 0.1 || move.category === 'Status')) {
+					return false;
+				}
 			}
-			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
+			if (target.volatiles['mustrecharge'] && target.volatiles['mustrecharge'].duration! < 2) {
 				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
 				// i.e. if Sucker Punch is linked with a negative priority move
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
-			}
-			// @ts-expect-error modded
-			if (action.linked) {
-				// @ts-expect-error modded
-				for (const linkedMove of action.linked) {
-					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
-				}
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return null;
+				return false;
 			}
 		},
 	},
