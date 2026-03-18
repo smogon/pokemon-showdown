@@ -464,6 +464,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', source, 'Mimic', move.name);
 		},
 	},
+	minimize: {
+		inherit: true,
+		volatileStatus: undefined,
+	},
 	mirrormove: {
 		inherit: true,
 		onHit(pokemon) {
