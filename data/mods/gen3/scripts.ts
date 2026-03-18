@@ -130,6 +130,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.priority = this.battle.activeMove.priority;
 			}
 			const baseTarget = move.target;
+			let targetRelayVar = { target };
+			targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
+			if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 			if (move.target === 'self' || move.target === 'allies') {
 				target = pokemon;

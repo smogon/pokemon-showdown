@@ -878,8 +878,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target)) {
-					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
-						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+					if ((target.side.getSideCondition('reflect') && move.category === 'Physical') ||
+						(target.side.getSideCondition('lightscreen') && move.category === 'Special')) {
 						return;
 					}
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
@@ -3095,40 +3095,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['counter']) return 0;
-			return pokemon.volatiles['counter'].damage || 1;
+			const lastDamagedBy = pokemon.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return false;
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Physical",
 		name: "Counter",
 		pp: 20,
 		priority: -5,
 		flags: { contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('counter');
-		},
 		onTry(source) {
-			if (!source.volatiles['counter']) return false;
-			if (source.volatiles['counter'].slot === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2, move) {
-				if (move.id !== 'counter') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit(damage, target, source, move) {
-				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return;
+			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
 		target: "scripted",
@@ -10718,7 +10701,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
+				if (target !== source && this.effectState.target.hasAlly(target) && move.category === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -12430,40 +12413,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['mirrorcoat']) return 0;
-			return pokemon.volatiles['mirrorcoat'].damage || 1;
+			const lastDamagedBy = pokemon.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return false;
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Special",
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
 		flags: { protect: 1, failmefirst: 1, noassist: 1 },
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('mirrorcoat');
-		},
 		onTry(source) {
-			if (!source.volatiles['mirrorcoat']) return false;
-			if (source.volatiles['mirrorcoat'].slot === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2, move) {
-				if (move.id !== 'mirrorcoat') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit(damage, target, source, move) {
-				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return;
+			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
 		target: "scripted",
@@ -15406,7 +15372,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
+				if (target !== source && this.effectState.target.hasAlly(target) && move.category === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
