@@ -1009,8 +1009,7 @@ export class Battle {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
 				// unique field position in a pre-sorted-by-speed array
-				const fieldPositionValue = pokemon.side.n * this.sides.length + pokemon.position;
-				handler.speed -= this.speedOrder.indexOf(fieldPositionValue) / (this.activePerHalf * 2);
+				handler.speed -= this.speedOrder.indexOf(pokemon.getFieldPositionValue()) / (this.activePerHalf * 2);
 			}
 		}
 		return handler;
@@ -1313,9 +1312,9 @@ export class Battle {
 		if (!sourceCanBeSet) return sourceCanBeSet;
 
 		if (this.gen <= 4 || source.isAlly(target)) {
-			this.add('-activate', source, 'Skill Swap');
+			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
 		} else {
-			this.add('-activate', source, 'Skill Swap', target, `[ability] ${targetAbility.name}`, `[ability2] ${sourceAbility.name}`);
+			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
 		this.singleEvent('End', sourceAbility, source.abilityState, source);
 		this.singleEvent('End', targetAbility, target.abilityState, target);
@@ -2672,40 +2671,8 @@ export class Battle {
 
 			this.add('start');
 
-			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
-				let rawSpecies: Species | null = null;
-				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-					rawSpecies = this.dex.species.get('Zacian-Crowned');
-				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-				}
-				if (!rawSpecies) continue;
-				const species = pokemon.setSpecies(rawSpecies);
-				if (!species) continue;
-				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getUpdatedDetails();
-				pokemon.setAbility(species.abilities['0'], null, null, true);
-				pokemon.baseAbility = pokemon.ability;
-
-				const behemothMove: { [k: string]: string } = {
-					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-				};
-				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHeadIndex >= 0) {
-					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHeadIndex] = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				}
+				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 
 			this.format.onBattleStart?.call(this);
@@ -2726,9 +2693,6 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 			this.midTurn = true;
 			break;

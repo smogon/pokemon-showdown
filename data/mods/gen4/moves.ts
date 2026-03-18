@@ -87,8 +87,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			duration: 1,
 			onModifyAtkPriority: -101,
 			onModifyAtk(atk, pokemon, defender, move) {
-				// https://www.smogon.com/forums/posts/8992145/
-				// this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				if (!this.ruleTable.has('beatupnicknamesmod')) {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0]!.name);
+				}
 				this.event.modifier = 1;
 				return this.dex.species.get(move.allies!.shift()!.set.species).baseStats.atk;
 			},
@@ -836,9 +838,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1 },
 		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
+				move.flags['metronome'] && !pokemon.moves.includes(move.id) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				move.flags['metronome'] &&
 				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
 				!(pokemon.volatiles['healblock'] && move.flags['heal'])
 			));
@@ -1072,6 +1073,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 					const move = this.dex.getActiveMove('pursuit');
+					source.deductPP(move.id);
 					source.moveUsed(move, pokemon.position);
 					if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
 						source.addVolatile('choicelock');

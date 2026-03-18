@@ -650,6 +650,7 @@ export class TeamValidator {
 			}
 		}
 		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
+			// Gigantamax Melmetal cannot be obtained through the Max Soup
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
@@ -955,7 +956,12 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const { species: eventSpecies, eventData } = eventOnlyData;
+			const eventSpecies = eventOnlyData.species;
+			let eventData = eventOnlyData.eventData;
+			if (ruleTable.has('fullarceusclause') && eventSpecies.baseSpecies === 'Arceus') {
+				// Hall of Origin Arceus
+				eventData = [...eventData, { generation: 4, level: 80, moves: ['refresh', 'futuresight', 'recover', 'hyperbeam'] }];
+			}
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
@@ -2345,10 +2351,10 @@ export class TeamValidator {
 		if (dex.gen < 8 || this.format.mod === 'gen8dlc1') return null;
 		if (!pokemonGoData) {
 			// Handles forms and evolutions not obtainable from Pokemon GO
-			const otherSpecies = this.dex.species.learnsetParent(species);
+			const otherSpecies = this.dex.species.get(species.changesFrom || species.prevo);
 			// If a Pokemon is somehow not obtainable from Pokemon GO and it must be leveled up to be evolved,
 			// validation for the game should stop because it's more optimal to get the Pokemon outside of the game
-			if (otherSpecies && !species.evoLevel) {
+			if (otherSpecies.name && !species.evoLevel) {
 				const otherProblems = this.validatePokemonGo(otherSpecies, set, setSources, name);
 				if (otherProblems) {
 					problems = otherProblems;
@@ -2646,7 +2652,7 @@ export class TeamValidator {
 						// we're past the required level to learn it
 						// (gen 7 level-up moves can be relearnered at any level)
 						// falls through to LMT check below
-					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
+					} else if (this.ruleTable.has('pomegglitchclause') && level >= 5 && learnedGen === 3 && species.canHatch) {
 						// Pomeg Glitch
 						learned = `${learnedGen}Epomeg` as MoveSource;
 					} else if (species.gender !== 'N' &&
@@ -2764,7 +2770,7 @@ export class TeamValidator {
 					return null;
 				}
 			}
-			if (ruleTable.has('mimicglitch') && species.gen < 5) {
+			if (ruleTable.has('mimicglitchclause') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
 				let getGlitch = false;
@@ -2855,7 +2861,7 @@ export class TeamValidator {
 			if (!dex.species.getLearnsetData(nextSpecies.id).learnset) {
 				nextSpecies = dex.species.get(nextSpecies.changesFrom || nextSpecies.baseSpecies);
 			}
-			while (nextSpecies) {
+			while (nextSpecies.name) {
 				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
 					/**
 					 * Case 1: The species can learn the move - allow moves of the species from all gens
@@ -2874,7 +2880,7 @@ export class TeamValidator {
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
-				nextSpecies = dex.species.learnsetParent(nextSpecies);
+				nextSpecies = dex.species.get(nextSpecies.prevo);
 			}
 		}
 

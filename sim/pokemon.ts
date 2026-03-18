@@ -518,6 +518,11 @@ export class Pokemon {
 		return (this.side.id + positionLetter) as PokemonSlot;
 	}
 
+	getFieldPositionValue() {
+		// p1a, p2a, p3a, ..., p1b, p2b, p3b, ...
+		return this.side.n + this.battle.sides.length * this.position;
+	}
+
 	toString() {
 		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
@@ -876,16 +881,15 @@ export class Pokemon {
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
-		const gen = this.battle.gen;
 		move = this.battle.dex.moves.get(move);
 		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
 		ppData.used = true;
-		if (!ppData.pp && gen > 1) return 0;
+		if (!ppData.pp) return 0;
 
 		if (!amount) amount = 1;
 		ppData.pp -= amount;
-		if (ppData.pp < 0 && gen > 1) {
+		if (ppData.pp < 0) {
 			amount += ppData.pp;
 			ppData.pp = 0;
 		}

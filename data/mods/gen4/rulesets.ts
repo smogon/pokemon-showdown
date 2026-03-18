@@ -1,11 +1,20 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+	standardag: {
+		inherit: true,
+		ruleset: [
+			'Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Beat Up Nicknames Mod', 'Endless Battle Clause',
+		],
+	},
 	standard: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
 	},
 	flatrules: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 	},
 	teampreview: {
 		inherit: true,

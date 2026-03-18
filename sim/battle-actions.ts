@@ -180,7 +180,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map(a => a.side.n * a.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
@@ -485,10 +485,13 @@ export class BattleActions {
 			}
 		}
 
-		if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-			!this.battle.runEvent('TryMove', pokemon, target, move)) {
+		let tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
+		if (tryMoveResult) {
+			tryMoveResult = this.battle.runEvent('TryMove', pokemon, target, move);
+		}
+		if (!tryMoveResult) {
 			move.mindBlownRecoil = false;
-			return false;
+			return tryMoveResult;
 		}
 
 		this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
@@ -1925,7 +1928,7 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
-			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.", false, pokemon.side);
 			return;
 		}
 
