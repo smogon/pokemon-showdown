@@ -130,7 +130,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		condition: {
 			inherit: true,
 			onModifyAtk() {},
-			onModifyDef() {},
+			onModifySpA() {},
 			onModifyDamagePhase1(atk, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('Flash Fire boost');
@@ -271,6 +271,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return false;
 			}
 		},
+		rating: 4.5,
 	},
 	minus: {
 		inherit: true,
@@ -349,6 +350,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target === source) return;
 			return 1;
 		},
+		rating: 1.5,
 	},
 	roughskin: {
 		inherit: true,
