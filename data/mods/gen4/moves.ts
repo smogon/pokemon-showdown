@@ -944,6 +944,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
+			noCopy: false,
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Electric') {
@@ -1492,6 +1493,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
+			noCopy: false,
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Fire') {
