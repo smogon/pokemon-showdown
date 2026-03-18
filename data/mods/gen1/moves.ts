@@ -466,7 +466,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	minimize: {
 		inherit: true,
-		volatileStatus: undefined,
+		condition: {
+			inherit: true,
+			onSourceModifyDamage() {},
+		},
 	},
 	mirrormove: {
 		inherit: true,
