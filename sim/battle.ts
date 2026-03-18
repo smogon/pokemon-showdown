@@ -1639,12 +1639,6 @@ export class Battle {
 						delete pokemon.volatiles['partiallytrapped'];
 					}
 				}
-				if (pokemon.volatiles['fakepartiallytrapped']) {
-					const counterpart = pokemon.volatiles['fakepartiallytrapped'].counterpart;
-					if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
-						delete pokemon.volatiles['fakepartiallytrapped'];
-					}
-				}
 			}
 		}
 

@@ -193,28 +193,23 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// TODO: research exact mechanics
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
+			if (this.effectState.fake) return;
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
 		onRestart() {
 			this.effectState.duration = 2;
+			delete this.effectState.fake;
 		},
 		onAccuracy(accuracy, target, source, move) {
+			if (this.effectState.fake) return;
 			if (source === this.effectState.source) return true;
 		},
 		onLockMove() {
+			if (this.effectState.fake) return;
 			// exact move doesn't matter, no move is ever actually used
 			return 'struggle';
 		},
-		onDisableMove(target) {
-			target.maybeLocked = true;
-		},
-	},
-	fakepartiallytrapped: {
-		name: 'fakepartiallytrapped',
-		// Wrap ended this turn, but you don't know that
-		// until you try to use an attack
-		duration: 2,
 		onDisableMove(target) {
 			target.maybeLocked = true;
 		},
@@ -247,15 +242,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				delete pokemon.volatiles['partialtrappinglock'];
 				return;
 			}
-			if (this.effectState.duration === 1) {
-				if (this.effectState.totalDuration !== 5) {
-					pokemon.addVolatile('fakepartiallytrapped');
-					pokemon.volatiles['fakepartiallytrapped'].counterpart = target;
-					target.addVolatile('fakepartiallytrapped');
-					target.volatiles['fakepartiallytrapped'].counterpart = pokemon;
-				}
-			} else {
-				target.addVolatile('partiallytrapped', pokemon, move);
+			target.addVolatile('partiallytrapped', pokemon, move);
+			if (this.effectState.duration === 1 && this.effectState.totalDuration !== 5) {
+				target.volatiles['partiallytrapped'].fake = true;
 			}
 		},
 		onLockMove() {
