@@ -74,7 +74,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	rattled: {
 		inherit: true,
 		onAfterBoost() {},
-		rating: 1,
 	},
 	scrappy: {
 		inherit: true,
