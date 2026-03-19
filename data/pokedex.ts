@@ -18732,10 +18732,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 56,
 		color: "Gray",
 		prevo: "Primeape",
-		// technically incorrect, as Primeape can unlearn Rage Fist and still evolve.
-		evoType: "levelMove",
-		evoMove: "Rage Fist",
-		evoCondition: "after using it 20 times",
+		// Technically incorrect, as Primeape only needs to use Rage Fist 20 times to evolve. Documented this way for validation purposes.
+		evoLevel: 36,
+		evoCondition: "after using Rage Fist 20 times",
 		eggGroups: ["Field"],
 	},
 	clodsire: {

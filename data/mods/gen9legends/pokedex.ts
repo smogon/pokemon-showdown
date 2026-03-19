@@ -21,4 +21,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		evoType: "other",
 		evoCondition: "Land 20 hits with Barb Barrage",
 	},
+	annihilape: {
+		inherit: true,
+		// Technically incorrect, as Primeape only needs to use Rage Fist 20 times to evolve. Documented this way for validation purposes.
+		evoLevel: 35,
+		evoCondition: "after using Rage Fist 20 times",
+	},
 };
