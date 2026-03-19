@@ -82,6 +82,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: 208,
 		gen: 3,
 		isNonstandard: "Unobtainable",
+		// No competitive use
 	},
 	fastball: {
 		inherit: true,

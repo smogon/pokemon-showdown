@@ -1,4 +1,4 @@
-import type { PokemonEventMethods, ConditionData } from './dex-conditions';
+import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 
@@ -16,6 +16,7 @@ export interface ItemData extends Partial<Item>, PokemonEventMethods {
 export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	inherit: true,
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
+	condition?: ModdedConditionData,
 };
 
 export interface ItemDataTable { [itemid: IDEntry]: ItemData }

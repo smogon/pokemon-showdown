@@ -160,11 +160,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'rage',
 		},
 		condition: {
+			inherit: true,
 			// Rage lock
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
 			},
-			onLockMove: 'rage',
 			onHit(target, source, move) {
 				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
 					this.boost({ atk: 1 });
@@ -220,12 +220,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		condition: {
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4);
-				delete target.volatiles['partiallytrapped'];
-			},
-			onTryHitPriority: -1,
+			inherit: true,
 			onTryHit(target, source, move) {
 				if (target === source) {
 					this.debug('sub bypass: self hit');
@@ -274,9 +269,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					lastAttackedBy.damage = damage;
 				}
 				return 0;
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Substitute');
 			},
 		},
 		secondary: null,
