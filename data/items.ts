@@ -3446,6 +3446,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 269,
 		gen: 4,
 	},
+	linkingcord: {
+		name: "Linking Cord",
+		spritenum: 0,
+		isHeldItem: false,
+		num: 1611,
+		gen: 8,
+		isNonstandard: "Past",
+	},
 	loadeddice: {
 		name: "Loaded Dice",
 		spritenum: 751,
@@ -5581,6 +5589,20 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 2572,
 		gen: 9,
 		isNonstandard: "Future",
+	},
+	scrollofdarkness: {
+		name: "Scroll of Darkness",
+		spritenum: 0,
+		isHeldItem: false,
+		num: 1857,
+		gen: 9,
+	},
+	scrollofwaters: {
+		name: "Scroll of Waters",
+		spritenum: 0,
+		isHeldItem: false,
+		num: 1858,
+		gen: 9,
 	},
 	seaincense: {
 		name: "Sea Incense",

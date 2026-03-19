@@ -5,27 +5,47 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	alakazam: {
 		inherit: true,
-		evoType: "useItem",
-		evoItem: "Linking Cord",
+		evoType: "other",
+		evoItem: "Linking Cord or trade",
 	},
 	machamp: {
 		inherit: true,
-		evoType: "useItem",
-		evoItem: "Linking Cord",
+		evoType: "other",
+		evoItem: "Linking Cord or trade",
 	},
 	golem: {
 		inherit: true,
-		evoType: "useItem",
-		evoItem: "Linking Cord",
+		evoType: "other",
+		evoItem: "Linking Cord or trade",
 	},
 	gengar: {
 		inherit: true,
+		evoType: "other",
+		evoItem: "Linking Cord or trade",
+	},
+	chansey: {
+		inherit: true,
 		evoType: "useItem",
-		evoItem: "Linking Cord",
 	},
 	quilava: {
 		inherit: true,
 		evos: ["Typhlosion-Hisui"],
+	},
+	espeon: {
+		inherit: true,
+		evoCondition: "during the day w/o knowing a Fairy-type move and not near a Moss or Ice rock",
+	},
+	umbreon: {
+		inherit: true,
+		evoCondition: "during the night w/o knowing a Fairy-type move and not near a Moss or Ice rock",
+	},
+	steelix: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	scizor: {
+		inherit: true,
+		evoType: "useItem",
 	},
 	cherrimsunshine: {
 		inherit: true,
@@ -34,6 +54,50 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	mimejr: {
 		inherit: true,
 		evos: ["Mr. Mime"],
+	},
+	weavile: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	magnezone: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Thunder Stone or near a special magnetic field",
+	},
+	rhyperior: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	electivire: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	magmortar: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	leafeon: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Leaf Stone or near a Moss Rock",
+	},
+	glaceon: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Ice Stone or near an Ice Rock",
+	},
+	gliscor: {
+		inherit: true,
+		evoType: "useItem",
+	},
+	probopass: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "Thunder Stone or near a special magnetic field",
+	},
+	dusknoir: {
+		inherit: true,
+		evoType: "useItem",
 	},
 	dewott: {
 		inherit: true,
@@ -68,6 +132,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		evoType: "other",
 		evoCondition: "Receive 294+ recoil without fainting",
+	},
+	sneasler: {
+		inherit: true,
+		evoType: "useItem",
 	},
 	overqwil: {
 		inherit: true,

@@ -88,6 +88,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	readonly isPokeball: boolean;
 	/** Is this item a Red or Blue Orb? */
 	readonly isPrimalOrb: boolean;
+	/** Is this item a held item? (Defaults to true if unset) */
+	readonly isHeldItem?: boolean;
 
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
@@ -120,6 +122,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.isGem = !!data.isGem;
 		this.isPokeball = !!data.isPokeball;
 		this.isPrimalOrb = !!data.isPrimalOrb;
+		this.isHeldItem = data.isHeldItem !== false;
 
 		if (!this.gen) {
 			if (this.num >= 1124) {
