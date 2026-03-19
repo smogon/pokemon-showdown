@@ -36,8 +36,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	autotomize: {
 		inherit: true,
 		volatileStatus: 'autotomize',
-		onHit(pokemon) {
-		},
+		onHit() {},
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
@@ -77,6 +76,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	block: {
 		inherit: true,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+	},
+	bodyslam: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 	},
 	bounce: {
 		inherit: true,
@@ -192,6 +195,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 	},
+	dragonrush: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+	},
 	dreameater: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -260,10 +267,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 20,
 		condition: {
-			duration: 2,
-			onStart() {
-				this.effectState.multiplier = 1;
-			},
+			inherit: true,
 			onRestart() {
 				if (this.effectState.multiplier < 8) {
 					this.effectState.multiplier <<= 1;
@@ -362,6 +366,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return success;
 		},
+	},
+	heatcrash: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 	},
 	heatwave: {
 		inherit: true,
@@ -494,13 +502,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	lightscreen: {
 		inherit: true,
 		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
-					return 8;
-				}
-				return 5;
-			},
+			inherit: true,
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
@@ -509,14 +511,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return this.chainModify(0.5);
 					}
 				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Light Screen');
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 2,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'move: Light Screen');
 			},
 		},
 	},
@@ -527,24 +521,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	magiccoat: {
 		inherit: true,
 		condition: {
-			duration: 1,
-			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Magic Coat');
-				if (effect?.effectType === 'Move') {
-					this.effectState.pranksterBoosted = effect.pranksterBoosted;
-				}
-			},
-			onTryHitPriority: 2,
-			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
-					return;
-				}
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-				this.actions.useMove(newMove, target, { target: source });
-				return null;
-			},
+			inherit: true,
 			onAllyTryHitSide(target, source, move) {
 				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 					return;
@@ -587,12 +564,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 20,
 		condition: {
-			noCopy: true,
-			onSourceModifyDamage(damage, source, target, move) {
-				if (['stomp', 'steamroller'].includes(move.id)) {
-					return this.chainModify(2);
-				}
-			},
+			inherit: true,
+			onAccuracy() {},
 		},
 	},
 	moonlight: {
@@ -689,11 +662,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.addVolatile('stall');
 		},
 		condition: {
-			duration: 1,
-			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Quick Guard');
-			},
-			onTryHitPriority: 4,
+			inherit: true,
 			onTryHit(target, source, effect) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
@@ -720,13 +689,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	reflect: {
 		inherit: true,
 		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
-					return 8;
-				}
-				return 5;
-			},
+			inherit: true,
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
@@ -735,14 +698,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return this.chainModify(0.5);
 					}
 				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Reflect');
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 1,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'Reflect');
 			},
 		},
 	},
@@ -881,12 +836,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	substitute: {
 		inherit: true,
 		condition: {
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4);
-				delete target.volatiles['partiallytrapped'];
-			},
-			onTryPrimaryHitPriority: -1,
+			inherit: true,
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.flags['bypasssub']) {
 					return;
@@ -917,9 +867,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return this.HIT_SUBSTITUTE;
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Substitute');
 			},
 		},
 	},
