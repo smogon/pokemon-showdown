@@ -6249,9 +6249,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712825/">Doubles UU</a>`,
-		],
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6263,9 +6260,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles LC",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710957/">Doubles LC</a>`,
-		],
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6274,9 +6268,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712864/">Doubles Ubers</a>`,
-		],
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6306,9 +6297,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Doubles Monotype",
 		desc: `Double battle where all Pok&eacute;mon on your team must share a common type.`,
-		threads: [
-			`&bullet; <a href="https://discord.gg/3aEUWwwDys">OM Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6406,9 +6394,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] OU",
-		threads: [
-			`&bullet; <a href="https://discord.gg/zEFfyzvffa">OU Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		ruleset: ['Standard'],
@@ -6421,9 +6406,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Ubers",
-		threads: [
-			`&bullet; <a href="https://discord.gg/BXfzNWuU54">Ubers Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		searchShow: false,
@@ -6438,9 +6420,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] UU",
-		threads: [
-			`&bullet; <a href="https://discord.gg/zuQ6MaMEwK">UU Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		searchShow: false,
@@ -6451,11 +6430,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] RU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3725482/">RU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3729823/">RU Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3717072/">RU Sample Teams</a>`,
-		],
 
 		mod: 'swse',
 		searchShow: false,
@@ -6466,11 +6440,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] NU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3715408/">NU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3729943/">NU Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3730216/">NU Sample Teams</a>`,
-		],
 
 		mod: 'swse',
 		searchShow: false,
@@ -6491,9 +6460,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] LC",
-		threads: [
-			`&bullet; <a href="https://discord.gg/6dKHQAR3DW">LC Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		ruleset: ['Standard', 'Little Cup'],
@@ -6522,9 +6488,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Monotype",
 		desc: `All Pok&eacute;mon on your team must share a common type.`,
-		threads: [
-			`&bullet; <a href="https://discord.gg/3aEUWwwDys">OM Discord channel</a>`,
-		],
 
 		mod: 'swse',
 		ruleset: ['Standard', 'Same Type Clause', 'Terastal Clause'],
