@@ -10,9 +10,8 @@ describe('[Gen 1 Stadium] Confusion + Sleep interaction', () => {
 		battle.destroy();
 	});
 
-	it('should decrement sleep counter when confused pokemon hits itself', () => {
+	it('should decrement sleep counter before confusion and not tick confusion while asleep', () => {
 		battle = common.gen(1).mod('gen1stadium').createBattle({
-			forceRandomChance: true,
 		}, [[
 			{ species: 'Alakazam', moves: ['sleeptalk'] },
 		], [
@@ -28,25 +27,25 @@ describe('[Gen 1 Stadium] Confusion + Sleep interaction', () => {
 
 		battle.makeChoices('move sleeptalk', 'move confuseray');
 		assert(alakazam.volatiles['confusion'], 'Alakazam should be confused');
+		alakazam.volatiles['confusion'].time = 4;
 
 		// sleep should have decremented to 2 during the confuse ray turn
 		assert.equal(alakazam.statusState.time, 2, 'Sleep should have decremented during confuse ray turn');
+		assert.equal(alakazam.volatiles['confusion'].time, 4,
+			'Confusion should not be checked or decremented while asleep');
 
-		// force confusion self-hit by using forceRandomChance: true
-		// this makes randomChance always return true, so we need to check the second parameter
-		// in confusion code: !this.randomChance(128, 256) means 50% chance to NOT hit self
-		// with forceRandomChance, randomChance(128, 256) returns true, so !true = false = hits self
 		battle.makeChoices('move sleeptalk', 'move psychic');
 
-		// sleep counter should have decremented despite confusion self-hit
+		// sleep should decrement; confusion should still not tick while asleep
 		assert.equal(alakazam.status, 'slp', 'Alakazam should still be asleep');
 		assert.equal(alakazam.statusState.time, 1,
-			`Sleep time should decrement from 2 to 1 when hitting self in confusion (got ${alakazam.statusState.time})`);
+			`Sleep time should decrement from 2 to 1 (got ${alakazam.statusState.time})`);
+		assert.equal(alakazam.volatiles['confusion'].time, 4,
+			'Confusion should still not decrement on sleep turns');
 	});
 
-	it('should allow pokemon to wake up normally after confusion self-hits', () => {
+	it('should allow pokemon to wake up normally, then tick confusion once awake', () => {
 		battle = common.gen(1).mod('gen1stadium').createBattle({
-			forceRandomChance: true,
 		}, [[
 			{ species: 'Alakazam', moves: ['psychic'] },
 		], [
@@ -62,12 +61,13 @@ describe('[Gen 1 Stadium] Confusion + Sleep interaction', () => {
 
 		battle.makeChoices('move psychic', 'move confuseray');
 		assert(alakazam.volatiles['confusion'], 'Alakazam should be confused');
+		alakazam.volatiles['confusion'].time = 3;
 
-		// next turn: confusion causes self-hit, which should decrement sleep to 0
+		// next turn after waking up: confusion now starts to tick
 		battle.makeChoices('move psychic', 'move psychic');
-
-		// pokemon should wake up after the turn ends
 		assert.false(alakazam.status, 'Alakazam should have woken up after sleep counter reached 0');
+		assert.equal(alakazam.volatiles['confusion'].time, 2,
+			'Confusion should decrement once the pokemon is awake');
 	});
 
 	it('should decrement sleep normally when confused but does not hit self', () => {
