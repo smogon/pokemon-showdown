@@ -209,7 +209,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.random(2, 6);
 			},
 			"onResidualOrder": undefined,
-      		"onResidualSubOrder": undefined,
+			"onResidualSubOrder": undefined,
 		},
 	},
 	dive: {
