@@ -86,6 +86,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
+			onAfterMoveSelfPriority: 0, // explicit
 			onAfterMoveSelf(pokemon) {
 				this.damage(pokemon.baseMaxhp / 4);
 			},
@@ -141,7 +142,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', target, 'Encore');
 			},
 			onResidualOrder: 13,
-			onResidualSubOrder: 0,
+			onResidualSubOrder: undefined,
 		},
 	},
 	endure: {

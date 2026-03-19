@@ -208,6 +208,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(2, 6);
 			},
+			"onResidualOrder": undefined,
+      		"onResidualSubOrder": undefined,
 		},
 	},
 	dive: {

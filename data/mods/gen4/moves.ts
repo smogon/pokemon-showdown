@@ -749,8 +749,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { metronome: 1 },
 		condition: {
 			inherit: true,
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 6,
+			onSideResidualOrder: 6,
+			onSideResidualSubOrder: undefined,
 		},
 	},
 	lunardance: {
