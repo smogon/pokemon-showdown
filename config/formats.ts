@@ -229,9 +229,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
 		gameType: 'doubles',
-		/* searchShow: false,
+		searchShow: false,
 		challengeShow: false,
-		tournamentShow: false, */
+		tournamentShow: false,
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Shadow Tag', 'Commander'],
 	},
