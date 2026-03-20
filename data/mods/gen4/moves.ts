@@ -88,8 +88,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onModifyAtkPriority: -101,
 			onModifyAtk(atk, pokemon, defender, move) {
 				if (!this.ruleTable.has('beatupnicknamesmod')) {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-					this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0]!.name);
+					this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
 				}
 				this.event.modifier = 1;
 				return this.dex.species.get(move.allies!.shift()!.set.species).baseStats.atk;
