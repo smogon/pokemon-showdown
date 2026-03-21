@@ -17499,7 +17499,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		prevo: "Basculin-White-Striped",
 		evoType: "levelExtra",
-		evoCondition: "after receiveing 294+ recoil without fainting",
+		evoCondition: "after receiving 294+ recoil without fainting",
 		eggGroups: ["Water 2"],
 		otherFormes: ["Basculegion-F"],
 		formeOrder: ["Basculegion", "Basculegion-F"],
