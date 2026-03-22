@@ -92,7 +92,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	lightningrod: {
 		inherit: true,
-		onAnyRedirectTarget: Inherit.NOOP,
+		onAnyRedirectTarget: Inherit.NONE,
 		onFoeRedirectTarget(target, source, source2, move) {
 			// don't count Hidden Power as Electric-type
 			if (this.dex.moves.get(move.id).type !== 'Electric') return;
@@ -103,8 +103,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	magnetpull: {
 		inherit: true,
-		onFoeTrapPokemon: Inherit.NOOP,
-		onFoeMaybeTrapPokemon: Inherit.NOOP,
+		onFoeTrapPokemon: Inherit.NONE,
+		onFoeMaybeTrapPokemon: Inherit.NONE,
 		onAnyTrapPokemon(pokemon) {
 			if (pokemon.hasType('Steel') && pokemon.isAdjacent(this.effectState.target)) {
 				pokemon.tryTrap(true);
@@ -156,7 +156,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	raindish: {
 		inherit: true,
-		onWeather: Inherit.NOOP,
+		onWeather: Inherit.NONE,
 		onResidualOrder: 10,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
@@ -191,7 +191,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	trace: {
 		inherit: true,
-		onUpdate: Inherit.NOOP,
+		onUpdate: Inherit.NONE,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
@@ -202,7 +202,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	truant: {
 		inherit: true,
-		onStart: Inherit.NOOP,
+		onStart: Inherit.NONE,
 		onSwitchIn(pokemon) {
 			pokemon.truantTurn = this.turn !== 0;
 		},

@@ -101,7 +101,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	flinch: {
 		inherit: true,
-		onStart: Inherit.NOOP,
+		onStart: Inherit.NONE,
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',

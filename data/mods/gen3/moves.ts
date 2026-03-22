@@ -61,7 +61,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		condition: {
 			inherit: true,
-			onAfterSetStatus: Inherit.NOOP,
+			onAfterSetStatus: Inherit.NONE,
 			onBeforeMove(pokemon, target, move) {
 				if (this.effectState.duration === 1) {
 					this.add('-end', pokemon, 'move: Bide');
@@ -103,7 +103,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	blizzard: {
 		inherit: true,
-		onModifyMove: Inherit.NOOP,
+		onModifyMove: Inherit.NONE,
 	},
 	brickbreak: {
 		inherit: true,
@@ -116,7 +116,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	charge: {
 		inherit: true,
-		boosts: Inherit.NOOP,
+		boosts: Inherit.NONE,
 	},
 	conversion: {
 		inherit: true,
@@ -169,7 +169,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (source !== this.effectState.target || !this.effectState.slot) return;
 				return this.getAtSlot(this.effectState.slot);
 			},
-			onDamagingHit: Inherit.NOOP,
+			onDamagingHit: Inherit.NONE,
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
 				if (
@@ -208,8 +208,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(2, 6);
 			},
-			"onResidualOrder": Inherit.NOOP,
-			"onResidualSubOrder": Inherit.NOOP,
+			"onResidualOrder": Inherit.NONE,
+			"onResidualSubOrder": Inherit.NONE,
 		},
 	},
 	dive: {
@@ -303,7 +303,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	followme: {
 		inherit: true,
-		volatileStatus: Inherit.NOOP,
+		volatileStatus: Inherit.NONE,
 		slotCondition: 'followme',
 		condition: {
 			inherit: true,
@@ -413,7 +413,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (source !== this.effectState.target || !this.effectState.slot) return;
 				return this.getAtSlot(this.effectState.slot);
 			},
-			onDamagingHit: Inherit.NOOP,
+			onDamagingHit: Inherit.NONE,
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
 				if (
@@ -429,7 +429,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mirrormove: {
 		inherit: true,
 		flags: { metronome: 1, failencore: 1, nosleeptalk: 1, noassist: 1 },
-		onTryHit: Inherit.NOOP,
+		onTryHit: Inherit.NONE,
 		onHit(pokemon) {
 			const noMirror = [
 				'assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform',
@@ -595,11 +595,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			duration: 2,
-			durationCallback: Inherit.NOOP,
+			durationCallback: Inherit.NONE,
 			onEnd(target) {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
-			onBeforeMovePriority: Inherit.NOOP,
+			onBeforeMovePriority: Inherit.NONE,
 		},
 	},
 	teeterdance: {
@@ -625,11 +625,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	volttackle: {
 		inherit: true,
-		secondary: Inherit.NOOP,
+		secondary: Inherit.NONE,
 	},
 	waterfall: {
 		inherit: true,
-		secondary: Inherit.NOOP,
+		secondary: Inherit.NONE,
 	},
 	weatherball: {
 		inherit: true,

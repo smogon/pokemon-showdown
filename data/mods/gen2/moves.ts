@@ -69,8 +69,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return false;
 		},
-		beforeTurnCallback: Inherit.NOOP,
-		onTry: Inherit.NOOP,
+		beforeTurnCallback: Inherit.NONE,
+		onTry: Inherit.NONE,
 		condition: {},
 		priority: -1,
 	},
@@ -90,7 +90,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onAfterMoveSelf(pokemon) {
 				this.damage(pokemon.baseMaxhp / 4);
 			},
-			onResidual: Inherit.NOOP,
+			onResidual: Inherit.NONE,
 		},
 	},
 	detect: {
@@ -115,7 +115,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return false;
 			},
-			onSourceModifyDamage: Inherit.NOOP,
+			onSourceModifyDamage: Inherit.NONE,
 			onSourceBasePower(basePower, target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					return this.chainModify(2);
@@ -142,7 +142,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', target, 'Encore');
 			},
 			onResidualOrder: 13,
-			onResidualSubOrder: Inherit.NOOP,
+			onResidualSubOrder: Inherit.NONE,
 		},
 	},
 	endure: {
@@ -180,7 +180,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return false;
 			},
-			onSourceModifyDamage: Inherit.NOOP,
+			onSourceModifyDamage: Inherit.NONE,
 			onSourceBasePower(basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return this.chainModify(2);
@@ -248,10 +248,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	leechseed: {
 		inherit: true,
-		onHit: Inherit.NOOP,
+		onHit: Inherit.NONE,
 		condition: {
 			inherit: true,
-			onResidual: Inherit.NOOP,
+			onResidual: Inherit.NONE,
 			onAfterMoveSelfPriority: 2,
 			onAfterMoveSelf(pokemon) {
 				if (!pokemon.hp) return;
@@ -288,14 +288,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			inherit: true,
-			onSourceInvulnerability: Inherit.NOOP,
+			onSourceInvulnerability: Inherit.NONE,
 		},
 	},
 	lowkick: {
 		inherit: true,
 		accuracy: 90,
 		basePower: 50,
-		basePowerCallback: Inherit.NOOP,
+		basePowerCallback: Inherit.NONE,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -332,8 +332,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return false;
 		},
-		beforeTurnCallback: Inherit.NOOP,
-		onTry: Inherit.NOOP,
+		beforeTurnCallback: Inherit.NONE,
+		onTry: Inherit.NONE,
 		condition: {},
 		priority: -1,
 	},
@@ -356,7 +356,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mist: {
 		inherit: true,
 		volatileStatus: 'mist',
-		sideCondition: Inherit.NOOP,
+		sideCondition: Inherit.NONE,
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
@@ -407,7 +407,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onResidual: Inherit.NOOP,
+			onResidual: Inherit.NONE,
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
 				if (pokemon.status === 'slp') this.damage(pokemon.baseMaxhp / 4);
@@ -466,7 +466,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			data.sources.push(pokemon);
 		},
-		onModifyMove: Inherit.NOOP,
+		onModifyMove: Inherit.NONE,
 		condition: {
 			inherit: true,
 			onBeforeSwitchOut(pokemon) {
@@ -595,7 +595,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source) {
 			return source.status !== 'slp';
 		},
-		secondary: Inherit.NOOP,
+		secondary: Inherit.NONE,
 	},
 	slash: {
 		inherit: true,
@@ -625,7 +625,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return source.status !== 'slp';
 		},
 		// Rain weakening done directly in the damage formula
-		onBasePower: Inherit.NOOP,
+		onBasePower: Inherit.NONE,
 	},
 	spiderweb: {
 		inherit: true,
@@ -635,7 +635,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onSideRestart: Inherit.NOOP,
+			onSideRestart: Inherit.NONE,
 		},
 	},
 	substitute: {
@@ -719,7 +719,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	thief: {
 		inherit: true,
-		onAfterHit: Inherit.NOOP,
+		onAfterHit: Inherit.NONE,
 		secondary: {
 			chance: 100,
 			onHit(target, source) {

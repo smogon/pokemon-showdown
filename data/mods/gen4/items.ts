@@ -32,24 +32,24 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	choiceband: {
 		inherit: true,
-		onStart: Inherit.NOOP,
-		onModifyMove: Inherit.NOOP,
+		onStart: Inherit.NONE,
+		onModifyMove: Inherit.NONE,
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicescarf: {
 		inherit: true,
-		onStart: Inherit.NOOP,
-		onModifyMove: Inherit.NOOP,
+		onStart: Inherit.NONE,
+		onModifyMove: Inherit.NONE,
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicespecs: {
 		inherit: true,
-		onStart: Inherit.NOOP,
-		onModifyMove: Inherit.NOOP,
+		onStart: Inherit.NONE,
+		onModifyMove: Inherit.NONE,
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
@@ -72,7 +72,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	custapberry: {
 		inherit: true,
-		onFractionalPriority: Inherit.NOOP,
+		onFractionalPriority: Inherit.NONE,
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				const action = this.queue.willMove(pokemon);
@@ -144,7 +144,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	focussash: {
 		inherit: true,
-		onDamage: Inherit.NOOP,
+		onDamage: Inherit.NONE,
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
 				target.addVolatile('focussash');
@@ -186,7 +186,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ironball: {
 		inherit: true,
-		onEffectiveness: Inherit.NOOP,
+		onEffectiveness: Inherit.NONE,
 	},
 	ironplate: {
 		inherit: true,
@@ -227,8 +227,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lifeorb: {
 		inherit: true,
-		onModifyDamage: Inherit.NOOP,
-		onAfterMoveSecondarySelf: Inherit.NOOP,
+		onModifyDamage: Inherit.NONE,
+		onAfterMoveSecondarySelf: Inherit.NONE,
 		onBasePower(basePower, user, target) {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
@@ -250,8 +250,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk: Inherit.NOOP,
-		onModifySpA: Inherit.NOOP,
+		onModifyAtk: Inherit.NONE,
+		onModifySpA: Inherit.NONE,
 		onBasePower(basePower, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
@@ -319,7 +319,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				this.effectState.lastMove = move.id;
 			},
-			onModifyDamage: Inherit.NOOP,
+			onModifyDamage: Inherit.NONE,
 			onModifyDamagePhase2(damage, source, target, move) {
 				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},

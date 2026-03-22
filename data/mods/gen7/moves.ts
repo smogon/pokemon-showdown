@@ -273,7 +273,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	grassknot: {
 		inherit: true,
-		onTryHit: Inherit.NOOP,
+		onTryHit: Inherit.NONE,
 	},
 	grasswhistle: {
 		inherit: true,
@@ -367,11 +367,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	heatcrash: {
 		inherit: true,
-		onTryHit: Inherit.NOOP,
+		onTryHit: Inherit.NONE,
 	},
 	heavyslam: {
 		inherit: true,
-		onTryHit: Inherit.NOOP,
+		onTryHit: Inherit.NONE,
 	},
 	hiddenpower: {
 		inherit: true,
@@ -536,7 +536,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	lowkick: {
 		inherit: true,
-		onTryHit: Inherit.NOOP,
+		onTryHit: Inherit.NONE,
 	},
 	luckychant: {
 		inherit: true,
@@ -775,7 +775,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	rapidspin: {
 		inherit: true,
 		basePower: 20,
-		secondary: Inherit.NOOP,
+		secondary: Inherit.NONE,
 	},
 	razorwind: {
 		inherit: true,
@@ -1081,6 +1081,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 50,
 		pp: 15,
 		willCrit: true,
-		secondary: Inherit.NOOP,
+		secondary: Inherit.NONE,
 	},
 };
