@@ -2860,7 +2860,7 @@ export const commands: Chat.ChatCommands = {
 		`/highlight roomdelete [word 1], [word 2], [...] - Delete the provided list of words from the highlight list of whichever room you used the command in.`,
 		`/highlight clear - Clear your global highlight list.`,
 		`/highlight roomclear - Clear the highlight list of whichever room you used the command in.`,
-		`/highlight clearall - Clear your entire highlight list (all rooms and globally).`
+		`/highlight clearall - Clear your entire highlight list (all rooms and globally).`,
 	],
 
 	buildformat(target, room, user) {
