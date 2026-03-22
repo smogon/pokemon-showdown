@@ -122,4 +122,15 @@ describe('Chat', () => {
 
 		assert(!Chat.toDurationString(10000000 * 24 * 60 * 60 * 1000).includes('  '));
 	});
+
+	describe('command help entries', () => {
+		it('should expose help text for highlight command aliases', () => {
+			const { commands: coreCommands } = require('../../dist/server/chat-commands/core');
+			assert.equal(coreCommands.hlhelp, 'highlighthelp');
+			assert.deepEqual(coreCommands.highlighthelp, [
+				`/highlight OR /hl - Open the highlight settings menu.`,
+				`Use this to add or remove terms that trigger highlighted chat messages.`,
+			]);
+		});
+	});
 });

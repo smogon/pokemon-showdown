@@ -581,6 +581,11 @@ export const commands: Chat.ChatCommands = {
 		`Valid settings: autoconfirmed, trusted, unlocked, +, %, @, ~.`,
 		`/unblockinvites - Allows anyone to invite you to rooms.`,
 	],
+	hlhelp: 'highlighthelp',
+	highlighthelp: [
+		`/highlight OR /hl - Open the highlight settings menu.`,
+		`Use this to add or remove terms that trigger highlighted chat messages.`,
+	],
 
 	status(target, room, user, connection, cmd) {
 		if (user.locked || user.semilocked) {
