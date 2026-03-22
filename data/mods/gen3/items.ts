@@ -1,7 +1,8 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	aguavberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -12,7 +13,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	apicotberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -23,7 +25,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	berryjuice: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -90,7 +93,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	figyberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -101,7 +105,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ganlonberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -126,7 +131,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	iapapaberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -152,7 +158,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lansatberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -175,7 +182,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	liechiberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -213,7 +221,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	magoberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -268,7 +277,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	oranberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -279,7 +289,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	petayaberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -305,7 +316,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	salacberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -356,7 +368,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sitrusberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -394,7 +407,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	starfberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -415,7 +429,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	wikiberry: {
 		inherit: true,
-		onUpdate() {},
+		onStart() {},
+		onAfterDamage() {},
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
