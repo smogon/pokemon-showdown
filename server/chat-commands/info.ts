@@ -2848,6 +2848,21 @@ export const commands: Chat.ChatCommands = {
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 
+	// The command itself is handled on the client, so we only need the helptext
+	hlhelp: 'highlighthelp',
+	highlighthelp: [
+		`Set up highlights:`,
+		`/highlight add [word 1], [word 2], [...] - Add the provided list of words to your highlight list.`,
+		`/highlight roomadd [word 1], [word 2], [...] - Add the provided list of words to the highlight list of whichever room you used the command in.`,
+		`/highlight list - List all words that currently highlight you.`,
+		`/highlight roomlist - List all words that currently highlight you in whichever room you used the command in.`,
+		`/highlight delete [word 1], [word 2], [...] - Delete the provided list of words from your entire highlight list.`,
+		`/highlight roomdelete [word 1], [word 2], [...] - Delete the provided list of words from the highlight list of whichever room you used the command in.`,
+		`/highlight clear - Clear your global highlight list.`,
+		`/highlight roomclear - Clear the highlight list of whichever room you used the command in.`,
+		`/highlight clearall - Clear your entire highlight list (all rooms and globally).`
+	],
+
 	buildformat(target, room, user) {
 		target = toID(target);
 		if (target && this.connection.openPages?.has('buildformat')) {
