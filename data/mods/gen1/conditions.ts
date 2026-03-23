@@ -269,7 +269,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		duration: 0,
 		onBeforeMovePriority: 7,
-		onStart: Inherit.NONE,
+		onStart: undefined, // no inherit
 		onAfterMove(pokemon, target, move) {
 			if (target && target.hp <= 0) {
 				delete pokemon.volatiles['mustrecharge'];

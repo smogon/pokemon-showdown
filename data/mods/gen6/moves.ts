@@ -14,7 +14,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
-		onTry: Inherit.NONE,
+		onTry: undefined, // no inherit
 	},
 	destinybond: {
 		inherit: true,
@@ -24,7 +24,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	diamondstorm: {
 		inherit: true,
-		self: Inherit.NONE,
+		self: undefined, // no inherit
 		secondary: {
 			chance: 50,
 			self: {
@@ -66,7 +66,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryAddVolatile: Inherit.NONE,
+			onTryAddVolatile: undefined, // no inherit
 		},
 	},
 	mysticalfire: {

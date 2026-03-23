@@ -33,8 +33,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		// Ability suppression cancelled in scripts.ts
 		// new Ability suppression implemented in scripts.ts
-		onSwitchIn: Inherit.NONE,
-		onEnd: Inherit.NONE,
+		onSwitchIn: undefined, // no inherit
+		onEnd: undefined, // no inherit
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 		},

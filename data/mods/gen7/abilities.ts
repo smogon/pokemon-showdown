@@ -34,7 +34,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	innerfocus: {
 		inherit: true,
 		rating: 1,
-		onTryBoost: Inherit.NONE,
+		onTryBoost: undefined, // no inherit
 	},
 	moody: {
 		inherit: true,
@@ -65,19 +65,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	oblivious: {
 		inherit: true,
-		onTryBoost: Inherit.NONE,
+		onTryBoost: undefined, // no inherit
 	},
 	owntempo: {
 		inherit: true,
-		onTryBoost: Inherit.NONE,
+		onTryBoost: undefined, // no inherit
 	},
 	rattled: {
 		inherit: true,
-		onAfterBoost: Inherit.NONE,
+		onAfterBoost: undefined, // no inherit
 	},
 	scrappy: {
 		inherit: true,
-		onTryBoost: Inherit.NONE,
+		onTryBoost: undefined, // no inherit
 	},
 	slowstart: {
 		inherit: true,

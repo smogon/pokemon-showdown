@@ -2,7 +2,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	ancientpower: {
 		inherit: true,
 		category: "Physical",
-		secondary: Inherit.NONE,
+		secondary: undefined, // no inherit
 		// Ancient Power is physical and boosts on-kill
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
@@ -388,7 +388,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	thunderouskick: {
 		inherit: true,
-		secondary: Inherit.NONE,
+		secondary: undefined, // no inherit
 		onHit(target, source, move) {
 			// random # 0 or 1
 			const randomNum = this.random(2);
@@ -876,7 +876,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Extreme Speed', target);
 			this.add('-anim', source, 'Thunder', target);
 		},
-		secondary: Inherit.NONE,
+		secondary: undefined, // no inherit
 		desc: "Nearly always goes first.",
 		shortDesc: "Nearly always goes first.",
 	},

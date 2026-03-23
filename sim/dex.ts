@@ -38,8 +38,6 @@ import { Species, DexSpecies } from './dex-species';
 import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
 
-(global as any).Inherit = { NONE: undefined };
-
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');

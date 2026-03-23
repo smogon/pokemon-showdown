@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-declare const Inherit: { readonly NONE: undefined };
-
 type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
