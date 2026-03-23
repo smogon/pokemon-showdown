@@ -2059,6 +2059,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			return problems;
 		},
 	},
+	gametype: {
+		effectType: 'Rule',
+		name: 'Game Type',
+		desc: "Overrides the format's default game type (Singles, Doubles, Triples, Multi, or FreeForAll)",
+		hasValue: true,
+		onValidateRule(value) {
+			const gameType = this.dex.toID(value);
+			const validGameTypes = ['singles', 'doubles', 'triples', 'multi', 'freeforall'];
+			if (!validGameTypes.includes(gameType)) {
+				throw new Error(`Invalid game type "${value}". Valid game types are: ${validGameTypes.join(', ')}`);
+			}
+			return gameType;
+		},
+	},
 	pickedteamsize: {
 		effectType: 'Rule',
 		name: 'Picked Team Size',

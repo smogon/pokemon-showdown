@@ -5,6 +5,9 @@ import type { SpeciesData } from './dex-species';
 import { Tags } from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
+type MutableFormatGameFields = Omit<Format, 'gameType' | 'playerCount'> & {
+	gameType: GameType, playerCount: 2 | 4,
+};
 
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
@@ -205,6 +208,27 @@ export class RuleTable extends Map<string, string> {
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
+		if (this.valueRules.has('gametype')) {
+			const rawGameType = this.valueRules.get('gametype')!;
+			const gameTypeRule = dex.formats.get('gametype');
+			const validatedGameType = gameTypeRule.onValidateRule?.call(
+				{ format, ruleTable: this, dex }, rawGameType
+			) ?? rawGameType;
+			const gameType = dex.toID(validatedGameType);
+			this.valueRules.set('gametype', gameType);
+			const currentPlayerCount = ['multi', 'freeforall'].includes(format.gameType) ? 4 : 2;
+			const newPlayerCount = ['multi', 'freeforall'].includes(gameType) ? 4 : 2;
+			if (currentPlayerCount !== newPlayerCount) {
+				throw new Error(
+					`Cannot change game type from "${format.gameType}" to "${gameType}". ` +
+					`Changing between ${currentPlayerCount}-player and ${newPlayerCount}-player game types is not supported.`
+				);
+			}
+			const mutableFormat = format as MutableFormatGameFields;
+			mutableFormat.gameType = gameType as GameType;
+			mutableFormat.playerCount = newPlayerCount;
+		}
+
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
 			format.gameType === 'doubles' ? 2 :
 			1;
@@ -976,6 +1000,9 @@ export class DexFormats {
 				);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
+		}
+		if (ruleTable.valueRules.has('gametype')) {
+			format.onValidateRule?.call({ format, ruleTable, dex: this.dex }, '');
 		}
 
 		if (!repeals) format.ruleTable = ruleTable;
