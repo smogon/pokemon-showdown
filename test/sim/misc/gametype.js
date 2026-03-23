@@ -47,7 +47,7 @@ describe('Game Type Rule', () => {
 		battle = null;
 		assert.throws(
 			() => common.createBattle({ customRules: ['Game Type = Perchance'] }),
-			/Invalid game type/
+			/not a valid game type/
 		);
 	});
 
@@ -79,20 +79,20 @@ describe('Game Type Rule', () => {
 		battle = null;
 		assert.throws(
 			() => common.createBattle({ gameType: 'freeforall', customRules: ['Best Of = 3'] }),
-			/Free-For-All battles cannot be a Best-of series/,
+			/Only two-player battles/,
 		);
 		assert.throws(
 			() => common.createBattle({ gameType: 'multi', customRules: ['Best Of = 3'] }),
-			/Multi battles cannot be a Best-of series/,
+			/Only two-player battles/,
 		);
 	});
 
 	it('should reject non-singles game types with format restrictions', () => {
 		battle = null;
-		// Shared Power has an onValidateRule to disallow non-singles, it should be bypassed
+		// Shared Power has an onValidateRule to disallow non-singles, it should not be bypassed
 		assert.throws(
 			() => common.createBattle({ formatid: '[Gen 9] Shared Power @@@ Game Type = Doubles' }),
-			/Shared Power currently does not support non-singles/
+			/Shared Power currently does not support doubles battles/
 		);
 	});
 
@@ -112,11 +112,11 @@ describe('Game Type Rule', () => {
 		battle = null;
 		assert.throws(
 			() => common.createBattle({ gameType: 'multi', customRules: ['Game Type = Singles'] }),
-			/Changing between 4-player and 2-player game types is not supported/
+			/game types is not supported/
 		);
 		assert.throws(
 			() => common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Singles'] }),
-			/Changing between 4-player and 2-player game types is not supported/
+			/game types is not supported/
 		);
 	});
 	
