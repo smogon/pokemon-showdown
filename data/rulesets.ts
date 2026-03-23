@@ -2266,7 +2266,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				);
 			}
 			const gameType = this.format.gameType;
-			if (gameType === 'doubles' || gameType === 'triples') {
+			if (gameType !== 'singles') {
 				throw new Error(
 					`The game type '${gameType}' cannot be 1v1 because sides can have multiple active Pok\u00e9mon, so it is incompatible with Chimera 1v1.`
 				);
@@ -2906,11 +2906,26 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (num > 9 || num < 3 || num % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
-			if (!['singles', 'doubles'].includes(this.format.gameType)) {
-				throw new Error("Only single and doubles battles can be a Best-of series.");
+			if (!['singles', 'doubles', 'triples'].includes(this.format.gameType)) {
+				throw new Error("Only two-player battles can be a Best-of series.");
 			}
 			return value;
 		},
+	},
+	gametype: {
+		effectType: 'Rule',
+		name: 'Game Type',
+		desc: "Overrides the format's default game type.",
+		hasValue: true,
+		onValidateRule(value) {
+			const gameType = this.dex.toID(value);
+			const validGameTypes = [ 'singles', 'doubles', 'triples', 'freeforall', 'multi' ];
+			if (!validGameTypes.includes(gameType)) {
+				throw new Error(`"${value}" is not a valid game type. Valid game types are: ${validGameTypes.join(', ')}`);
+			}
+			return gameType;
+		},
+		// effect applied in sim/dex-formats
 	},
 	illusionlevelmod: {
 		effectType: 'Rule',
