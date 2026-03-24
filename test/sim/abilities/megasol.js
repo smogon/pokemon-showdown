@@ -20,7 +20,7 @@ describe("Mega Sol", () => {
 		] });
 		battle.makeChoices('move weatherball', 'move endure');
 		assert.false.fullHP(battle.p2.active[0]);
-		});
+	});
 
 	it("should ignore other weathers", () => {
 		battle = common.createBattle();
@@ -32,5 +32,5 @@ describe("Mega Sol", () => {
 		] });
 		battle.makeChoices('move weatherball', 'move raindance');
 		assert.false.fullHP(battle.p2.active[0]);
-		});
+	});
 });
