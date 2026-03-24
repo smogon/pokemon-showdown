@@ -2506,6 +2506,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 63,
 	},
+	megasol: {
+		onBeforeMovePriority: 9,
+		onBeforeMove(source) {
+			source.abilityState.megaSolarActive = true;
+		},
+		onAfterMove(source) {
+			source.abilityState.megaSolarActive = false;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (!source.abilityState.megaSolarActive) return;
+			if (['sunnyday', 'desolateland'].includes(source.effectiveWeather())) return;
+			if (move.type === 'Fire') return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Mega Sol",
+		rating: 4,
+		num: 312,
+	},
 	megalauncher: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
