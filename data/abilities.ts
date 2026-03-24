@@ -1052,6 +1052,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
+		num: 312, // TODO confirm
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -2522,6 +2523,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,
+		num: 311, // TODO confirm
 	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
