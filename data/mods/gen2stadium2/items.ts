@@ -10,6 +10,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragonscale: {
 		inherit: true,
-		onModifyDamage() {},
+		onModifyDamage: undefined, // no inherit
 	},
 };

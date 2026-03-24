@@ -36,7 +36,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	autotomize: {
 		inherit: true,
 		volatileStatus: 'autotomize',
-		onHit() {},
+		onHit: undefined, // no inherit
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
@@ -152,7 +152,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		target: "normal",
 	},
 	covet: {
@@ -485,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	knockoff: {
 		inherit: true,
 		basePower: 20,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 	},
 	leafstorm: {
 		inherit: true,
@@ -565,7 +565,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		condition: {
 			inherit: true,
-			onAccuracy() {},
+			onAccuracy: undefined, // no inherit
 		},
 	},
 	moonlight: {
@@ -578,7 +578,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mudsport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'mudsport',
 		condition: {
 			noCopy: true,
@@ -596,7 +596,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturepower: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		onHit(pokemon) {
 			this.actions.useMove('earthquake', pokemon);
 		},
@@ -628,7 +628,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	poisonpowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	powergem: {
 		inherit: true,
@@ -780,7 +780,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeppowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	smellingsalts: {
 		inherit: true,
@@ -813,7 +813,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	stormthrow: {
 		inherit: true,
@@ -831,7 +831,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	substitute: {
 		inherit: true,
@@ -924,7 +924,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxic: {
 		inherit: true,
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	uproar: {
 		inherit: true,
@@ -952,7 +952,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	watersport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'watersport',
 		condition: {
 			noCopy: true,
