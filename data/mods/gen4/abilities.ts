@@ -1,7 +1,7 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
-		onSwitchIn() {},
+		onSwitchIn: undefined, // no inherit
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -24,8 +24,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	blaze: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 3) {
@@ -36,7 +36,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cloudnine: {
 		inherit: true,
-		onSwitchIn() {},
+		onSwitchIn: undefined, // no inherit
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -51,7 +51,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 			}
 		},
-		onAfterMoveSecondary() {},
+		onAfterMoveSecondary: undefined, // no inherit
 	},
 	compoundeyes: {
 		onSourceModifyAccuracyPriority: 9,
@@ -129,8 +129,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		condition: {
 			inherit: true,
-			onModifyAtk() {},
-			onModifySpA() {},
+			onModifyAtk: undefined, // no inherit
+			onModifySpA: undefined, // no inherit
 			onModifyDamagePhase1(atk, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('Flash Fire boost');
@@ -202,7 +202,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	hydration: {
 		inherit: true,
-		onResidual() {},
+		onResidual: undefined, // no inherit
 		onWeather(target, source, effect) {
 			if (effect.id === 'raindance' && target.status) {
 				this.add('-activate', target, 'ability: Hydration');
@@ -250,7 +250,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	lightningrod: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		rating: 0,
 	},
 	liquidooze: {
@@ -275,7 +275,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	minus: {
 		inherit: true,
-		onModifySpAPriority: undefined,
+		onModifySpAPriority: undefined, // no inherit
 		onModifySpA(spa, pokemon) {
 			for (const allyActive of pokemon.allies()) {
 				if (allyActive.hasAbility('plus')) {
@@ -286,7 +286,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	naturalcure: {
 		inherit: true,
-		onCheckShow(pokemon) {},
+		onCheckShow: undefined, // no inherit
 		onSwitchOut(pokemon) {
 			if (!pokemon.status || pokemon.status === 'fnt') return;
 
@@ -307,8 +307,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	overgrow: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
@@ -319,13 +319,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	pickup: {
 		inherit: true,
-		onResidual() {},
+		onResidual: undefined, // no inherit
 		rating: 0,
 		// No competitive use
 	},
 	plus: {
 		inherit: true,
-		onModifySpAPriority: undefined,
+		onModifySpAPriority: undefined, // no inherit
 		onModifySpA(spa, pokemon) {
 			for (const allyActive of pokemon.allies()) {
 				if (allyActive.hasAbility('minus')) {
@@ -389,7 +389,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	simple: {
 		inherit: true,
-		onChangeBoost() {},
+		onChangeBoost: undefined, // no inherit
 		onModifyBoost(boosts) {
 			let key: BoostID;
 			for (key in boosts) {
@@ -425,7 +425,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	stench: {
 		inherit: true,
-		onModifyMove() {},
+		onModifyMove: undefined, // no inherit
 		rating: 0,
 		// No competitive use
 	},
@@ -440,18 +440,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	stormdrain: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		rating: 0,
 	},
 	sturdy: {
 		inherit: true,
-		onDamage() {},
+		onDamage: undefined, // no inherit
 		rating: 0,
 	},
 	swarm: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
@@ -484,8 +484,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	thickfat: {
 		inherit: true,
-		onSourceModifyAtk() {},
-		onSourceModifySpA() {},
+		onSourceModifyAtk: undefined, // no inherit
+		onSourceModifySpA: undefined, // no inherit
 		onSourceBasePowerPriority: 1,
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
@@ -495,8 +495,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	torrent: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3) {
@@ -541,6 +541,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	rebound: {
 		inherit: true,
-		onTryHitSide() {},
+		onTryHitSide: undefined, // no inherit
 	},
 };

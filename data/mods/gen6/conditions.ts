@@ -40,6 +40,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	choicelock: {
 		inherit: true,
-		onBeforeMove() {},
+		onBeforeMove: undefined, // no inherit
 	},
 };
