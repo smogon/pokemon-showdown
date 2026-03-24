@@ -833,6 +833,22 @@ export class TeamValidator {
 		}
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
+		let encounterMinLevel = Infinity;
+		let encounterMinLevelFlag = false;
+		if (ruleTable.has('obtainablemisc')) {
+			for (const encounter of learnsetSpecies.encounters || []) {
+				if (encounter.generation !== this.gen) continue;
+				if (!encounter.level) continue;
+
+				if (encounter.level < encounterMinLevel) {
+					encounterMinLevel = encounter.level;
+					if (set.level < encounterMinLevel || encounterMinLevel === Infinity) {
+						encounterMinLevelFlag = true;
+					}
+				}
+			}
+		}
+
 		let isFromRBYEncounter = false;
 		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
@@ -857,7 +873,8 @@ export class TeamValidator {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
-				if (set.level < (evoSpecies.evoLevel || 0)) {
+				if (set.level < (evoSpecies.evoLevel || 0) && (encounterMinLevelFlag ||
+					encounterMinLevel > (evoSpecies.evoLevel || 0))) {
 					isUnderleveled = evoSpecies.name;
 					requiredLevel = evoSpecies.evoLevel;
 					break;
@@ -930,7 +947,11 @@ export class TeamValidator {
 			if (legalSources.length) {
 				setSources.sources = legalSources;
 			} else if (isUnderleveled) {
-				problems.push(`${name} must be at least level ${requiredLevel} to be evolved.`);
+				if (!encounterMinLevelFlag) {
+					problems.push(`${name} must be at least level ${requiredLevel} to be evolved.`);
+				} else {
+					problems.push(`${name} must be at least level ${encounterMinLevel} to be encountered.`);
+				}
 				const firstEventSource = setSources.sources.find(source => source.charAt(1) === 'S');
 				if (firstEventSource) {
 					const eventProblems = this.validateSource(
