@@ -2519,11 +2519,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 178,
 	},
 	megasol: {
-		// implemented in pokemon.ts#effectiveWeather
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,
 		num: 311, // TODO confirm
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
