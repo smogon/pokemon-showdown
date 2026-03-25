@@ -5479,15 +5479,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	tatsugiricurlymega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	tatsugiridroopymega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	tatsugiristretchymega: {
+	tatsugirimega: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},

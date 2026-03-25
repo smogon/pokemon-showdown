@@ -1490,19 +1490,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tatsugiri: {
 		tier: "UU",
 	},
-	tatsugiridroopy: {
-		tier: "UU",
-	},
-	tatsugiristretchy: {
-		tier: "UU",
-	},
-	tatsugiricurlymega: {
-		tier: "UU",
-	},
-	tatsugiridroopymega: {
-		tier: "UU",
-	},
-	tatsugiristretchymega: {
+	tatsugirimega: {
 		tier: "UU",
 	},
 	frigibax: {

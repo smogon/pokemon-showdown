@@ -156,7 +156,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Soul-Heart" },
 	},
-	magearnaoriginalmega: {
+	magearnamegaoriginal: {
 		inherit: true,
 		abilities: { 0: "Soul-Heart" },
 	},
@@ -176,15 +176,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Levitate" },
 	},
-	tatsugiricurlymega: {
-		inherit: true,
-		abilities: { 0: "Drizzle" },
-	},
-	tatsugiridroopymega: {
-		inherit: true,
-		abilities: { 0: "Drizzle" },
-	},
-	tatsugiristretchymega: {
+	tatsugirimega: {
 		inherit: true,
 		abilities: { 0: "Drizzle" },
 	},

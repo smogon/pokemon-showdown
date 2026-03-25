@@ -402,7 +402,7 @@ describe('Dex data', () => {
 	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Toxtricity (1) +
 	// Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) +
 	// Urshifu (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) +
-	// Palafin (1) + Squawkabilly (3) + Tatsugiri (2) + Gimmighoul (1) + Basculegion (1) +
+	// Palafin (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) +
 	// Ogerpon (7) + Terapagos (2)
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 +
 		3 + 5 + 1 + 17 + 2 + 2 + 1 +
@@ -410,7 +410,7 @@ describe('Dex data', () => {
 		2 + 1 + 1 + 2 + 1 +
 		1 + 1 + 2 + 1 + 2 +
 		1 + 2 + 1 + 1 +
-		1 + 3 + 2 + 1 + 1 +
+		1 + 3 + 1 + 1 +
 		7 + 2;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
@@ -430,11 +430,14 @@ describe('Dex data', () => {
 	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
 	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
 	species['gen9legends'] = 232 + 132; // Lumiose Pokedex + Hyperspace Pokedex
-	// Mega (95) + Primal (2) + Rotom (5) + Keldeo (1) + Meloetta (1) + Genesect (4) + Vivillon (2) + Floette (1) +
+	// Mega (93) + Primal (2) + Rotom (5) + Keldeo (1) + Meloetta (1) + Genesect (4) + Vivillon (2) + Floette (1) +
 	// Meowstic (1) + Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Zygarde (2) + Mimikyu (1) +
 	// Alola (4) + Toxtricity (1) + Indeedee (1) + Morpeko (1) + Galar (8) + Hisui (4) + Squawkabilly (3) +
-	// Tatsugiri (2) + Gimmighoul (1) + Hoopa (1)
-	formes['gen9legends'] = 95 + 2 + 5 + 1 + 1 + 4 + 2 + 1 + 1 + 1 + 3 + 3 + 2 + 1 + 4 + 1 + 1 + 1 + 8 + 4 + 3 + 2 + 1 + 1;
+	// Gimmighoul (1) + Hoopa (1)
+	formes['gen9legends'] = 93 + 2 + 5 + 1 + 1 + 4 + 2 + 1 +
+		1 + 1 + 3 + 3 + 2 + 1 +
+		4 + 1 + 1 + 1 + 8 + 4 + 3 +
+		1 + 1;
 
 	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
 		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {
