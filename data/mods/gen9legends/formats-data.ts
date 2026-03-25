@@ -2568,13 +2568,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		isNonstandard: null,
 	},
-	magearnaoriginal: {
-		isNonstandard: "Unobtainable",
-	},
 	magearnamega: {
-		isNonstandard: null,
-	},
-	magearnaoriginalmega: {
 		isNonstandard: null,
 	},
 	marshadow: {

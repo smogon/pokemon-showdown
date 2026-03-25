@@ -3497,10 +3497,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 		doublesTier: "DUber",
 	},
-	magearnaoriginal: {
-		isNonstandard: "Unobtainable",
-		tier: "Illegal",
-	},
 	marshadow: {
 		tier: "Uber",
 		doublesTier: "DUber",

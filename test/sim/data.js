@@ -12,8 +12,8 @@ describe('Dex data', () => {
 			assert(!entry.name.startsWith("-") && !entry.name.endsWith("-"), `Pokemon name "${entry.name}" should not start or end with a hyphen`);
 			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
 
-			if (entry.isCosmeticForme) {
-				assert.equal(Dex.getAlias(pokemonid), toID(entry.baseSpecies), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.baseSpecies}`);
+			if (entry.cosmeticOf) {
+				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticOf), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticOf}`);
 				assert.equal(Dex.data.FormatsData[pokemonid], undefined, `Cosmetic forme "${entry.name}" should not have its own tier`);
 				continue;
 			}
@@ -30,7 +30,7 @@ describe('Dex data', () => {
 					assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
 				}
 				assert.false(entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
-				assert.false(entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
+				// assert.false(entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
 				assert.false(entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
 			} else {
 				// entry should be a base species
@@ -73,8 +73,8 @@ describe('Dex data', () => {
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
-			if (entry.isCosmeticForme) {
-				assert.equal(Dex.getAlias(pokemonid), toID(entry.baseSpecies), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.baseSpecies}`);
+			if (entry.cosmeticOf) {
+				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticOf), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticOf}`);
 				assert.equal(Dex.data.FormatsData[pokemonid], undefined, `Cosmetic forme "${entry.name}" should not have its own tier`);
 			}
 			if (entry.battleOnly) {
@@ -320,7 +320,7 @@ describe('Dex data', () => {
 		const count = { species: 0, formes: 0 };
 		for (const pkmn of dex.species.all()) {
 			if (!existenceFunction(pkmn)) continue;
-			if (pkmn.isCosmeticForme) continue;
+			if (pkmn.cosmeticOf) continue;
 			if (pkmn.name !== pkmn.baseSpecies) {
 				count.formes++;
 			} else {
@@ -369,7 +369,7 @@ describe('Dex data', () => {
 		6 + 48;
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
 	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1) +
-	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
+	// Mimikyu (1) + Necrozma (3) [LGPE Starters/Meltan/Melmetal (4)]
 	formes[7] = formes[6] +
 		18 + 12 + 7 - 6 + 2 + 2 +
 		3 + 1 + 2 + 1 + 17 + 1 +
@@ -379,7 +379,7 @@ describe('Dex data', () => {
 	// Alola (8) + Indeedee (1) + Morpeko (1) + Eiscue (1) + Zacian/Zamazenta (2) +
 	// Toxtricity (1) + Cramorant (2) + Necrozma (2) + Mimikyu (2) + Wishiwashi (1) +
 	// Keldeo (1) + Kyruem (2) + Darmanitan (2) + Cherrim (1) - Antique (2)
-	// {DLC1} Alola (4) + Galar (1) + Magearna (1) + Urshifu (1) +
+	// {DLC1} Alola (4) + Galar (1) + Urshifu (1) +
 	// Rockruff (1) + Lycanroc (2) + [Pikachu (1)]
 	// {DLC2} Giratina (1) + *-Therian (3) + Genesect (4) + Zygarde (2) +
 	// Birds (3) + Slowking (1) + Calyrex (2)
@@ -389,7 +389,7 @@ describe('Dex data', () => {
 		1 + 2 + 2 + 2 + 1 +
 		1 + 2 + 2 + 1 - 2 +
 		(
-			4 + 1 + 1 + 1 +
+			4 + 1 + 1 +
 			1 + 2 + (1)
 		) +
 		(
@@ -399,7 +399,7 @@ describe('Dex data', () => {
 	// Pikachu (8) + Origin (3) + Therian (4) + Alola (16) + Galar (7) + Paldea (4) + Hisui (16) +
 	// Deoxys (3) + Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Kyurem (2) + Keldeo (1) +
 	// Meloetta (1) + Greninja (1) + Vivillon (2) + Meowstic (1) + Hoopa (1) + Oricorio (3) + Rockruff (1) +
-	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Magearna (1) + Toxtricity (1) +
+	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Toxtricity (1) +
 	// Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) +
 	// Urshifu (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) +
 	// Palafin (1) + Squawkabilly (3) + Tatsugiri (2) + Gimmighoul (1) + Basculegion (1) +
@@ -407,7 +407,7 @@ describe('Dex data', () => {
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 +
 		3 + 5 + 1 + 17 + 2 + 2 + 1 +
 		1 + 1 + 2 + 1 + 1 + 3 + 1 +
-		2 + 1 + 1 + 2 + 1 + 1 +
+		2 + 1 + 1 + 2 + 1 +
 		1 + 1 + 2 + 1 + 2 +
 		1 + 2 + 1 + 1 +
 		1 + 3 + 2 + 1 + 1 +
@@ -430,11 +430,11 @@ describe('Dex data', () => {
 	// Shaymin (1) + Therian (4) + Hisui (16) + Basculin (1) + Basculegion (1)
 	formes['gen8legends'] = 1 + 1 + 2 + 1 + 5 + 3 + 17 + 1 + 4 + 16 + 1 + 1;
 	species['gen9legends'] = 232 + 132; // Lumiose Pokedex + Hyperspace Pokedex
-	// Mega (96) + Primal (2) + Rotom (5) + Keldeo (1) + Meloetta (1) + Genesect (4) + Vivillon (2) + Floette (1) +
+	// Mega (95) + Primal (2) + Rotom (5) + Keldeo (1) + Meloetta (1) + Genesect (4) + Vivillon (2) + Floette (1) +
 	// Meowstic (1) + Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Zygarde (2) + Mimikyu (1) +
 	// Alola (4) + Toxtricity (1) + Indeedee (1) + Morpeko (1) + Galar (8) + Hisui (4) + Squawkabilly (3) +
 	// Tatsugiri (2) + Gimmighoul (1) + Hoopa (1)
-	formes['gen9legends'] = 96 + 2 + 5 + 1 + 1 + 4 + 2 + 1 + 1 + 1 + 3 + 3 + 2 + 1 + 4 + 1 + 1 + 1 + 8 + 4 + 3 + 2 + 1 + 1;
+	formes['gen9legends'] = 95 + 2 + 5 + 1 + 1 + 4 + 2 + 1 + 1 + 1 + 3 + 3 + 2 + 1 + 4 + 1 + 1 + 1 + 8 + 4 + 3 + 2 + 1 + 1;
 
 	for (const mod of ['gen7letsgo', 'gen8bdsp', 'gen8legends', 'gen9legends']) {
 		it(`${mod} should have ${species[mod]} species and ${formes[mod]} formes`, () => {

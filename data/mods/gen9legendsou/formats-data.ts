@@ -1333,13 +1333,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		tier: "OU",
 	},
-	magearnaoriginal: {
-		tier: "OU",
-	},
 	magearnamega: {
-		tier: "Uber",
-	},
-	magearnaoriginalmega: {
 		tier: "Uber",
 	},
 	marshadow: {

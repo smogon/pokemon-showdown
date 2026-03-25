@@ -2339,9 +2339,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		isNonstandard: "Past",
 	},
-	magearnaoriginal: {
-		isNonstandard: "Past",
-	},
 	marshadow: {
 		isNonstandard: "Past",
 	},

@@ -4654,8 +4654,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
-	magearnaoriginal: {
-	},
 	marshadow: {
 		tier: "Uber",
 		doublesTier: "DUber",

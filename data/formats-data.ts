@@ -4745,10 +4745,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-	magearnaoriginalmega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
 	marshadow: {
 		isNonstandard: "Past",
 		tier: "Illegal",
