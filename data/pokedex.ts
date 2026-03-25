@@ -15627,6 +15627,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Magearnite",
 		battleOnly: "Magearna-Original",
+		changesFrom: "Magearna-Original",
 		gen: 9,
 	},
 	marshadow: {
