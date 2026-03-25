@@ -2220,6 +2220,9 @@ export class Pokemon {
 			if (this.hasItem('utilityumbrella')) return '';
 		}
 		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
+		// petrichor needs to be field-wide
+		if (this.hasAbility('petrichor') && this.battle.activePokemon === this) return 'bloodmoon';
+		if (this.hasAbility('petrichor') && this.battle.activePokemon === this) return 'raindance';
 		return weather;
 	}
 
