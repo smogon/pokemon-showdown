@@ -4264,7 +4264,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.5,
 		weightkg: 14,
 		color: "Yellow",
-		evos: ["Dudunsparce", "Dudunsparce-Three-Segment"],
+		evos: ["Dudunsparce"],
 		eggGroups: ["Field"],
 	},
 	gligar: {
@@ -17770,7 +17770,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.3,
 		weightkg: 1.8,
 		color: "White",
-		evos: ["Maushold", "Maushold-Four"],
+		evos: ["Maushold"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	maushold: {
@@ -17794,7 +17794,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		cosmeticOf: "Maushold",
 		name: "Maushold-Four",
 		forme: "Four",
-		prevo: "Tandemaus",
 		weightkg: 2.8,
 	},
 	fidough: {
@@ -18663,7 +18662,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		cosmeticOf: "Dudunsparce",
 		name: "Dudunsparce-Three-Segment",
 		forme: "Three-Segment",
-		prevo: "Dunsparce",
 		heightm: 4.5,
 		weightkg: 47.4,
 	},
