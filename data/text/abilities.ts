@@ -381,7 +381,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dragonize: {
 		name: "Dragonize",
-		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves are Dragon-type and have 1.2x power.",
 	},
 	dragonsmaw: {
