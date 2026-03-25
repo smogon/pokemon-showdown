@@ -2696,13 +2696,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	sinistea: {
 		isNonstandard: "Past",
 	},
-	sinisteaantique: {
-		isNonstandard: "Past",
-	},
 	polteageist: {
-		isNonstandard: "Past",
-	},
-	polteageistantique: {
 		isNonstandard: "Past",
 	},
 	hatenna: {
@@ -2815,9 +2809,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	zarude: {
 		isNonstandard: "Past",
 	},
-	zarudedada: {
-		isNonstandard: "Past",
-	},
 	regieleki: {
 		isNonstandard: "Past",
 	},
@@ -2927,9 +2918,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	maushold: {
-		isNonstandard: "Past",
-	},
-	mausholdfour: {
 		isNonstandard: "Past",
 	},
 	fidough: {
@@ -3126,9 +3114,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	dudunsparce: {
-		isNonstandard: "Past",
-	},
-	dudunsparcethreesegment: {
 		isNonstandard: "Past",
 	},
 	kingambit: {

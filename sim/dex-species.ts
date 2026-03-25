@@ -22,12 +22,11 @@ export interface SpeciesData extends Partial<Species> {
 	eggGroups: string[];
 	weightkg: number;
 }
-export interface CosmeticFormeData {
+export interface CosmeticFormeData extends Partial<Species> {
 	isCosmeticForme: boolean;
 	name: string;
 	baseSpecies: string;
 	forme: string;
-	color: string;
 }
 
 export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
