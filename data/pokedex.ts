@@ -58,8 +58,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Venusaurite",
-		battleOnly: "Venusaur",
-		changesFrom: "Venusaur",
 	},
 	venusaurgmax: {
 		num: 3,
@@ -225,8 +223,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Blastoisinite",
-		battleOnly: "Blastoise",
-		changesFrom: "Blastoise",
 	},
 	blastoisegmax: {
 		num: 9,
@@ -351,8 +347,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Bug"],
 		requiredItem: "Beedrillite",
-		battleOnly: "Beedrill",
-		changesFrom: "Beedrill",
 	},
 	pidgey: {
 		num: 16,
@@ -408,8 +402,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Flying"],
 		requiredItem: "Pidgeotite",
-		battleOnly: "Pidgeot",
-		changesFrom: "Pidgeot",
 	},
 	rattata: {
 		num: 19,
@@ -1053,8 +1045,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Pink",
 		eggGroups: ["Field"],
 		requiredItem: "Clefablite",
-		battleOnly: "Clefable",
-		changesFrom: "Clefable",
 		gen: 9,
 	},
 	vulpix: {
@@ -1625,8 +1615,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Human-Like"],
 		requiredItem: "Alakazite",
-		battleOnly: "Alakazam",
-		changesFrom: "Alakazam",
 	},
 	machop: {
 		num: 66,
@@ -1741,8 +1729,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Grass"],
 		requiredItem: "Victreebelite",
-		battleOnly: "Victreebel",
-		changesFrom: "Victreebel",
 		gen: 9,
 	},
 	tentacool: {
@@ -1974,8 +1960,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Pink",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Slowbronite",
-		battleOnly: "Slowbro",
-		changesFrom: "Slowbro",
 	},
 	slowbrogalar: {
 		num: 80,
@@ -2237,8 +2221,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Gengarite",
-		battleOnly: "Gengar",
-		changesFrom: "Gengar",
 	},
 	gengargmax: {
 		num: 94,
@@ -2665,8 +2647,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Monster"],
 		requiredItem: "Kangaskhanite",
-		battleOnly: "Kangaskhan",
-		changesFrom: "Kangaskhan",
 	},
 	horsea: {
 		num: 116,
@@ -2764,8 +2744,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Water 3"],
 		requiredItem: "Starminite",
-		battleOnly: "Starmie",
-		changesFrom: "Starmie",
 		gen: 9,
 	},
 	mrmime: {
@@ -2886,8 +2864,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Bug"],
 		requiredItem: "Pinsirite",
-		battleOnly: "Pinsir",
-		changesFrom: "Pinsir",
 	},
 	tauros: {
 		num: 128,
@@ -2985,8 +2961,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 2", "Dragon"],
 		requiredItem: "Gyaradosite",
-		battleOnly: "Gyarados",
-		changesFrom: "Gyarados",
 	},
 	lapras: {
 		num: 131,
@@ -3211,8 +3185,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Flying"],
 		requiredItem: "Aerodactylite",
-		battleOnly: "Aerodactyl",
-		changesFrom: "Aerodactyl",
 	},
 	snorlax: {
 		num: 143,
@@ -3380,14 +3352,12 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Dragon", "Flying"],
 		baseStats: { hp: 91, atk: 124, def: 115, spa: 145, spd: 125, spe: 100 },
-		abilities: { 0: "Multiscale" },
+		abilities: { 0: "Inner Focus", H: "Multiscale" },
 		heightm: 2.2,
 		weightkg: 290,
 		color: "Brown",
 		eggGroups: ["Water 1", "Dragon"],
 		requiredItem: "Dragoninite",
-		battleOnly: "Dragonite",
-		changesFrom: "Dragonite",
 		gen: 9,
 	},
 	mewtwo: {
@@ -3506,8 +3476,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Meganiumite",
-		battleOnly: "Meganium",
-		changesFrom: "Meganium",
 		gen: 9,
 	},
 	cyndaquil: {
@@ -3628,8 +3596,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Feraligite",
-		battleOnly: "Feraligatr",
-		changesFrom: "Feraligatr",
 		gen: 9,
 	},
 	sentret: {
@@ -3935,8 +3901,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Monster", "Field"],
 		requiredItem: "Ampharosite",
-		battleOnly: "Ampharos",
-		changesFrom: "Ampharos",
 	},
 	bellossom: {
 		num: 182,
@@ -4344,8 +4308,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Mineral"],
 		requiredItem: "Steelixite",
-		battleOnly: "Steelix",
-		changesFrom: "Steelix",
 	},
 	snubbull: {
 		num: 209,
@@ -4430,8 +4392,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Bug"],
 		requiredItem: "Scizorite",
-		battleOnly: "Scizor",
-		changesFrom: "Scizor",
 	},
 	shuckle: {
 		num: 213,
@@ -4470,8 +4430,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Bug"],
 		requiredItem: "Heracronite",
-		battleOnly: "Heracross",
-		changesFrom: "Heracross",
 	},
 	sneasel: {
 		num: 215,
@@ -4684,8 +4642,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Flying"],
 		requiredItem: "Skarmorite",
-		battleOnly: "Skarmory",
-		changesFrom: "Skarmory",
 		gen: 9,
 	},
 	houndour: {
@@ -4728,8 +4684,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Field"],
 		requiredItem: "Houndoominite",
-		battleOnly: "Houndoom",
-		changesFrom: "Houndoom",
 	},
 	kingdra: {
 		num: 230,
@@ -4999,8 +4953,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Monster"],
 		requiredItem: "Tyranitarite",
-		battleOnly: "Tyranitar",
-		changesFrom: "Tyranitar",
 	},
 	lugia: {
 		num: 249,
@@ -5099,8 +5051,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Monster", "Dragon"],
 		requiredItem: "Sceptilite",
-		battleOnly: "Sceptile",
-		changesFrom: "Sceptile",
 	},
 	torchic: {
 		num: 255,
@@ -5160,8 +5110,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Field"],
 		requiredItem: "Blazikenite",
-		battleOnly: "Blaziken",
-		changesFrom: "Blaziken",
 	},
 	mudkip: {
 		num: 258,
@@ -5221,8 +5169,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		requiredItem: "Swampertite",
-		battleOnly: "Swampert",
-		changesFrom: "Swampert",
 	},
 	poochyena: {
 		num: 261,
@@ -5558,8 +5504,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Gardevoirite",
-		battleOnly: "Gardevoir",
-		changesFrom: "Gardevoir",
 	},
 	surskit: {
 		num: 283,
@@ -5836,8 +5780,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Human-Like"],
 		requiredItem: "Sablenite",
-		battleOnly: "Sableye",
-		changesFrom: "Sableye",
 	},
 	mawile: {
 		num: 303,
@@ -5865,8 +5807,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Field", "Fairy"],
 		requiredItem: "Mawilite",
-		battleOnly: "Mawile",
-		changesFrom: "Mawile",
 	},
 	aron: {
 		num: 304,
@@ -5922,8 +5862,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Monster"],
 		requiredItem: "Aggronite",
-		battleOnly: "Aggron",
-		changesFrom: "Aggron",
 	},
 	meditite: {
 		num: 307,
@@ -5965,8 +5903,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Human-Like"],
 		requiredItem: "Medichamite",
-		battleOnly: "Medicham",
-		changesFrom: "Medicham",
 	},
 	electrike: {
 		num: 309,
@@ -6008,8 +5944,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		requiredItem: "Manectite",
-		battleOnly: "Manectric",
-		changesFrom: "Manectric",
 	},
 	plusle: {
 		num: 311,
@@ -6139,8 +6073,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 2"],
 		requiredItem: "Sharpedonite",
-		battleOnly: "Sharpedo",
-		changesFrom: "Sharpedo",
 	},
 	wailmer: {
 		num: 320,
@@ -6207,8 +6139,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Field"],
 		requiredItem: "Cameruptite",
-		battleOnly: "Camerupt",
-		changesFrom: "Camerupt",
 	},
 	torkoal: {
 		num: 324,
@@ -6361,8 +6291,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Flying", "Dragon"],
 		requiredItem: "Altarianite",
-		battleOnly: "Altaria",
-		changesFrom: "Altaria",
 	},
 	zangoose: {
 		num: 335,
@@ -6676,8 +6604,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Banettite",
-		battleOnly: "Banette",
-		changesFrom: "Banette",
 	},
 	duskull: {
 		num: 355,
@@ -6746,8 +6672,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Chimechite",
-		battleOnly: "Chimecho",
-		changesFrom: "Chimecho",
 		gen: 9,
 	},
 	absol: {
@@ -6776,8 +6700,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Field"],
 		requiredItem: "Absolite",
-		battleOnly: "Absol",
-		changesFrom: "Absol",
 	},
 	absolmegaz: {
 		num: 359,
@@ -6847,8 +6769,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Fairy", "Mineral"],
 		requiredItem: "Glalitite",
-		battleOnly: "Glalie",
-		changesFrom: "Glalie",
 	},
 	spheal: {
 		num: 363,
@@ -7007,8 +6927,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Dragon"],
 		requiredItem: "Salamencite",
-		battleOnly: "Salamence",
-		changesFrom: "Salamence",
 	},
 	beldum: {
 		num: 374,
@@ -7068,8 +6986,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Mineral"],
 		requiredItem: "Metagrossite",
-		battleOnly: "Metagross",
-		changesFrom: "Metagross",
 	},
 	regirock: {
 		num: 377,
@@ -7139,8 +7055,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Latiasite",
-		battleOnly: "Latias",
-		changesFrom: "Latias",
 	},
 	latios: {
 		num: 381,
@@ -7171,8 +7085,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Latiosite",
-		battleOnly: "Latios",
-		changesFrom: "Latios",
 	},
 	kyogre: {
 		num: 382,
@@ -7263,8 +7175,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Undiscovered"],
 		requiredMove: "Dragon Ascent",
-		battleOnly: "Rayquaza",
-		changesFrom: "Rayquaza",
 	},
 	jirachi: {
 		num: 385,
@@ -7520,8 +7430,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Flying"],
 		requiredItem: "Staraptite",
-		battleOnly: "Staraptor",
-		changesFrom: "Staraptor",
 		gen: 9,
 	},
 	bidoof: {
@@ -7913,7 +7821,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Shellos",
 		forme: "East",
 		color: "Blue",
-		evos: ["Gastrodon-East"],
 	},
 	gastrodon: {
 		num: 423,
@@ -7937,7 +7844,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Gastrodon",
 		forme: "East",
 		color: "Blue",
-		prevo: "Shellos-East",
 	},
 	ambipom: {
 		num: 424,
@@ -8018,8 +7924,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
 		requiredItem: "Lopunnite",
-		battleOnly: "Lopunny",
-		changesFrom: "Lopunny",
 	},
 	mismagius: {
 		num: 429,
@@ -8257,8 +8161,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Monster", "Dragon"],
 		requiredItem: "Garchompite",
-		battleOnly: "Garchomp",
-		changesFrom: "Garchomp",
 	},
 	garchompmegaz: {
 		num: 445,
@@ -8334,8 +8236,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Field", "Human-Like"],
 		requiredItem: "Lucarionite",
-		battleOnly: "Lucario",
-		changesFrom: "Lucario",
 	},
 	lucariomegaz: {
 		num: 448,
@@ -8517,8 +8417,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Abomasite",
-		battleOnly: "Abomasnow",
-		changesFrom: "Abomasnow",
 	},
 	weavile: {
 		num: 461,
@@ -8756,8 +8654,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Galladite",
-		battleOnly: "Gallade",
-		changesFrom: "Gallade",
 	},
 	probopass: {
 		num: 476,
@@ -8812,14 +8708,12 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Ghost"],
 		gender: "F",
 		baseStats: { hp: 70, atk: 80, def: 70, spa: 140, spd: 100, spe: 120 },
-		abilities: { 0: "Snow Warning" },
+		abilities: { 0: "Snow Cloak", H: "Cursed Body" },
 		heightm: 2.6,
 		weightkg: 29.6,
 		color: "White",
 		eggGroups: ["Fairy", "Mineral"],
 		requiredItem: "Froslassite",
-		battleOnly: "Froslass",
-		changesFrom: "Froslass",
 		gen: 9,
 	},
 	rotom: {
@@ -9042,8 +8936,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Heatranite",
-		battleOnly: "Heatran",
-		changesFrom: "Heatran",
 		gen: 9,
 	},
 	regigigas: {
@@ -9160,8 +9052,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Darkranite",
-		battleOnly: "Darkrai",
-		changesFrom: "Darkrai",
 		gen: 9,
 	},
 	shaymin: {
@@ -9600,8 +9490,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Field"],
 		requiredItem: "Emboarite",
-		battleOnly: "Emboar",
-		changesFrom: "Emboar",
 		gen: 9,
 	},
 	oshawott: {
@@ -10031,8 +9919,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Field"],
 		requiredItem: "Excadrite",
-		battleOnly: "Excadrill",
-		changesFrom: "Excadrill",
 		gen: 9,
 	},
 	audino: {
@@ -10061,8 +9947,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Fairy"],
 		requiredItem: "Audinite",
-		battleOnly: "Audino",
-		changesFrom: "Audino",
 	},
 	timburr: {
 		num: 532,
@@ -10262,8 +10146,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Bug"],
 		requiredItem: "Scolipite",
-		battleOnly: "Scolipede",
-		changesFrom: "Scolipede",
 		gen: 9,
 	},
 	cottonee: {
@@ -10586,8 +10468,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Field", "Dragon"],
 		requiredItem: "Scraftinite",
-		battleOnly: "Scrafty",
-		changesFrom: "Scrafty",
 		gen: 9,
 	},
 	sigilyph: {
@@ -11268,8 +11148,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Eelektrossite",
-		battleOnly: "Eelektross",
-		changesFrom: "Eelektross",
 		gen: 9,
 	},
 	elgyem: {
@@ -11352,8 +11230,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Chandelurite",
-		battleOnly: "Chandelure",
-		changesFrom: "Chandelure",
 		gen: 9,
 	},
 	axew: {
@@ -11563,8 +11439,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Mineral"],
 		requiredItem: "Golurkite",
-		battleOnly: "Golurk",
-		changesFrom: "Golurk",
 		gen: 9,
 	},
 	pawniard: {
@@ -12166,8 +12040,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Field"],
 		requiredItem: "Chesnaughtite",
-		battleOnly: "Chesnaught",
-		changesFrom: "Chesnaught",
 		gen: 9,
 	},
 	fennekin: {
@@ -12228,8 +12100,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Field"],
 		requiredItem: "Delphoxite",
-		battleOnly: "Delphox",
-		changesFrom: "Delphox",
 		gen: 9,
 	},
 	froakie: {
@@ -12322,8 +12192,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 1"],
 		requiredItem: "Greninjite",
-		battleOnly: "Greninja",
-		changesFrom: "Greninja",
 		gen: 9,
 	},
 	bunnelby: {
@@ -12646,8 +12514,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		requiredItem: "Pyroarite",
-		battleOnly: "Pyroar",
-		changesFrom: "Pyroar",
 		gen: 9,
 	},
 	flabebe: {
@@ -12714,7 +12580,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Floettite",
 		battleOnly: "Floette-Eternal",
-		changesFrom: "Floette-Eternal",
 		gen: 9,
 	},
 	florges: {
@@ -13041,8 +12906,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Water 2"],
 		requiredItem: "Malamarite",
-		battleOnly: "Malamar",
-		changesFrom: "Malamar",
 		gen: 9,
 	},
 	binacle: {
@@ -13085,8 +12948,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Water 3"],
 		requiredItem: "Barbaracite",
-		battleOnly: "Barbaracle",
-		changesFrom: "Barbaracle",
 		gen: 9,
 	},
 	skrelp: {
@@ -13129,8 +12990,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Water 1", "Dragon"],
 		requiredItem: "Dragalgite",
-		battleOnly: "Dragalge",
-		changesFrom: "Dragalge",
 		gen: 9,
 	},
 	clauncher: {
@@ -13281,8 +13140,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Flying", "Human-Like"],
 		requiredItem: "Hawluchanite",
-		battleOnly: "Hawlucha",
-		changesFrom: "Hawlucha",
 		gen: 9,
 	},
 	dedenne: {
@@ -13713,7 +13570,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Zygardite",
 		battleOnly: ["Zygarde", "Zygarde-10%"],
-		changesFrom: "Zygarde",
 		gen: 9,
 	},
 	diancie: {
@@ -13745,8 +13601,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Pink",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Diancite",
-		battleOnly: "Diancie",
-		changesFrom: "Diancie",
 	},
 	hoopa: {
 		num: 720,
@@ -14112,8 +13966,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Water 3"],
 		requiredItem: "Crabominite",
-		battleOnly: "Crabominable",
-		changesFrom: "Crabominable",
 		gen: 9,
 	},
 	oricorio: {
@@ -14664,8 +14516,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Bug", "Water 3"],
 		requiredItem: "Golisopite",
-		battleOnly: "Golisopod",
-		changesFrom: "Golisopod",
 		gen: 9,
 	},
 	sandygast: {
@@ -15231,8 +15081,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Monster", "Dragon"],
 		requiredItem: "Drampanite",
-		battleOnly: "Drampa",
-		changesFrom: "Drampa",
 		gen: 9,
 	},
 	dhelmise: {
@@ -15608,8 +15456,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Magearnite",
-		battleOnly: "Magearna",
-		changesFrom: "Magearna",
 		gen: 9,
 	},
 	magearnaoriginalmega: {
@@ -15627,7 +15473,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Magearnite",
 		battleOnly: "Magearna-Original",
-		changesFrom: "Magearna-Original",
 		gen: 9,
 	},
 	marshadow: {
@@ -15729,8 +15574,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Zeraorite",
-		battleOnly: "Zeraora",
-		changesFrom: "Zeraora",
 		gen: 9,
 	},
 	meltan: {
@@ -16966,8 +16809,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Fairy", "Mineral"],
 		requiredItem: "Falinksite",
-		battleOnly: "Falinks",
-		changesFrom: "Falinks",
 		gen: 9,
 	},
 	pincurchin: {
@@ -18413,8 +18254,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Grass"],
 		requiredItem: "Scovillainite",
-		battleOnly: "Scovillain",
-		changesFrom: "Scovillain",
 	},
 	rellor: {
 		num: 953,
@@ -18675,8 +18514,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Mineral"],
 		requiredItem: "Glimmoranite",
-		battleOnly: "Glimmora",
-		changesFrom: "Glimmora",
 	},
 	greavard: {
 		num: 971,
@@ -19139,8 +18976,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Dragon", "Mineral"],
 		requiredItem: "Baxcalibrite",
-		battleOnly: "Baxcalibur",
-		changesFrom: "Baxcalibur",
 	},
 	gimmighoul: {
 		num: 999,
@@ -20254,8 +20089,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Purple",
 		eggGroups: ["Amorphous", "Mineral"],
 		requiredItem: "Crucibellite",
-		battleOnly: "Crucibelle",
-		changesFrom: "Crucibelle",
 		gen: 6,
 	},
 	pluffle: {
