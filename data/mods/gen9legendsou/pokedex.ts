@@ -20,10 +20,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 60, atk: 100, def: 105, spa: 130, spd: 105, spe: 120 },
 		abilities: { 0: "Pure Power" },
 	},
-	dragonitemega: {
-		inherit: true,
-		abilities: { 0: "Sheer Force" },
-	},
 	ampharosmega: {
 		inherit: true,
 		abilities: { 0: "Fluffy" },
@@ -55,10 +51,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	gallademega: {
 		inherit: true,
 		abilities: { 0: "Sharpness" },
-	},
-	froslassmega: {
-		inherit: true,
-		abilities: { 0: "Snow Warning" },
 	},
 	garchompmegaz: {
 		inherit: true,
