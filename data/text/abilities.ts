@@ -380,6 +380,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
 	},
 	dragonize: {
+		name: "Dragonize",
 		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves are Dragon-type and have 1.2x power.",
 	},
@@ -985,6 +986,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
 	},
 	megasol: {
+		name: "Mega Sol",
 		desc: "Moves used by this Pokemon have the effects they would when they are used under harsh sunlight.",
 		shortDesc: "This Pokemon's moves act as if they were used under harsh sunlight.",
 	},
