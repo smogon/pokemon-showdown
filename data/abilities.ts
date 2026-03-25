@@ -1054,7 +1054,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dragonize",
 		rating: 4,
 		num: 312, // TODO confirm
-		shortDesc: "This Pokemon's Normal-type moves are Dragon-type and have 1.2x power.",
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -2526,7 +2525,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Mega Sol",
 		rating: 3,
 		num: 311, // TODO confirm
-		shortDesc: "This Pokemon's moves act as if they were used under harsh sunlight.",
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	merciless: {
