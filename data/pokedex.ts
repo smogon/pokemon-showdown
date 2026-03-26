@@ -15397,7 +15397,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		cosmeticFormes: ["Magearna-Original"],
 		otherFormes: ["Magearna-Mega"],
-		formeOrder: ["Magearna", "Magearna-Original", "Magearna-Mega", "Magearna-Mega-Original"],
+		formeOrder: ["Magearna", "Magearna-Original", "Magearna-Mega", "Magearna-Original-Mega"],
 	},
 	magearnaoriginal: {
 		cosmeticOf: "Magearna",
@@ -15419,13 +15419,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Magearnite",
-		cosmeticFormes: ["Magearna-Mega-Original"],
-		formeOrder: ["Magearna-Mega", "Magearna", "Magearna-Mega-Original"],
+		cosmeticFormes: ["Magearna-Original-Mega"],
+		formeOrder: ["Magearna-Mega", "Magearna", "Magearna-Original-Mega"],
 		gen: 9,
 	},
-	magearnamegaoriginal: {
+	magearnaoriginalmega: {
 		cosmeticOf: "Magearna-Mega",
-		name: "Magearna-Mega-Original",
+		name: "Magearna-Original-Mega",
 		forme: "Mega",
 		color: "Red",
 	},
@@ -18554,8 +18554,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Water 2"],
 		cosmeticFormes: ["Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
-		otherFormes: ["Tatsugiri-Mega"],
-		formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Mega"],
+		otherFormes: ["Tatsugiri-Curly-Mega"],
+		formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy", "Tatsugiri-Curly-Mega"],
 	},
 	tatsugiridroopy: {
 		cosmeticOf: "Tatsugiri",
@@ -18569,9 +18569,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Stretchy",
 		color: "Yellow",
 	},
-	tatsugirimega: {
+	tatsugiricurlymega: {
 		num: 978,
-		name: "Tatsugiri-Mega",
+		name: "Tatsugiri-Curly-Mega",
 		baseSpecies: "Tatsugiri",
 		forme: "Mega",
 		types: ["Dragon", "Water"],
@@ -18583,19 +18583,19 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Water 2"],
 		requiredItem: "Tatsugirinite",
 		battleOnly: "Tatsugiri",
-		cosmeticFormes: ["Tatsugiri-Mega-Droopy", "Tatsugiri-Mega-Stretchy"],
-		formeOrder: ["Tatsugiri-Mega", "Tatsugiri", "Tatsugiri-Mega-Droopy", "Tatsugiri-Mega-Stretchy"],
+		cosmeticFormes: ["Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
+		formeOrder: ["Tatsugiri-Curly-Mega", "Tatsugiri", "Tatsugiri-Droopy-Mega", "Tatsugiri-Stretchy-Mega"],
 	},
-	tatsugirimegadroopy: {
-		cosmeticOf: "Tatsugiri-Mega",
-		name: "Tatsugiri-Mega-Droopy",
+	tatsugiridroopymega: {
+		cosmeticOf: "Tatsugiri-Curly-Mega",
+		name: "Tatsugiri-Droopy-Mega",
 		forme: "Mega-Droopy",
 		color: "Pink",
 		battleOnly: "Tatsugiri-Droopy",
 	},
-	tatsugirimegastretchy: {
-		cosmeticOf: "Tatsugiri-Mega",
-		name: "Tatsugiri-Mega-Stretchy",
+	tatsugiristretchymega: {
+		cosmeticOf: "Tatsugiri-Curly-Mega",
+		name: "Tatsugiri-Stretchy-Mega",
 		forme: "Mega-Stretchy",
 		color: "Yellow",
 		battleOnly: "Tatsugiri-Stretchy",

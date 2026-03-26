@@ -3088,7 +3088,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tatsugiri: {
 		isNonstandard: null,
 	},
-	tatsugirimega: {
+	tatsugiricurlymega: {
 		isNonstandard: null,
 	},
 	clodsire: {

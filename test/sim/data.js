@@ -95,7 +95,8 @@ describe('Dex data', () => {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert(forme.startsWith(`${entry.name}-`), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
+					const entryNameBase = entry.baseSpecies ?? entry.name;
+					assert(forme.startsWith(`${entryNameBase}-`), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entryNameBase}`);
 					assert(!forme.endsWith("-"), `Cosmetic forme name "${forme}" of ${entry.name} should not end with a hyphen`);
 					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
 					if (!forme.startsWith('Pokestar')) {

@@ -3661,7 +3661,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 0,
 		megaStone: {
 			"Magearna": "Magearna-Mega",
-			"Magearna-Original": "Magearna-Mega-Original",
+			"Magearna-Original": "Magearna-Original-Mega",
 		},
 		itemUser: ["Magearna", "Magearna-Original"],
 		onTakeItem(item, source) {
@@ -6262,9 +6262,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Tatsugirinite",
 		spritenum: 0,
 		megaStone: {
-			"Tatsugiri": "Tatsugiri-Mega",
-			"Tatsugiri-Droopy": "Tatsugiri-Mega-Droopy",
-			"Tatsugiri-Stretchy": "Tatsugiri-Mega-Stretchy",
+			"Tatsugiri": "Tatsugiri-Curly-Mega",
+			"Tatsugiri-Droopy": "Tatsugiri-Droopy-Mega",
+			"Tatsugiri-Stretchy": "Tatsugiri-Stretchy-Mega",
 		},
 		itemUser: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
 		onTakeItem(item, source) {
