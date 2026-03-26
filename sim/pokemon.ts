@@ -7,7 +7,7 @@
 
 import { State } from './state';
 import { toID } from './dex';
-import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
+import type { DynamaxOptions, MoveRequestData, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -518,6 +518,11 @@ export class Pokemon {
 		return (this.side.id + positionLetter) as PokemonSlot;
 	}
 
+	getFieldPositionValue() {
+		// p1a, p2a, p3a, ..., p1b, p2b, p3b, ...
+		return this.side.n + this.battle.sides.length * this.position;
+	}
+
 	toString() {
 		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
@@ -685,6 +690,12 @@ export class Pokemon {
 			}
 		}
 		return null;
+	}
+
+	getMoveSlot(slotIndex: number) {
+		// used by Gen 1
+		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return null;
+		return this.moveSlots[slotIndex];
 	}
 
 	getMoveHitData(move: ActiveMove) {
@@ -876,16 +887,15 @@ export class Pokemon {
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
-		const gen = this.battle.gen;
 		move = this.battle.dex.moves.get(move);
 		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
 		ppData.used = true;
-		if (!ppData.pp && gen > 1) return 0;
+		if (!ppData.pp) return 0;
 
 		if (!amount) amount = 1;
 		ppData.pp -= amount;
-		if (ppData.pp < 0 && gen > 1) {
+		if (ppData.pp < 0) {
 			amount += ppData.pp;
 			ppData.pp = 0;
 		}
@@ -936,10 +946,7 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
-		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
-		target?: string, pp?: number, maxpp?: number,
-	}[] {
+	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
 			this.trapped = true;
@@ -1067,7 +1074,14 @@ export class Pokemon {
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		if (!moves.length) {
+		// actions that don't hard lock out of switching, but can't bypass the Fight button
+		// partially trapped causes maybeLocked, so it shouldn't be revealed
+		if (this.battle.gen === 1 && ['frz', 'slp'].includes(this.status)) {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			moves = [{ move: 'Fight', id: 'fight' as ID }];
+			lockedMove = 'fight' as ID;
+		} else if (!moves.length) {
 			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
 			lockedMove = 'struggle' as ID;
 		}
@@ -1123,7 +1137,7 @@ export class Pokemon {
 			ident: this.fullname,
 			details: this.details,
 			condition: this.getHealth().secret,
-			active: (this.position < this.side.active.length),
+			active: this.position < this.side.active.length,
 			stats: {
 				atk: this.baseStoredStats['atk'],
 				def: this.baseStoredStats['def'],
@@ -1604,7 +1618,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = isHidden ? 'hidden' : true;
-				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
+				moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 			}
 		}
 	}
@@ -1900,10 +1914,18 @@ export class Pokemon {
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 		if (sourceEffect && !isFromFormeChange && !isTransform) {
-			if (source) {
-				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
-			} else {
-				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
+			switch (sourceEffect.id) {
+			case 'mummy':
+			case 'lingeringaroma':
+				this.battle.add('-activate', source, sourceEffect.fullname, this, '[ability] ' + oldAbility.name);
+				break;
+			default:
+				if (source) {
+					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
+				} else {
+					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
+				}
+				break;
 			}
 		}
 		if (ability.id && this.battle.gen > 3 &&
@@ -2155,6 +2177,7 @@ export class Pokemon {
 		case 'primordialsea':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
+		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
 		return weather;
 	}
 

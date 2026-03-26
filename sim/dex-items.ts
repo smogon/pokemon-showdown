@@ -1,4 +1,4 @@
-import type { PokemonEventMethods, ConditionData } from './dex-conditions';
+import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 
@@ -16,6 +16,7 @@ export interface ItemData extends Partial<Item>, PokemonEventMethods {
 export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	inherit: true,
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
+	condition?: ModdedConditionData,
 };
 
 export interface ItemDataTable { [itemid: IDEntry]: ItemData }
@@ -43,17 +44,11 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	readonly onMemory?: string;
 	/**
-	 * If this is a mega stone: The name (e.g. Charizard-Mega-X) of the
-	 * forme this allows transformation into.
+	 * If this is a mega stone: A pair (e.g. Charizard: Charizard-Mega-X) of the
+	 * forme this allows transformation from and into.
 	 * undefined, if not a mega stone.
 	 */
-	readonly megaStone?: string | string[];
-	/**
-	 * If this is a mega stone: The name (e.g. Charizard) of the
-	 * forme this allows transformation from.
-	 * undefined, if not a mega stone.
-	 */
-	readonly megaEvolves?: string | string[];
+	readonly megaStone?: { [megaEvolves: string]: string };
 	/**
 	 * If this is a Z crystal: true if the Z Crystal is generic
 	 * (e.g. Firium Z). If species-specific, the name
@@ -116,7 +111,6 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.onDrive = data.onDrive || undefined;
 		this.onMemory = data.onMemory || undefined;
 		this.megaStone = data.megaStone || undefined;
-		this.megaEvolves = data.megaEvolves || undefined;
 		this.zMove = data.zMove || undefined;
 		this.zMoveType = data.zMoveType || undefined;
 		this.zMoveFrom = data.zMoveFrom || undefined;
@@ -176,7 +170,7 @@ export class DexItems {
 	}
 
 	getByID(id: ID): Item {
-		if (id === '') return EMPTY_ITEM;
+		if (id === '' || id === 'constructor') return EMPTY_ITEM;
 		let item = this.itemCache.get(id);
 		if (item) return item;
 		if (this.dex.getAlias(id)) {

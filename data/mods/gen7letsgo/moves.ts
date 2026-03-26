@@ -19,6 +19,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	doubleironbash: {
 		inherit: true,
 		isNonstandard: null,
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, minimize: 1 },
 	},
 	floatyfall: {
 		inherit: true,
@@ -41,8 +42,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		desc: "A random move that was introduced in gen 1 is selected for use, other than Counter, Mimic, Mirror Move, Struggle, or Transform.",
 		shortDesc: "Picks a random move from gen 1.",
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => move.gen === 1 && move.flags['metronome']);
+		onHit(target) {
+			const moves = this.dex.moves.all().filter(move => (
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome'] && move.gen === 1
+			));
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);

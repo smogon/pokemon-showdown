@@ -182,7 +182,7 @@ describe('Endless Battle Clause (slow)', () => {
 			{ species: "Blissey", moves: ['splash'] },
 			{ species: "Vaporeon", moves: ['splash'] },
 		] });
-		for (let i = 0; i < 998; i++) {
+		for (let i = 0; i < 999; i++) {
 			battle.makeChoices('switch 2', 'switch 2');
 		}
 		assert(!battle.ended);
