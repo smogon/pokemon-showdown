@@ -12,8 +12,8 @@ describe('Dex data', () => {
 			assert(!entry.name.startsWith("-") && !entry.name.endsWith("-"), `Pokemon name "${entry.name}" should not start or end with a hyphen`);
 			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
 
-			if (entry.cosmeticOf) {
-				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticOf), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticOf}`);
+			if (entry.cosmeticForme) {
+				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticForme), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticForme}`);
 				assert.equal(Dex.data.FormatsData[pokemonid], undefined, `Cosmetic forme "${entry.name}" should not have its own tier`);
 				continue;
 			}
@@ -73,8 +73,8 @@ describe('Dex data', () => {
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
-			if (entry.cosmeticOf) {
-				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticOf), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticOf}`);
+			if (entry.cosmeticForme) {
+				assert.equal(Dex.getAlias(pokemonid), toID(entry.cosmeticForme), `Misspelled/nonexistent alias "${pokemonid}" of ${entry.cosmeticForme}`);
 				assert.equal(Dex.data.FormatsData[pokemonid], undefined, `Cosmetic forme "${entry.name}" should not have its own tier`);
 			}
 			if (entry.battleOnly) {
@@ -321,7 +321,7 @@ describe('Dex data', () => {
 		const count = { species: 0, formes: 0 };
 		for (const pkmn of dex.species.all()) {
 			if (!existenceFunction(pkmn)) continue;
-			if (pkmn.cosmeticOf) continue;
+			if (pkmn.cosmeticForme) continue;
 			if (pkmn.name !== pkmn.baseSpecies) {
 				count.formes++;
 			} else {

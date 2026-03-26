@@ -23,14 +23,14 @@ export interface SpeciesData extends Partial<Species> {
 	weightkg: number;
 }
 export interface CosmeticFormeData extends Partial<Species> {
-	cosmeticOf: string;
+	cosmeticForme: string;
 	name: string;
 	forme: string;
 }
 
 export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
 	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
-	Partial<Omit<CosmeticFormeData, 'cosmeticOf'>> & { inherit: true };
+	Partial<Omit<CosmeticFormeData, 'cosmeticForme'>> & { inherit: true };
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
@@ -189,7 +189,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if this species can hatch from an Egg. */
 	readonly canHatch: boolean;
 	/** Species name of the base cosmetic forme. */
-	readonly cosmeticOf?: string;
+	readonly cosmeticForme?: string;
 	/**
 	 * Gender. M = always male, F = always female, N = always
 	 * genderless, '' = sometimes male sometimes female.
@@ -322,7 +322,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
-		this.cosmeticOf = data.cosmeticOf || undefined;
+		this.cosmeticForme = data.cosmeticForme || undefined;
 		this.tags = data.tags || [];
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
@@ -450,7 +450,7 @@ export class DexSpecies {
 				species.abilities = { 0: species.abilities['S']! };
 			} else {
 				species = this.get(alias);
-				if (this.dex.data.Pokedex?.[id]?.cosmeticOf) {
+				if (this.dex.data.Pokedex?.[id]?.cosmeticForme) {
 					const cosmeticForme = this.dex.data.Pokedex[id];
 					species = new Species({
 						...species,
@@ -470,7 +470,7 @@ export class DexSpecies {
 								forme: forme.slice(species.name.length + 1),
 								baseSpecies: species.name,
 								baseForme: "",
-								cosmeticOf: species.name,
+								cosmeticForme: species.name,
 								otherFormes: null,
 								cosmeticFormes: null,
 							});
