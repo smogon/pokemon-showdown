@@ -6277,6 +6277,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 	},
 	{
+		name: "[Gen 9] SwSe VGC",
+
+		mod: 'swse',
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
+	},
+	{
 		name: "[Gen 9] Doubles Custom Game",
 
 		mod: 'swse',
@@ -6588,7 +6596,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Leppa Berry', 'Razor Hook', 'Starf Berry',
 		],
-		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice'],
 		restricted: [
 			'Armor Tail', 'Chlorophyll', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Gale Wings', 'Good as Gold', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter',
 			'Magic Bounce', 'Magic Guard', 'Magnet Pull', 'Mold Breaker', 'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Psychic Surge', 'Pure Power',

@@ -5131,7 +5131,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rapidspin: {
 		name: "Rapid Spin",
 		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field. Has a 100% chance to raise the user's Speed by 1 stage.",
-		shortDesc: "Free user from hazards/bind/Leech Seed; +1 Spe.",
+		shortDesc: "Frees user from hazards/bind/Leech Seed; +1 Spe.",
 		gen7: {
 			desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
 			shortDesc: "Frees user from hazards, binding, Leech Seed.",
@@ -7992,7 +7992,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandstonesweep: {
 		name: "Sandstone Sweep",
 		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
-		shortDesc: "Free user from hazards/bind/Leech Seed.",
+		shortDesc: "Frees user from hazards/bind/Leech Seed.",
 	},
 	scavenge: {
 		name: "Scavenge",
@@ -8168,7 +8168,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	windrage: {
 		name: "Windrage",
 		desc: "This move fails if Strong Winds is not active. If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
-		shortDesc: "Fails if no Strong Winds. Clear hazards.",
+		shortDesc: "Fails w/o Strong Winds. Frees user from hazards/bind/Leech Seed.",
 	},
 	wrangle: {
 		name: "Wrangle",
