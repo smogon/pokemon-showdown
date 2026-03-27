@@ -8260,7 +8260,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 
 	amazedrive: {
 		name: "Amaze-Drive",
-		spritenum: 799,
+		spritenum: 800,
 		fling: {
 			basePower: 70,
 		},
@@ -8269,7 +8269,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	avocaberry: {
 		name: "Avoca Berry",
-		spritenum: 789,
+		spritenum: 790,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -8290,7 +8290,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	bacchuslaurel: {
 		name: "Bacchus Laurel",
-		spritenum: 804,
+		spritenum: 805,
 		fling: {
 			basePower: 30,
 		},
@@ -8315,7 +8315,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	}, */
 	coffeegeistcappuccino: { // incomplete test fling
 		name: "Coffeegeist Cappuccino",
-		spritenum: 794,
+		spritenum: 795,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8383,7 +8383,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	flatunovan: {
 		name: "Flat Unovan",
-		spritenum: 795,
+		spritenum: 796,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8410,7 +8410,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	frostorb: {
 		name: "Frost Orb",
-		spritenum: 788,
+		spritenum: 789,
 		fling: {
 			basePower: 30,
 			status: 'fst',
@@ -8425,7 +8425,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	iridescentscale: {
 		name: "Iridescent Scale",
-		spritenum: 802,
+		spritenum: 803,
 		fling: {
 			basePower: 110,
 		},
@@ -8434,7 +8434,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	keybone: {
 		name: "Keybone",
-		spritenum: 800,
+		spritenum: 802,
 		fling: {
 			basePower: 100,
 		},
@@ -8443,7 +8443,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	miststone: {
 		name: "Mist Stone",
-		spritenum: 798,
+		spritenum: 799,
 		fling: {
 			basePower: 30,
 		},
@@ -8452,7 +8452,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	mystictamroastdoppio: {
 		name: "Mystic Tamroast Doppio",
-		spritenum: 793,
+		spritenum: 794,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8479,7 +8479,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	pikaspresso: {
 		name: "Pikaspresso",
-		spritenum: 790,
+		spritenum: 791,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8515,7 +8515,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	razorhook: {
 		name: "Razor Hook",
-		spritenum: 803,
+		spritenum: 801,
 		fling: {
 			basePower: 50,
 			volatileStatus: 'flinch',
@@ -8538,7 +8538,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	sandygastmocha: {
 		name: "Sandygast Mocha",
-		spritenum: 792,
+		spritenum: 793,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8583,7 +8583,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	weathervane: { // incomplete
 		name: 'Weather Vane',
-		spritenum: 796,
+		spritenum: 797,
 		fling: {
 			basePower: 10,
 		},
@@ -8597,7 +8597,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	whirligig: {
 		name: "Whirligig",
-		spritenum: 797,
+		spritenum: 798,
 		fling: {
 			basePower: 30,
 		},
@@ -8613,7 +8613,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	worcanecoldbrew: {
 		name: "Worcane Cold Brew",
-		spritenum: 791,
+		spritenum: 792,
 		isDrink: true,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -8640,7 +8640,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	zetacell: {
 		name: "Zeta Cell",
-		spritenum: 803,
+		spritenum: 804,
 		fling: {
 			basePower: 30,
 		},
