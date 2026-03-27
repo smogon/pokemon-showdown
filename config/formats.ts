@@ -6234,25 +6234,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 1,
 	},
 	{
-		name: "[Gen 9] NOT Doubles OU IMPLEMENTED",
-		mod: 'swse',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] SwSe Doubles OU",
-		mod: 'swse',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-	{
 		name: "[Gen 9] Doubles OU",
 		mod: 'swse',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Shadow Tag', 'Commander'],
+		// banlist: ['DUber', 'Shadow Tag', 'Commander'],
+		banlist: ['Standard Doubles', '!Gravity Sleep Clause', 'Shadow Tag', 'Commander'],
 	},
 	{
 		name: "[Gen 9] Doubles UU",
