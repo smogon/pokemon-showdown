@@ -21740,9 +21740,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onHit(target, source, move) {
-			this.field.addPseudoWeather('gravity', source);
-		},
+		pseudoWeather: 'gravity',
 		target: "normal",
 		type: "Dark",
 	},
