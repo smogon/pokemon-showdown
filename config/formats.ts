@@ -6239,7 +6239,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		// banlist: ['DUber', 'Shadow Tag', 'Commander'],
-		banlist: ['Standard Doubles', '!Gravity Sleep Clause', 'Shadow Tag', 'Commander'],
+		banlist: ['Shadow Tag', 'Commander'],
+	},
+	{
+		name: "[Gen 9] Doubles Ubers",
+		mod: 'swse',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 	},
 	{
 		name: "[Gen 9] Doubles UU",
@@ -6259,16 +6268,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Little Cup'],
 		banlist: [],
-	},
-	{
-		name: "[Gen 9] Doubles Ubers",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 	},
 	{
 		name: "[Gen 9] SwSe VGC",
