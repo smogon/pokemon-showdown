@@ -575,7 +575,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			source.switchFlag = true;
 		},
-		hasSheerForce: true,
+		hasSheerForceBoost: true,
 		target: "normal",
 		type: "Dragon",
 		desc: "Dondozo eats a mon on the user's team, KOing it. Dondozo then gains a stat boost depending on the eaten mon's highest stat: +3 Attack for Atk/SpA, +2 Def/+2 SpD for Def/SpD, and +3 Speed for Speed.",
