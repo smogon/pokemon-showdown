@@ -2,7 +2,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
 	init() {
-		// we could probably remove all NFE from formats-data for simplicity
+		// if NFEs are not allowed, we could probably remove all NFE from formats-data for simplicity
 		for (const i in this.data.FormatsData) {
 			if (this.species.get(i).nfe) {
 				this.modData('FormatsData', i).isNonstandard = 'Past';
