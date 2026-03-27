@@ -23367,7 +23367,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Yanmage",
 		types: ["Bug", "Dragon"],
 		baseStats: { hp: 85, atk: 65, def: 55, spa: 120, spd: 90, spe: 100 },
-		abilities: { 0: "Arcanum", 1: "Magic Guard", H: "Arcanum" },
+		abilities: { 0: "Power Within", 1: "Magic Guard", H: "Arcanum" },
 		heightm: 525,
 		weightkg: 515,
 		color: "Green",
