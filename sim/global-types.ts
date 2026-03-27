@@ -281,7 +281,7 @@ interface ModdedBattlePokemon {
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
 	effectiveWeather?: (this: Pokemon) => ID;
 	formeChange?: (
-		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, message?: string
+		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string, message?: string
 	) => boolean;
 	hasType?: (this: Pokemon, type: string | string[]) => boolean;
 	getAbility?: (this: Pokemon) => Ability;

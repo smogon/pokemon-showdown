@@ -153,7 +153,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		 * This function handles all changes to stats, ability, type, species, etc.
 		 * as well as sending all relevant messages sent to the client.
 		 */
-		formeChange(speciesId, source, isPermanent, message) {
+		formeChange(speciesId, source, isPermanent, abilitySlot, message) {
 			if (!source) source = this.battle.effect;
 
 			const rawSpecies = this.battle.dex.species.get(speciesId);
