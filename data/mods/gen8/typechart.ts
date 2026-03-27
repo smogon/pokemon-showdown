@@ -22,6 +22,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Stellar: 0,
 			Water: 0,
 		},
+		HPivs: {},
 	},
 	ghost: {
 		damageTaken: {
@@ -46,6 +47,8 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Stellar: 0,
 			Water: 0,
 		},
+		HPivs: { def: 30, spd: 30 },
+		HPdvs: { atk: 13, def: 14 },
 	},
 	ice: {
 		damageTaken: {
@@ -71,6 +74,8 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Stellar: 0,
 			Water: 0,
 		},
+		HPivs: { atk: 30, def: 30 },
+		HPdvs: { def: 13 },
 	},
 	normal: {
 		damageTaken: {
@@ -119,6 +124,8 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Stellar: 0,
 			Water: 0,
 		},
+		HPivs: { def: 30, spa: 30, spd: 30 },
+		HPdvs: { atk: 12, def: 14 },
 	},
 	steel: {
 		damageTaken: {
@@ -145,6 +152,8 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Stellar: 0,
 			Water: 0,
 		},
+		HPivs: { spd: 30 },
+		HPdvs: { atk: 13 },
 	},
 	stellar: {
 		inherit: true,
