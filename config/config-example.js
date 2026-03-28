@@ -82,7 +82,7 @@ Main's SSL deploy script from Let's Encrypt looks like:
  *   know what you are doing
  * @type {false | string[]}.
  */
-exports.proxyip = false;
+exports.proxyip = ["127.0.0.1"];
 
 // subprocesses - the number of child processes to use for various tasks.
 //   Can be set to `0` instead of `{...}` to stop using subprocesses, if you're running out of RAM.
@@ -487,7 +487,8 @@ exports.appealurl = '';
  * replsocketprefix - the prefix for the repl sockets to be listening on
  * replsocketmode - the file mode bits to use for the repl sockets
  */
-exports.repl = true;
+exports.repl = false;
+exports.nofswriting = true;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
