@@ -216,6 +216,14 @@ export class RuleTable extends Map<string, string> {
 			) ?? rawGameType;
 			const gameType = dex.toID(validatedGameType);
 			this.valueRules.set('gametype', gameType);
+
+			if (format.supportedGameTypes && !format.supportedGameTypes.includes(gameType as GameType)) {
+				throw new Error(
+					`The game type "${gameType}" is not supported in this format. ` +
+					`Supported game types are: ${format.supportedGameTypes.join(', ')}.`
+				);
+			}
+
 			const currentPlayerCount = ['multi', 'freeforall'].includes(format.gameType) ? 4 : 2;
 			const newPlayerCount = ['multi', 'freeforall'].includes(gameType) ? 4 : 2;
 			if (currentPlayerCount !== newPlayerCount) {
@@ -438,6 +446,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly gameType: GameType;
 	/** Number of players, based on game type, for convenience */
 	readonly playerCount: 2 | 4;
+	readonly defaultGameType?: GameType;
+	readonly supportedGameTypes?: GameType[];
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
@@ -520,7 +530,13 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Condition';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
-		this.gameType = data.gameType || 'singles';
+
+		this.defaultGameType = data.defaultGameType;
+		this.supportedGameTypes = data.supportedGameTypes || (this.defaultGameType ? [this.defaultGameType] : undefined);
+
+		this.gameType = data.gameType || this.defaultGameType ||
+			(this.supportedGameTypes ? this.supportedGameTypes[0] : 'singles');
+
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];

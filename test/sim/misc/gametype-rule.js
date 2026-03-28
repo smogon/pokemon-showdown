@@ -2,6 +2,7 @@
 
 const assert = require('../../assert');
 const common = require('../../common');
+const Dex = require('../../../dist/sim/dex').Dex;
 
 let battle;
 
@@ -135,6 +136,27 @@ describe('Game Type Rule', () => {
 			() => common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Doubles'] }),
 			/Changing between 4-player and 2-player game types is not supported/
 		);
+	});
+
+	it('should reject game types not listed in supportedGameTypes', () => {
+		battle = null;
+		const origGet = Dex.formats.get;
+		Dex.formats.get = function (name, isTrusted) {
+			const f = origGet.call(this, name, isTrusted);
+			if (f && f.id === 'gen9customgame') {
+				Object.defineProperty(f, 'supportedGameTypes', { value: ['doubles'], writable: true });
+			}
+			return f;
+		};
+
+		try {
+			assert.throws(
+				() => common.createBattle({ formatid: 'gen9customgame@@@Game Type = Singles' }),
+				/The game type "singles" is not supported in this format/
+			);
+		} finally {
+			Dex.formats.get = origGet;
+		}
 	});
 
 	it('should allow changing between 2-player game types', () => {
