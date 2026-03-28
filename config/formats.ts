@@ -6239,7 +6239,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		// banlist: ['DUber', 'Shadow Tag', 'Commander'],
-		banlist: ['Shadow Tag', 'Commander'],
+		banlist: ['Arena Trap', 'Shadow Tag'],
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
@@ -6266,7 +6266,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'swse',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Little Cup'],
+		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
 		banlist: [],
 	},
 	{
@@ -6302,19 +6302,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'swse',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Same Type Clause'],
-		banlist: [
-			'Arena Trap', 'Shadow Tag',
-		],
+		banlist: ['Arena Trap', 'Shadow Tag'],
 	},
 	{
 		name: "[Gen 9] Doubles Battlefields",
 		desc: `Any field condition with a set duration becomes permanent once triggered unless directly replaced, removed, or reversed. Namely, this impacts screens, weathergy, terrains, room effects, gravity, and side conditions like Tailwind and Safeguard.`,
+
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag',
-			'King\'s Rock', 'Razor Fang',
+			'King\'s Rock', 'Razor Hook',
 			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Last Respects', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
 		],
 		onClimateWeatherChange() {
@@ -6343,55 +6342,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
-	// SwSe Dex-based Metas
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "SwSe Dex-based Metas",
-	},
-	{
-		name: "[Gen 9] Tso-Lo Doubles",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Tso-Lo Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] Sand Flats Doubles",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Sand Flats Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] Kaskade Countryside Doubles",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Kaskade Countryside Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] Alki Marsh Doubles",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Alki Marsh Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
-	},
-
 	// SwSe Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -6403,12 +6353,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] OU",
 
 		mod: 'swse',
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: [
 			'Uber', 'AG',
-			'Arena Trap', 'Shadow Tag',
+			'Arena Trap', 'Moody', 'Shadow Tag',
 			'Baton Pass',
-			'King\'s Rock',
+			'King\'s Rock', 'Razor Hook',
 		],
 	},
 	{
@@ -6421,8 +6371,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 		banlist: [
 			'AG',
+			'Moody',
 			'Baton Pass',
-			'King\'s Rock',
+			'King\'s Rock', 'Razor Hook',
 		],
 	},
 	{
@@ -6453,7 +6404,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['[Gen 9] RU'],
-		banlist: ['RU', 'NUBL', 'Quick Claw'],
+		banlist: ['RU', 'NUBL'],
 	},
 	{
 		name: "[Gen 9] PU",
@@ -6472,8 +6423,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Little Cup'],
 		banlist: [
 			'Baton Pass',
-			'King\'s Rock',
+			'King\'s Rock', 'Razor Hook',
 		],
+	},
+	{
+		name: "[Gen 9] BSS",
+
+		mod: 'swse',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -6497,12 +6455,48 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `All Pok&eacute;mon on your team must share a common type.`,
 
 		mod: 'swse',
-		ruleset: ['Standard', 'Same Type Clause', 'Terastal Clause'],
+		ruleset: ['Standard', 'Same Type Clause'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag',
 			'Baton Pass',
-			'King\'s Rock',
+			'King\'s Rock', 'Razor Hook',
 		],
+	},
+	{
+		name: "[Gen 9] Battlefields",
+		desc: `Any field condition with a set duration becomes permanent once triggered unless directly replaced, removed, or reversed. Namely, this impacts screens, weathergy, terrains, room effects, gravity, and side conditions like Tailwind and Safeguard.`,
+
+		mod: 'gen9',
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause'],
+		banlist: [
+			'Arena Trap', 'Shadow Tag',
+			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
+			'King\'s Rock', 'Razor Hook',
+		],
+		onClimateWeatherChange() {
+			this.field.climateWeatherState.duration = 0;
+		},
+		onIrritantWeatherChange() {
+			this.field.irritantWeatherState.duration = 0;
+		},
+		onEnergyWeatherChange() {
+			this.field.energyWeatherState.duration = 0;
+		},
+		onClearingWeatherChange() {
+			this.field.clearingWeatherState.duration = 0;
+		},
+		onCataclysmWeatherChange() {
+			this.field.cataclysmWeatherState.duration = 0;
+		},
+		onTerrainChange() {
+			this.field.terrainState.duration = 0;
+		},
+		onPseudoWeatherChange(target, source, pseudoWeather) {
+			this.field.pseudoWeather[pseudoWeather.id].duration = 0;
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			side.sideConditions[sideCondition.id].duration = 0;
+		},
 	},
 	{
 		name: "[Gen 9] Almost Any Ability",
@@ -6514,8 +6508,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] STABmons",
 		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
+
 		mod: 'swse',
-		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Terastal Clause'],
+		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause'],
 		restricted: [
 			'Astral Barrage', 'Belly Drum', 'Clangorous Soul', 'Ceaseless Edge', 'Dire Claw', 'Dragon Energy', 'Electro Shot', 'Extreme Speed', 'Fillet Away', 'Final Gambit',
 			'Flower Trick', 'Gigaton Hammer', 'No Retreat', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'Triple Arrows', 'V-create', 'Victory Dance', 'Wicked Blow',
@@ -6525,12 +6520,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Pokebilities",
 		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
+
 		mod: 'pokebilities',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
 			'Arena Trap', 'Moody', 'Shadow Tag',
 			'Baton Pass',
-			'Bright Powder', 'King\'s Rock', 'Razor Fang',
+			'Bright Powder', 'King\'s Rock', 'Razor Hook',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -6588,6 +6584,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Shared Power",
 		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
+
 		mod: 'swse',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
 		banlist: [
@@ -6693,7 +6690,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Misc. Randomized Metas",
-		column: 3,
 	},
 	{
 		name: "[Gen 9] Monotype Random Battle",
@@ -6704,5 +6700,121 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+	},
+
+	// SwSe Dex-based Metas
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "SwSe Dex-based Metas",
+		column: 4,
+	},
+	{
+		name: "[Gen 9] Tso-Lo Doubles",
+		desc: `Only Pok&eacute;mon in the Tso-Lo Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Tso-Lo Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
+		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Tso-Lo Singles",
+		desc: `Only Pok&eacute;mon in the Tso-Lo Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		searchShow: false,
+		ruleset: ['Tso-Lo Pokedex', 'Standard'],
+		banlist: [
+			'Uber', 'AG',
+			'Arena Trap', 'Shadow Tag',
+			'Baton Pass',
+			'King\'s Rock', 'Razor Hook',
+		],
+	},
+	{
+		name: "[Gen 9] Sand Flats Doubles",
+		desc: `Only Pok&eacute;mon in the Sand Flats Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Sand Flats Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
+		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Sand Flats Singles",
+		desc: `Only Pok&eacute;mon in the Tso-Lo Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Sand Flats Pokedex', 'Standard'],
+		banlist: [
+			'Uber', 'AG',
+			'Arena Trap', 'Shadow Tag',
+			'Baton Pass',
+			'King\'s Rock', 'Razor Hook',
+		],
+	},
+	{
+		name: "[Gen 9] Kaskade Countryside Doubles",
+		desc: `Only Pok&eacute;mon in the Kaskade Countryside Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Kaskade Countryside Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
+		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Kaskade Countryside Singles",
+		desc: `Only Pok&eacute;mon in the Kaskade Countryside Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Kaskade Countryside Pokedex', 'Standard'],
+		banlist: [
+			'Uber', 'AG',
+			'Arena Trap', 'Shadow Tag',
+			'Baton Pass',
+			'King\'s Rock', 'Razor Hook',
+		],
+	},
+	{
+		name: "[Gen 9] Alki Marsh Doubles",
+		desc: `Only Pok&eacute;mon in the Alki Marsh Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Alki Marsh Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
+		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Alki Marsh Singles",
+		desc: `Only Pok&eacute;mon in the Alki Marsh Pok&eacute;dex are allowed.`,
+
+		mod: 'swse',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Alki Marsh Pokedex', 'Standard'],
+		banlist: [
+			'Uber', 'AG',
+			'Arena Trap', 'Shadow Tag',
+			'Baton Pass',
+			'King\'s Rock', 'Razor Hook',
+		],
 	},
 ];
