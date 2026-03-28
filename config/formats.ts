@@ -3172,20 +3172,25 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
-	// National Dex
-	///////////////////////////////////////////////////////////////////
 	// TK PRISM
-
+	///////////////////////////////////////////////////////////////////
 	{
-		section: "National Dex",
+		section: 'Prism Custom', // nom de la catégorie
+		column: 2, // colonne du lobby (1 ou 2, optionnel)
 	},
 	{
 		name: '[Gen 9] Prism',
-		mod: 'gen9',
+		mod: 'prism',
 		ruleset: ['Standard NatDex', 'Terastal Clause'],
 		banlist: [],
-		desc: 'Mode Prism : chaque Pokémon possède un second talent passif ' +
-		'en plus de son talent principal.',
+		desc: 'Chaque Pokémon possède un passif exclusif et unique en plus de son talent actif.',
+	},
+
+	// National Dex
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "National Dex",
 	},
 	{
 		name: "[Gen 9] National Dex",
