@@ -106174,7 +106174,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderbolt: ["9L53"],
 			thundershock: ["9L19"],
 		},
-	},
+	}, */
 	excadrillkaskade: {
 		learnset: {
 			aurasphere: ["9M"],
@@ -106251,7 +106251,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M"],
 		},
 	},
-	qayagus: {
+	/* qayagus: {
 		learnset: {
 			acid: ["9L7"],
 			amnesia: ["9L30"],
