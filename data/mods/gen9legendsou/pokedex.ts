@@ -24,14 +24,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Sheer Force" },
 	},
-	meganiummega: {
-		inherit: true,
-		abilities: { 0: "Flower Veil" },
-	},
-	feraligatrmega: {
-		inherit: true,
-		abilities: { 0: "Dragon's Maw" },
-	},
 	ampharosmega: {
 		inherit: true,
 		abilities: { 0: "Fluffy" },
@@ -84,10 +76,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Dark Aura" },
 	},
-	emboarmega: {
-		inherit: true,
-		abilities: { 0: "Supreme Overlord" },
-	},
 	excadrillmega: {
 		inherit: true,
 		abilities: { 0: "Sand Rush" },
@@ -115,18 +103,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	chandeluremega: {
 		inherit: true,
 		abilities: { 0: "Magic Guard" },
-	},
-	chesnaughtmega: {
-		inherit: true,
-		abilities: { 0: "Grassy Surge" },
-	},
-	delphoxmega: {
-		inherit: true,
-		abilities: { 0: "Levitate" },
-	},
-	greninjamega: {
-		inherit: true,
-		abilities: { 0: "Protean" },
 	},
 	meowsticmmega: {
 		inherit: true,
