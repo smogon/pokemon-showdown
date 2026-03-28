@@ -6427,7 +6427,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] BSS",
+		name: "[Gen 9] SwSe BSS",
 
 		mod: 'swse',
 		bestOfDefault: true,
