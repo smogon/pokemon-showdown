@@ -6470,8 +6470,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag',
-			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
 			'King\'s Rock', 'Razor Hook',
+			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Last Respects', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
 		],
 		onClimateWeatherChange() {
 			this.field.climateWeatherState.duration = 0;
