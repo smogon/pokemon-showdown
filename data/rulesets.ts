@@ -2650,6 +2650,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	godlygiftmod: {
 		effectType: 'Rule',
 		name: "Godly Gift Mod",
+		desc: "Each Pok&eacute;mon receives one base stat from a God (Restricted Pok&eacute;mon) depending on its position in the team. If there is no restricted Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.",
 		onValidateTeam(team) {
 			const gods = new Set<string>();
 			for (const set of team) {
