@@ -40,26 +40,26 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
-// base URL for pokéball sprites (msikma/pokesprite on GitHub, via raw.githubusercontent.com)
-const POKESPRITE_BALL_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/';
+// base URL for Poké Ball item icons (hosted by Pokémon Showdown)
+const POKESPRITE_BALL_BASE = 'https://play.pokemonshowdown.com/sprites/itemicons/';
 
 // returns the pokeball image src and alt text appropriate for a species's rarity tier
 function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 	const sp = Dex.species.get(toID(speciesId));
 	// Legendary / Mythical / Ultra Beast / Paradox → Master Ball
 	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
-		return { src: `${POKESPRITE_BALL_BASE}master.png`, alt: 'Master Ball' };
+		return { src: `${POKESPRITE_BALL_BASE}masterball.png`, alt: 'Master Ball' };
 	}
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 		// Pseudo-legendary tier (BST ≥ 580) → Ultra Ball
-		if (bst >= 580) return { src: `${POKESPRITE_BALL_BASE}ultra.png`, alt: 'Ultra Ball' };
+		if (bst >= 580) return { src: `${POKESPRITE_BALL_BASE}ultraball.png`, alt: 'Ultra Ball' };
 		// Mid-tier (BST ≥ 480) → Great Ball
-		if (bst >= 480) return { src: `${POKESPRITE_BALL_BASE}great.png`, alt: 'Great Ball' };
+		if (bst >= 480) return { src: `${POKESPRITE_BALL_BASE}greatball.png`, alt: 'Great Ball' };
 	}
 	// Common / starter → normal Poké Ball
-	return { src: `${POKESPRITE_BALL_BASE}poke.png`, alt: 'Poké Ball' };
+	return { src: `${POKESPRITE_BALL_BASE}pokeball.png`, alt: 'Poké Ball' };
 }
 
 // renders a pokemon sprite with a small pokeball overlay at bottom-right (like official games)
@@ -82,14 +82,14 @@ const PS_ITEMICONS_BASE = 'https://play.pokemonshowdown.com/sprites/itemicons/';
 // Real Pokémon held items (focussash, leftovers, etc.) use the default PS itemicons URL.
 const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
 	// capsule items are custom (no PS icon) — use pokesprite ball images
-	mastercapsule: `${POKESPRITE_BALL_BASE}master.png`,
-	ultracapsule:  `${POKESPRITE_BALL_BASE}ultra.png`,
-	greatcapsule:  `${POKESPRITE_BALL_BASE}great.png`,
+	mastercapsule: `${POKESPRITE_BALL_BASE}masterball.png`,
+	ultracapsule: `${POKESPRITE_BALL_BASE}ultraball.png`,
+	greatcapsule: `${POKESPRITE_BALL_BASE}greatball.png`,
 	// rarecandy and revive are real items — use PS itemicons (same domain, always accessible)
-	rarecandy:     `${PS_ITEMICONS_BASE}rarecandy.png`,
-	revive:        `${PS_ITEMICONS_BASE}revive.png`,
+	rarecandy: `${PS_ITEMICONS_BASE}rarecandy.png`,
+	revive: `${PS_ITEMICONS_BASE}revive.png`,
 	// luckycharm is a custom roguelite item; visually map to the Lucky Egg icon on PS
-	luckycharm:    `${PS_ITEMICONS_BASE}luckyegg.png`,
+	luckycharm: `${PS_ITEMICONS_BASE}luckyegg.png`,
 };
 
 // returns the item sprite img html for a shop item
