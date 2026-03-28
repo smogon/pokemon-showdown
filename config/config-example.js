@@ -488,7 +488,6 @@ exports.appealurl = '';
  * replsocketmode - the file mode bits to use for the repl sockets
  */
 exports.repl = false;
-exports.nofswriting = true;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
