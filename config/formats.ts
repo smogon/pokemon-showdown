@@ -3174,9 +3174,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////
+	// TK PRISM
 
 	{
 		section: "National Dex",
+	},
+	{
+		name: '[Gen 9] Prism',
+		mod: 'gen9',
+		ruleset: ['Standard NatDex', 'Terastal Clause'],
+		banlist: [],
+		desc: 'Mode Prism : chaque Pokémon possède un second talent passif ' +
+		'en plus de son talent principal.',
 	},
 	{
 		name: "[Gen 9] National Dex",
