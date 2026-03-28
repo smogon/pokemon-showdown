@@ -17,6 +17,13 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+// Associate each prism passive with the pokemon
+const PRISMS: {[speciesId: string]: string} = {
+	charmander: 'draconic',
+	charmeleon: 'draconic',
+	charizard: 'draconic',
+}
+
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// S/V Singles
@@ -3184,6 +3191,36 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard NatDex', 'Terastal Clause'],
 		banlist: [],
 		desc: 'Chaque Pokémon possède un passif exclusif et unique en plus de son talent actif.',
+
+		// Prisms implementation
+
+		onSwitchIn(pokemon) {
+			const identifiant = pokemon.species.baseSpecies.toLowerCase().replace(/[^a-z-0-9]/g, '');
+			const passiveId = PRISMS[identifiant];
+			if (!passiveId) return; 		// passive not implemented yet
+			if (pokemon.m.innate) return;	// the passive is already active
+
+			const passiveAbility = this.dex.abilities.get(passiveId);
+			if (!passiveAbility.exists) return; 	// the passive doesn't exist
+
+			// The Pokemon will now receive the passive
+
+			pokemon.m.innate = passiveId;
+			pokemon.addVolatile('ability:' + passiveId, pokemon);
+
+			this.add('-message', `${pokemon.name} activates his Prism : ${passiveAbility.name}`);
+		},
+
+		onSwitchOut(pokemon) {
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile('ability:' + pokemon.m.innate);
+				delete pokemon.m.innate;
+			}
+		},
+
+		onFaint(pokemon) {
+			if (pokemon.m.innate) delete pokemon.m.innate;
+		},
 	},
 
 	// National Dex

@@ -1,3 +1,12 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
-    // Les seconds talents (passifs) seront définis ici (étape 3)
+    draconic: {
+        onModifyDamage(dmg, src, target, move) {
+            if (move.type === 'Dragon') {
+                return this.chainModify([6144, 4096]);
+            }
+        },
+        name: 'Draconic',
+        shortDesc: 'User now has the dragon STAB (doubles if user already is dragon type)',
+        flags: {},
+    },
 };
