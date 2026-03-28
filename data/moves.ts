@@ -21627,7 +21627,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 	// swse
 
-	amazeassault: { // tested, works as intended
+	/* amazeassault: { // tested, works as intended
 		num: 10108,
 		accuracy: 100,
 		basePower: 90,
@@ -21680,7 +21680,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Steel",
-	},
+	}, */
 	auraprojection: { // tested, works as intended
 		num: 10008,
 		accuracy: true,
@@ -21744,7 +21744,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Dark",
 	},
-	blightspore: { // tested, works as intended
+	/* blightspore: { // tested, works as intended
 		num: 10109,
 		accuracy: 100,
 		basePower: 0,
@@ -21756,7 +21756,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		status: 'blt',
 		target: "normal",
 		type: "Poison",
-	},
+	}, */
 	bloodmoon: { // tested, works as intended
 		num: 10001,
 		accuracy: true,
@@ -21806,7 +21806,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Grass",
 	},
-	comradesarmor: { // untested
+	/* comradesarmor: { // untested
 		num: 10086,
 		accuracy: true,
 		basePower: 0,
@@ -21860,7 +21860,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Normal",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
-	},
+	}, */
 	conduction: { // tested, works as intended
 		num: 10035,
 		accuracy: 100,
@@ -21898,7 +21898,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Rock",
 	},
-	darkdepletion: { // untested, test which version
+	/* darkdepletion: { // untested, test which version
 		num: 10085,
 		accuracy: 100,
 		basePower: 70,
@@ -21907,20 +21907,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, bite: 1 },
-		/* onEffectiveness(pokemon, typeMod, target, type) {
+		/*  onEffectiveness(pokemon, typeMod, target, type) {
 			if (pokemon.hasType('Grass', 'Water')) {
 				return 2;
 			} else if (['Grass', 'Water'].includes(type)) {
 				return 1;
 			}
-		}, */
+		}, * /
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Water') return 1;
 			if (type === 'Grass') return 1;
 		},
 		target: "normal",
 		type: "Dark",
-	},
+	}, */
 	daydream: { // tested, works as intended
 		num: 10010,
 		accuracy: true,
@@ -22177,7 +22177,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 	},
-	efflorescence: { // untested
+	/* efflorescence: { // untested
 		num: 10103,
 		accuracy: true,
 		basePower: 0,
@@ -22205,7 +22205,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "allyTeam",
 		type: "Fairy",
-	},
+	}, */
 	emberplume: { // untested
 		num: 10041,
 		accuracy: 70,
@@ -22310,7 +22310,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Fairy",
 	},
-	ferrospikebarrage: { // tested, works as intended
+	/* ferrospikebarrage: { // tested, works as intended
 		num: 10096,
 		accuracy: 85,
 		basePower: 110,
@@ -22326,8 +22326,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Steel",
-	},
-	fireglass: { // tested, works as intended
+	}, */
+	/* fireglass: { // tested, works as intended
 		num: 10095,
 		accuracy: 90,
 		basePower: 90,
@@ -22349,7 +22349,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Rock",
-	},
+	}, */
 	fluffbuff: { // tested, works as intended
 		num: 10073,
 		accuracy: true,
@@ -22379,7 +22379,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Normal",
 	},
-	frostburnclaw: { // tested, works as intended
+	/* frostburnclaw: { // tested, works as intended
 		num: 10098,
 		accuracy: 95,
 		basePower: 80,
@@ -22408,8 +22408,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Ice",
-	},
-	frostification: { // untested
+	}, */
+	/* frostification: { // untested
 		num: 10100,
 		accuracy: true,
 		basePower: 0,
@@ -22463,7 +22463,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "self",
 		type: "Ice",
-	},
+	}, */
 	frostkick: { // tested, works as intended
 		num: 10054,
 		accuracy: 90,
@@ -22481,7 +22481,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ice",
 	},
-	glacialcharge: { // untested
+	/* glacialcharge: { // untested
 		num: 10101,
 		accuracy: 100,
 		basePower: 75,
@@ -22499,7 +22499,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ice",
 		contestType: "Beautiful",
-	},
+	}, */
 	haunt: { // tested, works as intended
 		num: 10009,
 		accuracy: true,
@@ -22513,7 +22513,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Ghost",
 	},
-	heartshock: { // tested, works as intended
+	/* heartshock: { // tested, works as intended
 		num: 10091,
 		accuracy: true,
 		basePower: 0,
@@ -22544,7 +22544,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "self",
 		type: "Electric",
-	},
+	}, */
 	hiveshriek: { // tested, works as intended
 		num: 10029,
 		accuracy: 70,
@@ -22569,7 +22569,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Bug",
 	},
-	hornswongle: { // tested, works as intended
+	/* hornswongle: { // tested, works as intended
 		num: 10107,
 		accuracy: true,
 		basePower: 0,
@@ -22584,7 +22584,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Dark",
-	},
+	}, */
 	hydraulicjaw: { // tested, works as intended
 		num: 10032,
 		accuracy: 90,
@@ -22597,7 +22597,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Steel",
 	},
-	hydrocharge: { // untested
+	/* hydrocharge: { // untested
 		num: 10083,
 		accuracy: 95,
 		basePower: 100,
@@ -22611,7 +22611,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		target: "any",
 		type: "Water",
-	},
+	}, */
 	icebreak: { // tested, works as intended
 		num: 10053,
 		accuracy: 100,
@@ -22725,7 +22725,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Dragon",
 	},
-	juicedrink: { // untested
+	/* juicedrink: { // untested
 		num: 10084,
 		accuracy: true,
 		basePower: 0,
@@ -22738,7 +22738,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'confusion',
 		target: "self",
 		type: "Grass",
-	},
+	}, */
 	kihop: { // tested, works as intended
 		num: 10018,
 		accuracy: 100,
@@ -22767,7 +22767,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Fire",
 	},
-	languishingaura: { // untested
+	/* languishingaura: { // untested
 		num: 10104,
 		accuracy: true,
 		basePower: 0,
@@ -22795,7 +22795,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "allyTeam",
 		type: "Ghost",
-	},
+	}, */
 	lavajet: { // tested, works as intended
 		num: 10039,
 		accuracy: 100,
@@ -22969,7 +22969,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Water",
 	},
-	overbearingcommand: { // untested
+	/* overbearingcommand: { // untested
 		num: 10099,
 		accuracy: 100,
 		basePower: 0,
@@ -23000,7 +23000,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Psychic",
-	},
+	}, */
 	paddle: { // tested, works as intended
 		num: 10043,
 		accuracy: 100,
@@ -23106,7 +23106,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 	},
-	pricklypear: { // untested
+	/* pricklypear: { // untested
 		num: 10081,
 		accuracy: 80,
 		basePower: 0,
@@ -23142,7 +23142,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Grass",
-	},
+	}, */
 	psionrush: { // tested, works as intended
 		num: 10050,
 		accuracy: 100,
@@ -23185,7 +23185,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	resilientoil: { // tested, works as intended
+	/* resilientoil: { // tested, works as intended
 		num: 10097,
 		accuracy: true,
 		basePower: 0,
@@ -23226,7 +23226,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "self",
 		type: "Rock",
-	},
+	}, */
 	rockjaw: { // tested, works as intended
 		num: 10026,
 		accuracy: 100,
@@ -23239,7 +23239,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Rock",
 	},
-	rollerblitz: { // untested
+	/* rollerblitz: { // untested
 		num: 10087,
 		accuracy: 100,
 		basePower: 70,
@@ -23251,7 +23251,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		overrideOffensiveStat: 'spe',
 		target: "normal",
 		type: "Steel",
-	},
+	}, */
 	sandblast: { // untested
 		num: 10025,
 		accuracy: 100,
@@ -23270,7 +23270,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ground",
 	},
-	sandstonesweep: { // untested
+	/* sandstonesweep: { // untested
 		num: 10082,
 		accuracy: 80,
 		basePower: 100,
@@ -23307,8 +23307,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Rock",
-	},
-	scavenge: { // untested
+	}, */
+	/* scavenge: { // untested
 		num: 10088,
 		accuracy: 100,
 		basePower: 55,
@@ -23364,7 +23364,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Steel",
-	},
+	}, */
 	shade: { // untested
 		num: 10062,
 		accuracy: 100,
@@ -23421,7 +23421,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 	},
-	shockshelter: { // untested
+	/* shockshelter: { // untested
 		num: 10092,
 		accuracy: true,
 		basePower: 0,
@@ -23475,7 +23475,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "self",
 		type: "Electric",
-	},
+	}, */
 	shreddingriff: { // tested, works as intended
 		num: 10036,
 		accuracy: 80,
@@ -23646,7 +23646,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Flying",
 	},
-	stunningsolo: { // untested
+	/* stunningsolo: { // untested
 		num: 10090,
 		accuracy: 100,
 		basePower: 80,
@@ -23668,8 +23668,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Electric",
-	},
-	sulphurbeam: { // tested, works as intended
+	}, */
+	/* sulphurbeam: { // tested, works as intended
 		num: 10110,
 		accuracy: 100,
 		basePower: 85,
@@ -23684,8 +23684,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Ground",
-	},
-	sultryspin: { // tested, works as intended
+	}, */
+	/* sultryspin: { // tested, works as intended
 		num: 10089,
 		accuracy: 100,
 		basePower: 60,
@@ -23700,7 +23700,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "allAdjacentFoes",
 		type: "Fighting",
-	},
+	}, */
 	sunscreen: { // untested (hits behind substitute?)
 		num: 10042,
 		accuracy: true,
@@ -23754,7 +23754,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Bug",
 	},
-	technoplasm: { // untested, does it only have chance to para once?
+	/* technoplasm: { // untested, does it only have chance to para once?
 		num: 10102,
 		accuracy: 100,
 		basePower: 20,
@@ -23775,7 +23775,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Electric",
-	},
+	}, */
 	thermalvortex: { // tested, works as intended TODO: fix move failure message when unable to set the weather
 		num: 10074,
 		accuracy: 100,
@@ -23870,7 +23870,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Water",
 	},
-	whiteout: { // tested, works as intended
+	/* whiteout: { // tested, works as intended
 		num: 10106,
 		accuracy: 100,
 		basePower: 90,
@@ -23886,7 +23886,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "allAdjacent",
 		type: "Ice",
-	},
+	}, */
 	whitewand: { // tested, works as intended
 		num: 10057,
 		accuracy: 85,
@@ -23900,7 +23900,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ice",
 	},
-	wildfire: { // tested, works as intended
+	/* wildfire: { // tested, works as intended
 		num: 10105,
 		accuracy: 100,
 		basePower: 90,
@@ -23916,7 +23916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "allAdjacent",
 		type: "Fire",
-	},
+	}, */
 	wildmagic: { // untested
 		num: 10070,
 		accuracy: 90,
@@ -24026,7 +24026,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Flying",
 	},
-	wrangle: { // tested, works as intended
+	/* wrangle: { // tested, works as intended
 		num: 10079,
 		accuracy: 95,
 		basePower: 80,
@@ -24038,5 +24038,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'partiallytrapped',
 		target: "normal",
 		type: "Fighting",
-	},
+	}, */
 };

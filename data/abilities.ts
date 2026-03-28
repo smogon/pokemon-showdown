@@ -30,7 +30,7 @@ Ratings and how they work:
 	  The sort of ability that defines metagames.
 	ex. Imposter, Shadow Tag
 
-*/
+ */
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
@@ -6046,7 +6046,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10015,
 	},
-	ancientbody: { // tested, works as intended
+	/* ancientbody: { // tested, works as intended
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.hasType('Rock')) return false;
 			if (!pokemon.addType('Rock')) return false;
@@ -6059,8 +6059,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ancient Body",
 		rating: 2.5,
 		num: 10065,
-	},
-	anxiety: { // tested, works as intended
+	}, */
+	/* anxiety: { // tested, works as intended
 		onDamagingHit(damage, target, source, move) {
 			// this.add('-activate', target, 'ability: Anxiety');
 			this.actions.useMove(this.toID('explosion'), target);
@@ -6069,7 +6069,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Anxiety",
 		rating: -1,
 		num: 10064,
-	},
+	}, */
 	arcanum: { // tested, works as intended
 		onStart(source) {
 			this.field.setEnergyWeather('dragonforce');
@@ -6079,7 +6079,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10011,
 	},
-	arenabloom: { // tested, works as intended
+	/* arenabloom: { // tested, works as intended
 		onStart(source) {
 			this.field.setIrritantWeather('pollinate');
 		},
@@ -6093,8 +6093,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Arena Bloom",
 		rating: 4,
 		num: 10071,
-	},
-	arenacurse: { // tested, works as intended
+	}, */
+	/* arenacurse: { // tested, works as intended
 		onStart(source) {
 			this.field.setEnergyWeather('haunt');
 		},
@@ -6108,7 +6108,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Arena Curse",
 		rating: 4,
 		num: 10072,
-	},
+	}, */
 	bloomspring: { // tested, works as intended
 		onIrritantWeather(target, source, effect) {
 			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
@@ -6167,7 +6167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10023,
 	},
-	cataclysmiclight: { // tested, works as intended
+	/* cataclysmiclight: { // tested, works as intended
 		onStart(source) {
 			this.field.setCataclysmWeather('cataclysmiclight');
 		},
@@ -6186,7 +6186,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Cataclysmic Light",
 		rating: 4.5,
 		num: 10079,
-	},
+	}, */
 	chakra: { // tested, works as intended
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
@@ -6426,7 +6426,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 10055,
 	},
-	expiation: { // tested, works as intended, TODO: fix text to attribute healing to proper pokemon
+	/* expiation: { // tested, works as intended, TODO: fix text to attribute healing to proper pokemon
 		onFaint(target) {
 			if (!target.hp) {
 				this.add('-activate', target, 'ability: Expiation');
@@ -6447,7 +6447,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Expiation",
 		rating: 3,
 		num: 10078,
-	},
+	}, */
 	ferroflux: { // tested, works as intended
 		onStart(source) {
 			this.field.setEnergyWeather('magnetize');
@@ -6524,9 +6524,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Forked",
 		rating: 0.1,
-		num: 100106,
+		num: 10035,
 	},
-	frigidblaze: { // tested, works as intended
+	/* frigidblaze: { // tested, works as intended
 		onSourceDamagingHit(damage, target, source, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Frigid Blaze's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
@@ -6544,7 +6544,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Frigid Blaze",
 		rating: 2,
 		num: 10069,
-	},
+	}, */
 	galeforce: { // tested, works as intended
 		onStart(source) {
 			this.field.setClearingWeather('strongwinds');
@@ -6554,7 +6554,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10014,
 	},
-	geigeraura: { // tested, works as intended
+	/* geigeraura: { // tested, works as intended
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
@@ -6568,7 +6568,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Geiger Aura",
 		rating: 3,
 		num: 10058,
-	},
+	}, */
 	glacialarmor: { // tested, works as intended
 		onModifyDef(def, pokemon) {
 			if (['hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
@@ -6597,7 +6597,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10004,
 	},
-	heathaze: { // tested, works as intended
+	/* heathaze: { // tested, works as intended
 		onStart(source) {
 			this.field.setClearingWeather('strongwinds');
 			this.field.setClimateWeather('sunnyday');
@@ -6606,7 +6606,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Heat Haze",
 		rating: 5,
 		num: 10073,
-	},
+	}, */
 	hydrophobic: { // incomplete. needs testing
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
@@ -6647,7 +6647,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10045,
 	},
-	icearmor: { // tested, works as intended
+	/* icearmor: { // tested, works as intended
 		onStart(source) {
 			this.field.setClearingWeather('strongwinds');
 			this.field.setClimateWeather('hail');
@@ -6656,7 +6656,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ice Armor",
 		rating: 5,
 		num: 10074,
-	},
+	}, */
 	incantation: { // tested, works as intended
 		onStart(source) {
 			this.field.setIrritantWeather('sprinkle');
@@ -6679,7 +6679,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 10033,
 	},
-	intoxicate: {
+	/* intoxicate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -6699,7 +6699,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Intoxicate",
 		rating: 3,
 		num: 10060,
-	},
+	}, */
 	machineprecision: { // tested, works as intended
 		onModifyCritRatio(critRatio, source) {
 			if (['magnetize'].includes(source.effectiveEnergyWeather())) {
@@ -6773,7 +6773,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 10037,
 	},
-	nastywebbing: { // tested, works as intended
+	/* nastywebbing: { // tested, works as intended
 		onDamagingHit(damage, target, source, move) {
 			const side = source.isAlly(target) ? source.side.foe : source.side;
 			const stickyweb = side.sideConditions['stickyweb'];
@@ -6786,8 +6786,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Nasty Webbing",
 		rating: 4,
 		num: 10062,
-	},
-	neutralize: { // tested, works intendedly TODO: remove failure message when using moves that deal damage and set weather
+	}, */
+	/* neutralize: { // tested, works intendedly TODO: remove failure message when using moves that deal damage and set weather
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
@@ -6894,7 +6894,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Neutralize",
 		rating: 4,
 		num: 10075,
-	},
+	}, */
 	nottobe: { // tested, works as intended
 		onDamagingHit(damage, target, source, move) {
 			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
@@ -6907,7 +6907,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10048,
 	},
-	nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
+	/* nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
 		onSwitchIn(pokemon) {
 			this.effectState.switchingIn = true;
 		},
@@ -6947,7 +6947,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Nullify",
 		rating: 2.5,
 		num: 10063,
-	},
+	}, */
 	pearldrop: { // tested, works as intended
 		onStart(source) {
 			this.field.addPseudoWeather('pearldrop');
@@ -6975,7 +6975,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 10053,
 	},
-	petrichor: { // tested, works as intended
+	/* petrichor: { // tested, works as intended
 		onStart(target) {
 			if (this.field.climateWeather && target.effectiveClimateWeather() === this.field.climateWeather) {
 				this.add('-activate', target, 'ability: Petrichor');
@@ -6990,7 +6990,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Petrichor",
 		rating: 2.5,
 		num: 10061,
-	},
+	}, */
 	pollution: { // tested, works as intended
 		onStart(source) {
 			this.field.setIrritantWeather('smogspread');
@@ -7030,7 +7030,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 10024,
 	},
-	powerplumage: { // tested, works as intended
+	/* powerplumage: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Blurrun' || pokemon.transformed) return;
@@ -7086,7 +7086,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Power Plumage",
 		rating: 5,
 		num: 10056,
-	},
+	}, */
 	powerwithin: { // tested, works as intended
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
@@ -7126,7 +7126,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10026,
 	},
-	relicsoul: { // tested, works as intended
+	/* relicsoul: { // tested, works as intended
 		onStart(source) {
 			this.field.setEnergyWeather('supercell');
 		},
@@ -7135,7 +7135,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Relic Soul",
 		rating: 4.5,
 		num: 10076,
-	},
+	}, */
 	rockybody: { // tested, works as intended
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
@@ -7266,7 +7266,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10054,
 	},
-	songbird: { // tested, works as intended
+	/* songbird: { // tested, works as intended
 		onAllyDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
@@ -7277,7 +7277,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Songbird",
 		rating: 0,
 		num: 10068,
-	},
+	}, */
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
 		onAnyFaint(target, source, effect) {
@@ -7296,7 +7296,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10029,
 	},
-	soulpassage: { // tested, works as intended
+	/* soulpassage: { // tested, works as intended
 		onStart(target) {
 			let statName: StatIDExceptHP = 'atk';
 			let bestStat = 0;
@@ -7313,7 +7313,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Soul Passage",
 		rating: 2.5,
 		num: 10077,
-	},
+	}, */
 	standoff: { // tested, works as intended
 		onStart(source) {
 			this.field.setEnergyWeather('auraprojection');
@@ -7500,7 +7500,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10019,
 	},
-	wetanddry: { // maybe works? needs client implementation to check (i think)
+	/* wetanddry: { // maybe works? needs client implementation to check (i think)
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Drout' || pokemon.transformed) return;
@@ -7579,5 +7579,5 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Wet and Dry",
 		rating: 1,
 		num: 10057,
-	},
+	}, */
 };

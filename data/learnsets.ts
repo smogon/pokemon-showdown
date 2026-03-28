@@ -53092,7 +53092,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			leafstorm: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
-	rotomstereo: {
+	/* rotomstereo: {
 		learnset: {
 			boomburst: ["9R"],
 		},
@@ -53121,7 +53121,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			dracometeor: ["9R"],
 		},
-	},
+	}, */
 	uxie: {
 		learnset: {
 			acrobatics: ["9M", "8M", "7M", "6M", "5M"],
@@ -105427,7 +105427,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whipup: ["9M", "9L1"],
 		},
 	},
-	depuray: {
+	/* depuray: {
 		learnset: {
 			acrobatics: ["9M"],
 			auraprojection: ["9M"],
@@ -105670,7 +105670,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			voltswitch: ["9M"],
 			weatherball: ["9M"],
 		},
-	},
+	}, */
 	pudet: {
 		learnset: {
 			auraprojection: ["9M"],
@@ -105765,7 +105765,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wildcharge: ["9M"],
 		},
 	},
-	pramblo: {
+	/* pramblo: {
 		learnset: {
 			aquajet: ["9L16"],
 			bulkup: ["9M"],
@@ -106924,7 +106924,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			taunt: ["9L10"],
 			whipup: ["9L50"],
 		},
-	},
+	}, */
 	botnyak: {
 		learnset: {
 			acrobatics: ["9M"],
@@ -107141,7 +107141,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M"],
 		},
 	},
-	hurchin: {
+	/* hurchin: {
 		learnset: {
 			destinybond: ["9L1"],
 			doubleedge: ["9L20"],
@@ -107240,7 +107240,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			watergun: ["9L1"],
 			wavecrash: ["9L0"],
 		},
-	},
+	}, */
 	probat: {
 		learnset: {
 			absorb: ["9L1"],
@@ -108104,7 +108104,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			woodhammer: ["9M"],
 		},
 	},
-	obsidious: {
+	/* obsidious: {
 		learnset: {
 			blackhole: ["9L60"],
 			ceaselessedge: ["9L20"],
@@ -108726,5 +108726,5 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trickroom: ["9L63"],
 			wildmagic: ["9L21"],
 		},
-	},
+	}, */
 }

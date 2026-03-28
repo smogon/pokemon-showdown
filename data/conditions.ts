@@ -1732,7 +1732,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 
 	// Cataclysm weathers
 
-	cataclysmiclight: { // TODO: client side implementation
+	/* cataclysmiclight: { // TODO: client side implementation
 		name: 'Cataclysmic Light',
 		effectType: 'CataclysmWeather',
 		duration: 0,
@@ -1759,7 +1759,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldEnd() {
 			this.add('-cataclysmWeather', 'none');
 		},
-	},
+	}, */
 
 	// Extra weathers
 

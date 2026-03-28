@@ -412,7 +412,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.3,
 		weightkg: 3.5,
 		color: "Purple",
-		evos: ["Raticate", "Raticate-Kaskade"],
+		// evos: ["Raticate", "Raticate-Kaskade"],
+		evos: ["Raticate"],
 		eggGroups: ["Field"],
 		otherFormes: ["Rattata-Alola"],
 		formeOrder: ["Rattata", "Rattata-Alola"],
@@ -443,8 +444,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Rattata",
 		evoLevel: 20,
 		eggGroups: ["Field"],
-		otherFormes: ["Raticate-Alola", "Raticate-Alola-Totem", "Raticate-Kaskade"],
-		formeOrder: ["Raticate", "Raticate-Alola", "Raticate-Alola-Totem", "Raticate-Kaskade"],
+		// otherFormes: ["Raticate-Alola", "Raticate-Alola-Totem", "Raticate-Kaskade"],
+		// formeOrder: ["Raticate", "Raticate-Alola", "Raticate-Alola-Totem", "Raticate-Kaskade"],
+		otherFormes: ["Raticate-Alola", "Raticate-Alola-Totem"],
+		formeOrder: ["Raticate", "Raticate-Alola", "Raticate-Alola-Totem"],
 	},
 	raticatealola: {
 		num: 20,
@@ -475,7 +478,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Field"],
 	},
-	raticatekaskade: {
+	/* raticatekaskade: {
 		num: 20,
 		name: "Raticate-Kaskade",
 		baseSpecies: "Raticate",
@@ -491,7 +494,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
 		gen: 9,
-	},
+	}, */
 	spearow: {
 		num: 21,
 		name: "Spearow",
@@ -2893,10 +2896,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Smoochum",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Jynx-Kaskade"],
-		formeOrder: ["Jynx", "Jynx-Kaskade"],
+		// otherFormes: ["Jynx-Kaskade"],
+		// formeOrder: ["Jynx", "Jynx-Kaskade"],
 	},
-	jynxkaskade: {
+	/* jynxkaskade: {
 		num: 124,
 		name: "Jynx-Kaskade",
 		baseSpecies: "Jynx",
@@ -2912,7 +2915,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "levelFriendship",
 		eggGroups: ["Human-Like"],
 		gen: 9,
-	},
+	}, */
 	electabuzz: {
 		num: 125,
 		name: "Electabuzz",
@@ -3077,8 +3080,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 220,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
-		otherFormes: ["Lapras-Kaskade"],
-		formeOrder: ["Lapras", "Lapras-Kaskade"],
+		// otherFormes: ["Lapras-Kaskade"],
+		// formeOrder: ["Lapras", "Lapras-Kaskade"],
 		canGigantamax: "G-Max Resonance",
 	},
 	laprasgmax: {
@@ -3095,7 +3098,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Monster", "Water 1"],
 		changesFrom: "Lapras",
 	},
-	lapraskaskade: {
+	/* lapraskaskade: {
 		num: 131,
 		name: "Lapras-Kaskade",
 		baseSpecies: "Lapras",
@@ -3108,7 +3111,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		gen: 9,
-	},
+	}, */
 	ditto: { // updated
 		num: 132,
 		name: "Ditto",
@@ -4199,7 +4202,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.8,
 		weightkg: 11.5,
 		color: "Purple",
-		evos: ["Ambipom", "Ambipom-Kaskade"],
+		// evos: ["Ambipom", "Ambipom-Kaskade"],
+		evos: ["Ambipom"],
 		eggGroups: ["Field"],
 	},
 	sunkern: {
@@ -4932,7 +4936,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Porygon",
 		evoType: "useItem",
 		evoItem: "Up-Grade",
-		evos: ["Porygon-Z", "Porygon w"],
+		// evos: ["Porygon-Z", "Porygon w"],
+		evos: ["Porygon-Z"],
 		eggGroups: ["Mineral"],
 	},
 	stantler: { // updated
@@ -4997,7 +5002,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.4,
 		weightkg: 6,
 		color: "Pink",
-		evos: ["Jynx", "Jynx-Kaskade"],
+		// evos: ["Jynx", "Jynx-Kaskade"],
+		evos: ["Jynx"],
 		eggGroups: ["Undiscovered"],
 		canHatch: true,
 	},
@@ -5852,7 +5858,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Whismur",
 		evoLevel: 20,
-		evos: ["Exploud", "Exploud-Kaskade"],
+		// evos: ["Exploud", "Exploud-Kaskade"],
+		evos: ["Exploud"],
 		eggGroups: ["Monster", "Field"],
 	},
 	exploud: { // updated
@@ -5867,10 +5874,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Loudred",
 		evoLevel: 40,
 		eggGroups: ["Monster", "Field"],
-		otherFormes: ["Exploud-Kaskade"],
-		formeOrder: ["Exploud", "Exploud-Kaskade"],
+		// otherFormes: ["Exploud-Kaskade"],
+		// formeOrder: ["Exploud", "Exploud-Kaskade"],
 	},
-	exploudkaskade: {
+	/* exploudkaskade: {
 		num: 295,
 		name: "Exploud-Kaskade",
 		baseSpecies: "Exploud",
@@ -5885,7 +5892,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 40,
 		eggGroups: ["Monster", "Field"],
 		gen: 9,
-	},
+	}, */
 	makuhita: {
 		num: 296,
 		name: "Makuhita",
@@ -8426,10 +8433,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "levelMove",
 		evoMove: "Double Hit",
 		eggGroups: ["Field"],
-		otherFormes: ["Ambipom-Kaskade"],
-		formeOrder: ["Ambipom", "Ambipom-Kaskade"],
+		// otherFormes: ["Ambipom-Kaskade"],
+		// formeOrder: ["Ambipom", "Ambipom-Kaskade"],
 	},
-	ambipomkaskade: {
+	/* ambipomkaskade: {
 		num: 424,
 		name: "Ambipom-Kaskade",
 		baseSpecies: "Ambipom",
@@ -8445,7 +8452,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoMove: "Rock Throw",
 		eggGroups: ["Field"],
 		gen: 9,
-	},
+	}, */
 	drifloon: { // updated
 		num: 425,
 		name: "Drifloon",
@@ -9386,8 +9393,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Sol", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Junk"],
-		formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
+		// otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
+		// formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
+		otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
+		formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
 	},
 	rotomheat: { // updated
 		num: 479,
@@ -9464,7 +9473,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Amorphous"],
 		changesFrom: "Rotom",
 	},
-	rotomstereo: {
+	/* rotomstereo: {
 		num: 479,
 		name: "Rotom-Stereo",
 		baseSpecies: "Rotom",
@@ -9559,7 +9568,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Amorphous"],
 		changesFrom: "Rotom",
 		gen: 9,
-	},
+	}, */
 	uxie: {
 		num: 480,
 		name: "Uxie",
@@ -10730,7 +10739,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.6,
 		weightkg: 12.5,
 		color: "Gray",
-		evos: ["Gurdurr", "Gurdurr-Kaskade"],
+		// evos: ["Gurdurr", "Gurdurr-Kaskade"],
+		evos: ["Gurdurr"],
 		eggGroups: ["Human-Like"],
 	},
 	gurdurr: { // updated
@@ -10747,10 +10757,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 25,
 		evos: ["Conkeldurr"],
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Gurdurr-Kaskade"],
-		formeOrder: ["Gurdurr", "Gurdurr-Kaskade"],
+		// otherFormes: ["Gurdurr-Kaskade"],
+		// formeOrder: ["Gurdurr", "Gurdurr-Kaskade"],
 	},
-	gurdurrkaskade: {
+	/* gurdurrkaskade: {
 		num: 533,
 		name: "Gurdurr-Kaskade",
 		baseSpecies: "Gurdurr",
@@ -10767,7 +10777,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Conkeldurr-Kaskade"],
 		eggGroups: ["Human-Like"],
 		gen: 9,
-	},
+	}, */
 	conkeldurr: { // updated
 		num: 534,
 		name: "Conkeldurr",
@@ -10781,10 +10791,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Gurdurr",
 		evoType: "trade",
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Conkeldurr-Kaskade"],
-		formeOrder: ["Conkeldurr", "Conkeldurr-Kaskade"],
+		// otherFormes: ["Conkeldurr-Kaskade"],
+		// formeOrder: ["Conkeldurr", "Conkeldurr-Kaskade"],
 	},
-	conkeldurrkaskade: {
+	/* conkeldurrkaskade: {
 		num: 534,
 		name: "Conkeldurr-Kaskade",
 		baseSpecies: "Conkeldurr",
@@ -10801,7 +10811,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Leaf Stone",
 		eggGroups: ["Human-Like"],
 		gen: 9,
-	},
+	}, */
 	tympole: {
 		num: 535,
 		name: "Tympole",
@@ -11571,10 +11581,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Duosion"],
 		eggGroups: ["Amorphous"],
-		otherFormes: ["Solosis-Kaskade"],
-		formeOrder: ["Solosis", "Solosis-Kaskade"],
+		// otherFormes: ["Solosis-Kaskade"],
+		// formeOrder: ["Solosis", "Solosis-Kaskade"],
 	},
-	solosiskaskade: {
+	/* solosiskaskade: {
 		num: 577,
 		name: "Solosis-Kaskade",
 		baseSpecies: "Solosis",
@@ -11588,7 +11598,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Duosion-Kaskade"],
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	},
+	}, */
 	duosion: { // updated
 		num: 578,
 		name: "Duosion",
@@ -11602,10 +11612,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 32,
 		evos: ["Reuniclus"],
 		eggGroups: ["Amorphous"],
-		otherFormes: ["Duosion-Kaskade"],
-		formeOrder: ["Duosion", "Duosion-Kaskade"],
+		// otherFormes: ["Duosion-Kaskade"],
+		// formeOrder: ["Duosion", "Duosion-Kaskade"],
 	},
-	duosionkaskade: {
+	/* duosionkaskade: {
 		num: 578,
 		name: "Duosion-Kaskade",
 		baseSpecies: "Duosion",
@@ -11621,7 +11631,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Reuniclus-Kaskade"],
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	},
+	}, */
 	reuniclus: { // updated
 		num: 579,
 		name: "Reuniclus",
@@ -11634,10 +11644,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Duosion",
 		evoLevel: 41,
 		eggGroups: ["Amorphous"],
-		otherFormes: ["Reuniclus-Kaskade"],
-		formeOrder: ["Reuniclus", "Reuniclus-Kaskade"],
+		// otherFormes: ["Reuniclus-Kaskade"],
+		// formeOrder: ["Reuniclus", "Reuniclus-Kaskade"],
 	},
-	reunicluskaskade: {
+	/* reunicluskaskade: {
 		num: 579,
 		name: "Reuniclus-Kaskade",
 		baseSpecies: "Reuniclus",
@@ -11653,7 +11663,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Water Stone",
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	},
+	}, */
 	ducklett: { // updated
 		num: 580,
 		name: "Ducklett",
@@ -12236,7 +12246,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.9,
 		weightkg: 20,
 		color: "Yellow",
-		evos: ["Mienshao", "Mienflux"],
+		// evos: ["Mienshao", "Mienflux"],
+		evos: ["Mienshao"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	mienshao: { // updated
@@ -12275,10 +12286,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Golurk"],
 		eggGroups: ["Mineral"],
-		otherFormes: ["Golett-Kaskade"],
-		formeOrder: ["Golett", "Golett-Kaskade"],
+		// otherFormes: ["Golett-Kaskade"],
+		// formeOrder: ["Golett", "Golett-Kaskade"],
 	},
-	golettkaskade: {
+	/* golettkaskade: {
 		num: 622,
 		name: "Golett-Kaskade",
 		baseSpecies: "Golett",
@@ -12293,7 +12304,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Golgre"],
 		eggGroups: ["Mineral"],
 		gen: 9,
-	},
+	}, */
 	golurk: {
 		num: 623,
 		name: "Golurk",
@@ -14547,8 +14558,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Pink",
 		eggGroups: ["Undiscovered"],
 		tags: ["Mythical"],
-		otherFormes: ["Diancie-Mega", "Diancie-Kaskade"],
-		formeOrder: ["Diancie", "Diancie-Mega", "Diancie-Kaskade"],
+		// otherFormes: ["Diancie-Mega", "Diancie-Kaskade"],
+		// formeOrder: ["Diancie", "Diancie-Mega", "Diancie-Kaskade"],
+		otherFormes: ["Diancie-Mega"],
+		formeOrder: ["Diancie", "Diancie-Mega"],
 	},
 	dianciemega: {
 		num: 719,
@@ -14565,7 +14578,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Diancite",
 	},
-	dianciekaskade: {
+	/* dianciekaskade: {
 		num: 719,
 		name: "Diancie-Kaskade",
 		baseSpecies: "Diancie",
@@ -14579,7 +14592,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Undiscovered"],
 		gen: 9,
-	},
+	}, */
 	hoopa: {
 		num: 720,
 		name: "Hoopa",
@@ -14912,7 +14925,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.6,
 		weightkg: 7,
 		color: "Purple",
-		evos: ["Crabominable", "Crabominable-Kaskade"],
+		// evos: ["Crabominable", "Crabominable-Kaskade"],
+		evos: ["Crabominable"],
 		eggGroups: ["Water 3"],
 	},
 	crabominable: { // updated
@@ -14928,8 +14942,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "useItem",
 		evoItem: "Ice Stone",
 		eggGroups: ["Water 3"],
-		otherFormes: ["Crabominable-Mega", "Crabominable-Kaskade"],
-		formeOrder: ["Crabominable", "Crabominable-Mega", "Crabominable-Kaskade"],
+		// otherFormes: ["Crabominable-Mega", "Crabominable-Kaskade"],
+		// formeOrder: ["Crabominable", "Crabominable-Mega", "Crabominable-Kaskade"],
+		otherFormes: ["Crabominable-Mega"],
+		formeOrder: ["Crabominable", "Crabominable-Mega"],
 	},
 	crabominablemega: {
 		num: 740,
@@ -14946,7 +14962,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Crabominite",
 		gen: 9,
 	},
-	crabominablekaskade: {
+	/* crabominablekaskade: {
 		num: 740,
 		name: "Crabominable-Kaskade",
 		baseSpecies: "Crabominable",
@@ -14962,7 +14978,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoCondition: "with a Poison-type move",
 		eggGroups: ["Water 3"],
 		gen: 9,
-	},
+	}, */
 	oricorio: { // updated
 		num: 741,
 		name: "Oricorio",
@@ -16067,10 +16083,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 19,
 		color: "Pink",
 		eggGroups: ["Water 2"],
-		otherFormes: ["Bruxish-Kaskade"],
-		formeOrder: ["Bruxish", "Bruxish-Kaskade"],
+		// otherFormes: ["Bruxish-Kaskade"],
+		// formeOrder: ["Bruxish", "Bruxish-Kaskade"],
 	},
-	bruxishkaskade: {
+	/* bruxishkaskade: {
 		num: 779,
 		name: "Bruxish-Kaskade",
 		baseSpecies: "Bruxish",
@@ -16083,7 +16099,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Orange",
 		eggGroups: ["Water 2"],
 		gen: 9,
-	},
+	}, */
 	drampa: { // updated
 		num: 780,
 		name: "Drampa",
@@ -16290,91 +16306,91 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 53,
 		eggGroups: ["Undiscovered"],
 	},
-	nihilego: { // updated
+	nihilego: {
 		num: 793,
 		name: "Nihilego",
 		types: ["Rock", "Poison"],
 		gender: "N",
 		baseStats: { hp: 109, atk: 53, def: 47, spa: 127, spd: 131, spe: 103 },
-		abilities: { 0: "Corrosion", 1: "Beast Boost", H: "Telepathy" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 1.2,
 		weightkg: 55.5,
 		color: "White",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	buzzwole: { // updated
+	buzzwole: {
 		num: 794,
 		name: "Buzzwole",
 		types: ["Bug", "Fighting"],
 		gender: "N",
 		baseStats: { hp: 107, atk: 139, def: 139, spa: 53, spd: 53, spe: 79 },
-		abilities: { 0: "Iron Fist", 1: "Beast Boost", H: "Rage State" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 2.4,
 		weightkg: 333.6,
 		color: "Red",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	pheromosa: { // updated
+	pheromosa: {
 		num: 795,
 		name: "Pheromosa",
 		types: ["Bug", "Fighting"],
 		gender: "N",
 		baseStats: { hp: 71, atk: 137, def: 37, spa: 137, spd: 37, spe: 151 },
-		abilities: { 0: "Secretion", 1: "Beast Boost", H: "No Guard" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 1.8,
 		weightkg: 25,
 		color: "White",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	xurkitree: { // updated
+	xurkitree: {
 		num: 796,
 		name: "Xurkitree",
 		types: ["Electric"],
 		gender: "N",
 		baseStats: { hp: 83, atk: 89, def: 71, spa: 173, spd: 71, spe: 83 },
-		abilities: { 0: "Energizer", 1: "Beast Boost", H: "Lightning Rod" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 3.8,
 		weightkg: 100,
 		color: "Black",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	celesteela: { // updated
+	celesteela: {
 		num: 797,
 		name: "Celesteela",
 		types: ["Steel", "Flying"],
 		gender: "N",
 		baseStats: { hp: 97, atk: 101, def: 103, spa: 107, spd: 101, spe: 61 },
-		abilities: { 0: "Magnapult", 1: "Beast Boost", H: "Heavy Metal" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 9.2,
 		weightkg: 999.9,
 		color: "Green",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	kartana: { // updated
+	kartana: {
 		num: 798,
 		name: "Kartana",
 		types: ["Grass", "Steel"],
 		gender: "N",
 		baseStats: { hp: 59, atk: 181, def: 131, spa: 59, spd: 31, spe: 109 },
-		abilities: { 0: "Hyper Cutter", 1: "Beast Boost", H: "Sharpness" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 0.3,
 		weightkg: 0.1,
 		color: "White",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	guzzlord: { // updated
+	guzzlord: {
 		num: 799,
 		name: "Guzzlord",
 		types: ["Dark", "Dragon"],
 		gender: "N",
 		baseStats: { hp: 223, atk: 101, def: 53, spa: 97, spd: 53, spe: 43 },
-		abilities: { 0: "Gluttony", 1: "Beast Boost", H: "Carbon Capture" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 5.5,
 		weightkg: 888,
 		color: "Black",
@@ -16517,13 +16533,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 	},
-	poipole: { // updated
+	poipole: {
 		num: 803,
 		name: "Poipole",
 		types: ["Poison"],
 		gender: "N",
 		baseStats: { hp: 67, atk: 73, def: 67, spa: 73, spd: 67, spe: 73 },
-		abilities: { 0: "Poison Point", 1: "Beast Boost", H: "Liquid Ooze" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 0.6,
 		weightkg: 1.8,
 		color: "Purple",
@@ -16531,13 +16547,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Naganadel"],
 		eggGroups: ["Undiscovered"],
 	},
-	naganadel: { // updated
+	naganadel: {
 		num: 804,
 		name: "Naganadel",
 		types: ["Poison", "Dragon"],
 		gender: "N",
 		baseStats: { hp: 73, atk: 73, def: 73, spa: 127, spd: 73, spe: 121 },
-		abilities: { 0: "Poison Point", 1: "Beast Boost", H: "Mega Launcher" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 3.6,
 		weightkg: 150,
 		color: "Purple",
@@ -16547,26 +16563,26 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoMove: "Dragon Pulse",
 		eggGroups: ["Undiscovered"],
 	},
-	stakataka: { // updated
+	stakataka: {
 		num: 805,
 		name: "Stakataka",
 		types: ["Rock", "Steel"],
 		gender: "N",
 		baseStats: { hp: 61, atk: 131, def: 211, spa: 53, spd: 101, spe: 13 },
-		abilities: { 0: "Solid Rock", 1: "Beast Boost", H: "Compound Eyes" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 5.5,
 		weightkg: 820,
 		color: "Gray",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
-	blacephalon: { // updated
+	blacephalon: {
 		num: 806,
 		name: "Blacephalon",
 		types: ["Fire", "Ghost"],
 		gender: "N",
 		baseStats: { hp: 53, atk: 127, def: 53, spa: 151, spd: 79, spe: 107 },
-		abilities: { 0: "Power Above", 1: "Beast Boost", H: "Power Within" },
+		abilities: { 0: "Beast Boost" },
 		heightm: 1.8,
 		weightkg: 13,
 		color: "White",
@@ -17013,7 +17029,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.6,
 		weightkg: 6,
 		color: "White",
-		evos: ["Dubwool", "Dubwool-Kaskade"],
+		// evos: ["Dubwool", "Dubwool-Kaskade"],
+		evos: ["Dubwool"],
 		eggGroups: ["Field"],
 	},
 	dubwool: { // updated
@@ -17028,10 +17045,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Wooloo",
 		evoLevel: 24,
 		eggGroups: ["Field"],
-		otherFormes: ["Dubwool-Kaskade"],
-		formeOrder: ["Dubwool", "Dubwool-Kaskade"],
+		// otherFormes: ["Dubwool-Kaskade"],
+		// formeOrder: ["Dubwool", "Dubwool-Kaskade"],
 	},
-	dubwoolkaskade: {
+	/* dubwoolkaskade: {
 		num: 832,
 		name: "Dubwool-Kaskade",
 		baseSpecies: "Dubwool",
@@ -17047,7 +17064,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoRegion: "Kaskade",
 		eggGroups: ["Field"],
 		gen: 9,
-	},
+	}, */
 	chewtle: {
 		num: 833,
 		name: "Chewtle",
@@ -22687,7 +22704,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],
 	},
-	depuray: {
+	/* depuray: {
 		num: 10049,
 		name: "Depuray",
 		types: ["Fighting", "Ground"],
@@ -22752,7 +22769,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Flying", "Field"],
 		requiredAbility: "Power Plumage",
 		battleOnly: "Blurrun",
-	},
+	}, */
 	pudet: {
 		num: 10053,
 		name: "Pudet",
@@ -22777,7 +22794,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Pudet",
 		eggGroups: ["Field"],
 	},
-	pramblo: {
+	/* pramblo: {
 		num: 10055,
 		name: "Pramblo",
 		types: ["Fire", "Ground"],
@@ -23194,7 +23211,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 490,
 		color: "Green",
 		eggGroups: ["Amorphous"],
-	},
+	}, */
 	botnyak: {
 		num: 10086,
 		name: "Botnyak",
@@ -23209,7 +23226,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		cosmeticFormes: ["Botnyak-LR", "Botnyak-LG", "Botnyak-DB", "Botnyak-DR", "Botnyak-DG"],
 		formeOrder: ["Botnyak", "Botnyak-LR", "Botnyak-LG", "Botnyak-DB", "Botnyak-DR", "Botnyak-DG"],
 	},
-	hurchin: {
+	/* hurchin: {
 		num: 10087,
 		name: "Hurchin",
 		types: ["Water", "Fire"],
@@ -23267,7 +23284,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		prevo: "Wasgrowl",
 		eggGroups: ["Field", "Water 2"],
-	},
+	}, */
 	probat: {
 		num: 10092,
 		name: "Probat",
@@ -23385,7 +23402,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Flying", "Field"],
 	},
-	obsidious: {
+	/* obsidious: {
 		num: 100100,
 		name: "Obsidious",
 		types: ["Rock", "Dark"],
@@ -23694,5 +23711,5 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		tags: ["Ultra Beast", "Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
-	},
+	}, */
 };
