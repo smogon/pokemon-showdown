@@ -8615,7 +8615,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.4,
 		weightkg: 19.2,
 		color: "Purple",
-		evos: ["Skuntank", "Skuntank-Kaskade"],
+		// evos: ["Skuntank", "Skuntank-Kaskade"],
+		evos: ["Skuntank"],
 		eggGroups: ["Field"],
 	},
 	skuntank: { // updated
@@ -8630,10 +8631,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Stunky",
 		evoLevel: 34,
 		eggGroups: ["Field"],
-		otherFormes: ["Skuntank-Kaskade"],
-		formeOrder: ["Skuntank", "Skuntank-Kaskade"],
+		// otherFormes: ["Skuntank-Kaskade"],
+		// formeOrder: ["Skuntank", "Skuntank-Kaskade"],
 	},
-	skuntankkaskade: {
+	/* skuntankkaskade: {
 		num: 435,
 		name: "Skuntank-Kaskade",
 		baseSpecies: "Skuntank",
@@ -8648,7 +8649,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 		gen: 9,
-	},
+	}, */
 	bronzor: {
 		num: 436,
 		name: "Bronzor",
