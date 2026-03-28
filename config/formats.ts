@@ -6630,84 +6630,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
-	// SwSe Popular Randomized Metas
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "SwSe Popular Randomized Metas",
-		column: 3,
-	},
-	{
-		name: "[Gen 9] Random Doubles Battle",
-		desc: `Double battle with randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
-
-		mod: 'swse',
-		gameType: 'doubles',
-		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "[Gen 9] Unrated Random Doubles Battle",
-
-		mod: 'swse',
-		gameType: 'doubles',
-		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		rated: false,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "[Gen 9] Random Battle",
-		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
-
-		mod: 'swse',
-		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-	},
-	{
-		name: "[Gen 9] Unrated Random Battle",
-
-		mod: 'swse',
-		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		rated: false,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-	},
-	// Misc. Randomized Metas
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Misc. Randomized Metas",
-	},
-	{
-		name: "[Gen 9] Monotype Random Battle",
-
-		mod: 'swse',
-		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-	},
-
 	// SwSe Dex-based Metas
 	///////////////////////////////////////////////////////////////////
 
 	{
 		section: "SwSe Dex-based Metas",
-		column: 4,
+		column: 3,
 	},
 	{
 		name: "[Gen 9] Tso-Lo Doubles",
@@ -6816,5 +6744,78 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+	},
+
+	// SwSe Popular Randomized Metas
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "SwSe Popular Randomized Metas",
+		column: 4,
+	},
+	{
+		name: "[Gen 9] Random Doubles Battle",
+		desc: `Double battle with randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+
+		mod: 'swse',
+		gameType: 'doubles',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		bestOfDefault: true,
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 9] Unrated Random Doubles Battle",
+
+		mod: 'swse',
+		gameType: 'doubles',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		rated: false,
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 9] Random Battle",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+
+		mod: 'swse',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		bestOfDefault: true,
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+	},
+	{
+		name: "[Gen 9] Unrated Random Battle",
+
+		mod: 'swse',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		rated: false,
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+	},
+
+	// Misc. Randomized Metas
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Misc. Randomized Metas",
+	},
+	{
+		name: "[Gen 9] Monotype Random Battle",
+
+		mod: 'swse',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 ];
