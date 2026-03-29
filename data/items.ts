@@ -1936,7 +1936,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 2401,
 		gen: 9,
-		isNonstandard: "Past",
 	},
 	fairygem: {
 		name: "Fairy Gem",
