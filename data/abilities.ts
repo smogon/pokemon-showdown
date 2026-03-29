@@ -6356,12 +6356,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10034,
 	},
 	enjoin: {
-		onStart(target) {
-			this.hint("Enjoin has no effect!", true);
+		onModifyMove(move, pokemon, target) {
+			if (!move.flags['commanding']) return;
+			const bestStat = pokemon.getBestStat(true, true);
+
+			if (move.target === 'self') {
+				this.boost({ [bestStat]: 1 }, pokemon);
+			} else if (target?.isAlly?.(pokemon)) {
+				this.boost({ [bestStat]: 1 }, target);
+			} else {
+				this.boost({ [bestStat]: -1 }, target);
+			}
 		},
 		flags: {},
 		name: "Enjoin",
-		rating: 0,
+		rating: 3,
 		num: 10067,
 	},
 	eventide: { // tested, works as intended
@@ -7308,6 +7317,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (bestStat > 0) this.boost({ [statName]: bestStat }, target);
+		},
+		onStart(target) {
+			const bestStat = source.getBestStat(true, true);
+			this.boost({ [bestStat]: length }, source);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				const bestStat = source.getBestStat(true, true);
+				this.boost({ [bestStat]: length }, source);
+			}
 		},
 		flags: {},
 		name: "Soul Passage",

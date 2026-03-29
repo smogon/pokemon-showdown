@@ -32,6 +32,7 @@ interface MoveFlags {
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	cantusetwice?: 1; // The user cannot select this move after a previous successful use.
 	charge?: 1; // The user is unable to make a move between turns.
+	commanding?: 1; // swse
 	contact?: 1; // Makes contact.
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.

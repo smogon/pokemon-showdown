@@ -200,7 +200,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "After You",
 		pp: 15,
 		priority: 0,
-		flags: { bypasssub: 1, allyanim: 1 },
+		flags: { bypasssub: 1, allyanim: 1, commanding: 1 },
 		onHit(target) {
 			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
@@ -4760,7 +4760,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Encore",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1, commanding: 1 },
 		volatileStatus: 'encore',
 		condition: {
 			duration: 3,
@@ -6088,7 +6088,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Follow Me",
 		pp: 20,
 		priority: 2,
-		flags: { noassist: 1, failcopycat: 1 },
+		flags: { noassist: 1, failcopycat: 1, commanding: 1 },
 		volatileStatus: 'followme',
 		onTry(source) {
 			return this.activePerHalf > 1;
@@ -8633,7 +8633,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Helping Hand",
 		pp: 20,
 		priority: 5,
-		flags: { bypasssub: 1, noassist: 1, failcopycat: 1 },
+		flags: { bypasssub: 1, noassist: 1, failcopycat: 1, commanding: 1 },
 		volatileStatus: 'helpinghand',
 		onTryHit(target) {
 			if (!target.newlySwitched && !this.queue.willMove(target)) return false;
@@ -9719,7 +9719,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Instruct",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, bypasssub: 1, allyanim: 1, failinstruct: 1 },
+		flags: { protect: 1, bypasssub: 1, allyanim: 1, failinstruct: 1, commanding: 1 },
 		onHit(target, source) {
 			if (!target.lastMove || target.volatiles['dynamax']) return false;
 			const lastMove = target.lastMove;
@@ -11634,7 +11634,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {
 			protect: 1, bypasssub: 1,
 			failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
-			failcopycat: 1, failmimic: 1, failinstruct: 1,
+			failcopycat: 1, failmimic: 1, failinstruct: 1, commanding: 1,
 		},
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
@@ -22977,7 +22977,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Overbearing Command",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, commanding: 1 },
 		onModifyMove(move, pokemon, target) {
 			move.secondaries = [];
 			if (target?.volatiles['confusion']) {
