@@ -2429,6 +2429,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "If a Pokemon uses a Psychic-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
 		shortDesc: "Psychic-type moves against this Pokemon deal damage with a halved offensive stat.",
 	},
+	forked: {
+		name: "Forked", // incomplete, testing desc for 2+ forked users
+		desc: "The user and its allies can never be struck by Thunderstorm's lightning strikes. When lightning strikes the field, the opposing side will always recive the strikes. If both sides of a battle have Forked, ",
+		shortDesc: "The user and its allies cannot be struck by Thunderstorm.",
+	},
 	frigidblaze: {
 		name: "Frigid Blaze",
 		desc: "This Pokemon's Ice-type moves have a 20% chance of burning. This Pokemon's Fire-type moves have a 20% chance of inflicting frostbite. This effect comes after a move's inherent secondary effect chance.",
