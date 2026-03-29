@@ -283,6 +283,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		damageTaken: {
 			hail: 3,
 			frz: 3,
+			fst: 3,
 			Bug: 0,
 			Dark: 0,
 			Dragon: 0,
@@ -334,6 +335,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		damageTaken: {
 			psn: 3,
 			tox: 3,
+			blt: 3,
 			Bug: 2,
 			Dark: 0,
 			Dragon: 0,
@@ -412,6 +414,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		damageTaken: {
 			psn: 3,
 			tox: 3,
+			blt: 3,
 			sandstorm: 3,
 			Bug: 2,
 			Dark: 0,
