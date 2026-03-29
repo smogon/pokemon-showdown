@@ -2068,9 +2068,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const gameType = this.dex.toID(value);
 			const validGameTypes = ['singles', 'doubles', 'triples', 'multi', 'freeforall'];
 			if (!validGameTypes.includes(gameType)) {
-				throw new Error(`Invalid game type "${value}". Valid game types are: ${validGameTypes.join(', ')}`);
+				return `Invalid game type "${value}". Valid game types are: ${validGameTypes.join(', ')}`;
 			}
-			return gameType;
+			if (!this.format.supportedGameTypes.includes(gameType as GameType)) {
+				return `The game type "${gameType}" is not supported in this format. Supported game types are: ${this.format.supportedGameTypes.join(', ')}.`;
+			}
 		},
 	},
 	pickedteamsize: {

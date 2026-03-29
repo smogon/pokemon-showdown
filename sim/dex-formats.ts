@@ -211,24 +211,21 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.has('gametype')) {
 			const rawGameType = this.valueRules.get('gametype')!;
 			const gameTypeRule = dex.formats.get('gametype');
-			const validatedGameType = gameTypeRule.onValidateRule?.call(
+			const validationError = gameTypeRule.onValidateRule?.call(
 				{ format, ruleTable: this, dex }, rawGameType
-			) ?? rawGameType;
-			const gameType = dex.toID(validatedGameType);
-			this.valueRules.set('gametype', gameType);
-
-			if (format.supportedGameTypes && !format.supportedGameTypes.includes(gameType as GameType)) {
-				throw new Error(
-					`The game type "${gameType}" is not supported in this format. ` +
-					`Supported game types are: ${format.supportedGameTypes.join(', ')}.`
-				);
+			);
+			if (typeof validationError === 'string') {
+				throw new Error(validationError);
 			}
+
+			const gameType = dex.toID(rawGameType);
+			this.valueRules.set('gametype', gameType);
 
 			const currentPlayerCount = ['multi', 'freeforall'].includes(format.gameType) ? 4 : 2;
 			const newPlayerCount = ['multi', 'freeforall'].includes(gameType) ? 4 : 2;
 			if (currentPlayerCount !== newPlayerCount) {
 				throw new Error(
-					`Cannot change game type from "${format.gameType}" to "${gameType}". ` +
+					`Rule "Game Type = ${gameType}" is incompatible with ${format.name}'s game type "${format.gameType}". ` +
 					`Changing between ${currentPlayerCount}-player and ${newPlayerCount}-player game types is not supported.`
 				);
 			}
@@ -447,7 +444,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/** Number of players, based on game type, for convenience */
 	readonly playerCount: 2 | 4;
 	readonly defaultGameType?: GameType;
-	readonly supportedGameTypes?: GameType[];
+	readonly supportedGameTypes: GameType[];
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
@@ -532,10 +529,10 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 
 		this.defaultGameType = data.defaultGameType;
-		this.supportedGameTypes = data.supportedGameTypes || (this.defaultGameType ? [this.defaultGameType] : undefined);
-
-		this.gameType = data.gameType || this.defaultGameType ||
-			(this.supportedGameTypes ? this.supportedGameTypes[0] : 'singles');
+		this.gameType = data.gameType || data.defaultGameType ||
+			(data.supportedGameTypes?.length ? data.supportedGameTypes[0] : 'singles');
+		this.supportedGameTypes = data.supportedGameTypes ||
+			(this.defaultGameType ? [this.defaultGameType] : [this.gameType]);
 
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
@@ -1016,9 +1013,6 @@ export class DexFormats {
 				);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
-		}
-		if (ruleTable.valueRules.has('gametype')) {
-			format.onValidateRule?.call({ format, ruleTable, dex: this.dex }, '');
 		}
 
 		if (!repeals) format.ruleTable = ruleTable;

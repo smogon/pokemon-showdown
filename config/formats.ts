@@ -183,6 +183,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -205,6 +206,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
 		gameType: 'doubles',
+		supportedGameTypes: ['doubles'],
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Shadow Tag', 'Commander'],
 	},
@@ -289,6 +291,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -362,6 +365,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Free-For-All",
 		mod: 'gen9',
 		gameType: 'freeforall',
+		supportedGameTypes: ['multi', 'freeforall'],
 		rated: false,
 		tournamentShow: false,
 		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause'],
@@ -3504,6 +3508,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: "The fifth iteration of Super Staff Bros is here! Battle with a random team of pokemon created by the sim staff.",
 		mod: 'gen9ssb',
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		team: 'randomStaffBros',
 		bestOfDefault: true,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
@@ -4340,6 +4345,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4414,6 +4420,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4545,6 +4552,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4619,6 +4627,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4741,6 +4750,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4795,6 +4805,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4812,6 +4823,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4934,6 +4946,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4978,6 +4991,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -4988,6 +5002,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'triples',
 		searchShow: false,
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -5093,6 +5108,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		// no restrictions
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -5158,6 +5174,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		battle: { trunc: Math.trunc },
 		// no restrictions
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -5303,6 +5320,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
@@ -5311,6 +5329,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
@@ -5392,6 +5411,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
@@ -5495,6 +5515,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
+		supportedGameTypes: ['singles', 'doubles', 'triples', 'multi', 'freeforall'],
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 ];
