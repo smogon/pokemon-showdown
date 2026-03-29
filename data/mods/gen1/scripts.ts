@@ -159,10 +159,15 @@ export const Scripts: ModdedBattleScriptsData = {
 					);
 				} else if (pokemon.getLockedMove()) {
 					this.battle.hint(
-						"In Gen 1, when Haze clears slp/frz status of a Pokémon during a multi-turn move, " +
-						"the Pokémon will become soft-locked."
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during a multi-turn move, " +
+						"that Pokémon will become soft-locked."
 					);
-				}
+				} else if (pokemon.getSemiLockedMove()) {
+					this.battle.hint(
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during Bide, " +
+						"the move execution will never resolve."
+					);
+				} 
 				abortMove();
 				return;
 			}
