@@ -8026,8 +8026,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slushball: {
 		name: "Slushball",
-		desc: "During Rain, Primordial Sea or Hail, this move has x1.5 power. This move's type effectiveness against Flying is changed to be super effective no matter what this move's type is.",
-		shortDesc: "Rain/Hail: x1.5 BP. Super effective on Water.",
+		desc: "During Rain, Primordial Sea, or Hail, this move has x1.5 power. This move's type effectiveness against Fire is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Rain/Hail: x1.5 BP. Super effective on Fire.",
 	},
 	smogspread: {
 		name: "Smog Spread",

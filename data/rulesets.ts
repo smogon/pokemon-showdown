@@ -1640,6 +1640,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && move.id === 'slushball' && type === 'Fire') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
 			// Ignore normal effectiveness, prevents bug with Tera Shell
 			if (typeMod) return -typeMod;
