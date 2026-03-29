@@ -102,7 +102,7 @@ describe('Two Turn Moves [Gen 1]', () => {
 		assert(pidgeot.volatiles['invulnerability']);
 	});
 
-	it.skip(`should be soft-locked if it was woken up by Haze during the charging turn`, () => {
+	it(`should be soft-locked if it was woken up by Haze during the charging turn`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: "Golem", moves: ['solarbeam', 'splash'] },
 			{ species: "Magikarp", moves: ['splash'] },
@@ -118,8 +118,8 @@ describe('Two Turn Moves [Gen 1]', () => {
 			assert(battle.p1.active[0].volatiles['twoturnmove']);
 			const request = battle.p1.activeRequest;
 			assert.equal(request.active[0].moves.length, 1);
-			assert.equal(request.active[0].moves[0].id, 'fight');
-			battle.makeChoices('move fight', 'move swordsdance');
+			assert.equal(request.active[0].moves[0].id, 'solarbeam');
+			battle.makeChoices('move solarbeam', 'move swordsdance');
 		}
 		assert.fullHP(battle.p2.active[0]);
 		assert.equal(battle.p2.active[0].boosts.atk, 6);

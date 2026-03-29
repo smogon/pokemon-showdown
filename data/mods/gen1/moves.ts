@@ -334,13 +334,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 				if (pokemon !== source) {
-					// uncommenting the code below can lead to soft-locks
-					// if (['frz', 'slp'].includes(pokemon.status)) {
-					// 	pokemon.side.lastSelectedMove = 'cannotmove' as ID;
-					// 	if (this.queue.willMove(pokemon)) {
-					// 		this.queue.changeAction(pokemon, { choice: 'move', pokemon, moveid: 'cannotmove' });
-					// 	}
-					// }
+					if (['frz', 'slp'].includes(pokemon.status)) {
+						pokemon.side.lastSelectedMove = 'cannotmove' as ID;
+						if (this.queue.willMove(pokemon)) {
+							this.queue.changeAction(pokemon, { choice: 'move', pokemon, moveid: 'cannotmove' });
+						}
+					}
 					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {

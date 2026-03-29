@@ -146,19 +146,26 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
+			const abortMove = () => {
+				this.battle.clearActiveMove(true);
+				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			};
+
+			const lockedMove = pokemon.getLockedMove();
+
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
 						"In Gen 1, if a partially trapped Pokémon switches to a Pokémon that is asleep, " +
 						"the sleep counter will not decrease until you select a move with a different Pokémon."
 					);
-				} else if (pokemon.getLockedMove()) {
+				} else if (lockedMove) {
 					this.battle.hint(
-						"In Gen 1, a Pokémon can get soft-locked if Haze clears its status during a multi-turn move."
+						"In Gen 1, when Haze clears slp/frz status of a Pokémon during a multi-turn move, " +
+						"the Pokémon will become soft-locked."
 					);
 				}
-				this.battle.clearActiveMove(true);
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+				abortMove();
 				return;
 			}
 
@@ -175,17 +182,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+				abortMove();
 				return;
 			}
 			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
+				abortMove();
 				return;
 			}
 
 			if (move.id !== 'struggle') {
-				const lockedMove = pokemon.getLockedMove();
 				if (lockedMove) sourceEffect = move;
 
 				// Locked moves don't deduct PP
@@ -204,7 +209,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						"In Gen 1, a Pokémon that thaws out might try to use a move that doesn't match the move " +
 						"of the slot it last selected.",
 					);
-					this.battle.clearActiveMove(true);
+					abortMove();
 					return;
 				}
 			}
