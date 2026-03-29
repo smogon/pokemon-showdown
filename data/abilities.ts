@@ -6916,7 +6916,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10048,
 	},
-	/* nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
+	nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
 		onSwitchIn(pokemon) {
 			this.effectState.switchingIn = true;
 		},
@@ -6956,7 +6956,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Nullify",
 		rating: 2.5,
 		num: 10063,
-	}, */
+	},
 	pearldrop: { // tested, works as intended
 		onStart(source) {
 			this.field.addPseudoWeather('pearldrop');
