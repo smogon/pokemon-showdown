@@ -2288,14 +2288,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon, source, effect) {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
+					this.add('-start', pokemon, 'Charge', this.activeMove?.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
 			},
 			onRestart(pokemon, source, effect) {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
+					this.add('-start', pokemon, 'Charge', this.activeMove?.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}

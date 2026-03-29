@@ -6357,23 +6357,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	enjoin: {
 		onModifyMove(move, pokemon, target) {
-			if (!move.flags['commanding']) return; // Only affects moves with 'commanding' flag
-			if (!target) return; // Safety check for undefined target
+			if (!move.flags['commanding']) return;
 
-			const bestStat = target.getBestStat(true, true); // Use the target's best stat
-			if (!bestStat) return; // Safety check
-
-			// Case 1: Move targets self
-			if (move.target === 'self') {
-				this.boost({ [bestStat]: 1 }, target);
-
-				// Case 2: Move targets an ally
-			} else if (target.side === pokemon.side) {
-				this.boost({ [bestStat]: 1 }, target);
-
-				// Case 3: Move targets an enemy
-			} else {
-				this.boost({ [bestStat]: -1 }, target);
+			if (target) {
+				const bestStat = target.getBestStat(true, true);
+				if (move.target === 'self') {
+					this.boost({ [bestStat]: 1 }, target);
+				} else if (target.side === pokemon.side) {
+					this.boost({ [bestStat]: 1 }, target);
+				} else {
+					this.boost({ [bestStat]: -1 }, target);
+				}
 			}
 		},
 		flags: {},

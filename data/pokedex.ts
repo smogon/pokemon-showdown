@@ -10694,7 +10694,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Kaskade",
 		types: ["Ground", "Fairy"],
 		baseStats: { hp: 110, atk: 50, def: 65, spa: 135, spd: 60, spe: 88 },
-		abilities: { 0: "Chakra", 1: "Incantation", H: "Sand Rush" },
+		abilities: { 0: "Sand Rush", 1: "Chakra", H: "Incantation" },
 		heightm: 0.7,
 		weightkg: 40.4,
 		color: "Pink",
