@@ -167,7 +167,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during Bide, " +
 						"the move execution will never resolve."
 					);
-				} 
+				}
 				abortMove();
 				return;
 			}
