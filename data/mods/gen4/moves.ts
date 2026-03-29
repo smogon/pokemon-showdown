@@ -404,6 +404,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
+			onDisableMove: undefined, // no inherit
+			onSemiLockMove(pokemon) {
+				if (this.effectState.move && pokemon.hasMove(this.effectState.move)) {
+					return this.effectState.move;
+				}
+			},
 		},
 	},
 	endeavor: {
