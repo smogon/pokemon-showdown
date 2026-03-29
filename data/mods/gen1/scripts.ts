@@ -151,15 +151,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 			};
 
-			const lockedMove = pokemon.getLockedMove();
-
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
 						"In Gen 1, if a Pokémon spends a turn partially trapped and switches to a Pokémon that is asleep, " +
 						"the sleep counter will not decrease until you select a move with a different Pokémon."
 					);
-				} else if (lockedMove) {
+				} else if (pokemon.getLockedMove()) {
 					this.battle.hint(
 						"In Gen 1, when Haze clears slp/frz status of a Pokémon during a multi-turn move, " +
 						"the Pokémon will become soft-locked."
@@ -183,6 +181,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id !== 'struggle') {
+				const lockedMove = pokemon.getLockedMove(true);
 				if (lockedMove) sourceEffect = move;
 
 				// Locked moves don't deduct PP

@@ -111,7 +111,7 @@ describe('Two Turn Moves [Gen 1]', () => {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move solarbeam', 'move spore');
-		battle.makeChoices('move fight', 'move haze');
+		battle.makeChoices('move solarbeam', 'move haze');
 		// Golem is locked into Solar Beam, but the move will never execute
 		for (let i = 0; i < 3; i++) {
 			assert.throws(() => battle.choose('p1', 'switch 2'));

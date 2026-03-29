@@ -941,19 +941,34 @@ export class Pokemon {
 	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
-	getLockedMove(): ID | null {
+	getLockedMove(includeSemiLocked?: boolean): ID | null {
 		const lockedMove = this.battle.runEvent('LockMove', this);
+		if (lockedMove !== true) return lockedMove;
+		return includeSemiLocked ? this.getSemiLockedMove() : null;
+	}
+
+	/**
+	 * Moves that lock you when you select the Fight button, ut don't prevent you from switching out.
+	 * Those are Gen 1 trapping moves, Gen 1 and 2 Bide, and Gen 2 and 3 Encore.
+	 */
+	getSemiLockedMove(): ID | null {
+		const lockedMove = this.battle.runEvent('SemiLockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
-			this.trapped = true;
 			if (lockedMove === 'recharge') {
 				return [{
 					move: 'Recharge',
 					id: 'recharge' as ID,
+				}];
+			}
+			if (lockedMove === 'fight') {
+				return [{
+					move: 'Fight',
+					id: 'fight' as ID,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
@@ -1067,21 +1082,22 @@ export class Pokemon {
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
+		let lockedMove = this.getLockedMove();
+		if (lockedMove) {
+			this.trapped = true;
+		} else {
+			lockedMove = this.getSemiLockedMove();
+			if (this.maybeLocked && !(this.battle.gen === 1 && ['frz', 'slp'].includes(this.status))) {
+				lockedMove = null;
+			}
+		}
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		// actions that don't hard lock out of switching, but can't bypass the Fight button
-		// partially trapped causes maybeLocked, so it shouldn't be revealed
-		if (this.battle.gen === 1 && ['frz', 'slp'].includes(this.status)) {
-			this.maybeDisabled = false;
-			this.maybeLocked = false;
-			moves = [{ move: 'Fight', id: 'fight' as ID }];
-			lockedMove = 'fight' as ID;
-		} else if (!moves.length) {
+		if (!moves.length) {
 			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
 			lockedMove = 'struggle' as ID;
 		}

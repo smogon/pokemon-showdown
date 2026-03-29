@@ -655,7 +655,7 @@ export class Side {
 			}
 		}
 
-		const lockedMove = pokemon.getLockedMove();
+		const lockedMove = pokemon.getLockedMove(true);
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);
@@ -668,15 +668,6 @@ export class Side {
 				pokemon,
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
-			});
-			return true;
-		} else if (this.battle.gen === 1 &&
-			(['frz', 'slp'].includes(pokemon.status) || pokemon.volatiles['partiallytrapped'])) {
-			if (pokemon.maybeLocked) this.choice.cantUndo = true;
-			this.choice.actions.push({
-				choice: 'move',
-				pokemon,
-				// don't send a move, handled side.commitChoices
 			});
 			return true;
 		} else if (!moves.length) {
@@ -1116,22 +1107,12 @@ export class Side {
 			for (const choice of this.choice.actions) {
 				if (choice.choice !== 'move' || !choice.pokemon) continue;
 				const move = choice.moveid;
-				if (!move) {
-					const pokemon = choice.pokemon;
-					if (['frz', 'slp'].includes(pokemon.status)) {
-						// do nothing
-					} else if (pokemon.volatiles['partiallytrapped']) {
-						// 'cannotmove' is what is set in the cartridge
-						this.lastSelectedMove = 'cannotmove' as ID;
-					}
-					/**
-					 * if partially trapped: put 'cannotmove' in lastSelectedMove
-					 * if frozen or asleep: try to reuse the last move,
-					 *   which can fail if the Pokemon thaws and the move doesn't match lastSelectedMoveSlot
-					 *
-					 * if this happens in the first move selection of a player, put '00' as a placeholder to avoid errors
-					 */
-					choice.moveid = this.lastSelectedMove || '00' as ID;
+				const pokemon = choice.pokemon;
+				if (['frz', 'slp'].includes(pokemon.status)) {
+					// do nothing
+				} else if (pokemon.volatiles['partiallytrapped']) {
+					// 'cannotmove' is what is set in the cartridge
+					this.lastSelectedMove = 'cannotmove' as ID;
 				} else if (move === 'struggle') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
@@ -1139,10 +1120,8 @@ export class Side {
 					// not locked
 					this.lastSelectedMove = move as ID;
 					this.lastSelectedMoveSlot = choice.moveSlot;
-				} else {
-					// locked moves (including mustrecharge) dont set lastSelectedMove
-					choice.moveid = this.lastSelectedMove || '00' as ID;
 				}
+				choice.moveid = this.lastSelectedMove || '00' as ID;
 			}
 		}
 		this.battle.queue.addChoice(this.choice.actions);

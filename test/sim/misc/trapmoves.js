@@ -239,8 +239,13 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 
 	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Rhydon", moves: ['splash'], evs: { hp: 255 } }, { species: "Dragonite", moves: ['wrap'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Slowbro", moves: ['seismictoss', 'toxic'] }] });
+		battle.setPlayer('p1', { team: [
+			{ species: "Rhydon", moves: ['splash'], evs: { hp: 255 } },
+			{ species: "Dragonite", moves: ['wrap'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Slowbro", moves: ['seismictoss', 'toxic'] },
+		] });
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
 		}
@@ -284,7 +289,7 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it(`should stay asleep if it switched in after a Pokemon was trapped`, () => {
-		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 3] }, [[
 			{ species: 'dragonite', moves: ['wrap', 'spore', 'splash'] },
 		], [
 			{ species: 'rhydon', moves: ['swordsdance'] },
@@ -294,8 +299,11 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 
 		battle.makeChoices('move spore', 'move swordsdance');
 		battle.makeChoices('move wrap', 'switch 2');
-		battle.makeChoices('move wrap', 'move splash'); // Exeggutor needs to spend a turn trapped to select a move
+		battle.makeChoices('move wrap', 'move fight'); // Exeggutor needs to spend a turn trapped to select a move
 		battle.makeChoices('move wrap', 'switch 2');
+		assert.equal(battle.p1.active[0].volatiles['partialtrappinglock'].duration, 1); // this is just a rng check
+		battle.makeChoices('move wrap', 'move fight');
+		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 		for (let i = 0; i < 20; i++) {
 			battle.makeChoices('move splash', 'move fight');
 		}

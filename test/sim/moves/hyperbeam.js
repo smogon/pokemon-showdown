@@ -132,8 +132,8 @@ describe(`Hyper Beam [Gen 1]`, () => {
 			assert(battle.p2.active[0].volatiles['mustrecharge']);
 			const request = battle.p2.activeRequest;
 			assert.equal(request.active[0].moves.length, 1);
-			assert.equal(request.active[0].moves[0].id, 'fight');
-			battle.makeChoices('move splash', 'move fight');
+			assert.equal(request.active[0].moves[0].id, 'recharge');
+			battle.makeChoices('move splash', 'move recharge');
 		}
 		assert.equal(battle.p1.active[0].hp, hp);
 	});

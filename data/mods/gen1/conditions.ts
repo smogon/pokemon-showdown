@@ -80,6 +80,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
+		onSemiLockPriority: 2,
+		onSemiLockMove: 'fight',
 	},
 	frz: {
 		name: 'frz',
@@ -98,6 +100,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				target.cureStatus();
 			}
 		},
+		onSemiLockPriority: 2,
+		onSemiLockMove: 'fight',
 	},
 	psn: {
 		name: 'psn',
@@ -202,8 +206,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
-		onDisableMove(target) {
-			target.maybeLocked = true;
+		onSemiLockPriority: 1,
+		onSemiLockMove: 'fight',
+		onDisableMove(pokemon) {
+			if (this.effectState.maybeLocked) {
+				pokemon.maybeLocked = true;
+			}
 		},
 	},
 	fakepartiallytrapped: {
@@ -252,13 +260,18 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			} else {
 				target.addVolatile('partiallytrapped', pokemon, move);
+				if (this.effectState.totalDuration - this.effectState.duration! > 2) {
+					target.volatiles['partiallytrapped'].maybeLocked = true;
+				}
 			}
 		},
-		onLockMove() {
+		onSemiLockMove() {
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
-			pokemon.maybeLocked = true;
+			if (this.effectState.totalDuration - this.effectState.duration! >= 2) {
+				pokemon.maybeLocked = true;
+			}
 		},
 	},
 	mustrecharge: {
