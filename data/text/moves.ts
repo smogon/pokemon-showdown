@@ -8168,7 +8168,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	windrage: {
 		name: "Windrage",
 		desc: "This move fails if Strong Winds is not active. If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
-		shortDesc: "Fails w/o Strong Winds. Frees user from hazards/bind/Leech Seed.",
+		shortDesc: "Frees user from hazards/bind/Leech Seed. S.W. only.",
 	},
 	wrangle: {
 		name: "Wrangle",

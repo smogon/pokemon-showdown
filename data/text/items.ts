@@ -555,7 +555,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Fairium Z",
 		shortDesc: "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
 	},
-	fairyfeather: { // Charming Talisman
+	fairyfeather: {
 		name: "Fairy Feather",
 		shortDesc: "Holder's Fairy-type attacks have 1.2x power.",
 	},
@@ -2563,10 +2563,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	blackaugurite: {
 		name: "Black Augurite",
 		shortDesc: "Evolves Scyther into Kleavor when used.",
-	},
-	charmingtalisman: {
-		name: "Charming Talisman",
-		shortDesc: "Holder's Fairy-type attacks have 1.2x power.",
 	},
 	coffeegeistcappuccino: {
 		name: "Coffeegeist Cappuccino",

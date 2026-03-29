@@ -1922,7 +1922,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	fairyfeather: { // Charming Talisman
+	fairyfeather: {
 		name: "Fairy Feather",
 		spritenum: 754,
 		fling: {
@@ -8298,21 +8298,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
-	/* charmingtalisman: {
-		name: "Charming Talisman",
-		spritenum: 754,
-		fling: {
-			basePower: 50,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fairy') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: -1,
-		gen: 9,
-	}, */
 	coffeegeistcappuccino: { // incomplete test fling
 		name: "Coffeegeist Cappuccino",
 		spritenum: 795,
