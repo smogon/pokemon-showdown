@@ -1121,6 +1121,7 @@ export class Side {
 					this.lastSelectedMove = move as ID;
 					this.lastSelectedMoveSlot = choice.moveSlot;
 				}
+				// choice.moveid should be synced with lastSelectedMove
 				choice.moveid = this.lastSelectedMove || '00' as ID;
 			}
 		}
