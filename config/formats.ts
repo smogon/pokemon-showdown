@@ -6466,7 +6466,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Battlefields",
 		desc: `Any field condition with a set duration becomes permanent once triggered unless directly replaced, removed, or reversed. Namely, this impacts screens, weathergy, terrains, room effects, gravity, and side conditions like Tailwind and Safeguard.`,
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag',
