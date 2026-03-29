@@ -156,7 +156,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
-						"In Gen 1, if a partially trapped Pokémon switches to a Pokémon that is asleep, " +
+						"In Gen 1, if a Pokémon spends a turn partially trapped and switches to a Pokémon that is asleep, " +
 						"the sleep counter will not decrease until you select a move with a different Pokémon."
 					);
 				} else if (lockedMove) {
@@ -167,14 +167,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				abortMove();
 				return;
-			}
-
-			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
-			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
-			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
-				move = this.battle.dex.getActiveMove('hyperbeam');
-				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
-					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
 			}
 
 			if (target?.subFainted) target.subFainted = null;
