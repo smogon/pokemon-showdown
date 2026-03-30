@@ -39,8 +39,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			ppData.pp = ((ppData.pp % 64) + 64) % 64;
 
-			if (ppData.id === 'mimic' && !this.transformed) {
-				this.baseMoveSlots[this.side.lastSelectedMoveSlot].pp = ppData.pp;
+			if (!this.transformed) {
+				const baseMoveSlot = this.baseMoveSlots[this.side.lastSelectedMoveSlot];
+				if (baseMoveSlot.id === 'mimic') {
+					baseMoveSlot.pp = ppData.pp;
+				}
 			}
 
 			return amount;
