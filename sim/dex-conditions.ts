@@ -450,6 +450,7 @@ export interface EventMethods {
 	onChangeBoostPriority?: number;
 	onDamagePriority?: number;
 	onDragOutPriority?: number;
+	onDisableMovePriority?: number;
 	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;

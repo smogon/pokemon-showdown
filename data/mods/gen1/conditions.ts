@@ -81,6 +81,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
 		onSemiLockMove: 'fight',
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
+		},
 	},
 	frz: {
 		name: 'frz',
@@ -100,6 +103,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onSemiLockMove: 'fight',
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
+		},
 	},
 	psn: {
 		name: 'psn',
@@ -206,8 +212,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onSemiLockPriority: -1,
 		onSemiLockMove: 'fight',
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
-			if (this.effectState.maybeLocked && !['frz', 'slp'].includes(target.status)) {
+			if (this.effectState.maybeLocked) {
 				target.maybeLocked = true;
 			}
 		},
@@ -217,10 +224,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// Wrap ended this turn, but you don't know that
 		// until you try to use an attack
 		duration: 2,
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
-			if (!['frz', 'slp'].includes(target.status)) {
-				target.maybeLocked = true;
-			}
+			target.maybeLocked = true;
 		},
 	},
 	partialtrappinglock: {

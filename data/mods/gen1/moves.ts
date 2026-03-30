@@ -61,6 +61,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSemiLockPriority: 1,
 			onSemiLockMove: 'bide',
+			onDisableMove(target) {
+				target.maybeLocked = false; // the player knows it is locked
+			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
 	},
