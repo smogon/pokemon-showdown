@@ -1,16 +1,7 @@
 import { createBattle } from './bt_utils';
 
-// Array of all possible pack teams for testing
+// array of all possible pack teams for testing
 const PACK_TEAMS = [
-	// WHY AZUMARILL HAS FREEZE STATUS:
-	// The 'frz' (freeze) status demonstrates the custom status condition feature, allowing
-	// pokemon to start with status conditions for testing status-related abilities and moves.
-	//
-	// TEAM FORMAT EXPLANATION:
-	// The packed team string format is: name|species|item|ability|moves|nature|evs|gender|ivs|shiny|level|happiness,misc
-	// The misc section contains: hpType,pokeball,gigantamax,dynamaxLevel,teraType,hpPercentage,status
-	// - Position 6 in misc: hpPercentage (50 for Weavile = starts at 50% HP)
-	// - Position 7 in misc: status (frz for Azumarill = starts frozen)
 	"Testmon1|Weavile|ChoiceBand|Pickpocket|IceShard,KnockOff,IcicleCrash,LowKick|Jolly|,252,,,4,252|M||||,,,,,,50,]Testmon2|Azumarill|ChoiceBand|HugePower|AquaJet,PlayRough,Waterfall,Superpower|Adamant|252,252,,,4,|M||||,,,,,,,frz",
 ];
 
@@ -27,7 +18,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const targetUserId = args[0];
-		// Randomly select one of the pack teams
+		// randomly select one of the pack teams
 		const teamPacked = PACK_TEAMS[Math.floor(Math.random() * PACK_TEAMS.length)];
 
 		const commandUser = user;
