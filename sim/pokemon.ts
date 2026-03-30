@@ -1495,15 +1495,7 @@ export class Pokemon {
 			accuracy: 0,
 			evasion: 0,
 		};
-
-		if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
-			const moveslot = this.baseMoves.indexOf('mimic' as ID);
-			const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
-			this.moveSlots = this.baseMoveSlots.slice();
-			this.moveSlots[moveslot].pp = mimicPP;
-		} else {
-			this.moveSlots = this.baseMoveSlots.slice();
-		}
+		this.moveSlots = this.baseMoveSlots.slice();
 
 		this.transformed = false;
 		this.ability = this.baseAbility;

@@ -33,6 +33,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!amount) amount = 1;
 			ppData.pp -= amount;
+
+			if (ppData.pp < 0) {
+				this.battle.hint("In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+			}
+			ppData.pp = ((ppData.pp % 64) + 64) % 64;
+
+			if (ppData.id === 'mimic' && !this.transformed) {
+				this.baseMoveSlots[this.side.lastSelectedMoveSlot].pp = ppData.pp;
+			}
+
 			return amount;
 		},
 		getStat(statName, unmodified) {
@@ -177,10 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Two-turn moves like Sky Attack deduct PP on their second turn.
 				if ((!lockedMove && !TWO_TURN_MOVES.includes(move.id)) || pokemon.volatiles['twoturnmove']) {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
-					if (moveSlot && pokemon.deductPP(moveSlot.id, null, target) && moveSlot.pp < 0) {
-						moveSlot.pp += 64;
-						this.battle.hint("In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
-					}
+					if (moveSlot) pokemon.deductPP(moveSlot.id, null, target);
 				}
 
 				if (move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
@@ -210,9 +217,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			if (sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') {
+			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') && TWO_TURN_MOVES.includes(move.id)) {
 				const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
 				if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
+			}
+			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') && pokemon.transformed) {
+				if (pokemon.side.lastSelectedMoveSlot < pokemon.baseMoveSlots.length) {
+					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp += 1;
+					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp %= 64;
+				}
 			}
 
 			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
