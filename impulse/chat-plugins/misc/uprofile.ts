@@ -94,7 +94,6 @@ function getAvatarDisplay(user: User | null): string {
 	if (user?.connected) {
 		avatar = user.avatar;
 	} else {
-
 		avatar = 'unknown';
 	}
 
@@ -104,7 +103,6 @@ function getAvatarDisplay(user: User | null): string {
 		// don't use Avatars.src() as it returns empty string for files with extensions
 		avatarUrl = `${getAvatarBaseUrl()}${avatar}`;
 	} else {
-
 		const avatarName = getAvatarName(avatar);
 
 		// use the server's avatar system for official avatars
@@ -249,15 +247,15 @@ function getStatusDisplay(user: User | null, customStatus?: string): string {
 	} else {
 		const statusType = user.statusType || 'online';
 		switch (statusType) {
-			case 'busy':
-				statusText = `<b style="color: orange;">●&nbsp;Busy</b>`;
-				break;
-			case 'idle':
-				statusText = `<b style="color: gray;">●&nbsp;Idle</b>`;
-				break;
-			case 'online':
-			default:
-				statusText = `<b style="color: green;">●&nbsp;Online</b>`;
+		case 'busy':
+			statusText = `<b style="color: orange;">●&nbsp;Busy</b>`;
+			break;
+		case 'idle':
+			statusText = `<b style="color: gray;">●&nbsp;Idle</b>`;
+			break;
+		case 'online':
+		default:
+			statusText = `<b style="color: green;">●&nbsp;Online</b>`;
 		}
 	}
 

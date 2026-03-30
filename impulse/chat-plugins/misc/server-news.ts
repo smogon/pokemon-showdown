@@ -97,7 +97,7 @@ const addNews = (id: string, title: string, desc: string, user: User): void => {
 };
 
 const deleteNews = (id: string): boolean => {
-	if (!data.news || !data.news[id]) return false;
+	if (!data.news?.[id]) return false;
 	delete data.news[id];
 	saveData();
 	return true;
@@ -110,7 +110,7 @@ const blockNews = (userid: string): void => {
 };
 
 const unblockNews = (userid: string): boolean => {
-	if (!data.blocks || !data.blocks[userid]) return false;
+	if (!data.blocks?.[userid]) return false;
 	delete data.blocks[userid];
 	saveData();
 	return true;

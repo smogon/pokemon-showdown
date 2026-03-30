@@ -1130,7 +1130,6 @@ export const commands: ChatCommands = {
 
 			if (!building) return this.errorReply("That building doesn't exist in this location.");
 
-
 			if (building.accessible === false) {
 				const blockMsg = (building).blockMessage || "This building is locked.";
 				return this.sendReply(`|uhtmlchange|rpg-${user.id}|${generateExploreHTML(player, currentLocation, blockMsg)}`);

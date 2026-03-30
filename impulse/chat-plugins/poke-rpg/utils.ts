@@ -136,7 +136,6 @@ export function setItem(
 		slot.unburdenActive = false;
 	}
 
-
 	return true;
 }
 

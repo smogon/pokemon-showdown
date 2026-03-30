@@ -235,7 +235,6 @@ function compareActions(
 	if (slotB.status === 'par' && abilityB !== 'quickfeet') speedB = Math.floor(speedB / 2);
 	if (slotB.pokemon.item === 'machobrace' || slotB.pokemon.item?.includes('power')) speedB = Math.floor(speedB / 2);
 
-
 	const quickClawA = !isSwitchA && battle.magicRoomTurns === 0 && slotA.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 	const quickClawB = !isSwitchB && battle.magicRoomTurns === 0 && slotB.pokemon.item === 'quickclaw' && Math.random() < 0.2;
 

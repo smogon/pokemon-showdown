@@ -6,16 +6,16 @@
 import {
 	Clans, UserClans, ClanLogs, ClanBans,
 	ClanPointsLogs, ClanWars, type ClanWarDoc,
-	ClanBattleLogs
+	ClanBattleLogs,
 } from './database';
 import type {
 	Clan, ClanPermissions, CustomClanRank,
-	ClanStats, ClanWar
+	ClanStats, ClanWar,
 } from './interface';
 import { Table } from '../../utils';
 import {
 	K_FACTOR, getExpectedScore, calculateElo, to,
-	logClanActivity, hasClanPermission, generateWarCard
+	logClanActivity, hasClanPermission, generateWarCard,
 } from './utils';
 
 const LOBBY_ROOM_ID = 'clanwarlogs' as RoomID;
@@ -962,23 +962,23 @@ export const warCommands: Chat.ChatCommands = {
 
 		const sortType = toID(sortBy);
 		switch (sortType) {
-			case 'wins':
-				sortField = 'stats.clanBattleWins';
-				headerName = 'Wins';
-				break;
-			case 'losses':
-				sortField = 'stats.clanBattleLosses';
-				headerName = 'Losses';
-				break;
-			case 'winrate':
-				sortField = 'stats.clanBattleWins';
-				headerName = 'Win Rate';
-				break;
-			case 'elo':
-			default:
-				sortField = 'stats.elo';
-				headerName = 'ELO';
-				break;
+		case 'wins':
+			sortField = 'stats.clanBattleWins';
+			headerName = 'Wins';
+			break;
+		case 'losses':
+			sortField = 'stats.clanBattleLosses';
+			headerName = 'Losses';
+			break;
+		case 'winrate':
+			sortField = 'stats.clanBattleWins';
+			headerName = 'Win Rate';
+			break;
+		case 'elo':
+		default:
+			sortField = 'stats.elo';
+			headerName = 'ELO';
+			break;
 		}
 
 		const clans = await Clans.find({}, { skip: 0, limit: 1000, sort: { [sortField]: sortOrder } });

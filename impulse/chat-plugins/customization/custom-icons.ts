@@ -49,7 +49,7 @@ void loadData();
 
 const cacheBuster = () => `?v=${Date.now()}`;
 
-const validateSize = (sizeStr?: string): { valid: boolean; size: number; error?: string } => {
+const validateSize = (sizeStr?: string): { valid: boolean, size: number, error?: string } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
 
 	const size = parseInt(sizeStr);
@@ -155,8 +155,8 @@ export const commands: Chat.ChatCommands = {
 
 			const now = Date.now();
 			data[userId] = {
-				url: url,
-				size: size,
+				url,
+				size,
 				setBy: user.id,
 				createdAt: now,
 				updatedAt: now,
@@ -233,7 +233,7 @@ export const commands: Chat.ChatCommands = {
 				`<center><strong>Custom Icon Commands:</strong><br>Alias: /ic</center>`,
 				`<hr><ul style="list-style-type:none;padding-left:0;">`,
 				listHtml,
-				`</ul>`
+				`</ul>`,
 			].join('');
 
 			this.sendReplyBox(html);

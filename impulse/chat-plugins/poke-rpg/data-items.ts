@@ -1,6 +1,5 @@
 import type { InventoryItem, Stats } from './interface';
 
-
 export const BERRY_FLAVORS: Record<string, { flavor: string, stat: keyof Stats }> = {
 	'figyberry': { flavor: 'Spicy', stat: 'atk' },
 	'wikiberry': { flavor: 'Dry', stat: 'spa' },
@@ -20,7 +19,6 @@ export const TYPE_RESIST_BERRIES: Record<string, string> = {
 	'rindoberry': 'Grass', 'roseliberry': 'Fairy', 'shucaberry': 'Ground', 'tangaberry': 'Bug',
 	'wacanberry': 'Electric', 'yacheberry': 'Ice',
 };
-
 
 export const CUSTOM_ITEMS_DATABASE: Record<string, Omit<InventoryItem, 'quantity'>> = {
 	'potion': { id: 'potion', name: 'Potion', category: 'medicine', description: 'Restores 20 HP.', price: 300, effects: { healAmount: 20 } },

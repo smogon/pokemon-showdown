@@ -97,7 +97,6 @@ export function getCustomEffectiveness(
 			continue;
 		}
 
-
 		if (chartEntry.superEffective.includes(defenderType)) {
 			if (hasStrongWinds && isFlyingType && defenderType === 'Flying' &&
 				['Rock', 'Electric', 'Ice'].includes(moveType)) {

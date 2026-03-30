@@ -10,7 +10,6 @@ import { ITEMS_DATABASE } from './items';
  * Edit this file to create new stories and adventures.
  */
 
-
 export interface ShopTier {
 	requiredBadges: number;
 	items: string[];
@@ -39,7 +38,6 @@ export const SHOP_INVENTORIES: Record<string, ShopInventory> = {
 		],
 	},
 };
-
 
 export function getShopInventory(locationId: string, playerBadges: number): string[] {
 	const shopData = SHOP_INVENTORIES[locationId];

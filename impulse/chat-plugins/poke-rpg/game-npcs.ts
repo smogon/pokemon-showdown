@@ -4,7 +4,6 @@ import type { NPCData, TrainerSpec } from './interface';
  * Game NPCs & Story Configuration
  */
 
-
 export const NPC_DATABASE: Record<string, NPCData> = {
 	'professorelm': {
 		id: 'professorelm',
@@ -51,7 +50,6 @@ export const NPC_DATABASE: Record<string, NPCData> = {
 		dialogue: "This is private property! Get lost!",
 	},
 };
-
 
 export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	'rocketgrunt1a': {
@@ -159,11 +157,9 @@ export const TRAINER_DATABASE: Record<string, TrainerSpec> = {
 	},
 };
 
-
 export const TRAINER_LOCATIONS: Record<string, string[]> = {
 	'newbarktown': ['securitybob'],
 };
-
 
 export interface BadgeInfo {
 	gymLeaderId: string;
@@ -180,7 +176,6 @@ export const BADGES: BadgeInfo[] = [
 		description: 'Allows access to dark caves.',
 	},
 ];
-
 
 export const TOTAL_BADGES = BADGES.length;
 
@@ -209,7 +204,6 @@ export function isValidBadge(badgeName: string): boolean {
 
 export const FIRST_BADGE_NAME = BADGES[0]?.badgeName;
 export const LAST_BADGE_NAME = BADGES[BADGES.length - 1]?.badgeName;
-
 
 export interface StoryEvent {
 	id: string;

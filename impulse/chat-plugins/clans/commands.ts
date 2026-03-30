@@ -6,13 +6,13 @@
 import {
 	Clans, UserClans, ClanLogs, ClanBans,
 	ClanPointsLogs, ClanWars, ClanBattleLogs,
-	type ClanDoc
+	type ClanDoc,
 } from './database';
 import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interface';
 import { Table } from '../../utils';
 import {
 	K_FACTOR, getExpectedScore, calculateElo, to,
-	toDurationString, logClanActivity, hasClanPermission
+	toDurationString, logClanActivity, hasClanPermission,
 } from './utils';
 import { FS } from '../../../lib';
 import { warCommands } from './war-commands';

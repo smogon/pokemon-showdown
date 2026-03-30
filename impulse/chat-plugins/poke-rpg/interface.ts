@@ -338,7 +338,7 @@ export interface TrainerSpec {
 	requiredBadge?: string | string[];
 	blockMessage?: string;
 
-	/** 
+	/**
 	 * Time-based availability. If defined, trainer only appears during specified times.
 	 * If not defined, trainer is always available (fallback behavior).
 	 */
@@ -397,7 +397,7 @@ export interface NPCData {
 	action?: NPCAction;
 	npcType?: 'normal' | 'movetutor' | 'movedeleter' | 'namerater' | 'nurse' | 'shopkeeper' | 'gymleader' | 'elitefoura' | 'champion' | 'rival';
 
-	/** 
+	/**
 	 * Time-based availability. If defined, NPC only appears during specified times.
 	 * If not defined, NPC is always available (fallback behavior).
 	 */

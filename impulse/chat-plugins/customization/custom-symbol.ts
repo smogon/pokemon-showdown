@@ -47,7 +47,7 @@ const parseArgs = (target: string) => {
 	return { name, userId: toID(name), symbol };
 };
 
-const validateSymbol = (symbol: string): { valid: boolean; error?: string } => {
+const validateSymbol = (symbol: string): { valid: boolean, error?: string } => {
 	if (!symbol || symbol.length !== 1) {
 		return { valid: false, error: 'Symbol must be a single character.' };
 	}
@@ -206,7 +206,7 @@ export const commands: Chat.ChatCommands = {
 				`<center><strong>Custom Symbol Commands:</strong><br>Alias: /cs</center>`,
 				`<hr><ul style="list-style-type:none;padding-left:0;">`,
 				listHtml,
-				`</ul><small>Blocked symbols: ${BLOCKED_SYMBOLS.join(' ')}</small>`
+				`</ul><small>Blocked symbols: ${BLOCKED_SYMBOLS.join(' ')}</small>`,
 			].join('');
 
 			this.sendReplyBox(html);
@@ -221,7 +221,7 @@ export const loginfilter: Chat.LoginFilter = user => {
 };
 
 const originalGetIdentity = Users.User.prototype.getIdentity;
-Users.User.prototype.getIdentity = function(room: BasicRoom | null = null): string {
+Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
 
 	if (!customSymbol) return originalGetIdentity.call(this, room);

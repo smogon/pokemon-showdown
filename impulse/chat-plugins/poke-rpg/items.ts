@@ -19,7 +19,6 @@ import {
 	TYPE_RESIST_BERRIES,
 } from './data-items';
 
-
 export function getItemData(itemId: string): Omit<InventoryItem, 'quantity'> | null {
 	const id = toID(itemId);
 	if (CUSTOM_ITEMS_DATABASE[id]) {
@@ -306,7 +305,6 @@ export function useEvolutionStone(player: PlayerData, pokemon: RPGPokemon, itemI
 		return { success: false, message: `${pokemon.species} cannot evolve with ${itemData.name}.` };
 	}
 }
-
 
 /**
  * Use a healing item on a Pokemon during battle.

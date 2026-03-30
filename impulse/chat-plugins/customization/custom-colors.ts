@@ -71,12 +71,7 @@ const HSLToRGB = (H: number, S: number, L: number): RGB => {
 	let R1 = 0, G1 = 0, B1 = 0;
 
 	const hCase = Math.floor(H / 60);
-	if (hCase === 0) { R1 = C; G1 = X; }
-	else if (hCase === 1) { R1 = X; G1 = C; }
-	else if (hCase === 2) { G1 = C; B1 = X; }
-	else if (hCase === 3) { G1 = X; B1 = C; }
-	else if (hCase === 4) { R1 = X; B1 = C; }
-	else if (hCase === 5) { R1 = C; B1 = X; }
+	if (hCase === 0) { R1 = C; G1 = X; } else if (hCase === 1) { R1 = X; G1 = C; } else if (hCase === 2) { G1 = C; B1 = X; } else if (hCase === 3) { G1 = X; B1 = C; } else if (hCase === 4) { R1 = X; B1 = C; } else if (hCase === 5) { R1 = C; B1 = X; }
 
 	return { R: R1 + m, G: G1 + m, B: B1 + m };
 };

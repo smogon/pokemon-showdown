@@ -34,11 +34,11 @@ export const commands: Chat.ChatCommands = {
 		for (const u of Users.users.values()) {
 			u.send(
 				`|pm|~|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
-				(noSave
-					? `The server will restart shortly. <b>Ongoing battles will not be saved and will be lost.</b>`
-					: `While we attempt to save ongoing battles, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+				(noSave ?
+					`The server will restart shortly. <b>Ongoing battles will not be saved and will be lost.</b>` :
+					`While we attempt to save ongoing battles, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
 					`After the restart, you should be able to resume your battles from where you left off, unless saving unexpectedly fails.`) +
-				`</div>`
+					`</div>`
 			);
 		}
 

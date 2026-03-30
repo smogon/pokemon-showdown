@@ -11,7 +11,6 @@ import {
 export function processEndOfTurn(battle: BattleState, messageLog: string[]) {
 	const allSlots = getActiveSlots([...battle.playerSide.slots, ...battle.opponentSide.slots]);
 
-
 	handleEndOfTurnWeather(battle, messageLog, allSlots);
 	handleEndOfTurnFieldEffects(battle, messageLog, allSlots);
 

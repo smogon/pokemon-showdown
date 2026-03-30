@@ -43,7 +43,7 @@ let data: EmoticonData = {
 
 let emoticons: Record<string, string> = {};
 
-let emoteRegex: RegExp = /^$/g;
+let emoteRegex = /^$/g;
 
 const saveData = (): void => {
 	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
@@ -84,9 +84,9 @@ const escapeRegExp = (str: string): string =>
 const buildEmoteRegex = (): void => {
 	const keys = Object.keys(emoticons);
 	emoteRegex =
-		keys.length > 0
-			? new RegExp(`(${keys.map(escapeRegExp).join('|')})`, 'g')
-			: /^$/g;
+		keys.length > 0 ?
+			new RegExp(`(${keys.map(escapeRegExp).join('|')})`, 'g') :
+			/^$/g;
 };
 
 const getEmoteSize = (): string => String(data.emoteSize || DEFAULT_EMOTE_SIZE);
@@ -103,9 +103,8 @@ const addEmoticon = (name: string, url: string, user: User): void => {
 };
 
 const deleteEmoticon = (name: string): void => {
-	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 	delete data.emoticons[name];
-	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
 	delete emoticons[name];
 	saveData();
 	buildEmoteRegex();
@@ -156,7 +155,7 @@ const renderEmoticonCell = (id: string, url: string): string =>
 Impulse.ignoreEmotes = {} as Record<string, boolean>;
 void loadEmoticons();
 
-export const chatfilter: Chat.ChatFilter = function(
+export const chatfilter: Chat.ChatFilter = function (
 	message,
 	user,
 	room,
@@ -265,9 +264,8 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Not ignoring emoticons.');
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 			delete data.ignores[user.id];
-			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
 			delete Impulse.ignoreEmotes[user.id];
 			saveData();
 			this.sendReply('No longer ignoring emoticons.');
@@ -306,7 +304,7 @@ export const commands: Chat.ChatCommands = {
 		help(): void {
 			if (!this.runBroadcast()) return;
 
-			const helpList: { cmd: string; desc: string }[] = [
+			const helpList: { cmd: string, desc: string }[] = [
 				{ cmd: '/emoticon', desc: 'Shows all emoticons' },
 				{ cmd: '/emoticon add [name], [url]', desc: 'Add emoticon. Requires: &.' },
 				{ cmd: '/emoticon delete [name]', desc: 'Remove emoticon. Requires: &.' },

@@ -24,7 +24,7 @@ const IMAGE_FORMATS: { [ext: string]: number[] } = {
 const VALID_EXTENSIONS = Object.keys(IMAGE_FORMATS);
 
 const getExtension = (url: string) => {
-	const match = url.match(/\.([0-9a-z]+)(?:[?#]|$)/i);
+	const match = /\.([0-9a-z]+)(?:[?#]|$)/i.exec(url);
 	return match ? `.${match[1].toLowerCase()}` : '';
 };
 

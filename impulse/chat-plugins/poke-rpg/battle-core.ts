@@ -809,7 +809,6 @@ export function calculateDamage(
 
 	damage = Math.floor(damage * effectivenessMultiplier);
 
-
 	damage = applyFinalDamageModifiersPost(
 		damage, move, moveType, attacker, defender,
 		attackerSlot, defenderSlot, battle, effectiveness, isCritical, abilityContext

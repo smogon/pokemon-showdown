@@ -44,7 +44,6 @@ export const GameConfig = {
 	},
 };
 
-
 export const STARTER_POKEMON = {
 	fire: ['torchic'],
 	water: ['mudkip'],

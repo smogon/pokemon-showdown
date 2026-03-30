@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown - Impulse Server   
+* Pokemon Showdown - Impulse Server
 * Seen & Clearall Plugin.
 * Refactored by @PrinceSky-Git
 */
@@ -90,7 +90,6 @@ const cleanupOldSeen = (daysOld = 365): number => {
 
 	for (const userid in seenData) {
 		if (seenData[userid] < cutoff) {
-			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 			delete seenData[userid];
 			deletedCount++;
 		}
@@ -156,12 +155,12 @@ const formatSeenStatus = (
 	const userNameColor = Impulse.nameColor(targetName, true, true);
 
 	switch (status) {
-		case 'online':
-			return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
-		case 'never':
-			return `${userNameColor} has <b><font color='red'>never been online</font></b>.`;
-		case 'ago':
-			return `${userNameColor} was last seen <b>${duration ?? 'unknown'}</b> ago.`;
+	case 'online':
+		return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
+	case 'never':
+		return `${userNameColor} has <b><font color='red'>never been online</font></b>.`;
+	case 'ago':
+		return `${userNameColor} was last seen <b>${duration ?? 'unknown'}</b> ago.`;
 	}
 };
 

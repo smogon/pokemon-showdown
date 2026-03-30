@@ -14,7 +14,6 @@ export function getActiveAbility(defender: RPGPokemon, attacker?: RPGPokemon): s
 	const attackerAbility = toID(attacker.ability || '');
 	const breakerAbilities = ['moldbreaker', 'turboblaze', 'teravolt'];
 
-
 	if (breakerAbilities.includes(attackerAbility)) {
 		const ignoredAbilities = [
 			'asomeone', 'battlebond', 'comatose', 'disguise', 'multitype',

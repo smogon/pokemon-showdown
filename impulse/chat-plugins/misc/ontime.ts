@@ -43,7 +43,7 @@ const loadData = async (): Promise<void> => {
 
 void loadData().catch(e => console.error('Ontime loadData uncaught:', e));
 
-const convertTime = (ms: number): { h: number; m: number; s: number } => {
+const convertTime = (ms: number): { h: number, m: number, s: number } => {
 	const totalSeconds = Math.max(0, Math.floor(ms / 1000));
 	const s = totalSeconds % 60;
 	const m = Math.floor(totalSeconds / 60) % 60;
@@ -51,7 +51,7 @@ const convertTime = (ms: number): { h: number; m: number; s: number } => {
 	return { h, m, s };
 };
 
-const displayTime = (t: { h: number; m: number; s: number }): string => {
+const displayTime = (t: { h: number, m: number, s: number }): string => {
 	const parts: string[] = [];
 	if (t.h > 0) parts.push(`${t.h.toLocaleString()} ${t.h === 1 ? 'hour' : 'hours'}`);
 	if (t.m > 0) parts.push(`${t.m.toLocaleString()} ${t.m === 1 ? 'minute' : 'minutes'}`);
@@ -70,17 +70,17 @@ export const getTotalOntime = (userid: string): number => data.ontime[userid] ??
 
 const updateOntime = (userid: string, sessionTime: number): void => {
 	if (sessionTime <= 0) return;
-	(data.ontime as Record<string, number>)[userid] = (data.ontime[userid] ?? 0) + sessionTime;
+	(data.ontime)[userid] = (data.ontime[userid] ?? 0) + sessionTime;
 	saveData();
 };
 
 const blockUser = (userid: string): void => {
-	(data.blocks as Record<string, boolean>)[userid] = true;
+	(data.blocks)[userid] = true;
 	saveData();
 };
 
 const unblockUser = (userid: string): void => {
-	delete (data.blocks as Record<string, boolean>)[userid];
+	delete (data.blocks)[userid];
 	saveData();
 };
 
@@ -90,9 +90,9 @@ const formatOntimeDisplay = (
 	currentSession: number,
 ): string => {
 	const displayTotal = displayTime(convertTime(totalTime + currentSession));
-	const sessionPart = currentSession > 0
-		? ` Current session: <strong>${displayTime(convertTime(currentSession))}</strong>.`
-		: '';
+	const sessionPart = currentSession > 0 ?
+		` Current session: <strong>${displayTime(convertTime(currentSession))}</strong>.` :
+		'';
 	return `${Impulse.nameColor(userid, true)}'s total ontime is <strong>${displayTotal}</strong>.${sessionPart}`;
 };
 

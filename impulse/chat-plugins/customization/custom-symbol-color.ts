@@ -52,7 +52,7 @@ const parseArgs = (target: string) => {
 	return { name, userId: toID(name), color };
 };
 
-const formatColorSpan = (color: string, content: string = '■') =>
+const formatColorSpan = (color: string, content = '■') =>
 	`<span style="color: ${color}">${content}</span>`;
 
 const updateSymbolColors = (): void => {
@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 				`<center><strong>Custom Symbol Color Commands:</strong><br>Alias: /sc</center>`,
 				`<hr><ul style="list-style-type:none;padding-left:0;">`,
 				listHtml,
-				`</ul><small>Format: #FF5733 or #F73</small>`
+				`</ul><small>Format: #FF5733 or #F73</small>`,
 			].join('');
 
 			this.sendReplyBox(html);

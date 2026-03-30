@@ -10,7 +10,6 @@
 
 import type { EncounterZone } from './interface';
 
-
 export const LOCATIONS: Record<string, any> = {
 	'newbarktown': {
 		id: 'newbarktown',
@@ -192,7 +191,6 @@ export const LOCATIONS: Record<string, any> = {
 	},
 };
 
-
 export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 	'grassland': {
 		name: 'Tall Grass',
@@ -235,7 +233,6 @@ export const ENCOUNTER_ZONES: Record<string, EncounterZone> = {
 		blockMessage: 'The gate is locked tight. You need to find a key to enter.',
 	},
 };
-
 
 export function getStartingLocation(): { id: string, name: string } {
 	return { id: 'newbarktown', name: 'New Bark Town' };
