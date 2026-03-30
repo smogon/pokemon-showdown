@@ -1,7 +1,7 @@
 /*
 * Pokemon Showdown - Impulse Server
-* Custom Colors chat-plugin.
-* Refactored By @ClarkJ338
+* Custom Colors Plugin.
+* Refactored By @PrinceSky-Git
 */
 import * as crypto from 'crypto';
 import https from 'https';
@@ -129,8 +129,8 @@ Impulse.nameColor = nameColor;
 const reloadCSS = () => {
 	if (global.Config?.serverid) {
 		const url = `https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`;
-		const req = https.get(url, () => {});
-		req.on('error', () => {});
+		const req = https.get(url, () => { });
+		req.on('error', () => { });
 		req.end();
 	}
 };
@@ -156,7 +156,7 @@ const updateColorsCSS = async () => {
 
 		FS(CONFIG_PATH).writeUpdate(() => {
 			const fileContent = FS(CONFIG_PATH).readIfExistsSync();
-			
+
 			if (!fileContent.trim()) return `${cssBlock}\n`;
 
 			const startIndex = fileContent.indexOf(COLORS_START_TAG);
@@ -224,7 +224,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			addCustomColor(targetId, color);
-			
+
 			await updateColorsCSS();
 
 			const escapedName = Utils.escapeHTML(name);
@@ -245,9 +245,9 @@ export const commands: Chat.ChatCommands = {
 			if (!colors[targetId]) {
 				throw new Chat.ErrorMessage(`${target} does not have a custom color.`);
 			}
-			
+
 			removeCustomColor(targetId);
-			
+
 			await updateColorsCSS();
 
 			this.sendReply(`You removed ${target}'s custom color.`);

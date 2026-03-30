@@ -2,7 +2,7 @@
 * Pokemon Showdown
 * Custom Symbol Commands
 * @author PrinceSky-Git
-* Refactored By @ClarkJ338
+* Refactored By PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';
@@ -166,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 			data[userId].symbol = symbol;
 			data[userId].updatedAt = Date.now();
 			saveData();
-			
+
 			applyCustomSymbol(userId);
 
 			const targetHtml = Impulse.nameColor(name, true, false);
@@ -197,8 +197,8 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/symbol update [user], [symbol]", desc: "Update symbol. Requires: &." },
 				{ cmd: "/symbol delete [user]", desc: "Remove custom symbol. Requires: &." },
 			];
-			
-			const listHtml = helpList.map(({ cmd, desc }) => 
+
+			const listHtml = helpList.map(({ cmd, desc }) =>
 				`<li><b>${cmd}</b> - ${desc}</li>`
 			).join('<hr>');
 
@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 				listHtml,
 				`</ul><small>Blocked symbols: ${BLOCKED_SYMBOLS.join(' ')}</small>`
 			].join('');
-			
+
 			this.sendReplyBox(html);
 		},
 	},
@@ -221,13 +221,13 @@ export const loginfilter: Chat.LoginFilter = user => {
 };
 
 const originalGetIdentity = Users.User.prototype.getIdentity;
-Users.User.prototype.getIdentity = function (room: BasicRoom | null = null): string {
+Users.User.prototype.getIdentity = function(room: BasicRoom | null = null): string {
 	const customSymbol = (this as any).customSymbol;
 
 	if (!customSymbol) return originalGetIdentity.call(this, room);
 
 	const punishgroups = Config.punishgroups || { locked: null, muted: null };
-	
+
 	if (this.locked || this.namelocked) {
 		return (punishgroups.locked?.symbol || '\u203d') + this.name;
 	}

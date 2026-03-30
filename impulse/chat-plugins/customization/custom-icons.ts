@@ -1,7 +1,7 @@
 /*
-* Pokemon Showdown
-* Custom Icons Commands
-* Refactored By @MusaddikTemkar
+* Pokemon Showdown - Impulse Server
+* Custom Icons Plugin
+* Refactored By @PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';
@@ -51,7 +51,7 @@ const cacheBuster = () => `?v=${Date.now()}`;
 
 const validateSize = (sizeStr?: string): { valid: boolean; size: number; error?: string } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
-	
+
 	const size = parseInt(sizeStr);
 	if (isNaN(size) || size < MIN_SIZE || size > MAX_SIZE) {
 		return { valid: false, size: 0, error: `Invalid size. Use ${MIN_SIZE}-${MAX_SIZE} pixels.` };
@@ -93,7 +93,7 @@ const updateIcons = (): void => {
 				return fileContent + '\n' + cssBlock + '\n';
 			}
 		});
-		
+
 		if (typeof Impulse !== 'undefined' && Impulse.reloadCSS) {
 			Impulse.reloadCSS();
 		}
@@ -113,14 +113,14 @@ const sendIconNotifications = (
 	const sizeDisplay = formatSizeDisplay(size);
 	const iconHtml = url ? `<img src="${url}${cacheBuster()}" width="32" height="32">` : '';
 	const iconDisplay = iconHtml ? `: ${iconHtml}` : '';
-	
+
 	const user = Users.get(userId);
 	if (user?.connected) {
 		const staffHtml = Impulse.nameColor(staffUser.name, true, true);
 		const msg = `${staffHtml} ${action}${sizeDisplay}${iconDisplay}<br /><center>Refresh if you don't see it.</center>`;
 		user.popup(`|html|${msg}`);
 	}
-	
+
 	const room = Rooms.get(STAFF_ROOM_ID);
 	if (room) {
 		const staffHtml = Impulse.nameColor(staffUser.name, true, true);
@@ -142,7 +142,7 @@ export const commands: Chat.ChatCommands = {
 		set(target, room, user) {
 			this.checkCan('roomowner');
 			const { name, userId, url, sizeStr } = parseArgs(target);
-			
+
 			if (!name || !url) return this.parse('/icon help');
 			if (userId.length > 19) throw new Chat.ErrorMessage('Usernames are not this long...');
 
@@ -181,14 +181,14 @@ export const commands: Chat.ChatCommands = {
 
 			const updateFields: Partial<IconEntry> = { updatedAt: Date.now() };
 			if (url) updateFields.url = url;
-			
+
 			if (sizeStr) {
 				const { valid, size, error } = validateSize(sizeStr);
 				if (!valid) throw new Chat.ErrorMessage(error!);
 				updateFields.size = size;
 			}
 
-			// Merge updates into existing data
+			// merge updates into existing data
 			Object.assign(data[userId], updateFields);
 			saveData();
 			updateIcons();
@@ -224,8 +224,8 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/icon update [user], [url], [size]", desc: "Update icon. Requires: &." },
 				{ cmd: "/icon delete [user]", desc: "Remove icon. Requires: &." },
 			];
-			
-			const listHtml = helpList.map(({ cmd, desc }) => 
+
+			const listHtml = helpList.map(({ cmd, desc }) =>
 				`<li><b>${cmd}</b> - ${desc}</li>`
 			).join('<hr>');
 
@@ -235,7 +235,7 @@ export const commands: Chat.ChatCommands = {
 				listHtml,
 				`</ul>`
 			].join('');
-			
+
 			this.sendReplyBox(html);
 		},
 	},

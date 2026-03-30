@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown - Impulse Server
-* Custom Avatars chat-plugin.
+* Custom Avatars Plugin.
 * Refactored By @PrinceSky-Git
 */
 
@@ -10,7 +10,7 @@ import { toID } from '../../../sim/dex';
 const CONFIG = {
 	path: 'config/avatars/',
 	staffRoom: 'staff',
-	maxSize: 5 * 1024 * 1024, // 5MB
+	maxSize: 5 * 1024 * 1024,
 	timeout: 10000,
 	baseUrl: Config.avatarUrl || 'impulse-ps.mooo.com/avatars/',
 };
@@ -34,22 +34,22 @@ const isValidImageSignature = (buffer: Uint8Array, ext: string) => {
 };
 
 const displayAvatar = (filename: string) => {
-	// Adding timestamp (v=Date.now()) is crucial here to force the browser to reload the image
+	// adding timestamp (v=Date.now()) is crucial here to force the browser to reload the image
 	// after we overwrote it, otherwise it shows the cached old version.
 	const url = `${CONFIG.baseUrl}${filename}?v=${Date.now()}`;
 	return `<img src='${url}' width='80' height='80'>`;
 };
 
 const notifyChanges = (
-	user: string, 
-	targetId: string, 
-	action: 'set' | 'delete', 
+	user: string,
+	targetId: string,
+	action: 'set' | 'delete',
 	filename?: string
 ) => {
 	const setterColor = Impulse.nameColor(user.name, true, true);
 	const targetColor = Impulse.nameColor(targetId, true, true);
 	const targetUser = Users.get(targetId);
-	
+
 	let staffMsg = '';
 	let userMsg = '';
 
@@ -69,7 +69,7 @@ const notifyChanges = (
 };
 
 const deleteUserFiles = async (userId: string) => {
-	await Promise.all(VALID_EXTENSIONS.map(ext => 
+	await Promise.all(VALID_EXTENSIONS.map(ext =>
 		FS(CONFIG.path + userId + ext).unlinkIfExists()
 	));
 };
@@ -81,7 +81,7 @@ const downloadImage = async (urlStr: string, name: string, ext: string) => {
 
 		const controller = new AbortController();
 		const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeout);
-		
+
 		const res = await fetch(urlStr, { signal: controller.signal }).catch(err => {
 			throw new Error(err.name === 'AbortError' ? 'Request timed out' : 'Failed to fetch');
 		});
@@ -98,7 +98,7 @@ const downloadImage = async (urlStr: string, name: string, ext: string) => {
 
 		await FS(CONFIG.path).parentDir().mkdirp();
 		await FS(CONFIG.path + name + ext).write(Buffer.from(buffer));
-		
+
 		return { success: true };
 	} catch (err: any) {
 		return { error: err.message || 'Unknown error' };
@@ -127,11 +127,11 @@ export const commands: Chat.ChatCommands = {
 			if (result.error) return this.errorReply(`Failed: ${result.error}`);
 
 			const filename = userId + ext;
-			
+
 			for (const validExt of VALID_EXTENSIONS) {
 				if (validExt !== ext) await FS(CONFIG.path + userId + validExt).unlinkIfExists();
 			}
-			
+
 			const userAvatars = Users.Avatars.avatars[userId];
 			const alreadyHasAvatar = userAvatars?.allowed.includes(filename);
 
@@ -160,7 +160,7 @@ export const commands: Chat.ChatCommands = {
 			try {
 				Users.Avatars.removeAllowed(userId, filename);
 				Users.Avatars.save(true);
-				
+
 				await deleteUserFiles(userId);
 
 				this.sendReply(`${target}'s avatar removed.`);

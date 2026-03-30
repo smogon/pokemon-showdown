@@ -1,8 +1,8 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Symbol Colors Commands
 * @author PrinceSky-Git
-* Refactored By @ClarkJ338
+* Refactored By PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';
@@ -52,7 +52,7 @@ const parseArgs = (target: string) => {
 	return { name, userId: toID(name), color };
 };
 
-const formatColorSpan = (color: string, content: string = '■') => 
+const formatColorSpan = (color: string, content: string = '■') =>
 	`<span style="color: ${color}">${content}</span>`;
 
 const updateSymbolColors = (): void => {
@@ -67,7 +67,7 @@ const updateSymbolColors = (): void => {
 
 		FS(CONFIG_PATH).writeUpdate(() => {
 			const fileContent = FS(CONFIG_PATH).readIfExistsSync();
-			
+
 			if (!fileContent.trim()) return cssBlock + '\n';
 
 			const startIndex = fileContent.indexOf(START_TAG);
@@ -199,8 +199,8 @@ export const commands: Chat.ChatCommands = {
 				{ cmd: "/symbolcolor update [user], [hex]", desc: "Update color. Requires: &." },
 				{ cmd: "/symbolcolor delete [user]", desc: "Remove color. Requires: &." },
 			];
-			
-			const listHtml = helpList.map(({ cmd, desc }) => 
+
+			const listHtml = helpList.map(({ cmd, desc }) =>
 				`<li><b>${cmd}</b> - ${desc}</li>`
 			).join('<hr>');
 
@@ -210,7 +210,7 @@ export const commands: Chat.ChatCommands = {
 				listHtml,
 				`</ul><small>Format: #FF5733 or #F73</small>`
 			].join('');
-			
+
 			this.sendReplyBox(html);
 		},
 
