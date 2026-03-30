@@ -1,8 +1,8 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Custom Symbol Commands
 * @author PrinceSky-Git
-* Refactored By PrinceSky-Git
+* Refactored By @PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';

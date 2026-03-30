@@ -2,7 +2,7 @@
 * Pokemon Showdown - Impulse Server
 * Symbol Colors Commands
 * @author PrinceSky-Git
-* Refactored By PrinceSky-Git
+* Refactored By @PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';
