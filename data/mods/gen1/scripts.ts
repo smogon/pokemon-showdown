@@ -41,9 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!this.transformed) {
 				const baseMoveSlot = this.baseMoveSlots[this.side.lastSelectedMoveSlot];
-				if (baseMoveSlot.id === 'mimic') {
-					baseMoveSlot.pp = ppData.pp;
-				}
+				if (baseMoveSlot.id === 'mimic') baseMoveSlot.pp = ppData.pp;
 			}
 
 			return amount;
