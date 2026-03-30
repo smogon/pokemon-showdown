@@ -218,7 +218,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove')) {
+			if (sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') {
 				if (TWO_TURN_MOVES.includes(move.id)) {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
 					if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
