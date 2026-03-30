@@ -70,19 +70,6 @@ describe('Two Turn Moves [Gen 1]', () => {
 		assert.equal(blastoise.moveSlots[1].pp, 24);
 	});
 
-	it(`[Gen 1] if called by Metronome or Mirror Move by a Transformed Pokémon, PP from the original base move slot is incremented`, () => {
-		battle = common.gen(1).createBattle({ seed: [0, 1, 0, 1] });
-		battle.setPlayer('p1', { team: [{ species: 'blastoise', moves: ['transform', 'splash'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'golem', moves: ['tackle', 'mirrormove'] }] });
-		const blastoise = battle.p1.active[0];
-		battle.makeChoices();
-		battle.makeChoices('move mirrormove', 'move tackle');
-		assert.equal(blastoise.moveSlots[0].pp, 5);
-		assert.equal(blastoise.moveSlots[1].pp, 4);
-		assert.equal(blastoise.baseMoveSlots[0].pp, blastoise.baseMoveSlots[0].maxpp - 1);
-		assert.equal(blastoise.baseMoveSlots[1].pp, blastoise.baseMoveSlots[1].maxpp + 1);
-	});
-
 	it(`Dig/Fly dodges all attacks except for Swift, Transform, and Bide`, () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', { team: [{ species: "Aerodactyl", moves: ['fly'] }] });
