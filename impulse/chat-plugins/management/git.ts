@@ -7,7 +7,7 @@
 */
 
 import { FS, Utils } from '../../../lib';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
 
 const findGitRoot = async (startPath: string): Promise<string | null> => {
 	let currentPath = FS(startPath);
@@ -31,20 +31,62 @@ const getErrorMessage = (err: unknown): string => {
 };
 
 const executeGitCommand = async (command: string, gitRoot: string): Promise<string> => {
-	try {
-		const output = execSync(command, {
+	return new Promise((resolve, reject) => {
+		exec(command, {
 			cwd: gitRoot,
 			encoding: 'utf8',
 			timeout: 30000,
+		}, (error, stdout, stderr) => {
+			if (error) {
+				const message = getErrorMessage(error);
+				reject(new Chat.ErrorMessage(`${command} failed: ${message}\n${stderr}`));
+			} else {
+				resolve(stdout);
+			}
 		});
-		return output;
-	} catch (err: unknown) {
-		const message = getErrorMessage(err);
-		throw new Chat.ErrorMessage(`${command} failed: ${message}`);
-	}
+	});
 };
 
 export const commands: Chat.ChatCommands = {
+	async gitstash(target, room, user): Promise<void> {
+		if (!this.runBroadcast()) return;
+		this.checkCan('bypassall');
+
+		const gitRoot = await findGitRoot(FS.ROOT_PATH);
+		if (!gitRoot) {
+			throw new Chat.ErrorMessage('Could not find git root directory.');
+		}
+
+		let output = '';
+		if (target && target.toLowerCase() === 'pop') {
+			const stashListOutput = await executeGitCommand('sudo git stash list', gitRoot);
+			const lines = stashListOutput.split('\n');
+			const impulseStashLine = lines.find(line => line.includes('impulse-stash-'));
+
+			if (!impulseStashLine) {
+				throw new Chat.ErrorMessage('Could not find any stashes created by /gitstash.');
+			}
+
+			const match = /stash@\{\d+\}/.exec(impulseStashLine);
+			if (!match) {
+				throw new Chat.ErrorMessage('Could not parse stash reference.');
+			}
+			const stashRef = match[0];
+			output = await executeGitCommand(`sudo git stash pop ${stashRef}`, gitRoot);
+		} else {
+			const identifier = `impulse-stash-${Date.now()}`;
+			output = await executeGitCommand(`sudo git stash push -u -m "${identifier}"`, gitRoot);
+		}
+
+		const html = `<details><summary>Git stash completed</summary>` +
+			`<pre>${Utils.escapeHTML(output)}</pre></details>`;
+		return this.sendReplyBox(html);
+	},
+	gitstashhelp: [
+		`/gitstash - Stashes local changes. Requires: ~`,
+		`/gitstash pop - Pops the stashed local changes. Requires: ~`,
+	],
+
 	async gitpull(target, room, user): Promise<void> {
 		if (!this.runBroadcast()) return;
 		this.checkCan('bypassall');
@@ -91,6 +133,10 @@ export const commands: Chat.ChatCommands = {
 			{
 				cmd: "/gitstatus",
 				desc: "Shows the current git status. Requires: ~.",
+			},
+			{
+				cmd: "/gitstash [pop]",
+				desc: "Stashes or pops local changes. Requires: ~.",
 			},
 		];
 		const html = `<center><strong>Git Commands:</strong></center>` +
