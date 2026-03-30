@@ -373,9 +373,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Defense by 2 stages.",
 		shortDesc: "Raises the user's Defense by 2.",
 	},
-	batonpass: {
+	batonpass: { // updated
 		name: "Baton Pass",
-		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes transferred to it, as well as the effects of confusion, Aqua Ring, Curse, Dragon Cheer, Embargo, Focus Energy, Gastro Acid, Heal Block, Ingrain, Leech Seed, Lock-On (Mind Reader), Magnet Rise, Perish Song, Power Trick, Telekinesis, and a substitute with its remaining HP. The effect of Gastro Acid is not transferred if the recipient has an Ability that cannot be affected.",
+		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes transferred to it, as well as the effects of confusion, Aqua Ring, Curse, Dragon Cheer, Embargo, Focus Energy, Gastro Acid, Heal Block, Ingrain, Leech Seed, Lock-On (Mind Reader), Magnet Rise, Perish Song, Power Trick, Prickly Pear, Resilient Oil, Telekinesis, and a substitute with its remaining HP. The effect of Gastro Acid is not transferred if the recipient has an Ability that cannot be affected.",
 		shortDesc: "User switches, passing stat changes and more.",
 		gen8: {
 			desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes transferred to it, as well as the effects of confusion, Aqua Ring, Curse, Embargo, Focus Energy, Gastro Acid, Heal Block, Ingrain, Leech Seed, Lock-On (Mind Reader), Magnet Rise, Perish Song, Power Trick, Telekinesis, and a substitute with its remaining HP. The effect of Gastro Acid is not transferred if the recipient has an Ability that cannot be affected.",
@@ -7974,7 +7974,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	resilientoil: {
 		name: "Resilient Oil",
 		desc: "For 5 turns, the user and its party members are protected from having their stat stages lowered by other Pokemon. The user has 1/16 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect. Fails if both effects are already active on the user and the user's side.",
-		shortDesc: "Sets Mist. Gives user the Aqua Ring effect.",
+		shortDesc: "Sets Mist and gives user the Aqua Ring effect.",
+
+		start: "  [TEAM] became covered in oil!",
+		heal: "  A veil of oil restored [POKEMON]'s HP!",
+		end: "  [TEAM] is no longer protected by oil!",
+		block: "  [POKEMON] is protected by the oil!",
 	},
 	rockjaw: {
 		name: "Rock Jaw",
@@ -8138,7 +8143,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Sets Rain Dance. Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Sets Rain. Traps + damages the target for 4-5 turns.",
 
-		start: "#whirlpool",
+		start: "  [POKEMON] was lassoed!",
 	},
 	whitewand: {
 		name: "White Wand",
