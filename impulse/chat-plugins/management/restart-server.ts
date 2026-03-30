@@ -18,7 +18,7 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 			throw new Chat.ErrorMessage(
-				"For safety reasons, using /restartserver with the `nosave` option can only be done during lockdown."
+				"For safety reasons, using /restartserver with the \`nosave`\ option can only be done during lockdown."
 			);
 		}
 
