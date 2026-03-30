@@ -217,12 +217,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') && TWO_TURN_MOVES.includes(move.id)) {
-				const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
-				if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
-			}
-			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') && pokemon.transformed) {
-				if (pokemon.side.lastSelectedMoveSlot < pokemon.baseMoveSlots.length) {
+			if ((sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove')) {
+				if (TWO_TURN_MOVES.includes(move.id)) {
+					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
+					if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
+				}
+				if (pokemon.transformed && pokemon.side.lastSelectedMoveSlot < pokemon.baseMoveSlots.length) {
 					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp += 1;
 					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp %= 64;
 				}
