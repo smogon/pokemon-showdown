@@ -1,8 +1,8 @@
 /*
  * Pokemon Showdown - Impulse Server
- * Emoticons chat-plugin.
+ * Emoticons Plugin.
  * @author PrinceSky-Git
- * Refactored By PrinceSky-Git
+ * Refactored By @PrinceSky-Git
  */
 
 import { FS, Utils } from '../../../lib';

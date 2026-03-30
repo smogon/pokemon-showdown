@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown - Impulse Server
-* News chat-plugin.
+* News Plugin.
 * @author PrinceSky-Git
 * Refactored By @PrinceSky-Git
 */
