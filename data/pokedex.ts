@@ -7020,7 +7020,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredItem: "Whirligig",
-		battleOnly: "Castform",
+		changesFrom: "Castform",
 		gen: 9,
 	},
 	kecleon: {

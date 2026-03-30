@@ -72,6 +72,7 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 		if (sigMove.flags['dance'] && dex.gen >= 7) details["Dance move"] = "";
 		if (sigMove.flags['slicing'] && dex.gen >= 9) details["Slicing move"] = "";
 		if (sigMove.flags['wind'] && dex.gen >= 9) details["Wind move"] = "";
+		if (sigMove.flags['commanding'] && dex.gen >= 9) details["Commanding move"] = "";
 
 		if (sigMove.zMove?.basePower) {
 			details["Z-Power"] = String(sigMove.zMove.basePower);

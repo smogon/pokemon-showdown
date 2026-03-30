@@ -1101,7 +1101,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return this.modify(spa, 0.75);
 			}
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAccuracy(accuracy, target, source, move) {
 			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
 			if (move.flags['powder'] && this.field.isIrritantWeather('pollinate')) {
 				return true;
@@ -1291,7 +1291,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (!pokemon.hasType('Fighting') || pokemon.hasItem('energynullifier')) return;
 			return critRatio + 1;
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAccuracy(accuracy, target, source, move) {
 			if (target.hasItem('energynullifier')) return;
 			if (source !== target && move.type === 'Fighting') {
 				this.chainModify(1.2);
@@ -1636,7 +1636,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return this.modify(spd, 1.25);
 			}
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAccuracy(accuracy, target, source, move) {
 			if (target.hasItem('energynullifier')) return;
 			if (source !== target && move.type === 'Steel') {
 				this.debug('Magnetosphere guarantees accuracy');
@@ -1691,7 +1691,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return this.modify(spe, 1.25);
 			}
 		},
-		onAnyAccuracy(accuracy, target, source, move) {
+		onAccuracy(accuracy, target, source, move) {
 			if (move.flags['wind'] && this.field.isClearingWeather('strongwinds')) {
 				return true;
 			}
