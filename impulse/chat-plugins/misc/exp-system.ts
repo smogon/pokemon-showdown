@@ -1,10 +1,10 @@
 /*
 * Pokemon Showdown - Impulse Server
 * Exp System Commands
-* Instructions: Add this line in chat.ts output message.
-* Note: You need to import ExpSystem in chat.ts
-if (this.user.registered) void ExpSystem.addExp(this.user.id, 1);
-@author PrinceSky-Git
+* Instructions: Add this line in   * chat.ts output message.
+* Note: You need to import         * ExpSystem in chat.ts
+* if (this.user.registered) void   * ExpSystem.addExp(this.user.id,   * 1);
+* @author PrinceSky-Git
 */
 
 import { ImpulseDB } from '../../impulse-db';

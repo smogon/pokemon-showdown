@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown - Impulse       * Server   
+* Pokemon Showdown - Impulse Server   
 * Seen & Clearall Plugin.
 * Refactored by @PrinceSky-Git
 */

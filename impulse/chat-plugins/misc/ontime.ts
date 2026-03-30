@@ -1,7 +1,7 @@
 /*
  * Pokemon Showdown - Impulse Server
  * Ontime Plugin.
- * Refactored By PrinceSky-Git
+ * Refactored By @PrinceSky-Git
  */
 import { FS } from '../../../lib';
 import { Table } from '../../utils';

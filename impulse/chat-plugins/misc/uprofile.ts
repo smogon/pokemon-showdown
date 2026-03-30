@@ -1,5 +1,5 @@
 /*
- * Pokemon Showdown - Impulse       * Server
+ * Pokemon Showdown - Impulse Server
  * User Profile Plugin
  * @author TurboRx
  */
