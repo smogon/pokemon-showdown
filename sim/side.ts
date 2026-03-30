@@ -209,7 +209,7 @@ export class Side {
 	 * lastSelectedMove never resets
 	 * lastSelectedMoveSlot resets on every switch
 	 */
-	lastSelectedMove: ID = '';
+	lastSelectedMove: ID = '00' as ID;
 	lastSelectedMoveSlot = 0;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
@@ -655,7 +655,7 @@ export class Side {
 			}
 		}
 
-		const lockedMove = pokemon.getLockedMove(true);
+		const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);
@@ -1110,10 +1110,10 @@ export class Side {
 				const pokemon = choice.pokemon;
 				if (['frz', 'slp'].includes(pokemon.status)) {
 					// do nothing
-				} else if (pokemon.volatiles['partiallytrapped']) {
+				} else if (move === 'cannotmove') {
 					// 'cannotmove' is what is set in the cartridge
 					this.lastSelectedMove = 'cannotmove' as ID;
-				} else if (move === 'struggle') {
+				} else if (move === 'struggle' || move === 'cannotmove') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
 				} else if (typeof choice.moveSlot === 'number') {
@@ -1122,7 +1122,7 @@ export class Side {
 					this.lastSelectedMoveSlot = choice.moveSlot;
 				}
 				// choice.moveid should be synced with lastSelectedMove
-				choice.moveid = this.lastSelectedMove || '00' as ID;
+				choice.moveid = this.lastSelectedMove as ID;
 			}
 		}
 		this.battle.queue.addChoice(this.choice.actions);

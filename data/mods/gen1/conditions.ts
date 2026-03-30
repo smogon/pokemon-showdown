@@ -207,10 +207,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (source === this.effectState.source) return true;
 		},
 		onSemiLockPriority: 1,
-		onSemiLockMove: 'fight',
-		onDisableMove(pokemon) {
-			if (this.effectState.maybeLocked) {
-				pokemon.maybeLocked = true;
+		onSemiLockMove: 'cannotmove',
+		onDisableMove(target) {
+			if (this.effectState.maybeLocked && !['frz', 'slp'].includes(target.status)) {
+				target.maybeLocked = true;
 			}
 		},
 	},
@@ -220,7 +220,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// until you try to use an attack
 		duration: 2,
 		onDisableMove(target) {
-			target.maybeLocked = true;
+			if (!['frz', 'slp'].includes(target.status)) {
+				target.maybeLocked = true;
+			}
 		},
 	},
 	partialtrappinglock: {

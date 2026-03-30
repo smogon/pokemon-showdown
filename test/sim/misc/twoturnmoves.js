@@ -124,4 +124,19 @@ describe('Two Turn Moves [Gen 1]', () => {
 		assert.fullHP(battle.p2.active[0]);
 		assert.equal(battle.p2.active[0].boosts.atk, 6);
 	});
+
+	it(`should be delayed by trapping moves`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 1] }, [[
+			{ species: 'Aerodactyl', moves: ['solarbeam'] },
+		], [
+			{ species: 'Gyarados', moves: ['wrap', 'splash'] },
+		]]);
+		const aerodactyl = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['partiallytrapped'].duration, 1);
+		battle.makeChoices();
+		assert(!aerodactyl.volatiles['partiallytrapped']);
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert.false.fullHP(battle.p2.active[0]);
+	});
 });

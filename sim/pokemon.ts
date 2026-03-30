@@ -941,31 +941,35 @@ export class Pokemon {
 	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
-	getLockedMove(includeSemiLocked?: boolean): ID | null {
-		const lockedMove = this.battle.runEvent('LockMove', this);
-		if (lockedMove !== true) return lockedMove;
-		return includeSemiLocked ? this.getSemiLockedMove() : null;
+	getLockedMove(): ID | null {
+		const lockedMove = this.battle.priorityEvent('LockMove', this);
+		return (lockedMove === true) ? null : lockedMove;
 	}
 
 	/**
-	 * Moves that lock you when you select the Fight button, ut don't prevent you from switching out.
-	 * Those are Gen 1 trapping moves, Gen 1 and 2 Bide, and Gen 2 and 3 Encore.
+	 * Moves that lock you when you select the Fight button, but don't prevent you from switching out.
+	 * Those are Gen 1 trapping moves, Gen 1 and 2 Bide, and Gen 2-4 Encore. Gen 1 freeze and sleep also semi-lock you.
 	 */
 	getSemiLockedMove(): ID | null {
-		const lockedMove = this.battle.runEvent('SemiLockMove', this);
+		const lockedMove = this.battle.priorityEvent('SemiLockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
-			if (lockedMove === 'recharge') {
+			switch (lockedMove) {
+			case 'recharge':
 				return [{
 					move: 'Recharge',
 					id: 'recharge' as ID,
 				}];
-			}
-			if (lockedMove === 'fight') {
+			case 'cannotmove':
+				return [{
+					move: 'Cannot Move',
+					id: 'cannotmove' as ID,
+				}];
+			case 'fight':
 				return [{
 					move: 'Fight',
 					id: 'fight' as ID,
@@ -1087,9 +1091,7 @@ export class Pokemon {
 			this.trapped = true;
 		} else {
 			lockedMove = this.getSemiLockedMove();
-			if (this.maybeLocked && !(this.battle.gen === 1 && ['frz', 'slp'].includes(this.status))) {
-				lockedMove = null;
-			}
+			if (this.maybeLocked) lockedMove = null;
 		}
 
 		// Information should be restricted for the last active Pokémon
