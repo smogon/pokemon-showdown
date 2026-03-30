@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Clans Database & Types
 * @author PrinceSky-Git
 */
