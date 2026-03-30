@@ -424,45 +424,45 @@ export const commands: Chat.ChatCommands = {
 				desc: string,
 				extra?: string,
 				strongWindsBoosted?: string,
-				setupMove?: string,
 				setupAbility?: string,
+				setupMove?: string,
 			},
 		} = {
 			sun: {
 				names: ["Sun", "Sunny Day", "Drought", "Fire"],
 				desc: "During the effect, the damage of Fire-type attacks is multiplied by 1.5x and the damage of Water-type attacks is multiplied by 0.5x, and Pokemon cannot be frozen.",
 				strongWindsBoosted: "1.5x increase to Fire-type moves boosted to 1.75x, and 0.5x decrease to Water-type moves is changed to 0.25x.",
-				setupMove: "Sunny Day",
 				setupAbility: "Drought",
+				setupMove: "Sunny Day",
 			},
 			rain: {
 				names: ["Rain", "Rain Dance", "Drizzle", "Water"],
 				desc: "During the effect, the damage of Water-type attacks is multiplied by 1.5x and the damage of Fire-type attacks is multiplied by 0.5x.",
 				strongWindsBoosted: "1.5x increase to Water-type moves boosted to 1.75x, and 0.5 decrease to Fire-type moves is changed to 0.25x.",
-				setupMove: "Rain Dance",
 				setupAbility: "Drizzle",
+				setupMove: "Rain Dance",
 			},
 			hail: {
 				names: ["Hail", "Snow Warning", "Snow", "Ice"],
 				desc: "At the end of each turn except the last, all active Pokémon lose 1/16 of their maximum HP, rounded down, unless they are an Ice or Steel type. During the effect, the Defense and Sp.Def of Ice-type Pokémon is multiplied by 1.25x.",
 				strongWindsBoosted: "1/16 damage is increased to 1/8, and Steel types are no longer immune to Hail.",
 				extra: "Snow does not exist in Swirling Seasons.",
-				setupMove: "Hail",
 				setupAbility: "Snow Warning",
+				setupMove: "Hail",
 			},
 			bloodmoon: {
 				names: ["Blood Moon", "Eventide", "Dark"],
 				desc: "During the effect, the damage of super effective attacks is multiplied by 1.25x and Dark-type Status moves have their priority increased by 1.",
 				strongWindsBoosted: "All Status moves gain +1 priority, and Dark-type Pokémon become immune to all Status moves (not including self-targeting Status moves).",
-				setupMove: "Blood Moon",
 				setupAbility: "Eventide",
+				setupMove: "Blood Moon",
 			},
 			fog: {
 				names: ["Fog", "Condensation", "Foghorn", "Normal"],
 				desc: "During the effect, Normal-type attacks can damage Ghost types and non-Normal-type moves have their accuracy multiplied by 0.9x (this includes Typeless moves).",
 				strongWindsBoosted: "Normal-type Pokemon and moves become Typeless, allowing them to take and deal neutral damage.",
-				setupMove: "Foghorn",
 				setupAbility: "Condensation",
+				setupMove: "Foghorn",
 			},
 			sandstorm: {
 				names: ["Sandstorm", "Sand Stream", "Rock", "Sand"],
@@ -475,22 +475,22 @@ export const commands: Chat.ChatCommands = {
 				names: ["Dust Storm", "Dust Devil", "Ground", "Dust"],
 				desc: "During the effect, the Speed of Ground-type Pokémon is multiplied by 1.25x and the the damage of Water- and Grass-type attacks is multiplied by 0.5x.",
 				strongWindsBoosted: "Non-grounded Pokémon can be hit with Ground-type attacks.",
-				setupMove: "Dust Storm",
 				setupAbility: "Dust Devil",
+				setupMove: "Dust Storm",
 			},
 			pollenstorm: {
 				names: ["Pollen Storm", "Hay Fever", "Pollinate", "Grass", "Pollen"],
 				desc: "During the effect, powder moves ignore accuracy checks and the Attack and Sp.Atk of non-Grass- and Bug-type Pokémon is multiplied by 0.75x.",
 				strongWindsBoosted: "Activates Grassy Terrain.",
-				setupMove: "Pollinate",
 				setupAbility: "Hay Fever",
+				setupMove: "Pollinate",
 			},
 			pheromones: {
 				names: ["Pheromones", "Secretion", "Swarm Signal", "Bug"],
 				desc: "During the effect, the Speed of Bug- and Poison-type Pokémon is multiplied by 1.5x and the accuracy of moves used by Bug- and Poison-type Pokémon is multiplied by 1.33x.",
 				strongWindsBoosted: "At the end of each turn except the last, all active Pokémon are confused, unless they are a Bug or Poison type.",
-				setupMove: "Swarm Signal",
 				setupAbility: "Secretion",
+				setupMove: "Swarm Signal",
 			},
 			smog: {
 				names: ["Smog", "Pollution", "Smog Spread", "Poison"],
@@ -503,58 +503,63 @@ export const commands: Chat.ChatCommands = {
 				names: ["Fairy Dust", "Incantation", "Sprinkle", "Fairy"],
 				desc: "At the end of each turn except the last, all active Pokémon have 1/16 of their maximum HP restored, rounded down. During the effect, the Sp.Def of Fairy-type Pokémon is multiplied by 1.25x.",
 				strongWindsBoosted: "Activates Misty Terrain.",
-				setupMove: "Sprinkle",
 				setupAbility: "Incantation",
+				setupMove: "Sprinkle",
 			},
 			battleaura: {
 				names: ["Battle Aura", "Stand Off", "Aura Projection", "Fighting", "Aura"],
 				desc: "During the effect, raises the chance for Fighting-type Pokémon to land a critical hit by 1 stage and Fighting-type moves have their accuracy multiplied by 1.2x.",
 				strongWindsBoosted: "Prevents Fighting-type Pokémon from having their stats lowered.",
-				setupMove: "Aura Projection",
 				setupAbility: "Stand Off",
+				setupMove: "Aura Projection",
 			},
 			paranormalactivity: {
 				names: ["Paranormal Activity", "Seance", "Se\u0301ance", "Haunt", "Ghost", "Paranormal", "PActivity", "P.Activity"],
 				desc: "At the end of each turn except the last, all active Pokémon lose 1/16 of their maximum HP, rounded down, unless they are a Ghost, Normal, or Dark type.",
 				strongWindsBoosted: "Ghost-type attacks' type effectiveness against Normal is changed to be super effective.",
-				setupMove: "Haunt",
 				setupAbility: "Se\u0301ance",
+				setupMove: "Haunt",
 			},
 			dreamscape: {
 				names: ["Dreamscape", "Dreamer", "Daydream", "Psychic", "Dream"],
 				desc: "During the effect, the damage of Psychic-type attacks is multiplied by 1.5x and the damage of Dark-type attacks is multiplied by 0.5x.",
 				strongWindsBoosted: "Activates Psychic Terrain.",
-				setupMove: "Daydream",
 				setupAbility: "Dreamer",
+				setupMove: "Daydream",
 			},
 			dragonforce: {
 				names: ["Dragon Force", "Arcanum", "Dragon", "DForce"],
 				desc: "During the effect, the damage of super effective attacks is multiplied by 0.8x and the damage of Dragon-type attacks is multiplied by 1.25x. These multipliers stack, so super effective Dragon-type attacks deal regular damage (0.8x1.25=1).",
 				strongWindsBoosted: "The damage of attacks is multiplied by 1.5x. Non-Dragon-type Pokémon lose 10% of their maximum HP after successfully landing a damaging move. The boosts are cumulative, meaning: super effective non-Dragon-type moves deal 20% more damage (0.8x1.5), super effective Dragon moves deal 50% more damage (0.8x1.25x1.5), neutral effective non-Dragon moves deal 50% more damage (1.5), and neutral effective Dragon moves deal 87.5% more damage (1.25x1.5).",
-				setupMove: "Dragon Force",
 				setupAbility: "Arcanum",
+				setupMove: "Dragon Force",
 			},
 			thunderstorm: {
 				names: ["Thunderstorm", "Stormfront", "Supercell", "Electric", "Thunder"],
 				desc: "At the end of each turn except the last, one random Pokémon is struck by lightning. During the effect, the Speed of Electric-type Pokémon is multiplied by 1.5x.",
 				strongWindsBoosted: "Activates Electric Terrain.",
-				setupMove: "Supercell",
 				setupAbility: "Stormfront",
+				setupMove: "Supercell",
 			},
 			magnetosphere: {
 				names: ["Magnetosphere", "Ferroflux", "Magnetize", "Steel", "Magnet"],
 				desc: "During the effect, Steel-type moves ignore accuracy checks, and the Sp.Def of Steel-type Pokémon is multiplied by 1.25x.",
 				strongWindsBoosted: "Steel-type Pokémon become non-grounded.",
-				setupMove: "Magnetize",
 				setupAbility: "Ferroflux",
+				setupMove: "Magnetize",
 			},
 			strongwinds: {
 				names: ["Strong Winds", "Galeforce", "Flying", "Winds", "Wind"],
 				desc: "Clears all active Weathergies on activation. If other Weathergies are activated after Strong Winds, they gain the boosted effects described for as long as Strong Winds remains active. During the effect, wind moves ignore accuracy checks and the Speed of Flying-type Pokémon is multiplied by 1.25x.",
 				extra: "Cannot be boosted by Strong Winds.",
-				setupMove: "Strong Winds",
 				setupAbility: "Galeforce",
+				setupMove: "Strong Winds",
 			},
+			/* cataclysmiclight: {
+				names: ["Cataclysmic Light", "Cataclysm", "Endram-Odai", "Ultra", "Ultra Beast", "UB"],
+				desc: "During the effect, the damage of attacks used by Ultra Beasts is multiplied by 1.25x and the damage of attacks targeted at Ultra Beasts is multiplied by 0.75x.",
+				setupAbility: "Cataclysmiclight",
+			}, */
 		};
 
 		const aliasMap: { [alias: string]: string } = {};
@@ -565,16 +570,26 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
+		const groups: [string, string[]][] = [
+			['Climate', ['sun', 'rain', 'hail', 'bloodmoon', 'fog']],
+			['Irritant', ['sandstorm', 'duststorm', 'pollenstorm', 'pheromones', 'smog', 'fairydust']],
+			['Energy', ['battleaura', 'paranormalactivity', 'dreamscape', 'dragonforce', 'thunderstorm', 'magnetosphere']],
+			['Clearing', ['strongwinds']],
+			// ['Cataclysm', ['cataclysmiclight']],
+		];
+
+		const categoryMap: { [id: string]: string } = {};
+		for (const [label, ids] of groups) {
+			for (const id of ids) {
+				categoryMap[id] = label;
+			}
+		}
+
 		if (!target) {
-			const groups = [
-				['sun', 'rain', 'hail', 'bloodmoon', 'fog'],
-				['sandstorm', 'duststorm', 'pollenstorm', 'pheromones', 'smog', 'fairydust'],
-				['battleaura', 'paranormalactivity', 'dreamscape', 'dragonforce', 'thunderstorm', 'magnetosphere'],
-				['strongwinds'],
-			];
 			const htmlLines = [
 				`Available Weathergies:`,
-				...groups.map(group =>
+				...groups.map(([label, group]) =>
+					`<b>${label}:</b> ` +
 					group
 						.filter(id => weathergies[id])
 						.map(id => {
@@ -598,7 +613,9 @@ export const commands: Chat.ChatCommands = {
 
 		let html = '';
 		const displayName = weathergy.names[0];
-		html += `<h2>${displayName}</h2><p>${Utils.escapeHTML(weathergy.desc)}</p>`;
+		const category = categoryMap[id];
+		html += `<h2>${displayName}${category ? ` (${Utils.escapeHTML(category)})` : ''}</h2>`;
+		html += `<p>${Utils.escapeHTML(weathergy.desc)}</p>`;
 		if (weathergy.strongWindsBoosted) {
 			html += `<p><b>Strong Winds boosted:</b> ${Utils.escapeHTML(weathergy.strongWindsBoosted)}</p>`;
 		}

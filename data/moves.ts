@@ -22032,12 +22032,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Dragon",
 	},
-	dragonsdice: { // tested, works as intended
+	dragonsdice: { // incomplete, untested
 		num: 10093,
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon, target, move) {
-			const result = this.random(20);
+			let result = this.random(20);
+			if (pokemon.item === 'loadeddice') result = Math.max(result, this.random(20));
 			let bp;
 			if (result === 0) {
 				this.debug('self-hit');
