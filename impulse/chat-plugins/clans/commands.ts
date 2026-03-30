@@ -3,13 +3,17 @@
 * Clans Commands
 * @author PrinceSky-Git
 */
-import { Clans, UserClans, ClanLogs, ClanBans,
+import {
+	Clans, UserClans, ClanLogs, ClanBans,
 	ClanPointsLogs, ClanWars, ClanBattleLogs,
-	type ClanDoc } from './database';
+	type ClanDoc
+} from './database';
 import type { Clan, ClanPermissions, CustomClanRank, ClanStats } from './interface';
 import { Table } from '../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo, to,
-	toDurationString, logClanActivity, hasClanPermission } from './utils';
+import {
+	K_FACTOR, getExpectedScore, calculateElo, to,
+	toDurationString, logClanActivity, hasClanPermission
+} from './utils';
 import { FS } from '../../../lib';
 import { warCommands } from './war-commands';
 
@@ -638,7 +642,7 @@ export const commands: Chat.ChatCommands = {
 									to(new Date(invite.timestamp), { date: true, time: true }),
 								]);
 							});
-							
+
 							output += Table(sentTitle, sentHeaderRow, sentDataRows);
 						} else {
 							output += `<div class="infobox">${clan.name} has no pending outgoing invitations.</div>`;

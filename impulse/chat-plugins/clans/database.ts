@@ -19,8 +19,8 @@ export type UserClanDoc = UserClanInfo & { _id: ID } & Document;
 export type ClanLogDoc = ClanLog & { clanId: ID } & Document;
 export type ClanPointsLogDoc = ClanPointsLogEntry & { clanId: ID } & Document;
 export type ClanBanDoc = { _id: ID, banned: boolean } & Document;
-export type ClanBattleLogDoc = ClanBattleLogEntry & Document; // Added
-export type ClanWarDoc = ClanWar & Document; // Added
+export type ClanBattleLogDoc = ClanBattleLogEntry & Document;
+export type ClanWarDoc = ClanWar & Document;
 
 export const Clans = ImpulseDB<ClanDoc>('clans');
 export const UserClans = ImpulseDB<UserClanDoc>('userclans');

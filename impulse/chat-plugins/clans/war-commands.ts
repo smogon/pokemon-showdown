@@ -3,14 +3,20 @@
 * Clans War Commands
 * @author PrinceSky-Git
 */
-import { Clans, UserClans, ClanLogs, ClanBans,
+import {
+	Clans, UserClans, ClanLogs, ClanBans,
 	ClanPointsLogs, ClanWars, type ClanWarDoc,
-	ClanBattleLogs } from './database';
-import type { Clan, ClanPermissions, CustomClanRank,
-	ClanStats, ClanWar } from './interface';
+	ClanBattleLogs
+} from './database';
+import type {
+	Clan, ClanPermissions, CustomClanRank,
+	ClanStats, ClanWar
+} from './interface';
 import { Table } from '../../utils';
-import { K_FACTOR, getExpectedScore, calculateElo, to,
-	logClanActivity, hasClanPermission, generateWarCard } from './utils';
+import {
+	K_FACTOR, getExpectedScore, calculateElo, to,
+	logClanActivity, hasClanPermission, generateWarCard
+} from './utils';
 
 const LOBBY_ROOM_ID = 'clanwarlogs' as RoomID;
 
@@ -90,7 +96,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("There was an error creating the war document. Aborting.");
 		}
 
-		// Only set the cooldown once we know the war was created successfully
+		// only set the cooldown once we know the war was created successfully
 		await Clans.updateOne(
 			{ _id: clanId },
 			{ $set: { 'stats.lastWarChallenge': Date.now() } }
@@ -407,7 +413,7 @@ export const warCommands: Chat.ChatCommands = {
 			return this.errorReply("There was an error creating the war document. Aborting.");
 		}
 
-		// Consistent with challenge: cooldown set after successful insert
+		// consistent with challenge: cooldown set after successful insert
 		await Clans.updateOne(
 			{ _id: clanId },
 			{ $set: { 'stats.lastWarChallenge': Date.now() } }
@@ -956,23 +962,23 @@ export const warCommands: Chat.ChatCommands = {
 
 		const sortType = toID(sortBy);
 		switch (sortType) {
-		case 'wins':
-			sortField = 'stats.clanBattleWins';
-			headerName = 'Wins';
-			break;
-		case 'losses':
-			sortField = 'stats.clanBattleLosses';
-			headerName = 'Losses';
-			break;
-		case 'winrate':
-			sortField = 'stats.clanBattleWins';
-			headerName = 'Win Rate';
-			break;
-		case 'elo':
-		default:
-			sortField = 'stats.elo';
-			headerName = 'ELO';
-			break;
+			case 'wins':
+				sortField = 'stats.clanBattleWins';
+				headerName = 'Wins';
+				break;
+			case 'losses':
+				sortField = 'stats.clanBattleLosses';
+				headerName = 'Losses';
+				break;
+			case 'winrate':
+				sortField = 'stats.clanBattleWins';
+				headerName = 'Win Rate';
+				break;
+			case 'elo':
+			default:
+				sortField = 'stats.elo';
+				headerName = 'ELO';
+				break;
 		}
 
 		const clans = await Clans.find({}, { skip: 0, limit: 1000, sort: { [sortField]: sortOrder } });
