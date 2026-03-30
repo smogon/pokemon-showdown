@@ -1107,13 +1107,15 @@ export class Side {
 			for (const choice of this.choice.actions) {
 				if (choice.choice !== 'move' || !choice.pokemon) continue;
 				const move = choice.moveid;
-				const pokemon = choice.pokemon;
-				if (['frz', 'slp'].includes(pokemon.status)) {
-					// do nothing
-				} else if (move === 'cannotmove') {
-					// 'cannotmove' is what is set in the cartridge
-					this.lastSelectedMove = 'cannotmove' as ID;
-				} else if (move === 'struggle' || move === 'cannotmove') {
+				if (move === 'fight') {
+					const pokemon = choice.pokemon;
+					if (['frz', 'slp'].includes(pokemon.status)) {
+						// do nothing
+					} else if (pokemon.volatiles['partiallytrapped']) {
+						// 'cannotmove' is what is set in the cartridge
+						this.lastSelectedMove = 'cannotmove' as ID;
+					}
+				} else if (move === 'struggle') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
 				} else if (typeof choice.moveSlot === 'number') {

@@ -32,7 +32,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	bide: {
 		inherit: true,
-		priority: 0,
 		accuracy: true,
 		condition: {
 			onStart(pokemon) {
@@ -60,6 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
+			onSemiLockPriority: 1,
 			onSemiLockMove: 'bide',
 		},
 		type: "???", // Will look as Normal but it's STAB-less

@@ -964,11 +964,6 @@ export class Pokemon {
 					move: 'Recharge',
 					id: 'recharge' as ID,
 				}];
-			case 'cannotmove':
-				return [{
-					move: 'Cannot Move',
-					id: 'cannotmove' as ID,
-				}];
 			case 'fight':
 				return [{
 					move: 'Fight',

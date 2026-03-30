@@ -80,7 +80,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
-		onSemiLockPriority: 2,
 		onSemiLockMove: 'fight',
 	},
 	frz: {
@@ -100,7 +99,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				target.cureStatus();
 			}
 		},
-		onSemiLockPriority: 2,
 		onSemiLockMove: 'fight',
 	},
 	psn: {
@@ -206,8 +204,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
-		onSemiLockPriority: 1,
-		onSemiLockMove: 'cannotmove',
+		onSemiLockPriority: -1,
+		onSemiLockMove: 'fight',
 		onDisableMove(target) {
 			if (this.effectState.maybeLocked && !['frz', 'slp'].includes(target.status)) {
 				target.maybeLocked = true;

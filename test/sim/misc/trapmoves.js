@@ -299,7 +299,7 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 
 		battle.makeChoices('move spore', 'move swordsdance');
 		battle.makeChoices('move wrap', 'switch 2');
-		battle.makeChoices('move wrap', 'move cannotmove'); // Exeggutor needs to spend a turn trapped to select a move
+		battle.makeChoices('move wrap', 'move fight'); // Exeggutor needs to spend a turn trapped to select a move
 		battle.makeChoices('move wrap', 'switch 2');
 		assert.equal(battle.p1.active[0].volatiles['partialtrappinglock'].duration, 1); // this is just a rng check
 		battle.makeChoices('move wrap', 'move fight');
