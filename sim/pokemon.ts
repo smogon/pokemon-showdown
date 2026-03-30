@@ -1495,6 +1495,7 @@ export class Pokemon {
 			accuracy: 0,
 			evasion: 0,
 		};
+
 		this.moveSlots = this.baseMoveSlots.slice();
 
 		this.transformed = false;
