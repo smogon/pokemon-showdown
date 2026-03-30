@@ -1122,7 +1122,7 @@ export class Side {
 					this.lastSelectedMoveSlot = choice.moveSlot;
 				}
 				// choice.moveid should be synced with lastSelectedMove
-				choice.moveid = this.lastSelectedMove as ID;
+				choice.moveid = this.lastSelectedMove;
 			}
 		}
 		this.battle.queue.addChoice(this.choice.actions);
