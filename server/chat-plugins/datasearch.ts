@@ -586,20 +586,14 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!target) {
-			const htmlLines = [
-				`Available Weathergies:`,
-				...groups.map(([label, group]) =>
-					`<b>${label}:</b> ` +
-					group
-						.filter(id => weathergies[id])
-						.map(id => {
-							const entry = weathergies[id];
-							const displayName = entry.names[0];
-							return `<button name="send" value="/weathergy ${id}">${displayName}</button>`;
-						}).join(' ')
-				),
-			];
-			this.sendReplyBox(htmlLines.join('<br />'));
+			const htmlLines = groups.map(([label, group]) =>
+				`<b>${label}:</b> ` + group.filter(id => weathergies[id]).map(id => {
+					const entry = weathergies[id];
+					const displayName = entry.names[0];
+					return `<button name="send" value="/weathergy ${id}">${displayName}</button>`;
+				}).join(' ')
+			);
+			this.sendReplyBox(`<div style="overflow-x: hidden;"><h2>Available Weathergies</h2>` + htmlLines.map(line => `<p style="margin: 2px 0;">${line}</p>`).join('') + `</div>`);
 			return;
 		}
 
@@ -611,10 +605,9 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		let html = '';
 		const displayName = weathergy.names[0];
 		const category = categoryMap[id];
-		html += `<h2>${displayName}${category ? ` (${Utils.escapeHTML(category)})` : ''}</h2>`;
+		let html = `<div style="overflow-x: hidden;"><h2>${displayName}${category ? ` (${Utils.escapeHTML(category)})` : ''}</h2>`;
 		html += `<p>${Utils.escapeHTML(weathergy.desc)}</p>`;
 		if (weathergy.strongWindsBoosted) {
 			html += `<p><b>Strong Winds boosted:</b> ${Utils.escapeHTML(weathergy.strongWindsBoosted)}</p>`;
@@ -624,6 +617,7 @@ export const commands: Chat.ChatCommands = {
 			html += `<p><b>Setup Ability:</b> ${weathergy.setupAbility || '-'}<br /><b>Setup Move:</b> ${weathergy.setupMove || '-'}</p>`;
 		}
 		html = html.replace(/(<br\s*\/?>|\s)*$/, '');
+		html += '</div></div>';
 		this.sendReplyBox(html);
 	},
 	weathergyhelp() {
