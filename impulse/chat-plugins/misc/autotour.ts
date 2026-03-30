@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Automated Tournaments Commands
 * @author PrinceSky-Git
 */
