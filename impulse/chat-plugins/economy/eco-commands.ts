@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Economy Commands
 * @author PrinceSky-Git
 */

@@ -1,5 +1,5 @@
 /*
-* Pokemon Showdown
+* Pokemon Showdown - Impulse Server
 * Giveaway Commands
 * @author TurboRx
 */
@@ -21,9 +21,7 @@ interface Giveaway {
 	hostId: string;
 	hostName: string;
 	type: GiveawayType;
-	// For currency giveaways
 	prize?: number;
-	// For TCG card giveaways
 	cardId?: string;
 	cardName?: string;
 	cardRarity?: string;
@@ -120,11 +118,11 @@ async function endGiveaway(roomid: string, room: Room): Promise<void> {
 	const randomIndex = Math.floor(Math.random() * giveaway.participants.length);
 	const winner = giveaway.participants[randomIndex];
 
-	// Award the prize based on giveaway type
+	// award the prize based on giveaway type
 	if (giveaway.type === 'currency') {
 		await Economy.updateBalance(winner.userid, giveaway.prize!);
 	} else if (giveaway.type === 'tcgcard') {
-		// Import TCG collections dynamically
+		// import tcg collections dynamically
 		try {
 			const { userCollectionsCollection } = require('../tcg/tcg_collections');
 			await userCollectionsCollection.updateOne(
@@ -257,7 +255,7 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply("Specify a card ID. Usage: /giveaway start tcgcard, [cardId], [duration in minutes or 'manual']");
 				}
 
-				// Fetch card details
+				// fetch card details
 				try {
 					const { getCard } = require('../tcg/tcg_utils');
 					const { tcgCardsCollection } = require('../tcg/tcg_collections');
