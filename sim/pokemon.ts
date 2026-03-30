@@ -950,7 +950,8 @@ export class Pokemon {
 	 * Moves that lock you when you select the Fight button, but don't prevent you from switching out.
 	 * Those are Gen 1 trapping moves, Gen 1 and 2 Bide, and Gen 2-4 Encore. Gen 1 freeze and sleep also semi-lock you.
 	 */
-	getSemiLockedMove(): ID | null {
+	getSemiLockedMove(restrictData?: boolean): ID | null {
+		if (restrictData && this.maybeLocked) return null;
 		const lockedMove = this.battle.priorityEvent('SemiLockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
@@ -1082,11 +1083,11 @@ export class Pokemon {
 
 	getMoveRequestData() {
 		let lockedMove = this.getLockedMove();
+		const hardLocked = !!lockedMove;
 		if (lockedMove) {
 			this.trapped = true;
 		} else {
-			lockedMove = this.getSemiLockedMove();
-			if (this.maybeLocked) lockedMove = null;
+			lockedMove = this.getSemiLockedMove(true);
 		}
 
 		// Information should be restricted for the last active Pokémon
@@ -1103,8 +1104,15 @@ export class Pokemon {
 			moves,
 		};
 
-		if (isLastActive) {
-			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+		if (hardLocked || !isLastActive) {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			this.maybeTrapped = false;
+			if (hardLocked || canSwitchIn) {
+				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
+				if (this.trapped) data.trapped = true;
+			}
+		} else {
 			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
@@ -1119,14 +1127,6 @@ export class Pokemon {
 					data.maybeTrapped = true;
 				}
 			}
-		} else {
-			this.maybeDisabled = false;
-			this.maybeLocked = false;
-			if (canSwitchIn) {
-				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
-				if (this.trapped) data.trapped = true;
-			}
-			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {
