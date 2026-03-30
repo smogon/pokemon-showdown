@@ -7755,7 +7755,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	evoboost: {
 		name: "Evoboost",
-		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. Move fails if the user is not Eevee or Skinka.",
+		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This move fails if the user is not Eevee or Skinka.",
 		shortDesc: "Eevee/Skinka: +1 Atk, Def, SpA, SpD, and Spe.",
 	},
 	excalibur: {
