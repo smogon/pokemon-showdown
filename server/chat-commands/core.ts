@@ -525,7 +525,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	blockpmshelp: [
 		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
-		`/blockpms [ac, trusted, friends, friendsandtrusted, +] - Blocks PMs, except for staff and the specified group(s).`,
+		`/blockpms [unlocked, ac, trusted, friends, friendsandtrusted, +] - Blocks PMs, except for staff and the specified group(s).`,
 	],
 
 	unblockpm: 'unblockpms',
