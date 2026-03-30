@@ -2,7 +2,7 @@
 * Pokemon Showdown - Impulse Server
 * News chat-plugin.
 * @author PrinceSky-Git
-* Refactored By @ClarkJ338
+* Refactored By @PrinceSky-Git
 */
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex';
@@ -43,7 +43,7 @@ const loadData = async (): Promise<void> => {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
 			const json = JSON.parse(raw);
-			// Merge with defaults to prevent crashes if keys are missing
+			// merge with defaults to prevent crashes if keys are missing
 			data = {
 				news: json.news || {},
 				blocks: json.blocks || {},
@@ -51,7 +51,7 @@ const loadData = async (): Promise<void> => {
 		}
 	} catch (e) {
 		console.error('Failed to load server news:', e);
-		// If load fails, keep default empty state to prevent crashes
+		// if load fails, keep default empty state to prevent crashes
 		data = { news: {}, blocks: {} };
 	}
 };
@@ -59,7 +59,7 @@ const loadData = async (): Promise<void> => {
 void loadData();
 
 const generateNewsDisplay = (): string[] => {
-	// Safety check just in case
+	// safety check just in case
 	if (!data.news) return [];
 
 	const news = Object.values(data.news)
@@ -73,7 +73,7 @@ const generateNewsDisplay = (): string[] => {
 };
 
 const onUserConnect = (user: User): void => {
-	// Robust checks for data existence
+	// robust checks for data existence
 	if (!data.news || Object.keys(data.news).length === 0) return;
 	if (data.blocks && data.blocks[user.id]) return;
 

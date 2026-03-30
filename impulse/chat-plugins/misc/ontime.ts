@@ -1,7 +1,7 @@
 /*
- * Pokemon Showdown
- * Ontime chat-plugin.
- * Refactored By @ClarkJ338
+ * Pokemon Showdown - Impulse Server
+ * Ontime Plugin.
+ * Refactored By PrinceSky-Git
  */
 import { FS } from '../../../lib';
 import { Table } from '../../utils';
@@ -146,7 +146,7 @@ export const commands: Chat.ChatCommands = {
 
 			const ontimeSnapshot: Record<string, number> = { ...data.ontime };
 
-			// Include currently connected users who may not yet have a saved record
+			// include currently connected users who may not yet have a saved record
 			for (const u of Users.users.values()) {
 				if (u.connected && u.named && !u.isPublicBot && !isBlockedOntime(u.id)) {
 					ontimeSnapshot[u.id] ??= 0;

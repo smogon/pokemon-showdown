@@ -1,6 +1,6 @@
 /*
- * Pokemon Showdown
- * User Profile Command
+ * Pokemon Showdown - Impulse       * Server
+ * User Profile Plugin
  * @author TurboRx
  */
 import { ImpulseDB } from '../../impulse-db';
@@ -25,25 +25,17 @@ interface ProfileSettingsDocument {
 const ProfileSettingsDB = ImpulseDB<ProfileSettingsDocument>('profilesettings');
 const TcgProfileDB = ImpulseDB<TcgUserProfile>('tcg_profiles');
 
-/**
- * Validate if a string is a valid hex color code
- * Supports both 3-character (#RGB) and 6-character (#RRGGBB) formats
- */
 function isValidHexColor(value: string): boolean {
 	return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
 }
 
-/**
- * Validate if a string is a valid image URL
- * Checks for http/https protocol and common image extensions
- */
 function isValidImageUrl(value: string): boolean {
 	try {
 		const url = new URL(value);
 		if (url.protocol !== 'http:' && url.protocol !== 'https:') {
 			return false;
 		}
-		// Check for common image extensions (excluding SVG for security reasons)
+		// check for common image extensions (excluding SVG for security reasons)
 		const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 		const pathname = url.pathname.toLowerCase();
 		return imageExtensions.some(ext => pathname.endsWith(ext));
@@ -52,20 +44,17 @@ function isValidImageUrl(value: string): boolean {
 	}
 }
 
-/** Cache for registration data to avoid repeated API calls */
+// cache for registration data to avoid repeated API calls
 interface RegistrationCacheEntry {
 	data: { registertime?: number, username?: string } | null;
 	timestamp: number;
 }
 
 const registrationCache = new Map<string, RegistrationCacheEntry>();
-const REGISTRATION_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes cache duration
+const REGISTRATION_CACHE_DURATION = 10 * 60 * 1000; // 10 mins
 
-/**
- * Get registration data with caching to improve reliability
- */
 async function getRegistrationData(userid: string): Promise<{ registertime?: number, username?: string } | null> {
-	// Check cache first
+	// check cache first
 	const cached = registrationCache.get(userid);
 	if (cached && (Date.now() - cached.timestamp) < REGISTRATION_CACHE_DURATION) {
 		return cached.data;
@@ -75,59 +64,54 @@ async function getRegistrationData(userid: string): Promise<{ registertime?: num
 		const response = await Net(`https://${Config.routes.root}/users/${userid}.json`).get();
 		const parsed = JSON.parse(response);
 
-		// Validate the response structure before using it
+		// validate the response structure before using it
 		const data = (parsed && typeof parsed === 'object') ? {
 			registertime: typeof parsed.registertime === 'number' ? parsed.registertime : undefined,
 			username: typeof parsed.username === 'string' ? parsed.username : undefined,
 		} : null;
 
-		// Cache the result (even if null/invalid - to prevent repeated failed requests)
+		// cache the result (even if null/invalid - to prevent repeated failed requests)
 		registrationCache.set(userid, { data, timestamp: Date.now() });
 
 		return data;
 	} catch {
-		// On error, if we have stale cache, use it rather than showing nothing
 		if (cached) {
 			return cached.data;
 		}
-		// Cache the failure to prevent immediate retries
 		registrationCache.set(userid, { data: null, timestamp: Date.now() });
 		return null;
 	}
 }
 
 /**
- * Get the avatar display for a user, including custom avatars
- * For offline users, shows 'unknown' avatar
+ * get the avatar display for a user, including custom avatars
+ * for offline users, shows 'unknown' avatar
  */
 function getAvatarDisplay(user: User | null): string {
 	let avatar: string | number | undefined;
 	let avatarUrl = '';
 
-	// If user is online AND connected, use their current avatar
-	// A user object may exist but not be connected (recently went offline)
 	if (user?.connected) {
 		avatar = user.avatar;
 	} else {
-		// User is offline - show 'unknown' avatar
+
 		avatar = 'unknown';
 	}
 
-	// Check if user has a custom avatar (file with extension)
+	// check if user has a custom avatar (file with extension)
 	if (avatar && typeof avatar === 'string' && avatar.includes('.')) {
-		// Custom avatar from config/avatars/ - serve directly
-		// Don't use Avatars.src() as it returns empty string for files with extensions
+		// custom avatar from config/avatars/ - serve directly
+		// don't use Avatars.src() as it returns empty string for files with extensions
 		avatarUrl = `${getAvatarBaseUrl()}${avatar}`;
 	} else {
-		// Convert numeric avatar to name, then use the server's avatar system
+
 		const avatarName = getAvatarName(avatar);
 
-		// Use the server's avatar system for official avatars
+		// use the server's avatar system for official avatars
 		if (Users.Avatars?.src) {
 			avatarUrl = Users.Avatars.src(avatarName);
 		}
 
-		// Fallback to default sprite URL if src() returns empty or doesn't exist
 		if (!avatarUrl) {
 			avatarUrl = `https://${Config.routes.client}/sprites/trainers/${avatarName}.png`;
 		}
@@ -137,7 +121,7 @@ function getAvatarDisplay(user: User | null): string {
 }
 
 /**
- * Get user information from various Impulse systems
+ * get user information from various impulse systems
  */
 async function getUserProfileData(userid: string) {
 	const data: {
@@ -157,7 +141,7 @@ async function getUserProfileData(userid: string) {
 		textColor?: string,
 	} = {};
 
-	// Fetch all data in parallel for better performance
+	// fetch all data in parallel for better performance
 	const [
 		expDoc, profileSettings, userClanInfo, registrationResult, tcgProfile,
 	] = await Promise.allSettled([
@@ -168,19 +152,19 @@ async function getUserProfileData(userid: string) {
 		TcgProfileDB.findOne({ userId: userid }),
 	]);
 
-	// Process EXP data
+	// process EXP data
 	if (expDoc.status === 'fulfilled' && expDoc.value) {
 		data.exp = expDoc.value.exp;
 		data.level = expDoc.value.level;
 	}
 
-	// Process ontime data - use the ontime module's function to read from the JSON file
+	// process ontime data - use the ontime module's function to read from the JSON file
 	const ontime = getTotalOntime(userid);
 	if (ontime > 0) {
 		data.ontime = ontime;
 	}
 
-	// Process profile settings (status, background, text color)
+	// process profile settings
 	if (profileSettings.status === 'fulfilled' && profileSettings.value) {
 		const settings = profileSettings.value;
 		if (settings.status) {
@@ -195,12 +179,11 @@ async function getUserProfileData(userid: string) {
 		}
 	}
 
-	// Process clan data - fetch clan details if user is in a clan
+	// process clan data
 	if (userClanInfo.status === 'fulfilled' && userClanInfo.value?.memberOf) {
 		const clanResult = await Clans.findOne({ _id: userClanInfo.value.memberOf }).catch(() => null);
 		if (clanResult) {
 			data.clanName = clanResult.name;
-			// Get the user's rank in the clan
 			const memberData = clanResult.members[userid];
 			if (memberData && clanResult.ranks[memberData.rank]) {
 				data.clanRank = clanResult.ranks[memberData.rank].name;
@@ -208,7 +191,7 @@ async function getUserProfileData(userid: string) {
 		}
 	}
 
-	// Process registration date from cached result
+	// process registration date from cached result
 	if (registrationResult.status === 'fulfilled' && registrationResult.value) {
 		const result = registrationResult.value;
 		if (result.registertime) {
@@ -221,13 +204,13 @@ async function getUserProfileData(userid: string) {
 		}
 	}
 
-	// Process TCG data with rank calculation
+	// process TCG data with rank calculation
 	if (tcgProfile.status === 'fulfilled' && tcgProfile.value) {
 		const userTcgData = tcgProfile.value;
 		data.tcgPoints = userTcgData.collectionPoints || 0;
 		data.tcgTotalCards = userTcgData.totalQuantity || 0;
 
-		// Calculate ranks by fetching counts of users with higher values
+		// calculate ranks by fetching counts of users with higher values
 		const [pointsRankResult, cardsRankResult] = await Promise.allSettled([
 			TcgProfileDB.countDocuments({ collectionPoints: { $gt: userTcgData.collectionPoints || 0 } }),
 			TcgProfileDB.countDocuments({ totalQuantity: { $gt: userTcgData.totalQuantity || 0 } }),
@@ -245,9 +228,7 @@ async function getUserProfileData(userid: string) {
 	return data;
 }
 
-/**
- * Format ontime for display
- */
+// format ontime for display
 function formatOntime(time: number): string {
 	const s = Math.floor((time / 1000) % 60);
 	const m = Math.floor((time / (1000 * 60)) % 60);
@@ -260,32 +241,27 @@ function formatOntime(time: number): string {
 	return parts.length ? parts.join(', ') : '0 seconds';
 }
 
-/**
- * Get status display with color and icon, optionally with custom status
- */
 function getStatusDisplay(user: User | null, customStatus?: string): string {
 	let statusText = '';
 
-	// Check if user is both present AND connected
-	// A user object may exist but not be connected (recently went offline)
 	if (!user?.connected) {
 		statusText = `<b style="color: red;">●&nbsp;Offline</b>`;
 	} else {
 		const statusType = user.statusType || 'online';
 		switch (statusType) {
-		case 'busy':
-			statusText = `<b style="color: orange;">●&nbsp;Busy</b>`;
-			break;
-		case 'idle':
-			statusText = `<b style="color: gray;">●&nbsp;Idle</b>`;
-			break;
-		case 'online':
-		default:
-			statusText = `<b style="color: green;">●&nbsp;Online</b>`;
+			case 'busy':
+				statusText = `<b style="color: orange;">●&nbsp;Busy</b>`;
+				break;
+			case 'idle':
+				statusText = `<b style="color: gray;">●&nbsp;Idle</b>`;
+				break;
+			case 'online':
+			default:
+				statusText = `<b style="color: green;">●&nbsp;Online</b>`;
 		}
 	}
 
-	// Append custom status in parentheses if provided
+	// append custom status in parentheses if provided
 	if (customStatus) {
 		statusText += ` - (${Chat.escapeHTML(customStatus)})`;
 	}
@@ -303,53 +279,50 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(targetId);
 			const targetName = target || user.name;
 
-			// Get user profile data
+			// get user profile data
 			const profileData = await getUserProfileData(targetId);
 
-			// Build background style with proper validation
 			let backgroundStyle = '';
 			if (profileData.backgroundType === 'image' && profileData.backgroundValue) {
-				// Re-validate URL before use in CSS context
+				// re-validate URL before use in CSS context
 				if (isValidImageUrl(profileData.backgroundValue)) {
-					// Escape single quotes in URL for CSS context
 					const cssUrl = profileData.backgroundValue.replace(/'/g, "\\'");
 					backgroundStyle = `background-image: url('${cssUrl}'); background-size: cover; background-position: center;`;
 				}
 			} else if (profileData.backgroundType === 'color' && profileData.backgroundValue) {
-				// Re-validate hex color before use in CSS context
+				// re-validate hex color before use in CSS context
 				if (isValidHexColor(profileData.backgroundValue)) {
 					backgroundStyle = `background-color: ${profileData.backgroundValue};`;
 				}
 			}
 
-			// Build text color style
+			// build text color style
 			let textColorStyle = '';
 			if (profileData.textColor && isValidHexColor(profileData.textColor)) {
 				textColorStyle = `color: ${profileData.textColor};`;
 			}
 
-			// Build the profile HTML in table format
+			// build the profile HTML in table format
 			let buf = `<table cellspacing="0" cellpadding="3" style="min-width:100%;min-height:150px;${backgroundStyle}">`;
 			buf += '<tr>';
 
-			// Avatar section (left side)
+			// avatar section (left side)
 			buf += '<td style="width: 80px; text-align: center; border-right: solid 1px black; padding: 12px;">';
 
-			// Username in avatar section
+			// username in avatar section
 			buf += `<div style="text-align: center; padding-bottom: 6px;"><b class="username">${Impulse.nameColor(targetName, true, true)}</b></div>`;
 
-			// Avatar image - always display (either current or 'unknown' for offline users)
+			// avatar image
 			buf += `<div style="text-align: center;">${getAvatarDisplay(targetUser)}</div>`;
 
 			buf += '</td>';
 
-			// Info section (right side)
+			// info section (right side)
 			buf += '<td>';
 
-			// Status with custom status in brackets if available
+			// status with custom status in brackets (if available)
 			buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Status:</u> ${getStatusDisplay(targetUser, profileData.customStatus)}</p>`;
 
-			// Clan (if available)
 			if (profileData.clanName) {
 				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Clan:</u> <span>${Chat.escapeHTML(profileData.clanName)}`;
 				if (profileData.clanRank) {
@@ -358,17 +331,17 @@ export const commands: Chat.ChatCommands = {
 				buf += `</span></p>`;
 			}
 
-			// Registration date
+			// registration date
 			if (profileData.registrationDate) {
 				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Registration Date:</u> <span>${profileData.registrationDate}</span></p>`;
 			}
 
-			// Level (if available)
+			// level (if available)
 			if (profileData.level !== undefined) {
 				buf += `<p style="margin: 4px 0;${textColorStyle}"><u>Level:</u> <span>${profileData.level}</span></p>`;
 			}
 
-			// Ontime - show if user has stored ontime or is currently online
+			// ontime
 			const storedOntime = profileData.ontime ?? 0;
 			const currentSessionOntime = getCurrentSessionTime(targetUser);
 			const totalOntime = storedOntime + currentSessionOntime;
@@ -438,7 +411,7 @@ export const commands: Chat.ChatCommands = {
 
 			const value = target.trim();
 
-			// Check if it's a hex color code
+			// check if it's a hex color code
 			if (isValidHexColor(value)) {
 				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
@@ -452,7 +425,7 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Check if it's a valid image URL
+			// check if it's a valid image URL
 			if (isValidImageUrl(value)) {
 				await ProfileSettingsDB.updateOne(
 					{ _id: user.id },
@@ -466,7 +439,6 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Invalid input
 			return this.errorReply("Invalid input. Please provide a valid hex color code (e.g., #FF5733) or an image URL ending with a valid image extension (.png, .jpg, .jpeg, .gif, .webp).");
 		},
 
@@ -485,7 +457,6 @@ export const commands: Chat.ChatCommands = {
 
 			const value = target.trim();
 
-			// Validate hex color
 			if (!isValidHexColor(value)) {
 				return this.errorReply("Invalid hex color code. Please provide a valid hex color (e.g., #FF5733 or #FFF).");
 			}

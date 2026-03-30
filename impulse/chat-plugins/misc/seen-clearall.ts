@@ -1,7 +1,8 @@
 /*
- * Pokemon Showdown - Impulse Server
- * Seen & Clearall chat-plugin.
- */
+* Pokemon Showdown - Impulse       * Server   
+* Seen & Clearall Plugin.
+* Refactored by @PrinceSky-Git
+*/
 import { FS } from '../../../lib';
 import { Table } from '../../utils';
 import { toID } from '../../../sim/dex';
@@ -27,11 +28,8 @@ interface HelpEntry {
 	desc: string;
 }
 
-// Initialise with a known-empty state; overwritten once loadData resolves.
 let seenData: SeenData = Object.create(null) as SeenData;
 
-// Tracks whether the initial load has completed so commands can guard against
-// acting on stale / empty data.
 let dataReady = false;
 
 const saveData = (): void => {
@@ -43,7 +41,7 @@ const loadData = async (): Promise<void> => {
 		const raw = await FS(DATA_FILE).readIfExists();
 		if (raw) {
 			const parsed: unknown = JSON.parse(raw);
-			// Validate shape before assigning.
+			// validate shape before assigning.
 			if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
 				const validated: SeenData = Object.create(null) as SeenData;
 				for (const [key, value] of Object.entries(parsed)) {
@@ -64,10 +62,6 @@ const loadData = async (): Promise<void> => {
 
 void loadData();
 
-/**
- * Asserts data has loaded; throws a user-visible error otherwise.
- * Call at the start of any command that reads seenData.
- */
 const assertDataReady = (): void => {
 	if (!dataReady) throw new Chat.ErrorMessage('Seen data is still loading — please try again in a moment.');
 };
@@ -145,7 +139,7 @@ const clearRooms = (rooms: Room[], _user: User): ClearResult => {
 		leaveUsersFromRoom(room, userIds);
 		cleared.push(room.id);
 
-		// Re-join users after a short delay to allow the client to process the clear.
+		// re-join users after a short delay to allow the client to process the clear.
 		setTimeout(() => {
 			rejoinUsersToRoom(room, userIds);
 		}, 1000);
@@ -162,12 +156,12 @@ const formatSeenStatus = (
 	const userNameColor = Impulse.nameColor(targetName, true, true);
 
 	switch (status) {
-	case 'online':
-		return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
-	case 'never':
-		return `${userNameColor} has <b><font color='red'>never been online</font></b>.`;
-	case 'ago':
-		return `${userNameColor} was last seen <b>${duration ?? 'unknown'}</b> ago.`;
+		case 'online':
+			return `${userNameColor} is <b><font color='limegreen'>Online</font></b>.`;
+		case 'never':
+			return `${userNameColor} has <b><font color='red'>never been online</font></b>.`;
+		case 'ago':
+			return `${userNameColor} was last seen <b>${duration ?? 'unknown'}</b> ago.`;
 	}
 };
 
@@ -202,7 +196,7 @@ export const commands: Chat.ChatCommands = {
 
 			assertDataReady();
 
-			// Sanitise: strip anything that isn't a valid PS username character.
+			// sanitise: strip anything that isn't a valid PS username character.
 			const cleanTarget = target.trim().slice(0, 18);
 			const targetUser = Users.get(cleanTarget);
 

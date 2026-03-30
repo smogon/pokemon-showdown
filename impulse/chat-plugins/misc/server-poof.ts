@@ -1,6 +1,7 @@
 /*
-* Pokemon Showdown
-* Poof Commands
+* Pokemon Showdown - Impulse Server
+* Poof Commands Plugin
+* Refactored by @PrinceSky-Git
 */
 
 interface PoofConfig {

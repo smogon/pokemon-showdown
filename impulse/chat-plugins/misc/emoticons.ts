@@ -2,17 +2,13 @@
  * Pokemon Showdown - Impulse Server
  * Emoticons chat-plugin.
  * @author PrinceSky-Git
- * Refactored By @ClarkJ338
+ * Refactored By PrinceSky-Git
  */
 
 import { FS, Utils } from '../../../lib';
 import { Table } from '../../utils';
 
 const DATA_FILE = 'impulse/db/emoticons.json';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 interface EmoticonEntry {
 	readonly url: string;
@@ -26,35 +22,18 @@ interface EmoticonData {
 	ignores: Record<string, boolean>;
 }
 
-// ---------------------------------------------------------------------------
-// Constants & validation helpers
-// ---------------------------------------------------------------------------
-
 const MIN_EMOTE_SIZE = 16;
 const MAX_EMOTE_SIZE = 256;
 const DEFAULT_EMOTE_SIZE = 32;
 const MAX_EMOTE_NAME_LENGTH = 10;
 
-/**
- * Allowlist for emoticon image URLs.
- * Only https:// URLs pointing to common image extensions are accepted.
- */
 const VALID_URL_RE = /^https:\/\/[^\s"'<>]+\.(?:png|gif|jpg|jpeg|webp)(?:\?[^\s"'<>]*)?$/i;
 
 const isValidEmoticonUrl = (url: string): boolean => VALID_URL_RE.test(url);
 
-/**
- * Emoticon names must be non-empty, ≤ MAX_EMOTE_NAME_LENGTH characters,
- * and consist only of word characters or common punctuation used in
- * emoticons (colons, underscores, hyphens, parentheses).
- */
 const VALID_NAME_RE = /^[\w:)(|\-]{1,10}$/;
 
 const isValidEmoticonName = (name: string): boolean => VALID_NAME_RE.test(name);
-
-// ---------------------------------------------------------------------------
-// Module state
-// ---------------------------------------------------------------------------
 
 let data: EmoticonData = {
 	emoticons: {},
@@ -62,15 +41,9 @@ let data: EmoticonData = {
 	ignores: {},
 };
 
-/** Flat name→url map kept in sync with `data.emoticons` for fast lookups. */
 let emoticons: Record<string, string> = {};
 
-/** Pre-compiled regex rebuilt whenever the emoticon set changes. */
 let emoteRegex: RegExp = /^$/g;
-
-// ---------------------------------------------------------------------------
-// Persistence helpers
-// ---------------------------------------------------------------------------
 
 const saveData = (): void => {
 	FS(DATA_FILE).writeUpdate(() => JSON.stringify(data));
@@ -104,10 +77,6 @@ const loadEmoticons = async (): Promise<void> => {
 		buildEmoteRegex();
 	}
 };
-
-// ---------------------------------------------------------------------------
-// Emoticon management
-// ---------------------------------------------------------------------------
 
 const escapeRegExp = (str: string): string =>
 	str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -147,10 +116,6 @@ const saveEmoteSize = (size: number): void => {
 	saveData();
 };
 
-// ---------------------------------------------------------------------------
-// Message parsing
-// ---------------------------------------------------------------------------
-
 function parseMessage(message: string): string {
 	if (message.startsWith('/html')) {
 		return message.slice(5).replace(/&#x2f;/g, '/');
@@ -160,7 +125,7 @@ function parseMessage(message: string): string {
 Impulse.parseMessage = parseMessage;
 
 const parseEmoticons = (message: string, _room?: Room): string | false => {
-	// Reset lastIndex before testing to avoid stateful regex bugs.
+	// reset lastIndex before testing to avoid stateful regex bugs.
 	emoteRegex.lastIndex = 0;
 	if (!emoteRegex.test(message)) return false;
 
@@ -182,28 +147,16 @@ const parseEmoticons = (message: string, _room?: Room): string | false => {
 };
 Impulse.parseEmoticons = parseEmoticons;
 
-// ---------------------------------------------------------------------------
-// Grid renderer
-// ---------------------------------------------------------------------------
-
 const renderEmoticonCell = (id: string, url: string): string =>
 	`<div style="text-align:center;padding:10px;">` +
 	`<img src="${Utils.escapeHTML(url)}" height="40" width="40" style="display:block;margin:0 auto;" loading="lazy">` +
 	`<br><small>${Utils.escapeHTML(id)}</small>` +
 	`</div>`;
 
-// ---------------------------------------------------------------------------
-// Initialise
-// ---------------------------------------------------------------------------
-
 Impulse.ignoreEmotes = {} as Record<string, boolean>;
 void loadEmoticons();
 
-// ---------------------------------------------------------------------------
-// Chat filter
-// ---------------------------------------------------------------------------
-
-export const chatfilter: Chat.ChatFilter = function (
+export const chatfilter: Chat.ChatFilter = function(
 	message,
 	user,
 	room,
@@ -217,10 +170,6 @@ export const chatfilter: Chat.ChatFilter = function (
 	if (parsed) return `/html ${parsed}`;
 	return message;
 };
-
-// ---------------------------------------------------------------------------
-// Commands
-// ---------------------------------------------------------------------------
 
 export const commands: Chat.ChatCommands = {
 	emoticon: {
@@ -358,14 +307,14 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 
 			const helpList: { cmd: string; desc: string }[] = [
-				{ cmd: '/emoticon',                   desc: 'Shows all emoticons' },
+				{ cmd: '/emoticon', desc: 'Shows all emoticons' },
 				{ cmd: '/emoticon add [name], [url]', desc: 'Add emoticon. Requires: &.' },
-				{ cmd: '/emoticon delete [name]',     desc: 'Remove emoticon. Requires: &.' },
-				{ cmd: '/emoticon toggle',            desc: 'Enable/disable emoticons in room. Requires: #.' },
-				{ cmd: '/emoticon ignore',            desc: 'Ignore emoticons' },
-				{ cmd: '/emoticon unignore',          desc: 'Show emoticons' },
-				{ cmd: '/emoticon size [px]',         desc: 'Set size of emoticons. Requires: &.' },
-				{ cmd: '/emoticon info [name]',       desc: 'Info about emoticon' },
+				{ cmd: '/emoticon delete [name]', desc: 'Remove emoticon. Requires: &.' },
+				{ cmd: '/emoticon toggle', desc: 'Enable/disable emoticons in room. Requires: #.' },
+				{ cmd: '/emoticon ignore', desc: 'Ignore emoticons' },
+				{ cmd: '/emoticon unignore', desc: 'Show emoticons' },
+				{ cmd: '/emoticon size [px]', desc: 'Set size of emoticons. Requires: &.' },
+				{ cmd: '/emoticon info [name]', desc: 'Info about emoticon' },
 				{ cmd: '<small>Note: History may show emoticons even if ignored</small>', desc: '' },
 			];
 

@@ -1,6 +1,6 @@
 /*
 * Pokemon Showdown
-* Auto Tournaments Commands
+* Automated Tournaments Commands
 * @author PrinceSky-Git
 */
 import { ImpulseCollection } from '../../impulse-db';
@@ -117,8 +117,6 @@ function startRoomAutotourScheduler(roomid: RoomID): void {
 			const cfg = autotourConfig[roomid];
 			const rm = Rooms.get(roomid);
 			if (rm?.game && rm.game.gameid === 'tournament') {
-				// A tour is already running — skip this tick without updating lastTourTime,
-				// but reschedule from now so we don't stack up on the next tick.
 				clearInterval(autotourIntervals[roomid]);
 				autotourIsInterval[roomid] = false;
 				autotourIntervals[roomid] = setTimeout(() => {
@@ -157,21 +155,21 @@ function runAutotour(roomid: RoomID): void {
 	const format = pickRandom(config.formats);
 	const { type, modifier } = pickTourTypeAndModifier(config.types);
 
-	// Re-fetch room immediately before creating to guard against it closing
+	// re-fetch room immediately before creating to guard against it closing
 	const liveRoom = Rooms.get(roomid);
 	if (!liveRoom || liveRoom.type !== 'chat') return;
 
 	const mockContext: Chat.CommandContext = {
 		sendReply: (msg: string) => liveRoom.add(msg).update(),
 		errorReply: (msg: string) => liveRoom.add(`|error|${msg}`).update(),
-		modlog: () => {},
-		privateModAction: () => {},
-		addModAction: () => {},
-		parse: () => {},
-		checkCan: () => {},
+		modlog: () => { },
+		privateModAction: () => { },
+		addModAction: () => { },
+		parse: () => { },
+		checkCan: () => { },
 		checkChat: (msg: string) => msg,
-		checkGame: () => {},
-		checkRoom: () => {},
+		checkGame: () => { },
+		checkRoom: () => { },
 		can: () => true,
 		runBroadcast: () => true,
 		requireRoom: () => liveRoom,
