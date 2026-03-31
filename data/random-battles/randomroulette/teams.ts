@@ -1,4 +1,4 @@
-import RandomTeams from '../gen9/teams';
+import RandomTeams from '../swse/teams';
 
 export class RandomRandomRouletteTeams extends RandomTeams {}
 
