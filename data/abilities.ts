@@ -6362,10 +6362,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target) {
 				const bestStat = target.getBestStat(true, true);
 				if (move.target === 'self') {
+					this.add('-activate', pokemon, 'ability: Enjoin');
 					this.boost({ [bestStat]: 1 }, target);
 				} else if (target.side === pokemon.side) {
+					this.add('-activate', pokemon, 'ability: Enjoin');
 					this.boost({ [bestStat]: 1 }, target);
 				} else {
+					this.add('-activate', pokemon, 'ability: Enjoin');
 					this.boost({ [bestStat]: -1 }, target);
 				}
 			}
