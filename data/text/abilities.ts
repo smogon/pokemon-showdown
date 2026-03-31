@@ -2490,8 +2490,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	machineprecision: {
 		name: "Machine Precision",
-		desc: "In Magnetosphere, This Pokemon's critical hit ratio is raised by 1 stage. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
-		shortDesc: "In Magnetosphere, This Pokemon's critical hit ratio is raised by 1 stage.",
+		desc: "In Magnetosphere, This Pokemon's critical hit ratio is raised by 2 stages. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "In Magnetosphere, This Pokemon's critical hit ratio is raised by 2 stages.",
 	},
 	malice: {
 		name: "Malice",
