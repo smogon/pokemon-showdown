@@ -3217,9 +3217,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: [
 			'Articuno-Base', 'Brute Bonnet', 'Cacturne', 'Cobalion', 'Drifblim', 'Dugtrio-Base', 'Gabite', 'Gogoat', 'Hariyama', 'Hawlucha-Base',
 			'Hippowdon', 'Krookodile', 'Lurantis-Base', 'Lycanroc-Base', 'Mabosstiff', 'Minior-Base', 'Munkidori', 'Passimian', 'Pawmot', 'Persian-Base',
-			'Raichu-Alola', 'Roserade', 'Rotom-Heat', 'Sandaconda', 'Sceptile-Base', 'Sigilyph', 'Stoutland', 'Stunfisk-Base', 'Tentacruel', 'Thwackey',
-			'Tinkaton', 'Toedscruel', 'Tsareena', 'Uxie', 'Vivillon', 'Whiscash', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z',
-			'Marshadium Z', 'Yawn',
+			'Raichu-Alola', 'Roserade', 'Rotom-Heat', 'Sandaconda', 'Sceptile-Base', 'Stoutland', 'Stunfisk-Base', 'Tentacruel', 'Thwackey', 'Tinkaton',
+			'Toedscruel', 'Tsareena', 'Uxie', 'Vivillon', 'Whiscash', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
