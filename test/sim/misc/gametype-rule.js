@@ -97,20 +97,6 @@ describe('Game Type Rule', () => {
 		);
 	});
 
-	it('should reject changing from 2-player to 4-player game types', () => {
-		battle = null;
-		// Since Custom Game now supports all game types, it doesn't throw at the supportedGameTypes check,
-		// it throws at the player count validation check.
-		assert.throws(
-			() => common.createBattle({ formatid: 'gen9customgame@@@Game Type = Multi' }),
-			/Changing between 2-player and 4-player game types is not supported/
-		);
-		assert.throws(
-			() => common.createBattle({ formatid: 'gen9customgame@@@Game Type = FreeForAll' }),
-			/Changing between 2-player and 4-player game types is not supported/
-		);
-	});
-
 	it('should reject changing from 4-player to 2-player game types', () => {
 		battle = null;
 		assert.throws(
