@@ -382,7 +382,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	dragonize: {
 		name: "Dragonize",
 		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves are Dragon-type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
@@ -987,8 +987,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	megasol: {
 		name: "Mega Sol",
-		desc: "Moves used by this Pokemon have the effects they would when they are used under harsh sunlight.",
-		shortDesc: "This Pokemon's moves act as if they were used under harsh sunlight.",
+		shortDesc: "This Pokemon's moves are used as if the effects of Sunny Day were active.",
 	},
 	merciless: {
 		name: "Merciless",
