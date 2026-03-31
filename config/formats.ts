@@ -6422,7 +6422,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'swse',
 		ruleset: ['Standard', 'Little Cup'],
 		banlist: [
-			'Baton Pass',
+			'Basculin-White-Striped', 'Dunsparce', 'Misdreavus', 'Murkrow',
+			'Baton Pass', 'Evoboost',
 			'King\'s Rock', 'Razor Hook',
 		],
 	},

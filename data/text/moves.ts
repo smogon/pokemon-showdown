@@ -1601,7 +1601,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dragonrush: {
 		name: "Dragon Rush",
 		desc: "Has a 20% chance to make the target flinch. If Dragon Force is active, this move does not check accuracy. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "20% chance to flinch target. Can't miss in D. Force",
+		shortDesc: "20% chance to flinch target. D. Force: no miss.",
 		gen5: {
 			desc: "Has a 20% chance to make the target flinch.",
 		},
@@ -7744,7 +7744,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	emberplume: {
 		name: "Ember Plume",
 		desc: "Has a 10% chance to poison the target. This move's type effectiveness against Flying is changed to be super effective no matter what this move's type is. If the weather is Smog, this move does not check accuracy. If this move is used against a Pokemon holding Safety Goggles or has the Overcoat Ability, this move's accuracy remains at 70%.",
-		shortDesc: "10% psn. Super effective on Flying. Smog: can't miss.",
+		shortDesc: "10% psn. Super effective on Flying. Smog: no miss.",
 	},
 	escaperoot: {
 		name: "Escape Root",

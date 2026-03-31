@@ -23186,7 +23186,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	/* resilientoil: { // tested, works as intended
+	resilientoil: { // tested, works as intended
 		num: 10097,
 		accuracy: true,
 		basePower: 0,
@@ -23227,7 +23227,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "self",
 		type: "Rock",
-	}, */
+	},
 	rockjaw: { // tested, works as intended
 		num: 10026,
 		accuracy: 100,
