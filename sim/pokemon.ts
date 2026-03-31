@@ -7,7 +7,7 @@
 
 import { State } from './state';
 import { toID } from './dex';
-import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
+import type { DynamaxOptions, MoveRequestData, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -692,6 +692,12 @@ export class Pokemon {
 		return null;
 	}
 
+	getMoveSlot(slotIndex: number) {
+		// used by Gen 1
+		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return null;
+		return this.moveSlots[slotIndex];
+	}
+
 	getMoveHitData(move: ActiveMove) {
 		if (!move.moveHitData) move.moveHitData = {};
 		const slot = this.getSlot();
@@ -940,10 +946,7 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
-		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
-		target?: string, pp?: number, maxpp?: number,
-	}[] {
+	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
 			this.trapped = true;
@@ -1071,7 +1074,14 @@ export class Pokemon {
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		if (!moves.length) {
+		// actions that don't hard lock out of switching, but can't bypass the Fight button
+		// partially trapped causes maybeLocked, so it shouldn't be revealed
+		if (this.battle.gen === 1 && ['frz', 'slp'].includes(this.status)) {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			moves = [{ move: 'Fight', id: 'fight' as ID }];
+			lockedMove = 'fight' as ID;
+		} else if (!moves.length) {
 			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
 			lockedMove = 'struggle' as ID;
 		}
@@ -1127,7 +1137,7 @@ export class Pokemon {
 			ident: this.fullname,
 			details: this.details,
 			condition: this.getHealth().secret,
-			active: (this.position < this.side.active.length),
+			active: this.position < this.side.active.length,
 			stats: {
 				atk: this.baseStoredStats['atk'],
 				def: this.baseStoredStats['def'],
@@ -1608,7 +1618,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = isHidden ? 'hidden' : true;
-				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
+				moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 			}
 		}
 	}
@@ -2167,6 +2177,7 @@ export class Pokemon {
 		case 'primordialsea':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
+		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
 		return weather;
 	}
 

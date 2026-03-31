@@ -696,7 +696,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	shellder: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	cloyster: {
 		tier: "NUBL",
@@ -6161,6 +6161,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	chuggalong: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	flox: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	shox: {
 		isNonstandard: "CAP",

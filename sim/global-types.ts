@@ -335,7 +335,7 @@ interface ModdedBattlePokemon {
 	getCanLinkMove?: (this: Pokemon, move: ActiveMove) => boolean;
 	queryLinkMove?: (
 		this: Pokemon, move: ActiveMove, ignoreDisabled?: boolean
-	) => { index: number, link: [ActiveMove, ActiveMove] };
+	) => { linkIndex: number, linkedMoves: [ActiveMove, ActiveMove] };
 }
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
