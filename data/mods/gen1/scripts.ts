@@ -39,7 +39,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			ppData.pp = ((ppData.pp % 64) + 64) % 64;
 
-			if (!this.transformed && ppData.virtual) {
+			if (ppData.virtual && !this.transformed) {
 				// sync PP from Mimic's slot, or Metronome/Mirror Move that called Mimic
 				this.baseMoveSlots[this.side.lastSelectedMoveSlot].pp = ppData.pp;
 			}
