@@ -239,10 +239,6 @@ export class RandomFFATeams extends RandomTeams {
 		if (!types.includes('Ground')) this.incompatibleMoves(moves, movePool, 'earthquake', 'stompingtantrum');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context:
-		// To force Close Combat on Barraskewda without locking it to Tera Fighting
-		if (species.id === 'barraskewda') {
-			this.incompatibleMoves(moves, movePool, ['psychicfangs', 'throatchop'], ['poisonjab', 'throatchop']);
-		}
 
 		// Defense Curl Blissey makes this complicated
 		if (species.id !== 'blissey') this.incompatibleMoves(moves, movePool, SETUP, HAZARDS);
@@ -250,7 +246,7 @@ export class RandomFFATeams extends RandomTeams {
 		if (species.id === 'glimmora') this.incompatibleMoves(moves, movePool, 'spikes', 'stealthrock');
 	}
 
-	// Generate random moveset for a given species, role, tera type.
+	// Generate random moveset for a given species and role.
 	override randomMoveset(
 		types: string[],
 		abilities: string[],
@@ -437,7 +433,7 @@ export class RandomFFATeams extends RandomTeams {
 		}
 
 		// Enforce setup
-		if (role.includes('Setup') || role === 'Tera Blast user') {
+		if (role.includes('Setup')) {
 			// First, try to add a non-Speed setup move
 			const nonSpeedSetupMoves = movePool.filter(moveid => SETUP.includes(moveid) && !SPEED_SETUP.includes(moveid));
 			if (nonSpeedSetupMoves.length) {
@@ -748,10 +744,6 @@ export class RandomFFATeams extends RandomTeams {
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 
 		for (const set of sets) {
-			// Prevent Tera Blast user if the team already has one, or if Terastallizion is prevented.
-			if ((teamDetails.teraBlast || ruleTable.has('terastalclause')) && set.role === 'Tera Blast user') {
-				continue;
-			}
 			// Prevent Imprisoner if the team already has two
 			if (!!teamDetails.imprison && teamDetails.imprison >= 2 && set.role === 'Imprisoner') {
 				continue;
@@ -764,8 +756,6 @@ export class RandomFFATeams extends RandomTeams {
 		for (const movename of set.movepool) {
 			movePool.push(this.dex.moves.get(movename).id);
 		}
-		const teraTypes = set.teraTypes;
-		let teraType = this.sampleIfArray(teraTypes);
 
 		let ability = '';
 		let item = undefined;
@@ -825,9 +815,6 @@ export class RandomFFATeams extends RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm' && item !== 'Choice Specs') return false;
-			if (move.id === 'terablast' && (
-				species.id === 'porygon' || species.baseStats.atk > species.baseStats.spa)
-			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
@@ -855,7 +842,6 @@ export class RandomFFATeams extends RandomTeams {
 			evs,
 			ivs,
 			item,
-			teraType,
 			role,
 		};
 	}
@@ -897,9 +883,6 @@ export class RandomFFATeams extends RandomTeams {
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
-
-			// Treat Ogerpon formes and Terapagos like the Tera Blast user role; reject if team has one already
-			if (['ogerponhearthflame', 'terapagos'].includes(species.id) && teamDetails.teraBlast) continue;
 
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
@@ -1048,9 +1031,6 @@ export class RandomFFATeams extends RandomTeams {
 			if (set.moves.includes('rapidspin') || set.moves.includes('mortalspin')) teamDetails.rapidSpin = 1;
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
-			}
-			if (set.role === 'Tera Blast user' || ['ogerponhearthflame', 'terapagos'].includes(species.id)) {
-				teamDetails.teraBlast = 1;
 			}
 			if (set.role === 'Imprisoner') teamDetails.imprison = (teamDetails.imprison || 0) + 1;
 		}

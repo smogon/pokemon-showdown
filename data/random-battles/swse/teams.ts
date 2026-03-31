@@ -3,7 +3,7 @@ import { Utils } from '../../../lib';
 import { PRNG, type PRNGSeed } from '../../../sim/prng';
 import { type RuleTable } from '../../../sim/dex-formats';
 import { Tags } from './../../tags';
-import { Teams } from '../../../sim/teams';
+// import { Teams } from '../../../sim/teams';
 
 export interface TeamData {
 	typeCount: { [k: string]: number };
@@ -110,7 +110,7 @@ const NO_STAB = [
 ];
 // Hazard-setting moves
 const HAZARDS = [
-	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'steelbarbs', 
+	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'steelbarbs',
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
@@ -1214,7 +1214,7 @@ export class RandomTeams {
 		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const sunAbilities = ['Heat Haze', 'Chlorophyll', 'Solar Power', 'Drought', 'Leaf Guard'];
 		const hailAbilities = ['Ice Armor', 'Slush Rush', 'Absolute Zero', 'Snow Warning', 'Snow Cloak',
-			'Glacial Armor', 'Ice Body']
+			'Glacial Armor', 'Ice Body'];
 		const bloodMoonAbilities = ['Shadow Step', 'Malice', 'Eventide'];
 		const fogAbilities = ['Warp Mist', 'Foghorn'];
 		const sandAbilities = ['Sand Stream', 'Sand Veil', 'Earth Force', 'Sand Rush'];
@@ -1350,7 +1350,7 @@ export class RandomTeams {
 					'Trained Eye', 'Soul Drain', 'Sweet Dreams', 'Smoke and Mirrors', 'Power Within', 'Indomitable',
 					'Energizer', 'Forked', 'Magnapult', 'Nanomachines', 'Machine Precision', 'Gale Wings', 'Grass Pelt',
 					'Corrosion', 'Surge Surfer', 'Wind Rider', 'Wind Power', 'Bad Dreams', 'Petrichor', 'Rain Dish', 'Dry Skin',
-					'Ice Body'
+					'Ice Body',
 				].includes(a)
 			);
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
@@ -1442,7 +1442,8 @@ export class RandomTeams {
 			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
 		}
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
-		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.thunderstorm && !teamDetails.rain)) return 'Power Herb';
+		if (moves.has('meteorbeam') ||
+			(moves.has('electroshot') && !teamDetails.thunderstorm && !teamDetails.rain)) return 'Power Herb';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
@@ -1689,8 +1690,6 @@ export class RandomTeams {
 		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
-
 		for (const set of sets) {
 			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
 			const abilities = set.abilities!;
@@ -1901,10 +1900,10 @@ export class RandomTeams {
 			);
 			/* const hasRainSetup = (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
 				set.moves.includes('whirlduel') || set.moves.includes('shelter'));
-			const hasRainSetup = (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday') ||
-				set.moves.includes('thermalvortex') || set.ability === 'Heat Haze');
-			const hasRainSetup = (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception') ||
-				set.moves.includes('hail') || set.ability === 'Ice Armor');
+			const hasRainSetup = (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' ||
+				set.moves.includes('sunnyday') || set.moves.includes('thermalvortex') || set.ability === 'Heat Haze');
+			const hasRainSetup = (set.ability === 'Snow Warning' || set.moves.includes('snowscape') ||
+				set.moves.includes('chillyreception') || set.moves.includes('hail') || set.ability === 'Ice Armor');
 			const hasRainSetup = (set.ability === 'Eventtide' || set.moves.includes('bloodmoon'));
 			const hasRainSetup = (set.ability === 'Condensation' || set.moves.includes('foghorn'));
 			const hasRainSetup = (set.ability === 'Sand Stream' || set.moves.includes('sandstorm'));
@@ -1919,7 +1918,7 @@ export class RandomTeams {
 			const hasRainSetup = (set.ability === 'Arcanum' || set.moves.includes('dragonforce'));
 			const hasRainSetup = (set.ability === 'Stormfront' || set.ability === 'Relic Soul' || set.moves.includes('supercell'));
 			const hasRainSetup = (set.ability === 'Ferroflux' || set.moves.includes('magnetize'));
-			const hasRainSetup = (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' || 
+			const hasRainSetup = (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' ||
 				set.moves.includes('strongwinds')); */
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
@@ -2053,7 +2052,6 @@ export class RandomTeams {
 			if (weakToSlushBall) typeWeaknesses['Slushball']++;
 			if (weakToEmberPlume) typeWeaknesses['Ember Plume']++;
 			if (weakToDeception) typeWeaknesses['Deception']++;
-			
 
 			// Increment level 100 counter
 			if (set.level === 100) numMaxLevelPokemon++;
@@ -2089,7 +2087,7 @@ export class RandomTeams {
 				teamDetails.thunderstorm = 1;
 			}
 			if (set.ability === 'Ferroflux' || set.moves.includes('magnetize')) teamDetails.magnetosphere = 1;
-			if (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' || 
+			if (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' ||
 				set.moves.includes('strongwinds')) {
 				teamDetails.strongWinds = 1;
 			}
@@ -2097,12 +2095,12 @@ export class RandomTeams {
 				(isDoubles && set.ability === 'Cloud Nine')) {
 				teamDetails.climateWeather = 1;
 			}
-			if (teamDetails.sand || teamDetails.dust || teamDetails.pollen || teamDetails.pheromones || teamDetails.smog
-				|| teamDetails.fairyDust) {
+			if (teamDetails.sand || teamDetails.dust || teamDetails.pollen || teamDetails.pheromones || teamDetails.smog ||
+				teamDetails.fairyDust) {
 				teamDetails.irritantWeather = 1;
 			}
-			if (teamDetails.battleAura || teamDetails.paranormalActivity || teamDetails.dreamscape || teamDetails.dragonForce
-				|| teamDetails.thunderstorm || teamDetails.magnetosphere) {
+			if (teamDetails.battleAura || teamDetails.paranormalActivity || teamDetails.dreamscape || teamDetails.dragonForce ||
+				teamDetails.thunderstorm || teamDetails.magnetosphere) {
 				teamDetails.energyWeather = 1;
 			}
 			if (set.moves.includes('healbell') || set.moves.includes('aromatherapy') ||
