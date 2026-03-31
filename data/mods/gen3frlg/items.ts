@@ -99,10 +99,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	repeatball: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
 	rootfossil: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -116,10 +112,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Unobtainable",
 	},
 	shellbell: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	silkscarf: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
