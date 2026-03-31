@@ -30,7 +30,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				for (const stat in set.ivs) {
 					if ((stat === 'atk' && set.ivs[stat] > 7) || (stat !== 'hp' && set.ivs[stat as 'def'] > 0)) {
 						return [
-							`${set.name} must have 7 or fewer Attack IVs and 0 IVs in all other stats except HP, due to the Roaming IVs glitch.`	
+							`${set.name} must have 7 or fewer Attack IVs and 0 IVs in all other stats except HP, due to the Roaming IVs glitch.`,
 						];
 					}
 				}
