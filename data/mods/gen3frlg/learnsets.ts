@@ -1,6 +1,4 @@
-import { Field } from '../../../sim/field';
-
-export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
+export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 	bulbasaur: {
 		learnset: {
 			attract: ["3M"],
