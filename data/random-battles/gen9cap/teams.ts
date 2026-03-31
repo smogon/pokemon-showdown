@@ -1,11 +1,11 @@
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomGen9Teams, type MoveCounter } from "../gen9/teams";
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
 	'Zacian', 'Zamazenta',
 ];
 
-export class RandomCAPTeams extends RandomTeams {
+export class RandomCAPTeams extends RandomGen9Teams {
 	getCAPAbility(
 		types: string[],
 		moves: Set<string>,

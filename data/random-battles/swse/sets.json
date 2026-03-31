@@ -26,24 +26,6 @@
             }
         ]
     },
-    "burbwhirl": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Leer", "Lunge", "Scratch", "Whirlpool"]
-            }
-        ]
-    },
-    "spoutlaw": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Leer", "Lunge", "Scratch", "Whirlpool"]
-            }
-        ]
-    },
 	"vaquamael": {
         "level": 87,
         "sets": [
@@ -68,24 +50,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Lick", "Mimic", "Scratch", "Snarl"]
-            }
-        ]
-    },
-    "sewaddle": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Pounce", "Rest", "Substitute", "Tackle"]
-            }
-        ]
-    },
-    "swadloon": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Pounce", "Rest", "Substitute", "Tackle"]
             }
         ]
     },

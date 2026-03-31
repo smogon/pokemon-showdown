@@ -1,5 +1,5 @@
 import type { PRNG, PRNGSeed } from "../../../sim/prng";
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomGen9Teams, type MoveCounter } from "../gen9/teams";
 import { Utils } from '../../../lib';
 
 // First, some lists of moves that can be used for rules throughout set generation. Taken from regular gen9.
@@ -49,7 +49,7 @@ const MOVE_PAIRS = [
 	['protect', 'wish'],
 ];
 
-export class RandomBabyTeams extends RandomTeams {
+export class RandomBabyTeams extends RandomGen9Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
