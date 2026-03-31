@@ -22,19 +22,19 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
 	obtainable: {
-        inherit: true,
-        onValidateSet(set) {
-            const species = this.dex.species.get(set.species);
-            if (['entei', 'raikou', 'suicune'].includes(species.id)) {
-                if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-                for (const stat in set.ivs) {
-                    if ((stat === 'atk' && set.ivs[stat] > 7) || (stat !== 'hp' && set.ivs[stat as 'def'] > 0)) {
-                        return [
-                            `${set.name} must have 7 or fewer Attack IVs and 0 IVs in all other stats except HP, due to the Roaming IVs glitch.`    
-                        ];
-                    }
-                }
-            }
-        },
-    },
+		inherit: true,
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (['entei', 'raikou', 'suicune'].includes(species.id)) {
+				if (!set.ivs) set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+				for (const stat in set.ivs) {
+					if ((stat === 'atk' && set.ivs[stat] > 7) || (stat !== 'hp' && set.ivs[stat as 'def'] > 0)) {
+						return [
+							`${set.name} must have 7 or fewer Attack IVs and 0 IVs in all other stats except HP, due to the Roaming IVs glitch.`	
+						];
+					}
+				}
+			}
+		},
+	},
 };
