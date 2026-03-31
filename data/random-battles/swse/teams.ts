@@ -1687,18 +1687,12 @@ export class RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
-		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
-
-		for (const set of sets) {
-			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
-			const abilities = set.abilities!;
-			if (
-				isLead && (abilities.includes('Protosynthesis') || abilities.includes('Quark Drive')) &&
-				set.role === 'Fast Bulky Setup'
-			) continue;
-			possibleSets.push(set);
+		if (!this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]) {
+			throw new Error(`No sets found for species: ${species.id} (isDoubles: ${isDoubles})`);
 		}
+		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
+		const possibleSets: RandomTeamsTypes.RandomSetData[] = [...sets];
+
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = [];

@@ -26,7 +26,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "S/V Singles",
 	},
 	{
-		name: "[Gen 9] Random Battle OLD",
+		name: "[Gen 9] Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		mod: 'gen9',
 		team: 'random',
@@ -37,7 +37,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
-		name: "[Gen 9] Unrated Random Battle OLD",
+		name: "[Gen 9] Unrated Random Battle",
 		mod: 'gen9',
 		team: 'random',
 		searchShow: false,
@@ -215,7 +215,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 9] Random Doubles Battle OLD",
+		name: "[Gen 9] Random Doubles Battle",
 		mod: 'gen9',
 		gameType: 'doubles',
 		team: 'random',
@@ -3902,7 +3902,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Monotype Random Battle OLD",
+		name: "[Gen 9] Monotype Random Battle",
 		mod: 'gen9',
 		team: 'random',
 		searchShow: false,
@@ -6755,7 +6755,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 9] Random Doubles Battle",
+		name: "[Gen 9] SwSe Random Doubles Battle",
 		desc: `Double battle with randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 
 		mod: 'swse',
@@ -6768,7 +6768,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 9] Unrated Random Doubles Battle",
+		name: "[Gen 9] Unrated SwSe Random Doubles Battle",
 
 		mod: 'swse',
 		gameType: 'doubles',
@@ -6780,7 +6780,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 9] Random Battle",
+		name: "[Gen 9] SwSe Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 
 		mod: 'swse',
@@ -6792,7 +6792,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
-		name: "[Gen 9] Unrated Random Battle",
+		name: "[Gen 9] Unrated SwSe Random Battle",
 
 		mod: 'swse',
 		team: 'random',
@@ -6810,7 +6810,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Misc. Randomized Metas",
 	},
 	{
-		name: "[Gen 9] Monotype Random Battle",
+		name: "[Gen 9] SwSe Monotype Random Battle",
 
 		mod: 'swse',
 		team: 'random',

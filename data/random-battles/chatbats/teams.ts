@@ -1,4 +1,4 @@
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomGen9Teams, type MoveCounter } from "../gen9/teams";
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -61,7 +61,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomChatBatsTeams extends RandomTeams {
+export class RandomChatBatsTeams extends RandomGen9Teams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,

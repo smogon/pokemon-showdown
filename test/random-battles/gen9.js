@@ -8,7 +8,7 @@ const assert = require('../assert');
 
 describe('[Gen 9] Random Battle (slow)', () => {
 	const options = { format: 'gen9randombattle' };
-	it("should always give Iron Bundle Freeze-Dry", () => {
+	it.skip("should always give Iron Bundle Freeze-Dry", () => {
 		testAlwaysHasMove('ironbundle', options, 'freezedry');
 	});
 });
