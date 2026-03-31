@@ -825,18 +825,19 @@ export const commands: Chat.ChatCommands = {
 				links: string[],
 			},
 		} = {
-			'Sun Teams': {
-				names: ["Sun"],
-				description: 'sun teams',
+			'DOU': {
+				names: ["Doubles", "DOU", "Doubles OU"],
+				description: 'Double Weathergy teams for DOU',
 				links: [
-					'https://pokepast.es/2d5e17f98e135c43',
-				],
-			},
-			'Rain Teams': {
-				names: ["Rain"],
-				description: 'rain teams',
-				links: [
-					'https://pokepast.es/e71a69c1bdd599ba',
+					'<a href="https://pokepast.es/726649bcc9795b78">Rain + Dreamscape</a>',
+					'<a href="https://pokepast.es/7ed8e2fba6c76275">Dragon Force + Fairy Dust</a>',
+					'<a href="https://pokepast.es/af0b17ac8355b4cb">Sun + Dust Storm</a>',
+					'<a href="https://pokepast.es/bfdf902e4aa48355">Paranormal Activity + Sandstorm</a>',
+					'<a href="https://pokepast.es/7f8076d2cb88e13f">Blood Moon + Thunderstorm</a>',
+					'<a href="https://pokepast.es/7693e81493199140">Fog + Magnetosphere</a>',
+					'<a href="https://pokepast.es/129c7731afac3a56">Smog + Battle Aura</a>',
+					'<a href="https://pokepast.es/70f70acd7bbaced8">Hail + Strong Winds</a>',
+					'<a href="https://pokepast.es/34829c613d750110">Pollen + Pheromones + A Little Rain</a>',
 				],
 			},
 		};
