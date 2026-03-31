@@ -832,14 +832,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.climateWeatherState.boosted && move?.category === 'Status') {
-				return 1;
+				return priority + 1;
+			} else if (move?.type === 'Dark' && move?.category === 'Status') {
+				return priority + 1;
 			}
-			if (move?.type === 'Dark' && move.category === 'Status') return 1;
 		},
 		onTryHit(target, source, move) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (this.field.climateWeatherState.boosted &&
-				target.hasType('Dark') && move.category === 'Status' && target !== source) {
+				target.hasType('Dark') && move?.category === 'Status' && target !== source) {
 				this.add('-immune', target);
 				this.hint("Dark types are immune to Status moves in Strong Winds-boosted Blood Moon.");
 				return null;
