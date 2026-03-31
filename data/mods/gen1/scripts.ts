@@ -151,20 +151,18 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 			};
 
-			const lockedMove = pokemon.getLockedMove();
-
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
 						"In Gen 1, if a Pokémon spends a turn partially trapped and switches to a Pokémon that is asleep, " +
 						"the sleep counter will not decrease until you select a move with a different Pokémon."
 					);
-				} else if (lockedMove) {
+				} else if (pokemon.getLockedMove()) {
 					this.battle.hint(
 						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during a multi-turn move, " +
 						"that Pokémon will become soft-locked."
 					);
-				} else if (pokemon.getSemiLockedMove()) {
+				} else if (pokemon.getSemiLockedMove() !== 'fight') {
 					this.battle.hint(
 						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during Bide, " +
 						"the move execution will never resolve."
@@ -188,6 +186,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id !== 'struggle') {
+				const lockedMove = pokemon.getLockedMove();
+				const semiLockedMove = pokemon.getSemiLockedMove();
 				if (lockedMove) sourceEffect = move;
 
 				// Locked moves don't deduct PP
@@ -200,7 +200,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 
-				if (move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
+				if (!lockedMove && semiLockedMove !== 'fight' && move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
 					this.battle.hint("Desync Clause Mod activated!");
 					this.battle.hint(
 						"In Gen 1, a Pokémon that thaws out might try to use a move that doesn't match the move " +

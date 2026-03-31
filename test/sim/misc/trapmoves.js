@@ -318,4 +318,41 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		battle.makeChoices('move splash', 'move swordsdance'); // it was able to wake up after the switch
 		assert.equal(rhydon.boosts.atk, 2);
 	});
+
+	it(`should continue if copied by Mirror Move`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'dragonite', moves: ['wrap'] },
+		], [
+			{ species: 'rhydon', moves: ['splash'] },
+			{ species: 'alakazam', moves: ['mirror move'] },
+		]]);
+		battle.makeChoices('move wrap', 'switch 2');
+		for (let i = 0; i < 5; i++) {
+			if (!battle.p2.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+		battle.makeChoices();
+		for (let i = 0; i < 5; i++) {
+			if (!battle.p1.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+	});
+
+	it(`should cause a Desync if copied by Mirror Move and the target switches`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'dragonite', moves: ['wrap'] },
+			{ species: 'magikarp', moves: ['splash'] },
+		], [
+			{ species: 'rhydon', moves: ['splash'] },
+			{ species: 'alakazam', moves: ['mirror move'] },
+		]]);
+		battle.makeChoices('move wrap', 'switch 2');
+		for (let i = 0; i < 5; i++) {
+			if (!battle.p2.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'move wrap');
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
+	});
 });
