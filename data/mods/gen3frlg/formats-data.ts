@@ -456,10 +456,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	espeon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	umbreon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	porygon: {
 		tier: "LC",
@@ -507,34 +509,44 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	mew: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	chikorita: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	bayleef: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	meganium: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	cyndaquil: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	quilava: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	typhlosion: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	totodile: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	croconaw: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	feraligatr: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sentret: {
 		tier: "LC",
@@ -543,10 +555,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	hoothoot: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	noctowl: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ledyba: {
 		tier: "LC",
@@ -561,10 +575,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	chinchou: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lanturn: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	togepi: {
 		tier: "LC",
@@ -579,13 +595,16 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	mareep: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	flaaffy: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ampharos: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	azurill: {
 		tier: "LC",
@@ -597,7 +616,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	sudowoodo: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	hoppip: {
 		tier: "LC",
@@ -609,13 +629,16 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	aipom: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sunkern: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sunflora: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	yanma: {
 		tier: "OU",
@@ -642,31 +665,38 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	girafarig: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	pineco: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	forretress: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	dunsparce: {
 		tier: "OU",
 	},
 	gligar: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	snubbull: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	granbull: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	qwilfish: {
 		tier: "LC",
 	},
 	shuckle: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	heracross: {
 		tier: "LC",
@@ -675,10 +705,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	teddiursa: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ursaring: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	slugma: {
 		tier: "LC",
@@ -693,7 +725,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	corsola: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	remoraid: {
 		tier: "LC",
@@ -711,10 +744,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	houndour: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	houndoom: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	phanpy: {
 		tier: "LC",
@@ -723,13 +758,16 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	stantler: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	smeargle: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	miltank: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	raikou: {
 		tier: "LC",
@@ -756,415 +794,552 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	celebi: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	treecko: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	grovyle: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sceptile: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	torchic: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	combusken: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	blaziken: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	mudkip: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	marshtomp: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	swampert: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	poochyena: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	mightyena: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	zigzagoon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	linoone: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	wurmple: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	silcoon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	beautifly: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	cascoon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	dustox: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lotad: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lombre: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ludicolo: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	seedot: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	nuzleaf: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	shiftry: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	taillow: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	swellow: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	wingull: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	pelipper: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ralts: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	kirlia: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	gardevoir: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	surskit: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	masquerain: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	shroomish: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	breloom: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	slakoth: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	vigoroth: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	slaking: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	nincada: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	ninjask: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	shedinja: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	whismur: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	loudred: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	exploud: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	makuhita: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	hariyama: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	nosepass: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	skitty: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	delcatty: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sableye: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	mawile: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	aron: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lairon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	aggron: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	meditite: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	medicham: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	electrike: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	manectric: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	plusle: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	minun: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	volbeat: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	illumise: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	roselia: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	gulpin: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	swalot: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	carvanha: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sharpedo: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	wailmer: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	wailord: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	numel: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	camerupt: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	torkoal: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	spoink: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	grumpig: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	spinda: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	trapinch: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	vibrava: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	flygon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	cacnea: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	cacturne: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	swablu: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	altaria: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	zangoose: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	seviper: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lunatone: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	solrock: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	barboach: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	whiscash: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	corphish: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	crawdaunt: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	baltoy: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	claydol: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	lileep: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	cradily: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	anorith: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	armaldo: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	feebas: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	milotic: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	castform: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	castformsunny: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	castformrainy: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	castformsnowy: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	kecleon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	shuppet: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	banette: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	duskull: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	dusclops: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	tropius: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	chimecho: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	absol: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	snorunt: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	glalie: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	spheal: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	sealeo: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	walrein: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	clamperl: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	huntail: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	gorebyss: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	relicanth: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	luvdisc: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	bagon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	shelgon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	salamence: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	beldum: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	metang: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	metagross: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	regirock: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	regice: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	registeel: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	latias: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	latios: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	kyogre: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	groudon: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	rayquaza: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	jirachi: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	deoxys: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 	deoxysattack: {
 		tier: "Uber",
@@ -1173,6 +1348,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	deoxysspeed: {
-		tier: "Illegal",
+		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
 	},
 };

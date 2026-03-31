@@ -1,427 +1,286 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	aguavberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
 	apicotberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
-	berryjuice: {
+	aspearberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (this.runEvent('TryHeal', pokemon, null, this.effect, 20) && pokemon.useItem()) {
-					this.heal(20);
-				}
-			}
-		},
-		isNonstandard: "Unobtainable",
+		gen: 3,
 	},
-	blackbelt: {
+	belueberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Fighting') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	blackglasses: {
-		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Dark') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	charcoal: {
-		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Fire') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	dragonfang: {
-		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Dragon') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	enigmaberry: {
-		name: "Enigma Berry",
-		spritenum: 124,
-		isBerry: true,
-		num: 208,
 		gen: 3,
 		isNonstandard: "Unobtainable",
-		// No competitive use
 	},
-	fastball: {
+	blukberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+	},
+	cheriberry: {
+		inherit: true,
+		gen: 3,
+	},
+	chestoberry: {
+		inherit: true,
+		gen: 3,
+	},
+	choiceband: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
+	},
+	clawfossil: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+	},
+	cornnberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	deepseascale: {
+		inherit: true,
+		gen: 3,
+	},
+	deepseatooth: {
+		inherit: true,
+		gen: 3,
+	},
+	diveball: {
+		inherit: true,
+		gen: 3,
+	},
+	domefossil: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+	},
+	durinberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	enigmaberry: {
+		inherit: true,
+		gen: 3,
 	},
 	figyberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
 	ganlonberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
-	hardstone: {
+	grepaberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Rock') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
 	},
-	heavyball: {
+	helixfossil: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		gen: 3,
+		isNonstandard: null,
+	},
+	hondewberry: {
+		inherit: true,
+		gen: 3,
 	},
 	iapapaberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
-	kingsrock: {
+	kelpsyberry: {
 		inherit: true,
-		onModifyMove(move) {
-			const affectedByKingsRock = [
-				'aerialace', 'aeroblast', 'aircutter', 'armthrust', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'brickbreak', 'bulletseed', 'clamp', 'cometpunch', 'crabhammer', 'crosschop', 'cut', 'dig', 'dive', 'doublekick', 'doubleslap', 'doubleedge', 'dragonbreath', 'dragonclaw', 'dragonrage', 'drillpeck', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firespin', 'flail', 'fly', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gust', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'iciclespear', 'jumpkick', 'karatechop', 'leafblade', 'lowkick', 'machpunch', 'magicalleaf', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mudshot', 'muddywater', 'nightshade', 'outrage', 'overheat', 'payday', 'peck', 'petaldance', 'pinmissile', 'poisontail', 'pound', 'psychoboost', 'psywave', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'rockblast', 'rockthrow', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seismictoss', 'selfdestruct', 'shadowpunch', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spikecannon', 'spitup', 'steelwing', 'strength', 'struggle', 'submission', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'triplekick', 'twister', 'uproar', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'wrap',
-			]; // Tickle also has the move flag, but can never flinch because King's Rock requires damage to trigger
-			if (affectedByKingsRock.includes(move.id)) {
-				if (!move.secondaries) move.secondaries = [];
-				move.secondaries.push({
-					chance: 10,
-					volatileStatus: 'flinch',
-				});
-			}
-		},
+		gen: 3,
 	},
 	lansatberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
 	laxincense: {
 		inherit: true,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('lax incense - decreasing accuracy');
-			return accuracy * 0.95;
-		},
+		gen: 3,
 	},
-	levelball: {
+	leppaberry: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		gen: 3,
 	},
 	liechiberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
-	},
-	lightball: {
-		inherit: true,
-		onModifySpA(spa, pokemon) {
-			if (pokemon.species.name === 'Pikachu') {
-				return this.chainModify(2);
-			}
-		},
-		onBasePower: undefined, // no inherit
-	},
-	loveball: {
-		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	lureball: {
+	lumberry: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		gen: 3,
 	},
-	magnet: {
+	luxuryball: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Electric') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
+	},
+	machobrace: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
 	},
 	magoberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
 	},
-	metalcoat: {
+	magostberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Steel') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	miracleseed: {
-		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Grass') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	moonball: {
-		inherit: true,
+		gen: 3,
 		isNonstandard: "Unobtainable",
 	},
-	mysticwater: {
+	mentalherb: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Water') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
 	},
-	nevermeltice: {
+	nanabberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Ice') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	nestball: {
+		inherit: true,
+		gen: 3,
+	},
+	netball: {
+		inherit: true,
+		gen: 3,
+	},
+	nomelberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	oldamber: {
+		inherit: true,
+		gen: 3,
 	},
 	oranberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
+	},
+	pamtreberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	pechaberry: {
+		inherit: true,
+		gen: 3,
+	},
+	persimberry: {
+		inherit: true,
+		gen: 3,
 	},
 	petayaberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		isNonstandard: "Unobtainable",
 	},
-	poisonbarb: {
+	pinapberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Poison') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
+		isNonstandard: null,
 	},
-	quickclaw: {
+	pomegberry: {
 		inherit: true,
-		onFractionalPriority: undefined, // no inherit
-		// implemented in Pokemon#getActionSpeed()
+		gen: 3,
+	},
+	premierball: {
+		inherit: true,
+		gen: 3,
+	},
+	qualotberry: {
+		inherit: true,
+		gen: 3,
+	},
+	rabutaberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	rawstberry: {
+		inherit: true,
+		gen: 3,
+	},
+	razzberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	repeatball: {
+		inherit: true,
+		gen: 3,
+	},
+	rootfossil: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
 	},
 	salacberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		isNonstandard: "Unobtainable",
 	},
 	seaincense: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Water') {
-				return this.chainModify(1.05);
-			}
-		},
+		gen: 3,
 	},
-	sharpbeak: {
+	shellbell: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Flying') {
-				return this.chainModify(1.1);
-			}
-		},
+		isNonstandard: "Unobtainable",
 	},
 	silkscarf: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Normal') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	silverpowder: {
-		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Bug') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
 	},
 	sitrusberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			this.heal(30);
-		},
+		gen: 3,
 	},
-	softsand: {
+	souldew: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Ground') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
 	},
-	spelltag: {
+	spelonberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
-			if (move?.type === 'Ghost') {
-				return this.chainModify(1.1);
-			}
-		},
-	},
-	sportball: {
-		inherit: true,
+		gen: 3,
 		isNonstandard: "Unobtainable",
 	},
 	starfberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
-			}
-		},
+		isNonstandard: "Unobtainable",
 	},
-	twistedspoon: {
+	tamatoberry: {
 		inherit: true,
-		onBasePower: undefined, // no inherit
-		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
-			if (move?.type === 'Psychic') {
-				return this.chainModify(1.1);
-			}
-		},
+		gen: 3,
+	},
+	timerball: {
+		inherit: true,
+		gen: 3,
+	},
+	watmelberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	wepearberry: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	whiteherb: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	wikiberry: {
 		inherit: true,
-		onUpdate: undefined, // no inherit
-		onResidualOrder: 10,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
+		gen: 3,
+		isNonstandard: null,
 	},
 };
