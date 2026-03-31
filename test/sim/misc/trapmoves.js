@@ -360,7 +360,7 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		}
 		battle.makeChoices(); // trap back with Mirror Move
 		battle.makeChoices('switch 2', 'move wrap');
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
+		assert(battle.log.slice(-10).some(line => line.includes('Desync Clause Mod activated!')));
 		// check if that target is freed and the trapper can choose other moves
 		assert(!battle.p1.active[0].volatiles['partiallytrapped']);
 		assert.equal(battle.p2.activeRequest.active[0].moves.length, 1);
@@ -368,27 +368,18 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it(`should continue if copied by Metronome even if the target switches`, () => {
-		battle = common.gen(1).createBattle([[
+		battle = common.gen(1).createBattle({ seed: 'gen5,99176924e1c86af0' }, [[
 			{ species: 'dragonite', moves: ['splash'] },
 			{ species: 'magikarp', moves: ['splash'] },
 		], [
 			{ species: 'alakazam', moves: ['metronome'] },
 		]]);
-
-		battle.onEvent('Hit', battle.format, pokemon => {
-			if (battle.activeMove === 'metronome') {
-				const randomMove = this.sample('wrap');
-				pokemon.side.lastSelectedMove = this.toID(randomMove);
-				this.actions.useMove(randomMove, pokemon);
-			}
-		});
 		battle.makeChoices(); // trap with Metronome
+		assert(battle.log.slice(-10).some(line => line === '|move|p2a: Alakazam|Wrap|p1a: Dragonite|[from] Metronome'));
 		battle.makeChoices('switch 2', 'move wrap');
-		for (let i = 0; i < 5; i++) {
-			if (!battle.p1.active[0].volatiles['partiallytrapped']) break;
-			battle.makeChoices();
-		}
 		assert.false(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
+		// default to Metronome
+		assert(battle.log.slice(-10).some(line => line.includes('|move|p2a: Alakazam|Metronome|')));
 		// check if that target is freed and the trapper can choose other moves
 		assert(!battle.p1.active[0].volatiles['partiallytrapped']);
 		assert.equal(battle.p2.activeRequest.active[0].moves.length, 1);

@@ -959,16 +959,10 @@ export class Pokemon {
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
-			switch (lockedMove) {
-			case 'recharge':
+			if (lockedMove === 'recharge') {
 				return [{
 					move: 'Recharge',
 					id: 'recharge' as ID,
-				}];
-			case 'fight':
-				return [{
-					move: 'Fight',
-					id: 'fight' as ID,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
