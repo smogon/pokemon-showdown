@@ -502,7 +502,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] FRLG OU",
 		mod: 'gen3frlg',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain'],
+		banlist: ['Uber', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web'],
 	},
 	{
 		name: "[Gen 9] Godly Gift Random Battle",
