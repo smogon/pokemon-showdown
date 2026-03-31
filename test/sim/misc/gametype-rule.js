@@ -128,8 +128,8 @@ describe('Game Type Rule', () => {
 	it('should reject game types not listed in supportedGameTypes', () => {
 		battle = null;
 		// To safely test this, we can try to override a format with limited supportedGameTypes,
-		// like Gen 9 Doubles OU, which hasn't defined \`supportedGameTypes\` explicitly,
-		// so its \`supportedGameTypes\` will be derived as \`['doubles']\` from \`defaultGameType: 'doubles'\`.
+		// like Gen 9 Doubles OU, whose \`supportedGameTypes\` defaults to \`['doubles']\`
+		// from its \`gameType: 'doubles'\` declaration.
 		assert.throws(
 			() => common.createBattle({ formatid: 'gen9doublesou@@@Game Type = Singles' }),
 			/The game type "singles" is not supported in this format/

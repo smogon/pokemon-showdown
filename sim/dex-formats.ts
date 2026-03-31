@@ -443,7 +443,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly gameType: GameType;
 	/** Number of players, based on game type, for convenience */
 	readonly playerCount: 2 | 4;
-	readonly defaultGameType?: GameType;
 	readonly supportedGameTypes: GameType[];
 	/** List of rule names. */
 	readonly ruleset: string[];
@@ -528,11 +527,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 
-		this.defaultGameType = data.defaultGameType;
-		this.gameType = data.gameType || data.defaultGameType ||
-			(data.supportedGameTypes?.length ? data.supportedGameTypes[0] : 'singles');
-		this.supportedGameTypes = data.supportedGameTypes ||
-			(this.defaultGameType ? [this.defaultGameType] : [this.gameType]);
+		this.gameType = data.gameType || (data.supportedGameTypes?.length ? data.supportedGameTypes[0] : 'singles');
+		this.supportedGameTypes = data.supportedGameTypes || [this.gameType];
 
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
