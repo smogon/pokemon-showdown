@@ -478,7 +478,6 @@ export interface EventMethods {
 	onResidualOrder?: number;
 	onResidualPriority?: number;
 	onResidualSubOrder?: number;
-	onSemiLockPriority?: number;
 	onSourceBasePowerPriority?: number;
 	onSourceInvulnerabilityPriority?: number;
 	onSourceModifyAccuracyPriority?: number;

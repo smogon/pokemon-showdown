@@ -670,6 +670,15 @@ export class Side {
 				moveid: lockedMoveID,
 			});
 			return true;
+		} else if (this.battle.gen === 1 &&
+			(['frz', 'slp'].includes(pokemon.status) || pokemon.volatiles['partiallytrapped'])) {
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
+			this.choice.actions.push({
+				choice: 'move',
+				pokemon,
+				moveid: 'fight',
+			});
+			return true;
 		} else if (!moves.length) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
@@ -1123,7 +1132,11 @@ export class Side {
 					this.lastSelectedMove = move as ID;
 					this.lastSelectedMoveSlot = choice.moveSlot;
 				}
-				// choice.moveid should be synced with lastSelectedMove
+				/**
+				 * choice.moveid should be synced with lastSelectedMove
+				 * if a Pokémon is frozen or asleep, this ensures it tries to use the last move used
+				 * if a Pokémon is recharging, this ensures it tries to use Hyper Beam again
+				 */
 				choice.moveid = this.lastSelectedMove;
 			}
 		}
@@ -1221,7 +1234,7 @@ export class Side {
 				if (!this.chooseMove(data, targetLoc, event)) return false;
 				break;
 			case 'switch':
-				this.chooseSwitch(data);
+				if (!this.chooseSwitch(data)) return false;
 				break;
 			case 'shift':
 				if (data) return this.emitChoiceError(`Unrecognized data after "shift": ${data}`);
@@ -1237,7 +1250,7 @@ export class Side {
 				break;
 			case 'auto':
 			case 'default':
-				this.autoChoose();
+				if (!this.autoChoose()) return false;
 				break;
 			default:
 				this.emitChoiceError(`Unrecognized choice: ${choiceString}`);

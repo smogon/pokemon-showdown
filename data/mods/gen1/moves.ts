@@ -59,7 +59,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
-			onSemiLockPriority: 1,
 			onSemiLockMove: 'bide',
 			onDisableMove(target) {
 				target.maybeLocked = false; // the player knows it is locked

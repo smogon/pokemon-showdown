@@ -1087,7 +1087,7 @@ export class Pokemon {
 		if (lockedMove) {
 			this.trapped = true;
 		} else {
-			lockedMove = this.getSemiLockedMove(true);
+			lockedMove = this.maybeLocked ? null : this.getSemiLockedMove(true);
 		}
 
 		// Information should be restricted for the last active Pokémon
@@ -1095,7 +1095,13 @@ export class Pokemon {
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		if (!moves.length) {
+		// actions that don't hard lock out of switching, but can't bypass the Fight button
+		// partially trapped causes maybeLocked, so it shouldn't be revealed
+		if (this.battle.gen === 1 && !lockedMove && (['frz', 'slp'].includes(this.status) ||
+			(this.volatiles['partiallytrapped'] && !this.maybeLocked))) {
+			moves = [{ move: 'Fight', id: 'fight' as ID }];
+			lockedMove = 'fight' as ID;
+		} else if (!moves.length) {
 			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
 			lockedMove = 'struggle' as ID;
 		}

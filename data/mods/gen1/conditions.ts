@@ -80,7 +80,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
-		onSemiLockMove: 'fight',
 		onDisableMove(target) {
 			target.maybeLocked = false; // the player knows it is locked
 		},
@@ -102,7 +101,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				target.cureStatus();
 			}
 		},
-		onSemiLockMove: 'fight',
 		onDisableMove(target) {
 			target.maybeLocked = false; // the player knows it is locked
 		},
@@ -210,8 +208,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
-		onSemiLockPriority: -1,
-		onSemiLockMove: 'fight',
 		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
 			if (this.effectState.maybeLocked) {
@@ -243,9 +239,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.effectState.damage = this.lastDamage;
 			this.effectState.locked = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
-		},
-		onOverrideAction(pokemon, target, move) {
-			return this.effectState.move;
 		},
 		onBeforeMove(pokemon, target, move) {
 			if (target !== this.effectState.locked) {
