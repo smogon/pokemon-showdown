@@ -4323,7 +4323,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 95, atk: 65, def: 110, spa: 60, spd: 130, spe: 65 },
-		abilities: { 0: "Synchronize", 1: "Poison Heal", H: "Eventide" },
+		abilities: { 0: "Synchronize", 1: "Immunity", H: "Eventide" },
 		heightm: 1,
 		weightkg: 27,
 		color: "Black",
