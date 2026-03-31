@@ -223,6 +223,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
 					if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
 				}
+				// FIXME: this should happen even if the slot was empty before Transform
+				// https://bulbapedia.bulbagarden.net/wiki/List_of_Transform_glitches#Transform_.2B_Mirror_Move.2FMetronome_PP_error
 				if (pokemon.transformed && pokemon.side.lastSelectedMoveSlot < pokemon.baseMoveSlots.length) {
 					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp += 1;
 					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp %= 64;
