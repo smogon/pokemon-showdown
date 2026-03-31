@@ -498,6 +498,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Ladder Spotlight",
 		column: 2,
 	},
+    {
+		name: "[Gen 3] FRLG OU",
+		mod: 'gen3frlg',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain'],
+		onValidateSet(set) {
+			const species = set.species;
+			if ((species === 'Raikou' || species == 'Entei' || species == 'Suicune') && set.ivs)
+			{
+				let stat: StatID;
+				for (stat in set.ivs) {
+					if (stat != 'hp' && stat != 'atk' && set.ivs[stat] > 0) {
+						return [species + " may not have more than 7 Attack IVs or 0 Defense, Special Attack, Special Defense, or Speed IVs in FRLG, due to the Roaming IVs glitch."];
+					}
+					if (stat == 'atk' && set.ivs[stat] > 7) {
+						return [species + " may not have more than 7 Attack IVs or 0 Defense, Special Attack, Special Defense, or Speed IVs in FRLG, due to the Roaming IVs glitch."];
+					}
+				}
+			}
+		},
+	},
 	{
 		name: "[Gen 9] Godly Gift Random Battle",
 		desc: `Each Pok&eacute;mon receives one base stat from the God in the first slot depending on its position in the team.`,
