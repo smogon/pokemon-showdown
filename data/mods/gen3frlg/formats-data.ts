@@ -426,10 +426,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	pinsir: {
-		tier: "LC",
+		tier: "OU",
 	},
 	tauros: {
-		tier: "LC",
+		tier: "OU",
 	},
 	magikarp: {
 		tier: "LC",
@@ -482,7 +482,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	aerodactyl: {
-		tier: "LC",
+		tier: "OU",
 	},
 	snorlax: {
 		tier: "OU",
@@ -692,7 +692,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Unobtainable",
 	},
 	qwilfish: {
-		tier: "LC",
+		tier: "OU",
 	},
 	shuckle: {
 		tier: "Unreleased",
@@ -735,7 +735,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	delibird: {
-		tier: "LC",
+		tier: "OU",
 	},
 	mantine: {
 		tier: "OU",
