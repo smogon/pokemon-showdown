@@ -63,6 +63,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	lightball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	magoberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
