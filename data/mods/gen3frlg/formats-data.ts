@@ -366,7 +366,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	chansey: {
-		tier: "NFE",
+		tier: "OU",
 	},
 	blissey: {
 		tier: "OU",
