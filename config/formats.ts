@@ -84,6 +84,23 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
+		name: "[Gen 9] Champoins OU",
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU',
+			'+Abomasite', '+Altarianite', '+Ampharosite', '+Banettite', '+Blastoisinite', '+Blazikenite', '+Cameruptite', '+Charizardite X', '+Charizardite Y',
+			'+Diancite', '+Galladite', '+Garchompite', '+Gardevoirite', '+Gengarite', '+Glalitite', '+Gyaradosite', '+Heracronite', '+Houndoominite', '+Latiasite',
+			'+Latiosite', '+Lucarionite', '+Medichamite', '+Metagrossite', '+Mewtwonite X', '+Mewtwonite Y', '+Sablenite', '+Salamencite', '+Sceptilite', '+Scizorite',
+			'+Slowbronite', '+Swampertite', '+Tyranitarite', '+Venusaurite',
+			// New Megas
+			'+Emboarite', '+Meganiumite', '+Greninjite', '+Delphoxite', '+Chesnaughtite', '+Dragoninite', '+Feraligite', '+Froslassite',
+			'+Abomasnow-Mega', '+Altaria-Mega', '+Ampharos-Mega', '+Banette-Mega', '+Blastoise-Mega', '+Blaziken-Mega', '+Camerupt-Mega', '+Charizard-Mega-X', '+Charizard-Mega-Y',
+			'+Diancie-Mega', '+Gallade-Mega', '+Garchomp-Mega', '+Gardevoir-Mega', '+Gengar-Mega', '+Glalie-Mega', '+Gyarados-Mega', '+Heracross-Mega', '+Houndoom-Mega', '+Latias-Mega',
+			'+Latios-Mega', '+Lucario-Mega', '+Medicham-Mega', '+Metagross-Mega', '+Mewtwo-Mega-X', '+Mewtwo-Mega-Y', '+Sableye-Mega', '+Salamence-Mega', '+Sceptile-Mega', '+Scizor-Mega',
+			'+Slowbro-Mega', '+Swampert-Mega', '+Tyranitar-Mega', '+Venusaur-Mega', '+Emboar-Mega', '+Meganium-Mega', '+Greninja-Mega', '+Delphox-Mega', '+Chesnaught-Mega', '+Dragonite-Mega',
+			'+Feraligatr-Mega', '+Froslass-Mega',
+		],
+	},
+	{
 		name: "[Gen 9] Ubers",
 		mod: 'gen9',
 		ruleset: ['Standard'],

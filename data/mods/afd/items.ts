@@ -65,10 +65,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		desc: "Reflects back 125% of the damage that would've been dealt. One-time use.",
 		shortDesc: "Reflects back 125% of the damage that would've been dealt. One-time use.",
 		onDamage(damage, target, source, effect) {
-			if (target.useItem()) {
+			if (source && target !== source && effect?.effectType === 'Move' && target.useItem()) {
 				this.add('-activate', target, 'item: Ward Tag');
 				this.damage(damage * 5 / 4, source, target);
-				this.effectState.busted = true;
 				return 0;
 			}
 		},

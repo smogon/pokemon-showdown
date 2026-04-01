@@ -3,6 +3,146 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 80, atk: 92, def: 65, spa: 65, spd: 80, spe: 98 },
 	},
+	clefablemega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	victreebelmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	starmiemega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	skarmorymega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	scolipedemega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	scraftymega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	emboarmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	eelektrossmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	chesnaughtmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	delphoxmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	greninjamega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	pyroarmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	barbaraclemega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	hawluchamega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	raichumegax: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	chimechomega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	baxcaliburmega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	zeraoramega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	absolmegaz: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	staraptormega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	golisopodmega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	meowsticfmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	crabominablemega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	golurkmega: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	garchompmegaz: {
+		inherit: true,
+		abilities: { 0: "Huge Power" },
+	},
+	lucariomegaz: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	raichumegay: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	falinksmega: {
+		inherit: true,
+		abilities: { 0: "No Retreat" },
+	},
+	drampamega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	zygardemega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	dragalgemega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	darkraimega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	heatranmega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	floettemega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
+	},
+	chandeluremega: {
+		inherit: true,
+		abilities: { 0: "Shadow Tag" },
+	},
 	lickitung: {
 		inherit: true,
 		abilities: { 0: "Own Tempo", 1: "Oblivious", H: "Chaos Saliva" },
@@ -95,24 +235,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 101, atk: 122, def: 88, spa: 98, spd: 120, spe: 88 },
 		abilities: { 0: "Contrary" },
 	},
-	goodra: {
-		inherit: true,
-		otherFormes: ["Goodra-Hisui", "Goodra-Agency"],
-		formeOrder: ["Goodra", "Goodra-Hisui", "Goodra-Agency"],
-	},
-	goodraagency: {
-		num: 706,
-		name: "Goodra-Agency",
-		baseSpecies: "Goodra",
-		forme: "Agency",
-		types: ["Dragon"],
-		baseStats: { hp: 80, atk: 100, def: 120, spa: 110, spd: 200, spe: 60 },
-		abilities: { 0: "Regenerator", 1: "Hydration", H: "Gooey" },
-		heightm: 1.7,
-		weightkg: 334.1,
-		color: "Purple",
-		eggGroups: ["Dragon"],
-	},
 	incineroar: {
 		inherit: true,
 		types: ['Fire', 'Fighting'],
@@ -144,6 +266,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	glimmoramega: {
 		inherit: true,
 		baseStats: { hp: 106, atk: 185, def: 85, spa: 214, spd: 145, spe: 155 },
+		abilities: { 0: "Regenerator" },
 	},
 	tatsugiri: {
 		inherit: true,
@@ -156,6 +279,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	tatsugiristretchy: {
 		inherit: true,
 		abilities: { 0: "Commander", 1: "Parental Bond", H: "Storm Drain" },
+	},
+	tatsugiricurlymega: {
+		inherit: true,
+		abilities: { 0: "Parental Bond" },
+	},
+	tatsugiridroopymega: {
+		inherit: true,
+		abilities: { 0: "Parental Bond" },
+	},
+	tatsugiristretchymega: {
+		inherit: true,
+		abilities: { 0: "Parental Bond" },
 	},
 	calyrex: {
 		num: 898,

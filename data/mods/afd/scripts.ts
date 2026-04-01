@@ -71,7 +71,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.modData('Learnsets', 'bruxish').learnset[move.id] = ['9L1'];
 			}
 		}
-		for (const moveid of this.modData('Learnsets', 'incineroar').learnset) {
+		for (const moveid in this.data.Learnsets['incineroar'].learnset) {
 			if (this.moves.get(moveid).type === 'Dark') {
 				delete this.modData('Learnsets', 'incineroar').learnset[moveid];
 			}
@@ -355,6 +355,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return true;
+		},
+		canTerastallize(pokemon: Pokemon) {
+			if (this.dex.gen !== 9) {
+				return null;
+			}
+			return pokemon.teraType;
 		},
 		canMegaEvo(pokemon) {
 			const species = pokemon.baseSpecies;

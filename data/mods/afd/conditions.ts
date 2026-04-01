@@ -3,7 +3,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
-			if (move.type === 'Fire') {
+			if (move.type === 'Rock') {
 				this.debug('Sandstorm rock boost');
 				return this.chainModify(1.5);
 			}
