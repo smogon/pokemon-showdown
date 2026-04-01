@@ -776,6 +776,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Sleep Clause Mod'],
 	},
 	{
+		name: "[Gen 3] FRLG OU",
+		mod: 'gen3frlg',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
+		banlist: ['Uber'],
+	},
+	{
 		name: "[Gen 4] VGC 2009",
 		mod: 'gen4pt',
 		gameType: 'doubles',
