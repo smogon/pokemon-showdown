@@ -10,6 +10,29 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (species.types.includes('Grass') && !species.types.includes('Fire')) {
 				if (this.data.Learnsets[id]?.learnset) this.modData('Learnsets', id).learnset.solarflare = ['9L1'];
 			}
+			if (species.baseStats['atk'] >= 130 &&
+				!Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') &&
+				!Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power')
+			) {
+				const abilities = { ...this.modData('Pokedex', id).abilities };
+				for (const s of ['1', 'H', 'S'] ) {
+					if (!this.modData('Pokedex', id).abilities[s]) {
+						abilities[s] = 'Huge Power';
+						this.modData('Pokedex', id).abilities = abilities;
+						break;
+					}
+				}
+			}
+			if (!Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator')) {
+				const abilities = { ...this.modData('Pokedex', id).abilities };
+				for (const s of ['1', 'H', 'S'] ) {
+					if (!this.modData('Pokedex', id).abilities[s]) {
+						abilities[s] = 'Regenerator';
+						this.modData('Pokedex', id).abilities = abilities;
+						break;
+					}
+				}
+			}
 		}
 		this.modData('Learnsets', 'tyranitar').learnset.shoreup = ['9L1'];
 		this.modData('Learnsets', 'bastiodon').learnset.blastiodon = ['9L1'];
