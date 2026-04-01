@@ -267,7 +267,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	farfetchd: {
-		tier: "LC",
+		tier: "OU",
 	},
 	doduo: {
 		tier: "LC",
@@ -699,7 +699,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Unobtainable",
 	},
 	heracross: {
-		tier: "LC",
+		tier: "OU",
 	},
 	sneasel: {
 		tier: "OU",
