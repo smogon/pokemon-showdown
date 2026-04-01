@@ -1038,7 +1038,7 @@ export class RandomAFDTeams extends RandomTeams {
 	override getLevel(species: Species): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		const file = this.randomAFDSets[species.id] || this.randomSets[species.id];
-		if (file["level"]) return file["level"]!;
+		if (file["level"]) return file["level"];
 		// Default to tier-based levelling
 		const tier = species.tier;
 		const tierScale: Partial<Record<Species['tier'], number>> = {
