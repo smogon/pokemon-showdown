@@ -10,6 +10,20 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (species.types.includes('Grass') && !species.types.includes('Fire')) {
 				if (this.data.Learnsets[id]?.learnset) this.modData('Learnsets', id).learnset.solarflare = ['9L1'];
 			}
+			const abilities = this.modData('Pokedex', id, true).abilities;
+			if (species.baseStats['atk'] >= 130) {
+				const hasHP = Object.values(abilities).includes('Huge Power') ||
+					Object.values(abilities).includes('Pure Power');
+				if (!hasHP) {
+					const slot = !abilities['1'] ? '1' : !abilities['H'] ? 'H' : 'S';
+					abilities[slot] ||= 'Huge Power';
+				}
+			}
+			const hasRegen = Object.values(abilities).includes('Regenerator');
+			if (!hasRegen) {
+				const slot = !abilities['1'] ? '1' : !abilities['H'] ? 'H' : 'S';
+				abilities[slot] ||= 'Regenerator';
+			}
 		}
 		this.modData('Learnsets', 'tyranitar').learnset.shoreup = ['9L1'];
 		this.modData('Learnsets', 'bastiodon').learnset.blastiodon = ['9L1'];
