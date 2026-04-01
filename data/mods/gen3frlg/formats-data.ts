@@ -438,7 +438,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	lapras: {
-		tier: "LC",
+		tier: "OU",
 	},
 	ditto: {
 		tier: "LC",
@@ -656,7 +656,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	unown: {
-		tier: "LC",
+		tier: "OU",
 	},
 	wynaut: {
 		tier: "Uber",
@@ -741,7 +741,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	skarmory: {
-		tier: "LC",
+		tier: "OU",
 	},
 	houndour: {
 		tier: "Unreleased",
@@ -770,13 +770,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Unobtainable",
 	},
 	raikou: {
-		tier: "LC",
+		tier: "OU",
 	},
 	entei: {
-		tier: "LC",
+		tier: "OU",
 	},
 	suicune: {
-		tier: "LC",
+		tier: "OU",
 	},
 	larvitar: {
 		tier: "LC",
