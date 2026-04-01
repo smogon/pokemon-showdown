@@ -1884,13 +1884,19 @@ export class RandomTeams {
 				this.dex.getEffectiveness('Fire', species) > 0 ||
 				(this.dex.getEffectiveness('Fire', species) > -2 && types.includes('Flying'))
 			);
+			const weakToSlushBall = (
+				this.dex.getEffectiveness('Ice', species) > 0 ||
+				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Fire'))
+			);
 			const weakToDeception = (
 				this.dex.getEffectiveness('Dark', species) > 0 ||
 				(this.dex.getEffectiveness('Dark', species) > -2 && types.includes('Fairy'))
 			);
-			const weakToSlushBall = (
-				this.dex.getEffectiveness('Ice', species) > 0 ||
-				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Fire'))
+			const weakToDarkDepletion = (
+				(this.dex.getEffectiveness('Dark', species) > 0 ||
+					(this.dex.getEffectiveness('Dark', species) > -2 && types.includes('Grass'))) &&
+					(this.dex.getEffectiveness('Dark', species) > 0 ||
+						(this.dex.getEffectiveness('Dark', species) > -2 && types.includes('Water')))
 			);
 			/* const hasRainSetup = (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
 				set.moves.includes('whirlduel') || set.moves.includes('shelter'));
@@ -1963,17 +1969,21 @@ export class RandomTeams {
 					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
 					if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
 				}
-				if (weakToSlushBall) {
-					if (!typeWeaknesses['Slushball']) typeWeaknesses['Slushball'] = 0;
-					if (typeWeaknesses['Slushball'] >= 4 * limitFactor) continue;
-				}
 				if (weakToEmberPlume) {
 					if (!typeWeaknesses['Ember Plume']) typeWeaknesses['Ember Plume'] = 0;
 					if (typeWeaknesses['Ember Plume'] >= 4 * limitFactor) continue;
 				}
+				if (weakToSlushBall) {
+					if (!typeWeaknesses['Slushball']) typeWeaknesses['Slushball'] = 0;
+					if (typeWeaknesses['Slushball'] >= 4 * limitFactor) continue;
+				}
 				if (weakToDeception) {
 					if (!typeWeaknesses['Deception']) typeWeaknesses['Deception'] = 0;
 					if (typeWeaknesses['Deception'] >= 4 * limitFactor) continue;
+				}
+				if (weakToDarkDepletion) {
+					if (!typeWeaknesses['Dark Depletion']) typeWeaknesses['Dark Depletion'] = 0;
+					if (typeWeaknesses['Dark Depletion'] >= 4 * limitFactor) continue;
 				}
 
 				// Limit one level 100 Pokemon
@@ -2043,9 +2053,10 @@ export class RandomTeams {
 				typeWeaknesses['Fire']++;
 			}
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
-			if (weakToSlushBall) typeWeaknesses['Slushball']++;
 			if (weakToEmberPlume) typeWeaknesses['Ember Plume']++;
+			if (weakToSlushBall) typeWeaknesses['Slushball']++;
 			if (weakToDeception) typeWeaknesses['Deception']++;
+			if (weakToDarkDepletion) typeWeaknesses['Dark Depletion']++;
 
 			// Increment level 100 counter
 			if (set.level === 100) numMaxLevelPokemon++;
