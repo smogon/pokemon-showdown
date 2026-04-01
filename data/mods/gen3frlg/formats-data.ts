@@ -488,13 +488,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	articuno: {
-		tier: "LC",
+		tier: "OU",
 	},
 	zapdos: {
-		tier: "LC",
+		tier: "OU",
 	},
 	moltres: {
-		tier: "LC",
+		tier: "OU",
 	},
 	dratini: {
 		tier: "LC",
