@@ -2562,8 +2562,26 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 				if (searchStatus === 'slp') {
 					canStatus = canStatus || moveid === 'yawn';
 				}
-				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
+				if (searchStatus === 'brn' || searchStatus === 'fst' || searchStatus === 'par') {
 					canStatus = canStatus || moveid === 'triattack';
+				}
+				if (searchStatus === 'frz' || searchStatus === 'fst') {
+					canStatus = canStatus || moveid === 'blizzard';
+				}
+				if (searchStatus === 'par') {
+					canStatus = canStatus || moveid === 'conduction';
+				}
+				if (searchStatus === 'brn' || searchStatus === 'par' || searchStatus === 'psn' || searchStatus === 'fst') {
+					canStatus = canStatus || moveid === 'draconicorb';
+				}
+				if (searchStatus === 'slp' || searchStatus === 'par' || searchStatus === 'confusion') {
+					canStatus = canStatus || moveid === 'initiative';
+				}
+				if (searchStatus === 'brn' || searchStatus === 'fst') {
+					canStatus = canStatus || moveid === 'frostburnclaw';
+				}
+				if (searchStatus === 'confusion' || searchStatus === 'slp') {
+					canStatus = canStatus || moveid === 'overbearingcommand';
 				}
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
