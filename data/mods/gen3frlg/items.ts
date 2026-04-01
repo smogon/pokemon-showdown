@@ -7,6 +7,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	brightpowder: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	choiceband: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -108,6 +112,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Unobtainable",
 	},
 	salacberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	scopelens: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
