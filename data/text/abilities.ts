@@ -379,6 +379,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
 	},
+	dragonize: {
+		name: "Dragonize",
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
 		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
@@ -979,6 +984,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Mega Launcher",
 		desc: "This Pokemon's pulse moves have their power multiplied by 1.5. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
+	},
+	megasol: {
+		name: "Mega Sol",
+		shortDesc: "This Pokemon's moves are used as if the effects of Sunny Day were active.",
 	},
 	merciless: {
 		name: "Merciless",
