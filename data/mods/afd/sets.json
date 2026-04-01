@@ -1042,7 +1042,7 @@
                 "teraTypes": ["Electric"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["Agility", "Bolt Beak", "Fishious Rend", "Megahorn"],
                 "abilities": ["Lightning Rod"],
                 "teraTypes": ["Electric"]
