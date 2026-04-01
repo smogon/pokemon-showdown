@@ -85,6 +85,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Champoins OU",
+		thread: [`<a href="https://www.smogon.com/forums/threads/np-sv-ou-suspect-process-round-16-we-are-the-champions.3779986/">Champoins OU Discussion</a>`],
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU',
 			'+Abomasite', '+Altarianite', '+Ampharosite', '+Banettite', '+Blastoisinite', '+Blazikenite', '+Cameruptite', '+Charizardite X', '+Charizardite Y',
