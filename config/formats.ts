@@ -499,12 +499,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 3] FRLG OU",
-		mod: 'gen3frlg',
-		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
-		banlist: ['Uber'],
-	},
-	{
 		name: "[Gen 9] Godly Gift Random Battle",
 		desc: `Each Pok&eacute;mon receives one base stat from the God in the first slot depending on its position in the team.`,
 		team: 'randomGodlyGift',
@@ -696,6 +690,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// searchShow: false,
 		ruleset: ['[Gen 6] RU'],
 		banlist: ['RU', 'NUBL'],
+	},
+	{
+		name: "[Gen 3] FRLG OU",
+		mod: 'gen3frlg',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 4] VGC 2009",
