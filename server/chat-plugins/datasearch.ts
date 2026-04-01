@@ -817,31 +817,29 @@ export const commands: Chat.ChatCommands = {
 	sampleteams(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!this.runBroadcast()) return;
-
 		const sampleTeamsData: {
 			[name: string]: {
 				names: string[],
 				description: string,
-				links: string[],
+				links: { url: string, name: string }[],
 			},
 		} = {
 			'DOU': {
 				names: ["Doubles", "DOU", "Doubles OU"],
 				description: 'Double Weathergy teams for DOU',
 				links: [
-					'<a href="https://pokepast.es/726649bcc9795b78">Rain + Dreamscape</a>',
-					'<a href="https://pokepast.es/7ed8e2fba6c76275">Dragon Force + Fairy Dust</a>',
-					'<a href="https://pokepast.es/af0b17ac8355b4cb">Sun + Dust Storm</a>',
-					'<a href="https://pokepast.es/bfdf902e4aa48355">Paranormal Activity + Sandstorm</a>',
-					'<a href="https://pokepast.es/7f8076d2cb88e13f">Blood Moon + Thunderstorm</a>',
-					'<a href="https://pokepast.es/7693e81493199140">Fog + Magnetosphere</a>',
-					'<a href="https://pokepast.es/129c7731afac3a56">Smog + Battle Aura</a>',
-					'<a href="https://pokepast.es/70f70acd7bbaced8">Hail + Strong Winds</a>',
-					'<a href="https://pokepast.es/34829c613d750110">Pollen + Pheromones + A Little Rain</a>',
+					{ url: 'https://pokepast.es/726649bcc9795b78', name: 'Rain + Dreamscape' },
+					{ url: 'https://pokepast.es/7ed8e2fba6c76275', name: 'Dragon Force + Fairy Dust' },
+					{ url: 'https://pokepast.es/af0b17ac8355b4cb', name: 'Sun + Dust Storm' },
+					{ url: 'https://pokepast.es/bfdf902e4aa48355', name: 'Paranormal Activity + Sandstorm' },
+					{ url: 'https://pokepast.es/7f8076d2cb88e13f', name: 'Blood Moon + Thunderstorm' },
+					{ url: 'https://pokepast.es/7693e81493199140', name: 'Fog + Magnetosphere' },
+					{ url: 'https://pokepast.es/129c7731afac3a56', name: 'Smog + Battle Aura' },
+					{ url: 'https://pokepast.es/70f70acd7bbaced8', name: 'Hail + Strong Winds' },
+					{ url: 'https://pokepast.es/34829c613d750110', name: 'Pollen + Pheromones + A Little Rain' },
 				],
 			},
 		};
-
 		if (!target) {
 			const htmlLines = [`<h2>WIP Sample Teams:</h2>`];
 			for (const group in sampleTeamsData) {
@@ -849,16 +847,14 @@ export const commands: Chat.ChatCommands = {
 				htmlLines.push(
 					`<h3>${group}</h3>`,
 					`<p>${data.description}</p>`,
-					`<ul>${data.links.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('')}</ul>`
+					`<ul>${data.links.map(link => `<li><a href="${link.url}" target="_blank">${link.name}</a></li>`).join('')}</ul>`
 				);
 			}
 			this.sendReplyBox(htmlLines.join(''));
 			return;
 		}
-
 		const targetId = toID(target);
 		let groupName: string | null = null;
-
 		for (const group in sampleTeamsData) {
 			const data = sampleTeamsData[group];
 			if (data.names.map(n => toID(n)).includes(targetId) || toID(group) === targetId) {
@@ -866,21 +862,18 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 		}
-
 		if (!groupName) {
 			throw new Chat.ErrorMessage(
 				`Sample Teams group "${target}" not found. Use /sampleteams to see available categories.`
 			);
 		}
-
 		const groupData = sampleTeamsData[groupName];
 		let html = `<h2>${groupName}</h2><p>${groupData.description}</p>`;
 		html += '<ul>';
 		for (const link of groupData.links) {
-			html += `<li><a href="${link}" target="_blank">${link}</a></li>`;
+			html += `<li><a href="${link.url}" target="_blank">${link.name}</a></li>`;
 		}
 		html += '</ul>';
-
 		this.sendReplyBox(html);
 	},
 };
