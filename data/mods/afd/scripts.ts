@@ -78,6 +78,18 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 	},
 	actions: {
+		runMegaEvo(pokemon: Pokemon) {
+			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+			if (!speciesid) return false;
+
+			pokemon.formeChange(speciesid, pokemon.getItem(), true);
+
+			// Limit one mega evolution
+			pokemon.canMegaEvo = null;
+
+			this.battle.runEvent('AfterMega', pokemon);
+			return true;
+		},
 		switchIn(pokemon, pos, sourceEffect = null, isDrag) {
 			if (!pokemon || pokemon.isActive) {
 				this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
