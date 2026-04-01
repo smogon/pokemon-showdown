@@ -14,21 +14,19 @@ export const Scripts: ModdedBattleScriptsData = {
 				!Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') &&
 				!Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power')
 			) {
-				const abilities = { ...this.modData('Pokedex', id).abilities };
 				for (const s of ['1', 'H', 'S'] ) {
 					if (!this.modData('Pokedex', id).abilities[s]) {
-						abilities[s] = 'Huge Power';
-						this.modData('Pokedex', id).abilities = abilities;
+						this.modData('Pokedex', id).abilities =
+							{ ...this.modData('Pokedex', id).abilities, s: 'Huge Power' };
 						break;
 					}
 				}
 			}
 			if (!Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator')) {
-				const abilities = { ...this.modData('Pokedex', id).abilities };
 				for (const s of ['1', 'H', 'S'] ) {
 					if (!this.modData('Pokedex', id).abilities[s]) {
-						abilities[s] = 'Regenerator';
-						this.modData('Pokedex', id).abilities = abilities;
+						this.modData('Pokedex', id).abilities = 
+							{ ...this.modData('Pokedex', id).abilities, s: 'Regenerator' };
 						break;
 					}
 				}
