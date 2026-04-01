@@ -259,7 +259,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			} else {
 				target.addVolatile('partiallytrapped', pokemon, move);
-				if (this.effectState.totalDuration - this.effectState.duration! > 2) {
+				if (this.effectState.totalDuration - this.effectState.duration! > 0) {
 					target.volatiles['partiallytrapped'].maybeLocked = true;
 				}
 			}
@@ -268,7 +268,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
-			if (this.effectState.totalDuration - this.effectState.duration! >= 2) {
+			if (this.effectState.totalDuration - this.effectState.duration! > 1) {
 				pokemon.maybeLocked = true;
 			}
 		},
