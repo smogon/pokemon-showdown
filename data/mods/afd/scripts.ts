@@ -10,35 +10,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (species.types.includes('Grass') && !species.types.includes('Fire')) {
 				if (this.data.Learnsets[id]?.learnset) this.modData('Learnsets', id).learnset.solarflare = ['9L1'];
 			}
-			if (species.baseStats['atk'] >= 130) {
-				let hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
-					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
-				if (!this.modData('Pokedex', id).abilities['1'] && !hasHP) {
-					this.modData('Pokedex', id).abilities['1'] = 'Huge Power';
-				}
-				hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
-					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
-				if (!this.modData('Pokedex', id).abilities['H'] && !hasHP) {
-					this.modData('Pokedex', id).abilities['H'] = 'Huge Power';
-				}
-				hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
-					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
-				if (!this.modData('Pokedex', id).abilities['S'] && !hasHP) {
-					this.modData('Pokedex', id).abilities['S'] = 'Huge Power';
-				}
-			}
-			let hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
-			if (!this.modData('Pokedex', id).abilities['1'] && !hasRegen) {
-				this.modData('Pokedex', id).abilities['1'] = 'Regenerator';
-			}
-			hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
-			if (!this.modData('Pokedex', id).abilities['H'] && !hasRegen) {
-				this.modData('Pokedex', id).abilities['H'] = 'Regenerator';
-			}
-			hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
-			if (!this.modData('Pokedex', id).abilities['S'] && !hasRegen) {
-				this.modData('Pokedex', id).abilities['S'] = 'Regenerator';
-			}
 		}
 		this.modData('Learnsets', 'tyranitar').learnset.shoreup = ['9L1'];
 		this.modData('Learnsets', 'bastiodon').learnset.blastiodon = ['9L1'];
