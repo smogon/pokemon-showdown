@@ -376,4 +376,40 @@ describe('Transform [Gen 1]', () => {
 		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
 		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
 	});
+
+	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'Blastoise', moves: ['transform', 'splash'] },
+		], [
+			{ species: 'Golem', moves: ['tackle', 'mirrormove'] },
+		]]);
+		const blastoise = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices('move mirrormove', 'move tackle');
+		assert.equal(blastoise.moveSlots[0].pp, 5);
+		assert.equal(blastoise.moveSlots[1].pp, 4);
+		assert.equal(blastoise.baseMoveSlots[0].pp, blastoise.baseMoveSlots[0].maxpp - 1);
+		assert.equal(blastoise.baseMoveSlots[1].pp, blastoise.baseMoveSlots[1].maxpp + 1);
+	});
+
+	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented (same with two-turn moves)`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'Mewtwo', moves: ['transform', 'splash'] },
+		], [
+			{ species: 'Charizard', moves: ['solarbeam', 'mirrormove', 'splash'] },
+		]]);
+		const charizard = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices('move splash', 'move solarbeam');
+		battle.makeChoices('move mirrormove', 'move splash');
+		assert.equal(charizard.moveSlots[0].pp, 5);
+		assert.equal(charizard.moveSlots[1].pp, 5);
+		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert.equal(charizard.moveSlots[0].pp, 5);
+		assert.equal(charizard.moveSlots[1].pp, 4);
+		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+	});
 });
