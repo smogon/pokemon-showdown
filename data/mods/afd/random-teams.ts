@@ -1,5 +1,6 @@
 import { Utils } from '../../../lib';
 import RandomTeams from '../../random-battles/gen9/teams';
+import { toID } from '../../../sim/dex';
 
 export interface TeamData {
 	typeCount: { [k: string]: number };
