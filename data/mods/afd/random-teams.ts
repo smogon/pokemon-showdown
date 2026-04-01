@@ -1037,7 +1037,8 @@ export class RandomAFDTeams extends RandomTeams {
 
 	override getLevel(species: Species): number {
 		if (this.adjustLevel) return this.adjustLevel;
-		if (this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
+		const file = this.randomAFDSets[species.id] || this.randomSets[species.id];
+		if (file["level"]) return file["level"]!;
 		// Default to tier-based levelling
 		const tier = species.tier;
 		const tierScale: Partial<Record<Species['tier'], number>> = {
@@ -1084,7 +1085,8 @@ export class RandomAFDTeams extends RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this.randomSets[species.id]["sets"];
+		if (!this.randomAFDSets[species.id]) return this.randomSet(species, teamDetails, isLead, isDoubles);
+		const sets = this.randomAFDSets[species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);

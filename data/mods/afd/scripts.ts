@@ -1,51 +1,45 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	init() {
-		for (const species of this.species.all()) {
+		for (const id in this.data.Pokedex) {
+			const species = this.data.Pokedex[id];
+			if (species.isCosmeticForme) continue;
 			if (species.types.includes('Ground')) {
-				this.modData('Learnsets', species.id).learnset.thousandarrows = ['9L1'];
+				if (this.data.Learnsets[id]?.learnset) this.modData('Learnsets', id).learnset.thousandarrows = ['9L1'];
 			}
 			if (species.types.includes('Grass') && !species.types.includes('Fire')) {
-				this.modData('Learnsets', species.id).learnset.solarflare = ['9L1'];
+				if (this.data.Learnsets[id]?.learnset) this.modData('Learnsets', id).learnset.solarflare = ['9L1'];
 			}
-			if (!species.battleOnly && species.baseStats['atk'] >= 130) {
-				let hasHP = Object.values(species.abilities).includes('Huge Power') ||
-					Object.values(species.abilities).includes('Pure Power');
-				if (!species.abilities['1'] && !hasHP) {
-					this.modData('Pokedex', species.id).abilities['1'] = 'Huge Power';
+			if (species.baseStats['atk'] >= 130) {
+				let hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
+					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
+				if (!this.modData('Pokedex', id).abilities['1'] && !hasHP) {
+					this.modData('Pokedex', id).abilities['1'] = 'Huge Power';
 				}
-				hasHP = Object.values(this.modData('Pokedex', species.id).abilities).includes('Huge Power') ||
-					Object.values(this.modData('Pokedex', species.id).abilities).includes('Pure Power');
-				if (!species.abilities['H'] && !hasHP) {
-					this.modData('Pokedex', species.id).abilities['H'] = 'Huge Power';
+				hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
+					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
+				if (!this.modData('Pokedex', id).abilities['H'] && !hasHP) {
+					this.modData('Pokedex', id).abilities['H'] = 'Huge Power';
 				}
-				hasHP = Object.values(this.modData('Pokedex', species.id).abilities).includes('Huge Power') ||
-					Object.values(this.modData('Pokedex', species.id).abilities).includes('Pure Power');
-				if (!species.abilities['S'] && !hasHP) {
-					this.modData('Pokedex', species.id).abilities['S'] = 'Huge Power';
+				hasHP = Object.values(this.modData('Pokedex', id).abilities).includes('Huge Power') ||
+					Object.values(this.modData('Pokedex', id).abilities).includes('Pure Power');
+				if (!this.modData('Pokedex', id).abilities['S'] && !hasHP) {
+					this.modData('Pokedex', id).abilities['S'] = 'Huge Power';
 				}
 			}
-			if (!species.battleOnly) {
-				let hasRegen = Object.values(species.abilities).includes('Regenerator');
-				if (!species.abilities['1'] && !hasRegen) {
-					this.modData('Pokedex', species.id).abilities['1'] = 'Regenerator';
-				}
-				hasRegen = Object.values(this.modData('Pokedex', species.id).abilities).includes('Regenerator');
-				if (!species.abilities['H'] && !hasRegen) {
-					this.modData('Pokedex', species.id).abilities['H'] = 'Regenerator';
-				}
-				hasRegen = Object.values(this.modData('Pokedex', species.id).abilities).includes('Regenerator');
-				if (!species.abilities['S'] && !hasRegen) {
-					this.modData('Pokedex', species.id).abilities['S'] = 'Regenerator';
-				}
+			let hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
+			if (!this.modData('Pokedex', id).abilities['1'] && !hasRegen) {
+				this.modData('Pokedex', id).abilities['1'] = 'Regenerator';
+			}
+			hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
+			if (!this.modData('Pokedex', id).abilities['H'] && !hasRegen) {
+				this.modData('Pokedex', id).abilities['H'] = 'Regenerator';
+			}
+			hasRegen = Object.values(this.modData('Pokedex', id).abilities).includes('Regenerator');
+			if (!this.modData('Pokedex', id).abilities['S'] && !hasRegen) {
+				this.modData('Pokedex', id).abilities['S'] = 'Regenerator';
 			}
 		}
-		this.modData('Learnsets', 'incineroar2').learnset = this.data.Learnsets['incineroar'].learnset;
-		this.modData('Learnsets', 'incineroar2').learnset.shadowsneak = ['9L1'];
-		this.modData('Learnsets', 'incineroar2').learnset.kingsshield = ['9L1'];
-		this.modData('Learnsets', 'incineroar2').learnset.poltergeist = ['9L1'];
-		this.modData('Learnsets', 'incineroar2').learnset.encore = ['9L1'];
-		this.modData('Learnsets', 'incineroar2').learnset.gigatonhammer = ['9L1'];
 		this.modData('Learnsets', 'tyranitar').learnset.shoreup = ['9L1'];
 		this.modData('Learnsets', 'bastiodon').learnset.blastiodon = ['9L1'];
 		this.modData('Learnsets', 'seaking').learnset.boltbeak = ['9L1'];
@@ -62,10 +56,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'golisopod').learnset.bellydrum = ['9L1'];
 		this.modData('Learnsets', 'skuntank').learnset.shitpulse = ['9L1'];
 		this.modData('Learnsets', 'dusknoir').learnset = { explosion: ['9L1'] };
-		this.modData('Learnsets', 'calyrexmonarch').learnset.photongeyser = ['9L1'];
-		this.modData('Learnsets', 'calyrexmonarch').learnset.revivalblessing = ['9L1'];
-		this.modData('Learnsets', 'calyrexmonarch').learnset.darkvoid = ['9L1'];
-		this.modData('Learnsets', 'calyrexmonarch').learnset.holdhands = ['9L1'];
 		for (const move of this.moves.all()) {
 			if (move.flags['bite']) {
 				this.modData('Learnsets', 'bruxish').learnset[move.id] = ['9L1'];
