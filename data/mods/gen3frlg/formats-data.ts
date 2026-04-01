@@ -183,7 +183,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	primeape: {
-		tier: "NFE",
+		tier: "OU",
 	},
 	growlithe: {
 		tier: "LC",
