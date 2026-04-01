@@ -6356,20 +6356,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10034,
 	},
 	enjoin: {
-		onModifyMove(move, pokemon, target) {
-			if (!move.flags['commanding']) return;
-
-			if (target) {
+		onAfterMove(source, target, move) {
+			if (target && move.flags['commanding']) {
 				const bestStat = target.getBestStat(true, true);
 				if (move.target === 'self') {
-					this.add('-activate', pokemon, 'ability: Enjoin');
-					this.boost({ [bestStat]: 1 }, target);
-				} else if (target.side === pokemon.side) {
-					this.add('-activate', pokemon, 'ability: Enjoin');
-					this.boost({ [bestStat]: 1 }, target);
+					this.add('-activate', source, 'ability: Enjoin');
+					this.boost({ [bestStat]: 1 }, target, source, null, true);
+				} else if (target.side === source.side) {
+					this.add('-activate', source, 'ability: Enjoin');
+					this.boost({ [bestStat]: 1 }, target, source, null, true);
 				} else {
-					this.add('-activate', pokemon, 'ability: Enjoin');
-					this.boost({ [bestStat]: -1 }, target);
+					this.add('-activate', source, 'ability: Enjoin');
+					this.boost({ [bestStat]: -1 }, target, source, null, true);
 				}
 			}
 		},

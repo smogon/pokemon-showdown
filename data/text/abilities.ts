@@ -2392,7 +2392,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	enjoin: {
 		name: "Enjoin",
-		desc: "This Pokemon's commanding moves raise an ally's highest stat or lower the target's highest stat by 1 stage. If the target is the user, it has its highest stat raised by 1 stage.",
+		desc: "This Pokemon's commanding moves raise an ally's highest stat or lower the target's highest stat by 1 stage. Stat stage changes are not considered. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order.",
 		shortDesc: "This Pokemon's commanding moves raise ally's/lower foe's highest stat by 1 stage.",
 	},
 	eventide: {
