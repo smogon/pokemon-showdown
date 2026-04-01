@@ -45,65 +45,9 @@ export class MoveCounter extends Utils.Multiset<string> {
 		this.basePowerMoves = new Set();
 	}
 }
-
-// Moves that restore HP:
-const RECOVERY_MOVES = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
-];
-// Moves that drop stats:
-const CONTRARY_MOVES = [
-	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
-];
-// Moves that boost Attack:
-const PHYSICAL_SETUP = [
-	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup', 'victorydance',
-];
-// Moves which boost Special Attack:
-const SPECIAL_SETUP = [
-	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow', 'takeheart', 'torchsong',
-];
-// Moves that boost Attack AND Special Attack:
-const MIXED_SETUP = [
-	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
-];
-// Some moves that only boost Speed:
-const SPEED_SETUP = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze',
-];
-// Conglomerate for ease of access
-const SETUP = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
-	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
-];
-const SPEED_CONTROL = [
-	'electroweb', 'glare', 'icywind', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom',
-];
-// Hazard-setting moves
-const HAZARDS = [
-	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
-];
-// Protect and its variants
-const PROTECT_MOVES = [
-	'banefulbunker', 'burningbulwark', 'protect', 'silktrap', 'spikyshield',
-];
 // Moves that switch the user out
 const PIVOT_MOVES = [
 	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
-];
-
-// Moves that should be paired together when possible
-const MOVE_PAIRS = [
-	['lightscreen', 'reflect'],
-	['sleeptalk', 'rest'],
-	['protect', 'wish'],
-	['leechseed', 'protect'],
-	['leechseed', 'substitute'],
-];
-
-/** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
-const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor', 'rampardos',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -115,12 +59,7 @@ const DEFENSIVE_TERA_BLAST_USERS = [
 	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges',
 ];
 
-function sereneGraceBenefits(move: Move) {
-	return move.secondary?.chance && move.secondary.chance > 20 && move.secondary.chance < 100;
-}
-
 export class RandomAFDTeams extends RandomTeams {
-
 	override shouldCullAbility(
 		ability: string,
 		types: string[],
