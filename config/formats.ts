@@ -695,7 +695,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "STAAABmons",
+		name: "[Gen 9] STAAABmons",
 		desc: `Pok&eacute;mon have access to almost any ability and can use any move of their typing, in addition to the moves they can normally learn.`,
 		mod: 'gen9',
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Terastal Clause', 'STABmons Move Legality'],
