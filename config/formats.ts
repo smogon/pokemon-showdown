@@ -911,6 +911,82 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Pokebilities AAA",
+		desc: `Pok&eacute;mon have all of their released abilities simultaneously, as well as one ability they cannot normally use.`,
+		mod: 'pokebilities',
+		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'AAA Restricted Abilities', 'Terastal Clause', 'Sleep Moves Clause'],
+		banlist: [
+			'Annihilape', 'Arcanine-Hisui', 'Arceus', 'Archaludon', 'Azumarill', 'Basculegion', 'Basculin', 'Baxcalibur', 'Blaziken', 'Braviary-Hisui', 'Calyrex-Ice', 'Calyrex-Shadow',
+			'Ceruledge', 'Chi-Yu', 'Chien-Pao', 'Clefable', 'Cloyster', 'Conkeldurr', 'Darkrai', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Dragapult', 'Dragonite',
+			'Enamorus-Incarnate', 'Espathra', 'Eternatus', 'Excadrill', 'Flutter Mane', 'Gholdengo', 'Giratina', 'Giratina-Origin', 'Gliscor', 'Gouging Fire', 'Groudon', 'Hawlucha',
+			'Ho-Oh', 'Hoopa-Unbound', 'Iron Bundle', 'Iron Valiant', 'Kingambit', 'Keldeo', 'Kleavor', 'Koraidon', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate',
+			'Lugia', 'Lunala', 'Magearna', 'Manaphy', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Noivern', 'Ogerpon-Hearthflame', 'Palkia', 'Palkia-Origin',
+			'Porygon-Z', 'Raging Bolt', 'Rayquaza', 'Reshiram', 'Roaring Moon', 'Serperior', 'Shaymin-Sky', 'Smeargle', 'Sneasler', 'Solgaleo', 'Spectrier', 'Ursaluna', 'Ursaluna-Bloodmoon',
+			'Urshifu-Single-Strike', 'Urshifu-Rapid-Strike', 'Volcarona', 'Walking Wake', 'Weavile', 'Yanmega', 'Zacian', 'Zacian-Crowned', 'Zekrom', 'Zoroark-Hisui', 'Arena Trap',
+			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Shadow Tag',
+			'Regenerator + Wimp Out', 'Regenerator + Emergency Exit', 'Regenerator > 2', 'Drizzle + Swift Swim', 'Primordial Sea + Swift Swim', 'Drought + Chlorophyll',
+			'Desolate Land + Chlorophyll', 'Electric Surge + Surge Surfer', 'Hadron Engine + Surge Surfer', 'Hadron Engine + Quark Drive', 'Electric Surge + Quark Drive',
+			'Drought + Protosynthesis', 'Sand Stream + Sand Rush', 'Sand Stream + Sand Veil', 'Snow Warning + Snow Cloak', 'Snow Warning + Slush Rush',
+			'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail', 'Stored Power',
+		],
+		restricted: [
+			'Comatose', 'Contrary', 'Fur Coat', 'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Orichalcum Pulse',
+			'Parental Bond', 'Poison Heal', 'Pure Power', 'Sand Veil', 'Simple', 'Snow Cloak', 'Speed Boost', 'Stakeout', 'Stench', 'Tinted Lens', 'Toxic Debris', 'Triage', 'Unburden',
+			'Water Bubble', 'Wonder Guard',
+		],
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const unSeenAbilities = Object.keys(species.abilities)
+				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.filter(ability => ability !== set.ability);
+			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
+				for (const abilityName of unSeenAbilities) {
+					const banReason = this.ruleTable.check('ability:' + this.toID(abilityName));
+					if (banReason) {
+						return [`${set.name}'s ability ${abilityName} is ${banReason}.`];
+					}
+				}
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+					continue;
+				}
+				pokemon.m.innates = Object.keys(pokemon.species.abilities)
+					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
+					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
+					.filter(ability => ability !== pokemon.ability);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					const effect = 'ability:' + this.toID(innate);
+					pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+		},
+		onFaint(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(innate) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);			}
+		},
+		onAfterMega(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+			pokemon.m.innates = undefined;
+		},
+	},
+	{
 		name: "[Gen 9] Shared Power",
 		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
 		mod: 'sharedpower',
