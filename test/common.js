@@ -43,7 +43,7 @@ class TestTools {
 
 	getFormat(options) {
 		if (options.formatid) {
-			const format = Dex.formats.get(options.formatid, true);
+			const format = Dex.formats.get(options.formatid, options.formatid.includes('@@@'));
 			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
 			return format;
 		}
