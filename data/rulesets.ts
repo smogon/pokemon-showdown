@@ -1435,7 +1435,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
-					if (pokemon.hp && pokemon.status === 'slp') {
+					if (pokemon !== target && pokemon.hp && pokemon.status === 'slp') {
 						this.add('-message', 'Sleep Clause activated. The match is a forfeit.');
 						this.lose((source || target.side.foe).side);
 						return false;
