@@ -372,10 +372,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	tangela: {
-		tier: "LC",
+		tier: "OU",
 	},
 	kangaskhan: {
-		tier: "LC",
+		tier: "OU",
 	},
 	horsea: {
 		tier: "LC",
@@ -441,7 +441,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	ditto: {
-		tier: "LC",
+		tier: "OU",
 	},
 	eevee: {
 		tier: "LC",
@@ -464,7 +464,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Unobtainable",
 	},
 	porygon: {
-		tier: "LC",
+		tier: "OU",
 	},
 	porygon2: {
 		tier: "OU",
