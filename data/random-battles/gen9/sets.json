@@ -3294,7 +3294,7 @@
         ]
     },
     "rotomwash": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3812,7 +3812,7 @@
         ]
     },
     "arceusice": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4115,7 +4115,7 @@
         ]
     },
     "krookodile": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4132,7 +4132,7 @@
         ]
     },
     "scrafty": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -5524,7 +5524,7 @@
         ]
     },
     "komala": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -6488,7 +6488,7 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Aqua Step", "Close Combat", "Rapid Spin", "Roost", "Swords Dance"],
                 "abilities": ["Moxie"],
-                "teraTypes": ["Steel"] 
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -7072,7 +7072,7 @@
         ]
     },
     "farigiraf": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -7140,7 +7140,7 @@
         ]
     },
     "brutebonnet": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",

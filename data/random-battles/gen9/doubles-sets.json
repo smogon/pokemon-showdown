@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -609,7 +609,7 @@
         ]
     },
     "weezinggalar": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -907,7 +907,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Fire Blast", "Heat Wave", "Scorching Sands", "Tailwind"],
                 "abilities": ["Flame Body"],
-                "teraTypes": ["Ground"] 
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -1674,7 +1674,7 @@
         ]
     },
     "shiftry": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -1702,7 +1702,7 @@
         ]
     },
     "gardevoir": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1736,7 +1736,7 @@
         ]
     },
     "breloom": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -1960,7 +1960,7 @@
         ]
     },
     "altaria": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2055,7 +2055,7 @@
         ]
     },
     "tropius": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2664,7 +2664,7 @@
         ]
     },
     "sneasler": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3229,7 +3229,7 @@
         ]
     },
     "arceusdragon": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -3313,7 +3313,7 @@
         ]
     },
     "arceusghost": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -4048,7 +4048,7 @@
         ]
     },
     "tornadustherian": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -4292,7 +4292,7 @@
                 "abilities": ["Compound Eyes"],
                 "teraTypes": ["Flying", "Steel"]
             },
-                        {
+            {
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Hurricane", "Protect", "Sleep Powder", "Tailwind"],
                 "abilities": ["Compound Eyes"],
@@ -4401,7 +4401,7 @@
         ]
     },
     "sylveon": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -4663,7 +4663,7 @@
         ]
     },
     "gumshoos": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -4781,7 +4781,7 @@
         ]
     },
     "lycanroc": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -4959,7 +4959,7 @@
         ]
     },
     "komala": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -5775,7 +5775,7 @@
         ]
     },
     "calyrexshadow": {
-        "level": 63,
+        "level": 62,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5978,7 +5978,7 @@
                 "role": "Offensive Protect",
                 "movepool": ["First Impression", "Knock Off", "Leech Life", "Protect"],
                 "abilities": ["Tinted Lens"],
-                "teraTypes": ["Bug"] 
+                "teraTypes": ["Bug"]
             }
         ]
     },
@@ -6141,7 +6141,7 @@
                 "abilities": ["Competitive"],
                 "teraTypes": ["Flying", "Steel"]
             },
-                        {
+            {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Hurricane", "Protect", "Tailwind", "Thunderbolt"],
                 "abilities": ["Competitive"],
@@ -6358,7 +6358,7 @@
         ]
     },
     "orthworm": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Protect",
