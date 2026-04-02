@@ -273,8 +273,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	raichualola: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
 	raichumegax: {
@@ -3932,23 +3932,21 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	zorua: {
-		isNonstandard: "Future",
-		tier: "Illegal",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	zoruahisui: {
-		isNonstandard: "Future",
-		tier: "Illegal",
+		tier: "OU",
 		natDexTier: "LC",
 	},
 	zoroark: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
 	zoroarkhisui: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
 	minccino: {
