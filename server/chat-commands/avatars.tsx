@@ -740,7 +740,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
 			}
 			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/537330/">Fifty Shades of Rez</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);

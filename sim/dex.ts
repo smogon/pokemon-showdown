@@ -179,9 +179,13 @@ export class ModdedDex {
 		return dexes[mod || BASE_MOD].includeData();
 	}
 
-	modData(dataType: DataType, id: string) {
+	/** `force` is needed to mod data defined by the mod itself (for instance,
+	 * if you want to use modData and pokedex.ts on the same pokemon. */
+	modData(dataType: DataType, id: string, force?: boolean) {
 		if (this.isBase) return this.data[dataType][id];
-		if (this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) return this.data[dataType][id];
+		if (!force && this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) {
+			return this.data[dataType][id];
+		}
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));
 	}
 
