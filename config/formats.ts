@@ -756,18 +756,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 6] Megas Revisited Random Battle",
-		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
-		mod: 'gen6megasrevisited',
+		name: "[Gen 9] ReGeneration Random Battle",
+		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
+		mod: 'gen9regeneration',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Mega Data Mod'],
+		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Megas Revisited!`);
-			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to ReGeneration!`);
+			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
 		},
 	},
 	{
@@ -3449,18 +3449,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 6] Megas Revisited", // Roomtours
-		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
-		mod: 'gen6megasrevisited',
+		name: "[Gen 9] ReGeneration", // Roomtours
+		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
+		mod: 'gen9regeneration',
 		searchShow: false,
-		ruleset: ['Standard', 'Mega Data Mod'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'Swagger', 'Blaziken + Speed Boost'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
+		banlist: [
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+			'Aerodactylite', 'Alakazite', 'Beedrillite', 'Blastoisinite', 'Charizardite X', 'Charizardite Y', 'Gyaradosite',
+			'Gengarite', 'Kangaskhanite', 'Mewtwonite X', 'Mewtwonite Y', 'Pidgeotite', 'Pinsirite', 'Slowbronite', 'Venusaurite',
+		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Megas Revisited!`);
-			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to ReGeneration!`);
+			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
+		},
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			if (species.num >= 152 && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} is not in the Kanto Pokédex.`];
+			}
 		},
 	},
 	{
