@@ -338,7 +338,7 @@ describe('Counter', () => {
 	});
 
 	it(`[Gen 1] Metronome calling Counter fails`, () => {
-		battle = common.gen(1).createBattle({ seed: [0, 2, 5, 2] }, [[
+		battle = common.gen(1).createBattle({ seed: [1, 3, 1, 7] }, [[
 			{ species: 'Persian', moves: ['Swift'] },
 		], [
 			{ species: 'Chansey', moves: ['Metronome'] },

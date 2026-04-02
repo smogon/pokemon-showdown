@@ -117,6 +117,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragonascent: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	dragonhammer: {
 		inherit: true,
 		flags: { contact: 1, protect: 1, mirror: 1 },
@@ -196,6 +200,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 	},
 	hail: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	happyhour: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -383,6 +391,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 70,
 	},
+	moongeistbeam: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	multiattack: {
 		inherit: true,
 		isNonstandard: null,
@@ -412,6 +424,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	originpulse: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	plasmafists: {
 		inherit: true,
 		isNonstandard: null,
@@ -435,6 +451,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	recover: {
 		inherit: true,
 		pp: 10,
+	},
+	reflecttype: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	relicsong: {
 		inherit: true,
@@ -502,6 +522,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	softboiled: {
 		inherit: true,
+		isNonstandard: null,
 		pp: 10,
 	},
 	spectralthief: {
