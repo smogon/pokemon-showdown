@@ -91,10 +91,10 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	zaou: "[Gen 9] Legends Z-A OU",
 	legendsou: "[Gen 9] Legends Z-A OU",
 	plzaou: "[Gen 9] Legends Z-A OU",
-	omotm: "[Gen 9] Linked",
-	lcotm: "[Gen 9] 350 Cup",
-	ommotm: "[Gen 9] Pokebilities AAA",
-	ommspotlight: "[Gen 9] Pokebilities AAA",
+	omotm: "[Gen 9] Alphabet Cup",
+	lcotm: "[Gen 9] Cross Evolution",
+	ommotm: "[Gen 9] STAAABmons",
+	ommspotlight: "[Gen 9] STAAABmons",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias
 	megasnow: "Abomasnow-Mega",
