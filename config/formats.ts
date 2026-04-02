@@ -263,15 +263,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'gen9',
 		gameType: 'doubles',
+		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
-	},
-	{
-		name: "[Gen 9] VGC 2026 Reg F (Bo3)",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
 	},
 	{
 		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
