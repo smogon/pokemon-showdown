@@ -1061,7 +1061,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
-		num: 312, // TODO confirm
+		num: 312, // TODO confirm with generation shift
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -2866,7 +2866,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,
-		num: 311, // TODO confirm
+		num: 311, // TODO confirm with generation shift
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	merciless: {

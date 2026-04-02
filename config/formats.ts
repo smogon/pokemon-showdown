@@ -342,16 +342,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 	},
 	{
-		name: "[Gen 9] VGC 2026 Reg F (Bo3)",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
-	},
-	{
 		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -491,8 +481,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Chinchou', 'Diglett-Alola', 'Drifloon', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Koffing', 'Mareanie', 'Mienfoo', 'Mudbray',
-			'Pawniard', 'Sandshrew-Alola', 'Shellos', 'Snover', 'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
+			'Chinchou', 'Diglett-Alola', 'Drifloon', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Impidimp', 'Koffing', 'Mareanie', 'Mienfoo', 'Mudbray', 'Larvesta',
+			'Pawniard', 'Sandshrew-Alola', 'Shellos', 'Stunky', 'Tentacool', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
 			// LC UUBL
 			'Deerling', 'Minccino', 'Light Clay',
 		],
@@ -913,21 +903,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 6] Megas Revisited Random Battle",
-		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
-		mod: 'gen6megasrevisited',
+		name: "[Gen 9] ReGeneration Random Battle",
+		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
+		mod: 'gen9regeneration',
 		team: 'random',
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Mega Data Mod'],
+		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Megas Revisited!`);
-			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to ReGeneration!`);
+			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
 		},
 	},
 	{
@@ -3527,9 +3517,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] National Dex Ubers'],
 		banlist: [
-			'Alomomola', 'Arceus-Normal', 'Arceus-Dark', 'Arceus-Ground', 'Calyrex-Ice', 'Chansey', 'Deoxys-Attack', 'Ditto', 'Dondozo', 'Eternatus', 'Giratina-Origin', 'Groudon-Primal',
-			'Hatterene', 'Ho-Oh', 'Kingambit', 'Kyogre-Primal', 'Lunala', 'Marshadow', 'Mewtwo-Mega-Y', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Salamence-Mega', 'Smeargle', 'Yveltal',
-			'Zacian-Crowned', 'Zygarde-50%',
+			'Alomomola', 'Arceus-Normal', 'Arceus-Dark', 'Arceus-Ground', 'Calyrex-Ice', 'Chansey', 'Deoxys-Attack', 'Deoxys-Speed', 'Ditto', 'Dondozo', 'Eternatus',
+			'Giratina-Origin', 'Groudon-Primal', 'Ho-Oh', 'Kyogre-Primal', 'Lunala', 'Marshadow', 'Mewtwo-Mega-Y', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Pheromosa',
+			'Salamence-Mega', 'Smeargle', 'Yveltal', 'Zacian-Crowned', 'Zygarde-50%',
 			// UUBL
 			'Arceus-Dragon', 'Arceus-Fairy', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Water', 'Blaziken-Mega', 'Chi-Yu', 'Chien-Pao', 'Dracovish', 'Flutter Mane', 'Groudon',
 			'Kyogre', 'Kyurem-Black', 'Rayquaza', 'Shaymin-Sky', 'Zacian', 'Zekrom', 'Power Construct', 'Light Clay', 'Ultranecrozium Z', 'Last Respects',
@@ -3645,7 +3635,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: [
 			'Standard AG', 'NatDex Mod', '!Obtainable',
-			'Forme Clause', 'Sleep Moves Clause', 'Ability Clause = 2', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', 'Terastal Clause',
+			'Forme Clause', 'Sleep Moves Clause', 'Ability Clause = 2', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', 'Terastal Clause', '-Nonexistent',
 		],
 		banlist: [
 			'Cramorant-Gorging', 'Calyrex-Shadow', 'Darmanitan-Galar-Zen', 'Eternatus-Eternamax', 'Greninja-Ash', 'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja', 'Terapagos-Stellar', 'Arena Trap',
@@ -3783,20 +3773,30 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 6] Megas Revisited", // Roomtours
-		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
-		mod: 'gen6megasrevisited',
+		name: "[Gen 9] ReGeneration", // Roomtours
+		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
+		mod: 'gen9regeneration',
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['Standard', 'Mega Data Mod'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'Swagger', 'Blaziken + Speed Boost'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
+		banlist: [
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+			'Aerodactylite', 'Alakazite', 'Beedrillite', 'Blastoisinite', 'Charizardite X', 'Charizardite Y', 'Gyaradosite',
+			'Gengarite', 'Kangaskhanite', 'Mewtwonite X', 'Mewtwonite Y', 'Pidgeotite', 'Pinsirite', 'Slowbronite', 'Venusaurite',
+		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Megas and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wK11cPHnPCmH7JFss6leKW6_-cumn3DuZA-YMzrzF-U/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Megas Revisited!`);
-			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to ReGeneration!`);
+			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
+		},
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			if (species.num >= 152 && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} is not in the Kanto Pokédex.`];
+			}
 		},
 	},
 	{
@@ -6235,6 +6235,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		// banlist: ['DUber', 'Shadow Tag', 'Commander'],
 		banlist: ['Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
@@ -6244,6 +6247,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Doubles UU",
@@ -6255,6 +6261,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Doubles LC",
@@ -6263,6 +6272,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
 		banlist: [],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] SwSe VGC",
@@ -6271,6 +6283,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
@@ -6298,6 +6313,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Same Type Clause'],
 		banlist: ['Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Doubles Battlefields",
@@ -6311,6 +6329,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'King\'s Rock', 'Razor Hook',
 			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Last Respects', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 		onClimateWeatherChange() {
 			this.field.climateWeatherState.duration = 0;
 		},
@@ -6355,6 +6376,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Ubers",
@@ -6370,6 +6394,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] UU",
@@ -6380,6 +6407,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] OU'],
 		banlist: ['OU', 'UUBL'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] RU",
@@ -6390,6 +6420,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] UU'],
 		banlist: ['UU', 'RUBL'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] NU",
@@ -6400,6 +6433,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] RU'],
 		banlist: ['RU', 'NUBL'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] PU",
@@ -6410,6 +6446,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['[Gen 9] NU'],
 		banlist: ['NU', 'PUBL'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] LC",
@@ -6421,6 +6460,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass', 'Evoboost',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] SwSe BSS",
@@ -6428,6 +6470,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'swse',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -6438,6 +6483,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 
 	// SwSe Singles Other Metagames
@@ -6457,6 +6505,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Battlefields",
@@ -6469,6 +6520,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'King\'s Rock', 'Razor Hook',
 			'Aurora Veil', 'Baton Pass', 'Fairy Lock', 'Last Respects', 'Light Screen', 'Quick Guard', 'Reflect', 'Tailwind', 'Trick Room',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 		onClimateWeatherChange() {
 			this.field.climateWeatherState.duration = 0;
 		},
@@ -6500,6 +6554,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'swse',
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] STABmons",
@@ -6512,6 +6569,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Flower Trick', 'Gigaton Hammer', 'No Retreat', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'Triple Arrows', 'V-create', 'Victory Dance', 'Wicked Blow',
 			'Wicked Torque',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Pokebilities",
@@ -6540,6 +6600,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
 					continue;
@@ -6594,6 +6655,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Quark Drive', 'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Regenerator', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Surge Surfer',
 			'Technician', 'Tinted Lens', 'Triage', 'Unaware', 'Unburden', 'Water Bubble',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
 				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
@@ -6642,6 +6706,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Tso-Lo Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Tso-Lo Singles",
@@ -6656,6 +6723,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Sand Flats Doubles",
@@ -6668,6 +6738,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['Sand Flats Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Sand Flats Singles",
@@ -6684,6 +6757,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Kaskade Countryside Doubles",
@@ -6696,6 +6772,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['Kaskade Countryside Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Kaskade Countryside Singles",
@@ -6712,6 +6791,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Alki Marsh Doubles",
@@ -6724,6 +6806,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: ['Alki Marsh Pokedex', 'Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Alki Marsh Singles",
@@ -6740,6 +6825,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass',
 			'King\'s Rock', 'Razor Hook',
 		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 
 	// SwSe Popular Randomized Metas
@@ -6761,6 +6849,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Unrated SwSe Random Doubles Battle",
@@ -6773,6 +6864,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] SwSe Random Battle",
@@ -6785,6 +6879,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 9] Unrated SwSe Random Battle",
@@ -6796,6 +6893,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 
 	// Misc. Randomized Metas
@@ -6813,5 +6913,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+		},
 	},
 ];
