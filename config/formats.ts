@@ -6419,7 +6419,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Basculin-White-Striped', 'Dunsparce', 'Misdreavus', 'Murkrow',
 			'Baton Pass', 'Evoboost',
-			'King\'s Rock', 'Razor Hook', 'Weather Balloon', 'Volatile Spray', 'Energy Channelizer',
+			'King\'s Rock', 'Razor Hook',
 		],
 	},
 	{
