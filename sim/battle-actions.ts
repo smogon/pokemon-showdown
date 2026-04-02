@@ -902,6 +902,7 @@ export class BattleActions {
 					this.battle.retargetLastMove(target);
 				}
 			}
+			if (move.multihitType === 'echolocation') move.selfDropped = false;
 
 			// like this (Triple Kick)
 			if (target && move.multiaccuracy && hit > 1) {
@@ -1358,7 +1359,7 @@ export class BattleActions {
 					if (typeof moveData.self.chance === 'undefined' || secondaryRoll < moveData.self.chance) {
 						this.moveHit(source, source, move, moveData.self, isSecondary, true);
 					}
-					if (!move.multihit) move.selfDropped = true;
+					if (!move.multihit || move.multihitType === 'echolocation') move.selfDropped = true;
 				} else {
 					this.moveHit(source, source, move, moveData.self, isSecondary, true);
 				}
@@ -1756,6 +1757,10 @@ export class BattleActions {
 			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
+		} else if (move.multihitType === 'echolocation' && move.hit > 1) {
+			// Echolocation modifier
+			this.battle.debug(`Echolocation modifier: 0.25`);
+			baseDamage = this.battle.modify(baseDamage, 0.25);
 		}
 
 		// weather modifier

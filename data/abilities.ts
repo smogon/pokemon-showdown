@@ -6327,17 +6327,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	echolocation: { // tested, works as intended
 		onPrepareHit(source, target, move) {
-			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
-				move.flags['futuremove'] || move.isZ || move.isMax || !move.flags['sound']) return;
+			if (move.category === 'Status' || move.multihit || move.isZ || move.isMax ||
+				!move.flags['sound']) return;
 			move.multihit = 2;
-			move.multihitType = 'parentalbond';
-		},
-		// Damage modifier implemented in BattleActions#modifyDamage()
-		onSourceModifySecondaries(secondaries, target, source, move) {
-			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
-				// hack to prevent accidentally suppressing King's Rock/Razor Fang
-				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
-			}
+			move.multihitType = 'echolocation';
 		},
 		flags: {},
 		name: "Echolocation",
