@@ -2581,8 +2581,10 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 
 	// swse
 
+	alfa: "Alfalphalops",
 	alpha: "Alfalphalops",
-	bearvoyancedormant: "Bearvoyance",
+	tarm: "Alfalphalops",
+	zog: "Kaskazog",
 	botnyaklb: "Botnyak",
 	botnyaklr: "Botnyak",
 	botnyaklg: "Botnyak",
@@ -2592,14 +2594,16 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 
 	// formes
 
+	snoverhighland: "Snover",
 	abomasnowhighland: "Abomasnow",
-	bearvoyancea: "Bearvoyance-Awakened",
 	// droutwet: "Drout",
 	eecroachsolo: "Eecroach",
 	mosskratlakebloom: "Mosskrat",
-	snoverhighland: "Snover",
 	// tamroastm: "Tamroast",
 	// weepollenm: "Weepollen",
+	bearvoyancedormant: "Bearvoyance",
+	bearvoyancea: "Bearvoyance-Awakened",
+	bearvoyancemega: "Bearvoyance-Awakened",
 
 	// UBs
 
