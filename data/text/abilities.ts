@@ -1900,7 +1900,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
-		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
+		shortDesc: "Electric Terrain/ThunderStorm: this Pokemon's Speed is doubled.",
 	},
 	swarm: {
 		name: "Swarm",

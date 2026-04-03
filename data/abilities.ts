@@ -5049,10 +5049,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 293,
 	},
-	surgesurfer: {
-		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain')) {
-				return this.chainModify(2);
+	surgesurfer: { // updated
+		onModifySpe(pokemon, source) {
+			if (this.field.isTerrain('electricterrain') ||
+				['supercell'].includes(source.effectiveEnergyWeather())) {
+				return this.chainModify(1.5);
 			}
 		},
 		flags: {},
