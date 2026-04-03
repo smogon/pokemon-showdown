@@ -91,7 +91,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
-		name: "[Gen 9] Ubers",
+		name: "[Gen 9] Ubers OLD",
 		mod: 'gen9',
 		searchShow: false,
 		challengeShow: false,
@@ -105,7 +105,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] OU'],
+		ruleset: ['[Gen 9] OU OLD'],
 		banlist: ['OU', 'UUBL'],
 	},
 	{
@@ -114,7 +114,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] UU'],
+		ruleset: ['[Gen 9] UU OLD'],
 		banlist: ['UU', 'RUBL', 'Light Clay'],
 	},
 	{
@@ -123,7 +123,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] RU'],
+		ruleset: ['[Gen 9] RU OLD'],
 		banlist: ['RU', 'NUBL', 'Drought', 'Quick Claw'],
 	},
 	{
@@ -132,7 +132,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] NU'],
+		ruleset: ['[Gen 9] NU OLD'],
 		banlist: ['NU', 'PUBL', 'Damp Rock'],
 	},
 	{
@@ -172,7 +172,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] OU', '+CAP'],
+		ruleset: ['[Gen 9] OU OLD', '+CAP'],
 		banlist: ['Crucibellite', 'Rage Fist'],
 	},
 	{
@@ -251,7 +251,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] Doubles OU'],
+		ruleset: ['[Gen 9] Doubles OU OLD'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
@@ -448,7 +448,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] LC'],
+		ruleset: ['[Gen 9] LC OLD'],
 		banlist: [
 			'Chinchou', 'Diglett-Alola', 'Drifloon', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Impidimp', 'Koffing', 'Mareanie', 'Mienfoo', 'Mudbray', 'Larvesta',
 			'Pawniard', 'Sandshrew-Alola', 'Shellos', 'Stunky', 'Tentacool', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
@@ -476,7 +476,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] Ubers'],
+		ruleset: ['[Gen 9] Ubers OLD'],
 		banlist: [
 			// Ubers OU
 			'Arceus-Normal', 'Arceus-Fairy', 'Arceus-Ghost', 'Arceus-Ground', 'Arceus-Water', 'Calyrex-Ice', 'Chien-Pao', 'Deoxys-Attack', 'Deoxys-Speed', 'Ditto',
@@ -827,7 +827,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['[Gen 9] OU', 'Same Color Clause'],
+		ruleset: ['[Gen 9] OU OLD', 'Same Color Clause'],
 		banlist: ['Ogerpon-Wellspring'],
 		unbanlist: ['Archaludon', 'Volcarona'],
 	},

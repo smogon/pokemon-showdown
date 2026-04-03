@@ -98,7 +98,7 @@ const SETUP = [
 	'fluffbuff',
 ];
 const WEATHER_SETUP = [
-	'raindance', 'sunnyday', 'hail', 'snowscape', 'foghorn', 'bloodmoon', 'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread',
+	'sunnyday', 'raindance', 'hail', 'snowscape', 'foghorn', 'bloodmoon', 'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread',
 	'sprinkle', 'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize', 'strongwinds', 'brainstorm',
 ];
 const SPEED_CONTROL = [
@@ -777,7 +777,7 @@ export class RandomTeams {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, role);
-		
+
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
 			for (const moveid of movePool) {
@@ -811,7 +811,7 @@ export class RandomTeams {
 				}
 			}
 		}
-		
+
 		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.includes('Guts')) {
 			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -1946,11 +1946,11 @@ export class RandomTeams {
 					(this.dex.getEffectiveness('Dark', species) > 0 ||
 						(this.dex.getEffectiveness('Dark', species) > -2 && types.includes('Water')))
 			);
-			/* const hasRainSetup = (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
+			/* set.moves.includes('sunnyday') || set.moves.includes('thermalvortex') || set.ability === 'Heat Haze');
+			const hasRainSetup = (set.ability === 'Snow Warning' || set.moves.includes('snowscape') ||
+				const hasRainSetup = (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
 				set.moves.includes('whirlduel') || set.moves.includes('shelter'));
 			const hasRainSetup = (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' ||
-				set.moves.includes('sunnyday') || set.moves.includes('thermalvortex') || set.ability === 'Heat Haze');
-			const hasRainSetup = (set.ability === 'Snow Warning' || set.moves.includes('snowscape') ||
 				set.moves.includes('chillyreception') || set.moves.includes('hail') || set.ability === 'Ice Armor');
 			const hasRainSetup = (set.ability === 'Eventtide' || set.moves.includes('bloodmoon'));
 			const hasRainSetup = (set.ability === 'Condensation' || set.moves.includes('foghorn'));
@@ -3154,8 +3154,8 @@ export class RandomTeams {
 			resistances: {},
 		};
 		const weatherAbilitiesSet: { [k: string]: string } = {
-			drizzle: "raindance",
 			drought: "sunnyday",
+			drizzle: "raindance",
 			snowwarning: "hail",
 			sandstream: "sandstorm",
 		};

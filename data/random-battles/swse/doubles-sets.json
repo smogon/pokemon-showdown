@@ -23,13 +23,13 @@
                 "abilities": ["Galeforce"]
             },
             {
-                "role": "Doubles Rain Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Rain Dance"],
+                "role": "Doubles Sun Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Heat Wave", "Sunny Day"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
-                "role": "Doubles Sun Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Heat Wave", "Sunny Day"],
+                "role": "Doubles Rain Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Rain Dance"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
