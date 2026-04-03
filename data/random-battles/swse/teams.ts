@@ -97,6 +97,10 @@ const SETUP = [
 	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance', 'evoboost',
 	'fluffbuff',
 ];
+const WEATHER_SETUP = [
+	'raindance', 'sunnyday', 'hail', 'snowscape', 'foghorn', 'bloodmoon', 'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread',
+	'sprinkle', 'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize', 'strongwinds', 'brainstorm',
+];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom', 'mockery',
 ];
@@ -773,7 +777,7 @@ export class RandomTeams {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, role);
-
+		
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
 			for (const moveid of movePool) {
@@ -798,6 +802,16 @@ export class RandomTeams {
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup.
 
+		// Enforce Weather setup on Setter mons
+		if (role.includes('Setter')) {
+			for (const moveid of WEATHER_SETUP) {
+				if (movePool.includes(moveid)) {
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, role);
+				}
+			}
+		}
+		
 		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.includes('Guts')) {
 			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -1389,6 +1403,7 @@ export class RandomTeams {
 		if (role === 'AV Pivot') return 'Assault Vest';
 		const pikaclones = ['pikachu', 'pichu', 'raichu', 'emolga', 'guruchi'];
 		if (pikaclones.includes(species.id)) return 'Light Ball';
+		if (species.id === 'bearvoyance') return 'Thick Club';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
@@ -1687,11 +1702,44 @@ export class RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		if (!this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]) {
-			throw new Error(`No sets found for species: ${species.id} (isDoubles: ${isDoubles})`);
-		}
 		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
-		const possibleSets: RandomTeamsTypes.RandomSetData[] = [...sets];
+		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
+
+		for (const set of sets) {
+			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
+			const abilities = set.abilities!;
+			if (
+				isLead && (abilities.includes('Protosynthesis') || abilities.includes('Quark Drive')) &&
+				set.role === 'Fast Bulky Setup'
+			) continue;
+			// Prevent weather setters of opposing weathers
+			if (set.role.includes('Setter')) {
+				if (teamDetails.climateWeather) {
+					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
+					if (teamDetails.sun && !set.role.includes('Sun Setter')) continue;
+					if (teamDetails.hail && !set.role.includes('Hail Setter')) continue;
+					if (teamDetails.bloodMoon && !set.role.includes('Blood Moon Setter')) continue;
+					if (teamDetails.fog && !set.role.includes('Fog Setter')) continue;
+				}
+				if (teamDetails.irritantWeather) {
+					if (teamDetails.sand && !set.role.includes('Sandstorm Setter')) continue;
+					if (teamDetails.dust && !set.role.includes('Dust Storm Setter')) continue;
+					if (teamDetails.pollen && !set.role.includes('Pollen Setter')) continue;
+					if (teamDetails.fairyDust && !set.role.includes('Fairy Dust Setter')) continue;
+					if (teamDetails.pheromones && !set.role.includes('Pheromones Setter')) continue;
+					if (teamDetails.smog && !set.role.includes('Smog Setter')) continue;
+				}
+				if (teamDetails.energyWeather) {
+					if (teamDetails.battleAura && !set.role.includes('Battle Aura Setter')) continue;
+					if (teamDetails.paranormalActivity && !set.role.includes('Paranormal Activity Setter')) continue;
+					if (teamDetails.dragonForce && !set.role.includes('Dragon Force Setter')) continue;
+					if (teamDetails.dreamscape && !set.role.includes('Dreamscape Setter')) continue;
+					if (teamDetails.thunderstorm && !set.role.includes('Thunderstorm Setter')) continue;
+					if (teamDetails.magnetosphere && !set.role.includes('Magnetosphere Setter')) continue;
+				}
+			}
+			possibleSets.push(set);
+		}
 
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;

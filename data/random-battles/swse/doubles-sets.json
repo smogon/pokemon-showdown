@@ -1,451 +1,227 @@
 {
 	"masquerain": {
-        "level": 87,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Air Slash", "Bug Buzz", "Giga Drain", "Quiver Dance"],
+                "movepool": ["Baton Pass", "Hydro Pump", "Hurricane", "Bug Buzz", "Giga Drain", "Quiver Dance"],
+                "abilities": ["Intimidate", "Drizzle"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Hydro Pump", "Hurricane", "Hive Shriek", "Protect", "Tailwind"],
                 "abilities": ["Intimidate", "Drizzle"]
             }
         ]
     },
-	"alfalphalops": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Growl", "Growth", "Headbutt", "Tackle"],
-                "abilities": ["Overgrow", "Droughtproof"]
-            }
-        ]
-    },
-	"tarmendoa": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Bite", "Coil", "Earthquake", "Body Slam"],
-                "abilities": ["Blaze", "Hydrophobic"]
-            }
-        ]
-    },
-	"vaquamael": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Blizzard", "Bubble", "Leer", "Lunge"],
-                "abilities": ["Torrent", "Bubble Helm"]
-            }
-        ]
-    },
-	"cheekat": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Belch", "Bite", "Tackle", "Yawn"],
-                "abilities": ["Cheek Pouch", "Prankster", "Gluttony"]
-            }
-        ]
-    },
-	"opakespiel": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Lick", "Mimic", "Scratch", "Snarl"],
-                "abilities": ["Wandering Spirit", "Not To Be", "To Be"]
-            }
-        ]
-    },
-    "leavanny": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Knock Off", "Leaf Blade", "Lunge", "Swords Dance", "Triple Axel"],
-                "abilities": ["Powder Cure", "Chlorophyll", "Overcoat"]
-            }
-        ]
-    },
-    "glaceon": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Blizzard",  "Chilling Water", "Freeze-Dry", "Icy Wind"],
-                "abilities": ["Slush Rush", "Ice Body", "Snow Warning"]
-            }
-        ]
-    },
-    "catatomb": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Black Hole", "Body Slam", "Crunch", "Curse"],
-                "abilities": ["Warp Mist", "Cursed Body", "Infiltrator"]
-            }
-        ]
-    },
-    "probaska": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Body Press", "Body Slam", "Boomburst"],
-                "abilities": ["Trumpet Weevil", "Dancer", "Soundproof"]
-            }
-        ]
-    },
-    "diggersbykaskade": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Avalanche", "Blizzard", "Body Press", "Body Slam"],
-                "abilities": ["Slush Rush", "Ice Body", "Huge Power"]
-            }
-        ]
-    },
-    "ursaluna": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Avalanche", "Body Press", "Body Press", "Brick Break"],
-                "abilities": ["Guts", "Bulletproof", "Unnerve"]
-            }
-        ]
-    },
-    "flareon": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Curse", "Evoboost", "Facade", "Flamethrower"],
-                "abilities": ["Flash Fire", "Guts", "Drought"]
-            }
-        ]
-    },
-    "bloomage": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Agility", "Aromatherapy", "Brave Bird"],
-                "abilities": ["Vegetate", "Solar Power", "Bloomspring"]
-            }
-        ]
-    },
-    "chandelure": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Black Hole", "Curse", "Calm Mind"],
-                "abilities": ["Flash Fire", "Se\u0301ance", "Soul Drain"]
-            }
-        ]
-    },
-    "ninetales": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Body Slam", "Calm Mind", "Crunch", "Curse"],
-                "abilities": ["Solar Power", "Drought"]
-            }
-        ]
-    },
-    "aspfault": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Bite", "Coil", "Earthquake", "Body Slam"],
-                "abilities": ["Blaze", "Hydrophobic"]
-            }
-        ]
-    },
     "aerogen": {
-        "level": 87,
+        "level": 80,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Agility", "Brick Break", "Body Slam"],
-                "abilities": ["Prankster", "Speed Boost", "Galeforce"]
+                "role": "Doubles Support",
+                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Rain Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Rain Dance"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Sun Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Heat Wave", "Sunny Day"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Hail Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Hail"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Blood Moon Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Weather Ball", "Whip Up", "Blood Moon"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Fog Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Double Edge", "Foghorn"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Sandstorm Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Sandstorm"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Dust Storm Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Earth Power", "Whip Up", "Dust Storm"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Pollen Setter",
+                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up", "Pollinate"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                
+                "role": "Doubles Smog Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Whip Up", "Smog Spread"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Pheromones Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Swarm Signal"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Fairy Dust Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Sprinkle"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Battle Aura Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Aura Projection"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Paranormal Activity Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Shadow Claw", "Whip Up", "Haunt"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Dragon Force Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Dragon Claw", "Dragon Force"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Dreamscape Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Daydream"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Thunderstorm Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Supercell"],
+                "abilities": ["Galeforce", "Prankster"]
+            },
+            {
+                "role": "Doubles Magnetosphere Setter",
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Iron Tail", "Magnetize"],
+                "abilities": ["Galeforce", "Prankster"]
             }
         ]
     },
-    "crobat": {
-        "level": 87,
+    "bearvoyance": {
+        "level": 83,
         "sets": [
             {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect"],
+                "abilities": ["Consecration"]
+            },
+            {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Air Slash", "Brave Bird", "Crunch"],
-                "abilities": ["Inner Focus", "Infiltrator"]
+                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect", "Calm Mind"],
+                "abilities": ["Consecration"]
+            },
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect", "Nasty Plot"],
+                "abilities": ["Consecration"]
             }
         ]
     },
-    "drifblim": {
-        "level": 87,
+    "espeon": {
+        "level": 83,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Aura Sphere", "Calm Mind", "Body Slam"],
-                "abilities": ["Aftermath", "Unburden", "Flare Boost"]
-            }
-        ]
-    },
-    "emolga": {
-        "level": 87,
-        "sets": [
+                "role": "Choice Item user",
+                "movepool": ["Shadow Ball", "Dazzling Gleam", "Power Gem", "Mind Meld", "Psychic"],
+                "abilities": ["Dreamer"]
+            },
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Agility", "Defog", "Discharge"],
-                "abilities": ["Static", "Wind Power", "Motor Drive"]
-            }
-        ]
-    },
-    "honchkrow": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Black Hole", "Brave Bird", "Dark Pulse"],
-                "abilities": ["Malice", "Super Luck", "Moxie"]
-            }
-        ]
-    },
-    "caragen": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Body Slam", "Brick Break", "Bug Buzz", "Bulk Up"],
-                "abilities": ["Tinted Lens", "Shield Dust", "Secretion"]
-            }
-        ]
-    },
-    "frosmoth": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Aurora Veil", "Avalanche", "Blizzard"],
-                "abilities": ["Shield Dust", "Powder Cure", "Ice Scales"]
-            }
-        ]
-    },
-    "absol": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Black Hole", "Body Slam", "Calm Mind"],
-                "abilities": ["Anticipation", "Super Luck", "Shadow Step"]
-            }
-        ]
-    },
-    "carbink": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Body Press", "Body Slam", "Bulk Up"],
-                "abilities": ["Clear Body", "Sturdy"]
-            }
-        ]
-    },
-    "excadrillkaskade": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Body Slam", "Brick Break", "Calm Mind"],
-                "abilities": ["Sand Rush", "Chakra", "Incantation"]
-            }
-        ]
-    },
-    "florges": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aromatherapy", "Calm Mind", "Chilling Water", "Dazzling Gleam"],
-                "abilities": ["Flower Veil", "Druidry", "Symbiosis"]
-            }
-        ]
-    },
-    "kaskazog": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acid Armor", "Acrobatics", "Aromatherapy", "Dazzling Gleam"],
-                "abilities": ["Poison Touch", "Druidry", "Prankster"]
-            }
-        ]
-    },
-    "klefki": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Body Press", "Calm Mind", "Dazzling Gleam", "Double-Edge"],
-                "abilities": ["Prankster", "Magician"]
-            }
-        ]
-    },
-    "basculegion": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aqua Jet", "Aqua Tail", "Aura Sphere", "Blizzard"],
-                "abilities": ["Adaptability", "Shadow Step", "Mold Breaker"]
-            }
-        ]
-    },
-    "drifblimamazeall": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Baton Pass", "Aura Sphere", "Body Press"],
-                "abilities": ["Pickup", "Levitate", "Surveillance"]
-            }
-        ]
-    },
-    "abomasnow": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aromatherapy", "Aurora Veil", "Avalanche", "Blizzard"],
-                "abilities": ["Evergreen", "Snow Warning", "Soundproof"]
-            }
-        ]
-    },
-    "luxraykaskade": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Avalanche", "Blizzard", "Body Slam", "Body Press"],
-                "abilities": ["Fur Coat", "Moxie", "Slush Rush"]
-            }
-        ]
-    },
-    "ninetalesalola": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aurora Veil", "Blizzard", "Avalanche", "Body Slam"],
-                "abilities": ["Absolute Zero", "Snow Warning"]
-            }
-        ]
-    },
-    "goodra": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acid Armor", "Aqua Tail", "Blizzard", "Body Press"],
-                "abilities": ["Sap Sipper", "Hydration", "Gooey"]
-            }
-        ]
-    },
-    "goodrahisui": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acid Armor", "Aqua Tail", "Blizzard", "Body Press"],
-                "abilities": ["Sap Sipper", "Overcoat", "Gooey"]
+                "role": "Offensive Protect",
+                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect"],
+                "abilities": ["Dreamer"]
             }
         ]
     },
     "yanmage": {
-        "level": 87,
+        "level": 84,
         "sets": [
             {
+                "role": "Doubles Dragon Force Setter",
+                "movepool": ["Draco Meteor", "Protect", "Bug Buzz", "Deception", "Thunder", "Heat Wave"],
+                "abilities": ["Arcanum"]
+            },
+            {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Blizzard", "Bug Buzz", "Dazzling Gleam"],
-                "abilities": ["Power Within", "Magic Guard", "Arcanum"]
+                "movepool": ["Tail Glow", "Dragon Pulse", "Bug Buzz", "Deception", "Heat Wave"],
+                "abilities": ["Magic Guard", "Power Within", "Arcanum"]
             }
         ]
     },
-    "legen": {
-        "level": 87,
+    "enigmeon": {
+        "level": 83,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Blizzard", "Body Press", "Body Slam", "Brick Break"],
-                "abilities": ["Multiscale", "Moxie", "Arcanum"]
+                "role": "Doubles Fog Setter",
+                "movepool": ["Boomburst", "Hyper Voice", "Whip Up", "Protect", "Helping Hand"],
+                "abilities": ["Condensation"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Trick Room", "Boomburst", "Hyper Voice", "Whip Up", "Calm Mind"],
+                "abilities": ["Condensation", "Unaware", "Warp Mist"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Trick Room", "Hyper Voice", "Helping Hand", "Protect"],
+                "abilities": ["Condensation", "Unaware", "Warp Mist"]
             }
         ]
     },
-    "noivern": {
-        "level": 87,
+    "tarmendoa": {
+        "level": 83,
         "sets": [
             {
+                "role": "Choice Item user",
+                "movepool": ["Thermal Vortex", "Headlong Rush", "U-turn", "Rock Slide"],
+                "abilities": ["Hydrophobic"]
+            },
+            {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Acrobatics", "Air Slash", "Body Slam", "Boomburst"],
-                "abilities": ["Echolocation", "Infiltrator", "Malice"]
+                "movepool": ["Coil", "Thermal Vortex", "Earthquake", "Rapid Spin", "Gunk Shot"],
+                "abilities": ["Hydrophobic"]
             }
         ]
     },
-    "sliggoohisui": {
-        "level": 87,
+    "stackem": {
+        "level": 88,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Acid Armor", "Body Slam", "Blizzard", "Body Press"],
-                "abilities": ["Sap Sipper", "Overcoat", "Gooey"]
+                "role": "Doubles Support",
+                "movepool": ["Follow Me", "Wide Guard", "Rock Slide", "Knock Off"],
+                "abilities": ["Rocky Body"]
             }
         ]
     },
-    "yanmakaskade": {
-        "level": 87,
+    "quailstion": {
+        "level": 85,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Deception", "Double-Edge", "Bug Buzz", "Dazzling Gleam"],
-                "abilities": ["Power Within", "Magic Guard", "Arcanum"]
-            }
-        ]
-    },
-    "azumarillkaskade": {
-        "level": 87,
-        "sets": [
+                "role": "Doubles Support",
+                "movepool": ["Follow Me", "Bulldoze", "Coaching", "Brave Bird", "Protect"],
+                "abilities": ["Foil", "Vital Spirit"]
+            },
+            {
+                "role": "Doubles Bulky Setup Sweeper",
+                "movepool": ["No Retreat", "Roost", "Earthquake", "Brave Bird", "Protect", "Body Press"],
+                "abilities": ["Foil", "Vital Spirit"]
+            },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Aqua Jet", "Aqua Tail", "Aromatherapy", "Body Slam"],
-                "abilities": ["Drizzle", "Sticky Hold", "Vegetate"]
-            }
-        ]
-    },
-    "clamtrip": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Body Slam", "Bulk Up", "Crystal Force"],
-                "abilities": ["Pearl Drop"]
-            }
-        ]
-    },
-    "relicanth": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aqua Jet", "Aqua Tail", "Blizzard", "Body Press"],
-                "abilities": ["Swift Swim", "Rock Head", "Sturdy"]
+                "movepool": ["Shell Smash", "Earthquake", "Acrobatics", "Protect", "Rock Slide"],
+                "abilities": ["Foil", "Vital Spirit"]
             }
         ]
     }
