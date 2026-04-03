@@ -65,6 +65,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Shield Dust", 1: "Compound Eyes" },
 	},
+	floetteeternal: {
+		inherit: true,
+		abilities: { 0: "Flower Veil" },
+	},
 	sliggoohisui: {
 		inherit: true,
 		abilities: { 0: "Sap Sipper", 1: "Overcoat", H: "Gooey" },
