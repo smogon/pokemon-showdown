@@ -28188,7 +28188,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			honeclaws: ["9M"],
 			hurricane: ["9M"],
-			icywind: ["7T", "7V", "6T", "5T", "4T", "3T"],
+			icywind: ["9M", "7T", "7V", "6T", "5T", "4T", "3T"],
 			knockoff: ["9M"],
 			meanlook: ["9L35", "7L41", "7V", "6L41", "5L41", "4L41", "3L48"],
 			mimic: ["3T"],
