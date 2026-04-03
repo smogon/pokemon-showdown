@@ -815,8 +815,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Speed Boost', 'Stakeout', 'Tinted Lens', 'Toxic Debris', 'Triage', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
-			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Boomburst', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Dragon Energy', 'Electro Shot', 'Eruption', 'Esper Wing', 'Extreme Speed', 'Fillet Away',
-			'Final Gambit', 'Gigaton Hammer', 'Glacial Lance', 'Jet Punch', 'Last Respects', 'Lumina Crash', 'No Retreat', 'Population Bomb', 'Rage Fist', 'Revival Blessing', 'Rising Voltage', 'Shell Smash',
+			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Boomburst', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Dragon Energy', 'Electro Shot', 'Eruption', 'Esper Wing', 'Extreme Speed',
+			'Fillet Away', 'Final Gambit', 'Gigaton Hammer', 'Glacial Lance', 'Jet Punch', 'Lumina Crash', 'No Retreat', 'Population Bomb', 'Rage Fist', 'Revival Blessing', 'Rising Voltage', 'Shell Smash',
 			'Shift Gear', 'Surging Strikes', 'Tail Glow', 'Take Heart', 'Torch Song', 'Transform', 'Triple Arrows', 'V-create', 'Victory Dance', 'Water Spout', 'Wicked Blow', 'Wicked Torque',
 		],
 	},
@@ -2203,8 +2203,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
-			'Assurance', 'Baneful Bunker', 'Bounce', 'Burning Bulwark', 'Copycat', 'Detect', 'Dig', 'Dive', 'Encore', 'Endeavor', 'Fly', 'Imprison', 'Nasty Plot', 'Phantom Force',
-			'Protect', 'Ruination', 'Shadow Force', 'Shell Smash', 'Silk Trap', 'Spiky Shield', 'Sunny Day', 'Super Fang', 'Swords Dance', 'Taunt', 'Trick Room',
+			'Assurance', 'Baneful Bunker', 'Bounce', 'Burning Bulwark', 'Copycat', 'Detect', 'Dig', 'Dive', 'Encore', 'Endeavor', 'Fake Out', 'Fly', 'Imprison', 'Nasty Plot',
+			'Phantom Force', 'Protect', 'Ruination', 'Shadow Force', 'Shell Smash', 'Silk Trap', 'Spiky Shield', 'Sunny Day', 'Super Fang', 'Swords Dance', 'Taunt', 'Trick Room',
 		],
 		onValidateSet(set) {
 			const problems = [];
@@ -6337,7 +6337,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Same Type Clause'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {
@@ -6400,9 +6400,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'swse',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause'],
 		restricted: [
-			'Astral Barrage', 'Belly Drum', 'Clangorous Soul', 'Ceaseless Edge', 'Dire Claw', 'Dragon Energy', 'Electro Shot', 'Extreme Speed', 'Fillet Away', 'Final Gambit',
-			'Flower Trick', 'Gigaton Hammer', 'No Retreat', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'Triple Arrows', 'V-create', 'Victory Dance', 'Wicked Blow',
-			'Wicked Torque',
+			'Astral Barrage', 'Belly Drum', 'Ceaseless Edge', 'Clangorous Soul', 'Combat Torque', 'Dire Claw', 'Dragon Energy', 'Electro Shot', 'Esper Wing', 'Extreme Speed', 'Fillet Away',
+			'Final Gambit', 'Flower Trick', 'Gigaton Hammer', 'No Retreat', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'Surging Strikes', 'Torch Song', 'Triple Arrows',
+			'V-create', 'Victory Dance', 'Water Shuriken', 'Wicked Blow', 'Wicked Torque',
 		],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
@@ -6416,7 +6416,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
 			'Arena Trap', 'Moody', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'Bright Powder', 'King\'s Rock', 'Razor Hook',
 		],
 		onValidateSet(set) {
@@ -6481,7 +6481,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Arena Trap', 'Moody', 'Neutralizing Gas', 'Shadow Tag', 'Speed Boost', 'Stench', 'Sturdy', 'Swift Swim',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Leppa Berry', 'Razor Hook', 'Starf Berry',
 		],
 		restricted: [
@@ -6555,7 +6555,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Uber', 'AG',
 			'Arena Trap', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {
@@ -6589,7 +6589,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Uber', 'AG',
 			'Arena Trap', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {
@@ -6623,7 +6623,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Uber', 'AG',
 			'Arena Trap', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {
@@ -6657,7 +6657,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Uber', 'AG',
 			'Arena Trap', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {
