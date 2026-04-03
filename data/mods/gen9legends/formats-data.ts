@@ -1640,6 +1640,24 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	rotommow: {
 		isNonstandard: null,
 	},
+	rotomstereo: {
+		isNonstandard: "Past",
+	},
+	rotomjunk: {
+		isNonstandard: "Past",
+	},
+	rotomsway: {
+		isNonstandard: "Past",
+	},
+	rotombrawl: {
+		isNonstandard: "Past",
+	},
+	rotomweb: {
+		isNonstandard: "Past",
+	},
+	rotomsol: {
+		isNonstandard: "Past",
+	},
 	uxie: {
 		isNonstandard: "Past",
 	},
