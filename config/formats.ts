@@ -6208,7 +6208,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Uber', 'AG',
 			'Arena Trap', 'Moody', 'Shadow Tag',
-			'Baton Pass',
+			'Baton Pass', 'Last Respects',
 			'King\'s Rock', 'Razor Hook',
 		],
 		onBegin() {

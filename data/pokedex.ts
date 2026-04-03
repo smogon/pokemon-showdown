@@ -9394,10 +9394,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		// otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
-		// formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
-		otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
-		formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
+		otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
+		formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Rotom-Stereo", "Rotom-Junk", "Rotom-Sway", "Rotom-Brawl", "Rotom-Web", "Rotom-Sol"],
 	},
 	rotomheat: { // updated
 		num: 479,
@@ -9474,7 +9472,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Amorphous"],
 		changesFrom: "Rotom",
 	},
-	/* rotomstereo: {
+	rotomstereo: {
 		num: 479,
 		name: "Rotom-Stereo",
 		baseSpecies: "Rotom",
@@ -9569,7 +9567,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Amorphous"],
 		changesFrom: "Rotom",
 		gen: 9,
-	}, */
+	},
 	uxie: {
 		num: 480,
 		name: "Uxie",
