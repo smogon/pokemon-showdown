@@ -103649,7 +103649,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			viralblast: ["9M"],
 		},
 	},
-	tropiuskaskade: {
+	/* tropiuskaskade: {
 		learnset: {
 			aromatherapy: ["9M"],
 			bodypress: ["9M"],
@@ -103707,7 +103707,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["9L6"],
 			woodhammer: ["9M", "9L61"],
 		},
-	},
+	}, */
 	mosster: {
 		learnset: {
 			absorb: ["9L10"],
