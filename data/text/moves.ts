@@ -7208,8 +7208,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	upperhand: {
 		name: "Upper Hand",
-		desc: "Has a 100% chance to make the target flinch. Fails if the target did not select a priority move for use this turn, or if the target moves before the user.",
-		shortDesc: "100% flinch. Fails unless target using priority.",
+		desc: "Has a 100% chance to make the target flinch. Fails if the target did not select a priority attacking move for use this turn, or if the target moves before the user.",
+		shortDesc: "100% flinch. Fails unless target using priority attack.",
 	},
 	uproar: {
 		name: "Uproar",
