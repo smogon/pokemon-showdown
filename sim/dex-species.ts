@@ -748,6 +748,19 @@ export class DexSpecies {
 			throw new Error(`Species with no learnset data: ${species.id}`);
 		}
 
+		if (originalSpecies.baseSpecies === 'Rotom' && originalSpecies.id !== 'rotom') {
+			for (let i = 0; i < out.length; i++) {
+				const learnset = out[i];
+				if (learnset.species.id === 'rotom') {
+					out[i] = {
+						...learnset,
+						learnset: { ...learnset.learnset },
+					} as any;
+					delete out[i].learnset.ectoplasma;
+				}
+			}
+		}
+
 		return out;
 	}
 
