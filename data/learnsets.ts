@@ -53220,57 +53220,68 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rotomheat: {
 		learnset: {
+			ectoplasma: [],
 			overheat: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomwash: {
 		learnset: {
+			ectoplasma: [],
 			hydropump: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomfrost: {
 		learnset: {
+			ectoplasma: [],
 			blizzard: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomfan: {
 		learnset: {
+			ectoplasma: [],
 			airslash: ["8R", "7R", "6R", "5R", "4R"],
 			hurricane: ["9R"],
 		},
 	},
 	rotommow: {
 		learnset: {
+			ectoplasma: [],
 			leafstorm: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomstereo: {
 		learnset: {
+			ectoplasma: [],
 			boomburst: ["9R"],
 		},
 	},
 	rotomjunk: {
 		learnset: {
+			ectoplasma: [],
 			viralblast: ["9R"],
 		},
 	},
 	rotomsway: {
 		learnset: {
+			ectoplasma: [],
 			mindmeld: ["9R"],
 		},
 	},
 	rotombrawl: {
 		learnset: {
+			ectoplasma: [],
 			focusblast: ["9R"],
 		},
 	},
 	rotomweb: {
 		learnset: {
+			ectoplasma: [],
 			blackhole: ["9R"],
 		},
 	},
 	rotomsol: {
 		learnset: {
+			ectoplasma: [],
 			dracometeor: ["9R"],
 		},
 	},

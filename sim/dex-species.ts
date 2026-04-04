@@ -699,6 +699,13 @@ export class DexSpecies {
 				if (this.dex.gen === 8 && species.evoRegion === 'Alola') maxGen = 7;
 			}
 		}
+
+		// Rotom formes cannot learn ectoplasma in Gen 9, only base Rotom can
+		const originalSpecies = this.get(id);
+		if (this.dex.gen >= 9 && originalSpecies.baseSpecies === 'Rotom' && originalSpecies.id !== 'rotom') {
+			movePool.delete('ectoplasma' as ID);
+		}
+
 		return movePool;
 	}
 
