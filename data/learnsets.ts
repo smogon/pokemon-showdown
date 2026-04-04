@@ -53599,6 +53599,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	rotomfan: {
 		learnset: {
 			agility: ["9L1"],
+			airslash: ["8R", "7R", "6R", "5R", "4R"],
 			allyswitch: ["8M", "7T"],
 			astonish: ["9L1", "8L1", "7L1", "6L1", "6S1", "5L1", "5S0", "4L1"],
 			auraprojection: ["9M"],
@@ -104822,7 +104823,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			viralblast: ["9M"],
 		},
 	},
-	tropiuskaskade: {
+	/* tropiuskaskade: {
 		learnset: {
 			aromatherapy: ["9M"],
 			bodypress: ["9M"],
@@ -104880,7 +104881,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["9L6"],
 			woodhammer: ["9M", "9L61"],
 		},
-	},
+	}, */
 	mosster: {
 		learnset: {
 			absorb: ["9L10"],
@@ -106792,7 +106793,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whipup: ["9M", "9L1"],
 		},
 	},
-	depuray: {
+	/* depuray: {
 		learnset: {
 			acrobatics: ["9M"],
 			auraprojection: ["9M"],
@@ -107035,7 +107036,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			voltswitch: ["9M"],
 			weatherball: ["9M"],
 		},
-	},
+	}, */
 	pudet: {
 		learnset: {
 			auraprojection: ["9M"],
@@ -107130,7 +107131,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wildcharge: ["9M"],
 		},
 	},
-	pramblo: {
+	/* pramblo: {
 		learnset: {
 			aquajet: ["9M", "9L16"],
 			bulkup: ["9M"],
@@ -107632,7 +107633,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderbolt: ["9M", "9L53"],
 			thundershock: ["9L19"],
 		},
-	},
+	}, */
 	excadrillkaskade: {
 		learnset: {
 			aurasphere: ["9M"],
@@ -107711,7 +107712,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M"],
 		},
 	},
-	qayagus: {
+	/* qayagus: {
 		learnset: {
 			acid: ["9L7"],
 			amnesia: ["9L30"],
@@ -108385,7 +108386,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			taunt: ["9M", "9L10"],
 			whipup: ["9M", "9L50"],
 		},
-	},
+	}, */
 	botnyak: {
 		learnset: {
 			acrobatics: ["9M"],
@@ -108602,7 +108603,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M"],
 		},
 	},
-	hurchin: {
+	/* hurchin: {
 		learnset: {
 			destinybond: ["9L1"],
 			doubleedge: ["9M", "9L20"],
@@ -108701,7 +108702,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			watergun: ["9L1"],
 			wavecrash: ["9M", "9L0"],
 		},
-	},
+	}, */
 	probat: {
 		learnset: {
 			absorb: ["9L1"],
@@ -109009,7 +109010,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			populationbomb: ["9L60"],
 			powertrip: ["9M"],
 			protect: ["9M"],
-			psychic: ["9M", "9L29"],
+			psychic: ["9M"],
 			psychocut: ["9M"],
 			psyshock: ["9M"],
 			reflect: ["9M"],
@@ -109020,6 +109021,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			sleeptalk: ["9M"],
 			sludgebomb: ["9M"],
 			snarl: ["9L34"],
+			spite: ["9L29"],
 			storedpower: ["9M"],
 			substitute: ["9M"],
 			supercell: ["9M"],
@@ -109566,7 +109568,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			woodhammer: ["9M"],
 		},
 	},
-	obsidious: {
+	/* obsidious: {
 		learnset: {
 			blackhole: ["9M", "9L60"],
 			ceaselessedge: ["9L20"],
@@ -110191,5 +110193,5 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trickroom: ["9L63"],
 			wildmagic: ["9M", "9L21"],
 		},
-	},
+	}, */
 }
