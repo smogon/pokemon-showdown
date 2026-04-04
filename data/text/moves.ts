@@ -260,7 +260,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	attract: {
 		name: "Attract",
-		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
+		desc: "Causes the target to become infatuated, making it unable to attack 33% of the time. Fails if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
 		shortDesc: "Infatuates the target.",
 		gen5: {
 			desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability are immune.",
@@ -7869,7 +7869,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lovespray: {
 		name: "Lovespray",
-		desc: "Lowers the target's SpA by 1 stage. Causes the target to become infatuated, making it unable to attack 50% of the time. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune. During Pheromones the move bypasses accuracy checks and target all other active Pokemon.",
+		desc: "Lowers the target's SpA by 1 stage and infatuates it. If the current weather is Pheromones, this move bypasses accuracy checks and targets all other active Pokemon.",
 		shortDesc: "Infatuates target. Lowers target's SpA by 1 stage.",
 	},
 	lunarsurge: {
@@ -8085,7 +8085,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sultryspin: {
 		name: "Sultry Spin",
-		desc: "Has a 30% chance to infatuate the ",
+		desc: "Has a 30% chance to infatuate the target.",
 		shortDesc: "30% chance to infatuate on hit. Hits all foes.",
 	},
 	sunscreen: {
