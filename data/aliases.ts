@@ -2584,6 +2584,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	alfa: "Alfalphalops",
 	alpha: "Alfalphalops",
 	tarm: "Tarmendoa",
+	quail: "Quailstion",
 	zog: "Kaskazog",
 	botnyaklb: "Botnyak",
 	botnyaklr: "Botnyak",
