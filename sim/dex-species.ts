@@ -758,7 +758,7 @@ export class DexSpecies {
 			species = this.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
-		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem' && species.baseSpecies !== 'Rotom') {
+		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Necrozma whose movesets are extensions are their base formes
 			return this.get(species.changesFrom);
 		} else if (
