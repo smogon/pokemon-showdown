@@ -870,6 +870,11 @@ export class BattleActions {
 				} else {
 					targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 				}
+			} else if (targetHits[0] === 1 && targetHits[1] === 2) {
+				targetHits = this.battle.random(1, 3);
+				if (targetHits === 1 && pokemon.hasItem('loadeddice')) {
+					targetHits = 2;
+				}
 			} else {
 				targetHits = this.battle.random(targetHits[0], targetHits[1] + 1);
 			}
