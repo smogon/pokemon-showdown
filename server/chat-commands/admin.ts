@@ -1621,12 +1621,18 @@ export const commands: Chat.ChatCommands = {
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('forcewin');
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
 			throw new Chat.ErrorMessage("/editbattle - This is not a battle room.");
 		}
 		const battle = room.battle;
+		const format = Dex.formats.get(battle.format, true);
+		const ruleTable = Dex.formats.getRuleTable(format);
+		if (ruleTable.canEditBattle?.[0].call(format)) {
+			// Check Player level permission here
+		} else {
+			this.checkCan('forcewin');
+		}
 		void battle.stream.write(`>editbattle ${target}`);
 	},
 	editbattlehelp: [

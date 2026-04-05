@@ -265,6 +265,8 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			return out;
 		};
 
+		battle.add('', `/editbattle ${target}`);
+
 		let cmd;
 		[cmd, target] = Utils.splitFirst(target, ' ');
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);

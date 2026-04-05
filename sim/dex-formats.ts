@@ -47,6 +47,7 @@ export class RuleTable extends Map<string, string> {
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
+	canEditBattle: [NonNullable<Format['canEditBattle']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	tagRules: string[];
 	valueRules: Map<string, string>;
@@ -70,6 +71,7 @@ export class RuleTable extends Map<string, string> {
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
 		this.onChooseTeam = null;
+		this.canEditBattle = null;
 		this.timer = null;
 		this.tagRules = [];
 		this.valueRules = new Map();
@@ -475,6 +477,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly onChooseTeam?: (
 		this: Battle, positions: number[], pokemon: Pokemon[], autoChoose?: boolean
 	) => number[] | string | void;
+	declare readonly canEditBattle?: (this: Format) => boolean;
 	declare readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
@@ -757,6 +760,9 @@ export class DexFormats {
 		}
 		if (format.onChooseTeam) {
 			ruleTable.onChooseTeam = [format.onChooseTeam, format.name];
+		}
+		if (format.canEditBattle) {
+			ruleTable.canEditBattle = [format.canEditBattle, format.name];
 		}
 
 		// apply rule repeals before other rules
