@@ -395,6 +395,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  Arcane energy burst forth!", // this sucks ass
 		end: "  The arcane forces calmed down.",
 		upkeep: "  (Arcane energy surrounds us.)",
+
+		damage: "  [POKEMON] was overwhelmed by arcane might!",
 	},
 	supercell: {
 		weatherName: "Thunderstorm",
