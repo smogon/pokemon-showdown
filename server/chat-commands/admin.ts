@@ -1628,11 +1628,12 @@ export const commands: Chat.ChatCommands = {
 		const battle = room.battle;
 		const format = Dex.formats.get(battle.format, true);
 		const ruleTable = Dex.formats.getRuleTable(format);
-		if (ruleTable.canEditBattle?.[0].call(format)) {
-			// Check Player level permission here
-		} else {
+		if (ruleTable.has('editbattle')) {
+			this.checkCan('editprivacy', null, room);
+			}
+			else {
 			this.checkCan('forcewin');
-		}
+			}
 		void battle.stream.write(`>editbattle user:${user.name}, ${target}`);
 	},
 	editbattlehelp: [

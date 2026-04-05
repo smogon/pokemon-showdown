@@ -3260,9 +3260,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: "Rule",
 		name: "Edit Battle",
 		desc: "Allows players to edit battle details using `/editbattle`.",
-		canEditBattle() {
-			return true;
-		},
 		// Implemented in chat-commands/admin.ts
 	},
 };
