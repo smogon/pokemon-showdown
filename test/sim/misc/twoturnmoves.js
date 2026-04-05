@@ -56,7 +56,7 @@ describe('Two Turn Moves [Gen 1]', () => {
 		assert(!aerodactyl.volatiles['twoturnmove']);
 	});
 
-	it(`[Gen 1] if called by Metronome or Mirror Move, the calling move uses PP in the attacking turn`, () => {
+	it(`if called by Metronome or Mirror Move, the calling move uses PP in the attacking turn`, () => {
 		battle = common.gen(1).createBattle({ seed: [0, 1, 0, 1] });
 		battle.setPlayer('p1', { team: [{ species: 'blastoise', moves: ['metronome', 'skullbash'] }] });
 		battle.setPlayer('p2', { team: [{ species: 'golem', moves: ['defensecurl'] }] });
@@ -100,5 +100,43 @@ describe('Two Turn Moves [Gen 1]', () => {
 		battle.makeChoices('move swift', 'move gust');
 		assert.false.fullHP(pidgeot);
 		assert(pidgeot.volatiles['invulnerability']);
+	});
+
+	it(`should be soft-locked if it was woken up by Haze during the charging turn`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: "Golem", moves: ['solarbeam', 'splash'] },
+			{ species: "Magikarp", moves: ['splash'] },
+		], [
+			{ species: "Mewtwo", moves: ['splash', 'spore', 'haze', 'swordsdance'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move solarbeam', 'move spore');
+		battle.makeChoices('move solarbeam', 'move haze');
+		// Golem is locked into Solar Beam, but the move will never execute
+		for (let i = 0; i < 3; i++) {
+			assert.throws(() => battle.choose('p1', 'switch 2'));
+			assert(battle.p1.active[0].volatiles['twoturnmove']);
+			const request = battle.p1.activeRequest;
+			assert.equal(request.active[0].moves.length, 1);
+			assert.equal(request.active[0].moves[0].id, 'solarbeam');
+			battle.makeChoices('move solarbeam', 'move swordsdance');
+		}
+		assert.fullHP(battle.p2.active[0]);
+		assert.equal(battle.p2.active[0].boosts.atk, 6);
+	});
+
+	it(`should be delayed by trapping moves`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 1] }, [[
+			{ species: 'Aerodactyl', moves: ['solarbeam'] },
+		], [
+			{ species: 'Gyarados', moves: ['wrap', 'splash'] },
+		]]);
+		const aerodactyl = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['partiallytrapped'].duration, 1);
+		battle.makeChoices();
+		assert(!aerodactyl.volatiles['partiallytrapped']);
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 });

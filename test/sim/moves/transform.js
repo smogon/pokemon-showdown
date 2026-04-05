@@ -368,9 +368,10 @@ describe('Transform [Gen 1]', () => {
 			{ species: 'Gengar', moves: ['splash', 'thunderwave'] },
 		]]);
 		battle.makeChoices('move splash', 'move thunderwave');
-		do {
+		for (let i = 0; i < 5; i++) {
 			battle.makeChoices('move transform', 'move splash');
-		} while (!battle.p1.active[0].transformed);
+			if (battle.p1.active[0].transformed) break;
+		}
 		const p1poke = battle.p1.active[0];
 		const p2poke = battle.p2.active[0];
 		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);

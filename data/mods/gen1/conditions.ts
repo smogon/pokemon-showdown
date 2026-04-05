@@ -80,6 +80,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
+		},
 	},
 	frz: {
 		name: 'frz',
@@ -97,6 +100,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (move.secondary && move.secondary.status === 'brn') {
 				target.cureStatus();
 			}
+		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
 		},
 	},
 	psn: {
@@ -202,8 +208,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
-			target.maybeLocked = true;
+			if (this.effectState.maybeLocked) {
+				target.maybeLocked = true;
+			}
 		},
 	},
 	fakepartiallytrapped: {
@@ -211,6 +220,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// Wrap ended this turn, but you don't know that
 		// until you try to use an attack
 		duration: 2,
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
 			target.maybeLocked = true;
 		},
@@ -229,9 +239,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.effectState.damage = this.lastDamage;
 			this.effectState.locked = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
-		},
-		onOverrideAction(pokemon, target, move) {
-			return this.effectState.move;
 		},
 		onBeforeMove(pokemon, target, move) {
 			if (target !== this.effectState.locked) {
@@ -252,13 +259,18 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			} else {
 				target.addVolatile('partiallytrapped', pokemon, move);
+				if (this.effectState.totalDuration - this.effectState.duration! > 0) {
+					target.volatiles['partiallytrapped'].maybeLocked = true;
+				}
 			}
 		},
-		onLockMove() {
+		onSemiLockMove() {
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
-			pokemon.maybeLocked = true;
+			if (this.effectState.totalDuration - this.effectState.duration! > 1) {
+				pokemon.maybeLocked = true;
+			}
 		},
 	},
 	mustrecharge: {
