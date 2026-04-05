@@ -1633,7 +1633,6 @@ export const commands: Chat.ChatCommands = {
 		} else {
 			this.checkCan('forcewin');
 		}
-		void battle.stream.write(`>editbattle ${target}`);
 		void battle.stream.write(`>editbattle user:${user.name}, ${target}`);
 	},
 	editbattlehelp: [
