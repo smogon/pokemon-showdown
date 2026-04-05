@@ -484,8 +484,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		activate: "[POKEMON] fell from the sky due to the gravity!",
 	},
 	pearldrop: {
-		start: "  [POKEMON]'s pearls spread over the battlefield!",
-		end: "  [POKEMON] gathered up all of its pearls!",
+		start: "  Pearls spread over the battlefield!",
+		end: "  The pearls rolled away!",
 	},
 	magicroom: {
 		start: "  It created a bizarre area in which Pok\u00E9mon's held items lose their effects!",
