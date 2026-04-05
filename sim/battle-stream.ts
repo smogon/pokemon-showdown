@@ -389,6 +389,42 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			if (targets.length) battle.add(`||Reseeded to ${targets.join(',')}`);
 			break;
 		}
+		case 'basestats':
+		case 'bs': {
+			if (targets.length !== 8) {
+				battle.add("||<<< Error: Format should be: basestats PLAYER, POKEMON, HP, ATK, DEF, SPA, SPD, SPE");
+				return;
+			}
+			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets;
+			const p = getPokemon(toID(player), toID(pokemon));
+			const hp = parseInt(hpStr);
+			const atk = parseInt(atkStr);
+			const def = parseInt(defStr);
+			const spa = parseInt(spaStr);
+			const spd = parseInt(spdStr);
+			const spe = parseInt(speStr);
+			if (!Number.isInteger(Number(hpStr)) || !Number.isInteger(Number(atkStr)) || !Number.isInteger(Number(defStr)) ||
+				!Number.isInteger(Number(spaStr)) || !Number.isInteger(Number(spdStr)) || !Number.isInteger(Number(speStr))) {
+				battle.add("||<<< Error: All stats must be integers between 0 and 256.");
+				return;
+			}
+			if (hp < 1 || hp > 255 || atk < 1 || atk > 255 || def < 1 || def > 255 ||
+				spa < 1 || spa > 255 || spd < 1 || spd > 255 || spe < 1 || spe > 255) {
+				battle.add("||<<< Error: Stats must be an integer between 0 and 256.");
+				return;
+			}
+			const newBaseStats: StatsTable = {hp: hp, atk: atk, def: def, spa: spa, spd: spd, spe: spe};
+			const newStats = battle.spreadModify(newBaseStats, p.set);
+			p.baseStoredStats = newStats;
+			p.baseMaxhp = newStats.hp;
+			p.maxhp = newStats.hp;
+			if (p.hp > newStats.hp) p.hp = newStats.hp;
+			for (const stat in p.storedStats) {
+				p.storedStats[stat as StatIDExceptHP] = newStats[stat as StatIDExceptHP];
+			}
+			p.speed = p.storedStats.spe;
+			break;
+		}
 		default:
 			throw new Error(`Unknown editbattle command: ${cmd}`);
 		}
