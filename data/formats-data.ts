@@ -1532,6 +1532,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	sneasel: {
 		tier: "ZU",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	sneaselhisui: {
 		tier: "ZU",
@@ -3137,6 +3139,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	gurdurr: {
 		tier: "ZU",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	conkeldurr: {
 		tier: "UU",
