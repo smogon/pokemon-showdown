@@ -165,7 +165,7 @@ describe(`Hyper Beam [Gen 1]`, () => {
 		assert(battle.p1.active[0].hp < hp);
 	});
 
-	it(`should be freed from soft-locked if unfrozen by Haze during the recharge turn`, () => {
+	it(`should not be freed from soft-locked if unfrozen by Haze during the recharge turn`, () => {
 		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 			{ species: 'cloyster', moves: ['icebeam', 'splash', 'haze'] },
 		], [
