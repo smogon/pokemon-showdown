@@ -239,7 +239,6 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			return out;
 		};
 
-		battle.add('', `/editbattle ${target}`);
 		let user = null;
 		if (target.startsWith('user:')) {
 			[user, target] = Utils.splitFirst(target.slice(5), ',');
@@ -375,30 +374,36 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				battle.add("||<<< Error: Format should be: basestats PLAYER, POKEMON, HP, ATK, DEF, SPA, SPD, SPE");
 				return;
 			}
-			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets;
-			const p = getPokemon(toID(player), toID(pokemon));
-			const hp = parseInt(hpStr);
-			const atk = parseInt(atkStr);
-			const def = parseInt(defStr);
-			const spa = parseInt(spaStr);
-			const spd = parseInt(spdStr);
-			const spe = parseInt(speStr);
-			if (!Number.isInteger(Number(hpStr)) || !Number.isInteger(Number(atkStr)) || !Number.isInteger(Number(defStr)) ||
-				!Number.isInteger(Number(spaStr)) || !Number.isInteger(Number(spdStr)) || !Number.isInteger(Number(speStr))) {
-				battle.add("||<<< Error: All stats must be integers between 0 and 256.");
+			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets.map(target => target.trim());
+			const p = getPokemon(player, pokemon);
+			const hp = Number(hpStr);
+			const atk = Number(atkStr);
+			const def = Number(defStr);
+			const spa = Number(spaStr);
+			const spd = Number(spdStr);
+			const spe = Number(speStr);
+			if (![hp, atk, def, spa, spd, spe].every(stat => Number.isInteger(stat))) {
+				battle.add("||<<< Error: All stats must be integers between 1 and 255.");
 				return;
 			}
-			if (hp < 1 || hp > 255 || atk < 1 || atk > 255 || def < 1 || def > 255 ||
-				spa < 1 || spa > 255 || spd < 1 || spd > 255 || spe < 1 || spe > 255) {
-				battle.add("||<<< Error: Stats must be an integer between 0 and 256.");
+			if ([hp, atk, def, spa, spd, spe].some(stat => stat < 1 || stat > 255)) {
+				battle.add("||<<< Error: Stats must be integers between 1 and 255.");
 				return;
 			}
-			const newBaseStats: StatsTable = {hp: hp, atk: atk, def: def, spa: spa, spd: spd, spe: spe};
+			const newBaseStats: StatsTable = {hp, atk, def, spa, spd, spe};
+			const oldMaxhp = p.maxhp;
+			const oldHp = p.hp;
+			const wasFainted = p.fainted;
 			const newStats = battle.spreadModify(newBaseStats, p.set);
 			p.baseStoredStats = newStats;
 			p.baseMaxhp = newStats.hp;
 			p.maxhp = newStats.hp;
-			if (p.hp > newStats.hp) p.hp = newStats.hp;
+			if (wasFainted) {
+				p.hp = 0;
+			} else {
+				const hpRatio = oldMaxhp ? oldHp / oldMaxhp : 1;
+				p.hp = Math.max(1, Math.min(p.maxhp, Math.round(hpRatio * p.maxhp)));
+			}
 			for (const stat in p.storedStats) {
 				p.storedStats[stat as StatIDExceptHP] = newStats[stat as StatIDExceptHP];
 			}
