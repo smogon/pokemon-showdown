@@ -1634,6 +1634,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('forcewin');
 		}
 		void battle.stream.write(`>editbattle ${target}`);
+		void battle.stream.write(`>editbattle user:${user.name}, ${target}`);
 	},
 	editbattlehelp: [
 		`/editbattle hp [player], [pokemon], [hp]`,
