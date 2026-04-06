@@ -205,7 +205,6 @@ export class RuleTable extends Map<string, string> {
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
-
 		if (this.valueRules.has('gametype')) {
 			const gameType = dex.toID(this.valueRules.get('gametype')!) as GameType;
 			const currentPlayerCount = format.gameType === 'multi' || format.gameType === 'freeforall' ? 4 : 2;
@@ -213,12 +212,11 @@ export class RuleTable extends Map<string, string> {
 			if (currentPlayerCount !== newPlayerCount) {
 				throw new Error(
 				`Changing between ${currentPlayerCount}- (${format.gameType}) and ${newPlayerCount}-player (${gameType}) game types is not supported.`
-				);
+					);
 			}
 			(format as any).gameType = gameType;
 			(format as any).playerCount = newPlayerCount;
 		}
-
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
 			format.gameType === 'doubles' ? 2 :
 			1;

@@ -10,7 +10,6 @@ describe('Game Type Rule', () => {
 		if (battle && battle.destroy) battle.destroy();
 	});
 
-
 	it('should override singles -> doubles', () => {
 		battle = common.createBattle({ customRules: ['Game Type = Doubles'] });
 		assert.equal(battle.gameType, 'doubles');
@@ -26,16 +25,15 @@ describe('Game Type Rule', () => {
 		assert.equal(battle.gameType, 'triples');
 	});
 
-	it('should override ffa     -> multi'  , () => {
+	it('should override ffa -> multi'  , () => {
 		battle = common.createBattle({ gameType: 'freeforall', customRules: ['Game Type = Multi'] });
 		assert.equal(battle.gameType, 'multi');
 	});
 
-	it('should override multi   -> ffa'    , () => {
+	it('should override multi -> ffa', () => {
 		battle = common.createBattle({ gameType: 'multi', customRules: ['Game Type = FreeForAll'] });
 		assert.equal(battle.gameType, 'freeforall');
 	});
-
 
 	it('should succeed with multiple overrides', () => {
 		// set game type, then override
@@ -79,11 +77,11 @@ describe('Game Type Rule', () => {
 		battle = null;
 		assert.throws(
 			() => common.createBattle({ gameType: 'freeforall', customRules: ['Best Of = 3'] }),
-			/Only two-player battles/,
+			/Only two-player battles/
 		);
 		assert.throws(
 			() => common.createBattle({ gameType: 'multi', customRules: ['Best Of = 3'] }),
-			/Only two-player battles/,
+			/Only two-player battles/
 		);
 	});
 
@@ -119,5 +117,4 @@ describe('Game Type Rule', () => {
 			/game types is not supported/
 		);
 	});
-	
 });

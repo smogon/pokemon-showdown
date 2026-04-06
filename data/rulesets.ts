@@ -2919,7 +2919,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		hasValue: true,
 		onValidateRule(value) {
 			const gameType = this.dex.toID(value);
-			const validGameTypes = [ 'singles', 'doubles', 'triples', 'freeforall', 'multi' ];
+			const validGameTypes = ['singles', 'doubles', 'triples', 'freeforall', 'multi'];
 			if (!validGameTypes.includes(gameType)) {
 				throw new Error(`"${value}" is not a valid game type. Valid game types are: ${validGameTypes.join(', ')}`);
 			}
