@@ -6,7 +6,41 @@
  */
 
 import { FS, Utils } from '../../../lib';
-import { Table } from '../../utils';
+
+const Table = (
+	title: string,
+	dataRows: string[][],
+	headerRow: string[] | null = null
+): string => {
+	let output = `<div style="max-height:360px; overflow:auto; border:1px solid #000; padding:2px;">`;
+	output += `<table border="1" width="100%" cellpadding="6" cellspacing="0">`;
+
+	output += `<caption><b><big>${title}</big></b></caption>`;
+
+	if (headerRow && headerRow.length > 0) {
+		output += `<thead><tr>`;
+		headerRow.forEach(header => {
+			output += `<th align="center">${header}</th>`;
+		});
+		output += `</tr></thead>`;
+	}
+
+	output += `<tbody>`;
+	dataRows.forEach((row, index) => {
+		const bgcolor = index % 2 === 0 ? '#f0f0f0' : '#ffffff';
+		output += `<tr bgcolor="${bgcolor}">`;
+		row.forEach(cell => {
+			output += `<td align="center">${cell}</td>`;
+		});
+		output += `</tr>`;
+	});
+	output += `</tbody>`;
+
+	output += `</table>`;
+	output += `</div>`;
+
+	return output;
+};
 
 const DATA_FILE = 'impulse/db/emoticons.json';
 
@@ -104,7 +138,6 @@ const addEmoticon = (name: string, url: string, user: User): void => {
 
 const deleteEmoticon = (name: string): void => {
 	delete data.emoticons[name];
-
 	delete emoticons[name];
 	saveData();
 	buildEmoteRegex();
@@ -124,7 +157,6 @@ function parseMessage(message: string): string {
 Impulse.parseMessage = parseMessage;
 
 const parseEmoticons = (message: string, _room?: Room): string | false => {
-	// reset lastIndex before testing to avoid stateful regex bugs.
 	emoteRegex.lastIndex = 0;
 	if (!emoteRegex.test(message)) return false;
 
@@ -135,8 +167,6 @@ const parseEmoticons = (message: string, _room?: Room): string | false => {
 		emoteRegex,
 		(match: string) => {
 			const url = emoticons[match];
-			// url was loaded from disk and validated on write, but double-check
-			// before injecting into HTML to prevent stored-XSS.
 			if (!url || !isValidEmoticonUrl(url)) return Utils.escapeHTML(match);
 			return `<img src="${Utils.escapeHTML(url)}" title="${Utils.escapeHTML(match)}" height="${size}" width="${size}" loading="lazy">`;
 		}
@@ -245,7 +275,7 @@ export const commands: Chat.ChatCommands = {
 				rows.push(row);
 			}
 
-			this.sendReply(`|html|${Table('Available Emoticons', [], rows)}`);
+			this.sendReply(`|html|${Table('Available Emoticons', rows)}`);
 		},
 
 		ignore(target, room, user): void {
@@ -265,7 +295,6 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			delete data.ignores[user.id];
-
 			delete Impulse.ignoreEmotes[user.id];
 			saveData();
 			this.sendReply('No longer ignoring emoticons.');
@@ -298,7 +327,7 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Added:</b> ${emote.addedAt ? new Date(emote.addedAt).toUTCString() : 'Unknown'}`],
 			];
 
-			this.sendReply(`|html|${Table(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows)}`);
+			this.sendReply(`|html|${Table(`Emoticon: ${Utils.escapeHTML(target)}`, rows)}`);
 		},
 
 		help(): void {
