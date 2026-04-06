@@ -53207,7 +53207,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rotomheat: {
 		learnset: {
-			// ectoplasma: [],
+			ectoplasma: [],
 			overheat: ["9M", "9L60", "9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
