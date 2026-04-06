@@ -879,6 +879,9 @@ export class Pokemon {
 
 	ignoringItem(isFling = false) {
 		if (this.getItem().isPrimalOrb) return false;
+		if (this.battle.gen <= 4 && this.hasAbility('multitype')) return false;
+		// in gen 4, items that ignore Klutz also ignore Embargo
+		if (this.battle.gen <= 4 && this.getItem().ignoreKlutz) return false;
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
@@ -1828,9 +1831,9 @@ export class Pokemon {
 	}
 
 	takeItem(source?: Pokemon) {
-		if (!this.item) return false;
 		if (!source) source = this;
-		if (this.battle.gen <= 4 && source.itemKnockedOff) return false;
+		if (this.battle.gen <= 4 && (this.itemKnockedOff || source.itemKnockedOff)) return false;
+		if (!this.item) return;
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';

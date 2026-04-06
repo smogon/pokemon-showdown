@@ -516,10 +516,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
-			const bannedAbilities = ['forecast', 'multitype', 'trace'];
-			if (bannedAbilities.includes(target.ability)) {
-				return;
-			}
+			if (ability.flags['notrace']) return;
 			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
