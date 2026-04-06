@@ -125,8 +125,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.lastDamage = 0;
-			let lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (!lockedMove) {
 				if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);

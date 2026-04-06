@@ -1234,9 +1234,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				if (this.actions.useMove(move.id, snatchUser)) {
-					snatchUser.deductPP('snatch');
+
+				// check Pressure
+				const ppDrop = this.runEvent('DeductPP', source, snatchUser, this.effectState.sourceEffect);
+				const extraPP = ppDrop !== true ? ppDrop : 0;
+				if (extraPP > 0) {
+					snatchUser.deductPP(this.effectState.sourceEffect.id, extraPP);
 				}
+
+				this.actions.useMove(move.id, snatchUser);
 				return null;
 			},
 		},
