@@ -26,9 +26,8 @@ const Table = (
 	}
 
 	output += `<tbody>`;
-	dataRows.forEach((row, index) => {
-		const bgcolor = index % 2 === 0 ? '#f0f0f0' : '#ffffff';
-		output += `<tr bgcolor="${bgcolor}">`;
+	dataRows.forEach(row => {
+		output += `<tr>`;
 		row.forEach(cell => {
 			output += `<td align="center">${cell}</td>`;
 		});
@@ -275,7 +274,7 @@ export const commands: Chat.ChatCommands = {
 				rows.push(row);
 			}
 
-			this.sendReply(`|html|${Table('Available Emoticons', rows)}`);
+			this.sendReply(`|html|${Table('<big>Available Emoticons</big>', rows)}`);
 		},
 
 		ignore(target, room, user): void {
