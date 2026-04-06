@@ -12,9 +12,9 @@ describe('Griseous Orb [Gen 4]', () => {
 
 	it(`should prevent changing the holder's ability`, () => {
 		battle = common.gen(4).createBattle([[
-			{ species: 'giratina', ability: 'pressure', item: 'griseousorb', moves: ['skillswap'] },
+			{ species: 'dhelmise', ability: 'pressure', item: 'griseousorb', moves: ['skillswap'] },
 		], [
-			{ species: 'giratina', ability: 'flashfire', moves: ['worryseed'] },
+			{ species: 'wobbuffet', ability: 'flashfire', moves: ['worryseed'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].ability, 'pressure');
