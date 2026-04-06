@@ -284,6 +284,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	multitype: {
+		inherit: true,
+		onTakeItem: false,
+	},
 	naturalcure: {
 		inherit: true,
 		onCheckShow: undefined, // no inherit

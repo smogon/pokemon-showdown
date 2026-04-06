@@ -1456,13 +1456,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { bypasssub: 1, metronome: 1, failencore: 1 },
 	},
-	trick: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (target.itemKnockedOff || source.itemKnockedOff) return false;
-			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
-		},
-	},
 	trickroom: {
 		inherit: true,
 		condition: {
