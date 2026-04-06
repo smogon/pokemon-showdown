@@ -287,6 +287,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	multitype: {
 		inherit: true,
 		onTakeItem: false,
+		onSetAbility: false, // redundant but hardcoded
 	},
 	naturalcure: {
 		inherit: true,
