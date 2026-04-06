@@ -157,31 +157,47 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
-			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
-			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
-				move = this.battle.dex.getActiveMove('hyperbeam');
-				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
-					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
+			const abortMove = () => {
+				this.battle.clearActiveMove(true);
+				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			};
+
+			if (move.id === 'cannotmove') {
+				if (pokemon.status === 'slp') {
+					this.battle.hint(
+						"In Gen 1, if a Pokémon spends a turn partially trapped and switches to a Pokémon that is asleep, " +
+						"the sleep counter will not decrease until you select a move with a different Pokémon."
+					);
+				} else if (pokemon.getLockedMove()) {
+					this.battle.hint(
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during a multi-turn move, " +
+						"that Pokémon will become soft-locked."
+					);
+				} else if (pokemon.getSemiLockedMove()) {
+					this.battle.hint(
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during Bide, " +
+						"the move execution will never resolve."
+					);
+				}
+				abortMove();
+				return;
 			}
 
 			if (target?.subFainted) target.subFainted = null;
 
 			this.battle.setActiveMove(move, pokemon, target);
 
-			if (pokemon.moveThisTurn || move.id === 'cantmove' || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
-				// This is only run for sleep.
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
+				abortMove();
 				return;
 			}
 			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
+				abortMove();
 				return;
 			}
 
 			if (move.id !== 'struggle') {
-				const lockedMove = pokemon.getLockedMove();
+				const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 				if (lockedMove) sourceEffect = move;
 
 				// Locked moves don't deduct PP
@@ -191,13 +207,12 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (moveSlot) pokemon.deductPP(moveSlot.id, null, target);
 				}
 
-				if (move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
+				if (!lockedMove && move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
 					this.battle.hint("Desync Clause Mod activated!");
 					this.battle.hint(
-						"In Gen 1, a Pokémon that thaws out might try to use a move that doesn't match the move " +
-						"of the slot it last selected (switches reset to the first slot).",
+						"In Gen 1, a Pokémon might default to using a move that doesn't match the move of the slot it last selected.",
 					);
-					this.battle.clearActiveMove(true);
+					abortMove();
 					return;
 				}
 			}
@@ -450,7 +465,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let i: number;
 					for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 						move.hit = i + 1;
-						if (move.hit === hits) move.lastHit = true;
+						move.lastHit = move.hit === hits;
 						moveDamage = this.moveHit(target, pokemon, move);
 						if (moveDamage === false) break;
 						damage = (moveDamage || 0);
