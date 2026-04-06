@@ -2304,7 +2304,7 @@ export class TeamValidator {
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
 			const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
-			if (!setSources.size() && !canUseAbilityPatch) {
+			if (!setSources.size() && !canUseAbilityPatch && ruleTable.has('obtainableabilities')) {
 				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				return problems;
 			}
@@ -2627,17 +2627,18 @@ export class TeamValidator {
 					continue;
 				}
 
+				const onlyLegalAbilities = ruleTable.has('obtainableabilities');
 				const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 				if (
-					learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
-					!dex.mod(`gen${learnedGen}`).species.get(baseSpecies.name).abilities['H']
+					learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch && onlyLegalAbilities &&
+					!dex.forGen(learnedGen).species.get(baseSpecies.name).abilities['H']
 				) {
 					cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 					continue;
 				}
 
 				const ability = dex.abilities.get(set.ability);
-				if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo) {
+				if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo && onlyLegalAbilities) {
 					// You can evolve a transferred mon to reroll for its new Ability.
 					cantLearnReason = `is learned in gen ${learnedGen}, but the Ability ${ability.name} did not exist then.`;
 					continue;
