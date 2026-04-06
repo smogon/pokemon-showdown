@@ -887,6 +887,7 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
+			move.lastHit = move.hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
 				damage = [damage[hit - 1]];
