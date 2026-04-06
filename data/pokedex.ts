@@ -7111,10 +7111,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 100,
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
-		// otherFormes: ["Tropius-Kaskade"],
-		// formeOrder: ["Tropius", "Tropius-Kaskade"],
+		otherFormes: ["Tropius-Kaskade"],
+		formeOrder: ["Tropius", "Tropius-Kaskade"],
 	},
-	/* tropiuskaskade: {
+	tropiuskaskade: {
 		num: 357,
 		name: "Tropius-Kaskade",
 		baseSpecies: "Tropius",
@@ -7127,7 +7127,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		gen: 9,
-	}, */
+	},
 	chimecho: {
 		num: 358,
 		name: "Chimecho",
