@@ -381,6 +381,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	embargo: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onTryHit(pokemon) {
+			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb') {
+				return false;
+			}
+		},
 		condition: {
 			inherit: true,
 			onResidualOrder: 10,
