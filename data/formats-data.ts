@@ -4749,10 +4749,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-	magearnaoriginalmega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
 	marshadow: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -5488,14 +5484,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	tatsugiricurlymega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	tatsugiridroopymega: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	tatsugiristretchymega: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},

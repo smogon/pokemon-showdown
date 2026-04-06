@@ -2339,9 +2339,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		isNonstandard: "Past",
 	},
-	magearnaoriginal: {
-		isNonstandard: "Past",
-	},
 	marshadow: {
 		isNonstandard: "Past",
 	},
@@ -2552,13 +2549,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	sinistea: {
 		isNonstandard: "Past",
 	},
-	sinisteaantique: {
-		isNonstandard: "Past",
-	},
 	polteageist: {
-		isNonstandard: "Past",
-	},
-	polteageistantique: {
 		isNonstandard: "Past",
 	},
 	hatenna: {
@@ -2712,9 +2703,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	zarude: {
-		isNonstandard: "Past",
-	},
-	zarudedada: {
 		isNonstandard: "Past",
 	},
 	regieleki: {

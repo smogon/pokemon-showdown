@@ -22,17 +22,15 @@ export interface SpeciesData extends Partial<Species> {
 	eggGroups: string[];
 	weightkg: number;
 }
-export interface CosmeticFormeData {
-	isCosmeticForme: boolean;
+export interface CosmeticFormeData extends Partial<Species> {
+	cosmeticForme: string;
 	name: string;
-	baseSpecies: string;
 	forme: string;
-	color: string;
 }
 
 export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
 	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
-	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
+	Partial<Omit<CosmeticFormeData, 'cosmeticForme'>> & { inherit: true };
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
@@ -190,8 +188,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly eggGroups: string[];
 	/** True if this species can hatch from an Egg. */
 	readonly canHatch: boolean;
-	/** True if this species is a purely cosmetic forme. */
-	readonly isCosmeticForme: boolean;
+	/** Species name of the base cosmetic forme. */
+	readonly cosmeticForme?: string;
 	/**
 	 * Gender. M = always male, F = always female, N = always
 	 * genderless, '' = sometimes male sometimes female.
@@ -324,7 +322,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
-		this.isCosmeticForme = data.isCosmeticForme || undefined;
+		this.cosmeticForme = data.cosmeticForme || undefined;
 		this.tags = data.tags || [];
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
@@ -452,12 +450,11 @@ export class DexSpecies {
 				species.abilities = { 0: species.abilities['S']! };
 			} else {
 				species = this.get(alias);
-				if (this.dex.data.Pokedex?.[id]?.isCosmeticForme) {
+				if (this.dex.data.Pokedex?.[id]?.cosmeticForme) {
 					const cosmeticForme = this.dex.data.Pokedex[id];
 					species = new Species({
 						...species,
 						...cosmeticForme,
-						name: species.baseSpecies + '-' + cosmeticForme.forme!, // Forme always exists on cosmetic forme entries
 						baseForme: "",
 						otherFormes: null,
 						cosmeticFormes: null,
@@ -473,7 +470,7 @@ export class DexSpecies {
 								forme: forme.slice(species.name.length + 1),
 								baseSpecies: species.name,
 								baseForme: "",
-								isCosmeticForme: true,
+								cosmeticForme: species.name,
 								otherFormes: null,
 								cosmeticFormes: null,
 							});

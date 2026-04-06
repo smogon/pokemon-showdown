@@ -1333,13 +1333,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		tier: "OU",
 	},
-	magearnaoriginal: {
-		tier: "OU",
-	},
 	magearnamega: {
-		tier: "Uber",
-	},
-	magearnaoriginalmega: {
 		tier: "Uber",
 	},
 	marshadow: {
@@ -1496,19 +1490,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tatsugiri: {
 		tier: "UU",
 	},
-	tatsugiridroopy: {
-		tier: "UU",
-	},
-	tatsugiristretchy: {
-		tier: "UU",
-	},
 	tatsugiricurlymega: {
-		tier: "UU",
-	},
-	tatsugiridroopymega: {
-		tier: "UU",
-	},
-	tatsugiristretchymega: {
 		tier: "UU",
 	},
 	frigibax: {

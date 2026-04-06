@@ -2568,13 +2568,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	magearna: {
 		isNonstandard: null,
 	},
-	magearnaoriginal: {
-		isNonstandard: "Unobtainable",
-	},
 	magearnamega: {
-		isNonstandard: null,
-	},
-	magearnaoriginalmega: {
 		isNonstandard: null,
 	},
 	marshadow: {
@@ -2696,13 +2690,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	sinistea: {
 		isNonstandard: "Past",
 	},
-	sinisteaantique: {
-		isNonstandard: "Past",
-	},
 	polteageist: {
-		isNonstandard: "Past",
-	},
-	polteageistantique: {
 		isNonstandard: "Past",
 	},
 	hatenna: {
@@ -2815,9 +2803,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	zarude: {
 		isNonstandard: "Past",
 	},
-	zarudedada: {
-		isNonstandard: "Past",
-	},
 	regieleki: {
 		isNonstandard: "Past",
 	},
@@ -2927,9 +2912,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	maushold: {
-		isNonstandard: "Past",
-	},
-	mausholdfour: {
 		isNonstandard: "Past",
 	},
 	fidough: {
@@ -3106,17 +3088,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tatsugiri: {
 		isNonstandard: null,
 	},
-	tatsugiridroopy: {
-	},
-	tatsugiristretchy: {
-	},
 	tatsugiricurlymega: {
-		isNonstandard: null,
-	},
-	tatsugiridroopymega: {
-		isNonstandard: null,
-	},
-	tatsugiristretchymega: {
 		isNonstandard: null,
 	},
 	clodsire: {
@@ -3126,9 +3098,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	dudunsparce: {
-		isNonstandard: "Past",
-	},
-	dudunsparcethreesegment: {
 		isNonstandard: "Past",
 	},
 	kingambit: {

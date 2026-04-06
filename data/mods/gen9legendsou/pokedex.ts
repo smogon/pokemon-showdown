@@ -172,14 +172,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Drizzle" },
 	},
-	tatsugiridroopymega: {
-		inherit: true,
-		abilities: { 0: "Drizzle" },
-	},
-	tatsugiristretchymega: {
-		inherit: true,
-		abilities: { 0: "Drizzle" },
-	},
 	baxcaliburmega: {
 		inherit: true,
 		abilities: { 0: "Thermal Exchange" },

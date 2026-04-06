@@ -4654,8 +4654,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
-	magearnaoriginal: {
-	},
 	marshadow: {
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -4970,9 +4968,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	sinistea: {
 		tier: "LC",
 	},
-	sinisteaantique: {
-		tier: "LC",
-	},
 	polteageist: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -5188,8 +5183,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
-	},
-	zarudedada: {
 	},
 	regieleki: {
 		tier: "UU",
