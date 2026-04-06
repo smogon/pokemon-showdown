@@ -172,7 +172,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		onTakeItem: false,
-		ignoreKlutz: true,
 		onSetAbility: false,
 	},
 	heavyball: {
