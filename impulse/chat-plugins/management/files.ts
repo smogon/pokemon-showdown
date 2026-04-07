@@ -289,7 +289,7 @@ export const commands: Chat.ChatCommands = {
 		`Requires: ~ and whitelist`,
 	],
 
-	filehelp(): void {
+	filehelp() {
 		if (!this.runBroadcast()) return;
 		const helpList = [
 			{
