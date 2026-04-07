@@ -20,18 +20,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 60, atk: 100, def: 105, spa: 130, spd: 105, spe: 120 },
 		abilities: { 0: "Pure Power" },
 	},
-	dragonitemega: {
-		inherit: true,
-		abilities: { 0: "Sheer Force" },
-	},
-	meganiummega: {
-		inherit: true,
-		abilities: { 0: "Flower Veil" },
-	},
-	feraligatrmega: {
-		inherit: true,
-		abilities: { 0: "Dragon's Maw" },
-	},
 	ampharosmega: {
 		inherit: true,
 		abilities: { 0: "Fluffy" },
@@ -64,10 +52,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Sharpness" },
 	},
-	froslassmega: {
-		inherit: true,
-		abilities: { 0: "Snow Warning" },
-	},
 	garchompmegaz: {
 		inherit: true,
 		abilities: { 0: "Rough Skin" },
@@ -83,10 +67,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	darkraimega: {
 		inherit: true,
 		abilities: { 0: "Dark Aura" },
-	},
-	emboarmega: {
-		inherit: true,
-		abilities: { 0: "Supreme Overlord" },
 	},
 	excadrillmega: {
 		inherit: true,
@@ -115,18 +95,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	chandeluremega: {
 		inherit: true,
 		abilities: { 0: "Magic Guard" },
-	},
-	chesnaughtmega: {
-		inherit: true,
-		abilities: { 0: "Grassy Surge" },
-	},
-	delphoxmega: {
-		inherit: true,
-		abilities: { 0: "Levitate" },
-	},
-	greninjamega: {
-		inherit: true,
-		abilities: { 0: "Protean" },
 	},
 	meowsticmmega: {
 		inherit: true,

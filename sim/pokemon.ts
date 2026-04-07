@@ -7,7 +7,7 @@
 
 import { State } from './state';
 import { toID } from './dex';
-import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
+import type { DynamaxOptions, MoveRequestData, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -692,6 +692,12 @@ export class Pokemon {
 		return null;
 	}
 
+	getMoveSlot(slotIndex: number) {
+		// used by Gen 1
+		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return null;
+		return this.moveSlots[slotIndex];
+	}
+
 	getMoveHitData(move: ActiveMove) {
 		if (!move.moveHitData) move.moveHitData = {};
 		const slot = this.getSlot();
@@ -936,17 +942,23 @@ export class Pokemon {
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
 	getLockedMove(): ID | null {
-		const lockedMove = this.battle.runEvent('LockMove', this);
+		const lockedMove = this.battle.priorityEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
-		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
-		target?: string, pp?: number, maxpp?: number,
-	}[] {
+	/**
+	 * Moves that lock you when you select the Fight button, but don't prevent you from switching out.
+	 * Those are Gen 1 trapping moves, Gen 1 and 2 Bide, and Gen 2-4 Encore. Gen 1 freeze and sleep also semi-lock you.
+	 */
+	getSemiLockedMove(restrictData?: boolean): ID | null {
+		if (restrictData && this.maybeLocked) return null;
+		const lockedMove = this.battle.priorityEvent('SemiLockMove', this);
+		return (lockedMove === true) ? null : lockedMove;
+	}
+
+	getMoves(lockedMove?: ID | null, restrictData?: boolean): MoveRequestData[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
-			this.trapped = true;
 			if (lockedMove === 'recharge') {
 				return [{
 					move: 'Recharge',
@@ -1064,14 +1076,26 @@ export class Pokemon {
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
+		let lockedMove = this.getLockedMove();
+		const hardLocked = !!lockedMove;
+		if (lockedMove) {
+			this.trapped = true;
+		} else {
+			lockedMove = this.maybeLocked ? null : this.getSemiLockedMove(true);
+		}
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		if (!moves.length) {
+		// actions that don't hard lock out of switching, but can't bypass the Fight button
+		// partially trapped causes maybeLocked, so it shouldn't be revealed
+		if (this.battle.gen === 1 && !lockedMove && (['frz', 'slp'].includes(this.status) ||
+			(this.volatiles['partiallytrapped'] && !this.maybeLocked))) {
+			moves = [{ move: 'Fight', id: 'fight' as ID }];
+			lockedMove = 'fight' as ID;
+		} else if (!moves.length) {
 			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
 			lockedMove = 'struggle' as ID;
 		}
@@ -1080,8 +1104,15 @@ export class Pokemon {
 			moves,
 		};
 
-		if (isLastActive) {
-			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+		if (hardLocked || !isLastActive) {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			this.maybeTrapped = false;
+			if (hardLocked || canSwitchIn) {
+				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
+				if (this.trapped) data.trapped = true;
+			}
+		} else {
 			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
@@ -1096,14 +1127,6 @@ export class Pokemon {
 					data.maybeTrapped = true;
 				}
 			}
-		} else {
-			this.maybeDisabled = false;
-			this.maybeLocked = false;
-			if (canSwitchIn) {
-				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
-				if (this.trapped) data.trapped = true;
-			}
-			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {
@@ -1127,7 +1150,7 @@ export class Pokemon {
 			ident: this.fullname,
 			details: this.details,
 			condition: this.getHealth().secret,
-			active: (this.position < this.side.active.length),
+			active: this.position < this.side.active.length,
 			stats: {
 				atk: this.baseStoredStats['atk'],
 				def: this.baseStoredStats['def'],
@@ -1486,14 +1509,7 @@ export class Pokemon {
 			evasion: 0,
 		};
 
-		if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
-			const moveslot = this.baseMoves.indexOf('mimic' as ID);
-			const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
-			this.moveSlots = this.baseMoveSlots.slice();
-			this.moveSlots[moveslot].pp = mimicPP;
-		} else {
-			this.moveSlots = this.baseMoveSlots.slice();
-		}
+		this.moveSlots = this.baseMoveSlots.slice();
 
 		this.transformed = false;
 		this.ability = this.baseAbility;
@@ -1608,7 +1624,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = isHidden ? 'hidden' : true;
-				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
+				moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 			}
 		}
 	}
@@ -2167,6 +2183,7 @@ export class Pokemon {
 		case 'primordialsea':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
+		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
 		return weather;
 	}
 

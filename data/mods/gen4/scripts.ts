@@ -12,6 +12,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.gen <= 2) {
 				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (this.battle.gen === 1) pokemon.side.lastSelectedMoveSlot = 0;
+				for (const poke of pokemon.foes()) {
+					if (poke.volatiles['partialtrappinglock'] && poke.moveSlots[poke.side.lastSelectedMoveSlot].id === 'metronome') {
+						// this is not done for Mirror Move, potentially resulting in a desync
+						poke.side.lastSelectedMove = 'metronome' as ID;
+						if (this.battle.queue.willMove(poke)) {
+							this.battle.queue.changeAction(poke, { choice: 'move', poke, moveid: 'metronome' });
+						}
+					}
+				}
 				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
 					this.battle.runEvent('AfterSwitchInSelf', pokemon);
 				}
