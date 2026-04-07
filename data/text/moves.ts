@@ -258,7 +258,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 	},
-	attract: {
+	attract: { // updated
 		name: "Attract",
 		desc: "Causes the target to become infatuated, making it unable to attack 33% of the time. Fails if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
 		shortDesc: "Infatuates the target.",
@@ -1304,7 +1304,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	defog: { // updated
 		name: "Defog",
-		desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the target's side, and the effects of Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness. If there is a terrain active and this move is successful, the terrain will be cleared.",
+		desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, Sticky Web, and Steel Barbs end for the target's side, and the effects of Spikes, Toxic Spikes, Stealth Rock, Sticky Web, and Steel Barbs end for the user's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness. If there is a terrain active and this move is successful, the terrain will be cleared. If Fog is active and this move is successful, Fog will be cleared.",
 		shortDesc: "-1 evasion; ends user and target hazards/terrain.",
 		gen7: {
 			desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, Steel Barbs, and Sticky Web end for the target's side, and the effects of Spikes, Toxic Spikes, Stealth Rock, Steel Barbs, and Sticky Web end for the user's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness.",
@@ -7008,7 +7008,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tidyup: {
 		name: "Tidy Up",
-		desc: "Raises the user's Attack and Speed by 1 stage. Removes substitutes from all active Pokemon and ends the effects of Spikes, Stealth Rock, Sticky Web, and Toxic Spikes for both sides.",
+		desc: "Raises the user's Attack and Speed by 1 stage. Removes substitutes from all active Pokemon and ends the effects of Spikes, Stealth Rock, Sticky Web, Toxic Spikes, and Steel Barbs for both sides.",
 		shortDesc: "User +1 Atk, Spe. Clears all substitutes/hazards.",
 
 		activate: "  Tidying up complete!",
