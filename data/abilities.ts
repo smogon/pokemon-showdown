@@ -6158,7 +6158,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (['smogspread'].includes(attacker.effectiveIrritantWeather())) {
 				if (move.type === 'Poison') {
-					this.debug('Smog damage boost');
+					this.debug('Carbon Capture damage boost');
 					return this.chainModify(1.5);
 				}
 			}
