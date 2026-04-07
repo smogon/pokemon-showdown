@@ -55,6 +55,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
 			},
+			onLockMove: undefined, // no inherit
+			onSemiLockMove: 'bide',
 		},
 	},
 	counter: {
