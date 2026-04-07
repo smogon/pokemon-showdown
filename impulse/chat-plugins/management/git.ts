@@ -128,15 +128,15 @@ export const commands: Chat.ChatCommands = {
 		const helpList = [
 			{
 				cmd: "/gitpull",
-				desc: "Pulls the latest changes from git repository. Requires: ~",
+				desc: "Pulls the latest changes from git repository. Requires: <code>~</code> or higher",
 			},
 			{
 				cmd: "/gitstatus",
-				desc: "Shows the current git status. Requires: ~",
+				desc: "Shows the current git status. Requires: <code>~</code> or higher",
 			},
 			{
 				cmd: "/gitstash [pop]",
-				desc: "Stashes or pops local changes. Requires: ~",
+				desc: "Stashes or pops local changes. Requires: <code>~</code> or higher",
 			},
 		];
 		const html = `<center><strong>Git Commands:</strong></center>` +
