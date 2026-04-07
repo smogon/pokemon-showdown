@@ -1630,8 +1630,7 @@ export const commands: Chat.ChatCommands = {
 		const ruleTable = Dex.formats.getRuleTable(format);
 		if (ruleTable.has('editbattle')) {
 			this.checkCan('editprivacy', null, room);
-			}
-			else {
+			} else {
 			this.checkCan('forcewin');
 			}
 		void battle.stream.write(`>editbattle user:${user.name}, ${target}`);
@@ -1650,7 +1649,7 @@ export const commands: Chat.ChatCommands = {
 		`/editbattle reseed [optional seed]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t OR bs`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
-		'Modified base stats must be integers within the stat limit (1-255).'
+		`Modified base stats must be integers within the stat limit (1-255).`
 	],
 };
 

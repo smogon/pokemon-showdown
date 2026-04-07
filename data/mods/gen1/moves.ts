@@ -32,7 +32,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	bide: {
 		inherit: true,
-		priority: 0,
 		accuracy: true,
 		condition: {
 			onStart(pokemon) {
@@ -60,15 +59,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
-			onDisableMove(pokemon) {
-				if (!pokemon.hasMove('bide')) {
-					return;
-				}
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== 'bide') {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
+			onSemiLockMove: 'bide',
+			onDisableMove(target) {
+				target.maybeLocked = false; // the player knows it is locked
 			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
@@ -334,6 +327,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 				if (pokemon !== source) {
+					if (['frz', 'slp'].includes(pokemon.status)) {
+						pokemon.side.lastSelectedMove = 'cannotmove' as ID;
+						if (this.queue.willMove(pokemon)) {
+							this.queue.changeAction(pokemon, { choice: 'move', pokemon, moveid: 'cannotmove' });
+						}
+					}
 					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
