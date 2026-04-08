@@ -2180,7 +2180,7 @@ export class Pokemon {
 	 * Like Field.effectiveWeather(), but ignores sun and rain if
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
-	effectiveWeather() {
+	effectiveWeather(message?: string | boolean) {
 		const weather = this.battle.field.effectiveWeather();
 		switch (weather) {
 		case 'sunnyday':
@@ -2189,7 +2189,10 @@ export class Pokemon {
 		case 'primordialsea':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
-		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
+		if (this.hasAbility('megasol') && this.battle.activePokemon === this) {
+			if (message) this.battle.add('-activate', this, 'ability: Mega Sol');
+			return 'sunnyday';
+		}
 		return weather;
 	}
 
