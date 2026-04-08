@@ -4587,7 +4587,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Electric' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+					!attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
@@ -7787,7 +7788,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-				if (weakenedMoves.includes(move.id) && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) && !defender.isSemiInvulnerable()) {
+				if (weakenedMoves.includes(move.id) && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+					!defender.isSemiInvulnerable()) {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
@@ -12341,7 +12343,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) && !defender.isSemiInvulnerable()) {
+				if (move.type === 'Dragon' && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+					!defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
@@ -14342,7 +14345,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Psychic' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Psychic' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+					!attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
