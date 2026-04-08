@@ -1831,10 +1831,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stickyhold: {
 		name: "Sticky Hold",
-		desc: "This Pokemon cannot lose its held item due to another Pokemon's Ability or attack, unless the attack knocks out this Pokemon. A Sticky Barb will be transferred to other Pokemon regardless of this Ability.",
+		desc: "This Pokemon cannot lose its held item due to another Pokemon's Ability or attack, unless the attack knocks out this Pokemon or the attacker has the Mold Breaker, Turboblaze, or Teravolt Abilities. A Sticky Barb will be transferred to other Pokemon regardless of this Ability.",
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's Ability or attack.",
 		gen4: {
-			desc: "This Pokemon cannot lose its held item due to another Pokemon's attack, even if the attack knocks out this Pokemon. A Sticky Barb will be transferred to other Pokemon regardless of this Ability.",
+			desc: "This Pokemon cannot lose its held item due to another Pokemon's attack, even if the attack knocks out this Pokemon, unless the attacker has the Mold Breaker Ability. A Sticky Barb will be transferred to other Pokemon regardless of this Ability.",
 		},
 
 		block: "  [POKEMON]'s item cannot be removed!",
