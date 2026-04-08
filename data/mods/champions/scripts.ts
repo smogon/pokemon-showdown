@@ -7,6 +7,26 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 	},
+	statModify(baseStats, set, statName) {
+		const tr = this.trunc;
+		let stat = baseStats[statName];
+		const statPoint = set.evs[statName] > 0 ? 4 + (set.evs[statName] * 8) : 0;
+		if (statName === 'hp') {
+			return tr(tr(2 * stat + 31 + tr(statPoint / 4) + 100) * 50 / 100 + 10);
+		}
+		stat = tr(tr(2 * stat + 31 + tr(statPoint / 4)) * 50 / 100 + 5);
+		const nature = this.dex.natures.get(set.nature);
+		// Natures are calculated with 16-bit truncation.
+		// This only affects Eternatus-Eternamax in Pure Hackmons.
+		if (nature.plus === statName) {
+			stat = this.ruleTable.has('overflowstatmod') ? Math.min(stat, 595) : stat;
+			stat = tr(tr(stat * 110, 16) / 100);
+		} else if (nature.minus === statName) {
+			stat = this.ruleTable.has('overflowstatmod') ? Math.min(stat, 728) : stat;
+			stat = tr(tr(stat * 90, 16) / 100);
+		}
+		return stat;
+	},
 	calculatePP(move, ppUps) {
 		return move.noPPBoosts ? move.pp : (move.pp / 5 + 1) * 4;
 	},
