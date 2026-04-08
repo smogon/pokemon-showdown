@@ -2518,7 +2518,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				const item = pokemon.getItem();
 				if (/^tr\d\d/i.test(item.name)) {
 					const move = this.dex.moves.get(item.desc.split('move ')[1].split('.')[0]);
-					const pp = this.calculatePP(move, 3);
+					const pp = this.calculatePP(move);
 					pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
 						...pokemon.baseMoveSlots, {
 							id: move.id,

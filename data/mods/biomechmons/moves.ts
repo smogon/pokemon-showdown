@@ -298,8 +298,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else {
 					source.m.scrambled.moves.push({ thing: targetAbility.id, inSlot: 'Ability' });
 					const bmmMove = Dex.moves.get(targetAbility.id);
-					const ppUps = move.noPPBoosts ? 0 : 3;
-					const basePP = this.calculatePP(move, ppUps);
+					const basePP = this.calculatePP(move);
 					const newMove = {
 						move: bmmMove.name,
 						id: bmmMove.id,
@@ -324,8 +323,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else {
 					target.m.scrambled.moves.push({ thing: sourceAbility.id, inSlot: 'Ability' });
 					const bmmMove = Dex.moves.get(sourceAbility.id);
-					const ppUps = move.noPPBoosts ? 0 : 3;
-					const basePP = this.calculatePP(move, ppUps);
+					const basePP = this.calculatePP(move);
 					const newMove = {
 						move: bmmMove.name,
 						id: bmmMove.id,

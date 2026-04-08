@@ -167,8 +167,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.m.scrambled.moves.push({ thing: ability.id, inSlot: 'Ability' });
 					const move = Dex.moves.get(ability.id);
-					const ppUps = move.noPPBoosts ? 0 : 3;
-					const basePP = this.battle.calculatePP(move, ppUps);
+					const basePP = this.battle.calculatePP(move);
 					const newMove = {
 						move: move.name,
 						id: move.id,
@@ -325,8 +324,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.m.scrambled.moves.push({ thing: item.id, inSlot: 'Item' });
 					const move = Dex.moves.get(item.id);
-					const ppUps = move.noPPBoosts ? 0 : 3;
-					const basePP = this.battle.calculatePP(move, ppUps);
+					const basePP = this.battle.calculatePP(move);
 					const newMove = {
 						move: move.name,
 						id: move.id,

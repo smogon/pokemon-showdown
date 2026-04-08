@@ -942,7 +942,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.boost({ spe: 1 });
 				this.heal(pokemon.maxhp);
 				const move = this.dex.moves.get('finalgambit');
-				const pp = this.calculatePP(move, 3);
+				const pp = this.calculatePP(move);
 				const finalGambit = {
 					move: move.name,
 					id: move.id,
