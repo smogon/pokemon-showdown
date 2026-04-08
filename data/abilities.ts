@@ -7491,7 +7491,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10039,
 	},
 	warpmist: { // tested, works as intended
-		onSwitchInPriority: -1,
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onClimateWeatherChange(pokemon) {
+			if (pokemon.effectiveClimateWeather() === 'foghorn') {
+				pokemon.addVolatile('warpmist');
+			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['warpmist'];
+			this.add('-end', pokemon, 'Warp Mist', '[silent]');
+		},
 		onTryHit(target, source, move) {
 			if (move.category === 'Status' || target.hasItem('ringtarget')) return;
 			if (target !== source && move.ignoreImmunity) {
@@ -7499,17 +7511,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.ignoreImmunity = false;
 			}
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.atk >= source.storedStats.spa) return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(spa, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.spa > source.storedStats.atk) return this.chainModify(1.2);
-			}
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				this.add('-activate', pokemon, 'ability: Warp Mist');
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'warpmist' + this.effectState.bestStat);
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist atk boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, pokemon) {
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist def boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spa boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(spd, pokemon) {
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spd boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpe(spe, pokemon) {
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spe boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Warp Mist');
+			},
 		},
 		flags: {},
 		name: "Warp Mist",
