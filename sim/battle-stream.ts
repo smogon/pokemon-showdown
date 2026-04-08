@@ -374,7 +374,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				battle.add("||<<< Error: Format should be: basestats PLAYER, POKEMON, HP, ATK, DEF, SPA, SPD, SPE");
 				return;
 			}
-			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets.map(t => t.trim());	
+			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets.map(t => t.trim());
 			const p = getPokemon(player, pokemon);
 			const hp = Number(hpStr);
 			const atk = Number(atkStr);
