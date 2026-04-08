@@ -1412,6 +1412,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flowerveil: {
 		onAllyTryBoost(boost, target, source, effect) {
+			if (!target.hasType('Grass')) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -1426,7 +1427,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (effect && effect.id !== 'yawn') {
+			if (target.hasType('Grass') && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
@@ -1436,7 +1437,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllyTryAddVolatile(status, target) {
-			if (status.id === 'yawn') {
+			if (target.hasType('Grass') && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
