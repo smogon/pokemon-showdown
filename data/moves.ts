@@ -22736,18 +22736,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, snatch: 1, metronome: 1 },
 		onHit(target, source) {
 			const outcomes = [
-				'sleepUser', // nat1
-				'paralyzeUser', // nat2
-				'healTarget', // nat3
-				'hurtUser', // nat4
-				'confuseUser', // nat5
-				'disableMoveUser', // nat6
-				'hurtTarget', // nat7
-				'healUser', // nat8
-				'disableMoveTarget', // nat9
-				'confuseTarget', // nat10
-				'paralyzeTarget', // nat11
-				'sleepTarget', // nat12
+				'sleepUser', // 1
+				'paralyzeUser', // 2
+				'healTarget', // 3
+				'hurtUser', // 4
+				'confuseUser', // 5
+				'disableMoveUser', // 6
+				'hurtTarget', // 7
+				'healUser', // 8
+				'disableMoveTarget', // 9
+				'confuseTarget', // 10
+				'paralyzeTarget', // 11
+				'sleepTarget', // 12
 			];
 			const roll = this.random(12);
 			const randomOutcome = outcomes[roll];
