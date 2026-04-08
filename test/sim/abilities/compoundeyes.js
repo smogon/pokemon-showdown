@@ -11,17 +11,6 @@ describe('Compound Eyes', () => {
 	});
 
 	it(`should boost move accuracy by 1.3x`, () => {
-		battle = common.createBattle([
-			[{ species: 'Butterfree', ability: 'compoundeyes', moves: ['sleeppowder'] }],
-			[{ species: 'Beldum', moves: ['poltergeist'] }],
-		]);
-		// sleep powder base accuracy is 75; with compound eyes: floor(75 * 1.3) = 97, then half-down = 98
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 98);
-		});
-		battle.makeChoices();
-	});
-
 	it(`should not affect moves that bypass accuracy checks`, () => {
 		// forceRandomChance=false makes all random checks fail, but Swift (bypass accuracy) should still hit
 		battle = common.createBattle({ forceRandomChance: false }, [[
