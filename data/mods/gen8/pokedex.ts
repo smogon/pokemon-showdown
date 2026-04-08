@@ -142,7 +142,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Poison Point", 1: "Rivalry", H: "Hustle" },
 	},
-	nidorana: {
+	nidorina: {
 		inherit: true,
 		abilities: { 0: "Poison Point", 1: "Rivalry", H: "Hustle" },
 	},
@@ -154,7 +154,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Poison Point", 1: "Rivalry", H: "Hustle" },
 	},
-	nidorano: {
+	nidorino: {
 		inherit: true,
 		abilities: { 0: "Poison Point", 1: "Rivalry", H: "Hustle" },
 	},
@@ -267,10 +267,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Synchronize", 1: "Early Bird", H: "Magic Bounce" },
 	},
-	wooperpaldea: {
+	/* wooperpaldea: {
 		inherit: true,
 		abilities: { 0: "Poison Point", 1: "Water Absorb", H: "Unaware" },
-	},
+	}, */
 	espeon: {
 		inherit: true,
 		abilities: { 0: "Synchronize", H: "Magic Bounce" },
