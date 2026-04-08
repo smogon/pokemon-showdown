@@ -1225,7 +1225,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
 					const move = this.dex.moves.get(scrambledMove.thing);
-					const ppUps = move.noPPBoosts || move.id === 'trumpcard' ? 0 : 3;
+					const ppUps = move.noPPBoosts ? 0 : 3;
 					const basePP = this.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
