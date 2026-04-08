@@ -174,8 +174,8 @@ export const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Custom Avatar Commands</strong></h4><hr>Commands Alias: /ca</center><hr>` +
-				`<code>/customavatar set [user], [url]</code> - Set a user's avatar. Requires: ~<hr>` +
-				`<code>/customavatar delete [user]</code> - Remove a user's avatar. Requires: ~<hr></div>`
+				`<b>/customavatar set [user], [url]</b> - Set a user's avatar. Requires: ~<hr>` +
+				`<b>/customavatar delete [user]</b> - Remove a user's avatar. Requires: ~<hr></div>`
 			);
 		},
 	},
