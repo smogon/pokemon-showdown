@@ -185,7 +185,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 							(pokemon.m.scrambled.abilities as { thing: string, inSlot: string }[]).findIndex(e =>
 								this.toID(e.thing) === 'trace' && e.inSlot === 'Move'), 1);
 						this.add('-ability', pokemon, move.name, 'Trace');
-						const basePP = this.calculatePP(move);
+						const ppUps = move.noPPBoosts ? 0 : 3;
+						const basePP = this.calculatePP(move, ppUps);
 						const newMove = {
 							move: move.name,
 							id: move.id,
