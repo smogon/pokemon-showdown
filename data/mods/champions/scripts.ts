@@ -10,11 +10,11 @@ export const Scripts: ModdedBattleScriptsData = {
 	statModify(baseStats, set, statName) {
 		const tr = this.trunc;
 		let stat = baseStats[statName];
-		const statPoint = set.evs[statName] > 0 ? 4 + (set.evs[statName] * 8) : 0;
+		const evs = set.evs[statName] ? 4 + 8 * (set.evs[statName] - 1) : 0;
 		if (statName === 'hp') {
-			return tr(tr(2 * stat + 31 + tr(statPoint / 4) + 100) * 50 / 100 + 10);
+			return tr(tr(2 * stat + set.ivs[statName] + tr(evs / 4) + 100) * set.level / 100 + 10);
 		}
-		stat = tr(tr(2 * stat + 31 + tr(statPoint / 4)) * 50 / 100 + 5);
+		stat = tr(tr(2 * stat + set.ivs[statName] + tr(evs / 4)) * set.level / 100 + 5);
 		const nature = this.dex.natures.get(set.nature);
 		// Natures are calculated with 16-bit truncation.
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
