@@ -2179,6 +2179,8 @@ export class Pokemon {
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
 		if (this.hasAbility('relicsoul') && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility('surgesurfer') && (this.effectiveEnergyWeather() === 'supercell' ||
+			this.battle.field.isTerrain('electricterrain')) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

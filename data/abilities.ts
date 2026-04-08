@@ -1412,7 +1412,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flowerveil: {
 		onAllyTryBoost(boost, target, source, effect) {
-			if ((source && target === source) || !target.hasType('Grass')) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -1427,7 +1426,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
+			if (effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
@@ -1437,7 +1436,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllyTryAddVolatile(status, target) {
-			if (target.hasType('Grass') && status.id === 'yawn') {
+			if (status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
@@ -2126,7 +2125,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			for (const allyActive of pokemon.adjacentAllies()) {
-				if (allyActive.status && this.randomChance(3, 10)) {
+				if (allyActive.status) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
 				}
@@ -3686,6 +3685,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('psn', target);
+				}
+			}
+		},
 		flags: {},
 		name: "Poison Touch",
 		rating: 2,
@@ -3810,7 +3816,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
+				if (source.effectiveClimateWeather() !== 'foghorn') this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
@@ -5064,14 +5070,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	swarm: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if (move.type === 'Bug' && (attacker.hp <= attacker.maxhp / 3 ||
+				attacker.effectiveIrritantWeather() === 'swarmsignal')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if (move.type === 'Bug' && (attacker.hp <= attacker.maxhp / 3) ||
+				attacker.effectiveIrritantWeather() === 'swarmsignal') {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
@@ -6159,7 +6167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (['smogspread'].includes(attacker.effectiveIrritantWeather())) {
 				if (move.type === 'Poison') {
 					this.debug('Carbon Capture damage boost');
-					return this.chainModify(1.5);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -6213,7 +6221,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	consecration: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6229,7 +6237,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnergyWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6290,13 +6298,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10044,
 	},
 	druidry: { // tested, works as intended
+		// idk if it'll read target as the druidry mon, if it doesnt then ig this ability will bypass safety goggles
 		onStart(target) {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (target.effectiveIrritantWeather() === 'sprinkle') {
 				this.field.setTerrain('grassyterrain');
 			}
 		},
 		onTerrainChange(target, source, sourceEffect) {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (target.effectiveIrritantWeather() === 'sprinkle' && !this.field.isTerrain('grassyterrain')) {
 				this.field.setTerrain('grassyterrain');
 			}
 		},
@@ -6484,9 +6493,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10041,
 	},
 	flytrap: { // tested, works as intended
-		onFoeModifySpe(spe, pokemon) {
-			if (!pokemon.hasAbility('flytrap') && pokemon.hasType('Bug')) {
-				return this.chainModify(0.5);
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Flytrap') {
+				this.add('-immune', target, '[from] ability: Volt Absorb');
+				return null;
 			}
 		},
 		onFoeTrapPokemon(pokemon) {
@@ -7236,15 +7246,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		onModifyMovePriority: -2,
-		onModifyMove(move, source) {
-			if (move.secondaries) {
-				if (['daydream'].includes(source.effectiveEnergyWeather())) {
-					this.debug('S&M 2x confuse chance');
-					for (const secondary of move.secondaries) {
-						if (secondary.chance && secondary.status === 'confusion') secondary.chance *= 2;
-					}
+		onModifyMovePriority: -1,
+		onModifyMove(move, pokemon) {
+			if (move.category === "Special" && pokemon.effectiveEnergyWeather() === 'daydream') {
+				this.debug('Adding Smoke & Mirrors confusion');
+				if (!move.secondaries) move.secondaries = [];
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'confusion') return;
 				}
+				move.secondaries.push({
+					chance: 20,
+					volatileStatus: 'confusion',
+				});
 			}
 		},
 		flags: {},
@@ -7287,11 +7300,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
 		onAnyFaint(target, source, effect) {
-			if (!effect || effect.effectType === 'Move' || !this.effectState.target.hp) return;
 			if (['haunt'].includes(this.effectState.target.effectiveEnergyWeather())) {
-				this.heal(3 * this.effectState.target.baseMaxhp / 8, this.effectState.target, this.effectState.target);
-			} else {
 				this.heal(this.effectState.target.baseMaxhp / 4, this.effectState.target, this.effectState.target);
+			} else {
+				this.heal(this.effectState.target.baseMaxhp / 8, this.effectState.target, this.effectState.target);
 			}
 		},
 		onImmunity(type, pokemon) {
