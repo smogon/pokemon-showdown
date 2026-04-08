@@ -893,9 +893,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && this.field.climateWeatherState.boosted) {
-				this.debug('SW fog type change and BP boost')
+				this.debug('SW fog type change and BP boost');
 				move.type = '???';
-				move.basePower = move.basePower * 1.5;
+				move.basePower *= 1.5;
 			}
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
