@@ -238,7 +238,12 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			if (!out) throw new Error(`Pokemon "${side.name} ${input}" not found`);
 			return out;
 		};
+		const requireInt = (input: string) => {
+			const num = Number(input);
+			if (!Number.isInteger(num)) throw new Error(`"${input}" is not an integer`);
+			return num;
 
+		};
 		let user = null;
 		if (target.startsWith('user:')) {
 			[user, target] = Utils.splitFirst(target.slice(5), ',');
@@ -260,7 +265,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			}
 			const [player, pokemon, hp] = targets;
 			const p = getPokemon(toID(player), toID(pokemon));
-			p.sethp(parseInt(hp) || 0);
+			p.sethp(requireInt(hp));
 			if (p.isActive) battle.add('-damage', p, p.getHealth);
 			break;
 		}
@@ -287,12 +292,12 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			}
 			const [player, pokemon, move, pp] = targets;
 			const p = getPokemon(player, pokemon);
-			const moveData = p.getMoveData(toID(move));
+			const moveData = p.getMoveData(toID(move)) || p.moveSlots[parseInt(move) - 1];
 			if (!moveData) {
 				battle.add(`||<<< Error: Move "${move}" not found for Pokemon "${player} ${pokemon}"`);
 				return;
 			}
-			moveData.pp = parseInt(pp) || 0;
+			moveData.pp = requireInt(pp);
 			break;
 		}
 		case 'boost':
@@ -304,11 +309,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const [player, pokemon, stat, boostLevel] = targets;
 			const p = getPokemon(player, pokemon);
 			const statID = toID(stat) as BoostID;
-			if (!['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].includes(statID) || isNaN(parseInt(boostLevel))) {
+			if (!['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].includes(statID)) {
 				battle.add(`||<<< Error: Invalid boost "${stat}:${boostLevel}"`);
 				return;
 			}
-			battle.boost({ [statID]: parseInt(boostLevel) }, p);
+			battle.boost({ [statID]: requireInt(boostLevel) }, p);
 			break;
 		}
 		case 'volatile':
