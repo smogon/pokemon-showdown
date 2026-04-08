@@ -10880,7 +10880,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	magicroom: { // updated
+	magicroom: {
 		num: 478,
 		accuracy: true,
 		basePower: 0,
@@ -20273,7 +20273,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Cute",
 	},
-	trickroom: { // updated
+	trickroom: {
 		num: 433,
 		accuracy: true,
 		basePower: 0,
@@ -21362,7 +21362,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { def: 1 } },
 		contestType: "Cute",
 	},
-	wonderroom: { // updated
+	wonderroom: {
 		num: 472,
 		accuracy: true,
 		basePower: 0,
