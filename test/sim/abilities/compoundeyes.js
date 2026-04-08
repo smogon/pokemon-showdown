@@ -1,0 +1,87 @@
+'use strict';
+
+const assert = require('./../../assert');
+const common = require('./../../common');
+
+let battle;
+
+describe('Compound Eyes', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it(`should boost move accuracy by 1.3x`, () => {
+		battle = common.createBattle([
+			[{ species: 'Butterfree', ability: 'compoundeyes', moves: ['sleeppowder'] }],
+			[{ species: 'Beldum', moves: ['poltergeist'] }],
+		]);
+		// sleep powder base accuracy is 75; with compound eyes: floor(75 * 1.3) = 97, then half-down = 98
+		battle.onEvent('Accuracy', battle.format, accuracy => {
+			assert.equal(accuracy, 98);
+		});
+		battle.makeChoices();
+	});
+
+	it(`should not affect moves that bypass accuracy checks`, () => {
+		battle = common.createBattle([[
+			{ species: 'Butterfree', ability: 'compoundeyes', moves: ['swift'] },
+		], [
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+});
+
+describe('Hustle', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it(`should boost Attack by 1.5x`, () => {
+		battle = common.createBattle([[
+			{ species: 'Togekiss', ability: 'hustle', moves: ['bodyslam'] },
+		], [
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+		]]);
+		battle.randomizer = dmg => dmg;
+		battle.makeChoices('move bodyslam', 'move sleeptalk');
+		const hustleDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+
+		battle.destroy();
+
+		battle = common.createBattle([[
+			{ species: 'Togekiss', ability: 'serenegrace', moves: ['bodyslam'] },
+		], [
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+		]]);
+		battle.randomizer = dmg => dmg;
+		battle.makeChoices('move bodyslam', 'move sleeptalk');
+		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+
+		assert.bounded(hustleDamage / normalDamage, [1.45, 1.55]);
+	});
+
+	it(`should reduce the accuracy of physical moves`, () => {
+		// with forceRandomChance=false all random checks fail, so 80% accuracy body slam misses
+		battle = common.createBattle({ forceRandomChance: false }, [[
+			{ species: 'Togekiss', ability: 'hustle', moves: ['bodyslam'] },
+		], [
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move bodyslam', 'move sleeptalk');
+		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should not reduce the accuracy of special moves`, () => {
+		battle = common.createBattle([[
+			{ species: 'Togekiss', ability: 'hustle', moves: ['airslash'] },
+		], [
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+		]]);
+		battle.onEvent('Accuracy', battle.format, accuracy => {
+			assert.equal(accuracy, 95); // hustle only reduces physical move accuracy
+		});
+		battle.makeChoices('move airslash', 'move sleeptalk');
+	});
+});
