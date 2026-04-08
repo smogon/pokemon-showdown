@@ -1824,9 +1824,9 @@ export class BattleActions {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+		if (target.getMoveHitData(move).brokeProtect) {
 			baseDamage = this.battle.modify(baseDamage, 0.25);
-			this.battle.add('-zbroken', target);
+			if (move.isZOrMaxPowered) this.battle.add('-zbroken', target);
 		}
 
 		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...

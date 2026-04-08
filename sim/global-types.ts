@@ -388,6 +388,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	checkMoveMakesContact?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
+	checkMoveBreaksProtect?: (
+		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus?: boolean
+	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
 	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
 	getAllActive?: (this: Battle, includeFainted?: boolean, includeCommanding?: boolean) => Pokemon[];

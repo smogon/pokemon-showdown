@@ -1053,7 +1053,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
-		num: 312, // TODO confirm with generation shift
+		num: 312,
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -2524,7 +2524,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,
-		num: 311, // TODO confirm with generation shift
+		num: 315,
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	merciless: {
@@ -3236,6 +3236,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Pickup",
 		rating: 0.5,
 		num: 53,
+	},
+	piercingdrill: {
+		isNonstandard: "Future",
+		onModifyMove(move) {
+			if (move.flags['contact']) delete move.flags['protect'];
+		},
+		// breaking protect handled in Battle#checkMoveBreaksProtect()
+		flags: {},
+		name: "Piercing Drill",
+		rating: 1,
+		num: 311,
 	},
 	pixilate: {
 		onModifyTypePriority: -1,
@@ -4406,6 +4417,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Speed Boost",
 		rating: 4.5,
 		num: 3,
+	},
+	spicyspray: {
+		isNonstandard: "Future",
+		onDamagingHit(damage, target, source, move) {
+			source.trySetStatus('brn', target);
+		},
+		flags: {},
+		name: "Spicy Spray",
+		rating: 3,
+		num: 318,
 	},
 	stakeout: {
 		onModifyAtkPriority: 5,
