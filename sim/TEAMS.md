@@ -170,7 +170,7 @@ Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,2
 The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
 ```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES;PPUPS|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE
 ```
 
 - `SPECIES` is left blank if it's identical to `NICKNAME`
@@ -179,6 +179,9 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
   for the Pokémon. It can also be an ability string, for Hackmons etc.
 
 - `MOVES` is a comma-separated list of move IDs.
+
+- `PPUPS` correspond to the moves as specified in `MOVES`. A blank value is for
+  3 PP Ups, and if all values are blank, the semicolon and commas can be removed.
 
 - `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
 
