@@ -11,7 +11,6 @@ describe('Compound Eyes', () => {
 	});
 
 	it(`should boost move accuracy by 1.3x`, () => {
-	it(`should not affect moves that bypass accuracy checks`, () => {
 		// forceRandomChance=false makes all random checks fail, but Swift (bypass accuracy) should still hit
 		battle = common.createBattle({ forceRandomChance: false }, [[
 			{ species: 'Butterfree', ability: 'compoundeyes', moves: ['swift'] },
