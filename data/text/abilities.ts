@@ -2507,10 +2507,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "If Blood Moon is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. Stat stage changes are considered at the time this Ability activates. If both stats are tied, Special Attack is prioritized. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
 		shortDesc: "Blood Moon: this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
 	},
-	masterinstinct: {
-		name: "Master Instinct",
-		shortDesc: "If Battle Aura is active, this Pokemon's moves have their accuracy multiplied by 1.3.",
-	},
 	nanomachines: {
 		name: "Nanomachines",
 		desc: "If Magnetosphere is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding an Energy Nullifier.",

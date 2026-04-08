@@ -6765,20 +6765,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10018,
 	},
-	masterinstinct: { // tested, works as intended
-		onSourceModifyAccuracyPriority: -1,
-		onSourceModifyAccuracy(accuracy, source) {
-			if (typeof accuracy !== 'number') return;
-			if (['auraprojection'].includes(source.effectiveEnergyWeather())) {
-				this.debug('Master Instinct accuracy boost');
-				return this.chainModify(1.3);
-			}
-		},
-		flags: {},
-		name: "Master Instinct",
-		rating: 2,
-		num: 10027,
-	},
 	nanomachines: { // tested, works as intended
 		onEnergyWeather(target, source, effect) {
 			if (target.hasItem('energynullifier')) return;

@@ -1154,7 +1154,7 @@ export class RandomTeams {
 			return !teamDetails.fairyDust;
 		case 'Druidry':
 			return !(teamDetails.fairyDust && teamDetails.strongWinds);
-		case 'Rage State': case 'Master Instinct': case 'Trained Eye':
+		case 'Rage State': case 'Trained Eye':
 			return !teamDetails.battleAura;
 		case 'Sweet Dreams': case 'Smoke and Mirrors':
 			return !teamDetails.dreamscape;
@@ -1238,7 +1238,7 @@ export class RandomTeams {
 		const smogAbilities = ['Pollution', 'Carbon Capture', 'Poison Heal', 'Corrosion', 'Guts',
 			'Quick Feet', 'Toxic Boost'];
 		const fairyDustAbilities = ['Incantation', 'Power Above', 'Druidry'];
-		const battleAuraAbilities = ['Stand Off', 'Rage State', 'Master Instinct', 'Trained Eye'];
+		const battleAuraAbilities = ['Stand Off', 'Rage State', 'Trained Eye'];
 		const paranormalActivityAbilities = ['Se\u0301ance', 'Shadow Step', 'Soul Drain', 'Arena Curse'];
 		const dragonforceAbilities = ['Arcanum', 'Power Within', 'Indomitable'];
 		const dreamscapeAbilities = ['Dreamer', 'Sweet Dreams', 'Smoke and Mirrors', 'Bad Dreams'];
@@ -1360,7 +1360,7 @@ export class RandomTeams {
 			const weatherAbilities = abilities.filter(
 				a => ['Chlorophyll', 'Hydration', 'Earth Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim',
 					'Leaf Guard', 'Absolute Zero', 'Glacial Armor', 'Shadow Step', 'Malice', 'Warp Mist', 'Dust Gather',
-					'Bloomspring', 'Powder Cure', 'Carbon Capture', 'Power Above', 'Druidry', 'Rage State', 'Master Instinct',
+					'Bloomspring', 'Powder Cure', 'Carbon Capture', 'Power Above', 'Druidry', 'Rage State',
 					'Trained Eye', 'Soul Drain', 'Sweet Dreams', 'Smoke and Mirrors', 'Power Within', 'Indomitable',
 					'Energizer', 'Forked', 'Magnapult', 'Nanomachines', 'Machine Precision', 'Gale Wings', 'Grass Pelt',
 					'Corrosion', 'Surge Surfer', 'Wind Rider', 'Wind Power', 'Bad Dreams', 'Petrichor', 'Rain Dish', 'Dry Skin',
