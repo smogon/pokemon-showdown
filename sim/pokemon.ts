@@ -1017,7 +1017,7 @@ export class Pokemon {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-			} else if (moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) {
+			} else if (moveSlot.pp <= 0) {
 				disabled = true;
 			}
 
