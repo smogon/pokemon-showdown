@@ -217,10 +217,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	raichumegax: {
-		tier: "OU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	raichumegay: {
-		tier: "OU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	sandshrew: {
 		isNonstandard: "Past",
@@ -1979,7 +1981,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	absolmegaz: {
-		tier: "OU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	snorunt: {
 		isNonstandard: "Past",
@@ -2346,7 +2349,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	garchompmegaz: {
-		tier: "OU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	riolu: {
 		isNonstandard: "Past",
@@ -2359,7 +2363,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	lucariomegaz: {
-		tier: "OU",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	hippopotas: {
 		isNonstandard: "Past",
@@ -3257,6 +3262,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	greninjaash: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+	},
+	greninjabond: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
