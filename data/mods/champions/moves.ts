@@ -6,4 +6,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			volatileStatus: 'flinch',
 		},
 	},
+	protect: {
+		inherit: true,
+		pp: 5,
+	},
 };

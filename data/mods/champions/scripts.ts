@@ -1,10 +1,20 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
+	init() {
+		for (const i in this.data.Moves) {
+			if (this.data.Moves[i].pp > 20) {
+				this.modData('Moves', i).pp = 20;
+			}
+		}
+	},
+	calculatePP(move, ppUps) {
+		return move.noPPBoosts ? move.pp : (move.pp / 5 + 1) * 4;
+	},
 	checkMoveBreaksProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
 		if (move.flags['protect'] && (move.category !== 'Status' || blockStatus)) {
 			return false;
 		}
-		if (move.isZOrMaxPowered || attacker.hasAbility(['piercingdrill', 'unseenfist']) &&
+		if ((move.isZOrMaxPowered || attacker.hasAbility(['piercingdrill', 'unseenfist'])) &&
 			!['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
 			defender.getMoveHitData(move).brokeProtect = true;
 		}
@@ -71,14 +81,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (moveSlot.pp <= 0 || (moveSlot.id === 'fakeout' && this.activeMoveActions > 0)) {
 					disabled = true;
 				}
-	
+
 				if (disabled === 'hidden') {
 					disabled = !restrictData;
 				}
 				if (!disabled) {
 					hasValidMove = true;
 				}
-	
+
 				moves.push({
 					move: moveName,
 					id: moveSlot.id,
