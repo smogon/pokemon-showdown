@@ -3657,6 +3657,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		isNonstandard: "Past",
 		flags: {},
 		name: "Poison Point",
 		rating: 1.5,
@@ -3694,7 +3695,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Poison Touch",
-		rating: 2,
+		rating: 3,
 		num: 143,
 	},
 	powerconstruct: {
