@@ -7721,7 +7721,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dragonsdice: {
 		name: "Dragon's Dice",
 		desc: "Rolls a D20 die. Based on the roll has a different effect. 1: 0 BP, User hits themselves in confusion; 2: 0 BP; 3: 20 BP; 4: 40 BP; 5: 50 BP; 6: 60 BP; 7: 70 BP; 8: 75 BP; 9: 80 BP; 10: 85 BP; 11: 90 BP; 12: 95 BP; 13: 100 BP; 14: 110 BP; 15: 120 BP; 16: 130 BP; 17: 140 BP; 18: 150 BP; 19: 160 BP; 20: 0 BP, OHKOs the target, OHKO fails if the target has the Sturdy Ability or if it has a higher level than the user.",
-		shortDesc: "Has random power, damages the user, or OHKOs.",
+		shortDesc: "Has random power, damages the user, or OHKOs. Loaded Dice: roll with advantage.",
 	},
 	duststorm: {
 		name: "Dust Storm",
