@@ -887,6 +887,7 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
+			move.lastHit = move.hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
 				damage = [damage[hit - 1]];
@@ -1925,7 +1926,7 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
-			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.", false, pokemon.side);
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
 			return;
 		}
 
