@@ -2688,10 +2688,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	warpmist: {
 		name: "Warp Mist",
-		desc: "This Pokemon can't have its type immunities bypassed. If Fog is active, this Pokemon's highest attacking stat is multiplied by 1.2. Stat stage changes are considered at the time this Ability activates. If both stats are tied, Attack is prioritized. This Pokemon's moves do not have their accuracy lowered by Fog. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "Overrides ignoring type immunity. Highest attacking stat is 1.2x in Fog.",
+		desc: "This Pokemon can't have its type immunities bypassed. If Fog is active, this Pokemon's highest stat is multiplied by 1.3. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "Overrides ignoring type immunity. Highest stat is 1.3x in Fog.",
 
 		activate: "  The heavy fog activated [POKEMON]'s Warp Mist!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
 		end: "  The effects of [POKEMON]'s Warp Mist wore off!",
 	},
 	wetanddry: {

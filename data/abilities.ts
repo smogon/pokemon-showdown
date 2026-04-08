@@ -7567,7 +7567,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Warp Mist",
-		rating: 2,
+		rating: 3,
 		num: 10019,
 	},
 	/* wetanddry: { // maybe works? needs client implementation to check (i think)
