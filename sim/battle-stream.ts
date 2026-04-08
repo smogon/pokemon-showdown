@@ -242,8 +242,8 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const num = Number(input);
 			if (!Number.isInteger(num)) throw new Error(`"${input}" is not an integer`);
 			return num;
-
 		};
+		
 		let user = null;
 		if (target.startsWith('user:')) {
 			[user, target] = Utils.splitFirst(target.slice(5), ',');
