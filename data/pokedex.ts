@@ -23314,7 +23314,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Oracub",
 		types: ["Ghost", "Psychic"],
 		baseStats: { hp: 80, atk: 50, def: 50, spa: 70, spd: 90, spe: 20 },
-		abilities: { 0: "Inner Focus" },
+		abilities: { 0: "Inner Focus", H: "Smoke and Mirrors" },
 		heightm: 0.6,
 		weightkg: 8.5,
 		color: "Green",
@@ -23350,7 +23350,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 260,
 		color: "White",
 		eggGroups: ["Field"],
+		requiredItem: "Thick Club",
 		requiredAbility: "Consecration",
+		changesFrom: "Bearvoyance",
 		battleOnly: "Bearvoyance",
 	},
 	folleming: {
