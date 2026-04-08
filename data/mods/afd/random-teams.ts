@@ -88,7 +88,7 @@ export class RandomAFDTeams extends RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
-		case 'Sand Force': case 'Sand Rush': case 'It\'s Excadrillin\' Time!':
+		case 'Earth Force': case 'Sand Rush': case 'It\'s Excadrillin\' Time!':
 			return !teamDetails.sand;
 		case 'Slush Rush':
 			return !teamDetails.snow;
@@ -139,7 +139,7 @@ export class RandomAFDTeams extends RandomTeams {
 		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
 			const weatherAbilities = abilities.filter(
-				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
+				a => ['Chlorophyll', 'Hydration', 'Earth Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
 			);
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}

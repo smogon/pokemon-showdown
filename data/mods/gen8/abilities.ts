@@ -1230,5 +1230,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	/* poisonpoint: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	poisontouch: {
+	inherit: true,
+		onDamagingHit(damage, target, source, move) {
+			null;
+		},
+		rating: 2,
 	}, */
 };

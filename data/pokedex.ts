@@ -10837,7 +10837,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Seismitoad"],
 		eggGroups: ["Water 1"],
 	},
-	seismitoad: { // updated
+	seismitoad: {
 		num: 537,
 		name: "Seismitoad",
 		types: ["Water", "Ground"],

@@ -4269,7 +4269,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["8M", "4M"],
 		},
 		eventData: [
-			{generation: 6, level: 41, perfectIVs: 2, abilities: ["poisonpoint"], moves: ["tailwhip", "doublekick", "poisonsting", "bodyslam"], pokeball: "cherishball"},
+			{generation: 6, level: 41, perfectIVs: 2, abilities: ["poisontouch"], moves: ["tailwhip", "doublekick", "poisonsting", "bodyslam"], pokeball: "cherishball"},
 		],
 	},
 	nidoranm: {
@@ -4580,7 +4580,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["8M", "4M"],
 		},
 		eventData: [
-			{generation: 7, level: 68, abilities: ["poisonpoint"], moves: ["earthquake", "poisonjab", "throatchop", "aquatail"], pokeball: "cherishball"},
+			{generation: 7, level: 68, abilities: ["poisontouch"], moves: ["earthquake", "poisonjab", "throatchop", "aquatail"], pokeball: "cherishball"},
 		],
 	},
 	cleffa: {
@@ -16740,7 +16740,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlpool: ["8M", "7V", "4M"],
 		},
 		eventData: [
-			{generation: 3, level: 45, abilities: ["poisonpoint"], moves: ["leer", "watergun", "twister", "agility"], pokeball: "pokeball"},
+			{generation: 3, level: 45, abilities: ["poisontouch"], moves: ["leer", "watergun", "twister", "agility"], pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 20},
