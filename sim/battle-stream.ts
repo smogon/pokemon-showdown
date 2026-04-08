@@ -239,17 +239,18 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			return out;
 		};
 
+		let command = target;
 		let user = null;
-		if (target.startsWith('user:')) {
-			[user, target] = Utils.splitFirst(target.slice(5), ',');
-			target = target.trim();
+		if (command.startsWith('user:')) {
+			[user, command] = Utils.splitFirst(command.slice(5), ',');
+			command = command.trim();
 		}
-		battle.add('html', Utils.html`<div class="message-warning">${user ? `[${user}] ` : ''}<strong>/editbattle</strong> ${target}</div>`);
+		battle.add('html', Utils.html`<div class="message-warning">${user ? `[${user}] ` : ''}<strong>/editbattle</strong> ${command}</div>`);
 
 		let cmd;
-		[cmd, target] = Utils.splitFirst(target, ' ');
+		[cmd, command] = Utils.splitFirst(command, ' ');
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
-		const targets = target.split(',');
+		const targets = command.split(',');
 		if (targets.length === 1 && targets[0] === '') targets.pop();
 		switch (cmd) {
 		case 'hp':
@@ -364,7 +365,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			break;
 		}
 		case 'reseed': {
-			battle.resetRNG(target as PRNGSeed);
+			battle.resetRNG(command as PRNGSeed);
 			if (targets.length) battle.add(`||Reseeded to ${targets.join(',')}`);
 			break;
 		}
@@ -374,7 +375,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				battle.add("||<<< Error: Format should be: basestats PLAYER, POKEMON, HP, ATK, DEF, SPA, SPD, SPE");
 				return;
 			}
-			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets.map(target => target.trim());	
+			const [player, pokemon, hpStr, atkStr, defStr, spaStr, spdStr, speStr] = targets.map(target => target.trim());
 			const p = getPokemon(player, pokemon);
 			const hp = Number(hpStr);
 			const atk = Number(atkStr);
