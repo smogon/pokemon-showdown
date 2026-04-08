@@ -6962,7 +6962,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			duration: 5,
 			onModifyAccuracyPriority: -1,
 			onModifyAccuracy(accuracy, target, source, move) {
-				if (typeof accuracy === 'number') {
+				if (typeof accuracy === 'number' && source.species.id !== 'clamtrip') {
 					this.debug('Pearl Drop accuracy drop');
 					return this.chainModify(0.9);
 				}
