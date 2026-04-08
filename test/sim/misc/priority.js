@@ -19,6 +19,7 @@ describe('Priority', () => {
 		battle.makeChoices();
 		const qaIdx = battle.log.findIndex(line => line.includes('|move|p1a: Snorlax|Quick Attack'));
 		const sbIdx = battle.log.findIndex(line => line.includes('|move|p2a: Blissey|Soft-Boiled'));
+		assert(qaIdx !== -1 && sbIdx !== -1);
 		assert(qaIdx < sbIdx);
 	});
 

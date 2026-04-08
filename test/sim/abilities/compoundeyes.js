@@ -23,7 +23,8 @@ describe('Compound Eyes', () => {
 	});
 
 	it(`should not affect moves that bypass accuracy checks`, () => {
-		battle = common.createBattle([[
+		// forceRandomChance=false makes all random checks fail, but Swift (bypass accuracy) should still hit
+		battle = common.createBattle({ forceRandomChance: false }, [[
 			{ species: 'Butterfree', ability: 'compoundeyes', moves: ['swift'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
@@ -63,14 +64,15 @@ describe('Hustle', () => {
 	});
 
 	it(`should reduce the accuracy of physical moves`, () => {
-		// with forceRandomChance=false all random checks fail, so 80% accuracy body slam misses
-		battle = common.createBattle({ forceRandomChance: false }, [[
+		battle = common.createBattle([[
 			{ species: 'Togekiss', ability: 'hustle', moves: ['bodyslam'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
+		battle.onEvent('Accuracy', battle.format, accuracy => {
+			assert.equal(accuracy, 80); // hustle reduces physical move accuracy to 0.8x (100 * 0.8)
+		});
 		battle.makeChoices('move bodyslam', 'move sleeptalk');
-		assert.fullHP(battle.p2.active[0]);
 	});
 
 	it(`should not reduce the accuracy of special moves`, () => {

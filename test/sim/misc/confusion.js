@@ -40,8 +40,8 @@ describe('Confusion', () => {
 		]]);
 		battle.makeChoices('move sleeptalk', 'move confuseray');
 		const snorlax = battle.p1.active[0];
-		if (snorlax.volatiles['confusion']) snorlax.volatiles['confusion'].time = 3;
 		assert(snorlax.volatiles['confusion']);
+		snorlax.volatiles['confusion'].time = 3;
 		assert.hurts(snorlax, () => battle.makeChoices('move sleeptalk', 'move sleeptalk'));
 	});
 
@@ -53,7 +53,7 @@ describe('Confusion', () => {
 		]]);
 		const snorlax = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move confuseray');
-		if (!snorlax.volatiles['confusion']) snorlax.addVolatile('confusion');
+		assert(snorlax.volatiles['confusion']);
 		snorlax.volatiles['confusion'].time = 1;
 		battle.forceRandomChance = false;
 		battle.makeChoices('move sleeptalk', 'move sleeptalk');
