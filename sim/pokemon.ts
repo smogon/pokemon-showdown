@@ -65,6 +65,8 @@ export class Pokemon {
 
 	readonly baseMoveSlots: MoveSlot[];
 	moveSlots: MoveSlot[];
+	/** Only track for base move slots */
+	ppUps: number[];
 
 	hpType: string;
 	hpPower: number;
@@ -343,6 +345,7 @@ export class Pokemon {
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
+		this.ppUps = [];
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
@@ -353,18 +356,19 @@ export class Pokemon {
 				if (!set.hpType) set.hpType = move.type;
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
-			let basepp = move.noPPBoosts ? move.pp : move.pp * 8 / 5;
-			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
+			const ppUps = move.noPPBoosts || move.id === 'trumpcard' ? 0 : 3;
+			const basePP = this.battle.calculatePP(move, ppUps);
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: basepp,
-				maxpp: basepp,
+				pp: basePP,
+				maxpp: basePP,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
 				used: false,
 			});
+			this.ppUps.push(ppUps);
 		}
 
 		this.position = 0;
@@ -1301,16 +1305,18 @@ export class Pokemon {
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 		this.timesAttacked = pokemon.timesAttacked;
-		for (const moveSlot of pokemon.moveSlots) {
+		for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
 			}
+			const move = this.battle.dex.moves.get(moveSlot.id);
+			const pp = Math.min(5, move.pp);
 			this.moveSlots.push({
 				move: moveName,
 				id: moveSlot.id,
-				pp: moveSlot.maxpp === 1 ? 1 : 5,
-				maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+				pp,
+				maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
 				target: moveSlot.target,
 				disabled: false,
 				used: false,

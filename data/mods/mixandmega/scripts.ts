@@ -125,14 +125,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				const behemothMove: { [k: string]: string } = {
 					'Rusted Sword': 'behemothblade', 'Rusted Shield': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[pokemon.getItem().name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp,
+						maxpp: pp,
 						target: move.target,
 						disabled: false,
 						disabledSource: '',
