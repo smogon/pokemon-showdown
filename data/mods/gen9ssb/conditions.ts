@@ -18,11 +18,12 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
 			if (ironHeadIndex >= 0) {
 				const move = this.dex.moves.get('behemothblade');
+				const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
 				pokemon.baseMoveSlots[ironHeadIndex] = {
 					move: move.name,
 					id: move.id,
-					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					pp,
+					maxpp: pp,
 					target: move.target,
 					disabled: false,
 					disabledSource: '',
@@ -47,11 +48,12 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
 			if (ironHeadIndex >= 0) {
 				const move = this.dex.moves.get('behemothbash');
+				const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
 				pokemon.baseMoveSlots[ironHeadIndex] = {
 					move: move.name,
 					id: move.id,
-					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					pp,
+					maxpp: pp,
 					target: move.target,
 					disabled: false,
 					disabledSource: '',

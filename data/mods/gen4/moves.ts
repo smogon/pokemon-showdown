@@ -870,8 +870,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
-				pp: 5,
-				maxpp: move.pp * 8 / 5,
+				pp: Math.min(5, move.pp),
+				maxpp: this.calculatePP(move, source.ppUps[mimicIndex] || 0),
 				disabled: false,
 				used: false,
 				virtual: true,
@@ -1206,7 +1206,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
-				maxpp: move.pp,
+				maxpp: this.calculatePP(move, source.ppUps[sketchIndex] || 0),
 				disabled: false,
 				used: false,
 			};
