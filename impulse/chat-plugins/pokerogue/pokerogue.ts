@@ -25,19 +25,22 @@ function getSprite(species: string, size = 80): string {
 	const sp = Dex.species.get(id);
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
-	// Gen 9+ Pokémon (Scarlet/Violet, Paradox forms, etc.) are not in sprites/dex/ —
-	// Gen 9+ always uses HOME sprites, which cover every generation including Gen 9 Paradox Pokémon.
-	// Gen 6–8 and pre-Gen6 formes use the official dex artwork sprites.
+	// All Pokémon with official dex artwork (Gen 6+, including Gen 9+ Scarlet/Violet and Paradox
+	// forms) use the smogon/sprites dex renders served via the PS CDN.
 	// Gen 1–5 base formes use the classic gen5/BW pixelated sprites.
+	// onerror: if dex sprite is missing, fall back to gen5 sprite.
 	let src: string;
-	if (sp.exists && sp.gen >= 9) {
-		src = `https://play.pokemonshowdown.com/sprites/home/${id}.png`;
-	} else if (sp.exists && (sp.gen > 5 || !!sp.forme)) {
+	let fallback: string | null = null;
+	if (sp.exists && (sp.gen > 5 || !!sp.forme)) {
 		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+		fallback = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else {
 		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	}
-	return `<img src="${src}" width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
+	const onerror = fallback
+		? ` onerror="if(this.src!=='${fallback}')this.src='${fallback}'"`
+		: '';
+	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
 // base URL for Poké Ball item icons (hosted by Pokémon Showdown)
