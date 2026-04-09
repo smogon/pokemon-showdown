@@ -1626,7 +1626,6 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("/editbattle - This is not a battle room.");
 		}
 		const battle = room.battle;
-		const format = Dex.formats.get(battle.format, true);
 		const ruleTable = Dex.formats.getRuleTable(format);
 		if (ruleTable.has('editbattle')) {
 			this.checkCan('editprivacy', null, room);
