@@ -33,16 +33,15 @@ describe('Critical hits', () => {
 	});
 
 	it(`should deal roughly 1.5x damage compared to a non-crit`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Octillery', ability: 'pressure', moves: ['watergun'] },
 		], [
 			{ species: 'Blissey', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move watergun', 'move sleeptalk');
-		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move watergun', 'move sleeptalk');
+		const normalDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Octillery', ability: 'pressure', item: 'razorclaw', moves: ['watergun'] },
