@@ -6497,7 +6497,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flytrap: { // tested, works as intended
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Flytrap') {
-				this.add('-immune', target, '[from] ability: Volt Absorb');
+				this.add('-immune', target, '[from] ability: Flytrap');
 				return null;
 			}
 		},
