@@ -10,7 +10,7 @@ describe('Compound Eyes', () => {
 		battle.destroy();
 	});
 
-	it(`should boost move accuracy by 1.3x`, () => {
+	it(`should not affect moves that bypass accuracy checks`, () => {
 		// forceRandomChance=false makes all random checks fail, but Swift (bypass accuracy) should still hit
 		battle = common.createBattle({ forceRandomChance: false }, [[
 			{ species: 'Butterfree', ability: 'compoundeyes', moves: ['swift'] },
@@ -28,16 +28,15 @@ describe('Hustle', () => {
 	});
 
 	it(`should boost Attack by 1.5x`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Togekiss', ability: 'hustle', moves: ['bodyslam'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move bodyslam', 'move sleeptalk');
-		const hustleDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move bodyslam', 'move sleeptalk');
+		const hustleDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Togekiss', ability: 'serenegrace', moves: ['bodyslam'] },
