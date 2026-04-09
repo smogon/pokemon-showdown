@@ -40,14 +40,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					continue;
 				}
 				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, this.dex.abilities.get('Neutralizing Gas'));
 				}
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
 				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, this.dex.abilities.get('Neutralizing Gas'));
 				}
 				if (!this.dex.abilities.get(target.ability).exists) {
 					const isItem = (target.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
