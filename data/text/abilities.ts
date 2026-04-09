@@ -1304,7 +1304,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "If this Pokemon is a Pecharunt and poisons or badly poisons a target, the target also becomes confused.",
 		shortDesc: "Pecharunt: If this Pokemon poisons a target, the target also becomes confused.",
 	},
-	poisontouch: {
+	poisontouch: { // updated
 		name: "Poison Touch",
 		desc: "This Pokemon's contact moves have a 30% chance of poisoning, and there is a 30% chance a Pokemon making contact with this Pokemon will be poisoned.. This effect comes after a move's inherent secondary effect chance.",
 		shortDesc: "Making contact with this Pokemon has a 30% chance to poison.",
@@ -1687,9 +1687,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon's stat stages are considered doubled during stat calculations.",
 		},
 	},
-	skilllink: {
+	skilllink: { // updated
 		name: "Skill Link",
-		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick and Triple Axel do not check accuracy for the second and third hits.",
+		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick, Triple Axel, and Muck Volley do not check accuracy for the second and third hits.",
 		shortDesc: "This Pokemon's multi-hit attacks always hit the maximum number of times.",
 		gen7: {
 			desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick does not check accuracy for the second and third hits.",

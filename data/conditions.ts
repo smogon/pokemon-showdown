@@ -1182,14 +1182,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-irritantWeather', 'SwarmSignal', '[upkeep]');
 			this.eachEvent('IrritantWeather');
 		},
-		/* onIrritantWeather(target) {
-			if (this.field.irritantWeatherState.boosted) {
-				if (target.hasItem('safetygoggles') || target.hasAbility(['overcoat', 'bubblehelm'])) return;
-				if (target.hasType('Bug') || target.hasType('Poison')) return;
-				target.addVolatile('confusion');
-				// this.hint("Non-Bug and Poison types become confused in Strong Winds Pheromones.");
-			}
-		}, */
 		onFieldEnd() {
 			this.add('-irritantWeather', 'none');
 		},

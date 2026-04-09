@@ -7288,7 +7288,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
 		onAnyFaint(target, source, effect) {
-			if (['haunt'].includes(this.effectState.target.effectiveEnergyWeather())) {
+			if (['haunt'].includes(this.effectState.source.effectiveEnergyWeather())) {
 				this.heal(this.effectState.target.baseMaxhp / 4, this.effectState.target, this.effectState.target);
 			} else {
 				this.heal(this.effectState.target.baseMaxhp / 8, this.effectState.target, this.effectState.target);
