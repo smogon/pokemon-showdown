@@ -11,16 +11,15 @@ describe('Filter', () => {
 	});
 
 	it(`should reduce super effective damage by 25%`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move thunderbolt', 'move sleeptalk');
-		const filterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move thunderbolt', 'move sleeptalk');
+		const filterDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
@@ -35,16 +34,15 @@ describe('Filter', () => {
 	});
 
 	it(`should not reduce neutral damage`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Snorlax', ability: 'immunity', moves: ['tackle'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move tackle', 'move sleeptalk');
-		const filterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move tackle', 'move sleeptalk');
+		const filterDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Snorlax', ability: 'immunity', moves: ['tackle'] },
@@ -59,16 +57,15 @@ describe('Filter', () => {
 	});
 
 	it(`should be bypassed by Mold Breaker`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['thunderpunch'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move thunderpunch', 'move sleeptalk');
-		const moldBreakerDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move thunderpunch', 'move sleeptalk');
+		const moldBreakerDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'rockhead', moves: ['thunderpunch'] },
@@ -89,16 +86,15 @@ describe('Solid Rock', () => {
 	});
 
 	it(`should reduce super effective damage by 25%`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
 		], [
 			{ species: 'Lapras', ability: 'solidrock', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move thunderbolt', 'move sleeptalk');
-		const solidRockDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move thunderbolt', 'move sleeptalk');
+		const solidRockDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
@@ -119,16 +115,15 @@ describe('Prism Armor', () => {
 	});
 
 	it(`should reduce super effective damage by 25% even against Mold Breaker`, () => {
-		battle = common.createBattle([[
+		const battleA = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['crunch'] },
 		], [
 			{ species: 'Necrozma-Dawn-Wings', ability: 'prismarmor', moves: ['sleeptalk'] },
 		]]);
-		battle.randomizer = dmg => dmg;
-		battle.makeChoices('move crunch', 'move sleeptalk');
-		const prismArmorDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
-		battle.destroy();
+		battleA.randomizer = dmg => dmg;
+		battleA.makeChoices('move crunch', 'move sleeptalk');
+		const prismArmorDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
+		battleA.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['crunch'] },
