@@ -774,7 +774,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] FRLG OU",
 		mod: 'gen3frlg',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Sand Veil', "King's Rock"],
+		banlist: ['Uber', 'Sand Veil', 'King\'s Rock'],
 	},
 	{
 		name: "[Gen 4] VGC 2009",
