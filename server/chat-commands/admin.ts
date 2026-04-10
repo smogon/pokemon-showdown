@@ -1639,9 +1639,11 @@ export const commands: Chat.ChatCommands = {
 		`/editbattle fieldcondition [fieldcondition]`,
 		`/editbattle weather [weather]`,
 		`/editbattle terrain [terrain]`,
+		`/editbattle basestats [player], [pokemon], [hp], [atk], [def], [spa], [spd], [spe]`,
 		`/editbattle reseed [optional seed]`,
-		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
+		`Short forms: /ebat [h/s/pp/b/v/sc/fc/w/t/bs]`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
+		`Modified base stats must be integers within the stat limit (1-255).`,
 	],
 };
 
