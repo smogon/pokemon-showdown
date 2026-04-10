@@ -3511,6 +3511,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	gourgeistsmall: {
+		tier: "OU",
 	},
 	gourgeistlarge: {
 		tier: "OU",
