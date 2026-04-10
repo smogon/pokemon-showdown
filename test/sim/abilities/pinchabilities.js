@@ -19,6 +19,8 @@ describe('Blaze', () => {
 		const charizard = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		battle.makeChoices('move flamethrower', 'move sleeptalk');
 		const normalDamage = blissey.maxhp - blissey.hp;
@@ -40,6 +42,8 @@ describe('Blaze', () => {
 		const charizard = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		charizard.hp = Math.floor(charizard.maxhp / 3) + 1;
 		battle.makeChoices('move flamethrower', 'move sleeptalk');
@@ -62,6 +66,8 @@ describe('Blaze', () => {
 		const charizard = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		battle.makeChoices('move airslash', 'move sleeptalk');
 		const fullHPDamage = blissey.maxhp - blissey.hp;
@@ -89,6 +95,8 @@ describe('Torrent', () => {
 		const blastoise = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		battle.makeChoices('move surf', 'move sleeptalk');
 		const normalDamage = blissey.maxhp - blissey.hp;
@@ -116,6 +124,8 @@ describe('Overgrow', () => {
 		const venusaur = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		battle.makeChoices('move razorleaf', 'move sleeptalk');
 		const normalDamage = blissey.maxhp - blissey.hp;
@@ -143,6 +153,8 @@ describe('Swarm', () => {
 		const yanmega = battle.p1.active[0];
 		const blissey = battle.p2.active[0];
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 
 		battle.makeChoices('move bugbuzz', 'move sleeptalk');
 		const normalDamage = blissey.maxhp - blissey.hp;

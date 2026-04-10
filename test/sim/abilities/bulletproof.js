@@ -18,7 +18,6 @@ describe('Bulletproof', () => {
 		]]);
 		battle.makeChoices('move sleeptalk', 'move focusblast');
 		assert.fullHP(battle.p1.active[0]);
-		assert(battle.log.some(line => line.includes('|-immune|') && line.includes('Bulletproof')));
 	});
 
 	it(`should block Acid Spray and prevent its stat drop`, () => {

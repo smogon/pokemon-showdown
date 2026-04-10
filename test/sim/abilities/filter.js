@@ -11,15 +11,17 @@ describe('Filter', () => {
 	});
 
 	it(`should reduce super effective damage by 25%`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move thunderbolt', 'move sleeptalk');
-		const filterDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move thunderbolt', 'move sleeptalk');
+		const filterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
@@ -27,6 +29,8 @@ describe('Filter', () => {
 			{ species: 'Lapras', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move thunderbolt', 'move sleeptalk');
 		const noFilterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -34,15 +38,17 @@ describe('Filter', () => {
 	});
 
 	it(`should not reduce neutral damage`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Snorlax', ability: 'immunity', moves: ['tackle'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move tackle', 'move sleeptalk');
-		const filterDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move tackle', 'move sleeptalk');
+		const filterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Snorlax', ability: 'immunity', moves: ['tackle'] },
@@ -50,6 +56,8 @@ describe('Filter', () => {
 			{ species: 'Lapras', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move tackle', 'move sleeptalk');
 		const noFilterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -57,15 +65,17 @@ describe('Filter', () => {
 	});
 
 	it(`should be bypassed by Mold Breaker`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['thunderpunch'] },
 		], [
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move thunderpunch', 'move sleeptalk');
-		const moldBreakerDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move thunderpunch', 'move sleeptalk');
+		const moldBreakerDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'rockhead', moves: ['thunderpunch'] },
@@ -73,6 +83,8 @@ describe('Filter', () => {
 			{ species: 'Lapras', ability: 'filter', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move thunderpunch', 'move sleeptalk');
 		const filterDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -86,15 +98,17 @@ describe('Solid Rock', () => {
 	});
 
 	it(`should reduce super effective damage by 25%`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
 		], [
 			{ species: 'Lapras', ability: 'solidrock', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move thunderbolt', 'move sleeptalk');
-		const solidRockDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move thunderbolt', 'move sleeptalk');
+		const solidRockDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Raichu', ability: 'static', moves: ['thunderbolt'] },
@@ -102,6 +116,8 @@ describe('Solid Rock', () => {
 			{ species: 'Lapras', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move thunderbolt', 'move sleeptalk');
 		const noAbilityDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -115,15 +131,17 @@ describe('Prism Armor', () => {
 	});
 
 	it(`should reduce super effective damage by 25% even against Mold Breaker`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['crunch'] },
 		], [
 			{ species: 'Necrozma-Dawn-Wings', ability: 'prismarmor', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move crunch', 'move sleeptalk');
-		const prismArmorDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move crunch', 'move sleeptalk');
+		const prismArmorDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['crunch'] },
@@ -131,6 +149,8 @@ describe('Prism Armor', () => {
 			{ species: 'Necrozma-Dawn-Wings', ability: 'pressure', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move crunch', 'move sleeptalk');
 		const noAbilityDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 

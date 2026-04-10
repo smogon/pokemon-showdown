@@ -25,15 +25,17 @@ describe("Choice Items", () => {
 	});
 
 	it("Choice Band should boost Attack by 1.5x", () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Igglybuff', ability: 'competitive', item: 'choiceband', moves: ['pound'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move pound', 'move sleeptalk');
-		const bandDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move pound', 'move sleeptalk');
+		const bandDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Igglybuff', ability: 'competitive', moves: ['pound'] },
@@ -41,6 +43,8 @@ describe("Choice Items", () => {
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move pound', 'move sleeptalk');
 		const noBandDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -48,15 +52,17 @@ describe("Choice Items", () => {
 	});
 
 	it("Choice Specs should boost Special Attack by 1.5x", () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Cleffa', ability: 'magicguard', item: 'choicespecs', moves: ['psychic'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move psychic', 'move sleeptalk');
-		const specsDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move psychic', 'move sleeptalk');
+		const specsDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Cleffa', ability: 'magicguard', moves: ['psychic'] },
@@ -64,6 +70,8 @@ describe("Choice Items", () => {
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move psychic', 'move sleeptalk');
 		const noSpecsDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -97,15 +105,17 @@ describe("Choice Items", () => {
 	});
 
 	it("should not boost damage while Dynamaxed", () => {
-		const battleA = common.gen(8).createBattle([[
+		battle = common.gen(8).createBattle([[
 			{ species: 'Igglybuff', ability: 'competitive', item: 'choiceband', moves: ['pound'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move pound dynamax', 'move sleeptalk');
-		const bandDynamaxDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move pound dynamax', 'move sleeptalk');
+		const bandDynamaxDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.gen(8).createBattle([[
 			{ species: 'Igglybuff', ability: 'competitive', moves: ['pound'] },
@@ -113,6 +123,8 @@ describe("Choice Items", () => {
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move pound dynamax', 'move sleeptalk');
 		const noBandDynamaxDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 

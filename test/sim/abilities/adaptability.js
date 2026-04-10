@@ -11,22 +11,26 @@ describe('Adaptability', () => {
 	});
 
 	it(`should boost STAB moves to 2x instead of 1.5x`, () => {
-		const battleA = common.createBattle([[
-			{ species: 'Porygon-Z', ability: 'adaptability', moves: ['triattack'] },
-		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
-		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move triattack', 'move sleeptalk');
-		const adaptDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle = common.createBattle([[{
+			species: 'Porygon-Z', ability: 'adaptability', moves: ['triattack']
+		}], [{
+			species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']
+		}]]);
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move triattack', 'move sleeptalk');
+		const adaptDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
-			{ species: 'Porygon-Z', ability: 'pressure', moves: ['triattack'] },
+			{species: 'Porygon-Z', ability: 'pressure', moves: ['triattack']},
 		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+			{species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']},
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move triattack', 'move sleeptalk');
 		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -35,22 +39,26 @@ describe('Adaptability', () => {
 	});
 
 	it(`should not affect non-STAB moves`, () => {
-		const battleA = common.createBattle([[
-			{ species: 'Porygon-Z', ability: 'adaptability', moves: ['icebeam'] },
-		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
-		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move icebeam', 'move sleeptalk');
-		const adaptDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle = common.createBattle([[{
+			species: 'Porygon-Z', ability: 'adaptability', moves: ['icebeam']
+		}], [{
+			species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']
+		}]]);
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move icebeam', 'move sleeptalk');
+		const adaptDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
-			{ species: 'Porygon-Z', ability: 'pressure', moves: ['icebeam'] },
+			{species: 'Porygon-Z', ability: 'pressure', moves: ['icebeam']},
 		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+			{species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']},
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move icebeam', 'move sleeptalk');
 		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
@@ -58,22 +66,26 @@ describe('Adaptability', () => {
 	});
 
 	it(`should apply to both types of a dual-type Pokemon`, () => {
-		const battleA = common.createBattle([[
-			{ species: 'Empoleon', ability: 'adaptability', moves: ['surf'] },
-		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
-		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move surf', 'move sleeptalk');
-		const adaptDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle = common.createBattle([[{
+			species: 'Empoleon', ability: 'adaptability', moves: ['surf']
+		}], [{
+			species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']
+		}]]);
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move surf', 'move sleeptalk');
+		const adaptDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
-			{ species: 'Empoleon', ability: 'pressure', moves: ['surf'] },
+			{species: 'Empoleon', ability: 'pressure', moves: ['surf']},
 		], [
-			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
+			{species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk']},
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move surf', 'move sleeptalk');
 		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 

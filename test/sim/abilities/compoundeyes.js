@@ -28,15 +28,17 @@ describe('Hustle', () => {
 	});
 
 	it(`should boost Attack by 1.5x`, () => {
-		const battleA = common.createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Togekiss', ability: 'hustle', moves: ['bodyslam'] },
 		], [
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move bodyslam', 'move sleeptalk');
-		const hustleDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
+		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
+		battle.makeChoices('move bodyslam', 'move sleeptalk');
+		const hustleDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		battle.destroy();
 
 		battle = common.createBattle([[
 			{ species: 'Togekiss', ability: 'serenegrace', moves: ['bodyslam'] },
@@ -44,6 +46,8 @@ describe('Hustle', () => {
 			{ species: 'Blissey', ability: 'naturalcure', moves: ['sleeptalk'] },
 		]]);
 		battle.randomizer = dmg => dmg;
+		battle.forceRandomChance = false;
+		battle.onEvent('Accuracy', battle.format, () => true);
 		battle.makeChoices('move bodyslam', 'move sleeptalk');
 		const normalDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 
