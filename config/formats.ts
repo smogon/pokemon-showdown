@@ -268,7 +268,39 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
-	// S/V Doubles
+	// Champions
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Champions",
+	},
+	{
+		name: "[Gen 9 Champions] OU",
+		mod: 'champions',
+		ruleset: ['Standard'],
+		banlist: ['AG', 'Uber', 'Baton Pass', 'Last Respects'],
+	},
+	{
+		name: "[Gen 9 Champions] BSS Reg M-A",
+		mod: 'champions',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 9 Champions] VGC 2026 Reg M-A",
+		mod: 'champions',
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets'],
+	},
+	{
+		name: "[Gen 9 Champions] VGC 2026 Reg M-A (bo3)",
+		mod: 'champions',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
+	},
+
+	// Unofficial Metagames
 	///////////////////////////////////////////////////////////////////
 
 	{
@@ -443,6 +475,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		teraPreviewDefault: true,
 		ruleset: ['[Gen 9] NatDex Draft', 'Item Clause = 2', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom'],
+	},
+	{
+		name: "[Gen 9 Champions] Draft",
+		mod: 'champions',
+		searchShow: false,
+		itemClauseDefault: true,
+		ruleset: ['Standard Draft'],
 	},
 	{
 		name: "[Gen 8] Draft",

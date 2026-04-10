@@ -10,11 +10,11 @@ export const Scripts: ModdedBattleScriptsData = {
 	statModify(baseStats, set, statName) {
 		const tr = this.trunc;
 		let stat = baseStats[statName];
-		const evs = set.evs[statName] ? 4 + 8 * (set.evs[statName] - 1) : 0;
+		const evs = set.evs[statName];
 		if (statName === 'hp') {
-			return tr(tr(2 * stat + set.ivs[statName] + tr(evs / 4) + 100) * set.level / 100 + 10);
+			return stat + evs + 75;
 		}
-		stat = tr(tr(2 * stat + set.ivs[statName] + tr(evs / 4)) * set.level / 100 + 5);
+		stat = stat + evs + 20;
 		const nature = this.dex.natures.get(set.nature);
 		// Natures are calculated with 16-bit truncation.
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
@@ -248,7 +248,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			const move = this.dex.getActiveMove(moveOrMoveName);
 			let hitResult: boolean | number | null = true;
-			let moveData = hitEffect as ActiveMove;
+			let moveData = hitEffect!;
 			if (!moveData) moveData = move;
 			if (!moveData.flags) moveData.flags = {};
 			if (move.target === 'all' && !isSelf) {
@@ -265,14 +265,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				return [[false], targets]; // single-target only
 			}
-	
+
 			// 0. check for substitute
 			if (!isSecondary && !isSelf) {
 				if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
 					damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 				}
 			}
-	
+
 			for (const i of targets.keys()) {
 				if (damage[i] === this.battle.HIT_SUBSTITUTE) {
 					damage[i] = true;
@@ -285,43 +285,43 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			// 1. call to this.battle.getDamage
 			damage = this.getSpreadDamage(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
-	
+
 			for (const i of targets.keys()) {
 				if (damage[i] === false) targets[i] = false;
 			}
-	
+
 			// 2. call to this.battle.spreadDamage
 			damage = this.battle.spreadDamage(damage, targets, pokemon, move);
-	
+
 			for (const i of targets.keys()) {
 				if (damage[i] === false) targets[i] = false;
 			}
-	
+
 			// 3. onHit event happens here
 			damage = this.runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
-	
+
 			for (const i of targets.keys()) {
 				if (!damage[i] && damage[i] !== 0) targets[i] = false;
 			}
-	
+
 			// steps 4 and 5 can mess with this.battle.activeTarget, which needs to be preserved for Dancer
 			const activeTarget = this.battle.activeTarget;
-	
+
 			// 4. self drops (start checking for targets[i] === false here)
 			if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
-	
+
 			// 5. secondary effects
 			if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
-	
+
 			this.battle.activeTarget = activeTarget;
-	
+
 			// 6. force switch
 			if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move);
-	
+
 			for (const i of targets.keys()) {
 				if (!damage[i] && damage[i] !== 0) targets[i] = false;
 			}
-	
+
 			const damagedTargets: Pokemon[] = [];
 			const damagedDamage = [];
 			for (const [i, t] of targets.entries()) {
@@ -347,7 +347,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.runEvent('EmergencyExit', pokemon);
 				}
 			}
-	
+
 			return [damage, targets];
 		},
 	},

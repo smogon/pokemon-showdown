@@ -458,6 +458,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
 	declare readonly teraPreviewDefault?: boolean;
+	declare readonly itemClauseDefault?: boolean;
 	declare readonly threads?: string[];
 	declare readonly tournamentShow?: boolean;
 	declare readonly checkCanLearn?: (
@@ -625,6 +626,7 @@ export class DexFormats {
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
+			if (format.itemClauseDefault === undefined) format.itemClauseDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
