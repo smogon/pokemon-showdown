@@ -1003,6 +1003,21 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	whiteherb: {
+		inherit: true,
+		onAnyAfterMove() {
+			// Desync: proceed from Parting Shot's point of view
+			this.queue.insertChoice({
+				choice: 'event',
+				event: 'WhiteHerb',
+				order: 99, // before switches
+				pokemon: this.effectState.target,
+			});
+		},
+		onWhiteHerb(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
+	},
 	widelens: {
 		inherit: true,
 		isNonstandard: "Past",
