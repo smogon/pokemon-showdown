@@ -158,6 +158,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 95,
 	},
+	crushclaw: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+	},
 	crushgrip: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -192,6 +196,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.trySetStatus(status, source);
 			},
 		},
+		desc: "Has a 30% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
+		shortDesc: "30% chance to sleep, poison, or paralyze target.",
 	},
 	disarmingvoice: {
 		inherit: true,
@@ -220,6 +226,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	dragonbreath: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	dragoncheer: {
+		inherit: true,
+		flags: { bypasssub: 1, allyanim: 1, metronome: 1, sound: 1 },
 	},
 	dragonclaw: {
 		inherit: true,
@@ -262,30 +272,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	esperwing: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	fairywind: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	falsesurrender: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	falseswipe: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	fierywrath: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	filletaway: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	encore: {
 		inherit: true,
 		condition: {
@@ -317,6 +303,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
+	},
+	esperwing: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	fairywind: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	falsesurrender: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	falseswipe: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	fierywrath: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	filletaway: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	firelash: {
 		inherit: true,
@@ -482,6 +492,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 20,
 			volatileStatus: 'flinch',
 		},
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	ivycudgel: {
 		inherit: true,
@@ -501,8 +513,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	kingsshield: {
 		inherit: true,
-		pp: 5,
 		isNonstandard: null,
+		pp: 5,
 	},
 	leafage: {
 		inherit: true,
@@ -564,6 +576,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	metalclaw: {
 		inherit: true,
 		isNonstandard: "Past",
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 	},
 	metronome: {
 		inherit: true,
@@ -593,6 +606,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				spa: -1,
 			},
 		},
+		desc: "Has a 10% chance to lower the target's Special Attack by 1 stage.",
+		shortDesc: "10% chance to lower the target's Sp. Atk by 1.",
 	},
 	moongeistbeam: {
 		inherit: true,
@@ -726,6 +741,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	// ragepowder: {
+	// 	inherit: true,
+	// 	flags: { noassist: 1, failcopycat: 1 },
+	// },
 	razorleaf: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -779,6 +798,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 8 : 16));
 			},
 		},
+		desc: "Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active.",
+		shortDesc: "Deals 1/16 max HP each turn; 1/8 on Steel, Water.",
 	},
 	sandattack: {
 		inherit: true,
@@ -858,8 +879,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	snaptrap: {
 		inherit: true,
-		type: "Steel",
 		isNonstandard: null,
+		type: "Steel",
 	},
 	snipeshot: {
 		inherit: true,
@@ -884,8 +905,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spinout: {
 		inherit: true,
-		pp: 10,
 		isNonstandard: "Past",
+		pp: 10,
 	},
 	spiritbreak: {
 		inherit: true,
@@ -1008,6 +1029,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		boosts: {
 			spe: -2,
 		},
+		desc: "Lowers the target's Speed by 2 stages and poisons it.",
+		shortDesc: "Lowers the target's Speed by 2 and poisons it.",
 	},
 	trickortreat: {
 		inherit: true,

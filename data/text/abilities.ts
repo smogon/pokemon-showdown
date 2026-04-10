@@ -1250,8 +1250,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	piercingdrill: {
 		name: "Piercing Drill",
-		desc: "", // TODO
-		shortDesc: "", // TODO
+		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
 	},
 	pixilate: {
 		name: "Pixilate",
@@ -1771,8 +1770,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spicyspray: {
 		name: "Spicy Spray",
-		desc: "", // TODO
-		shortDesc: "", // TODO
+		shortDesc: "If this Pokemon is hit by an attack, the attacker becomes burned.",
 	},
 	stakeout: {
 		name: "Stakeout",
