@@ -144,7 +144,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	pikachu: {
-		tier: "OU",
+		tier: "NFE",
 	},
 	pikachucosplay: {
 		isNonstandard: "Past",
