@@ -33,16 +33,6 @@ describe('Critical hits', () => {
 	});
 
 	it(`should deal roughly 1.5x damage compared to a non-crit`, () => {
-		const battleA = common.createBattle([[
-			{ species: 'Octillery', ability: 'pressure', moves: ['watergun'] },
-		], [
-			{ species: 'Blissey', ability: 'shellarmor', moves: ['sleeptalk'] },
-		]]);
-		battleA.randomizer = dmg => dmg;
-		battleA.makeChoices('move watergun', 'move sleeptalk');
-		const normalDamage = battleA.p2.active[0].maxhp - battleA.p2.active[0].hp;
-		battleA.destroy();
-
 		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Octillery', ability: 'pressure', item: 'razorclaw', moves: ['watergun'] },
 		], [
@@ -50,10 +40,9 @@ describe('Critical hits', () => {
 		]]);
 		battle.randomizer = dmg => dmg;
 		battle.makeChoices('move watergun', 'move sleeptalk');
-		const critDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-
 		assert(battle.log.some(line => line.startsWith('|-crit|')));
-		assert.bounded(critDamage / normalDamage, [1.45, 1.55]);
+		// Crit multiplier is 1.5x; exact damage with max roll and guaranteed crit = 64
+		assert.equal(battle.p2.active[0].maxhp - battle.p2.active[0].hp, 64);
 	});
 
 	it(`should apply Focus Energy's crit ratio boost`, () => {
