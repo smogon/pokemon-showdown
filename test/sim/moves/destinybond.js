@@ -128,3 +128,23 @@ describe(`Destiny Bond [Gen 2]`, () => {
 		assert.fainted(snorlax);
 	});
 });
+
+describe(`Destiny Bond [Gen 3 Colosseum]`, () => {
+	afterEach(() => battle.destroy());
+
+	it(`should fail with a Destiny Bond fail message when used as the last Pokémon (Self KO Clause)`, () => {
+		battle = common.createBattle({ formatid: 'gen3hoennstadium@@@^!Team Preview,^!Obtainable,^!Picked Team Size,^!Open Team Sheets' }, [
+			[{ species: 'Gastly', moves: ['destinybond'] }],
+			[{ species: 'Snorlax', moves: ['sleeptalk'] }],
+		]);
+		battle.makeChoices('move destinybond', 'move sleeptalk');
+		assert(
+			battle.log.some(line => line === '|-fail|p1a: Gastly|move: Destiny Bond'),
+			'Destiny Bond should fail with the correct move name'
+		);
+		assert(
+			battle.log.every(line => !line.includes('|-fail|p1a: Gastly|move: Perish Song')),
+			'Destiny Bond should not report failing as Perish Song'
+		);
+	});
+});
