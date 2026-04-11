@@ -1543,11 +1543,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			for (const target of this.getAllActive()) {
 				if (!target.hasItem('energynullifier')) {
 					if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
-						forkedPresent = false;
-						for (const ally of target.alliesAndSelf()) {
-							if (ally.hasAbility('forked')) forkedPresent = true;
-						}
-						if (!forkedPresent) lightningRodPresent = true;
+						lightningRodPresent = true;
 					}
 				}
 			}
@@ -1556,14 +1552,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (!target.hasItem('energynullifier')) {
 					if (lightningRodPresent) {
 						if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
-							forkedPresent = false;
-							for (const ally of target.alliesAndSelf()) {
-								if (ally.hasAbility('forked')) forkedPresent = true;
-							}
-							if (!forkedPresent) validTargets.push(target);
+							validTargets.push(target);
 						}
 					} else {
-						forkedPresent = false;
 						for (const ally of target.alliesAndSelf()) {
 							if (ally.hasAbility('forked')) forkedPresent = true;
 						}
