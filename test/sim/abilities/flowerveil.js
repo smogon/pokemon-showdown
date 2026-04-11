@@ -47,7 +47,7 @@ describe('Flower Veil', () => {
 		assert.equal(breloom.status, 'slp');
 	});
 
-	it.skip(`should not block self-inflicted stat drops`, () => {
+	it(`should block self-inflicted stat drops`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Sceptile', ability: 'flowerveil', moves: ['superpower'] },
 			{ species: 'Lilligant', ability: 'weakarmor', moves: ['sleeptalk'] },
@@ -57,10 +57,10 @@ describe('Flower Veil', () => {
 		]]);
 		battle.makeChoices('move superpower 2, move sleeptalk', 'move tackle 2, move sleeptalk');
 		const sceptile = battle.p1.active[0];
-		assert.statStage(sceptile, 'atk', -1);
-		assert.statStage(sceptile, 'def', -1);
+		assert.statStage(sceptile, 'atk', 0);
+		assert.statStage(sceptile, 'def', 0);
 		const lilligant = battle.p1.active[1];
-		assert.statStage(lilligant, 'def', -1);
+		assert.statStage(lilligant, 'def', 0);
 		assert.statStage(lilligant, 'spe', 2);
 	});
 });
