@@ -418,6 +418,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 10,
 		onResidualSubOrder: 3,
 	},
+	stall: {
+		inherit: true,
+		onFractionalPriority(priority, pokemon) {
+			// don't override Lagging Tail and Full Incense's -0.2 fractional priority
+			if (priority >= 0) return -0.1;
+		},
+	},
 	static: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
