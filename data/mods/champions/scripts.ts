@@ -41,6 +41,16 @@ export const Scripts: ModdedBattleScriptsData = {
 		return true;
 	},
 	pokemon: {
+		// Remove Trick Room underflow
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
+				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
+			if (trickRoomCheck) {
+				speed = -speed;
+			}
+			return speed;
+		},
 		// Don't revert Mega Evolutions after fainting
 		// TODO: confirm interaction with Revival Blessing
 		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
