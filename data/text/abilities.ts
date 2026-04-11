@@ -655,9 +655,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		addItem: "  [POKEMON] harvested one [ITEM]!",
 	},
-	healer: {
+	healer: { // updated
 		name: "Healer",
-		desc: "30% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
+		desc: "This Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
 		shortDesc: "30% chance this Pokemon's ally has its status cured at the end of each turn.",
 		gen6: {
 			desc: "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
