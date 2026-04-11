@@ -88,11 +88,11 @@ const MIXED_SETUP = [
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze', 'hail',
+	'agility', 'autotomize', 'earthrush', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze', 'hail',
 ];
 // Conglomerate for ease of access
 const SETUP = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance', 'earthrush',
 	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
 	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance', 'evoboost',
 	'fluffbuff',
@@ -107,7 +107,7 @@ const SPEED_CONTROL = [
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
 	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
-	'dragontail', 'doomdesire', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
+	'dragontail', 'doomdesire', 'earthrush', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit',
 	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'trailblaze',
 	'uturn', 'vacuumwave', 'voltswitch', 'watershuriken', 'waterspout', 'mockery', 'lavajet', 'scavenge',
@@ -1567,11 +1567,11 @@ export class RandomTeams {
 		isLead: boolean,
 		role: RandomTeamsTypes.Role,
 	): string {
-		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
+		const lifeOrbReqs = ['earthrush', 'flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
 
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= moves.size) &&
-			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
+			['dragontail', 'earthrush', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
@@ -1932,6 +1932,10 @@ export class RandomTeams {
 				this.dex.getEffectiveness('Fire', species) > 0 ||
 				(this.dex.getEffectiveness('Fire', species) > -2 && types.includes('Flying'))
 			);
+			/* const weakToIceBreak = (
+				this.dex.getEffectiveness('Ice', species) > 0 ||
+				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Ice'))
+			); */
 			const weakToSlushBall = (
 				this.dex.getEffectiveness('Ice', species) > 0 ||
 				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Fire'))
@@ -2021,6 +2025,10 @@ export class RandomTeams {
 					if (!typeWeaknesses['Ember Plume']) typeWeaknesses['Ember Plume'] = 0;
 					if (typeWeaknesses['Ember Plume'] >= 4 * limitFactor) continue;
 				}
+				/* if (weakToIceBreak) {
+					if (!typeWeaknesses['Ice Break']) typeWeaknesses['Ice Break'] = 0;
+					if (typeWeaknesses['Ice Break'] >= 4 * limitFactor) continue;
+				} */
 				if (weakToSlushBall) {
 					if (!typeWeaknesses['Slushball']) typeWeaknesses['Slushball'] = 0;
 					if (typeWeaknesses['Slushball'] >= 4 * limitFactor) continue;
@@ -2102,6 +2110,7 @@ export class RandomTeams {
 			}
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 			if (weakToEmberPlume) typeWeaknesses['Ember Plume']++;
+			// if (weakToIceBreak) typeWeaknesses['Ice Break']++;
 			if (weakToSlushBall) typeWeaknesses['Slushball']++;
 			if (weakToDeception) typeWeaknesses['Deception']++;
 			if (weakToDarkDepletion) typeWeaknesses['Dark Depletion']++;

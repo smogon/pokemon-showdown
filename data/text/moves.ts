@@ -6555,8 +6555,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	supercellslam: {
 		name: "Supercell Slam",
-		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
-		shortDesc: "User is hurt by 50% of its max HP if it misses.",
+		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. If the weather is Thunderstorm, this move does not check accuracy. If this move is used against a Pokemon holding Energy Nullifier, this move's accuracy remains at 95%.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses. T.Storm: can't miss.",
 
 		damage: "#crash",
 	},
@@ -7626,10 +7626,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the weather becomes Battle Aura. During the effect, raises the chance for a critical hit by 1 stage and prevents other Pokemon from lowering Fighting-type Pokemon's stat stages. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Battle Aura.",
 		shortDesc: "For 5 turns, a battle aura raises crit rate by 1.",
 	},
-	auraspark: {
-		name: "Aura Spark",
-		shortDesc: "No additional effect.",
-	},
 	battlecry: {
 		name: "Battle Cry",
 		desc: "No additional effect.",
@@ -7730,7 +7726,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	earthrush: {
 		name: "Earth Rush",
-		shortDesc: "No additional effect.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
 	},
 	ectoplasma: {
 		name: "Ectoplasma",
@@ -7855,7 +7852,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	kihop: {
 		name: "Ki-hop",
-		shortDesc: "No additional effect.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 	},
 	languishingaura: {
 		name: "Languishing Aura",
@@ -7893,10 +7891,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Mind Meld",
 		desc: "Has a 10% chance to confuse the target. During Dreamscape, ignores the target's stat stage changes, including evasiveness.",
 		shortDesc: "10% chance to confuse the target.",
-	},
-	minilaser: {
-		name: "Minilaser",
-		shortDesc: "This move does not check accuracy.",
 	},
 	mockery: {
 		name: "Mockery",
@@ -8118,11 +8112,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Changes type to a random type that is super effective against the target, while prioritizing 4x weaknesses over 2x weaknesses. This move does not consider Items, Abilities, or other effects when determining weaknesses. This move cannot be used successfully unless the user's current form, while considering Transform, is a form of Unown.",
 		shortDesc: "Unown: Change type to be super effective.",
 	}, */
-	thunderhammer: {
-		name: "Thunder Hammer",
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze the target.",
-	},
 	viralblast: {
 		name: "Viral Blast",
 		desc: "Has a 30% chance to poison the target.",

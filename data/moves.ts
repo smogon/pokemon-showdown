@@ -18736,7 +18736,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	supercellslam: {
+	supercellslam: { // updated
 		num: 916,
 		accuracy: 95,
 		basePower: 100,
@@ -18746,6 +18746,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, minimize: 1 },
 		hasCrashDamage: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['supercell'].includes(target.effectiveEnergyWeather())) {
+				move.accuracy = true;
+			}
+		},
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
@@ -21776,18 +21781,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Fighting",
 	},
-	auraspark: { // tested, works as intended
-		num: 10017,
-		accuracy: 100,
-		basePower: 40,
-		category: "Special",
-		name: "Aura Spark",
-		pp: 35,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		target: "normal",
-		type: "Fighting",
-	},
 	battlecry: { // tested, works as intended
 		num: 10015,
 		accuracy: 100,
@@ -22236,12 +22229,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	earthrush: { // tested, works as intended
 		num: 10024,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Physical",
 		name: "Earth Rush",
-		pp: 35,
+		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
 		target: "normal",
 		type: "Ground",
 	},
@@ -22705,6 +22706,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		thawsTarget: true,
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Ice') return 1;
+		},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'fzn') {
+				return this.chainModify(2);
+			}
+		},
 		target: "normal",
 		type: "Ice",
 	},
@@ -22831,6 +22840,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 25,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		secondary: {
+			boosts: {
+				spe: -1,
+			},
+		},
 		target: "normal",
 		type: "Fighting",
 	},
@@ -22993,18 +23007,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Psychic",
-	},
-	minilaser: { // tested, works as intended
-		num: 10034,
-		accuracy: true,
-		basePower: 60,
-		category: "Special",
-		name: "Minilaser",
-		pp: 20,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		target: "normal",
-		type: "Steel",
 	},
 	mockery: { // tested, works as intended
 		num: 10061,
@@ -23875,22 +23877,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		climateWeather: 'SunnyDay',
 		target: "allAdjacentFoes",
 		type: "Fire",
-	},
-	thunderhammer: { // tested, works as intended
-		num: 10048,
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		name: "Thunder Hammer",
-		pp: 15,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: {
-			chance: 10,
-			status: 'par',
-		},
-		target: "normal",
-		type: "Electric",
 	},
 	viralblast: { // tested, works as intended
 		num: 10023,

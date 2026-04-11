@@ -630,6 +630,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		evoType: "trade",
 	},
+	seismitoad: {
+		inherit: true,
+		abilities: { 0: "Swift Swim", 1: "Poison Touch", H: "Water Absorb" },
+	},
 	sewaddle: {
 		inherit: true,
 		abilities: { 0: "Swarm", 1: "Chlorophyll", H: "Overcoat" },
@@ -1194,21 +1198,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Lingering Aroma", 1: "Gluttony", H: "Thick Fat" },
 	},
-	charcadet: {
-		inherit: true,
-		abilities: { 0: "Flash Fire", H: "Flame Body" },
-	},
 	armarouge: {
 		inherit: true,
 		abilities: { 0: "Flash Fire", H: "Weak Armor" },
-		evoType: "useItem",
-		evoItem: "Auspicious Armor",
 	},
 	ceruledge: {
 		inherit: true,
 		abilities: { 0: "Flash Fire", H: "Weak Armor" },
-		evoType: "useItem",
-		evoItem: "Malicious Armor",
 	},
 	rellor: {
 		inherit: true,

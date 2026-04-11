@@ -1091,7 +1091,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 			for (const moveId of set.moves) {
 				const move = this.dex.moves.get(moveId);
-				if (move.id === 'flamecharge' || (move.boosts?.spe && move.boosts.spe > 0)) {
+				if ((move.id === 'flamecharge' || move.id === 'earthrush') || (move.boosts?.spe && move.boosts.spe > 0)) {
 					speedBoosted = true;
 				}
 				const nonSpeedBoostedMoves = [
@@ -1202,7 +1202,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const boostingEffects = [
 				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
 				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'charge', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
-				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
+				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'earthrush', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
 				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'lansatberry', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
 				'meteormash', 'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled',
 				'rockpolish', 'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost',
@@ -1641,6 +1641,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && move.id === 'emberplume' && type === 'Flying') return;
+			if (move && move.id === 'icebreak' && type === 'Ice') return;
 			if (move && move.id === 'slushball' && type === 'Fire') return;
 			if (move && move.id === 'deception' && type === 'Fairy') return;
 			if (move && move.id === 'darkdepletion' && type === 'Grass') return;
