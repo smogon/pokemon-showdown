@@ -28,8 +28,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove: undefined, // no inherit
 		onBypassProtect(source, target, move) {
 			if (move.flags['contact']) {
-				target.getMoveHitData(move).brokeProtect = this.effect;
-				return true;
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
 			}
 		},
 		inherit: true,

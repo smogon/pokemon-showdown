@@ -3241,8 +3241,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		isNonstandard: "Future",
 		onBypassProtect(source, target, move) {
 			if (move.flags['contact']) {
-				target.getMoveHitData(move).brokeProtect = this.effect;
-				return true;
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
 			}
 		},
 		// breaking protect handled in Battle#checkMoveBypassesProtect()
