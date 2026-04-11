@@ -87,4 +87,3 @@ describe('Sleep Talk [Gen 3]', () => {
 		assert.equal(breloom.hp, startHP);
 	});
 });
-
