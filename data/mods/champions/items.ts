@@ -275,6 +275,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	electricseed: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	emboarite: {
 		inherit: true,
 		isNonstandard: null,
@@ -664,6 +668,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	netball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	normalgem: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
