@@ -488,7 +488,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		tournamentShow: false,
-		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause'],
+		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause', '!Species Clause'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin',
 			'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-White',
@@ -907,12 +907,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		tournamentShow: false,
 		ruleset: [
 			'Standard NatDex',
-			'!Species Clause', 'Forme Clause', '!Sleep Clause Mod', 'Sleep Moves Clause', 'Terastal Clause', 'DryPass Clause', 'Mega Rayquaza Clause',
+			'!Species Clause', 'Forme Clause', 'Sleep Moves Clause', 'Terastal Clause', 'DryPass Clause', 'Mega Rayquaza Clause',
 		],
 		banlist: [
 			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
 			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Tangled Feet', 'Berserk Gene', 'Booster Energy', 'King\'s Rock', 'Quick Claw',
-			'Razor Fang', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
+			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
 			'Articuno-Base', 'Brute Bonnet', 'Cacturne', 'Clefable-Base', 'Cobalion', 'Drifblim', 'Dugtrio-Base', 'Gabite', 'Gogoat', 'Hariyama', 'Hippowdon', 'Krookodile',
@@ -930,11 +930,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (item.zMove && !(this.ruleTable.has(`+item:${item.id}`))) {
 					return [`${item.name} is banned.`];
 				}
-			}
-			const species = this.dex.species.get(set.species);
-			if (set.moves.map(x => this.toID(this.dex.moves.get(x).realMove) || x).includes('hiddenpower') &&
-				species.baseSpecies !== 'Unown' && !this.ruleTable.has(`+move:hiddenpower`)) {
-				return [`Hidden Power is banned.`];
 			}
 		},
 	},

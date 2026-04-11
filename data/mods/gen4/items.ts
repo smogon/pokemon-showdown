@@ -171,6 +171,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1.2);
 			}
 		},
+		onTakeItem: false,
+		onSetAbility: false,
 	},
 	heavyball: {
 		inherit: true,
