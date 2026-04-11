@@ -195,6 +195,22 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Oblivious", 1: "Own Tempo", H: "Regenerator" },
 	},
+	grimer: {
+		inherit: true,
+		abilities: { 0: "Stench", 1: "Sticky Hold", H: "Poison Touch" },
+	},
+	grimeralola: {
+		inherit: true,
+		abilities: { 0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy" },
+	},
+	muk: {
+		inherit: true,
+		abilities: { 0: "Stench", 1: "Sticky Hold", H: "Poison Touch" },
+	},
+	mukalola: {
+		inherit: true,
+		abilities: { 0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy" },
+	},
 	exeggcute: {
 		inherit: true,
 		abilities: { 0: "Chlorophyll", H: "Harvest" },
