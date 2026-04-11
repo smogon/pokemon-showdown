@@ -13,6 +13,7 @@ import type { PRNG, PRNGSeed } from './prng';
 interface ExportOptions {
 	hideStats?: boolean;
 	removeNicknames?: boolean | ((nickname: string) => string | null);
+	useStatPoints?: boolean;
 }
 
 export interface PokemonSet {
@@ -371,7 +372,7 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, { hideStats, removeNicknames }: ExportOptions = {}) {
+	exportSet(set: PokemonSet, { hideStats, removeNicknames, useStatPoints }: ExportOptions = {}) {
 		let out = ``;
 
 		// core
@@ -414,7 +415,7 @@ export const Teams = new class Teams {
 		if (set.gigantamax) {
 			out += `Gigantamax: Yes  \n`;
 		}
-		if (set.teraType) {
+		if (set.teraType && !useStatPoints) {
 			out += `Tera Type: ${set.teraType}  \n`;
 		}
 

@@ -101,7 +101,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Ogerpon's forme change doesn't override permanent abilities
 				if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 				// However, its ability does reset upon switching out
-				this.baseAbility = toID(ability);
+				this.baseAbility = this.battle.toID(ability);
 			}
 			if (this.terastallized) {
 				this.knownType = true;
@@ -119,7 +119,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!sourceEffect) sourceEffect = this.battle.effect;
 			}
 			if (!source) source = this;
-	
+
 			if (this.status === status.id) {
 				if ((sourceEffect as Move)?.status === this.status) {
 					this.battle.add('-fail', this, this.status);
@@ -129,7 +129,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				return false;
 			}
-	
+
 			if (
 				!ignoreImmunities && status.id && !(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))
 			) {
@@ -151,7 +151,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					return result;
 				}
 			}
-	
+
 			this.status = status.id;
 			this.statusState = this.battle.initEffectState({ id: status.id, target: this });
 			if (source) this.statusState.source = source;
@@ -159,7 +159,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (status.durationCallback) {
 				this.statusState.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 			}
-	
+
 			if (status.id && !this.battle.singleEvent('Start', status, this.statusState, this, source, sourceEffect)) {
 				this.battle.debug('status start [' + status.id + '] interrupted');
 				// cancel the setstatus
@@ -175,7 +175,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Disable Fake Out if the user has already acted since switching in
 		getMoves(lockedMove, restrictData) {
 			if (lockedMove) {
-				lockedMove = toID(lockedMove);
+				lockedMove = this.battle.toID(lockedMove);
 				if (lockedMove === 'recharge') {
 					return [{
 						move: 'Recharge',
@@ -254,6 +254,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	actions: {
+		canTerastallize(pokemon) {
+			return null;
+		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;

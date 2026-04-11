@@ -1310,21 +1310,15 @@ export class TeamValidator {
 		let totalEV = 0;
 		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
 		if (!this.format.debug) {
-			if (useStatPoints) {
-				if (set.level !== 50) {
-					problems.push(`${name} is level ${set.level}, but this format only allows level 50 Pokémon.`);
-				}
-			} else {
-				if (set.level > 1 && evLimit !== 0 && totalEV === 0) {
-					problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
-				} else if (![508, 510].includes(evLimit!) && [508, 510].includes(totalEV)) {
-					problems.push(`${name} has exactly ${totalEV} EVs, but this format does not restrict you to 510 EVs (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
-				}
-				// Check for level import errors from user in VGC -> DOU, etc.
-				// Note that in VGC etc (Adjust Level Down = 50), `set.level` will be 100 here for validation purposes
-				if (set.level === 50 && ruleTable.maxLevel !== 50 && !ruleTable.maxTotalLevel && evLimit !== 0 && totalEV % 4 === 0) {
-					problems.push(`${name} is level 50, but this format allows level ${ruleTable.maxLevel} Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
-				}
+			if (set.level > 1 && evLimit !== 0 && totalEV === 0) {
+				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+			} else if (![508, 510].includes(evLimit!) && [508, 510].includes(totalEV)) {
+				problems.push(`${name} has exactly ${totalEV} EVs, but this format does not restrict you to 510 EVs (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+			}
+			// Check for level import errors from user in VGC -> DOU, etc.
+			// Note that in VGC etc (Adjust Level Down = 50), `set.level` will be 100 here for validation purposes
+			if (set.level === 50 && ruleTable.maxLevel !== 50 && !ruleTable.maxTotalLevel && evLimit !== 0 && totalEV % 4 === 0) {
+				problems.push(`${name} is level 50, but this format allows level ${ruleTable.maxLevel} Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
 		}
 
