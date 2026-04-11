@@ -2242,7 +2242,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	guaranteedsecondarymod: {
 		effectType: 'Rule',
 		name: 'Guaranteed Secondary Mod',
-		desc: 'All moves\' secondary effect chances are set to 100% (Tri Attack and Dire Claw set a random status; Poison Touch is not a real secondary and remains at 30%).',
+		desc: 'All moves\' secondary effect chances are set to 100% (Tri Attack and Dire Claw set a random status; Poison Touch/Coat is not a real secondary and remains at 30%).',
 		onModifyMove(move) {
 			if (move.secondaries) {
 				this.debug('Freeze test: Guaranteeing secondary');
