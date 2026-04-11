@@ -1647,7 +1647,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shielddust: {
 		name: "Shield Dust",
-		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against this Pokemon.",
+		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Poison Coat, Stench, and Toxic Chain Abilities are also prevented against this Pokemon.",
 		shortDesc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
 		gen8: {
 			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Spirit Shackle, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch and Stench Abilities are also prevented against this Pokemon.",
@@ -1687,9 +1687,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon's stat stages are considered doubled during stat calculations.",
 		},
 	},
-	skilllink: {
+	skilllink: { // updated
 		name: "Skill Link",
-		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick and Triple Axel do not check accuracy for the second and third hits.",
+		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick, Triple Axel, and Muck Volley do not check accuracy for the second and third hits.",
 		shortDesc: "This Pokemon's multi-hit attacks always hit the maximum number of times.",
 		gen7: {
 			desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick does not check accuracy for the second and third hits.",
@@ -2360,8 +2360,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	consecration: {
 		name: "Conseceration",
-		desc: "If this Pokemon is a Bearvoyance, it will change to Awakened Form if Paranormal Activity or Dreamscape is active.",
-		shortDesc: "If user is a Bearvoyance, changes to Awakened Form in P.Activity/Dreamscape.",
+		desc: "If this Pokemon is a Bearvoyance, it will change to Awakened Form if holding a Thick Club and Paranormal Activity or Dreamscape is active.",
+		shortDesc: "(Bearvoyance only) changes to Awakened Form w/ Thick Club + P.Activity/Dreamscape.",
 
 		transform: "[POKEMON] awakened its power!",
 		transformEnd: "[POKEMON]'s power has faded!",
@@ -2506,10 +2506,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Malice",
 		desc: "If Blood Moon is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. Stat stage changes are considered at the time this Ability activates. If both stats are tied, Special Attack is prioritized. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
 		shortDesc: "Blood Moon: this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
-	},
-	masterinstinct: {
-		name: "Master Instinct",
-		shortDesc: "If Battle Aura is active, this Pokemon's moves have their accuracy multiplied by 1.3.",
 	},
 	nanomachines: {
 		name: "Nanomachines",
@@ -2688,10 +2684,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	warpmist: {
 		name: "Warp Mist",
-		desc: "This Pokemon can't have its type immunities bypassed. If Fog is active, this Pokemon's highest attacking stat is multiplied by 1.2. Stat stage changes are considered at the time this Ability activates. If both stats are tied, Attack is prioritized. This Pokemon's moves do not have their accuracy lowered by Fog. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "Overrides ignoring type immunity. Highest attacking stat is 1.2x in Fog.",
+		desc: "This Pokemon can't have its type immunities bypassed. If Fog is active, this Pokemon's highest stat is multiplied by 1.3. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "Overrides ignoring type immunity. Highest stat is 1.3x in Fog.",
 
 		activate: "  The heavy fog activated [POKEMON]'s Warp Mist!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
 		end: "  The effects of [POKEMON]'s Warp Mist wore off!",
 	},
 	wetanddry: {

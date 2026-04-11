@@ -5863,10 +5863,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		prepare: "[POKEMON] tucked in its head!",
 	},
-	skyattack: {
+	skyattack: { // updated
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb or the weather is Strong Winds, the move completes in one turn. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in Strong Winds. 50% recoil on miss",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -6555,8 +6555,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	supercellslam: {
 		name: "Supercell Slam",
-		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
-		shortDesc: "User is hurt by 50% of its max HP if it misses.",
+		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. If the weather is Thunderstorm, this move does not check accuracy. If this move is used against a Pokemon holding Energy Nullifier, this move's accuracy remains at 95%.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses. T.Storm: can't miss.",
 
 		damage: "#crash",
 	},
@@ -7626,10 +7626,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the weather becomes Battle Aura. During the effect, raises the chance for a critical hit by 1 stage and prevents other Pokemon from lowering Fighting-type Pokemon's stat stages. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Battle Aura.",
 		shortDesc: "For 5 turns, a battle aura raises crit rate by 1.",
 	},
-	auraspark: {
-		name: "Aura Spark",
-		shortDesc: "No additional effect.",
-	},
 	battlecry: {
 		name: "Battle Cry",
 		desc: "No additional effect.",
@@ -7721,7 +7717,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dragonsdice: {
 		name: "Dragon's Dice",
 		desc: "Rolls a D20 die. Based on the roll has a different effect. 1: 0 BP, User hits themselves in confusion; 2: 0 BP; 3: 20 BP; 4: 40 BP; 5: 50 BP; 6: 60 BP; 7: 70 BP; 8: 75 BP; 9: 80 BP; 10: 85 BP; 11: 90 BP; 12: 95 BP; 13: 100 BP; 14: 110 BP; 15: 120 BP; 16: 130 BP; 17: 140 BP; 18: 150 BP; 19: 160 BP; 20: 0 BP, OHKOs the target, OHKO fails if the target has the Sturdy Ability or if it has a higher level than the user.",
-		shortDesc: "Has random power, damages the user, or OHKOs.",
+		shortDesc: "Has random power, damages the user, or OHKOs. Loaded Dice: roll with advantage.",
 	},
 	duststorm: {
 		name: "Dust Storm",
@@ -7730,7 +7726,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	earthrush: {
 		name: "Earth Rush",
-		shortDesc: "No additional effect.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
 	},
 	ectoplasma: {
 		name: "Ectoplasma",
@@ -7755,8 +7752,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	evoboost: {
 		name: "Evoboost",
-		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This move fails if the user is not Eevee or Skinka.",
-		shortDesc: "Eevee/Skinka: +1 Atk, Def, SpA, SpD, and Spe.",
+		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 2 stages. This move fails if the user is not Eevee or Skinka.",
+		shortDesc: "Eevee/Skinka: +2 Atk, Def, SpA, SpD, and Spe.",
 	},
 	excalibur: {
 		name: "Excalibur",
@@ -7855,7 +7852,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	kihop: {
 		name: "Ki-hop",
-		shortDesc: "No additional effect.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 	},
 	languishingaura: {
 		name: "Languishing Aura",
@@ -7893,10 +7891,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Mind Meld",
 		desc: "Has a 10% chance to confuse the target. During Dreamscape, ignores the target's stat stage changes, including evasiveness.",
 		shortDesc: "10% chance to confuse the target.",
-	},
-	minilaser: {
-		name: "Minilaser",
-		shortDesc: "This move does not check accuracy.",
 	},
 	mockery: {
 		name: "Mockery",
@@ -8118,11 +8112,6 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Changes type to a random type that is super effective against the target, while prioritizing 4x weaknesses over 2x weaknesses. This move does not consider Items, Abilities, or other effects when determining weaknesses. This move cannot be used successfully unless the user's current form, while considering Transform, is a form of Unown.",
 		shortDesc: "Unown: Change type to be super effective.",
 	}, */
-	thunderhammer: {
-		name: "Thunder Hammer",
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze the target.",
-	},
 	viralblast: {
 		name: "Viral Blast",
 		desc: "Has a 30% chance to poison the target.",

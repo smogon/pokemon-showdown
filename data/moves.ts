@@ -4571,7 +4571,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+				if (status.id === 'slp' && (target.isGrounded() || target.hasAbility('Surge Surfer')) && !target.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
 						this.add('-activate', target, 'move: Electric Terrain');
 					}
@@ -4579,7 +4579,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onTryAddVolatile(status, target) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
 					this.add('-activate', target, 'move: Electric Terrain');
 					return null;
@@ -4587,7 +4587,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Electric' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+					!attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
@@ -5008,13 +5009,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('psychicterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
 				this.debug('terrain buff');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('psychicterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -7756,7 +7757,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyPriority(priority, source, target, move) {
-			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('grassyterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
 				return priority + 1;
 			}
 		},
@@ -7787,7 +7788,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-				if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
+				if (weakenedMoves.includes(move.id) && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+					!defender.isSemiInvulnerable()) {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
@@ -7806,7 +7808,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+				if ((pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer')) && !pokemon.isSemiInvulnerable()) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				} else {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
@@ -10878,7 +10880,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	magicroom: { // updated
+	magicroom: {
 		num: 478,
 		accuracy: true,
 		basePower: 0,
@@ -10891,9 +10893,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (['daydream'].includes(source.effectiveEnergyWeather())) {
-					return 8;
-				}
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
 					return 7;
@@ -12300,7 +12299,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfdestruct: "always",
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('mistyterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
 				this.debug('misty terrain boost');
 				return this.chainModify(1.5);
 			}
@@ -12329,14 +12328,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
 			},
 			onTryAddVolatile(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
 					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
@@ -12344,7 +12343,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
+				if (move.type === 'Dragon' && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+					!defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
@@ -14333,7 +14333,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return;
 				}
 				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-				if (!target.isGrounded()) {
+				if (!(target.isGrounded() || target.hasAbility('Surge Surfer'))) {
 					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect airborne Pokémon.");
@@ -14345,7 +14345,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Psychic' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+					!attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
@@ -15375,7 +15376,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback(source, target, move) {
-			if (this.field.isTerrain('electricterrain') && target.isGrounded()) {
+			if (this.field.isTerrain('electricterrain') && (target.isGrounded() || target.hasAbility('Surge Surfer'))) {
 				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
 				return move.basePower * 2;
 			}
@@ -16910,7 +16911,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	skyattack: { // updated
 		num: 143,
-		accuracy: 95,
+		accuracy: 90,
 		basePower: 140,
 		category: "Physical",
 		name: "Sky Attack",
@@ -16932,6 +16933,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		hasCrashDamage: true,
+		onMoveFail(target, source, move) {
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Sky Attack'));
 		},
 		secondary: {
 			chance: 10,
@@ -18731,7 +18736,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	supercellslam: {
+	supercellslam: { // updated
 		num: 916,
 		accuracy: 95,
 		basePower: 100,
@@ -18741,6 +18746,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, minimize: 1 },
 		hasCrashDamage: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['supercell'].includes(target.effectiveEnergyWeather())) {
+				move.accuracy = true;
+			}
+		},
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
@@ -19571,7 +19581,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		onModifyType(move, pokemon) {
-			if (!pokemon.isGrounded()) return;
+			if (!(pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer'))) return;
 			switch (this.field.terrain) {
 			case 'electricterrain':
 				move.type = 'Electric';
@@ -19588,7 +19598,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (this.field.terrain && pokemon.isGrounded()) {
+			if (this.field.terrain && (pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer'))) {
 				move.basePower *= 2;
 				this.debug('BP doubled in Terrain');
 			}
@@ -20268,7 +20278,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Cute",
 	},
-	trickroom: { // updated
+	trickroom: {
 		num: 433,
 		accuracy: true,
 		basePower: 0,
@@ -20281,9 +20291,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (['daydream'].includes(source.effectiveEnergyWeather())) {
-					return 8;
-				}
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
 					return 7;
@@ -21360,7 +21367,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { def: 1 } },
 		contestType: "Cute",
 	},
-	wonderroom: { // updated
+	wonderroom: {
 		num: 472,
 		accuracy: true,
 		basePower: 0,
@@ -21373,9 +21380,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (['daydream'].includes(source.effectiveEnergyWeather())) {
-					return 8;
-				}
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
 					return 7;
@@ -21777,18 +21781,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Fighting",
 	},
-	auraspark: { // tested, works as intended
-		num: 10017,
-		accuracy: 100,
-		basePower: 40,
-		category: "Special",
-		name: "Aura Spark",
-		pp: 35,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		target: "normal",
-		type: "Fighting",
-	},
 	battlecry: { // tested, works as intended
 		num: 10015,
 		accuracy: 100,
@@ -21835,7 +21827,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Blight Spore",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, powder: 1 },
 		status: 'blt',
 		target: "normal",
 		type: "Poison",
@@ -22237,12 +22229,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	earthrush: { // tested, works as intended
 		num: 10024,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Physical",
 		name: "Earth Rush",
-		pp: 35,
+		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
 		target: "normal",
 		type: "Ground",
 	},
@@ -22296,7 +22296,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 100,
 		category: "Special",
 		name: "Ember Plume",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onEffectiveness(typeMod, target, type) {
@@ -22355,15 +22355,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Evoboost",
-		pp: 5,
+		pp: 1,
 		priority: 0,
 		flags: { snatch: 1 },
 		boosts: {
-			atk: 1,
-			def: 1,
-			spa: 1,
-			spd: 1,
-			spe: 1,
+			atk: 2,
+			def: 2,
+			spa: 2,
+			spd: 2,
+			spe: 2,
 		},
 		onTry(source) {
 			if (source.species.baseSpecies === 'Eevee' || source.species.baseSpecies === 'Skinka') {
@@ -22445,7 +22445,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1 },
 		irritantWeather: 'Pollinate',
 		boosts: {
-			def: 1,
+			def: 2,
 		},
 		target: "self",
 		type: "Grass",
@@ -22675,7 +22675,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 90,
 		category: "Physical",
 		name: "Hydraulic Jaw",
-		pp: 5,
+		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		target: "normal",
@@ -22706,6 +22706,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		thawsTarget: true,
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Ice') return 1;
+		},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'fzn') {
+				return this.chainModify(2);
+			}
+		},
 		target: "normal",
 		type: "Ice",
 	},
@@ -22832,6 +22840,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 25,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		secondary: {
+			boosts: {
+				spe: -1,
+			},
+		},
 		target: "normal",
 		type: "Fighting",
 	},
@@ -22995,25 +23008,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 	},
-	minilaser: { // tested, works as intended
-		num: 10034,
-		accuracy: true,
-		basePower: 60,
-		category: "Special",
-		name: "Minilaser",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		target: "normal",
-		type: "Steel",
-	},
 	mockery: { // tested, works as intended
 		num: 10061,
 		accuracy: true,
 		basePower: 20,
 		category: "Special",
 		name: "Mockery",
-		pp: 5,
+		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		multihit: [1, 2],
@@ -23029,14 +23030,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	muckvolley: { // tested, works as intended
 		num: 10022,
-		accuracy: 100,
-		basePower: 30,
+		accuracy: 90,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return 20 * move.hit;
+		},
 		category: "Special",
 		name: "Muck Volley",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: 3,
+		multiaccuracy: true,
 		target: "normal",
 		type: "Poison",
 	},
@@ -23317,7 +23322,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 80,
 		category: "Physical",
 		name: "Rock Jaw",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		target: "normal",
@@ -23339,10 +23344,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	sandblast: { // untested
 		num: 10025,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Special",
 		name: "Sandblast",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		basePowerCallback(pokemon, target, move) {
@@ -23452,10 +23457,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	shade: { // untested
 		num: 10062,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Special",
 		name: "Shade",
-		pp: 35,
+		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
@@ -23873,22 +23878,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Fire",
 	},
-	thunderhammer: { // tested, works as intended
-		num: 10048,
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		name: "Thunder Hammer",
-		pp: 20,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: {
-			chance: 10,
-			status: 'par',
-		},
-		target: "normal",
-		type: "Electric",
-	},
 	viralblast: { // tested, works as intended
 		num: 10023,
 		accuracy: 70,
@@ -24005,6 +23994,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 10070,
 		accuracy: 90,
 		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.hasAbility('powerwithin') || pokemon.hasAbility('powerabove')) {
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 		category: "Special",
 		name: "Wild Magic",
 		pp: 10,
@@ -24043,7 +24038,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	windrage: { // untested
 		num: 10020,
 		accuracy: true,
-		basePower: 120,
+		basePower: 110,
 		category: "Physical",
 		name: "Windrage",
 		pp: 5,
