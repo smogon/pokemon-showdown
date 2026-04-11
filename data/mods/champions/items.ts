@@ -873,7 +873,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spelltag: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	splashplate: {
 		inherit: true,
