@@ -26,7 +26,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	unseenfist: {
 		onModifyMove: undefined, // no inherit
-		onBypassProtect(source, target, move) {
+		onHitProtect(source, target, move) {
 			if (move.flags['contact']) {
 				target.getMoveHitData(move).bypassProtect = this.effect;
 				return false;

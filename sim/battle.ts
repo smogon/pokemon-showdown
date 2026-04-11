@@ -1299,7 +1299,7 @@ export class Battle {
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
 		if ((move.category !== 'Status' || blockStatus) && move.flags['protect'] &&
-			this.runEvent('BypassProtect', attacker, defender, move)) {
+			this.runEvent('HitProtect', attacker, defender, move)) {
 			return false;
 		}
 		if (move.isZOrMaxPowered && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {

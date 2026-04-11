@@ -3239,7 +3239,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	piercingdrill: {
 		isNonstandard: "Future",
-		onBypassProtect(source, target, move) {
+		onHitProtect(source, target, move) {
 			if (move.flags['contact']) {
 				target.getMoveHitData(move).bypassProtect = this.effect;
 				return false;
