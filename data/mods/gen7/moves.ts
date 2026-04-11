@@ -498,10 +498,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
+				if (this.checkMoveBreaksProtect(move, source, target, false)) return;
 				this.add('-activate', target, 'move: Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {

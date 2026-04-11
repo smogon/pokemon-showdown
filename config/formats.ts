@@ -344,7 +344,64 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
-	// S/V Doubles
+	// Champions
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Champions",
+	},
+	{
+		name: "[Gen 9 Champions] OU",
+		mod: 'champions',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Standard'],
+		banlist: ['AG', 'Uber', 'Baton Pass', 'Last Respects'],
+	},
+	{
+		name: "[Gen 9 Champions] BSS Reg M-A",
+		mod: 'champions',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 9 Champions] VGC 2026 Reg M-A",
+		mod: 'champions',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets'],
+	},
+	{
+		name: "[Gen 9 Champions] VGC 2026 Reg M-A (Bo3)",
+		mod: 'champions',
+		gameType: 'doubles',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
+	},
+	{
+		name: "[Gen 9 Champions] Custom Game",
+		mod: 'champions',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
+		onBegin() {
+			this.reportPercentages = true;
+		},
+	},
+
+	// Unofficial Metagames
 	///////////////////////////////////////////////////////////////////
 
 	{
@@ -553,6 +610,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		teraPreviewDefault: true,
 		ruleset: ['[Gen 9] NatDex Draft', 'Item Clause = 2', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom'],
+	},
+	{
+		name: "[Gen 9 Champions] Draft",
+		mod: 'champions',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		itemClauseDefault: true,
+		ruleset: ['Standard Draft'],
 	},
 	{
 		name: "[Gen 8] Draft",
@@ -1017,8 +1083,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Calyrex-Shadow', 'Koraidon', 'Kyogre', 'Miraidon', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 'Gengarite',
-			'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb', 'Baton Pass',
-			'Shed Tail',
+			'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb', 'Starminite',
+			'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
 			'Arceus', 'Basculegion-M', 'Calyrex-Ice', 'Ceruledge', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Flutter Mane',
@@ -1577,16 +1643,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				for (const scrambledMove of pokemon.m.scrambled.moves) {
 					const move = this.dex.moves.get(scrambledMove.thing);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: move.target,
 						disabled: false,
 						used: false,
 					};
 					pokemon.baseMoveSlots.push(newMove);
+					pokemon.ppUps.push(ppUps);
 				}
 				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
 			}
@@ -2915,7 +2984,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 				baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-				if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+				if (move.isZOrMaxPowered && target.getMoveHitData(move).brokeProtect) {
 					baseDamage = this.battle.modify(baseDamage, 0.25);
 					this.battle.add('-zbroken', target);
 				}

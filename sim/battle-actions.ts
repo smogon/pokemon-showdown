@@ -1145,11 +1145,16 @@ export class BattleActions {
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
-			this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			if (moveData.onAfterHit) {
+			if (this.battle.gen >= 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
+			}
+			if (moveData.onAfterHit && pokemon.hp) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
+			}
+			if (this.battle.gen < 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
@@ -1859,9 +1864,9 @@ export class BattleActions {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+		if (target.getMoveHitData(move).brokeProtect) {
 			baseDamage = this.battle.modify(baseDamage, 0.25);
-			this.battle.add('-zbroken', target);
+			if (move.isZOrMaxPowered) this.battle.add('-zbroken', target);
 		}
 
 		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...

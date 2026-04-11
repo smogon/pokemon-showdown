@@ -142,11 +142,12 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
 		const move = context.dex.moves.get(context.toID(moveName));
 		if (!move.id) continue;
+		const pp = context.calculatePP(move);
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
-			pp: Math.floor((move.noPPBoosts ? move.pp : move.pp * 8 / 5) * carryOver[slot]),
-			maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
+			pp: pp * carryOver[slot],
+			maxpp: pp,
 			target: move.target,
 			disabled: false,
 			disabledSource: '',
@@ -775,7 +776,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+			if (move.isZOrMaxPowered && target.getMoveHitData(move).brokeProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
 				this.battle.add('-zbroken', target);
 			}

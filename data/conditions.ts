@@ -543,11 +543,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return 5;
 		},
 		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
-			if (move.id === 'hydrosteam' && !attacker.hasItem('utilityumbrella')) {
+			if (move.id === 'hydrosteam' && attacker.effectiveClimateWeather() === 'sunnyday') {
 				this.debug('Sunny Day Hydro Steam boost');
 				return this.chainModify(1.5);
 			}
-			if (defender.hasItem('utilityumbrella')) return;
+			// TODO: check interaction between Mega Sol and Utility Umbrella
+			if (defender.effectiveClimateWeather() !== 'sunnyday' && !attacker.hasAbility('megasol')) return;
 			if (move.type === 'Fire') {
 				if (defender.hasAbility('droughtproof')) return;
 				this.debug('Sunny Day fire boost');
@@ -582,7 +583,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'sunnyday') return;
 			if (type === 'frz') return false;
 		},
 		onFieldResidualOrder: 1,
@@ -605,7 +606,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return 5;
 		},
 		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella')) return;
+			if (defender.effectiveClimateWeather() !== 'raindance') return;
 			if (move.type === 'Water') {
 				if (defender.hasAbility(['droughtproof', 'hydrophobic'])) return;
 				this.debug('rain water boost');
@@ -635,7 +636,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 			}
 			if (!petrichorActive) return;
-			if (defender.hasItem('utilityumbrella') || defender.hasAbility('droughtproof')) return;
+			if (defender.effectiveClimateWeather() !== 'raindance') return;
 			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				this.debug('Blood Moon super-effective boost');
 				return this.chainModify(1.25);
@@ -649,7 +650,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 			}
 			if (!petrichorActive) return;
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'raindance') return;
 			if (this.field.climateWeatherState.boosted && move?.category === 'Status') {
 				return 1;
 			}
@@ -663,7 +664,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 			}
 			if (!petrichorActive) return;
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== 'raindance') return;
 			if (this.field.climateWeatherState.boosted &&
 				target.hasType('Dark') && move.category === 'Status' && target !== source) {
 				this.add('-immune', target);
@@ -704,14 +705,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'hail') return;
 			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
 				return this.modify(def, 1.25);
 			}
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'hail') return;
 			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
 				return this.modify(spd, 1.25);
 			}
@@ -734,7 +735,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isClimateWeather('hail')) this.eachEvent('ClimateWeather');
 		},
 		onClimateWeather(target) {
-			if (target.hasItem('utilityumbrella') || target.hasAbility(['droughtproof', 'hydrophobic'])) return;
+			if (target.effectiveClimateWeather() !== 'hail') return;
 			if (this.field.climateWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				this.damage(target.baseMaxhp / 8);
@@ -760,7 +761,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'snowscape') return;
 			if (pokemon.hasType('Ice') && this.field.isClimateWeather('snowscape')) {
 				return this.modify(def, 1.5);
 			}
@@ -800,7 +801,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 			}
 			if (!petrichorActive) return;
-			if (defender.hasItem('utilityumbrella')) return;
+			if (defender.effectiveClimateWeather() !== 'bloodmoon') return;
 			if (move.type === 'Water') {
 				if (defender.hasAbility(['droughtproof', 'hydrophobic'])) return;
 				this.debug('rain water boost');
@@ -823,14 +824,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella') || defender.hasAbility('droughtproof')) return;
+			if (defender.effectiveClimateWeather() !== 'bloodmoon') return;
 			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				this.debug('Blood Moon super-effective boost');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifyPriority(priority, pokemon, target, move) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'bloodmoon') return;
 			if (this.field.climateWeatherState.boosted && move?.category === 'Status') {
 				return priority + 1;
 			} else if (move?.type === 'Dark' && move?.category === 'Status') {
@@ -838,7 +839,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== 'bloodmoon') return;
 			if (this.field.climateWeatherState.boosted &&
 				target.hasType('Dark') && move?.category === 'Status' && target !== source) {
 				this.add('-immune', target);
@@ -879,7 +880,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target, source, move) {
-			if (target.hasItem('utilityumbrella') || source.hasAbility(['droughtproof', 'warpmist'])) return;
+			if (target.effectiveClimateWeather() !== 'bloodmoon' || source.hasAbility(['droughtproof', 'warpmist'])) return;
 			if (typeof accuracy === 'number' && move?.type !== 'Normal' && move?.type !== '???') {
 				// This one piece of code took over 5 hours to do because it was reading move as move: Pokemon and not move: ActiveMove
 				this.debug('Fog accuracy decrease');
@@ -888,7 +889,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== 'bloodmoon') return;
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
@@ -975,7 +976,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'sandstorm') return;
 			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
@@ -987,7 +988,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'sandstorm') return;
 			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(def, 1.5);
@@ -1011,7 +1012,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
-			if (target.hasItem('safetygoggles') || target.hasAbility(['overcoat', 'bubblehelm'])) return;
+			if (target.effectiveIrritantWeather() !== 'sandstorm') return;
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -1029,7 +1030,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return 5;
 		},
 		onIrritantWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('safetygoggles') ||
+			if (defender.effectiveIrritantWeather() !== 'duststorm' ||
 				attacker.hasAbility(['overcoat', 'earthforce', 'bubblehelm', 'dustgather'])) return;
 			if (move.type === 'Water' || move.type === 'Grass') {
 				this.debug('Dust Storm Water/Grass supress');
@@ -1038,14 +1039,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'duststorm') return;
 			if (pokemon.hasType('Ground') && this.field.isIrritantWeather('duststorm')) {
 				return this.modify(spe, 1.25);
 			}
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
-			if (target.hasItem('safetygoggles') || target.hasAbility(['overcoat', 'bubblehelm', 'eartheater'])) return;
+			if (target.effectiveIrritantWeather() !== 'duststorm' || target.hasAbility('eartheater')) return;
 			if (this.field.irritantWeatherState.boosted) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
@@ -1087,7 +1088,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAtkPriority: 10,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility(['overcoat', 'bubblehelm', 'bloomspring'])) return;
+			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility('bloomspring')) return;
 			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
 				return;
 			} else {
@@ -1096,7 +1097,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpAPriority: 10,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility(['overcoat', 'bubblehelm', 'bloomspring'])) return;
+			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility('bloomspring')) return;
 			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
 				return;
 			} else {
@@ -1104,7 +1105,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onAccuracy(accuracy, target, source, move) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== 'pollinate') return;
 			if (move.flags['powder'] && this.field.isIrritantWeather('pollinate')) {
 				return true;
 			}
@@ -1145,7 +1146,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(accuracy, target, source) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== 'swarmsignal') return;
 			if (typeof accuracy === 'number' && (source.hasType('Bug') || source.hasType('Poison'))) {
 				this.debug('pheromones accuracy boost');
 				return this.modify(accuracy, 4 / 3);
@@ -1153,13 +1154,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'swarmsignal') return;
 			if (pokemon.hasType('Bug') || pokemon.hasType('Poison')) {
 				return this.modify(spe, 1.5);
 			}
 		},
 		onSwitchOut(pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'swarmsignal') return;
 			if ((pokemon.hasType('Bug') || pokemon.hasAbility('Poison')) && this.field.irritantWeatherState.boosted) {
 				this.debug('SW pheromones heal');
 				pokemon.heal(pokemon.baseMaxhp / 4);
@@ -1214,7 +1215,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isIrritantWeather('smogspread')) this.eachEvent('IrritantWeather');
 		},
 		onBeforeResidual(target) {
-			if (target.hasItem('safetygoggles') || target.hasAbility(['overcoat', 'bubblehelm', 'carboncapture'])) return;
+			if (target.effectiveIrritantWeather() !== 'smogspread' || target.hasAbility('carboncapture')) return;
 			if (this.field.irritantWeatherState.duration && this.field.irritantWeatherState.duration <= 1) return;
 			if (target.status === 'psn' && this.field.irritantWeatherState.boosted) {
 				target.clearStatus();
@@ -1243,7 +1244,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasItem('safetygoggles') || pokemon.hasAbility('overcoat')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'sprinkle') return;
 			if (pokemon.hasType('Fairy')) {
 				return this.modify(spd, 1.25);
 			}
@@ -1267,7 +1268,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== 'sprinkle') return;
 			this.heal(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -1289,11 +1290,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyCritRatioPriority: 10,
 		onModifyCritRatio(critRatio, pokemon) {
-			if (!pokemon.hasType('Fighting') || pokemon.hasItem('energynullifier')) return;
+			if (!pokemon.hasType('Fighting') || pokemon.effectiveEnergyWeather() !== 'auraprojection') return;
 			return critRatio + 1;
 		},
 		onAccuracy(accuracy, target, source, move) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== 'auraprojection') return;
 			if (source !== target && move.type === 'Fighting') {
 				this.chainModify(1.2);
 			}
@@ -1301,7 +1302,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (this.field.energyWeatherState.boosted) {
-				if (target.hasItem('energynullifier')) return;
+				if (target.effectiveEnergyWeather() !== 'auraprojection') return;
 				if (target.hasType('Fighting')) {
 					if (source && target === source) return;
 					let showMsg = false;
@@ -1384,7 +1385,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isEnergyWeather('haunt')) this.eachEvent('EnergyWeather');
 		},
 		onEnergyWeather(target) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== 'haunt') return;
 			this.damage(target.baseMaxhp / 16); // ghost, normal and dark's damage immunity added to typechart.ts
 		},
 		onFieldEnd() {
@@ -1402,7 +1403,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return 5;
 		},
 		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('energynullifier')) return;
+			if (defender.effectiveEnergyWeather() !== 'daydream') return;
 			if (move.type === 'Psychic') {
 				this.debug('Daydream Psychic boost');
 				return this.chainModify(1.5);
@@ -1446,14 +1447,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return 5;
 		},
 		onModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('energynullifier')) return;
+			if (defender.effectiveEnergyWeather() !== 'dragonforce') return;
 			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				this.debug('Dragon Force super-effective supress');
 				return this.chainModify(0.8);
 			}
 		},
 		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('energynullifier')) return;
+			if (defender.effectiveEnergyWeather() !== 'dragonforce') return;
 			if (this.field.energyWeatherState.boosted) {
 				if (move.type === 'Dragon') {
 					this.debug('Dragon Force SW dragon boost');
@@ -1471,7 +1472,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (this.field.energyWeatherState.boosted) {
-				if (source.hasItem('energynullifier')) return;
+				if (source.effectiveEnergyWeather() !== 'dragonforce') return;
 				if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag &&
 					!source.hasType('Dragon')) {
 					this.damage(source.baseMaxhp / 10);
@@ -1511,7 +1512,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
-			if (pokemon.hasItem('energynullifier')) return;
+			if (pokemon.effectiveEnergyWeather() !== 'supercell') return;
 			if (pokemon.hasType('Electric')) {
 				return this.modify(spe, 1.25);
 			}
@@ -1541,7 +1542,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			let forkedPresent = false;
 			// Handle Forked taking targetting priority over Lightning Rod
 			for (const target of this.getAllActive()) {
-				if (!target.hasItem('energynullifier')) {
+				if (target.effectiveEnergyWeather() !== 'supercell') {
 					if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
 						lightningRodPresent = true;
 					}
@@ -1549,7 +1550,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			// Form list of valid lightning strike targets
 			for (const target of this.getAllActive()) {
-				if (!target.hasItem('energynullifier')) {
+				if (target.effectiveEnergyWeather() !== 'supercell') {
 					if (lightningRodPresent) {
 						if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
 							validTargets.push(target);
@@ -1632,13 +1633,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasItem('energynullifier')) return;
+			if (pokemon.effectiveEnergyWeather() !== 'magnetize') return;
 			if (pokemon.hasType('Steel')) {
 				return this.modify(spd, 1.25);
 			}
 		},
 		onAccuracy(accuracy, target, source, move) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== 'magnetize') return;
 			if (source !== target && move.type === 'Steel') {
 				this.debug('Magnetosphere guarantees accuracy');
 				return true;
@@ -1646,7 +1647,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return accuracy;
 		},
 		onTryHit(target, source, move) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== 'magnetize') return;
 			if (target !== source && move.type === 'Ground' && target.hasType('Steel') && this.field.energyWeatherState.boosted) {
 				this.hint("Steel types are levitating in Strong Winds Magnetosphere.");
 				return null;
@@ -1778,9 +1779,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella')) return;
+			if (defender.effectiveClimateWeather() !== 'desolateland') return;
 			if (move.type === 'Fire') {
-				this.debug('Sunny Day fire boost');
+				this.debug('Desolate Land fire boost');
 				return this.chainModify(1.5);
 			}
 		},
@@ -1788,7 +1789,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-climateWeather', 'DesolateLand', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onImmunity(type, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.effectiveClimateWeather() !== 'desolateland') return;
 			if (type === 'frz') return false;
 		},
 		onFieldResidualOrder: 1,
@@ -1814,7 +1815,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella')) return;
+			if (defender.effectiveClimateWeather() !== 'primordialsea') return;
 			if (move.type === 'Water') {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
@@ -2002,11 +2003,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
 			if (ironHeadIndex >= 0) {
 				const move = this.dex.moves.get('behemothblade');
+				const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
 				pokemon.baseMoveSlots[ironHeadIndex] = {
 					move: move.name,
 					id: move.id,
-					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					pp,
+					maxpp: pp,
 					target: move.target,
 					disabled: false,
 					disabledSource: '',
@@ -2031,11 +2033,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
 			if (ironHeadIndex >= 0) {
 				const move = this.dex.moves.get('behemothbash');
+				const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
 				pokemon.baseMoveSlots[ironHeadIndex] = {
 					move: move.name,
 					id: move.id,
-					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					pp,
+					maxpp: pp,
 					target: move.target,
 					disabled: false,
 					disabledSource: '',

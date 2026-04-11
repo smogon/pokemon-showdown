@@ -3,19 +3,21 @@
 			"lib": ["es2020"],
 			"emitDeclarationOnly": true,
 			"outDir": "../dist",
+			"rootDir": "..",
 			"declaration": true,
 			"target": "esnext",
 			"module": "commonjs",
 			"moduleResolution": "node",
+			"ignoreDeprecations": "6.0",
 			"strict": true,
 			"allowJs": true,
 			"checkJs": true,
 			"incremental": true,
-			"allowUnreachableCode": false
+			"allowUnreachableCode": false,
+			"types": ["node"]
 	},
-	"types": ["node"],
 	"include": [
 			"./global-types.ts",
-			"./index.ts",
+			"./index.ts"
 	]
 }
