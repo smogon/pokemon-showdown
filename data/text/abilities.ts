@@ -1304,10 +1304,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "If this Pokemon is a Pecharunt and poisons or badly poisons a target, the target also becomes confused.",
 		shortDesc: "Pecharunt: If this Pokemon poisons a target, the target also becomes confused.",
 	},
-	poisontouch: { // updated
+	poisontouch: {
 		name: "Poison Touch",
-		desc: "This Pokemon's contact moves have a 30% chance of poisoning, and there is a 30% chance a Pokemon making contact with this Pokemon will be poisoned.. This effect comes after a move's inherent secondary effect chance.",
-		shortDesc: "Making contact with this Pokemon has a 30% chance to poison.",
+		desc: "This Pokemon's contact moves have a 30% chance of poisoning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
 	},
 	powerconstruct: {
 		name: "Power Construct",

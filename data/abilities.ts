@@ -3687,16 +3687,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
-					source.trySetStatus('psn', target);
-				}
-			}
-		},
 		flags: {},
 		name: "Poison Touch",
-		rating: 3,
+		rating: 2,
 		num: 143,
 	},
 	powerconstruct: {
@@ -6995,6 +6988,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 10060,
 	}, */
+	poisoncoat: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('psn', target);
+				}
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, target, source)) {
+				if (this.randomChance(3, 10)) {
+					target.trySetStatus('psn', source);
+				}
+			}
+		},
+		flags: {},
+		name: "Poison Coat",
+		rating: 3,
+		num: 100006,
+	},
 	pollution: { // tested, works as intended
 		onStart(source) {
 			this.field.setIrritantWeather('smogspread');

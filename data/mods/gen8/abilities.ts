@@ -740,6 +740,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	poisontouch: {
 		inherit: true,
+		isNonstandard: null,
 		rating: 2,
 	},
 	powerconstruct: {
@@ -1232,10 +1233,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		isNonstandard: null,
 	},
 	poisontouch: {
-	inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			null;
-		},
-		rating: 2,
+		inherit: true,
+		isNonstandard: null,
 	}, */
 };
