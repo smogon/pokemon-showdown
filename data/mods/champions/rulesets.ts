@@ -30,8 +30,8 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	flatrules: {
 		inherit: true,
 		desc: "The in-game Flat Rules: Adjust Level 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
-		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		banlist: ['Mythical', 'Restricted Legendary'],
 		onBegin() {
 			this.reportPercentages = true;
 		},
