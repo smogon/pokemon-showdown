@@ -8707,6 +8707,8 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["9M"],
 		},
 	},
+	vivillonfancy: {},
+	vivillonpokeball: {},
 	floetteeternal: {
 		learnset: {
 			alluringvoice: ["9M"],
@@ -9967,6 +9969,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			worryseed: ["9M"],
 		},
 	},
+	gourgeistsuper: {},
 	avalugg: {
 		learnset: {
 			auroraveil: ["9M"],
@@ -11661,6 +11664,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wonderroom: ["9M"],
 		},
 	},
+	polteageistantique: {},
 	hatterene: {
 		learnset: {
 			afteryou: ["9M"],
@@ -13333,6 +13337,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			uproar: ["9M"],
 		},
 	},
+	sinistchamasterpiece: {},
 	archaludon: {
 		learnset: {
 			aurasphere: ["9M"],
