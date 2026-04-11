@@ -460,7 +460,7 @@ export const commands: Chat.ChatCommands = {
 			fog: {
 				names: ["Fog", "Condensation", "Foghorn", "Normal"],
 				desc: "During the effect, Normal-type attacks can damage Ghost types and non-Normal-type moves have their accuracy multiplied by 0.9x (this includes Typeless moves).",
-				strongWindsBoosted: "Normal-type Pokemon and moves become Typeless, allowing them to take and deal neutral damage.",
+				strongWindsBoosted: "Normal-type Pokemon and moves become Typeless and deal 1.5x damage, allowing them to take and deal neutral damage.",
 				setupAbility: "Condensation",
 				setupMove: "Foghorn",
 			},
@@ -488,7 +488,7 @@ export const commands: Chat.ChatCommands = {
 			pheromones: {
 				names: ["Pheromones", "Secretion", "Swarm Signal", "Bug"],
 				desc: "During the effect, the Speed of Bug- and Poison-type Pokémon is multiplied by 1.5x and the accuracy of moves used by Bug- and Poison-type Pokémon is multiplied by 1.33x.",
-				strongWindsBoosted: "At the end of each turn except the last, all active Pokémon are confused, unless they are a Bug or Poison type.",
+				strongWindsBoosted: "Bug- and Poison-type Pokemon restore 1/4 of their maximum HP, rounded down, when they switches out.",
 				setupAbility: "Secretion",
 				setupMove: "Swarm Signal",
 			},
