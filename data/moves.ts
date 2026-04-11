@@ -23926,31 +23926,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onTryHit(source, target, move) {
-			if (source.hasAbility('powerabove')) {
-				const result = this.random(3);
-				if (result === 0) {
-					this.debug("fire type");
-					move.type = "Fire";
-				} else if (result === 1) {
-					this.debug("ice type");
-					move.type = "Ice";
-				} else {
-					this.debug("electric type");
-					move.type = "Electric";
-				}
-			} else if (source.hasAbility('powerwithin')) {
-				const result = this.random(3);
-				if (result === 0) {
-					this.debug("fire type");
-					move.type = "Fire";
-				} else if (result === 1) {
-					this.debug("water type");
-					move.type = "Water";
-				} else {
-					this.debug("grass type");
-					move.type = "Grass";
-				}
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.hasAbility('powerabove')) {
+				const types = ["Fire", "Water", "Grass"];
+				move.type = this.sample(types);
+				this.debug(`${move.type} type`);
+			} else if (pokemon.hasAbility('powerwithin')) {
+				const types = ["Fire", "Ice", "Electric"];
+				move.type = this.sample(types);
+				this.debug(`${move.type} type`);
 			}
 		},
 		target: "normal",
