@@ -3666,14 +3666,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 50,
 			onHit(target, source) {
-				const result = this.random(3);
-				if (result === 0) {
-					target.trySetStatus('psn', source);
-				} else if (result === 1) {
-					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('slp', source);
-				}
+				const status = this.sample(['psn', 'par', 'slp']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "normal",
@@ -6803,14 +6797,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					const result = this.random(3);
-					if (result === 0) {
-						pokemon.trySetStatus('slp', source);
-					} else if (result === 1) {
-						pokemon.trySetStatus('par', source);
-					} else {
-						pokemon.trySetStatus('psn', source);
-					}
+					const status = this.sample(['slp', 'par', 'psn']);
+					pokemon.trySetStatus(status, source);
 				}
 			},
 		},
@@ -7369,12 +7357,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					const result = this.random(2);
-					if (result === 0) {
-						pokemon.trySetStatus('par', source);
-					} else {
-						pokemon.trySetStatus('psn', source);
-					}
+					const status = this.sample(['par', 'psn']);
+					pokemon.trySetStatus(status, source);
 				}
 			},
 		},
@@ -20142,22 +20126,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			const climateWeather = this.field.effectiveClimateWeather?.();
+			const energyWeather = this.field.effectiveEnergyWeather?.();
+			if (['sunnyday', 'desolateland', 'hail', 'snowscape'].includes(climateWeather) ||
+				energyWeather === 'supercell') {
+				if (move.secondaries) move.secondaries[0].chance = 30;
+			}
+		},
 		secondary: {
-			chance: 30,
+			chance: 20,
 			onHit(target, source) {
-				const result = this.random(9);
-				if (result <= 1) {
+				const climateWeather = source.effectiveClimateWeather();
+				const energyWeather = source.effectiveEnergyWeather();
+				if (['sunnyday', 'desolateland'].includes(climateWeather)) {
 					target.trySetStatus('brn', source);
-				} else if (result <= 3) {
-					target.trySetStatus('par', source);
-				} else if (result <= 5) {
+				} else if (['hail', 'snowscape'].includes(climateWeather)) {
 					target.trySetStatus('fst', source);
-				} else if (result === 6 && ['sunnyday', 'desolateland'].includes(source.effectiveClimateWeather())) {
-					target.trySetStatus('brn', source);
-				} else if (result === 7 && ['hail'].includes(source.effectiveClimateWeather())) {
-					target.trySetStatus('fst', source);
-				} else if (result === 8 && ['supercell'].includes(source.effectiveEnergyWeather())) {
+				} else if (energyWeather === 'supercell') {
 					target.trySetStatus('par', source);
+				} else {
+					const status = this.sample(['brn', 'par', 'fst']);
+					target.trySetStatus(status, source);
 				}
 			},
 		},
@@ -22019,16 +22009,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
-				const result = this.random(4);
-				if (result === 0) {
-					target.trySetStatus('brn', source);
-				} else if (result === 1) {
-					target.trySetStatus('par', source);
-				} else if (result === 2) {
-					target.trySetStatus('fst', source);
-				} else {
-					target.trySetStatus('psn', source);
-				}
+				const status = this.sample(['brn', 'par', 'fst', 'psn']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "normal",
@@ -23691,12 +23673,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
-				const result = this.random(2);
-				if (result === 0) {
-					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('psn', source);
-				}
+				const status = this.sample(['par', 'psn']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "normal",

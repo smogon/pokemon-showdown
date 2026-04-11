@@ -547,8 +547,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.debug('Sunny Day Hydro Steam boost');
 				return this.chainModify(1.5);
 			}
-			// TODO: check interaction between Mega Sol and Utility Umbrella
-			if (defender.effectiveClimateWeather() !== 'sunnyday' && !attacker.hasAbility('megasol')) return;
+			if (defender.effectiveClimateWeather() !== 'sunnyday') return;
 			if (move.type === 'Fire') {
 				if (defender.hasAbility('droughtproof')) return;
 				this.debug('Sunny Day fire boost');
@@ -1012,7 +1011,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
-			if (target.effectiveIrritantWeather() !== 'sandstorm') return;
+			if (target.effectiveIrritantWeather() !== 'sandstorm' || target.hasAbility('bubblehelm')) return;
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -1046,7 +1045,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
-			if (target.effectiveIrritantWeather() !== 'duststorm' || target.hasAbility('eartheater')) return;
+			if (target.effectiveIrritantWeather() !== 'duststorm' || target.hasAbility(['eartheater', 'bubblehelm'])) return;
 			if (this.field.irritantWeatherState.boosted) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
@@ -1088,7 +1087,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAtkPriority: 10,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility('bloomspring')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility(['bubblehelm', 'bloomspring'])) return;
 			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
 				return;
 			} else {
@@ -1097,7 +1096,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifySpAPriority: 10,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility('bloomspring')) return;
+			if (pokemon.effectiveIrritantWeather() !== 'pollinate' || pokemon.hasAbility(['bubblehelm', 'bloomspring'])) return;
 			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
 				return;
 			} else {
@@ -1215,7 +1214,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isIrritantWeather('smogspread')) this.eachEvent('IrritantWeather');
 		},
 		onBeforeResidual(target) {
-			if (target.effectiveIrritantWeather() !== 'smogspread' || target.hasAbility('carboncapture')) return;
+			if (target.effectiveIrritantWeather() !== 'smogspread' || target.hasAbility(['bubblehelm', 'carboncapture'])) return;
 			if (this.field.irritantWeatherState.duration && this.field.irritantWeatherState.duration <= 1) return;
 			if (target.status === 'psn' && this.field.irritantWeatherState.boosted) {
 				target.clearStatus();

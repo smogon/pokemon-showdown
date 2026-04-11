@@ -3128,14 +3128,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: {},
 		volatileStatus: 'curse',
 		onHit(target, source) {
-			const result = this.random(3);
-			if (result === 0) {
-				target.trySetStatus('psn', target);
-			} else if (result === 1) {
-				target.trySetStatus('par', target);
-			} else {
-				target.trySetStatus('brn', target);
-			}
+			const status = this.sample(['psn', 'par', 'brn']);
+			target.trySetStatus(status, source);
 			this.boost({ spe: 1 }, source);
 		},
 		onPrepareHit(target, source) {
@@ -3718,14 +3712,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 4;
 			else if (randomStat2) boost[randomStat2] = 2;
 			this.boost(boost, source);
-			const result = this.random(3);
-			if (result === 0) {
-				this.actions.useMove("laserfocus", target);
-			} else if (result === 1) {
-				this.actions.useMove("lockon", target);
-			} else {
-				this.actions.useMove("charge", target);
-			} // This is easier than implementing each condition manually
+			// This is easier than implementing each condition manually
+			const move = this.sample(['lockon', 'laserfocus', 'charge']);
+			this.actions.useMove(move, target);
 			this.heal(target.maxhp / 4, target, target, this.effect);
 		},
 		target: "self",
