@@ -16,7 +16,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.side.pokemonLeft === 1) {
-				this.add('-fail', attacker, 'move: Destiny Bond');
+				this.add('-fail', attacker);
 				this.hint("Self KO Clause: The last pokemon on a team cannot use moves that force fainting");
 				return false;
 			}
