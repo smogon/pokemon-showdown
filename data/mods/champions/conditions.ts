@@ -100,7 +100,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	desolateland: {
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.effectiveWeather() !== 'desolateland') return;
+			if (attacker.effectiveWeather() !== 'desolateland') return;
 			if (move.type === 'Fire') {
 				this.debug('Desolate Land fire boost');
 				return this.chainModify(1.5);
@@ -125,11 +125,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	deltastream: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
-				this.add('-fieldactivate', 'Delta Stream');
-				return 0;
-			}
-		},
+		// TODO: check Mega Sol's interaction with Deltastream
 	},
 };
