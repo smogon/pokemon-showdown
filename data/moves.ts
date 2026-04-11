@@ -3635,14 +3635,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 50,
 			onHit(target, source) {
-				const result = this.random(3);
-				if (result === 0) {
-					target.trySetStatus('psn', source);
-				} else if (result === 1) {
-					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('slp', source);
-				}
+				const status = this.sample(['psn', 'par', 'slp']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "normal",
@@ -6725,14 +6719,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					const result = this.random(3);
-					if (result === 0) {
-						pokemon.trySetStatus('slp', source);
-					} else if (result === 1) {
-						pokemon.trySetStatus('par', source);
-					} else {
-						pokemon.trySetStatus('psn', source);
-					}
+					const status = this.sample(['slp', 'par', 'psn']);
+					pokemon.trySetStatus(status, source);
 				}
 			},
 		},
@@ -19876,14 +19864,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
-				const result = this.random(3);
-				if (result === 0) {
-					target.trySetStatus('brn', source);
-				} else if (result === 1) {
-					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('frz', source);
-				}
+				const status = this.sample(['brn', 'par', 'frz']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "normal",
