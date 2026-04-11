@@ -284,6 +284,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	multitype: {
+		inherit: true,
+		onTakeItem: false,
+		onSetAbility: false, // redundant but hardcoded
+	},
 	naturalcure: {
 		inherit: true,
 		onCheckShow: undefined, // no inherit
@@ -413,6 +418,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 10,
 		onResidualSubOrder: 3,
 	},
+	stall: {
+		inherit: true,
+		onFractionalPriority(priority, pokemon) {
+			// don't override Lagging Tail and Full Incense's -0.2 fractional priority
+			if (priority >= 0) return -0.1;
+		},
+	},
 	static: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -512,10 +524,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
-			const bannedAbilities = ['forecast', 'multitype', 'trace'];
-			if (bannedAbilities.includes(target.ability)) {
-				return;
-			}
+			if (ability.flags['notrace']) return;
 			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
