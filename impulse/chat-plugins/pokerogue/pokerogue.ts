@@ -25,13 +25,17 @@ function getSprite(species: string, size = 80): string {
 	const sp = Dex.species.get(id);
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
-	// All Pokémon with official dex artwork (Gen 6+, including Gen 9+ Scarlet/Violet and Paradox
-	// forms) use the smogon/sprites dex renders served via the PS CDN.
-	// Gen 1–5 base formes use the classic gen5/BW pixelated sprites.
-	// onerror: if dex sprite is missing, fall back to gen5 sprite.
+	// Sprite source strategy (mirrors PS client getTeambuilderSpriteData):
+	//   Gen 8+  → sprites/home-centered  (Pokémon HOME renders; all Gen 8/9 live here)
+	//   Gen 6–7 → sprites/dex            (XY/SM era official art)
+	//   Gen 1–5 → sprites/gen5           (BW pixel sprites)
+	// onerror chain: if the primary URL is missing, fall back one tier.
 	let src: string;
 	let fallback: string | null = null;
-	if (sp.exists && (sp.gen > 5 || !!sp.forme)) {
+	if (sp.exists && sp.gen >= 8) {
+		src = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
+		fallback = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+	} else if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
 		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
 		fallback = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else {
@@ -43,26 +47,64 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
-// base URL for Poké Ball item icons (hosted by Pokémon Showdown)
-const POKESPRITE_BALL_BASE = 'https://play.pokemonshowdown.com/sprites/itemicons/';
+// base URL for smogon/sprites item minisprites (individual PNGs keyed by internal sprite ID)
+const SMOGON_SPRITES_ITEM_BASE = 'https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/';
+
+// base URL for msikma/pokesprite items (consumables absent from smogon/sprites: rarecandy, revive, lucky egg)
+const POKESPRITE_ITEM_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/';
+
+// maps PS item IDs to their smogon/sprites minisprite filenames (derived from data/items.json)
+const SMOGON_ITEM_SIDS: Record<string, string> = {
+	// pokeballs
+	pokeball: 'i4', masterball: 'i1', greatball: 'i3', ultraball: 'i2',
+	// held items
+	focussash: 'i275', leftovers: 'i234', eviolite: 'i538', rockyhelmet: 'i540',
+	heavydutyboots: 'i1120', airballoon: 'i541', blacksludge: 'i281',
+	choiceband: 'i220', choicespecs: 'i297', choicescarf: 'i287',
+	lifeorb: 'i270', expertbelt: 'i268', wiseglasses: 'i267', muscleband: 'i266',
+	assaultvest: 'i640', clearamulet: 'i1882', boosterenergy: 'i1880',
+	protectivepads: 'i880', safetygoggles: 'i650',
+	sitrusberry: 'i158', aguavberry: 'i162',
+	flameorb: 'i273', toxicorb: 'i272',
+	whiteherb: 'i214', powerherb: 'i271',
+	throatspray: 'i1118', blunderpolicy: 'i1121', shedshell: 'i295',
+	silkscarf: 'i251', blackbelt: 'i241', magnet: 'i242',
+	mysticwater: 'i243', miracleseed: 'i239', charcoal: 'i249',
+	nevermeltice: 'i246', softsand: 'i237', sharpbeak: 'i244',
+	poisonbarb: 'i245', twistedspoon: 'i248', silverpowder: 'i222',
+	hardstone: 'i238', spelltag: 'i247',
+};
+
+// explicit sprite URLs for items not covered by SMOGON_ITEM_SIDS
+const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
+	// capsule items → their corresponding ball sprites from smogon/sprites
+	mastercapsule: `${SMOGON_SPRITES_ITEM_BASE}i1.png`,
+	ultracapsule: `${SMOGON_SPRITES_ITEM_BASE}i2.png`,
+	greatcapsule: `${SMOGON_SPRITES_ITEM_BASE}i3.png`,
+	// consumables absent from smogon/sprites → msikma/pokesprite
+	rarecandy: `${POKESPRITE_ITEM_BASE}medicine/rare-candy.png`,
+	revive: `${POKESPRITE_ITEM_BASE}medicine/revive.png`,
+	// luckycharm is a custom roguelite item; visually map to the Lucky Egg icon
+	luckycharm: `${POKESPRITE_ITEM_BASE}hold-item/lucky-egg.png`,
+};
 
 // returns the pokeball image src and alt text appropriate for a species's rarity tier
 function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 	const sp = Dex.species.get(toID(speciesId));
 	// Legendary / Mythical / Ultra Beast / Paradox → Master Ball
 	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
-		return { src: `${POKESPRITE_BALL_BASE}masterball.png`, alt: 'Master Ball' };
+		return { src: `${SMOGON_SPRITES_ITEM_BASE}i1.png`, alt: 'Master Ball' };
 	}
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 		// Pseudo-legendary tier (BST ≥ 580) → Ultra Ball
-		if (bst >= 580) return { src: `${POKESPRITE_BALL_BASE}ultraball.png`, alt: 'Ultra Ball' };
+		if (bst >= 580) return { src: `${SMOGON_SPRITES_ITEM_BASE}i2.png`, alt: 'Ultra Ball' };
 		// Mid-tier (BST ≥ 480) → Great Ball
-		if (bst >= 480) return { src: `${POKESPRITE_BALL_BASE}greatball.png`, alt: 'Great Ball' };
+		if (bst >= 480) return { src: `${SMOGON_SPRITES_ITEM_BASE}i3.png`, alt: 'Great Ball' };
 	}
 	// Common / starter → normal Poké Ball
-	return { src: `${POKESPRITE_BALL_BASE}pokeball.png`, alt: 'Poké Ball' };
+	return { src: `${SMOGON_SPRITES_ITEM_BASE}i4.png`, alt: 'Poké Ball' };
 }
 
 // renders a pokemon sprite with a small pokeball overlay at bottom-right (like official games)
@@ -75,37 +117,21 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
-// base URL for non-ball pokesprite items (fallback for items not served by PS)
-const POKESPRITE_ITEM_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/';
-
-// PS item-icon base URL — served from the same domain as the PS client; reliable for real held items.
-const PS_ITEMICONS_BASE = 'https://play.pokemonshowdown.com/sprites/itemicons/';
-
-// explicit sprite URLs for PokéRogue custom items that don't exist in the PS item dex.
-// Real Pokémon held items (focussash, leftovers, etc.) use the default PS itemicons URL.
-const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
-	// capsule items are custom (no PS icon) — use pokesprite ball images
-	mastercapsule: `${POKESPRITE_BALL_BASE}masterball.png`,
-	ultracapsule: `${POKESPRITE_BALL_BASE}ultraball.png`,
-	greatcapsule: `${POKESPRITE_BALL_BASE}greatball.png`,
-	// rarecandy and revive are real items — use PS itemicons (same domain, always accessible)
-	rarecandy: `${PS_ITEMICONS_BASE}rarecandy.png`,
-	revive: `${PS_ITEMICONS_BASE}revive.png`,
-	// luckycharm is a custom roguelite item; visually map to the Lucky Egg icon on PS
-	luckycharm: `${PS_ITEMICONS_BASE}luckyegg.png`,
-};
-
 // returns the item sprite img html for a shop item
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
+	const sid = SMOGON_ITEM_SIDS[id];
 	const src = ITEM_SPRITE_OVERRIDES[id] ??
-		`https://play.pokemonshowdown.com/sprites/itemicons/${id}.png`;
+		(sid ? `${SMOGON_SPRITES_ITEM_BASE}${sid}.png` : null);
 	const letter = Utils.escapeHTML((itemId.charAt(0) || '?').toUpperCase());
 	// onerror: hide broken img and reveal the letter-fallback span
-	return `<img src="${src}" width="40" height="40" alt="" ` +
-		`style="image-rendering:pixelated;display:block;flex-shrink:0" ` +
-		`onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='flex'" />` +
-		`<span style="display:none;width:40px;height:40px;align-items:center;justify-content:center;` +
+	const imgHtml = src
+		? `<img src="${src}" width="40" height="40" alt="" ` +
+			`style="image-rendering:pixelated;display:block;flex-shrink:0" ` +
+			`onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='flex'" />`
+		: '';
+	return imgHtml +
+		`<span style="${src ? 'display:none;' : ''}width:40px;height:40px;align-items:center;justify-content:center;` +
 		`font-size:17px;font-weight:bold;color:#c4a8ff;background:rgba(90,63,160,0.35);` +
 		`border-radius:7px;flex-shrink:0">${letter}</span>`;
 }
@@ -1702,6 +1728,7 @@ export const testables = {
 	getSpriteWithBall,
 	renderGamePopup,
 	ITEM_SPRITE_OVERRIDES,
-	PS_ITEMICONS_BASE,
-	POKESPRITE_BALL_BASE,
+	SMOGON_ITEM_SIDS,
+	SMOGON_SPRITES_ITEM_BASE,
+	POKESPRITE_ITEM_BASE,
 };
