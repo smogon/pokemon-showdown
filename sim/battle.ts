@@ -1303,7 +1303,7 @@ export class Battle {
 			return false;
 		}
 		if (move.isZOrMaxPowered && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
-			defender.getMoveHitData(move).brokeProtect = true;
+			defender.getMoveHitData(move).bypassProtect = true;
 		}
 		return true;
 	}
