@@ -954,4 +954,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return bp;
 		},
 	},
+
+	instantcharge: {
+		name: 'instantcharge',
+		noCopy: true,
+		duration: 1,
+		onChargeMove(pokemon) {
+			pokemon.removeVolatile('instantcharge');
+			return false;
+		},
+	},
 };

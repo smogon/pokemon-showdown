@@ -544,7 +544,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return;
 			}
 			if (this.dex.moves.get(randomMove.move).flags['charge']) {
-				pokemon.addVolatile('sleeptalkcharge');
+				pokemon.addVolatile('instantcharge');
 			}
 			this.actions.useMove(randomMove.move, pokemon);
 		},

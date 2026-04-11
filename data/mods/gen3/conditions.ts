@@ -53,13 +53,4 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onModifySpD: undefined, // no inherit
 	},
-	sleeptalkcharge: {
-		name: 'sleeptalkcharge',
-		noCopy: true,
-		duration: 1,
-		onChargeMove(pokemon) {
-			pokemon.removeVolatile('sleeptalkcharge');
-			return false;
-		},
-	},
 };
