@@ -1,4 +1,16 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+	angershell: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
+	berserk: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
 	healer: {
 		inherit: true,
 		onResidual(pokemon) {
