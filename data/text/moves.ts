@@ -6556,7 +6556,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	supercellslam: {
 		name: "Supercell Slam",
 		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. If the weather is Thunderstorm, this move does not check accuracy. If this move is used against a Pokemon holding Energy Nullifier, this move's accuracy remains at 95%.",
-		shortDesc: "User is hurt by 50% of its max HP if it misses. T.Storm: can't miss.",
+		shortDesc: "User loses 50% max HP if miss. T.Storm: can't miss.",
 
 		damage: "#crash",
 	},
