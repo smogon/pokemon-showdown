@@ -531,7 +531,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
 				const move = this.dex.moves.get(moveid);
-				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
+				if (moveid && (!move.flags['nosleeptalk'] || move.flags['charge'])) {
 					moves.push({ move: moveid, pp });
 				}
 			}
@@ -542,6 +542,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!randomMove.pp) {
 				this.add('cant', pokemon, 'nopp', randomMove.move);
 				return;
+			}
+			if (this.dex.moves.get(randomMove.move).flags['charge']) {
+				pokemon.addVolatile('sleeptalkcharge');
 			}
 			this.actions.useMove(randomMove.move, pokemon);
 		},

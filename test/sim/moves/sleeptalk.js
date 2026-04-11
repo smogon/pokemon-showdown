@@ -44,3 +44,47 @@ describe('Sleep Talk', () => {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 });
+
+describe('Sleep Talk [Gen 3]', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should be able to call two-turn moves, executing them in one turn', () => {
+		battle = common.gen(3).createBattle([[
+			{ species: 'Mew', moves: ['sleeptalk', 'fly'] },
+		], [
+			{ species: 'Breloom', moves: ['spore', 'sleeptalk'] },
+		]]);
+		const mew = battle.p1.active[0];
+		const breloom = battle.p2.active[0];
+
+		battle.makeChoices('move sleeptalk', 'move spore');
+		assert.equal(mew.status, 'slp');
+		mew.statusState.time = 5;
+
+		const startHP = breloom.hp;
+		battle.makeChoices('move sleeptalk', 'move sleeptalk');
+		assert.notEqual(breloom.hp, startHP);
+		assert(!mew.volatiles['fly']);
+	});
+
+	it('should not be able to call two-turn moves in Gen 4+', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'Mew', moves: ['sleeptalk', 'fly'] },
+		], [
+			{ species: 'Breloom', moves: ['spore', 'sleeptalk'] },
+		]]);
+		const mew = battle.p1.active[0];
+		const breloom = battle.p2.active[0];
+
+		battle.makeChoices('move sleeptalk', 'move spore');
+		assert.equal(mew.status, 'slp');
+		mew.statusState.time = 5;
+
+		const startHP = breloom.hp;
+		battle.makeChoices('move sleeptalk', 'move sleeptalk');
+		assert.equal(breloom.hp, startHP);
+	});
+});
+
