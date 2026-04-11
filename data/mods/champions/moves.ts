@@ -292,7 +292,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const action = this.queue.willMove(target);
 				if (!action) {
 					this.effectState.duration!++;
-					// TODO: this is a quick fix before checking if move priority is changed when Mental Herb cures Encore
+					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
 				} else if (!target.hasItem('mentalherb')) {
 					this.queue.changeAction(target, {
 						choice: 'move',
