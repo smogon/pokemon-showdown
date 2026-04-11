@@ -1160,7 +1160,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onSwitchOut(pokemon) {
 			if (pokemon.effectiveIrritantWeather() !== 'swarmsignal') return;
-			if ((pokemon.hasType('Bug') || pokemon.hasAbility('Poison')) && this.field.irritantWeatherState.boosted) {
+			if ((pokemon.hasType('Bug') || pokemon.hasType('Poison')) && this.field.irritantWeatherState.boosted) {
 				this.debug('SW pheromones heal');
 				pokemon.heal(pokemon.baseMaxhp / 4);
 			}
