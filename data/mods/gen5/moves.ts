@@ -663,12 +663,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			inherit: true,
-			onTryHit(target, source, effect) {
+			onTryHit(target, source, move) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
-				if (effect && (effect.id === 'feint' || this.dex.moves.get(effect.id).priority <= 0)) {
+				if (move.id === 'feint' || this.dex.moves.get(move.id).priority <= 0) {
 					return;
 				}
+				if (this.checkMoveBreaksProtect(move, source, target)) return;
 				this.add('-activate', target, 'Quick Guard');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -685,6 +686,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		priority: 3,
 		flags: { noassist: 1, failcopycat: 1 },
+		condition: {
+			inherit: true,
+			onFoeRedirectTarget(target, source, source2, move) {
+				const ragePowderUser = this.effectState.target;
+				if (ragePowderUser.isSkyDropped()) return;
+
+				if (this.validTarget(ragePowderUser, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
+					this.debug("Rage Powder redirected target of move");
+					return ragePowderUser;
+				}
+			},
+		},
 	},
 	reflect: {
 		inherit: true,

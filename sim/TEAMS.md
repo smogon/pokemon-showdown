@@ -186,7 +186,7 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
   HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
   If all EVs or IVs are blank, the commas can all be left off.
 
-- `EVS` represent AVs in Pokémon Let's Go.
+- `EVS` represent AVs in Pokémon Let's Go and Stat Points in Pokémon Champions.
 
 - `IVS` represent DVs in Gen 1-2. The IV will be divided by 2 and rounded down,
   to become DVs (so the default of 31 IVs is converted to 15 DVs).

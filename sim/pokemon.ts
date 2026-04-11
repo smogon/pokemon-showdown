@@ -708,7 +708,7 @@ export class Pokemon {
 		return move.moveHitData[slot] || (move.moveHitData[slot] = {
 			crit: false,
 			typeMod: 0,
-			zBrokeProtect: false,
+			brokeProtect: false,
 		});
 	}
 
@@ -1017,7 +1017,7 @@ export class Pokemon {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-			} else if (moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) {
+			} else if (moveSlot.pp <= 0) {
 				disabled = true;
 			}
 
@@ -2180,7 +2180,7 @@ export class Pokemon {
 	 * Like Field.effectiveWeather(), but ignores sun and rain if
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
-	effectiveWeather() {
+	effectiveWeather(message?: string | boolean) {
 		const weather = this.battle.field.effectiveWeather();
 		switch (weather) {
 		case 'sunnyday':
@@ -2189,7 +2189,11 @@ export class Pokemon {
 		case 'primordialsea':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
-		if (this.hasAbility('megasol') && this.battle.activePokemon === this) return 'sunnyday';
+		// TODO: check interactions of Mega Sol with Utility Umbrella and Desolate Land
+		if (this.hasAbility('megasol') && this.battle.activePokemon === this && weather !== 'sunnyday') {
+			if (message) this.battle.add('-activate', this, 'ability: Mega Sol');
+			return 'sunnyday';
+		}
 		return weather;
 	}
 
