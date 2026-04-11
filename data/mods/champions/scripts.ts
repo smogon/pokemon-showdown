@@ -47,7 +47,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
 				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
 			if (trickRoomCheck) {
-				speed = 10000 - speed;
+				speed = -speed;
 			}
 			return speed;
 		},
