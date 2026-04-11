@@ -87,8 +87,8 @@ export interface EventMethods {
 	) => Pokemon | void;
 	onResidual?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSetAbility?: (
-		this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect
-	) => null | void;
+		(this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => null | void
+	) | boolean;
 	onSetStatus?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect
 	) => boolean | null | void;
