@@ -3,6 +3,8 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		this.modData('Abilities', 'dragonize').isNonstandard = null;
 		this.modData('Abilities', 'megasol').isNonstandard = null;
+		this.modData('Abilities', 'piercingdrill').isNonstandard = null;
+		this.modData('Abilities', 'spicyspray').isNonstandard = null;
 		for (const i in this.data.Items) {
 			const item = this.data.Items[i];
 			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
