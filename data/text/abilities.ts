@@ -2556,6 +2556,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		start: "  The scent of petrichor fills the air.",
 	},
+	poisoncoat: {
+		name: "Poison Coat",
+		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be poisoned.",
+	},
 	pollution: {
 		name: "Pollution",
 		shortDesc: "On switch-in, this Pokemon summons Smog.",
