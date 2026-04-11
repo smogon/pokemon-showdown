@@ -25,6 +25,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon has a 30% chance to have its status cured at the end of each turn.",
 	},
 	unseenfist: {
+		onModifyMove: undefined, // no inherit
+		onBypassProtect(source, target, move) {
+			if (move.flags['contact']) {
+				target.getMoveHitData(move).brokeProtect = this.effect;
+				return true;
+			}
+		},
 		inherit: true,
 		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
 	},
