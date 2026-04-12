@@ -1146,14 +1146,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	effectspore: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target) && !source.status && source.runStatusImmunity('powder')) {
+			if (this.checkMoveMakesContact(move, source, target) && source.runStatusImmunity('powder')) {
 				const r = this.random(100);
 				if (r < 11) {
-					source.setStatus('slp', target);
+					source.trySetStatus('slp', target);
 				} else if (r < 21) {
-					source.setStatus('par', target);
+					source.trySetStatus('par', target);
 				} else if (r < 30) {
-					source.setStatus('psn', target);
+					source.trySetStatus('psn', target);
 				}
 			}
 		},
@@ -2521,6 +2521,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	megasol: {
 		isNonstandard: "Future",
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (this.field.weather !== 'sunnyday') {
+				(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
+					.call(this, damage, attacker, defender, move);
+			}
+		},
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,

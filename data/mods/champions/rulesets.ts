@@ -3,7 +3,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		inherit: true,
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Cancel Mod', 'Endless Battle Clause',
-			'Adjust Level = 50', 'Item Clause = 1',
+			'Adjust Level = 50', 'Species Clause', 'Item Clause = 1',
 		],
 		onBegin() {
 			this.reportPercentages = true;
@@ -13,7 +13,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		inherit: true,
 		ruleset: [
 			'Standard AG',
-			'Sleep Moves Clause', 'Species Clause', 'Nickname Clause', 'OHKO Clause',
+			'Sleep Moves Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause',
 		],
 	},
 	standarddraft: {
@@ -21,6 +21,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		ruleset: [
 			'Standard AG',
 			'Nickname Clause', 'Beat Up Nicknames Mod', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause',
+			'!Item Clause',
 		],
 		onBegin() {
 			this.reportPercentages = true;

@@ -2673,11 +2673,12 @@ export class Battle {
 		if (!action.pokemon) {
 			action.speed = 1;
 		} else {
-			action.speed = action.pokemon.getActionSpeed();
 			if (this.gen <= 4 && action.choice === 'move' && action.fractionalPriority < 0) {
 				// in Gen 4, Pokemon with decrease fractional priority act in reverse speed order
 				// ignores Trick Room, does not ignore boosts and Simple
 				action.speed = -action.pokemon.getStat('spe', false, false);
+			} else {
+				action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 	}
