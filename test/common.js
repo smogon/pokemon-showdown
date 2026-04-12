@@ -9,10 +9,6 @@ const Dex = Sim.Dex;
 const cache = new Map();
 const formatsCache = new Map();
 
-function capitalize(word) {
-	return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
 /**
  * The default random number generator seed used if one is not given.
  */
@@ -47,10 +43,11 @@ class TestTools {
 			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
 			return format;
 		}
-
-		const gameType = Dex.toID(options.gameType || 'singles');
-		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		if (options.pokemon) throw new Error(`The 'pokemon' option is no longer supported`);
+
+		let tierFragment = this.currentMod === 'base' ? 'Anything Goes' : 'Custom Game';
+		if (this.currentMod === 'gen1stadium') tierFragment = 'OU';
+
 		const customRules = [
 			options.legality ? '^Obtainable' : '^!Obtainable',
 			options.preview ? '^Team Preview' : '^!Team Preview',
@@ -60,19 +57,11 @@ class TestTools {
 			options.inverseMod && 'Inverse Mod',
 			options.overflowStatMod && 'Overflow Stat Mod',
 			options.customRules,
+			options.gameType && `Game Type = ${options.gameType}`,
 		].filter(Boolean);
-		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
-		let modPrefix = this.modPrefix;
-		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
-		if (gameType === 'multi') {
-			basicFormat = 'randombattle';
-			modPrefix = `[gen8] `; // Remove when multis support Gen 9
-		}
-		// Re-integrate to the above if statement when gen 9 ffa randbats is added
-		if (gameType === 'freeforall') basicFormat = '';
-		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
-		const formatName = `${modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
+		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
+		const formatName = `${this.modPrefix}${tierFragment}${customRulesID}`;
 
 		let format = formatsCache.get(formatName);
 		if (format) return format;
