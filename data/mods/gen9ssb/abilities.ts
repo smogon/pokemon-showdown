@@ -245,6 +245,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
+		onSwitchOut(pokemon) {
+			// #11371 ((this.effect as any).onEnd as (p: Pokemon) => void).call(this, pokemon);
+		},
 		flags: {},
 		gen: 9,
 	},
@@ -278,6 +281,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				boosts['spa'] = 0;
 				boosts['accuracy'] = 0;
 			}
+		},
+		onSwitchOut(pokemon) {
+			// #11371 ((this.effect as any).onEnd as (p: Pokemon) => void).call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		gen: 9,
@@ -479,6 +485,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!pokemon.hasAbility('Blitz of Ruin')) {
 				return this.chainModify(0.75);
 			}
+		},
+		onSwitchOut(pokemon) {
+			// #11371 ((this.effect as any).onEnd as (p: Pokemon) => void).call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 	},

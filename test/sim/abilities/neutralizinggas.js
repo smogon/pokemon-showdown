@@ -149,6 +149,24 @@ describe('Neutralizing Gas', () => {
 		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
 	});
 
+	it(`should clear the locked move from Gorilla Tactics`, () => {
+		battle = common.createBattle([[
+			{ species: "Darmanitan-Galar", level: 10, ability: 'gorillatactics', moves: ['earthquake', 'shadowclaw'] },
+		], [
+			{ species: "Whismur", moves: ['sleeptalk'] },
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move earthquake', 'auto');
+		assert.throws(() => battle.choose('p1', 'move shadowclaw'));
+		battle.makeChoices('move earthquake', 'switch 2');
+
+		battle.makeChoices('move shadowclaw', 'auto');
+
+		battle.makeChoices('move shadowclaw', 'switch 2');
+		assert.throws(() => battle.choose('p1', 'move earthquake'));
+	});
+
 	it(`should cause Illusion to instantly wear off when Neutralizing Gas enters the field`, () => {
 		battle = common.createBattle([[
 			{ species: "Zoroark", ability: 'illusion', moves: ['sleeptalk'] },
@@ -160,6 +178,17 @@ describe('Neutralizing Gas', () => {
 
 		battle.makeChoices('auto', 'switch 2');
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
+	});
+
+	it(`should cause Cherrim-Sunshine to instantly revert form`, () => {
+		battle = common.createBattle([[
+			{ species: "Cherrim", ability: 'flowergift', moves: ['sleeptalk'] },
+		], [
+			{ species: "Torkoal", ability: 'drought', moves: ['sleeptalk'] },
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('auto', 'switch 2');
+		assert.species(battle.p1.active[0], 'Cherrim');
 	});
 
 	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, () => {
