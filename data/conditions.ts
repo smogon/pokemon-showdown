@@ -1555,6 +1555,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 							validTargets.push(target);
 						}
 					} else {
+						forkedPresent = false;
 						for (const ally of target.alliesAndSelf()) {
 							if (ally.hasAbility('forked') && ally.effectiveEnergyWeather() === 'supercell') forkedPresent = true;
 						}
