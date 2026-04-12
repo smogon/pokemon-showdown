@@ -18,7 +18,7 @@ export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-type RuleValueType = true | 'integer' | 'positive-integer' | 'identifier';
+type RuleValueType = 'string' | 'integer' | 'positive-integer' | 'identifier';
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -466,7 +466,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: false | RuleValueType;
+	declare readonly valueType?: RuleValueType;
 	declare readonly onValidateRule?: (
 		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
 	) => string | void;
@@ -940,7 +940,7 @@ export class DexFormats {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
-			if (subformat.hasValue) {
+			if (subformat.valueType) {
 				if (rawValue === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
 				const value = this.parseRuleValue(subformat, rawValue, ruleSpec);
 
