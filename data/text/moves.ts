@@ -7873,7 +7873,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunarsurge: {
 		name: "Lunar Surge",
 		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb or the weather is Blood Moon, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Blood Moon, the move still requires a turn to charge.",
-		shortDesc: "Charges turn 1. Hits turn 2. No charge in moonlight.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in Blood Moon.",
 
 		prepare: "  [POKEMON] absorbed moonlight!",
 	},
