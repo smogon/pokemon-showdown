@@ -314,7 +314,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(pokemon) {
 			let success = true;
 			// Fail in formats where you don't control allies
-			if (this.format.gameType !== 'doubles' && this.format.gameType !== 'triples') success = false;
+			if (this.gameType !== 'doubles' && this.gameType !== 'triples') success = false;
 
 			// Fail in triples if the Pokemon is in the middle
 			if (pokemon.side.active.length === 3 && pokemon.position === 1) success = false;
@@ -3042,7 +3042,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
 			];
 			let success = false;
-			if (this.gameType === "freeforall") {
+			if (this.gameType === 'freeforall') {
 				// the list of all sides in clockwise order
 				const sides = [this.sides[0], this.sides[3]!, this.sides[1], this.sides[2]!];
 				const temp: { [k: number]: typeof source.side.sideConditions } = { 0: {}, 1: {}, 2: {}, 3: {} };
