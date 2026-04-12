@@ -73,7 +73,7 @@ function setProbability(
 			species,
 			{},
 			false,
-			format.gameType !== 'singles',
+			format.defaultGameType !== 'singles',
 			format.ruleTable?.has('dynamaxclause')
 		);
 
@@ -157,7 +157,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	const dex = Dex.forFormat(format);
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
-	const isDoubles = format.gameType === 'doubles';
+	const isDoubles = format.defaultGameType === 'doubles';
 	let folderName = format.mod;
 	if (format.team === 'randomBaby') folderName += 'baby';
 	if (species.isNonstandard === 'CAP') folderName += 'cap';
@@ -737,7 +737,7 @@ export const commands: Chat.ChatCommands = {
 			const data = getData(species, format);
 			if (!data) {
 				setExists = false;
-			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
+			} else if (format.defaultGameType === 'doubles' || format.defaultGameType === 'freeforall') {
 				setExists = !!data.doublesMoves;
 			} else {
 				setExists = !!data.moves;
