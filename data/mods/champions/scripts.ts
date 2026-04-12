@@ -30,16 +30,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	calculatePP(move, ppUps) {
 		return move.noPPBoosts ? move.pp : (move.pp / 5 + 1) * 4;
 	},
-	checkMoveBreaksProtect(move, attacker, defender, blockStatus = true) {
-		if (move.flags['protect'] && (move.category !== 'Status' || blockStatus)) {
-			return false;
-		}
-		if ((move.isZOrMaxPowered || attacker.hasAbility(['piercingdrill', 'unseenfist'])) &&
-			!['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
-			defender.getMoveHitData(move).brokeProtect = true;
-		}
-		return true;
-	},
 	pokemon: {
 		// Remove Trick Room underflow
 		getActionSpeed() {
@@ -267,6 +257,19 @@ export const Scripts: ModdedBattleScriptsData = {
 		canTerastallize(pokemon) {
 			return null;
 		},
+		canMegaEvo(pokemon: Pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+			// Mega Rayquaza
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
+				this.battle.ruleTable.has('+pokemontag:future')) &&
+				altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				return altForme.name;
+			}
+			return item.megaStone?.[species.name] || null;
+		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;
@@ -370,9 +373,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (target.getMoveHitData(move).brokeProtect) {
+			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
-				if (move.isZOrMaxPowered) this.battle.add('-zbroken', target);
+				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+					this.battle.add('-ability', pokemon, bypassProtect.name);
+				}
+				this.battle.add('-zbroken', target);
 			}
 
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...

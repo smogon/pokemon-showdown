@@ -1,4 +1,16 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+	angershell: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedAngerShell = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
+	berserk: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
 	dragonize: {
 		inherit: true,
 		isNonstandard: null,
@@ -41,6 +53,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		isNonstandard: null,
 	},
 	unseenfist: {
+		onModifyMove: undefined, // no inherit
+		onHitProtect(source, target, move) {
+			if (move.flags['contact']) {
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
+			}
+		},
 		inherit: true,
 		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
 	},
