@@ -142,7 +142,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angershell: {
 		onDamage(damage, target, source, effect) {
-			this.effectState.checkedBerserk = !(
+			this.effectState.checkedAngerShell = !(
 				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			);

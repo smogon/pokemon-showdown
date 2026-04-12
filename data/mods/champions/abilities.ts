@@ -2,7 +2,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	angershell: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
-			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
+			this.effectState.checkedAngerShell = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
 	berserk: {
