@@ -1026,9 +1026,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	gravitysleepclause: {
 		effectType: 'ValidatorRule',
 		name: 'Gravity Sleep Clause',
-		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity or Gigantamax Orbeetle",
+		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity, Black Hole, or Gigantamax Orbeetle",
 		banlist: [
 			'Gravity ++ Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
+			'Black Hole ++ Dark Void', 'Black Hole ++ Grass Whistle', 'Black Hole ++ Hypnosis', 'Black Hole ++ Lovely Kiss', 'Black Hole ++ Sing', 'Black Hole ++ Sleep Powder',
 		],
 		onValidateTeam(team) {
 			let hasOrbeetle = false;
@@ -1054,7 +1055,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onBegin() {
-			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity or Gigantamax Orbeetle are banned');
+			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity, Black Hole, or Gigantamax Orbeetle are banned');
 		},
 	},
 	endlessbattleclause: {
