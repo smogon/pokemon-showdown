@@ -22,6 +22,7 @@ export interface RuleTableBuildContext {
 	format: Format;
 	ruleTable: RuleTable;
 	dex: ModdedDex;
+	rule: Format;
 }
 
 type RuleValidator<T> = (this: RuleTableBuildContext, value: T) => (T | void);
@@ -433,17 +434,17 @@ export class RuleTable extends Map<string, string> {
 			this.minSourceGen = 1;
 		}
 
-		if (this.isRuleValue('pickedteamsize', 'Auto')) {
+		if (this.isRuleValue('pickedteamsize', 'auto')) {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
 				format.gameType === 'triples' ? 6 :
 				3
 			);
 		} else {
-			this.pickedTeamSize = this.getRuleValueOr<number | null>('pickedteamsize', null);
+			this.pickedTeamSize = Number(this.getRuleValue<ID>('pickedteamsize')) || null;
 		}
 
-		if (this.isRuleValue('evlimit', 'Auto')) {
+		if (this.isRuleValue('evlimit', 'auto')) {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'gen7letsgo') {
 				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
@@ -454,7 +455,7 @@ export class RuleTable extends Map<string, string> {
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
 		} else {
-			this.evLimit = this.getRuleValueOr<number | null>('evlimit', null);
+			this.evLimit = Number(this.getRuleValue<ID>('evlimit')) || null;
 		}
 
 		// sanity checks; these _could_ be inside `value.validate`, but lie here
@@ -940,13 +941,8 @@ export class DexFormats {
 		);
 	}
 
-	parseRuleValue(rule: Format, value: string, ruleSpec: string): string | number {
-		const valueType = rule.value!.type;
+	parseRuleValueInner(valueType: RuleValueType, value: string, ruleName: string, ruleSpec: string): string | number | ID {
 		if (value === 'Current Gen') value = `${this.dex.gen}`;
-
-		if ((rule.id === 'pickedteamsize' || rule.id === 'evlimit') && value === 'Auto') {
-			return value;
-		}
 
 		if (valueType === 'integer' || valueType === 'positive-integer') {
 			const intValue = parseInt(value);
@@ -955,7 +951,7 @@ export class DexFormats {
 			}
 			if (valueType === 'positive-integer') {
 				if (intValue === 0) {
-					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${rule.name}").`);
+					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${ruleName}").`);
 				}
 				if (intValue <= 0) {
 					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
@@ -973,6 +969,11 @@ export class DexFormats {
 		}
 
 		return value;
+	}
+
+	parseRuleValue(rule: Format, value: string, ruleSpec: string): string | number | ID {
+		const valueType = rule.value!.type;
+		return this.parseRuleValueInner(valueType, value, rule.name, ruleSpec);
 	}
 
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
@@ -1195,7 +1196,7 @@ export class DexFormats {
 				const normalValue = ruleTable.valueRules.get(rule as ID);
 				// Casting to 'any' lets us avoid a repetitive switch-case with little value.
 				const value: RuleValueTypeMap[RuleValueType] = (subFormat.value!.validate as any)?.call(
-					{ format, ruleTable, dex: this.dex } as RuleTableBuildContext,
+					{ format, ruleTable, dex: this.dex, rule: subFormat } as RuleTableBuildContext,
 					normalValue,
 				);
 				if (subFormat.value!.type !== 'flag' && (typeof value === 'string' || typeof value === 'number')) {
