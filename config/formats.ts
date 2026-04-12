@@ -45,7 +45,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Free-For-All Random Battle",
 		mod: 'gen9',
 		team: 'randomFFA',
-		gameType: 'freeforall',
+		defaultGameType: 'freeforall',
 		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
@@ -61,7 +61,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Multi Random Battle",
 		mod: 'gen9',
 		team: 'random',
-		gameType: 'multi',
+		defaultGameType: 'multi',
 		searchShow: false,
 		tournamentShow: false,
 		rated: false,
@@ -171,7 +171,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Random Doubles Battle",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
@@ -179,27 +179,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Shadow Tag', 'Commander'],
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 	},
 	{
 		name: "[Gen 9] Doubles UU",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['[Gen 9] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
 		name: "[Gen 9] Doubles LC",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
 		banlist: [
@@ -210,7 +210,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Reg C",
 		mod: 'gen9predlc',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Paldea Pokedex'],
@@ -218,7 +218,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Reg D",
 		mod: 'gen9predlc',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
@@ -227,7 +227,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] VGC 2024 Reg G",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit One Restricted'],
@@ -237,7 +237,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] VGC 2026 Reg F",
 
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
@@ -245,7 +245,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
@@ -253,14 +253,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] VGC 2026 Reg I (Bo3)",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -289,14 +289,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9 Champions] VGC 2026 Reg M-A",
 		mod: 'champions',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets'],
 	},
 	{
 		name: "[Gen 9 Champions] VGC 2026 Reg M-A (Bo3)",
 		mod: 'champions',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Flat Rules', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
 	},
 	{
@@ -335,7 +335,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] 2v2 Doubles",
 		desc: `Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.`,
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: [
 			'Picked Team Size = 2', 'Max Team Size = 4',
 			'Standard Doubles', 'Accuracy Moves Clause', 'Terastal Clause', 'Sleep Clause Mod', 'Evasion Items Clause',
@@ -351,7 +351,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] 4v4 Doubles UU",
 		desc: "VGC rules, but only Pok&eacute;mon that get less than 4.52% usage on the VGC ladder are legal, as well as a few other guidelines.",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] VGC 2026 Reg F', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'OHKO Clause'],
@@ -376,7 +376,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Free-For-All",
 		mod: 'gen9',
-		gameType: 'freeforall',
+		defaultGameType: 'freeforall',
 		rated: false,
 		tournamentShow: false,
 		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause', '!Species Clause'],
@@ -447,7 +447,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] 6v6 Doubles Draft",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		teraPreviewDefault: true,
 		ruleset: ['Standard Draft', '!Sleep Clause Mod', '!Evasion Clause', 'Min Source Gen = 9'],
@@ -455,7 +455,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] 4v4 Doubles Draft",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		teraPreviewDefault: true,
@@ -471,7 +471,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] NatDex 6v6 Doubles Draft",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		teraPreviewDefault: true,
 		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
@@ -506,7 +506,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] NatDex 4v4 Doubles Draft",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Draft', 'Item Clause = 1', 'NatDex Mod', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4'],
 	},
@@ -829,7 +829,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] VGC 2009",
 		mod: 'gen4pt',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		bestOfDefault: true,
 		// searchShow: false,
 		ruleset: ['Flat Rules', '! Adjust Level Down', 'Max Level = 50'],
@@ -1125,7 +1125,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] 1-2 Switch",
 		desc: `Doubles-based metagame where each Pok&eacute;mon takes turns being "active" every few turns.`,
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Gravity Sleep Clause'],
 		banlist: [
@@ -2089,7 +2089,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Partners in Crime",
 		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
 		mod: 'partnersincrime',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: [
@@ -2979,7 +2979,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Triples",
 		mod: 'gen9',
-		gameType: 'triples',
+		defaultGameType: 'triples',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: [
@@ -3227,7 +3227,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Godly Gift VG 2024 Reg G (Bo3)",
 		desc: `Battle Stadium Doubles-based format where each Pok&eacute;mon receives one base stat from a God (Restricted Pok&eacute;mon) depending on its position in the team. If there is no restricted Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.`,
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: [
@@ -3405,7 +3405,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] National Dex Doubles",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles', 'NatDex Mod', 'Evasion Abilities Clause'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Genesect', 'Gengar-Mega',
@@ -3418,7 +3418,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] National Dex Doubles Ubers",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'NatDex Mod', '!Gravity Sleep Clause'],
 		banlist: ['Shedinja', 'Assist'],
@@ -3553,7 +3553,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] National Dex Doubles",
 		mod: 'gen8',
 		searchShow: false,
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles', 'NatDex Mod', 'Evasion Abilities Clause'],
 		banlist: [
 			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Charizard', 'Dialga', 'Eternatus', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
@@ -3895,7 +3895,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		bestOfDefault: true,
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['[Gen 9] Hackmons Cup'],
 	},
 	{
@@ -4025,7 +4025,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Get a randomized team of level-balanced Pok&eacute;mon with absolutely any legal ability, moves, and item, and choose two to battle in a doubles format.`,
 		mod: 'gen9',
 		team: 'randomCC',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Picked Team Size = 2'],
 	},
@@ -4041,7 +4041,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Metronome Battle",
 		mod: 'gen9',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Max Team Size = 2', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
@@ -4088,7 +4088,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] Random Doubles Battle",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		team: 'random',
 		searchShow: false,
 		bestOfDefault: true,
@@ -4098,7 +4098,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] Free-For-All Random Battle",
 		mod: 'gen8',
 		team: 'random',
-		gameType: 'freeforall',
+		defaultGameType: 'freeforall',
 		searchShow: false,
 		tournamentShow: false,
 		rated: false,
@@ -4108,7 +4108,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] Multi Random Battle",
 		mod: 'gen8',
 		team: 'random',
-		gameType: 'multi',
+		defaultGameType: 'multi',
 		searchShow: false,
 		tournamentShow: false,
 		rated: false,
@@ -4368,28 +4368,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] Doubles OU",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Power Construct', 'Shadow Tag', 'Swagger'],
 	},
 	{
 		name: "[Gen 7] Doubles OU",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void', 'Swagger'],
 	},
 	{
 		name: "[Gen 6] Doubles OU",
 		mod: 'gen6',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Swagger'],
 	},
 	{
 		name: "[Gen 5] Doubles OU",
 		mod: 'gen5',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Clause Mod'],
 		banlist: ['DUber', 'Shadow Tag', 'Soul Dew', 'Dark Void', 'Gravity', 'Swagger'],
@@ -4397,7 +4397,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] Doubles OU",
 		mod: 'gen4',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard', 'Evasion Abilities Clause'],
 		banlist: ['AG', 'Uber', 'Soul Dew', 'Explosion', 'Dark Void', 'Self-Destruct', 'Swagger', 'Thunder Wave'],
@@ -4406,7 +4406,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 3] Doubles OU",
 		mod: 'gen3',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Explosion', 'Self-Destruct', 'Swagger'],
@@ -4560,7 +4560,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] Doubles Ubers",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 		banlist: [],
@@ -4568,7 +4568,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] Doubles UU",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
@@ -4576,7 +4576,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] VGC 2022",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
@@ -4585,7 +4585,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] VGC 2021",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
@@ -4593,7 +4593,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] VGC 2020",
 		mod: 'gen8dlc1',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
@@ -4601,7 +4601,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8 BDSP] Doubles OU",
 		mod: 'gen8bdsp',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Evasion Abilities Clause', 'Evasion Items Clause'],
 		banlist: ['DUber', 'Dark Void'],
@@ -4609,14 +4609,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8 BDSP] Battle Festival Doubles",
 		mod: 'gen8bdsp',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Min Source Gen = 8'],
 	},
 	{
 		name: "[Gen 8] Doubles Custom Game",
 		mod: 'gen8',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -4765,7 +4765,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] Doubles UU",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
@@ -4773,7 +4773,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] VGC 2019",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', 'Limit Two Restricted'],
@@ -4783,7 +4783,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] VGC 2018",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', '!! Timer Starting = 300'],
@@ -4792,7 +4792,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] VGC 2017",
 		mod: 'gen7sm',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: [
@@ -4804,7 +4804,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] Battle Spot Doubles",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
@@ -4813,7 +4813,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7 Let's Go] Doubles OU",
 		mod: 'gen7letsgo',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Sleep Clause Mod'],
 		banlist: ['DUber'],
@@ -4821,7 +4821,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] Doubles Custom Game",
 		mod: 'gen7',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -4961,7 +4961,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] VGC 2016",
 		mod: 'gen6',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Limit Two Restricted'],
@@ -4971,7 +4971,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] VGC 2015",
 		mod: 'gen6',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
@@ -4980,7 +4980,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] VGC 2014",
 		mod: 'gen6xy',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Kalos Pokedex', 'Min Source Gen = 6'],
@@ -4988,7 +4988,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] Battle Spot Doubles",
 		mod: 'gen6',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
@@ -4997,7 +4997,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] Doubles Custom Game",
 		mod: 'gen6',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -5007,14 +5007,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] Battle Spot Triples",
 		mod: 'gen6',
-		gameType: 'triples',
+		defaultGameType: 'triples',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 6] Triples Custom Game",
 		mod: 'gen6',
-		gameType: 'triples',
+		defaultGameType: 'triples',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -5144,7 +5144,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] VGC 2013",
 		mod: 'gen5',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules'],
@@ -5153,7 +5153,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] VGC 2012",
 		mod: 'gen5bw1',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules'],
@@ -5162,7 +5162,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] VGC 2011",
 		mod: 'gen5bw1',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
@@ -5171,7 +5171,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] Doubles Custom Game",
 		mod: 'gen5',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5181,7 +5181,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] Triples Custom Game",
 		mod: 'gen5',
-		gameType: 'triples',
+		defaultGameType: 'triples',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5292,7 +5292,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] VGC 2010",
 		mod: 'gen4',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules'],
@@ -5340,7 +5340,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] Doubles Custom Game",
 		mod: 'gen4',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5440,7 +5440,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 3] ADV 200 Doubles",
 		mod: 'gen3rs',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
 		banlist: ['Uber', 'Quick Claw', 'Soul Dew', 'Swagger'],
@@ -5449,7 +5449,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Orre Colosseum",
 		mod: 'gen3colosseum',
 		searchShow: false,
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
 			'Nickname Clause', 'Beat Up Nicknames Mod', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
@@ -5470,7 +5470,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'gen3colosseum',
 		searchShow: false,
-		gameType: 'singles',
+		defaultGameType: 'singles',
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
 			'Nickname Clause', 'Beat Up Nicknames Mod', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 3', 'Exact HP Mod', "Item Clause = 1", 'Open Team Sheets',
@@ -5493,7 +5493,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 3] Doubles Custom Game",
 		mod: 'gen3',
-		gameType: 'doubles',
+		defaultGameType: 'doubles',
 		searchShow: false,
 		debug: true,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
