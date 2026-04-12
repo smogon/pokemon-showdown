@@ -21,6 +21,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		ruleset: [
 			'Standard AG',
 			'Nickname Clause', 'Beat Up Nicknames Mod', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause',
+			'!Item Clause',
 		],
 		onBegin() {
 			this.reportPercentages = true;
