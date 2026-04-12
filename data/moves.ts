@@ -22289,6 +22289,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Evoboost",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: { snatch: 1 },
 		boosts: {
