@@ -142,15 +142,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angershell: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			this.effectState.checkedAngerShell = !(
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedAngerShell = false;
-			} else {
-				this.effectState.checkedAngerShell = true;
-			}
+			);
 		},
 		onTryEatItem(item) {
 			const healingItems = [
@@ -408,15 +403,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			this.effectState.checkedBerserk = !(
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedBerserk = false;
-			} else {
-				this.effectState.checkedBerserk = true;
-			}
+			);
 		},
 		onTryEatItem(item) {
 			const healingItems = [
