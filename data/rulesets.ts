@@ -2265,7 +2265,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					`Custom rules that could allow the active team size to be reduced below 6 (Min Team Size < 6, Picked Team Size < 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
 				);
 			}
-			const gameType = this.format.gameType;
+			const gameType = this.ruleTable.gameType;
 			if (gameType === 'doubles' || gameType === 'triples') {
 				throw new Error(
 					`The game type '${gameType}' cannot be 1v1 because sides can have multiple active Pok\u00e9mon, so it is incompatible with Chimera 1v1.`
@@ -2907,7 +2907,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (num > 9 || num < 3 || num % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
-			if (this.format.playerCount > 2) {
+			if (this.ruleTable.playerCount > 2) {
 				throw new Error("Free For All and Multi Battles cannot be a Best-of series.");
 			}
 			return value;

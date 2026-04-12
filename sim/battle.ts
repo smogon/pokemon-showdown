@@ -215,11 +215,11 @@ export class Battle {
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
 		this.formatData = this.initEffectState({ id: format.id });
-		this.gameType = (format.gameType || 'singles');
+		this.gameType = (this.ruleTable.gameType || 'singles');
 		this.field = new Field(this);
-		this.sides = Array(format.playerCount).fill(null) as any;
+		this.sides = Array(this.ruleTable.playerCount).fill(null) as any;
 		this.activePerHalf = this.gameType === 'triples' ? 3 :
-			(format.playerCount > 2 || this.gameType === 'doubles') ? 2 :
+			(this.ruleTable.playerCount > 2 || this.gameType === 'doubles') ? 2 :
 			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed;

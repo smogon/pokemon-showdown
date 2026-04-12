@@ -53,6 +53,8 @@ export class RuleTable extends Map<string, string> {
 	tagRules: string[];
 	valueRules: Map<string, string>;
 
+	gameType!: GameType;
+	playerCount!: 2 | 4;
 	minTeamSize!: number;
 	maxTeamSize!: number;
 	pickedTeamSize!: number | null;
@@ -205,10 +207,15 @@ export class RuleTable extends Map<string, string> {
 		}
 	}
 
+	resolveGameType(format: Format, dex: ModdedDex) {
+		this.gameType = format.gameType;
+		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
+	}
+
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
-		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
-			format.gameType === 'doubles' ? 2 :
+		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(this.gameType) ? 3 :
+			this.gameType === 'doubles' ? 2 :
 			1;
 
 		// NOTE: These numbers are pre-calculated here because they're hardcoded
@@ -273,8 +280,8 @@ export class RuleTable extends Map<string, string> {
 
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
-				['doubles', 'rotation'].includes(format.gameType) ? 4 :
-				format.gameType === 'triples' ? 6 :
+				['doubles', 'rotation'].includes(this.gameType) ? 4 :
+				this.gameType === 'triples' ? 6 :
 				3
 			);
 		}
@@ -318,17 +325,17 @@ export class RuleTable extends Map<string, string> {
 			}
 		}
 		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${this.gameType} game.`);
 		}
 		if (this.pickedTeamSize && this.pickedTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+			throw new Error(`Chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${this.gameType} game.`);
 		}
 		if (this.minTeamSize && this.pickedTeamSize && this.minTeamSize < this.pickedTeamSize) {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
 		}
 		if (!this.minTeamSize) this.minTeamSize = Math.max(gameTypeMinTeamSize, this.pickedTeamSize || 0);
 		if (this.maxTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} must be at least ${gameTypeMinTeamSize} for a ${this.gameType} game.`);
 		}
 		if (this.maxTeamSize < this.minTeamSize) {
 			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} must be at least min team size ${this.minTeamSize}${this.blame('minteamsize')}.`);
@@ -490,7 +497,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.ruleTable = null;
 		this.onBegin = data.onBegin || undefined;
 		this.noLog = !!data.noLog;
-		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
 		assignMissingFields(this, data);
 	}
 }
@@ -978,6 +984,7 @@ export class DexFormats {
 		}
 		ruleTable.getTagRules();
 
+		ruleTable.resolveGameType(format, this.dex);
 		ruleTable.resolveNumbers(format, this.dex);
 
 		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
