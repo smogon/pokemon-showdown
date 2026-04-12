@@ -17,6 +17,8 @@ export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
+type RuleValueType = true | 'integer' | 'positive-integer';
+
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
@@ -419,7 +421,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
+	declare readonly hasValue?: false | RuleValueType;
 	declare readonly onValidateRule?: (
 		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
 	) => string | void;
@@ -735,6 +737,34 @@ export class DexFormats {
 			ruleSpec.slice(1).startsWith('basepokemon:')
 		);
 	}
+
+	parseRuleValue(rule: Format, value: string, ruleSpec: string): string {
+		const valueType = rule.hasValue as RuleValueType;
+		if (value === 'Current Gen') value = `${this.dex.gen}`;
+
+		if ((rule.id === 'pickedteamsize' || rule.id === 'evlimit') && value === 'Auto') {
+			return value;
+		}
+
+		if (valueType === 'integer' || valueType === 'positive-integer') {
+			const intValue = parseInt(value);
+			if (!Number.isSafeInteger(intValue)) {
+				throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+			}
+			if (valueType === 'positive-integer') {
+				if (intValue === 0) {
+					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${rule.name}").`);
+				}
+				if (intValue <= 0) {
+					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+				}
+			}
+			return `${intValue}`;
+		}
+
+		return value;
+	}
+
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
 		if (format.name.length > 50) {
@@ -838,32 +868,16 @@ export class DexFormats {
 			}
 
 			// rule
-			let [formatid, value] = ruleSpec.split('=');
-			const subformat = this.get(formatid);
+			const [rawRuleName, rawValue] = ruleSpec.split('=');
+			const subformat = this.get(rawRuleName);
 			const repealAndReplace = ruleSpec.startsWith('!!');
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
 			if (subformat.hasValue) {
-				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
-				if (value === 'Current Gen') value = `${this.dex.gen}`;
-				if ((subformat.id === 'pickedteamsize' || subformat.id === 'evlimit') && value === 'Auto') {
-					// can't be resolved until later
-				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
-					const intValue = parseInt(value);
-					if (isNaN(intValue) || value !== `${intValue}`) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
-					}
-				}
-				if (subformat.hasValue === 'positive-integer') {
-					if (parseInt(value) === 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
-					}
-					if (parseInt(value) <= 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
-					}
-				}
+				if (rawValue === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
+				const value = this.parseRuleValue(subformat, rawValue, ruleSpec);
 
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
@@ -893,7 +907,7 @@ export class DexFormats {
 				}
 				ruleTable.valueRules.set(subformat.id, value);
 			} else {
-				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
+				if (rawValue !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
 				if (ruleTable.has(subformat.id) && !repealAndReplace && !noWarn) {
 					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
