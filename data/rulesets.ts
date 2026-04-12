@@ -2094,6 +2094,23 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
+	gametype: {
+		effectType: 'Rule',
+		name: 'Game Type',
+		desc: "Sets the fielded Pokémon and player configuration (Singles, Doubles, Triples, Multi, Free For All)",
+		hasValue: true,
+		onValidateRule(gameType) {
+			if (!this.dex.isSupportedGameType(gameType)) {
+				throw new Error(`Invalid game type "${gameType}". Showdown! supports: ${this.dex.getSupportedGameTypes().join(', ')}`);
+			}
+			if (this.format.supportedGameTypes.length <= 1) {
+				throw new Error(`This format does not support customizing its game type.`);
+			}
+			if (!this.format.supportedGameTypes.includes(gameType as GameType)) {
+				throw new Error(`This format does not support "${gameType}". Supported game types are: ${this.format.supportedGameTypes.join(', ')}.`);
+			}
+		},
+	},
 	maxtotallevel: {
 		effectType: 'Rule',
 		name: 'Max Total Level',

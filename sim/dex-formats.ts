@@ -6,8 +6,16 @@ import { Tags } from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
 
-export interface FormatData extends Partial<Format>, EventMethods {
+export interface FormatData extends Partial<Omit<Format, 'supportedGameTypes'>>, EventMethods {
 	name: string;
+	supportedGameTypes?: GameType[] | 'any';
+
+	/**
+	 * @deprecated gameType - The preset game type for this format.
+	 *
+	 * Use defaultGameType instead.
+	 */
+	gameType?: GameType;
 }
 
 export type FormatList = (FormatData | { section: string, column?: number })[];
@@ -208,7 +216,7 @@ export class RuleTable extends Map<string, string> {
 	}
 
 	resolveGameType(format: Format, dex: ModdedDex) {
-		this.gameType = format.gameType;
+		this.gameType = this.valueRules.get('gametype') as GameType || format.defaultGameType;
 		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
 	}
 
@@ -401,9 +409,9 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	readonly rated: boolean | string;
 	/** Game type. */
-	readonly gameType: GameType;
-	/** Number of players, based on game type, for convenience */
-	readonly playerCount: 2 | 4;
+	readonly defaultGameType: GameType;
+	/** Game types that are compatible with this mod and event handlers. */
+	readonly supportedGameTypes: GameType[];
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
@@ -487,7 +495,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Condition';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
-		this.gameType = data.gameType || 'singles';
+		this.defaultGameType = data.defaultGameType || data.supportedGameTypes?.[0] || 'singles';
+		this.supportedGameTypes = data.supportedGameTypes || [this.defaultGameType];
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
@@ -616,6 +625,27 @@ export class DexFormats {
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
+			let gameType = format.defaultGameType || format.gameType;
+			let supportedGameTypes = format.supportedGameTypes;
+			if (!gameType) {
+				gameType = (
+					Array.isArray(supportedGameTypes) && supportedGameTypes.length ?
+						supportedGameTypes[0] : 'singles'
+				);
+			}
+
+			if (supportedGameTypes === 'any') {
+				supportedGameTypes = this.dex.getSupportedGameTypes();
+			} else if (!supportedGameTypes) {
+				supportedGameTypes = [gameType];
+			} else if (!supportedGameTypes.includes(gameType)) {
+				// TS compiler takes care of most validation, but we still gotta check compatibility.
+				throw new Error(`Format "${format.name}" has incompatible game type definitions.`);
+			}
+
+			format.supportedGameTypes = supportedGameTypes;
+			format.defaultGameType = gameType;
+
 			this.checkDeprecated(format);
 
 			const ruleset = new Format(format);
@@ -648,6 +678,16 @@ export class DexFormats {
 		}
 		if (format.maxForcedLevel) {
 			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
+		}
+
+		if ('gameType' in format) {
+			/*
+			(global as any).Monitor?.warnDeprecated?.(
+				`"gameType" is deprecated in Formats. Please migrate to "defaultGameType" and "supportedGameTypes".`,
+				` (Used in "${format.name}")`
+			);
+			*/
+			throw new Error(`Gametype in Formats no longer supported.`);
 		}
 	}
 
