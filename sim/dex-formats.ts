@@ -18,7 +18,7 @@ export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-type RuleValueType = true | 'integer' | 'positive-integer';
+type RuleValueType = true | 'integer' | 'positive-integer' | 'identifier';
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -831,6 +831,14 @@ export class DexFormats {
 				}
 			}
 			return `${intValue}`;
+		}
+
+		if (valueType === 'identifier') {
+			const identifier = toID(value);
+			if (!identifier.length) {
+				throw new Error(`In rule "${ruleSpec}", "${value}" must be alphanumeric.`);
+			}
+			return identifier;
 		}
 
 		return value;
