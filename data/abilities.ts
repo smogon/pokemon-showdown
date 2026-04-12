@@ -7223,6 +7223,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	rootcontrol: { // tested, works as intended
 		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Root Control');
 			pokemon.addVolatile('ingrain');
 		},
 		flags: {},
