@@ -1090,8 +1090,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Technician', 'Tinted Lens', 'Triage', 'Unaware', 'Unburden', 'Water Bubble',
 		],
 		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			if (this.ruleTable.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
 		getSharedPower(pokemon) {
@@ -2880,8 +2880,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Choice Specs', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
 		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Sharing is Caring currently does not support ${this.format.gameType} battles.`);
+			if (this.ruleTable.gameType !== 'singles') {
+				throw new Error(`Sharing is Caring currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
 		getSharedItems(pokemon) {
@@ -4145,8 +4145,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Max Team Size = 12', 'Picked Team Size = 6'],
 		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			if (this.ruleTable.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
 		onBeforeSwitchIn(pokemon) {
@@ -4168,8 +4168,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
 		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			if (this.ruleTable.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
 		onBeforeSwitchIn(pokemon) {

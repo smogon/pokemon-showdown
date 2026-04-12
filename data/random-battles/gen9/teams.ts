@@ -1467,7 +1467,7 @@ export class RandomTeams {
 		return 80;
 	}
 
-	getForme(species: Species): string {
+	getForme(species: Species, isSingles = true): string {
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;
@@ -1483,7 +1483,7 @@ export class RandomTeams {
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (
 			species.baseSpecies === 'Squawkabilly' &&
-			(this.format.mod.startsWith('champions') || this.format.gameType !== 'singles')) {
+			(this.format.mod.startsWith('champions') || !isSingles)) {
 			return 'Squawkabilly' + this.sample(['', '-Blue', '-White', '-Yellow']);
 		}
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
@@ -1502,11 +1502,12 @@ export class RandomTeams {
 		isDoubles = false
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
-		const forme = this.getForme(species);
 		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const isSingles = ruleTable.gameType === 'singles';
+		const forme = this.getForme(species, isSingles);
 
 		for (const set of sets) {
 			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
@@ -1758,7 +1759,7 @@ export class RandomTeams {
 
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
-		const isDoubles = this.format.gameType !== 'singles';
+		const isDoubles = ruleTable.gameType !== 'singles';
 		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -1778,7 +1779,7 @@ export class RandomTeams {
 		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
-		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
+		let leadsRemaining = ruleTable.gameType === 'doubles' ? 2 : 1;
 		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
