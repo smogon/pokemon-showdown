@@ -708,7 +708,7 @@ export class Pokemon {
 		return move.moveHitData[slot] || (move.moveHitData[slot] = {
 			crit: false,
 			typeMod: 0,
-			brokeProtect: false,
+			bypassProtect: false,
 		});
 	}
 

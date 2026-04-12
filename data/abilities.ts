@@ -3235,10 +3235,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	piercingdrill: {
 		isNonstandard: "Future",
-		onModifyMove(move) {
-			if (move.flags['contact']) delete move.flags['protect'];
+		onHitProtect(source, target, move) {
+			if (move.flags['contact']) {
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
+			}
 		},
-		// breaking protect handled in Battle#checkMoveBreaksProtect()
+		// breaking protect handled in Battle#checkMoveBypassesProtect()
 		flags: {},
 		name: "Piercing Drill",
 		rating: 1,

@@ -389,7 +389,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	checkMoveMakesContact?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
-	checkMoveBreaksProtect?: (
+	checkMoveBypassesProtect?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;

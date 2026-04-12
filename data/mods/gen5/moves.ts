@@ -669,7 +669,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (move.id === 'feint' || this.dex.moves.get(move.id).priority <= 0) {
 					return;
 				}
-				if (this.checkMoveBreaksProtect(move, source, target)) return;
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'Quick Guard');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {

@@ -1060,7 +1060,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (this.checkMoveBreaksProtect(move, source, target)) return;
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -1170,7 +1170,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (this.checkMoveBreaksProtect(move, source, target)) return;
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -3995,7 +3995,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (move.target === 'self') return;
-				if (this.checkMoveBreaksProtect(move, source, target, false)) return;
+				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
 				this.add('-activate', target, 'move: Alting', move.name);
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
