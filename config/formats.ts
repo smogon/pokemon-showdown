@@ -155,6 +155,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Custom Game",
 		mod: 'gen9',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -261,6 +262,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles Custom Game",
 		mod: 'gen9',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -303,6 +305,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 Champions] Custom Game",
 		mod: 'champions',
 		searchShow: false,
+		supportedGameTypes: 'any',
 		debug: true,
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
@@ -365,6 +368,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Anything Goes",
 		mod: 'gen9',
+		supportedGameTypes: 'any',
 		ruleset: ['Standard AG'],
 	},
 	{
@@ -4499,6 +4503,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 8] Anything Goes",
 		mod: 'gen8',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		ruleset: ['Standard AG'],
 	},
@@ -4544,6 +4549,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] Custom Game",
 		mod: 'gen8',
 		searchShow: false,
+		supportedGameTypes: 'any',
 		debug: true,
 		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
@@ -4617,6 +4623,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] Doubles Custom Game",
 		mod: 'gen8',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -4712,6 +4719,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] Anything Goes",
 		mod: 'gen7',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		ruleset: ['Standard AG'],
 	},
@@ -4748,6 +4756,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 7] Custom Game",
 		mod: 'gen7',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -4822,6 +4831,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 7] Doubles Custom Game",
 		mod: 'gen7',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -4915,6 +4925,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] Anything Goes",
 		mod: 'gen6',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		ruleset: ['Standard AG'],
 	},
@@ -4944,6 +4955,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 6] Custom Game",
 		mod: 'gen6',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -4998,6 +5010,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] Doubles Custom Game",
 		mod: 'gen6',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -5015,6 +5028,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] Triples Custom Game",
 		mod: 'gen6',
 		defaultGameType: 'triples',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		battle: { trunc: Math.trunc },
 		debug: true,
@@ -5127,6 +5141,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 5] Custom Game",
 		mod: 'gen5',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5172,6 +5187,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 5] Doubles Custom Game",
 		mod: 'gen5',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5182,6 +5198,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 5] Triples Custom Game",
 		mod: 'gen5',
 		defaultGameType: 'triples',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5232,6 +5249,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] Anything Goes",
 		mod: 'gen4',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		ruleset: ['Standard AG'],
 	},
@@ -5275,6 +5293,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] Custom Game",
 		mod: 'gen4',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5340,6 +5359,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 4] Doubles Custom Game",
 		mod: 'gen4',
+		supportedGameTypes: 'any',
 		defaultGameType: 'doubles',
 		searchShow: false,
 		debug: true,
@@ -5485,6 +5505,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5494,6 +5515,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Doubles Custom Game",
 		mod: 'gen3',
 		defaultGameType: 'doubles',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -5574,6 +5596,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 2] Custom Game",
 		mod: 'gen2',
+		supportedGameTypes: 'any',
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -5677,6 +5700,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 1] Custom Game",
 		mod: 'gen1',
+		supportedGameTypes: ['singles'],
 		searchShow: false,
 		debug: true,
 		battle: { trunc: Math.trunc },
