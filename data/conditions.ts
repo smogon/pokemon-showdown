@@ -1549,14 +1549,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			// Form list of valid lightning strike targets
 			for (const target of this.getAllActive()) {
-				if (target.effectiveEnergyWeather() !== 'supercell') {
+				if (target.effectiveEnergyWeather() === 'supercell') {
 					if (lightningRodPresent) {
 						if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
 							validTargets.push(target);
 						}
 					} else {
 						for (const ally of target.alliesAndSelf()) {
-							if (ally.hasAbility('forked')) forkedPresent = true;
+							if (ally.hasAbility('forked') && ally.effectiveEnergyWeather() === 'supercell') forkedPresent = true;
 						}
 						if (!forkedPresent) validTargets.push(target);
 					}
