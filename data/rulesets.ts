@@ -3270,10 +3270,49 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 	// swse
 
+	weathersleepclause: {
+		effectType: 'ValidatorRule',
+		name: 'Weather Sleep Clause',
+		desc: "Bans Sleep Powder in conjunction with Pollen Storm, and sleep moves below 100% accuracy in conjunction with Pheromones",
+		onValidateTeam(team) {
+			let hasPollenStorm = false;
+			let hasPheromones = false;
+			let hasSleepPowder = false;
+			let hasInaccurateSleepMove = false;
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				const isBugOrPoison = species.types.includes('Bug') || species.types.includes('Poison');
+				const ability = this.dex.abilities.get(set.ability);
+				if (ability.id === 'hayfever') hasPollenStorm = true;
+				if (ability.id === 'secretion') hasPheromones = true;
+				for (const moveid of set.moves) {
+					const move = this.dex.moves.get(moveid);
+					if (move.id === 'pollinate') hasPollenStorm = true;
+					if (move.id === 'swarmsignal') hasPheromones = true;
+					if (move.status === 'slp' && move.flags?.powder) hasSleepPowder = true;
+					const hasMissChanceOrNeverMisses = move.accuracy === true || move.accuracy < 100;
+					if (move.status === 'slp' && hasMissChanceOrNeverMisses && isBugOrPoison) {
+						hasInaccurateSleepMove = true;
+					}
+				}
+			}
+			const problems = [];
+			if (hasPollenStorm && hasSleepPowder) {
+				problems.push(`The combination of Pollen Storm and Sleep Powder on the same team is banned.`);
+			}
+			if (hasPheromones && hasInaccurateSleepMove) {
+				problems.push(`The combination of Pheromones and sleep-inducing moves with imperfect accuracy on the same team is banned.`);
+			}
+			if (problems.length) return problems;
+		},
+		onBegin() {
+			this.add('rule', 'Weather Sleep Clause: The combination of Sleep Powder and Pollen Storm, or sleep-inducing moves with imperfect accuracy and Pheromones, are banned');
+		},
+	},
 	tsolopokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Tso-Lo Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 1 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Tso-Lo Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3291,7 +3330,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	sandflatspokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Sand Flats Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 2 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Sand Flats Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3309,7 +3348,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	kaskadecountrysidepokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Kaskade Countryside Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 3 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Kaskade Countryside Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3327,7 +3366,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	alkimarshpokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Alki Marsh Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 4 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Alki Marsh Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3345,7 +3384,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	sierrapokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Sierra Pokedex',
-		desc: "Only allows Pok&eacute;mon found in the mountains of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Sierra Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3363,7 +3402,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	omegapokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Omega Pokedex',
-		desc: "Only allows Legendary and Mythical Pok&eacute;mon found in the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Omega Pok&eacute;dex.",
 		banlist: [
 
 		],
