@@ -267,6 +267,19 @@ export const Scripts: ModdedBattleScriptsData = {
 		canTerastallize(pokemon) {
 			return null;
 		},
+		canMegaEvo(pokemon: Pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+			// Mega Rayquaza
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
+				this.battle.ruleTable.has('+pokemontag:future')) &&
+				altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				return altForme.name;
+			}
+			return item.megaStone?.[species.name] || null;
+		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;
