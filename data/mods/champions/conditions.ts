@@ -54,4 +54,83 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 	},
+
+	raindance: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (attacker.effectiveWeather() !== 'raindance') return;
+			if (move.type === 'Water') {
+				this.debug('rain water boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Fire') {
+				this.debug('rain fire suppress');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	primordialsea: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (attacker.effectiveWeather() !== 'primordialsea') return;
+			if (move.type === 'Water') {
+				this.debug('Rain water boost');
+				return this.chainModify(1.5);
+			}
+		},
+	},
+	sunnyday: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (attacker.effectiveWeather() !== 'sunnyday') return;
+			if (move.id === 'hydrosteam') {
+				this.debug('Sunny Day Hydro Steam boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Fire') {
+				this.debug('Sunny Day fire boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Water') {
+				this.debug('Sunny Day water suppress');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	desolateland: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (attacker.effectiveWeather() !== 'desolateland') return;
+			if (move.type === 'Fire') {
+				this.debug('Desolate Land fire boost');
+				return this.chainModify(1.5);
+			}
+		},
+	},
+	sandstorm: {
+		inherit: true,
+		onModifySpD(spd, target, source) {
+			if (target.hasType('Rock') && source.effectiveWeather() === 'sandstorm') {
+				return this.modify(spd, 1.5);
+			}
+		},
+	},
+	snowscape: {
+		inherit: true,
+		onModifyDef(def, target, source) {
+			if (target.hasType('Ice') && source.effectiveWeather() === 'snowscape') {
+				return this.modify(def, 1.5);
+			}
+		},
+	},
+	// TODO: check Mega Sol's interaction with Deltastream
+	// deltastream: {
+	// 	inherit: true,
+	// 	onEffectiveness(typeMod, target, type, move) {
+	// 		if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
+	// 			this.add('-fieldactivate', 'Delta Stream');
+	// 			return 0;
+	// 		}
+	// 	},
+	// },
 };

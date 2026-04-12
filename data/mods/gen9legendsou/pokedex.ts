@@ -7,6 +7,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Transistor" },
 	},
+	starmiemega: {
+		inherit: true,
+		baseStats: { hp: 60, atk: 100, def: 105, spa: 130, spd: 105, spe: 120 },
+	},
 	ampharosmega: {
 		inherit: true,
 		abilities: { 0: "Fluffy" },
