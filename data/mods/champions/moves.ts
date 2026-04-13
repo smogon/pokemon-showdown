@@ -56,10 +56,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	belch: {
 		inherit: true,
 		onTry(source) {
-			if (!source.ateBerry) {
-				this.add('cant', source, 'Belch', 'Belch');
-				return false;
-			}
+			return source.ateBerry;
 		},
 		onDisableMove: undefined, // no inherit
 		desc: "Fails unless the user has eaten a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
