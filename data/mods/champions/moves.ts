@@ -55,7 +55,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	belch: {
 		inherit: true,
-		onTryMove(source) {
+		onTry(source) {
 			if (!source.ateBerry) {
 				this.add('cant', source, 'Belch', 'Belch');
 				return false;
