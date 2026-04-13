@@ -906,7 +906,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.hasType('Normal') && this.field.climateWeatherState.boosted) {
 				pokemon.setType('???');
 				pokemon.fogType = true;
-				this.hint("Normal types turn Typeless in Strong Winds-boosted Fog.");
+				// this.hint("Normal types turn Typeless in Strong Winds-boosted Fog.");
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -918,7 +918,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.hasType('Normal') && this.field.climateWeatherState.boosted) {
 				pokemon.setType('???');
 				pokemon.fogType = true;
-				this.hint("Normal types turn Typeless in Strong Winds-boosted Fog.");
+				// this.hint("Normal types turn Typeless in Strong Winds-boosted Fog.");
 			}
 		},
 		onFieldStart(field, source, effect) {
