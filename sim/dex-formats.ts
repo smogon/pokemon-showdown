@@ -20,6 +20,23 @@ type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
 type RuleValueType = 'string' | 'integer' | 'positive-integer' | 'identifier';
 
+export interface RuleTableBuildContext {
+	format: Format;
+	ruleTable: RuleTable;
+	dex: ModdedDex;
+};
+
+/*
+type NumberRuleValidator = (this: RuleTableBuildContext, value: number) => (number | void);
+type StringRuleValidator = (this: RuleTableBuildContext, value: string) => (string | void);
+type IDRuleValidator = (this: RuleTableBuildContext, value: ID) => (ID | void);
+type FlagRuleValidator = (this: RuleTableBuildContext) => void;
+
+type RuleValidator = NumberRuleValidator | StringRuleValidator | IDRuleValidator | FlagRuleValidator;
+*/
+
+type RuleValidator = (this: RuleTableBuildContext, value: number | string | undefined) => (number | string | void);
+
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
@@ -48,6 +65,7 @@ export interface GameTimerSettings {
  * The value is the name of the parent rule (blank for the active format).
  */
 export class RuleTable extends Map<string, string> {
+	dex: ModdedDex;
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
@@ -56,7 +74,7 @@ export class RuleTable extends Map<string, string> {
 	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
 	 *  DO NOT search this; just use ruleTable.has(...). This is purely for tag rule precedence. */
 	tagRules: TagRule[];
-	valueRules: Map<string, string>;
+	valueRules: Map<string, string | number>;
 
 	minTeamSize!: number;
 	maxTeamSize!: number;
@@ -71,8 +89,9 @@ export class RuleTable extends Map<string, string> {
 	adjustLevelDown!: number | null;
 	evLimit!: number | null;
 
-	constructor() {
+	constructor(dex: ModdedDex) {
 		super();
+		this.dex = dex;
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
@@ -269,6 +288,71 @@ export class RuleTable extends Map<string, string> {
 		}
 	}
 
+	hasRuleValue(rule: string) {
+		return this.valueRules.has(rule);
+	}
+
+	getRuleValue<T>(rule: string): T | undefined {
+		return this.valueRules.get(rule) as T | undefined;
+	}
+
+	getRuleValueOr<T>(rule: string, defaultValue: T): T {
+		if (!this.valueRules.has(rule)) return defaultValue;
+		return this.getRuleValue<T>(rule)!;
+	}
+
+	isRuleValue<T>(rule: string, value: T) {
+		if (!this.valueRules.has(rule)) return false;
+		return this.valueRules.get(rule) === value;
+	}
+
+	/*
+	 *
+	 * These methods copy a value or non-value rule to a target dictionary.
+	 * A rule that holds a value is an option.
+	 * A "non-value" rule is called a flag, and it's treated as boolean.
+	 *
+	 * If the rule is missing, the "maybe" variants will
+	 * never copy it as undefined/false. Instead, they won't do anything.
+	 *
+	 */
+
+	transferOption<
+		DictType,
+		KeyType extends KeysMatching<DictType, undefined>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		// This assertion is a white lie, because TS is dumb.
+		dict[key] = this.getRuleValue<DictType[KeyType]>(rule)!;
+	}
+
+	transferFlag<
+		DictType,
+		KeyType extends KeysMatching<DictType, boolean>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		// Also helping TS - not a lie though.
+		dict[key] = this.has(rule) as DictType[KeyType];
+	}
+
+	maybeTransferOption<
+		DictType,
+		KeyType extends keyof DictType,
+	>(rule: string, dict: DictType, key: KeyType) {
+		if (!this.valueRules.has(rule)) return false;
+		// Nothing weird here, but ultimately also helping TS, also not a lie.
+		dict[key] = this.getRuleValue<DictType[KeyType]>(rule)!;
+		return true;
+	}
+
+	maybeTransferFlag<
+		DictType,
+		KeyType extends KeysMatching<DictType, true>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		if (!this.has(rule)) return false;
+		// Also helping TS, and not a lie.
+		dict[key] = true as DictType[KeyType];
+		return true;
+	}
+
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
@@ -284,65 +368,35 @@ export class RuleTable extends Map<string, string> {
 		// should be enough for a validator rule, and the battle event system
 		// should be enough for a battle rule.
 
-		this.minTeamSize = Number(this.valueRules.get('minteamsize')) || 0;
-		this.maxTeamSize = Number(this.valueRules.get('maxteamsize')) || 6;
-		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
-		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
-		this.maxMoveCount = Number(this.valueRules.get('maxmovecount')) || 4;
-		this.minSourceGen = Number(this.valueRules.get('minsourcegen'));
-		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
-		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
-		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
-		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
-		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
-		this.evLimit = Number(this.valueRules.get('evlimit'));
-		if (isNaN(this.evLimit)) this.evLimit = null;
-		if (!this.minSourceGen) {
-			if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
-				this.minSourceGen = dex.gen;
-			} else {
-				this.minSourceGen = 1;
-			}
+		this.minTeamSize = this.getRuleValueOr<number>('minteamsize', 0);
+		this.maxTeamSize = this.getRuleValueOr<number>('maxteamsize', 6);
+		this.maxTotalLevel = this.getRuleValueOr<number | null>('maxtotallevel', null);
+		this.maxMoveCount = this.getRuleValueOr<number>('maxmovecount', 4);
+		this.minLevel = this.getRuleValueOr<number>('minlevel', 1);
+		this.maxLevel = this.getRuleValueOr<number>('maxlevel', 100);
+		this.defaultLevel = this.getRuleValueOr<number>('defaultlevel', 0);
+		this.adjustLevel = this.getRuleValueOr<number | null>('adjustlevel', null);
+		this.adjustLevelDown = this.getRuleValueOr<number | null>('adjustleveldown', null);
+
+		if (this.hasRuleValue('minsourcegen')) {
+			this.minSourceGen = this.getRuleValue<number>('minsourcegen')!;
+		} else if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
+			this.minSourceGen = dex.gen;
+		} else {
+			this.minSourceGen = 1;
 		}
 
-		const timer: Partial<GameTimerSettings> = {};
-		if (this.valueRules.has('timerstarting')) {
-			timer.starting = Number(this.valueRules.get('timerstarting'));
-		}
-		if (this.has('dctimer')) {
-			timer.dcTimer = true;
-		}
-		if (this.has('dctimerbank')) {
-			timer.dcTimer = true;
-		}
-		if (this.valueRules.has('timergrace')) {
-			timer.grace = Number(this.valueRules.get('timergrace'));
-		}
-		if (this.valueRules.has('timeraddperturn')) {
-			timer.addPerTurn = Number(this.valueRules.get('timeraddperturn'));
-		}
-		if (this.valueRules.has('timermaxperturn')) {
-			timer.maxPerTurn = Number(this.valueRules.get('timermaxperturn'));
-		}
-		if (this.valueRules.has('timermaxfirstturn')) {
-			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
-		}
-		if (this.has('timeoutautochoose')) {
-			timer.timeoutAutoChoose = true;
-		}
-		if (this.has('timeraccelerate')) {
-			timer.accelerate = true;
-		}
-		if (Object.keys(timer).length) this.timer = [timer, format.name];
-
-		if (this.valueRules.get('pickedteamsize') === 'Auto') {
+		if (this.isRuleValue('pickedteamsize', 'Auto')) {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
 				format.gameType === 'triples' ? 6 :
 				3
 			);
+		} else {
+			this.pickedTeamSize = this.getRuleValueOr<number | null>('pickedteamsize', null);
 		}
-		if (this.valueRules.get('evlimit') === 'Auto') {
+
+		if (this.isRuleValue('evlimit', 'Auto')) {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'gen7letsgo') {
 				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
@@ -352,10 +406,12 @@ export class RuleTable extends Map<string, string> {
 			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
+		} else {
+			this.evLimit = this.getRuleValueOr<number | null>('evlimit', null);
 		}
 
-		// sanity checks; these _could_ be inside `onValidateRule` but this way
-		// involves less string conversion.
+		// sanity checks; these _could_ be inside `onValidateRule`, but lie here
+		// for historical reasons
 
 		// engine hard limits
 		if (this.maxTeamSize > 24) {
@@ -418,6 +474,22 @@ export class RuleTable extends Map<string, string> {
 		if (this.evLimit && this.evLimit < 0) {
 			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} can't be less than 0 (you might have meant: "! EV Limit" to remove the limit, or "EV Limit = 0" to ban EVs).`);
 		}
+	}
+
+	resolveTimer(format: Format, dex: ModdedDex) {
+		const timer: Partial<GameTimerSettings> = {};
+		this.maybeTransferOption('timerstarting', timer, 'starting');
+		this.maybeTransferFlag('dctimer', timer, 'dcTimer');
+		this.maybeTransferFlag('dctimerbank', timer, 'dcTimer');
+		this.maybeTransferOption('timergrace', timer, 'grace');
+		this.maybeTransferOption('timeraddperturn', timer, 'addPerTurn');
+		this.maybeTransferOption('timermaxperturn', timer, 'maxPerTurn');
+		this.maybeTransferOption('timermaxfirstturn', timer, 'maxFirstTurn');
+		this.maybeTransferFlag('timeoutautochoose', timer, 'timeoutAutoChoose');
+		this.maybeTransferFlag('timeraccelerate', timer, 'accelerate');
+		if (!Object.keys(timer).length) return;
+
+		this.timer = [timer, format.name];
 
 		if (timer.starting !== undefined && (timer.starting < 10 || timer.starting > 1200)) {
 			throw new Error(`Timer starting value ${timer.starting}${this.blame('timerstarting')} must be between 10 and 1200 seconds.`);
@@ -486,9 +558,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * Only applies to rules, not formats
 	 */
 	declare readonly valueType?: RuleValueType;
-	declare readonly onValidateRule?: (
-		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
-	) => string | void;
+	declare readonly onValidateRule?: RuleValidator;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
 
@@ -809,8 +879,8 @@ export class DexFormats {
 		);
 	}
 
-	parseRuleValue(rule: Format, value: string, ruleSpec: string): string {
-		const valueType = rule.valueType as RuleValueType;
+	parseRuleValue(rule: Format, value: string, ruleSpec: string): string | number {
+		const valueType = rule.valueType!;
 		if (value === 'Current Gen') value = `${this.dex.gen}`;
 
 		if ((rule.id === 'pickedteamsize' || rule.id === 'evlimit') && value === 'Auto') {
@@ -830,7 +900,7 @@ export class DexFormats {
 					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
 				}
 			}
-			return `${intValue}`;
+			return intValue;
 		}
 
 		if (valueType === 'identifier') {
@@ -855,7 +925,7 @@ export class DexFormats {
 				return dex.formats.getRuleTable(format, 2, repeals);
 			}
 		}
-		const ruleTable = new RuleTable();
+		const ruleTable = new RuleTable(this.dex);
 
 		const ruleset = format.ruleset.slice();
 		for (const ban of format.banlist) {
@@ -1058,6 +1128,7 @@ export class DexFormats {
 		ruleTable.getTagRules();
 
 		ruleTable.resolveNumbers(format, this.dex);
+		ruleTable.resolveTimer(format, this.dex);
 
 		const canMegaEvo = (this.dex.gen >= 6 || ruleTable.has('+tag:future')) &&
 			(this.dex.gen <= 7 || ruleTable.has('+tag:past'));
@@ -1074,10 +1145,13 @@ export class DexFormats {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
+				const normalValue = ruleTable.valueRules.get(rule as ID);
 				const value = subFormat.onValidateRule?.call(
-					{ format, ruleTable, dex: this.dex }, ruleTable.valueRules.get(rule as ID)!
+					{ format, ruleTable, dex: this.dex }, normalValue,
 				);
-				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
+				if (typeof value === 'string' || typeof value === 'number') {
+					ruleTable.valueRules.set(subFormat.id, value);
+				}
 			}
 		}
 

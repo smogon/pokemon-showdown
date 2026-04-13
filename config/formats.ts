@@ -2033,15 +2033,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					teravolt: 'moldbreaker',
 					turboblaze: 'moldbreaker',
 				};
-				const num = parseInt(this.ruleTable.valueRules.get('abilityclause')!);
+				const maxDupeNum = this.ruleTable.getRuleValue<number>('abilityclause')!;
 				for (const set of team) {
 					let ability = this.toID(set.ability.split('0')[0]);
 					if (!ability) continue;
 					if (ability in base) ability = base[ability] as ID;
-					if (abilityTable.get(ability) >= num) {
+					if (abilityTable.get(ability) >= maxDupeNum) {
 						return [
-							`You are limited to ${num} of each ability by ${num} Ability Clause.`,
-							`(You have more than ${num} ${this.dex.abilities.get(ability).name} variants)`,
+							`You are limited to ${maxDupeNum} of each ability by ${maxDupeNum} Ability Clause.`,
+							`(You have more than ${maxDupeNum} ${this.dex.abilities.get(ability).name} variants)`,
 						];
 					}
 					abilityTable.add(ability);
@@ -2385,7 +2385,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					moves.push(moveid);
 				}
 			}
-			const allowedPokemoves = Number(this.ruleTable.valueRules.get('allowedpokemoves') || '1');
+			const allowedPokemoves = this.ruleTable.getRuleValueOr<number>('allowedpokemoves', 1);
 			if (pokemoves > allowedPokemoves) {
 				problems.push(
 					`${set.species} has ${pokemoves} Pokemoves.`,

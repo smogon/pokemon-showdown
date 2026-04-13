@@ -496,7 +496,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: `Forces all teams to have the same type. Usage: Force Monotype = [Type], e.g. "Force Monotype = Water"`,
 		valueType: 'string',
 		onValidateRule(value) {
-			const type = this.dex.types.get(value);
+			const type = this.dex.types.get(value as string);
 			if (!type.exists) throw new Error(`Misspelled type "${value}"`);
 			// Temporary hardcode until types support generations
 			if (
@@ -512,7 +512,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			const type = this.dex.types.get(this.ruleTable.valueRules.get('forcemonotype')!);
+			const type = this.dex.types.get(this.ruleTable.getRuleValue<string>('forcemonotype')!);
 			if (!species.types.map(this.toID).includes(type.id)) {
 				return [`${set.species} must have ${type.name} type.`];
 			}
@@ -525,12 +525,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		valueType: 'string',
 		onValidateRule(value) {
 			const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
-			if (!validColors.map(this.dex.toID).includes(this.dex.toID(value))) {
+			if (!validColors.map(this.dex.toID).includes(this.dex.toID(value as string))) {
 				throw new Error(`Invalid color "${value}"`);
 			}
 		},
 		onValidateSet(set) {
-			const color = this.toID(this.ruleTable.valueRules.get('forcemonocolor'));
+			const color = this.toID(this.ruleTable.getRuleValue<string>('forcemonocolor')!);
 			let dex = this.dex;
 			if (dex.gen < 5) {
 				dex = dex.forGen(5);
@@ -550,14 +550,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (this.dex.gen !== 9) {
 				throw new Error(`Terastallization doesn't exist outside of Generation 9.`);
 			}
-			const type = this.dex.types.get(value);
+			const type = this.dex.types.get(value as string);
 			if (!type.exists) throw new Error(`Misspelled type "${value}"`);
 			if (type.isNonstandard) {
 				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}.`);
 			}
 		},
 		onValidateSet(set) {
-			const type = this.dex.types.get(this.ruleTable.valueRules.get('forceteratype')!);
+			const type = this.dex.types.get(this.ruleTable.getRuleValue<string>('forceteratype')!);
 			if (this.toID(set.teraType) !== type.id) {
 				return [`${set.species} must have its Tera Type set to ${type.name}.`];
 			}
@@ -569,16 +569,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
 		valueType: 'string',
 		onValidateRule(value) {
-			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+			if (!this.dex.species.get(value as string).exists) throw new Error(`Misspelled Pokemon "${value}"`);
 		},
 		onValidateTeam(team) {
-			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			const species = this.dex.species.get(this.ruleTable.getRuleValue<string>('forceselect'));
 			if (!team.some(set => set.species === species.name)) {
 				return [`Your team must contain ${species.name}.`];
 			}
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
-			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			const species = this.dex.species.get(this.ruleTable.getRuleValue<string>('forceselect'));
 			const speciesIndex = pokemon.findIndex(p => p.species.name === species.name);
 			if (autoChoose) {
 				positions = [speciesIndex];
@@ -600,7 +600,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onValidateRule(value) {
 			if (!value) throw new Error(`To remove EV limits, use "! EV Limits"`);
 
-			const slashedParts = value.split('/');
+			const slashedParts = (value as string).split('/');
 			const UINT_REGEX = /^[0-9]{1,4}$/;
 			return slashedParts.map(slashedPart => {
 				const parts = slashedPart.replace('-', ' - ').replace(/ +/g, ' ').trim().split(' ');
@@ -616,7 +616,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}).join(' / ');
 		},
 		onValidateSet(set) {
-			const limits = this.ruleTable.valueRules.get('evlimits')!;
+			const limits = this.ruleTable.getRuleValue<string>('evlimits')!;
 			const problems = [];
 
 			for (const limit of limits.split(' / ')) {
@@ -841,14 +841,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same item",
 		valueType: 'positive-integer',
 		onBegin() {
-			this.add('rule', `Item Clause: Limit ${this.ruleTable.valueRules.get('itemclause') || 1} of each item`);
+			this.add('rule', `Item Clause: Limit ${this.ruleTable.getRuleValue<number>('itemclause')} of each item`);
 		},
 		onValidateRule(value) {
-			const num = Number(value);
-			if (num < 1 || num > this.ruleTable.maxTeamSize) {
+			const maxDupeItems = value as number;
+			if (maxDupeItems < 1 || maxDupeItems > this.ruleTable.maxTeamSize) {
 				throw new Error(`Item Clause must be between 1 and ${this.ruleTable.maxTeamSize}.`);
 			}
-			return value;
 		},
 		onValidateTeam(team) {
 			const itemTable = new this.dex.Multiset<string>();
@@ -857,7 +856,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (!item) continue;
 				itemTable.add(item);
 			}
-			const itemLimit = Number(this.ruleTable.valueRules.get('itemclause') || 1);
+			const itemLimit = this.ruleTable.getRuleValue<number>('itemclause')!;
 			for (const [itemid, num] of itemTable) {
 				if (num <= itemLimit) continue;
 				return [
@@ -873,11 +872,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Prevents teams from having Pok&eacute;mon with the same ability than allowed",
 		valueType: 'positive-integer',
 		onBegin() {
-			const num = this.ruleTable.valueRules.get('abilityclause');
+			const num = this.ruleTable.getRuleValue<number>('abilityclause')!;
 			this.add('rule', `${num} Ability Clause: Limit ${num} of each ability`);
 		},
 		onValidateRule(value) {
-			const allowedAbilities = parseInt(value);
+			const allowedAbilities = value as number;
 			if (allowedAbilities < 1) throw new Error(`Must allow at least 1 of each ability`);
 		},
 		onValidateTeam(team) {
@@ -903,7 +902,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				teravolt: 'moldbreaker',
 				turboblaze: 'moldbreaker',
 			};
-			const num = parseInt(this.ruleTable.valueRules.get('abilityclause')!);
+			const num = this.ruleTable.getRuleValue<number>('abilityclause')!;
 			for (const set of team) {
 				let ability = this.toID(set.ability);
 				if (!ability) continue;
@@ -1652,7 +1651,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Pokemon must be obtained from this generation or later.",
 		valueType: 'positive-integer',
 		onValidateRule(value) {
-			const minSourceGen = parseInt(value);
+			const minSourceGen = value as number;
 			if (minSourceGen > this.dex.gen) {
 				// console.log(this.ruleTable);
 				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format (${this.format.name})`);
@@ -2132,7 +2131,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				];
 			}
 		},
-		onValidateRule(value) {
+		onValidateRule() {
 			const ruleTable = this.ruleTable;
 			const maxTotalLevel = ruleTable.maxTotalLevel!;
 			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
@@ -2909,8 +2908,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows players to define a best-of series where the winner of the series is the winner of the majority of games.",
 		valueType: 'positive-integer',
 		onValidateRule(value) {
-			const num = Number(value);
-			if (num > 9 || num < 3 || num % 2 !== 1) {
+			const battleCount = value as number;
+			if (battleCount > 9 || battleCount < 3 || battleCount % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
 			if (this.format.playerCount > 2) {
@@ -2934,11 +2933,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows players to define the amount of Pokemoves allowed per set.",
 		valueType: 'positive-integer',
 		onValidateRule(value) {
-			const num = Number(value);
-			if (num > this.ruleTable.maxMoveCount || num < 1) {
+			const pokeMovesAllowed = value as number;
+			if (pokeMovesAllowed > this.ruleTable.maxMoveCount || pokeMovesAllowed < 1) {
 				throw new Error(`Allowed Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
 			}
-			return value;
 		},
 		// Validation in the Pokemoves format
 	},
@@ -2948,11 +2946,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows players to define how many times a Pokemon can be used as a Pokemove per team.",
 		valueType: 'positive-integer',
 		onValidateRule(value) {
-			const num = Number(value);
-			if (num > this.ruleTable.maxMoveCount || num < 1) {
+			const pokeMovesUnique = value as number;
+			if (pokeMovesUnique > this.ruleTable.maxMoveCount || pokeMovesUnique < 1) {
 				throw new Error(`Unique Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
 			}
-			return value;
 		},
 		onValidateTeam(team, format, teamHas) {
 			const pokemoves = new this.dex.Multiset<ID>();
@@ -2966,7 +2963,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 			const problems: string[] = [];
-			const uniquePokemoves = Number(this.ruleTable.valueRules.get('uniquepokemoveclause') || 1);
+			// FIXME: There is no Unique Pokemove Clause
+			// const uniquePokemoves = this.ruleTable.getRuleValueOr<number>('uniquepokemoves', 1);
+			const uniquePokemoves = 1;
 			for (const [moveid, num] of pokemoves) {
 				if (num <= uniquePokemoves) continue;
 				problems.push(

@@ -4,6 +4,10 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
+type KeysMatching<T, U> = {
+	[K in keyof T]: U extends T[K] ? K : never
+}[keyof T];
+
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type BattleActions = import('./battle-actions').BattleActions;
