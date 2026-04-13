@@ -22859,7 +22859,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	porygonw: {
 		num: 10059,
-		name: "Porygon w",
+		name: "Porygon ω",
 		types: ["Normal"],
 		baseStats: { hp: 100, atk: 50, def: 90, spa: 120, spd: 90, spe: 80 },
 		abilities: { 0: "Surveillance", 1: "Energizer", H: "Analytic" },
@@ -23630,7 +23630,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	orogon: {
 		num: 10119,
-		name: "Orogon",
+		name: "Ωrogon",
 		types: ["Electric", "Steel"],
 		baseStats: { hp: 110, atk: 80, def: 110, spa: 155, spd: 110, spe: 115 },
 		abilities: { 0: "Relic Soul" },

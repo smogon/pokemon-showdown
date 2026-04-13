@@ -3337,7 +3337,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		],
 		onValidateSet(set, format) {
 			const sfDex = [
-				"Ditto",
+				"Sandile", "Krokorok", "Krookodile", "Depuray", "Desoray", "Hippopotas", "Hippowdon", "Dirrun", "Blurrun", "Pudet", "Woond", "Sizzlipede", "Centiskorch", "Maractus", "Pramblo", "Glashulimp", "Torkoal", "Nacli", "Naclstack", "Garganacl", "Vullaby", "Mandibuzz", "Cubone", "Marowak", "Grubbin", "Charjabug", "Vikavolt", "Rotom", "Trapinch", "Vibrava", "Flygon", "Gligar", "Gliscor", "Dwebble", "Crustle", "Wimpod", "Golisopod", "Shellos", "Gastrodon", "Exeggcute", "Exeggutor-Alola", "Chewtle", "Drednaw", "Slowpoke", "Slowbro", "Slowking", "Numel", "Camerupt", "Rufflet", "Braviary", "Braviary-Hisui", "Baltoy", "Claydol", "Natu", "Xatu", "Sigilyph", "Rellor", "Rabsca", "Larvesta", "Volcarona", "Rockruff", "Lycanroc", "Darumaka", "Darmanitan", "Skarmory", "Drout", "Guruchi", "Magikarp", "Gyarados", "Bruxish-Kaskade", "Klink", "Klang", "Klinklang", "Porygon", "Porygon2", "Porygon-Z", "Porygon ω", "Beldum", "Metang", "Metagross", "Elgyem", "Beheeyem", "Minior", "Solosis-Kaskade", "Duosion-Kaskade", "Reuniclus-Kaskade", "Estoe", "Perpetua",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!sfDex.includes(species.baseSpecies) && !sfDex.includes(species.name) &&
@@ -3355,7 +3355,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		],
 		onValidateSet(set, format) {
 			const kcDex = [
-				"Ditto",
+				"Blitzle", "Zebstrika", "Rookidee", "Corvisquire", "Corviknight", "Nincada", "Ninjask", "Shedinja", "Burmy", "Wormadam", "Mothim", "Tooburm", "Detrarc", "Drilbur", "Excadrill-Kaskade", "Shuckle", "Qayagus", "Miltank", "Auditaur", "Oxillery", "Lechonk", "Oinkologne", "Wooloo", "Dubwool-Kaskade", "Mudbray", "Mudsdale", "Yamper", "Boltund", "Fidough", "Dachsbun", "Applin", "Flapple", "Appletun", "Dipplin", "Hydrapple", "Oricorio", "Mienfoo", "Mienshao", "Mienflux", "Gneckle", "Rabyoose", "Milcery", "Alcremie", "Vanillite", "Vanillish", "Vanilluxe", "Avokiddo", "Alliguaca", "Poltchageist", "Sinistcha", "Furfrou", "Tandemaus", "Maushold", "Tamroast", "Weepollen", "Bounsweet", "Steenee", "Tsareena", "Cottonee", "Whimsicott", "Ralts", "Kirlia", "Gardevoir", "Gallade", "Vitisquash", "Dionysseur",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!kcDex.includes(species.baseSpecies) && !kcDex.includes(species.name) &&
@@ -3373,7 +3373,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		],
 		onValidateSet(set, format) {
 			const amDex = [
-				"Ditto",
+				"Aipom", "Ambipom-Kaskade", "Timburr", "Gurdurr-Kaskade", "Conkeldurr-Kaskade", "Umbralu", "Wooper-Paldea", "Clodsire", "Dewpider", "Araquanid", "Croagunk", "Toxicroak", "Fomantis", "Lurantis", "Nomobjeka", "Venipede", "Whirlipede", "Scolipede", "Scyther", "Scizor", "Kleavor", "Kleptarak", "Combee", "Vespiquen", "Riolu", "Lucario", "Kituff", "Beadamup", "Budew", "Roselia", "Roserade", "Pawniard", "Bisharp", "Kingambit", "Spinda", "Stunky", "Skuntank-Kaskade", "Pidove", "Tranquill", "Unfezant", "Trubbish", "Garbodor", "Rattata", "Raticate-Kaskade", "Rascume", "Scraggy", "Scrafty", "Whismur", "Loudred", "Exploud-Kaskade", "Smoochum", "Jynx-Kaskade", "Toxel", "Toxtricity", "Zigzagoon-Galar", "Linoone-Galar", "Obstagoon", "Shroodle", "Grafaiai", "Varoom", "Revavroom", "Faebril", "Bokshel", "Hermirt", "Aeradio", "Botnyak", "Castform", "Skrelp", "Dragalge", "Clobbopus", "Grapploct", "Pincurchin", "Hurchin", "Mareanie", "Toxapex", "Wishiwashi", "Dondozo", "Tatsugiri", "Carvanha", "Sharpedo", "Wailmer", "Wailord", "Dhelmise", "Frillish", "Jellicent", "Vendrom", "Stantler", "Wyrdeer", "Buwuve", "Wasgrowl", "Worcane",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!amDex.includes(species.baseSpecies) && !amDex.includes(species.name) &&
@@ -3391,7 +3391,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		],
 		onValidateSet(set, format) {
 			const sDex = [
-				"Ditto",
+				"Zubat", "Golbat", "Crobat", "Probat", "Roggenrola", "Boldore", "Gigalith", "Sableye", "Jemineye", "Oracub", "Bearvoyance", "Munna", "Musharna", "Folleming", "Carbink", "Bellsprout-Kaskade", "Drosabell", "Shinx-Kaskade", "Luxio-Kaskade", "Luxray-Kaskade", "Togepi", "Togetic", "Togekiss", "Snom", "Frosmoth", "Yanma-Kaskade", "Yanmage", "Dunsparce", "Dudunsparce", "Cutiefly", "Ribombee", "Noibat", "Noivern", "Ponyta-Galar", "Rapidash-Galar", "Absol", "Bloomage", "Goomy", "Sliggoo", "Sliggoo-Hisui", "Goodra", "Goodra-Hisui", "Zorua", "Zorua-Hisui", "Zoroark", "Zoroark-Hisui", "Helioptile", "Heliolisk", "Obsidious", "Slugma", "Magcargo", "Mercryni", "Meraculisk", "Tyrunt", "Tyrantrum", "Charcadet", "Armarouge", "Ceruledge", "Turtonator", "Skiddo", "Gogoat", "Nosepass", "Probopass", "Joltik", "Galvantula", "Tynamo", "Eelektrik", "Eelektross", "Crabrawler", "Crabominable-Kaskade", "Axew", "Fraxure", "Haxorus", "Druddigon", "Swablu", "Altaria", "Sneasel", "Weavile", "Golett-Kaskade", "Golgre", "Relicanth", "Prospectre", "Rolycoly", "Carkol", "Coalossal", "Swinub", "Piloswine", "Mamoswine", "Bergmite", "Avalugg", "Avalugg-Hisui", "Spheal", "Sealeo", "Walrein", "Cetoddle", "Cetitan", "Feebas", "Milotic", "Amaura", "Aurorus", "Lapras-Kaskade", "Skideer", "Yuleigh", "Cryogonal", "Drampa", "Kabuto", "Kabutops", "Tirtouga", "Carracosta", "Archen", "Archeops", "Feafurr", "Vaicear", "Phisnooz", "Telemac", "Macedontus", "Crynorawst",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!sDex.includes(species.baseSpecies) && !sDex.includes(species.name) &&
@@ -3409,7 +3409,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		],
 		onValidateSet(set, format) {
 			const oDex = [
-				"Ditto",
+				"Tamunk", "Temunk", "Manadza", "Arctikull", "Wicoot", "Ωrogon", "Diancie-Kaskade", "Type: Null", "Silvally", "Rotomb", "Spiritomb", "Basculin-White", "Basculegion", "Ditto", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Stakataka", "Blacephalon", "Orbtholod", "Poipole", "Naganadel", "Pestalation", "Revylon", "Leoseace", "Lamentu", "Endram-Odai",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!oDex.includes(species.baseSpecies) && !oDex.includes(species.name) &&
