@@ -53,6 +53,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 120,
 		pp: 5,
 	},
+	belch: {
+		inherit: true,
+		onTryMove(source) {
+			if (!source.ateBerry) {
+				this.add('cant', source, 'Belch', 'Belch');
+				return false;
+			}
+		},
+		onDisableMove: undefined, // no inherit
+	},
 	behemothbash: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -313,6 +323,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	fakeout: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
+				pokemon.disableMove('fakeout');
+			}
+		},
+	},
 	falsesurrender: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -360,6 +378,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	forcepalm: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	freezedry: {
+		inherit: true,
+		secondary: undefined, // no inherit
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Water.",
 	},
 	freezeshock: {
 		inherit: true,
