@@ -22,7 +22,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (targets && !targets.includes(active)) continue;
 				// The ally of the pokemon
-				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
+				const allySide = active.side.allySide || active.side;
+				const ally = allySide.active.find(mon => mon && mon !== active && !mon.fainted);
 				if (eventid === 'SwitchIn' && ally?.m.innate && targets && !targets.includes(ally)) {
 					const volatileState = ally.volatiles[ally.m.innate];
 					if (volatileState) {
@@ -121,7 +122,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (const pokemon of side.active) {
 				pokemon.moveSlots = pokemon.moveSlots.filter(move => pokemon.m.curMoves.includes(move.id));
 				pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
-				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+				const allySide = side.allySide || side;
+				const ally = allySide.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
 				if (ally) {
 					// @ts-expect-error modded
@@ -325,7 +327,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!setAbilityEvent) return setAbilityEvent;
 			}
 			this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
-			const ally = this.side.active.find(mon => mon && mon !== this && !mon.fainted);
+			const allySide = this.side.allySide || this.side;
+			const ally = allySide.active.find(mon => mon && mon !== this && !mon.fainted);
 			if (ally?.m.innate) {
 				ally.removeVolatile(ally.m.innate);
 				delete ally.m.innate;
@@ -358,7 +361,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		hasAbility(ability) {
 			if (this.ignoringAbility()) return false;
 			const ownAbility = this.ability;
-			const ally = this.side.active.find(mon => mon && mon !== this && !mon.fainted);
+			const allySide = this.side.allySide || this.side;
+			const ally = allySide.active.find(mon => mon && mon !== this && !mon.fainted);
 			const allyAbility = ally ? ally.ability : "";
 			if (!Array.isArray(ability)) {
 				if (ownAbility === this.battle.toID(ability) || allyAbility === this.battle.toID(ability)) return true;
