@@ -1,4 +1,4 @@
-export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedRulesetTable = {
 	terastalclause: {
 		effectType: 'Rule',
 		name: 'Terastal Clause',

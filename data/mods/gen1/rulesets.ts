@@ -1,4 +1,4 @@
-export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedRulesetTable = {
 	standardag: {
 		inherit: true,
 		ruleset: [
