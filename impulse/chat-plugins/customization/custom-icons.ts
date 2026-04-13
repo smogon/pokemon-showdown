@@ -47,8 +47,6 @@ const loadData = async (): Promise<void> => {
 
 void loadData();
 
-const cacheBuster = () => `?v=${Date.now()}`;
-
 const validateSize = (sizeStr?: string): { valid: boolean, size: number, error?: string } => {
 	if (!sizeStr) return { valid: true, size: DEFAULT_ICON_SIZE };
 
@@ -72,7 +70,7 @@ const updateIcons = (): void => {
 
 		const cssRules = Object.entries(data).map(([userId, entry]) => {
 			const size = entry.size || DEFAULT_ICON_SIZE;
-			return `[id$="-userlist-user-${userId}"] { background: url("${entry.url}${bust}") right no-repeat !important; background-size: ${size}px!important;}`;
+			return `[id$="-userlist-user-${userId}"] { background: url("${entry.url}") right no-repeat !important; background-size: ${size}px!important;}`;
 		}).join('\n');
 
 		const cssBlock = `${ICONS_START_TAG}\n${cssRules}\n${ICONS_END_TAG}`;
