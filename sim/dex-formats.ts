@@ -679,7 +679,7 @@ export class DexFormats {
 				);
 			}
 
-			if (supportedGameTypes === 'any') {
+			if (supportedGameTypes === 'any' || (!supportedGameTypes && gameType !== format.gameType)) {
 				supportedGameTypes = this.dex.getSupportedGameTypes();
 			} else if (!supportedGameTypes) {
 				supportedGameTypes = [gameType];
