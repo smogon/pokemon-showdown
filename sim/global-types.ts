@@ -13,6 +13,10 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
+type KeysMatching<T, U> = {
+	[K in keyof T]: U extends T[K] ? K : never
+}[keyof T];
+
 /**
  * Use `${value as DebugOutput}` to tell oxlint to stop complaining about booleans.
  * Needs to be explicit because booleans in string interpolation is frequently a bug.
