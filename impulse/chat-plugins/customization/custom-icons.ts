@@ -109,7 +109,7 @@ const sendIconNotifications = (
 ) => {
 	const userId = toID(targetName);
 	const sizeDisplay = formatSizeDisplay(size);
-	const iconHtml = url ? `<img src="${url}${cacheBuster()}" width="32" height="32">` : '';
+	const iconHtml = url ? `<img src="${url}}" width="32" height="32">` : '';
 	const iconDisplay = iconHtml ? `: ${iconHtml}` : '';
 
 	const user = Users.get(userId);
