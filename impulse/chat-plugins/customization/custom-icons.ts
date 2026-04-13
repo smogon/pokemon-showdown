@@ -66,7 +66,6 @@ const formatSizeDisplay = (size: number) => (size !== DEFAULT_ICON_SIZE ? ` (${s
 
 const updateIcons = (): void => {
 	try {
-		const bust = cacheBuster();
 
 		const cssRules = Object.entries(data).map(([userId, entry]) => {
 			const size = entry.size || DEFAULT_ICON_SIZE;
