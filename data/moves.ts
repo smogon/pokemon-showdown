@@ -23566,7 +23566,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, sound: 1, heal: 1, bypasssub: 1, metronome: 1 },
 		heal: [1, 2],
-		onHitField(target, source, move) {
+		onHit(target, source, move) {
 			for (const pokemon of this.getAllActive()) {
 				if (!pokemon.status && pokemon.runStatusImmunity('slp') && !pokemon.hasAbility('soundproof')) {
 					pokemon.addVolatile('yawn');
