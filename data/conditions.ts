@@ -867,7 +867,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-climateWeather', 'none');
 		},
 	},
-	foghorn: { // incomplete.
+	foghorn: { // tested, works as intended
 		name: 'Foghorn',
 		effectType: 'ClimateWeather',
 		duration: 5,
@@ -879,7 +879,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target, source, move) {
-			if (target.effectiveClimateWeather() !== 'foghorn' || source.hasAbility(['droughtproof', 'warpmist', 'protean'])) return;
+			if (target.effectiveClimateWeather() !== 'foghorn' ||
+				source.hasAbility(['droughtproof', 'warpmist', 'protean'])) return;
 			if (typeof accuracy === 'number' && move?.type !== 'Normal' && move?.type !== '???') {
 				// This one piece of code took over 5 hours to do because it was reading move as move: Pokemon and not move: ActiveMove
 				this.debug('Fog accuracy decrease');

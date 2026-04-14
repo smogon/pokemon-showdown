@@ -6145,7 +6145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 10021,
 	},
-	bubblehelm: { // incomplete, needs testing
+	bubblehelm: { // tested, works as intended
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
@@ -6289,7 +6289,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10010,
 	},
-	droughtproof: { // incomplete. needs testing
+	droughtproof: { // tested, works as intended
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -6646,7 +6646,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10072,
 	}, */
-	hydrophobic: { // incomplete. needs testing
+	hydrophobic: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Water') {
