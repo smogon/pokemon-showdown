@@ -23568,8 +23568,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		heal: [1, 2],
 		onHit(target, source, move) {
 			for (const pokemon of this.getAllActive()) {
-				if (!pokemon.status && pokemon.runStatusImmunity('slp') && !pokemon.hasAbility('soundproof')) {
-					pokemon.addVolatile('yawn');
+				if (!(pokemon.volatiles['protect'] || pokemon.volatiles['banefulbunker'] || pokemon.volatiles['kingsshield'] ||
+				pokemon.volatiles['spikyshield'] || pokemon.side.getSideCondition('matblock') || pokemon.side.getSideCondition('wideguard'))) {
+					if (!pokemon.status && pokemon.runStatusImmunity('slp') && !pokemon.hasAbility('soundproof')) {
+						pokemon.addVolatile('yawn');
+					}
 				}
 			}
 		},
