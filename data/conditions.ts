@@ -1542,7 +1542,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			let forkedPresent = false;
 			// Handle Forked taking targetting priority over Lightning Rod
 			for (const target of this.getAllActive()) {
-				if (target.effectiveEnergyWeather() !== 'supercell') {
+				if (target.effectiveEnergyWeather() === 'supercell') {
 					if (target.hasAbility('lightningrod') || target.hasAbility('powerplumage')) {
 						lightningRodPresent = true;
 					}
@@ -1566,6 +1566,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			if (validTargets.length > 0) {
 				let lightningStrikes = 1;
+				forkedPresent = false;
+				for (const target of this.getAllActive()) {
+					if (target.hasAbility('forked') && target.effectiveEnergyWeather() === 'supercell') forkedPresent = true;
+				}
 				if (forkedPresent) lightningStrikes = 2;
 				for (let i = 0; i < lightningStrikes; i++) {
 					let target = validTargets[0];
