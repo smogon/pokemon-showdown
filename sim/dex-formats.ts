@@ -59,6 +59,10 @@ export interface GameTimerSettings {
 	accelerate: boolean;
 }
 
+const FORMAT_KEY_RULELIKE = ['checkCanLearn', 'onChooseTeam'] as const;
+
+type FormatKeyRuleLike = typeof FORMAT_KEY_RULELIKE[number];
+
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:
  * - '[ruleid]' the ID of a rule in effect
@@ -308,6 +312,35 @@ export class RuleTable extends Map<string, string> {
 	isRuleValue<T>(rule: string, value: T) {
 		if (!this.valueRules.has(rule)) return false;
 		return this.valueRules.get(rule) === value;
+	}
+
+	/*
+	 * Stores unique properties or event handler across formats and rules.
+	 * These are not already rules because:
+	 * - Need to fast access these properties without loading rule tables.
+	 * - Inadequate ergonomics for value rules (e.g. may be functions).
+	 * - Historical reasons.
+	 */
+
+	importUniqueFormatKey<K extends FormatKeyRuleLike>(
+		format: MakeRequiredNonNullable<Format, K>,
+		key: K,
+	) {
+		this[key] = [format[key], format.name] as this[K];
+	}
+
+	importUniqueSubFormatKey<K extends FormatKeyRuleLike>(
+		subRuleTable: MakeRequiredNonNullable<RuleTable, K>,
+		key: K,
+		format: Format,
+	) {
+		if (this[key]) {
+			throw new Error(
+				`"${format.name}" has conflicting ${this.dex.formats.describeFormatKey(key)} from ` +
+				`"${this[key][1]}" and "${subRuleTable[key][1]}"`
+			);
+		}
+		this[key] = subRuleTable[key] as this[K];
 	}
 
 	/*
@@ -631,6 +664,11 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type RuleLikeCheck = Assert<
+	FormatKeyRuleLike extends keyof Format & keyof RuleTable ? true : false
+>;
+
 /** merges format lists from config/formats and config/custom-formats */
 function mergeFormatLists(main: FormatList, custom: FormatList | undefined): FormatList {
 	// interface for the builder.
@@ -755,6 +793,17 @@ export class DexFormats {
 
 		this.formatsListCache = formatsList;
 		return this;
+	}
+
+	describeFormatKey(key: keyof Format) {
+		switch (key) {
+		case 'checkCanLearn':
+			return `move validation rules`;
+		case 'onChooseTeam':
+			return `team selection rules`;
+		default:
+			return key;
+		}
 	}
 
 	checkDeprecated(format: AnyObject) {
@@ -942,11 +991,10 @@ export class DexFormats {
 		if (format.customRules) {
 			ruleset.push(...format.customRules);
 		}
-		if (format.checkCanLearn) {
-			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
-		}
-		if (format.onChooseTeam) {
-			ruleTable.onChooseTeam = [format.onChooseTeam, format.name];
+		for (const key of FORMAT_KEY_RULELIKE) {
+			if (this.hasRuleLike(format, key)) {
+				ruleTable.importUniqueFormatKey(format, key);
+			}
 		}
 
 		// apply rule repeals before other rules
@@ -1105,23 +1153,10 @@ export class DexFormats {
 			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans) {
 				ruleTable.addComplexTeamBan(subRule, source || subformat.name, limit, bans);
 			}
-			if (subRuleTable.checkCanLearn) {
-				if (ruleTable.checkCanLearn) {
-					throw new Error(
-						`"${format.name}" has conflicting move validation rules from ` +
-						`"${ruleTable.checkCanLearn[1]}" and "${subRuleTable.checkCanLearn[1]}"`
-					);
+			for (const key of FORMAT_KEY_RULELIKE) {
+				if (this.hasRuleLike(subRuleTable, key)) {
+					ruleTable.importUniqueSubFormatKey(subRuleTable, key, format);
 				}
-				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
-			}
-			if (subRuleTable.onChooseTeam) {
-				if (ruleTable.onChooseTeam) {
-					throw new Error(
-						`"${format.name}" has conflicting team selection rules from ` +
-						`"${ruleTable.onChooseTeam[1]}" and "${subRuleTable.onChooseTeam[1]}"`
-					);
-				}
-				ruleTable.onChooseTeam = subRuleTable.onChooseTeam;
 			}
 		}
 		if (!hasPokemonBans && warnForNoPokemonBans) {
@@ -1292,5 +1327,15 @@ export class DexFormats {
 			throw new Error(`Nothing matches "${rule}"`);
 		}
 		return matches[0];
+	}
+
+	hasRuleLike<
+		T extends Format | RuleTable,
+		K extends keyof T,
+	>(format: T, key: K): format is MakeRequiredNonNullable<T, K> {
+		// Ignore falsy values as usual.
+		// Note that, in this case, if we wanted them,
+		// the rule-like would have to optimally be a true rule.
+		return !!format[key];
 	}
 }
