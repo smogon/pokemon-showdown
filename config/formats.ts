@@ -3389,6 +3389,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] ChatBats",
 		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
 		mod: 'chatbats',
+		searchShow: false,
 		team: 'randomChatBats',
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
 		onSwitchIn(pokemon) {
