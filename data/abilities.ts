@@ -6267,6 +6267,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
 			}
 		},
+		onUpdate(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (!pokemon.hasItem('thickclub') && pokemon.species.id === 'bearvoyanceawakened') {
+				if (pokemon.isActive) {
+					pokemon.formeChange('Bearvoyance', this.effect, false, '0', '[msg]');
+				}
+			}
+		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Consecration",
 		rating: 2,
