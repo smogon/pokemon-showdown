@@ -37,6 +37,10 @@ type RuleValidator = NumberRuleValidator | StringRuleValidator | IDRuleValidator
 
 type RuleValidator = (this: RuleTableBuildContext, value: number | string | undefined) => (number | string | void);
 
+type ModdedCheckCanLearn = (
+	this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: Partial<PokemonSet>
+) => string | null;
+
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
@@ -68,7 +72,7 @@ export class RuleTable extends Map<string, string> {
 	dex: ModdedDex;
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
-	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
+	checkCanLearn: [ModdedCheckCanLearn, string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
@@ -575,9 +579,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly itemClauseDefault?: boolean;
 	declare readonly threads?: string[];
 	declare readonly tournamentShow?: boolean;
-	declare readonly checkCanLearn?: (
-		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
-	) => string | null;
+	declare readonly checkCanLearn?: ModdedCheckCanLearn;
 	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
 	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	declare readonly getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
