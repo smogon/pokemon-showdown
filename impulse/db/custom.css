@@ -1,0 +1,2827 @@
+/******************************************************************
+* 1. GLOBAL & UTILITIES
+******************************************************************/
+
+/* Global RPG Text Shadow Reset */
+[class*="rpg-"], .dark [class*="rpg-"] {
+    text-shadow: none !important;
+}
+
+/* --- Success Notification Banner --- */
+
+.rpg-notification {
+	background-color: #d4edda;
+    color: #155724;
+	border: 1px solid #c3e6cb;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    animation: fadeIn 0.3s;
+}
+
+.dark .rpg-notification {
+    background-color: #1e4d2b;
+    color: #d4edda;
+    border-color: #28a745;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(-5px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Text Utilities --- */
+.rpg-text-center { text-align: center; }
+.rpg-margin-top { margin-top: 15px; }
+.rpg-button-float-right { float: right; }
+
+.rpg-text-error { color: #E63946; }
+.dark .rpg-text-error { color: #ff6677; }
+
+.rpg-text-success { color: #28a745; }
+.dark .rpg-text-success { color: #40c040; }
+
+.rpg-text-warning { color: #FF8C00; }
+.dark .rpg-text-warning { color: #ffaa33; }
+
+.rpg-text-info { color: #007bff; }
+.dark .rpg-text-info { color: #55aaff; }
+
+.rpg-text-muted { color: #6c757d; }
+.dark .rpg-text-muted { color: #aaaaaa; }
+
+/* --- Generic Grid Utilities --- */
+.rpg-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
+
+/* NEW: 3 Column Grid for items */
+.rpg-grid-3col-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns for items */
+    gap: 10px;
+    width: 100%;
+}
+
+/* Responsive adjustment for mobile: stack columns */
+@media only screen and (max-width: 480px) {
+    .rpg-grid-2col {
+        grid-template-columns: 1fr;
+    }
+    /* NEW: 3-column grid stacks to 2 columns on mobile */
+    .rpg-grid-3col-items {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* --- Scrollable Grid Wrapper --- */
+.rpg-scrollable-grid {
+    max-height: 380px;
+    overflow: auto;
+    display: block;
+    margin-bottom: 10px;
+    /* Optional: Scrollbar aesthetics for WebKit browsers (Chrome/Safari) */
+    scrollbar-width: thin;
+}
+
+/******************************************************************
+* 2. CORE COMPONENTS (Infobox, Nav Bar, Party/Starter Cards)
+******************************************************************/
+
+/* --- RPG Infobox (Standalone Replacement) --- */
+.rpg-infobox {
+    display: block;
+    clear: both;
+    background-color: #eeeeee;  /* Soft cool white/gray */
+    border: 1px solid #b0c4de;  /* Pleasant blue-gray border */
+    color: #2c3e50;             /* Dark slate text for contrast */
+    border-radius: 8px;         /* Modern rounded corners */
+    padding: 8px;              /* Comfortable spacing */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 2px;
+    margin-top: 2px;
+    overflow: hidden;           /* Contains internal floats */
+}
+
+/* Dark Mode Variant */
+.dark .rpg-infobox {
+    background-color: rgba(25, 25, 25, 0.9);  /* Deep modern charcoal */
+    border: 1px solid #3e444a;  /* Subtle lighter border */
+    color: #e0e6ed;             /* Bright, clear text */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Ensure headers inside look clean */
+.rpg-infobox h2 {
+	 text-align: center;
+    margin-top: 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 4px;
+}
+.dark .rpg-infobox h2 {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- Navigation Bar Revamp --- */
+.rpg-nav-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns = 2 rows for 6 items */
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-nav-bar {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-nav-button {
+    display: flex;
+    flex-direction: column; /* Stack Icon on top of Text */
+    align-items: center;
+    justify-content: center;
+    padding: 6px 2px;
+    height: 50px; /* Fixed height for uniform look */
+    
+    /* Modern styling to match Infobox */
+    background-color: #fff;
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    color: #555;
+    
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1.2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.dark .rpg-nav-button {
+    background-color: #33383d;
+    border-color: #555;
+    color: #ccc;
+}
+
+/* Hover State */
+.rpg-nav-button:hover {
+    background-color: #f0f8ff; /* Light AliceBlue hover */
+    border-color: #87cefa;
+    transform: translateY(-1px); /* Subtle lift effect */
+}
+.dark .rpg-nav-button:hover {
+    background-color: #3e444a;
+    border-color: #777;
+}
+
+.rpg-nav-icon {
+    font-size: 1.4em;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+/* --- Party Screen Grid Layout --- */
+.rpg-party-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns for a 3x2 layout */
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rpg-party-card {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+.dark .rpg-party-card {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-party-empty {
+    background-color: rgba(0,0,0,0.05);
+    border: 2px dashed #ccc;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    height: 100%;
+    min-height: 100px; /* Match approx height of filled card */
+}
+.dark .rpg-party-empty {
+    background-color: rgba(255,255,255,0.05);
+    border-color: #555;
+    color: #777;
+}
+
+/* Upper Section: Icon + Stats */
+.rpg-party-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rpg-party-icon {
+    flex-shrink: 0;
+    width: 40px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.rpg-party-stats {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.9em;
+    line-height: 1.3;
+}
+
+/* Lower Section: Action Buttons */
+.rpg-party-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-party-actions {
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+.rpg-party-actions .button {
+    flex-grow: 1;
+    font-size: 0.75em;
+    padding: 2px 4px;
+    margin: 0;
+}
+
+/* Tiny Move Arrows */
+.rpg-party-move-btn {
+    flex-grow: 0 !important;
+    width: 24px;
+    text-align: center;
+    padding: 2px 0 !important;
+}
+
+/* --- Compact Starter Selection Card --- */
+.rpg-starter-card {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+	 height: 70px;
+    border-radius: 6px;
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    text-align: center;
+    transition: transform 0.1s;
+}
+
+.dark .rpg-starter-card {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-starter-card:hover {
+    transform: translateY(-2px);
+    border-color: #87cefa;
+    background-color: #f0f8ff;
+}
+.dark .rpg-starter-card:hover {
+    border-color: #777;
+    background-color: rgba(255,255,255,0.05);
+}
+
+.rpg-starter-card img {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+    margin-bottom: 2px;
+}
+
+.rpg-starter-info {
+    font-size: 0.9em;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.rpg-starter-card .button {
+    width: 120px;
+    padding: 3px 0;
+    font-size: 0.8em;
+    margin: 0;
+}
+
+/******************************************************************
+* 3. SUMMARY SCREEN
+******************************************************************/
+
+/* Header Section */
+.rpg-summary-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-header { border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-summary-sprite {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 50%; /* Circle background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-summary-sprite {
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.rpg-summary-sprite img {
+    max-width: 64px;
+    max-height: 64px;
+    image-rendering: pixelated;
+}
+
+.rpg-summary-info {
+    flex-grow: 1;
+}
+
+/* Unified Stats Table */
+.rpg-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.rpg-stats-table th {
+    text-align: left;
+    color: #666;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    padding: 4px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+.dark .rpg-stats-table th { color: #aaa; border-bottom-color: rgba(255,255,255,0.1); }
+
+.rpg-stats-table td {
+    padding: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.dark .rpg-stats-table td { border-bottom-color: rgba(255,255,255,0.05); }
+
+.rpg-stat-val { font-weight: bold; }
+.rpg-stat-iv { color: #888; font-size: 0.85em; }
+.rpg-stat-ev { color: #5daae0; font-size: 0.85em; font-weight: bold; }
+
+/* Move Cards in Summary */
+.rpg-summary-move {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+}
+.dark .rpg-summary-move {
+    background: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+/* Trainer Memo Box */
+.rpg-memo-box {
+    background: rgba(0,0,0,0.03);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+.dark .rpg-memo-box { background: rgba(255,255,255,0.05); }
+
+/******************************************************************
+* 4. ITEM & SHOP GRID STYLING
+******************************************************************/
+
+.rpg-item-container {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #b0c4de;
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.dark .rpg-item-container {
+    background-color: rgba(0,0,0,0.2);
+    border-color: #555;
+}
+
+.rpg-item-header {
+    display: block; /* Changed from flex to block since it's just text now */
+    text-align: center; /* Center the text for a cleaner look without icons */
+    margin-bottom: 4px;
+}
+
+/* Remove the icon styling entirely */
+.rpg-item-icon {
+    display: none;
+}
+
+.rpg-item-details {
+    font-size: 0.9em;
+    line-height: 1.3;
+    overflow: hidden;
+}
+
+.rpg-item-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center; /* Center buttons */
+    margin-top: auto;
+}
+
+.rpg-item-actions .button {
+    padding: 2px 6px;
+    font-size: 0.75em;
+    margin: 0;
+    flex-grow: 1;
+    max-width: 80px; /* Prevent buttons from getting too wide */
+}
+
+
+/******************************************************************
+* 5. BATTLE UI - CORE STRUCTURE & ELEMENTS
+******************************************************************/
+
+/* --- Main Battle Container --- */
+.rpg-battle-ui {
+    display: block;
+    height: 250px;
+    background: url('https://i.ibb.co/6RQXD1Xx/pokemon-swsh-route-5-by-phoenixoflight92-de33uqj-350t.jpg') no-repeat center bottom !important;
+    background-size: cover !important;
+    border: 1px solid #444 !important;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.dark .rpg-battle-ui {
+    background: url('https://i.ibb.co/RGyJczN6/de33uyt-aab270ae-87c5-4511-89a9-05f39dcb1de8.jpg') no-repeat center bottom !important;
+    background-size: cover !important;
+}
+
+/* --- Battle Slot Wrappers (Shared) --- */
+.rpg-opponent-slot,
+.rpg-player-slot {
+    position: absolute;
+    width: 220px;
+    text-align: center;
+}
+
+/* --- SINGLE BATTLE POSITIONING --- */
+.rpg-single-slot-player {
+    bottom: 8px;
+    left: 18%; 
+    z-index: 3;
+}
+
+.rpg-single-slot-opponent {
+    top: 45px;
+    right: 18%; 
+    z-index: 2;
+}
+
+/* --- DOUBLE BATTLE POSITIONING --- */
+/* Player Slot 1 (Left) */
+.rpg-double-slot-0 {
+    bottom: 40px;
+    left: 2%;
+    z-index: 3;
+}
+
+/* Player Slot 2 (Right) */
+.rpg-double-slot-1 {
+    bottom: 20px;
+    right: 45%;
+    z-index: 3;
+}
+
+/* Opponent Slot 1 (Right - Standard) */
+.rpg-double-slot-2 {
+    top: 60px; /* Moved down to touch ground */
+    right: 7%;
+    z-index: 2;
+}
+
+/* Opponent Slot 2 (Left - Double Extra) */
+.rpg-double-slot-3 {
+    top: 30px; /* Moved down to touch ground */
+    left: 40%;
+    z-index: 2;
+}
+
+/* --- Sprites --- */
+.rpg-pokemon-sprite-front,
+.rpg-pokemon-sprite-back {
+    width: 70px;
+    height: 70px;
+    image-rendering: pixelated;
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- Info Blocks --- */
+.rpg-opponent-info,
+.rpg-player-info {
+    width: 100%;
+    color: white; /* Default to white for name text contrast */
+    margin-bottom: -5px;
+    position: relative;
+}
+
+/* --- Battle Name Text (Heavy Outline) --- */
+.rpg-battle-name-line {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    color: #fff;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0px 2px 3px rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
+.dark .rpg-battle-name-line { color: #fff; }
+
+
+
+/******************************************************************
+* 6. BATTLE UI - BARS (HP/EXP)
+******************************************************************/
+
+/* --- HP BAR (Pill Shape, External Text) --- */
+.rpg-hp-bar {
+    width: 75%;                   
+    max-width: 120px;             
+    min-width: 120px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #666;
+    border-radius: 15px;          /* Pill shape */
+    position: relative;
+    margin: 4px auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+.dark .rpg-hp-bar {
+    background: rgba(60, 60, 60, 0.8);
+    border-color: #888;
+}
+
+.rpg-hp-bar-inner {
+    width: 100%; /* Controlled via inline style */
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.rpg-hp-bar-text {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    color: #fff;
+    font-size: 0px !important;
+    font-weight: bold;
+    padding: 0;
+    text-align: left;
+    width: 35px;
+}
+.dark .rpg-hp-bar-text { background: transparent; color: #fff; }
+
+/* --- HP Colors --- */
+.rpg-hp-high { background-color: #6abf69;; }
+.dark .rpg-hp-high { background-color: #59b359; }
+
+.rpg-hp-mid { background-color: #ffd54f; }
+.dark .rpg-hp-mid { background-color: #ffca28; }
+
+.rpg-hp-low { background-color: #e57373; }
+.dark .rpg-hp-low { background-color: #ef5350; }
+
+/* --- EXP BAR (Attached to Player, Pill Shape) --- */
+.rpg-exp-bar {
+    width: 75%;
+    max-width: 120px;
+    min-width: 120px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #666;
+    border-radius: 10px;
+    position: relative;
+    margin: 3px auto 0 auto;
+    overflow: hidden;
+}
+.dark .rpg-exp-bar {
+    background: rgba(60, 60, 60, 0.8);
+    border-color: #888;
+}
+
+.rpg-exp-bar-inner {
+    background: #5daae0;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.rpg-exp-bar-text {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    color: #fff;
+    font-size: 0px !important;
+    font-weight: bold;
+    text-align: left;
+    width: 35px;
+}
+.dark .rpg-exp-bar-text { color: #fff; }
+
+/******************************************************************
+* 7. STATUS & TAG SYSTEM
+******************************************************************/
+
+/* --- 1. Attached Status Line --- */
+/* Holds Stat Boosts & Status Conditions immediately below the bar */
+.rpg-battle-status-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 1px;
+    width: 100%;
+    position: relative;
+    min-height: 16px;
+}
+
+/* --- 2. Fixed Weather/Field Container --- */
+/* Center-Top */
+.rpg-weather-container {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    z-index: 5;
+}
+
+/* --- 3. Unified Tag Styles (The Pill Look) --- */
+.rpg-tag,
+.rpg-stat-up,
+.rpg-stat-down,
+.rpg-weather-tag,
+.rpg-terrain-tag,
+.rpg-field-effect-tag,
+.rpg-side-effect-tag,
+/* NEW: Missing Tags */
+.rpg-tag-perish,
+.rpg-tag-proto,
+.rpg-tag-quark,
+.rpg-tag-commander,
+.rpg-tag-disguise,
+.rpg-tag-gulping,
+.rpg-tag-gorging
+{
+    font-size: 8px;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 6px; /* Pill */
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    text-shadow: none;
+    text-transform: uppercase;
+    display: inline-block;
+    line-height: 1.2;
+    margin: 0;
+    vertical-align: middle;
+    color: #fff;
+}
+
+.dark .rpg-tag, 
+.dark .rpg-stat-up,
+.dark .rpg-stat-down,
+.dark .rpg-weather-tag, 
+.dark .rpg-terrain-tag,
+.dark .rpg-field-effect-tag,
+.dark .rpg-side-effect-tag,
+.dark .rpg-tag-perish,
+.dark .rpg-tag-proto,
+.dark .rpg-tag-quark,
+.dark .rpg-tag-commander,
+.dark .rpg-tag-disguise,
+.dark .rpg-tag-gulping,
+.dark .rpg-tag-gorging
+{
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* --- Stat Boost Specifics --- */
+.rpg-stat-up {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+.dark .rpg-stat-up {
+    background-color: #1e4d2b;
+    color: #d4edda;
+    border-color: #4caf50;
+}
+
+.rpg-stat-down {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+.dark .rpg-stat-down {
+    background-color: #5a1e23;
+    color: #f8d7da;
+    border-color: #e57373;
+}
+
+
+/* --- Status Condition Colors --- */
+.rpg-tag-brn, .rpg-tag-flash-fire { background-color: #FF7F50; }
+.rpg-tag-par, .rpg-tag-charged, .rpg-tag-magnet-rise { background-color: #F8D030; color: #333; }
+.rpg-tag-psn, .rpg-tag-tox { background-color: #A040A0; }
+.rpg-tag-slp, .rpg-tag-yawn { background-color: #7890a8; }
+.rpg-tag-frz { background-color: #98D8D8; color: #333; }
+.rpg-tag-confused { background-color: #E5597D; }
+.rpg-tag-seeded, .rpg-tag-ingrained { background-color: #78C850; }
+.rpg-tag-trapped, .rpg-tag-locked, .rpg-tag-grounded { background-color: #A8A878; }
+
+/* Volatile Statuses */
+.rpg-tag-cursed, .rpg-tag-nightmare, .rpg-tag-embargo { background-color: #4b4b4b; border-color: #2b2b2b; }
+.rpg-tag-taunted, .rpg-tag-tormented, .rpg-tag-rampage, .rpg-tag-uproar { background-color: #d63031; }
+.rpg-tag-substitute { background-color: #55efc4; color: #333; }
+.rpg-tag-disabled, .rpg-tag-encored, .rpg-tag-heal-block { background-color: #a29bfe; color: #333; }
+.rpg-tag-focus-energy, .rpg-tag-must-recharge, .rpg-tag-charging { background-color: #fdcb6e; color: #333; }
+.rpg-tag-aqua-ring, .rpg-tag-protected, .rpg-tag-helped { background-color: #74b9ff; }
+.rpg-tag-telekinesis, .rpg-tag-infatuated, .rpg-tag-destiny-bond, .rpg-tag-grudge { background-color: #e84393; }
+.rpg-tag-analytic, .rpg-tag-slow-start, .rpg-tag-unburden { background-color: #b2bec3; color: #333; }
+.rpg-tag-stockpile { background-color: #00b894; }
+.rpg-tag-attention { background-color: #fab1a0; color: #333; }
+
+.rpg-tag-tera {
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    border: none;
+}
+
+/* --- NEW: Missing Mechanics Tags --- */
+
+/* Perish Song (Dark/Ominous) */
+.rpg-tag-perish { 
+    background-color: #2f3542; 
+    color: #ff4757; 
+    border: 1px solid #ff4757; 
+}
+
+/* Paradox Abilities (Ancient/Future themes) */
+.rpg-tag-proto { 
+    background: linear-gradient(135deg, #e17055 0%, #d63031 100%); 
+    color: white; 
+    border: none; 
+} 
+.rpg-tag-quark { 
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); 
+    color: white; 
+    border: none; 
+}
+
+/* Commander (Tatsugiri/Dondozo) */
+.rpg-tag-commander { 
+    background-color: #ffa502; 
+    color: #2f3542; 
+    border: 1px solid #eccc68; 
+}
+
+/* Disguise (Mimikyu) */
+.rpg-tag-disguise { 
+    background-color: #a4b0be; 
+    color: #2f3542; 
+    border: 1px dashed #57606f; 
+}
+
+/* Cramorant Forms */
+.rpg-tag-gulping { background-color: #70a1ff; color: white; }
+.rpg-tag-gorging { background-color: #ff6b81; color: white; }
+
+
+/* --- Weather & Terrain Colors --- */
+.rpg-weather-sun, .rpg-weather-harsh-sun { background-color: #F85858; }
+.rpg-weather-rain, .rpg-weather-heavy-rain { background-color: #5090D0; }
+.rpg-weather-sand { background-color: #D0A050; }
+.rpg-weather-hail { background-color: #80C0C0; }
+.rpg-weather-strong-winds { background-color: #00b894; }
+
+.rpg-terrain-electric { background-color: #F8D030; color: #333; }
+.rpg-terrain-grassy { background-color: #78C850; }
+.rpg-terrain-misty { background-color: #E0A0C0; }
+.rpg-terrain-psychic { background-color: #F85888; }
+
+/* --- Field Effects (Side effects/screens) --- */
+.rpg-side-reflect { background-color: #F85888; }
+.rpg-side-lightscreen { background-color: #F8D030; color: #333; }
+.rpg-side-auroraveil { background-color: #6890F0; }
+.rpg-side-stealthrock { background-color: #B8A038; }
+.rpg-side-spikes { background-color: #A8A878; }
+.rpg-side-toxicspikes { background-color: #A040A0; }
+.rpg-side-stickyweb { background-color: #b2bec3; color: #333; }
+.rpg-side-mist { background-color: #A8B8C0; color: #333; }
+.rpg-side-tailwind { background-color: #87CEEB; color: #333; }
+.rpg-side-quickguard, .rpg-side-wideguard { background-color: #74b9ff; }
+.rpg-side-craftyshield { background-color: #ff7675; }
+
+/* --- Global Field Effects --- */
+.rpg-field-trickroom { background-color: #a29bfe; color: #333; }
+.rpg-field-magicroom { background-color: #fd79a8; color: #333; }
+.rpg-field-wonderroom { background-color: #74b9ff; color: #333; }
+.rpg-field-gravity { background-color: #636e72; }
+.rpg-field-mudsport { background-color: #e17055; }
+.rpg-field-watersport { background-color: #74b9ff; }
+.rpg-field-fairylock { background-color: #ff7675; }
+.rpg-field-iondeluge { background-color: #ffeaa7; color: #333; }
+
+
+/******************************************************************
+* 8. BATTLE UI - BUTTONS & MENUS
+******************************************************************/
+
+/* --- Battle Log & Events --- */
+.rpg-battle-log {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #666;
+    min-height: 100px;
+    max-height: 100px;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+.dark .rpg-battle-log { border-color: #888; }
+
+/* --- General Battle Buttons --- */
+.rpg-button-victory {
+    width: 200px;
+    height: 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.rpg-battle-action-button {
+    width: 155px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+    margin: 4px 2px;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+.rpg-battle-action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- Tera Toggle Button --- */
+.rpg-tera-toggle {
+    width: 120px;
+    height: 22px;
+    padding: 1px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 auto 2px auto;
+    font-size: 0.75em;
+    border: 2px solid #FF1493;
+    color: #FF1493;
+    background: white;
+    line-height: 16px;
+}
+.dark .rpg-tera-toggle {
+    background: #333;
+    color: #FF69B4;
+    border-color: #FF69B4;
+}
+
+.rpg-tera-toggle-on {
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+    color: white;
+    border: none;
+    padding: 3px;
+    line-height: 16px;
+}
+.dark .rpg-tera-toggle-on { color: #111; }
+
+/* --- Move Buttons --- */
+.rpg-move-button {
+    width: 155px;
+    height: 40px;
+    padding: 4px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: left;
+}
+.rpg-move-button-terastallized { border: 2px solid #FF1493; }
+
+.rpg-move-grid {
+    width: auto;
+    border-collapse: separate;
+    border-spacing: 8px;
+    margin: 15px auto;
+}
+.rpg-move-grid-cell { padding: 0; vertical-align: top; }
+
+.rpg-move-name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+.rpg-move-info {
+    font-size: 0.8em;
+    opacity: 0.9;
+    overflow: hidden;
+}
+.rpg-move-pp { float: right; }
+
+/* --- Battle Switch Menu (Grid Layout) --- */
+.rpg-switch-list-item {
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.dark .rpg-switch-list-item { border: 1px solid #555; }
+
+.rpg-switch-button {
+    width: 160px;       /* Matches move button width approx */
+    height: 55px;       /* Taller to fit HP bar and name */
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;      /* Flexbox for Icon + Info layout */
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+.rpg-switch-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;     /* Prevent icon squishing */
+}
+
+.rpg-switch-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.8em;
+    line-height: 1.3;
+}
+
+/* Adjust HP bar within the button to fit nicely */
+.rpg-switch-button .rpg-hp-bar {
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+    height: 6px;
+    margin: 2px 0 0 0;
+}
+
+/* Hide text inside the tiny button HP bar to save space */
+.rpg-switch-button .rpg-hp-bar-text {
+    display: none;
+}
+
+/* --- Catch Menu Buttons (Compact) --- */
+.rpg-catch-button {
+    width: 140px;       /* Reduced width (was 160px) */
+    height: 38px;       /* Reduced height (was 55px) */
+    padding: 3px 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+/* Override inner icon size specifically for balls */
+.rpg-catch-button .rpg-switch-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Compact text styling */
+.rpg-catch-button .rpg-switch-info {
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 0.75em;
+    line-height: 1.1;
+}
+
+/******************************************************************
+* 9. RESPONSIVE ADJUSTMENTS
+******************************************************************/
+
+/* Mobile Devices (max-width 480px) */
+@media only screen and (max-width: 480px) {
+    
+    .rpg-battle-ui {
+        height: 250px;
+    }
+    
+    /* Reduced from 220px to 155px for Double Battle safety */
+    .rpg-opponent-slot, .rpg-player-slot {
+        width: 155px; 
+    }
+
+    /* --- SINGLE BATTLE MOBILE RESET --- */
+    .rpg-single-slot-player {
+    	top: 100px;
+        left: 10px;
+    }
+    .rpg-single-slot-opponent {
+    	top: 70px;
+        right: 20px;
+    }
+
+    /* --- DOUBLE BATTLE MOBILE RESET --- */
+    /* Reset positioning to absolute edges for mobile */
+    .rpg-double-slot-0 { left: -2%; bottom: -5px; }
+    .rpg-double-slot-1 { right: 20%; bottom: -5px; }
+    .rpg-double-slot-2 { right: -2%; top: 80px; }
+    .rpg-double-slot-3 { left: 21%; top: 70px; }
+    
+    /* Slightly smaller name text */
+    .rpg-battle-name-line {
+        font-size: 0.9em;
+    }
+
+    /* Pull the HP bar text slightly closer */
+    .rpg-hp-bar-text, .rpg-exp-bar-text {
+        right: -32px; 
+        font-size: 6px;
+    }
+    
+    /* Ensure the bar allows enough room for text on small containers */
+    .rpg-hp-bar, .rpg-exp-bar {
+        max-width: 100px;
+    }
+  
+}
+
+/* Impulse Themed Table */
+
+.themed-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 12px;
+  background: rgba(216, 238, 245, 0.9);
+  border: 2px solid #1a9eb5;
+  box-shadow: 0 4px 12px rgba(26, 158, 181, 0.15);
+}
+
+/* Dark theme support */
+.dark .themed-table-container {
+  background: rgba(6, 14, 26, 0.9);
+  border-color: #0d2244;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.themed-table-title {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #0d2244 !important;
+  border-bottom: 2px solid #1a9eb5;
+  background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .themed-table-title {
+  color: #b8d8e8 !important;
+  background: linear-gradient(to bottom, #0d2244, #0a1628);
+  border-bottom-color: #0f6a80;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.themed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+}
+
+.themed-table-header th {
+  padding: 0.6rem 0.8rem;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 9pt !important;
+  color: #0a1628 !important;
+  background: linear-gradient(to bottom, #b8d8e8, #5dcde0) !important;
+  border-bottom: 2px solid #1a9eb5;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.dark .themed-table-header th {
+  color: #d8eef5 !important;
+  background: linear-gradient(to bottom, #0f6a80, #0d2244) !important;
+  border-bottom-color: #0f6a80;
+}
+
+.themed-table-row:nth-child(even) {
+  background-color: rgba(93, 205, 224, 0.1);
+}
+
+.dark .themed-table-row:nth-child(even) {
+  background-color: rgba(216, 238, 245, 0.04);
+}
+
+.themed-table-row:hover {
+  background-color: rgba(93, 205, 224, 0.25);
+}
+
+.dark .themed-table-row:hover {
+  background-color: rgba(216, 238, 245, 0.08);
+}
+
+.themed-table-row td {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid rgba(26, 158, 181, 0.15);
+  color: #0a1628 !important;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.dark .themed-table-row td {
+  color: #b8d8e8 !important;
+  border-top-color: rgba(13, 34, 68, 0.3);
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .themed-table-title {
+    font-size: 1rem !important;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .themed-table-header th,
+  .themed-table-row td {
+    padding: 0.4rem 0.6rem;
+    font-size: 8pt !important;
+  }
+}
+
+/* Smooth scrolling for overflow */
+.themed-table-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  }
+
+/* Impulse Themed Table Ends */
+
+/*****************************
+* Impulse Server
+* Modern Custom Theme
+******************************/
+
+/* BACKGROUND */
+body {
+background: url("https://i.ibb.co/chD4qSxY/28517.jpg") no-repeat left center fixed;
+background-size: cover;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* LOGO */
+img[class="logo"] {
+content: url("https://i.ibb.co/bjCQM6Jz/cooltext492473542861219.png");
+}
+
+/* HEADER BACKGROUND - Earthy green gradient */
+div[id="header"] {
+background: linear-gradient(135deg, #5dcde0 0%, #1a9eb5 50%, #0d2244 100%);
+box-shadow: 0 2px 8px rgba(13, 34, 68, 0.3);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+}
+
+/* HEADER BAR BACKGROUND - Light earthy tones */
+div[class="maintabbarbottom"] {
+border: 2px solid #1a9eb5;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* HEADER BUTTONS - Earthy theme */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button,
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur,
+div[class="userbar"] > button {
+border: 2px solid #1a9eb5;
+color: #0d2244;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+font-weight: 700;
+border-radius: 6px;
+transition: all 0.2s ease;
+}
+
+/* HEADER BUTTONS HOVER - Deeper earthy green */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button:hover,
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur:hover,
+div[class="userbar"] > button:hover {
+border-color: #0a1628;
+color: #c8d94a;
+background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+box-shadow: 0 4px 8px rgba(26, 158, 181, 0.4);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+transform: translateY(-1px);
+}
+
+/* REGULAR BUTTONS */
+div[class^="tabbar maintabbar"] > div > ul > li > button {
+color: #0d2244;
+font-weight: 700;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+transition: all 0.2s ease;
+}
+
+/* REGULAR BUTTONS HOVER */
+div[class^="tabbar maintabbar"] > div > ul > li > button:hover {
+color: #c8d94a;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* NOTIFICATION BUTTONS - Warm red for visibility */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying {
+background: linear-gradient(to bottom, #2a6fa8, #1a4d78);
+border: 2px solid #0d2244;
+color: #ffffff;
+box-shadow: 0 0 12px rgba(42, 111, 168, 0.7);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+font-weight: 700;
+animation: pulse 2s infinite;
+}
+
+/* NOTIFICATION BUTTONS HOVER */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying:hover {
+background: linear-gradient(to bottom, #1a4d78, #2a6fa8);
+border-color: #1a4d78;
+color: #ffffff;
+box-shadow: 0 0 16px rgba(93, 205, 224, 0.9);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+transform: translateY(-1px);
+}
+
+/* PULSE ANIMATION for notifications */
+@keyframes pulse {
+0% {
+box-shadow: 0 0 12px rgba(42, 111, 168, 0.6);
+}
+50% {
+box-shadow: 0 0 20px rgba(42, 111, 168, 0.8);
+}
+100% {
+box-shadow: 0 0 12px rgba(42, 111, 168, 0.6);
+}
+}
+
+/* ADDITIONAL MODERN ENHANCEMENTS */
+/* Focus states for accessibility */
+div[class^="tabbar maintabbar"] > div > ul > li > a.button:focus,
+div[class="userbar"] > button:focus {
+outline: 3px solid #1a9eb5;
+outline-offset: 2px;
+}
+
+/* Improved text readability across all elements */
+* {
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+/* LAYOUT STRUCTURE */
+.leftmenu {
+padding: 40px 0 0 0;
+width: 324px;
+}
+
+.rightmenu {
+position: absolute;
+top: 40px;
+right: 25px;
+width: 294px;
+}
+
+.activitymenu {
+position: absolute;
+left: 325px;
+top: 40px;
+}
+
+.mainmenu {
+padding: 0 0 51px 0;
+}
+
+.mainmenuwrapper {
+position: relative;
+min-height: 100%;
+}
+
+/* BATTLE FORM */
+.battleform {
+width: 230px;
+text-align: left;
+margin: 0 auto;
+}
+
+.battleform .buttonbar {
+text-align: center;
+}
+
+/* MAIN MENU FOOTER - Earthy theme */
+.mainmenufooter {
+position: absolute;
+bottom: 15px;
+left: 20px;
+color: #0a1628;
+text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 4px rgba(255, 255, 255, 0.7);
+font-weight: 600;
+background: rgba(216, 238, 245, 0.8);
+padding: 8px 12px;
+border-radius: 8px;
+border: 1px solid rgba(26, 158, 181, 0.3);
+}
+
+.mainmenufooter blockquote {
+margin: 0 0 1em 0;
+padding: 0;
+}
+
+.mainmenufooter small {
+font-size: 9pt;
+}
+
+.mainmenufooter small small {
+font-size: 8pt;
+}
+
+.mainmenufooter a {
+text-decoration: underline;
+color: #1a9eb5;
+font-weight: 700;
+}
+
+.mainmenufooter a:hover {
+text-decoration: underline;
+color: #0a1628;
+}
+
+/* PM BOXES - Earthy theme */
+.pmbox {
+width: 270px;
+margin: 0 auto;
+min-height: 2px;
+}
+
+.pm-window {
+margin: 0 -12px 12px -10px;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 4px 16px rgba(26, 158, 181, 0.2);
+}
+
+.tiny-layout .pm-window {
+margin: 0 0 12px 0;
+}
+
+.pm-window h3 {
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+color: #0d2244;
+margin: 0;
+padding: 2px 4px 2px 5px;
+font-size: 11pt;
+font-weight: 700;
+border: 2px solid #1a9eb5;
+border-top-left-radius: 12px;
+border-top-right-radius: 12px;
+cursor: pointer;
+transition: all 0.2s ease;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.pm-window h3:hover {
+color: #c8d94a;
+background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pm-window h3.pm-minimized {
+border-radius: 12px;
+}
+
+.pm-window h3.pm-notifying {
+border-color: #0d2244;
+background: linear-gradient(to bottom, #2a6fa8, #1a4d78);
+color: #ffffff;
+animation: pulse 2s infinite;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pm-window h3.pm-notifying:hover {
+border-color: #1a4d78;
+background: linear-gradient(to bottom, #5dcde0, #2a6fa8);
+}
+
+.pm-window h3 .closebutton,
+.pm-window h3 .minimizebutton {
+float: right;
+margin: -2px -5px 0 0;
+width: 22px;
+height: 21px;
+border-radius: 4px;
+transition: all 0.2s ease;
+}
+
+.pm-window h3 .closebutton:hover,
+.pm-window h3 .minimizebutton:hover {
+background: rgba(255, 255, 255, 0.2);
+}
+
+.pm-window h3 small {
+color: #7a9db5;
+font-weight: normal;
+vertical-align: 1px;
+}
+
+.pm-log {
+min-height: 100px;
+max-height: 300px;
+background: rgba(216, 238, 245, 0.98);
+color: #0a1628;
+border: 2px solid #1a9eb5;
+border-top: 0;
+border-bottom: 0;
+overflow: auto;
+-webkit-overflow-scrolling: touch;
+word-wrap: break-word;
+font-weight: 500;
+}
+
+.pm-buttonbar {
+padding-bottom: 3px;
+}
+
+.pm-log-add {
+color: #0a1628;
+border: 2px solid #1a9eb5;
+border-bottom-left-radius: 12px;
+border-bottom-right-radius: 12px;
+background: rgba(216, 238, 245, 0.95);
+font-weight: 500;
+}
+
+.pm-window.collapsed .pm-log,
+.pm-window.collapsed .pm-log-add {
+display: none;
+}
+
+.pm-window.focused h3,
+.pm-window.focused .pm-log,
+.pm-window.focused .pm-log-add {
+border-color: #0a1628;
+}
+
+.pm-window.focused h3,
+.pm-window.focused h3:hover {
+background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+color: #c8d94a;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* CHALLENGES - Earthy theme */
+.challenge {
+margin-top: -1px;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+border: 2px solid #1a9eb5;
+color: #0d2244;
+padding: 1px 5px;
+border-radius: 8px;
+font-weight: 700;
+}
+
+.challenge p {
+margin: 4px 0;
+}
+
+/* NEWS ENTRIES */
+.newsentry {
+font-size: 9pt;
+padding: 1px 10px;
+border-bottom: 2px solid #5dcde0;
+font-weight: 600;
+color: #0a1628;
+}
+
+.unread {
+background: rgba(93, 205, 224, 0.7);
+}
+
+/* RESPONSIVE LAYOUT */
+.tiny-layout .leftmenu,
+.tiny-layout .rightmenu,
+.tiny-layout .activitymenu {
+position: static;
+top: 0;
+right: 0;
+left: 0;
+width: auto;
+margin: 0;
+padding: 0;
+}
+
+.tiny-layout .leftmenu {
+padding-top: 30px;
+}
+
+.tiny-layout .activitymenu {
+padding-bottom: 8px;
+}
+
+/* MAIN MESSAGES - Earthy styling */
+.mainmessage {
+display: block;
+padding: 10px 15px;
+margin: 30px 40px;
+max-width: 400px;
+border-radius: 20px;
+background: rgba(216, 238, 245, 0.95);
+color: #0a1628;
+font-weight: 600;
+border: 2px solid #1a9eb5;
+box-shadow: 0 4px 16px rgba(26, 158, 181, 0.3);
+}
+
+/* MENU GROUPS - Earthy theme */
+.menugroup {
+display: block;
+padding: 10px 0;
+margin: 0 auto 30px auto;
+max-width: 270px;
+border-radius: 20px;
+background: linear-gradient(135deg, rgba(26, 158, 181, 0.9), rgba(13, 34, 68, 0.9));
+color: #d8eef5;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+text-align: center;
+border: 2px solid #0f6a80;
+box-shadow: 0 8px 24px rgba(26, 158, 181, 0.3);
+backdrop-filter: blur(10px);
+}
+
+.mainmessage p,
+.menugroup p {
+margin: 10px 0;
+}
+
+/* MENU GROUP BUTTONS - Earthy variants */
+.menugroup .button {
+box-sizing: border-box;
+font-size: 12pt;
+font-weight: 600;
+display: inline-block;
+padding: 5px 7px 3px 7px;
+width: 200px;
+border-radius: 8px;
+transition: all 0.2s ease;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+/* Earthy default colors */
+color: #ffffff;
+border: 2px solid #0d2244;
+background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+}
+
+.menugroup .button.big {
+width: 230px;
+height: 50px;
+padding: 0;
+font-size: 14pt;
+}
+
+.menugroup .button.big small {
+display: block;
+font-size: 9pt;
+}
+
+.menugroup .button:hover {
+background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+border-color: #0f6a80;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menugroup .button:active {
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 -1px 1px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(0, 0, 0, 0.4);
+background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+border-color: #0f6a80;
+transform: translateY(0px);
+}
+
+.menugroup .button.disabled,
+.menugroup .button.disabled:hover,
+.menugroup .button.disabled:active {
+cursor: default;
+background: linear-gradient(to bottom, #cccccc, #aaaaaa);
+border-color: #999999;
+color: #666666;
+text-shadow: none;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+transform: none;
+}
+
+/* COLORED MENU BUTTONS - Earthy/Forest variations */
+.button.mainmenu1 {
+background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+border-color: #0d2244;
+}
+
+.button.mainmenu1:hover {
+background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+border-color: #0f6a80;
+}
+
+.button.mainmenu1:active {
+background: linear-gradient(to bottom, #1a9eb5, #5dcde0);
+border-color: #0f6a80;
+}
+
+.button.mainmenu2 {
+background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+border-color: #0a1628;
+}
+
+.button.mainmenu2:hover {
+background: linear-gradient(to bottom, #8de8f5, #5dcde0);
+border-color: #1a9eb5;
+}
+
+.button.mainmenu2:active {
+background: linear-gradient(to bottom, #5dcde0, #8de8f5);
+border-color: #1a9eb5;
+}
+
+.button.mainmenu3 {
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+border-color: #1a9eb5;
+color: #0d2244;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.button.mainmenu3:hover {
+background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+border-color: #0f6a80;
+color: #ffffff;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.button.mainmenu3:active {
+background: linear-gradient(to bottom, #1a9eb5, #5dcde0);
+border-color: #0f6a80;
+}
+
+.button.mainmenu4 {
+background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+border-color: #0a1628;
+}
+
+.button.mainmenu4:hover {
+background: linear-gradient(to bottom, #a0eef8, #1a9eb5);
+border-color: #0f6a80;
+}
+
+.button.mainmenu4:active {
+background: linear-gradient(to bottom, #1a9eb5, #a0eef8);
+border-color: #0f6a80;
+}
+
+.button.mainmenu5 {
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+border-color: #1a9eb5;
+color: #0a1628;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.button.mainmenu5:hover {
+background: linear-gradient(to bottom, #b8d8e8, #5dcde0);
+border-color: #0f6a80;
+color: #ffffff;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.button.mainmenu5:active {
+background: linear-gradient(to bottom, #5dcde0, #b8d8e8);
+border-color: #0f6a80;
+}
+
+.button.mainmenu6 {
+background: linear-gradient(to bottom, #2a6fa8, #1a4d78);
+border-color: #0d2244;
+}
+
+.button.mainmenu6:hover {
+background: linear-gradient(to bottom, #5dcde0, #2a6fa8);
+border-color: #1a4d78;
+}
+
+.button.mainmenu6:active {
+background: linear-gradient(to bottom, #2a6fa8, #5dcde0);
+border-color: #1a4d78;
+}
+
+.rightmenu .menugroup .button {
+width: 180px;
+}
+
+/* LADDER - Earthy theme */
+.ladder table, .ladder td, .ladder th {
+border-collapse: collapse;
+border: 1px solid #1a9eb5;
+}
+
+.ladder td, .ladder th {
+padding: 3px 5px;
+}
+
+.ladder th {
+text-align: left;
+font-size: 9pt;
+background: linear-gradient(to bottom, #b8d8e8, #5dcde0);
+color: #0a1628;
+font-weight: 700;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.ladder span {
+color: #1a9eb5;
+}
+
+.hidden {
+display: none;
+}
+
+/* ROOM LIST - Earthy theme */
+.roomlisttop {
+max-width: 480px;
+margin-bottom: 10px;
+}
+
+.roomcounters {
+max-width: 480px;
+margin: 8px 0 15px 0;
+text-align: center;
+}
+
+@media (max-width: 382px) {
+.roomcounters {
+margin: 38px 0 15px 0;
+}
+}
+
+.roomcounters button {
+margin: 0 auto;
+width: 120px;
+height: 60px;
+padding: 3px 8px;
+text-align: center;
+vertical-align: middle;
+font-size: 10pt;
+position: relative;
+border: 2px solid #1a9eb5;
+color: #0d2244;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+font-weight: 700;
+border-radius: 6px;
+transition: all 0.2s ease;
+}
+
+.roomcounters button:hover {
+border-color: #0a1628;
+color: #c8d94a;
+background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+box-shadow: 0 4px 8px rgba(26, 158, 181, 0.4);
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+transform: translateY(-1px);
+}
+
+.roomcounters button strong {
+display: block;
+font-size: 18pt;
+font-weight: normal;
+}
+
+.roomcounters .usercount {
+display: block;
+width: 49px;
+height: 63px;
+position: absolute;
+left: -30px;
+bottom: -5px;
+background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta.png) center no-repeat;
+}
+
+.roomcounters button:hover .usercount {
+background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta.gif) center no-repeat;
+}
+
+.roomcounters .battlecount {
+display: block;
+width: 46px;
+height: 76px;
+position: absolute;
+right: -30px;
+bottom: -10px;
+background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta-pirouette.png) center no-repeat;
+}
+
+.roomcounters button:hover .battlecount {
+background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta-pirouette.gif) center no-repeat;
+}
+
+.roomlist {
+max-width: 480px;
+text-align: left;
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.roomlist .subrooms {
+font-size: 8pt;
+padding-left: 20px;
+margin: -5px 0 4px;
+color: #1a9eb5;
+}
+
+.roomlist .subrooms i.fa-level-up {
+margin-right: 5px;
+}
+
+.roomlist .subrooms a.blocklink {
+display: inline-block;
+margin: 0;
+vertical-align: middle;
+font-size: 8pt;
+color: #1a9eb5;
+font-weight: 600;
+}
+
+.roomlist .subrooms a.blocklink:hover {
+color: #0a1628;
+}
+
+/* CHAT LOG - Earthy theme */
+.chat-log {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 40px;
+font-size: 10pt;
+background: rgba(216, 238, 245, 0.6);
+color: #0a1628;
+overflow: auto;
+overflow-x: hidden;
+-webkit-overflow-scrolling: touch;
+word-wrap: break-word;
+}
+
+.chat-log-add {
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+min-height: 36px;
+padding: 3px 4px 0 4px;
+border-top: 1px solid #1a9eb5;
+background: rgba(216, 238, 245, 0.95);
+}
+
+.chat-log .notice,
+.chat-log .chat,
+.pm-log .chat {
+padding: 3px 0 3px 0;
+font-size: 9pt;
+}
+
+.chat-log .chat.mine,
+.pm-log .chat.mine {
+margin-left: -8px;
+margin-right: -8px;
+padding-left: 8px;
+padding-right: 8px;
+background: rgba(93, 205, 224, 0.3);
+}
+
+.chat em {
+padding: 0 4px 0 3px;
+font-style: normal;
+}
+
+.chat small {
+font-weight: normal;
+font-size: 8pt;
+color: #1a9eb5;
+}
+
+.chat .message-announce small {
+color: #0a1628;
+}
+
+.chat.timer {
+color: #0f6a80;
+}
+
+.debug {
+display: none;
+}
+
+.highlighted {
+background: rgba(93, 205, 224, 0.4);
+}
+
+.chat.highlighted {
+margin-left: -8px;
+margin-right: -8px;
+padding-left: 8px;
+padding-right: 8px;
+}
+
+.revealed {
+background-color: rgba(184, 216, 232, 0.8);
+}
+
+.message-pm {
+color: #1a4d78;
+}
+
+.message-pm .pmnote {
+cursor: pointer;
+}
+
+.chat-log .inner,
+.pm-log .inner {
+padding: 4px 8px 6px 8px;
+}
+
+/* CHATBOX - Earthy theme */
+.chatbox {
+margin: 0 10px 0 80px;
+padding: 5px 0 0 0;
+}
+
+.chatbox.nolabel {
+margin: 0 14px 0 6px;
+padding: 5px 0 5px 0;
+}
+
+.chatbox label {
+float: left;
+margin-left: -78px;
+padding-top: 2px;
+width: 73px;
+text-align: right;
+overflow: hidden;
+white-space: pre;
+font-weight: bold;
+font-size: 8pt;
+color: #0a1628;
+}
+
+.chatbox textarea {
+display: block;
+height: 1.1em;
+width: 100%;
+resize: none;
+font-size: 9pt;
+font-family: Verdana, Helvetica, Arial, sans-serif;
+overflow-x: hidden;
+overflow-wrap: break-word;
+border: 1px solid #1a9eb5;
+border-radius: 4px;
+padding: 2px 4px;
+background: rgba(255, 255, 255, 0.95);
+color: #0a1628;
+}
+
+.chatbox textarea:focus {
+border-color: #0f6a80;
+outline: none;
+box-shadow: 0 0 4px rgba(26, 158, 181, 0.3);
+}
+
+/* USERLIST - Earthy theme */
+.userlist {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+width: 145px;
+height: auto;
+border-right: 1px solid #1a9eb5;
+background: rgba(216, 238, 245, 0.95);
+overflow: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+.pm-buttonbar {
+height: 21px;
+}
+
+.pm-buttonbar button {
+float: left;
+font: 8pt Verdana, sans-serif;
+height: 21px;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+color: #0d2244;
+border: 0;
+border-right: 1px solid #1a9eb5;
+border-bottom: 1px solid #1a9eb5;
+font-weight: 600;
+transition: all 0.2s ease;
+}
+
+.userlist-minimized {
+height: 21px;
+bottom: auto;
+overflow: hidden;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+border-bottom: 1px solid #1a9eb5;
+}
+
+.userlist-maximized {
+height: auto;
+bottom: 0;
+overflow: auto;
+background: linear-gradient(to bottom, #d8eef5, #b8d8e8);
+}
+
+.userlist-minimized .userlist-count,
+.userlist-maximized .userlist-count {
+cursor: pointer;
+font-weight: 600;
+color: #0d2244;
+}
+
+.userlist-minimized .userlist-count:hover,
+.userlist-maximized .userlist-count:hover,
+.pm-buttonbar button:hover {
+background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+color: #0a1628;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.chat-log.hasuserlist,
+.chat-log-add.hasuserlist,
+.tournament-wrapper.hasuserlist {
+left: 146px;
+}
+
+.userlist,
+.userlist li {
+display: block;
+list-style-type: none;
+margin: 0;
+padding: 0;
+text-align: left;
+}
+
+.userlist li {
+height: 20px;
+font: 10pt Verdana, sans-serif;
+white-space: nowrap;
+}
+
+.userlist li em.group {
+font-style: normal;
+font-size: 8pt;
+color: #1a9eb5;
+display: block;
+float: left;
+text-align: center;
+padding: 1px 0 0 1px;
+width: 14px;
+font-weight: 600;
+}
+
+.userlist li button {
+box-sizing: border-box;
+display: block;
+overflow: hidden;
+height: auto;
+background: transparent;
+border: 0;
+padding: 1px 0;
+margin: 0;
+height: 20px;
+width: 100%;
+white-space: nowrap;
+font: 9pt Verdana, sans-serif;
+text-align: left;
+color: #0a1628;
+font-weight: 500;
+transition: all 0.2s ease;
+}
+
+/* Remove Firefox's magic padding */
+.userlist li button::-moz-focus-inner {
+padding: 0;
+}
+
+.userlist li button:hover {
+background: rgba(93, 205, 224, 0.4);
+color: #0a1628;
+}
+
+.userlist li button:active {
+background: rgba(26, 158, 181, 0.3);
+}
+
+.userlist li.cur {
+background: rgba(255, 255, 255, 0.9);
+border-left: 3px solid #1a9eb5;
+}
+
+.userlist li.cur button,
+.userlist li.cur button:hover {
+background: rgba(255, 255, 255, 0.9);
+margin: 0 0 0 -1px;
+color: #0a1628;
+font-weight: 700;
+}
+
+@media (max-width:895px) {
+.mainmenu {
+padding-bottom: 1px;
+}
+
+.rightmenu, .tiny-layout .rightmenu {
+position: static;
+top: 0;
+right: 0;
+padding-bottom: 51px;
+}
+
+.rightmenu {
+width: 324px;
+}
+
+.rightmenu .menugroup .button {
+width: 200px;
+}
+
+/* Dark Theme */
+
+.dark .roomlisttop {
+	max-width: 480px;
+	margin-bottom: 10px;
+}
+
+.dark .roomcounters {
+	max-width: 480px;
+	margin: 8px 0 15px 0;
+	text-align: center;
+}
+
+@media (max-width: 382px) {
+	.dark .roomcounters {
+		margin: 38px 0 15px 0;
+	}
+}
+
+.dark .roomcounters button {
+	margin: 0 auto;
+	width: 120px;
+	height: 60px;
+	padding: 3px 8px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 10pt;
+	position: relative;
+	border: 2px solid #0f6a80;
+	color: #b8d8e8;
+	background: linear-gradient(to bottom, #0d2244, #0a1628);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+	font-weight: 700;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.dark .roomcounters button:hover {
+	border-color: #1a9eb5;
+	color: #c8d94a;
+	background: linear-gradient(to bottom, #0f6a80, #0d2244);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	transform: translateY(-1px);
+}
+
+.dark .roomcounters button strong {
+	display: block;
+	font-size: 18pt;
+	font-weight: normal;
+}
+
+.dark .roomcounters .usercount {
+	display: block;
+	width: 49px;
+	height: 63px;
+	position: absolute;
+	left: -30px;
+	bottom: -5px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .usercount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta.gif) center no-repeat;
+}
+
+.dark .roomcounters .battlecount {
+	display: block;
+	width: 46px;
+	height: 76px;
+	position: absolute;
+	right: -30px;
+	bottom: -10px;
+	background: url(https://play.pokemonshowdown.com/sprites/gen5/meloetta-pirouette.png) center no-repeat;
+}
+
+.dark .roomcounters button:hover .battlecount {
+	background: url(https://play.pokemonshowdown.com/sprites/gen5ani/meloetta-pirouette.gif) center no-repeat;
+}
+
+.dark .roomlist {
+	max-width: 480px;
+	text-align: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.dark .roomlist .subrooms {
+	font-size: 8pt;
+	padding-left: 20px;
+	margin: -5px 0 4px;
+	color: #5dcde0;
+}
+
+.dark .roomlist .subrooms i.fa-level-up {
+	margin-right: 5px;
+}
+
+.dark .roomlist .subrooms a.blocklink {
+	display: inline-block;
+	margin: 0;
+	vertical-align: middle;
+	font-size: 8pt;
+	color: #5dcde0;
+	font-weight: 600;
+}
+
+.dark .roomlist .subrooms a.blocklink:hover {
+	color: #8de8f5;
+}
+
+.dark .menugroup .button {
+	box-sizing: border-box;
+	font-size: 12pt;
+	font-weight: 600;
+	display: inline-block;
+	padding: 5px 7px 3px 7px;
+	width: 200px;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+	/* Dark theme default colors */
+	color: #d8eef5;
+	border: 2px solid #0f6a80;
+	background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+}
+
+.dark .menugroup .button.big {
+	width: 230px;
+	height: 50px;
+	padding: 0;
+	font-size: 14pt;
+}
+
+.dark .menugroup .button.big small {
+	display: block;
+	font-size: 9pt;
+}
+
+.dark .menugroup .button:hover {
+	background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+	border-color: #1a9eb5;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .menugroup .button:active {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+	border-color: #1a9eb5;
+	transform: translateY(0px);
+}
+
+.dark .menugroup .button.disabled,
+.dark .menugroup .button.disabled:hover,
+.dark .menugroup .button.disabled:active {
+	cursor: default;
+	background: linear-gradient(to bottom, #0d2244, #0a1628);
+	border-color: #0f6a80;
+	color: #1a9eb5;
+	text-shadow: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	transform: none;
+}
+
+/* COLORED MENU BUTTONS - Dark variations */
+.dark .button.mainmenu1 {
+	background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+	border-color: #0d2244;
+}
+
+.dark .button.mainmenu1:hover {
+	background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+	border-color: #0f6a80;
+}
+
+.dark .button.mainmenu1:active {
+	background: linear-gradient(to bottom, #1a9eb5, #5dcde0);
+	border-color: #0f6a80;
+}
+
+.dark .button.mainmenu2 {
+	background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+	border-color: #0a1628;
+}
+
+.dark .button.mainmenu2:hover {
+	background: linear-gradient(to bottom, #8de8f5, #5dcde0);
+	border-color: #1a9eb5;
+}
+
+.dark .button.mainmenu2:active {
+	background: linear-gradient(to bottom, #5dcde0, #8de8f5);
+	border-color: #1a9eb5;
+}
+
+.dark .button.mainmenu3 {
+	background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+	border-color: #0a1628;
+	color: #d8eef5;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark .button.mainmenu3:hover {
+	background: linear-gradient(to bottom, #a0eef8, #1a9eb5);
+	border-color: #0f6a80;
+	color: #ffffff;
+}
+
+.dark .button.mainmenu3:active {
+	background: linear-gradient(to bottom, #1a9eb5, #a0eef8);
+	border-color: #0f6a80;
+}
+
+.dark .button.mainmenu4 {
+	background: linear-gradient(to bottom, #2a6fa8, #1a4d78);
+	border-color: #0d2244;
+}
+
+.dark .button.mainmenu4:hover {
+	background: linear-gradient(to bottom, #5dcde0, #2a6fa8);
+	border-color: #1a4d78;
+}
+
+.dark .button.mainmenu4:active {
+	background: linear-gradient(to bottom, #2a6fa8, #5dcde0);
+	border-color: #1a4d78;
+}
+
+.dark .button.mainmenu5 {
+    background: linear-gradient(to bottom, #0d2244, #0f6a80);
+    border-color: #0a1628;
+    color: #b8d8e8;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+}
+
+.dark .button.mainmenu5:hover {
+    background: linear-gradient(to bottom, #0f6a80, #1a9eb5);
+    border-color: #0d2244;
+    color: #ffffff;
+}
+
+.dark .button.mainmenu5:active {
+    background: linear-gradient(to bottom, #1a9eb5, #0f6a80);
+    border-color: #0d2244;
+}
+
+
+.dark .button.mainmenu6 {
+	background: linear-gradient(to bottom, #1a9eb5, #0a1628);
+	border-color: #060e1a;
+}
+
+.dark .button.mainmenu6:hover {
+	background: linear-gradient(to bottom, #5dcde0, #1a9eb5);
+	border-color: #0a1628;
+}
+
+.dark .button.mainmenu6:active {
+	background: linear-gradient(to bottom, #1a9eb5, #5dcde0);
+	border-color: #0a1628;
+}
+
+.dark .rightmenu .menugroup .button {
+	width: 180px;
+}
+
+.dark .userlist {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 145px;
+	height: auto;
+	border-right: 1px solid #0d2244;
+	background: rgba(6, 14, 26, 0.9);
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.dark .pm-buttonbar {
+	height: 21px;
+}
+
+.dark .pm-buttonbar button {
+	float: left;
+	font: 8pt Verdana, sans-serif;
+	height: 21px;
+	background: #060e1a;
+	color: #a0eef8;
+	border: 0;
+	border-right: 1px solid #0d2244;
+	border-bottom: 1px solid #0d2244;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.dark .userlist-minimized {
+	height: 21px;
+	bottom: auto;
+	overflow: hidden;
+	background: #060e1a;
+	border-bottom: 1px solid #0d2244;
+}
+
+.dark .userlist-maximized {
+	height: auto;
+	bottom: 0;
+	overflow: auto;
+	background: #060e1a;
+}
+
+.dark .userlist-minimized .userlist-count,
+.dark .userlist-maximized .userlist-count {
+	cursor: pointer;
+	font-weight: 600;
+	color: #5dcde0;
+}
+
+.dark .userlist-minimized .userlist-count:hover,
+.dark .userlist-maximized .userlist-count:hover,
+.dark .pm-buttonbar button:hover {
+	background: #0a1628;
+	color: #d8eef5;
+	text-shadow: none;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist,
+.dark .tournament-wrapper.hasuserlist {
+	left: 146px;
+}
+
+.dark .userlist li {
+	display: block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	height: 20px;
+	font: 10pt Verdana, sans-serif;
+	white-space: nowrap;
+}
+
+.dark .userlist li em.group {
+	font-style: normal;
+	font-size: 8pt;
+	color: #a0eef8;
+	display: block;
+	float: left;
+	text-align: center;
+	padding: 1px 0 0 1px;
+	width: 14px;
+	font-weight: 600;
+}
+
+.dark .userlist li button {
+	box-sizing: border-box;
+	display: block;
+	overflow: hidden;
+	height: auto;
+	background: transparent;
+	border: 0;
+	padding: 1px 0;
+	margin: 0;
+	width: 100%;
+	white-space: nowrap;
+	font: 9pt Verdana, sans-serif;
+	text-align: left;
+	color: #b8d8e8;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+/* Remove Firefox's magic padding */
+.dark .userlist li button::-moz-focus-inner {
+	padding: 0;
+}
+
+.dark .userlist li button:hover {
+	background: rgba(13, 34, 68, 0.3);
+	color: #d8eef5;
+}
+
+.dark .userlist li button:active {
+	background: rgba(26, 158, 181, 0.2);
+}
+
+.dark .userlist li.cur {
+	background: transparent;
+	border-left: 3px solid #c8d94a;
+}
+
+.dark .userlist li.cur button,
+.dark .userlist li.cur button:hover {
+	background: transparent;
+	margin: 0 0 0 -1px;
+	color: #c8d94a;
+	font-weight: 700;
+}
+
+.dark div[class="maintabbarbottom"] {
+	border: 2px solid #0f6a80;
+	background: #060e1a;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* HEADER BUTTONS - Ultra-dark Earthy theme */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur {
+	border: 2px solid #0f6a80;
+	color: #b8d8e8;
+	background: linear-gradient(to bottom, #0d2244, #0a1628);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+/* HEADER BUTTONS HOVER - Lighter earthy green */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:hover,
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.cur:hover {
+	border-color: #1a9eb5;
+	color: #c8d94a;
+	background: linear-gradient(to bottom, #0f6a80, #0d2244);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* REGULAR BUTTONS in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button {
+	color: #5dcde0;
+	font-weight: 700;
+	text-shadow: none;
+	transition: all 0.2s ease;
+}
+
+/* REGULAR BUTTONS HOVER in tabbar */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > button:hover {
+	color: #c8d94a;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* NOTIFICATION BUTTONS - Still vibrant */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying {
+	background: linear-gradient(to bottom, #2a6fa8, #1a4d78);
+	border: 2px solid #2a6fa8;
+	color: #ffffff;
+	box-shadow: 0 0 12px rgba(42, 111, 168, 0.7);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	animation: pulse 2s infinite;
+}
+
+/* NOTIFICATION BUTTONS HOVER */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button.notifying:hover {
+	background: linear-gradient(to bottom, #5dcde0, #2a6fa8);
+	border-color: #5dcde0;
+	color: #ffffff;
+	box-shadow: 0 0 16px rgba(93, 205, 224, 0.9);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	transform: translateY(-1px);
+}
+
+/* Focus states for accessibility */
+.dark div[class^="tabbar maintabbar"] > div > ul > li > a.button:focus {
+	outline: 3px solid #5dcde0;
+	outline-offset: 2px;
+}
+
+.dark .chat-log {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 40px;
+	font-size: 10pt;
+	background: rgba(6, 14, 26, 0.9);
+	color: #b8d8e8;
+	overflow: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	word-wrap: break-word;
+}
+
+.dark .chat-log-add {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	min-height: 36px;
+	padding: 3px 4px 0 4px;
+	border-top: 1px solid #0d2244;
+	background: rgba(6, 14, 26, 0.95);
+}
+
+.dark .chat-log .notice,
+.dark .chat-log .chat,
+.dark .pm-log .chat {
+	padding: 3px 0 3px 0;
+	font-size: 9pt;
+}
+
+.dark .chat-log .chat.mine,
+.dark .pm-log .chat.mine {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: rgba(216, 238, 245, 0.04);
+}
+
+.dark .chat em {
+	padding: 0 4px 0 3px;
+	font-style: normal;
+}
+
+.dark .chat small {
+	font-weight: normal;
+	font-size: 8pt;
+	color: #1a9eb5;
+}
+
+.dark .chat .message-announce small {
+	color: #5dcde0;
+}
+
+.dark .chat.timer {
+	color: #1a9eb5;
+}
+
+.dark .debug {
+	display: none;
+}
+
+.dark .highlighted {
+	background: rgba(200, 217, 74, 0.15);
+}
+
+.dark .chat.highlighted {
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.dark .revealed {
+	background-color: rgba(93, 205, 224, 0.1);
+}
+
+.dark .message-pm {
+	color: #5dcde0;
+}
+
+.dark .message-pm .pmnote {
+	cursor: pointer;
+}
+
+.dark .chat-log .inner,
+.dark .pm-log .inner {
+	padding: 4px 8px 6px 8px;
+}
+
+.dark .chat-log.hasuserlist,
+.dark .chat-log-add.hasuserlist {
+	left: 146px;
+}
+
+
+/* SYMBOLCOLORS START */
+[id$="-userlist-user-princesky"] button > em.group { color: #ee6898 !important; }
+[class$="chatmessage-princesky"] strong small, .groupsymbol { color: #ee6898 !important; }
+/* SYMBOLCOLORS END */
+
+/* COLORS START */
+[class$="chatmessage-princesky"] strong, [class$="chatmessage-princesky mine"] strong, [class$="chatmessage-princesky highlighted"] strong, [id$="-userlist-user-princesky"] strong em, [id$="-userlist-user-princesky"] strong, [id$="-userlist-user-princesky"] span { color: #318CE7 !important; }
+/* COLORS END */
+
+/* ICONS START */
+[id$="-userlist-user-princesky"] { background: url("https://www.pkparaiso.com/imagenes/shuffle/sprites/103_01.png") right no-repeat !important; background-size: 24px!important;}
+[id$="-userlist-user-alliancesky"] { background: url("https://www.pkparaiso.com/imagenes/shuffle/sprites/492.png") right no-repeat !important; background-size: 24px!important;}
+/* ICONS END */
