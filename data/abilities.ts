@@ -6383,7 +6383,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	enjoin: {
 		onAfterMove(source, target, move) {
-			if (target && move.flags['commanding']) {
+			if (target && move.flags['influencing']) {
 				const bestStat = target.getBestStat(true, true);
 				if (move.target === 'self') {
 					this.add('-activate', source, 'ability: Enjoin');
