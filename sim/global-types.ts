@@ -9,6 +9,8 @@ interface ReadonlyArray<T> {
 	filter(predicate: BooleanConstructor, thisArg?: any): Exclude<T, false | null | undefined | '' | 0>[];
 }
 
+type Assert<T extends true> = T;
+
 type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
@@ -16,6 +18,10 @@ type Mutable<T> = {
 type KeysMatching<T, U> = {
 	[K in keyof T]: U extends T[K] ? K : never
 }[keyof T];
+
+type MakeRequiredNonNullable<T, K extends keyof T> = T & {
+	[P in K]-?: NonNullable<T[P]>;
+};
 
 /**
  * Use `${value as DebugOutput}` to tell oxlint to stop complaining about booleans.
