@@ -12357,7 +12357,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		},
 		eventData: [
 			{generation: 2, level: 40, shiny: true, moves: ["leer", "watergun", "roar", "gust"]},
-			// TODO: update w/ unkown PCNY Suicune distribution
+			// TODO: update w/ unknown PCNY Suicune distribution
 		],
 		encounters: [
 			{generation: 2, level: 40},
