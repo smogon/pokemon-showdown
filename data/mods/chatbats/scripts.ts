@@ -301,4 +301,17 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.modData('Learnsets', 'raticate').learnset.lastbreakfast = ['9L1'];
 	},
+	actions: {
+		inherit: true,
+		canTerastallize(pokemon: Pokemon) {
+			if (pokemon.hasAbility('terawheel')) return false;
+			if (pokemon.side.terastallizationUsed || pokemon.getItem().megaStone || pokemon.getItem().zMove) {
+				return false;
+			}
+			if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
+				return false;
+			}
+			return pokemon.teraType;
+		},
+	},
 };

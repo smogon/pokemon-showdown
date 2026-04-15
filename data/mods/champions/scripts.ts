@@ -66,7 +66,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					// Ogerpon/Terapagos text goes here
 					this.formeRegression = true;
 				} else if (source.effectType === 'Item') {
-					this.canTerastallize = null; // National Dex behavior
 					if (source.zMove) {
 						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
@@ -101,7 +100,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Ogerpon's forme change doesn't override permanent abilities
 				if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 				// However, its ability does reset upon switching out
-				this.baseAbility = this.battle.toID(ability);
+				this.baseAbility = toID(ability);
 			}
 			if (this.terastallized) {
 				this.knownType = true;
@@ -175,7 +174,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canTerastallize(pokemon) {
-			return null;
+			return false;
 		},
 		canMegaEvo(pokemon: Pokemon) {
 			const species = pokemon.baseSpecies;
@@ -188,7 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
-			return item.megaStone?.[species.name] || null;
+			return item.megaStone?.[species.name] || false;
 		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {

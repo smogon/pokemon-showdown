@@ -54,13 +54,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		runMegaEvo(pokemon: Pokemon) {
-			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+			const speciesid = this.canMegaEvo(pokemon) || this.canUltraBurst(pokemon);
 			if (!speciesid) return false;
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
-
-			// Limit one mega evolution
-			pokemon.canMegaEvo = null;
 
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
@@ -332,9 +329,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 		canTerastallize(pokemon: Pokemon) {
-			if (this.dex.gen !== 9) {
-				return null;
-			}
+			if (pokemon.side.terastallizationUsed) return false;
 			return pokemon.teraType;
 		},
 		canMegaEvo(pokemon) {
@@ -351,8 +346,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (species.baseSpecies === 'Magearna' && !species.isMega) {
 				return species.name.includes('Original') ? 'Magearna-Original-Mega' : 'Magearna-Mega';
 			}
-			if (!item.megaStone) return null;
-			return item.megaStone[species.name];
+			if (!item.megaStone) return false;
+			return item.megaStone[species.name] || false;
 		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			const tr = this.battle.trunc;

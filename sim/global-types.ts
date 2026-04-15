@@ -155,11 +155,13 @@ interface ModdedBattleActions {
 	inherit?: true;
 	afterMoveSecondaryEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
 	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move, pokemon: Pokemon) => number;
-	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
+	canDynamax?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	canDynamaxSide?: (this: BattleActions, side: Side) => boolean;
+	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | false;
+	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | false;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
 	forceSwitch?: (
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
@@ -188,6 +190,7 @@ interface ModdedBattleActions {
 		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => number | undefined | false;
 	runAction?: (this: BattleActions, action: Action) => void;
+	runDynamax?: (this: BattleActions, side: Side) => boolean;
 	runMegaEvo?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
@@ -219,7 +222,7 @@ interface ModdedBattleActions {
 		this: BattleActions, pokemon: Pokemon, pos: number, sourceEffect: Effect | null, isDrag?: boolean
 	) => boolean | "pursuitfaint";
 	targetTypeChoices?: (this: BattleActions, targetType: string) => boolean;
-	terastallize?: (this: BattleActions, pokemon: Pokemon) => void;
+	terastallize?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	tryMoveHit?: (
 		this: BattleActions, target: Pokemon, pokemon: Pokemon, move: ActiveMove
 	) => number | undefined | false | '';
@@ -261,7 +264,6 @@ interface ModdedBattleSide {
 		this: Side, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
 	) => boolean;
 	allies?: (this: Side, all?: boolean) => Pokemon[];
-	canDynamaxNow?: (this: Side) => boolean;
 	chooseSwitch?: (this: Side, slotText?: string) => any;
 	getChoice?: (this: Side) => string;
 	getRequestData?: (this: Side, forAlly?: boolean) => { name: string, id: ID, pokemon: AnyObject[] };

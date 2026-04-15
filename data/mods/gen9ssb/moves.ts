@@ -1079,7 +1079,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const success = this.boost({ [statDebuff]: -1 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 				if (success) {
 					target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
-					target.canMegaEvo = 'Sableye-Mega';
+					target.m.megaEvoUsed = false;
 					target.switchFlag = 'shatterandscatter' as ID;
 				}
 				return this.NOT_FAIL;
@@ -1092,7 +1092,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const success = this.boost({ [statDebuff]: -2 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 					if (success) {
 						target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
-						target.canMegaEvo = 'Sableye-Mega';
+						target.m.megaEvoUsed = false;
 						target.switchFlag = 'shatterandscatter' as ID;
 					}
 				}
@@ -1929,7 +1929,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
+					if (this.actions.canMegaEvo(source) || this.actions.canUltraBurst(source)) {
 						for (const [actionIndex, action] of this.queue.entries()) {
 							if (action.pokemon === source && action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
@@ -3254,7 +3254,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;
 					}
-					if (source.canMegaEvo) {
+					if (this.actions.canMegaEvo(source)) {
 						for (const [actionIndex, action] of this.queue.entries()) {
 							if (action.pokemon === source && action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);

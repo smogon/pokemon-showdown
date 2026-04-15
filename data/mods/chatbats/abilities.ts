@@ -731,9 +731,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 	terawheel: {
-		onStart(pokemon) {
-			pokemon.canTerastallize = null;
-		},
 		// copied from SSB High Performance Computing
 		onResidualOrder: 6,
 		onResidual(source) {
