@@ -865,7 +865,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	linoone: {
-		tier: "ZU",
+		tier: "PUBL",
 	},
 	wurmple: {
 		tier: "LC",
