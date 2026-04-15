@@ -22621,10 +22621,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	icebreak: { // tested, works as intended
 		num: 10050,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Physical",
 		name: "Ice Break",
-		pp: 35,
+		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		thawsTarget: true,
@@ -22759,7 +22759,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 65,
 		category: "Special",
 		name: "Ki-hop",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		secondary: {
@@ -23174,7 +23174,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	psychicclap: { // tested, works as intended
 		num: 10046,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 40,
 		category: "Physical",
 		name: "Psychic Clap",

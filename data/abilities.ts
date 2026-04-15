@@ -6933,7 +6933,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			target.addVolatile('perishsong');
 		},
 		flags: {},
-		name: "Not To Be",
+		name: "Not to Be",
 		rating: 2,
 		num: 10048,
 	},

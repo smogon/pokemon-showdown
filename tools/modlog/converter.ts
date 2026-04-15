@@ -50,7 +50,11 @@ export function parseBrackets(line: string, openingBracket: '(' | '[', greedy?: 
 }
 
 function toID(text: any): ID {
-	return (text && typeof text === "string" ? text : "").toLowerCase().replace(/[^a-z0-9]+/g, "") as ID;
+	return (text && typeof text === "string" ? text : "")
+		.replace(/Ω/g, "O")
+		.replace(/ω/g, "w")
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, "") as ID;
 }
 
 export function modernizeLog(line: string, nextLine?: string): string | undefined {
