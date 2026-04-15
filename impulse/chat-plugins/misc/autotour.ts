@@ -153,14 +153,17 @@ function runAutotour(roomid: RoomID): void {
 			mockContext
 		);
 		if (tour) {
+			// FORCE CUSTOM NAME UPDATE
+			if (config.name) {
+				tour.setCustomName(config.name);
+			}
+
 			if (config.autostart > 0) tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
 			if (config.autodq > 0) tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
 			
-			// Update timestamps and save
 			autotourConfig[roomid].lastTourTime = Date.now();
 			void saveConfig(roomid);
 
-			// Force the room to update so text appears without user interaction
 			liveRoom.update();
 		}
 	} catch (err) {
