@@ -6558,7 +6558,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHitSide(side, source, move) {
 			const targets = side.allies().filter(target => (
 				((target.hasAbility(['plus', 'minus']) ||
-					['magnetosphere'].includes(source.effectiveEnergyWeather()))) &&
+					['magnetize'].includes(source.effectiveEnergyWeather()))) &&
 					(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
 			if (!targets.length) return false;
@@ -10932,7 +10932,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHitSide(side, source, move) {
 			const targets = side.allies().filter(ally => (
 				((ally.hasAbility(['plus', 'minus']) ||
-					['magnetosphere'].includes(source.effectiveEnergyWeather()))) &&
+					['magnetize'].includes(source.effectiveEnergyWeather()))) &&
 					(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
 			));
 			if (!targets.length) return false;
@@ -12196,7 +12196,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (['hail', 'fog'].includes(source.effectiveClimateWeather())) {
+				if (['hail', 'foghorn'].includes(source.effectiveClimateWeather())) {
 					return 8;
 				}
 				return 5;
@@ -16576,7 +16576,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (['sandstorm', 'duststorm'].includes(pokemon.effectiveClimateWeather())) {
+			if (['sandstorm', 'duststorm'].includes(pokemon.effectiveIrritantWeather())) {
 				factor = 0.667;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -21888,7 +21888,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
 			if (['magnetize'].includes(pokemon.effectiveEnergyWeather())) {
-				this.debug('powered by Magnetosphere');
+				this.debug('powered by Magnetize');
 				return this.chainModify(1.5);
 			}
 		},
@@ -23535,7 +23535,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (type === 'Fire') return 1;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (['rain', 'primordialsea', 'hail'].includes(pokemon.effectiveClimateWeather())) {
+			if (['raindance', 'primordialsea', 'hail'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('powered by Weathergy');
 				return this.chainModify(1.5);
 			}

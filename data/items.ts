@@ -8342,7 +8342,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		// Partially implemented in Pokemon.effectiveEnergyWeather() in sim/pokemon.ts
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['auraprojection', 'haunt', 'comsicrays',
+			if (['auraprojection', 'haunt', 'daydream',
 				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
 				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
 			}
@@ -8350,13 +8350,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['auraprojection', 'haunt', 'comsicrays',
+			if (['auraprojection', 'haunt', 'daydream',
 				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
 				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['auraprojection', 'haunt', 'comsicrays',
+			if (['auraprojection', 'haunt', 'daydream',
 				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
 				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
 			}

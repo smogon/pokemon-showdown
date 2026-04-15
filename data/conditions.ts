@@ -470,7 +470,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);
-				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectState.sourceEffect, '[zeffect]');
+				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectState.sourceEffect.name, '[zeffect]');
 				target.side.removeSlotCondition(target, 'healreplacement');
 			}
 		},
@@ -775,7 +775,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Snowscape', '[upkeep]');
+			this.add('-climateWeather', 'Snowscape', '[upkeep]');
 			if (this.field.isClimateWeather('snowscape')) this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
@@ -1646,7 +1646,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onAccuracy(accuracy, target, source, move) {
 			if (target.effectiveEnergyWeather() !== 'magnetize') return;
 			if (source !== target && move.type === 'Steel') {
-				this.debug('Magnetosphere guarantees accuracy');
+				this.debug('Magnetize guarantees accuracy');
 				return true;
 			}
 			return accuracy;
@@ -1654,7 +1654,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onTryHit(target, source, move) {
 			if (target.effectiveEnergyWeather() !== 'magnetize') return;
 			if (target !== source && move.type === 'Ground' && target.hasType('Steel') && this.field.energyWeatherState.boosted) {
-				this.hint("Steel types are levitating in Strong Winds Magnetosphere.");
+				this.hint("Steel types are levitating in Strong Winds Magnetize.");
 				return null;
 			}
 		},

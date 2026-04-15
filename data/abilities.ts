@@ -4311,9 +4311,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'sandstorm') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, source) {
+		onModifyAccuracy(accuracy, pokemon) {
 			if (typeof accuracy !== 'number') return;
-			if (['sandstorm'].includes(source.effectiveIrritantWeather())) {
+			if (['sandstorm'].includes(pokemon.effectiveIrritantWeather())) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4675,9 +4675,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'hail') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, source) {
+		onModifyAccuracy(accuracy, pokemon) {
 			if (typeof accuracy !== 'number') return;
-			if (['hail', 'snowscape'].includes(source.effectiveIrritantWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -6707,7 +6707,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	indomitable: { // untested
 		onDamage(damage, target, source, effect) {
-			if (!['dragonforce'].includes(target.effectiveClimateWeather())) return;
+			if (!['dragonforce'].includes(target.effectiveEnergyWeather())) return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
