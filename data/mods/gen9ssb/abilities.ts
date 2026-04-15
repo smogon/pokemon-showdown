@@ -796,7 +796,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.maybeTrapped = true;
 			}
 		},
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
 				this.damage(target.getUndynamaxedHP(damage), source, target);

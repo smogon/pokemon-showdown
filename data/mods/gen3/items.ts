@@ -334,6 +334,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
+	shellbell: {
+		inherit: true,
+		onAfterMoveSecondarySelf: undefined, // no inherit
+		onSourceDamagingHitPriority: -2,
+		onSourceDamagingHit(damage, target, pokemon, move) {
+			if (damage && !pokemon.forceSwitchFlag) {
+				this.heal(damage / 8, pokemon);
+			}
+		},
+	},
 	silkscarf: {
 		inherit: true,
 		onBasePower: undefined, // no inherit

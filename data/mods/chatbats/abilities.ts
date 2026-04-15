@@ -191,7 +191,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "-20 BP on attacks targeting Glastrier, at 50% HP become Calyrex-Ice.",
 	},
 	flipflop: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onTryHit(target, source, move) {
 			if (move.flags['contact']) {
 				let flipFlopBoosts = false;
@@ -339,7 +339,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	// stockpile on hit
 	omnivore: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) return;
 			this.add('-activate', target, 'ability: Omnivore');
