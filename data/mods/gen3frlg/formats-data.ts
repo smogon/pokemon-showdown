@@ -24,7 +24,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	blastoise: {
-		tier: "OU",
+		tier: "UU",
 	},
 	caterpie: {
 		tier: "LC",
