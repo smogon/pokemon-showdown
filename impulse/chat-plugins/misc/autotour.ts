@@ -3,11 +3,11 @@
 * Automated Tournaments Commands
 * @author PrinceSky-Git
 */
-import { ImpulseCollection } from '../../impulse-db';
+import { FS } from '../../../lib';
 import { Table } from '../../utils';
 import { nameColor } from '../customization/custom-colors';
 
-const AUTOTOUR_COLLECTION = 'autotour_configs';
+const DATA_FILE = 'impulse/db/autotour-configs.json';
 
 interface PerRoomAutotourConfig {
 	roomid: RoomID;
@@ -19,7 +19,10 @@ interface PerRoomAutotourConfig {
 	playerCap: string;
 	enabled: boolean;
 	lastTourTime?: number;
-	_id?: unknown;
+}
+
+interface AutotourConfigStore {
+	[roomid: string]: PerRoomAutotourConfig;
 }
 
 const ALL_TOUR_TYPES = ['elimination', 'roundrobin'];
@@ -35,27 +38,29 @@ const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 	lastTourTime: 0,
 };
 
-const autotourCollection = new ImpulseCollection<PerRoomAutotourConfig>(AUTOTOUR_COLLECTION);
-let autotourConfig: { [roomid: string]: PerRoomAutotourConfig } = {};
+let autotourConfig: AutotourConfigStore = {};
 const autotourIntervals: { [roomid: string]: NodeJS.Timeout } = {};
 const autotourIsInterval: { [roomid: string]: boolean } = {};
 
-async function saveConfig(roomid: RoomID): Promise<void> {
-	const config = autotourConfig[roomid];
-	await autotourCollection.updateOne(
-		{ roomid },
-		{ $set: { ...config, roomid } },
-		{ upsert: true }
-	);
+function saveConfig(): void {
+	FS(DATA_FILE).writeUpdate(() => JSON.stringify(autotourConfig));
 }
 
 async function loadConfig(): Promise<void> {
-	const configs = await autotourCollection.find({});
-	autotourConfig = {};
-	for (const config of configs) {
-		autotourConfig[config.roomid] = config;
+	try {
+		const raw = await FS(DATA_FILE).readIfExists();
+		if (raw) {
+			autotourConfig = JSON.parse(raw) as AutotourConfigStore;
+		}
+	} catch (e) {
+		console.error('Failed to load autotour configs:', e);
+		autotourConfig = {};
 	}
 }
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 function pickRandom<T>(arr: T[]): T {
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -113,7 +118,7 @@ function runAutotour(roomid: RoomID): void {
 
 	const format = pickRandom(config.formats);
 	const type = pickRandom(config.types);
-	
+
 	const modifier = (type === 'elimination' && Math.random() < 0.2) ? '2' : undefined;
 
 	const liveRoom = Rooms.get(roomid);
@@ -154,7 +159,7 @@ function runAutotour(roomid: RoomID): void {
 			if (config.autostart > 0) tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
 			if (config.autodq > 0) tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
 			autotourConfig[roomid].lastTourTime = Date.now();
-			void saveConfig(roomid);
+			saveConfig();
 			liveRoom.update();
 		}
 	} catch (err) {
@@ -191,7 +196,7 @@ async function modifyFormats(
 
 	const formats = target.split(',').map(s => toID(s.trim())).filter(Boolean);
 	if (!formats.length) return context.errorReply(`Usage: /autotour ${action}format <format>`);
-	
+
 	if (action === 'set') config.formats = formats;
 	if (action === 'add') {
 		for (const f of formats) if (!config.formats.includes(f)) config.formats.push(f);
@@ -200,37 +205,41 @@ async function modifyFormats(
 		config.formats = config.formats.filter(f => !formats.includes(f as any));
 	}
 
-	await saveConfig(roomid);
+	saveConfig();
 	context.sendReply(`Formats updated for ${roomid}.`);
 	if (config.enabled) startRoomAutotourScheduler(roomid);
 }
 
+// ---------------------------------------------------------------------------
+// Commands
+// ---------------------------------------------------------------------------
+
 export const commands: Chat.ChatCommands = {
 	autotour: {
-		async enable(target, room, user) {
+		enable(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const config = ensureRoomConfig(room!.roomid);
 			config.enabled = true;
-			await saveConfig(room!.roomid);
+			saveConfig();
 			startRoomAutotourScheduler(room!.roomid);
 			this.sendReply(`Autotour enabled for ${room!.roomid}.`);
 		},
-		async disable(target, room, user) {
+		disable(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const config = ensureRoomConfig(room!.roomid);
 			config.enabled = false;
-			await saveConfig(room!.roomid);
+			saveConfig();
 			stopRoomAutotourScheduler(room!.roomid);
 			this.sendReply(`Autotour disabled for ${room!.roomid}.`);
 		},
-		async types(target, room, user) {
+		types(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
 			const config = ensureRoomConfig(roomid);
 			const types = target.split(',').map(s => toID(s.trim())).filter(type => ALL_TOUR_TYPES.includes(type));
 			if (!types.length) return this.errorReply('Usage: /autotour types elimination, roundrobin');
 			config.types = types;
-			await saveConfig(roomid);
+			saveConfig();
 			this.sendReply(`Types for ${roomid} set to: ${config.types.join(', ')}`);
 		},
 		async formats(target, room, user) {
@@ -242,39 +251,39 @@ export const commands: Chat.ChatCommands = {
 		async removeformat(target, room, user) {
 			await modifyFormats(this, room, target, 'remove');
 		},
-		async interval(target, room, user) {
+		interval(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const value = parseInt(target);
 			if (isNaN(value) || value < 1) return this.errorReply("Interval must be at least 1 minute.");
 			const config = ensureRoomConfig(room!.roomid);
 			config.interval = value;
-			await saveConfig(room!.roomid);
+			saveConfig();
 			this.sendReply(`Interval set to ${value} minutes.`);
 			if (config.enabled) startRoomAutotourScheduler(room!.roomid);
 		},
-		async autostart(target, room, user) {
+		autostart(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const value = parseInt(target);
 			if (isNaN(value) || value < 0) return this.errorReply("Invalid value.");
 			const config = ensureRoomConfig(room!.roomid);
 			config.autostart = value;
-			await saveConfig(room!.roomid);
+			saveConfig();
 			this.sendReply(`Autostart set to ${value} minutes.`);
 		},
-		async autodq(target, room, user) {
+		autodq(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const value = parseInt(target);
 			if (isNaN(value) || value < 0) return this.errorReply("Invalid value.");
 			const config = ensureRoomConfig(room!.roomid);
 			config.autodq = value;
-			await saveConfig(room!.roomid);
+			saveConfig();
 			this.sendReply(`Autodq set to ${value} minutes.`);
 		},
-		async playercap(target, room, user) {
+		playercap(target, room, user) {
 			if (!checkRoomOwner(this, room)) return;
 			const config = ensureRoomConfig(room!.roomid);
 			config.playerCap = target.trim();
-			await saveConfig(room!.roomid);
+			saveConfig();
 			this.sendReply(`Player cap set to ${target}.`);
 		},
 		show(target, room, user) {
