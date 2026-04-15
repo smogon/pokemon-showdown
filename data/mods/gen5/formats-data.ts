@@ -593,7 +593,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	omanyte: {
 		tier: "ZUBL",
-		doublesTier: "NFE",
+		doublesTier: "LC",
 	},
 	omastar: {
 		tier: "RU",
@@ -2117,7 +2117,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	trubbish: {
 		tier: "ZUBL",
-		doublesTier: "NFE",
+		doublesTier: "LC",
 	},
 	garbodor: {
 		tier: "NU",
