@@ -175,6 +175,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (effect?.name === 'Fiery Dance' && boost.spa &&
 				source.species.name === "Volcarona") {
 				source.formeChange('Volcarona-Radiant', null, true);
+				this.add('-activate', source, 'ability: Desolate Land');
 			}
 		},
 		onModifyMovePriority: 1,
