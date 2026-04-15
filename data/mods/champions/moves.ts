@@ -53,6 +53,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 120,
 		pp: 5,
 	},
+	belch: {
+		inherit: true,
+		onTry(source) {
+			return source.ateBerry;
+		},
+		onDisableMove: undefined, // no inherit
+		desc: "Fails unless the user has eaten a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
+		shortDesc: "Fails unless the user has eaten a Berry.",
+	},
 	behemothbash: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -313,6 +322,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	fakeout: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
+				pokemon.disableMove('fakeout');
+			}
+		},
+		desc: "Has a 100% chance to make the target flinch. This move cannot be selected unless it is the user's first turn on the field.",
+	},
 	falsesurrender: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -360,6 +378,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	forcepalm: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	freezedry: {
+		inherit: true,
+		secondary: undefined, // no inherit
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Water.",
 	},
 	freezeshock: {
 		inherit: true,
