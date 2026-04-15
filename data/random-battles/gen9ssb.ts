@@ -1,4 +1,4 @@
-import RandomTeams from '../../random-battles/gen9/teams';
+import RandomTeams from './gen9/index';
 
 export interface SSBSet {
 	species: string;

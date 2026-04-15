@@ -1,4 +1,4 @@
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomTeams, type MoveCounter } from "../gen9/index";
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [

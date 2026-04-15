@@ -1,4 +1,4 @@
-import RandomGen2Teams from '../gen2/teams';
+import RandomGen2Teams from '../gen2/index';
 import { Utils } from '../../../lib';
 
 interface HackmonsCupEntry {

@@ -1,4 +1,4 @@
-import { type SSBSet, ssbSets } from "../../../data/mods/gen9ssb/random-teams";
+import { type SSBSet, ssbSets } from "../../../data/random-battles/gen9ssb";
 import type { ModdedEffectText } from "../../../sim/dex-data";
 import { formatNature, STAT_NAMES } from ".";
 

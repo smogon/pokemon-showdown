@@ -1,5 +1,5 @@
 import type { PRNG, PRNGSeed } from "../../../sim/prng";
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomTeams, type MoveCounter } from "../gen9/index";
 
 // First, some lists of moves that can be used for rules throughout set generation. Taken from regular gen9.
 

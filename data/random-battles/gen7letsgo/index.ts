@@ -1,5 +1,5 @@
 import type { PRNG } from '../../../sim';
-import { type MoveCounter, RandomBDSPTeams, type OldRandomBattleSpecies } from '../gen8bdsp/teams';
+import { type MoveCounter, RandomBDSPTeams, type OldRandomBattleSpecies } from '../gen8bdsp/index';
 
 export class RandomLetsGoTeams extends RandomBDSPTeams {
 	override randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
