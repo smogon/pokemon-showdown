@@ -128,7 +128,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 					move.secondaries.push({
-						chance: 10,
+						chance: 20,
 						volatileStatus: 'flinch',
 						onHit(target, source, activeMove) {
 							if (this.ruleTable.tagRules.includes("+pokemontag:cap")) return;
@@ -190,6 +190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					this.add('-immune', target, '[from] ability: Wonder Guard');
 					if (!this.ruleTable.tagRules.includes("+pokemontag:cap") && target.baseSpecies.name === 'Shedinja') {
 						target.formeChange('Shedinja-Escaped', null, true);
+						this.add('-activate', target, 'ability: Wonder Guard');
 					}
 				}
 				return null;
@@ -251,14 +252,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				this.debug('Stack Change boost');
+				this.debug('Stack Shift boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				this.debug('Stack Change boost');
+				this.debug('Stack Shift boost');
 				return this.chainModify(1.5);
 			}
 		},
@@ -272,7 +273,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		// airborneness implemented in scripts.ts:Pokemon#isGrounded
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		name: "Stack Change",
+		name: "Stack Shift",
 		rating: 4,
 		shortDesc: "Stakataka: Levitate + Fire moves 1.5x pow. Missile before attacks, Base before Stack Shield.",
 	},
@@ -303,7 +304,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Interdimensional Missile",
 		rating: 3.5,
-		shortDesc: "Effects of Levitate + Stack Change + User's Fire moves deal 1.5x damage.",
+		shortDesc: "Effects of Levitate + Stack Shift + User's Fire moves deal 1.5x damage.",
 	},
 	wither: {
 		onTryHit(target, source, move) {
@@ -858,9 +859,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		condition: {
 			duration: 3,
-			/* onStart(pokemon) {
-	         // put a message here
-			}, */
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Burnout');
+			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
 				this.debug('Burnout boost');
@@ -872,7 +873,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			},
 			onEnd(pokemon) {
-				// message here
+				this.add('-end', pokemon, 'Burnout');
+				this.add('-ability', pokemon, 'Burnout');
 				pokemon.formeChange('Blaziken');
 				pokemon.setAbility('toughclaws', pokemon);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
