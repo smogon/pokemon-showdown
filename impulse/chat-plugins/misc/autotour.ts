@@ -116,7 +116,6 @@ function runAutotour(roomid: RoomID): void {
 	const format = pickRandom(config.formats);
 	const type = pickRandom(config.types);
 	
-	// Modifier chance lowered to 20%
 	const modifier = (type === 'elimination' && Math.random() < 0.2) ? '2' : undefined;
 
 	const liveRoom = Rooms.get(roomid);
@@ -156,8 +155,13 @@ function runAutotour(roomid: RoomID): void {
 		if (tour) {
 			if (config.autostart > 0) tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
 			if (config.autodq > 0) tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
+			
+			// Update timestamps and save
 			autotourConfig[roomid].lastTourTime = Date.now();
 			void saveConfig(roomid);
+
+			// Force the room to update so text appears without user interaction
+			liveRoom.update();
 		}
 	} catch (err) {
 		const msg = `[autotour] Failed to start tournament in ${roomid}: ${(err as Error)?.message ?? err}`;
