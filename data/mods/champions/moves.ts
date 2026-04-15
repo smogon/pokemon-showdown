@@ -358,6 +358,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	firstimpression: {
 		inherit: true,
 		basePower: 100,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
+				pokemon.disableMove('firstimpression');
+			}
+		},
+		desc: "This move cannot be selected unless it is the user's first turn on the field.",
 	},
 	fishiousrend: {
 		inherit: true,
