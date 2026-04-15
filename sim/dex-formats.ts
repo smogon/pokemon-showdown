@@ -438,7 +438,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	declare readonly hasValue?: false | RuleValueType;
 	declare readonly onValidateRule?: (
-		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
+		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex, rule: Format }, value: string
 	) => string | void;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
@@ -1042,7 +1042,7 @@ export class DexFormats {
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const value = subFormat.onValidateRule?.call(
-					{ format, ruleTable, dex: this.dex }, ruleTable.valueRules.get(rule as ID)!
+					{ format, ruleTable, dex: this.dex, rule: subFormat }, ruleTable.valueRules.get(rule as ID)!
 				);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}

@@ -1061,7 +1061,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Technician', 'Tinted Lens', 'Triage', 'Unaware', 'Unburden', 'Water Bubble',
 		],
 		onValidateRule() {
-			if (this.ruleTable.gameType !== 'singles') {
+			if (!this.rule.supportedGameTypes.includes(this.ruleTable.gameType)) {
 				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
@@ -1138,6 +1138,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Tatsugiri', 'Terapagos', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
 			'Zamazenta-Crowned', 'Moody', 'Shadow Tag',
 		],
+		onValidateRule() {
+			// Because it's implemented through format.(battle|side)
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
+		},
 		battle: {
 			endTurn() {
 				// @ts-expect-error Hack
@@ -1763,6 +1767,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				forte.onBasePower.call(this, basePower, source, target, move);
 			}
 		},
+		onValidateRule() {
+			// Because it's implemented through format.pokemon
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
+		},
 		pokemon: {
 			getItem() {
 				const move = this.battle.dex.moves.get(this.m.forte);
@@ -2063,6 +2071,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, pokemon.getNature().name, '[silent]');
+		},
+		onValidateRule() {
+			// Because it's implemented through format.battle
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
 		},
 		battle: {
 			statModify(baseStats, set, statName) {
@@ -2395,6 +2407,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Speed Boost', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Clangorous Soul',
 			'Last Respects', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'No Retreat', 'Perish Song', 'Sand Attack', 'Shell Smash', 'Smokescreen', 'Quiver Dance', 'Victory Dance',
 		],
+		onValidateRule() {
+			// Because it's implemented through format.actions
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
+		},
 		actions: {
 			switchIn(pokemon, pos, sourceEffect, isDrag) {
 				if (!pokemon || pokemon.isActive) {
@@ -2531,7 +2547,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Choice Specs', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
 		onValidateRule() {
-			if (this.ruleTable.gameType !== 'singles') {
+			if (!this.rule.supportedGameTypes.includes(this.ruleTable.gameType)) {
 				throw new Error(`Sharing is Caring currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
@@ -2569,11 +2585,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Urshifu', 'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag',
 			'Booster Energy', 'Heat Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
-		onValidateRule() {
-			if (this.dex.gen !== 9) {
-				throw new Error(`Tera Donation is not supported in generations without terastallization.`);
-			}
-		},
 		onSwitchIn(pokemon) {
 			if (this.turn === 0) {
 				this.actions.terastallize(pokemon);
@@ -2617,6 +2628,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (move.id === 'terablast' && source.m.thirdType) {
 				this.attrLastMove('[anim] Tera Blast ' + source.m.thirdType);
 			}
+		},
+		onValidateRule() {
+			/*
+			if (this.dex.gen !== 9) {
+				throw new Error(`Tera Donation is not supported in generations without terastallization.`);
+			}
+			if (this.dex.currentMod === 'champions') {
+				throw new Error(`Tera Donation is not supported as a custom rule for Champions.`);
+			}
+			*/
+			// Because it's implemented through format.(actions|pokemon)
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
 		},
 		actions: {
 			modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
@@ -2839,6 +2862,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				familyTable.add(species.id);
 			}
+		},
+		onValidateRule() {
+			// Because it's implemented through format.battle
+			throw new Error(`${this.rule.name} cannot be used as a rule.`);
 		},
 		battle: {
 			tiebreak() {
@@ -3766,7 +3793,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Max Team Size = 12', 'Picked Team Size = 6'],
 		onValidateRule() {
-			if (this.ruleTable.gameType !== 'singles') {
+			if (!this.rule.supportedGameTypes.includes(this.ruleTable.gameType)) {
 				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
@@ -3789,7 +3816,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
 		onValidateRule() {
-			if (this.ruleTable.gameType !== 'singles') {
+			if (!this.rule.supportedGameTypes.includes(this.ruleTable.gameType)) {
 				throw new Error(`Shared Power currently does not support ${this.ruleTable.gameType} battles.`);
 			}
 		},
