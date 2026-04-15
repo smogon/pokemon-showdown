@@ -324,7 +324,7 @@ export const commands: Chat.ChatCommands = {
 				`<b>/autotour playercap [number]</b> - Set a player cap.<hr>` +
 				`<b>/autotour show</b> - Show current settings for this room.<hr>` +
 				`<b>/autotour nextrun</b> - See time remaining until next tournament.<hr>` +
-				`<center><small>Random Battle formats used by default.</small></center></div>`
+				`<center><small>Gen 9 Random Battle format is used by default.</small></center></div>`
 			);
 		},
 	},
