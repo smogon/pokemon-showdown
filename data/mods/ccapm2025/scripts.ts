@@ -36,6 +36,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "kommoo").learnset.powergem = ["9L1"];
 		this.modData("Learnsets", "kommoo").learnset.stoneedge = ["9L1"];
 		this.modData("Learnsets", "mesprit").learnset.recover = ["9L1"];
+		this.modData("Learnsets", "mesprit").learnset.gaslight = ["9L1"];
 		this.modData("Learnsets", "octillery").learnset.recover = ["9L1"];
 		this.modData("Learnsets", "shaymin").learnset.floralhealing = ["9L1"];
 		this.modData("Learnsets", "shaymin").learnset.flowershield = ["9L1"];
