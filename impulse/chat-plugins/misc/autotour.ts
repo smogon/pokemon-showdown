@@ -17,7 +17,6 @@ interface PerRoomAutotourConfig {
 	autostart: number;
 	autodq: number;
 	playerCap: string;
-	name: string;
 	enabled: boolean;
 	lastTourTime?: number;
 	_id?: unknown;
@@ -32,7 +31,6 @@ const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
 	autostart: 5,
 	autodq: 2,
 	playerCap: '',
-	name: '',
 	enabled: false,
 	lastTourTime: 0,
 };
@@ -149,21 +147,14 @@ function runAutotour(roomid: RoomID): void {
 			config.playerCap || undefined,
 			false,
 			modifier,
-			config.name || undefined,
+			undefined,
 			mockContext
 		);
 		if (tour) {
-			// FORCE CUSTOM NAME UPDATE
-			if (config.name) {
-				tour.setCustomName(config.name);
-			}
-
 			if (config.autostart > 0) tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
 			if (config.autodq > 0) tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
-			
 			autotourConfig[roomid].lastTourTime = Date.now();
 			void saveConfig(roomid);
-
 			liveRoom.update();
 		}
 	} catch (err) {
@@ -286,13 +277,6 @@ export const commands: Chat.ChatCommands = {
 			await saveConfig(room!.roomid);
 			this.sendReply(`Player cap set to ${target}.`);
 		},
-		async name(target, room, user) {
-			if (!checkRoomOwner(this, room)) return;
-			const config = ensureRoomConfig(room!.roomid);
-			config.name = target.trim();
-			await saveConfig(room!.roomid);
-			this.sendReply(`Tour name set to ${target}.`);
-		},
 		show(target, room, user) {
 			if (!this.runBroadcast() || !checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
@@ -306,7 +290,6 @@ export const commands: Chat.ChatCommands = {
 				[`<b>Autostart:</b>`, `${config.autostart} min`],
 				[`<b>Autodq:</b>`, `${config.autodq} min`],
 				[`<b>Player Cap:</b>`, config.playerCap || '(none)'],
-				[`<b>Name:</b>`, config.name || '(none)'],
 			];
 			this.sendReply(`|html|${Table(`Autotour settings for ${roomid}`, [], rows)}`);
 		},
@@ -328,26 +311,23 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Autotour Commands</strong></h4><hr>Commands Alias: /at</center><hr>` +
+				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Autotour Commands</strong></h4><hr>Commands Alias: /autotour</center><hr>` +
 				`<b>/autotour enable</b> - Enable autotours in this room. Requires: #<hr>` +
 				`<b>/autotour disable</b> - Disable autotours in this room. Requires: #<hr>` +
 				`<b>/autotour formats [format1], [format2]</b> - Set specific formats.<hr>` +
 				`<b>/autotour addformat [format]</b> - Add a format to the rotation.<hr>` +
 				`<b>/autotour removeformat [format]</b> - Remove a format from the rotation.<hr>` +
-				`<b>/autotour types [elimination, roundrobin]</b> - Set tournament type.<hr>` +
+				`<b>/autotour types [elimination, roundrobin]</b> - Set tournament types.<hr>` +
 				`<b>/autotour interval [minutes]</b> - Set delay between tournaments.<hr>` +
 				`<b>/autotour autostart [minutes]</b> - Set the autostart timer.<hr>` +
 				`<b>/autotour autodq [minutes]</b> - Set the autodq timer.<hr>` +
 				`<b>/autotour playercap [number]</b> - Set a player cap.<hr>` +
-				`<b>/autotour name [custom name]</b> - Set a custom tournament name.<hr>` +
 				`<b>/autotour show</b> - Show current settings for this room.<hr>` +
 				`<b>/autotour nextrun</b> - See time remaining until next tournament.<hr>` +
-				`<center><small>Gen 9 Random Battle format used by default.</small></center></div>`
+				`<center><small>Random Battle formats used by default.</small></center></div>`
 			);
 		},
 	},
-	
-	at: 'autotour',
 };
 
 export const destroy = (): void => {
