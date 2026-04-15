@@ -1,4 +1,4 @@
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomTeams, type MoveCounter } from "../gen9/index";
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -61,7 +61,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomChatBatsTeams extends RandomTeams {
+export class RandomRGTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -217,27 +217,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (!abilities.includes('Prankster')) this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
-		if (species.id === 'lurantis') this.incompatibleMoves(moves, movePool, 'leafstorm', 'powerwhip');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'kingsshield', 'stealthrock');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'kingsshield', 'rest');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'rest', 'stealthrock');
-		if (species.id === 'carbink') this.incompatibleMoves(moves, movePool, 'spikes', 'stealthrock');
-		if (species.id === 'moltres') this.incompatibleMoves(moves, movePool, 'bravebird', 'woodhammer');
-		if (species.id === 'moltres') this.incompatibleMoves(moves, movePool, 'flareblitz', 'wavecrash');
-		if (species.id === 'kommoo') this.incompatibleMoves(moves, movePool, 'aurasphere', 'closecombat');
-		if (species.id === 'archaludon') this.incompatibleMoves(moves, movePool, 'scald', 'hydropump');
-		if (species.id === 'abomasnowmega') this.incompatibleMoves(moves, movePool, 'iceshard', 'snowscape');
-		if (species.id === 'regieleki') this.incompatibleMoves(moves, movePool, 'blazingtorque', 'soak');
-		if (species.id === 'golurk') this.incompatibleMoves(moves, movePool, 'icepunch', 'dynamicpunch');
-		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
-		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
-		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'psychic', 'storedpower');
-		if (species.id === 'primeape') this.incompatibleMoves(moves, movePool, 'knockoff', 'earthquake');
-		if (species.id === 'feraligatrmega') this.incompatibleMoves(moves, movePool, 'thunderfang', 'poisonfang');
-		if (species.id === 'salazzle') this.incompatibleMoves(moves, movePool, 'malignantchain', 'venoshock');
-		if (species.id === 'glimmora') this.incompatibleMoves(moves, movePool, 'powergem', 'meteorbeam');
-		if (species.id === 'wobbuffet') this.incompatibleMoves(moves, movePool, 'shedtail', 'encore');
-		if (species.id === 'wobbuffet') this.incompatibleMoves(moves, movePool, 'nightshade', 'guillotine');
 	}
 
 	override randomMoveset(
@@ -597,6 +576,54 @@ export class RandomChatBatsTeams extends RandomTeams {
 		return moves;
 	}
 
+	override getAbility(
+		types: string[],
+		moves: Set<string>,
+		abilities: string[],
+		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+		isLead: boolean,
+		isDoubles: boolean,
+		teraType: string,
+		role: RandomTeamsTypes.Role,
+	): string {
+		if (abilities.length <= 1) return abilities[0];
+
+		// Hard-code abilities here
+		if (species.id === 'drifblim') return moves.has('defog') ? 'Aftermath' : 'Unburden';
+		// if (abilities.includes('Flash Fire') && this.dex.getEffectiveness('Fire', teraType) >= 1) return 'Flash Fire';
+		if ((species.id === 'thundurus' || species.id === 'tornadus') && !counter.get('Physical')) return 'Prankster';
+		if (species.id === 'swampert' && (counter.get('Water') || moves.has('flipturn'))) return 'Torrent';
+		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
+		if (abilities.includes('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
+
+		const abilityAllowed: string[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilities) {
+			if (!this.shouldCullAbility(
+				ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// Pick a random allowed ability
+		if (abilityAllowed.length >= 1) return this.sample(abilityAllowed);
+
+		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
+		if (!abilityAllowed.length) {
+			const weatherAbilities = abilities.filter(
+				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
+			);
+			if (weatherAbilities.length) return this.sample(weatherAbilities);
+		}
+
+		// Pick a random ability
+		return this.sample(abilities);
+	}
+
 	override getPriorityItem(
 		ability: string,
 		types: string[],
@@ -624,109 +651,80 @@ export class RandomChatBatsTeams extends RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
-		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.id === 'pikachu') return 'Light Ball';
+		if (role === 'AV Pivot') return 'Assault Vest';
+		if (species.id === 'marowak') return 'Thick Club';
+		if (ability === 'Tropical Current') return 'Flame Orb';
+		if (ability === 'Blackout') return 'Heavy-Duty Boots';
+		if (species.id === 'gyarados') return 'Sitrus Berry';
 		if (species.id === 'regieleki') return 'Magnet';
+		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
+		if (
+			species.id === 'froslass' || moves.has('populationbomb') ||
+			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
+		) return 'Wide Lens';
 		if (species.id === 'smeargle') return 'Focus Sash';
-
-		// PMCM hardcodes
-		if (species.id === 'volcarona') return 'Heavy-Duty Boots';
-		if (species.id === 'golemalola') return 'Life Orb';
-		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
-		if (species.id === 'lurantis') return this.sample(['Life Orb', 'Leftovers']);
-		if (species.id === 'carbink') return 'Leftovers';
-		if (species.id === 'moltres') return 'Life Orb';
-		if (species.id === 'kommoo') return 'Throat Spray';
-		if (species.id === 'volbeat') return 'Focus Sash';
-		if (species.id === 'illumise') return 'Focus Sash';
-		if (species.id === 'abomasnow') return 'Light Clay';
-		if (species.id === 'dugtrio' && moves.has("swordsdance")) return 'Focus Sash';
-		if (species.id === 'dugtrio') return 'Choice Band';
-		if (species.id === 'tyranitar') return 'Choice Scarf';
-		if (species.id === 'mimikyu') return 'Red Card';
-		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
-		if (species.id === 'mesprit') return 'Throat Spray';
-		if (species.id === 'electrode' && moves.has("rapidspin")) return 'Heavy-Duty Boots';
-		if (species.id === 'electrode') return this.sample(['Normal Gem', 'Heavy-Duty Boots']);
-		if (species.id === 'taurospaldeacombat') return 'Expert Belt';
-		if (species.id === 'chiyu') return 'Normalium Z';
-		if (species.id === 'wochien') return 'Big Root';
-		if (species.id === 'staraptor') return 'Choice Scarf';
-		if (species.id === 'archaludon' && ability === 'Hydroelectric Dam') return 'Assault Vest';
-		if (species.id === 'archaludon' && ability === 'Stamina') return 'Leftovers';
-		if (species.id === 'malamar') return this.sample(['Mirror Herb', 'Leftovers']);
-		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
-		if (species.id === 'glastrier' && moves.has('swordsdance')) return 'Heavy-Duty Boots';
-		if (species.id === 'glastrier') return 'Assault Vest';
-		if (species.id === 'lycanrocmidnight') return 'Loaded Dice';
-		if (species.id === 'lycanroc') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
-		if (species.id === 'lycanrocdusk') return 'Expert Belt';
-		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
-		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
-		if (species.id === 'whiscash') return 'Rocky Helmet';
-		if (species.id === 'hippowdon') return this.sample(['Leftovers', 'Rocky Helmet']);
-		if (species.id === 'cramorant') return 'Heavy-Duty Boots';
-		if (species.id === 'grafaiai') return this.sample(['Red Card', 'Mirror Herb']);
-		if (species.id === 'tatsugiri') return 'Choice Scarf';
-		if (species.id === 'kyurem') return 'Heavy-Duty Boots';
-		if (species.id === 'roaringmoon') return 'Heavy-Duty Boots';
-		if (species.id === 'milotic') return 'Rocky Helmet';
-		if (species.id === 'gogoat') return 'Leftovers';
-		if (species.id === 'clodsire') return this.sample(['Leftovers', 'Rocky Helmet']);
-		if (species.id === 'masquerain') return 'Heavy-Duty Boots';
-		if (species.id === 'kyuremblack' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'kyuremblack') return this.sample(['Choice Band', 'Heavy-Duty Boots']);
-		if (species.id === 'ironthorns') return 'Rocky Helmet';
-		if (species.id === 'dudunsparce') return 'Leftovers';
-		if (species.id === 'chienpao') return 'Heavy Duty Boots';
-		if (species.id === 'pelipper' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'pelipper') return 'Choice Specs';
-		if (species.id === 'kleavor') return 'Choice Scarf';
-		if (species.id === 'araquanid') return 'Heavy-Duty Boots';
-		if (species.id === 'avalugghisui') return 'Heavy-Duty Boots';
-		if (species.id === 'swalot') return 'Leftovers';
-		if (species.id === 'zapdosgalar') return this.sample(['Choice Scarf', 'Expert Belt']);
-		if (species.id === 'phione') return 'Leftovers';
-		if (species.id === 'sudowoodo') return 'Choice Band';
-		if (species.id === 'dondozo') return 'Leftovers';
-		if (species.id === 'golurk') return this.sample(['Life Orb', 'Punching Glove', 'Colbur Berry']);
-		if (species.id === 'meowscarada') return 'Heavy-Duty Boots';
-		if (species.id === 'infernape') return this.sample(['Life Orb', 'Sitrus Berry', 'Air Balloon']);
-		if (species.id === 'urshifu') return this.sample(['Life Orb', 'Protective Pads']);
-		if (species.id === 'urshifurapidstrike') return this.sample(['Life Orb', 'Protective Pads']);
-		if (species.id === 'salamence') return this.sample(['Life Orb', 'Heavy-Duty Boots', 'Sky Plate']);
-		if (species.id === 'stonjourner') return 'Choice Scarf';
-		if (species.id === 'veluza') return 'Sitrus Berry';
-		if (species.id === 'ogerponhearthflame') return 'Hearthflame Mask';
-		if (species.id === 'dachsbun') return 'Rocky Helmet';
-		if (species.id === 'mew') return 'Starf Berry';
-		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
-		if (species.id === 'delibird') return 'Heavy-Duty Boots';
-		if (species.id === 'hitmontop') return this.sample(['Protective Pads', 'Wide Lens']);
-		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
-		if (species.id === 'vaporeon') return 'Flame Orb';
-		if (species.id === 'garganacl') return 'Poisonium Z';
-		if (species.id === 'swanna') return 'Heavy-Duty Boots';
-		if (species.id === 'terapagos') return 'Leftovers';
-		if (species.id === 'flapple') return 'Tart Apple';
-		if (species.id === 'genesectburn' && moves.has('sunsteelstrike')) return 'Burn Drive';
-		if (species.id === 'genesectchill' && moves.has('behemothblade')) return 'Chill Drive';
-		if (species.id === 'genesectdouse' && moves.has('makeitrain')) return 'Douse Drive';
-		if (species.id === 'genesectshock' && moves.has('tachyoncutter')) return 'Shock Drive';
-		if (species.id === 'honchkrow') return 'Heavy-Duty Boots';
-		if (species.id === 'primeape') return 'Eviolite';
-		if (species.id === 'rillaboom') return 'Heavy-Duty Boots';
-		if (species.id === 'mandibuzz') return 'Thick Club';
-		if (species.id === 'feraligatr') return 'Life Orb';
-		if (species.id === 'salazzle') return 'Heavy-Duty Boots';
-		if (species.id === 'kyogre') return 'Waterium Z';
-		if (species.id === 'azelf') return 'Focus Band';
-		if (species.id === 'decidueye') return this.sample(['Life Orb', 'Heavy-Duty Boots', "Leftovers"]);
-		if (species.id === 'ogerponcornerstone') return 'Cornerstone Mask';
-		if (species.id === 'glimmora' && moves.has('meteorbeam')) return 'Power Herb';
-		if (species.id === 'glimmora') return 'Air Balloon';
-		if (species.id === 'wobbuffet') return 'Covert Cloak';
+		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
+		if (
+			(species.baseSpecies === 'Magearna' && role === 'Tera Blast user') ||
+			((species.id === 'calyrexice' || species.id === 'necrozmaduskmane') && isDoubles)
+		) return 'Weakness Policy';
+		if (['dragonenergy', 'lastrespects', 'waterspout'].some(m => moves.has(m))) return 'Choice Scarf';
+		if (
+			!isDoubles && (ability === 'Imposter' || (species.id === 'magnezone' && role === 'Fast Attacker'))
+		) return 'Choice Scarf';
+		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
+		if (species.id === 'palkia' && counter.get('Status')) return 'Lustrous Orb';
+		if (
+			moves.has('courtchange') ||
+			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
+		) return 'Heavy-Duty Boots';
+		if (
+			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) ||
+			moves.has('bellydrum') || moves.has('filletaway')
+		) {
+			return 'Sitrus Berry';
+		}
+		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
+			if (
+				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
+				role !== 'Wallbreaker' && role !== 'Doubles Wallbreaker' && !counter.get('priority')
+			) {
+				return 'Choice Scarf';
+			} else {
+				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
+			}
+		}
+		if (counter.get('Status') && (species.name === 'Latias' || species.name === 'Latios')) return 'Soul Dew';
+		if (species.id === 'scyther' && !isDoubles) return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
+		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
+		if (species.nfe) return 'Eviolite';
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
+		}
+		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
+		if (ability === 'Anger Shell') return this.sample(['Expert Belt', 'Lum Berry', 'Scope Lens', 'Sitrus Berry']);
+		if (moves.has('dragondance') && isDoubles) return 'Clear Amulet';
+		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
+		if (ability === 'Unburden') {
+			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
+		}
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
+		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
+		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
+		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
+		if (species.id === 'giratina' && !isDoubles && moves.has('rest') && !moves.has('sleeptalk')) return 'Leftovers';
+		if (
+			moves.has('rest') && !moves.has('sleeptalk') &&
+			ability !== 'Natural Cure' && ability !== 'Shed Skin'
+		) {
+			return 'Chesto Berry';
+		}
+		if (
+			species.id !== 'yanmega' &&
+			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
+		) return 'Heavy-Duty Boots';
 	}
 
 	override randomSet(
@@ -795,7 +793,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		const level = this.getLevel(species, isDoubles);
 
 		// Prepare optimal HP
-		const srImmunity = ability === 'Magic Guard' || ability === 'Frost Cloak' || item === 'Heavy-Duty Boots';
+		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
 		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		// Crash damage move users want an odd HP to survive two misses
 		if (['axekick', 'highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
@@ -838,9 +836,49 @@ export class RandomChatBatsTeams extends RandomTeams {
 			ivs.atk = 0;
 		}
 
-		if (moves.has('gyroball') || moves.has('trickroom') || moves.has('archaicglare')) {
+		if (moves.has('gyroball') || moves.has('trickroom')) {
 			evs.spe = 0;
 			ivs.spe = 0;
+		}
+
+		// hidden power time
+		// Hidden Power Ice IVs
+		if (
+			moves.has('hiddenpower') &&
+			(
+				species.id === 'ninetales' || species.id === 'electrode' || species.id === 'jolteon' || species.id === 'zapdos' ||
+				species.id === 'blastoise' || species.id === 'butterfree' || species.id === 'pikachu' || species.id === 'raichu'
+			)
+		) {
+			ivs.atk = 0;
+			ivs.def = 30;
+		}
+
+		// Hidden Power Ground IVs
+		if (
+			moves.has('hiddenpower') && (species.id === 'vileplume' || species.id === 'magneton' || species.id === 'victreebel')
+		) {
+			ivs.atk = 1;
+			ivs.spa = 30;
+			ivs.spd = 30;
+		}
+
+		// Hidden Power Fighting IVs
+		if (
+			moves.has('hiddenpower') &&
+			(species.id === 'persian' || species.id === 'gengar' || species.id === 'exeggutor' || species.id === 'porygon')
+		) {
+			ivs.atk = 1;
+			ivs.def = 30;
+			ivs.spa = 30;
+			ivs.spd = 30;
+			ivs.spe = 30;
+		}
+
+		// Hidden Power Grass IVs
+		if ((species.id === 'vaporeon' || species.id === 'omastar') && moves.has('hiddenpower')) {
+			ivs.atk = 0;
+			ivs.spa = 30;
 		}
 
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
@@ -867,7 +905,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomChatBatsTeam() {
+	randomRGTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -1108,4 +1146,4 @@ export class RandomChatBatsTeams extends RandomTeams {
 	}
 }
 
-export default RandomChatBatsTeams;
+export default RandomRGTeams;

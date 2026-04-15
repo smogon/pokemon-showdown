@@ -1,6 +1,6 @@
-import RandomGen3Teams from '../gen3/teams';
+import RandomGen3Teams from '../gen3/index';
 import type { PRNG, PRNGSeed } from '../../../sim/prng';
-import type { MoveCounter } from '../gen8/teams';
+import type { MoveCounter } from '../gen8/index';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [

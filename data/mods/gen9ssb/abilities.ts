@@ -1,4 +1,4 @@
-import { ssbSets } from "./random-teams";
+import { ssbSets } from "./../../random-battles/gen9ssb";
 import { changeSet, getName, PSEUDO_WEATHERS } from "./scripts";
 
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];

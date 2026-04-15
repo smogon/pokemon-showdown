@@ -8,6 +8,7 @@
  */
 
 import { Dex, toID } from './dex';
+import { FS } from './../lib/fs';
 import type { PRNG, PRNGSeed } from './prng';
 
 interface ExportOptions {
@@ -117,6 +118,16 @@ export interface PokemonSet {
 }
 
 export const Teams = new class Teams {
+	/**
+	 * List of all valid generator IDs
+	 */
+	readonly validGenerators: Set<string>;
+
+	constructor() {
+		const generators = FS(`${__dirname}/../data/random-battles`).readdirSync();
+		this.validGenerators = new Set(generators.map(name => name.split('.', 1)[0]));
+	}
+
 	pack(team: PokemonSet[] | null): string {
 		if (!team) return '';
 
@@ -625,26 +636,39 @@ export const Teams = new class Teams {
 		return sets;
 	}
 
-	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
-		let TeamGenerator;
-		format = Dex.formats.get(format);
-		let mod = format.mod;
-		if (format.mod === 'monkeyspaw') mod = 'gen9';
-		const formatID = toID(format);
-		if (mod === 'gen9ssb') {
-			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
-		} else if (mod === 'afd') {
-			TeamGenerator = require(`../data/mods/afd/random-teams`).default;
-		} else if (formatID.includes('gen9babyrandombattle')) {
-			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
-		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
-			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
-		} else if (formatID.includes('gen9freeforallrandombattle')) {
-			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
-		} else {
-			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
+	getIDForMod(mod: string) {
+		if (this.validGenerators.has(mod)) return mod;
+
+		let dex: ModdedDex = Dex.mod(mod);
+		while (dex.parentMod) {
+			mod = dex.parentMod;
+			if (this.validGenerators.has(mod)) {
+				return mod;
+			}
+			dex = Dex.mod(mod);
 		}
 
+		return 'gen9';
+	}
+
+	getIDForFormat(format: Format) {
+		const formatID = toID(format);
+		if (formatID.includes('gen9babyrandombattle')) {
+			return 'gen9baby';
+		}
+		if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
+			return 'gen9cap';
+		}
+		if (formatID.includes('gen9freeforallrandombattle')) {
+			return 'gen9ffa';
+		}
+		return this.getIDForMod(format.mod);
+	}
+
+	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
+		format = Dex.formats.get(format);
+		const generatorID = this.getIDForFormat(format);
+		const TeamGenerator = require(`../data/random-battles/${generatorID}`).default;
 		return new TeamGenerator(format, seed);
 	}
 

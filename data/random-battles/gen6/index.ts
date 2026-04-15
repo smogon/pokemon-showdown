@@ -1,5 +1,5 @@
-import { type MoveCounter, type TeamData } from '../gen8/teams';
-import RandomGen7Teams, { type BattleFactorySpecies, ZeroAttackHPIVs } from '../gen7/teams';
+import { type MoveCounter, type TeamData } from '../gen8/index';
+import RandomGen7Teams, { type BattleFactorySpecies, ZeroAttackHPIVs } from '../gen7/index';
 import { type PRNG, type PRNGSeed } from '../../../sim/prng';
 import { toID } from '../../../sim/dex';
 

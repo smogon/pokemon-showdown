@@ -1,4 +1,4 @@
-import { type SSBSet, ssbSets } from "../../../data/mods/gen9ssb/random-teams";
+import { type SSBSet, ssbSets } from "../../../data/random-battles/gen9ssb";
 import { formatNature, STAT_NAMES } from ".";
 
 class SSBSetHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, baseDex: ModdedDex }> {
