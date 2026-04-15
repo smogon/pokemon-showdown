@@ -5378,7 +5378,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	espathra: {
 		tier: "Uber",
-		doublesTier: "(DUU)",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	wiglett: {
