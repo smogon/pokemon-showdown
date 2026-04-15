@@ -18,28 +18,38 @@ export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-type RuleValueType = 'string' | 'integer' | 'positive-integer' | 'identifier';
-
 export interface RuleTableBuildContext {
 	format: Format;
 	ruleTable: RuleTable;
 	dex: ModdedDex;
+}
+
+type RuleValidator<T> = (this: RuleTableBuildContext, value: T) => (T | void);
+
+type RuleValueTypeMap = {
+	flag: void,
+	string: string,
+	identifier: ID,
+	integer: number,
+	'positive-integer': number,
 };
 
-/*
-type NumberRuleValidator = (this: RuleTableBuildContext, value: number) => (number | void);
-type StringRuleValidator = (this: RuleTableBuildContext, value: string) => (string | void);
-type IDRuleValidator = (this: RuleTableBuildContext, value: ID) => (ID | void);
-type FlagRuleValidator = (this: RuleTableBuildContext) => void;
+export type RuleValueType = keyof RuleValueTypeMap;
 
-type RuleValidator = NumberRuleValidator | StringRuleValidator | IDRuleValidator | FlagRuleValidator;
-*/
+interface RuleValueConstraintsVariant<T extends RuleValueType> {
+	type: T;
+	validate?: RuleValidator<RuleValueTypeMap[T]>;
+};
 
-type RuleValidator = (this: RuleTableBuildContext, value: number | string | undefined) => (number | string | void);
+export type RuleValueConstraints = {
+	[K in RuleValueType]: RuleValueConstraintsVariant<K>;
+}[keyof RuleValueTypeMap];
 
 type ModdedCheckCanLearn = (
 	this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: Partial<PokemonSet>
 ) => string | null;
+
+const RULE_VALUE_DEFAULT_FLAG = { type: 'flag' as const } satisfies RuleValueConstraints;
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -401,7 +411,7 @@ export class RuleTable extends Map<string, string> {
 		// in complicated ways.
 
 		// If you're making your own rule, it nearly definitely does not not
-		// belong here: `onValidateRule`, `onValidateSet`, and `onValidateTeam`
+		// belong here: `value.validate`, `onValidateSet`, and `onValidateTeam`
 		// should be enough for a validator rule, and the battle event system
 		// should be enough for a battle rule.
 
@@ -447,7 +457,7 @@ export class RuleTable extends Map<string, string> {
 			this.evLimit = this.getRuleValueOr<number | null>('evlimit', null);
 		}
 
-		// sanity checks; these _could_ be inside `onValidateRule`, but lie here
+		// sanity checks; these _could_ be inside `value.validate`, but lie here
 		// for historical reasons
 
 		// engine hard limits
@@ -594,8 +604,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly valueType?: RuleValueType;
-	declare readonly onValidateRule?: RuleValidator;
+	declare readonly value?: RuleValueConstraints;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
 
@@ -650,6 +659,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 		this.gameType = data.gameType || 'singles';
+		this.value = data.value || RULE_VALUE_DEFAULT_FLAG;
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
@@ -931,7 +941,7 @@ export class DexFormats {
 	}
 
 	parseRuleValue(rule: Format, value: string, ruleSpec: string): string | number {
-		const valueType = rule.valueType!;
+		const valueType = rule.value!.type;
 		if (value === 'Current Gen') value = `${this.dex.gen}`;
 
 		if ((rule.id === 'pickedteamsize' || rule.id === 'evlimit') && value === 'Auto') {
@@ -1074,7 +1084,7 @@ export class DexFormats {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
-			if (subformat.valueType) {
+			if (subformat.value!.type !== 'flag') {
 				if (rawValue === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
 				const value = this.parseRuleValue(subformat, rawValue, ruleSpec);
 
@@ -1183,10 +1193,12 @@ export class DexFormats {
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const normalValue = ruleTable.valueRules.get(rule as ID);
-				const value = subFormat.onValidateRule?.call(
-					{ format, ruleTable, dex: this.dex }, normalValue,
+				// Casting to 'any' lets us avoid a repetitive switch-case with little value.
+				const value: RuleValueTypeMap[RuleValueType] = (subFormat.value!.validate as any)?.call(
+					{ format, ruleTable, dex: this.dex } as RuleTableBuildContext,
+					normalValue,
 				);
-				if (typeof value === 'string' || typeof value === 'number') {
+				if (subFormat.value!.type !== 'flag' && (typeof value === 'string' || typeof value === 'number')) {
 					ruleTable.valueRules.set(subFormat.id, value);
 				}
 			}

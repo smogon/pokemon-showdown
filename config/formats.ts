@@ -1015,10 +1015,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Quark Drive', 'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Regenerator', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Surge Surfer',
 			'Technician', 'Tinted Lens', 'Triage', 'Unaware', 'Unburden', 'Water Bubble',
 		],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				// Only checked when Shared Power is added as a rule, not as the main format.
+				if (this.format.gameType !== 'singles') {
+					throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+				}
+			},
 		},
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();
@@ -2604,10 +2608,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Scope Lens', 'Shadow Tag', 'Choice Band', 'Choice Scarf',
 			'Choice Specs', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Sharing is Caring currently does not support ${this.format.gameType} battles.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				// Only checked when Sharing is Caring is added as a rule, not as the main format.
+				if (this.format.gameType !== 'singles') {
+					throw new Error(`Sharing is Caring currently does not support ${this.format.gameType} battles.`);
+				}
+			},
 		},
 		getSharedItems(pokemon) {
 			const items = new Set<string>();
@@ -2663,10 +2671,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Urshifu', 'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag',
 			'Booster Energy', 'Heat Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
-		onValidateRule() {
-			if (this.dex.gen !== 9) {
-				throw new Error(`Tera Donation is not supported in generations without terastallization.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				// Only checked when Tera Donation is added as a rule, not as the main format.
+				if (this.dex.gen !== 9) {
+					throw new Error(`Tera Donation is not supported in generations without terastallization.`);
+				}
+			},
 		},
 		onSwitchIn(pokemon) {
 			if (this.turn === 0) {
@@ -3768,10 +3780,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Max Team Size = 12', 'Picked Team Size = 6'],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				// Only checked when Random Battle Shared Power B12P6 is added as a rule, not as the main format.
+				if (this.format.gameType !== 'singles') {
+					throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+				}
+			},
 		},
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
@@ -3791,10 +3807,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				// Only checked when Random Battle Mayhem is added as a rule, not as the main format.
+				if (this.format.gameType !== 'singles') {
+					throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+				}
+			},
 		},
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;

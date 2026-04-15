@@ -494,21 +494,23 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Force Monotype',
 		desc: `Forces all teams to have the same type. Usage: Force Monotype = [Type], e.g. "Force Monotype = Water"`,
-		valueType: 'string',
-		onValidateRule(value) {
-			const type = this.dex.types.get(value as string);
-			if (!type.exists) throw new Error(`Misspelled type "${value}"`);
-			// Temporary hardcode until types support generations
-			if (
-				(['Dark', 'Steel'].includes(type.name) && this.dex.gen < 2) ||
-				(type.name === 'Fairy' && this.dex.gen < 6)
-			) {
-				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}`);
-			}
-			if (type.name === 'Stellar') {
-				throw new Error(`There are no Stellar-type Pok\u00e9mon.`);
-			}
-			return type.name;
+		value: {
+			type: 'string',
+			validate(value) {
+				const type = this.dex.types.get(value);
+				if (!type.exists) throw new Error(`Misspelled type "${value}"`);
+				// Temporary hardcode until types support generations
+				if (
+					(['Dark', 'Steel'].includes(type.name) && this.dex.gen < 2) ||
+					(type.name === 'Fairy' && this.dex.gen < 6)
+				) {
+					throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}`);
+				}
+				if (type.name === 'Stellar') {
+					throw new Error(`There are no Stellar-type Pok\u00e9mon.`);
+				}
+				return type.name;
+			},
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -522,12 +524,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Force Monocolor',
 		desc: `Forces all teams to have Pok&eacute;mon of the same color. Usage: Force Monocolor = [Color], e.g. "Force Monocolor = Blue"`,
-		valueType: 'string',
-		onValidateRule(value) {
-			const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
-			if (!validColors.map(this.dex.toID).includes(this.dex.toID(value as string))) {
-				throw new Error(`Invalid color "${value}"`);
-			}
+		value: {
+			type: 'string',
+			validate(value) {
+				const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
+				if (!validColors.map(this.dex.toID).includes(this.dex.toID(value))) {
+					throw new Error(`Invalid color "${value}"`);
+				}
+			},
 		},
 		onValidateSet(set) {
 			const color = this.toID(this.ruleTable.getRuleValue<string>('forcemonocolor')!);
@@ -545,16 +549,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Force Tera Type',
 		desc: `Forces all Pok&eacute;mon to have the same Tera Type. Usage: Force Tera Type = [Type], e.g. "Force Tera Type = Dragon"`,
-		valueType: 'string',
-		onValidateRule(value) {
-			if (this.dex.gen !== 9) {
-				throw new Error(`Terastallization doesn't exist outside of Generation 9.`);
-			}
-			const type = this.dex.types.get(value as string);
-			if (!type.exists) throw new Error(`Misspelled type "${value}"`);
-			if (type.isNonstandard) {
-				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}.`);
-			}
+		value: {
+			type: 'string',
+			validate(value) {
+				if (this.dex.gen !== 9) {
+					throw new Error(`Terastallization doesn't exist outside of Generation 9.`);
+				}
+				const type = this.dex.types.get(value);
+				if (!type.exists) throw new Error(`Misspelled type "${value}"`);
+				if (type.isNonstandard) {
+					throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}.`);
+				}
+			},
 		},
 		onValidateSet(set) {
 			const type = this.dex.types.get(this.ruleTable.getRuleValue<string>('forceteratype')!);
@@ -567,9 +573,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Force Select',
 		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
-		valueType: 'string',
-		onValidateRule(value) {
-			if (!this.dex.species.get(value as string).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+		value: {
+			type: 'string',
+			validate(value) {
+				if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+			},
 		},
 		onValidateTeam(team) {
 			const species = this.dex.species.get(this.ruleTable.getRuleValue<string>('forceselect'));
@@ -596,24 +604,26 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'EV Limits',
 		desc: "Require EVs to be in specific ranges, such as: \"EV Limits = Atk 0-124 / Def 100-252\"",
-		valueType: 'string',
-		onValidateRule(value) {
-			if (!value) throw new Error(`To remove EV limits, use "! EV Limits"`);
+		value: {
+			type: 'string',
+			validate(value) {
+				if (!value) throw new Error(`To remove EV limits, use "! EV Limits"`);
 
-			const slashedParts = (value as string).split('/');
-			const UINT_REGEX = /^[0-9]{1,4}$/;
-			return slashedParts.map(slashedPart => {
-				const parts = slashedPart.replace('-', ' - ').replace(/ +/g, ' ').trim().split(' ');
-				const [stat, low, hyphen, high] = parts;
-				if (parts.length !== 4 || !UINT_REGEX.test(low) || hyphen !== '-' || !UINT_REGEX.test(high)) {
-					throw new Error(`EV limits should be in the format "EV Limits = Atk 0-124 / Def 100-252"`);
-				}
-				const statid = this.dex.toID(stat) as StatID;
-				if (!this.dex.stats.ids().includes(statid)) {
-					throw new Error(`Unrecognized stat name "${stat}" in "${value}"`);
-				}
-				return `${statid} ${low}-${high}`;
-			}).join(' / ');
+				const slashedParts = value.split('/');
+				const UINT_REGEX = /^[0-9]{1,4}$/;
+				return slashedParts.map(slashedPart => {
+					const parts = slashedPart.replace('-', ' - ').replace(/ +/g, ' ').trim().split(' ');
+					const [stat, low, hyphen, high] = parts;
+					if (parts.length !== 4 || !UINT_REGEX.test(low) || hyphen !== '-' || !UINT_REGEX.test(high)) {
+						throw new Error(`EV limits should be in the format "EV Limits = Atk 0-124 / Def 100-252"`);
+					}
+					const statid = this.dex.toID(stat) as StatID;
+					if (!this.dex.stats.ids().includes(statid)) {
+						throw new Error(`Unrecognized stat name "${stat}" in "${value}"`);
+					}
+					return `${statid} ${low}-${high}`;
+				}).join(' / ');
+			},
 		},
 		onValidateSet(set) {
 			const limits = this.ruleTable.getRuleValue<string>('evlimits')!;
@@ -668,10 +678,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Tera Type Preview',
 		desc: "Allows each player to see the Tera Type of the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		onValidateRule() {
-			if (!this.ruleTable.has('teampreview')) {
-				throw new Error(`The "Tera Type Preview" rule${this.ruleTable.blame('teratypepreview')} requires Team Preview.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				if (!this.ruleTable.has('teampreview')) {
+					throw new Error(`The "Tera Type Preview" rule${this.ruleTable.blame('teratypepreview')} requires Team Preview.`);
+				}
+			},
 		},
 		// implemented in team preview
 	},
@@ -706,7 +719,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Timer Starting',
 		desc: "Amount of time given at the start of the battle in seconds",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in server/room-battle.ts
 	},
 	dctimer: {
@@ -725,28 +740,36 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Timer Grace',
 		desc: "Grace period between timer activation and when total time starts ticking down.",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in server/room-battle.ts
 	},
 	timeraddperturn: {
 		effectType: 'Rule',
 		name: 'Timer Add Per Turn',
 		desc: "Amount of additional time given per turn in seconds",
-		valueType: 'integer',
+		value: {
+			type: 'integer',
+		},
 		// hardcoded in server/room-battle.ts
 	},
 	timermaxperturn: {
 		effectType: 'Rule',
 		name: 'Timer Max Per Turn',
 		desc: "Maximum amount of time allowed per turn in seconds",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in server/room-battle.ts
 	},
 	timermaxfirstturn: {
 		effectType: 'Rule',
 		name: 'Timer Max First Turn',
 		desc: "Maximum amount of time allowed for the first turn in seconds",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in server/room-battle.ts
 	},
 	timeoutautochoose: {
@@ -839,15 +862,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Item Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same item",
-		valueType: 'positive-integer',
 		onBegin() {
 			this.add('rule', `Item Clause: Limit ${this.ruleTable.getRuleValue<number>('itemclause')} of each item`);
 		},
-		onValidateRule(value) {
-			const maxDupeItems = value as number;
-			if (maxDupeItems < 1 || maxDupeItems > this.ruleTable.maxTeamSize) {
-				throw new Error(`Item Clause must be between 1 and ${this.ruleTable.maxTeamSize}.`);
-			}
+		value: {
+			type: 'positive-integer',
+			validate(value) {
+				const maxDupeItems = value;
+				if (maxDupeItems < 1 || maxDupeItems > this.ruleTable.maxTeamSize) {
+					throw new Error(`Item Clause must be between 1 and ${this.ruleTable.maxTeamSize}.`);
+				}
+			},
 		},
 		onValidateTeam(team) {
 			const itemTable = new this.dex.Multiset<string>();
@@ -870,14 +895,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Ability Clause',
 		desc: "Prevents teams from having Pok&eacute;mon with the same ability than allowed",
-		valueType: 'positive-integer',
 		onBegin() {
 			const num = this.ruleTable.getRuleValue<number>('abilityclause')!;
 			this.add('rule', `${num} Ability Clause: Limit ${num} of each ability`);
 		},
-		onValidateRule(value) {
-			const allowedAbilities = value as number;
-			if (allowedAbilities < 1) throw new Error(`Must allow at least 1 of each ability`);
+		value: {
+			type: 'positive-integer',
+			validate(value) {
+				const allowedAbilities = value;
+				if (allowedAbilities < 1) throw new Error(`Must allow at least 1 of each ability`);
+			},
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
@@ -1649,13 +1676,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Min Source Gen",
 		desc: "Pokemon must be obtained from this generation or later.",
-		valueType: 'positive-integer',
-		onValidateRule(value) {
-			const minSourceGen = value as number;
-			if (minSourceGen > this.dex.gen) {
-				// console.log(this.ruleTable);
-				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format (${this.format.name})`);
-			}
+		value: {
+			type: 'positive-integer',
+			validate(value) {
+				const minSourceGen = value;
+				if (minSourceGen > this.dex.gen) {
+					// console.log(this.ruleTable);
+					throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format (${this.format.name})`);
+				}
+			},
 		},
 	},
 
@@ -1664,10 +1693,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'OM Unobtainable Moves',
 		desc: "Allows special move legality rules to allow moves which are otherwise unobtainable without hacking or glitches",
 		// Hardcoded in team-validator.ts
-		onValidateRule() {
-			if (!this.ruleTable.checkCanLearn?.[0]) {
-				throw new Error(`A format with the "OM Unobtainable Moves"${this.ruleTable.blame('omunobtainablemoves')} rule must also have a special move legality rule.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				if (!this.ruleTable.checkCanLearn?.[0]) {
+					throw new Error(`A format with the "OM Unobtainable Moves"${this.ruleTable.blame('omunobtainablemoves')} rule must also have a special move legality rule.`);
+				}
+			},
 		},
 	},
 	stabmonsmovelegality: {
@@ -1980,10 +2012,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		mutuallyExclusiveWith: 'forceopenteamsheets',
-		onValidateRule() {
-			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
-				throw new Error(`The "Open Team Sheets" rule${this.ruleTable.blame('openteamsheets')} requires Team Preview.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
+					throw new Error(`The "Open Team Sheets" rule${this.ruleTable.blame('openteamsheets')} requires Team Preview.`);
+				}
+			},
 		},
 		onTeamPreview() {
 			const msg = 'uhtml|otsrequest|<button name="send" value="/acceptopenteamsheets" class="button" style="margin-right: 10px;"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button" style="margin-top: 10px"><strong>Deny Open Team Sheets</strong></button>';
@@ -2002,10 +2037,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Force Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		mutuallyExclusiveWith: 'openteamsheets',
-		onValidateRule() {
-			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
-				throw new Error(`The "Force Open Team Sheets" rule${this.ruleTable.blame('forceopenteamsheets')} requires Team Preview.`);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
+					throw new Error(`The "Force Open Team Sheets" rule${this.ruleTable.blame('forceopenteamsheets')} requires Team Preview.`);
+				}
+			},
 		},
 		onTeamPreview() {
 			this.showOpenTeamSheets();
@@ -2062,42 +2100,51 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Picked Team Size',
 		desc: "Team size (number of pokemon) that can be brought out of Team Preview",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/side and sim/battle
 	},
 	minteamsize: {
 		effectType: 'ValidatorRule',
 		name: "Min Team Size",
 		desc: "Minimum team size (number of pokemon) that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	evlimit: {
 		effectType: 'ValidatorRule',
 		name: "EV Limit",
 		desc: "Maximum total EVs on each pokemon.",
-		valueType: 'integer',
+		value: {
+			type: 'integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	maxteamsize: {
 		effectType: 'ValidatorRule',
 		name: "Max Team Size",
 		desc: "Maximum team size (number of pokemon) that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	maxmovecount: {
 		effectType: 'ValidatorRule',
 		name: "Max Move Count",
 		desc: "Max number of moves allowed on a single pokemon (defaults to 4 in a normal game)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	maxtotallevel: {
 		effectType: 'Rule',
 		name: 'Max Total Level',
 		desc: "Teams are restricted to a total maximum Level limit and Pokemon are restricted to a set range of Levels",
-		valueType: 'positive-integer',
 		onValidateTeam(team) {
 			const pickedTeamSize = this.ruleTable.pickedTeamSize || team.length;
 			const maxTotalLevel = this.ruleTable.maxTotalLevel;
@@ -2131,17 +2178,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				];
 			}
 		},
-		onValidateRule() {
-			const ruleTable = this.ruleTable;
-			const maxTotalLevel = ruleTable.maxTotalLevel!;
-			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
-			const maxTeamSizeBlame = ruleTable.pickedTeamSize ? ruleTable.blame('pickedteamsize') : ruleTable.blame('maxteamsize');
-			if (maxTotalLevel >= ruleTable.maxLevel * maxTeamSize) {
-				throw new Error(`A Max Total Level of ${maxTotalLevel}${ruleTable.blame('maxtotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
-			}
-			if (maxTotalLevel <= ruleTable.minLevel * maxTeamSize) {
-				throw new Error(`A Max Total Level of ${maxTotalLevel}${ruleTable.blame('maxtotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
-			}
+		value: {
+			type: 'positive-integer',
+			validate() {
+				const ruleTable = this.ruleTable;
+				const maxTotalLevel = ruleTable.maxTotalLevel!;
+				const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
+				const maxTeamSizeBlame = ruleTable.pickedTeamSize ? ruleTable.blame('pickedteamsize') : ruleTable.blame('maxteamsize');
+				if (maxTotalLevel >= ruleTable.maxLevel * maxTeamSize) {
+					throw new Error(`A Max Total Level of ${maxTotalLevel}${ruleTable.blame('maxtotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
+				}
+				if (maxTotalLevel <= ruleTable.minLevel * maxTeamSize) {
+					throw new Error(`A Max Total Level of ${maxTotalLevel}${ruleTable.blame('maxtotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
+				}
+			},
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
 			if (autoChoose) {
@@ -2158,28 +2208,36 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Min Level',
 		desc: "Minimum level of brought Pokémon",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	maxlevel: {
 		effectType: 'ValidatorRule',
 		name: 'Max Level',
 		desc: "Maximum level of brought Pokémon (if you're using both this and Adjust Level, this will control what level moves you have access to)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	defaultlevel: {
 		effectType: 'ValidatorRule',
 		name: 'Default Level',
 		desc: "Default level of brought Pokémon (normally should be equal to Max Level, except Custom Games have a very high max level but still default to 100)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		// hardcoded in sim/team-validator
 	},
 	adjustlevel: {
 		effectType: 'ValidatorRule',
 		name: 'Adjust Level',
 		desc: "All Pokémon will be set to exactly this level (but unlike Max Level and Min Level, it will still be able to learn moves from above this level) (when using this, Max Level is the level of the pokemon before it's level-adjusted down)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		mutuallyExclusiveWith: 'adjustleveldown',
 		// hardcoded in sim/team-validator
 	},
@@ -2187,7 +2245,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Adjust Level Down',
 		desc: "Any Pokémon above this level will be set to this level (but unlike Max Level, it will still be able to learn moves from above this level)",
-		valueType: 'positive-integer',
+		value: {
+			type: 'positive-integer',
+		},
 		mutuallyExclusiveWith: 'adjustlevel',
 		// hardcoded in sim/team-validator
 	},
@@ -2257,19 +2317,22 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				return [`${set.species}'s item ${item.name} is banned.`];
 			}
 		},
-		onValidateRule() {
-			const table = this.ruleTable;
-			if ((table.pickedTeamSize || table.minTeamSize) < 6) {
-				throw new Error(
-					`Custom rules that could allow the active team size to be reduced below 6 (Min Team Size < 6, Picked Team Size < 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
-				);
-			}
-			const gameType = this.format.gameType;
-			if (gameType === 'doubles' || gameType === 'triples') {
-				throw new Error(
-					`The game type '${gameType}' cannot be 1v1 because sides can have multiple active Pok\u00e9mon, so it is incompatible with Chimera 1v1.`
-				);
-			}
+		value: {
+			type: 'flag',
+			validate() {
+				const table = this.ruleTable;
+				if ((table.pickedTeamSize || table.minTeamSize) < 6) {
+					throw new Error(
+						`Custom rules that could allow the active team size to be reduced below 6 (Min Team Size < 6, Picked Team Size < 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
+					);
+				}
+				const gameType = this.format.gameType;
+				if (gameType === 'doubles' || gameType === 'triples') {
+					throw new Error(
+						`The game type '${gameType}' cannot be 1v1 because sides can have multiple active Pok\u00e9mon, so it is incompatible with Chimera 1v1.`
+					);
+				}
+			},
 		},
 		onBeforeSwitchIn(pokemon) {
 			const allies = pokemon.side.pokemon.splice(1);
@@ -2906,16 +2969,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Best Of',
 		desc: "Allows players to define a best-of series where the winner of the series is the winner of the majority of games.",
-		valueType: 'positive-integer',
-		onValidateRule(value) {
-			const battleCount = value as number;
-			if (battleCount > 9 || battleCount < 3 || battleCount % 2 !== 1) {
-				throw new Error("Series length must be an odd number between three and nine (inclusive).");
-			}
-			if (this.format.playerCount > 2) {
-				throw new Error("Free For All and Multi Battles cannot be a Best-of series.");
-			}
-			return value;
+		value: {
+			type: 'positive-integer',
+			validate(value) {
+				const battleCount = value;
+				if (battleCount > 9 || battleCount < 3 || battleCount % 2 !== 1) {
+					throw new Error("Series length must be an odd number between three and nine (inclusive).");
+				}
+				if (this.format.playerCount > 2) {
+					throw new Error("Free For All and Multi Battles cannot be a Best-of series.");
+				}
+				return value;
+			},
 		},
 	},
 	illusionlevelmod: {
@@ -2931,12 +2996,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Allowed Pokemoves",
 		desc: "Allows players to define the amount of Pokemoves allowed per set.",
-		valueType: 'positive-integer',
-		onValidateRule(value) {
-			const pokeMovesAllowed = value as number;
-			if (pokeMovesAllowed > this.ruleTable.maxMoveCount || pokeMovesAllowed < 1) {
-				throw new Error(`Allowed Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
-			}
+		value: {
+			type: 'positive-integer',
+			validate(pokeMovesAllowed) {
+				if (pokeMovesAllowed > this.ruleTable.maxMoveCount || pokeMovesAllowed < 1) {
+					throw new Error(`Allowed Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
+				}
+			},
 		},
 		// Validation in the Pokemoves format
 	},
@@ -2944,12 +3010,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Unique Pokemoves",
 		desc: "Allows players to define how many times a Pokemon can be used as a Pokemove per team.",
-		valueType: 'positive-integer',
-		onValidateRule(value) {
-			const pokeMovesUnique = value as number;
-			if (pokeMovesUnique > this.ruleTable.maxMoveCount || pokeMovesUnique < 1) {
-				throw new Error(`Unique Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
-			}
+		value: {
+			type: 'positive-integer',
+			validate(pokeMovesUnique) {
+				if (pokeMovesUnique > this.ruleTable.maxMoveCount || pokeMovesUnique < 1) {
+					throw new Error(`Unique Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
+				}
+			},
 		},
 		onValidateTeam(team, format, teamHas) {
 			const pokemoves = new this.dex.Multiset<ID>();
@@ -3253,13 +3320,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				poke.details = poke.getUpdatedDetails();
 			}
 		},
-		onValidateRule() {
-			if (!this.format.team) throw new Error('The Rebalance Levels rule is only intended to work with randomized teams.');
-			if (this.ruleTable.adjustLevel) {
-				throw new Error(`This format's rules force Pokemon to be level ${this.ruleTable.adjustLevel}, so they can't be rebalanced.`);
-			}
-			const speciesMods = [...this.ruleTable.keys()].map(r => this.dex.data.Rulesets[r]).filter(r => r?.onModifySpecies);
-			if (!speciesMods.length) throw new Error('This format has no rules that modify base stats.');
+		value: {
+			type: 'flag',
+			validate() {
+				if (!this.format.team) throw new Error('The Rebalance Levels rule is only intended to work with randomized teams.');
+				if (this.ruleTable.adjustLevel) {
+					throw new Error(`This format's rules force Pokemon to be level ${this.ruleTable.adjustLevel}, so they can't be rebalanced.`);
+				}
+				const speciesMods = [...this.ruleTable.keys()].map(r => this.dex.data.Rulesets[r]).filter(r => r?.onModifySpecies);
+				if (!speciesMods.length) throw new Error('This format has no rules that modify base stats.');
+			},
 		},
 	},
 };
