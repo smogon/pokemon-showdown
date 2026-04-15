@@ -1280,7 +1280,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Rock", "Steel"],
 		baseStats: { hp: 61, atk: 131, def: 211, spa: 53, spd: 101, spe: 13 },
-		abilities: { 0: "Stack Change" },
+		abilities: { 0: "Stack Shift" },
 		otherFormes: ["Stakataka-Missile"],
 		formeOrder: ["Stakataka", "Stakataka-Missile"],
 	},
@@ -1297,7 +1297,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		color: "Gray",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
-		requiredAbility: "Stack Change",
+		requiredAbility: "Stack Shift",
 		battleOnly: "Stakataka",
 	},
 	sudowoodo: {
