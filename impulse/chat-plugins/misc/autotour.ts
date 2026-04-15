@@ -311,7 +311,7 @@ export const commands: Chat.ChatCommands = {
 		help() {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Autotour Commands</strong></h4><hr>Commands Alias: /autotour</center><hr>` +
+				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Autotour Commands</strong></h4><hr>Commands Alias: /at</center><hr>` +
 				`<b>/autotour enable</b> - Enable autotours in this room. Requires: #<hr>` +
 				`<b>/autotour disable</b> - Disable autotours in this room. Requires: #<hr>` +
 				`<b>/autotour formats [format1], [format2]</b> - Set specific formats.<hr>` +
@@ -328,6 +328,8 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 	},
+
+	at: 'autotour',
 };
 
 export const destroy = (): void => {
