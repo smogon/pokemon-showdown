@@ -1586,12 +1586,17 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					// immune to lightning
 					if (target.hasType('Electric')) typeMod *= 0;
 					if (target.hasType('Ground')) typeMod *= 0;
+					if (target.hasAbility('lightningrod') || target.hasAbility('motordrive') || target.hasAbility('voltabsorb')) {
+						typeMod = 0;
+					}
+					this.debug('lightning strike damage is based on the Pokemon\'s weakness/resistance to Electric');
+					this.damage(typeMod * target.baseMaxhp / 10, target);
 					// electric types gain charge and take no damage
 					if (target.hasType('Electric')) {
 						target.addVolatile('charge');
 						this.hint("Electric types gain the Charge effect when struck by lightning.");
 					} else if (target.hasType('Ground')) { // ground types lose speed
-						this.boost({ spe: -1 });
+						this.boost({ spe: -1 }, target);
 						this.hint("Ground types receive -1 Speed when struck by lightning.");
 					}
 					if (target.hasAbility('lightningrod')) {
@@ -1599,24 +1604,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 							this.add('-immune', target, '[from] ability: Lightning Rod');
 						}
 						this.hint("Pokemon with Lightning Rod draw in any lightning strike.");
-						typeMod *= 0;
 					}
 					if (target.hasAbility('motordrive')) {
 						if (!this.boost({ spe: 1 }, target)) {
 							this.add('-immune', target, '[from] ability: Motor Drive');
 						}
 						this.hint("Pokemon with Motor Drive receive +1 Speed when struck by lightning.");
-						typeMod *= 0;
 					}
 					if (target.hasAbility('voltabsorb')) {
 						if (!target.heal(target.baseMaxhp / 4, target)) {
 							this.add('-immune', target, '[from] ability: Volt Absorb');
 						}
 						this.hint("Pokemon with Volt Absorb heal from lightning strikes.");
-						typeMod *= 0;
 					}
-					this.debug('lightning strike damage is based on the pokemons weakness/resistance to electric');
-					this.damage(typeMod * target.baseMaxhp / 10, target);
 				}
 			}
 
