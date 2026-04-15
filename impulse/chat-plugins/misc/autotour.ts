@@ -19,27 +19,14 @@ interface PerRoomAutotourConfig {
 	playerCap: string;
 	name: string;
 	enabled: boolean;
-	modifier?: string;
 	lastTourTime?: number;
 	_id?: unknown;
 }
 
-const ALL_TOUR_TYPES = [
-	'elimination',
-	'roundrobin',
-];
+const ALL_TOUR_TYPES = ['elimination', 'roundrobin'];
 
 const defaultRoomConfig: Omit<PerRoomAutotourConfig, 'roomid'> = {
-	formats: [
-		'gen9randombattle', 'gen9randomdoublesbattle',
-		'gen9blankcanvasrandombattle', 'gen9monotyperandombattle',
-		'gen9randombattlemayhem', 'gen9babyrandombattle',
-		'gen8randombattle', 'gen8randomdoublesbattle',
-		'gen7randombattle', 'gen6randombattle',
-		'gen5randombattle', 'gen4randombattle',
-		'gen3randombattle', 'gen2randombattle',
-		'gen1randombattle', 'gen5pokebilitiesrandombattle',
-	],
+	formats: ['gen9randombattle'],
 	types: [...ALL_TOUR_TYPES],
 	interval: 60,
 	autostart: 5,
@@ -76,29 +63,6 @@ function pickRandom<T>(arr: T[]): T {
 	return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function pickTourTypeAndModifier(types: string[]): { type: string, modifier?: string } {
-	const hasElim = types.includes('elimination');
-	const hasRR = types.includes('roundrobin');
-	if (hasElim && hasRR) {
-		const roll = Math.random();
-		if (roll < 0.6) {
-			if (Math.random() < 0.5) {
-				return { type: 'elimination', modifier: '2' };
-			}
-			return { type: 'elimination' };
-		} else {
-			return { type: 'roundrobin' };
-		}
-	}
-	const type = pickRandom(types);
-	if (type === 'elimination') {
-		if (Math.random() < 0.5) {
-			return { type, modifier: '2' };
-		}
-	}
-	return { type };
-}
-
 function startRoomAutotourScheduler(roomid: RoomID): void {
 	stopRoomAutotourScheduler(roomid);
 	const config = autotourConfig[roomid];
@@ -114,7 +78,6 @@ function startRoomAutotourScheduler(roomid: RoomID): void {
 		runAutotour(roomid);
 		autotourIsInterval[roomid] = true;
 		autotourIntervals[roomid] = setInterval(() => {
-			const cfg = autotourConfig[roomid];
 			const rm = Rooms.get(roomid);
 			if (rm?.game && rm.game.gameid === 'tournament') {
 				clearInterval(autotourIntervals[roomid]);
@@ -146,16 +109,16 @@ function stopRoomAutotourScheduler(roomid: RoomID): void {
 
 function runAutotour(roomid: RoomID): void {
 	const config = autotourConfig[roomid];
-	if (!config?.enabled) return;
-	if (!config.formats.length || !config.types.length) return;
+	if (!config?.enabled || !config.formats.length || !config.types.length) return;
 	const room = Rooms.get(roomid);
-	if (!room || room.type !== 'chat') return;
-	if (room.game && room.game.gameid === 'tournament') return;
+	if (!room || room.type !== 'chat' || (room.game && room.game.gameid === 'tournament')) return;
 
 	const format = pickRandom(config.formats);
-	const { type, modifier } = pickTourTypeAndModifier(config.types);
+	const type = pickRandom(config.types);
+	
+	// Modifier chance lowered to 20%
+	const modifier = (type === 'elimination' && Math.random() < 0.2) ? '2' : undefined;
 
-	// re-fetch room immediately before creating to guard against it closing
 	const liveRoom = Rooms.get(roomid);
 	if (!liveRoom || liveRoom.type !== 'chat') return;
 
@@ -191,14 +154,9 @@ function runAutotour(roomid: RoomID): void {
 			mockContext
 		);
 		if (tour) {
-			if (config.autostart > 0) {
-				tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
-			}
-			if (config.autodq > 0) {
-				tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
-			}
-			const now = Date.now();
-			autotourConfig[roomid].lastTourTime = now;
+			if (config.autostart > 0) tour.setAutoStartTimeout(config.autostart * 60 * 1000, mockContext);
+			if (config.autodq > 0) tour.setAutoDisqualifyTimeout(config.autodq * 60 * 1000, mockContext);
+			autotourConfig[roomid].lastTourTime = Date.now();
 			void saveConfig(roomid);
 		}
 	} catch (err) {
@@ -213,16 +171,13 @@ function checkRoomOwner(context: Chat.CommandContext, room: Room | null): boolea
 		context.errorReply('Use this command in a room.');
 		return false;
 	}
-	if (context.user.can('declare', null, room)) return true;
-	if (room.auth.get(context.user.id) === Users.HOST_SYMBOL) return true;
-	context.errorReply('Only the Room Owner or a global Admin can use this command in this room.');
+	if (context.user.can('declare', null, room) || room.auth.get(context.user.id) === Users.HOST_SYMBOL) return true;
+	context.errorReply('Only the Room Owner or a global Admin can use this command.');
 	return false;
 }
 
 function ensureRoomConfig(roomid: RoomID): PerRoomAutotourConfig {
-	if (!autotourConfig[roomid]) {
-		autotourConfig[roomid] = { roomid, ...defaultRoomConfig };
-	}
+	if (!autotourConfig[roomid]) autotourConfig[roomid] = { roomid, ...defaultRoomConfig };
 	return autotourConfig[roomid];
 }
 
@@ -230,159 +185,55 @@ async function modifyFormats(
 	context: Chat.CommandContext,
 	room: Room | null,
 	target: string,
-	action: 'set' | 'add' | 'remove' | 'clear'
+	action: 'set' | 'add' | 'remove'
 ): Promise<void> {
-	context.checkChat();
 	if (!checkRoomOwner(context, room)) return;
 	const roomid = room!.roomid;
 	const config = ensureRoomConfig(roomid);
-
-	if (action === 'clear') {
-		config.formats = ['gen9randombattle'];
-		await saveConfig(roomid);
-		context.sendReply(`All formats removed except gen9randombattle for ${roomid}.`);
-		if (config.enabled) startRoomAutotourScheduler(roomid);
-		return;
-	}
 
 	const formats = target.split(',').map(s => toID(s.trim())).filter(Boolean);
-	if (!formats.length) {
-		return context.errorReply(`Usage: /autotour ${action}format <format1>, <format2>, ...`);
+	if (!formats.length) return context.errorReply(`Usage: /autotour ${action}format <format>`);
+	
+	if (action === 'set') config.formats = formats;
+	if (action === 'add') {
+		for (const f of formats) if (!config.formats.includes(f)) config.formats.push(f);
+	}
+	if (action === 'remove') {
+		config.formats = config.formats.filter(f => !formats.includes(f as any));
 	}
 
-	if (action === 'set') {
-		config.formats = formats;
-		await saveConfig(roomid);
-		context.sendReply(`Formats for ${roomid} set to: ${config.formats.join(', ')}`);
-	} else if (action === 'add') {
-		for (const format of formats) {
-			if (!config.formats.includes(format)) config.formats.push(format);
-		}
-		await saveConfig(roomid);
-		context.sendReply(`Added formats to ${roomid}: ${formats.join(', ')}`);
-	} else if (action === 'remove') {
-		for (const format of formats) {
-			const i = config.formats.indexOf(format);
-			if (i >= 0) config.formats.splice(i, 1);
-		}
-		await saveConfig(roomid);
-		context.sendReply(`Removed formats from ${roomid}: ${formats.join(', ')}`);
-	}
-
-	if (config.enabled) startRoomAutotourScheduler(roomid);
-}
-
-async function modifyTypes(
-	context: Chat.CommandContext,
-	room: Room | null,
-	target: string,
-	action: 'set' | 'add' | 'remove' | 'clear'
-): Promise<void> {
-	context.checkChat();
-	if (!checkRoomOwner(context, room)) return;
-	const roomid = room!.roomid;
-	const config = ensureRoomConfig(roomid);
-
-	if (action === 'clear') {
-		config.types = ['elimination'];
-		await saveConfig(roomid);
-		context.sendReply(`All types removed except elimination for ${roomid}.`);
-		if (config.enabled) startRoomAutotourScheduler(roomid);
-		return;
-	}
-
-	const types = target.split(',').map(s => toID(s.trim())).filter(type => ALL_TOUR_TYPES.includes(type));
-	if (!types.length) {
-		return context.errorReply(`Usage: /autotour ${action}type <elimination|roundrobin>, ...`);
-	}
-
-	if (action === 'set') {
-		config.types = types;
-		await saveConfig(roomid);
-		context.sendReply(`Types for ${roomid} set to: ${config.types.join(', ')}`);
-	} else if (action === 'add') {
-		for (const type of types) {
-			if (!config.types.includes(type)) config.types.push(type);
-		}
-		await saveConfig(roomid);
-		context.sendReply(`Added types to ${roomid}: ${types.join(', ')}`);
-	} else if (action === 'remove') {
-		for (const type of types) {
-			const i = config.types.indexOf(type);
-			if (i >= 0) config.types.splice(i, 1);
-		}
-		await saveConfig(roomid);
-		context.sendReply(`Removed types from ${roomid}: ${types.join(', ')}`);
-	}
-
-	if (config.enabled) startRoomAutotourScheduler(roomid);
-}
-
-async function setConfigValue(
-	context: Chat.CommandContext,
-	room: Room | null,
-	target: string,
-	field: 'interval' | 'autostart' | 'autodq' | 'playerCap' | 'name'
-): Promise<void> {
-	context.checkChat();
-	if (!checkRoomOwner(context, room)) return;
-	const roomid = room!.roomid;
-	const config = ensureRoomConfig(roomid);
-
-	if (field === 'playerCap' || field === 'name') {
-		config[field] = target.trim();
-		await saveConfig(roomid);
-		context.sendReply(`${field === 'playerCap' ? 'Player cap' : 'Name'} for ${roomid} set to "${config[field]}".`);
-		if (config.enabled) startRoomAutotourScheduler(roomid);
-		return;
-	}
-
-	const value = Number(target);
-	if (field === 'interval' && (!value || value < 1)) {
-		return context.errorReply('Invalid interval. Must be at least 1 minute.');
-	}
-	if ((field === 'autostart' || field === 'autodq') && (isNaN(value) || value < 0)) {
-		return context.errorReply(`Invalid ${field}. Must be 0 or greater.`);
-	}
-
-	config[field] = value;
 	await saveConfig(roomid);
-	context.sendReply(`${field.charAt(0).toUpperCase() + field.slice(1)} for ${roomid} set to ${value} minutes.`);
+	context.sendReply(`Formats updated for ${roomid}.`);
 	if (config.enabled) startRoomAutotourScheduler(roomid);
-}
-
-async function toggleAutotour(
-	context: Chat.CommandContext,
-	room: Room | null,
-	user: User,
-	enable: boolean
-): Promise<void> {
-	context.checkChat();
-	if (!checkRoomOwner(context, room)) return;
-	const roomid = room!.roomid;
-	const config = ensureRoomConfig(roomid);
-	config.enabled = enable;
-	await saveConfig(roomid);
-
-	if (enable) {
-		startRoomAutotourScheduler(roomid);
-	} else {
-		stopRoomAutotourScheduler(roomid);
-	}
-
-	context.sendReply(`Autotour ${enable ? 'enabled' : 'disabled'} for room ${roomid}.`);
-	room!.add(
-		`|html|<div class="infobox"><center>${user.name} ${enable ? 'enabled' : 'disabled'} auto tournaments in this room.</center></div>`
-	).update();
 }
 
 export const commands: Chat.ChatCommands = {
 	autotour: {
 		async enable(target, room, user) {
-			await toggleAutotour(this, room, user, true);
+			if (!checkRoomOwner(this, room)) return;
+			const config = ensureRoomConfig(room!.roomid);
+			config.enabled = true;
+			await saveConfig(room!.roomid);
+			startRoomAutotourScheduler(room!.roomid);
+			this.sendReply(`Autotour enabled for ${room!.roomid}.`);
 		},
 		async disable(target, room, user) {
-			await toggleAutotour(this, room, user, false);
+			if (!checkRoomOwner(this, room)) return;
+			const config = ensureRoomConfig(room!.roomid);
+			config.enabled = false;
+			await saveConfig(room!.roomid);
+			stopRoomAutotourScheduler(room!.roomid);
+			this.sendReply(`Autotour disabled for ${room!.roomid}.`);
+		},
+		async types(target, room, user) {
+			if (!checkRoomOwner(this, room)) return;
+			const roomid = room!.roomid;
+			const config = ensureRoomConfig(roomid);
+			const types = target.split(',').map(s => toID(s.trim())).filter(type => ALL_TOUR_TYPES.includes(type));
+			if (!types.length) return this.errorReply('Usage: /autotour types elimination, roundrobin');
+			config.types = types;
+			await saveConfig(roomid);
+			this.sendReply(`Types for ${roomid} set to: ${config.types.join(', ')}`);
 		},
 		async formats(target, room, user) {
 			await modifyFormats(this, room, target, 'set');
@@ -393,57 +244,64 @@ export const commands: Chat.ChatCommands = {
 		async removeformat(target, room, user) {
 			await modifyFormats(this, room, target, 'remove');
 		},
-		async removeallformats(target, room, user) {
-			await modifyFormats(this, room, '', 'clear');
-		},
-		async types(target, room, user) {
-			await modifyTypes(this, room, target, 'set');
-		},
-		async addtype(target, room, user) {
-			await modifyTypes(this, room, target, 'add');
-		},
-		async removetype(target, room, user) {
-			await modifyTypes(this, room, target, 'remove');
-		},
-		async removealltypes(target, room, user) {
-			await modifyTypes(this, room, '', 'clear');
-		},
 		async interval(target, room, user) {
-			await setConfigValue(this, room, target, 'interval');
+			if (!checkRoomOwner(this, room)) return;
+			const value = parseInt(target);
+			if (isNaN(value) || value < 1) return this.errorReply("Interval must be at least 1 minute.");
+			const config = ensureRoomConfig(room!.roomid);
+			config.interval = value;
+			await saveConfig(room!.roomid);
+			this.sendReply(`Interval set to ${value} minutes.`);
+			if (config.enabled) startRoomAutotourScheduler(room!.roomid);
 		},
 		async autostart(target, room, user) {
-			await setConfigValue(this, room, target, 'autostart');
+			if (!checkRoomOwner(this, room)) return;
+			const value = parseInt(target);
+			if (isNaN(value) || value < 0) return this.errorReply("Invalid value.");
+			const config = ensureRoomConfig(room!.roomid);
+			config.autostart = value;
+			await saveConfig(room!.roomid);
+			this.sendReply(`Autostart set to ${value} minutes.`);
 		},
 		async autodq(target, room, user) {
-			await setConfigValue(this, room, target, 'autodq');
+			if (!checkRoomOwner(this, room)) return;
+			const value = parseInt(target);
+			if (isNaN(value) || value < 0) return this.errorReply("Invalid value.");
+			const config = ensureRoomConfig(room!.roomid);
+			config.autodq = value;
+			await saveConfig(room!.roomid);
+			this.sendReply(`Autodq set to ${value} minutes.`);
 		},
 		async playercap(target, room, user) {
-			await setConfigValue(this, room, target, 'playerCap');
+			if (!checkRoomOwner(this, room)) return;
+			const config = ensureRoomConfig(room!.roomid);
+			config.playerCap = target.trim();
+			await saveConfig(room!.roomid);
+			this.sendReply(`Player cap set to ${target}.`);
 		},
 		async name(target, room, user) {
-			await setConfigValue(this, room, target, 'name');
+			if (!checkRoomOwner(this, room)) return;
+			const config = ensureRoomConfig(room!.roomid);
+			config.name = target.trim();
+			await saveConfig(room!.roomid);
+			this.sendReply(`Tour name set to ${target}.`);
 		},
 		show(target, room, user) {
-			if (!this.runBroadcast()) return;
-			if (!checkRoomOwner(this, room)) return;
+			if (!this.runBroadcast() || !checkRoomOwner(this, room)) return;
 			const roomid = room!.roomid;
 			const config = autotourConfig[roomid] || { roomid, ...defaultRoomConfig };
-			const colorName = nameColor(user.name, true, true);
-			const formatsHtml = `<div style="max-width:300px;overflow-x:auto;white-space:nowrap;">${config.formats.join(', ') || '(none)'}</div>`;
 			const rows = [
 				[`<b>Room:</b>`, `<b>${roomid}</b>`],
-				[`<b>Owner:</b>`, colorName],
-				[`<b>Enabled:</b>`, config.enabled ? '<span style="color:limegreen">Yes</span>' : '<span style="color:red">No</span>'],
-				[`<b>Formats:</b>`, formatsHtml],
-				[`<b>Types:</b>`, config.types.join(', ') || '(none)'],
+				[`<b>Enabled:</b>`, config.enabled ? 'Yes' : 'No'],
+				[`<b>Formats:</b>`, config.formats.join(', ')],
+				[`<b>Types:</b>`, config.types.join(', ')],
 				[`<b>Interval:</b>`, `${config.interval} min`],
 				[`<b>Autostart:</b>`, `${config.autostart} min`],
 				[`<b>Autodq:</b>`, `${config.autodq} min`],
 				[`<b>Player Cap:</b>`, config.playerCap || '(none)'],
 				[`<b>Name:</b>`, config.name || '(none)'],
 			];
-			const tableHTML = Table(`Autotour settings for ${roomid}`, [], rows);
-			this.sendReply(`|html|${tableHTML}`);
+			this.sendReply(`|html|${Table(`Autotour settings for ${roomid}`, [], rows)}`);
 		},
 		nextrun(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -453,48 +311,32 @@ export const commands: Chat.ChatCommands = {
 			if (!config?.enabled) return this.errorReply(`Autotour is not enabled in ${roomid}.`);
 
 			const now = Date.now();
-			const intervalMs = config.interval * 60 * 1000;
-			const lastRun = config.lastTourTime || 0;
-			const nextRun = lastRun > 0 ? lastRun + intervalMs : now;
-			const timeRemaining = Math.max(0, nextRun - now);
+			const nextRun = (config.lastTourTime || 0) + (config.interval * 60 * 1000);
+			const remaining = Math.max(0, nextRun - now);
 
-			const minutes = Math.floor(timeRemaining / 60000);
-			const seconds = Math.floor((timeRemaining % 60000) / 1000);
-			const tableHTML = Table(`Next Autotour in ${roomid}`, [], [
-				[`<b>Room:</b>`, `<b>${roomid}</b>`],
-				[`<b>Time Remaining:</b>`, `<b>${minutes}m ${seconds}s</b>`],
-				[`<b>Interval:</b>`, `${config.interval} min`],
-				[`<b>Last Run:</b>`, config.lastTourTime ? new Date(config.lastTourTime).toLocaleString() : '(never)'],
-			]);
-			this.sendReply(`|html|${tableHTML}`);
+			const minutes = Math.floor(remaining / 60000);
+			const seconds = Math.floor((remaining % 60000) / 1000);
+			this.sendReply(`Next tournament in ${roomid} starts in: ${minutes}m ${seconds}s.`);
 		},
 		help() {
 			if (!this.runBroadcast()) return;
-			const helpList = [
-				{ cmd: "/autotour enable", desc: "Enable autotour in this room. Requires: #/~." },
-				{ cmd: "/autotour disable", desc: "Disable autotour in this room. Requires: #/~." },
-				{ cmd: "/autotour formats [format1], [format2], ...", desc: "Set tournament formats. Requires: #/~." },
-				{ cmd: "/autotour addformat [format]", desc: "Add a format to the list. Requires: #/~." },
-				{ cmd: "/autotour removeformat [format]", desc: "Remove a format from the list. Requires: #/~." },
-				{ cmd: "/autotour removeallformats", desc: "Remove all formats except gen9randombattle. Requires: #/~." },
-				{ cmd: "/autotour types [elimination|roundrobin], ...", desc: "Set tournament types. Requires: #/~." },
-				{ cmd: "/autotour addtype [type]", desc: "Add a tournament type. Requires: #/~." },
-				{ cmd: "/autotour removetype [type]", desc: "Remove a tournament type. Requires: #/~." },
-				{ cmd: "/autotour removealltypes", desc: "Remove all types except elimination. Requires: #/~." },
-				{ cmd: "/autotour interval [minutes]", desc: "Set time between tournaments. Requires: #/~." },
-				{ cmd: "/autotour autostart [minutes]", desc: "Set autostart timer. Requires: #/~." },
-				{ cmd: "/autotour autodq [minutes]", desc: "Set autodq timer. Requires: #/~." },
-				{ cmd: "/autotour playercap [number]", desc: "Set player cap. Requires: #/~." },
-				{ cmd: "/autotour name [name]", desc: "Set custom tournament name. Requires: #/~." },
-				{ cmd: "/autotour show", desc: "Show current autotour settings for this room." },
-				{ cmd: "/autotour nextrun [room]", desc: "Show time remaining until next tournament starts." },
-			];
-			const html = `<center><strong>Autotour Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
-				helpList.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b> - ${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				).join('') +
-				`</ul>`;
-			this.sendReplyBox(`<div style="max-height: 360px; overflow-y: auto;">${html}</div>`);
+			this.sendReplyBox(
+				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Autotour Commands</strong></h4><hr>Commands Alias: /autotour</center><hr>` +
+				`<b>/autotour enable</b> - Enable autotours in this room. Requires: #<hr>` +
+				`<b>/autotour disable</b> - Disable autotours in this room. Requires: #<hr>` +
+				`<b>/autotour formats [format1], [format2]</b> - Set specific formats.<hr>` +
+				`<b>/autotour addformat [format]</b> - Add a format to the rotation.<hr>` +
+				`<b>/autotour removeformat [format]</b> - Remove a format from the rotation.<hr>` +
+				`<b>/autotour types [elimination, roundrobin]</b> - Set tournament type.<hr>` +
+				`<b>/autotour interval [minutes]</b> - Set delay between tournaments.<hr>` +
+				`<b>/autotour autostart [minutes]</b> - Set the autostart timer.<hr>` +
+				`<b>/autotour autodq [minutes]</b> - Set the autodq timer.<hr>` +
+				`<b>/autotour playercap [number]</b> - Set a player cap.<hr>` +
+				`<b>/autotour name [custom name]</b> - Set a custom tournament name.<hr>` +
+				`<b>/autotour show</b> - Show current settings for this room.<hr>` +
+				`<b>/autotour nextrun</b> - See time remaining until next tournament.<hr>` +
+				`<center><small>Gen 9 Random Battle format used by default.</small></center></div>`
+			);
 		},
 	},
 };
