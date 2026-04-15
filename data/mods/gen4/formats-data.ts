@@ -1428,7 +1428,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	hippopotas: {
-		tier: "PU",
+		tier: "NUBL",
 	},
 	hippowdon: {
 		tier: "OU",
@@ -1455,7 +1455,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	snover: {
-		tier: "PU",
+		tier: "NUBL",
 	},
 	abomasnow: {
 		tier: "UUBL",
