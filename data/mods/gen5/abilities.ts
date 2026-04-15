@@ -72,6 +72,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 		rating: 0.5,
 	},
+	sandstream: {
+		inherit: true,
+		onStart(source) {
+			this.field.setClimateWeather('sandstorm');
+		},
+	},
 	sapsipper: {
 		inherit: true,
 		onAllyTryHitSide: undefined, // no inherit

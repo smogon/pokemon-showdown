@@ -1159,6 +1159,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideResidualSubOrder: undefined, // no inherit
 		},
 	},
+	sandstorm: {
+		inherit: true,
+		climateWeather: 'Sandstorm',
+		irritantWeather: undefined,
+	},
 	sandtomb: {
 		inherit: true,
 		accuracy: 70,

@@ -6,6 +6,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.abilityState.ending = false;
 		},
 	},
+	sandstream: {
+		inherit: true,
+		onStart(source) {
+			this.field.setClimateWeather('sandstorm');
+		},
+	},
 	angerpoint: {
 		inherit: true,
 		onAfterSubDamage(damage, target, source, move) {

@@ -2214,8 +2214,8 @@ export class Pokemon {
 	}
 
 	/**
-	 * Like Field.effectiveWeather(), but ignores sun and rain if
-	 * the Utility Umbrella is active for the Pokemon.
+	 * Like Field.effectiveClimateWeather(), but ignores Climate Weathergy
+	 * effects if the Utility Umbrella is active for the Pokemon.
 	 */
 	effectiveClimateWeather(message?: string | boolean) {
 		const weather = this.battle.field.effectiveClimateWeather();

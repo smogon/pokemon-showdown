@@ -920,22 +920,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	deltastream: {
 		onStart(source) {
-			this.field.setClimateWeather('deltastream');
+			this.field.setClearingWeather('deltastream');
 		},
-		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'deltastream' && !strongWeathers.includes(climateWeather.id)) return false;
+		onAnySetClearingWeather(target, source, clearingWeather) {
+			const strongWeathers = ['strongwinds', 'deltastream'];
+			if (this.field.getClearingWeather().id === 'deltastream' &&
+				strongWeathers.includes(clearingWeather.id)) {
+				return false;
+			}
 		},
 		onEnd(pokemon) {
-			if (this.field.climateWeatherState.source !== pokemon) return;
+			if (this.field.clearingWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('deltastream')) {
-					this.field.climateWeatherState.source = target;
+					this.field.clearingWeatherState.source = target;
 					return;
 				}
 			}
-			this.field.clearClimateWeather();
+			this.field.clearClearingWeather();
 		},
 		flags: {},
 		name: "Delta Stream",
@@ -947,8 +950,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setClimateWeather('desolateland');
 		},
 		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'desolateland' && !strongWeathers.includes(climateWeather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea'];
+			if (this.field.getClimateWeather().id === 'desolateland' &&
+				!strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.climateWeatherState.source !== pokemon) return;
@@ -3772,8 +3776,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setClimateWeather('primordialsea');
 		},
 		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'primordialsea' && !strongWeathers.includes(climateWeather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea'];
+			if (this.field.getClimateWeather().id === 'primordialsea' &&
+				!strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.climateWeatherState.source !== pokemon) return;
@@ -6864,7 +6869,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onStart(pokemon) {
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
-				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather();
 				this.debug('Cleared Climate Weathers');
 			}
@@ -6878,7 +6883,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.field.clearEnergyWeather();
 				this.debug('Cleared Energy Weathers');
 			}
-			if (['strongwinds'].includes(this.field.effectiveClearingWeather())) {
+			if (['strongwinds', 'deltastream'].includes(this.field.effectiveClearingWeather())) {
 				this.field.clearClearingWeather();
 				this.debug('Cleared Clearing Weathers');
 			}

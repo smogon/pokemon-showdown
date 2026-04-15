@@ -9113,11 +9113,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.accuracy = 50;
 				break;
 			}
-			switch (target?.effectiveEnergyWeather()) {
-			case 'supercell':
-				move.accuracy = true;
-				break;
-			}
 			switch (target?.effectiveClearingWeather()) {
 			case 'strongwinds':
 				move.accuracy = true;
@@ -12390,7 +12385,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'hail':
 			case 'snowscape':
 			case 'foghorn':
-			case 'deltastream':
 				factor = 0.25;
 				break;
 			case 'bloodmoon':
@@ -12430,7 +12424,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'hail':
 			case 'snowscape':
 			case 'foghorn':
-			case 'deltastream':
 				factor = 0.25;
 				break;
 			case 'bloodmoon':
@@ -17471,7 +17464,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snowscape', 'bloodmoon', 'foghorn', 'deltastream'];
+			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snowscape', 'bloodmoon', 'foghorn'];
 			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -17507,7 +17500,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snowscape', 'bloodmoon', 'foghorn', 'deltastream'];
+			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snowscape', 'bloodmoon', 'foghorn'];
 			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -18988,7 +18981,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'snowscape':
 			case 'bloodmoon':
 			case 'foghorn':
-			case 'deltastream':
 				factor = 0.25;
 				break;
 			}
@@ -21065,7 +21057,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		basePowerCallback(pokemon, target, move) {
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
-				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather()) ||
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather()) ||
 				['sandstorm', 'duststorm', 'pollinate',
 					'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather()) ||
 					['auraprojection', 'haunt', 'daydream',

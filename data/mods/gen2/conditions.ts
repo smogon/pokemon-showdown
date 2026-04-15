@@ -214,10 +214,27 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onFieldResidualOrder: 2,
 	},
 	sandstorm: {
-		inherit: true,
+		name: 'Sandstorm',
+		effectType: 'ClimateWeather',
+		duration: 5,
 		onFieldResidualOrder: 2,
-		onIrritantWeather(target) {
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-climateWeather', 'Sandstorm', '[from] ability: ' + effect.name, `[of] ${source}`);
+			} else {
+				this.add('-climateWeather', 'Sandstorm');
+			}
+		},
+		onFieldResidual() {
+			this.add('-climateWeather', 'Sandstorm', '[upkeep]');
+			if (this.field.isClimateWeather('sandstorm')) this.eachEvent('ClimateWeather');
+		},
+		onClimateWeather(target) {
 			this.damage(target.baseMaxhp / 8);
+		},
+		onFieldEnd() {
+			this.add('-climateWeather', 'none');
 		},
 	},
 	stall: {

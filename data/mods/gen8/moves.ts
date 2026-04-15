@@ -4,6 +4,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// Prevents setting the volatile used to check for Ally Switch failure
 		onPrepareHit: undefined, // no inherit
 	},
+	sandstorm: {
+		inherit: true,
+		climateWeather: 'Sandstorm',
+		irritantWeather: undefined,
+	},
 	anchorshot: {
 		inherit: true,
 		isNonstandard: null,

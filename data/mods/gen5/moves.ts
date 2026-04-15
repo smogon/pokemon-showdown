@@ -367,6 +367,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return success;
 		},
 	},
+	sandstorm: {
+		inherit: true,
+		climateWeather: 'Sandstorm',
+		irritantWeather: undefined,
+	},
 	heatcrash: {
 		inherit: true,
 		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },

@@ -574,7 +574,7 @@ export const commands: Chat.ChatCommands = {
 			['Climate', ['sun', 'rain', 'hail', 'bloodmoon', 'fog']],
 			['Irritant', ['sandstorm', 'duststorm', 'pollenstorm', 'pheromones', 'smog', 'fairydust']],
 			['Energy', ['battleaura', 'paranormalactivity', 'dreamscape', 'dragonforce', 'thunderstorm', 'magnetosphere']],
-			['Clearing', ['strongwinds']],
+			['Clearing', ['strongwinds', 'deltastream']],
 			// ['Cataclysm', ['cataclysmiclight']],
 		];
 

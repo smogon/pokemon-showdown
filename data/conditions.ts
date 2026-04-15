@@ -1711,8 +1711,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			} else {
 				this.add('-clearingWeather', 'StrongWinds');
 			}
-			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
-				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'raindance', 'hail', 'snowscape',
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather();
 				this.debug('Cleared Climate Weathers');
 			}
@@ -1840,7 +1840,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	deltastream: {
 		name: 'DeltaStream',
-		effectType: 'ClimateWeather',
+		effectType: 'ClearingWeather',
 		duration: 0,
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
@@ -1850,15 +1850,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-climateWeather', 'DeltaStream', '[from] ability: ' + effect.name, `[of] ${source}`);
+			this.add('-clearingWeather', 'DeltaStream', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-climateWeather', 'DeltaStream', '[upkeep]');
-			this.eachEvent('ClimateWeather');
+			this.add('-clearingWeather', 'DeltaStream', '[upkeep]');
+			this.eachEvent('ClearingWeather');
 		},
 		onFieldEnd() {
-			this.add('-climateWeather', 'none');
+			this.add('-clearingWeather', 'none');
 		},
 	},
 
