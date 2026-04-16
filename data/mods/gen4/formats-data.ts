@@ -423,7 +423,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	scyther: {
-		tier: "PU",
+		tier: "UU",
 	},
 	scizor: {
 		tier: "OU",
