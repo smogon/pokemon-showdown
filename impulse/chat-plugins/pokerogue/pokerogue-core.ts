@@ -202,7 +202,6 @@ export function getTier1Pokemon(): string[] {
 	t1Cache = all.filter(s => {
 		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
 		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		// Tier 1: Babies/Starters (Can evolve OR very weak BST)
 		return s.tier === 'LC' || (s.evos && s.evos.length > 0 && getBST(s) < 350);
 	}).map(s => toID(s.name));
 	return t1Cache;
@@ -214,7 +213,6 @@ export function getTier2Pokemon(): string[] {
 	t2Cache = all.filter(s => {
 		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
 		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		// Tier 2: Fully evolved standard Pokémon
 		if (s.evos && s.evos.length > 0) return false;
 		const bst = getBST(s);
 		return bst >= 350 && bst <= 490;
@@ -228,7 +226,6 @@ export function getTier3Pokemon(): string[] {
 	t3Cache = all.filter(s => {
 		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
 		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		// Tier 3: Elite non-legendaries (High BST or explicitly strong tiers)
 		if (s.evos && s.evos.length > 0) return false;
 		const bst = getBST(s);
 		return (bst >= 491 && bst <= 579) || ['OU', 'UU', 'RU'].includes(s.tier);
@@ -241,7 +238,6 @@ export function getTier4Pokemon(): string[] {
 	const all = Dex.species.all();
 	t4Cache = all.filter(s => {
 		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
-		// Tier 4: Legendaries, Mythicals, UBs, Paradoxes, or BST 580+
 		return s.tags.some(tag => LEGENDARY_TAGS.has(tag)) || getBST(s) >= 580;
 	}).map(s => toID(s.name));
 	return t4Cache;
@@ -279,7 +275,6 @@ export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclud
 }
 
 export function pickStarterOptions(): string[] {
-	// Starters are exclusively Tier 1 (Babies)
 	return pickRandom(getTier1Pokemon(), 3);
 }
 
@@ -329,13 +324,32 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 	return validEvos[Math.floor(Math.random() * validEvos.length)];
 }
 
+// --- LEVEL 999 MATH & EXP ---
+
+export function botLevel(floor: number): number {
+	let level = 5; 
+	if (floor <= 20) {
+		level += (floor - 1) * 2;
+	} else if (floor <= 50) {
+		level = 43 + ((floor - 20) * 4);
+	} else {
+		level = 163 + ((floor - 50) * 8);
+	}
+	return Math.min(999, level);
+}
+
 export function expForLevel(level: number): number {
-	// Formula naturally scales to 999 without breaking
 	return 15 * level * (level - 1);
 }
 
 export function floorExpReward(floor: number): number {
-	return 50 + floor * 15;
+	const currentTarget = botLevel(floor);
+	const nextTarget = botLevel(floor + 1);
+	
+	if (currentTarget === 999) return 500000; 
+
+	const expGap = expForLevel(nextTarget) - expForLevel(currentTarget);
+	return Math.floor(expGap * 1.15); 
 }
 
 export function floorCoinReward(floor: number): number {
@@ -345,7 +359,7 @@ export function floorCoinReward(floor: number): number {
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
-	// Level Cap removed! Now naturally scales up to 999
+	
 	while (mon.level < 999 && mon.exp >= expForLevel(mon.level + 1)) {
 		mon.level++;
 	}

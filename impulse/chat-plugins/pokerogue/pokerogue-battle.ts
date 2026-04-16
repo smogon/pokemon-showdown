@@ -8,21 +8,8 @@ import {
 	getLevelUpEvo, pickRandom,
 	getTier1Pokemon, getTier2Pokemon, getTier3Pokemon, getTier4Pokemon,
 	packPokemon, packTeam,
-	setState,
+	setState, botLevel,
 } from './pokerogue-core';
-
-function botLevel(floor: number): number {
-	// Accelerating level curve to naturally reach Level 999 in the extreme late-game
-	let level = 5; 
-	if (floor <= 20) {
-		level += (floor - 1) * 2;
-	} else if (floor <= 50) {
-		level = 43 + ((floor - 20) * 4);
-	} else {
-		level = 163 + ((floor - 50) * 8);
-	}
-	return Math.min(999, level);
-}
 
 function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
@@ -213,20 +200,33 @@ interface ActiveRougeMatch {
 
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
-function buildBotTeam(floor: number): string {
-	const level = botLevel(floor);
+function buildBotTeam(state: PokeRogueState): string {
+	const floor = state.floor;
 	const size = botTeamSize(floor);
 	const isBoss = floor % 10 === 0;
+
+	// Dynamic Level Scaling based on player's highest level
+	const playerMaxLevel = Math.max(...state.team.map(m => m.level));
+	let level = Math.max(botLevel(floor), playerMaxLevel);
+
+	const floorMod = floor % 10;
+	if (floorMod === 8) {
+		level += 1;
+	} else if (floorMod === 9) {
+		level += 2;
+	} else if (floorMod === 0) { 
+		level += Math.floor(Math.random() * 4) + 2; 
+	}
+	
+	level = Math.min(999, level); 
 
 	let poolA: string[];
 	let poolB: string[];
 	let chanceA: number;
 
 	if (isBoss) {
-		// Bosses always field Elite or Legendary Pokemon
 		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.8;
 	} else {
-		// Standard scaling based on floor progression
 		if (floor < 10) {
 			poolA = getTier1Pokemon(); poolB = getTier1Pokemon(); chanceA = 1.0;
 		} else if (floor < 30) {
@@ -258,7 +258,7 @@ function buildBotTeam(floor: number): string {
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
-	const botTeam = buildBotTeam(state.floor);
+	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
 
 	const botUser = createBotUser(user.id);

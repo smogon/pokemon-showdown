@@ -8,7 +8,7 @@ import {
 	expForLevel, floorExpReward, floorCoinReward,
 	applyExpAndLevelUp, getLevelUpEvo,
 	getLevelUpMoves, rollShopInventory, rollGachaPokemon,
-	getMovesLearnedBetween,
+	getMovesLearnedBetween, botLevel,
 } from './pokerogue-core';
 import {
 	activeMatches,
@@ -457,8 +457,10 @@ export const commands: Chat.ChatCommands = {
 			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
 			
-			let addedLevel = 5; // Base starter level
-			if (state.pendingChoiceType !== 'starter') addedLevel = Math.max(5, state.floor - 2);
+			let addedLevel = 5; 
+			if (state.pendingChoiceType !== 'starter') {
+				addedLevel = Math.max(5, botLevel(state.floor) - 2);
+			}
 			
 			let finalSpecies = choice;
 			while (true) {
@@ -547,7 +549,6 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			// Level cap uncapped to 999
 			if (itemId === 'rarecandy' && state.team[slot].level >= 999) {
 				return this.errorReply(`That Pokémon is already at Max Level!`);
 			}
@@ -664,7 +665,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
 			
-			const addedLevel = Math.max(5, state.floor - 2);
+			const addedLevel = Math.max(5, botLevel(state.floor) - 2);
 			let finalSpecies = toID(state.pendingGachaOffer.species);
 			
 			while (true) {
@@ -916,8 +917,26 @@ export const handlers: Chat.Handlers = {
 
 		if (toID(winner) === match.userId) {
 			const mult = (state.doubleExpFloors ?? 0) > 0 ? 2 : 1;
-			const expReward = floorExpReward(match.floor) * mult;
-			const coinReward = floorCoinReward(match.floor) * mult;
+			
+			// --- Difficulty Reward Multipliers ---
+			const floorMod = match.floor % 10;
+			let difficultyExpMult = 1.0;
+			let difficultyCoinMult = 1.0;
+
+			if (floorMod === 8) {
+				difficultyExpMult = 1.2; 
+				difficultyCoinMult = 1.2;
+			} else if (floorMod === 9) {
+				difficultyExpMult = 1.3; 
+				difficultyCoinMult = 1.3;
+			} else if (floorMod === 0) {
+				difficultyExpMult = 1.6; 
+				difficultyCoinMult = 1.5;
+			}
+
+			const expReward = Math.floor(floorExpReward(match.floor) * mult * difficultyExpMult);
+			const coinReward = Math.floor(floorCoinReward(match.floor) * mult * difficultyCoinMult);
+			
 			const detailMsgs: string[] = [];
 
 			for (let i = 0; i < state.team.length; i++) {
@@ -1008,7 +1027,6 @@ export const start = (): void => {
 	const FORMAT_ID = 'roguelikebattle' as ID;
 	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
 	Dex.formats.load();
-	// Rule changed to allow Level 999
 	const format = new Format({
 		name: 'Roguelike Battle', mod: 'gen9', effectType: 'Format', section: 'Roguelike',
 		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 999', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
