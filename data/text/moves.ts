@@ -4471,6 +4471,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 	},
+	nihillight: {
+		name: "Nihil Light",
+		desc: "Hits adjacent opposing Pokemon. Ignores the target's stat stage changes, including evasiveness. This move can hit Fairy-type Pokemon.",
+		shortDesc: "Hits adjacent foes. Ignores the target's stat stage changes. Hits Fairy types.",
+	},
 	nobleroar: {
 		name: "Noble Roar",
 		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
