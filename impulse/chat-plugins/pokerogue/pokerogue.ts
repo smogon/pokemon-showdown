@@ -377,9 +377,24 @@ export const commands: Chat.ChatCommands = {
 			}
 			deleteState(user.id); refreshGamePage(user);
 		},
-		help: 'pokeroguehelp',
-		pokeroguehelp: (target, room, user) => this.parse('/help pokerogue'),
-		'': 'pokeroguehelp',
+
+		help(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const isStaff = user.can('lock');
+			let html =
+				`<b>PokéRogue — Player Commands:</b><br>` +
+				`<code>/pokerogue start</code> — Open the game page.<br>` +
+				`<code>/pokerogue battle</code> — Start floor battle.<br>` +
+				`<code>/pokerogue shop</code> — Item shop.<br>` +
+				`<code>/pokerogue status</code> — View run info.<br>` +
+				`<code>/pokerogue top</code> — Leaderboard.<br>` +
+				`<code>/pokerogue quit</code> — Abandon run.<br>`;
+			if (isStaff) {
+				html += `<br><b>Staff Tools:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
+			}
+			this.sendReplyBox(html);
+		},
+		'': 'help',
 	},
 };
 
