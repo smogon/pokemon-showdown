@@ -10,14 +10,10 @@ import {
 	setState,
 } from './pokerogue-core';
 
-// bot level/team-size helpers (battle-subsystem only)
-
-// bot level for a given floor: starts at 1 and grows ~1.5/floor, capped at 100
 function botLevel(floor: number): number {
 	return Math.min(100, 1 + Math.floor((floor - 1) * 1.5));
 }
 
-// number of pokemon on the bot's team for a given floor
 function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
 	if (floor <= 10) return 2;
@@ -27,9 +23,6 @@ function botTeamSize(floor: number): number {
 	return 6;
 }
 
-// bot user creation
-
-// a noop stream — discards everything written to it.
 class NoopStream extends ObjectReadWriteStream<string> {
 	override _write(_data: string): void { /* discard */ }
 }
@@ -37,13 +30,8 @@ class NoopStream extends ObjectReadWriteStream<string> {
 const noopWorker = new StreamWorker(new NoopStream());
 let botCounter = 0;
 
-// maps active bot user ids to battle ai callbacks
 const botBattleHandlers = new Map<string, (roomid: string, requestLine: string) => void>();
-
-// display name for all pokerogue ai trainer bots — all bots share this label in battle
 const TRAINER_NAME = 'PokéRogue Challenger';
-
-// destroys a bot user, removing it from the users table.
 
 export function destroyBotUser(botUser: User): void {
 	botBattleHandlers.delete(botUser.id);
@@ -55,15 +43,11 @@ export function destroyBotUser(botUser: User): void {
 	}
 }
 
-// creates the pokerogue ai trainer bot for a specific player. each bot gets a unique id (pokeroguebot{n}) so concurrent battles work, but the display name is always trainer_name so battles show a clean label.
-
 function createBotUser(playerId: string): User {
 	const uid = ++botCounter;
 	const connId = `pokerogue-bot-${uid}`;
-	// unique id keeps users map consistent; display name override makes battle show correct label
 	const botInternalName = `pokeroguebot${uid}`;
 
-	// destroy any stale bot for this player via the activeMatches map.
 	let staleRoomId: RoomID | undefined;
 	for (const [roomId, match] of activeMatches) {
 		if (match.userId === toID(playerId)) {
@@ -97,14 +81,9 @@ function createBotUser(playerId: string): User {
 	conn.user = botUser;
 
 	botUser.forceRename(botInternalName, true);
-
-	// override display name so battle shows 'PokéRogue Challenger' instead of the unique internal id
 	(botUser as any).name = TRAINER_NAME;
-
-	// mark unnamed: hides bot from room user lists and /seen tracking
 	(botUser as any).named = false;
 
-	// override sendTo so |request| messages trigger ai moves
 	(botUser as any).sendTo = function (roomid: RoomID | BasicRoom | null, data: string) {
 		if (typeof data === 'string') {
 			const lines = data.split('\n');
@@ -125,10 +104,6 @@ function createBotUser(playerId: string): User {
 	return botUser;
 }
 
-// ai move logic
-
-// parse a |request| json and return a valid choice string. uses type-effectiveness scoring to prefer super-effective moves.
-
 function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
 	try {
@@ -139,14 +114,12 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 
 	if (!request || request.wait) return 'pass';
 
-	// team preview
 	if (request.teamPreview) {
 		const count = request.side?.pokemon?.length ?? 1;
 		const order = Array.from({ length: count }, (_, i) => i + 1);
 		return `team ${order.join('')}`;
 	}
 
-	// force switch
 	if (request.forceSwitch) {
 		const choices: string[] = [];
 		const pokemon = request.side?.pokemon ?? [];
@@ -175,7 +148,6 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 		return choices.join(', ');
 	}
 
-	// move request — score each move by type effectiveness
 	if (request.active) {
 		const choicesList: string[] = [];
 
@@ -193,7 +165,6 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 
 			let chosen = '';
 			if (usableMoves.length > 0) {
-				// score: bp x 2^effectiveness (higher is better)
 				const scored = usableMoves.map((m: any) => {
 					const moveData = Dex.moves.get(m.id);
 					const bp = moveData.basePower ?? 0;
@@ -209,7 +180,7 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 				scored.sort((a: any, b: any) => b.score - a.score);
 				chosen = `move ${moves.indexOf(scored[0].m) + 1}`;
 			} else {
-				chosen = 'move 1'; // struggle
+				chosen = 'move 1';
 			}
 
 			if (active.canMegaEvo && Math.random() < 0.5) chosen += ' mega';
@@ -224,8 +195,6 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 	return 'move 1';
 }
 
-// active battle tracking
-
 interface ActiveRougeMatch {
 	userId: ID;
 	botUserId: ID;
@@ -234,7 +203,6 @@ interface ActiveRougeMatch {
 
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
-// builds an ai bot team as a packed string for the given floor
 function buildBotTeam(floor: number): string {
 	const level = botLevel(floor);
 	const size = botTeamSize(floor);
@@ -251,8 +219,6 @@ function buildBotTeam(floor: number): string {
 		return packPokemon({ species, level, exp: 0 } as PokemonEntry);
 	}).join(']');
 }
-
-// starts a pokerogue battle on the current floor for the given user. creates the bot, registers ai handlers and tracks the active match. returns true on success; on failure the user has already received a popup.
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
@@ -284,16 +250,12 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 		return false;
 	}
 
-	// register the ai callback after confirming the battle exists
 	botBattleHandlers.set(botUser.id, (roomid, requestLine) => {
 		const room = Rooms.get(roomid as RoomID);
 		if (!room?.battle) return;
 		const choice = makeAIChoice(requestLine, state.floor);
 		void room.battle.stream.write(`>${botSlot} ${choice}`);
 	});
-
-	// clear held items now that battle creation succeeded
-	for (const mon of state.team) delete mon.heldItem;
 
 	state.battleRoomId = battleRoom.roomid;
 	setState(user.id, state);

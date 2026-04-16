@@ -229,6 +229,59 @@ function renderGamePage(state: PokeRogueState): string {
 		return buf + `</div><div class="pr-shop-footer"><button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button><button name="send" value="/pokerogue view main" class="button">Back</button></div></div>`;
 	}
 
+	if (view === 'bag') {
+		buf += `<div style="display:flex; justify-content:space-between; align-items:baseline;">`;
+		buf += `<h3 style="margin:0;">Manage Team Items</h3>`;
+		buf += `</div>`;
+		
+		buf += `<div class="pr-popup-team" style="margin-top:10px;">`;
+		for (let i = 0; i < state.team.length; i++) {
+			const mon = state.team[i];
+			buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
+			buf += `<span style="font-size:11px"><b>${mon.species}</b> (Lv.${mon.level})</span><br>`;
+			
+			if (mon.heldItem) {
+				const item = SHOP_ITEMS[mon.heldItem];
+				buf += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:2px 4px; border-radius:4px; margin-top:4px;">`;
+				buf += `<span style="font-size:10px;color:#8ab4f8" title="${item?.description || ''}">${item?.name || mon.heldItem}</span>`;
+				buf += `<button name="send" value="/pokerogue unequip ${i + 1}" class="button" style="font-size:9px; padding:2px 4px;">Take</button>`;
+				buf += `</div>`;
+			} else {
+				buf += `<div style="font-size:10px;color:#888;margin-top:4px;">No Item</div>`;
+			}
+			buf += `</div></div>`;
+		}
+		buf += `</div>`;
+
+		buf += `<h3 style="margin-top:15px;">Your Bag</h3>`;
+		const ownedItems = Object.entries(state.items ?? {}).filter(([, qty]) => qty > 0);
+		
+		if (ownedItems.length) {
+			buf += `<div class="pr-inventory-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">`;
+			for (const [id, qty] of ownedItems) {
+				const item = SHOP_ITEMS[id];
+				buf += `<div class="pr-inventory-item-card" style="background:rgba(255,255,255,0.05);padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.1)"><b>${item?.name || id}</b> (x${qty})<br>`;
+				buf += `<span style="font-size:10px;color:#aaa">${item?.description || ''}</span>`;
+				
+				if (item?.heldItem || id === 'rarecandy') {
+					buf += `<div style="font-size:10px; margin: 4px 0 2px 0;"><b>${item?.heldItem ? 'Equip to:' : 'Use on:'}</b></div>`;
+					buf += `<div style="display:flex;gap:2px;">`;
+					for (let i = 1; i <= state.team.length; i++) {
+						buf += `<button name="send" value="/pokerogue use ${id} ${i}" class="button" style="flex:1;padding:2px 0">${i}</button>`;
+					}
+					buf += `</div>`;
+				} else {
+					buf += `<button name="send" value="/pokerogue use ${id}" class="button" style="width:100%;margin-top:4px">Use</button>`;
+				}
+				buf += `</div>`;
+			}
+			buf += `</div>`;
+		} else {
+			buf += `<div style="text-align:center; color:#888; padding:10px; font-style:italic;">Your bag is currently empty.</div>`;
+		}
+		return buf + `</div>`;
+	}
+
 	const activeEffects: string[] = [];
 	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
 	if (state.hasRevive) activeEffects.push('Revive (active)');
@@ -249,26 +302,9 @@ function renderGamePage(state: PokeRogueState): string {
 	}
 	buf += `</div>`;
 
-	const ownedItems = Object.entries(state.items ?? {}).filter(([, qty]) => qty > 0);
-	if (ownedItems.length) {
-		buf += `<h3>Inventory</h3><div class="pr-inventory-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">`;
-		for (const [id, qty] of ownedItems) {
-			const item = SHOP_ITEMS[id];
-			buf += `<div class="pr-inventory-item-card" style="background:rgba(255,255,255,0.05);padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.1)"><b>${item?.name || id}</b> (x${qty})<br>`;
-			if (item?.heldItem || id === 'rarecandy') {
-				buf += `<div style="display:flex;gap:2px;margin-top:4px">`;
-				for (let i = 1; i <= state.team.length; i++) buf += `<button name="send" value="/pokerogue use ${id} ${i}" class="button" style="flex:1;padding:2px 0">${i}</button>`;
-				buf += `</div>`;
-			} else {
-				buf += `<button name="send" value="/pokerogue use ${id}" class="button" style="width:100%;margin-top:4px">Use</button>`;
-			}
-			buf += `</div>`;
-		}
-		buf += `</div>`;
-	}
-
 	buf += `<div class="pr-popup-actions" style="margin-top:12px;display:flex;gap:6px">`;
 	buf += `<button name="send" value="/pokerogue battle" class="button" style="flex:1.5">Start Battle</button>`;
+	buf += `<button name="send" value="/pokerogue view bag" class="button" style="flex:1">Bag</button>`;
 	buf += `<button name="send" value="/pokerogue view shop" class="button" style="flex:1">Shop</button>`;
 	buf += `<button name="send" value="/pokerogue view top" class="button" style="flex:1">Leaderboard</button>`;
 	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080;flex:1">Quit</button></div>`;
@@ -328,7 +364,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state) return;
 			const v = target.trim() as any;
-			if (['main', 'shop', 'top'].includes(v)) {
+			if (['main', 'shop', 'top', 'bag'].includes(v)) {
 				(state as any).view = v;
 				setState(user.id, state);
 				refreshGamePage(user);
@@ -339,7 +375,6 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
 			
-			// Block battle if any choices, swaps, or moves are pending
 			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
 				return this.errorReply("Handle pending choices or team swaps first.");
 			}
@@ -395,17 +430,17 @@ export const commands: Chat.ChatCommands = {
 				
 				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
 				
-				// If the replaced Pokemon was holding an item, return it to the inventory
 				if (state.team[slot].heldItem) {
-					const held = state.team[slot].heldItem!;
+					const heldId = state.team[slot].heldItem!;
+					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
+					const bagId = shopEntry ? shopEntry[0] : heldId;
+
 					state.items = state.items || {};
-					state.items[held] = (state.items[held] || 0) + 1;
+					state.items[bagId] = (state.items[bagId] || 0) + 1;
 				}
 
-				// Overwrite the slot with the new Pokemon
 				state.team[slot] = newMon;
 				
-				// Scrub the move queue for the deleted Pokemon
 				if (state.pendingMoves) {
 					state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
 				}
@@ -427,7 +462,6 @@ export const commands: Chat.ChatCommands = {
 			let addedLevel = 1;
 			if (state.pendingChoiceType !== 'starter') addedLevel = Math.max(1, state.floor - 2);
 			
-			// Fast-forward evolutions for high-level catches
 			let finalSpecies = choice;
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
@@ -452,8 +486,17 @@ export const commands: Chat.ChatCommands = {
 
 		buy(target, room, user) {
 			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot buy items while a battle is in progress.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("Please resolve your pending choices before using the shop.");
+			}
+
 			const item = SHOP_ITEMS[toID(target)];
-			if (state && item && (state.coins ?? 0) >= item.cost && state.shopInventory?.includes(item.id)) {
+			if (item && (state.coins ?? 0) >= item.cost && state.shopInventory?.includes(item.id)) {
 				state.coins! -= item.cost;
 				state.items = state.items ?? {};
 				state.items[item.id] = (state.items[item.id] ?? 0) + 1;
@@ -461,11 +504,34 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
+		refreshshop(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot reroll the shop during a battle.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("Please resolve your pending choices before using the shop.");
+			}
+
+			if ((state.coins ?? 0) >= 5) {
+				state.coins! -= 5;
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+				refreshGamePage(user);
+			} else {
+				return this.errorReply("You don't have enough coins to reroll the shop.");
+			}
+		},
+
 		use(target, room, user) {
 			const state = getState(user.id);
 			if (!state) return;
-			
-			// Prevent item usage while choices or moves are pending
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot manage your bag or items while a battle is in progress.");
+			}
 			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
 				return this.errorReply("You cannot use items while you have pending choices or moves to learn.");
 			}
@@ -475,13 +541,7 @@ export const commands: Chat.ChatCommands = {
 			const slot = parseInt(slotStr) - 1;
 			if (!state.items?.[itemId]) return this.errorReply("Item not found.");
 			const item = SHOP_ITEMS[itemId];
-			
-			// 1. Prevent Gacha scam if team is full
-			if (item?.gachaType && state.team.length >= 6) {
-				return this.errorReply("Your team is full! You cannot open a capsule right now.");
-			}
 
-			// 2. Validate Target Slot for items that require a Pokemon
 			const requiresSlot = itemId === 'rarecandy' || item?.heldItem;
 			if (requiresSlot) {
 				if (isNaN(slot) || slot < 0 || slot >= state.team.length) {
@@ -489,12 +549,10 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			// 3. Prevent Wasting Rare Candies on Level 100s
 			if (itemId === 'rarecandy' && state.team[slot].level >= 100) {
 				return this.errorReply(`That Pokémon is already at Max Level!`);
 			}
 
-			// 4. Prevent Wasting Duplicate Revives
 			if (itemId === 'revive' && state.hasRevive) {
 				return this.errorReply("You already have an active Revive!");
 			}
@@ -551,12 +609,45 @@ export const commands: Chat.ChatCommands = {
 			} else if (item?.heldItem) {
 				if (state.team[slot].heldItem) {
 					const oldItem = state.team[slot].heldItem!;
-					state.items[oldItem] = (state.items[oldItem] ?? 0) + 1;
+					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === oldItem);
+					const bagId = shopEntry ? shopEntry[0] : oldItem;
+					state.items[bagId] = (state.items[bagId] ?? 0) + 1;
 				}
 				state.team[slot].heldItem = item.heldItem;
 			}
 
 			setState(user.id, state); 
+			refreshGamePage(user);
+		},
+
+		unequip(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot manage items while a battle is in progress.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("You cannot change items while you have pending choices.");
+			}
+
+			const slot = parseInt(target.trim()) - 1;
+			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+
+			const mon = state.team[slot];
+			if (!mon.heldItem) return this.errorReply("That Pokémon isn't holding an item.");
+
+			const heldId = mon.heldItem;
+			const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
+			const bagId = shopEntry ? shopEntry[0] : heldId;
+
+			state.items = state.items || {};
+			state.items[bagId] = (state.items[bagId] || 0) + 1;
+			delete mon.heldItem;
+
+			state.notification = `You took the ${SHOP_ITEMS[bagId]?.name || bagId} from ${mon.species}.`;
+
+			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
@@ -577,7 +668,6 @@ export const commands: Chat.ChatCommands = {
 			const addedLevel = Math.max(1, state.floor - 2);
 			let finalSpecies = toID(state.pendingGachaOffer.species);
 			
-			// Fast-forward evolutions
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
 				if (!evo || addedLevel < evo.evoLevel) break;
@@ -600,8 +690,15 @@ export const commands: Chat.ChatCommands = {
 		declinegacha(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
+			
+			const sourceItem = state.pendingGachaOffer.sourceItemId;
+			state.items = state.items || {};
+			state.items[sourceItem] = (state.items[sourceItem] || 0) + 1;
+			state.notification = `You declined the Pokémon and kept your ${SHOP_ITEMS[sourceItem]?.name}.`;
+
 			delete state.pendingGachaOffer;
-			setState(user.id, state); refreshGamePage(user);
+			setState(user.id, state); 
+			refreshGamePage(user);
 		},
 
 		addmon(target, room, user) {
@@ -721,7 +818,6 @@ export const commands: Chat.ChatCommands = {
 				s.lastRunStreaks = s.streaksWon || 0;
 				s.team = [];
 				
-				// Scrub all pending queues so the next run is clean
 				delete s.pendingMoves;
 				delete s.pendingSwap;
 				delete s.pendingChoice;
@@ -770,6 +866,53 @@ export const handlers: Chat.Handlers = {
 		if (botUser) destroyBotUser(botUser);
 		const state = getState(match.userId);
 		if (!state) return;
+
+		// --- CONSUMABLE ITEM LOGIC ---
+		const room = Rooms.get(battle.roomid);
+		if (room && room.log) {
+			const logLines = room.log.log || [];
+			const consumedItems: string[] = [];
+
+			for (const line of logLines) {
+				const endItemMatch = /^\|-enditem\|p1[a-z]: ([^|]+)\|([^|]+)/.exec(line);
+				
+				if (endItemMatch) {
+					if (line.includes('[from] move: Knock Off') || 
+						line.includes('[from] move: Thief') || 
+						line.includes('[from] move: Incinerate')) {
+						continue; 
+					}
+
+					const logSpeciesName = endItemMatch[1].trim();
+					const itemName = endItemMatch[2].trim();
+					const itemId = toID(itemName);
+
+					const shopItem = SHOP_ITEMS[itemId];
+					
+					if (shopItem && shopItem.isConsumable) {
+						const logSpeciesData = Dex.species.get(logSpeciesName);
+
+						const matchingMon = state.team.find(m => {
+							const teamSpeciesData = Dex.species.get(m.species);
+							const isMatch = (teamSpeciesData.name === logSpeciesData.name) || 
+											(teamSpeciesData.baseSpecies === logSpeciesData.baseSpecies);
+							return isMatch && m.heldItem === itemId;
+						});
+
+						if (matchingMon) {
+							delete matchingMon.heldItem;
+							consumedItems.push(shopItem.name);
+						}
+					}
+				}
+			}
+
+			if (consumedItems.length > 0) {
+				state.notification = (state.notification || "") + 
+					`<br><b style="color:#ffb84d">Consumed items:</b> ${consumedItems.join(', ')}`;
+			}
+		}
+
 		delete state.battleRoomId;
 
 		if (toID(winner) === match.userId) {
@@ -792,21 +935,17 @@ export const handlers: Chat.Handlers = {
 
 				if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, oldLevel);
 
-				// Check old species first, then new species if evolved
 				const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
 				if (evolved) {
-					// Pass `true` for isEvolution to catch L0 moves
 					const evoMoves = getMovesLearnedBetween(mon.species, oldLevel, mon.level, true);
 					for (const m of evoMoves) {
 						if (!newMoves.includes(m)) newMoves.push(m);
 					}
 				}
 
-				// Initialize queue array if it doesn't exist
 				state.pendingMoves = state.pendingMoves || [];
 
 				for (const move of newMoves) {
-					// CRITICAL CHECK: Is it already known? Is it already queued?
 					const alreadyKnown = mon.moves.includes(move);
 					const alreadyQueued = state.pendingMoves.some(p => p.pokemonIndex === i && p.move === move);
 
@@ -830,15 +969,13 @@ export const handlers: Chat.Handlers = {
 			
 			if (state.floor > (state.highestFloor ?? 0)) {
 				state.highestFloor = state.floor;
-				// JSON parse/stringify creates a safe deep copy of the team array
 				state.recordTeam = JSON.parse(JSON.stringify(state.team));
 			}
 
 			state.displayName = Users.get(match.userId)?.name || match.userId;
 			
-			state.notification = `<b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>${detailMsgs.join('<br>')}`;
+			state.notification = (state.notification || "") + `<br><b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>${detailMsgs.join('<br>')}`;
 			
-			// Remove team length restriction so player always gets milestones
 			if ((state.floor - 1) % 5 === 0) {
 				state.pendingChoice = pickNewPokemonOptions(state.team, prevFl);
 				state.pendingChoiceType = 'add';
@@ -846,13 +983,12 @@ export const handlers: Chat.Handlers = {
 			}
 			delete state.shopInventory;
 		} else {
-			// Wipe pending queues on a loss to prevent softlocks
 			delete state.pendingMoves;
 			delete state.pendingSwap;
 			
 			if (state.hasRevive) {
 				state.hasRevive = false;
-				state.notification = "<b>Revive used!</b> Retrying Floor " + match.floor;
+				state.notification = (state.notification || "") + "<br><b>Revive used!</b> Retrying Floor " + match.floor;
 			} else {
 				state.gameOver = true;
 				state.lastRunFloor = match.floor;
