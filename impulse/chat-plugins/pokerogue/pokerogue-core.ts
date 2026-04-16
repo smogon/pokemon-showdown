@@ -436,6 +436,8 @@ export interface PokemonEntry {
 	exp: number;
 	// held item to equip in the next battle (cleared after battle ends).
 	heldItem?: string;
+	// permanently tracks the current 4 moves
+	moves: string[];
 }
 
 export interface PokeRogueState {
@@ -479,6 +481,10 @@ export interface PokeRogueState {
 		// whether the rolled pokemon is the featured tier (legendary/pseudo/midtier) or the fallback
 		isFeatured: boolean,
 	};
+	// Queue for moves waiting to be learned when a Pokémon already has 4
+	pendingMoves?: { pokemonIndex: number; move: string; speciesName: string }[];
+	// Queue for replacing a team member when the team is full
+	pendingSwap?: PokemonEntry;
 }
 
 // persistence
@@ -667,10 +673,11 @@ export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number
 // exp / levelling / evolution helpers
 
 // returns the level-based evolution for a species, if one exists. in pokérogue all evolutions are unlocked by levelling up.
-
 export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
 	const species = Dex.species.get(toID(speciesId));
 	if (!species.exists || !species.evos.length) return null;
+
+	const validEvos: { evoTo: string, evoLevel: number }[] = [];
 
 	for (const evoName of species.evos) {
 		const evo = Dex.species.get(toID(evoName));
@@ -678,11 +685,16 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 
 		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 36;
 		const evoLevel = evo.evoLevel ?? fallback;
+		
 		if (evoLevel > 0) {
-			return { evoTo: toID(evoName), evoLevel };
+			validEvos.push({ evoTo: toID(evoName), evoLevel });
 		}
 	}
-	return null;
+
+	if (!validEvos.length) return null;
+	
+	// Randomize branching evolutions (e.g., Eevee, Tyrogue)
+	return validEvos[Math.floor(Math.random() * validEvos.length)];
 }
 
 // total exp needed to reach a given level from level 1.
@@ -746,6 +758,31 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	return available.slice(0, 4).map(m => m.move);
 }
 
+// returns moves learned specifically between oldLevel and newLevel, catching L0 evo moves
+export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newLevel: number, isEvolution = false): string[] {
+	const learnset = Dex.species.getLearnsetData(toID(speciesId))?.learnset;
+	if (!learnset) return [];
+
+	const learned: string[] = [];
+	for (const [moveid, sources] of Object.entries(learnset)) {
+		for (const src of sources) {
+			const match = /^9L(\d+)$/.exec(src);
+			if (match) {
+				const learnLvl = parseInt(match[1]);
+				if (learnLvl > oldLevel && learnLvl <= newLevel) {
+					learned.push(moveid);
+				} else if (isEvolution && learnLvl === 0) {
+					// In Showdown, Level 0 indicates a move learned explicitly upon evolution
+					learned.push(moveid);
+				}
+				break;
+			}
+		}
+	}
+	// Return unique moves to prevent base duplicates
+	return Array.from(new Set(learned)); 
+}
+
 // team packing helpers
 
 export function packPokemon(mon: PokemonEntry): string {
@@ -755,8 +792,9 @@ export function packPokemon(mon: PokemonEntry): string {
 	const abilities = speciesData.abilities ?? {};
 	const ability = (abilities as unknown as Record<string, string>)['0'] || '';
 
-	const moves = getLevelUpMoves(toID(mon.species), mon.level);
-	const movesStr = moves.join(',');
+	// Use saved moves; fallback to generated moves for older save files
+	if (!mon.moves) mon.moves = getLevelUpMoves(toID(mon.species), mon.level);
+	const movesStr = mon.moves.join(',');
 
 	const item = mon.heldItem ?? '';
 
