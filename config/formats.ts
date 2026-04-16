@@ -3097,8 +3097,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Arceus', 'Calyrex-Shadow', 'Enamorus-Incarnate', 'Koraidon', 'Kyogre', 'Miraidon', 'Komala', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 'Gengarite',
-			'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb', 'Scovillainite', 'Victreebelite', 'Zygardite', 'King\'s Rock',
-			'Razor Fang', 'Baton Pass', 'Shed Tail',
+			'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb', 'Scovillainite', 'Starminite', 'Victreebelite', 'Zygardite',
+			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
 			'Basculegion-M', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dragapult', 'Eternatus', 'Flutter Mane', 'Gengar', 'Giratina', 'Gouging Fire',
@@ -3168,8 +3168,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
 		banlist: [
 			'Basculin-White-Striped', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler', 'Moody', 'Absolite Z', 'Beedrillite',
-			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Scovillainite', 'Victreebelite', 'Zygardite',
-			'Baton Pass', 'Sticky Web',
+			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Scovillainite', 'Starminite', 'Victreebelite',
+			'Zygardite', 'Baton Pass', 'Sticky Web',
 		],
 		restricted: [
 			'Aipom', 'Buizel', 'Cutiefly', 'Dratini', 'Elekid', 'Gastly', 'Girafarig', 'Gligar', 'Mienfoo',
@@ -3257,7 +3257,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Arena Trap', 'Comatose', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator + Emergency Exit', 'Regenerator + Fur Coat', 'Regenerator + Ice Scales',
 			'Regenerator + Wimp Out', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Belly Drum', 'Burning Bulwark', 'Ceaseless Edge', 'Clangorous Soul',
 			'Dire Claw', 'Electro Shot', 'Fillet Away', 'Imprison', 'Last Respects', 'Lumina Crash', 'No Retreat', 'Photon Geyser', 'Power Trip', 'Quiver Dance',
-			'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Substitute', 'Tail Glow',
+			'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Substitute', 'Tail Glow', 'V-create',
 		],
 		restricted: [
 			'Contrary', 'Gorilla Tactics', 'Hadron Engine', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Liquid Ooze', 'Orichalcum Pulse',
