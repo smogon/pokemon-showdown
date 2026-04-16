@@ -1,5 +1,5 @@
 // pokerogue plugin — main file: html rendering, commands, page handlers, battle hook.
-// see pokerogue-core.ts for types/data, pokerogue-battle.ts for bot/ai logic.
+// Refactored for single-page architecture using URL arguments.
 
 import { Utils } from '../../../lib';
 import { Table } from '../../utils';
@@ -17,19 +17,16 @@ import {
 	startBattle, destroyBotUser,
 } from './pokerogue-battle';
 
-// page auto-refresh interval while a battle is active
-const PAGE_REFRESH_SECONDS = 20;
+// page auto-refresh interval while a battle is active or notification is pending
+const PAGE_REFRESH_SECONDS = 1;
+
+// --- Rendering Helpers (Sprites & Icons) ---
 
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
 	const sp = Dex.species.get(id);
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
-	// Sprite source strategy (mirrors PS client getTeambuilderSpriteData):
-	//   Gen 8+  → sprites/home-centered  (Pokémon HOME renders; all Gen 8/9 live here)
-	//   Gen 6–7 → sprites/dex            (XY/SM era official art)
-	//   Gen 1–5 → sprites/gen5           (BW pixel sprites)
-	// onerror chain: if the primary URL is missing, fall back one tier.
 	let src: string;
 	let fallback: string | null = null;
 	if (sp.exists && sp.gen >= 8) {
@@ -47,17 +44,11 @@ function getSprite(species: string, size = 80): string {
 	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
-// base URL for smogon/sprites item minisprites (individual PNGs keyed by internal sprite ID)
 const SMOGON_SPRITES_ITEM_BASE = 'https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/';
-
-// base URL for msikma/pokesprite items (consumables absent from smogon/sprites: rarecandy, revive, lucky egg)
 const POKESPRITE_ITEM_BASE = 'https://raw.githubusercontent.com/msikma/pokesprite/master/items/';
 
-// maps PS item IDs to their smogon/sprites minisprite filenames (derived from data/items.json)
 const SMOGON_ITEM_SIDS: Record<string, string> = {
-	// pokeballs
 	pokeball: 'i4', masterball: 'i1', greatball: 'i3', ultraball: 'i2',
-	// held items
 	focussash: 'i275', leftovers: 'i234', eviolite: 'i538', rockyhelmet: 'i540',
 	heavydutyboots: 'i1120', airballoon: 'i541', blacksludge: 'i281',
 	choiceband: 'i220', choicespecs: 'i297', choicescarf: 'i287',
@@ -75,39 +66,29 @@ const SMOGON_ITEM_SIDS: Record<string, string> = {
 	hardstone: 'i238', spelltag: 'i247',
 };
 
-// explicit sprite URLs for items not covered by SMOGON_ITEM_SIDS
 const ITEM_SPRITE_OVERRIDES: Record<string, string> = {
-	// capsule items → their corresponding ball sprites from smogon/sprites
 	mastercapsule: `${SMOGON_SPRITES_ITEM_BASE}i1.png`,
 	ultracapsule: `${SMOGON_SPRITES_ITEM_BASE}i2.png`,
 	greatcapsule: `${SMOGON_SPRITES_ITEM_BASE}i3.png`,
-	// consumables absent from smogon/sprites → msikma/pokesprite
 	rarecandy: `${POKESPRITE_ITEM_BASE}medicine/rare-candy.png`,
 	revive: `${POKESPRITE_ITEM_BASE}medicine/revive.png`,
-	// luckycharm is a custom roguelite item; visually map to the Lucky Egg icon
 	luckycharm: `${POKESPRITE_ITEM_BASE}hold-item/lucky-egg.png`,
 };
 
-// returns the pokeball image src and alt text appropriate for a species's rarity tier
 function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 	const sp = Dex.species.get(toID(speciesId));
-	// Legendary / Mythical / Ultra Beast / Paradox → Master Ball
 	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
 		return { src: `${SMOGON_SPRITES_ITEM_BASE}i1.png`, alt: 'Master Ball' };
 	}
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-		// Pseudo-legendary tier (BST ≥ 580) → Ultra Ball
 		if (bst >= 580) return { src: `${SMOGON_SPRITES_ITEM_BASE}i2.png`, alt: 'Ultra Ball' };
-		// Mid-tier (BST ≥ 480) → Great Ball
 		if (bst >= 480) return { src: `${SMOGON_SPRITES_ITEM_BASE}i3.png`, alt: 'Great Ball' };
 	}
-	// Common / starter → normal Poké Ball
 	return { src: `${SMOGON_SPRITES_ITEM_BASE}i4.png`, alt: 'Poké Ball' };
 }
 
-// renders a pokemon sprite with a small pokeball overlay at bottom-right (like official games)
 function getSpriteWithBall(species: string, size = 80): string {
 	const ball = getPokeballInfo(species);
 	const spriteHtml = getSprite(species, size);
@@ -117,14 +98,12 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
-// returns the item sprite img html for a shop item
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
 	const sid = SMOGON_ITEM_SIDS[id];
 	const src = ITEM_SPRITE_OVERRIDES[id] ??
 		(sid ? `${SMOGON_SPRITES_ITEM_BASE}${sid}.png` : null);
 	const letter = Utils.escapeHTML((itemId.charAt(0) || '?').toUpperCase());
-	// onerror: hide broken img and reveal the letter-fallback span
 	const imgHtml = src
 		? `<img src="${src}" width="40" height="40" alt="" ` +
 			`style="image-rendering:pixelated;display:block;flex-shrink:0" ` +
@@ -136,7 +115,8 @@ function getItemSprite(itemId: string): string {
 		`border-radius:7px;flex-shrink:0">${letter}</span>`;
 }
 
-// exp progress bar for a team member
+// --- UI Helpers ---
+
 function renderExpBar(mon: PokemonEntry): string {
 	let pct = 100;
 	if (mon.level < 100) {
@@ -148,7 +128,6 @@ function renderExpBar(mon: PokemonEntry): string {
 	return `<div class="pr-expbar"><div class="pr-expbar-fill" style="width:${pct}%"></div></div>`;
 }
 
-// hex colour for a pokemon type
 function typeColor(type: string): string {
 	const colors: Record<string, string> = {
 		Normal: '9fa19f', Fire: 'e62829', Water: '2980ef', Grass: '3fa129',
@@ -160,1372 +139,262 @@ function typeColor(type: string): string {
 	return colors[type] ?? '68a090';
 }
 
-// type badge html (large = choice card size, default = team card size)
 function renderTypeBadge(types: string[], large = false): string {
-	if (large) {
-		return types.map(t =>
-			`<span style="background:#${typeColor(t)};color:#fff;border-radius:4px;` +
-			`padding:2px 6px;font-size:10px;font-weight:bold">${t}</span>`
-		).join(' ');
-	}
 	return types.map(t =>
-		`<span style="background:#${typeColor(t)};color:#fff;border-radius:3px;` +
-		`padding:1px 5px;font-size:9px;font-weight:bold">${t}</span>`
+		`<span style="background:#${typeColor(t)};color:#fff;border-radius:${large ? '4px' : '3px'};` +
+		`padding:${large ? '2px 6px' : '1px 5px'};font-size:${large ? '10px' : '9px'};font-weight:bold">${t}</span>`
 	).join(' ');
 }
 
-function renderTeam(team: PokemonEntry[], withSprites = false): string {
-	return team.map((mon, idx) => {
-		const speciesData = Dex.species.get(toID(mon.species));
-		const name = speciesData.exists ? speciesData.name : mon.species;
-		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const heldLabel = mon.heldItem ? ` [${Utils.escapeHTML(mon.heldItem)}]` : '';
-		const sprite = withSprites ? getSprite(mon.species, 40) + ' ' : '';
-		return `${sprite}<b>${idx + 1}. ${Utils.escapeHTML(name)}${heldLabel}</b> Lv.${mon.level}${mon.level < 100 ? ` (${expNeeded} EXP to next level)` : ' (MAX)'}`;
-	}).join('<br>');
-}
-
-// top-100 leaderboard html
 function renderLeaderboard(): string {
 	const entries = Object.entries(savedData)
 		.filter(([, s]) => (s.highestFloor ?? 0) > 0)
 		.sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0))
 		.slice(0, 100);
 
-	if (!entries.length) {
-		return '<em>No records yet — be the first to complete a floor!</em>';
-	}
+	if (!entries.length) return '<em>No records yet!</em>';
 
 	const rows = entries.map(([userid, s], i) => {
 		const rank = i + 1;
 		const display = s.displayName || userid;
-		const nameHtml = Impulse.nameColor(display, true, true);
-		const medal = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`;
-		const teamStr = (s.team ?? [])
-			.map(m => {
-				const spr = getSprite(m.species, 30);
-				const sname = Dex.species.get(toID(m.species)).name || m.species;
-				return `${spr}<small>${Utils.escapeHTML(sname)}</small>`;
-			})
-			.join(' ') || '—';
-		return [medal, nameHtml, `Floor ${s.highestFloor ?? 0}`, teamStr];
+		const teamStr = (s.team ?? []).map(m => `${getSprite(m.species, 30)}<small>${Utils.escapeHTML(Dex.species.get(toID(m.species)).name || m.species)}</small>`).join(' ');
+		return [rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`, Impulse.nameColor(display, true, true), `Floor ${s.highestFloor ?? 0}`, teamStr];
 	});
 
-	return Table(
-		'PokéRogue Top 100',
-		['#', 'Player', 'Best Floor', 'Last Team'],
-		rows
-	);
+	return Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows);
 }
 
-// builds a fresh state for a new run, preserving leaderboard fields from an existing state
-function buildFreshState(existing: PokeRogueState | null): PokeRogueState {
-	const options = pickStarterOptions();
-	const fresh: PokeRogueState = {
-		floor: 1,
-		team: [],
-		pendingChoice: options,
-		pendingChoiceType: 'starter',
-		coins: 0,
-		streaksWon: 0,
-	};
-	if (existing?.highestFloor) fresh.highestFloor = existing.highestFloor;
-	if (existing?.displayName) fresh.displayName = existing.displayName;
-	return fresh;
+// --- REFACTORED PAGE LOGIC ---
+
+/**
+ * REWRITTEN: Consolidated Page Refresh.
+ * Instead of multiple pageIDs, we always target the base 'view-pokerogue'.
+ */
+function refreshGamePage(user: User): void {
+	for (const conn of user.connections) {
+		conn.send(`>view-pokerogue\n|refresh|`);
+	}
 }
 
-// renders the full game page html. view = 'main' | 'shop'
-function renderGamePopup(state: PokeRogueState, view: 'main' | 'shop' = 'main'): string {
-	// auto-refresh while battle is active or a notification is pending
-	let buf = (state.battleRoomId || state.notification) ?
-		`<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
+/**
+ * REWRITTEN: Unified Page Renderer.
+ * view = 'main' | 'shop' | 'top'
+ */
+function renderGamePage(state: PokeRogueState, view: 'main' | 'shop' | 'top' = 'main'): string {
+	let buf = (state.battleRoomId || state.notification) ? `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
 	buf += `<div class="pr-popup">`;
 
+	// --- Header ---
 	buf += `<div class="pr-popup-header">`;
-	buf += `<h2>PokéRogue</h2>`;
-	if (state.team?.length) {
+	buf += `<h2>PokéRogue${view !== 'main' ? ` - ${view.toUpperCase()}` : ''}</h2>`;
+	if (state.team?.length && view !== 'top') {
 		buf += `<div style="display:flex;gap:6px;align-items:center">` +
 			`<span class="pr-floor-badge">Floor ${state.floor}</span>` +
 			`<span class="pr-coin-badge">${state.coins ?? 0} Coins</span>` +
 			`</div>`;
 	}
+	if (view !== 'main') {
+		buf += `<a href="/view-pokerogue" class="button" style="margin-left:auto">Back to Home</a>`;
+	}
 	buf += `</div>`;
 
-	// notification banner
+	// --- Leaderboard View ---
+	if (view === 'top') {
+		return buf + renderLeaderboard() + `</div>`;
+	}
+
+	// Notifications
 	if (state.notification) {
 		buf += `<div class="pr-notification">${state.notification}` +
 			`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button>` +
 			`</div>`;
-		if (!state.battleRoomId && !state.pendingChoice?.length && view !== 'shop') {
-			buf += `<div style="text-align:center;margin:8px 0">` +
-				`<a href="/view-pokerogue-shop" class="button" style="color:#fff;text-decoration:none">Go to Shop</a>` +
-				`</div>`;
-		}
 	}
 
-	// ── Pending Gacha Offer ──────────────────────────────────────────────────
+	// --- Priority Screens (Gacha/Battle/Choices) ---
 	if (state.pendingGachaOffer && !state.battleRoomId) {
 		const { species, sourceItemId, isFeatured } = state.pendingGachaOffer;
 		const sp = Dex.species.get(toID(species));
-		const name = sp.exists ? sp.name : species;
-		const types = sp.types ?? [];
-		const typeBadge = renderTypeBadge(types, true);
-		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-		const sourceItem = SHOP_ITEMS[sourceItemId];
-		const ballType = sourceItemId === 'mastercapsule' ? 'Master Ball' :
-			sourceItemId === 'ultracapsule' ? 'Ultra Ball' : 'Great Ball';
-		const tierLabel = isFeatured ?
-			(sourceItemId === 'mastercapsule' ? 'Legendary!' :
-			sourceItemId === 'ultracapsule' ? 'Pseudo-Legendary!' : 'Mid-Tier!') :
-			(sourceItemId === 'mastercapsule' ? 'Mid-Tier Pokemon' : 'Common Pokemon');
-		const tierColor = isFeatured ?
-			(sourceItemId === 'mastercapsule' ? '#f59e0b' :
-			sourceItemId === 'ultracapsule' ? '#a78bfa' : '#34d399') :
-			(sourceItemId === 'mastercapsule' ? '#34d399' : '#8ab4f8');
-		const isTeamFull = (state.team?.length ?? 0) >= 6;
-		buf += `<div class="pr-gacha-offer">`;
-		buf += `<div class="pr-gacha-offer-header">`;
-		buf += `<span class="pr-gacha-ball-label">${Utils.escapeHTML(ballType)} Capsule Result</span>`;
-		buf += `<span class="pr-gacha-tier-badge" style="color:${tierColor}">${tierLabel}</span>`;
-		buf += `</div>`;
-		buf += `<div class="pr-gacha-offer-body">`;
-		buf += `<div style="text-align:center">`;
-		buf += getSpriteWithBall(species, 80);
-		buf += `<div class="pr-gacha-mon-name">${Utils.escapeHTML(name)}</div>`;
-		buf += `<div style="margin:4px 0">${typeBadge}</div>`;
-		buf += `<div style="font-size:11px;color:#8ab4f8;margin-top:3px">BST <b style="color:#c4a8ff">${bst}</b></div>`;
-		buf += `</div>`;
-		buf += `<div class="pr-gacha-offer-info">`;
-		if (sourceItem) {
-			buf += `<p style="font-size:11px;color:#9ab4cc;margin:0 0 10px">${Utils.escapeHTML(sourceItem.description)}</p>`;
-		}
-		if (isTeamFull) {
-			buf += `<div style="color:#f87171;font-size:12px;font-weight:bold;margin-bottom:10px">`;
-			buf += `Your team is full (6/6)! You must decline or release a Pokemon first.</div>`;
-		}
-		buf += `<div class="pr-gacha-offer-actions">`;
-		if (!isTeamFull) {
-			buf += `<button name="send" value="/pokerogue gachaaccept" class="button pr-gacha-accept-btn">`;
-			buf += `Accept &mdash; Add <b>${Utils.escapeHTML(name)}</b> to team</button>`;
-		}
-		buf += `<button name="send" value="/pokerogue gachadecline" class="button pr-gacha-decline-btn">`;
-		buf += `Decline &mdash; Don&apos;t add to team</button>`;
-		buf += `</div></div></div></div>`;
-		// close the popup and return early — gacha offer takes priority
-		buf += `</div>`;
-		return buf;
+		buf += `<div class="pr-gacha-offer"><div style="text-align:center">${getSpriteWithBall(species, 80)}` +
+			`<div><b>${Utils.escapeHTML(sp.name)}</b></div></div>` +
+			`<div class="pr-gacha-offer-actions">` +
+			`<button name="send" value="/pokerogue gachaaccept" class="button">Accept</button>` +
+			`<button name="send" value="/pokerogue gachadecline" class="button">Decline</button></div></div>`;
+		return buf + `</div>`;
 	}
 
-	// active battle in progress
 	if (state.battleRoomId) {
-		buf += `<div style="text-align:center;padding:14px 0">` +
-			`<p style="color:#f5c518;font-weight:bold;font-size:14px">Battle in progress!</p>` +
-			`</div>`;
-		buf += `</div>`;
-		return buf;
+		return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#f5c518;font-weight:bold">Battle in progress!</p></div></div>`;
 	}
 
-	// ── Pending Pokémon choice ───────────────────────────────────────────────
 	if (state.pendingChoice?.length) {
-		const isAdd = state.pendingChoiceType === 'add';
-		const choiceTitle = isAdd ?
-			'Milestone! Choose a Pokémon to add to your team:' :
-			'Choose a starter!';
-		buf += `<h2 class="pr-choice-heading">${choiceTitle}</h2>`;
-		buf += `<div style="overflow-x:auto"><table class="pr-choice-table">`;
-		buf += `<thead><tr>` +
-			`<th>Status</th><th>Info</th><th>Moves</th><th></th>` +
-			`</tr></thead>`;
-		buf += `<tbody>`;
+		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table"><tbody>`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const s = state.pendingChoice[i];
 			const sp = Dex.species.get(toID(s));
-			const name = sp.exists ? sp.name : s;
-			const isLegendary = sp.tags?.some(tag => LEGENDARY_TAGS.has(tag));
-			const types = sp.types ?? [];
-			const typeBadge = renderTypeBadge(types, true);
-			const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-			const ab = (sp.abilities ?? {}) as unknown as Record<string, string>;
-			const abilityList = [ab['0'], ab['1'], ab['H']].filter(Boolean).join(' / ') || '—';
-			const moveIds = getLevelUpMoves(toID(s), isAdd ? Math.max(1, state.floor - 2) : 1);
-			const moveNames = moveIds.map(m => Dex.moves.get(m).name || m);
-			const addLevel = isAdd ? Math.max(1, state.floor - 2) : 1;
-			buf += `<tr class="pr-choice-row${isLegendary ? ' legendary' : ''}">`;
-			// Status column
-			buf += `<td class="pr-ct-status">`;
-			buf += getSpriteWithBall(s, 60);
-			buf += `<div class="pr-ct-name"><b>${Utils.escapeHTML(name)}</b>`;
-			if (isLegendary) {
-				buf += ` <span class="pr-legendary-badge">LEGENDARY</span>`;
-			}
-			buf += `</div>`;
-			buf += `<div style="margin:3px 0">${typeBadge}</div>`;
-			buf += `<div class="pr-ct-meta">Lv. ${addLevel} &nbsp;·&nbsp; ` +
-				`BST <b style="color:#c4a8ff">${bst}</b></div>`;
-			buf += `</td>`;
-			// Info column
-			buf += `<td class="pr-ct-info">`;
-			buf += `<div class="pr-ct-stats">` +
-				`<span><b>HP:</b> ${bs.hp}</span>` +
-				`<span><b>Atk:</b> ${bs.atk}</span>` +
-				`<span><b>Def:</b> ${bs.def}</span>` +
-				`<span><b>SpA:</b> ${bs.spa}</span>` +
-				`<span><b>SpD:</b> ${bs.spd}</span>` +
-				`<span><b>Spe:</b> ${bs.spe}</span>` +
-				`</div>`;
-			buf += `<div class="pr-ct-ability"><b>Ability:</b> ${Utils.escapeHTML(abilityList)}</div>`;
-			buf += `</td>`;
-			// Moves column
-			buf += `<td class="pr-ct-moves">`;
-			buf += moveNames.map(m => Utils.escapeHTML(m)).join('<br>') || 'Tackle';
-			buf += `</td>`;
-			// Action column
-			buf += `<td class="pr-ct-action">`;
-			buf += `<button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">` +
-				`${isAdd ? 'Add to Team' : 'Pick starter'}</button>`;
-			buf += `</td>`;
-			buf += `</tr>`;
+			buf += `<tr class="pr-choice-row"><td>${getSpriteWithBall(s, 60)}</td><td><b>${Utils.escapeHTML(sp.name)}</b></td>`;
+			buf += `<td><button name="send" value="/pokerogue choose ${i + 1}" class="button">Pick</button></td></tr>`;
 		}
-		buf += `</tbody></table></div>`;
-		buf += `</div>`;
+		buf += `</tbody></table></div></div>`;
 		return buf;
 	}
 
-	// game over screen
 	if (state.gameOver) {
-		buf += `<div class="pr-gameover">`;
-		buf += `<div class="pr-gameover-title">Too bad!</div>`;
-		buf += `<div class="pr-gameover-stats">`;
-		buf += `<span><b>Floor Reached:</b> ${state.lastRunFloor ?? 1}</span>`;
-		buf += `<span><b>Streaks Won:</b> ${state.lastRunStreaks ?? 0}</span>`;
-		if (state.highestFloor) {
-			buf += `<span><b>Best Floor:</b> ${state.highestFloor}</span>`;
-		}
-		buf += `</div>`;
-		buf += `<div class="pr-popup-actions" style="justify-content:center;margin-top:20px">`;
-		buf += `<button name="send" value="/pokerogue newgame" class="button pr-newrun-btn">` +
-			`Start a new run</button>`;
-		buf += `</div>`;
-		buf += `</div>`;
-		buf += `</div>`;
+		buf += `<div class="pr-gameover"><div class="pr-gameover-title">Game Over!</div>` +
+			`<button name="send" value="/pokerogue newgame" class="button">New Run</button></div></div>`;
 		return buf;
 	}
 
-	// no team — show new run button
-	if (!state.team?.length) {
-		buf += `<div style="text-align:center;padding:16px 0">` +
-			`<p style="color:#8ab4f8;font-size:13px;margin:0 0 12px">No active run. Start a new adventure!</p>` +
-			`<button name="send" value="/pokerogue newgame" class="button">New Run</button>` +
-			`</div>`;
-		buf += `</div>`;
-		return buf;
-	}
-
-	// shop sub-view
+	// --- Shop View ---
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
-		// stats bar: Floor | Best | Total Coins
-		buf += `<div class="pr-shop-stats-bar">`;
-		buf += `<span>Floor <b>${state.floor}</b></span>`;
-		if (state.highestFloor) {
-			buf += `<span class="pr-shop-stats-sep">|</span><span>Best <b>${state.highestFloor}</b></span>`;
-		}
-		buf += `<span class="pr-shop-stats-sep">|</span>`;
-		buf += `<span class="pr-shop-coin-total">Total Coins <span class="pr-coin-badge">${shopCoins}</span></span>`;
-		buf += `</div>`;
-
 		buf += `<div class="pr-shop-grid">`;
-		for (const itemId of (state.shopInventory ?? [])) {
+		for (const itemId of (state.shopInventory ?? rollShopInventory())) {
 			const item = SHOP_ITEMS[itemId];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
-			const isHeld = !!item.heldItem;
-			const categoryLabel = isHeld ? 'Held Item' : 'Consumable';
-			const categoryClass = isHeld ? 'pr-item-tag-held' : 'pr-item-tag-consumable';
-			buf += `<div class="pr-shop-card${canAfford ? '' : ' pr-shop-card-disabled'}">`;
-			// icon + name row
-			buf += `<div class="pr-shop-card-top">`;
-			buf += `<div class="pr-shop-item-icon">${getItemSprite(item.heldItem ?? item.id)}</div>`;
-			buf += `<div style="flex:1;min-width:0">`;
-			buf += `<div class="pr-shop-item-name">${Utils.escapeHTML(item.name)}</div>`;
-			buf += `<span class="${categoryClass}">${categoryLabel}</span>`;
-			buf += `</div>`;
-			buf += `</div>`;
-			// description
-			buf += `<div class="pr-shop-item-desc">${Utils.escapeHTML(item.description)}</div>`;
-			// buy button
-			if (canAfford) {
-				buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn">`;
-				buf += `Buy: <b>${item.cost}</b> Coins</button>`;
-			} else {
-				buf += `<button class="button pr-shop-buy-btn pr-shop-buy-disabled" disabled>`;
-				buf += `&#128274; Buy: ${item.cost} Coins</button>`;
-			}
-			buf += `</div>`;
+			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.heldItem ?? item.id)}` +
+				`<div style="flex:1"><b>${Utils.escapeHTML(item.name)}</b></div></div>` +
+				`<div class="pr-shop-item-desc">${Utils.escapeHTML(item.description)}</div>` +
+				`<button name="send" value="/pokerogue buy ${item.id}" class="button" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
 		}
-		buf += `</div>`;
-
-		// footer: reroll row then back+battle row
-		buf += `<div class="pr-shop-footer">`;
-		buf += `<div class="pr-shop-reroll-row">`;
-		buf += `<button name="send" value="/pokerogue refreshshop" class="button pr-shop-reroll-btn">`;
-		buf += `Reroll Shop <span class="pr-shop-reroll-cost">(5 coins)</span></button>`;
-		buf += `</div>`;
-		buf += `<div class="pr-shop-footer-nav">`;
-		buf += `<a href="/view-pokerogue" class="button pr-shop-back-btn">&#8592; Back</a>`;
-		buf += `<button name="send" value="/pokerogue battle" class="button pr-shop-battle-btn">Start Battle &#8594;</button>`;
-		buf += `</div>`;
-		buf += `</div>`;
-
-		buf += `</div>`;
-		return buf;
+		buf += `</div><div class="pr-shop-footer"><button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button>` +
+			`<div class="pr-shop-footer-nav"><a href="/view-pokerogue" class="button">Back</a>` +
+			`<button name="send" value="/pokerogue battle" class="button">Battle!</button></div></div>`;
+		return buf + `</div>`;
 	}
 
-	// ── Main dashboard ───────────────────────────────────────────────────────
-	// main dashboard
-	const coins = state.coins ?? 0;
-	const items = state.items ?? {};
-	const activeEffects: string[] = [];
-	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
-	if (state.hasRevive) activeEffects.push('Revive (active)');
-
-	buf += `<div class="pr-popup-stats">`;
-	buf += `<span>Floor <b>${state.floor}</b></span>`;
-	buf += `<span>Coins <b>${coins}</b></span>`;
-	buf += `<span>Streaks <b>${state.streaksWon ?? 0}</b></span>`;
-	if (state.highestFloor) buf += `<span>Best <b>${state.highestFloor}</b></span>`;
-	buf += `</div>`;
-
-	if (activeEffects.length) {
-		buf += `<div style="font-size:11px;color:#8ab4f8;` +
-			`background:rgba(90,63,160,0.15);border:1px solid rgba(90,63,160,0.3);` +
-			`border-radius:6px;padding:4px 10px;margin:6px 0">` +
-			`<b>Active:</b> ${activeEffects.join(' &nbsp; ')}</div>`;
-	}
-
-	buf += `<h3>Your Team</h3>`;
-	buf += `<div class="pr-popup-team">`;
+	// --- Main Dashboard ---
+	buf += `<div class="pr-popup-stats"><span>Floor <b>${state.floor}</b></span><span>Coins <b>${state.coins ?? 0}</b></span></div>`;
+	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
-		const sp = Dex.species.get(toID(mon.species));
-		const name = sp.exists ? sp.name : mon.species;
-		const types = sp.types ?? [];
-		const typeBadge = renderTypeBadge(types);
-		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const heldLabel = mon.heldItem ? SHOP_ITEMS[mon.heldItem]?.name ?? mon.heldItem : '';
-		// show evolution available indicator
-		const evo = getLevelUpEvo(mon.species);
-		const evoHint = evo && mon.level < evo.evoLevel ?
-			`<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
-		buf += `<div class="pr-popup-mon">`;
-		buf += getSpriteWithBall(mon.species, 52);
-		buf += `<div style="flex:1;min-width:0">`;
-		buf += `<b style="color:#e8e0ff;font-size:12px">${Utils.escapeHTML(name)}</b><br>`;
-		buf += `<span style="font-size:10px">${typeBadge}</span>`;
-		if (evoHint) buf += ` ${evoHint}`;
-		buf += `<br>`;
-		const levelStr = mon.level < 100 ?
-			` <span style="color:#555">(${expNeeded} EXP)</span>` :
-			` <span style="color:#f5c518">MAX</span>`;
-		buf += `<span style="font-size:11px;color:#8ab4f8">Lv.${mon.level}${levelStr}</span>`;
-		buf += renderExpBar(mon);
-		if (heldLabel) {
-			buf += `<br><span style="font-size:10px;color:#8ab4f8">${Utils.escapeHTML(heldLabel)}</span>`;
-		}
-		buf += `</div></div>`;
+		buf += `<div class="pr-popup-mon">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">` +
+			`<b>${Utils.escapeHTML(Dex.species.get(toID(mon.species)).name)}</b><br>` +
+			`<span style="font-size:11px;color:#8ab4f8">Lv.${mon.level}</span>${renderExpBar(mon)}</div></div>`;
 	}
 	buf += `</div>`;
 
-	const ownedItems = Object.entries(items).filter(([, qty]) => qty > 0);
+	// Inventory
+	const ownedItems = Object.entries(state.items ?? {}).filter(([, qty]) => qty > 0);
 	if (ownedItems.length) {
-		buf += `<h3>Inventory</h3>`;
-		buf += `<div class="pr-inventory-grid">`;
+		buf += `<h3>Inventory</h3><div class="pr-inventory-grid">`;
 		for (const [id, qty] of ownedItems) {
-			const shopItem = SHOP_ITEMS[id];
-			const iname = shopItem?.name ?? id;
-			buf += `<div class="pr-inventory-item">`;
-			buf += `<div class="pr-inventory-item-top">`;
-			buf += `<div class="pr-shop-item-icon" style="padding:4px">${getItemSprite(shopItem?.heldItem ?? id)}</div>`;
-			buf += `<div style="flex:1;min-width:0">`;
-			buf += `<div style="font-size:11px;font-weight:bold;color:#e0d4ff">${Utils.escapeHTML(iname)}</div>`;
-			buf += `<div style="font-size:10px;color:#8ab4f8">x${qty}</div>`;
-			buf += `</div></div>`;
-			// action buttons
-			if (shopItem?.gachaType) {
-				// gacha capsule — single "Open" button
-				buf += `<button name="send" value="/pokerogue use ${id}" class="button pr-inv-use-btn">`;
-				buf += `Open Capsule</button>`;
-			} else if (shopItem?.heldItem) {
-				// held item — equip to a specific team slot
-				buf += `<div style="font-size:9px;color:#666;margin:4px 0 2px">Equip to slot:</div>`;
-				buf += `<div style="display:flex;flex-wrap:wrap;gap:3px">`;
-				for (let slot = 1; slot <= state.team.length; slot++) {
-					const slotMon = state.team[slot - 1];
-					const isEquipped = slotMon?.heldItem === shopItem.heldItem;
-					const slotName = Dex.species.get(toID(slotMon?.species ?? '')).name || (slotMon?.species ?? `${slot}`);
-					buf += `<button name="send" value="/pokerogue use ${id} ${slot}" ` +
-						`class="button pr-inv-slot-btn${isEquipped ? ' pr-inv-slot-equipped' : ''}" ` +
-						`title="${Utils.escapeHTML(slotName)}">`;
-					buf += `${slot}${isEquipped ? ' ✓' : ''}</button>`;
-				}
-				buf += `</div>`;
-			} else if (id === 'rarecandy') {
-				// rarecandy — apply to a specific team slot
-				buf += `<div style="font-size:9px;color:#666;margin:4px 0 2px">Use on slot:</div>`;
-				buf += `<div style="display:flex;flex-wrap:wrap;gap:3px">`;
-				for (let slot = 1; slot <= state.team.length; slot++) {
-					buf += `<button name="send" value="/pokerogue use ${id} ${slot}" class="button pr-inv-slot-btn">`;
-					buf += `${slot}</button>`;
-				}
-				buf += `</div>`;
-			} else {
-				// consumable (luckycharm, revive) — single "Use" button
-				buf += `<button name="send" value="/pokerogue use ${id}" class="button pr-inv-use-btn">`;
-				buf += `Use</button>`;
-			}
-			buf += `</div>`;
+			const item = SHOP_ITEMS[id];
+			buf += `<div class="pr-inventory-item"><b>${Utils.escapeHTML(item?.name ?? id)}</b> (x${qty})</div>`;
 		}
 		buf += `</div>`;
 	}
 
 	buf += `<div class="pr-popup-actions" style="margin-top:12px">`;
-	buf += `<button name="send" value="/pokerogue battle" class="button">` +
-		`Start Battle — Floor ${state.floor}</button>`;
+	buf += `<button name="send" value="/pokerogue battle" class="button">Start Battle</button>`;
 	buf += `<a href="/view-pokerogue-shop" class="button">Shop</a>`;
 	buf += `<a href="/view-pokerogue-top" class="button">Leaderboard</a>`;
-	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080">` +
-		`Quit Run</button>`;
-	buf += `</div>`;
+	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080">Quit</button></div>`;
 
 	buf += `</div>`;
 	return buf;
 }
 
-// re-rolls empty pendingChoice if it was set but is empty (e.g. dex not loaded at creation time)
-function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
-	if (!state.pendingChoice || state.pendingChoice.length) return;
-	if (state.pendingChoiceType === 'add' && state.team?.length) {
-		state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
-	} else {
-		state.pendingChoice = pickStarterOptions();
-	}
-	setState(userId, state);
-}
-
-// renders the "no active run" page html
-const NO_RUN_PAGE_HTML =
-	`<div class="pr-popup">` +
-	`<div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
-	`<div style="text-align:center;padding:16px 0">` +
-	`<p style="font-size:13px;margin:0 0 12px">No active run.</p>` +
-	`<button name="send" value="/pokerogue newgame" class="button">Start New Run</button>` +
-	`</div></div>`;
-
-// refreshes the page view for a user after battle-end state changes
-function refreshGamePage(user: User): void {
-	for (const conn of user.connections) {
-		for (const pageId of ['view-pokerogue', 'view-pokerogue-shop', 'view-pokerogue-top']) {
-			conn.send(`>${pageId}\n|refresh|`);
-		}
-	}
-}
-
-// pushes the shop page HTML directly to a user so it opens automatically
-function openShopForUser(user: User, state: PokeRogueState): void {
-	if (!state.shopInventory) {
-		state.shopInventory = rollShopInventory();
-		setState(user.id, state);
-	}
-	const shopHtml = renderGamePopup(state, 'shop');
-	for (const conn of user.connections) {
-		conn.send(`>view-pokerogue-shop\n|init|html\n|title|PokéRogue Shop\n|pagehtml|${shopHtml}`);
-	}
-}
+// --- Commands & Page Handlers ---
 
 export const commands: Chat.ChatCommands = {
 	pokerogue: {
-		// /pokerogue start — auto-creates a new run if none exists, then opens the game page
 		start(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
 			const state = getState(user.id);
-			let newState = state;
-			let stateChanged = false;
-			// clear stale battle room reference so auto-start condition evaluates correctly
-			if (newState?.battleRoomId) {
-				const bRoom = Rooms.get(newState.battleRoomId as RoomID);
-				if (!bRoom?.battle || bRoom.battle.ended) {
-					delete newState.battleRoomId;
-					stateChanged = true;
-				}
-			}
-			if (!newState || (!newState.team?.length && !newState.pendingChoice?.length && !newState.battleRoomId && !newState.gameOver)) {
-				newState = buildFreshState(newState);
-				stateChanged = true;
-			}
-			if (stateChanged && newState) {
-				setState(user.id, newState);
-			}
-			if (newState) repairEmptyPendingChoice(newState, user.id);
+			if (!state) setState(user.id, { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter' } as any);
 			return this.parse('/join view-pokerogue');
 		},
-
-		// /pokerogue newgame [confirm] — starts a fresh run; requires confirm if progress exists
 		newgame(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const existing = getState(user.id);
-			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
-
-			if (hasProgress && target.trim().toLowerCase() !== 'confirm') {
-				return this.sendReplyBox(
-					`<b>Warning: You already have an active PokéRogue run!</b><br>` +
-					`Floor: <b>${existing.floor}</b> &nbsp;|&nbsp; ` +
-					`Team: <b>${existing.team?.length ?? 0} Pokemon</b> &nbsp;|&nbsp; ` +
-					`Coins: <b>${existing.coins ?? 0}</b><br><br>` +
-					`Starting a fresh run will permanently delete your current progress.<br>` +
-					`<button name="send" value="/pokerogue newgame confirm" class="button">` +
-					`Yes, start a fresh run</button> &nbsp; ` +
-					`<button name="send" value="/pokerogue start" class="button">` +
-					`Keep my current run</button>`
-				);
-			}
-
-			const newState = buildFreshState(existing);
-			setState(user.id, newState);
-			return this.parse('/join view-pokerogue');
+			deleteState(user.id);
+			return this.parse('/pokerogue start');
 		},
-
-		// /pokerogue choose <1|2|3>
-		choose(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const n = parseInt(target.trim());
-			if (!n || n < 1 || n > 3) {
-				return this.errorReply('Usage: /pokerogue choose [1, 2, or 3]');
-			}
-
-			const state = getState(user.id);
-			if (!state?.pendingChoice?.length) {
-				return this.errorReply('You have no pending Pokemon choice. Use /pokerogue start first.');
-			}
-
-			// block second battle while one is active
-			if (state.battleRoomId) {
-				const activeBattleRoom = Rooms.get(state.battleRoomId);
-				if (activeBattleRoom) {
-					return this.sendReplyBox(
-						`You already have an active PokéRogue battle! ` +
-						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
-					);
-				}
-				delete state.battleRoomId;
-			}
-
-			const options = state.pendingChoice;
-			if (n > options.length) return this.errorReply('Invalid choice.');
-
-			const chosen = options[n - 1];
-			// treat any non-'add' type as a starter choice
-			const isStarter = state.pendingChoiceType !== 'add';
-
-			if (isStarter) {
-				state.team = [{ species: chosen, level: 1, exp: 0 }];
-				state.floor = 1;
-			} else {
-				if (state.team.length >= 6) {
-					delete state.pendingChoice;
-					delete state.pendingChoiceType;
-					setState(user.id, state);
-					return this.errorReply('Your team is already full (6 Pokemon). The pending choice has been cleared.');
-				}
-				const addLevel = Math.max(1, state.floor - 2);
-				state.team.push({ species: chosen, level: addLevel, exp: expForLevel(addLevel) });
-			}
-
-			delete state.pendingChoice;
-			delete state.pendingChoiceType;
-
-			// persist state before battle creation so updates aren't lost if creation fails
-			setState(user.id, state);
-
-			const ok = startBattle(user, state);
-			if (!ok) {
-				this.refreshPage('pokerogue');
-				return;
-			}
-
-			this.refreshPage('pokerogue');
-		},
-
-		// /pokerogue battle — starts the next floor battle
-		battle(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) {
-				return this.errorReply('No active PokéRogue run. Use /pokerogue start to open the game page!');
-			}
-
-			if (state.battleRoomId) {
-				const battleRoom = Rooms.get(state.battleRoomId as RoomID);
-				if (battleRoom) {
-					return this.sendReplyBox(
-						`You already have an active PokéRogue battle! ` +
-						`<a href="/${state.battleRoomId}">Click here</a> to go to your battle.`
-					);
-				}
-				// stale reference — clear and continue
-				delete state.battleRoomId;
-				setState(user.id, state);
-			}
-
-			if (state.pendingChoice?.length) {
-				return this.sendReplyBox(
-					`You have a pending Pokemon choice! ` +
-					`<button name="send" value="/pokerogue start" class="button">Open PokéRogue</button> to choose.`
-				);
-			}
-
-			if (state.pendingGachaOffer) {
-				return this.sendReplyBox(
-					`You have a pending gacha offer! ` +
-					`<button name="send" value="/pokerogue start" class="button">Open PokéRogue</button> to accept or decline it first.`
-				);
-			}
-
-			if (!state.team?.length) {
-				return this.errorReply('No team to battle with. Use /pokerogue start to begin a new run!');
-			}
-
-			const ok = startBattle(user, state);
-			if (!ok) {
-				// startBattle sends an error popup; refresh the page for retry
-				this.refreshPage('pokerogue');
-				return;
-			}
-		},
-
-		// /pokerogue status — shows current run info
-		status(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) {
-				return this.sendReplyBox(
-					`You have no active PokéRogue run. ` +
-					`<button name="send" value="/pokerogue start" class="button">Start a run</button>`
-				);
-			}
-			if (state.pendingChoice?.length && !state.team?.length) {
-				return this.sendReplyBox(
-					`You have a pending Pokemon choice! ` +
-					`<button name="send" value="/pokerogue start" class="button">Open PokéRogue</button> to choose.`
-				);
-			}
-			if (!state.team?.length) {
-				return this.sendReplyBox(
-					`You have no active PokéRogue run. ` +
-					`<button name="send" value="/pokerogue newgame" class="button">Start a run</button>`
-				);
-			}
-			const coins = state.coins ?? 0;
-			const items = state.items ?? {};
-			const itemList = Object.entries(items)
-				.filter(([, qty]) => qty > 0)
-				.map(([id, qty]) => `${SHOP_ITEMS[id]?.name ?? id} x${qty}`)
-				.join(', ') || 'None';
-			const pendingLine = state.pendingChoice?.length ?
-				`<br><br><b>You have a pending Pokemon choice!</b> ` +
-				`<button name="send" value="/pokerogue start" class="button">Open PokéRogue</button> to choose.` :
-				'';
-			this.sendReplyBox(
-				`<b>PokéRogue Status</b><br>` +
-				`<b>Floor:</b> ${state.floor} &nbsp;|&nbsp; <b>Coins:</b> ${coins} &nbsp;|&nbsp; ` +
-				`<b>Streaks:</b> ${state.streaksWon ?? 0}` +
-				(state.highestFloor ? ` &nbsp;|&nbsp; <b>Best Floor:</b> ${state.highestFloor}` : '') +
-				pendingLine +
-				`<br><br><b>Team:</b><br>${renderTeam(state.team, true)}` +
-				(itemList !== 'None' ? `<br><br><b>Inventory:</b> ${itemList}` : '')
-			);
-		},
-
-		// /pokerogue shop — opens the shop page
 		shop(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerogue start first.');
-			if (!state.shopInventory) {
-				state.shopInventory = rollShopInventory();
-				setState(user.id, state);
-			}
 			return this.parse('/join view-pokerogue-shop');
 		},
-
-		// /pokerogue refreshshop — reroll the shop inventory for 5 coins
-		refreshshop(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
+		battle(target, room, user) {
 			const state = getState(user.id);
-			if (!state) return this.errorReply('You have no active PokéRogue run. Use /pokerogue start first.');
-			const coins = state.coins ?? 0;
-			if (coins < 5) return this.errorReply(`Not enough coins. You need 5 but have ${coins}.`);
-			state.coins = coins - 5;
-			state.shopInventory = rollShopInventory();
-			setState(user.id, state);
-			this.refreshPage('pokerogue-shop');
+			if (state && startBattle(user, state)) refreshGamePage(user);
 		},
-
-		// /pokerogue buy <item>
+		choose(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingChoice) return;
+			const n = parseInt(target) - 1;
+			const choice = state.pendingChoice[n];
+			if (state.pendingChoiceType === 'starter') {
+				state.team = [{ species: choice, level: 1, exp: 0 }];
+			} else {
+				state.team.push({ species: choice, level: Math.max(1, state.floor - 2), exp: expForLevel(Math.max(1, state.floor - 2)) });
+			}
+			delete state.pendingChoice;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
 		buy(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const itemId = toID(target.trim());
-			const item = SHOP_ITEMS[itemId];
-			if (!item) {
-				return this.errorReply(`Unknown item "${target.trim()}". Use /pokerogue shop to see available items.`);
-			}
-
 			const state = getState(user.id);
-			if (!state) {
-				return this.errorReply('You have no active PokéRogue run. Use /pokerogue start first.');
-			}
-
-			if (!state.shopInventory) {
-				state.shopInventory = rollShopInventory();
+			const item = SHOP_ITEMS[toID(target)];
+			if (state && item && (state.coins ?? 0) >= item.cost) {
+				state.coins! -= item.cost;
+				state.items = state.items ?? {};
+				state.items[item.id] = (state.items[item.id] ?? 0) + 1;
 				setState(user.id, state);
-			}
-
-			// only items in the current shop rotation can be purchased
-			if (!state.shopInventory.includes(itemId)) {
-				return this.errorReply(
-					`${item.name} is not in your current shop. Use /pokerogue shop to see what's available, ` +
-					`or /pokerogue refreshshop to reroll for 5 coins.`
-				);
-			}
-
-			const coins = state.coins ?? 0;
-			if (coins < item.cost) {
-				return this.errorReply(`Not enough coins. You have ${coins} but need ${item.cost}.`);
-			}
-
-			state.coins = coins - item.cost;
-			state.items = state.items ?? {};
-			state.items[itemId] = (state.items[itemId] ?? 0) + 1;
-			setState(user.id, state);
-
-			// refresh the shop page so the ui reflects changes instantly
-			this.refreshPage('pokerogue-shop');
-		},
-
-		// /pokerogue use <item> [team slot 1-6]
-		use(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const parts = target.trim().split(/\s+/);
-			const itemId = toID(parts[0] ?? '');
-			const slotArg = parseInt(parts[1] ?? '0');
-
-			const item = SHOP_ITEMS[itemId];
-			if (!item) {
-				return this.errorReply(`Unknown item "${parts[0]}". Use /pokerogue shop to see available items.`);
-			}
-
-			const state = getState(user.id);
-			if (!state) {
-				return this.errorReply('You have no active PokéRogue run. Use /pokerogue start first.');
-			}
-
-			const qty = state.items?.[itemId] ?? 0;
-			if (qty < 1) {
-				return this.errorReply(`You don't have any ${item.name}. Use /pokerogue buy ${itemId} to get one.`);
-			}
-
-			state.items![itemId] = qty - 1;
-
-			switch (itemId) {
-			case 'rarecandy': {
-				const slot = slotArg - 1;
-				if (slot < 0 || slot >= state.team.length) {
-					state.items![itemId] = qty;
-					setState(user.id, state);
-					return this.errorReply(`Specify a team slot 1-${state.team.length}. Example: /pokerogue use rarecandy 1`);
-				}
-				const mon = state.team[slot];
-				const oldSpecies = mon.species;
-				mon.level = Math.min(100, mon.level + 5);
-				mon.exp = expForLevel(mon.level);
-				let evolved = false;
-				while (true) {
-					const evo = getLevelUpEvo(mon.species);
-					if (!evo || mon.level < evo.evoLevel) break;
-					mon.species = evo.evoTo;
-					evolved = true;
-				}
-				const newName = Dex.species.get(toID(mon.species)).name || mon.species;
-				const oldName = Dex.species.get(toID(oldSpecies)).name || oldSpecies;
-				state.notification = evolved ?
-					`${Utils.escapeHTML(oldName)} evolved into <b>${Utils.escapeHTML(newName)}</b> and grew to <b>Lv.${mon.level}</b>!` :
-					`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`;
-				setState(user.id, state);
-				this.refreshPage('pokerogue');
-				return;
-			}
-			case 'luckycharm': {
-				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
-				state.notification = `<b>Lucky Charm</b> activated! EXP and coins doubled for the next ${state.doubleExpFloors} floors.`;
-				setState(user.id, state);
-				this.refreshPage('pokerogue');
-				return;
-			}
-			case 'revive': {
-				state.hasRevive = true;
-				state.notification = `<b>Revive</b> activated! If you lose your next battle, you will retry the same floor.`;
-				setState(user.id, state);
-				this.refreshPage('pokerogue');
-				return;
-			}
-			default: {
-				// gacha capsule items
-				if (item.gachaType) {
-					// Block opening a new capsule while an offer is already pending
-					if (state.pendingGachaOffer) {
-						state.items![itemId] = qty; // restore item — capsule not consumed
-						setState(user.id, state);
-						return this.errorReply(
-							`You already have a pending gacha offer! ` +
-							`Accept or decline it first with /pokerogue gachaaccept or /pokerogue gachadecline.`
-						);
-					}
-					if (state.team.length >= 6) {
-						state.items![itemId] = qty;
-						setState(user.id, state);
-						return this.errorReply(
-							`Your team is full (6 Pokemon). Release a Pokemon or wait until after a battle.`
-						);
-					}
-					const exclude = state.team.map(m => m.species);
-					const { species, isFeatured } = rollGachaPokemon(item.gachaType, item.gachaChance ?? 0, exclude);
-					state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured };
-					setState(user.id, state);
-					this.refreshPage('pokerogue');
-					return;
-				}
-				// held items — equip to a team Pokemon
-				if (!item.heldItem) {
-					state.items![itemId] = qty;
-					setState(user.id, state);
-					return this.errorReply(`Cannot manually use ${item.name}. It applies automatically.`);
-				}
-				const slot = slotArg - 1;
-				if (slot < 0 || slot >= state.team.length) {
-					state.items![itemId] = qty;
-					setState(user.id, state);
-					return this.errorReply(`Specify a team slot 1-${state.team.length}. Example: /pokerogue use ${itemId} 1`);
-				}
-				const mon = state.team[slot];
-				if (mon.heldItem) {
-					// return old held item to inventory
-					state.items![mon.heldItem] = (state.items![mon.heldItem] ?? 0) + 1;
-				}
-				mon.heldItem = item.heldItem;
-				const monName = Dex.species.get(toID(mon.species)).name || mon.species;
-				state.notification = `Equipped <b>${Utils.escapeHTML(item.name)}</b> to <b>${Utils.escapeHTML(monName)}</b>!`;
-				setState(user.id, state);
-				this.refreshPage('pokerogue');
-				return;
-			}
+				refreshGamePage(user);
 			}
 		},
-
-		// /pokerogue gachaaccept — accept a pending gacha Pokemon offer
-		gachaaccept(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) return this.errorReply('You have no active PokéRogue run.');
-			if (!state.pendingGachaOffer) return this.errorReply('No pending gacha offer to accept.');
-			if (state.team.length >= 6) {
-				return this.errorReply('Your team is full (6 Pokemon). You must decline this offer.');
-			}
-			const { species } = state.pendingGachaOffer;
-			const addLevel = Math.max(1, state.floor - 2);
-			state.team.push({ species, level: addLevel, exp: expForLevel(addLevel) });
-			const sp = Dex.species.get(toID(species));
-			const name = sp.exists ? sp.name : species;
-			state.notification = `<b>${Utils.escapeHTML(name)}</b> (Lv.${addLevel}) joined your team from the capsule!`;
-			delete state.pendingGachaOffer;
-			setState(user.id, state);
-			this.refreshPage('pokerogue');
-		},
-
-		// /pokerogue gachadecline — decline a pending gacha Pokemon offer
-		gachadecline(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) return this.errorReply('You have no active PokéRogue run.');
-			if (!state.pendingGachaOffer) return this.errorReply('No pending gacha offer to decline.');
-			const { species } = state.pendingGachaOffer;
-			const sp = Dex.species.get(toID(species));
-			const name = sp.exists ? sp.name : species;
-			state.notification = `Declined the offer for <b>${Utils.escapeHTML(name)}</b>. The capsule coins are spent.`;
-			delete state.pendingGachaOffer;
-			setState(user.id, state);
-			this.refreshPage('pokerogue');
-		},
-
-		// /pokerogue quit
-		quit(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			const state = getState(user.id);
-			if (!state) {
-				return this.errorReply('You have no active PokéRogue run.');
-			}
-			if (state.battleRoomId) {
-				// clean up bot and active match before forfeiting
-				const battleRoomId = state.battleRoomId as RoomID;
-				const match = activeMatches.get(battleRoomId);
-				if (match) {
-					const botUser = Users.get(match.botUserId);
-					if (botUser) destroyBotUser(botUser);
-					activeMatches.delete(battleRoomId);
-				}
-				const br = Rooms.get(state.battleRoomId);
-				if (br?.battle) br.battle.forfeit(user);
-			}
-			deleteState(user.id);
-			this.refreshPage('pokerogue');
-			return;
-		},
-
-		// staff commands (global driver+)
-
-		givemoney(target, room, user) {
-			this.checkCan('lock');
-			const parts = target.trim().split(/\s+/);
-			// if only a number is given, give to self
-			const isNumber = (s: string) => /^\d+$/.test(s);
-			let targetName: string;
-			let amount: number;
-			if (parts.length === 1 && isNumber(parts[0])) {
-				targetName = user.name;
-				amount = parseInt(parts[0]);
-			} else if (parts.length >= 2 && isNumber(parts[parts.length - 1])) {
-				amount = parseInt(parts[parts.length - 1]);
-				targetName = parts.slice(0, -1).join(' ');
-			} else {
-				targetName = parts.join(' ') || user.name;
-				amount = 100;
-			}
-			const targetId = toID(targetName) || user.id;
-			if (amount <= 0 || isNaN(amount)) return this.errorReply('Amount must be a positive number.');
-			const targetState = getState(targetId);
-			if (!targetState) {
-				return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			}
-			targetState.coins = (targetState.coins ?? 0) + amount;
-			setState(targetId, targetState);
-			this.sendReply(`Gave ${amount} coins to ${targetName}. They now have ${targetState.coins} coins.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member gave you ${amount} coins. You now have ${targetState.coins} coins.`);
-			}
-			this.modlog('POKEROUGE GIVEMONEY', targetId, `${amount} coins`);
-		},
-
-		removecoins(target, room, user) {
-			this.checkCan('lock');
-			const parts = target.split(',').map(p => p.trim());
-			let targetId: string;
-			let targetName: string;
-			let amount: number;
-			const isNumber = (s: string) => /^\d+$/.test(s);
-			if (parts.length === 1 && isNumber(parts[0])) {
-				targetId = user.id;
-				targetName = user.name;
-				amount = parseInt(parts[0]);
-			} else if (parts.length >= 2) {
-				const rawName = parts[0];
-				const parsedId = toID(rawName);
-				if (!rawName) {
-					targetId = user.id;
-					targetName = user.name;
-				} else if (!parsedId) {
-					return this.errorReply(`Invalid username: "${rawName}".`);
-				} else {
-					targetId = parsedId;
-					targetName = rawName;
-				}
-				if (!isNumber(parts[1])) {
-					return this.errorReply('Amount must be a positive number.');
-				}
-				amount = parseInt(parts[1]);
-			} else {
-				return this.errorReply('Usage: /pokerogue removecoins [user], <amount>');
-			}
-			if (isNaN(amount) || amount <= 0) return this.errorReply('Amount must be a positive number.');
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			targetState.coins = Math.max(0, (targetState.coins ?? 0) - amount);
-			setState(targetId, targetState);
-			this.sendReply(`Removed ${amount} coins from ${targetName}. They now have ${targetState.coins} coins.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed ${amount} coins from your account. You now have ${targetState.coins} coins.`);
-			}
-			this.modlog('POKEROUGE REMOVECOINS', targetId, `${amount} coins`);
-		},
-
-		resetcoins(target, room, user) {
-			this.checkCan('lock');
-			const trimmed = target.trim();
-			let targetId: string;
-			let targetName: string;
-			if (!trimmed) {
-				targetId = user.id;
-				targetName = user.name;
-			} else {
-				const parsedId = toID(trimmed);
-				if (!parsedId) {
-					return this.errorReply('Invalid username.');
-				}
-				targetId = parsedId;
-				targetName = trimmed;
-			}
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			targetState.coins = 0;
-			setState(targetId, targetState);
-			this.sendReply(`Reset ${targetName}'s coins to 0.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member reset your coin balance to 0.`);
-			}
-			this.modlog('POKEROUGE RESETCOINS', targetId);
-		},
-
-		setfloor(target, room, user) {
-			this.checkCan('lock');
-			const parts = target.split(',').map(p => p.trim());
-			let targetId: string;
-			let targetName: string;
-			let floor: number;
-			const isNumber = (s: string) => /^\d+$/.test(s);
-			if (parts.length === 1 && isNumber(parts[0])) {
-				targetId = user.id;
-				targetName = user.name;
-				floor = parseInt(parts[0]);
-			} else if (parts.length >= 2) {
-				const rawUser = parts[0];
-				if (!rawUser) {
-					targetId = user.id;
-					targetName = user.name;
-				} else {
-					targetId = toID(rawUser);
-					if (!targetId) {
-						return this.errorReply('Invalid username for setfloor.');
-					}
-					targetName = rawUser;
-				}
-				if (!isNumber(parts[1])) return this.errorReply('Floor must be a positive number.');
-				floor = parseInt(parts[1]);
-			} else {
-				return this.errorReply('Usage: /pokerogue setfloor [user], <floor>');
-			}
-			if (isNaN(floor) || floor < 1) return this.errorReply('Floor must be a positive number.');
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			targetState.floor = floor;
-			setState(targetId, targetState);
-			this.sendReply(`Set ${targetName}'s floor to ${floor}.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member set your floor to ${floor}.`);
-			}
-			this.modlog('POKEROUGE SETFLOOR', targetId, `floor ${floor}`);
-		},
-
-		resetfloor(target, room, user) {
-			this.checkCan('lock');
-			const trimmedFloor = target.trim();
-			let targetId: string;
-			let targetName: string;
-			if (!trimmedFloor) {
-				targetId = user.id;
-				targetName = user.name;
-			} else {
-				const parsedId = toID(trimmedFloor);
-				if (!parsedId) return this.errorReply(`Invalid username: "${trimmedFloor}".`);
-				targetId = parsedId;
-				targetName = trimmedFloor;
-			}
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			targetState.floor = 1;
-			setState(targetId, targetState);
-			this.sendReply(`Reset ${targetName}'s floor to 1.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member reset your floor to 1.`);
-			}
-			this.modlog('POKEROUGE RESETFLOOR', targetId);
-		},
-
-		viewteam(target, room, user) {
-			if (!this.runBroadcast()) return;
-			this.checkCan('lock');
-			const trimmedVT = target.trim();
-			let targetId: string;
-			let targetName: string;
-			if (!trimmedVT) {
-				targetId = user.id;
-				targetName = user.name;
-			} else {
-				const parsedId = toID(trimmedVT);
-				if (!parsedId) return this.errorReply(`Invalid username: "${trimmedVT}".`);
-				targetId = parsedId;
-				targetName = trimmedVT;
-			}
-			const targetState = getState(targetId);
-			const targetNameHtml = Utils.escapeHTML(targetName);
-			if (!targetState) return this.sendReplyBox(`${targetNameHtml} has no PokéRogue data.`);
-			if (!targetState.team) return this.sendReplyBox(`${targetNameHtml} has no active PokéRogue run.`);
-			const targetDisplay = targetState.displayName || targetName;
-			this.sendReplyBox(
-				`<b>PokéRogue Team for ${Impulse.nameColor(targetDisplay, true, true)}</b><br>` +
-				`<b>Floor:</b> ${targetState.floor} &nbsp;|&nbsp; <b>Coins:</b> ${targetState.coins ?? 0}<br>` +
-				`<b>Team:</b><br>${renderTeam(targetState.team, true)}`
-			);
-		},
-
-		addmon(target, room, user) {
-			this.checkCan('lock');
-			const parts = target.split(',').map(p => p.trim());
-			let targetId: string;
-			let targetName: string;
-			let speciesStr: string;
-			let levelOverride: number | null = null;
-			const isPositiveInt = (s: string) => /^\d+$/.test(s) && parseInt(s) > 0;
-
-			if (parts.length === 1) {
-				if (!parts[0]) return this.errorReply('Usage: /pokerogue addmon [user], <pokemon> [, <level>]');
-				targetId = user.id;
-				targetName = user.name;
-				speciesStr = parts[0];
-			} else if (parts.length === 2) {
-				if (/^\d+$/.test(parts[1])) {
-					const lvl = parseInt(parts[1]);
-					if (lvl < 1 || lvl > 100) return this.errorReply('Level must be between 1 and 100.');
-					targetId = user.id;
-					targetName = user.name;
-					speciesStr = parts[0];
-					levelOverride = lvl;
-				} else {
-					if (!parts[0]) {
-						targetId = user.id;
-						targetName = user.name;
-					} else {
-						const maybeId = toID(parts[0]);
-						if (!maybeId) return this.errorReply(`Invalid username: "${parts[0]}".`);
-						targetId = maybeId;
-						targetName = parts[0];
-					}
-					speciesStr = parts[1];
-				}
-			} else {
-				if (!parts[0]) {
-					targetId = user.id;
-					targetName = user.name;
-				} else {
-					const maybeId = toID(parts[0]);
-					if (!maybeId) return this.errorReply(`Invalid username: "${parts[0]}".`);
-					targetId = maybeId;
-					targetName = parts[0];
-				}
-				speciesStr = parts[1];
-				if (!parts[2] || !isPositiveInt(parts[2]) || parseInt(parts[2]) > 100) {
-					return this.errorReply('Level must be between 1 and 100.');
-				}
-				levelOverride = parseInt(parts[2]);
-			}
-
-			const speciesId = toID(speciesStr);
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			if (targetState.team.length >= 6) return this.errorReply(`${targetName}'s team is full (6 Pokémon).`);
-			const species = Dex.species.get(speciesId);
-			if (!species.exists) return this.errorReply(`Unknown Pokémon: ${speciesStr}`);
-			const floorLevel = Math.max(1, targetState.floor - 2);
-			const addLevel = levelOverride ?? floorLevel;
-			targetState.team.push({ species: species.id, level: addLevel, exp: expForLevel(addLevel) });
-			setState(targetId, targetState);
-			this.sendReplyBox(
-				`${getSprite(species.id, 40)} Added <b>${species.name}</b> (Lv.${addLevel}) to ${Utils.escapeHTML(targetName)}'s team.`
-			);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member added ${species.name} (Lv.${addLevel}) to your team.`);
-			}
-			this.modlog('POKEROUGE ADDMON', targetId, `${species.name} Lv.${addLevel}`);
-		},
-
-		givemon: 'addmon',
-
-		removemon(target, room, user) {
-			this.checkCan('lock');
-			const trimmedTarget = target.trim();
-			let targetId: string;
-			let targetName: string;
-			if (!trimmedTarget) {
-				targetId = user.id;
-				targetName = user.name;
-			} else {
-				const maybeId = toID(trimmedTarget);
-				if (!maybeId) return this.errorReply(`Invalid username: "${trimmedTarget}".`);
-				targetId = maybeId;
-				targetName = trimmedTarget;
-			}
-			if (!getState(targetId)) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			deleteState(targetId);
-			this.sendReply(`Deleted all PokéRogue data for ${targetName}.`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member removed your PokéRogue data.`);
-			}
-			this.modlog('POKEROUGE WIPEUSERDATA', targetId, 'wiped all PokéRogue data');
-		},
-
-		healteam(target, room, user) {
-			this.checkCan('lock');
-			const trimmed = target.trim();
-			let targetId: string;
-			let targetName: string;
-			if (!trimmed) {
-				targetId = user.id;
-				targetName = user.name;
-			} else {
-				const maybeId = toID(trimmed);
-				if (!maybeId) {
-					return this.errorReply(`Invalid username: "${trimmed}".`);
-				}
-				targetId = maybeId;
-				targetName = trimmed;
-			}
-			const targetState = getState(targetId);
-			if (!targetState) return this.errorReply(`${targetName} has no PokéRogue data.`);
-			if (!targetState.team) return this.errorReply(`${targetName} has no active PokéRogue run.`);
-			for (const mon of targetState.team) {
-				mon.exp = expForLevel(mon.level);
-			}
-			setState(targetId, targetState);
-			this.sendReply(`Healed ${targetName}'s team (EXP reset to current level baseline).`);
-			if (targetId !== user.id) {
-				Users.get(targetId)?.popup(`[PokéRogue] A staff member healed your team.`);
-			}
-			this.modlog('POKEROUGE HEALTEAM', targetId);
-		},
-
-		// /pokerogue top — top 100 leaderboard (redirects to the leaderboard page)
-		top(target, room, user) {
-			return this.parse('/join view-pokerogue-top');
-		},
-
-		help(target, room, user) {
-			if (!this.runBroadcast()) return;
-			const isStaff = user.can('lock');
-			let html =
-				`<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerogue start</code> — Open the PokéRogue game page (auto-starts new run if needed).<br>` +
-				`<code>/pokerogue battle</code> — Start the next floor battle.<br>` +
-				`<code>/pokerogue choose [1/2/3]</code> — Choose a starter or add a new Pokemon to your team.<br>` +
-				`<code>/pokerogue shop</code> — Open the item shop page.<br>` +
-				`<code>/pokerogue refreshshop</code> — Reroll shop items for 5 coins.<br>` +
-				`<code>/pokerogue buy &lt;item&gt;</code> — Purchase an item (costs coins).<br>` +
-				`<code>/pokerogue use &lt;item&gt; [slot]</code> — Activate a consumable or equip a held item to slot 1-6.<br>` +
-				`<code>/pokerogue status</code> — View your floor, coins, inventory and team.<br>` +
-				`<code>/pokerogue top</code> — View the Top 100 leaderboard by highest floor.<br>` +
-				`<code>/pokerogue quit</code> — Abandon your current run.<br>` +
-				`<br><b>Tip:</b> Type <code>/pokerogue start</code> to open the game page.<br>` +
-				`<br><b>Shop Items:</b> 30+ PS items including Choice Band/Specs/Scarf, Life Orb, Assault Vest, Heavy-Duty Boots, and more.<br>` +
-				`<br><b>Tips:</b> Win floors to earn coins. Legendary Pokemon may appear as team additions at Floor 20+!`;
-			if (isStaff) {
-				html +=
-					`<br><br><b>Staff Commands (Global Driver+):</b><br>` +
-					`<code>/pokerogue givemoney [user] [amount]</code> — Give coins (default 100). Omit user to give to yourself.<br>` +
-					`<code>/pokerogue removecoins [user], &lt;amount&gt;</code> — Remove coins (omit user for self).<br>` +
-					`<code>/pokerogue resetcoins [user]</code> — Set coins to 0 (omit user for self).<br>` +
-					`<code>/pokerogue setfloor [user], &lt;floor&gt;</code> — Set current floor (omit user for self).<br>` +
-					`<code>/pokerogue resetfloor [user]</code> — Reset floor to 1 (omit user for self).<br>` +
-					`<code>/pokerogue viewteam [user]</code> — View a user's team (omit user for own team).<br>` +
-					`<code>/pokerogue addmon [user], &lt;pokemon&gt; [, &lt;level&gt;]</code> (alias: <code>givemon</code>) — Add a Pokemon to a team.<br>` +
-					`<code>/pokerogue removemon [user]</code> — Delete all PokéRogue data for a user.<br>` +
-					`<code>/pokerogue healteam [user]</code> — Reset team EXP to current level baseline.<br>`;
-			}
-			this.sendReplyBox(html);
-		},
-
-		// /pokerogue popup [shop] — redirects to the game page (kept for backwards compatibility)
-		popup(target, room, user) {
-			if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-			if (target.trim() === 'shop') return this.parse('/join view-pokerogue-shop');
-			return this.parse('/join view-pokerogue');
-		},
-
-		// /pokerogue dismissnotif — dismiss the notification banner
 		dismissnotif(target, room, user) {
-			if (!user.named) return;
 			const state = getState(user.id);
 			if (state?.notification) {
 				delete state.notification;
 				setState(user.id, state);
 			}
-			this.refreshPage('pokerogue');
-			this.refreshPage('pokerogue-shop');
+			refreshGamePage(user);
 		},
-
-		'': 'help',
+		gachaaccept: (target, room, user) => {
+			const state = getState(user.id);
+			if (state?.pendingGachaOffer) {
+				state.team.push({ species: state.pendingGachaOffer.species, level: Math.max(1, state.floor - 2), exp: 0 });
+				delete state.pendingGachaOffer;
+				setState(user.id, state);
+				refreshGamePage(user);
+			}
+		},
+		gachadecline: (target, room, user) => {
+			const state = getState(user.id);
+			if (state?.pendingGachaOffer) {
+				delete state.pendingGachaOffer;
+				setState(user.id, state);
+				refreshGamePage(user);
+			}
+		},
+		quit(target, room, user) {
+			deleteState(user.id);
+			refreshGamePage(user);
+		},
 	},
-
 };
-
-// page table — /view-pokerogue renders the game ui
 
 export const pages: Chat.PageTable = {
 	pokerogue(args, user) {
-		if (!user.named) return this.errorReply('You must be logged in to play PokéRogue.');
-
-		// leaderboard sub-page
-		if (args[0] === 'top') {
-			return `<div class="pr-popup">` +
-				`<div class="pr-popup-header">` +
-				`<h2>PokéRogue Leaderboard</h2>` +
-				`<a href="/view-pokerogue" class="button">Back</a>` +
-				`</div>` +
-				renderLeaderboard() +
-				`</div>`;
-		}
-
+		if (!user.named) return this.errorReply('Login required.');
 		const state = getState(user.id);
 
-		// no active run — show start screen
 		if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId && !state.gameOver)) {
-			return NO_RUN_PAGE_HTML;
+			return `<div class="pr-popup"><div class="pr-popup-header"><h2>PokéRogue</h2></div>` +
+				`<div style="text-align:center;padding:16px"><button name="send" value="/pokerogue start" class="button">Start New Run</button></div></div>`;
 		}
 
-		repairEmptyPendingChoice(state, user.id);
-		// clear stale battle room reference
-		if (state.battleRoomId) {
-			const bRoom = Rooms.get(state.battleRoomId as RoomID);
-			if (!bRoom?.battle || bRoom.battle.ended) {
-				delete state.battleRoomId;
-				setState(user.id, state);
-			}
-		}
-		const view = args[0] === 'shop' ? 'shop' : 'main';
-		if (view === 'shop' && state.shopInventory === undefined) {
-			state.shopInventory = rollShopInventory();
-			setState(user.id, state);
-		}
-		return renderGamePopup(state, view);
+		// View Routing
+		const view = (args[0] as 'main' | 'shop' | 'top') || 'main';
+		this.title = `PokéRogue${view !== 'main' ? ` - ${view.charAt(0).toUpperCase() + view.slice(1)}` : ''}`;
+
+		return renderGamePage(state, view);
 	},
 };
-
-// battle end handler
 
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {
 		const match = activeMatches.get(battle.roomid);
 		if (!match) return;
 		activeMatches.delete(battle.roomid);
-
 		const botUser = Users.get(match.botUserId);
 		if (botUser) destroyBotUser(botUser);
 
@@ -1534,132 +403,24 @@ export const handlers: Chat.Handlers = {
 		if (!state) return;
 
 		delete state.battleRoomId;
-
-		const winnerId = toID(winner);
-		const humanWon = winnerId === match.userId;
+		const humanWon = toID(winner) === match.userId;
 
 		if (humanWon) {
-			const doubleActive = (state.doubleExpFloors ?? 0) > 0;
-			const multiplier = doubleActive ? 2 : 1;
-
-			const expReward = floorExpReward(match.floor) * multiplier;
-			const levelUpMsgs: string[] = [];
-
-			for (const mon of state.team) {
-				const oldSpeciesData = Dex.species.get(toID(mon.species));
-				const oldName = oldSpeciesData.exists ? oldSpeciesData.name : mon.species;
-
-				const { evolved, oldLevel } = applyExpAndLevelUp(mon, expReward);
-				if (mon.level > oldLevel) {
-					const newSpeciesData = Dex.species.get(toID(mon.species));
-					const newName = newSpeciesData.exists ? newSpeciesData.name : mon.species;
-					if (evolved) {
-						levelUpMsgs.push(
-							`<b>${Utils.escapeHTML(oldName)}</b> evolved into <b>${Utils.escapeHTML(newName)}</b> and is now <b>Lv.${mon.level}</b>!`
-						);
-					} else {
-						levelUpMsgs.push(`<b>${Utils.escapeHTML(newName)}</b> grew to <b>Lv.${mon.level}</b>!`);
-					}
-				}
-			}
-
-			// award coins
-			const coinsEarned = floorCoinReward(match.floor) * multiplier;
-			state.coins = (state.coins ?? 0) + coinsEarned;
-
-			if (doubleActive) {
-				state.doubleExpFloors = (state.doubleExpFloors ?? 0) - 1;
-			}
-
-			const prevFloor = state.floor;
+			const coins = floorCoinReward(state.floor);
+			state.coins = (state.coins ?? 0) + coins;
 			state.floor++;
-			state.streaksWon = (state.streaksWon ?? 0) + 1;
-
-			// reset shop inventory after each win
-			delete state.shopInventory;
-
-			if (state.floor > (state.highestFloor ?? 0)) state.highestFloor = state.floor;
-			if (humanUser) state.displayName = humanUser.name;
-
-			// offer a new pokemon every 5 floors
-			const offerNewPokemon = state.floor > 1 && (state.floor - 1) % 5 === 0 && state.team.length < 6;
-
-			const coinBoostNote = doubleActive ? ` <b style="color:#fac000">(2x Lucky Charm!)</b>` : '';
-			const levelUpHtml = levelUpMsgs.length ? `<br>${levelUpMsgs.join('<br>')}` : '';
-			const milestoneHtml = offerNewPokemon ?
-				`<br><b style="color:#c4a8ff">Milestone! Choose a new Pokemon to add to your team!</b>` : '';
-			state.notification =
-				`<b style="font-size:14px">Floor ${prevFloor} Cleared! Moving to Floor ${state.floor}!</b>` +
-				`<br><span style="font-size:12px">` +
-				`+${coinsEarned} coins${coinBoostNote} (Total: ${state.coins}) — Streaks: ${state.streaksWon}` +
-				`</span>` +
-				levelUpHtml +
-				milestoneHtml;
-
-			if (offerNewPokemon) {
-				const opts = pickNewPokemonOptions(state.team, prevFloor);
-				state.pendingChoice = opts;
+			state.notification = `Floor Cleared! +${coins} coins.`;
+			if (state.floor % 5 === 0 && state.team.length < 6) {
+				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
 				state.pendingChoiceType = 'add';
-				setState(match.userId, state);
-			} else {
-				setState(match.userId, state);
-			}
-
-			// refresh the game page to show win result
-			if (humanUser) {
-				if (offerNewPokemon) {
-					// milestone: show the main page for Pokemon choice
-					refreshGamePage(humanUser);
-				} else {
-					// normal win: open shop page directly so user can buy items.
-					// do NOT call refreshGamePage here — it sends |refresh| to view-pokerogue-shop
-					// right after |init|html, which interferes with the shop auto-open and also
-					// forces the main page tab to update simultaneously, causing two page tabs
-					// to appear at once. the main game page auto-refreshes via its
-					// <meta http-equiv="refresh"> tag (active whenever state.notification is set).
-					openShopForUser(humanUser, state);
-				}
 			}
 		} else {
-			// loss
-			if (state.hasRevive) {
-				state.hasRevive = false;
-				delete state.battleRoomId;
-				state.notification = `<b>Revive activated!</b> You get to retry Floor ${match.floor}!`;
-				setState(match.userId, state);
-				if (humanUser) {
-					refreshGamePage(humanUser);
-				}
-			} else {
-				// run over — reset state while preserving leaderboard data
-				const finalFloor = match.floor;
-				const finalStreaks = state.streaksWon ?? 0;
-				state.floor = 1;
-				state.team = [];
-				state.coins = 0;
-				state.streaksWon = 0;
-				state.hasRevive = false;
-				state.items = {};
-				state.gameOver = true;
-				state.lastRunFloor = finalFloor;
-				state.lastRunStreaks = finalStreaks;
-				delete state.battleRoomId;
-				delete state.pendingChoice;
-				delete state.pendingChoiceType;
-				delete state.doubleExpFloors;
-				delete state.shopInventory;
-				delete state.notification;
-				delete state.pendingGachaOffer;
-				setState(match.userId, state);
-				if (humanUser) {
-					refreshGamePage(humanUser);
-				}
-			}
+			state.gameOver = true;
 		}
+		setState(match.userId, state);
+		if (humanUser) refreshGamePage(humanUser);
 	},
 };
-
-// plugin start hook — registers the private "Roguelike Battle" format at startup
 
 export const start = (): void => {
 	// guard BasicRoom.prototype.destroy against the null Rooms.global crash on startup/hot-reload
