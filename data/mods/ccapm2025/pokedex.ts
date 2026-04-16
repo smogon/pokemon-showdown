@@ -1584,7 +1584,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		forme: "Alchemist",
 		types: ["Dark", "Grass"],
 		baseStats: { hp: 105, atk: 70, def: 110, spa: 115, spd: 110, spe: 115 },
-		abilities: { 0: "Herbal Elixir" },
+		abilities: { 0: "Natural Cure" }, // Herbal Elixir causes crash
 		heightm: 1.8,
 		weightkg: 70,
 		color: "Black",
