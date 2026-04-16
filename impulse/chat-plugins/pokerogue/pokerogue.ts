@@ -1,5 +1,5 @@
-// pokerogue plugin — refactored for a true single-page application (SPA).
-// Navigation uses internal state to update the current window instead of opening new tabs.
+// pokerogue plugin — main file: html rendering, commands, page handlers, battle hook.
+// Refactored for a true single-page application (SPA) architecture.
 
 import { Utils } from '../../../lib';
 import { Table } from '../../utils';
@@ -17,6 +17,7 @@ import {
 	startBattle, destroyBotUser,
 } from './pokerogue-battle';
 
+// Page auto-refresh interval while a battle is active or notification is pending
 const PAGE_REFRESH_SECONDS = 20;
 
 // --- Asset & Sprite Helpers ---
@@ -124,9 +125,9 @@ function renderTypeBadge(types: string[], large = false): string {
 // --- REFACTORED CORE LOGIC ---
 
 /**
- * FIXED: Refresh Navigation.
- * Instead of /join view-pokerogue-shop, we always rejoin base 'view-pokerogue'.
- * Showdown client updates the current tab if the room ID remains the same.
+ * FIXED: Robust Page Refresh.
+ * Instead of simple |refresh|, this forces a re-join of the base 'view-pokerogue' window.
+ * This ensures the client receives the updated SPA HTML whenever state changes.
  */
 function refreshGamePage(user: User): void {
 	for (const conn of user.connections) {
@@ -137,46 +138,60 @@ function refreshGamePage(user: User): void {
 }
 
 /**
- * FIXED: SPA View Renderer.
- * Determines content based on internal state. All "Back" and "Shop" buttons 
- * now trigger commands instead of direct URL links to avoid new tabs.
+ * REWRITTEN: Single Page Renderer.
+ * Unified rendering function that checks state.view and state.gameOver 
+ * to provide a seamless tab-free experience.
  */
 function renderGamePage(state: PokeRogueState): string {
-	const view = (state as any).view || 'main'; // Use internal state property
+	const view = (state as any).view || 'main';
 	let buf = (state.battleRoomId || state.notification) ? `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
 	buf += `<div class="pr-popup">`;
 
-	// --- Header (SPA Navigation) ---
+	// --- Header Navigation ---
 	buf += `<div class="pr-popup-header">`;
 	buf += `<h2>PokéRogue${view !== 'main' ? ` - ${view.toUpperCase()}` : ''}</h2>`;
-	if (view !== 'main') {
-		buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-left:auto">Back to Game</button>`;
+	if (view !== 'main' && !state.gameOver) {
+		buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-left:auto">Back to Home</button>`;
 	}
 	buf += `</div>`;
+
+	// --- GLOBAL GAME OVER OVERRIDE ---
+	if (state.gameOver) {
+		buf += `<div class="pr-gameover" style="text-align:center;padding:20px">`;
+		buf += `<div class="pr-gameover-title" style="font-size:24px;color:#ff8080;font-weight:bold;margin-bottom:15px">GAME OVER</div>`;
+		buf += `<div style="margin-bottom:20px;color:#8ab4f8">Your run has ended. All Pokémon have fainted.</div>`;
+		buf += `<button name="send" value="/pokerogue newgame" class="button pr-newrun-btn" style="padding:10px 20px;font-size:16px">Start New Run</button>`;
+		buf += `</div></div>`;
+		return buf;
+	}
 
 	// --- View Routing ---
 	if (view === 'top') {
 		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
-		const rows = entries.map(([userid, s], i) => [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, '...']);
-		return buf + Table('Top Players', ['#', 'Player', 'Best Floor', 'Team'], rows) + `</div>`;
+		const rows = entries.map(([userid, s], i) => [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, '—']);
+		return buf + Table('Leaderboard', ['#', 'Player', 'Best Floor', 'Team'], rows) + `</div>`;
 	}
 
 	if (state.notification) {
 		buf += `<div class="pr-notification">${state.notification}<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button></div>`;
 	}
 
-	if (state.battleRoomId) return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#f5c518;font-weight:bold">Battle in progress!</p></div></div>`;
+	if (state.battleRoomId) return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#fac000;font-weight:bold">Battle in progress!</p></div></div>`;
 
+	// Pokemon Selection Milestone
 	if (state.pendingChoice?.length) {
-		buf += `<h2 class="pr-choice-heading">Choose a Pokémon:</h2><div style="overflow-x:auto"><table class="pr-choice-table"><tbody>`;
+		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table"><tbody>`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const s = state.pendingChoice[i];
 			const sp = Dex.species.get(toID(s));
-			buf += `<tr class="pr-choice-row"><td>${getSpriteWithBall(s, 60)}</td><td><b>${sp.name}</b></td><td><button name="send" value="/pokerogue choose ${i + 1}" class="button">Pick</button></td></tr>`;
+			buf += `<tr class="pr-choice-row"><td>${getSpriteWithBall(s, 60)}</td><td><b>${Utils.escapeHTML(sp.name)}</b></td>`;
+			buf += `<td><button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">Pick</button></td></tr>`;
 		}
 		return buf + `</tbody></table></div></div>`;
 	}
 
+	// Shop Sub-view
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
 		if (!state.shopInventory) state.shopInventory = rollShopInventory();
@@ -185,12 +200,13 @@ function renderGamePage(state: PokeRogueState): string {
 			const item = SHOP_ITEMS[itemId];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
-			buf += `<div class="pr-shop-card"><b>${item.name}</b><br><small>${item.description}</small>`;
-			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
+			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.heldItem ?? item.id)}<b>${Utils.escapeHTML(item.name)}</b></div>`;
+			buf += `<div class="pr-shop-item-desc">${Utils.escapeHTML(item.description)}</div>`;
+			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
 		}
-		buf += `</div><div class="pr-shop-footer">`;
-		buf += `<button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button>`;
-		buf += `<button name="send" value="/pokerogue view main" class="button">Back</button></div>`;
+		buf += `</div><div class="pr-shop-footer"><button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button>`;
+		buf += `<div class="pr-shop-footer-nav"><button name="send" value="/pokerogue view main" class="button">Back</button>`;
+		buf += `<button name="send" value="/pokerogue battle" class="button">Battle!</button></div></div>`;
 		return buf + `</div>`;
 	}
 
@@ -198,35 +214,38 @@ function renderGamePage(state: PokeRogueState): string {
 	buf += `<div class="pr-popup-stats"><span>Floor <b>${state.floor}</b></span><span>Coins <b>${state.coins ?? 0}</b></span></div>`;
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
-		buf += `<div class="pr-popup-mon">${getSpriteWithBall(mon.species, 52)}<div style="flex:1"><b>${Dex.species.get(toID(mon.species)).name}</b><br>Lv.${mon.level}${renderExpBar(mon)}</div></div>`;
+		buf += `<div class="pr-popup-mon">${getSpriteWithBall(mon.species, 52)}<div style="flex:1"><b>${Utils.escapeHTML(Dex.species.get(toID(mon.species)).name)}</b><br><span style="font-size:11px;color:#8ab4f8">Lv.${mon.level}</span>${renderExpBar(mon)}</div></div>`;
 	}
 	buf += `</div><div class="pr-popup-actions" style="margin-top:12px">`;
 	buf += `<button name="send" value="/pokerogue battle" class="button">Start Battle</button>`;
 	buf += `<button name="send" value="/pokerogue view shop" class="button">Shop</button>`;
 	buf += `<button name="send" value="/pokerogue view top" class="button">Leaderboard</button>`;
-	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080">Quit</button></div>`;
+	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080">Quit Run</button></div>`;
 
 	return buf + `</div>`;
 }
 
-// --- Commands & Page Handlers ---
+// --- Commands ---
 
 export const commands: Chat.ChatCommands = {
 	pokerogue: {
 		start(target, room, user) {
 			let state = getState(user.id);
-			if (!state) {
+			if (!state || state.gameOver) {
 				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 0 } as any;
 				setState(user.id, state);
 			}
 			return this.parse('/join view-pokerogue');
 		},
 
-		// FIXED: New 'view' command sets internal state and refreshes SAME tab
+		newgame(target, room, user) {
+			deleteState(user.id);
+			return this.parse('/pokerogue start');
+		},
+
 		view(target, room, user) {
-			if (!user.named) return;
 			const state = getState(user.id);
-			if (!state) return;
+			if (!state || state.gameOver) return;
 			const targetView = target.trim() as any;
 			if (['main', 'shop', 'top'].includes(targetView)) {
 				(state as any).view = targetView;
@@ -235,13 +254,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		shop: 'view shop',
-		top: 'view top',
-
 		battle(target, room, user) {
 			const state = getState(user.id);
-			if (state && startBattle(user, state)) {
-				(state as any).view = 'main'; // Ensure we return to main view on battle start
+			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
+			if (startBattle(user, state)) {
+				(state as any).view = 'main';
 				setState(user.id, state);
 				refreshGamePage(user);
 			}
@@ -249,7 +266,7 @@ export const commands: Chat.ChatCommands = {
 
 		choose(target, room, user) {
 			const state = getState(user.id);
-			if (!state?.pendingChoice) return;
+			if (!state?.pendingChoice || state.gameOver) return;
 			const n = parseInt(target) - 1;
 			if (isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
@@ -284,6 +301,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			refreshGamePage(user);
 		},
+
 		quit: (target, room, user) => { deleteState(user.id); refreshGamePage(user); },
 	},
 };
@@ -298,7 +316,6 @@ export const pages: Chat.PageTable = {
 				`<div style="text-align:center;padding:16px"><button name="send" value="/pokerogue start" class="button">Start New Run</button></div></div>`;
 		}
 
-		// FIXED: Page handler ignores URL args to prioritize internal state view
 		const view = (state as any).view || 'main';
 		this.title = `PokéRogue - ${view.toUpperCase()}`;
 		return renderGamePage(state);
@@ -315,6 +332,7 @@ export const handlers: Chat.Handlers = {
 		const botUser = Users.get(match.botUserId);
 		if (botUser) destroyBotUser(botUser);
 
+		const humanUser = Users.get(match.userId);
 		const state = getState(match.userId);
 		if (!state) return;
 
@@ -326,49 +344,33 @@ export const handlers: Chat.Handlers = {
 			state.floor++;
 			state.notification = `Floor Cleared!`;
 		} else {
+			// FIXED: Reset run stats upon loss so dashboard doesn't show stale info
 			state.gameOver = true;
+			state.floor = 1;
+			state.team = [];
+			state.coins = 0;
+			state.streaksWon = 0;
+			delete state.shopInventory;
+			delete state.notification;
+			delete (state as any).view;
 		}
 		setState(match.userId, state);
-		const humanUser = Users.get(match.userId);
 		if (humanUser) refreshGamePage(humanUser);
 	},
 };
 
-// --- Format Registration ---
-
 export const start = (): void => {
-	// Guard BasicRoom.destroy logic for hot-reloading stability
-	if (!(Rooms.BasicRoom.prototype as any).__pokerogueDestroyPatched) {
-		const _origDestroy = Rooms.BasicRoom.prototype.destroy;
-		Rooms.BasicRoom.prototype.destroy = function (this: any) {
-			if (!Rooms.global) {
-				const roomsGlobalStub = { deregisterChatRoom: () => {}, delistChatRoom: () => {} };
-				(Rooms as any).global = roomsGlobalStub as any;
-				try { _origDestroy.call(this); } finally { if ((Rooms as any).global === roomsGlobalStub) (Rooms as any).global = null; }
-				return;
-			}
-			return _origDestroy.call(this);
-		};
-		(Rooms.BasicRoom.prototype as any).__pokerogueDestroyPatched = true;
-	}
-
-	const { Dex } = require('../../../sim/dex') as typeof import('../../../sim/dex');
-	const { Format } = require('../../../sim/dex-formats') as typeof import('../../../sim/dex-formats');
-
+	const { Dex } = require('../../../sim/dex');
+	const { Format } = require('../../../sim/dex-formats');
 	const FORMAT_ID = 'roguelikebattle' as ID;
 	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
-
 	Dex.formats.load();
 	const format = new Format({
-		name: 'Roguelike Battle',
-		mod: 'gen9',
-		effectType: 'Format',
-		section: 'Roguelike',
+		name: 'Roguelike Battle', mod: 'gen9', effectType: 'Format', section: 'Roguelike',
 		ruleset: ['Max Team Size = 6', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
 		rated: false,
 	});
 	Dex.formats.rulesetCache.set(FORMAT_ID, format);
-	(Dex.formats.formatsListCache as any)?.push(format);
 };
 
 export const testables = {
