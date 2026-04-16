@@ -65,7 +65,6 @@ function renderHome(user: User): string {
 	const cards: Array<{ label: string; desc: string; view: string; emoji: string }> = [
 		{
 			label: 'User Icons',
-			desc: 'Manage custom userlist icons assigned to users.',
 			view: 'icons',
 		},
 	];
@@ -82,7 +81,6 @@ function renderHome(user: User): string {
 		'">' +
 			'<div style="flex: 1;">' +
 				'<strong>' + c.label + '</strong>' +
-				'<div style="font-size: 0.9em; color: #555;">' + c.desc + '</div>' +
 			'</div>' +
 			'<button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
 				'Open →' +
