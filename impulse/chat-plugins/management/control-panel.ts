@@ -86,7 +86,6 @@ function renderHome(user: User): string {
 				'<strong>' + c.label + '</strong>' +
 				'<div style="font-size: 0.9em; color: #555;">' + c.desc + '</div>' +
 			'</div>' +
-			// CHANGED: Buttons now route through the 'view' handler instead of directly opening new pages
 			'<button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
 				'Open →' +
 			'</button>' +
@@ -118,7 +117,6 @@ async function renderIcons(user: User): Promise<string> {
 	const iconData = await loadIconData();
 	const entries = Object.entries(iconData);
 
-	// CHANGED: Back button routes through the 'view' handler
 	const backBtn =
 		'<button class="button" name="send" value="/controlpanel view home">' +
 			'← Back to Control Panel' +
@@ -158,11 +156,10 @@ async function renderIcons(user: User): Promise<string> {
 			day: '2-digit', month: 'short', year: 'numeric',
 		});
 
-		// You might want to update the /icon delete command to also call refreshControlPanel(user) in its own file
-		// so the table updates dynamically when an icon is deleted.
+		// Uses the internal controlpanel delete command to trigger a UI refresh
 		const deleteBtn =
 			'<button class="button" name="send"' +
-				' value="/icon delete ' + userid + '"' +
+				' value="/controlpanel deleteicon ' + userid + '"' + 
 				' style="color: #c00; border-color: #c00;">' +
 				'🗑 Delete' +
 			'</button>';
@@ -204,7 +201,6 @@ export const pages: Chat.PageTable = {
 	async controlpanel(query, user, connection) {
 		this.checkCan('roomowner');
 		
-		// CHANGED: We now rely on the in-memory state Map instead of the URL query string
 		const view = panelViews.get(user.id) || 'home';
 
 		switch (view) {
@@ -229,7 +225,6 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/join view-controlpanel');
 		},
 
-		// CHANGED: New view handler that updates state and silently refreshes the open page
 		view(target, room, user) {
 			this.checkCan('roomowner');
 			const view = toID(target) || 'home';
@@ -240,6 +235,21 @@ export const commands: Chat.ChatCommands = {
 		icons(target, room, user) {
 			this.checkCan('roomowner');
 			return this.parse('/controlpanel view icons');
+		},
+
+		deleteicon(target, room, user) {
+			this.checkCan('roomowner');
+			const targetId = toID(target);
+			if (!targetId) return;
+
+			// Execute the original global /icon delete command
+			this.parse(`/icon delete ${targetId}`);
+
+			// Wait 100ms to ensure the file system finishes writing the updated JSON
+			// before we re-read it to render the refreshed page.
+			setTimeout(() => {
+				refreshControlPanel(user);
+			}, 100);
 		},
 
 		help: [
