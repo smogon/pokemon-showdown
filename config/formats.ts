@@ -581,8 +581,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'King\'s Rock', 'Light Clay', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
-			'Belly Drum', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Glacial Lance', 'Glare', 'Lumina Crash', 'Rage Fist', 'Revival Blessing',
-			'Sacred Fire', 'Salt Cure', 'Shell Smash', 'Shift Gear', 'Surging Strikes', 'Tail Glow', 'Triple Arrows',
+			'Belly Drum', 'Burning Bulwark', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Glacial Lance', 'Glare', 'Lumina Crash', 'Rage Fist',
+			'Revival Blessing', 'Sacred Fire', 'Salt Cure', 'Shell Smash', 'Shift Gear', 'Surging Strikes', 'Tail Glow', 'Triple Arrows',
 		],
 	},
 	{
