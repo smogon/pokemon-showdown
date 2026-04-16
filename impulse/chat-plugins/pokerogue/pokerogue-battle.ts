@@ -5,13 +5,23 @@ import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
 import {
 	type PokemonEntry, type PokeRogueState,
-	getLevelUpEvo,
-	packPokemon, packTeam, pickRandomPokemon,
+	getLevelUpEvo, pickRandom,
+	getTier1Pokemon, getTier2Pokemon, getTier3Pokemon, getTier4Pokemon,
+	packPokemon, packTeam,
 	setState,
 } from './pokerogue-core';
 
 function botLevel(floor: number): number {
-	return Math.min(100, 1 + Math.floor((floor - 1) * 1.5));
+	// Accelerating level curve to naturally reach Level 999 in the extreme late-game
+	let level = 5; 
+	if (floor <= 20) {
+		level += (floor - 1) * 2;
+	} else if (floor <= 50) {
+		level = 43 + ((floor - 20) * 4);
+	} else {
+		level = 163 + ((floor - 50) * 8);
+	}
+	return Math.min(999, level);
 }
 
 function botTeamSize(floor: number): number {
@@ -206,8 +216,34 @@ export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 function buildBotTeam(floor: number): string {
 	const level = botLevel(floor);
 	const size = botTeamSize(floor);
+	const isBoss = floor % 10 === 0;
 
-	const picks = pickRandomPokemon(size);
+	let poolA: string[];
+	let poolB: string[];
+	let chanceA: number;
+
+	if (isBoss) {
+		// Bosses always field Elite or Legendary Pokemon
+		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.8;
+	} else {
+		// Standard scaling based on floor progression
+		if (floor < 10) {
+			poolA = getTier1Pokemon(); poolB = getTier1Pokemon(); chanceA = 1.0;
+		} else if (floor < 30) {
+			poolA = getTier1Pokemon(); poolB = getTier2Pokemon(); chanceA = 0.5;
+		} else if (floor < 50) {
+			poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.6;
+		} else {
+			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.8;
+		}
+	}
+
+	const picks: string[] = [];
+	for (let i = 0; i < size; i++) {
+		const activePool = Math.random() < chanceA ? poolA : poolB;
+		const pick = pickRandom(activePool, 1, picks);
+		if (pick.length) picks.push(pick[0]);
+	}
 
 	return picks.map(starter => {
 		let species = starter;
@@ -223,6 +259,7 @@ function buildBotTeam(floor: number): string {
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
 	const botTeam = buildBotTeam(state.floor);
+	const isBoss = state.floor % 10 === 0;
 
 	const botUser = createBotUser(user.id);
 	const botSlot = 'p2' as const;
@@ -236,7 +273,7 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${TRAINER_NAME}`,
+			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${isBoss ? 'BOSS ' : ''}${TRAINER_NAME}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);

@@ -67,11 +67,9 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
-// --- UI Helpers ---
-
 function renderExpBar(mon: PokemonEntry): string {
 	let pct = 100;
-	if (mon.level < 100) {
+	if (mon.level < 999) {
 		const expAtCurrent = expForLevel(mon.level);
 		const expAtNext = expForLevel(mon.level + 1);
 		const range = expAtNext - expAtCurrent;
@@ -291,7 +289,7 @@ function renderGamePage(state: PokeRogueState): string {
 
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
-		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
+		const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const evo = getLevelUpEvo(mon.species);
 		const evoHint = evo && mon.level < evo.evoLevel ? `<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
 		buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
@@ -459,8 +457,8 @@ export const commands: Chat.ChatCommands = {
 			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
 			
-			let addedLevel = 1;
-			if (state.pendingChoiceType !== 'starter') addedLevel = Math.max(1, state.floor - 2);
+			let addedLevel = 5; // Base starter level
+			if (state.pendingChoiceType !== 'starter') addedLevel = Math.max(5, state.floor - 2);
 			
 			let finalSpecies = choice;
 			while (true) {
@@ -549,7 +547,8 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			if (itemId === 'rarecandy' && state.team[slot].level >= 100) {
+			// Level cap uncapped to 999
+			if (itemId === 'rarecandy' && state.team[slot].level >= 999) {
 				return this.errorReply(`That Pokémon is already at Max Level!`);
 			}
 
@@ -565,7 +564,7 @@ export const commands: Chat.ChatCommands = {
 				const oldSpecies = mon.species;
 				let evolved = false;
 				
-				mon.level = Math.min(100, mon.level + 5); 
+				mon.level = Math.min(999, mon.level + 5); 
 				mon.exp = expForLevel(mon.level);
 				while (true) { 
 					const evo = getLevelUpEvo(mon.species); 
@@ -604,7 +603,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (itemId === 'revive') {
 				state.hasRevive = true;
 			} else if (item?.gachaType) {
-				const { species } = rollGachaPokemon(item.gachaType, item.gachaChance || 0, state.team.map(m => m.species));
+				const { species } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
 				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured: true };
 			} else if (item?.heldItem) {
 				if (state.team[slot].heldItem) {
@@ -665,7 +664,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
 			
-			const addedLevel = Math.max(1, state.floor - 2);
+			const addedLevel = Math.max(5, state.floor - 2);
 			let finalSpecies = toID(state.pendingGachaOffer.species);
 			
 			while (true) {
@@ -1009,9 +1008,10 @@ export const start = (): void => {
 	const FORMAT_ID = 'roguelikebattle' as ID;
 	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
 	Dex.formats.load();
+	// Rule changed to allow Level 999
 	const format = new Format({
 		name: 'Roguelike Battle', mod: 'gen9', effectType: 'Format', section: 'Roguelike',
-		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 999', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
 		rated: false,
 	});
 	Dex.formats.rulesetCache.set(FORMAT_ID, format);

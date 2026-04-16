@@ -5,7 +5,6 @@ import { FS } from '../../../lib';
 
 const DATA_FILE = 'impulse/db/pokerogue.json';
 
-// tags that identify legendary / mythical / special pokemon (excluded from normal starters)
 export const LEGENDARY_TAGS = new Set<string>([
 	'Sub-Legendary', 'Restricted Legendary', 'Mythical', 'Ultra Beast', 'Paradox',
 ]);
@@ -25,13 +24,13 @@ export interface ShopItem {
 	description: string;
 	cost: number;
 	heldItem?: string;
-	gachaType?: 'legendary' | 'pseudo' | 'midtier';
+	gachaType?: 'master' | 'ultra' | 'great';
 	gachaChance?: number;
 	isConsumable?: boolean; 
 }
 
 export const SHOP_ITEMS: Record<string, ShopItem> = {
-	rarecandy: { id: 'rarecandy', name: 'Rare Candy', description: 'Instantly grants +5 levels to one of your Pokemon.', cost: 100 },
+	rarecandy: { id: 'rarecandy', name: 'Rare Candy', description: 'Instantly grants +5 levels to one of your Pokemon. (Max Lv. 999)', cost: 100 },
 	luckycharm: { id: 'luckycharm', name: 'Lucky Charm', description: 'Doubles EXP and coins earned for the next 3 floors.', cost: 150 },
 	revive: { id: 'revive', name: 'Revive', description: 'Grants a second chance — if you lose your next battle you retry the same floor.', cost: 200 },
 	focussash: { id: 'focussash', name: 'Focus Sash', description: 'Survive any one-hit KO at 1 HP.', cost: 120, heldItem: 'focussash', isConsumable: true },
@@ -117,9 +116,9 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	rawstberry: { id: 'rawstberry', name: 'Rawst Berry', description: 'Cures burn once.', cost: 30, heldItem: 'rawstberry', isConsumable: true },
 	cheriberry: { id: 'cheriberry', name: 'Cheri Berry', description: 'Cures paralysis once.', cost: 30, heldItem: 'cheriberry', isConsumable: true },
 	pechaberry: { id: 'pechaberry', name: 'Pecha Berry', description: 'Cures poison once.', cost: 30, heldItem: 'pechaberry', isConsumable: true },
-	mastercapsule: { id: 'mastercapsule', name: 'Master Ball Capsule', description: '15% chance to get a Legendary/Mythical/UB/Paradox Pokemon; otherwise a powerful mid-tier Pokemon. Team must have room. Can decline the offer.', cost: 1500, gachaType: 'legendary', gachaChance: 0.15 },
-	ultracapsule: { id: 'ultracapsule', name: 'Ultra Ball Capsule', description: '20% chance to get a Pseudo-legendary Pokemon (BST ≥ 580); otherwise a common starter Pokemon. Team must have room. Can decline the offer.', cost: 800, gachaType: 'pseudo', gachaChance: 0.20 },
-	greatcapsule: { id: 'greatcapsule', name: 'Great Ball Capsule', description: '50% chance to get a mid-tier Pokemon (BST 480–579); otherwise a common starter Pokemon. Team must have room. Can decline the offer.', cost: 400, gachaType: 'midtier', gachaChance: 0.50 },
+	mastercapsule: { id: 'mastercapsule', name: 'Master Ball Capsule', description: '30% chance for a Tier 4 (Legendary/Mythical/UB/Paradox); 70% chance for Tier 3 (Elite).', cost: 1500, gachaType: 'master' },
+	ultracapsule: { id: 'ultracapsule', name: 'Ultra Ball Capsule', description: '75% chance for a Tier 3 (Elite) Pokemon; 25% chance for Tier 2 (Standard).', cost: 800, gachaType: 'ultra' },
+	greatcapsule: { id: 'greatcapsule', name: 'Great Ball Capsule', description: '70% chance for a Tier 2 (Standard) Pokemon; 30% chance for Tier 3 (Elite).', cost: 400, gachaType: 'great' },
 };
 
 export interface PokemonEntry {
@@ -185,98 +184,70 @@ export function deleteState(userid: string): void {
 	saveData();
 }
 
-let regularPokemonCache: string[] | null = null;
-let legendaryPokemonCache: string[] | null = null;
-let pseudoLegendaryCache: string[] | null = null;
-let midTierCache: string[] | null = null;
+// --- TIERING SYSTEM ---
 
-function getRegularPokemon(): string[] {
-	if (regularPokemonCache?.length) return regularPokemonCache;
+let t1Cache: string[] | null = null;
+let t2Cache: string[] | null = null;
+let t3Cache: string[] | null = null;
+let t4Cache: string[] | null = null;
+
+function getBST(species: Species): number {
+	const bs = species.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+	return bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+}
+
+export function getTier1Pokemon(): string[] {
+	if (t1Cache?.length) return t1Cache;
 	const all = Dex.species.all();
-	regularPokemonCache = all
-		.filter(s =>
-			s.exists &&
-			s.num > 0 &&
-			!s.isNonstandard &&
-			!s.prevo &&
-			s.baseSpecies === s.name &&
-			!s.tags.some(tag => LEGENDARY_TAGS.has(tag))
-		)
-		.map(s => toID(s.name));
-	return regularPokemonCache;
+	t1Cache = all.filter(s => {
+		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
+		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
+		// Tier 1: Babies/Starters (Can evolve OR very weak BST)
+		return s.tier === 'LC' || (s.evos && s.evos.length > 0 && getBST(s) < 350);
+	}).map(s => toID(s.name));
+	return t1Cache;
 }
 
-function getLegendaryPokemon(): string[] {
-	if (legendaryPokemonCache?.length) return legendaryPokemonCache;
+export function getTier2Pokemon(): string[] {
+	if (t2Cache?.length) return t2Cache;
 	const all = Dex.species.all();
-	legendaryPokemonCache = all
-		.filter(s =>
-			s.exists &&
-			s.num > 0 &&
-			!s.isNonstandard &&
-			!s.prevo &&
-			s.baseSpecies === s.name &&
-			s.tags.some(tag => LEGENDARY_TAGS.has(tag))
-		)
-		.map(s => toID(s.name));
-	return legendaryPokemonCache;
+	t2Cache = all.filter(s => {
+		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
+		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
+		// Tier 2: Fully evolved standard Pokémon
+		if (s.evos && s.evos.length > 0) return false;
+		const bst = getBST(s);
+		return bst >= 350 && bst <= 490;
+	}).map(s => toID(s.name));
+	return t2Cache;
 }
 
-export function getPseudoLegendaryPokemon(): string[] {
-	if (pseudoLegendaryCache?.length) return pseudoLegendaryCache;
+export function getTier3Pokemon(): string[] {
+	if (t3Cache?.length) return t3Cache;
 	const all = Dex.species.all();
-	pseudoLegendaryCache = all
-		.filter(s => {
-			if (!s.exists || s.num <= 0 || s.isNonstandard) return false;
-			if (s.baseSpecies !== s.name) return false; 
-			if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false; 
-			if (s.evos && s.evos.length > 0) return false; 
-			const bs = s.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-			return bst >= 580;
-		})
-		.map(s => toID(s.name));
-	return pseudoLegendaryCache;
+	t3Cache = all.filter(s => {
+		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
+		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
+		// Tier 3: Elite non-legendaries (High BST or explicitly strong tiers)
+		if (s.evos && s.evos.length > 0) return false;
+		const bst = getBST(s);
+		return (bst >= 491 && bst <= 579) || ['OU', 'UU', 'RU'].includes(s.tier);
+	}).map(s => toID(s.name));
+	return t3Cache;
 }
 
-export function getMidTierPokemon(): string[] {
-	if (midTierCache?.length) return midTierCache;
+export function getTier4Pokemon(): string[] {
+	if (t4Cache?.length) return t4Cache;
 	const all = Dex.species.all();
-	midTierCache = all
-		.filter(s => {
-			if (!s.exists || s.num <= 0 || s.isNonstandard) return false;
-			if (s.baseSpecies !== s.name) return false;
-			if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-			if (s.evos && s.evos.length > 0) return false; 
-			const bs = s.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-			return bst >= 480 && bst < 580;
-		})
-		.map(s => toID(s.name));
-	return midTierCache;
+	t4Cache = all.filter(s => {
+		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
+		// Tier 4: Legendaries, Mythicals, UBs, Paradoxes, or BST 580+
+		return s.tags.some(tag => LEGENDARY_TAGS.has(tag)) || getBST(s) >= 580;
+	}).map(s => toID(s.name));
+	return t4Cache;
 }
 
-export function rollGachaPokemon(
-	gachaType: 'legendary' | 'pseudo' | 'midtier',
-	gachaChance: number,
-	exclude: string[] = []
-): { species: string, isFeatured: boolean } {
-	const isFeatured = Math.random() < gachaChance;
-	if (isFeatured) {
-		const pool = gachaType === 'legendary' ? getLegendaryPokemon() :
-			gachaType === 'pseudo' ? getPseudoLegendaryPokemon() :
-			getMidTierPokemon();
-		const picks = pickRandom(pool, 1, exclude);
-		if (picks.length) return { species: picks[0], isFeatured: true };
-	}
-	const fallbackPool = gachaType === 'legendary' ? getMidTierPokemon() : getRegularPokemon();
-	const fallbackPicks = pickRandom(fallbackPool, 1, exclude);
-	const species = fallbackPicks.length ? fallbackPicks[0] :
-		(pickRandom(getRegularPokemon(), 1)[0] ?? 'bulbasaur');
-	return { species, isFeatured: false };
-}
-
-function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
+export function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
 	const filtered = pool.filter(id => !exclude.includes(id));
 	const shuffled = filtered.slice();
 	for (let i = shuffled.length - 1; i > 0; i--) {
@@ -286,26 +257,54 @@ function pickRandom(pool: string[], n: number, exclude: string[] = []): string[]
 	return shuffled.slice(0, n);
 }
 
-export function pickRandomPokemon(n: number, exclude: string[] = []): string[] {
-	return pickRandom(getRegularPokemon(), n, exclude);
+export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclude: string[] = []): { species: string, isFeatured: boolean } {
+	const rand = Math.random();
+	let pool: string[];
+	let isFeatured = false;
+
+	if (gachaType === 'master') {
+		if (rand <= 0.30) { pool = getTier4Pokemon(); isFeatured = true; } 
+		else { pool = getTier3Pokemon(); }
+	} else if (gachaType === 'ultra') {
+		if (rand <= 0.75) { pool = getTier3Pokemon(); isFeatured = true; } 
+		else { pool = getTier2Pokemon(); }
+	} else { // great
+		if (rand <= 0.70) { pool = getTier2Pokemon(); isFeatured = true; } 
+		else { pool = getTier3Pokemon(); }
+	}
+
+	const picks = pickRandom(pool, 1, exclude);
+	const species = picks.length ? picks[0] : (pickRandom(getTier1Pokemon(), 1)[0] ?? 'bulbasaur');
+	return { species, isFeatured };
 }
 
 export function pickStarterOptions(): string[] {
-	return pickRandomPokemon(3);
+	// Starters are exclusively Tier 1 (Babies)
+	return pickRandom(getTier1Pokemon(), 3);
 }
 
 export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
 	const existing = currentTeam.map(m => m.species);
-	const legendaryChance = floor >= 40 ? 0.25 : floor >= 20 ? 0.12 : 0;
+	let poolA: string[];
+	let poolB: string[];
+	let chanceA: number;
 
-	if (legendaryChance > 0 && Math.random() < legendaryChance) {
-		const legendaries = pickRandom(getLegendaryPokemon(), 1, existing);
-		if (legendaries.length) {
-			const regular = pickRandomPokemon(2, [...existing, ...legendaries]);
-			return pickRandom([...regular, ...legendaries], 3);
-		}
+	if (floor < 20) {
+		poolA = getTier1Pokemon(); poolB = getTier2Pokemon(); chanceA = 0.7;
+	} else if (floor < 35) {
+		poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.6;
+	} else {
+		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
 	}
-	return pickRandomPokemon(3, existing);
+
+	const options: string[] = [];
+	for (let i = 0; i < 3; i++) {
+		const activePool = Math.random() < chanceA ? poolA : poolB;
+		const pick = pickRandom(activePool, 1, [...existing, ...options]);
+		if (pick.length) options.push(pick[0]);
+	}
+	
+	return options.length === 3 ? options : pickRandom([...getTier1Pokemon(), ...getTier2Pokemon()], 3, existing);
 }
 
 export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
@@ -331,6 +330,7 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 }
 
 export function expForLevel(level: number): number {
+	// Formula naturally scales to 999 without breaking
 	return 15 * level * (level - 1);
 }
 
@@ -345,7 +345,8 @@ export function floorCoinReward(floor: number): number {
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
-	while (mon.level < 100 && mon.exp >= expForLevel(mon.level + 1)) {
+	// Level Cap removed! Now naturally scales up to 999
+	while (mon.level < 999 && mon.exp >= expForLevel(mon.level + 1)) {
 		mon.level++;
 	}
 	let evolved = false;
