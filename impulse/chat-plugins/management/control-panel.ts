@@ -82,9 +82,9 @@ function renderHome(user: User): string {
 			'<div style="flex: 1;">' +
 				'<strong>' + c.label + '</strong>' +
 			'</div>' +
-			'<button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
+			'<div style="float: left;"><button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
 				'Open →' +
-			'</button>' +
+			'</button></div>' +
 		'</div>'
 	).join('');
 
