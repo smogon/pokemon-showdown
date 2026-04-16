@@ -1,5 +1,5 @@
 // pokerogue plugin — main file: html rendering, commands, page handlers, battle hook.
-// Refactored for a true single-page application (SPA) architecture.
+// Refactored for a true single-page application (SPA) architecture with robust item sprites.
 
 import { Utils } from '../../../lib';
 import { Table } from '../../utils';
@@ -92,12 +92,24 @@ function getSpriteWithBall(species: string, size = 80): string {
 		`</div>`;
 }
 
+/**
+ * RESTORED: Robust Item Sprite Helper
+ * Includes original logic to show letter fallback if image fail to load.
+ */
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
 	const sid = SMOGON_ITEM_SIDS[id];
 	const src = ITEM_SPRITE_OVERRIDES[id] ?? (sid ? `${SMOGON_SPRITES_ITEM_BASE}${sid}.png` : null);
-	const imgHtml = src ? `<img src="${src}" width="40" height="40" alt="" style="image-rendering:pixelated" onerror="this.style.display='none'" />` : '';
-	return imgHtml || `<span class="pr-item-fallback">${itemId.charAt(0).toUpperCase()}</span>`;
+	const letter = Utils.escapeHTML((itemId.charAt(0) || '?').toUpperCase());
+	
+	const imgHtml = src
+		? `<img src="${src}" width="40" height="40" alt="" ` +
+			`style="image-rendering:pixelated;display:block;flex-shrink:0" ` +
+			`onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='flex'" />`
+		: '';
+	
+	return imgHtml +
+		`<span class="pr-item-fallback" style="${src ? 'display:none;' : ''}">${letter}</span>`;
 }
 
 // --- UI Helpers ---
@@ -125,9 +137,8 @@ function renderTypeBadge(types: string[], large = false): string {
 // --- REFACTORED CORE LOGIC ---
 
 /**
- * FIXED: Robust Page Refresh.
- * Instead of simple |refresh|, this forces a re-join of the base 'view-pokerogue' window.
- * This ensures the client receives the updated SPA HTML whenever state changes.
+ * FIXED: Robust Page Refresh
+ * Re-joins the base 'view-pokerogue' window to update current tab HTML.
  */
 function refreshGamePage(user: User): void {
 	for (const conn of user.connections) {
@@ -138,9 +149,8 @@ function refreshGamePage(user: User): void {
 }
 
 /**
- * REWRITTEN: Single Page Renderer.
- * Unified rendering function that checks state.view and state.gameOver 
- * to provide a seamless tab-free experience.
+ * REWRITTEN: Single Page Renderer
+ * Unified rendering function with Game Over priority.
  */
 function renderGamePage(state: PokeRogueState): string {
 	const view = (state as any).view || 'main';
@@ -165,11 +175,35 @@ function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// --- View Routing ---
+	// --- Leaderboard View (Restored Team Sprites) ---
 	if (view === 'top') {
-		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
-		const rows = entries.map(([userid, s], i) => [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, '—']);
-		return buf + Table('Leaderboard', ['#', 'Player', 'Best Floor', 'Team'], rows) + `</div>`;
+		const entries = Object.entries(savedData)
+			.filter(([, s]) => (s.highestFloor ?? 0) > 0)
+			.sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0))
+			.slice(0, 100);
+
+		if (!entries.length) return buf + '<em>No records yet!</em></div>';
+
+		const rows = entries.map(([userid, s], i) => {
+			const rank = i + 1;
+			const display = s.displayName || userid;
+			const teamStr = (s.team ?? [])
+				.map(m => {
+					const spr = getSprite(m.species, 30);
+					const sname = Dex.species.get(toID(m.species)).name || m.species;
+					return `${spr}<small>${Utils.escapeHTML(sname)}</small>`;
+				})
+				.join(' ') || '—';
+
+			return [
+				rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `${rank}.`,
+				Impulse.nameColor(display, true, true),
+				`Floor ${s.highestFloor}`,
+				teamStr
+			];
+		});
+
+		return buf + Table('Leaderboard', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
 	}
 
 	if (state.notification) {
@@ -257,6 +291,8 @@ export const commands: Chat.ChatCommands = {
 		battle(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
+			if (!state.team.length) return this.errorReply("No Pokémon in your team.");
+			
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);
@@ -344,15 +380,14 @@ export const handlers: Chat.Handlers = {
 			state.floor++;
 			state.notification = `Floor Cleared!`;
 		} else {
-			// FIXED: Reset run stats upon loss so dashboard doesn't show stale info
 			state.gameOver = true;
 			state.floor = 1;
-			state.team = [];
 			state.coins = 0;
 			state.streaksWon = 0;
 			delete state.shopInventory;
 			delete state.notification;
 			delete (state as any).view;
+			state.team = []; 
 		}
 		setState(match.userId, state);
 		if (humanUser) refreshGamePage(humanUser);
