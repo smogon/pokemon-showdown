@@ -65,7 +65,6 @@ function renderHome(user: User): string {
 	const cards: Array<{ label: string; desc: string; view: string; emoji: string }> = [
 		{
 			label: 'User Icons',
-			view: 'icons',
 		},
 	];
 
@@ -79,10 +78,7 @@ function renderHome(user: User): string {
 			'align-items: center;' +
 			'gap: 14px;' +
 		'">' +
-			'<div style="flex: 1;">' +
-				'<strong>' + c.label + ':</strong>' +
-			'</div>' +
-			'          <button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
+			'<button class="button" name="send" value="/controlpanel view ' + c.label + '">' +
 				'Open →' +
 			'</button>' +
 		'</div>'
