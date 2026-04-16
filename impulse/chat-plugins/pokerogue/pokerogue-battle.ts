@@ -210,19 +210,9 @@ function buildBotTeam(state: PokeRogueState): string {
 	let level = Math.max(botLevel(floor), playerMaxLevel);
 
 	const floorMod = floor % 10;
-	if (floorMod === 8) {
-		level += 1;
-	} else if (floorMod === 9) {
-		level += 2;
-	} else if (floorMod === 0) { 
-		// Scale the Boss level advantage based on how deep into the run they are
-		if (floor === 10) {
-			level += Math.floor(Math.random() * 2) + 1; // +1 to +2 levels
-		} else if (floor === 20) {
-			level += Math.floor(Math.random() * 3) + 2; // +2 to +4 levels
-		} else {
-			level += Math.floor(Math.random() * 4) + 2; // +2 to +5 levels
-		}
+	if (floorMod === 0) { 
+		// Boss floors grant +1 to +3 levels over the player
+		level += Math.floor(Math.random() * 3) + 1; 
 	}
 	
 	level = Math.min(999, level); 

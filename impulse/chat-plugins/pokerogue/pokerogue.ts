@@ -347,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 				team: [], 
 				pendingChoice: pickStarterOptions(), 
 				pendingChoiceType: 'starter', 
-				coins: 0, 
+				coins: 150, 
 				streaksWon: 0,
 				highestFloor,
 				displayName,
@@ -923,14 +923,9 @@ export const handlers: Chat.Handlers = {
 			let difficultyExpMult = 1.0;
 			let difficultyCoinMult = 1.0;
 
-			if (floorMod === 8) {
-				difficultyExpMult = 1.2; 
-				difficultyCoinMult = 1.2;
-			} else if (floorMod === 9) {
-				difficultyExpMult = 1.3; 
-				difficultyCoinMult = 1.3;
-			} else if (floorMod === 0) {
-				difficultyExpMult = 1.6; 
+			// Boss floors grant a 1.5x reward bonus
+			if (floorMod === 0) {
+				difficultyExpMult = 1.5; 
 				difficultyCoinMult = 1.5;
 			}
 

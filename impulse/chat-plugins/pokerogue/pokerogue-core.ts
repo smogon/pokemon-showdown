@@ -1,450 +1,1031 @@
-// pokerogue-core.ts — types, constants, data persistence, and game helpers.
-// imported by pokerogue.ts and pokerogue-battle.ts. no chat plugin hooks.
+import { Utils } from '../../../lib';
+import { Table } from '../../utils';
+import {
+	SHOP_ITEMS, LEGENDARY_TAGS,
+	type PokemonEntry, type PokeRogueState,
+	getState, setState, deleteState, savedData,
+	pickStarterOptions, pickNewPokemonOptions,
+	expForLevel, floorExpReward, floorCoinReward,
+	applyExpAndLevelUp, getLevelUpEvo,
+	getLevelUpMoves, rollShopInventory, rollGachaPokemon,
+	getMovesLearnedBetween, botLevel,
+} from './pokerogue-core';
+import {
+	activeMatches,
+	startBattle, destroyBotUser,
+} from './pokerogue-battle';
 
-import { FS } from '../../../lib';
+const PAGE_REFRESH_SECONDS = 20;
 
-const DATA_FILE = 'impulse/db/pokerogue.json';
-
-export const LEGENDARY_TAGS = new Set<string>([
-	'Sub-Legendary', 'Restricted Legendary', 'Mythical', 'Ultra Beast', 'Paradox',
-]);
-
-const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
-	trade: 36,
-	useItem: 36,
-	levelFriendship: 20,
-	levelMove: 30,
-	levelExtra: 20,
-	levelHold: 30,
-};
-
-export interface ShopItem {
-	id: string;
-	name: string;
-	description: string;
-	cost: number;
-	heldItem?: string;
-	gachaType?: 'master' | 'ultra' | 'great';
-	gachaChance?: number;
-	isConsumable?: boolean; 
-}
-
-export const SHOP_ITEMS: Record<string, ShopItem> = {
-	rarecandy: { id: 'rarecandy', name: 'Rare Candy', description: 'Instantly grants +5 levels to one of your Pokemon. (Max Lv. 999)', cost: 100 },
-	luckycharm: { id: 'luckycharm', name: 'Lucky Charm', description: 'Doubles EXP and coins earned for the next 3 floors.', cost: 150 },
-	revive: { id: 'revive', name: 'Revive', description: 'Grants a second chance — if you lose your next battle you retry the same floor.', cost: 200 },
-	focussash: { id: 'focussash', name: 'Focus Sash', description: 'Survive any one-hit KO at 1 HP.', cost: 120, heldItem: 'focussash', isConsumable: true },
-	leftovers: { id: 'leftovers', name: 'Leftovers', description: 'Gradually restores HP each turn.', cost: 100, heldItem: 'leftovers' },
-	eviolite: { id: 'eviolite', name: 'Eviolite', description: 'Boosts Defense and Sp. Def by 50% for unevolved Pokemon.', cost: 100, heldItem: 'eviolite' },
-	rockyhelmet: { id: 'rockyhelmet', name: 'Rocky Helmet', description: 'Damages the attacker 1/6 max HP when hit by a contact move.', cost: 80, heldItem: 'rockyhelmet' },
-	heavydutyboots: { id: 'heavydutyboots', name: 'Heavy-Duty Boots', description: 'Prevents all entry hazard damage.', cost: 100, heldItem: 'heavydutyboots' },
-	airballoon: { id: 'airballoon', name: 'Air Balloon', description: 'Makes the holder immune to Ground-type moves until hit.', cost: 60, heldItem: 'airballoon', isConsumable: true },
-	blacksludge: { id: 'blacksludge', name: 'Black Sludge', description: 'Restores HP for Poison-types; damages all other types.', cost: 80, heldItem: 'blacksludge' },
-	choiceband: { id: 'choiceband', name: 'Choice Band', description: 'Boosts Attack by 50%, but locks into one move.', cost: 80, heldItem: 'choiceband' },
-	choicespecs: { id: 'choicespecs', name: 'Choice Specs', description: 'Boosts Sp. Atk by 50%, but locks into one move.', cost: 80, heldItem: 'choicespecs' },
-	choicescarf: { id: 'choicescarf', name: 'Choice Scarf', description: 'Boosts Speed by 50%, but locks into one move.', cost: 80, heldItem: 'choicescarf' },
-	lifeorb: { id: 'lifeorb', name: 'Life Orb', description: 'Boosts all moves by 30% at the cost of 10% HP per hit.', cost: 120, heldItem: 'lifeorb' },
-	expertbelt: { id: 'expertbelt', name: 'Expert Belt', description: 'Boosts super-effective moves by 20% with no drawback.', cost: 80, heldItem: 'expertbelt' },
-	wiseglasses: { id: 'wiseglasses', name: 'Wise Glasses', description: 'Boosts Sp. Atk by 10% without any downside.', cost: 60, heldItem: 'wiseglasses' },
-	muscleband: { id: 'muscleband', name: 'Muscle Band', description: 'Boosts Attack by 10% without any downside.', cost: 60, heldItem: 'muscleband' },
-	assaultvest: { id: 'assaultvest', name: 'Assault Vest', description: 'Boosts Sp. Def by 50%; prevents status moves.', cost: 100, heldItem: 'assaultvest' },
-	clearamulet: { id: 'clearamulet', name: 'Clear Amulet', description: 'Prevents the holder\'s stats from being lowered by opponents.', cost: 80, heldItem: 'clearamulet' },
-	boosterenergy: { id: 'boosterenergy', name: 'Booster Energy', description: 'Activates the highest stat of a Paradox Pokemon.', cost: 120, heldItem: 'boosterenergy', isConsumable: true },
-	protectivepads: { id: 'protectivepads', name: 'Protective Pads', description: 'Prevents the effects of contact moves from activating.', cost: 70, heldItem: 'protectivepads' },
-	safetygoggles: { id: 'safetygoggles', name: 'Safety Goggles', description: 'Protects from weather damage and powder/spore moves.', cost: 70, heldItem: 'safetygoggles' },
-	sitrusberry: { id: 'sitrusberry', name: 'Sitrus Berry', description: 'Restores 25% HP when below 50% HP.', cost: 40, heldItem: 'sitrusberry', isConsumable: true },
-	aguavberry: { id: 'aguavberry', name: 'Aguav Berry', description: 'Restores 1/3 HP when below 25% HP (may cause confusion).', cost: 30, heldItem: 'aguavberry', isConsumable: true },
-	flameorb: { id: 'flameorb', name: 'Flame Orb', description: 'Burns the holder at end of turn (great with Guts/Marvel Scale).', cost: 60, heldItem: 'flameorb' },
-	toxicorb: { id: 'toxicorb', name: 'Toxic Orb', description: 'Badly poisons the holder at end of turn (great with Poison Heal).', cost: 60, heldItem: 'toxicorb' },
-	whiteherb: { id: 'whiteherb', name: 'White Herb', description: 'Restores any lowered stats once, then is consumed.', cost: 50, heldItem: 'whiteherb', isConsumable: true },
-	powerherb: { id: 'powerherb', name: 'Power Herb', description: 'Allows a two-turn move to fire immediately once, then is consumed.', cost: 40, heldItem: 'powerherb', isConsumable: true },
-	throatspray: { id: 'throatspray', name: 'Throat Spray', description: 'Boosts Sp. Atk after using a sound-based move once.', cost: 60, heldItem: 'throatspray', isConsumable: true },
-	blunderpolicy: { id: 'blunderpolicy', name: 'Blunder Policy', description: 'Sharply boosts Speed when a move misses.', cost: 80, heldItem: 'blunderpolicy', isConsumable: true },
-	shedshell: { id: 'shedshell', name: 'Shed Shell', description: 'Allows the holder to switch out regardless of trapping moves.', cost: 50, heldItem: 'shedshell' },
-	silkscarf: { id: 'silkscarf', name: 'Silk Scarf', description: 'Boosts Normal-type moves by 20%.', cost: 50, heldItem: 'silkscarf' },
-	blackbelt: { id: 'blackbelt', name: 'Black Belt', description: 'Boosts Fighting-type moves by 20%.', cost: 50, heldItem: 'blackbelt' },
-	magnet: { id: 'magnet', name: 'Magnet', description: 'Boosts Electric-type moves by 20%.', cost: 50, heldItem: 'magnet' },
-	mysticwater: { id: 'mysticwater', name: 'Mystic Water', description: 'Boosts Water-type moves by 20%.', cost: 50, heldItem: 'mysticwater' },
-	miracleseed: { id: 'miracleseed', name: 'Miracle Seed', description: 'Boosts Grass-type moves by 20%.', cost: 50, heldItem: 'miracleseed' },
-	charcoal: { id: 'charcoal', name: 'Charcoal', description: 'Boosts Fire-type moves by 20%.', cost: 50, heldItem: 'charcoal' },
-	nevermeltice: { id: 'nevermeltice', name: 'NeverMeltIce', description: 'Boosts Ice-type moves by 20%.', cost: 50, heldItem: 'nevermeltice' },
-	softsand: { id: 'softsand', name: 'Soft Sand', description: 'Boosts Ground-type moves by 20%.', cost: 50, heldItem: 'softsand' },
-	sharpbeak: { id: 'sharpbeak', name: 'Sharp Beak', description: 'Boosts Flying-type moves by 20%.', cost: 50, heldItem: 'sharpbeak' },
-	poisonbarb: { id: 'poisonbarb', name: 'Poison Barb', description: 'Boosts Poison-type moves by 20%.', cost: 50, heldItem: 'poisonbarb' },
-	twistedspoon: { id: 'twistedspoon', name: 'Twisted Spoon', description: 'Boosts Psychic-type moves by 20%.', cost: 50, heldItem: 'twistedspoon' },
-	silverpowder: { id: 'silverpowder', name: 'Silver Powder', description: 'Boosts Bug-type moves by 20%.', cost: 50, heldItem: 'silverpowder' },
-	hardstone: { id: 'hardstone', name: 'Hard Stone', description: 'Boosts Rock-type moves by 20%.', cost: 50, heldItem: 'hardstone' },
-	spelltag: { id: 'spelltag', name: 'Spell Tag', description: 'Boosts Ghost-type moves by 20%.', cost: 50, heldItem: 'spelltag' },
-	dragonfang: { id: 'dragonfang', name: 'Dragon Fang', description: 'Boosts Dragon-type moves by 20%.', cost: 50, heldItem: 'dragonfang' },
-	blackglasses: { id: 'blackglasses', name: 'Black Glasses', description: 'Boosts Dark-type moves by 20%.', cost: 50, heldItem: 'blackglasses' },
-	metalcoat: { id: 'metalcoat', name: 'Metal Coat', description: 'Boosts Steel-type moves by 20%.', cost: 50, heldItem: 'metalcoat' },
-	pixieplate: { id: 'pixieplate', name: 'Pixie Plate', description: 'Boosts Fairy-type moves by 20%.', cost: 50, heldItem: 'pixieplate' },
-	scopelens: { id: 'scopelens', name: 'Scope Lens', description: 'Raises the holder\'s critical-hit ratio by one stage.', cost: 80, heldItem: 'scopelens' },
-	widelens: { id: 'widelens', name: 'Wide Lens', description: 'Boosts all move accuracy by 10%.', cost: 60, heldItem: 'widelens' },
-	brightpowder: { id: 'brightpowder', name: 'Bright Powder', description: 'Lowers the opponent\'s accuracy by 10%.', cost: 60, heldItem: 'brightpowder' },
-	laxincense: { id: 'laxincense', name: 'Lax Incense', description: 'Lowers the opponent\'s accuracy by 10%.', cost: 40, heldItem: 'laxincense' },
-	quickclaw: { id: 'quickclaw', name: 'Quick Claw', description: '20% chance to move first regardless of Speed.', cost: 60, heldItem: 'quickclaw' },
-	weaknesspolicy: { id: 'weaknesspolicy', name: 'Weakness Policy', description: 'Sharply raises Atk and Sp. Atk when hit by a super-effective move.', cost: 150, heldItem: 'weaknesspolicy', isConsumable: true },
-	covertcloak: { id: 'covertcloak', name: 'Covert Cloak', description: 'Protects the holder from secondary effects of moves.', cost: 80, heldItem: 'covertcloak' },
-	mirrorherb: { id: 'mirrorherb', name: 'Mirror Herb', description: 'Copies the opponent\'s stat boosts once, then is consumed.', cost: 100, heldItem: 'mirrorherb', isConsumable: true },
-	loadeddice: { id: 'loadeddice', name: 'Loaded Dice', description: 'Makes most 2–5-hit moves strike 4–5 times instead of 2–5.', cost: 120, heldItem: 'loadeddice' },
-	metronome: { id: 'metronome', name: 'Metronome', description: 'Boosts a move used consecutively — ~20% per use up to 2× power.', cost: 80, heldItem: 'metronome' },
-	ejectbutton: { id: 'ejectbutton', name: 'Eject Button', description: 'Immediately switches the holder out when it is hit by a move.', cost: 70, heldItem: 'ejectbutton', isConsumable: true },
-	ejectpack: { id: 'ejectpack', name: 'Eject Pack', description: 'Switches out the holder when any of its stats are lowered.', cost: 80, heldItem: 'ejectpack', isConsumable: true },
-	redcard: { id: 'redcard', name: 'Red Card', description: 'Forces the attacker to switch out when the holder is hit by a move.', cost: 70, heldItem: 'redcard', isConsumable: true },
-	bigroot: { id: 'bigroot', name: 'Big Root', description: 'Draining moves restore 30% more HP.', cost: 60, heldItem: 'bigroot' },
-	damprock: { id: 'damprock', name: 'Damp Rock', description: 'Rain Dance lasts 8 turns instead of 5.', cost: 60, heldItem: 'damprock' },
-	heatrock: { id: 'heatrock', name: 'Heat Rock', description: 'Sunny Day lasts 8 turns instead of 5.', cost: 60, heldItem: 'heatrock' },
-	icyrock: { id: 'icyrock', name: 'Icy Rock', description: 'Hail lasts 8 turns instead of 5.', cost: 60, heldItem: 'icyrock' },
-	smoothrock: { id: 'smoothrock', name: 'Smooth Rock', description: 'Sandstorm lasts 8 turns instead of 5.', cost: 60, heldItem: 'smoothrock' },
-	terrainextender: { id: 'terrainextender', name: 'Terrain Extender', description: 'Extends the duration of terrain by 3 extra turns.', cost: 70, heldItem: 'terrainextender' },
-	utilityumbrella: { id: 'utilityumbrella', name: 'Utility Umbrella', description: 'Negates all weather effects on the holder.', cost: 80, heldItem: 'utilityumbrella' },
-	roomservice: { id: 'roomservice', name: 'Room Service', description: 'Lowers Speed when Trick Room is set up.', cost: 50, heldItem: 'roomservice', isConsumable: true },
-	luminousmoss: { id: 'luminousmoss', name: 'Luminous Moss', description: 'Raises Sp. Def sharply when hit by a Water-type move.', cost: 50, heldItem: 'luminousmoss', isConsumable: true },
-	snowball: { id: 'snowball', name: 'Snowball', description: 'Raises Attack sharply when hit by an Ice-type move.', cost: 50, heldItem: 'snowball', isConsumable: true },
-	absorbbulb: { id: 'absorbbulb', name: 'Absorb Bulb', description: 'Raises Sp. Atk when hit by a Water-type move.', cost: 50, heldItem: 'absorbbulb', isConsumable: true },
-	cellbattery: { id: 'cellbattery', name: 'Cell Battery', description: 'Raises Attack when hit by an Electric-type move.', cost: 50, heldItem: 'cellbattery', isConsumable: true },
-	salacberry: { id: 'salacberry', name: 'Salac Berry', description: 'Raises Speed sharply when HP falls to 25%.', cost: 60, heldItem: 'salacberry', isConsumable: true },
-	petayaberry: { id: 'petayaberry', name: 'Petaya Berry', description: 'Raises Sp. Atk sharply when HP falls to 25%.', cost: 60, heldItem: 'petayaberry', isConsumable: true },
-	ganlonberry: { id: 'ganlonberry', name: 'Ganlon Berry', description: 'Raises Defense sharply when HP falls to 25%.', cost: 60, heldItem: 'ganlonberry', isConsumable: true },
-	liechiberry: { id: 'liechiberry', name: 'Liechi Berry', description: 'Raises Attack sharply when HP falls to 25%.', cost: 60, heldItem: 'liechiberry', isConsumable: true },
-	apicotberry: { id: 'apicotberry', name: 'Apicot Berry', description: 'Raises Sp. Def sharply when HP falls to 25%.', cost: 60, heldItem: 'apicotberry', isConsumable: true },
-	custapberry: { id: 'custapberry', name: 'Custap Berry', description: 'Moves first once when HP falls to 25%, then is consumed.', cost: 70, heldItem: 'custapberry', isConsumable: true },
-	lansatberry: { id: 'lansatberry', name: 'Lansat Berry', description: 'Raises critical-hit ratio sharply when HP falls to 25%.', cost: 60, heldItem: 'lansatberry', isConsumable: true },
-	lumberry: { id: 'lumberry', name: 'Lum Berry', description: 'Cures any status condition once.', cost: 50, heldItem: 'lumberry', isConsumable: true },
-	chestoberry: { id: 'chestoberry', name: 'Chesto Berry', description: 'Cures sleep once.', cost: 30, heldItem: 'chestoberry', isConsumable: true },
-	rawstberry: { id: 'rawstberry', name: 'Rawst Berry', description: 'Cures burn once.', cost: 30, heldItem: 'rawstberry', isConsumable: true },
-	cheriberry: { id: 'cheriberry', name: 'Cheri Berry', description: 'Cures paralysis once.', cost: 30, heldItem: 'cheriberry', isConsumable: true },
-	pechaberry: { id: 'pechaberry', name: 'Pecha Berry', description: 'Cures poison once.', cost: 30, heldItem: 'pechaberry', isConsumable: true },
-	mastercapsule: { id: 'mastercapsule', name: 'Master Ball Capsule', description: '30% chance for a Tier 4 (Legendary/Mythical/UB/Paradox); 70% chance for Tier 3 (Elite).', cost: 1500, gachaType: 'master' },
-	ultracapsule: { id: 'ultracapsule', name: 'Ultra Ball Capsule', description: '75% chance for a Tier 3 (Elite) Pokemon; 25% chance for Tier 2 (Standard).', cost: 800, gachaType: 'ultra' },
-	greatcapsule: { id: 'greatcapsule', name: 'Great Ball Capsule', description: '70% chance for a Tier 2 (Standard) Pokemon; 30% chance for Tier 3 (Elite).', cost: 400, gachaType: 'great' },
-};
-
-export interface PokemonEntry {
-	species: string;
-	level: number;
-	exp: number;
-	heldItem?: string;
-	moves: string[];
-}
-
-export interface PokeRogueState {
-	floor: number;
-	team: PokemonEntry[];
-	pendingChoice?: string[];
-	pendingChoiceType?: 'starter' | 'add';
-	battleRoomId?: string;
-	coins?: number;
-	items?: Record<string, number>;
-	doubleExpFloors?: number;
-	hasRevive?: boolean;
-	highestFloor?: number;
-	displayName?: string;
-	streaksWon?: number;
-	shopInventory?: string[];
-	notification?: string;
-	gameOver?: boolean;
-	lastRunFloor?: number;
-	lastRunStreaks?: number;
-	pendingGachaOffer?: { species: string, sourceItemId: string, isFeatured: boolean };
-	pendingMoves?: { pokemonIndex: number; move: string; speciesName: string }[];
-	pendingSwap?: PokemonEntry;
-}
-
-type SavedData = Record<string, PokeRogueState>;
-export let savedData: SavedData = {};
-
-function saveData(): void {
-	FS(DATA_FILE).writeUpdate(() => JSON.stringify(savedData), { throttle: 3000 });
-}
-
-async function loadData(): Promise<void> {
-	try {
-		const raw = await FS(DATA_FILE).readIfExists();
-		if (raw) savedData = JSON.parse(raw);
-	} catch {
-		savedData = {};
-	}
-}
-
-void loadData();
-
-export function getState(userid: string): PokeRogueState | null {
-	return savedData[userid] ?? null;
-}
-
-export function setState(userid: string, state: PokeRogueState): void {
-	savedData[userid] = state;
-	saveData();
-}
-
-export function deleteState(userid: string): void {
-	delete savedData[userid];
-	saveData();
-}
-
-// --- TIERING SYSTEM ---
-
-let t1Cache: string[] | null = null;
-let t2Cache: string[] | null = null;
-let t3Cache: string[] | null = null;
-let t4Cache: string[] | null = null;
-
-function getBST(species: Species): number {
-	const bs = species.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-	return bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-}
-
-export function getTier1Pokemon(): string[] {
-	if (t1Cache?.length) return t1Cache;
-	const all = Dex.species.all();
-	t1Cache = all.filter(s => {
-		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
-		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		return s.tier === 'LC' || (s.evos && s.evos.length > 0 && getBST(s) < 350);
-	}).map(s => toID(s.name));
-	return t1Cache;
-}
-
-export function getTier2Pokemon(): string[] {
-	if (t2Cache?.length) return t2Cache;
-	const all = Dex.species.all();
-	t2Cache = all.filter(s => {
-		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
-		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		if (s.evos && s.evos.length > 0) return false;
-		const bst = getBST(s);
-		return bst >= 350 && bst <= 490;
-	}).map(s => toID(s.name));
-	return t2Cache;
-}
-
-export function getTier3Pokemon(): string[] {
-	if (t3Cache?.length) return t3Cache;
-	const all = Dex.species.all();
-	t3Cache = all.filter(s => {
-		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
-		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		if (s.evos && s.evos.length > 0) return false;
-		const bst = getBST(s);
-		return (bst >= 491 && bst <= 579) || ['OU', 'UU', 'RU'].includes(s.tier);
-	}).map(s => toID(s.name));
-	return t3Cache;
-}
-
-export function getTier4Pokemon(): string[] {
-	if (t4Cache?.length) return t4Cache;
-	const all = Dex.species.all();
-	t4Cache = all.filter(s => {
-		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
-		return s.tags.some(tag => LEGENDARY_TAGS.has(tag)) || getBST(s) >= 580;
-	}).map(s => toID(s.name));
-	return t4Cache;
-}
-
-export function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
-	const filtered = pool.filter(id => !exclude.includes(id));
-	const shuffled = filtered.slice();
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled.slice(0, n);
-}
-
-export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclude: string[] = []): { species: string, isFeatured: boolean } {
-	const rand = Math.random();
-	let pool: string[];
-	let isFeatured = false;
-
-	if (gachaType === 'master') {
-		if (rand <= 0.30) { pool = getTier4Pokemon(); isFeatured = true; } 
-		else { pool = getTier3Pokemon(); }
-	} else if (gachaType === 'ultra') {
-		if (rand <= 0.75) { pool = getTier3Pokemon(); isFeatured = true; } 
-		else { pool = getTier2Pokemon(); }
-	} else { // great
-		if (rand <= 0.70) { pool = getTier2Pokemon(); isFeatured = true; } 
-		else { pool = getTier3Pokemon(); }
-	}
-
-	const picks = pickRandom(pool, 1, exclude);
-	const species = picks.length ? picks[0] : (pickRandom(getTier1Pokemon(), 1)[0] ?? 'bulbasaur');
-	return { species, isFeatured };
-}
-
-export function pickStarterOptions(): string[] {
-	return pickRandom(getTier1Pokemon(), 3);
-}
-
-export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
-	const existing = currentTeam.map(m => m.species);
-	let poolA: string[];
-	let poolB: string[];
-	let chanceA: number;
-
-	if (floor < 20) {
-		poolA = getTier1Pokemon(); poolB = getTier2Pokemon(); chanceA = 0.7;
-	} else if (floor < 35) {
-		poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.6;
+function getSprite(species: string, size = 80): string {
+	const id = toID(species);
+	const sp = Dex.species.get(id);
+	const name = sp.name || species;
+	const altName = Utils.escapeHTML(name);
+	let src: string;
+	let fallback: string | null = null;
+	if (sp.exists && sp.gen >= 8) {
+		src = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
+		fallback = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+	} else if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
+		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+		fallback = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else {
-		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
+		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	}
-
-	const options: string[] = [];
-	for (let i = 0; i < 3; i++) {
-		const activePool = Math.random() < chanceA ? poolA : poolB;
-		const pick = pickRandom(activePool, 1, [...existing, ...options]);
-		if (pick.length) options.push(pick[0]);
-	}
-	
-	return options.length === 3 ? options : pickRandom([...getTier1Pokemon(), ...getTier2Pokemon()], 3, existing);
+	const onerror = fallback ? ` onerror="if(this.src!=='${fallback}')this.src='${fallback}'"` : '';
+	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
-export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
-	const species = Dex.species.get(toID(speciesId));
-	if (!species.exists || !species.evos.length) return null;
+function getItemSprite(itemId: string): string {
+	const id = toID(itemId);
+	const src = Utils.escapeHTML(`https://play.pokemonshowdown.com/sprites/itemicons/${id}.png`);
+	return `<div class="pr-shop-item-icon"><img src="${src}" alt="" onerror="this.style.display='none'" /></div>`;
+}
 
-	const validEvos: { evoTo: string, evoLevel: number }[] = [];
+function getPokeballInfo(speciesId: string): { src: string, alt: string } {
+	const sp = Dex.species.get(toID(speciesId));
+	const SMOGON_SPRITES_ITEM_BASE = 'https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/';
+	if (sp.tags?.some(tag => LEGENDARY_TAGS.has(tag))) {
+		return { src: `${SMOGON_SPRITES_ITEM_BASE}i1.png`, alt: 'Master Ball' };
+	}
+	if (sp.exists) {
+		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		if (bst >= 580) return { src: `${SMOGON_SPRITES_ITEM_BASE}i2.png`, alt: 'Ultra Ball' };
+		if (bst >= 480) return { src: `${SMOGON_SPRITES_ITEM_BASE}i3.png`, alt: 'Great Ball' };
+	}
+	return { src: `${SMOGON_SPRITES_ITEM_BASE}i4.png`, alt: 'Poké Ball' };
+}
 
-	for (const evoName of species.evos) {
-		const evo = Dex.species.get(toID(evoName));
-		if (evo.evoType === 'other') continue;
+function getSpriteWithBall(species: string, size = 80): string {
+	const ball = getPokeballInfo(species);
+	const spriteHtml = getSprite(species, size);
+	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px">` +
+		spriteHtml +
+		`<img src="${ball.src}" alt="${Utils.escapeHTML(ball.alt)}" class="pr-pokeball-overlay" />` +
+		`</div>`;
+}
 
-		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 36;
-		const evoLevel = evo.evoLevel ?? fallback;
+function renderExpBar(mon: PokemonEntry): string {
+	let pct = 100;
+	if (mon.level < 999) {
+		const expAtCurrent = expForLevel(mon.level);
+		const expAtNext = expForLevel(mon.level + 1);
+		const range = expAtNext - expAtCurrent;
+		pct = range > 0 ? Math.max(0, Math.min(100, Math.round(((mon.exp - expAtCurrent) / range) * 100))) : 0;
+	}
+	return `<div class="pr-expbar"><div class="pr-expbar-fill" style="width:${pct}%"></div></div>`;
+}
+
+function typeColor(type: string): string {
+	const colors: Record<string, string> = {
+		Normal: '9fa19f', Fire: 'e62829', Water: '2980ef', Grass: '3fa129', Electric: 'fac000', Ice: '3dcef3', Fighting: 'ff8000', Poison: '9141cb',
+		Ground: '915121', Flying: '81b9ef', Psychic: 'ef4179', Bug: '91a119', Rock: 'afa981', Ghost: '704170', Dragon: '5060e1', Dark: '624d4e',
+		Steel: '60a1b8', Fairy: 'ef70ef',
+	};
+	return colors[type] ?? '68a090';
+}
+
+function renderTypeBadge(types: string[], large = false): string {
+	return types.map(t => `<span style="background:#${typeColor(t)};color:#fff;border-radius:${large ? '4px' : '3px'};padding:${large ? '2px 6px' : '1px 5px'};font-size:${large ? '10px' : '9px'};font-weight:bold">${t}</span>`).join(' ');
+}
+
+function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
+	if (!state.pendingChoice || state.pendingChoice.length) return;
+	if (state.pendingChoiceType === 'add' && state.team?.length) {
+		state.pendingChoice = pickNewPokemonOptions(state.team, state.floor - 1);
+	} else {
+		state.pendingChoice = pickStarterOptions();
+	}
+	setState(userId, state);
+}
+
+function refreshGamePage(user: User): void {
+	for (const conn of user.connections) {
+		if (conn.openPages?.has('pokerogue')) {
+			Chat.parse(`/join view-pokerogue`, null, user, conn);
+		}
+	}
+}
+
+function renderGamePage(state: PokeRogueState): string {
+	const view = (state as any).view || 'main';
+	let buf = (state.battleRoomId || state.notification) ? `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
+	buf += `<div class="pr-popup">`;
+
+	buf += `<div class="pr-popup-header"><h2>PokéRogue${view !== 'main' ? ` - ${view.toUpperCase()}` : ''}</h2>`;
+	if (view !== 'main' && !state.gameOver) buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-left:auto">Back</button>`;
+	buf += `</div>`;
+
+	if (state.gameOver) {
+		buf += `<div class="pr-gameover" style="text-align:center;padding:20px">`;
+		buf += `<div class="pr-gameover-title" style="font-size:24px;color:#ff8080;font-weight:bold;margin-bottom:15px">GAME OVER</div>`;
+		buf += `<div style="margin-bottom:20px;color:#8ab4f8">Your run has ended. Floor: <b>${state.lastRunFloor || 1}</b></div>`;
+		buf += `<button name="send" value="/pokerogue newgame confirm" class="button pr-newrun-btn" style="padding:10px 20px;font-size:16px">Start New Run</button>`;
+		buf += `</div></div>`;
+		return buf;
+	}
+
+	if (view === 'top') {
+		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
+		if (!entries.length) return buf + '<em>No records yet!</em></div>';
+		const rows = entries.map(([userid, s], i) => {
+			const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
+			const teamStr = (displayTeam ?? []).map(m => `${getSprite(m.species, 30)}`).join(' ');
+			return [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, teamStr];
+		});
+		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
+	}
+
+	if (state.notification) buf += `<div class="pr-notification">${state.notification}<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button></div>`;
+
+	if (state.battleRoomId) return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#fac000;font-weight:bold">Battle in progress!</p></div></div>`;
+
+	if (state.pendingGachaOffer) {
+		const sp = Dex.species.get(toID(state.pendingGachaOffer.species));
+		buf += `<h2 class="pr-choice-heading">Capsule Result!</h2>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table" style="margin: 0 auto;"><tbody>`;
+		buf += `<tr class="pr-choice-row"><td style="padding-right: 15px;">${getSpriteWithBall(sp.id, 60)}</td>`;
+		buf += `<td style="display:flex;flex-direction:column;gap:4px">`;
+		buf += `<button name="send" value="/pokerogue acceptgacha" class="button pr-pick-btn">Add to Team</button>`;
+		buf += `<button name="send" value="/pokerogue declinegacha" class="button">Decline</button></td></tr>`;
+		return buf + `</tbody></table></div></div>`;
+	}
+
+	if (state.pendingChoice?.length) {
+		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table" style="margin: 0 auto;"><tbody>`;
+		for (let i = 0; i < state.pendingChoice.length; i++) {
+			const sp = Dex.species.get(toID(state.pendingChoice[i]));
+			buf += `<tr class="pr-choice-row"><td style="padding-right: 15px;">${getSpriteWithBall(sp.id, 60)}</td>`;
+			buf += `<td><button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">Pick</button></td></tr>`;
+		}
+		return buf + `</tbody></table></div></div>`;
+	}
+
+	// --- TEAM SWAP UI ---
+	if (state.pendingSwap) {
+		const newMon = state.pendingSwap;
+		const sp = Dex.species.get(toID(newMon.species));
+
+		buf += `<h2 class="pr-choice-heading">Your team is full!</h2>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br><b>Lv. ${newMon.level}</b> wants to join your team!<br>Choose a Pokémon to replace:</div>`;
 		
-		if (evoLevel > 0) {
-			validEvos.push({ evoTo: toID(evoName), evoLevel });
+		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
+		
+		for (let i = 0; i < state.team.length; i++) {
+			const mon = state.team[i];
+			buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="button" style="text-align:left; padding:8px; display:flex; align-items:center;">`;
+			buf += `${getSprite(mon.species, 40)} <span style="margin-left: 10px;"><b>Replace</b> <small>(Lv. ${mon.level})</small></span></button>`;
 		}
+
+		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
+		buf += `<b>Keep current team</b> <small>(Discard new Pokémon)</small></button>`;
+		
+		buf += `</div></div>`;
+		return buf;
 	}
 
-	if (!validEvos.length) return null;
-	return validEvos[Math.floor(Math.random() * validEvos.length)];
-}
+	// --- MOVE LEARNING UI ---
+	if (state.pendingMoves && state.pendingMoves.length > 0) {
+		const pending = state.pendingMoves[0];
+		const mon = state.team[pending.pokemonIndex];
+		const sp = Dex.species.get(toID(mon.species));
+		const newMove = Dex.moves.get(pending.move);
 
-// --- LEVEL 999 MATH & EXP ---
+		buf += `<h2 class="pr-choice-heading">New Move!</h2>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br>wants to learn <b>${newMove.name}</b>!<br>It already knows 4 moves. Choose a move to forget:</div>`;
+		
+		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
+		
+		for (let i = 0; i < mon.moves.length; i++) {
+			const oldMove = Dex.moves.get(mon.moves[i]);
+			buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="button" style="text-align:left; padding:8px;">`;
+			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '—'})</small></button>`;
+		}
 
-export function botLevel(floor: number): number {
-	let level = 5; 
-	if (floor <= 20) {
-		level += (floor - 1) * 2;
-	} else if (floor <= 50) {
-		level = 43 + ((floor - 20) * 4);
-	} else {
-		level = 163 + ((floor - 50) * 8);
+		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
+		buf += `<b>Keep old moves</b> <small>(Give up learning ${newMove.name})</small></button>`;
+		
+		buf += `</div></div>`;
+		return buf;
 	}
-	return Math.min(999, level);
-}
 
-export function expForLevel(level: number): number {
-	return 15 * level * (level - 1);
-}
-
-export function floorExpReward(floor: number): number {
-	const currentTarget = botLevel(floor);
-	const nextTarget = botLevel(floor + 1);
-	
-	if (currentTarget === 999) return 500000; 
-
-	const expGap = expForLevel(nextTarget) - expForLevel(currentTarget);
-	return Math.floor(expGap * 1.15); 
-}
-
-export function floorCoinReward(floor: number): number {
-	return 30 + floor * 10;
-}
-
-export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
-	const oldLevel = mon.level;
-	mon.exp += expGained;
-	
-	while (mon.level < 999 && mon.exp >= expForLevel(mon.level + 1)) {
-		mon.level++;
+	if (view === 'shop') {
+		const shopCoins = state.coins ?? 0;
+		if (!state.shopInventory) state.shopInventory = rollShopInventory();
+		buf += `<div class="pr-shop-grid">`;
+		for (const id of state.shopInventory) {
+			const item = SHOP_ITEMS[id];
+			if (!item) continue;
+			const canAfford = shopCoins >= item.cost;
+			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.heldItem || item.id)}<b>${item.name}</b></div>`;
+			buf += `<div class="pr-shop-item-desc">${item.description}</div>`;
+			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
+		}
+		return buf + `</div><div class="pr-shop-footer"><button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button><button name="send" value="/pokerogue view main" class="button">Back</button></div></div>`;
 	}
-	let evolved = false;
-	while (true) {
+
+	if (view === 'bag') {
+		buf += `<div style="display:flex; justify-content:space-between; align-items:baseline;">`;
+		buf += `<h3 style="margin:0;">Manage Team Items</h3>`;
+		buf += `</div>`;
+		
+		buf += `<div class="pr-popup-team" style="margin-top:10px;">`;
+		for (let i = 0; i < state.team.length; i++) {
+			const mon = state.team[i];
+			buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
+			buf += `<span style="font-size:11px"><b>${mon.species}</b> (Lv.${mon.level})</span><br>`;
+			
+			if (mon.heldItem) {
+				const item = SHOP_ITEMS[mon.heldItem];
+				buf += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:2px 4px; border-radius:4px; margin-top:4px;">`;
+				buf += `<span style="font-size:10px;color:#8ab4f8" title="${item?.description || ''}">${item?.name || mon.heldItem}</span>`;
+				buf += `<button name="send" value="/pokerogue unequip ${i + 1}" class="button" style="font-size:9px; padding:2px 4px;">Take</button>`;
+				buf += `</div>`;
+			} else {
+				buf += `<div style="font-size:10px;color:#888;margin-top:4px;">No Item</div>`;
+			}
+			buf += `</div></div>`;
+		}
+		buf += `</div>`;
+
+		buf += `<h3 style="margin-top:15px;">Your Bag</h3>`;
+		const ownedItems = Object.entries(state.items ?? {}).filter(([, qty]) => qty > 0);
+		
+		if (ownedItems.length) {
+			buf += `<div class="pr-inventory-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">`;
+			for (const [id, qty] of ownedItems) {
+				const item = SHOP_ITEMS[id];
+				buf += `<div class="pr-inventory-item-card" style="background:rgba(255,255,255,0.05);padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.1)"><b>${item?.name || id}</b> (x${qty})<br>`;
+				buf += `<span style="font-size:10px;color:#aaa">${item?.description || ''}</span>`;
+				
+				if (item?.heldItem || id === 'rarecandy') {
+					buf += `<div style="font-size:10px; margin: 4px 0 2px 0;"><b>${item?.heldItem ? 'Equip to:' : 'Use on:'}</b></div>`;
+					buf += `<div style="display:flex;gap:2px;">`;
+					for (let i = 1; i <= state.team.length; i++) {
+						buf += `<button name="send" value="/pokerogue use ${id} ${i}" class="button" style="flex:1;padding:2px 0">${i}</button>`;
+					}
+					buf += `</div>`;
+				} else {
+					buf += `<button name="send" value="/pokerogue use ${id}" class="button" style="width:100%;margin-top:4px">Use</button>`;
+				}
+				buf += `</div>`;
+			}
+			buf += `</div>`;
+		} else {
+			buf += `<div style="text-align:center; color:#888; padding:10px; font-style:italic;">Your bag is currently empty.</div>`;
+		}
+		return buf + `</div>`;
+	}
+
+	const activeEffects: string[] = [];
+	if ((state.doubleExpFloors ?? 0) > 0) activeEffects.push(`Lucky Charm (${state.doubleExpFloors} floors left)`);
+	if (state.hasRevive) activeEffects.push('Revive (active)');
+
+	buf += `<div class="pr-popup-stats">Floor <b>${state.floor}</b> | Coins <b>${state.coins ?? 0}</b> | Streaks <b>${state.streaksWon ?? 0}</b></div>`;
+	if (activeEffects.length) buf += `<div class="pr-active-effects" style="font-size:11px;color:#8ab4f8;background:rgba(90,63,160,0.15);padding:4px;border-radius:6px;margin:6px 0"><b>Active:</b> ${activeEffects.join(' &nbsp; ')}</div>`;
+
+	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
+	for (const mon of state.team) {
+		const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const evo = getLevelUpEvo(mon.species);
-		if (!evo || mon.level < evo.evoLevel) break;
-		mon.species = evo.evoTo;
-		evolved = true;
+		const evoHint = evo && mon.level < evo.evoLevel ? `<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
+		buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
+		if (evoHint) buf += `${evoHint}<br>`;
+		buf += `<span style="font-size:11px">Lv.${mon.level} <small>(${expNeeded} EXP)</small></span>${renderExpBar(mon)}`;
+		if (mon.heldItem) buf += `<br><span style="font-size:10px;color:#8ab4f8">${SHOP_ITEMS[mon.heldItem]?.name || mon.heldItem}</span>`;
+		buf += `</div></div>`;
 	}
-	return { evolved, oldLevel };
+	buf += `</div>`;
+
+	buf += `<div class="pr-popup-actions" style="margin-top:12px;display:flex;gap:6px">`;
+	buf += `<button name="send" value="/pokerogue battle" class="button" style="flex:1.5">Start Battle</button>`;
+	buf += `<button name="send" value="/pokerogue view bag" class="button" style="flex:1">Bag</button>`;
+	buf += `<button name="send" value="/pokerogue view shop" class="button" style="flex:1">Shop</button>`;
+	buf += `<button name="send" value="/pokerogue view top" class="button" style="flex:1">Leaderboard</button>`;
+	buf += `<button name="send" value="/pokerogue quit" class="button" style="color:#ff8080;flex:1">Quit</button></div>`;
+
+	return buf + `</div>`;
 }
 
-export function getLevelUpMoves(speciesId: string, level: number): string[] {
-	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
-	const learnset = learnsetData?.learnset;
-	if (!learnset) return ['tackle'];
+export const commands: Chat.ChatCommands = {
+	pokerogue: {
+		start(target, room, user) {
+			if (!user.named) return this.errorReply("Login required.");
+			let state = getState(user.id);
+			if (state?.battleRoomId) {
+				const bRoom = Rooms.get(state.battleRoomId as RoomID);
+				if (!bRoom?.battle || bRoom.battle.ended) delete state.battleRoomId;
+			}
+			if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId && !state.gameOver)) {
+				const highestFloor = state?.highestFloor || 0;
+				const displayName = state?.displayName || user.name;
+				const recordTeam = state?.recordTeam || [];
+				
+				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 150, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
+				setState(user.id, state);
+			}
+			repairEmptyPendingChoice(state, user.id);
+			return this.parse('/join view-pokerogue');
+		},
 
-	const available: { move: string, learnLevel: number }[] = [];
+		newgame(target, room, user) {
+			const existing = getState(user.id);
+			const hasProgress = existing && (existing.team?.length > 0 || (existing.floor ?? 1) > 1);
+			if (hasProgress && !existing.gameOver && target !== 'confirm') {
+				return this.sendReplyBox(`<b>Warning: Run in progress!</b><br><button name="send" value="/pokerogue newgame confirm" class="button">Yes, start fresh</button>`);
+			}
+			
+			const highestFloor = existing?.highestFloor || 0;
+			const displayName = existing?.displayName || user.name;
+			const recordTeam = existing?.recordTeam || [];
+			
+			const newState = {
+				floor: 1, 
+				team: [], 
+				pendingChoice: pickStarterOptions(), 
+				pendingChoiceType: 'starter', 
+				coins: 150, 
+				streaksWon: 0,
+				highestFloor,
+				displayName,
+				recordTeam
+			} as any;
+			
+			setState(user.id, newState);
+			return this.parse('/pokerogue start');
+		},
 
-	for (const [moveid, sources] of Object.entries(learnset)) {
-		for (const src of sources) {
-			const match = /^9L(\d+)$/.exec(src);
-			if (match) {
-				const learnLvl = parseInt(match[1]);
-				if (learnLvl <= level) {
-					available.push({ move: moveid, learnLevel: learnLvl });
+		view(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+			const v = target.trim() as any;
+			if (['main', 'shop', 'top', 'bag'].includes(v)) {
+				(state as any).view = v;
+				setState(user.id, state);
+				refreshGamePage(user);
+			}
+		},
+
+		battle(target, room, user) {
+			const state = getState(user.id);
+			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
+			
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("Handle pending choices or team swaps first.");
+			}
+
+			if (startBattle(user, state)) {
+				(state as any).view = 'main';
+				setState(user.id, state);
+				refreshGamePage(user);
+			}
+		},
+
+		learnmove(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingMoves || !state.pendingMoves.length) return;
+			
+			const pending = state.pendingMoves[0];
+			const mon = state.team[pending.pokemonIndex];
+			if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, mon.level);
+
+			const targetTrimmed = target.trim();
+			
+			if (targetTrimmed === 'skip') {
+				state.notification = `Your Pokémon gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
+			} else {
+				const slot = parseInt(targetTrimmed) - 1;
+				if (isNaN(slot) || slot < 0 || slot >= mon.moves.length) return this.errorReply("Invalid move slot.");
+				
+				const oldMoveName = Dex.moves.get(mon.moves[slot]).name;
+				const newMoveName = Dex.moves.get(pending.move).name;
+				
+				mon.moves[slot] = pending.move; 
+				state.notification = `Forgot ${oldMoveName} and learned <b>${newMoveName}</b>!`;
+			}
+
+			state.pendingMoves.shift();
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		swapmon(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingSwap) return;
+			
+			const targetTrimmed = target.trim();
+			const newMon = state.pendingSwap;
+			const spName = Dex.species.get(toID(newMon.species)).name;
+			
+			if (targetTrimmed === 'skip') {
+				state.notification = `You let the new Pokémon go.`;
+			} else {
+				const slot = parseInt(targetTrimmed) - 1;
+				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+				
+				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
+				
+				if (state.team[slot].heldItem) {
+					const heldId = state.team[slot].heldItem!;
+					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
+					const bagId = shopEntry ? shopEntry[0] : heldId;
+
+					state.items = state.items || {};
+					state.items[bagId] = (state.items[bagId] || 0) + 1;
 				}
-				break;
+
+				state.team[slot] = newMon;
+				
+				if (state.pendingMoves) {
+					state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
+				}
+
+				state.notification = `You replaced ${oldMonName} with <b>${spName}</b>!`;
+			}
+
+			delete state.pendingSwap;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		choose(target, room, user) {
+			const state = getState(user.id);
+			const n = parseInt(target) - 1;
+			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
+			const choice = state.pendingChoice[n];
+			
+			let addedLevel = 5; 
+			if (state.pendingChoiceType !== 'starter') {
+				addedLevel = Math.max(5, botLevel(state.floor) - 2);
+			}
+			
+			let finalSpecies = choice;
+			while (true) {
+				const evo = getLevelUpEvo(finalSpecies);
+				if (!evo || addedLevel < evo.evoLevel) break;
+				finalSpecies = evo.evoTo;
+			}
+			
+			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
+			const newMon: PokemonEntry = { species: finalSpecies, level: addedLevel, exp: expForLevel(addedLevel), moves: initialMoves };
+			
+			if (state.pendingChoiceType === 'starter') {
+				state.team = [newMon];
+			} else if (state.team.length < 6) {
+				state.team.push(newMon);
+			} else {
+				state.pendingSwap = newMon;
+			}
+			
+			delete state.pendingChoice; delete state.pendingChoiceType;
+			setState(user.id, state); refreshGamePage(user);
+		},
+
+		buy(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot buy items while a battle is in progress.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("Please resolve your pending choices before using the shop.");
+			}
+
+			const item = SHOP_ITEMS[toID(target)];
+			if (item && (state.coins ?? 0) >= item.cost && state.shopInventory?.includes(item.id)) {
+				state.coins! -= item.cost;
+				state.items = state.items ?? {};
+				state.items[item.id] = (state.items[item.id] ?? 0) + 1;
+				setState(user.id, state); refreshGamePage(user);
+			}
+		},
+
+		refreshshop(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot reroll the shop during a battle.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("Please resolve your pending choices before using the shop.");
+			}
+
+			if ((state.coins ?? 0) >= 5) {
+				state.coins! -= 5;
+				state.shopInventory = rollShopInventory();
+				setState(user.id, state);
+				refreshGamePage(user);
+			} else {
+				return this.errorReply("You don't have enough coins to reroll the shop.");
+			}
+		},
+
+		use(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot manage your bag or items while a battle is in progress.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("You cannot use items while you have pending choices or moves to learn.");
+			}
+
+			const [id, slotStr] = target.split(' ');
+			const itemId = toID(id);
+			const slot = parseInt(slotStr) - 1;
+			if (!state.items?.[itemId]) return this.errorReply("Item not found.");
+			const item = SHOP_ITEMS[itemId];
+
+			const requiresSlot = itemId === 'rarecandy' || item?.heldItem;
+			if (requiresSlot) {
+				if (isNaN(slot) || slot < 0 || slot >= state.team.length) {
+					return this.errorReply("Invalid team slot.");
+				}
+			}
+
+			if (itemId === 'rarecandy' && state.team[slot].level >= 999) {
+				return this.errorReply(`That Pokémon is already at Max Level!`);
+			}
+
+			if (itemId === 'revive' && state.hasRevive) {
+				return this.errorReply("You already have an active Revive!");
+			}
+
+			state.items[itemId]--;
+
+			if (itemId === 'rarecandy') {
+				const mon = state.team[slot];
+				const oldLevel = mon.level;
+				const oldSpecies = mon.species;
+				let evolved = false;
+				
+				mon.level = Math.min(999, mon.level + 5); 
+				mon.exp = expForLevel(mon.level);
+				while (true) { 
+					const evo = getLevelUpEvo(mon.species); 
+					if (!evo || mon.level < evo.evoLevel) break; 
+					mon.species = evo.evoTo; 
+					evolved = true;
+				}
+				state.notification = `Your Pokémon grew to Lv. ${mon.level}!`;
+				
+				if (!mon.moves) mon.moves = getLevelUpMoves(oldSpecies, oldLevel);
+
+				const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
+				if (evolved) {
+					const evoMoves = getMovesLearnedBetween(mon.species, oldLevel, mon.level, true);
+					for (const m of evoMoves) {
+						if (!newMoves.includes(m)) newMoves.push(m);
+					}
+				}
+				
+				state.pendingMoves = state.pendingMoves || [];
+
+				for (const move of newMoves) {
+					const alreadyKnown = mon.moves.includes(move);
+					const alreadyQueued = state.pendingMoves.some(p => p.pokemonIndex === slot && p.move === move);
+
+					if (!alreadyKnown && !alreadyQueued) {
+						if (mon.moves.length < 4) {
+							mon.moves.push(move);
+						} else {
+							state.pendingMoves.push({ pokemonIndex: slot, move, speciesName: mon.species });
+						}
+					}
+				}
+			} else if (itemId === 'luckycharm') {
+				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
+			} else if (itemId === 'revive') {
+				state.hasRevive = true;
+			} else if (item?.gachaType) {
+				const { species } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
+				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured: true };
+			} else if (item?.heldItem) {
+				if (state.team[slot].heldItem) {
+					const oldItem = state.team[slot].heldItem!;
+					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === oldItem);
+					const bagId = shopEntry ? shopEntry[0] : oldItem;
+					state.items[bagId] = (state.items[bagId] ?? 0) + 1;
+				}
+				state.team[slot].heldItem = item.heldItem;
+			}
+
+			setState(user.id, state); 
+			refreshGamePage(user);
+		},
+
+		unequip(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+
+			if (state.battleRoomId) {
+				return this.errorReply("You cannot manage items while a battle is in progress.");
+			}
+			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
+				return this.errorReply("You cannot change items while you have pending choices.");
+			}
+
+			const slot = parseInt(target.trim()) - 1;
+			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+
+			const mon = state.team[slot];
+			if (!mon.heldItem) return this.errorReply("That Pokémon isn't holding an item.");
+
+			const heldId = mon.heldItem;
+			const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
+			const bagId = shopEntry ? shopEntry[0] : heldId;
+
+			state.items = state.items || {};
+			state.items[bagId] = (state.items[bagId] || 0) + 1;
+			delete mon.heldItem;
+
+			state.notification = `You took the ${SHOP_ITEMS[bagId]?.name || bagId} from ${mon.species}.`;
+
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		status(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const tId = toID(target) || user.id;
+			const s = getState(tId);
+			if (!s) return this.errorReply(`No run found for ${tId}.`);
+			let buf = `<b>PokéRogue Status: ${tId}</b><br>Floor ${s.floor} | Coins: ${s.coins}<br>${s.team.map(m => `Lv.${m.level} ${m.species}`).join(', ')}`;
+			if (s.pendingChoice?.length) buf += `<br><b>Choice Pending!</b> <button name="send" value="/pokerogue start">Open Game</button>`;
+			this.sendReplyBox(buf);
+		},
+
+		acceptgacha(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingGachaOffer) return;
+			
+			const addedLevel = Math.max(5, botLevel(state.floor) - 2);
+			let finalSpecies = toID(state.pendingGachaOffer.species);
+			
+			while (true) {
+				const evo = getLevelUpEvo(finalSpecies);
+				if (!evo || addedLevel < evo.evoLevel) break;
+				finalSpecies = evo.evoTo;
+			}
+
+			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
+			const newMon: PokemonEntry = { species: finalSpecies, level: addedLevel, exp: expForLevel(addedLevel), moves: initialMoves };
+
+			if (state.team.length < 6) {
+				state.team.push(newMon);
+			} else {
+				state.pendingSwap = newMon;
+			}
+			
+			delete state.pendingGachaOffer;
+			setState(user.id, state); refreshGamePage(user);
+		},
+
+		declinegacha(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingGachaOffer) return;
+			
+			const sourceItem = state.pendingGachaOffer.sourceItemId;
+			state.items = state.items || {};
+			state.items[sourceItem] = (state.items[sourceItem] || 0) + 1;
+			state.notification = `You declined the Pokémon and kept your ${SHOP_ITEMS[sourceItem]?.name}.`;
+
+			delete state.pendingGachaOffer;
+			setState(user.id, state); 
+			refreshGamePage(user);
+		},
+
+		addmon(target, room, user) {
+			this.checkCan('lock');
+			const [name, mon, lvl] = target.split(',').map(s => s.trim());
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			
+			if (!s) return this.errorReply(`No active run found for ${tId}.`);
+			
+			if (s.team.length >= 6) {
+				return this.errorReply(`${tId}'s team is already full! They must lose a Pokemon before you can add one.`);
+			}
+
+			const species = Dex.species.get(toID(mon));
+			if (!species.exists) return this.errorReply("Invalid Pokémon.");
+			const level = parseInt(lvl) || 1;
+			
+			let finalSpecies = species.id;
+			while (true) {
+				const evo = getLevelUpEvo(finalSpecies);
+				if (!evo || level < evo.evoLevel) break;
+				finalSpecies = evo.evoTo;
+			}
+
+			const initialMoves = getLevelUpMoves(finalSpecies, level);
+			s.team.push({ species: finalSpecies, level, exp: expForLevel(level), moves: initialMoves });
+			
+			setState(tId, s); 
+			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
+		},
+		givemoney(target, room, user) {
+			this.checkCan('lock');
+			let [name, amt] = target.split(',').map(s => s?.trim());
+			
+			if (!amt && !isNaN(parseInt(name))) {
+				amt = name;
+				name = user.id;
+			}
+			
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) { 
+				s.coins = (s.coins ?? 0) + parseInt(amt || '100'); 
+				setState(tId, s); 
+				this.sendReply(`Gave ${amt || '100'} coins to ${tId}.`); 
+			}
+		},
+		removecoins(target, room, user) {
+			this.checkCan('lock');
+			let [name, amt] = target.split(',').map(s => s?.trim());
+			
+			if (!amt && !isNaN(parseInt(name))) {
+				amt = name;
+				name = user.id;
+			}
+
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) { 
+				s.coins = Math.max(0, (s.coins ?? 0) - parseInt(amt || '100')); 
+				setState(tId, s); 
+				this.sendReply(`Removed ${amt || '100'} coins from ${tId}.`); 
+			}
+		},
+		resetcoins(target, room, user) {
+			this.checkCan('lock');
+			const tId = toID(target) || user.id;
+			const s = getState(tId);
+			if (s) { s.coins = 0; setState(tId, s); this.sendReply(`Reset coins for ${tId}.`); }
+		},
+		setfloor(target, room, user) {
+			this.checkCan('lock');
+			let [name, fl] = target.split(',').map(s => s?.trim());
+			
+			if (!fl && !isNaN(parseInt(name))) {
+				fl = name;
+				name = user.id;
+			}
+
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) { 
+				s.floor = parseInt(fl || '1'); 
+				setState(tId, s); 
+				this.sendReply(`Set floor for ${tId} to ${s.floor}.`); 
+			}
+		},
+		healteam(target, room, user) {
+			this.checkCan('lock');
+			const tId = toID(target) || user.id;
+			const s = getState(tId);
+			if (s) { for (const m of s.team) m.exp = expForLevel(m.level); setState(tId, s); this.sendReply(`Healed team for ${tId}.`); }
+		},
+		removemon(target, room, user) {
+			this.checkCan('lock');
+			const tId = toID(target) || user.id;
+			if (getState(tId)) { deleteState(tId); this.sendReply(`Wiped data for ${tId}.`); }
+		},
+
+		dismissnotif(target, room, user) {
+			const s = getState(user.id);
+			if (s?.notification) { delete s.notification; setState(user.id, s); }
+			refreshGamePage(user);
+		},
+		quit(target, room, user) {
+			const s = getState(user.id);
+			if (s?.battleRoomId) {
+				const match = activeMatches.get(s.battleRoomId as RoomID);
+				if (match) { const bot = Users.get(match.botUserId); if (bot) destroyBotUser(bot); activeMatches.delete(s.battleRoomId as RoomID); }
+				Rooms.get(s.battleRoomId)?.battle?.forfeit(user);
+			}
+			
+			if (s) {
+				s.gameOver = true;
+				s.lastRunFloor = s.floor;
+				s.lastRunStreaks = s.streaksWon || 0;
+				s.team = [];
+				
+				delete s.pendingMoves;
+				delete s.pendingSwap;
+				delete s.pendingChoice;
+				delete s.pendingGachaOffer;
+				
+				setState(user.id, s);
+			}
+			refreshGamePage(user);
+		},
+		help(target, room, user) {
+			if (!this.runBroadcast()) return;
+			const isStaff = user.can('lock');
+			let html = `<b>PokéRogue — Player Commands:</b><br>` +
+				`<code>/pokerogue start</code> — Open the game page.<br>` +
+				`<code>/pokerogue battle</code> — Start floor battle.<br>` +
+				`<code>/pokerogue shop</code> — Item shop.<br>` +
+				`<code>/pokerogue status</code> — View run info.<br>` +
+				`<code>/pokerogue top</code> — Leaderboard.<br>` +
+				`<code>/pokerogue quit</code> — Abandon run.<br>`;
+			if (isStaff) {
+				html += `<br><b>Staff Tools:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
+			}
+			this.sendReplyBox(html);
+		},
+		'': 'help',
+	},
+};
+
+export const pages: Chat.PageTable = {
+	pokerogue(args, user) {
+		if (!user.named) return this.errorReply('Login required.');
+		const state = getState(user.id);
+		if (!state) return `<div class="pr-popup"><div class="pr-popup-header"><h2>PokéRogue</h2></div><div style="text-align:center;padding:16px"><button name="send" value="/pokerogue start" class="button">Start New Run</button></div></div>`;
+		const v = (state as any).view || 'main';
+		this.title = `PokéRogue - ${v.toUpperCase()}`;
+		return renderGamePage(state);
+	},
+};
+
+export const handlers: Chat.Handlers = {
+	onBattleEnd(battle, winner, players) {
+		const match = activeMatches.get(battle.roomid);
+		if (!match) return;
+		activeMatches.delete(battle.roomid);
+		const botUser = Users.get(match.botUserId);
+		if (botUser) destroyBotUser(botUser);
+		const state = getState(match.userId);
+		if (!state) return;
+
+		// --- CONSUMABLE ITEM LOGIC ---
+		const room = Rooms.get(battle.roomid);
+		if (room && room.log) {
+			const logLines = room.log.log || [];
+			const consumedItems: string[] = [];
+
+			for (const line of logLines) {
+				const endItemMatch = /^\|-enditem\|p1[a-z]: ([^|]+)\|([^|]+)/.exec(line);
+				
+				if (endItemMatch) {
+					if (line.includes('[from] move: Knock Off') || 
+						line.includes('[from] move: Thief') || 
+						line.includes('[from] move: Incinerate')) {
+						continue; 
+					}
+
+					const logSpeciesName = endItemMatch[1].trim();
+					const itemName = endItemMatch[2].trim();
+					const itemId = toID(itemName);
+
+					const shopItem = SHOP_ITEMS[itemId];
+					
+					if (shopItem && shopItem.isConsumable) {
+						const logSpeciesData = Dex.species.get(logSpeciesName);
+
+						const matchingMon = state.team.find(m => {
+							const teamSpeciesData = Dex.species.get(m.species);
+							const isMatch = (teamSpeciesData.name === logSpeciesData.name) || 
+											(teamSpeciesData.baseSpecies === logSpeciesData.baseSpecies);
+							return isMatch && m.heldItem === itemId;
+						});
+
+						if (matchingMon) {
+							delete matchingMon.heldItem;
+							consumedItems.push(shopItem.name);
+						}
+					}
+				}
+			}
+
+			if (consumedItems.length > 0) {
+				state.notification = (state.notification || "") + 
+					`<br><b style="color:#ffb84d">Consumed items:</b> ${consumedItems.join(', ')}`;
 			}
 		}
-	}
 
-	if (!available.length) return ['tackle'];
+		delete state.battleRoomId;
 
-	available.sort((a, b) => b.learnLevel - a.learnLevel);
-	return available.slice(0, 4).map(m => m.move);
-}
+		if (toID(winner) === match.userId) {
+			const mult = (state.doubleExpFloors ?? 0) > 0 ? 2 : 1;
+			
+			// --- Difficulty Reward Multipliers ---
+			const floorMod = match.floor % 10;
+			let difficultyExpMult = 1.0;
+			let difficultyCoinMult = 1.0;
 
-export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newLevel: number, isEvolution = false): string[] {
-	const learnset = Dex.species.getLearnsetData(toID(speciesId))?.learnset;
-	if (!learnset) return [];
+			// Boss floors grant a 1.5x reward bonus
+			if (floorMod === 0) {
+				difficultyExpMult = 1.5; 
+				difficultyCoinMult = 1.5;
+			}
 
-	const learned: string[] = [];
-	for (const [moveid, sources] of Object.entries(learnset)) {
-		for (const src of sources) {
-			const match = /^9L(\d+)$/.exec(src);
-			if (match) {
-				const learnLvl = parseInt(match[1]);
-				if (learnLvl > oldLevel && learnLvl <= newLevel) {
-					learned.push(moveid);
-				} else if (isEvolution && learnLvl === 0) {
-					learned.push(moveid);
+			const expReward = Math.floor(floorExpReward(match.floor) * mult * difficultyExpMult);
+			const coinReward = Math.floor(floorCoinReward(match.floor) * mult * difficultyCoinMult);
+			
+			const detailMsgs: string[] = [];
+
+			for (let i = 0; i < state.team.length; i++) {
+				const mon = state.team[i];
+				const oldSpecies = mon.species;
+				
+				const { evolved, oldLevel } = applyExpAndLevelUp(mon, expReward);
+				
+				if (evolved) {
+					detailMsgs.push(`<b>${oldSpecies}</b> evolved into <b>${mon.species}</b> and reached Lv. ${mon.level}!`);
+				} else if (mon.level > oldLevel) {
+					detailMsgs.push(`<b>${mon.species}</b> reached Lv. ${mon.level}!`);
 				}
-				break;
+
+				if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, oldLevel);
+
+				const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
+				if (evolved) {
+					const evoMoves = getMovesLearnedBetween(mon.species, oldLevel, mon.level, true);
+					for (const m of evoMoves) {
+						if (!newMoves.includes(m)) newMoves.push(m);
+					}
+				}
+
+				state.pendingMoves = state.pendingMoves || [];
+
+				for (const move of newMoves) {
+					const alreadyKnown = mon.moves.includes(move);
+					const alreadyQueued = state.pendingMoves.some(p => p.pokemonIndex === i && p.move === move);
+
+					if (!alreadyKnown && !alreadyQueued) {
+						if (mon.moves.length < 4) {
+							mon.moves.push(move);
+							const moveName = Dex.moves.get(move).name;
+							detailMsgs.push(`<b>${mon.species}</b> learned <b>${moveName}</b>!`);
+						} else {
+							state.pendingMoves.push({ pokemonIndex: i, move, speciesName: mon.species });
+						}
+					}
+				}
+			}
+
+			state.coins = (state.coins ?? 0) + coinReward;
+			if (state.doubleExpFloors) state.doubleExpFloors--;
+			const prevFl = state.floor;
+			state.floor++;
+			state.streaksWon = (state.streaksWon ?? 0) + 1;
+			
+			if (state.floor > (state.highestFloor ?? 0)) {
+				state.highestFloor = state.floor;
+				state.recordTeam = JSON.parse(JSON.stringify(state.team));
+			}
+
+			state.displayName = Users.get(match.userId)?.name || match.userId;
+			
+			state.notification = (state.notification || "") + `<br><b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>${detailMsgs.join('<br>')}`;
+			
+			if ((state.floor - 1) % 5 === 0) {
+				state.pendingChoice = pickNewPokemonOptions(state.team, prevFl);
+				state.pendingChoiceType = 'add';
+				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokemon to add!</b>`;
+			}
+			delete state.shopInventory;
+		} else {
+			delete state.pendingMoves;
+			delete state.pendingSwap;
+			
+			if (state.hasRevive) {
+				state.hasRevive = false;
+				state.notification = (state.notification || "") + "<br><b>Revive used!</b> Retrying Floor " + match.floor;
+			} else {
+				state.gameOver = true;
+				state.lastRunFloor = match.floor;
+				state.lastRunStreaks = state.streaksWon || 0;
+				state.team = [];
 			}
 		}
-	}
-	return Array.from(new Set(learned)); 
-}
+		
+		setState(match.userId, state);
+		const hUser = Users.get(match.userId);
+		if (hUser) refreshGamePage(hUser);
+	},
+};
 
-export function packPokemon(mon: PokemonEntry): string {
-	const speciesData = Dex.species.get(toID(mon.species));
-	const name = speciesData.exists ? speciesData.name : mon.species;
-
-	const abilities = speciesData.abilities ?? {};
-	const ability = (abilities as unknown as Record<string, string>)['0'] || '';
-
-	if (!mon.moves) mon.moves = getLevelUpMoves(toID(mon.species), mon.level);
-	const movesStr = mon.moves.join(',');
-
-	const item = mon.heldItem ?? '';
-	return `${name}||${item}|${ability}|${movesStr}|Hardy||M|||${mon.level}|`;
-}
-
-export function packTeam(mons: PokemonEntry[]): string {
-	return mons.map(m => packPokemon(m)).join(']');
-}
-
-export function rollShopInventory(n = 8): string[] {
-	const all = Object.keys(SHOP_ITEMS);
-	const shuffled = all.slice();
-	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-	}
-	return shuffled.slice(0, n);
-}
+export const start = (): void => {
+	const { Dex } = require('../../../sim/dex');
+	const { Format } = require('../../../sim/dex-formats');
+	const FORMAT_ID = 'roguelikebattle' as ID;
+	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
+	Dex.formats.load();
+	const format = new Format({
+		name: 'Roguelike Battle', mod: 'gen9', effectType: 'Format', section: 'Roguelike',
+		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 999', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		rated: false,
+	});
+	Dex.formats.rulesetCache.set(FORMAT_ID, format);
+};
