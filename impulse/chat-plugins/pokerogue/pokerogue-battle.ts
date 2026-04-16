@@ -205,7 +205,7 @@ function buildBotTeam(state: PokeRogueState): string {
 	const size = botTeamSize(floor);
 	const isBoss = floor % 10 === 0;
 
-	// Dynamic Level Scaling based on player's highest level
+	// --- Dynamic AI Level Scaling ---
 	const playerMaxLevel = Math.max(...state.team.map(m => m.level));
 	let level = Math.max(botLevel(floor), playerMaxLevel);
 
@@ -215,17 +215,38 @@ function buildBotTeam(state: PokeRogueState): string {
 	} else if (floorMod === 9) {
 		level += 2;
 	} else if (floorMod === 0) { 
-		level += Math.floor(Math.random() * 4) + 2; 
+		// Scale the Boss level advantage based on how deep into the run they are
+		if (floor === 10) {
+			level += Math.floor(Math.random() * 2) + 1; // +1 to +2 levels
+		} else if (floor === 20) {
+			level += Math.floor(Math.random() * 3) + 2; // +2 to +4 levels
+		} else {
+			level += Math.floor(Math.random() * 4) + 2; // +2 to +5 levels
+		}
 	}
 	
 	level = Math.min(999, level); 
+	// --- END Dynamic AI Level Scaling ---
 
 	let poolA: string[];
 	let poolB: string[];
 	let chanceA: number;
 
 	if (isBoss) {
-		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.8;
+		// Progressive Boss Scaling
+		if (floor === 10) {
+			// Floor 10: Fully evolved standard Pokémon, slight chance of Elite
+			poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.8;
+		} else if (floor === 20) {
+			// Floor 20: Guaranteed Elite OU tier Pokémon
+			poolA = getTier3Pokemon(); poolB = getTier3Pokemon(); chanceA = 1.0;
+		} else if (floor === 30) {
+			// Floor 30: Elites with a chance of Legendaries
+			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
+		} else {
+			// Floor 40+: Heavy Legendary presence
+			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.4;
+		}
 	} else {
 		if (floor < 10) {
 			poolA = getTier1Pokemon(); poolB = getTier1Pokemon(); chanceA = 1.0;
@@ -258,6 +279,8 @@ function buildBotTeam(state: PokeRogueState): string {
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
+	
+	// Pass the full state to calculate dynamic levels
 	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
 
