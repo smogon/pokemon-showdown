@@ -80,11 +80,11 @@ function renderHome(user: User): string {
 			'gap: 14px;' +
 		'">' +
 			'<div style="flex: 1;">' +
-				'<strong>' + c.label + '</strong>' +
+				'<strong>' + c.label + ':</strong>' +
 			'</div>' +
-			'<div style="float: right;"><button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
+			'          <button class="button" name="send" value="/controlpanel view ' + c.view + '">' +
 				'Open →' +
-			'</button></div>' +
+			'</button>' +
 		'</div>'
 	).join('');
 
