@@ -324,7 +324,7 @@ export const commands: Chat.ChatCommands = {
 				const displayName = state?.displayName || user.name;
 				const recordTeam = state?.recordTeam || [];
 				
-				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 0, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
+				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 150, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
 				setState(user.id, state);
 			}
 			repairEmptyPendingChoice(state, user.id);
