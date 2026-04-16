@@ -64,9 +64,8 @@ async function loadIconData(): Promise<IconData> {
 function renderHome(user: User): string {
 	const cards: Array<{ label: string; desc: string; view: string; emoji: string }> = [
 		{
-			emoji: '🖼️',
 			label: 'User Icons',
-			desc: 'Manage custom userlist icons assigned to players.',
+			desc: 'Manage custom userlist icons assigned to users.',
 			view: 'icons',
 		},
 	];
@@ -81,7 +80,6 @@ function renderHome(user: User): string {
 			'align-items: center;' +
 			'gap: 14px;' +
 		'">' +
-			'<span style="font-size: 2em; line-height: 1;">' + c.emoji + '</span>' +
 			'<div style="flex: 1;">' +
 				'<strong>' + c.label + '</strong>' +
 				'<div style="font-size: 0.9em; color: #555;">' + c.desc + '</div>' +
@@ -161,7 +159,7 @@ async function renderIcons(user: User): Promise<string> {
 			'<button class="button" name="send"' +
 				' value="/controlpanel deleteicon ' + userid + '"' + 
 				' style="color: #c00; border-color: #c00;">' +
-				'🗑 Delete' +
+				'Delete' +
 			'</button>';
 
 		return [
