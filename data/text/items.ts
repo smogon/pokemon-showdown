@@ -729,6 +729,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Garchompite",
 		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
 	},
+	garchompitez: {
+		name: "Garchompite Z",
+		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
+	},
 	gardevoirite: {
 		name: "Gardevoirite",
 		shortDesc: "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
