@@ -482,7 +482,7 @@ export const start = (): void => {
 };
 
 // exposed for unit tests only — not part of the public plugin API
-export const testables = {
+/*export const testables = {
 	getSprite,
 	getPokeballInfo,
 	getItemSprite,
@@ -492,4 +492,4 @@ export const testables = {
 	SMOGON_ITEM_SIDS,
 	SMOGON_SPRITES_ITEM_BASE,
 	POKESPRITE_ITEM_BASE,
-};
+};*/
