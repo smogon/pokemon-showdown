@@ -1659,7 +1659,7 @@ export class GlobalRoomState {
 				player.setStatusType('online');
 			}
 		}
-		let display = true;
+		let display = !room.tour && !room.settings.isPrivate;
 		if (players.length === 2) {
 			display = display && this.checkId(players[0].id) && this.checkId(players[1].id);
 		}
