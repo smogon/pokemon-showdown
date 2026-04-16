@@ -791,7 +791,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Heart of Oak", "Power Whip", "Knock Off", "U-turn"],
+                "movepool": ["Aromatherapy", "Power Whip", "Knock Off", "U-turn"],
                 "abilities": ["Natural Cure"]
             }
         ]
