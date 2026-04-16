@@ -133,8 +133,8 @@ function renderGamePage(state: PokeRogueState): string {
 		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
 		if (!entries.length) return buf + '<em>No records yet!</em></div>';
 		const rows = entries.map(([userid, s], i) => {
-			// Removed names to keep the leaderboard sprites-only
-			const teamStr = (s.team ?? []).map(m => `${getSprite(m.species, 30)}`).join(' ');
+			const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
+			const teamStr = (displayTeam ?? []).map(m => `${getSprite(m.species, 30)}`).join(' ');
 			return [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, teamStr];
 		});
 		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
@@ -286,7 +286,11 @@ export const commands: Chat.ChatCommands = {
 				if (!bRoom?.battle || bRoom.battle.ended) delete state.battleRoomId;
 			}
 			if (!state || (!state.team?.length && !state.pendingChoice?.length && !state.battleRoomId && !state.gameOver)) {
-				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 0, streaksWon: 0 } as any;
+				const highestFloor = state?.highestFloor || 0;
+				const displayName = state?.displayName || user.name;
+				const recordTeam = state?.recordTeam || [];
+				
+				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 0, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
 				setState(user.id, state);
 			}
 			repairEmptyPendingChoice(state, user.id);
@@ -299,7 +303,24 @@ export const commands: Chat.ChatCommands = {
 			if (hasProgress && !existing.gameOver && target !== 'confirm') {
 				return this.sendReplyBox(`<b>Warning: Run in progress!</b><br><button name="send" value="/pokerogue newgame confirm" class="button">Yes, start fresh</button>`);
 			}
-			deleteState(user.id);
+			
+			const highestFloor = existing?.highestFloor || 0;
+			const displayName = existing?.displayName || user.name;
+			const recordTeam = existing?.recordTeam || [];
+			
+			const newState = {
+				floor: 1, 
+				team: [], 
+				pendingChoice: pickStarterOptions(), 
+				pendingChoiceType: 'starter', 
+				coins: 0, 
+				streaksWon: 0,
+				highestFloor,
+				displayName,
+				recordTeam
+			} as any;
+			
+			setState(user.id, newState);
 			return this.parse('/pokerogue start');
 		},
 
@@ -693,7 +714,22 @@ export const commands: Chat.ChatCommands = {
 				if (match) { const bot = Users.get(match.botUserId); if (bot) destroyBotUser(bot); activeMatches.delete(s.battleRoomId as RoomID); }
 				Rooms.get(s.battleRoomId)?.battle?.forfeit(user);
 			}
-			deleteState(user.id); refreshGamePage(user);
+			
+			if (s) {
+				s.gameOver = true;
+				s.lastRunFloor = s.floor;
+				s.lastRunStreaks = s.streaksWon || 0;
+				s.team = [];
+				
+				// Scrub all pending queues so the next run is clean
+				delete s.pendingMoves;
+				delete s.pendingSwap;
+				delete s.pendingChoice;
+				delete s.pendingGachaOffer;
+				
+				setState(user.id, s);
+			}
+			refreshGamePage(user);
 		},
 		help(target, room, user) {
 			if (!this.runBroadcast()) return;
@@ -791,7 +827,13 @@ export const handlers: Chat.Handlers = {
 			const prevFl = state.floor;
 			state.floor++;
 			state.streaksWon = (state.streaksWon ?? 0) + 1;
-			if (state.floor > (state.highestFloor ?? 0)) state.highestFloor = state.floor;
+			
+			if (state.floor > (state.highestFloor ?? 0)) {
+				state.highestFloor = state.floor;
+				// JSON parse/stringify creates a safe deep copy of the team array
+				state.recordTeam = JSON.parse(JSON.stringify(state.team));
+			}
+
 			state.displayName = Users.get(match.userId)?.name || match.userId;
 			
 			state.notification = `<b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>${detailMsgs.join('<br>')}`;
