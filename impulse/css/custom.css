@@ -3201,6 +3201,13 @@ width: 200px;
 	box-sizing: border-box;
 }
 
+.pr-shop-item-icon img {
+	image-rendering: pixelated;
+	width: 40px;
+	height: 40px;
+	display: block;
+}
+
 .pr-shop-item-name {
 	font-size: 12px;
 	font-weight: bold;
