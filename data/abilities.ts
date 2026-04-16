@@ -5871,9 +5871,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	windrider: { // updated, untested??
 		onStart(pokemon) {
-			if (pokemon.side.sideConditions['tailwind'] || ['strongwinds'].includes(pokemon.effectiveClearingWeather())) {
+			if (pokemon.side.sideConditions['tailwind'] ||
+				(['strongwinds'].includes(pokemon.effectiveClearingWeather()) && !pokemon.abilityState.gotWindRiderClearingBoost)) {
 				this.boost({ atk: 1 }, pokemon, pokemon);
 			}
+			delete pokemon.abilityState.gotWindRiderClearingBoost;
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['wind']) {
@@ -5893,6 +5895,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const pokemon = this.effectState.target;
 			if (clearingWeather.id === 'strongwinds') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
+				if (!pokemon.isStarted) {
+					pokemon.abilityState.gotWindRiderClearingBoost = true;
+				}
 			}
 		},
 		flags: { breakable: 1 },
