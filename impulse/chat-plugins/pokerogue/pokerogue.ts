@@ -133,7 +133,8 @@ function renderGamePage(state: PokeRogueState): string {
 		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
 		if (!entries.length) return buf + '<em>No records yet!</em></div>';
 		const rows = entries.map(([userid, s], i) => {
-			const teamStr = (s.team ?? []).map(m => `${getSprite(m.species, 30)}<small>${Dex.species.get(toID(m.species)).name || m.species}</small>`).join(' ');
+			// Removed names to keep the leaderboard sprites-only
+			const teamStr = (s.team ?? []).map(m => `${getSprite(m.species, 30)}`).join(' ');
 			return [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, teamStr];
 		});
 		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
@@ -146,8 +147,8 @@ function renderGamePage(state: PokeRogueState): string {
 	if (state.pendingGachaOffer) {
 		const sp = Dex.species.get(toID(state.pendingGachaOffer.species));
 		buf += `<h2 class="pr-choice-heading">Capsule Result!</h2>`;
-		buf += `<div style="overflow-x:auto"><table class="pr-choice-table"><tbody>`;
-		buf += `<tr class="pr-choice-row"><td>${getSpriteWithBall(sp.id, 60)}</td><td><b>${Utils.escapeHTML(sp.name)}</b></td>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table" style="margin: 0 auto;"><tbody>`;
+		buf += `<tr class="pr-choice-row"><td style="padding-right: 15px;">${getSpriteWithBall(sp.id, 60)}</td>`;
 		buf += `<td style="display:flex;flex-direction:column;gap:4px">`;
 		buf += `<button name="send" value="/pokerogue acceptgacha" class="button pr-pick-btn">Add to Team</button>`;
 		buf += `<button name="send" value="/pokerogue declinegacha" class="button">Decline</button></td></tr>`;
@@ -156,10 +157,10 @@ function renderGamePage(state: PokeRogueState): string {
 
 	if (state.pendingChoice?.length) {
 		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
-		buf += `<div style="overflow-x:auto"><table class="pr-choice-table"><tbody>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table" style="margin: 0 auto;"><tbody>`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const sp = Dex.species.get(toID(state.pendingChoice[i]));
-			buf += `<tr class="pr-choice-row"><td>${getSpriteWithBall(sp.id, 60)}</td><td><b>${Utils.escapeHTML(sp.name)}</b></td>`;
+			buf += `<tr class="pr-choice-row"><td style="padding-right: 15px;">${getSpriteWithBall(sp.id, 60)}</td>`;
 			buf += `<td><button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">Pick</button></td></tr>`;
 		}
 		return buf + `</tbody></table></div></div>`;
@@ -171,19 +172,18 @@ function renderGamePage(state: PokeRogueState): string {
 		const sp = Dex.species.get(toID(newMon.species));
 
 		buf += `<h2 class="pr-choice-heading">Your team is full!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br><b>${Utils.escapeHTML(sp.name)}</b> (Lv. ${newMon.level}) wants to join your team!<br>Choose a Pokémon to replace:</div>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br><b>Lv. ${newMon.level}</b> wants to join your team!<br>Choose a Pokémon to replace:</div>`;
 		
 		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
 		
 		for (let i = 0; i < state.team.length; i++) {
 			const mon = state.team[i];
-			const monSp = Dex.species.get(toID(mon.species));
 			buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="button" style="text-align:left; padding:8px; display:flex; align-items:center;">`;
-			buf += `${getSprite(mon.species, 40)} <span><b>Replace:</b> ${Utils.escapeHTML(monSp.name)} <small>(Lv. ${mon.level})</small></span></button>`;
+			buf += `${getSprite(mon.species, 40)} <span style="margin-left: 10px;"><b>Replace</b> <small>(Lv. ${mon.level})</small></span></button>`;
 		}
 
-		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="text-align:left; padding:8px; margin-top:8px;">`;
-		buf += `<b>Keep current team</b> <small>(Discard ${Utils.escapeHTML(sp.name)})</small></button>`;
+		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
+		buf += `<b>Keep current team</b> <small>(Discard new Pokémon)</small></button>`;
 		
 		buf += `</div></div>`;
 		return buf;
@@ -196,8 +196,8 @@ function renderGamePage(state: PokeRogueState): string {
 		const sp = Dex.species.get(toID(mon.species));
 		const newMove = Dex.moves.get(pending.move);
 
-		buf += `<h2 class="pr-choice-heading">${Utils.escapeHTML(sp.name)} wants to learn ${newMove.name}!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br>However, it already knows 4 moves. Choose a move to forget:</div>`;
+		buf += `<h2 class="pr-choice-heading">New Move!</h2>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br>wants to learn <b>${newMove.name}</b>!<br>It already knows 4 moves. Choose a move to forget:</div>`;
 		
 		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
 		
@@ -207,7 +207,7 @@ function renderGamePage(state: PokeRogueState): string {
 			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '—'})</small></button>`;
 		}
 
-		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:left; padding:8px; margin-top:8px;">`;
+		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
 		buf += `<b>Keep old moves</b> <small>(Give up learning ${newMove.name})</small></button>`;
 		
 		buf += `</div></div>`;
@@ -238,11 +238,11 @@ function renderGamePage(state: PokeRogueState): string {
 
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
-		const sp = Dex.species.get(toID(mon.species));
 		const expNeeded = mon.level < 100 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const evo = getLevelUpEvo(mon.species);
 		const evoHint = evo && mon.level < evo.evoLevel ? `<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
-		buf += `<div class="pr-popup-mon">${getSpriteWithBall(mon.species, 52)}<div style="flex:1"><b>${Utils.escapeHTML(sp.name)}</b> ${evoHint}<br>`;
+		buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
+		if (evoHint) buf += `${evoHint}<br>`;
 		buf += `<span style="font-size:11px">Lv.${mon.level} <small>(${expNeeded} EXP)</small></span>${renderExpBar(mon)}`;
 		if (mon.heldItem) buf += `<br><span style="font-size:10px;color:#8ab4f8">${SHOP_ITEMS[mon.heldItem]?.name || mon.heldItem}</span>`;
 		buf += `</div></div>`;
@@ -341,7 +341,7 @@ export const commands: Chat.ChatCommands = {
 			const targetTrimmed = target.trim();
 			
 			if (targetTrimmed === 'skip') {
-				state.notification = `<b>${mon.species}</b> gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
+				state.notification = `Your Pokémon gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
 			} else {
 				const slot = parseInt(targetTrimmed) - 1;
 				if (isNaN(slot) || slot < 0 || slot >= mon.moves.length) return this.errorReply("Invalid move slot.");
@@ -350,7 +350,7 @@ export const commands: Chat.ChatCommands = {
 				const newMoveName = Dex.moves.get(pending.move).name;
 				
 				mon.moves[slot] = pending.move; 
-				state.notification = `<b>${mon.species}</b> forgot ${oldMoveName} and learned <b>${newMoveName}</b>!`;
+				state.notification = `Forgot ${oldMoveName} and learned <b>${newMoveName}</b>!`;
 			}
 
 			state.pendingMoves.shift();
@@ -367,7 +367,7 @@ export const commands: Chat.ChatCommands = {
 			const spName = Dex.species.get(toID(newMon.species)).name;
 			
 			if (targetTrimmed === 'skip') {
-				state.notification = `You let <b>${spName}</b> go.`;
+				state.notification = `You let the new Pokémon go.`;
 			} else {
 				const slot = parseInt(targetTrimmed) - 1;
 				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
@@ -470,7 +470,7 @@ export const commands: Chat.ChatCommands = {
 
 			// 3. Prevent Wasting Rare Candies on Level 100s
 			if (itemId === 'rarecandy' && state.team[slot].level >= 100) {
-				return this.errorReply(`${Dex.species.get(state.team[slot].species).name} is already at Max Level!`);
+				return this.errorReply(`That Pokémon is already at Max Level!`);
 			}
 
 			// 4. Prevent Wasting Duplicate Revives
@@ -494,7 +494,7 @@ export const commands: Chat.ChatCommands = {
 					mon.species = evo.evoTo; 
 					evolved = true;
 				}
-				state.notification = `<b>${mon.species}</b> grew to Lv. ${mon.level}!`;
+				state.notification = `Your Pokémon grew to Lv. ${mon.level}!`;
 				
 				if (!mon.moves) mon.moves = getLevelUpMoves(oldSpecies, oldLevel);
 
