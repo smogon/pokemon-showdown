@@ -113,9 +113,9 @@ function renderHome(user: User): string {
 			'background: rgba(216, 238, 245, 0.6); border: 1px solid #ccc; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;' +
 			'display: flex; align-items: center; gap: 14px;' +
 		'">' +
-			'<div style="flex: 1;">' +
+			'<div style="flex: 1; color: black;">' +
 				'<strong>' + c.label + '</strong>' +
-				'<div style="font-size: 0.9em;">' + c.desc + '</div>' +
+				'<div style="font-size: 0.9em; color: black;">' + c.desc + '</div>' +
 			'</div>' +
 			'<button class="button" name="send" value="/controlpanel view ' + c.view + '" style="margin-left: auto;">Open →</button>' +
 		'</div>'
