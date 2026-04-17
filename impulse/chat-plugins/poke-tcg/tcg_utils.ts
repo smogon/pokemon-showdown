@@ -509,3 +509,147 @@ export function renderCardGridHtml(
 	html += `</div>`;
 	return html;
 }
+
+export function parseCardQuery(target: string, options?: { userId?: string }): {
+	filter: any, queryDescription: string, page: number, commandString: string, targetUserId: string,
+} {
+	const parts = target.split(',');
+	let page = 1, query = target.trim(), commandStringForPagination = query;
+
+	if (parts.length > 1) {
+		const lastPart = parts[parts.length - 1].trim();
+		const potentialPage = parseInt(lastPart);
+		if (!isNaN(potentialPage)) {
+			page = Math.max(1, potentialPage);
+			query = parts.slice(0, -1).join(',').trim();
+			commandStringForPagination = query;
+		}
+	}
+
+	let targetUserId = options?.userId || '';
+	const filter: any = { $and: [] };
+	const descriptions: string[] = [];
+	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?"([^"]+)"|([\w-]+)/g;
+	const filterMatches: string[] = [];
+	let nameQuery = query, match;
+
+	while ((match = filterRegex.exec(query)) !== null) {
+		const key = match[1]?.toLowerCase();
+		const operator = match[2];
+		const value = (match[3] ?? match[4] ?? '').replace(/"/g, '');
+
+		if (!key) continue;
+
+		if (key === 'user' && options?.userId !== undefined) {
+			targetUserId = value.toLowerCase().replace(/[^a-z0-9]/g, '');
+			filterMatches.push(match[0]);
+			nameQuery = nameQuery.replace(match[0], '');
+			continue;
+		}
+
+		filterMatches.push(match[0]);
+		nameQuery = nameQuery.replace(match[0], '');
+
+		const valueNum = parseInt(value);
+		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const valueRegex = new RegExp(escapedValue, 'i');
+
+		switch (key) {
+		case 'rarity':
+			filter.$and.push({ rarity: valueRegex });
+			descriptions.push(`Rarity: ${value}`);
+			break;
+		case 'supertype':
+		case 'st':
+			filter.$and.push({ supertype: valueRegex });
+			descriptions.push(`Supertype: ${value}`);
+			break;
+		case 'subtype':
+			filter.$and.push({ subtypes: valueRegex });
+			descriptions.push(`Subtype: ${value}`);
+			break;
+		case 'type':
+			filter.$and.push({ types: valueRegex });
+			descriptions.push(`Type: ${value}`);
+			break;
+		case 'hp':
+			if (!isNaN(valueNum)) {
+				let hpFilter: any = {};
+				if (operator === '>') hpFilter = { $gt: valueNum };
+				else if (operator === '>=') hpFilter = { $gte: valueNum };
+				else if (operator === '<') hpFilter = { $lt: valueNum };
+				else if (operator === '<=') hpFilter = { $lte: valueNum };
+				else hpFilter = valueNum;
+				filter.$and.push({ hp: hpFilter });
+				descriptions.push(`HP: ${operator || ''}${value}`);
+			}
+			break;
+		case 'series':
+			filter.$and.push({ setSeries: valueRegex });
+			descriptions.push(`Series: ${value}`);
+			break;
+		case 'reg':
+			filter.$and.push({ regulationMark: valueRegex });
+			descriptions.push(`Reg Mark: ${value}`);
+			break;
+		case 'set':
+			if (options?.userId !== undefined) {
+				// Collection mode: exact setId match only
+				const exactRegex = new RegExp('^' + escapedValue + '$', 'i');
+				filter.$and.push({ setId: exactRegex });
+			} else {
+				// Search mode: partial set name or exact setId
+				const partialRegex = new RegExp(escapedValue, 'i');
+				const exactRegex = new RegExp('^' + escapedValue + '$', 'i');
+				filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
+			}
+			descriptions.push(`Set: ${value}`);
+			break;
+		case 'artist':
+			if (options?.userId === undefined) {
+				// Search mode only
+				filter.$and.push({ artist: valueRegex });
+				descriptions.push(`Artist: ${value}`);
+			}
+			break;
+		case 'legal':
+			if (options?.userId === undefined) {
+				// Search mode only
+				const legalKey = `legalities.${value.toLowerCase()}`;
+				filter.$and.push({ [legalKey]: 'Legal' });
+				descriptions.push(`Legal: ${value}`);
+			}
+			break;
+		}
+	}
+
+	const nameQueryClean = nameQuery.trim();
+	if (nameQueryClean) {
+		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+		filter.$and.push({ name: nameRegex });
+		descriptions.unshift(options?.userId !== undefined ? `Name: '${nameQueryClean}'` : `'${nameQueryClean}'`);
+	}
+
+	if (options?.userId !== undefined) {
+		filter.$and.push({ userId: targetUserId });
+	} else if (filter.$and.length === 0) {
+		delete filter.$and;
+	}
+
+	let finalCommandString = commandStringForPagination;
+	if (options?.userId !== undefined) {
+		finalCommandString = finalCommandString.replace(/user:\s*("[^"]+"|[\w-]+)\s*,?\s*/gi, '').trim();
+		finalCommandString = finalCommandString.replace(/,\s*$/, '').trim();
+	}
+
+	let queryDescription = '';
+	if (options?.userId !== undefined) {
+		queryDescription = `Owner: ${targetUserId}`;
+		if (descriptions.length > 0) queryDescription += `, ${descriptions.join(', ')}`;
+		else queryDescription += ', All Cards';
+	} else {
+		queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
+	}
+
+	return { filter, queryDescription, page, commandString: finalCommandString, targetUserId };
+}
