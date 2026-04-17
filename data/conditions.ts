@@ -981,7 +981,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return this.modify(spd, 1.5);
 			}
 			if ((pokemon.hasType('Steel') || pokemon.hasType('Ground')) &&
-				this.field.setIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+				this.field.isIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(spd, 1.5);
 			}
