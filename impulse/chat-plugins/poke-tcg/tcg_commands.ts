@@ -114,15 +114,92 @@ export const commands: ChatCommands = {
 		async search(target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (!target) {
-				return this.errorReply('Usage: /tcg search [card/pokemonname|set:setid|rarity:"Rarity Name"|artist:"Artist Name"]');
+				return this.errorReply('Usage: /tcg search [Pokemon Name], [Set ID], [Rarity]');
 			}
 
 			try {
-				const { filter, queryDescription, page, commandString } = parseCardQuery(target);
+				const rawParts = target.split(',').map(p => p.trim()).filter(Boolean);
+				if (rawParts.length === 0) return this.errorReply("Please specify a search query.");
+
+				let page = 1;
+				const partsForQuery = [...rawParts];
+
+				// 1. Extract Page (only if the last part is a pure number and there's a query before it)
+				if (partsForQuery.length > 1) {
+					const lastPart = partsForQuery[partsForQuery.length - 1];
+					const parsedPage = parseInt(lastPart);
+					// Ensures "151" isn't mistaken for a page if it's the only query
+					if (!isNaN(parsedPage) && parsedPage.toString() === lastPart) {
+						page = Math.max(1, parsedPage);
+						partsForQuery.pop(); 
+					}
+				}
+
+				// Save the clean command string for the Next/Prev buttons
+				const commandString = partsForQuery.join(', ');
+
+				let nameQuery = '';
+				let setIdQuery = '';
+				let rarityQuery = '';
+				let genericQuery = '';
+
+				// 2. Extract Rarity
+				// A forgiving list of keywords to identify if the user is searching for a rarity
+				const RARITY_KEYWORDS = ['common', 'uncommon', 'rare', 'holo', 'promo', 'secret', 'ultra', 'hyper', 'illustration', 'full art', 'v', 'vmax', 'vstar', 'ex', 'gx', 'radiant', 'shining', 'amazing', 'star', 'prime', 'legend'];
+				
+				if (partsForQuery.length > 1) {
+					const lastPartLower = partsForQuery[partsForQuery.length - 1].toLowerCase();
+					if (RARITY_KEYWORDS.some(k => lastPartLower.includes(k))) {
+						rarityQuery = partsForQuery.pop()!;
+					}
+				}
+
+				// 3. Assign remaining parts (Name / SetId)
+				if (partsForQuery.length >= 2) {
+					nameQuery = partsForQuery[0];
+					setIdQuery = partsForQuery[1];
+				} else if (partsForQuery.length === 1) {
+					genericQuery = partsForQuery[0];
+				}
+
+				// 4. Build MongoDB Filter
+				const filter: any = { $and: [] };
+				const descriptions: string[] = [];
+
+				if (rarityQuery) {
+					filter.$and.push({ rarity: new RegExp(rarityQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') });
+					descriptions.push(`Rarity: ${rarityQuery}`);
+				}
+
+				if (nameQuery && setIdQuery) {
+					// If we have 2 distinct arguments, treat the first as Name and second as Exact SetId
+					filter.$and.push({ name: new RegExp(nameQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') });
+					filter.$and.push({ setId: new RegExp(`^${setIdQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') });
+					descriptions.unshift(`Set: ${setIdQuery}`);
+					descriptions.unshift(`Name: ${nameQuery}`);
+				} else if (genericQuery) {
+					// If only 1 argument is left, it could be a Pokemon Name OR a Set ID
+					const escapedGeneric = genericQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					filter.$and.push({
+						$or: [
+							{ name: new RegExp(escapedGeneric, 'i') },
+							{ setId: new RegExp(`^${escapedGeneric}$`, 'i') }
+						]
+					});
+					descriptions.unshift(`'${genericQuery}'`);
+				}
+
+				if (filter.$and.length === 0) delete filter.$and;
+
+				const queryDescription = descriptions.join(', ');
+
+				// 5. Fetch from Database
 				const collection = tcgCardsCollection;
 				const totalMatches = await collection.countDocuments(filter);
+				
 				if (totalMatches === 0) return this.errorReply(`No cards found matching: ${queryDescription}.`);
 
+				const SEARCH_PAGE_LIMIT = 40;
 				const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
 				const currentPage = Math.min(page, totalPages);
 				const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
@@ -133,6 +210,7 @@ export const commands: ChatCommands = {
 					sort: { rarityPoints: -1, name: 1 },
 				});
 
+				// 6. Render HTML Grid
 				let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 				html += `<strong style="font-size: 20px;">Search Results</strong><br />`;
 				html += `<div style="font-size: 0.9em; margin-bottom: 5px;">For: ${queryDescription}</div>`;
@@ -158,16 +236,21 @@ export const commands: ChatCommands = {
 				}
 				if (results.length > 0) html += `</div>`;
 
+				// 7. Pagination Commands
 				if (totalPages > 1) {
 					html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-					html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
+					html += `<div style="text-align: center; margin-top: 10px;">`;
+					
 					if (currentPage > 1) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Previous</button>`;
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 15px; border-radius: 4px; cursor: pointer; margin-right: 20px;">&lt; Previous</button>`;
 					}
-					html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
+					
+					html += `<span style="font-size: 0.9em; color: #555; display: inline-block; vertical-align: middle;">Page ${currentPage} of ${totalPages}</span>`;
+					
 					if (currentPage < totalPages) {
-						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next</button>`;
+						html += `<button name="send" value="/tcg search ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 15px; border-radius: 4px; cursor: pointer; margin-left: 20px;">Next &gt;</button>`;
 					}
+					
 					html += `</div>`;
 				}
 				html += `</div>`;
