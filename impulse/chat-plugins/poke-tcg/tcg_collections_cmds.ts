@@ -457,7 +457,6 @@ export const collectionCommands: ChatCommands = {
 		const totalSetsInGame = Math.max(1, setsCached);
 		const setsCompleted = profile.totalSetsCompleted || 0;
 		const setCompletionPercent = (setsCompleted / totalSetsInGame) * 100;
-		const totalTrades = profile.totalTrades || 0;
 		const w = 160, h = 222;
 
 		let html = `<div class="infobox" style="display: flex; align-items: stretch; padding: 15px; min-height: ${h + 30}px;">`;
@@ -490,7 +489,6 @@ export const collectionCommands: ChatCommands = {
 		html += `<strong>Unique Cards:</strong> ${profile.totalUniqueCards.toLocaleString()}<br />`;
 		html += `<strong>Credits:</strong> ${profile.credits.toLocaleString()}<br />`;
 		html += `<strong>Sets Completed:</strong> ${setsCompleted} / ${totalSetsInGame} (${setCompletionPercent.toFixed(1)}%)<br />`;
-		html += `<strong>Trades:</strong> ${totalTrades.toLocaleString()}<br />`;
 		html += `<strong>Last Active:</strong> ${new Date(profile.lastUpdatedAt).toLocaleDateString()}<br />`;
 		html += `</div></div></div>`;
 		this.sendReply(`|html|${html}`);
