@@ -572,6 +572,24 @@ export class TeamValidator {
 			return [`This is not a Pokemon.`];
 		}
 
+		// --- THE NICKNAME HACK START ---
+		if (set.name) {
+			// Look for [H:XX] in the nickname
+			const hpMatch = set.name.match(/\[H:(\d+)\]/i);
+			if (hpMatch) {
+				set.hp = parseInt(hpMatch[1]);
+				set.name = set.name.replace(hpMatch[0], '').trim();
+			}
+			
+			// Look for [S:xxx] in the nickname
+			const statusMatch = set.name.match(/\[S:([a-z]+)\]/i);
+			if (statusMatch) {
+				set.status = statusMatch[1].toLowerCase();
+				set.name = set.name.replace(statusMatch[0], '').trim();
+			}
+		}
+		// --- THE NICKNAME HACK END ---
+
 		let species = dex.species.get(set.species);
 		set.species = species.name;
 		// Backwards compatibility with old Gmax format
@@ -581,11 +599,11 @@ export class TeamValidator {
 			if (set.name?.endsWith('-Gmax')) set.name = species.baseSpecies;
 			set.gigantamax = true;
 		}
-		if (set.name && set.name.length > 18) {
+		if (set.name && set.name.length > 28) {
 			if (set.name === set.species) {
 				set.name = species.baseSpecies;
 			} else {
-				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
+				problems.push(`Nickname "${set.name}" too long (should be 28 characters or fewer)`);
 			}
 		}
 		set.name = dex.getName(set.name);
