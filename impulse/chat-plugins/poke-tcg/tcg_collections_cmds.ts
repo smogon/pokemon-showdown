@@ -18,51 +18,27 @@ export const collectionCommands: ChatCommands = {
 			const parts = target.split(',').map(p => p.trim()).filter(Boolean);
 			
 			let targetUserId = user.id;
-			let sortOption = 'rarity';
 			let page = 1;
 
-			// 1. Parse Arguments (targetUserId, sortOption, page)
+			// 1. Parse Arguments (targetUserId, page)
 			if (parts.length > 0) {
-				const firstArg = parts[0].toLowerCase();
-				if (['rarity', 'points', 'set', 'setid'].includes(firstArg)) {
-					sortOption = firstArg === 'setid' ? 'set' : firstArg;
+				const firstArg = parts[0];
+				const parsedPage = parseInt(firstArg);
+				
+				if (!isNaN(parsedPage)) {
+					// User just typed a page number: /tcg collection 2
+					page = Math.max(1, parsedPage);
 				} else {
-					targetUserId = toID(parts[0]) || user.id;
-				}
-
-				if (parts.length > 1) {
-					const secondArg = parts[1].toLowerCase();
-					if (['rarity', 'points', 'set', 'setid'].includes(secondArg)) {
-						sortOption = secondArg === 'setid' ? 'set' : secondArg;
-					} else {
-						const parsedPage = parseInt(secondArg);
-						if (!isNaN(parsedPage)) page = Math.max(1, parsedPage);
+					// User typed a name: /tcg collection username, [page]
+					targetUserId = toID(firstArg) || user.id;
+					if (parts.length > 1) {
+						const secondPage = parseInt(parts[1]);
+						if (!isNaN(secondPage)) page = Math.max(1, secondPage);
 					}
 				}
-
-				if (parts.length > 2) {
-					const parsedPage = parseInt(parts[2]);
-					if (!isNaN(parsedPage)) page = Math.max(1, parsedPage);
-				}
 			}
 
-			// 2. Define Sorting Behavior
-			let sortStage: any = {};
-			switch (sortOption) {
-				case 'points':
-					sortStage = { totalPoints: -1, cardId: 1 };
-					break;
-				case 'set':
-					sortStage = { setId: 1, totalPoints: -1, cardId: 1 };
-					break;
-				case 'rarity':
-				default:
-					// Sorts by Rarity string alphabetically, then by points. 
-					sortStage = { rarity: 1, totalPoints: -1, cardId: 1 };
-					break;
-			}
-
-			// 3. Fetch Data
+			// 2. Fetch Data (Hardcoded to sort by Points)
 			const collection = userCollectionsCollection;
 			const filter = { userId: targetUserId };
 			
@@ -85,18 +61,17 @@ export const collectionCommands: ChatCommands = {
 
 			const pipeline: any[] = [
 				{ $match: filter },
-				{ $sort: sortStage },
+				{ $sort: { totalPoints: -1, cardId: 1 } }, // Enforced default sorting
 				{ $skip: skip },
 				{ $limit: limit },
 			];
 			const results = await collection.aggregate<TcgUser>(pipeline);
 
-			// 4. Render HTML
+			// 3. Render HTML
 			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 			const displayName = targetUserId === user.id ? user.name : targetUserId;
 			html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity.toLocaleString()} | Total Points: ${stats.totalPoints.toLocaleString()}</div>`;
-			html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Sorted by: ${sortOption.charAt(0).toUpperCase() + sortOption.slice(1)}</div>`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches.toLocaleString()} unique cards.</div>`;
 
 			for (let i = 0; i < results.length; i++) {
@@ -120,8 +95,8 @@ export const collectionCommands: ChatCommands = {
 			}
 			if (results.length > 0) html += `</div>`;
 
-			// 5. Pagination Commands
-			const baseCmd = targetUserId === user.id ? `/tcg collection ${sortOption}` : `/tcg collection ${targetUserId}, ${sortOption}`;
+			// 4. Pagination Commands
+			const baseCmd = targetUserId === user.id ? `/tcg collection` : `/tcg collection ${targetUserId}`;
 
 			if (totalPages > 1) {
 				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
