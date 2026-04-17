@@ -5079,7 +5079,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpe(pokemon, source) {
 			if (this.field.isTerrain('electricterrain') ||
 				['supercell'].includes(source.effectiveEnergyWeather())) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 		flags: {},
@@ -6205,12 +6205,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(source) {
 			this.field.setCataclysmWeather('cataclysmiclight');
 		},
+		onAnySetCataclysmWeather(target, source, cataclysmWeather) {
+			const strongWeathers = ['cataclysmiclight'];
+			if (this.field.getCataclysmWeather().id === 'cataclysmiclight' &&
+				strongWeathers.includes(cataclysmWeather.id)) {
+				return false;
+			}
+		},
 		onEnd(pokemon) {
 			if (this.field.cataclysmWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('cataclysmiclight')) {
-					this.field.climateWeatherState.source = target;
+					this.field.cataclysmWeatherState.source = target;
 					return;
 				}
 			}
@@ -6474,7 +6481,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 10055,
 	},
-	/* expiation: { // tested, works as intended, TODO: fix text to attribute healing to proper pokemon
+	/* expiation: { // tested, works as intended
 		onFaint(target) {
 			if (!target.hp) {
 				this.add('-activate', target, 'ability: Expiation');
@@ -6852,7 +6859,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryMove(target, source, effect) {
 			if (['sunnyday', 'raindance', 'bloodmoon', 'hail', 'foghorn',
-				'pollinate', 'sprinkle', 'smogspread', 'sandstorm', 'dustdevil',
+				'pollinate', 'sprinkle', 'smogspread', 'sandstorm', 'duststorm',
 				'haunt', 'daydream', 'supercell', 'dragonforce', 'magnetize',
 				'swarmsignal', 'auraprojection', 'strongwinds'].includes(effect.id)) {
 				this.attrLastMove('[still]');
@@ -6873,7 +6880,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return false;
 		},
 		onStart(pokemon) {
-			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
+			if (['sunnyday', 'raindance', 'hail', 'snowscape',
 				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather();
 				this.debug('Cleared Climate Weathers');
@@ -6930,12 +6937,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10074,
 	}, */
-	nottobe: { // tested, works as intended
-		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
-			this.add('-ability', target, 'Not To Be');
-			source.addVolatile('perishsong');
-			target.addVolatile('perishsong');
+	nottobe: { // incomplete, not tested
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (!holder?.hp || target.side !== holder.side || target === holder) return;
+			this.add('-ability', holder, 'Not To Be');
+			for (const pokemon of this.getAllActive()) {
+				if (!pokemon.volatiles['perishsong']) pokemon.addVolatile('perishsong');
+			}
 		},
 		flags: {},
 		name: "Not to Be",
@@ -7356,28 +7365,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10028,
 	},
-	/* soulpassage: { // tested, works as intended
-		onStart(target) {
+	/* soulpassage: {
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (!holder?.hp || target.side !== holder.side || target === holder) return;
 			let statName: StatIDExceptHP = 'atk';
 			let bestStat = 0;
 			const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			for (const i of stats) {
-				if (target.side.lastFaintedBoosts[i] > bestStat) {
+				if (target.boosts[i] > bestStat) {
 					statName = i;
-					bestStat = target.side.lastFaintedBoosts[i];
+					bestStat = target.boosts[i];
 				}
 			}
-			if (bestStat > 0) this.boost({ [statName]: bestStat }, target);
-		},
-		onStart(target) {
-			const bestStat = source.getBestStat(true, true);
-			this.boost({ [bestStat]: length }, source);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				const bestStat = source.getBestStat(true, true);
-				this.boost({ [bestStat]: length }, source);
-			}
+			if (bestStat > 0) this.boost({ [statName]: bestStat }, holder);
 		},
 		flags: {},
 		name: "Soul Passage",
@@ -7460,7 +7461,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 10029,
 	},
-	tobe: { // Complete.
+	tobe: {
 		onTryHit(pokemon, target, move) {
 			if (move.ohko) {
 				this.add('-immune', pokemon, '[from] ability: To Be');

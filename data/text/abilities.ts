@@ -2351,8 +2351,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	carboncapture: {
 		name: "Carbon Capture",
-		desc: "If Smog is active, this Pokemon's Poison-type attacks have their power multiplied by 1.5. This Pokemon cannot be poisoned by Smog. These effects are prevented if this Pokemon is holding Safety Goggles.",
-		shortDesc: "If Smog is active, this Pokemon's Poison-type attacks have 1.5x power.",
+		desc: "If Smog is active, this Pokemon's Poison-type attacks have their power multiplied by 2. This Pokemon cannot be poisoned by Smog. These effects are prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "If Smog is active, this Pokemon's Poison-type attacks have 2x power.",
 	},
 	/* cataclysmiclight: { TODO
 		name: "Cataclysmic Light",
@@ -2367,7 +2367,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "On switch-in, this Pokemon summons Fog.",
 	},
 	consecration: {
-		name: "Conseceration",
+		name: "Consecration",
 		desc: "If this Pokemon is a Bearvoyance, it will change to Awakened Form if holding a Thick Club and Paranormal Activity or Dreamscape is active.",
 		shortDesc: "(Bearvoyance only) changes to Awakened Form w/ Thick Club + P.Activity/Dreamscape.",
 
@@ -2384,7 +2384,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	druidry: {
 		name: "Druidry",
-		desc: "On switch-in + while the user is active, Misty Terrain transforms into Grassy Terrain.",
+		desc: "If Fairy Dust is active, Grassy Terrain is set.",
 
 		activate: "  [POKEMON] transfigured the battlefield!",
 	},
@@ -2404,7 +2404,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	energizer: {
 		name: "Energizer",
-		desc: "If Thunderstorm is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding and Energy Nullifier.",
+		desc: "If Thunderstorm is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
 		shortDesc: "If Thunderstorm is active, this Pokemon's Speed is doubled.",
 	},
 	enjoin: {
@@ -2447,8 +2447,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "Psychic-type moves against this Pokemon deal damage with a halved offensive stat.",
 	},
 	forked: {
-		name: "Forked", // incomplete, testing desc for 2+ forked users
-		desc: "The user and its allies can never be struck by Thunderstorm's lightning strikes. When lightning strikes the field, the opposing side will always recive the strikes. If both sides of a battle have Forked, ",
+		name: "Forked",
+		desc: "Thunderstorm's lightning strikes hit twice. This Pokemon and its allies can never be struck by Thunderstorm's lightning strikes. When lightning strikes the field, the opposing side will always receive the strikes.",
 		shortDesc: "The user and its allies cannot be struck by Thunderstorm.",
 	},
 	frigidblaze: {
@@ -2522,11 +2522,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	nastywebbing: {
 		name: "Nasty Webbing",
-		shortDesc: "If this Pokemon is hit by a physical attack, Stick Web is set on the opposing side.",
+		shortDesc: "If this Pokemon is hit by a physical attack, Sticky Web is set on the opposing side.",
 	},
 	neutralize: {
 		name: "Neutralize",
-		desc: "On switch-in, this Pokemon clears all weathers. While this Pokemon is active, Abilities have no effect and weathers cannont be set. This Ability activates before hazards and other Abilities take effect. Does not affect the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Neutralize, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Tera Shift, Zen Mode, or Zero to Hero Abilities.",
+		desc: "On switch-in, this Pokemon clears all Weathergy. While this Pokemon is active, Abilities have no effect and Weathergy cannot be set. This Ability activates before hazards and other Abilities take effect. Does not affect the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Neutralize, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Tera Shift, Zen Mode, or Zero to Hero Abilities.",
 		shortDesc: "On switch-in, clears weather. Active: Abilities have no effect and weather cannot be set.",
 
 		start: "  All Weathergy and Abilities are being neutralized!",
@@ -2534,9 +2534,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	nottobe: {
 		name: "Not to Be",
-		shortDesc: "If an opponent knocks out the user, it faints in 2 turns.",
+		desc: "When an ally of this Pokemon faints, all active Pokemon gain Perish Song unless they already have it.",
+		shortDesc: "When an ally faints, all active Pokemon gain Perish Song.",
 
-		start: "  [POKEMON] and its attacker will faint in two turns!",
+		start: "  A dreadful fate settled over everyone on the field!",
 	},
 	nullify: {
 		name: "Nullify",
@@ -2547,7 +2548,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pearldrop: {
 		name: "Pearl Drop",
-		desc: "On switch-in, summons Pearl Drop for 5 turns. Pearl Drop: all moves have their accuracy multiplied by 0.9.",
+		desc: "On switch-in, summons Pearl Drop for 5 turns. Pearl Drop: all moves have their accuracy multiplied by 0.9, except for Clamtrip.",
 		shortDesc: "On switch-in, all moves have 0.9x accuracy for 5 turns.",
 	},
 	petrichor: {
@@ -2597,7 +2598,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockybody: {
 		name: "Rocky Body",
-		desc: "If this Pokemon is a Stackem, the first physical hit it takes in battle deals 0 neutral damage and Stealth Rock is set on the opposing side. Its rocks are then knocked over, it changes to Rockless Form, and it loses 1/8 of its max HP. Confusion damage also knocks the rocks over.",
+		desc: "If this Pokemon is a Stackem, the first physical hit it takes in battle deals 0 neutral damage and Stealth Rock is set on the opposing side. Its rocks are then knocked over, it changes to Rockless Form, and it loses 1/8 of its max HP. Confusion damage also knocks over its rocks.",
 		shortDesc: "(Stackem only) First physical hit deals 0 damage and sets Stealth Rock on the opp. side.",
 
 		block: "  Its rocks were knocked over!",
@@ -2638,12 +2639,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	souldrain: {
 		name: "Soul Drain",
-		desc: "This Pokemon restores 1/4 of its maximum HP, rounded down, when another Pokemon faints to indirect damage.If Paranormal Activity is active, this Pokemon restores an additional 1/8. This Pokemon takes no damage from Paranormal Activity. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
-		shortDesc: "Other Pokemon faints to indirect: heal 1/4, 3/8 in P.Activity; immunity to it.",
+		desc: "When another Pokemon faints, this Pokemon restores 1/8 of its maximum HP, rounded down. If Paranormal Activity is active, this Pokemon instead restores 1/4 of its maximum HP. This Pokemon takes no damage from Paranormal Activity. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "Other Pokemon faints: heals 1/8, 1/4 in P.Activity.",
 	},
 	soulpassage: {
 		name: "Soul Passage",
-		shortDesc: "On switch-in, gains the highest stat boost of the previous fainted ally.",
+		desc: "When an ally of this Pokemon faints, this Pokemon gains the highest positive stat stage of the fainted Pokemon. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order.",
+		shortDesc: "When an ally faints, gains its highest positive stat stage.",
 	},
 	standoff: {
 		name: "Stand Off",
@@ -2677,7 +2679,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	tobe: {
 		name: "To Be",
 		desc: "If this Pokemon is at full HP, it survives one hit with at least 1 HP and its Speed is raised by 1 stage. OHKO moves fail when used against this Pokemon.",
-		shortDesc: "Full HP: user survives one hit with at least 1 HP and its speed is raised by 1 stage.",
+		shortDesc: "Full HP: user survives one hit with at least 1 HP and its Speed is raised by 1 stage.",
 
 		activate: "  [POKEMON] decided to live!",
 	},

@@ -4556,7 +4556,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (status.id === 'slp' && (target.isGrounded() || target.hasAbility('Surge Surfer')) && !target.isSemiInvulnerable()) {
+				if (status.id === 'slp' && target.isTerrainAffected() &&
+					!target.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
 						this.add('-activate', target, 'move: Electric Terrain');
 					}
@@ -4564,7 +4565,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onTryAddVolatile(status, target) {
-				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
+				if (!target.isTerrainAffected() ||
+					target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
 					this.add('-activate', target, 'move: Electric Terrain');
 					return null;
@@ -4572,7 +4574,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+				if (move.type === 'Electric' && attacker.isTerrainAffected() &&
 					!attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify([5325, 4096]);
@@ -4994,13 +4996,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('psychicterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
+			if (this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) {
 				this.debug('terrain buff');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (this.field.isTerrain('psychicterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
+			if (this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -7732,7 +7734,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyPriority(priority, source, target, move) {
-			if (this.field.isTerrain('grassyterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
+			if (this.field.isTerrain('grassyterrain') && source.isTerrainAffected()) {
 				return priority + 1;
 			}
 		},
@@ -7763,7 +7765,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-				if (weakenedMoves.includes(move.id) && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+				if (weakenedMoves.includes(move.id) && defender.isTerrainAffected() &&
 					!defender.isSemiInvulnerable()) {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
@@ -7783,7 +7785,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if ((pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer')) && !pokemon.isSemiInvulnerable()) {
+				if (pokemon.isTerrainAffected() &&
+					!pokemon.isSemiInvulnerable()) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				} else {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
@@ -12257,7 +12260,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfdestruct: "always",
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('mistyterrain') && (source.isGrounded() || source.hasAbility('Surge Surfer'))) {
+			if (this.field.isTerrain('mistyterrain') && source.isTerrainAffected()) {
 				this.debug('misty terrain boost');
 				return this.chainModify(1.5);
 			}
@@ -12286,14 +12289,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return 5;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
+				if (!target.isTerrainAffected() ||
+					target.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
 			},
 			onTryAddVolatile(status, target, source, effect) {
-				if (!(target.isGrounded() || target.hasAbility('Surge Surfer')) || target.isSemiInvulnerable()) return;
+				if (!target.isTerrainAffected() ||
+					target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
 					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
@@ -12301,7 +12306,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && (defender.isGrounded() || defender.hasAbility('Surge Surfer')) &&
+				if (move.type === 'Dragon' && defender.isTerrainAffected() &&
 					!defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
@@ -14281,7 +14286,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return;
 				}
 				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-				if (!(target.isGrounded() || target.hasAbility('Surge Surfer'))) {
+				if (!target.isTerrainAffected()) {
 					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect airborne Pokémon.");
@@ -14293,7 +14298,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Psychic' && (attacker.isGrounded() || attacker.hasAbility('Surge Surfer')) &&
+				if (move.type === 'Psychic' && attacker.isTerrainAffected() &&
 					!attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
 					return this.chainModify([5325, 4096]);
@@ -15320,7 +15325,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback(source, target, move) {
-			if (this.field.isTerrain('electricterrain') && (target.isGrounded() || target.hasAbility('Surge Surfer'))) {
+			if (this.field.isTerrain('electricterrain') && target.isTerrainAffected()) {
 				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
 				return move.basePower * 2;
 			}
@@ -19517,7 +19522,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		onModifyType(move, pokemon) {
-			if (!(pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer'))) return;
+			if (!pokemon.isTerrainAffected()) return;
 			switch (this.field.terrain) {
 			case 'electricterrain':
 				move.type = 'Electric';
@@ -19534,7 +19539,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (this.field.terrain && (pokemon.isGrounded() || pokemon.hasAbility('Surge Surfer'))) {
+			if (this.field.terrain && pokemon.isTerrainAffected()) {
 				move.basePower *= 2;
 				this.debug('BP doubled in Terrain');
 			}
