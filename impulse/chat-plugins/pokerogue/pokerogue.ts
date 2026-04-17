@@ -838,7 +838,7 @@ export const commands: Chat.ChatCommands = {
 				`<code>/pokerogue top</code> — Leaderboard.<br>` +
 				`<code>/pokerogue quit</code> — Abandon run.<br>`;
 			if (isStaff) {
-				html += `<br><b>Staff Tools:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
+				html += `<br><b>Staff Commands:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
 			}
 			this.sendReplyBox(html);
 		},
