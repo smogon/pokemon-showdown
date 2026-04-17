@@ -423,6 +423,10 @@ export class TeamValidator {
 		const teamHas: { [k: string]: number } = {};
 		let lgpeStarterCount = 0;
 		let deoxysType;
+		
+		// DECLARE TRACKER HERE, OUTSIDE THE LOOP
+		let livingPokemonCount = 0; 
+
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
@@ -435,7 +439,7 @@ export class TeamValidator {
 				setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			}
 
-			// CHECK: undefined means 100% HP, so it's alive
+			// CHECK IF ALIVE (after validateSet parses the nickname hack)
 			if (set.hp === undefined || set.hp > 0) {
 				livingPokemonCount++;
 			}
@@ -472,7 +476,7 @@ export class TeamValidator {
 			}
 		}
 
-		// REJECTION BLOCK
+		// REJECTION BLOCK IF ALL POKEMON ARE 0% HP
 		if (livingPokemonCount === 0) {
 			problems.push(`Your team must have at least one Pokémon that isn't starting fainted (0% HP).`);
 		}
