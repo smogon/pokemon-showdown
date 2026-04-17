@@ -15,9 +15,57 @@ export const collectionCommands: ChatCommands = {
 	async collection(target, room, user) {
 		if (!this.runBroadcast()) return;
 		try {
-			const { filter, queryDescription, page, commandString, targetUserId } = parseCardQuery(target, { userId: user.id });
-			const collection = userCollectionsCollection;
+			const parts = target.split(',').map(p => p.trim()).filter(Boolean);
+			
+			let targetUserId = user.id;
+			let sortOption = 'rarity';
+			let page = 1;
 
+			// 1. Parse Arguments (targetUserId, sortOption, page)
+			if (parts.length > 0) {
+				const firstArg = parts[0].toLowerCase();
+				if (['rarity', 'points', 'set', 'setid'].includes(firstArg)) {
+					sortOption = firstArg === 'setid' ? 'set' : firstArg;
+				} else {
+					targetUserId = toID(parts[0]) || user.id;
+				}
+
+				if (parts.length > 1) {
+					const secondArg = parts[1].toLowerCase();
+					if (['rarity', 'points', 'set', 'setid'].includes(secondArg)) {
+						sortOption = secondArg === 'setid' ? 'set' : secondArg;
+					} else {
+						const parsedPage = parseInt(secondArg);
+						if (!isNaN(parsedPage)) page = Math.max(1, parsedPage);
+					}
+				}
+
+				if (parts.length > 2) {
+					const parsedPage = parseInt(parts[2]);
+					if (!isNaN(parsedPage)) page = Math.max(1, parsedPage);
+				}
+			}
+
+			// 2. Define Sorting Behavior
+			let sortStage: any = {};
+			switch (sortOption) {
+				case 'points':
+					sortStage = { totalPoints: -1, cardId: 1 };
+					break;
+				case 'set':
+					sortStage = { setId: 1, totalPoints: -1, cardId: 1 };
+					break;
+				case 'rarity':
+				default:
+					// Sorts by Rarity string alphabetically, then by points. 
+					sortStage = { rarity: 1, totalPoints: -1, cardId: 1 };
+					break;
+			}
+
+			// 3. Fetch Data
+			const collection = userCollectionsCollection;
+			const filter = { userId: targetUserId };
+			
 			const statsPipeline: any[] = [
 				{ $match: filter },
 				{ $group: { _id: null, totalUniqueCards: { $sum: 1 }, totalQuantity: { $sum: "$quantity" }, totalPoints: { $sum: { $multiply: ["$totalPoints", "$quantity"] } } } },
@@ -27,33 +75,30 @@ export const collectionCommands: ChatCommands = {
 			const totalMatches = stats.totalUniqueCards;
 
 			if (totalMatches === 0) {
-				return this.errorReply(`No cards found in ${targetUserId}'s collection matching: ${queryDescription.replace(`Owner: ${targetUserId}, `, '')}.`);
+				return this.errorReply(`${targetUserId === user.id ? "You don't" : `${targetUserId} doesn't`} have any cards in their collection yet.`);
 			}
 
-			const totalPages = Math.ceil(totalMatches / SEARCH_PAGE_LIMIT);
+			const limit = 80; // SEARCH_PAGE_LIMIT
+			const totalPages = Math.ceil(totalMatches / limit);
 			const currentPage = Math.min(page, totalPages);
-			const skip = (currentPage - 1) * SEARCH_PAGE_LIMIT;
+			const skip = (currentPage - 1) * limit;
 
 			const pipeline: any[] = [
 				{ $match: filter },
-				{ $sort: { totalPoints: -1, cardId: 1 } },
+				{ $sort: sortStage },
 				{ $skip: skip },
-				{ $limit: SEARCH_PAGE_LIMIT },
+				{ $limit: limit },
 			];
 			const results = await collection.aggregate<TcgUser>(pipeline);
 
+			// 4. Render HTML
 			let html = `<div class="infobox" style="padding: 7px; text-align: center; max-height: 340px; overflow-y: auto;">`;
 			const displayName = targetUserId === user.id ? user.name : targetUserId;
 			html += `<strong style="font-size: 20px;">${displayName}'s Card Collection</strong><br />`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 5px;">Total Cards: ${stats.totalQuantity.toLocaleString()} | Total Points: ${stats.totalPoints.toLocaleString()}</div>`;
-
-			const filtersOnly = queryDescription.replace(`Owner: ${targetUserId}, `, '').replace(`Owner: ${targetUserId}`, '');
-			if (filtersOnly && filtersOnly !== 'All Cards') {
-				html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Filters: ${filtersOnly}</div>`;
-			}
+			html += `<div style="font-size: 0.8em; color: #555; margin-bottom: 10px;">Sorted by: ${sortOption.charAt(0).toUpperCase() + sortOption.slice(1)}</div>`;
 			html += `<div style="font-size: 0.9em; margin-bottom: 10px;">Showing ${results.length} of ${totalMatches.toLocaleString()} unique cards.</div>`;
 
-			if (results.length === 0) html += `No results found for this page.`;
 			for (let i = 0; i < results.length; i++) {
 				const c = results[i];
 				if (i % 4 === 0) {
@@ -75,25 +120,32 @@ export const collectionCommands: ChatCommands = {
 			}
 			if (results.length > 0) html += `</div>`;
 
+			// 5. Pagination Commands
+			const baseCmd = targetUserId === user.id ? `/tcg collection ${sortOption}` : `/tcg collection ${targetUserId}, ${sortOption}`;
+
 			if (totalPages > 1) {
 				html += `<hr style="margin: 7px 0; border: none; border-top: 1px solid #ccc;">`;
-				html += `<div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 20px;">`;
+				html += `<div style="text-align: center; margin-top: 10px;">`;
+				
 				if (currentPage > 1) {
-					html += `<button name="send" value="/tcg collection ${commandString}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">&lt; Previous</button>`;
+					html += `<button name="send" value="${baseCmd}, ${currentPage - 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 15px; border-radius: 4px; cursor: pointer; margin-right: 20px;">&lt; Previous</button>`;
 				}
-				html += `<div style="font-size: 0.9em; color: #555;">Page ${currentPage} of ${totalPages}</div>`;
+				
+				html += `<span style="font-size: 0.9em; color: #555; display: inline-block; vertical-align: middle;">Page ${currentPage} of ${totalPages}</span>`;
+				
 				if (currentPage < totalPages) {
-					html += `<button name="send" value="/tcg collection ${commandString}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Next &gt;</button>`;
+					html += `<button name="send" value="${baseCmd}, ${currentPage + 1}" style="background: #eee; border: 1px solid #ccc; padding: 5px 15px; border-radius: 4px; cursor: pointer; margin-left: 20px;">Next &gt;</button>`;
 				}
+				
 				html += `</div>`;
 			}
 			html += `</div>`;
 			this.sendReply(`|html|${html}`);
 		} catch (error) {
-			return this.errorReply('An error occurred while fetching your collection.');
+			return this.errorReply('An error occurred while fetching the collection.');
 		}
 	},
-
+	
 	async setprogress(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const setId = target.trim().toLowerCase();
