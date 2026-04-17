@@ -5,7 +5,7 @@
 */
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats,
-	renderCardGridHtml, addCardsToCollection, initializeCache, parseCardQuery } from './tcg_utils';
+	renderCardGridHtml, addCardsToCollection, initializeCache } from './tcg_utils';
 import { Table } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
