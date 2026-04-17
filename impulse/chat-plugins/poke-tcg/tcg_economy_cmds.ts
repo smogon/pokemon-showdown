@@ -4,7 +4,7 @@
 * @author PrinceSky-Git
 */
 import type { TcgCard, TcgUser } from './interface';
-import { dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY } from './tcg_utils';
+import { dailyShopCache, currentShopDate, setShopCache, MAX_CARD_QUANTITY, CREDITS_PER_DUPLICATE } from './tcg_utils';
 import { generateThemedTable } from '../../utils';
 import { tcgCardsCollection, userCollectionsCollection,
 	userProfilesCollection, userPacksCollection } from './tcg_collections';
