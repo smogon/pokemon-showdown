@@ -24,7 +24,7 @@ import { type RuleTable } from './dex-formats';
  * Second character is a source ID, one of:
  *
  * - E = egg, 3rd char+ is the father in gen 2-5, empty in gen 6-7
- *   because egg moves aren't restricted to fathers anymore
+ * because egg moves aren't restricted to fathers anymore
  * - S = event, 3rd char+ is the index in .eventData
  * - D = Dream World, only 5D is valid
  * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
@@ -716,6 +716,23 @@ export class TeamValidator {
 			set.teraType = type.name;
 		} else {
 			delete set.teraType;
+		}
+
+		// Validate custom HP
+		if (set.hp !== undefined) {
+			if (isNaN(set.hp) || set.hp < 0 || set.hp > 100) {
+				problems.push(`${name} has an invalid starting HP percentage (${set.hp}%). It must be between 0 and 100.`);
+			}
+		}
+
+		// Validate custom Status
+		if (set.status) {
+			const status = dex.conditions.get(set.status);
+			if (!status.exists || !['psn', 'tox', 'brn', 'par', 'slp', 'frz'].includes(status.id)) {
+				problems.push(`${name} has an invalid starting status condition (${set.status}).`);
+			} else {
+				set.status = status.name;
+			}
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);
