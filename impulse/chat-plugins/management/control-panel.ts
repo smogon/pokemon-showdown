@@ -73,7 +73,7 @@ function createHeader(title: string): string {
 			'display: flex; align-items: center;' +
 			'border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 14px;' +
 		'">' +
-			'<strong style="font-size: 1.2em;">⚙️ Control Panel — ' + title + '</strong>' +
+			'<strong style="font-size: 1.2em;">Control Panel — ' + title + '</strong>' +
 			// Added margin-left: auto; here to ensure it pushes to the far right
 			'<button class="button" name="send" value="/controlpanel view home" style="margin-left: auto;">← Back to Control Panel</button>' +
 		'</div>'
@@ -124,7 +124,7 @@ function renderHome(user: User): string {
 	return (
 		'<div class="pad">' +
 			'<div style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 14px;">' +
-				'<strong style="font-size: 1.2em;">⚙️ Control Panel</strong>' +
+				'<strong style="font-size: 1.2em;">Control Panel</strong>' +
 			'</div>' +
 			'<p style="color: #555; margin-bottom: 14px;">Welcome, ' + Impulse.nameColor(user.name, true, false) + '. Select a section to manage.</p>' +
 			cardHtml +
@@ -161,7 +161,7 @@ async function renderColors(user: User): Promise<string> {
 	const rows = entries.map(([userid, color]) => [
 		Impulse.nameColor(userid, true, false),
 		renderColorSwatch(color),
-		`<button class="button" name="send" value="/controlpanel deletecolor ${userid}" style="color:#c00;border-color:#c00;">🗑 Delete</button>`,
+		`<button class="button" name="send" value="/controlpanel deletecolor ${userid}" style="color:#c00;border-color:#c00;">Delete</button>`,
 	]);
 
 	return `<div class="pad">${header}${Table('Custom Colors', ['User', 'Hex Color', 'Action'], rows)}</div>`;
@@ -179,7 +179,7 @@ async function renderSymbolColors(user: User): Promise<string> {
 		renderColorSwatch(entry.color),
 		Impulse.nameColor(entry.setBy, true, false),
 		formatDate(entry.createdAt),
-		`<button class="button" name="send" value="/controlpanel deletesymbolcolor ${userid}" style="color:#c00;border-color:#c00;">🗑 Delete</button>`,
+		`<button class="button" name="send" value="/controlpanel deletesymbolcolor ${userid}" style="color:#c00;border-color:#c00;">Delete</button>`,
 	]);
 
 	return `<div class="pad">${header}${Table('Symbol Colors', ['User', 'Hex Color', 'Set By', 'Added', 'Action'], rows)}</div>`;
@@ -197,7 +197,7 @@ async function renderSymbols(user: User): Promise<string> {
 		`<strong style="font-size:1.2em;">${entry.symbol}</strong>`,
 		Impulse.nameColor(entry.setBy, true, false),
 		formatDate(entry.createdAt),
-		`<button class="button" name="send" value="/controlpanel deletesymbol ${userid}" style="color:#c00;border-color:#c00;">🗑 Delete</button>`,
+		`<button class="button" name="send" value="/controlpanel deletesymbol ${userid}" style="color:#c00;border-color:#c00;">Delete</button>`,
 	]);
 
 	return `<div class="pad">${header}${Table('Custom Symbols', ['User', 'Symbol', 'Set By', 'Added', 'Action'], rows)}</div>`;
@@ -227,7 +227,7 @@ function renderAvatars(user: User): string {
 			Impulse.nameColor(userid, true, false),
 			`<img src="${imgUrl}" width="80" height="80" style="object-fit: contain; background: rgba(0,0,0,0.1); border-radius: 4px;" />`,
 			`<code>${filename}</code>`,
-			`<button class="button" name="send" value="/controlpanel deleteavatar ${userid}" style="color:#c00;border-color:#c00;">🗑 Delete</button>`,
+			`<button class="button" name="send" value="/controlpanel deleteavatar ${userid}" style="color:#c00;border-color:#c00;">Delete</button>`,
 		];
 	});
 
