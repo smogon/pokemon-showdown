@@ -24,6 +24,7 @@ export interface ShopItem {
 	description: string;
 	cost: number;
 	heldItem?: string;
+	icon?: string;
 	gachaType?: 'master' | 'ultra' | 'great';
 	gachaChance?: number;
 	isConsumable?: boolean; 
@@ -31,7 +32,7 @@ export interface ShopItem {
 
 export const SHOP_ITEMS: Record<string, ShopItem> = {
 	rarecandy: { id: 'rarecandy', name: 'Rare Candy', description: 'Instantly grants +5 levels to one of your Pokemon. (Max Lv. 999)', cost: 100 },
-	luckycharm: { id: 'luckycharm', name: 'Lucky Charm', description: 'Doubles EXP and coins earned for the next 3 floors.', cost: 150 },
+	luckycharm: { id: 'luckycharm', name: 'Lucky Charm', description: 'Doubles EXP and coins earned for the next 3 floors.', cost: 150, icon: 'luckyegg' },
 	revive: { id: 'revive', name: 'Revive', description: 'Grants a second chance — if you lose your next battle you retry the same floor.', cost: 200 },
 	focussash: { id: 'focussash', name: 'Focus Sash', description: 'Survive any one-hit KO at 1 HP.', cost: 120, heldItem: 'focussash', isConsumable: true },
 	leftovers: { id: 'leftovers', name: 'Leftovers', description: 'Gradually restores HP each turn.', cost: 100, heldItem: 'leftovers' },
@@ -116,9 +117,9 @@ export const SHOP_ITEMS: Record<string, ShopItem> = {
 	rawstberry: { id: 'rawstberry', name: 'Rawst Berry', description: 'Cures burn once.', cost: 30, heldItem: 'rawstberry', isConsumable: true },
 	cheriberry: { id: 'cheriberry', name: 'Cheri Berry', description: 'Cures paralysis once.', cost: 30, heldItem: 'cheriberry', isConsumable: true },
 	pechaberry: { id: 'pechaberry', name: 'Pecha Berry', description: 'Cures poison once.', cost: 30, heldItem: 'pechaberry', isConsumable: true },
-	mastercapsule: { id: 'mastercapsule', name: 'Master Ball Capsule', description: '30% chance for a Tier 4 (Legendary/Mythical/UB/Paradox); 70% chance for Tier 3 (Elite).', cost: 1500, gachaType: 'master' },
-	ultracapsule: { id: 'ultracapsule', name: 'Ultra Ball Capsule', description: '75% chance for a Tier 3 (Elite) Pokemon; 25% chance for Tier 2 (Standard).', cost: 800, gachaType: 'ultra' },
-	greatcapsule: { id: 'greatcapsule', name: 'Great Ball Capsule', description: '70% chance for a Tier 2 (Standard) Pokemon; 30% chance for Tier 3 (Elite).', cost: 400, gachaType: 'great' },
+	mastercapsule: { id: 'mastercapsule', name: 'Master Ball Capsule', description: '30% chance for a Tier 4 (Legendary/Mythical/UB/Paradox); 70% chance for Tier 3 (Elite).', cost: 1500, gachaType: 'master', icon: 'masterball' },
+	ultracapsule: { id: 'ultracapsule', name: 'Ultra Ball Capsule', description: '75% chance for a Tier 3 (Elite) Pokemon; 25% chance for Tier 2 (Standard).', cost: 800, gachaType: 'ultra', icon: 'ultraball' },
+	greatcapsule: { id: 'greatcapsule', name: 'Great Ball Capsule', description: '70% chance for a Tier 2 (Standard) Pokemon; 30% chance for Tier 3 (Elite).', cost: 400, gachaType: 'great', icon: 'greatball' },
 };
 
 export interface PokemonEntry {
@@ -203,7 +204,7 @@ export function getTier1Pokemon(): string[] {
 	t1Cache = all.filter(s => {
 		if (!s.exists || s.num <= 0 || s.isNonstandard || s.baseSpecies !== s.name) return false;
 		if (s.tags.some(tag => LEGENDARY_TAGS.has(tag))) return false;
-		return s.tier === 'LC' || (s.evos && s.evos.length > 0 && getBST(s) < 350);
+		return (s.tier === 'LC' && getBST(s) < 480) || (s.evos && s.evos.length > 0 && getBST(s) < 350);
 	}).map(s => toID(s.name));
 	return t1Cache;
 }
@@ -328,13 +329,13 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 // --- LEVEL 999 MATH & EXP ---
 
 export function botLevel(floor: number): number {
-	let level = 5; 
+	let level = 1; 
 	if (floor <= 20) {
 		level += (floor - 1) * 2;
 	} else if (floor <= 50) {
-		level = 43 + ((floor - 20) * 4);
+		level = 39 + ((floor - 20) * 4);
 	} else {
-		level = 163 + ((floor - 50) * 8);
+		level = 159 + ((floor - 50) * 8);
 	}
 	return Math.min(999, level);
 }

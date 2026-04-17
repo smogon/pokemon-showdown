@@ -23,17 +23,24 @@ function getSprite(species: string, size = 80): string {
 	const name = sp.name || species;
 	const altName = Utils.escapeHTML(name);
 	let src: string;
-	let fallback: string | null = null;
+	let fallback1: string | null = null;
+	let fallback2: string | null = null;
 	if (sp.exists && sp.gen >= 8) {
 		src = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
-		fallback = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+		fallback2 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
 		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
-		fallback = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else {
 		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	}
-	const onerror = fallback ? ` onerror="if(this.src!=='${fallback}')this.src='${fallback}'"` : '';
+	let onerror = '';
+	if (fallback1 && fallback2) {
+		onerror = ` onerror="this.onerror=function(){this.onerror=null;this.src='${fallback2}'};this.src='${fallback1}'"`;
+	} else if (fallback1) {
+		onerror = ` onerror="this.onerror=null;this.src='${fallback1}'"`;
+	}
 	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
@@ -220,7 +227,7 @@ function renderGamePage(state: PokeRogueState): string {
 			const item = SHOP_ITEMS[id];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
-			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.heldItem || item.id)}<b>${item.name}</b></div>`;
+			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.icon || item.heldItem || item.id)}<b>${item.name}</b></div>`;
 			buf += `<div class="pr-shop-item-desc">${item.description}</div>`;
 			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
 		}
@@ -457,9 +464,9 @@ export const commands: Chat.ChatCommands = {
 			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
 			
-			let addedLevel = 5; 
+			let addedLevel = 1;
 			if (state.pendingChoiceType !== 'starter') {
-				addedLevel = Math.max(5, botLevel(state.floor) - 2);
+				addedLevel = Math.max(1, botLevel(state.floor) - 2);
 			}
 			
 			let finalSpecies = choice;
@@ -604,8 +611,8 @@ export const commands: Chat.ChatCommands = {
 			} else if (itemId === 'revive') {
 				state.hasRevive = true;
 			} else if (item?.gachaType) {
-				const { species } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
-				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured: true };
+				const { species, isFeatured } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
+				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured };
 			} else if (item?.heldItem) {
 				if (state.team[slot].heldItem) {
 					const oldItem = state.team[slot].heldItem!;
@@ -665,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
 			
-			const addedLevel = Math.max(5, botLevel(state.floor) - 2);
+			const addedLevel = Math.max(1, botLevel(state.floor) - 2);
 			let finalSpecies = toID(state.pendingGachaOffer.species);
 			
 			while (true) {
