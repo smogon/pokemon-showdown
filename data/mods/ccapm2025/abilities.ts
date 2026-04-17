@@ -818,6 +818,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	aeoliandrift: {
 		onStart(source) {
+			this.add("-ability", source, 'Aeolian Drift');
+			this.add('-message', "Emolga spawns a strong wind!");
 			source.side.addSideCondition('tailwind');
 		},
 		flags: {},
@@ -961,7 +963,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyAccuracy(accuracy) {
 			if (this.effectState.headOn) return;
 			this.effectState.headOn = true;
-			this.debug('Head-On - decreasing accuracy');
+			this.add('-ability', this.effectState.target, 'Head-On');
+			this.hint("Torterra dodges the first attack that hits it after it transforms.");
+			this.debug('Head-On forcing miss');
 			return 0;
 		},
 		flags: {},
@@ -1378,7 +1382,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!lastAttackedBy) return;
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 1.5 && target.hp + damage > target.maxhp / 2) {
+				this.add('-activate', target, 'ability: Primal Shackle');
 				target.formeChange('Rayquaza-Untethered', null, true);
+				this.add('-message', "Rayquaza shatters its tether and escapes!");
+				target.setAbility('beastboost', target);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },

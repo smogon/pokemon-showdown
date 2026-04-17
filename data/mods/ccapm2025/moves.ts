@@ -717,6 +717,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			else if (!(source.side as any).holdHandsUsers.includes(source.baseSpecies.name)) (source.side as any)
 				.holdHandsUsers.push(source.baseSpecies.name);
 		},
+		shortDesc: "If used twice, transforms Jirachi.",
 	},
 	lunarblessing: {
 		inherit: true,
