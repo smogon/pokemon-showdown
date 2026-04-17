@@ -294,11 +294,29 @@ export const commands: Chat.ChatCommands = {
 
 		quit(target, room, user) {
 			clearGameTimer(user.id);
+			
+			const state = activeGames.get(user.id);
+			
+			// If they quit while a game is active, force a loss
+			if (state && state.status === 'playing') {
+				state.status = 'dealerWon';
+				state.message = 'You forfeited the game.';
+				
+				// TIP: If you add an economy or stat tracker later, 
+				// you would deduct their coins or add a loss to their profile right here!
+			}
+
+			// Clean up the game state entirely
 			activeGames.delete(user.id);
-			user.popup("You have left the Blackjack table.");
+			
+			// Send the popup
+			user.popup("You have forfeited and left the Blackjack table.");
+			
+			// Properly close the page for all of the user's active client connections
 			for (const conn of user.connections) {
 				if (conn.openPages?.has('blackjack')) {
-					conn.sendTo(room as Room, `|deinit|view-blackjack`);
+					conn.openPages.delete('blackjack');
+					conn.send(`>view-blackjack\n|deinit`);
 				}
 			}
 		},
