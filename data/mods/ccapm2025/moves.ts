@@ -710,6 +710,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	holdhands: {
 		inherit: true,
 		isNonstandard: undefined,
+		pp: 1,
+		noPPBoosts: true,
 		onAfterMove(source, target, move) {
 			if (this.ruleTable.tagRules.includes("+pokemontag:cap")) return;
 			if (source.baseSpecies.name === 'Jirachi') return;
@@ -717,6 +719,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			else if (!(source.side as any).holdHandsUsers.includes(source.baseSpecies.name)) (source.side as any)
 				.holdHandsUsers.push(source.baseSpecies.name);
 		},
+		shortDesc: "Use this move on 2 Pokemon (excluding Jirachi) to transform Jirachi.",
 	},
 	lunarblessing: {
 		inherit: true,

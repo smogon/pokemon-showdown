@@ -20,7 +20,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'ber', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
-				this.add('-status', target, 'ber');
+				this.add('-status', target, 'Berserk');
 			}
 			if (target.species.name === 'Drifblim') {
 				target.formeChange('Drifblim-Inflamed', this.effect, false);
@@ -41,7 +41,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return damage + hp;
 		},
 		onFoeDamage(damage, target, source, effect) {
-			if (source.status === 'ber') {
+			if (target.status === 'ber') {
 				const hp = target.maxhp / 16;
 				this.effectState.counter += hp;
 				return damage + hp;
