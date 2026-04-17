@@ -70,11 +70,12 @@ function renderColorSwatch(color: string): string {
 function createHeader(title: string): string {
 	return (
 		'<div style="' +
-			'display: flex; align-items: center; justify-content: space-between;' +
+			'display: flex; align-items: center;' +
 			'border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 14px;' +
 		'">' +
 			'<strong style="font-size: 1.2em;">⚙️ Control Panel — ' + title + '</strong>' +
-			'<button class="button" name="send" value="/controlpanel view home">← Back to Control Panel</button>' +
+			// Added margin-left: auto; here to ensure it pushes to the far right
+			'<button class="button" name="send" value="/controlpanel view home" style="margin-left: auto;">← Back to Control Panel</button>' +
 		'</div>'
 	);
 }
