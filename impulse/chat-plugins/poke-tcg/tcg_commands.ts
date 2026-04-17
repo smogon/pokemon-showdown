@@ -5,7 +5,7 @@
 */
 import type { TcgCard, TcgUserProfile, TcgUserPack } from './interface';
 import { generatePack, getCard, getSet, getCacheStats,
-	renderCardGridHtml, addCardsToCollection, initializeCache } from './tcg_utils';
+	renderCardGridHtml, addCardsToCollection, initializeCache, parseCardQuery } from './tcg_utils';
 import { Table } from '../../utils';
 import { adminCommands } from './tcg_admin_cmds';
 import { economyCommands } from './tcg_economy_cmds';
@@ -14,103 +14,6 @@ import { tcgCardsCollection, userProfilesCollection,
 	userPacksCollection, cooldownsCollection } from './tcg_collections';
 
 const SEARCH_PAGE_LIMIT = 40;
-
-function parseSearchQuery(target: string): { filter: any, queryDescription: string, page: number, commandString: string } {
-	const parts = target.split(',');
-	let page = 1, query = target.trim(), commandString = query;
-
-	if (parts.length > 1) {
-		const lastPart = parts[parts.length - 1].trim();
-		const potentialPage = parseInt(lastPart);
-		if (!isNaN(potentialPage)) {
-			page = Math.max(1, potentialPage);
-			query = parts.slice(0, -1).join(',').trim();
-			commandString = query;
-		}
-	}
-
-	const filter: any = { $and: [] };
-	const descriptions: string[] = [];
-	const filterRegex = /(\w+)\s*:\s*([<=>]{1,2})?"([^"]+)"|([\w-]+)/g;
-	let nameQuery = query, match;
-
-	while ((match = filterRegex.exec(query)) !== null) {
-		const key = match[1].toLowerCase();
-		const operator = match[2];
-		const value = match[3].replace(/"/g, '');
-		nameQuery = nameQuery.replace(match[0], '');
-
-		const valueNum = parseInt(value);
-		const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		const valueRegex = new RegExp(escapedValue, 'i');
-
-		switch (key) {
-		case 'rarity':
-			filter.$and.push({ rarity: valueRegex });
-			descriptions.push(`Rarity: ${value}`);
-			break;
-		case 'supertype':
-		case 'st':
-			filter.$and.push({ supertype: valueRegex });
-			descriptions.push(`Supertype: ${value}`);
-			break;
-		case 'subtype':
-			filter.$and.push({ subtypes: valueRegex });
-			descriptions.push(`Subtype: ${value}`);
-			break;
-		case 'type':
-			filter.$and.push({ types: valueRegex });
-			descriptions.push(`Type: ${value}`);
-			break;
-		case 'artist':
-			filter.$and.push({ artist: valueRegex });
-			descriptions.push(`Artist: ${value}`);
-			break;
-		case 'hp':
-			if (!isNaN(valueNum)) {
-				let hpFilter: any = {};
-				if (operator === '>') hpFilter = { $gt: valueNum };
-				else if (operator === '>=') hpFilter = { $gte: valueNum };
-				else if (operator === '<') hpFilter = { $lt: valueNum };
-				else if (operator === '<=') hpFilter = { $lte: valueNum };
-				else hpFilter = valueNum;
-				filter.$and.push({ hp: hpFilter });
-				descriptions.push(`HP: ${operator || ''}${value}`);
-			}
-			break;
-		case 'legal':
-			const legalKey = `legalities.${value.toLowerCase()}`;
-			filter.$and.push({ [legalKey]: 'Legal' });
-			descriptions.push(`Legal: ${value}`);
-			break;
-		case 'series':
-			filter.$and.push({ setSeries: valueRegex });
-			descriptions.push(`Series: ${value}`);
-			break;
-		case 'reg':
-			filter.$and.push({ regulationMark: valueRegex });
-			descriptions.push(`Reg Mark: ${value}`);
-			break;
-		case 'set':
-			const partialRegex = new RegExp(escapedValue, 'i');
-			const exactRegex = new RegExp("^" + escapedValue + "$", 'i');
-			filter.$and.push({ $or: [{ set: partialRegex }, { setId: exactRegex }] });
-			descriptions.push(`Set: ${value}`);
-			break;
-		}
-	}
-
-	const nameQueryClean = nameQuery.trim();
-	if (nameQueryClean) {
-		const nameRegex = new RegExp(nameQueryClean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-		filter.$and.push({ name: nameRegex });
-		descriptions.unshift(`'${nameQueryClean}'`);
-	}
-
-	if (filter.$and.length === 0) delete filter.$and;
-	const queryDescription = descriptions.length > 0 ? descriptions.join(', ') : 'All Cards';
-	return { filter, queryDescription, page, commandString };
-}
 
 export const commands: ChatCommands = {
 	tcg: 'pokemontcg',
@@ -215,7 +118,7 @@ export const commands: ChatCommands = {
 			}
 
 			try {
-				const { filter, queryDescription, page, commandString } = parseSearchQuery(target);
+				const { filter, queryDescription, page, commandString } = parseCardQuery(target);
 				const collection = tcgCardsCollection;
 				const totalMatches = await collection.countDocuments(filter);
 				if (totalMatches === 0) return this.errorReply(`No cards found matching: ${queryDescription}.`);
