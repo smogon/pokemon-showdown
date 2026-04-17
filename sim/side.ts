@@ -1017,8 +1017,11 @@ export class Side {
 		}
 
 		const ruleTable = this.battle.ruleTable;
+		
+		// Update: If the timer runs out (autoChoose), sort fainted Pokémon to the back of the line
 		let positions = data ? data.split(data.includes(',') ? ',' : '').map(datum => parseInt(datum) - 1) :
-			[...this.pokemon.keys()]; // autoChoose
+			[...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].fainted ? 1 : 0) - (this.pokemon[b].fainted ? 1 : 0)); 
+		
 		const pickedTeamSize = this.pickedTeamSize();
 
 		// make sure positions is exactly of length pickedTeamSize
@@ -1039,6 +1042,10 @@ export class Side {
 			}
 			if (positions.indexOf(pos) !== index) {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
+			}
+			// Update: Prevent players from choosing a fainted Pokémon for their active lead slots
+			if (index < this.active.length && this.pokemon[pos].fainted) {
+				return this.emitChoiceError(`Can't choose for Team Preview: You can't start the battle with a fainted Pokémon`);
 			}
 		}
 
