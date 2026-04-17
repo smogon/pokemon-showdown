@@ -27,7 +27,6 @@ interface GameState {
 	status: GameStatus;
 	message: string;
 	timer?: NodeJS.Timeout | null; // Tracks the active countdown on the server
-	turnDeadline?: number;         // Timestamp for the client UI to sync with
 }
 
 // ─── State Management ─────────────────────────────────────────────────────────
@@ -122,7 +121,6 @@ function dealInitialGame(): GameState {
 		status: 'playing',
 		message: 'Your turn. Hit or Stand?',
 		timer: null,
-		turnDeadline: Date.now() + TURN_TIME_MS,
 	};
 }
 
@@ -184,24 +182,12 @@ function renderGame(user: User, state: GameState): string {
 	// Action UI
 	let actionsHtml = '';
 	if (state.status === 'playing') {
-		let timeRemaining = 0;
-		if (state.turnDeadline) {
-			timeRemaining = Math.max(0, Math.ceil((state.turnDeadline - Date.now()) / 1000));
-		}
-		
-		const timerId = 'bj-timer-' + user.id;
-		
-		// This uses the img onerror hack to safely execute client-side JS within Pokemon Showdown's chat UI.
-		// It updates the span text every second and auto-destroys the interval if the span is removed (e.g., page reloads or closes).
-		const timerScript = '<img src="x" onerror="var el=document.getElementById(\'' + timerId + '\');if(!el||el.dataset.started)return;el.dataset.started=\'1\';var t=' + timeRemaining + ';var i=setInterval(function(){var c=document.getElementById(\'' + timerId + '\');if(!c){clearInterval(i);return;}t--;if(t<=0){clearInterval(i);c.innerHTML=\'0\';}else{c.innerHTML=t;}},1000);" style="display:none;" />';
-
 		actionsHtml =
 			'<div style="margin-top: 10px;">' +
 				'<button class="button" name="send" value="/blackjack hit" style="padding: 10px 20px; font-size: 1.1em; background: #4CAF50; color: white; border: none; border-radius: 4px; margin-right: 15px;">Hit</button>' +
 				'<button class="button" name="send" value="/blackjack stand" style="padding: 10px 20px; font-size: 1.1em; background: #f44336; color: white; border: none; border-radius: 4px; margin-left: 15px;">Stand</button>' +
 			'</div>' +
-			'<div style="font-size: 0.9em; color: #ffeb3b; margin-top: 15px;">⏳ Auto-stand in <span id="' + timerId + '" style="font-weight:bold; font-size:1.1em;">' + timeRemaining + '</span> seconds.</div>' +
-			timerScript;
+			'<div style="font-size: 0.9em; color: #ffeb3b; margin-top: 15px;">⏳ Auto-stand in 30 seconds.</div>';
 	} else {
 		let color = '#555';
 		if (state.status === 'playerWon') color = '#4CAF50';
@@ -217,9 +203,9 @@ function renderGame(user: User, state: GameState): string {
 		: '';
 
 	return '<div class="pad" style="max-width: 600px; margin: 0 auto;">' +
-		'<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 14px;">' +
-			'<strong style="font-size: 1.2em;">🃏 Impulse Blackjack</strong>' +
-			'<button class="button" name="send" value="/blackjack quit" style="padding: 6px 12px;">Quit Game</button>' +
+		'<div style="display: flex; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 14px;">' +
+			'<strong style="font-size: 1.2em;">🃏 Blackjack</strong>' +
+			'<button class="button" name="send" value="/blackjack quit" style="padding: 6px 12px; margin-left: auto;">Quit Game</button>' +
 		'</div>' +
 		'<div style="background: #2b5c33; padding: 20px; border-radius: 8px; border: 4px solid #4a3b2c; text-align: center;">' +
 			'<div style="margin-bottom: 20px;">' +
@@ -288,7 +274,6 @@ export const commands: Chat.ChatCommands = {
 				state.status = 'bust';
 				state.message = 'You busted with ' + playerVal + '!';
 			} else {
-				state.turnDeadline = Date.now() + TURN_TIME_MS;
 				resetGameTimer(user.id);
 			}
 
