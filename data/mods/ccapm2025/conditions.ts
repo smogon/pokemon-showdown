@@ -18,9 +18,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target, source, sourceEffect) {
 			this.effectState.counter = 0;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'ber', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add('-activate', target, 'ber', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
-				this.add('-status', target, 'ber');
+				this.add('-activate', target, 'ber');
 			}
 			if (target.species.name === 'Drifblim') {
 				target.formeChange('Drifblim-Inflamed', this.effect, false);
@@ -36,12 +36,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onDamage(damage, target, source, effect) {
+			if (!target) return damage;
 			const hp = target.maxhp / 16;
 			this.effectState.counter += hp;
 			return damage + hp;
 		},
 		onFoeDamage(damage, target, source, effect) {
-			if (source.status === 'ber') {
+			if (source?.getStatus().name === 'ber') {
 				const hp = target.maxhp / 16;
 				this.effectState.counter += hp;
 				return damage + hp;
@@ -61,7 +62,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				pokemon.formeChange('Drifblim', this.effect, false);
 			}
 		},
-		onFaint(pokemon) {
+		onBeforeFaint(pokemon) {
 			for (const opponent of pokemon.side.foe.active) {
 				const active = opponent.side.foe.active.filter(mon => mon.status === 'ber').length - 1 > 0;
 				if (opponent.species.name === 'Mesprit' && active) {
@@ -120,13 +121,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	// advent
 	gingerstorm: {
 		name: 'Gingerstorm',
-		effectType: 'IrritantWeather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		// This should be applied directly to the stat before any of the other modifiers are chained
 		// So we give it increased priority.
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Fire') && this.field.isIrritantWeather('gingerstorm')) {
+			if (pokemon.hasType('Fire') && this.field.isClimateWeather('gingerstorm')) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -143,9 +144,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onFieldResidual() {
 			this.add('-weather', 'Gingerstorm', '[upkeep]');
 			this.add('-message', `The gingerstorm continues!`);
-			if (this.field.isIrritantWeather('gingerstorm')) this.eachEvent('Weather');
+			if (this.field.isClimateWeather('gingerstorm')) this.eachEvent('Weather');
 		},
-		onIrritantWeather(target) {
+		onClimateWeather(target) {
 			if (target.hasType('Fire')) return;
 			if (target.status === 'brn') {
 				this.damage(target.baseMaxhp / 8);

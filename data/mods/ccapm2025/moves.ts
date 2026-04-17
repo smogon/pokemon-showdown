@@ -1953,7 +1953,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// if (this.effectState.griGus) return;
 			if (pokemon.species.name === 'Cofagrigus' && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				pokemon.formeChange('Cofagrigus-Unchained', null, true);
-				pokemon.setAbility('darkmagic', pokemon);
 				// this.effectState.griGus = true;
 			}
 		},
@@ -2084,7 +2083,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		irritantWeather: 'gingerstorm',
+		climateWeather: 'gingerstorm',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Sandstorm', target);
 		},
