@@ -640,7 +640,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
 			}
 		},
-		onTeamPreview() {
+		/* onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(', shiny', '')
@@ -649,6 +649,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					details = details
 						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
 				}
+				this.add('poke', pokemon.side.id, details, '');
+			} */
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				const details = pokemon.details.replace(/(Xerneas|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			if (this.ruleTable.has(`teratypepreview`)) {
