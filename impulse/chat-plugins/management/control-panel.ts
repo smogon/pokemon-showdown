@@ -84,28 +84,27 @@ function createHeader(title: string): string {
 function renderHome(user: User): string {
 	const cards = [
 		{
-			emoji: '👤', label: 'Custom Avatars', view: 'avatars',
+			label: 'Custom Avatars', view: 'avatars',
 			desc: 'Manage custom trainer sprites/avatars uploaded for users. (<code>/ca set</code>)',
 		},
 		{
-			emoji: '🎨', label: 'Custom Colors', view: 'colors',
+			label: 'Custom Colors', view: 'colors',
 			desc: 'Manage custom chat name colors. (<code>/cc set</code>)',
 		},
 		{
-			emoji: '🔣', label: 'Custom Symbols', view: 'symbols',
+			label: 'Custom Symbols', view: 'symbols',
 			desc: 'Manage custom auth symbols replacing the default ones. (<code>/cs set</code>)',
 		},
 		{
-			emoji: '🖍️', label: 'Symbol Colors', view: 'symbolcolors',
+			label: 'Symbol Colors', view: 'symbolcolors',
 			desc: 'Manage colors for user auth symbols. (<code>/sc set</code>)',
 		},
 		{
-			emoji: '🖼️', label: 'User Icons', view: 'icons',
+			label: 'User Icons', view: 'icons',
 			desc: 'Manage custom userlist icons assigned to players. (<code>/icon set</code>)',
 		},
 	];
 
-	// Sort the cards alphabetically (A-Z) by their label
 	cards.sort((a, b) => a.label.localeCompare(b.label));
 
 	const cardHtml = cards.map(c =>
@@ -113,12 +112,11 @@ function renderHome(user: User): string {
 			'border: 1px solid #ccc; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;' +
 			'display: flex; align-items: center; gap: 14px;' +
 		'">' +
-			'<span style="font-size: 2em; line-height: 1;">' + c.emoji + '</span>' +
 			'<div style="flex: 1;">' +
 				'<strong>' + c.label + '</strong>' +
 				'<div style="font-size: 0.9em; color: #555;">' + c.desc + '</div>' +
 			'</div>' +
-			'<button class="button" name="send" value="/controlpanel view ' + c.view + '">Open →</button>' +
+			'<button class="button" name="send" value="/controlpanel view ' + c.view + '" style="margin-left: auto;">Open →</button>' +
 		'</div>'
 	).join('');
 
