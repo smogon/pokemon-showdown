@@ -4,7 +4,7 @@
 * @author PrinceSky-Git
 */
 import type { TcgCard, TcgUser } from './interface';
-import { getSet, getCacheStats, calculateSetsCompleted, parseCardQuery } from './tcg_utils';
+import { getSet, getCacheStats, calculateSetsCompleted } from './tcg_utils';
 import { tcgCardsCollection, userCollectionsCollection,
 	userProfilesCollection, userPacksCollection } from './tcg_collections';
 
