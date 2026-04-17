@@ -1229,7 +1229,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return user;
 		});
 		if (!delayStart) {
-			Rooms.global.onCreateBattleRoom(users as User[], this.room, { rated: this.rated });
+			const suppressBattleReport = this.options.players.some(player => player.hidden || player.inviteOnly);
+			Rooms.global.onCreateBattleRoom(users as User[], this.room, {
+				rated: this.rated,
+				suppressBattleReport,
+			});
 			this.started = true;
 		} else if (delayStart === 'multi') {
 			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);

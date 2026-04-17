@@ -1545,12 +1545,7 @@ export class GlobalRoomState {
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
 		for (const room of Rooms.rooms.values()) {
-			if (
-				!room?.active ||
-				room.settings.isPrivate ||
-				room.privacySetter?.size ||
-				room.settings.modjoin === '%'
-			) continue;
+			if (!room?.active || room.settings.isPrivate) continue;
 			if (room.type !== 'battle') continue;
 			if (formatFilter && formatFilter !== room.format) continue;
 			if (eloFilter && (!room.rated || room.rated < eloFilter)) continue;
@@ -1664,13 +1659,7 @@ export class GlobalRoomState {
 				player.setStatusType('online');
 			}
 		}
-		// Tournament, hidden, and spectator-restricted battles should never be announced to report rooms.
-		let display = (
-			!room.tour &&
-			!room.settings.isPrivate &&
-			!room.privacySetter?.size &&
-			room.settings.modjoin !== '%'
-		);
+		let display = !options.suppressBattleReport && !room.tour && !room.settings.isPrivate;
 		if (players.length === 2) {
 			display = display && this.checkId(players[0].id) && this.checkId(players[1].id);
 		}
