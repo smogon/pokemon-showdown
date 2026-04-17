@@ -1217,7 +1217,11 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.inRooms.has(room.roomid) || !player.hasTeam) {
 			player.invite = targetUser.id;
 			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
-			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(user.id, battle.format, user.battleSettings);
+			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(
+				user.id,
+				battle.format,
+				{ ...user.battleSettings }
+			);
 			Ladders.challenges.add(
 				new Ladders.BattleInvite(user.id, targetUser.id, ready, {
 					acceptCommand: `/acceptbattle ${user.id}`,
