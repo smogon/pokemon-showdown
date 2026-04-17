@@ -22,6 +22,8 @@ Export format looks like this:
 ```
 Articuno @ Leftovers  
 Ability: Pressure  
+HP: 20%  
+Status: brn  
 EVs: 252 HP / 252 SpA / 4 SpD  
 Modest Nature  
 IVs: 30 SpA / 30 SpD  
@@ -32,12 +34,13 @@ IVs: 30 SpA / 30 SpD
 
 Ludicolo @ Life Orb  
 Ability: Swift Swim  
+Status: slp  
 EVs: 4 HP / 252 SpA / 252 Spe  
 Modest Nature  
 - Surf  
 - Giga Drain  
 - Ice Beam  
-- Rain Dance  
+- Rain Dance
 
 Volbeat (M) @ Damp Rock  
 Ability: Prankster  
@@ -78,6 +81,25 @@ Adamant Nature
 
 It's used for teambuilder import/export features, and not much else. But as a user, this is the only format you'll see.
 
+The "Nickname Hack" (Public Client Compatibility)
+-----------
+
+If you are importing teams using the official public client (play.pokemonshowdown.com), the standard HP: and Status: lines will be stripped by the browser before reaching the server.
+
+To bypass this, you can encode custom HP and Status conditions directly into the Pokémon's nickname using bracket tags [H:XX] and [S:xxx]. The server will extract these tags and apply them.
+
+```
+Smaug [H:20] [S:brn] (Charizard) @ Heavy-Duty Boots
+Ability: Blaze
+EVs: 252 SpA / 4 SpD / 252 Spe
+Timid Nature
+- Flamethrower
+- Air Slash
+- Roost
+- Defog
+```
+
+The server will extract the tags, set the Pokémon to 20% HP and Burned, and the final nickname in-battle will simply be "Smaug".
 
 JSON format
 -----------
@@ -92,6 +114,8 @@ JSON format looks like this:
     "gender": "",
     "item": "Leftovers",
     "ability": "Pressure",
+    "hp": 20,
+    "status": "brn",
     "evs": {"hp": 252, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 0},
     "nature": "Modest",
     "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 30, "spd": 30, "spe": 31},
@@ -103,6 +127,7 @@ JSON format looks like this:
     "gender": "",
     "item": "Life Orb",
     "ability": "Swift Swim",
+    "status": "slp",
     "evs": {"hp": 4, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
     "nature": "Modest",
     "moves": ["Surf", "Giga Drain", "Ice Beam", "Rain Dance"]
@@ -157,8 +182,8 @@ Packed format
 Packed format looks like this:
 
 ```
-Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||]
-Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||]
+Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||,,,,,,20,brn]
+Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||,,,,,,,slp]
 Volbeat||damprock|prankster|tailglow,batonpass,encore,raindance|Bold|248,,252,,8,|M||||]
 Seismitoad||lifeorb|swiftswim|hydropump,earthpower,stealthrock,raindance|Modest|,,,252,4,252|||||]
 Alomomola||damprock|regenerator|wish,protect,toxic,raindance|Bold|252,,252,,4,|||||]
@@ -170,7 +195,7 @@ Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,2
 The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
 ```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE,HPPERCENTAGE,STATUS
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE,HP,STATUS
 ```
 
 - `SPECIES` is left blank if it's identical to `NICKNAME`
@@ -216,35 +241,12 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
   (e.g., 50 for 50% HP). Left blank for 100% HP. Useful for testing abilities
   and moves that trigger at low HP.
 
-- `STATUS` is a status condition ID (`brn`, `psn`, `par`, `slp`, `frz`, `tox`)
-  for the Pokémon to start with. Left blank for no status. Useful for testing
-  status-related abilities and moves.
+- `HP` is left blank for 100%.
+
+- `STATUS` is left blank if the Pokémon has no starting status condition.
 
 - If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX`, `DYNAMAXLEVEL`, `TERATYPE`,
   `HPPERCENTAGE` and `STATUS` are all blank, the commas will be left off.
-
-
-### Examples with custom HP and status
-
-You can create Pokémon that start with reduced HP and/or status conditions:
-
-```
-Blissey||leftovers|naturalcure|softboiled,seismictoss,thunderwave,healbell|Bold|252,,252,,,4,|F|||100||,,,,,33,brn
-```
-
-This creates a Blissey starting at 33% HP with burn status.
-
-```
-Umbreon||leftovers|synchronize|wish,protect,foulplay,toxic|Careful|252,,4,,,252,|M|||100||,,,,,50,psn
-```
-
-This creates an Umbreon starting at 50% HP with poison status.
-
-```
-Mimikyu||lifeorb|disguise|swordsdance,playrough,shadowsneak,shadowclaw|Adamant|,252,4,,,252|F|||100||,,,,,,par
-```
-
-This creates a Mimikyu starting at 100% HP with paralysis status (note the empty hpPercentage field).
 
 
 Converting between formats
@@ -278,7 +280,7 @@ Example use:
 const {Teams} = require('pokemon-showdown');
 
 console.log(JSON.stringify(Teams.unpack(
-  `Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||]Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||]Volbeat||damprock|prankster|tailglow,batonpass,encore,raindance|Bold|248,,252,,8,|M||||]Seismitoad||lifeorb|swiftswim|hydropump,earthpower,stealthrock,raindance|Modest|,,,252,4,252|||||]Alomomola||damprock|regenerator|wish,protect,toxic,raindance|Bold|252,,252,,4,|||||]Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,252,4,,,124|||||`
+  `Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||,,,,,,20,brn]Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||,,,,,,,slp]`
 )));
 
 // will log the team to console in JSON format
@@ -308,7 +310,7 @@ const validator = new TeamValidator('gen6nu');
 
 const output = validator.validateTeam(
   Teams.unpack(
-    `Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||]Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||]Volbeat||damprock|prankster|tailglow,batonpass,encore,raindance|Bold|248,,252,,8,|M||||]Seismitoad||lifeorb|swiftswim|hydropump,earthpower,stealthrock,raindance|Modest|,,,252,4,252|||||]Alomomola||damprock|regenerator|wish,protect,toxic,raindance|Bold|252,,252,,4,|||||]Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,252,4,,,124|||||`
+    `Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||,,,,,,20,brn]Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||,,,,,,,slp]`
   )
 );
 ```
