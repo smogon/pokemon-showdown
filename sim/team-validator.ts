@@ -435,6 +435,11 @@ export class TeamValidator {
 				setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			}
 
+			// CHECK: undefined means 100% HP, so it's alive
+			if (set.hp === undefined || set.hp > 0) {
+				livingPokemonCount++;
+			}
+
 			if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
 				lgpeStarterCount++;
 				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
@@ -465,6 +470,11 @@ export class TeamValidator {
 					if (species.baseSpecies === 'Unown') set.species = 'Unown';
 				}
 			}
+		}
+
+		// REJECTION BLOCK
+		if (livingPokemonCount === 0) {
+			problems.push(`Your team must have at least one Pokémon that isn't starting fainted (0% HP).`);
 		}
 
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
