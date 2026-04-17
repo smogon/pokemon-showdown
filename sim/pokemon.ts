@@ -503,38 +503,35 @@ export class Pokemon {
 		this.baseMaxhp = 0;
 		this.hp = 0;
 		this.clearVolatile();
-		this.hp = this.maxhp;
-
-		// CUSTOM HP PERCENTAGE INITIALIZATION
-		// This allows Pokemon to start battles with a specific HP percentage (0-100).
-		// Applied here in the constructor AFTER clearVolatile() sets hp = maxhp (line 500).
-		// This is the correct location because:
-		// 1. clearVolatile() calls setSpecies() which initializes maxhp
-		// 2. This only runs once during Pokemon object creation
-		// 3. Subsequent switch-ins won't reset HP because setSpecies() only sets hp = maxhp
-		//    when !this.maxhp (initial construction only)
-		// Use cases: Testing low-HP abilities (Emergency Exit, Berserk), berries, etc.
-		if (this.set.hpPercentage !== undefined) {
-			const percentage = this.battle.clampIntRange(this.set.hpPercentage, 0, 100);
-			this.hp = Math.floor(this.maxhp * percentage / 100);
+		
+		// Apply Custom HP Percentage
+		if (this.set.hp !== undefined) {
+			if (this.set.hp <= 0) {
+				this.hp = 0;
+				this.fainted = true;
+			} else {
+				this.hp = Math.max(1, Math.floor(this.maxhp * (this.set.hp / 100)));
+			}
+		} else {
+			this.hp = this.maxhp;
 		}
 
-		// CUSTOM STATUS CONDITION INITIALIZATION
-		// This allows Pokemon to start battles with a status condition (brn, psn, par, slp, frz, tox).
-		// Applied here in the constructor AFTER status is initialized to '' (line 373).
-		// This is the correct location because:
-		// 1. Status is set to '' in line 373 before this point
-		// 2. This only runs once during Pokemon object creation
-		// 3. Status persists through switch-outs (not reset by clearVolatile)
-		// 4. We validate the status to ensure only legal status conditions are applied
-		// Use cases: Testing status-related abilities (Guts, Synchronize, Natural Cure),
-		// status moves (Facade), or specific battle scenarios.
-		if (this.set.status) {
-			const statusid = toID(this.set.status);
-			// Only allow valid major status conditions that exist in Pokemon games
-			if (['brn', 'par', 'slp', 'frz', 'psn', 'tox'].includes(statusid)) {
-				this.status = statusid;
-				this.statusState = this.battle.initEffectState({ id: statusid });
+		// Apply Custom Status Condition
+		if (this.set.status && !this.fainted) { // Only apply status if alive
+			const startingStatus = this.battle.dex.conditions.get(this.set.status);
+			if (startingStatus.exists) {
+				this.status = startingStatus.id;
+				this.statusState = this.battle.initEffectState({ id: startingStatus.id, target: this });
+				
+				// Initialize state variables for specific statuses 
+				// since we bypassed the standard setStatus() Start event
+				if (this.status === 'slp') {
+					// In modern gens, sleep lasts for 1-3 turns, internally represented as 2-4
+					this.statusState.time = this.battle.random(2, 5); 
+				} else if (this.status === 'tox') {
+					// Toxic counter must start at 0
+					this.statusState.stage = 0; 
+				}
 			}
 		}
 	}
