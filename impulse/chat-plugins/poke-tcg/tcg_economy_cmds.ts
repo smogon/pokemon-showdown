@@ -12,10 +12,225 @@ import { tcgCardsCollection, userCollectionsCollection,
 const PACK_COST = 0;
 const PACKS_IN_SHOP = 20;
 
+async function handleGiftCard(user: User, targetUserId: string, cardId: string, quantityToGift: number, reply: (msg: string) => void, errorReply: (msg: string) => void) {
+	const collection = userCollectionsCollection;
+	const profiles = userProfilesCollection;
+	let senderCardDeducted = false;
+	let senderProfileUpdated = false;
+
+	try {
+		const senderCard = await collection.findOne({ userId: user.id, cardId });
+		if (!senderCard || senderCard.quantity < quantityToGift) {
+			const owned = senderCard ? senderCard.quantity : 0;
+			return errorReply(`You do not have ${quantityToGift}x "${cardId}". You only have ${owned}.`);
+		}
+
+		const newSenderQty = senderCard.quantity - quantityToGift;
+		const pointsToDeduct = senderCard.totalPoints * quantityToGift;
+		const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
+
+		if (newSenderQty === 0) {
+			await collection.deleteOne({ userId: user.id, cardId });
+		} else {
+			await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: -quantityToGift } });
+		}
+		senderCardDeducted = true;
+
+		await profiles.updateOne(
+			{ userId: user.id },
+			{ $inc: { totalQuantity: -quantityToGift, collectionPoints: -pointsToDeduct, totalUniqueCards: uniqueCardsChangeSender } }
+		);
+		senderProfileUpdated = true;
+
+		const now = new Date().toISOString();
+		const recipientCard = await collection.findOne({ userId: targetUserId, cardId });
+		const currentRecipientQty = recipientCard?.quantity || 0;
+		const newRecipientQty = currentRecipientQty + quantityToGift;
+		const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
+		const excess = newRecipientQty - finalRecipientQty;
+		const creditsToAward = excess * CREDITS_PER_DUPLICATE;
+		const actualQtyAdded = finalRecipientQty - currentRecipientQty;
+		const pointsToAdd = senderCard.totalPoints * actualQtyAdded;
+		const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
+
+		if (actualQtyAdded > 0) {
+			if (recipientCard) {
+				await collection.updateOne(
+					{ userId: targetUserId, cardId },
+					{ $set: { quantity: finalRecipientQty, lastAcquiredAt: now } }
+				);
+			} else {
+				const newDocData: TcgUser = { ...senderCard, userId: targetUserId, quantity: finalRecipientQty, firstAcquiredAt: now, lastAcquiredAt: now };
+				delete (newDocData as any)._id;
+				await collection.insertOne(newDocData);
+			}
+		}
+
+		if (actualQtyAdded > 0 || creditsToAward > 0) {
+			const recipientProfile = await profiles.findOne({ userId: targetUserId });
+			if (recipientProfile) {
+				await profiles.updateOne(
+					{ userId: targetUserId },
+					{
+						$inc: {
+							totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
+							totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward,
+						},
+						$set: { userName: recipientProfile.userName, lastUpdatedAt: now },
+					}
+				);
+			} else {
+				await profiles.insertOne({
+					userId: targetUserId, userName: targetUserId, credits: creditsToAward,
+					totalUniqueCards: uniqueCardsChangeRecipient, totalQuantity: actualQtyAdded,
+					collectionPoints: pointsToAdd, lastUpdatedAt: now,
+				});
+			}
+		}
+
+		let msg = `You successfully gifted ${quantityToGift}x "${senderCard.name}" to ${targetUserId}.`;
+		if (creditsToAward > 0) msg += ` They received ${actualQtyAdded} card(s) and ${creditsToAward} credits (from duplicates).`;
+		reply(msg);
+
+		const targetUser = Users.get(targetUserId);
+		if (targetUser) targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
+	} catch (error) {
+		if (senderCardDeducted || senderProfileUpdated) {
+			try {
+				const senderCard = await collection.findOne({ userId: user.id, cardId });
+				const currentQty = senderCard?.quantity || 0;
+				const pointsToRestore = (senderCard?.totalPoints || 0) * quantityToGift;
+				const uniqueCardsRestoreSender = (currentQty === 0) ? 1 : 0;
+
+				if (senderCardDeducted) {
+					if (currentQty === 0) {
+						const originalCard = await tcgCardsCollection.findOne({ cardId });
+						if (originalCard) {
+							const now = new Date().toISOString();
+							const newDoc: TcgUser = {
+								userId: user.id, cardId, quantity: quantityToGift,
+								firstAcquiredAt: now, lastAcquiredAt: now, name: originalCard.name,
+								setId: originalCard.setId, rarity: originalCard.rarity, totalPoints: originalCard.totalPoints,
+								supertype: originalCard.supertype, types: originalCard.types || [], subtypes: originalCard.subtypes || [],
+							};
+							await collection.insertOne(newDoc);
+						}
+					} else {
+						await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: quantityToGift } });
+					}
+				}
+
+				if (senderProfileUpdated) {
+					await profiles.updateOne(
+						{ userId: user.id },
+						{ $inc: { totalQuantity: quantityToGift, collectionPoints: pointsToRestore, totalUniqueCards: uniqueCardsRestoreSender } }
+					);
+				}
+
+				return errorReply('An error occurred while gifting your card. Your cards have been returned.');
+			} catch (rollbackError) {
+				console.error('Failed to rollback gift card transaction:', rollbackError);
+				return errorReply('A critical error occurred during the gift. Please contact an administrator to verify your card inventory.');
+			}
+		}
+		errorReply('An error occurred while gifting your card.');
+	}
+}
+
+async function handleGiftPack(user: User, targetUserId: string, setId: string, quantityToGift: number, reply: (msg: string) => void, errorReply: (msg: string) => void) {
+	const collection = userPacksCollection;
+	let senderPackDeducted = false;
+	try {
+		const senderPack = await collection.findOne({ userId: user.id, setId });
+		if (!senderPack || senderPack.quantity < quantityToGift) {
+			const owned = senderPack ? senderPack.quantity : 0;
+			return errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
+		}
+
+		const updateSenderResult = await collection.updateOne(
+			{ userId: user.id, setId, quantity: { $gte: quantityToGift } },
+			{ $inc: { quantity: -quantityToGift } }
+		);
+
+		if (updateSenderResult.modifiedCount === 0) {
+			return errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
+		}
+		senderPackDeducted = true;
+
+		const now = new Date().toISOString();
+		await collection.updateOne(
+			{ userId: targetUserId, setId },
+			{
+				$inc: { quantity: quantityToGift },
+				$set: { setName: senderPack.setName, setLogo: senderPack.setLogo, lastAcquiredAt: now },
+				$setOnInsert: { userId: targetUserId, setId },
+			},
+			{ upsert: true }
+		);
+
+		reply(`You successfully gifted ${quantityToGift}x "${senderPack.setName}" pack(s) to ${targetUserId}.`);
+		const targetUser = Users.get(targetUserId);
+		if (targetUser) targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
+	} catch (error) {
+		if (senderPackDeducted) {
+			try {
+				await collection.updateOne({ userId: user.id, setId }, { $inc: { quantity: quantityToGift } });
+				return errorReply('An error occurred while gifting your pack(s). Your packs have been returned.');
+			} catch (rollbackError) {
+				console.error('Failed to rollback gift pack transaction:', rollbackError);
+				return errorReply('A critical error occurred during the gift. Please contact an administrator to verify your pack inventory.');
+			}
+		}
+		errorReply('An error occurred while gifting your pack(s).');
+	}
+}
+
+async function handleGiftCredits(user: User, targetUserId: string, amountToGift: number, reply: (msg: string) => void, errorReply: (msg: string) => void) {
+	const profiles = userProfilesCollection;
+	let senderUpdateSucceeded = false;
+	try {
+		const now = new Date().toISOString();
+		const senderUpdateResult = await profiles.updateOne(
+			{ userId: user.id, credits: { $gte: amountToGift } },
+			{ $inc: { credits: -amountToGift } }
+		);
+
+		if (senderUpdateResult.modifiedCount === 0) {
+			const senderProfile = await profiles.findOne({ userId: user.id });
+			const senderCredits = senderProfile?.credits || 0;
+			return errorReply(`You do not have enough credits. You have ${senderCredits.toLocaleString()}, but tried to send ${amountToGift.toLocaleString()}.`);
+		}
+
+		senderUpdateSucceeded = true;
+		const recipientProfile = await profiles.findOne({ userId: targetUserId });
+
+		if (recipientProfile) {
+			await profiles.updateOne(
+				{ userId: targetUserId },
+				{ $inc: { credits: amountToGift }, $set: { lastUpdatedAt: now } }
+			);
+		} else {
+			await profiles.insertOne({
+				userId: targetUserId, userName: targetUserId, credits: amountToGift,
+				collectionPoints: 0, totalQuantity: 0, totalUniqueCards: 0, lastUpdatedAt: now,
+			});
+		}
+
+		reply(`You successfully gifted ${amountToGift.toLocaleString()} credits to ${targetUserId}.`);
+		const targetUser = Users.get(targetUserId);
+		if (targetUser) targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
+	} catch (error) {
+		if (senderUpdateSucceeded) {
+			await profiles.updateOne({ userId: user.id }, { $inc: { credits: amountToGift } });
+			return errorReply(`An error occurred while sending credits. Your ${amountToGift.toLocaleString()} credits have been refunded.`);
+		}
+		errorReply('An unknown error occurred during the credit transfer.');
+	}
+}
+
 export const economyCommands: ChatCommands = {
 	async shop(target, room, user) {
 		if (!this.runBroadcast()) return;
-
 		try {
 			const today = new Date().toISOString().split('T')[0];
 			if (currentShopDate !== today || dailyShopCache.length === 0) {
@@ -222,281 +437,57 @@ export const economyCommands: ChatCommands = {
 		}
 	},
 
-	async giftcard(target, room, user) {
+	async gift(target, room, user) {
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Please specify a user, card ID, and optional quantity. Usage: /tcg giftcard [user], [cardId], [quantity]");
+		if (parts.length < 3) {
+			return this.errorReply("Usage: /tcg gift [user], [card|pack|credits], [id/amount], [quantity]");
 		}
 
 		const targetUserId = toID(parts[0]);
-		const cardId = parts[1];
-		const quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
+		const type = parts[1].toLowerCase();
 
 		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
-		if (targetUserId === user.id) return this.errorReply("You cannot gift cards to yourself.");
-		if (!cardId) return this.errorReply("Please specify a card ID to gift.");
-		if (isNaN(quantityToGift) || quantityToGift <= 0) return this.errorReply("Invalid quantity. Quantity must be a positive number.");
+		if (targetUserId === user.id) return this.errorReply("You cannot gift to yourself.");
 
-		const collection = userCollectionsCollection;
-		const profiles = userProfilesCollection;
-		let senderCardDeducted = false;
-		let senderProfileUpdated = false;
-
-		try {
-			const senderCard = await collection.findOne({ userId: user.id, cardId });
-			if (!senderCard || senderCard.quantity < quantityToGift) {
-				const owned = senderCard ? senderCard.quantity : 0;
-				return this.errorReply(`You do not have ${quantityToGift}x "${cardId}". You only have ${owned}.`);
-			}
-
-			const newSenderQty = senderCard.quantity - quantityToGift;
-			const pointsToDeduct = senderCard.totalPoints * quantityToGift;
-			const uniqueCardsChangeSender = newSenderQty === 0 ? -1 : 0;
-
-			// Deduct from sender
-			if (newSenderQty === 0) {
-				await collection.deleteOne({ userId: user.id, cardId });
-			} else {
-				await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: -quantityToGift } });
-			}
-			senderCardDeducted = true;
-
-			await profiles.updateOne(
-				{ userId: user.id },
-				{ $inc: { totalQuantity: -quantityToGift, collectionPoints: -pointsToDeduct, totalUniqueCards: uniqueCardsChangeSender } }
-			);
-			senderProfileUpdated = true;
-
-			// Add to recipient
-			const now = new Date().toISOString();
-			const recipientCard = await collection.findOne({ userId: targetUserId, cardId });
-			const currentRecipientQty = recipientCard?.quantity || 0;
-			const newRecipientQty = currentRecipientQty + quantityToGift;
-			const finalRecipientQty = Math.min(newRecipientQty, MAX_CARD_QUANTITY);
-			const excess = newRecipientQty - finalRecipientQty;
-			const creditsToAward = excess * CREDITS_PER_DUPLICATE;
-			const actualQtyAdded = finalRecipientQty - currentRecipientQty;
-			const pointsToAdd = senderCard.totalPoints * actualQtyAdded;
-			const uniqueCardsChangeRecipient = (currentRecipientQty === 0 && actualQtyAdded > 0) ? 1 : 0;
-
-			if (actualQtyAdded > 0) {
-				if (recipientCard) {
-					await collection.updateOne(
-						{ userId: targetUserId, cardId },
-						{ $set: { quantity: finalRecipientQty, lastAcquiredAt: now } }
-					);
-				} else {
-					const newDocData: TcgUser = { ...senderCard, userId: targetUserId, quantity: finalRecipientQty, firstAcquiredAt: now, lastAcquiredAt: now };
-					delete (newDocData as any)._id;
-					await collection.insertOne(newDocData);
-				}
-			}
-
-			if (actualQtyAdded > 0 || creditsToAward > 0) {
-				const recipientProfile = await profiles.findOne({ userId: targetUserId });
-				if (recipientProfile) {
-					await profiles.updateOne(
-						{ userId: targetUserId },
-						{
-							$inc: {
-								totalQuantity: actualQtyAdded, collectionPoints: pointsToAdd,
-								totalUniqueCards: uniqueCardsChangeRecipient, credits: creditsToAward,
-							},
-							$set: { userName: recipientProfile.userName, lastUpdatedAt: now },
-						}
-					);
-				} else {
-					await profiles.insertOne({
-						userId: targetUserId, userName: targetUserId, credits: creditsToAward,
-						totalUniqueCards: uniqueCardsChangeRecipient, totalQuantity: actualQtyAdded,
-						collectionPoints: pointsToAdd, lastUpdatedAt: now,
-					});
-				}
-			}
-
-			let reply = `You successfully gifted ${quantityToGift}x "${senderCard.name}" to ${targetUserId}.`;
-			if (creditsToAward > 0) {
-				reply += ` They received ${actualQtyAdded} card(s) and ${creditsToAward} credits (from duplicates).`;
-			}
-			this.sendReply(reply);
-			const targetUser = Users.get(targetUserId);
-			if (targetUser) {
-				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderCard.name}" card(s).`);
-			}
-		} catch (error) {
-			// Rollback sender's deduction if recipient update failed
-			if (senderCardDeducted || senderProfileUpdated) {
-				try {
-					const senderCard = await collection.findOne({ userId: user.id, cardId });
-					const currentQty = senderCard?.quantity || 0;
-					const pointsToRestore = (senderCard?.totalPoints || 0) * quantityToGift;
-					const uniqueCardsRestoreSender = (currentQty === 0) ? 1 : 0;
-
-					if (senderCardDeducted) {
-						if (currentQty === 0) {
-							// Card was deleted, need to re-fetch original card data
-							const originalCard = await tcgCardsCollection.findOne({ cardId });
-							if (originalCard) {
-								const now = new Date().toISOString();
-								const newDoc: TcgUser = {
-									userId: user.id, cardId, quantity: quantityToGift,
-									firstAcquiredAt: now, lastAcquiredAt: now, name: originalCard.name,
-									setId: originalCard.setId, rarity: originalCard.rarity, totalPoints: originalCard.totalPoints,
-									supertype: originalCard.supertype, types: originalCard.types || [], subtypes: originalCard.subtypes || [],
-								};
-								await collection.insertOne(newDoc);
-							}
-						} else {
-							await collection.updateOne({ userId: user.id, cardId }, { $inc: { quantity: quantityToGift } });
-						}
-					}
-
-					if (senderProfileUpdated) {
-						await profiles.updateOne(
-							{ userId: user.id },
-							{ $inc: { totalQuantity: quantityToGift, collectionPoints: pointsToRestore, totalUniqueCards: uniqueCardsRestoreSender } }
-						);
-					}
-
-					return this.errorReply('An error occurred while gifting your card. Your cards have been returned.');
-				} catch (rollbackError) {
-					console.error('Failed to rollback gift card transaction:', rollbackError);
-					return this.errorReply('A critical error occurred during the gift. Please contact an administrator to verify your card inventory.');
-				}
-			}
-			return this.errorReply('An error occurred while gifting your card.');
+		if (type === 'card') {
+			const cardId = parts[2];
+			const quantity = parts[3] ? parseInt(parts[3]) : 1;
+			if (!cardId) return this.errorReply("Please specify a card ID.");
+			if (isNaN(quantity) || quantity <= 0) return this.errorReply("Invalid quantity.");
+			await handleGiftCard(user, targetUserId, cardId, quantity, msg => this.sendReply(msg), msg => this.errorReply(msg));
+		} else if (type === 'pack') {
+			const setId = parts[2].toLowerCase();
+			const quantity = parts[3] ? parseInt(parts[3]) : 1;
+			if (!setId) return this.errorReply("Please specify a set ID.");
+			if (isNaN(quantity) || quantity <= 0) return this.errorReply("Invalid quantity.");
+			await handleGiftPack(user, targetUserId, setId, quantity, msg => this.sendReply(msg), msg => this.errorReply(msg));
+		} else if (type === 'credits') {
+			const amount = parseInt(parts[2]);
+			if (isNaN(amount) || amount <= 0) return this.errorReply("Invalid amount.");
+			await handleGiftCredits(user, targetUserId, amount, msg => this.sendReply(msg), msg => this.errorReply(msg));
+		} else {
+			return this.errorReply("Invalid gift type. Use: card, pack, or credits.");
 		}
+	},
+
+	async giftcard(target, room, user) {
+		const parts = target.split(',').map(p => p.trim());
+		if (parts.length < 2) return this.errorReply("Usage: /tcg giftcard [user], [cardId], [quantity]");
+		const qty = parts[2] ? `, ${parts[2]}` : '';
+		await this.parse(`/tcg gift ${parts[0]}, card, ${parts[1]}${qty}`);
 	},
 
 	async giftpack(target, room, user) {
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Please specify a user and set ID. Usage: /tcg giftpack [user], [setId], [quantity]");
-		}
-
-		const targetUserId = toID(parts[0]);
-		const setId = parts[1].toLowerCase(); // <-- FIX: Normalize setId to lowercase
-		const quantityToGift = parts[2] ? parseInt(parts[2]) : 1;
-
-		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
-		if (targetUserId === user.id) return this.errorReply("You cannot gift packs to yourself.");
-		if (!setId) return this.errorReply("Please specify a pack set ID to gift.");
-		if (isNaN(quantityToGift) || quantityToGift <= 0) return this.errorReply("Invalid quantity. Quantity must be a positive number.");
-
-		const collection = userPacksCollection;
-		let senderPackDeducted = false;
-
-		try {
-			const senderPack = await collection.findOne({ userId: user.id, setId });
-			if (!senderPack || senderPack.quantity < quantityToGift) {
-				const owned = senderPack ? senderPack.quantity : 0;
-				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${owned}.`);
-			}
-
-			const updateSenderResult = await collection.updateOne(
-				{ userId: user.id, setId, quantity: { $gte: quantityToGift } },
-				{ $inc: { quantity: -quantityToGift } }
-			);
-
-			if (updateSenderResult.modifiedCount === 0) {
-				return this.errorReply(`You do not have ${quantityToGift}x "${setId}" pack(s). You only have ${senderPack.quantity}.`);
-			}
-			senderPackDeducted = true;
-
-			const now = new Date().toISOString();
-			await collection.updateOne(
-				{ userId: targetUserId, setId },
-				{
-					$inc: { quantity: quantityToGift },
-					$set: { setName: senderPack.setName, setLogo: senderPack.setLogo, lastAcquiredAt: now },
-					$setOnInsert: { userId: targetUserId, setId },
-				},
-				{ upsert: true }
-			);
-			this.sendReply(`You successfully gifted ${quantityToGift}x "${senderPack.setName}" pack(s) to ${targetUserId}.`);
-			const targetUser = Users.get(targetUserId);
-			if (targetUser) {
-				targetUser.popup(`|html|${user.name} has given you ${quantityToGift} "${senderPack.setName}" pack(s).`);
-			}
-		} catch (error) {
-			// Rollback sender's deduction if recipient update failed
-			if (senderPackDeducted) {
-				try {
-					await collection.updateOne(
-						{ userId: user.id, setId },
-						{ $inc: { quantity: quantityToGift } }
-					);
-					return this.errorReply('An error occurred while gifting your pack(s). Your packs have been returned.');
-				} catch (rollbackError) {
-					console.error('Failed to rollback gift pack transaction:', rollbackError);
-					return this.errorReply('A critical error occurred during the gift. Please contact an administrator to verify your pack inventory.');
-				}
-			}
-			return this.errorReply('An error occurred while gifting your pack(s).');
-		}
+		if (parts.length < 2) return this.errorReply("Usage: /tcg giftpack [user], [setId], [quantity]");
+		const qty = parts[2] ? `, ${parts[2]}` : '';
+		await this.parse(`/tcg gift ${parts[0]}, pack, ${parts[1]}${qty}`);
 	},
 
 	async giftcredits(target, room, user) {
 		const parts = target.split(',').map(p => p.trim());
-		if (parts.length < 2) {
-			return this.errorReply("Please specify a user and an amount. Usage: /tcg giftcredits [user], [amount]");
-		}
-
-		const targetUserId = toID(parts[0]);
-		const amountToGift = parseInt(parts[1]);
-
-		if (!targetUserId) return this.errorReply("Please specify a user to gift to.");
-		if (targetUserId === user.id) return this.errorReply("You cannot gift credits to yourself.");
-		if (isNaN(amountToGift) || amountToGift <= 0) return this.errorReply("Invalid amount. Amount must be a positive number.");
-
-		const profiles = userProfilesCollection;
-		let senderUpdateSucceeded = false;
-
-		try {
-			const now = new Date().toISOString();
-			const senderUpdateResult = await profiles.updateOne(
-				{ userId: user.id, credits: { $gte: amountToGift } },
-				{ $inc: { credits: -amountToGift } }
-			);
-
-			if (senderUpdateResult.modifiedCount === 0) {
-				const senderProfile = await profiles.findOne({ userId: user.id });
-				const senderCredits = senderProfile?.credits || 0;
-				throw new Error(`You do not have enough credits. You have ${senderCredits.toLocaleString()}, but tried to send ${amountToGift.toLocaleString()}.`);
-			}
-
-			senderUpdateSucceeded = true;
-			const recipientProfile = await profiles.findOne({ userId: targetUserId });
-
-			if (recipientProfile) {
-				await profiles.updateOne(
-					{ userId: targetUserId },
-					{ $inc: { credits: amountToGift }, $set: { lastUpdatedAt: now } }
-				);
-			} else {
-				await profiles.insertOne({
-					userId: targetUserId, userName: targetUserId, credits: amountToGift,
-					collectionPoints: 0, totalQuantity: 0, totalUniqueCards: 0, lastUpdatedAt: now,
-				});
-			}
-
-			this.sendReply(`You successfully gifted ${amountToGift.toLocaleString()} credits to ${targetUserId}.`);
-			const targetUser = Users.get(targetUserId);
-			if (targetUser) {
-				targetUser.popup(`|html|${user.name} has given you ${amountToGift.toLocaleString()} credit(s).`);
-			}
-		} catch (error) {
-			if (error.message.startsWith('You do not have enough credits')) {
-				return this.errorReply(error.message);
-			}
-
-			if (senderUpdateSucceeded) {
-				await profiles.updateOne({ userId: user.id }, { $inc: { credits: amountToGift } });
-				return this.errorReply(`An error occurred while sending credits to the recipient. Your ${amountToGift.toLocaleString()} credits have been refunded.`);
-			}
-
-			return this.errorReply('An unknown error occurred during the credit transfer.');
-		}
+		if (parts.length < 2) return this.errorReply("Usage: /tcg giftcredits [user], [amount]");
+		await this.parse(`/tcg gift ${parts[0]}, credits, ${parts[1]}`);
 	},
 
 	economyhelp(target, room, user) {
@@ -506,10 +497,9 @@ export const economyCommands: ChatCommands = {
 			{ cmd: "/tcg buy [setId]", desc: "Buy a pack from the shop using credits." },
 			{ cmd: "/tcg sell [cardId], [quantity]", desc: "Sell a card from your collection for credits." },
 			{ cmd: "/tcg sellduplicates [all | setId]", desc: "Sell all duplicate cards (quantity > 1) for credits." },
-			{ cmd: "/tcg giftcard [user], [cardId], [quantity]", desc: "Gift a card from your collection to another user." },
-			{ cmd: "/tcg giftpack [user], [setId], [quantity]", desc: "Gift one or more saved packs to another user." },
-			{ cmd: "/tcg giftcredits [user], [amount]", desc: "Gift credits to another user." },
-		];
+			{ cmd: "/tcg gift [user], [card|pack|credits], [id/amount], [qty]", desc: "Gift a card, pack, or credits to another user." },
+			{ cmd: "/tcg giftcard, /tcg giftpack, /tcg giftcredits", desc: "Aliases for /tcg gift." },
+			];
 		const html = `<center><strong>TCG Economy Commands:</strong></center><hr><ul style="list-style-type:none;padding-left:0;">` +
 			helpList.map(({ cmd, desc }, i) =>
 				`<li><b>${cmd}</b><br>${desc}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
