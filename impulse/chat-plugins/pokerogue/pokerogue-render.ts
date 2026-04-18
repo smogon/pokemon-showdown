@@ -18,7 +18,7 @@ import { Table } from '../../utils';
 import { SHOP_ITEMS, rollShopInventory } from './pokerogue-items';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 import { savedData } from './pokerogue-state';
-import { expForLevel, getLevelUpEvo } from './pokerogue-pokemon';
+import { expForLevel } from './pokerogue-pokemon';
 
 export function refreshGamePage(user: User): void {
 	for (const conn of user.connections) {
@@ -30,6 +30,34 @@ export function refreshGamePage(user: User): void {
 
 const PAGE_REFRESH_SECONDS = 20;
 
+// Sprite number mapping for item icons, sourced from smogon/sprites ps-items.sheet.mjs.
+// Items served from: https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/i{num}.png
+const SMOGON_ITEM_SPRITE_BASE = 'https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/';
+const ITEM_SPRITE_NUMS: Record<string, number> = {
+	absorbbulb: 2, aguavberry: 5, airballoon: 6, apicotberry: 10,
+	assaultvest: 581, bigroot: 29, blackbelt: 32, blackglasses: 35,
+	blacksludge: 34, blunderpolicy: 716, boosterenergy: 745, brightpowder: 51,
+	cellbattery: 60, charcoal: 61, cheriberry: 63, chestoberry: 65,
+	choiceband: 68, choicescarf: 69, choicespecs: 70, clearamulet: 747,
+	covertcloak: 750, custapberry: 86, damprock: 88, dragonfang: 106,
+	ejectbutton: 118, ejectpack: 714, eviolite: 130, expertbelt: 132,
+	flameorb: 145, focussash: 151, ganlonberry: 158, greatball: 174,
+	hardstone: 187, heavydutyboots: 715, heatrock: 193, icyrock: 221,
+	lansatberry: 238, laxincense: 240, leftovers: 242, liechiberry: 248,
+	lifeorb: 249, loadeddice: 751, lumberry: 262, luminousmoss: 595,
+	magnet: 273, masterball: 276, metalcoat: 286, metronome: 289,
+	miracleseed: 292, mirrorherb: 748, muscleband: 297, mysticwater: 300,
+	nevermeltice: 305, pechaberry: 333, petayaberry: 335, pixieplate: 610,
+	poisonbarb: 343, powerherb: 358, protectivepads: 663, quickclaw: 373,
+	rawstberry: 381, redcard: 387, rockyhelmet: 417, roomservice: 717,
+	safetygoggles: 604, salacberry: 426, scopelens: 429, shedshell: 437,
+	sharpbeak: 436, silkscarf: 444, silverpowder: 447, sitrusberry: 448,
+	smoothrock: 453, snowball: 606, softsand: 456, spelltag: 461,
+	terrainextender: 662, throatspray: 713, toxicorb: 515, twistedspoon: 520,
+	ultraball: 521, utilityumbrella: 718, weaknesspolicy: 609, whiteherb: 535,
+	widelens: 537, wiseglasses: 539,
+};
+
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
 	const sp = Dex.species.get(id);
@@ -38,15 +66,13 @@ function getSprite(species: string, size = 80): string {
 	let src: string;
 	let fallback1: string | null = null;
 	let fallback2: string | null = null;
-	if (sp.exists && sp.gen >= 8) {
-		src = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
-		fallback1 = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
-		fallback2 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
-	} else if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
+	if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
 		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
-		fallback1 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
+		fallback2 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
 	} else {
 		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
 	}
 	let onerror = '';
 	if (fallback1 && fallback2) {
@@ -61,12 +87,19 @@ function getSprite(species: string, size = 80): string {
 
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
-	const src = Utils.escapeHTML(`https://play.pokemonshowdown.com/sprites/itemicons/${id}.png`);
+	const spriteNum = ITEM_SPRITE_NUMS[id];
 	const initial = Utils.escapeHTML(id.substring(0, 2).toUpperCase());
+	if (spriteNum !== undefined) {
+		const src = `${SMOGON_ITEM_SPRITE_BASE}i${spriteNum}.png`;
+		const escapedSrc = Utils.escapeHTML(src);
+		return `<div class="pr-shop-item-icon">` +
+			`<img src="${escapedSrc}" alt="${Utils.escapeHTML(id)}" width="32" height="32" style="image-rendering:pixelated" ` +
+			`onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'" />` +
+			`<span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
+			`</div>`;
+	}
 	return `<div class="pr-shop-item-icon">` +
-		`<img src="${src}" alt="${Utils.escapeHTML(id)}" width="32" height="32" style="image-rendering:pixelated" ` +
-		`onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'" />` +
-		`<span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
+		`<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
 		`</div>`;
 }
 
@@ -147,7 +180,7 @@ export function renderGamePage(state: PokeRogueState): string {
 		buf += `<div style="text-align:center;padding:24px 16px">`;
 		buf += `<div style="font-size:18px;color:#ff8080;font-weight:bold;margin-bottom:12px">Reset Run?</div>`;
 		buf += `<div style="color:#aaa;margin-bottom:20px">This will permanently end your current run on Floor <b>${state.floor}</b>. Are you sure?</div>`;
-		buf += `<div style="display:flex;gap:10px;justify-content:center">`;
+		buf += `<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">`;
 		buf += `<button name="send" value="/pokerogue quit" class="button" style="background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;border:1px solid #ef4444;padding:8px 20px">Yes, Reset Run</button>`;
 		buf += `<button name="send" value="/pokerogue view main" class="button" style="padding:8px 20px">Cancel</button>`;
 		buf += `</div></div></div>`;
@@ -343,12 +376,9 @@ export function renderGamePage(state: PokeRogueState): string {
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
 		const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const evo = getLevelUpEvo(mon.species);
-		const evoHint = evo && mon.level < evo.evoLevel ? `<span style="font-size:9px;color:#a0e0a0">Evo @ Lv.${evo.evoLevel}</span>` : '';
 		const spData = Dex.species.get(toID(mon.species));
 		const types: string[] = spData.types ?? [];
 		buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
-		if (evoHint) buf += `${evoHint}<br>`;
 		buf += `<span style="font-size:12px;font-weight:bold;color:#e0d4ff">${spData.name}</span> `;
 		buf += `<span style="font-size:9px">${renderTypeBadge(types)}</span><br>`;
 		buf += `<span style="font-size:11px">Lv.${mon.level} <small style="color:#888">(${expNeeded} EXP)</small></span>`;
