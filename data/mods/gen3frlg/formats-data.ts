@@ -653,7 +653,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	misdreavus: {
-		tier: "OU",
+		tier: "UU",
 	},
 	unown: {
 		tier: "UU",

@@ -2162,7 +2162,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	swanna: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	vanillite: {
@@ -2233,7 +2233,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	klinklang: {
-		tier: "PU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	tynamo: {
