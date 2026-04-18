@@ -38,14 +38,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		},
 	},
 	teampreview: {
-		effectType: 'Rule',
-		name: 'Team Preview',
-		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		onBegin() {
-			if (this.ruleTable.has(`teratypepreview`)) {
-				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
-			}
-		},
+		inherit: true,
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
