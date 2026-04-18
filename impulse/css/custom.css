@@ -3697,3 +3697,173 @@ width: 200px;
 		font-size: 22px;
 	}
 }
+
+/* ── Swap card button ── */
+
+.pr-swap-card {
+	display: flex !important;
+	align-items: center;
+	text-align: left !important;
+	padding: 10px 12px !important;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.18), rgba(8, 16, 36, 0.9)) !important;
+	border: 1px solid rgba(90, 63, 160, 0.4) !important;
+	border-radius: 12px !important;
+	width: 100%;
+	box-sizing: border-box;
+	transition: border-color 0.2s;
+}
+
+.pr-swap-card:hover {
+	border-color: rgba(239, 68, 68, 0.6) !important;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.25), rgba(8, 16, 36, 0.95)) !important;
+}
+
+/* ── Battle button (main view) ── */
+
+.pr-battle-btn {
+	text-align: center;
+	font-size: 13px;
+	font-weight: bold;
+	padding: 10px;
+	background: linear-gradient(135deg, rgba(21, 128, 61, 0.55), rgba(16, 100, 48, 0.4)) !important;
+	border: 1px solid rgba(34, 197, 94, 0.55) !important;
+	color: #86efac !important;
+}
+
+.pr-battle-btn:hover {
+	background: linear-gradient(135deg, rgba(22, 163, 74, 0.7), rgba(21, 128, 61, 0.55)) !important;
+	border-color: rgba(34, 197, 94, 0.8) !important;
+}
+
+/* ── Leaderboard ── */
+
+.pr-leaderboard {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	max-height: 420px;
+	overflow-y: auto;
+	margin-bottom: 8px;
+	scrollbar-width: thin;
+}
+
+.pr-lb-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: linear-gradient(135deg, rgba(90, 63, 160, 0.12), rgba(8, 16, 36, 0.85));
+	border: 1px solid rgba(90, 63, 160, 0.3);
+	border-radius: 10px;
+	padding: 8px 12px;
+	font-size: 12px;
+}
+
+.pr-lb-row.pr-lb-top {
+	border-color: rgba(245, 197, 24, 0.4);
+	background: linear-gradient(135deg, rgba(245, 197, 24, 0.06), rgba(15, 10, 0, 0.9));
+}
+
+.pr-lb-rank {
+	font-size: 16px;
+	min-width: 32px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.pr-lb-name {
+	flex: 1;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pr-lb-floor {
+	color: #7eb8ff;
+	font-weight: bold;
+	white-space: nowrap;
+	font-size: 11px;
+}
+
+.pr-lb-team {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+/* ── Floor progress strip ── */
+
+.pr-floor-progress {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin: 10px 0;
+	padding: 8px 6px 6px;
+	background: rgba(90, 63, 160, 0.08);
+	border: 1px solid rgba(90, 63, 160, 0.2);
+	border-radius: 8px;
+}
+
+.pr-fp-node {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.pr-fp-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: rgba(90, 63, 160, 0.4);
+	border: 2px solid rgba(90, 63, 160, 0.5);
+	box-sizing: border-box;
+}
+
+.pr-fp-node.active .pr-fp-dot {
+	width: 13px;
+	height: 13px;
+	background: #c4a8ff;
+	border-color: #c4a8ff;
+	box-shadow: 0 0 8px rgba(196, 168, 255, 0.6);
+}
+
+.pr-fp-node.past .pr-fp-dot {
+	background: rgba(59, 130, 246, 0.5);
+	border-color: rgba(59, 130, 246, 0.6);
+}
+
+.pr-fp-label {
+	font-size: 8px;
+	color: #7090b8;
+	white-space: nowrap;
+	letter-spacing: 0.3px;
+}
+
+.pr-fp-node.active .pr-fp-label {
+	color: #c4a8ff;
+	font-weight: bold;
+}
+
+.pr-fp-node.past .pr-fp-label {
+	color: #5090c8;
+}
+
+.pr-fp-line {
+	flex: 1;
+	height: 2px;
+	background: rgba(90, 63, 160, 0.25);
+	margin-top: 4px;
+	align-self: flex-start;
+}
+
+.pr-fp-line.past {
+	background: rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 600px) {
+	.pr-lb-team {
+		display: none;
+	}
+}
