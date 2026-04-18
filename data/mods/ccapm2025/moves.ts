@@ -1946,29 +1946,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source) {
 			this.directDamage(source.maxhp / 2, source, source);
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target) {
 			// if (this.effectState.griGus) return;
 			if (pokemon.species.name === 'Cofagrigus' && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				pokemon.formeChange('Cofagrigus-Unchained', null, true);
 				pokemon.setAbility('darkmagic', pokemon);
 				// Switch Curse for Dragon's Curse
 				const curseIndex = pokemon.set.moves
-						.map(move => move.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('curse' as ID);
+					.map(move => move.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('curse' as ID);
 				const move = this.dex.moves.get('dragonscurse');
-					const sketchedMove = {
-						move: move.name,
-						id: move.id,
-						pp: move.pp,
-						maxpp: move.pp,
-						target: move.target,
-						disabled: false,
-						used: false,
-					};
-					pokemon.moveSlots[curseIndex] = sketchedMove;
-					pokemon.baseMoveSlots[curseIndex] = sketchedMove;
+				const sketchedMove = {
+					move: move.name,
+					id: move.id,
+					pp: move.pp,
+					maxpp: move.pp,
+					target: move.target,
+					disabled: false,
+					used: false,
 				};
+				pokemon.moveSlots[curseIndex] = sketchedMove;
+				pokemon.baseMoveSlots[curseIndex] = sketchedMove;
+			};
 		},
-				// this.effectState.griGus = true;
+		// this.effectState.griGus = true;
 		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', `[of] ${source}`);

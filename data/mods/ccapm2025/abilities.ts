@@ -221,7 +221,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Gem Infusion",
 		rating: 4,
 		num: 1001,
-		shortDesc: "If holding a Gem, primary type becomes the type of the Gem."
+		shortDesc: "If holding a Gem, primary type becomes the type of the Gem.",
 	},
 	embodyaspectpixiedust: {
 		onStart(pokemon) {
