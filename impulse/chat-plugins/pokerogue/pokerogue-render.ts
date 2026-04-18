@@ -145,7 +145,7 @@ export function renderGamePage(state: PokeRogueState): string {
 
 	if (view === 'resetconfirm') {
 		buf += `<div style="text-align:center;padding:24px 16px">`;
-		buf += `<div style="font-size:18px;color:#ff8080;font-weight:bold;margin-bottom:12px">⚠️ Reset Run?</div>`;
+		buf += `<div style="font-size:18px;color:#ff8080;font-weight:bold;margin-bottom:12px">Reset Run?</div>`;
 		buf += `<div style="color:#aaa;margin-bottom:20px">This will permanently end your current run on Floor <b>${state.floor}</b>. Are you sure?</div>`;
 		buf += `<div style="display:flex;gap:10px;justify-content:center">`;
 		buf += `<button name="send" value="/pokerogue quit" class="button" style="background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;border:1px solid #ef4444;padding:8px 20px">Yes, Reset Run</button>`;
