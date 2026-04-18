@@ -1964,6 +1964,24 @@ export class Pokemon {
 		return this.setAbility('');
 	}
 
+	setBaseStats(baseStats: StatsTable) {
+		const clonedSpecies = this.battle.dex.deepClone(this.species);
+		clonedSpecies.baseStats = baseStats;
+		const oldMaxhp = this.maxhp;
+		const oldHp = this.hp;
+		const wasFainted = this.fainted;
+		this.setSpecies(clonedSpecies);
+		this.baseMaxhp = this.baseStoredStats.hp;
+		this.maxhp = this.baseStoredStats.hp;
+		if (wasFainted) {
+			this.hp = 0;
+		} else {
+			const hpRatio = oldMaxhp ? oldHp / oldMaxhp : 1;
+			this.hp = Math.max(1, Math.min(this.maxhp, Math.round(hpRatio * this.maxhp)));
+		}
+		return true;
+	}
+
 	getNature() {
 		return this.battle.dex.natures.get(this.set.nature);
 	}

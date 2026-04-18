@@ -391,23 +391,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				return;
 			}
 			const newBaseStats: StatsTable = { hp, atk, def, spa, spd, spe };
-			const oldMaxhp = p.maxhp;
-			const oldHp = p.hp;
-			const wasFainted = p.fainted;
-			const newStats = battle.spreadModify(newBaseStats, p.set);
-			p.baseStoredStats = newStats;
-			p.baseMaxhp = newStats.hp;
-			p.maxhp = newStats.hp;
-			if (wasFainted) {
-				p.hp = 0;
-			} else {
-				const hpRatio = oldMaxhp ? oldHp / oldMaxhp : 1;
-				p.hp = Math.max(1, Math.min(p.maxhp, Math.round(hpRatio * p.maxhp)));
-			}
-			for (const stat in p.storedStats) {
-				p.storedStats[stat as StatIDExceptHP] = newStats[stat as StatIDExceptHP];
-			}
-			p.speed = p.storedStats.spe;
+			p.setBaseStats(newBaseStats);
 			break;
 		}
 		case 'reseed': {
