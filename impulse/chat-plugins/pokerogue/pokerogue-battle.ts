@@ -1,15 +1,27 @@
-// pokerogue-battle.ts — bot user creation, ai move logic, and battle start.
-// imported by pokerogue.ts. does not export chat plugin hooks.
+/*
+ * =======================================================================
+ *
+ *    ___ __  __ ___ _   _ _    ___ ___
+ *   |_ _|  \/  | _ \ | | | |  / __| __|
+ *    | || |\/| |  _/ |_| | |__\__ \ _|
+ *   |___|_|  |_|_|  \___/|____|___/___|
+ *
+ *   Server: Impulse
+ *   Plugin: PokéRogue Battle
+ *   Made by: @TurboRx
+ *
+ * =======================================================================
+ */
 
 import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
+import { type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 import {
-	type PokemonEntry, type PokeRogueState,
 	getLevelUpEvo, pickRandom,
 	getTier1Pokemon, getTier2Pokemon, getTier3Pokemon, getTier4Pokemon,
-	packPokemon, packTeam,
-	setState, botLevel,
-} from './pokerogue-core';
+	packPokemon, packTeam, botLevel,
+} from './pokerogue-pokemon';
+import { setState } from './pokerogue-state';
 
 function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
@@ -286,7 +298,7 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `Roguelike Battle — Floor ${state.floor}: ${user.name} vs ${isBoss ? 'BOSS ' : ''}${TRAINER_NAME}`,
+			title: `PokéRogue Battle — Floor ${state.floor}: ${user.name} vs ${isBoss ? 'BOSS ' : ''}${TRAINER_NAME}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);

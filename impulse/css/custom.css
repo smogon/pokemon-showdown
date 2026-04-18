@@ -2988,6 +2988,20 @@ width: 200px;
 	transition: width 0.4s ease;
 }
 
+.pr-hpbar {
+	height: 5px;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 3px;
+	margin-top: 4px;
+	overflow: hidden;
+}
+
+.pr-hpbar-fill {
+	height: 100%;
+	border-radius: 3px;
+	transition: width 0.4s ease;
+}
+
 .pr-choice-grid {
 	display: flex;
 	flex-wrap: wrap;
