@@ -3085,7 +3085,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Heal Order', 'Jet Punch', 'Last Respects', 'Lumina Crash', 'No Retreat', 'Octolock', 'Population Bomb', 'Power Trip', 'Quiver Dance',
 			'Rage Fist', 'Revival Blessing', 'Rising Voltage', 'Salt Cure', 'Shed Tail', 'Shell Smash', 'Shift Gear', 'Stored Power', 'Substitute',
 			'Surging Strikes', 'Tail Glow', 'Take Heart', 'Thousand Arrows', 'Transform', 'Triple Arrows', 'V-Create', 'Victory Dance',
-			'Water Spout', 'Wicked Blow', 'King\'s Rock' 'Quick Claw', 'Razor Fang',
+			'Water Spout', 'Wicked Blow', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
 		],
 		unbanlist: ['Blazing Torque', 'Combat Torque', 'Light of Ruin', 'Magical Torque', 'Noxious Torque', 'Wicked Torque'],
 	},
