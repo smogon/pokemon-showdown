@@ -1967,8 +1967,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					pokemon.moveSlots[curseIndex] = sketchedMove;
 					pokemon.baseMoveSlots[curseIndex] = sketchedMove;
 				};
-				// this.effectState.griGus = true;
-			}
 		},
 				// this.effectState.griGus = true;
 		condition: {
