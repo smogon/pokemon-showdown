@@ -1,6 +1,6 @@
 {
     "aegislash": {
-        "level": 99,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -65,7 +65,7 @@
         ]
     },
 	 "clawitzer": {
-        "level": 97,
+        "level": 94,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -95,7 +95,7 @@
         ]
     }, 
 	"crustle": {
-        "level": 100,
+        "level": 95,
         "sets": [
 			      {
                 "role": "Setup Sweeper",
@@ -105,7 +105,7 @@
         ]
     },
 	"darmanitan": {
-        "level": 96,
+        "level": 89,
         "sets": [
 			      {
                 "role": "Wallbreaker",
@@ -195,7 +195,7 @@
         ]
     },
 	 "emolga": {
-        "level": 100,
+        "level": 92,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -220,7 +220,7 @@
         ]
     },
 	 "flygon": {
-        "level": 89,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -230,7 +230,7 @@
         ]
     },
 	"genesectburn": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -240,7 +240,7 @@
         ]
     },
 	"genesectdouse": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -250,7 +250,7 @@
         ]
     },
 	"genesectshock": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -260,7 +260,7 @@
         ]
     },
 	"genesectchill": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -289,7 +289,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Moonblast", "Wish", "Will-O-Wisp", "Close Combat"],
+                "movepool": ["Spirit Break", "Wish", "Will-O-Wisp", "Protect"],
                 "abilities": ["Quark Drive"]
             }
         ]
@@ -305,12 +305,12 @@
         ]
     }, 
 	"kecleon": {
-        "level": 100,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
                 "movepool": ["Kaleidostorm", "Knock Off", "Power-Up Punch", "Drain Punch"],
-                "abilities": ["Protean"]
+                "abilities": ["Color Change"]
             }
         ]
     },
@@ -354,7 +354,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Quiver Dance", "Solar Beam", "Alluring Voice", "Weather Ball", "Healing Wish"],
+                "movepool": ["Quiver Dance", "Solar Beam", "Alluring Voice", "Weather Ball"],
                 "abilities": ["Dancer"]
             }
         ]
@@ -390,7 +390,7 @@
         ]
     }, 
 	"luxray": {
-        "level": 98,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -475,7 +475,7 @@
         ]
     },
 	"ogerponpixiedust": {
-        "level": 97,
+        "level": 92,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -492,7 +492,7 @@
         ]
     },
 	"parasect": {
-        "level": 97,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -517,7 +517,7 @@
         ]
     },
 	"rayquaza": {
-        "level": 84,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -592,7 +592,7 @@
         ]
     },
 	"shedinja": {
-        "level": 100,
+        "level": 96,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -631,7 +631,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Stack Shield", "Taunt", "Stone Edge", "Heavy Slam", "Trick Room"],
+                "movepool": ["Stack Shield", "Taunt", "Stone Edge", "Heavy Slam"],
                 "abilities": ["Stack Shift"]
             },
             {
@@ -681,7 +681,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Hone Claws", "Hurricane", "Fire Blast", "Dual Wingbeat"],
+                "movepool": ["Hone Claws", "Flare Blitz", "Roost", "Dual Wingbeat"],
                 "abilities": ["Gale Wings"]
             },
             {
@@ -707,7 +707,7 @@
         ]
     },
 	"trubbish": {
-        "level": 98,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -747,7 +747,7 @@
         ]
     },
 	"volcarona": {
-        "level": 97,
+        "level": 95,
         "sets": [
             {
                 "role": "Fast Attacker",
