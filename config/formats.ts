@@ -3064,7 +3064,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: [
-			'Standard NatDex', 'Terastal Clause', '!Obtainable Moves', '!Team Preview', 'Camomons Mod', 'CFZ Clause',
+			'Standard OMs', 'NatDex Mod', 'Terastal Clause', '!Obtainable Moves', '!Team Preview', 'Camomons Mod', 'CFZ Clause',
 			'Sleep Moves Clause', 'Team Type Preview',
 		],
 		banlist: [
