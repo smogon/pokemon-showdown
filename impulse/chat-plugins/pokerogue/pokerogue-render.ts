@@ -14,6 +14,7 @@
  */
 
 import { Utils } from '../../../lib';
+import { Table } from '../../utils';
 import { SHOP_ITEMS, rollShopInventory } from './pokerogue-items';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 import { savedData } from './pokerogue-state';
@@ -167,23 +168,10 @@ export function renderGamePage(state: PokeRogueState): string {
 	buf += `</div>`;
 
 	if (state.gameOver) {
-		buf += `<div class="pr-gameover">`;
-		buf += `<div class="pr-gameover-title">GAME OVER</div>`;
-		buf += `<div class="pr-gameover-stats">`;
-		buf += `<span>Floor Reached: <b>${state.lastRunFloor || state.floor || 1}</b></span>`;
-		if ((state.lastRunStreaks ?? 0) > 0) {
-			buf += `<span>Streaks Won: <b>${state.lastRunStreaks}</b></span>`;
-		}
-		buf += `</div>`;
-		if (state.recordTeam?.length) {
-			buf += `<div style="font-size:11px;color:#7090b8;text-transform:uppercase;letter-spacing:1px;margin:10px 0 6px">Best Run Team</div>`;
-			buf += `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:18px">`;
-			for (const mon of state.recordTeam) {
-				buf += getSpriteWithBall(mon.species, 48);
-			}
-			buf += `</div>`;
-		}
-		buf += `<button name="send" value="/pokerogue newgame confirm" class="button pr-newrun-btn">Start New Run</button>`;
+		buf += `<div class="pr-gameover" style="text-align:center;padding:20px">`;
+		buf += `<div class="pr-gameover-title" style="font-size:24px;color:#ff8080;font-weight:bold;margin-bottom:15px">GAME OVER</div>`;
+		buf += `<div style="margin-bottom:20px;color:#8ab4f8">Your run has ended. Floor: <b>${state.lastRunFloor || 1}</b></div>`;
+		buf += `<button name="send" value="/pokerogue newgame confirm" class="button pr-newrun-btn" style="padding:10px 20px;font-size:16px">Start New Run</button>`;
 		buf += `</div></div>`;
 		return buf;
 	}
@@ -202,23 +190,12 @@ export function renderGamePage(state: PokeRogueState): string {
 	if (view === 'top') {
 		const entries = Object.entries(savedData).filter(([, s]) => (s.highestFloor ?? 0) > 0).sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0)).slice(0, 100);
 		if (!entries.length) return buf + '<em>No records yet!</em></div>';
-		buf += `<div class="pr-leaderboard">`;
-		for (let lbIdx = 0; lbIdx < entries.length; lbIdx++) {
-			const [userid, s] = entries[lbIdx];
-			const rank = lbIdx + 1;
-			const rankIcon = rank === 1 ? '1.' : rank === 2 ? '2.' : rank === 3 ? '3.' : `${rank}.`;
+		const rows = entries.map(([userid, s], i) => {
 			const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
-			const teamStr = (displayTeam ?? []).map((m: PokemonEntry) => getSprite(m.species, 30)).join('');
-			buf += `<div class="pr-lb-row${rank <= 3 ? ' pr-lb-top' : ''}">`;
-			buf += `<span class="pr-lb-rank">${rankIcon}</span>`;
-			buf += `<span class="pr-lb-name">${Impulse.nameColor(s.displayName || userid, true, true)}</span>`;
-			buf += `<span class="pr-lb-floor">F${s.highestFloor}</span>`;
-			buf += `<span class="pr-lb-team">${teamStr}</span>`;
-			buf += `</div>`;
-		}
-		buf += `</div>`;
-		buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-top:8px;width:100%">← Back</button>`;
-		return buf + `</div>`;
+			const teamStr = (displayTeam ?? []).map((m: PokemonEntry) => `${getSprite(m.species, 30)}`).join(' ');
+			return [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, teamStr];
+		});
+		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
 	}
 
 	if (state.notification) buf += `<div class="pr-notification">${state.notification}<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button></div>`;
@@ -226,37 +203,19 @@ export function renderGamePage(state: PokeRogueState): string {
 	if (state.battleRoomId) return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#fac000;font-weight:bold">Battle in progress!</p></div></div>`;
 
 	if (state.pendingGachaOffer) {
-		const offer = state.pendingGachaOffer;
-		const sp = Dex.species.get(toID(offer.species));
-		const gachaTypes: string[] = sp.types ?? [];
-		const gachaBs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-		const tierLabel = offer.isFeatured ? 'Featured' : 'Capsule';
-		const isGachaLeg = sp.tags?.some((t: string) => LEGENDARY_TAGS.has(t)) ?? false;
-		buf += `<div class="pr-gacha-offer">`;
-		buf += `<div class="pr-gacha-offer-header">`;
-		buf += `<span class="pr-gacha-ball-label">${tierLabel}</span>`;
-		if (isGachaLeg) buf += `<span class="pr-gacha-tier-badge" style="color:#f59e0b">★ Legendary</span>`;
-		buf += `</div>`;
-		buf += `<div class="pr-gacha-offer-body">`;
-		buf += getSpriteWithBall(sp.id, 80);
-		buf += `<div class="pr-gacha-offer-info">`;
-		buf += `<div class="pr-gacha-mon-name">${Utils.escapeHTML(sp.name)}</div>`;
-		buf += `<div style="margin:4px 0">${renderTypeBadge(gachaTypes, true)}</div>`;
-		buf += `<div class="pr-ct-stats" style="margin-top:8px">`;
-		buf += `<span>HP <b>${gachaBs.hp}</b></span><span>Atk <b>${gachaBs.atk}</b></span><span>Def <b>${gachaBs.def}</b></span>`;
-		buf += `<span>SpA <b>${gachaBs.spa}</b></span><span>SpD <b>${gachaBs.spd}</b></span><span>Spe <b>${gachaBs.spe}</b></span>`;
-		buf += `</div>`;
-		buf += `<div class="pr-gacha-offer-actions">`;
-		buf += `<button name="send" value="/pokerogue acceptgacha" class="button pr-gacha-accept-btn">Add to Team</button>`;
-		buf += `<button name="send" value="/pokerogue declinegacha" class="button pr-gacha-decline-btn">Decline</button>`;
-		buf += `</div>`;
-		buf += `</div></div></div>`;
-		return buf + `</div>`;
+		const sp = Dex.species.get(toID(state.pendingGachaOffer.species));
+		buf += `<h2 class="pr-choice-heading">Capsule Result!</h2>`;
+		buf += `<div style="overflow-x:auto"><table class="pr-choice-table" style="margin: 0 auto;"><tbody>`;
+		buf += `<tr class="pr-choice-row"><td style="padding-right: 15px;">${getSpriteWithBall(sp.id, 60)}</td>`;
+		buf += `<td style="display:flex;flex-direction:column;gap:4px">`;
+		buf += `<button name="send" value="/pokerogue acceptgacha" class="button pr-pick-btn">Add to Team</button>`;
+		buf += `<button name="send" value="/pokerogue declinegacha" class="button">Decline</button></td></tr>`;
+		return buf + `</tbody></table></div></div>`;
 	}
 
 	if (state.pendingChoice?.length) {
 		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
-		buf += `<div class="pr-choice-grid">`;
+		buf += `<table class="pr-choice-table" style="width:100%;"><tbody>`;
 		for (let i = 0; i < state.pendingChoice.length; i++) {
 			const sp = Dex.species.get(toID(state.pendingChoice[i]));
 			const isLeg = sp.tags?.some((t: string) => LEGENDARY_TAGS.has(t)) ?? false;
@@ -264,13 +223,14 @@ export function renderGamePage(state: PokeRogueState): string {
 			const abilities = sp.abilities ?? {};
 			const ability = (abilities as unknown as Record<string, string>)['0'] || 'Unknown';
 			const types: string[] = sp.types ?? [];
-			const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
-			buf += `<div class="pr-choice-card${isLeg ? ' legendary' : ''}">`;
-			buf += `<div style="margin-bottom:6px;display:flex;justify-content:center">${getSpriteWithBall(sp.id, 64)}</div>`;
-			if (isLeg) buf += `<div class="pr-legendary-badge" style="margin-bottom:4px">★ LEGENDARY</div>`;
-			buf += `<div class="pr-ct-name">${Utils.escapeHTML(sp.name)}</div>`;
-			buf += `<div style="margin:4px 0">${renderTypeBadge(types, true)}</div>`;
-			buf += `<div class="pr-ct-stats" style="justify-content:center;margin-bottom:4px">`;
+			buf += `<tr class="pr-choice-row${isLeg ? ' legendary' : ''}">`;
+			buf += `<td class="pr-ct-status">${getSpriteWithBall(sp.id, 64)}`;
+			if (isLeg) buf += `<div class="pr-legendary-badge">★ LEGENDARY</div>`;
+			buf += `</td>`;
+			buf += `<td class="pr-ct-info">`;
+			buf += `<div class="pr-ct-name">${sp.name}</div>`;
+			buf += `<div style="margin-bottom:4px">${renderTypeBadge(types)}</div>`;
+			buf += `<div class="pr-ct-stats">`;
 			buf += `<span>HP <b>${bs.hp}</b></span>`;
 			buf += `<span>Atk <b>${bs.atk}</b></span>`;
 			buf += `<span>Def <b>${bs.def}</b></span>`;
@@ -278,50 +238,32 @@ export function renderGamePage(state: PokeRogueState): string {
 			buf += `<span>SpD <b>${bs.spd}</b></span>`;
 			buf += `<span>Spe <b>${bs.spe}</b></span>`;
 			buf += `</div>`;
-			buf += `<div style="font-size:10px;color:#7090b8;margin-bottom:4px">BST: <b style="color:#c4a8ff">${bst}</b></div>`;
-			buf += `<div class="pr-ct-ability" style="margin-bottom:8px">Ability: <b>${Utils.escapeHTML(ability)}</b></div>`;
-			buf += `<button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn" style="width:100%">Pick</button>`;
-			buf += `</div>`;
+			buf += `<div class="pr-ct-ability">Ability: <b>${Utils.escapeHTML(ability)}</b></div>`;
+			buf += `</td>`;
+			buf += `<td class="pr-ct-action"><button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">Pick</button></td>`;
+			buf += `</tr>`;
 		}
-		buf += `</div>`;
-		return buf + `</div>`;
+		return buf + `</tbody></table></div>`;
 	}
 
 	// --- TEAM SWAP UI ---
 	if (state.pendingSwap) {
 		const newMon = state.pendingSwap;
-		const newSp = Dex.species.get(toID(newMon.species));
-		const newTypesSwap: string[] = newSp.types ?? [];
+		const sp = Dex.species.get(toID(newMon.species));
 
 		buf += `<h2 class="pr-choice-heading">Your team is full!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:14px">`;
-		buf += getSpriteWithBall(newSp.id, 80);
-		buf += `<div class="pr-ct-name" style="margin:6px 0 2px">${Utils.escapeHTML(newSp.name)} <small style="color:#aaa;font-weight:normal">Lv.${newMon.level}</small></div>`;
-		buf += `<div style="margin-bottom:6px">${renderTypeBadge(newTypesSwap, true)}</div>`;
-		buf += `<div style="font-size:11px;color:#aaa">wants to join your team! Choose a Pokémon to replace:</div>`;
-		buf += `</div>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br><b>Lv. ${newMon.level}</b> wants to join your team!<br>Choose a Pokémon to replace:</div>`;
 
-		buf += `<div style="display:flex;flex-direction:column;gap:8px">`;
+		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
+
 		for (let i = 0; i < state.team.length; i++) {
 			const mon = state.team[i];
-			const spSwap = Dex.species.get(toID(mon.species));
-			const typesSwap: string[] = spSwap.types ?? [];
-			const swapItem = mon.heldItem ? (SHOP_ITEMS[mon.heldItem]?.name || mon.heldItem) : null;
-			buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="button pr-swap-card">`;
-			buf += `${getSprite(mon.species, 44)}`;
-			buf += `<div style="flex:1;min-width:0;text-align:left;margin-left:10px">`;
-			buf += `<div style="font-size:12px;font-weight:bold;color:#e0d4ff">${Utils.escapeHTML(spSwap.name)}</div>`;
-			buf += `<div style="font-size:10px;color:#aaa;margin:2px 0">Lv.${mon.level} &nbsp;${renderTypeBadge(typesSwap)}</div>`;
-			buf += renderHpBar(mon);
-			if (swapItem) buf += `<div style="font-size:10px;color:#8ab4f8;margin-top:2px">Item: ${Utils.escapeHTML(swapItem)}</div>`;
-			buf += `</div>`;
-			buf += `<div style="font-size:11px;color:#ff8080;white-space:nowrap;align-self:center;padding-left:8px">Replace ›</div>`;
-			buf += `</button>`;
+			buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="button" style="text-align:left; padding:8px; display:flex; align-items:center;">`;
+			buf += `${getSprite(mon.species, 40)} <span style="margin-left: 10px;"><b>Replace</b> <small>(Lv. ${mon.level})</small></span></button>`;
 		}
 
-		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="text-align:center;padding:8px;margin-top:4px;opacity:0.8">`;
-		buf += `Keep current team <small>(Discard ${Utils.escapeHTML(newSp.name)})</small>`;
-		buf += `</button>`;
+		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
+		buf += `<b>Keep current team</b> <small>(Discard new Pokémon)</small></button>`;
 
 		buf += `</div></div>`;
 		return buf;
@@ -335,41 +277,19 @@ export function renderGamePage(state: PokeRogueState): string {
 		const newMove = Dex.moves.get(pending.move);
 
 		buf += `<h2 class="pr-choice-heading">New Move!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:14px">`;
-		buf += getSpriteWithBall(sp.id, 72);
-		buf += `<div class="pr-ct-name" style="margin:6px 0 2px">${Utils.escapeHTML(sp.name)} can learn a new move!</div>`;
-		buf += `</div>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;">${getSpriteWithBall(sp.id, 80)}<br>wants to learn <b>${newMove.name}</b>!<br>It already knows 4 moves. Choose a move to forget:</div>`;
 
-		buf += `<div style="background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(16,185,129,0.06));border:1px solid rgba(52,211,153,0.35);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px">`;
-		buf += `<div style="flex:1">`;
-		buf += `<div style="font-size:13px;font-weight:bold;color:#6ee7b7;margin-bottom:4px">${Utils.escapeHTML(newMove.name)}</div>`;
-		buf += `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">`;
-		buf += `${renderTypeBadge([newMove.type])}`;
-		buf += `<span style="font-size:11px;color:#aaa">BP: <b style="color:#dde6f0">${newMove.basePower || '—'}</b></span>`;
-		buf += `<span style="font-size:11px;color:#aaa">PP: <b style="color:#dde6f0">${newMove.pp || '—'}</b></span>`;
-		buf += `<span style="font-size:11px;color:#aaa">${newMove.category || ''}</span>`;
-		buf += `</div></div>`;
-		buf += `<div style="font-size:12px;color:#6ee7b7;font-weight:bold;white-space:nowrap">New</div>`;
-		buf += `</div>`;
+		buf += `<div style="display:flex; flex-direction:column; gap:6px;">`;
 
-		buf += `<div style="font-size:11px;color:#7090b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Choose a move to forget:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
 		for (let i = 0; i < mon.moves.length; i++) {
 			const oldMove = Dex.moves.get(mon.moves[i]);
-			buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="button" style="text-align:left;padding:8px 12px;display:flex;align-items:center;gap:10px;width:100%">`;
-			buf += `<div style="flex:1">`;
-			buf += `<div style="font-size:12px;font-weight:bold;color:#fca5a5;margin-bottom:3px">${Utils.escapeHTML(oldMove.name)}</div>`;
-			buf += `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">`;
-			buf += `${renderTypeBadge([oldMove.type])}`;
-			buf += `<span style="font-size:10px;color:#aaa">BP: <b>${oldMove.basePower || '—'}</b></span>`;
-			buf += `<span style="font-size:10px;color:#aaa">PP: <b>${oldMove.pp || '—'}</b></span>`;
-			buf += `<span style="font-size:10px;color:#aaa">${oldMove.category || ''}</span>`;
-			buf += `</div></div>`;
-			buf += `<span style="font-size:10px;color:#ff8080;white-space:nowrap">Forget ›</span>`;
-			buf += `</button>`;
+			buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="button" style="text-align:left; padding:8px;">`;
+			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '—'})</small></button>`;
 		}
 
-		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:center;padding:8px;margin-top:4px;opacity:0.8">Keep old moves <small>(Give up ${Utils.escapeHTML(newMove.name)})</small></button>`;
+		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;
+		buf += `<b>Keep old moves</b> <small>(Give up learning ${newMove.name})</small></button>`;
+
 		buf += `</div></div>`;
 		return buf;
 	}
@@ -377,31 +297,16 @@ export function renderGamePage(state: PokeRogueState): string {
 	if (view === 'shop') {
 		const shopCoins = state.coins ?? 0;
 		if (!state.shopInventory) state.shopInventory = rollShopInventory();
-		buf += `<div class="pr-shop-stats-bar"><span>Coins: <b>${shopCoins}</b></span></div>`;
 		buf += `<div class="pr-shop-grid">`;
 		for (const id of state.shopInventory) {
 			const item = SHOP_ITEMS[id];
 			if (!item) continue;
 			const canAfford = shopCoins >= item.cost;
-			buf += `<div class="pr-shop-card${canAfford ? '' : ' pr-shop-card-disabled'}">`;
-			buf += `<div class="pr-shop-card-top">${getItemSprite(item.icon || item.heldItem || item.id)}`;
-			buf += `<div><div class="pr-shop-item-name">${Utils.escapeHTML(item.name)}</div>`;
-			buf += `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">`;
-			if (item.heldItem) buf += `<span class="pr-item-tag-held">Held</span>`;
-			if (item.isConsumable) buf += `<span class="pr-item-tag-consumable">Consumable</span>`;
-			buf += `</div></div></div>`;
-			buf += `<div class="pr-shop-item-desc">${Utils.escapeHTML(item.description)}</div>`;
-			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn${canAfford ? '' : ' pr-shop-buy-disabled'}" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button>`;
-			buf += `</div>`;
+			buf += `<div class="pr-shop-card"><div class="pr-shop-card-top">${getItemSprite(item.icon || item.heldItem || item.id)}<b>${item.name}</b></div>`;
+			buf += `<div class="pr-shop-item-desc">${item.description}</div>`;
+			buf += `<button name="send" value="/pokerogue buy ${item.id}" class="button pr-shop-buy-btn" ${canAfford ? '' : 'disabled'}>Buy: ${item.cost}</button></div>`;
 		}
-		buf += `</div>`;
-		buf += `<div class="pr-shop-footer">`;
-		buf += `<div class="pr-shop-reroll-row"><button name="send" value="/pokerogue refreshshop" class="button pr-shop-reroll-btn">Reroll <span class="pr-shop-reroll-cost">(5c)</span></button></div>`;
-		buf += `<div class="pr-shop-footer-nav">`;
-		buf += `<button name="send" value="/pokerogue battle" class="button pr-shop-battle-btn">Battle</button>`;
-		buf += `<button name="send" value="/pokerogue view main" class="button pr-shop-back-btn">← Back</button>`;
-		buf += `</div></div>`;
-		return buf + `</div>`;
+		return buf + `</div><div class="pr-shop-footer"><button name="send" value="/pokerogue refreshshop" class="button">Reroll (5c)</button><button name="send" value="/pokerogue view main" class="button">Back</button></div></div>`;
 	}
 
 	if (view === 'bag') {
@@ -468,70 +373,28 @@ export function renderGamePage(state: PokeRogueState): string {
 	buf += `<div class="pr-popup-stats">Floor <b>${state.floor}</b> | Coins <b>${state.coins ?? 0}</b> | Streaks <b>${state.streaksWon ?? 0}</b></div>`;
 	if (activeEffects.length) buf += `<div class="pr-active-effects" style="font-size:11px;color:#8ab4f8;background:rgba(90,63,160,0.15);padding:4px;border-radius:6px;margin:6px 0"><b>Active:</b> ${activeEffects.join(' &nbsp; ')}</div>`;
 
-	// Floor progress strip (idea 12)
-	const fpMilestones = [1, 5, 10, 20, 30, 50];
-	buf += `<div class="pr-floor-progress">`;
-	for (let fpIdx = 0; fpIdx < fpMilestones.length; fpIdx++) {
-		const fpM = fpMilestones[fpIdx];
-		const fpNext = fpMilestones[fpIdx + 1] ?? Infinity;
-		const fpActive = state.floor >= fpM && state.floor < fpNext;
-		const fpPast = state.floor >= fpNext;
-		const fpLabel = fpM === 1 ? 'Start' : `F${fpM}`;
-		buf += `<div class="pr-fp-node${fpActive ? ' active' : fpPast ? ' past' : ''}">`;
-		buf += `<div class="pr-fp-dot"></div>`;
-		buf += `<div class="pr-fp-label">${fpLabel}</div>`;
-		buf += `</div>`;
-		if (fpIdx < fpMilestones.length - 1) {
-			buf += `<div class="pr-fp-line${fpPast ? ' past' : ''}"></div>`;
-		}
-	}
-	buf += `</div>`;
-
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
 	for (const mon of state.team) {
 		const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
 		const spData = Dex.species.get(toID(mon.species));
-		const monTypes: string[] = spData.types ?? [];
-		buf += `<div class="pr-popup-mon" style="align-items:flex-start">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
-		buf += `<span style="font-size:12px;font-weight:bold;color:#e0d4ff">${Utils.escapeHTML(spData.name)}</span> `;
-		buf += `<span style="font-size:9px">${renderTypeBadge(monTypes)}</span><br>`;
+		const types: string[] = spData.types ?? [];
+		buf += `<div class="pr-popup-mon" style="align-items:center;">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
+		buf += `<span style="font-size:12px;font-weight:bold;color:#e0d4ff">${spData.name}</span> `;
+		buf += `<span style="font-size:9px">${renderTypeBadge(types)}</span><br>`;
 		buf += `<span style="font-size:11px">Lv.${mon.level} <small style="color:#888">(${expNeeded} EXP)</small></span>`;
 		buf += renderExpBar(mon);
 		buf += renderHpBar(mon);
-		if (mon.heldItem) {
-			const monItemData = SHOP_ITEMS[mon.heldItem];
-			const monItemName = monItemData?.name || mon.heldItem;
-			const monItemNameHtml = Utils.escapeHTML(monItemName);
-			const monItemSpriteNum = ITEM_SPRITE_NUMS[toID(mon.heldItem)];
-			const monItemIconHtml = monItemSpriteNum !== undefined
-				? `<img src="${SMOGON_ITEM_SPRITE_BASE}i${monItemSpriteNum}.png" width="16" height="16" alt="${monItemNameHtml}" style="image-rendering:pixelated;vertical-align:middle" onerror="this.style.display='none'" />`
-				: '';
-			buf += `<div style="display:flex;align-items:center;gap:4px;margin-top:3px">${monItemIconHtml}<span style="font-size:10px;color:#8ab4f8">${monItemNameHtml}</span></div>`;
-		}
-		if (mon.moves?.length) {
-			buf += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:5px">`;
-			for (const moveId of mon.moves) {
-				const mv = Dex.moves.get(moveId);
-				buf += `<div style="font-size:9px;color:#b8c8e8;display:flex;align-items:center;gap:3px;overflow:hidden">`;
-				buf += `${renderTypeBadge([mv.type])}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Utils.escapeHTML(mv.name)}</span>`;
-				buf += `</div>`;
-			}
-			buf += `</div>`;
-		}
+		if (mon.heldItem) buf += `<br><span style="font-size:10px;color:#8ab4f8">${SHOP_ITEMS[mon.heldItem]?.name || mon.heldItem}</span>`;
 		buf += `</div></div>`;
 	}
 	buf += `</div>`;
 
-	// Action bar grid (idea 2)
-	buf += `<div style="margin-top:12px">`;
-	buf += `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">`;
-	buf += `<button name="send" value="/pokerogue battle" class="button pr-battle-btn" style="grid-column:1/-1">Start Battle</button>`;
-	buf += `<button name="send" value="/pokerogue view bag" class="button" style="padding:8px">Bag</button>`;
-	buf += `<button name="send" value="/pokerogue view shop" class="button" style="padding:8px">Shop</button>`;
-	buf += `<button name="send" value="/pokerogue view top" class="button" style="padding:8px">Scores</button>`;
-	buf += `</div>`;
-	buf += `<button name="send" value="/pokerogue view resetconfirm" class="button" style="width:100%;color:#ff8080;opacity:0.8;padding:6px">Reset Run</button>`;
-	buf += `</div>`;
+	buf += `<div class="pr-popup-actions" style="margin-top:12px;display:flex;gap:6px">`;
+	buf += `<button name="send" value="/pokerogue battle" class="button" style="flex:1.5">Start Battle</button>`;
+	buf += `<button name="send" value="/pokerogue view bag" class="button" style="flex:1">Bag</button>`;
+	buf += `<button name="send" value="/pokerogue view shop" class="button" style="flex:1">Shop</button>`;
+	buf += `<button name="send" value="/pokerogue view top" class="button" style="flex:1">Leaderboard</button>`;
+	buf += `<button name="send" value="/pokerogue view resetconfirm" class="button" style="color:#ff8080;flex:1">Reset Run</button></div>`;
 
 	return buf + `</div>`;
 }
