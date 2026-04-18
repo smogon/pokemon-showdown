@@ -118,6 +118,17 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-end', target, 'restoring');
 		},
 	},
+	backbeat: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Backbeat');
+		},
+		onModifyDamage(damage, source, target, move) {
+			return this.chainModify(1.5);
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Backbeat');
+		},
+	},
 	// advent
 	gingerstorm: {
 		name: 'Gingerstorm',

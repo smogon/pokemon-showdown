@@ -214,8 +214,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				if (pokemon.activeTurns && pokemon.species.name === "Fearow") {
 					pokemon.formeChange('Fearow-Ferocious', null, true);
+					this.add('-ability', pokemon, 'Wonder Guard');
 				} else if (pokemon.activeTurns && pokemon.species.name === "Fearow-Ferocious") {
 					pokemon.formeChange('Fearow', null, true);
+					this.add('-ability', pokemon, 'Sniper');
 				} else if (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.species.name === "Sunflora") {
 					pokemon.formeChange('Sunflora-Wilted', null, true);

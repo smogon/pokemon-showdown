@@ -1211,6 +1211,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Bug", "Ghost"],
 		baseStats: { hp: 80, atk: 90, def: 90, spa: 30, spd: 90, spe: 40 },
+		maxHP: undefined,
 		abilities: { 0: "Wonder Guard" },
 		otherFormes: ["Shedinja-Escaped"],
 		formeOrder: ["Shedinja", "Shedinja-Escaped"],
@@ -1485,8 +1486,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		types: ["Fire", "Bug"],
 		baseStats: { hp: 85, atk: 60, def: 65, spa: 135, spd: 105, spe: 100 },
 		abilities: { 0: "Flame Body" },
-		otherFormes: ["Volcarona-Solstice", "Volcarona-Raidant"],
-		formeOrder: ["Volcarona", "Volcanion-Solstice", "Volcarona-Raidant"],
+		otherFormes: ["Volcarona-Solstice", "Volcarona-Radiant"],
+		formeOrder: ["Volcarona", "Volcanion-Solstice", "Volcarona-Radaint"],
 	},
 	volcaronasolstice: {
 		num: 637,
@@ -1505,7 +1506,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	volcaronaradiant: {
 		num: 637,
-		name: "Volcarona-Raidant",
+		name: "Volcarona-Radiant",
 		baseSpecies: "Volcarona",
 		forme: "Radiant",
 		types: ["Fire", "Psychic"],
