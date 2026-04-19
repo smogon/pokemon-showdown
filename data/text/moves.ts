@@ -7772,7 +7772,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fluffbuff: {
 		name: "Fluff Buff",
-		shortDesc: "Sets Pollen Storm. Raises user's Def by 1 stage.",
+		shortDesc: "Sets Pollen Storm. Raises user's Def by 2 stages.",
 	},
 	foghorn: {
 		name: "Foghorn",
