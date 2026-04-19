@@ -95,20 +95,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return typeMod + this.dex.getEffectiveness('Rock', type);
 				};
 		},
-		onHit(target, pokemon, move) {
-			if (this.ruleTable.tagRules.includes("+pokemontag:cap")) return;
-
-			const item = pokemon.getItem();
-			if (!item?.isGem) return;
-
-			if (pokemon.species.id === 'diancie' && !pokemon.transformed) {
-				move.willChangeForme = true;
-			}
-		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (this.ruleTable.tagRules.includes("+pokemontag:cap")) return;
 
-			if (move.willChangeForme) {
+			const item = pokemon.getItem();
+			if (pokemon.species.id === 'diancie' && !pokemon.transformed && item?.isGem) {
 				pokemon.formeChange('Diancie-Infused', this.effect, true, '0', '[msg]');
 			}
 		},
@@ -1336,13 +1327,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Psychic', type);
 		},
-		onHit(target, pokemon, move) {
-			if (pokemon.baseSpecies.baseSpecies === 'Sylveon' && !pokemon.transformed) {
-				move.willChangeForme = true;
-			}
-		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
+			if (pokemon.baseSpecies.baseSpecies === 'Sylveon' && !pokemon.transformed) {
 				const sylveForme = pokemon.species.id === 'sylveonlumineon' ? '' : '-Lumineon';
 				pokemon.formeChange('Sylveon' + sylveForme, this.effect, false, '0', '[msg]');
 			}
@@ -1435,13 +1421,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, pokemon, move) {
 			if (pokemon.species.id === 'landorus') this.boost({ spa: 2 }, pokemon);
 			else if (pokemon.species.id === 'landorustherian') this.boost({ atk: 2 }, pokemon);
-
-			if (pokemon.baseSpecies.baseSpecies === 'Landorus' && pokemon.species.name !== 'Landorus-Ancestral') {
-				move.willChangeForme = true;
-			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
+			if (pokemon.baseSpecies.baseSpecies === 'Landorus' && pokemon.species.name !== 'Landorus-Ancestral') {
 				pokemon.formeChange('Landorus-Ancestral', this.effect, true);
 			}
 		},
@@ -1668,21 +1650,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
 		pseudoWeather: 'iondeluge',
-		onHit(target, pokemon, move) {
-			if (this.effectState.bigZera) return;
-			if (pokemon.baseSpecies.baseSpecies === 'Zeraora' &&
-				pokemon.volatiles['charge'] &&
-				!pokemon.transformed && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
-				move.willChangeForme = true;
-				this.effectState.bigZera = true;
-			}
-		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.effectState.bigZera && !this.ruleTable.tagRules.includes("+pokemontag:cap") &&
+				pokemon.baseSpecies.baseSpecies === 'Zeraora' && pokemon.volatiles['charge'] && !pokemon.transformed) {
 				const zeraForme = pokemon.species.id === 'zeraorabig' ? '' : '-Big';
 				pokemon.formeChange('Zeraora' + zeraForme, this.effect, false, '0', '[msg]');
 				this.add('-message', "Zeraora's energy is overflowing!");
 				pokemon.setAbility('electricsurge', pokemon);
+				this.effectState.bigZera = true;
 			}
 		},
 		secondary: undefined,
