@@ -436,7 +436,7 @@ export class DexSpecies {
 	}
 
 	getByID(id: ID): Species {
-		if (id === '') return EMPTY_SPECIES;
+		if (id === '' || id === 'constructor') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
@@ -742,11 +742,12 @@ export class DexSpecies {
 		// different learnsets. To prevent a leak, we make them show up as their
 		// base forme, but hardcode their learnsets into Rockruff-Dusk and
 		// Greninja-Ash
-		if (['Gastrodon', 'Pumpkaboo', 'Sinistea', 'Tatsugiri'].includes(species.baseSpecies) && species.forme) {
-			return this.get(species.baseSpecies);
+		if (!this.getLearnsetData(species.id).learnset && species.forme) {
+			return this.get(species.changesFrom || species.baseSpecies);
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
+			if (this.dex.currentMod === 'champions') return null;
 			species = this.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;

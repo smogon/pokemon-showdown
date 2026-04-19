@@ -142,11 +142,12 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
 		const move = context.dex.moves.get(context.toID(moveName));
 		if (!move.id) continue;
+		const pp = context.calculatePP(move);
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
-			pp: Math.floor((move.noPPBoosts ? move.pp : move.pp * 8 / 5) * carryOver[slot]),
-			maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
+			pp: pp * carryOver[slot],
+			maxpp: pp,
 			target: move.target,
 			disabled: false,
 			disabledSource: '',
@@ -374,40 +375,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.add('start');
 
-			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
-				let rawSpecies: Species | null = null;
-				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-					rawSpecies = this.dex.species.get('Zacian-Crowned');
-				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-				}
-				if (!rawSpecies) continue;
-				const species = pokemon.setSpecies(rawSpecies);
-				if (!species) continue;
-				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getUpdatedDetails();
-				// pokemon.setAbility(species.abilities['0'], null, null, true);
-				// pokemon.baseAbility = pokemon.ability;
-
-				const behemothMove: { [k: string]: string } = {
-					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				}
+				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 
 			this.format.onBattleStart?.call(this);
@@ -428,9 +397,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -806,8 +772,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
+				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+					this.battle.add('-ability', pokemon, bypassProtect.name);
+				}
 				this.battle.add('-zbroken', target);
 			}
 
@@ -963,26 +933,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
+			if (!item.megaStone) return null;
 			// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-			if (Array.isArray(item.megaEvolves)) {
-				if (!Array.isArray(item.megaStone)) {
-					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
-				}
-				if (item.megaEvolves.length !== item.megaStone.length) {
-					throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone length mismatch`);
-				}
-				// FIXME: Change to species.name when champions comes
-				const index = item.megaEvolves.indexOf(species.baseSpecies);
-				if (index < 0) return null;
-				return item.megaStone[index];
-				// FIXME: Change to species.name when champions comes
-			} else {
-				if (item.megaEvolves === species.baseSpecies) {
-					if (Array.isArray(item.megaStone)) throw new Error(`${item.name}#megaEvolves and ${item.name}#megaStone type mismatch`);
-					return item.megaStone;
-				}
-			}
-			return null;
+			// FIXME: Change to species.name when champions comes
+			const megaEvolution = item.megaStone[species.baseSpecies];
+			return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 		},
 
 		// 1 Z per pokemon

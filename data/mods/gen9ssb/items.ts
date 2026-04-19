@@ -14,11 +14,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		name: "Flygonite",
 		spritenum: 111,
 		itemUser: ["Flygon"],
-		megaEvolves: "Flygon",
-		megaStone: "Trapinch",
+		megaStone: { "Flygon": "Trapinch" },
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
 	},
@@ -36,7 +34,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	gardevoirite: {
 		inherit: true,
 		itemUser: ["Ralts"],
-		megaEvolves: "Ralts",
+		megaStone: { "Ralts": "Gardevoir-Mega" },
 		desc: "If held by a Ralts, this item allows it to Mega Evolve in battle.",
 	},
 	// Peary

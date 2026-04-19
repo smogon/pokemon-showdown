@@ -239,8 +239,13 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 
 	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Rhydon", moves: ['splash'], evs: { hp: 255 } }, { species: "Dragonite", moves: ['wrap'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Slowbro", moves: ['seismictoss', 'toxic'] }] });
+		battle.setPlayer('p1', { team: [
+			{ species: "Rhydon", moves: ['splash'], evs: { hp: 255 } },
+			{ species: "Dragonite", moves: ['wrap'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Slowbro", moves: ['seismictoss', 'toxic'] },
+		] });
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
 		}
@@ -281,5 +286,103 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		battle.forceRandomChance = false;
 		assert.hurts(cloyster, () => battle.makeChoices());
 		assert(cloyster.volatiles['partiallytrapped']);
+	});
+
+	it(`should stay asleep if it switched in after a Pokemon spent a turn trapped`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 3] }, [[
+			{ species: 'dragonite', moves: ['wrap', 'spore', 'splash'] },
+		], [
+			{ species: 'rhydon', moves: ['swordsdance'] },
+			{ species: 'exeggutor', moves: ['splash'] },
+		]]);
+		const rhydon = battle.p2.active[0];
+
+		battle.makeChoices('move spore', 'move swordsdance');
+		battle.makeChoices('move wrap', 'switch 2');
+		battle.makeChoices('move wrap', 'move fight'); // Exeggutor needs to spend a turn trapped to select a move
+		battle.makeChoices('move wrap', 'switch 2');
+		assert.equal(battle.p1.active[0].volatiles['partialtrappinglock'].duration, 1); // this is just a rng check
+		battle.makeChoices('move wrap', 'move fight');
+		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
+		for (let i = 0; i < 20; i++) {
+			battle.makeChoices('move splash', 'move fight');
+		}
+		assert.equal(rhydon.boosts.atk, 0); // it never woke up
+		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('move splash', 'move splash'); // using a move frees Rhydon from being locked
+		battle.makeChoices('move splash', 'switch 2');
+		for (let i = 0; i < 5; i++) {
+			battle.makeChoices('move splash', 'move fight');
+			if (rhydon.status !== 'slp') break;
+		}
+		battle.makeChoices('move splash', 'move swordsdance'); // it was able to wake up after the switch
+		assert.equal(rhydon.boosts.atk, 2);
+	});
+
+	it(`should continue if copied by Mirror Move`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'dragonite', moves: ['wrap'] },
+		], [
+			{ species: 'rhydon', moves: ['splash'] },
+			{ species: 'alakazam', moves: ['mirrormove'] },
+		]]);
+		battle.makeChoices('move wrap', 'switch 2');
+		for (let i = 0; i < 5; i++) {
+			// wait for the trap to end
+			if (!battle.p2.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+		battle.makeChoices(); // trap back with Mirror Move
+		for (let i = 0; i < 5; i++) {
+			if (!battle.p1.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+		assert.false(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
+		// check if that target is freed and the trapper can choose other moves
+		assert(!battle.p1.active[0].volatiles['partiallytrapped']);
+		assert.equal(battle.p2.activeRequest.active[0].moves.length, 1);
+		assert.equal(battle.p2.activeRequest.active[0].moves[0].id, 'mirrormove');
+	});
+
+	it(`should cause a Desync if copied by Mirror Move and the target switches`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'dragonite', moves: ['wrap'] },
+			{ species: 'magikarp', moves: ['splash'] },
+		], [
+			{ species: 'rhydon', moves: ['splash'] },
+			{ species: 'alakazam', moves: ['mirror move'] },
+		]]);
+		battle.makeChoices('move wrap', 'switch 2');
+		for (let i = 0; i < 5; i++) {
+			// wait for the trap to end
+			if (!battle.p2.active[0].volatiles['partiallytrapped']) break;
+			battle.makeChoices();
+		}
+		battle.makeChoices(); // trap back with Mirror Move
+		battle.makeChoices('switch 2', 'move wrap');
+		assert(battle.log.slice(-10).some(line => line.includes('Desync Clause Mod activated!')));
+		// check if that target is freed and the trapper can choose other moves
+		assert(!battle.p1.active[0].volatiles['partiallytrapped']);
+		assert.equal(battle.p2.activeRequest.active[0].moves.length, 1);
+		assert.equal(battle.p2.activeRequest.active[0].moves[0].id, 'mirrormove');
+	});
+
+	it(`should continue if copied by Metronome even if the target switches`, () => {
+		battle = common.gen(1).createBattle({ seed: 'gen5,99176924e1c86af0' }, [[
+			{ species: 'dragonite', moves: ['splash'] },
+			{ species: 'magikarp', moves: ['splash'] },
+		], [
+			{ species: 'alakazam', moves: ['metronome'] },
+		]]);
+		battle.makeChoices(); // trap with Metronome
+		assert(battle.log.slice(-10).some(line => line === '|move|p2a: Alakazam|Wrap|p1a: Dragonite|[from] Metronome'));
+		battle.makeChoices('switch 2', 'move wrap');
+		assert.false(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
+		// default to Metronome
+		assert(battle.log.slice(-10).some(line => line.includes('|move|p2a: Alakazam|Metronome|')));
+		// check if that target is freed and the trapper can choose other moves
+		assert(!battle.p1.active[0].volatiles['partiallytrapped']);
+		assert.equal(battle.p2.activeRequest.active[0].moves.length, 1);
+		assert.equal(battle.p2.activeRequest.active[0].moves[0].id, 'metronome');
 	});
 });

@@ -29,12 +29,16 @@ config.crashguard = false;
 config.watchconfig = false;
 // Don't try to write to file system
 config.nofswriting = true;
-// allow renaming without a token
+// Don't try to listen to the network
+config.lazysockets = true;
+// Allow renaming without a token
 config.noguestsecurity = true;
 // Test a normal ladder
 config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
+// If sqlite is enabled at all, run tests in server/modlog
+config.usesqlitemodlog = true;
 
 require('./../dist/lib/process-manager').ProcessManager.disabled = true;
 

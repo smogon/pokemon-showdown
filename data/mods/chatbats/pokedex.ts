@@ -482,10 +482,33 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ogerponcornerstone: {
 		inherit: true,
 		abilities: { 0: "Solid Rock" },
-		types: ["Psychic", "Normal"],
 	},
 	glimmora: {
 		inherit: true,
 		abilities: { 0: "Corrosion" },
+	},
+	wobbuffet: {
+		inherit: true,
+		abilities: { 0: "Jello Body" },
+	},
+	raticate: {
+		inherit: true,
+		abilities: { 0: "Hustle" },
+		baseStats: { hp: 90, atk: 81, def: 60, spa: 50, spd: 70, spe: 97 },
+	},
+	raticatemega: {
+		num: -977,
+		name: "Raticate-Mega",
+		baseSpecies: "Raticate",
+		forme: "Mega",
+		types: ["Normal", "Ghost"],
+		genderRatio: { M: 0.5, F: 0.5 },
+		baseStats: { hp: 90, atk: 105, def: 60, spa: 50, spd: 70, spe: 173 },
+		abilities: { 0: "Nibble Nibble" },
+		heightm: 0.7,
+		weightkg: 5,
+		color: "Black",
+		eggGroups: ["Field"],
+		requiredItem: "Raticite",
 	},
 };

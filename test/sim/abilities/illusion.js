@@ -10,6 +10,19 @@ describe('Illusion', () => {
 		battle.destroy();
 	});
 
+	it('should not wear off when switching out', () => {
+		battle = common.createBattle([[
+			{ species: "Zoroark", ability: 'illusion', moves: ['sleeptalk'] },
+			{ species: "Diglett", moves: ['sleeptalk'] },
+		], [
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move sleeptalk', 'auto');
+		battle.makeChoices('switch 2', 'auto');
+		assert(battle.log.every(line => !line.includes('|-end|p1a: Zoroark|Illusion')));
+	});
+
 	it(`should not instantly wear off before Dynamaxing`, () => {
 		battle = common.gen(8).createBattle([[
 			{ species: "Zoroark", ability: 'illusion', moves: ['sleeptalk'] },

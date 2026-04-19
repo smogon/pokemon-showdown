@@ -63,7 +63,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	fearow: {
-		tier: "UU",
+		tier: "RUBL",
 	},
 	ekans: {
 		tier: "LC",
@@ -312,7 +312,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	hypno: {
-		tier: "UU",
+		tier: "RU",
 	},
 	krabby: {
 		tier: "LC",
@@ -465,7 +465,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	porygon2: {
-		tier: "UUBL",
+		tier: "(OU)",
 	},
 	omanyte: {
 		tier: "PU",
@@ -732,7 +732,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	raikou: {
-		tier: "UUBL",
+		tier: "(OU)",
 	},
 	entei: {
 		tier: "UUBL",
@@ -930,7 +930,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	manectric: {
-		tier: "UU",
+		tier: "RU",
 	},
 	plusle: {
 		tier: "NU",
@@ -1137,7 +1137,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	regice: {
-		tier: "UUBL",
+		tier: "(OU)",
 	},
 	registeel: {
 		tier: "UUBL",

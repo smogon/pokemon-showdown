@@ -132,12 +132,6 @@ describe('Dex data', () => {
 			const entry = Items[itemid];
 			assert.equal(toID(entry.name), itemid, `Mismatched Item key "${itemid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Item ${entry.name} should have a number`);
-			if (entry.megaStone) {
-				assert.equal(typeof entry.megaStone, typeof entry.megaEvolves, `Item ${entry.name} megaStone and megaEvolves should both be the same type`);
-				if (Array.isArray(entry.megaStone)) {
-					assert.equal(entry.megaStone.length, entry.megaEvolves.length, `Item ${entry.name} megaStone and megaEvolves arrays should be the same length`);
-				}
-			}
 		}
 	});
 
@@ -242,8 +236,8 @@ describe('Dex data', () => {
 
 	it('should have valid Learnsets entries', function () {
 		this.timeout(0);
-		const mods = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex.mod('gen9legends'), Dex];
-		for (const mod of mods) {
+		const dexes = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex.mod('gen9legends'), Dex.mod('champions'), Dex];
+		for (const mod of dexes) {
 			for (const speciesid in mod.data.Learnsets) {
 				const species = Dex.species.get(speciesid);
 				assert.equal(speciesid, species.id, `Key "${speciesid}" in Learnsets should be a Species ID`);

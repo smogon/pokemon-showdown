@@ -52,7 +52,9 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 		};
 
 		if (sigMove.isNonstandard === "Past" && dex.gen >= 8) details["Past Gens Only"] = "x";
-		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForce) details["Boosted by Sheer Force"] = "";
+		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForceBoost) {
+			details["Boosted by Sheer Force"] = "";
+		}
 		if (sigMove.flags['contact'] && dex.gen >= 3) details["Contact"] = "";
 		if (sigMove.flags['sound'] && dex.gen >= 3) details["Sound"] = "";
 		if (sigMove.flags['bullet'] && dex.gen >= 6) details["Bullet"] = "";
@@ -373,7 +375,7 @@ class SSBSetsHTML extends Chat.JSX.Component<{ target: string }> {
 			<SSBInnateHTML name={setName} dex={dex} baseDex={baseDex} />
 			<SSBPokemonHTML species={set.species} dex={dex} baseDex={baseDex} />
 			{(!Array.isArray(set.item) && item.megaStone) && <SSBPokemonHTML
-				species={Array.isArray(item.megaStone) ? item.megaStone[0] : item.megaStone} dex={dex} baseDex={baseDex}
+				species={Object.values(item.megaStone)[0]} dex={dex} baseDex={baseDex}
 			/>}
 			{/* keys and Kennedy have an itemless forme change */}
 			{['Rayquaza'].includes(set.species) && <SSBPokemonHTML species={`${set.species}-Mega`} dex={dex} baseDex={baseDex} />}

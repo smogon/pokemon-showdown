@@ -1,11 +1,19 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	standard: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
+		banlist: ['Moody'],
 	},
 	standarddoubles: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
+		],
+		banlist: ['Moody'],
 	},
 	obtainablemoves: {
 		inherit: true,
