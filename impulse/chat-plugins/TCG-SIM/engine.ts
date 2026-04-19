@@ -16,40 +16,63 @@ export interface InGameCard extends TCGCard {
     uid: number; 
 }
 
+// Items attached to a Pokémon that expire after a set trigger
+export interface AttachedItem {
+    card: InGameCard;
+    // 'end_of_your_turn' = discard at end of the turn it was played (PlusPower)
+    // 'end_of_opponent_turn' = discard at end of the opponent's next turn (Defender)
+    expiresOn: 'end_of_your_turn' | 'end_of_opponent_turn';
+}
+
 export class PokemonInstance {
     uid: number; 
     cards: InGameCard[];
     attachedEnergy: InGameCard[];
+    attachedItems: AttachedItem[];
     currentDamage: number;
 
     constructor(basic: InGameCard) {
         this.uid = basic.uid;
         this.cards = [basic];
         this.attachedEnergy = [];
+        this.attachedItems = [];
         this.currentDamage = 0;
     }
 
     get topCard(): InGameCard {
         return this.cards[this.cards.length - 1];
     }
+
+    // The stage of this instance: 0 = Basic, 1 = Stage 1, 2 = Stage 2
+    get stage(): number {
+        const top = this.topCard;
+        if (top.subtypes?.includes('Stage 2')) return 2;
+        if (top.subtypes?.includes('Stage 1')) return 1;
+        return 0;
+    }
 }
 
+// Basic Pokémon: supertype Pokémon, not an evolution stage, and not a special form
+const EVOLUTION_SUBTYPES = new Set(['Stage 1', 'Stage 2', 'MEGA', 'VMAX', 'VSTAR', 'GX', 'EX']);
+
 export function isBasicPokemon(card: TCGCard): boolean {
-    const isPokemon = card.supertype === 'Pokémon' || card.supertype === 'Pokemon';
-    if (!isPokemon) return false;
-    
-    if (card.subtypes) {
-        if (card.subtypes.includes('Stage 1') || card.subtypes.includes('Stage 2') || card.subtypes.includes('MEGA') || card.subtypes.includes('VMAX')) {
-            return false;
-        }
-    }
+    if (card.supertype !== 'Pokémon' && card.supertype !== 'Pokemon') return false;
+    if (!card.subtypes) return true; // No subtypes = Basic
+    // Modern basics: "Basic" subtype, or V/EX that are explicitly Basic
+    if (card.subtypes.includes('Basic')) return true;
+    // If it has any evolution subtype it is not a basic
+    if (card.subtypes.some(s => EVOLUTION_SUBTYPES.has(s))) return false;
     return true;
 }
 
 export function isEvolutionPokemon(card: TCGCard): boolean {
-    const isPokemon = card.supertype === 'Pokémon' || card.supertype === 'Pokemon';
-    if (!isPokemon) return false;
+    if (card.supertype !== 'Pokémon' && card.supertype !== 'Pokemon') return false;
     return !!card.subtypes?.some(s => s === 'Stage 1' || s === 'Stage 2');
+}
+
+export function getEnergyType(card: TCGCard): string | null {
+    if (!card.supertype?.includes('Energy')) return null;
+    return card.name.replace(' Energy', '');
 }
 
 export function hasEnoughEnergy(instance: PokemonInstance, attackIndex: number): boolean {
@@ -64,25 +87,45 @@ export function hasEnoughEnergy(instance: PokemonInstance, attackIndex: number):
         else required[type] = (required[type] || 0) + 1;
     }
 
+    // Build what energy we have, tracking colorless-equivalent surplus
     const provided: Record<string, number> = {};
-    let totalProvided = 0;
+    let freeSurplus = 0; // surplus that can fill Colorless slots
     
     for (const energy of instance.attachedEnergy) {
-        let type = energy.name.replace(' Energy', ''); 
         if (energy.name === 'Double Colorless Energy') {
-            totalProvided += 2;
+            freeSurplus += 2;
+        } else if (energy.name === 'Rainbow Energy') {
+            // Rainbow can be any type — we'll treat it as wild; add 1 to each type bucket
+            // Handled below as a wildcard pass
+            freeSurplus += 1; // simplified: counts as 1 colorless-flexible
         } else {
+            const type = energy.name.replace(' Energy', '');
             provided[type] = (provided[type] || 0) + 1;
-            totalProvided += 1;
         }
     }
 
+    // Check typed requirements first
     for (const [type, amount] of Object.entries(required)) {
-        if ((provided[type] || 0) < amount) return false;
-        totalProvided -= amount; 
+        const have = provided[type] || 0;
+        if (have >= amount) {
+            // Surplus from this type can fill colorless
+            freeSurplus += have - amount;
+        } else {
+            // Deficit — try to fill from rainbow/colorless surplus
+            const deficit = amount - have;
+            if (freeSurplus >= deficit) {
+                freeSurplus -= deficit;
+            } else {
+                return false;
+            }
+        }
     }
 
-    return totalProvided >= colorlessRequired;
+    // Remaining typed surplus + free surplus must cover colorless
+    const totalColorlessFillable = freeSurplus + Object.values(provided).reduce((a, b) => a + b, 0)
+        - Object.values(required).reduce((a, b) => a + b, 0);
+
+    return totalColorlessFillable >= colorlessRequired;
 }
 
 export class TCGPlayer {
@@ -94,7 +137,19 @@ export class TCGPlayer {
     prizes: InGameCard[] = [];
     discard: InGameCard[] = [];
     
-    selectedUid: number | null = null; 
+    selectedUid: number | null = null;
+    // For multi-step trainer effects that need a secondary selection from hand/discard
+    pendingEffect: {
+        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck';
+        trainerUid: number;
+        trainerName: string;
+        // How many cards the player still needs to select
+        needed: number;
+        // Cards already selected for this pending effect
+        selected: number[];
+        // Optional filter function serialised as a string key
+        filter?: string;
+    } | null = null;
 
     constructor(userid: string) {
         this.userid = userid;
@@ -110,6 +165,13 @@ export class TCGPlayer {
             }
         }
         return true;
+    }
+
+    getAllInPlay(): PokemonInstance[] {
+        const result: PokemonInstance[] = [];
+        if (this.active) result.push(this.active);
+        for (const b of this.bench) if (b) result.push(b);
+        return result;
     }
 }
 
@@ -142,47 +204,105 @@ export class TCGMatch {
     }
 
     private generateDummyDeck(pool: TCGCard[]): InGameCard[] {
+        // Helper: find a card by name, throw clearly if missing so bad JSON is caught early
+        const find = (name: string): TCGCard => {
+            const card = pool.find(c => c.name === name);
+            if (!card) throw new Error(`TCG test deck: card "${name}" not found in pool`);
+            return card;
+        };
+
+        // Each entry is [card, copies].  Total must equal 60.
+        const recipe: [TCGCard, number][] = [
+            // --- Pokémon (20) ---
+            // Abra → Kadabra → Alakazam: tests Stage 1, Stage 2, and Pokémon Breeder
+            [find('Abra'),        4],
+            [find('Kadabra'),     3],
+            [find('Alakazam'),    2],
+            // Standalone basics with real attacks for early-game attacking
+            [find('Electabuzz'),  3],  // Lightning type, 2-energy attack
+            [find('Hitmonchan'),  3],  // Fighting type, 1-energy attack
+            // Magikarp + Gyarados: tests Stage 1 evolution on a fragile basic
+            [find('Magikarp'),    2],
+            [find('Gyarados'),    2],
+            // Gastly + Haunter: Psychic type, bench presence for Switch/Scoop Up targets
+            [find('Gastly'),      1],
+
+            // --- Energy (14) ---
+            [find('Psychic Energy'),         4],  // For Abra line + Haunter
+            [find('Lightning Energy'),        4],  // For Electabuzz
+            [find('Fighting Energy'),         3],  // For Hitmonchan
+            [find('Double Colorless Energy'), 3],  // Tests DCE logic in hasEnoughEnergy
+
+            // --- Trainers: no-target (8) ---
+            [find('Bill'),                   2],
+            [find('Professor Oak'),          2],
+            [find('Impostor Professor Oak'), 1],
+            [find('Lass'),                   1],
+            [find('Full Heal'),              1],
+            [find('Pokémon Center'),         1],
+
+            // --- Trainers: own-field targeted (12) ---
+            [find('Potion'),           2],
+            [find('Super Potion'),     1],
+            [find('Switch'),           2],
+            [find('Scoop Up'),         1],
+            [find('Defender'),         1],
+            [find('PlusPower'),        2],
+            [find('Devolution Spray'), 1],
+            [find('Pokémon Breeder'),  1],
+            [find('Revive'),           1],
+
+            // --- Trainers: opponent-field targeted (4) ---
+            [find('Gust of Wind'),         1],
+            [find('Energy Removal'),       1],
+            [find('Super Energy Removal'), 1],
+            [find('Pokémon Flute'),        1],
+
+            // --- Trainers: multi-step / pending (6) ---
+            [find('Computer Search'), 1],
+            [find('Item Finder'),     1],
+            [find('Maintenance'),     1],
+            [find('Pokémon Trader'),  1],
+            [find('Energy Retrieval'),1],
+            [find('Pokédex'),         1],
+        ];
+
+        // Verify the recipe adds up to exactly 60
+        const total = recipe.reduce((sum, [, n]) => sum + n, 0);
+        if (total !== 60) throw new Error(`TCG test deck has ${total} cards, expected 60`);
+
         const deck: InGameCard[] = [];
-        
-        // Filter the pool to grab specific cards for a functional "Mono-Fire Test Deck"
-        const charmander = pool.find(c => c.name === 'Charmander');
-        const charmeleon = pool.find(c => c.name === 'Charmeleon');
-        const fireEnergy = pool.find(c => c.name === 'Fire Energy');
-        const potion = pool.find(c => c.name === 'Potion');
-        const bill = pool.find(c => c.name === 'Bill');
-        
-        // Fallback to random if something is missing from the JSON
-        const fallback = pool[Math.floor(Math.random() * pool.length)];
-
-        for (let i = 0; i < 60; i++) {
-            let selectedCard = fallback;
-
-            // Build a structured deck: 20 Basic, 10 Evolution, 20 Energy, 10 Trainers
-            if (i < 20) selectedCard = charmander || fallback;
-            else if (i < 30) selectedCard = charmeleon || fallback;
-            else if (i < 50) selectedCard = fireEnergy || fallback;
-            else if (i < 55) selectedCard = potion || fallback;
-            else selectedCard = bill || fallback;
-
-            deck.push({ 
-                // We use structuredClone or spread to ensure we don't mutate the base JSON template
-                ...selectedCard, 
-                uid: this.cardUidCounter++ 
-            });
+        for (const [card, copies] of recipe) {
+            for (let i = 0; i < copies; i++) {
+                deck.push({ ...card, uid: this.cardUidCounter++ });
+            }
         }
-        
-        // Shuffle the deck!
+
+        // Fisher-Yates shuffle
         for (let i = deck.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [deck[i], deck[j]] = [deck[j], deck[i]];
         }
 
         return deck;
-	 }
+    }
 
     addLog(msg: string) {
         this.logs.unshift(msg);
         if (this.logs.length > 20) this.logs.pop(); 
+    }
+
+    // Expire items that are due to be discarded
+    private expireItems(forPlayer: boolean, timing: 'end_of_your_turn' | 'end_of_opponent_turn') {
+        const owner = forPlayer ? this.player : this.ai;
+        for (const inst of owner.getAllInPlay()) {
+            const expired = inst.attachedItems.filter(i => i.expiresOn === timing);
+            for (const item of expired) {
+                owner.discard.push(item.card);
+                this.addLog(`${item.card.name} on ${inst.topCard.name} expired and was discarded.`);
+            }
+            inst.attachedItems = inst.attachedItems.filter(i => i.expiresOn !== timing);
+        }
     }
 
     playBasicPokemon(isPlayer: boolean, uid: number, slot: 'active' | number) {
@@ -211,7 +331,7 @@ export class TCGMatch {
         return true;
     }
 
-    evolvePokemon(isPlayer: boolean, uid: number, slot: 'active' | number) {
+    evolvePokemon(isPlayer: boolean, uid: number, slot: 'active' | number, skipStageCheck = false) {
         if (this.winner) return false;
 
         const activePlayer = isPlayer ? this.player : this.ai;
@@ -224,11 +344,22 @@ export class TCGMatch {
         const targetInstance = slot === 'active' ? activePlayer.active : activePlayer.bench[slot];
         if (!targetInstance) return false;
 
-        if (targetInstance.topCard.name !== card.evolvesFrom) return false;
+        if (skipStageCheck) {
+            // Pokémon Breeder: allow Stage 2 directly on the matching Basic
+            const basicName = card.evolvesFrom;
+            // We need to trace the chain: Stage2.evolvesFrom = Stage1 name,
+            // but Breeder needs the Basic. We check if the bottom card is the right Basic.
+            // To find what Basic the Stage 2 ultimately evolves from, we walk the pool.
+            // For now we accept if the target's bottomCard is a Basic that could lead to this card.
+            // Simple approach: accept if topCard is Basic and card is Stage 2
+            if (targetInstance.stage !== 0) return false;
+        } else {
+            if (targetInstance.topCard.name !== card.evolvesFrom) return false;
+        }
 
         targetInstance.cards.push(card);
         activePlayer.hand.splice(handIndex, 1);
-        this.addLog(`${isPlayer ? 'Player' : 'AI'} evolved ${card.evolvesFrom} into ${card.name}.`);
+        this.addLog(`${isPlayer ? 'Player' : 'AI'} evolved ${card.evolvesFrom} into ${card.name}${skipStageCheck ? ' (via Pokémon Breeder)' : ''}.`);
 
         if (isPlayer) activePlayer.selectedUid = null;
         return true;
@@ -266,7 +397,8 @@ export class TCGMatch {
         const card = activePlayer.hand[handIndex];
         if (card.supertype !== 'Trainer') return false;
 
-        const effect = TrainerEffects[card.name];
+        // Look up by ID first, fall back to name for future-proofing with reprints
+        const effect = TrainerEffects[card.id] ?? TrainerEffects[card.name];
         if (!effect) {
             if (isPlayer) this.addLog(`Trainer card ${card.name} is not implemented yet!`);
             return false;
@@ -306,6 +438,8 @@ export class TCGMatch {
         if (victim.active) {
             this.addLog(`${victim.active.topCard.name} was Knocked Out!`);
             victim.discard.push(...victim.active.cards, ...victim.active.attachedEnergy);
+            // Also discard attached items
+            for (const item of victim.active.attachedItems) victim.discard.push(item.card);
             victim.active = null;
 
             if (attacker.prizes.length > 0) {
@@ -340,11 +474,25 @@ export class TCGMatch {
         if (!attackUse) return false;
 
         const damageRaw = parseInt(attackUse.damage.replace(/[^0-9]/g, ''));
-        const damage = isNaN(damageRaw) ? 0 : damageRaw;
+        let damage = isNaN(damageRaw) ? 0 : damageRaw;
 
         this.addLog(`${attacker.active.topCard.name} used ${attackUse.name}!`);
 
         if (damage > 0) {
+            // PlusPower: +10 per PlusPower attached to the attacker
+            const plusPowers = attacker.active.attachedItems.filter(i => i.card.name === 'PlusPower').length;
+            if (plusPowers > 0) {
+                damage += plusPowers * 10;
+                this.addLog(`PlusPower boosted the attack by ${plusPowers * 10}!`);
+            }
+
+            // Defender: reduce incoming damage by 20 per Defender on the defending Pokémon
+            const defenders = defender.active.attachedItems.filter(i => i.card.name === 'Defender').length;
+            if (defenders > 0) {
+                damage = Math.max(0, damage - defenders * 20);
+                this.addLog(`Defender reduced the damage by ${defenders * 20}!`);
+            }
+
             defender.active.currentDamage += damage;
             this.addLog(`It dealt ${damage} damage to ${defender.active.topCard.name}.`);
 
@@ -354,15 +502,32 @@ export class TCGMatch {
             }
         }
 
+        // Expire PlusPower on the attacker at end of their turn
+        this.expireItems(isPlayer, 'end_of_your_turn');
+        // Expire Defender on the defender at end of the attacker's turn (= end of opponent's turn from defender's POV)
+        this.expireItems(!isPlayer, 'end_of_opponent_turn');
+
         if (isPlayer) this.player.selectedUid = null; 
 
         if (!this.winner) {
             this.turn = isPlayer ? 'ai' : 'player';
+            this.hasAttackedThisTurn = true;
             this.hasAttachedEnergy = false; 
             if (this.turn === 'ai') this.executeAITurn();
         }
         return true;
     }
+
+    // Expose so endturn command can also expire items
+    endPlayerTurn() {
+        this.expireItems(true, 'end_of_your_turn');
+        this.player.selectedUid = null;
+        this.hasAttachedEnergy = false;
+        this.hasAttackedThisTurn = false;
+        this.turn = 'ai';
+    }
+
+    hasAttackedThisTurn = false;
 
     executeAITurn() {
         if (this.winner) return;
@@ -373,11 +538,11 @@ export class TCGMatch {
             return;
         }
 
-        // AI Logic: Play untargeted Trainers (Bill, Oak)
+        // AI Logic: Play untargeted Trainers (Bill, Oak, etc.)
         for (let i = this.ai.hand.length - 1; i >= 0; i--) {
             const card = this.ai.hand[i];
             if (card.supertype === 'Trainer') {
-                const effect = TrainerEffects[card.name];
+                const effect = TrainerEffects[card.id] ?? TrainerEffects[card.name];
                 if (effect && !effect.requiresTarget) {
                     this.playTrainer(false, card.uid);
                 }
@@ -425,11 +590,19 @@ export class TCGMatch {
             }
         }
 
+        // Expire AI's end-of-turn items even if AI didn't attack
+        if (!attacked) {
+            this.expireItems(false, 'end_of_your_turn');
+        }
+
         if (!attacked && !this.winner) {
             this.addLog("AI ends turn without attacking.");
             this.turn = 'player';
             this.hasAttachedEnergy = false; 
         }
+
+        // Expire player's Defender at end of AI's turn
+        this.expireItems(true, 'end_of_opponent_turn');
 
         if (this.turn === 'player' && !this.winner) {
             if (!this.player.draw(1)) {
