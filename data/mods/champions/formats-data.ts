@@ -808,7 +808,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	starmiemega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	mimejr: {
 		isNonstandard: "Past",
@@ -2362,7 +2362,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	lucariomega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	lucariomegaz: {
 		isNonstandard: "Past",
@@ -4716,7 +4716,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	palafin: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	smoliv: {
 		isNonstandard: "Past",
