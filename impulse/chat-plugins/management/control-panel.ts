@@ -145,7 +145,7 @@ async function renderIcons(user: User): Promise<string> {
 		entry.size !== DEFAULT_ICON_SIZE ? `${entry.size}px` : `${DEFAULT_ICON_SIZE}px (default)`,
 		Impulse.nameColor(entry.setBy, true, false),
 		formatDate(entry.createdAt),
-		`<button class="button" name="send" value="/controlpanel deleteicon ${userid}" style="color:#c00;border-color:#c00;">🗑 Delete</button>`,
+		`<button class="button" name="send" value="/controlpanel deleteicon ${userid}" style="color:#c00;border-color:#c00;">Delete</button>`,
 	]);
 
 	return `<div class="pad">${header}${Table('User Icons', ['User', 'Icon', 'Size', 'Set By', 'Added', 'Action'], rows)}</div>`;
