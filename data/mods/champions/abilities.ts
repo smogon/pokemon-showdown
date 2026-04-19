@@ -15,8 +15,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || move.category === 'Status') return;
+
 			if (move.hit === 1) delete this.effectState.neutral;
 			if (this.effectState.neutral) return 0;
+
 			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				return;
 			}
