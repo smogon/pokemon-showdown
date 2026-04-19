@@ -221,6 +221,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Gem Infusion",
 		rating: 4,
 		num: 1001,
+		shortDesc: "If holding a Gem, primary type becomes the type of the Gem.",
 	},
 	embodyaspectpixiedust: {
 		onStart(pokemon) {
@@ -233,6 +234,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Embody Aspect (Pixiedust)",
 		rating: 3.5,
+		shortDesc: "Ogerpon-Pixiedust: On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
 	},
 	stancechange: {
 		onModifyMovePriority: 1,
@@ -247,6 +249,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Stance Change",
 		rating: 4,
 		num: 176,
+		shortDesc: "Aegislash: change Forme to Soulbound before Soulbound Slash and Shield before King's Shield.",
 	},
 	stackshift: {
 		onModifyAtkPriority: 5,
@@ -322,7 +325,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Wither",
 		rating: 1.5,
-		shortDesc: "User loses 1/16 of its max HP per turn. Heals TBD% HP when hit by Water.",
+		shortDesc: "User loses 1/16 of its max HP per turn. Heals 25% HP when hit by Water.",
 	},
 	toughwings: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -614,25 +617,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved and is Ghost-type.",
 	},
 	backbeat: {
-		onBeforeMovePriority: 9,
-		onBeforeMove(pokemon) {
+		onResidualOrder: 9,
+		onResidual(pokemon) {
 			if (!pokemon.volatiles['backbeat']) {
-				pokemon.addVolatile('backbeat');
-			} else if (pokemon.volatiles['backbeat']) {
-				pokemon.removeVolatile('backbeat');
-			}
-		},
-		condition: {
-			onStart(pokemon) {
 				this.add('-activate', pokemon, 'ability: Backbeat');
-				this.add('-start', pokemon, 'Backbeat');
-			},
-			onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.5);
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Backbeat');
-			},
+				pokemon.addVolatile('backbeat');
+			} else {
+				this.add('-activate', pokemon, 'ability: Backbeat');
+				pokemon.removeVolatile('backbeat');
+			};
 		},
 		flags: {},
 		name: "Backbeat",
@@ -818,6 +811,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	aeoliandrift: {
 		onStart(source) {
+			this.add("-ability", source, 'Aeolian Drift');
+			this.add('-message', "Emolga spawns a strong wind!");
 			source.side.addSideCondition('tailwind');
 		},
 		flags: {},
@@ -945,7 +940,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Heart of Cold",
 		rating: 0,
-		shortDesc: "This Pokemon's moves and stats act as if snow is active.",
+		shortDesc: "This Pokemon's moves and stats act as if Snowscape is active.",
 	},
 	headon: {
 		onDamage(damage, target, source, effect) {
@@ -961,7 +956,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyAccuracy(accuracy) {
 			if (this.effectState.headOn) return;
 			this.effectState.headOn = true;
-			this.debug('Head-On - decreasing accuracy');
+			this.add('-ability', this.effectState.target, 'Head-On');
+			this.hint("Torterra-Old! dodges the first attack that targets it.");
+			this.debug('Head-On forcing miss');
 			return 0;
 		},
 		flags: {},
@@ -1378,7 +1375,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!lastAttackedBy) return;
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 1.5 && target.hp + damage > target.maxhp / 2) {
+				this.add('-activate', target, 'ability: Primal Shackle');
 				target.formeChange('Rayquaza-Untethered', null, true);
+				this.add('-message', "Rayquaza shatters its tether and escapes!");
+				target.setAbility('beastboost', target);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
