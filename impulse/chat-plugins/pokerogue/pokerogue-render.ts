@@ -225,7 +225,7 @@ export function renderGamePage(state: PokeRogueState): string {
 			const types: string[] = sp.types ?? [];
 			buf += `<tr class="pr-choice-row${isLeg ? ' legendary' : ''}">`;
 			buf += `<td class="pr-ct-status">${getSpriteWithBall(sp.id, 64)}`;
-			if (isLeg) buf += `<div class="pr-legendary-badge">★ LEGENDARY</div>`;
+			if (isLeg) buf += `<div class="pr-legendary-badge">LEGENDARY</div>`;
 			buf += `</td>`;
 			buf += `<td class="pr-ct-info">`;
 			buf += `<div class="pr-ct-name">${sp.name}</div>`;
@@ -284,7 +284,7 @@ export function renderGamePage(state: PokeRogueState): string {
 		for (let i = 0; i < mon.moves.length; i++) {
 			const oldMove = Dex.moves.get(mon.moves[i]);
 			buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="button" style="text-align:left; padding:8px;">`;
-			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '—'})</small></button>`;
+			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '-'})</small></button>`;
 		}
 
 		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="text-align:center; padding:8px; margin-top:8px;">`;

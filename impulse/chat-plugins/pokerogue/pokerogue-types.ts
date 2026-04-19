@@ -59,7 +59,7 @@ export interface PokeRogueState {
 	lastRunStreaks?: number;
 	recordTeam?: PokemonEntry[];
 	pendingGachaOffer?: { species: string, sourceItemId: string, isFeatured: boolean };
-	pendingMoves?: { pokemonIndex: number; move: string; speciesName: string }[];
+	pendingMoves?: { pokemonIndex: number, move: string, speciesName: string }[];
 	pendingSwap?: PokemonEntry;
 }
 

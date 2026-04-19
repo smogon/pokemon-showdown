@@ -99,14 +99,26 @@ export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclud
 	let isFeatured = false;
 
 	if (gachaType === 'master') {
-		if (rand <= 0.30) { pool = getTier4Pokemon(); isFeatured = true; }
-		else { pool = getTier3Pokemon(); }
+		if (rand <= 0.30) {
+			pool = getTier4Pokemon();
+			isFeatured = true;
+		} else {
+			pool = getTier3Pokemon();
+		}
 	} else if (gachaType === 'ultra') {
-		if (rand <= 0.75) { pool = getTier3Pokemon(); isFeatured = true; }
-		else { pool = getTier2Pokemon(); }
+		if (rand <= 0.75) {
+			pool = getTier3Pokemon();
+			isFeatured = true;
+		} else {
+			pool = getTier2Pokemon();
+		}
 	} else { // great
-		if (rand <= 0.70) { pool = getTier2Pokemon(); isFeatured = true; }
-		else { pool = getTier3Pokemon(); }
+		if (rand <= 0.70) {
+			pool = getTier2Pokemon();
+			isFeatured = true;
+		} else {
+			pool = getTier3Pokemon();
+		}
 	}
 
 	const picks = pickRandom(pool, 1, exclude);

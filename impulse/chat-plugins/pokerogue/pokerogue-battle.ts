@@ -222,12 +222,12 @@ function buildBotTeam(state: PokeRogueState): string {
 	let level = Math.max(botLevel(floor), playerMaxLevel);
 
 	const floorMod = floor % 10;
-	if (floorMod === 0) { 
+	if (floorMod === 0) {
 		// Boss floors grant +1 to +3 levels over the player
-		level += Math.floor(Math.random() * 3) + 1; 
+		level += Math.floor(Math.random() * 3) + 1;
 	}
-	
-	level = Math.min(999, level); 
+
+	level = Math.min(999, level);
 	// --- END Dynamic AI Level Scaling ---
 
 	let poolA: string[];
@@ -281,7 +281,7 @@ function buildBotTeam(state: PokeRogueState): string {
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
-	
+
 	// Pass the full state to calculate dynamic levels
 	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
@@ -298,7 +298,7 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 				{ user: botUser, team: botTeam },
 			],
 			rated: false,
-			title: `PokéRogue Battle — Floor ${state.floor}: ${user.name} vs ${isBoss ? 'BOSS ' : ''}${TRAINER_NAME}`,
+			title: `PokéRogue Battle - Floor ${state.floor}: ${user.name} vs ${isBoss ? 'BOSS ' : ''}${TRAINER_NAME}`,
 		});
 	} catch (e) {
 		destroyBotUser(botUser);

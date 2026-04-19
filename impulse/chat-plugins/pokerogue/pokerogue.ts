@@ -52,7 +52,7 @@ export const commands: Chat.ChatCommands = {
 				const highestFloor = state?.highestFloor || 0;
 				const displayName = state?.displayName || user.name;
 				const recordTeam = state?.recordTeam || [];
-				
+
 				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 150, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
 				setState(user.id, state);
 			}
@@ -66,23 +66,23 @@ export const commands: Chat.ChatCommands = {
 			if (hasProgress && !existing.gameOver && target !== 'confirm') {
 				return this.sendReplyBox(`<b>Warning: Run in progress!</b><br><button name="send" value="/pokerogue newgame confirm" class="button">Yes, start fresh</button>`);
 			}
-			
+
 			const highestFloor = existing?.highestFloor || 0;
 			const displayName = existing?.displayName || user.name;
 			const recordTeam = existing?.recordTeam || [];
-			
+
 			const newState = {
-				floor: 1, 
-				team: [], 
-				pendingChoice: pickStarterOptions(), 
-				pendingChoiceType: 'starter', 
-				coins: 150, 
+				floor: 1,
+				team: [],
+				pendingChoice: pickStarterOptions(),
+				pendingChoiceType: 'starter',
+				coins: 150,
 				streaksWon: 0,
 				highestFloor,
 				displayName,
-				recordTeam
+				recordTeam,
 			} as any;
-			
+
 			setState(user.id, newState);
 			return this.parse('/pokerogue start');
 		},
@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
 		battle(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
-			
+
 			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
 				return this.errorReply("Handle pending choices or team swaps first.");
 			}
@@ -115,24 +115,24 @@ export const commands: Chat.ChatCommands = {
 
 		learnmove(target, room, user) {
 			const state = getState(user.id);
-			if (!state?.pendingMoves || !state.pendingMoves.length) return;
-			
+			if (!state?.pendingMoves?.length) return;
+
 			const pending = state.pendingMoves[0];
 			const mon = state.team[pending.pokemonIndex];
 			if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, mon.level);
 
 			const targetTrimmed = target.trim();
-			
+
 			if (targetTrimmed === 'skip') {
 				state.notification = `Your Pokémon gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
 			} else {
 				const slot = parseInt(targetTrimmed) - 1;
 				if (isNaN(slot) || slot < 0 || slot >= mon.moves.length) return this.errorReply("Invalid move slot.");
-				
+
 				const oldMoveName = Dex.moves.get(mon.moves[slot]).name;
 				const newMoveName = Dex.moves.get(pending.move).name;
-				
-				mon.moves[slot] = pending.move; 
+
+				mon.moves[slot] = pending.move;
 				state.notification = `Forgot ${oldMoveName} and learned <b>${newMoveName}</b>!`;
 			}
 
@@ -144,21 +144,21 @@ export const commands: Chat.ChatCommands = {
 		swapmon(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingSwap) return;
-			
+
 			const targetTrimmed = target.trim();
 			const newMon = state.pendingSwap;
 			const spName = Dex.species.get(toID(newMon.species)).name;
-			
+
 			if (targetTrimmed === 'skip') {
 				state.notification = `You let the new Pokémon go.`;
 			} else {
 				const slot = parseInt(targetTrimmed) - 1;
 				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
-				
+
 				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
-				
+
 				if (state.team[slot].heldItem) {
-					const heldId = state.team[slot].heldItem!;
+					const heldId = state.team[slot].heldItem;
 					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
 					const bagId = shopEntry ? shopEntry[0] : heldId;
 
@@ -167,7 +167,7 @@ export const commands: Chat.ChatCommands = {
 				}
 
 				state.team[slot] = newMon;
-				
+
 				if (state.pendingMoves) {
 					state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
 				}
@@ -185,22 +185,22 @@ export const commands: Chat.ChatCommands = {
 			const n = parseInt(target) - 1;
 			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
-			
+
 			let addedLevel = 1;
 			if (state.pendingChoiceType !== 'starter') {
 				addedLevel = Math.max(1, botLevel(state.floor) - 2);
 			}
-			
+
 			let finalSpecies = choice;
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
 				if (!evo || addedLevel < evo.evoLevel) break;
 				finalSpecies = evo.evoTo;
 			}
-			
+
 			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
 			const newMon: PokemonEntry = { species: finalSpecies, level: addedLevel, exp: expForLevel(addedLevel), moves: initialMoves };
-			
+
 			if (state.pendingChoiceType === 'starter') {
 				state.team = [newMon];
 			} else if (state.team.length < 6) {
@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				state.pendingSwap = newMon;
 			}
-			
+
 			delete state.pendingChoice; delete state.pendingChoiceType;
 			setState(user.id, state); refreshGamePage(user);
 		},
@@ -293,17 +293,17 @@ export const commands: Chat.ChatCommands = {
 				const oldLevel = mon.level;
 				const oldSpecies = mon.species;
 				let evolved = false;
-				
-				mon.level = Math.min(999, mon.level + 5); 
+
+				mon.level = Math.min(999, mon.level + 5);
 				mon.exp = expForLevel(mon.level);
-				while (true) { 
-					const evo = getLevelUpEvo(mon.species); 
-					if (!evo || mon.level < evo.evoLevel) break; 
-					mon.species = evo.evoTo; 
+				while (true) {
+					const evo = getLevelUpEvo(mon.species);
+					if (!evo || mon.level < evo.evoLevel) break;
+					mon.species = evo.evoTo;
 					evolved = true;
 				}
 				state.notification = `Your Pokémon grew to Lv. ${mon.level}!`;
-				
+
 				if (!mon.moves) mon.moves = getLevelUpMoves(oldSpecies, oldLevel);
 
 				const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
@@ -313,7 +313,7 @@ export const commands: Chat.ChatCommands = {
 						if (!newMoves.includes(m)) newMoves.push(m);
 					}
 				}
-				
+
 				state.pendingMoves = state.pendingMoves || [];
 
 				for (const move of newMoves) {
@@ -342,13 +342,13 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`${Dex.species.get(toID(mon.species)).name}'s HP is already full!`);
 				}
 				mon.currentHp = item.healHp >= 100 ? 100 : Math.min(100, oldHp + item.healHp);
-				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> restored HP! (${oldHp}% → ${mon.currentHp}%)`;
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> restored HP! (${oldHp}% -> ${mon.currentHp}%)`;
 			} else if (item?.gachaType) {
 				const { species, isFeatured } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
 				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured };
 			} else if (item?.heldItem) {
 				if (state.team[slot].heldItem) {
-					const oldItem = state.team[slot].heldItem!;
+					const oldItem = state.team[slot].heldItem;
 					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === oldItem);
 					const bagId = shopEntry ? shopEntry[0] : oldItem;
 					state.items[bagId] = (state.items[bagId] ?? 0) + 1;
@@ -356,7 +356,7 @@ export const commands: Chat.ChatCommands = {
 				state.team[slot].heldItem = item.heldItem;
 			}
 
-			setState(user.id, state); 
+			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
@@ -404,10 +404,10 @@ export const commands: Chat.ChatCommands = {
 		acceptgacha(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
-			
+
 			const addedLevel = Math.max(1, botLevel(state.floor) - 2);
 			let finalSpecies = toID(state.pendingGachaOffer.species);
-			
+
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
 				if (!evo || addedLevel < evo.evoLevel) break;
@@ -422,7 +422,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				state.pendingSwap = newMon;
 			}
-			
+
 			delete state.pendingGachaOffer;
 			setState(user.id, state); refreshGamePage(user);
 		},
@@ -430,14 +430,14 @@ export const commands: Chat.ChatCommands = {
 		declinegacha(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingGachaOffer) return;
-			
+
 			const sourceItem = state.pendingGachaOffer.sourceItemId;
 			state.items = state.items || {};
 			state.items[sourceItem] = (state.items[sourceItem] || 0) + 1;
 			state.notification = `You declined the Pokémon and kept your ${SHOP_ITEMS[sourceItem]?.name}.`;
 
 			delete state.pendingGachaOffer;
-			setState(user.id, state); 
+			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
@@ -446,9 +446,9 @@ export const commands: Chat.ChatCommands = {
 			const [name, mon, lvl] = target.split(',').map(s => s.trim());
 			const tId = toID(name) || user.id;
 			const s = getState(tId);
-			
+
 			if (!s) return this.errorReply(`No active run found for ${tId}.`);
-			
+
 			if (s.team.length >= 6) {
 				return this.errorReply(`${tId}'s team is already full! They must lose a Pokemon before you can add one.`);
 			}
@@ -456,7 +456,7 @@ export const commands: Chat.ChatCommands = {
 			const species = Dex.species.get(toID(mon));
 			if (!species.exists) return this.errorReply("Invalid Pokémon.");
 			const level = parseInt(lvl) || 1;
-			
+
 			let finalSpecies = species.id;
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
@@ -466,31 +466,14 @@ export const commands: Chat.ChatCommands = {
 
 			const initialMoves = getLevelUpMoves(finalSpecies, level);
 			s.team.push({ species: finalSpecies, level, exp: expForLevel(level), moves: initialMoves });
-			
-			setState(tId, s); 
+
+			setState(tId, s);
 			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
 		},
 		givemoney(target, room, user) {
 			this.checkCan('lock');
 			let [name, amt] = target.split(',').map(s => s?.trim());
-			
-			if (!amt && !isNaN(parseInt(name))) {
-				amt = name;
-				name = user.id;
-			}
-			
-			const tId = toID(name) || user.id;
-			const s = getState(tId);
-			if (s) { 
-				s.coins = (s.coins ?? 0) + parseInt(amt || '100'); 
-				setState(tId, s); 
-				this.sendReply(`Gave ${amt || '100'} coins to ${tId}.`); 
-			}
-		},
-		removecoins(target, room, user) {
-			this.checkCan('lock');
-			let [name, amt] = target.split(',').map(s => s?.trim());
-			
+
 			if (!amt && !isNaN(parseInt(name))) {
 				amt = name;
 				name = user.id;
@@ -498,22 +481,43 @@ export const commands: Chat.ChatCommands = {
 
 			const tId = toID(name) || user.id;
 			const s = getState(tId);
-			if (s) { 
-				s.coins = Math.max(0, (s.coins ?? 0) - parseInt(amt || '100')); 
-				setState(tId, s); 
-				this.sendReply(`Removed ${amt || '100'} coins from ${tId}.`); 
+			if (s) {
+				s.coins = (s.coins ?? 0) + parseInt(amt || '100');
+				setState(tId, s);
+				this.sendReply(`Gave ${amt || '100'} coins to ${tId}.`);
+			}
+		},
+		removecoins(target, room, user) {
+			this.checkCan('lock');
+			let [name, amt] = target.split(',').map(s => s?.trim());
+
+			if (!amt && !isNaN(parseInt(name))) {
+				amt = name;
+				name = user.id;
+			}
+
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) {
+				s.coins = Math.max(0, (s.coins ?? 0) - parseInt(amt || '100'));
+				setState(tId, s);
+				this.sendReply(`Removed ${amt || '100'} coins from ${tId}.`);
 			}
 		},
 		resetcoins(target, room, user) {
 			this.checkCan('lock');
 			const tId = toID(target) || user.id;
 			const s = getState(tId);
-			if (s) { s.coins = 0; setState(tId, s); this.sendReply(`Reset coins for ${tId}.`); }
+			if (s) {
+				s.coins = 0;
+				setState(tId, s);
+				this.sendReply(`Reset coins for ${tId}.`);
+			}
 		},
 		setfloor(target, room, user) {
 			this.checkCan('lock');
 			let [name, fl] = target.split(',').map(s => s?.trim());
-			
+
 			if (!fl && !isNaN(parseInt(name))) {
 				fl = name;
 				name = user.id;
@@ -521,17 +525,21 @@ export const commands: Chat.ChatCommands = {
 
 			const tId = toID(name) || user.id;
 			const s = getState(tId);
-			if (s) { 
-				s.floor = parseInt(fl || '1'); 
-				setState(tId, s); 
-				this.sendReply(`Set floor for ${tId} to ${s.floor}.`); 
+			if (s) {
+				s.floor = parseInt(fl || '1');
+				setState(tId, s);
+				this.sendReply(`Set floor for ${tId} to ${s.floor}.`);
 			}
 		},
 		healteam(target, room, user) {
 			this.checkCan('lock');
 			const tId = toID(target) || user.id;
 			const s = getState(tId);
-			if (s) { for (const m of s.team) m.exp = expForLevel(m.level); setState(tId, s); this.sendReply(`Healed team for ${tId}.`); }
+			if (s) {
+				for (const m of s.team) m.exp = expForLevel(m.level);
+				setState(tId, s);
+				this.sendReply(`Healed team for ${tId}.`);
+			}
 		},
 		removemon(target, room, user) {
 			this.checkCan('lock');
@@ -548,21 +556,25 @@ export const commands: Chat.ChatCommands = {
 			const s = getState(user.id);
 			if (s?.battleRoomId) {
 				const match = activeMatches.get(s.battleRoomId as RoomID);
-				if (match) { const bot = Users.get(match.botUserId); if (bot) destroyBotUser(bot); activeMatches.delete(s.battleRoomId as RoomID); }
+				if (match) {
+					const bot = Users.get(match.botUserId);
+					if (bot) destroyBotUser(bot);
+					activeMatches.delete(s.battleRoomId as RoomID);
+				}
 				Rooms.get(s.battleRoomId)?.battle?.forfeit(user);
 			}
-			
+
 			if (s) {
 				s.gameOver = true;
 				s.lastRunFloor = s.floor;
 				s.lastRunStreaks = s.streaksWon || 0;
 				s.team = [];
-				
+
 				delete s.pendingMoves;
 				delete s.pendingSwap;
 				delete s.pendingChoice;
 				delete s.pendingGachaOffer;
-				
+
 				setState(user.id, s);
 			}
 			refreshGamePage(user);
@@ -570,13 +582,13 @@ export const commands: Chat.ChatCommands = {
 		help(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const isStaff = user.can('lock');
-			let html = `<b>PokéRogue — Player Commands:</b><br>` +
-				`<code>/pokerogue start</code> — Open the game page.<br>` +
-				`<code>/pokerogue battle</code> — Start floor battle.<br>` +
-				`<code>/pokerogue shop</code> — Item shop.<br>` +
-				`<code>/pokerogue status</code> — View run info.<br>` +
-				`<code>/pokerogue top</code> — Leaderboard.<br>` +
-				`<code>/pokerogue quit</code> — Abandon run.<br>`;
+			let html = `<b>PokéRogue - Player Commands:</b><br>` +
+				`<code>/pokerogue start</code> - Open the game page.<br>` +
+				`<code>/pokerogue battle</code> - Start floor battle.<br>` +
+				`<code>/pokerogue shop</code> - Item shop.<br>` +
+				`<code>/pokerogue status</code> - View run info.<br>` +
+				`<code>/pokerogue top</code> - Leaderboard.<br>` +
+				`<code>/pokerogue quit</code> - Abandon run.<br>`;
 			if (isStaff) {
 				html += `<br><b>Staff Commands:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
 			}
@@ -609,18 +621,18 @@ export const handlers: Chat.Handlers = {
 
 		// --- CONSUMABLE ITEM LOGIC + HP TRACKING ---
 		const room = Rooms.get(battle.roomid);
-		if (room && room.log) {
+		if (room?.log) {
 			const logLines = room.log.log || [];
 			const consumedItems: string[] = [];
 
 			// Track HP by battle slot to avoid collisions when the player has duplicate species.
-			// slotToTeamIdx maps e.g. 'p1a' → team array index, built from |switch|/|drag| lines.
+			// slotToTeamIdx maps e.g. 'p1a' -> team array index, built from |switch|/|drag| lines.
 			const slotHp: Record<string, number> = {};
 			const slotToTeamIdx: Record<string, number> = {};
 			const assignedTeamIdx = new Set<number>();
 
 			for (const line of logLines) {
-				// |switch|/|drag| lines establish slot→teamIdx and record initial HP.
+				// |switch|/|drag| lines establish slot->teamIdx and record initial HP.
 				// Format: |switch|p1a: NickName|Species, L50|HP/100
 				const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
 				if (switchMatch) {
@@ -672,7 +684,7 @@ export const handlers: Chat.Handlers = {
 				}
 			}
 
-			// Apply tracked HP via slot→team mapping
+			// Apply tracked HP via slot->team mapping
 			for (const [slot, hp] of Object.entries(slotHp)) {
 				const teamIdx = slotToTeamIdx[slot];
 				if (teamIdx !== undefined) {
@@ -681,7 +693,7 @@ export const handlers: Chat.Handlers = {
 			}
 
 			if (consumedItems.length > 0) {
-				state.notification = (state.notification || "") + 
+				state.notification = (state.notification || "") +
 					`<br><b style="color:#ffb84d">Consumed items:</b> ${consumedItems.join(', ')}`;
 			}
 		}
@@ -690,7 +702,7 @@ export const handlers: Chat.Handlers = {
 
 		if (toID(winner) === match.userId) {
 			const mult = (state.doubleExpFloors ?? 0) > 0 ? 2 : 1;
-			
+
 			// --- Difficulty Reward Multipliers ---
 			const floorMod = match.floor % 10;
 			let difficultyExpMult = 1.0;
@@ -698,21 +710,21 @@ export const handlers: Chat.Handlers = {
 
 			// Boss floors grant a 1.5x reward bonus
 			if (floorMod === 0) {
-				difficultyExpMult = 1.5; 
+				difficultyExpMult = 1.5;
 				difficultyCoinMult = 1.5;
 			}
 
 			const expReward = Math.floor(floorExpReward(match.floor) * mult * difficultyExpMult);
 			const coinReward = Math.floor(floorCoinReward(match.floor) * mult * difficultyCoinMult);
-			
+
 			const detailMsgs: string[] = [];
 
 			for (let i = 0; i < state.team.length; i++) {
 				const mon = state.team[i];
 				const oldSpecies = mon.species;
-				
+
 				const { evolved, oldLevel } = applyExpAndLevelUp(mon, expReward);
-				
+
 				if (evolved) {
 					detailMsgs.push(`<b>${oldSpecies}</b> evolved into <b>${mon.species}</b> and reached Lv. ${mon.level}!`);
 				} else if (mon.level > oldLevel) {
@@ -752,16 +764,16 @@ export const handlers: Chat.Handlers = {
 			const prevFl = state.floor;
 			state.floor++;
 			state.streaksWon = (state.streaksWon ?? 0) + 1;
-			
+
 			if (state.floor > (state.highestFloor ?? 0)) {
 				state.highestFloor = state.floor;
 				state.recordTeam = JSON.parse(JSON.stringify(state.team));
 			}
 
 			state.displayName = Users.get(match.userId)?.name || match.userId;
-			
+
 			state.notification = (state.notification || "") + `<br><b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>${detailMsgs.join('<br>')}`;
-			
+
 			if ((state.floor - 1) % 5 === 0) {
 				state.pendingChoice = pickNewPokemonOptions(state.team, prevFl);
 				state.pendingChoiceType = 'add';
@@ -771,10 +783,10 @@ export const handlers: Chat.Handlers = {
 		} else {
 			delete state.pendingMoves;
 			delete state.pendingSwap;
-			
+
 			if (state.hasRevive) {
 				state.hasRevive = false;
-				state.notification = (state.notification || "") + "<br><b>Revive used!</b> Retrying Floor " + match.floor;
+				state.notification = (state.notification || "") + "<br><b>Revive used!</b> Retrying Floor " + String(match.floor);
 			} else {
 				state.gameOver = true;
 				state.lastRunFloor = match.floor;
@@ -782,7 +794,7 @@ export const handlers: Chat.Handlers = {
 				state.team = [];
 			}
 		}
-		
+
 		setState(match.userId, state);
 		const hUser = Users.get(match.userId);
 		if (hUser) refreshGamePage(hUser);
