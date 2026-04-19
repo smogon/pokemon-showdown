@@ -212,26 +212,23 @@ export class TCGMatch {
         };
 
         // Each entry is [card, copies].  Total must equal 60.
+        // Tally: Pokemon 17 + Energy 14 + no-target 8 + own-field 11 + opp-field 4 + multi-step 6 = 60
         const recipe: [TCGCard, number][] = [
-            // --- Pokémon (20) ---
-            // Abra → Kadabra → Alakazam: tests Stage 1, Stage 2, and Pokémon Breeder
+            // --- Pokemon (17) ---
             [find('Abra'),        4],
-            [find('Kadabra'),     3],
+            [find('Kadabra'),     2],
             [find('Alakazam'),    2],
-            // Standalone basics with real attacks for early-game attacking
-            [find('Electabuzz'),  3],  // Lightning type, 2-energy attack
-            [find('Hitmonchan'),  3],  // Fighting type, 1-energy attack
-            // Magikarp + Gyarados: tests Stage 1 evolution on a fragile basic
+            [find('Electabuzz'),  2],
+            [find('Hitmonchan'),  2],
             [find('Magikarp'),    2],
             [find('Gyarados'),    2],
-            // Gastly + Haunter: Psychic type, bench presence for Switch/Scoop Up targets
             [find('Gastly'),      1],
 
             // --- Energy (14) ---
-            [find('Psychic Energy'),         4],  // For Abra line + Haunter
-            [find('Lightning Energy'),        4],  // For Electabuzz
-            [find('Fighting Energy'),         3],  // For Hitmonchan
-            [find('Double Colorless Energy'), 3],  // Tests DCE logic in hasEnoughEnergy
+            [find('Psychic Energy'),         4],
+            [find('Lightning Energy'),        4],
+            [find('Fighting Energy'),         3],
+            [find('Double Colorless Energy'), 3],
 
             // --- Trainers: no-target (8) ---
             [find('Bill'),                   2],
@@ -241,10 +238,10 @@ export class TCGMatch {
             [find('Full Heal'),              1],
             [find('Pokémon Center'),         1],
 
-            // --- Trainers: own-field targeted (12) ---
+            // --- Trainers: own-field targeted (11) ---
             [find('Potion'),           2],
             [find('Super Potion'),     1],
-            [find('Switch'),           2],
+            [find('Switch'),           1],
             [find('Scoop Up'),         1],
             [find('Defender'),         1],
             [find('PlusPower'),        2],
