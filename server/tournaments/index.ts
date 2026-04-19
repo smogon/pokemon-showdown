@@ -5,7 +5,7 @@ import { PRNG } from '../../sim/prng';
 import type { BestOfGame } from '../room-battle-bestof';
 import { Economy, CURRENCY } from '../../impulse/economy';
 import { Clans, UserClans, ClanPointsLogs } from '../../impulse/chat-plugins/clans/database';
-import { tcgCardsCollection, userPacksCollection } from '../../impulse/chat-plugins/tcg/tcg_collections';
+//import { tcgCardsCollection, userPacksCollection } from '../../impulse/chat-plugins/tcg/tcg_collections';
 // commented out doesn't look good on broadcast green.
 // import { nameColor } from '../../impulse/colors';
 
@@ -1172,7 +1172,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-	/* onTournamentEnd() {
+	 onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 			format: this.name,
@@ -1195,8 +1195,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.remove();
 	}
-} */
-	onTournamentEnd() {
+} 
+	/*onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 			format: this.name,
@@ -1449,7 +1449,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.remove();
 	}
-}
+}*/
 
 function getGenerator(generator: string | undefined) {
 	generator = toID(generator);
