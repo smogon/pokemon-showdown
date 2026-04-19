@@ -321,7 +321,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else if (!target.hasItem('mentalherb')) {
 					const priority = action.priority -
 						this.dex.moves.get(action.moveid).priority +
-						this.dex.moves.get(this.effectState.move).priority;
+						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
