@@ -677,7 +677,7 @@ export const commands: Chat.ChatCommands = {
 		const values = await Ladders.visualizeAll(target);
 		let buffer = `<div class="ladder">`;
 		buffer += Utils.html`<div>User: <strong>${target}</strong></div>`;
-		buffer += `<div style="overflow-x: auto;"><table>`;
+		buffer += `<div style="max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;"><table style="white-space: nowrap; min-width: 520px;">`;
 		const ratings = values.join(``);
 		if (!ratings) {
 			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
