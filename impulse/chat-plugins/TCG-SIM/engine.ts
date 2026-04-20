@@ -1130,11 +1130,20 @@ export class TCGMatch {
     }
 
     private finishAttack(isPlayer: boolean) {
+        if (!this.winner) this.performCheckup(isPlayer); // Checkup happens at the end of the turn
+
         this.expireItems(isPlayer, 'end_of_your_turn');
         this.expireItems(!isPlayer, 'end_of_opponent_turn');
+        
+        // Clean up current player's end-of-turn flags
+        const owner = this.playerOf(isPlayer);
+        for (const inst of owner.getAllInPlay()) this.clearPerTurnFlags(inst);
+        owner.hasRetreatedThisTurn = false;
+
         if (isPlayer) this.player.selectedUid = null;
+        
         if (!this.winner) {
-            this.hasAttackedThisTurn = true;
+            this.hasAttackedThisTurn = false; // Reset for the next player!
             this.hasAttachedEnergy = false;
             this.turn = isPlayer ? 'ai' : 'player';
             if (this.turn === 'ai') this.executeAITurn();
@@ -1150,6 +1159,7 @@ export class TCGMatch {
         this.performCheckup(true);
         if (this.winner) return;
         this.expireItems(true, 'end_of_your_turn');
+        this.expireItems(false, 'end_of_opponent_turn'); // Added for correctness
         for (const inst of this.player.getAllInPlay()) this.clearPerTurnFlags(inst);
         this.player.selectedUid = null;
         this.player.hasRetreatedThisTurn = false;
@@ -1244,17 +1254,15 @@ export class TCGMatch {
         if (!attacked && !this.winner) {
             this.performCheckup(false);
             this.expireItems(false, 'end_of_your_turn');
+            this.expireItems(true, 'end_of_opponent_turn');
             for (const inst of this.ai.getAllInPlay()) this.clearPerTurnFlags(inst);
             this.ai.hasRetreatedThisTurn = false;
-        }
 
-        if (!attacked && !this.winner) {
             this.addLog('AI ends turn without attacking.');
             this.turn = 'player';
             this.hasAttachedEnergy = false;
+            this.hasAttackedThisTurn = false;
         }
-
-        this.expireItems(true, 'end_of_opponent_turn');
 
         if (this.turn === 'player' && !this.winner) {
             this.turnNumber++;
