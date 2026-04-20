@@ -54,7 +54,8 @@ describe('Truant', () => {
 
 		battle.makeChoices('move irondefense', 'move endure');
 		battle.makeChoices('move irondefense', 'move spore');
-		while (user.status === 'slp') {
+		for (let i = 0; i < 5; i++) {
+			if (user.status !== 'slp') break;
 			assert.fullHP(pokemon);
 			battle.makeChoices('move scratch', 'move endure');
 		}
