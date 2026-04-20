@@ -1,6 +1,5 @@
-// chat-plugins/tcg/index.ts
 import { FS } from '../../../lib';
-import { TCGMatch, TCGCard, InGameCard, PokemonInstance, isBasicPokemon, isEvolutionPokemon, hasEnoughEnergy } from './engine';
+import { TCGMatch, TCGCard, InGameCard, PokemonInstance, isBasicPokemon, isEvolutionPokemon, hasEnoughEnergy, canRetreat } from './engine';
 import { TrainerEffects } from './effects';
 
 let baseSetData: TCGCard[] = [];
@@ -15,10 +14,6 @@ try {
 }
 
 const activeMatches = new Map<string, TCGMatch>();
-
-// ---------------------------------------------------------------------------
-// Rendering helpers
-// ---------------------------------------------------------------------------
 
 function renderSlot(
     instance: PokemonInstance | null,
@@ -35,27 +30,22 @@ function renderSlot(
 
     const pending = player.pendingEffect;
 
-    // Determine if this slot is interactive for the player
     const isSelectedField = !isAi && instance && context === 'active' && instance.uid === player.selectedUid;
 
     const isSelectedBasic    = !!selectedCard && isBasicPokemon(selectedCard);
     const isSelectedEnergy   = !!selectedCard && selectedCard.supertype?.includes('Energy');
     const isSelectedEvolution= !!selectedCard && isEvolutionPokemon(selectedCard);
     const isOwnTargetedTrainer  = !!trainerEffect?.requiresTarget && !trainerEffect?.opponentTarget;
-    // SER pending: player needs to click one of their own Pokémon's energy to discard
     const isSERPending = !isAi && pending?.filter?.startsWith('ser_target:') && pending.needed === 0;
     const isOpponentTargeted = !!trainerEffect?.requiresTarget && !!trainerEffect?.opponentTarget;
 
-    // Empty slot rendering
     if (!instance) {
         let btnValue = '';
 
         if (!isAi && !match.winner) {
             if (isSelectedBasic) {
-                // Place a basic Pokémon
                 btnValue = `/tcg place ${targetSlot}`;
             } else if (pending?.type === 'discard_for_effect' && pending.trainerName === 'Revive' && !isAi && context === 'bench') {
-                // Revive targets empty bench — handled via discard picker UI, not slot click
             }
         }
 
@@ -72,24 +62,16 @@ function renderSlot(
 
     if (!match.winner) {
         if (isAi) {
-            // Opponent field — only interactive when an opponent-targeting trainer is selected
             if (isOpponentTargeted && !player.pendingEffect) {
                 btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
                 overlayLabel = 'Target';
                 overlayColor = 'rgba(220, 53, 69, 0.4)';
             }
         } else {
-            // Player's own field
             if (isSERPending && !isAi && instance.attachedEnergy.length > 0) {
-                // Show each attached energy as a removable button — rendered below the card
-                // The slot itself is not the click target; energy buttons are rendered in the info bar.
-                // We just apply a red highlight here.
                 overlayLabel = 'Pick Energy';
                 overlayColor = 'rgba(220,53,69,0.3)';
             } else if (pending?.trainerName === 'Pokémon Breeder' && pending.selected.length >= pending.needed && !isAi) {
-                // Breeder step 2: highlight Basic slots that the selected Stage 2 can legally land on.
-                // We test by attempting a dry-run via the engine's chain-walk logic.
-                // Quick client-side check: instance must be a Basic (stage 0).
                 if (instance.stage === 0) {
                     btnValue = `/tcg breederplace ${targetSlot}`;
                     overlayLabel = 'Breed';
@@ -131,20 +113,29 @@ function renderSlot(
     }
     if (btnValue) html += `</button>`;
 
-    // Damage counter badge
     if (instance.currentDamage > 0) {
         html += `<div style="position:absolute;top:-2px;right:-2px;color:white;background:#e60000;font-weight:bold;border-radius:4px;font-size:10px;padding:1px 4px;border:1px solid white;pointer-events:none;">-${instance.currentDamage}</div>`;
     }
-    // Energy count badge
     if (instance.attachedEnergy.length > 0) {
         html += `<div style="position:absolute;bottom:-2px;right:-2px;color:white;background:#222;border-radius:4px;font-size:10px;padding:1px 4px;border:1px solid white;pointer-events:none;">⚡${instance.attachedEnergy.length}</div>`;
     }
-    // Attached items badges (PlusPower, Defender)
     if (instance.attachedItems.length > 0) {
         const itemNames = instance.attachedItems.map(i =>
             i.card.name === 'PlusPower' ? '➕' : i.card.name === 'Defender' ? '🛡' : '📎'
         ).join('');
         html += `<div style="position:absolute;bottom:-2px;left:-2px;color:white;background:#555;border-radius:4px;font-size:10px;padding:1px 4px;border:1px solid white;pointer-events:none;">${itemNames}</div>`;
+    }
+
+    if (instance.status) {
+        const statusColors: Record<string, string> = {
+            poisoned: '#9b59b6', burned: '#e67e22', asleep: '#3498db',
+            confused: '#f39c12', paralyzed: '#f1c40f',
+        };
+        const statusEmoji: Record<string, string> = {
+            poisoned: '☠', burned: '🔥', asleep: '💤', confused: '😵', paralyzed: '⚡',
+        };
+        const sc = instance.status;
+        html += `<div style="position:absolute;top:-2px;left:-2px;color:white;background:${statusColors[sc] ?? '#888'};border-radius:4px;font-size:10px;padding:1px 4px;border:1px solid white;pointer-events:none;">${statusEmoji[sc] ?? '?'}</div>`;
     }
 
     html += `</div>`;
@@ -155,7 +146,6 @@ function renderHandCard(card: InGameCard, match: TCGMatch): string {
     const isSelected = card.uid === match.player.selectedUid;
     const pending = match.player.pendingEffect;
 
-    // During a pending effect, hand cards that need to be selected are highlighted differently
     const isPendingCandidate = pending && !pending.selected.includes(card.uid) && card.uid !== pending.trainerUid;
     const isPendingSelected  = pending && pending.selected.includes(card.uid);
 
@@ -166,7 +156,6 @@ function renderHandCard(card: InGameCard, match: TCGMatch): string {
     let btnValue = '';
     if (!match.winner) {
         if (pending) {
-            // In pending mode, clicking a hand card adds/removes it from selection
             if (card.uid !== pending.trainerUid) {
                 btnValue = isPendingSelected
                     ? `/tcg pendingdeselect ${card.uid}`
@@ -190,7 +179,6 @@ function renderHandCard(card: InGameCard, match: TCGMatch): string {
     return html;
 }
 
-// Renders a mini card image from a discard pile with a click action
 function renderDiscardCard(card: InGameCard, index: number, cmdPrefix: string, highlight = false): string {
     const border = highlight ? `2px solid #007bff` : `1px solid #666`;
     return `<button class="button" name="send" value="${cmdPrefix} ${index}" style="background:transparent;border:${border};padding:0;margin:1px;width:55px;cursor:pointer;border-radius:4px;vertical-align:top;display:inline-block;">` +
@@ -198,10 +186,8 @@ function renderDiscardCard(card: InGameCard, index: number, cmdPrefix: string, h
         `</button>`;
 }
 
-// Renders the top-5 of the deck as clickable cards for Pokédex rearranging
 function renderPokedexUI(match: TCGMatch): string {
     const top5 = match.player.deck.slice(0, 5);
-    const pending = match.player.pendingEffect!;
     let html = `<div style="background:#1a1a2e;padding:8px;border-radius:6px;margin-bottom:5px;">`;
     html += `<strong style="color:#fff;display:block;margin-bottom:4px;">🔍 Pokédex — Rearrange top ${top5.length} cards (click to move to bottom of this preview):</strong>`;
     html += `<div style="overflow-x:auto;white-space:nowrap;">`;
@@ -219,7 +205,6 @@ function renderPokedexUI(match: TCGMatch): string {
     return html;
 }
 
-// Renders the pending effect UI panel
 function renderPendingUI(match: TCGMatch): string {
     const pending = match.player.pendingEffect!;
     let html = `<div style="background:#fff3cd;border:1px solid #ffc107;padding:8px;border-radius:6px;margin-bottom:5px;">`;
@@ -227,7 +212,6 @@ function renderPendingUI(match: TCGMatch): string {
 
     switch (pending.type) {
         case 'discard_for_effect': {
-            // superpotion_target special case: pick energy from specific Pokémon
             if (pending.filter?.startsWith('superpotion_target:') && pending.needed === 0) {
                 const slotStr = pending.filter.replace('superpotion_target:', '');
                 const slot: 'active' | number = slotStr === 'active' ? 'active' : parseInt(slotStr);
@@ -245,11 +229,9 @@ function renderPendingUI(match: TCGMatch): string {
                 html += `<button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;margin-top:4px;">Cancel</button>`;
                 break;
             }
-            // SER special case: needed = 0 means we're in own-energy selection mode
             if (pending.filter?.startsWith('ser_target:') && pending.needed === 0) {
                 html += `Pick 1 Energy card from your own Pokémon to discard:`;
                 html += `</div><div style="background:#ffe0e0;border:1px solid #dc3545;padding:5px;border-radius:5px;overflow-x:auto;white-space:nowrap;">`;
-                // Render each attached energy on each of the player's Pokémon as a button
                 const allInPlay = match.player.getAllInPlay();
                 for (const inst of allInPlay) {
                     for (let eIdx = 0; eIdx < inst.attachedEnergy.length; eIdx++) {
@@ -275,7 +257,6 @@ function renderPendingUI(match: TCGMatch): string {
                     html += ` <button class="button" name="send" value="/tcg pendingclearsel" style="font-size:10px;margin-left:4px;">Clear</button>`;
                 }
             } else {
-                // Phase 2: discard chosen, now pick the reward
                 if (pending.trainerName === 'Computer Search') {
                     html += `Now pick any card from your deck:`;
                     html += `</div><div style="background:#f8f9fa;border:1px solid #dee2e6;padding:5px;border-radius:5px;overflow-x:auto;white-space:nowrap;">`;
@@ -331,14 +312,12 @@ function renderPendingUI(match: TCGMatch): string {
             break;
         }
         case 'pick_from_deck': {
-            // Pokédex is handled by renderPokedexUI directly
             break;
         }
     }
 
     html += `</div>`;
 
-    // Cancel button on the outer panel for discard_for_effect selection phase
     if (pending.type === 'discard_for_effect' && pending.selected.length < pending.needed) {
         html += `<button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;">Cancel ${pending.trainerName}</button>`;
     }
@@ -346,7 +325,6 @@ function renderPendingUI(match: TCGMatch): string {
     return html;
 }
 
-// Renders the opponent's discard pile for Pokémon Flute / Energy Removal targeting
 function renderOpponentDiscardPicker(match: TCGMatch, filter: 'basic' | 'all'): string {
     const cards = match.ai.discard
         .map((c, i) => ({ c, i }))
@@ -359,10 +337,6 @@ function renderOpponentDiscardPicker(match: TCGMatch, filter: 'basic' | 'all'): 
     html += `</div>`;
     return html;
 }
-
-// ---------------------------------------------------------------------------
-// Commands
-// ---------------------------------------------------------------------------
 
 export const commands: Chat.ChatCommands = {
     tcg: {
@@ -434,7 +408,6 @@ export const commands: Chat.ChatCommands = {
             if (match.playTrainer(true, uid, slot)) {
                 this.refreshPage('tcg-match');
             } else {
-                // If a pendingEffect was set up by the trainer, still refresh
                 if (match.player.pendingEffect) {
                     this.refreshPage('tcg-match');
                 } else {
@@ -443,7 +416,6 @@ export const commands: Chat.ChatCommands = {
             }
         },
 
-        // Target opponent's discard pile for trainers like Pokémon Flute
         playtargetdiscard(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply("Not your turn.");
@@ -482,6 +454,20 @@ export const commands: Chat.ChatCommands = {
             }
         },
 
+        retreat(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.turn !== 'player' || match.winner) return this.errorReply("Not your turn or game is over.");
+            if (match.player.pendingEffect) return this.errorReply("Complete or cancel the current effect first.");
+            if (match.hasAttackedThisTurn) return this.errorReply("You cannot retreat after attacking.");
+            const benchIndex = parseInt(target);
+            if (isNaN(benchIndex)) return this.errorReply("Invalid bench index.");
+            if (match.retreat(true, benchIndex)) {
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply("Cannot retreat right now.");
+            }
+        },
+
         endturn(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply("Not your turn or no active match.");
@@ -491,11 +477,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // -----------------------------------------------------------------------
-        // Pending effect commands
-        // -----------------------------------------------------------------------
-
-        // Select a hand card as part of a pending effect
         pendingselect(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -505,7 +486,6 @@ export const commands: Chat.ChatCommands = {
             const card = match.player.hand.find(c => c.uid === uid);
             if (!card) return this.errorReply("Card not in hand.");
             if (uid === pending.trainerUid) return this.errorReply("Cannot select the Trainer card itself.");
-            // Enforce filter constraints
             if (pending.filter === 'stage2_hand' && !card.subtypes?.includes('Stage 2')) {
                 return this.errorReply("Pokémon Breeder requires a Stage 2 Pokémon.");
             }
@@ -518,7 +498,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Deselect a hand card from pending selection
         pendingdeselect(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -528,7 +507,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Clear all pending selections
         pendingclearsel(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -536,19 +514,14 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Cancel and refund the pending trainer back to hand
         pendingcancel(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
-            const pending = match.player.pendingEffect;
-            // Refund: find the trainer in discard (it was moved there prematurely? No — we return false in execute
-            // so it was never removed from hand. Just clear the pending state.)
             match.player.pendingEffect = null;
             match.player.selectedUid = null;
             this.refreshPage('tcg-match');
         },
 
-        // Finish a pending effect — source is 'deck' | 'discard' | 'confirm', index is the position
         pendingfinish(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -561,7 +534,6 @@ export const commands: Chat.ChatCommands = {
                 return this.errorReply(`Still need to select ${pending.needed - pending.selected.length} more card(s).`);
             }
 
-            // Step 1: Execute the discard/return of the selected hand cards
             const toDiscard = pending.selected
                 .map(uid => player.hand.find(c => c.uid === uid))
                 .filter(Boolean) as InGameCard[];
@@ -570,7 +542,6 @@ export const commands: Chat.ChatCommands = {
                 case 'Computer Search':
                 case 'Item Finder':
                 case 'Energy Retrieval': {
-                    // Discard selected hand cards
                     for (const c of toDiscard) {
                         player.hand.splice(player.hand.indexOf(c), 1);
                         player.discard.push(c);
@@ -579,12 +550,10 @@ export const commands: Chat.ChatCommands = {
                 }
                 case 'Maintenance':
                 case 'Pokémon Trader': {
-                    // Shuffle selected hand cards back into deck
                     for (const c of toDiscard) {
                         player.hand.splice(player.hand.indexOf(c), 1);
                         player.deck.push(c);
                     }
-                    // Shuffle deck
                     for (let i = player.deck.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [player.deck[i], player.deck[j]] = [player.deck[j], player.deck[i]];
@@ -593,7 +562,6 @@ export const commands: Chat.ChatCommands = {
                 }
             }
 
-            // Step 2: Execute the reward pick
             if (source === 'deck' && !isNaN(idx)) {
                 const picked = player.deck.splice(idx, 1)[0];
                 if (picked) {
@@ -602,13 +570,11 @@ export const commands: Chat.ChatCommands = {
                 }
             } else if (source === 'discard' && !isNaN(idx)) {
                 if (pending.trainerName === 'Energy Retrieval') {
-                    // Pick up to 2 — each click picks 1, we handle multiple clicks
                     const picked = player.discard[idx];
                     if (picked) {
                         player.discard.splice(idx, 1);
                         player.hand.push(picked);
                         match.addLog(`Energy Retrieval: Retrieved ${picked.name}.`);
-                        // Allow one more pick if this was the first
                         if (!pending.filter?.startsWith('energy_retrieval_done')) {
                             pending.filter = 'energy_retrieval_done_1';
                             this.refreshPage('tcg-match');
@@ -624,14 +590,12 @@ export const commands: Chat.ChatCommands = {
                     }
                 }
             } else if (source === 'confirm') {
-                // Maintenance: just draw 1
                 if (pending.trainerName === 'Maintenance') {
                     player.draw(1);
                     match.addLog(`Maintenance: Drew 1 card.`);
                 }
             }
 
-            // Remove the trainer from hand (it was kept there during multi-step)
             const trainerIdx = player.hand.findIndex(c => c.uid === pending.trainerUid);
             if (trainerIdx !== -1) {
                 player.discard.push(player.hand.splice(trainerIdx, 1)[0]);
@@ -642,8 +606,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Pokédex: move a top-deck card to the bottom of the preview window
-        // Super Potion: player picks which energy on the target Pokémon to discard
         superpotionpick(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -663,7 +625,6 @@ export const commands: Chat.ChatCommands = {
             inst.currentDamage = Math.max(0, inst.currentDamage - 40);
             match.addLog(`Player used Super Potion on ${inst.topCard.name}: discarded ${discarded.name}, healed 40 damage.`);
 
-            // Remove trainer from hand
             const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
             if (trainerIdx !== -1) match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
             match.player.pendingEffect = null;
@@ -671,7 +632,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Super Energy Removal: player picks which of their own attached energy to discard
         serownpick(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
@@ -686,11 +646,9 @@ export const commands: Chat.ChatCommands = {
             const inst = match.player.getAllInPlay().find(i => i.uid === instUid);
             if (!inst || eIdx >= inst.attachedEnergy.length) return this.errorReply("Invalid energy target.");
 
-            // Discard the chosen own energy
             const selfDiscarded = inst.attachedEnergy.splice(eIdx, 1)[0];
             match.player.discard.push(selfDiscarded);
 
-            // Now apply the opponent-side removal using the stored targetSlot
             const targetSlotStr = pending.filter.replace('ser_target:', '');
             const targetSlot: 'active' | number = targetSlotStr === 'active' ? 'active' : parseInt(targetSlotStr);
             const opponent = match.ai;
@@ -705,7 +663,6 @@ export const commands: Chat.ChatCommands = {
                 match.addLog(`Player used Super Energy Removal! Discarded ${selfDiscarded.name} from own side; removed ${removed.join(', ')} from ${oppTarget.topCard.name}.`);
             }
 
-            // Remove trainer from hand
             const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
             if (trainerIdx !== -1) match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
             match.player.pendingEffect = null;
@@ -727,8 +684,6 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
-        // Pokédex: confirm current order
-        // Breeder step 2: player clicked a Basic slot after selecting their Stage 2
         breederplace(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect || match.player.pendingEffect.trainerName !== 'Pokémon Breeder') {
@@ -741,7 +696,6 @@ export const commands: Chat.ChatCommands = {
             const stage2Uid = pending.selected[0];
             const slot = target === 'active' ? 'active' : parseInt(target);
             if (match.evolvePokemon(true, stage2Uid, slot, true)) {
-                // Remove the trainer from hand
                 const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
                 if (trainerIdx !== -1) {
                     match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
@@ -759,7 +713,6 @@ export const commands: Chat.ChatCommands = {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
             const pending = match.player.pendingEffect;
-            // Remove trainer from hand
             const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
             if (trainerIdx !== -1) {
                 match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
@@ -780,10 +733,6 @@ export const commands: Chat.ChatCommands = {
     }
 };
 
-// ---------------------------------------------------------------------------
-// Page renderer
-// ---------------------------------------------------------------------------
-
 export const pages: Chat.PageTable = {
     tcg: {
         match(query, user, connection) {
@@ -796,7 +745,6 @@ export const pages: Chat.PageTable = {
 
             let html = `<div class="pad" style="max-width:850px;margin:auto;font-size:13px;">`;
 
-            // Win/Loss banner
             if (match.winner) {
                 const win = match.winner === 'player';
                 html += `<div style="background:${win ? '#e6ffe6' : '#ffe6e6'};border:2px solid ${win ? 'green' : 'red'};padding:10px;border-radius:6px;margin-bottom:10px;text-align:center;">`;
@@ -804,7 +752,6 @@ export const pages: Chat.PageTable = {
                 html += `</div>`;
             }
 
-            // --- AI Field ---
             const selectedCard = match.player.hand.find(c => c.uid === match.player.selectedUid);
             const trainerEffect = selectedCard?.supertype === 'Trainer'
                 ? (TrainerEffects[selectedCard.id] ?? TrainerEffects[selectedCard.name])
@@ -822,7 +769,6 @@ export const pages: Chat.PageTable = {
             for (let i = 0; i < 5; i++) html += renderSlot(match.ai.bench[i], 'bench', i, true, match);
             html += `</div></div>`;
 
-            // Show opponent discard picker for Pokémon Flute
             if (isOpponentTargetedTrainer && selectedCard?.name === 'Pokémon Flute') {
                 html += `<div style="margin-top:4px;"><strong style="font-size:11px;">Opponent's Discard (pick a Basic):</strong><br/>`;
                 html += renderOpponentDiscardPicker(match, 'basic');
@@ -833,7 +779,6 @@ export const pages: Chat.PageTable = {
 
             html += `<hr style="margin:5px 0;"/>`;
 
-            // --- Player Field ---
             html += `<div style="background:#f0f8ff;padding:5px;border-radius:6px;margin-bottom:5px;">`;
             html += `<strong>Your Field</strong> (Deck: ${match.player.deck.length} | Prizes: ${match.player.prizes.length} | Discard: ${match.player.discard.length})`;
             html += `<div style="display:flex;gap:5px;margin-top:3px;">`;
@@ -842,7 +787,6 @@ export const pages: Chat.PageTable = {
             for (let i = 0; i < 5; i++) html += renderSlot(match.player.bench[i], 'bench', i, false, match);
             html += `</div></div></div>`;
 
-            // --- Pending Effect UI ---
             const pending = match.player.pendingEffect;
             if (pending) {
                 if (pending.filter === 'pokedex') {
@@ -852,7 +796,6 @@ export const pages: Chat.PageTable = {
                 }
             }
 
-            // --- Player Hand ---
             html += `<strong>Your Hand</strong>`;
             html += `<div style="overflow-x:auto;white-space:nowrap;padding-bottom:5px;">`;
             for (const card of match.player.hand) {
@@ -860,7 +803,6 @@ export const pages: Chat.PageTable = {
             }
             html += `</div>`;
 
-            // --- Controls Bar ---
             html += `<div style="padding:5px;background:#fff;border-top:1px solid #ccc;">`;
 
             if (match.winner) {
@@ -868,10 +810,8 @@ export const pages: Chat.PageTable = {
             } else if (match.turn === 'player') {
 
                 if (pending) {
-                    // Pending effects consume the controls bar — nothing else to show
                     html += `<em style="color:#888;">Complete the card effect above to continue.</em>`;
                 } else if (match.player.active && match.player.selectedUid === match.player.active.uid) {
-                    // Attack selection
                     html += `<strong style="display:block;margin-bottom:5px;">Select an Attack:</strong>`;
                     match.player.active.topCard.attacks?.forEach((atk, i) => {
                         const canAttack = hasEnoughEnergy(match.player.active!, i);
@@ -902,6 +842,26 @@ export const pages: Chat.PageTable = {
 
                 } else {
                     html += `<button class="button" name="send" value="/tcg endturn" style="font-weight:bold;background:#c1e1c1;">End Turn</button> `;
+
+                    if (match.player.active && !match.hasAttackedThisTurn) {
+                        const active = match.player.active;
+                        const retreatCost = active.retreatCostCount;
+                        const canDo = canRetreat(active) && active.status !== 'asleep' && active.status !== 'paralyzed';
+                        const benchPokemon = match.player.bench
+                            .map((b, i) => ({ b, i }))
+                            .filter(({ b }) => b !== null);
+                        if (benchPokemon.length > 0) {
+                            html += `<span style="font-size:11px;color:#555;margin-left:6px;">Retreat (costs ${retreatCost} ⚡):</span> `;
+                            for (const { b, i } of benchPokemon) {
+                                if (canDo) {
+                                    html += `<button class="button" name="send" value="/tcg retreat ${i}" style="font-size:11px;background:#fff3cd;border:1px solid #ffc107;margin:2px;">↩ ${b!.topCard.name}</button>`;
+                                } else {
+                                    html += `<button class="button disabled" style="font-size:11px;color:#aaa;margin:2px;cursor:not-allowed;" disabled>↩ ${b!.topCard.name}</button>`;
+                                }
+                            }
+                        }
+                    }
+
                     html += `<button class="button" name="send" value="/tcg quit" style="color:red;float:right;">Quit Match</button>`;
                     html += `<div style="clear:both;"></div>`;
                 }
@@ -914,7 +874,6 @@ export const pages: Chat.PageTable = {
 
             html += `</div>`;
 
-            // --- Game Log ---
             html += `<div style="margin-top:5px;background:#222;color:#fff;padding:5px;height:80px;overflow-y:scroll;border-radius:5px;font-family:monospace;font-size:11px;">`;
             for (const log of match.logs) {
                 html += `<div>> ${log}</div>`;

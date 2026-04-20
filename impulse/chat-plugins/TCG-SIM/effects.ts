@@ -3,14 +3,10 @@ import { isBasicPokemon, isEvolutionPokemon, PokemonInstance } from './engine';
 
 export interface TrainerEffect {
     requiresTarget: boolean;
-    // targetSlot: slot on YOUR field unless markedAsOpponentTarget is true
     opponentTarget?: boolean;
     execute: (match: TCGMatch, isPlayer: boolean, card: InGameCard, targetSlot?: 'active' | number) => boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Helper: shuffle an array in place
-// ---------------------------------------------------------------------------
 function shuffle<T>(arr: T[]): T[] {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -19,16 +15,7 @@ function shuffle<T>(arr: T[]): T[] {
     return arr;
 }
 
-// ---------------------------------------------------------------------------
-// The Dictionary of Card Effects
-// Keyed by card ID first (future-proof for reprints), name is the fallback key.
-// Both keys are registered at the bottom of the file.
-// ---------------------------------------------------------------------------
 const effects: Record<string, TrainerEffect> = {
-
-    // -----------------------------------------------------------------------
-    // NO-TARGET TRAINERS
-    // -----------------------------------------------------------------------
 
     "Bill": {
         requiresTarget: false,
@@ -44,9 +31,8 @@ const effects: Record<string, TrainerEffect> = {
         requiresTarget: false,
         execute: (match, isPlayer, card) => {
             const player = isPlayer ? match.player : match.ai;
-            // Discard every card in hand EXCEPT Oak itself — playTrainer discards Oak after execute() returns.
             const rest = player.hand.filter(c => c.uid !== card.uid);
-            player.hand = player.hand.filter(c => c.uid === card.uid); // keep only Oak
+            player.hand = player.hand.filter(c => c.uid === card.uid);
             player.discard.push(...rest);
             player.draw(7);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Professor Oak, discarded hand and drew 7 cards.`);
@@ -59,8 +45,10 @@ const effects: Record<string, TrainerEffect> = {
         execute: (match, isPlayer) => {
             const player = isPlayer ? match.player : match.ai;
             if (!player.active) return false;
-            // Status conditions aren't tracked yet; when they are, clear them here.
-            match.addLog(`${isPlayer ? 'Player' : 'AI'} played Full Heal on ${player.active.topCard.name}.`);
+            if (player.active.status === null) return false;
+            const statusName = player.active.status;
+            match.clearStatus(isPlayer);
+            match.addLog(`${isPlayer ? 'Player' : 'AI'} played Full Heal — cured ${player.active.topCard.name} of ${statusName}.`);
             return true;
         }
     },
@@ -78,7 +66,7 @@ const effects: Record<string, TrainerEffect> = {
                     inst.attachedEnergy = [];
                 }
             }
-            if (healed.length === 0) return false; // Nothing to heal
+            if (healed.length === 0) return false;
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Pokémon Center, healed all damage (and discarded all Energy) from: ${healed.join(', ')}.`);
             return true;
         }
@@ -99,8 +87,6 @@ const effects: Record<string, TrainerEffect> = {
 
     "Lass": {
         requiresTarget: false,
-        // Returns false — manages its own hand removal because Lass itself is a Trainer
-        // and must be shuffled into the deck along with all other Trainers, not discarded.
         execute: (match, isPlayer, card) => {
             const player = isPlayer ? match.player : match.ai;
             const opponent = isPlayer ? match.ai : match.player;
@@ -112,19 +98,13 @@ const effects: Record<string, TrainerEffect> = {
                 shuffle(p.deck);
             };
 
-            // removeTrainers includes Lass itself (still in hand when execute() runs),
-            // so Lass ends up shuffled into the deck correctly.
             removeTrainers(player);
             removeTrainers(opponent);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Lass! All Trainer cards shuffled into both decks.`);
             if (isPlayer) player.selectedUid = null;
-            return false; // prevent playTrainer from also discarding Lass
+            return false;
         }
     },
-
-    // -----------------------------------------------------------------------
-    // TARGETED TRAINERS — YOUR FIELD
-    // -----------------------------------------------------------------------
 
     "Potion": {
         requiresTarget: true,
@@ -149,7 +129,6 @@ const effects: Record<string, TrainerEffect> = {
             if (target.attachedEnergy.length === 0) return false;
 
             if (!isPlayer) {
-                // AI: auto-discard last attached energy
                 const discarded = target.attachedEnergy.pop()!;
                 player.discard.push(discarded);
                 target.currentDamage = Math.max(0, target.currentDamage - 40);
@@ -157,13 +136,11 @@ const effects: Record<string, TrainerEffect> = {
                 return true;
             }
 
-            // Player: must choose which energy to discard — pending flow
-            // Store targetSlot so the confirm step knows which Pokémon to heal
             player.pendingEffect = {
                 type: 'discard_for_effect',
                 trainerUid: card.uid,
                 trainerName: 'Super Potion',
-                needed: 0, // energy picked from field, not hand
+                needed: 0,
                 selected: [],
                 filter: `superpotion_target:${targetSlot}`,
             };
@@ -194,9 +171,7 @@ const effects: Record<string, TrainerEffect> = {
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
             if (!target) return false;
-            // Only the bottom (Basic) card returns to hand
             const basicCard = target.cards[0];
-            // All other cards and attachments go to discard
             player.discard.push(...target.cards.slice(1), ...target.attachedEnergy);
             for (const item of target.attachedItems) player.discard.push(item.card);
             player.hand.push(basicCard);
@@ -212,27 +187,23 @@ const effects: Record<string, TrainerEffect> = {
 
     "Defender": {
         requiresTarget: true,
-        // Returns false so playTrainer does NOT remove from hand or push to discard —
-        // the card lives on the Pokémon via attachedItems and is discarded by expireItems().
         execute: (match, isPlayer, card, targetSlot) => {
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
             if (!target) return false;
-            // Remove from hand manually here since we return false
             const handIdx = player.hand.findIndex(c => c.uid === card.uid);
             if (handIdx === -1) return false;
             player.hand.splice(handIdx, 1);
             target.attachedItems.push({ card, expiresOn: 'end_of_opponent_turn' });
             match.addLog(`${isPlayer ? 'Player' : 'AI'} attached Defender to ${target.topCard.name}.`);
             if (isPlayer) player.selectedUid = null;
-            return false; // prevent playTrainer from double-handling
+            return false;
         }
     },
 
     "PlusPower": {
         requiresTarget: true,
-        // Same pattern as Defender — manages its own hand removal.
         execute: (match, isPlayer, card, targetSlot) => {
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined) return false;
@@ -244,24 +215,17 @@ const effects: Record<string, TrainerEffect> = {
             target.attachedItems.push({ card, expiresOn: 'end_of_your_turn' });
             match.addLog(`${isPlayer ? 'Player' : 'AI'} attached PlusPower to ${target.topCard.name}.`);
             if (isPlayer) player.selectedUid = null;
-            return false; // prevent playTrainer from double-handling
+            return false;
         }
     },
 
     "Pokémon Breeder": {
-        // requiresTarget = false here because the two-step flow is handled entirely
-        // via the pendingEffect system: step 1 picks the Stage 2 from hand (stored in
-        // pending.selected[0]), step 2 (handled in index.ts pendingfinish) calls
-        // evolvePokemon with skipStageCheck = true.
-        // Returning false from execute() keeps the trainer in hand until the flow completes.
         requiresTarget: false,
         execute: (match, isPlayer, card) => {
             if (!isPlayer) {
-                // AI: find a Stage 2 in hand and a matching Basic in play
                 const player = match.ai;
                 const stage2 = player.hand.find(c => c.subtypes?.includes('Stage 2'));
                 if (!stage2) return false;
-                // Find the matching basic slot using chain-walk (delegated to engine)
                 const allSlots: ('active' | number)[] = ['active', 0, 1, 2, 3, 4];
                 for (const slot of allSlots) {
                     if (match.evolvePokemon(false, stage2.uid, slot, true)) {
@@ -271,7 +235,6 @@ const effects: Record<string, TrainerEffect> = {
                 }
                 return false;
             }
-            // Player: check there is at least one Stage 2 in hand before starting the flow
             const player = match.player;
             const hasStage2 = player.hand.some(c => c.uid !== card.uid && c.subtypes?.includes('Stage 2'));
             if (!hasStage2) {
@@ -282,12 +245,12 @@ const effects: Record<string, TrainerEffect> = {
                 type: 'discard_for_effect',
                 trainerUid: card.uid,
                 trainerName: 'Pokémon Breeder',
-                needed: 1,           // select 1 Stage 2 from hand
+                needed: 1,
                 selected: [],
                 filter: 'stage2_hand',
             };
             match.addLog('Pokémon Breeder: Select the Stage 2 Pokémon from your hand, then click its Basic on the field.');
-            return false; // keep trainer in hand until flow completes
+            return false;
         }
     },
 
@@ -297,7 +260,7 @@ const effects: Record<string, TrainerEffect> = {
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
-            if (!target || target.cards.length < 2) return false; // Nothing to devolve
+            if (!target || target.cards.length < 2) return false;
             const removed = target.cards.pop()!;
             player.discard.push(removed);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} used Devolution Spray, removing ${removed.name} from ${target.topCard.name}.`);
@@ -308,18 +271,14 @@ const effects: Record<string, TrainerEffect> = {
     "Revive": {
         requiresTarget: true,
         execute: (match, isPlayer, card, targetSlot) => {
-            // targetSlot here is the discard index of the Basic to revive.
-            // The UI sends it as a number representing index in the discard pile.
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined || targetSlot === 'active') return false;
             const discardIndex = targetSlot as number;
             const revived = player.discard[discardIndex];
             if (!revived) return false;
-            // Must be a Basic Pokémon
             if (!isBasicPokemon(revived)) return false;
-            // Find an empty bench slot
             const emptySlot = player.bench.findIndex(s => s === null);
-            if (emptySlot === -1) return false; // Bench full
+            if (emptySlot === -1) return false;
             const newInstance = new PokemonInstance(revived as InGameCard, match.turnNumber);
             const halfHp = Math.floor((parseInt(revived.hp || '0') / 2) / 10) * 10;
             newInstance.currentDamage = halfHp;
@@ -329,10 +288,6 @@ const effects: Record<string, TrainerEffect> = {
             return true;
         }
     },
-
-    // -----------------------------------------------------------------------
-    // TARGETED TRAINERS — OPPONENT'S FIELD
-    // -----------------------------------------------------------------------
 
     "Gust of Wind": {
         requiresTarget: true,
@@ -358,7 +313,6 @@ const effects: Record<string, TrainerEffect> = {
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? opponent.active : opponent.bench[targetSlot as number];
             if (!target || target.attachedEnergy.length === 0) return false;
-            // Remove the last attached energy (UI will allow picking in the future)
             const removed = target.attachedEnergy.pop()!;
             opponent.discard.push(removed);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} used Energy Removal! Discarded ${removed.name} from ${target.topCard.name}.`);
@@ -377,7 +331,6 @@ const effects: Record<string, TrainerEffect> = {
             if (ownEnergySources.length === 0) return false;
 
             if (!isPlayer) {
-                // AI: auto-discard from its active (or first available)
                 const ownSource = ownEnergySources[0];
                 const selfDiscarded = ownSource.attachedEnergy.pop()!;
                 player.discard.push(selfDiscarded);
@@ -393,18 +346,16 @@ const effects: Record<string, TrainerEffect> = {
                 return true;
             }
 
-            // Player: set up a pending flow to choose which own energy to discard.
-            // targetSlot (opponent's target) is stored in the filter field as a string.
             player.pendingEffect = {
                 type: 'discard_for_effect',
                 trainerUid: card.uid,
                 trainerName: 'Super Energy Removal',
-                needed: 0,    // 0 = SER own-energy selection phase (picks from field, not hand)
+                needed: 0,
                 selected: [],
                 filter: `ser_target:${targetSlot}`,
             };
             match.addLog(`Super Energy Removal: Select 1 Energy attached to your own Pokémon to discard.`);
-            return false; // multi-step
+            return false;
         }
     },
 
@@ -412,7 +363,6 @@ const effects: Record<string, TrainerEffect> = {
         requiresTarget: true,
         opponentTarget: true,
         execute: (match, isPlayer, card, targetSlot) => {
-            // targetSlot is the index in the OPPONENT'S discard pile
             const opponent = isPlayer ? match.ai : match.player;
             if (targetSlot === undefined || targetSlot === 'active') return false;
             const discardIndex = targetSlot as number;
@@ -420,7 +370,7 @@ const effects: Record<string, TrainerEffect> = {
             if (!target) return false;
             if (!isBasicPokemon(target)) return false;
             const emptySlot = opponent.bench.findIndex(s => s === null);
-            if (emptySlot === -1) return false; // Opponent's bench full
+            if (emptySlot === -1) return false;
             opponent.bench[emptySlot] = new PokemonInstance(target as InGameCard, match.turnNumber);
             opponent.discard.splice(discardIndex, 1);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Pokémon Flute! Moved ${target.name} from opponent's discard to their Bench.`);
@@ -428,17 +378,10 @@ const effects: Record<string, TrainerEffect> = {
         }
     },
 
-    // -----------------------------------------------------------------------
-    // COMPLEX TRAINERS — MULTI-STEP (pending effect system)
-    // These return false immediately if the pending state isn't set up yet,
-    // and use match.player.pendingEffect to collect the required choices.
-    // -----------------------------------------------------------------------
-
     "Computer Search": {
         requiresTarget: false,
         execute: (match, isPlayer, card) => {
             if (!isPlayer) {
-                // AI: discard 2 random cards and search for a basic
                 const player = match.ai;
                 if (player.hand.length < 2) return false;
                 player.discard.push(player.hand.shift()!, player.hand.shift()!);
@@ -451,10 +394,8 @@ const effects: Record<string, TrainerEffect> = {
                 }
                 return true;
             }
-            // Player: open a deck-search pending flow (UI handles the rest)
             const player = match.player;
             if (player.hand.filter(c => c.uid !== card.uid).length < 2) return false;
-            // Store pending state — UI will call /tcg pendingselect to complete
             player.pendingEffect = {
                 type: 'discard_for_effect',
                 trainerUid: card.uid,
@@ -464,7 +405,7 @@ const effects: Record<string, TrainerEffect> = {
                 filter: 'any_hand'
             };
             match.addLog(`Computer Search: Select 2 cards from your hand to discard, then pick a card from your deck.`);
-            return false; // Don't consume the card yet — multi-step
+            return false;
         }
     },
 
@@ -594,7 +535,6 @@ const effects: Record<string, TrainerEffect> = {
         requiresTarget: false,
         execute: (match, isPlayer, card) => {
             if (!isPlayer) {
-                // AI does nothing (can't meaningfully rearrange)
                 match.addLog(`AI looked at the top of their deck with Pokédex.`);
                 return true;
             }
@@ -604,7 +544,7 @@ const effects: Record<string, TrainerEffect> = {
                 type: 'pick_from_deck',
                 trainerUid: card.uid,
                 trainerName: card.name,
-                needed: 0, // 0 = rearrange mode, not pick mode
+                needed: 0,
                 selected: [],
                 filter: 'pokedex'
             };
@@ -615,21 +555,14 @@ const effects: Record<string, TrainerEffect> = {
 
 };
 
-// ---------------------------------------------------------------------------
-// Register effects by card ID (from base1.json) AND by name as fallback.
-// When a new set is added, just add its card IDs here — the name entry stays
-// as a safety net for any set whose IDs aren't registered yet.
-// ---------------------------------------------------------------------------
 export const TrainerEffects: Record<string, TrainerEffect> = {};
 
-// Name-based registrations (fallback for any set)
 for (const [name, effect] of Object.entries(effects)) {
     TrainerEffects[name] = effect;
 }
 
-// ID-based registrations for Base Set 1 (takes precedence over name)
 const base1IdMap: Record<string, string> = {
-    'base1-70': 'Clefairy Doll',   // not implemented above — will fall through to name lookup
+    'base1-70': 'Clefairy Doll',
     'base1-71': 'Computer Search',
     'base1-72': 'Devolution Spray',
     'base1-73': 'Impostor Professor Oak',
