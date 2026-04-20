@@ -1351,6 +1351,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Trying My Best!",
+		shortDesc: "Luvdisc: Stores 10% power boost per switch. If all allies faint, transforms.",
 		rating: 4,
 		num: 1293,
 	},

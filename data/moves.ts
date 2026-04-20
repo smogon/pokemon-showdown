@@ -1204,6 +1204,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onDisableMove(pokemon) {
 			if (!(pokemon.ateBerry || pokemon.drankItem)) pokemon.disableMove('belch');
 		},
+		onTry(source) {
+			return source.ateBerry;
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
