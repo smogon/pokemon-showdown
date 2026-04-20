@@ -180,6 +180,46 @@
             }
         ]
     },
+    "bludgen": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Drain Punch", "Mach Punch", "Poison Jab", "U-Turn"],
+                "abilities": ["Iron Fist"]
+            }
+        ]
+    },
+    "woond": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Shadow Fang", "Wild Charge"],
+                "abilities": ["Scrappy"]
+            }
+        ]
+    },
+    "pudet": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Wild Charge"],
+                "abilities": ["Scrappy"]
+            }
+        ]
+    },
+    "rotombrawl": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Nasty Plot", "Protect", "Aura Sphere", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
     "tarmendoa": {
         "level": 83,
         "sets": [
@@ -222,6 +262,26 @@
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Shell Smash", "Earthquake", "Acrobatics", "Protect", "Rock Slide"],
                 "abilities": ["Foil", "Vital Spirit"]
+            }
+        ]
+    },
+    "breloom": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Close Combat", "Mach Punch", "Protect", "Trailblaze", "Bulldoze", "Spore"],
+                "abilities": ["Technician"]
+            }
+        ]
+    },
+    "lilliganthisui": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Close Combat", "Leaf Blade", "Protect", "Sleep Powder", "Victory Dance"],
+                "abilities": ["Hustle"]
             }
         ]
     },
