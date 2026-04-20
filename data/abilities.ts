@@ -2096,6 +2096,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
+				if (!move.smartTarget) damage += Number(move.totalDamage);
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
