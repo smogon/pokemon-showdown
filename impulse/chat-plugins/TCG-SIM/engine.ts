@@ -958,8 +958,13 @@ export class TCGMatch {
 
         const success = effect.execute(this, isPlayer, card, targetSlot);
         if (success) {
-            activePlayer.hand.splice(handIndex, 1);
+            // Recalculate index in case the effect (like Professor Oak) mutated the hand
+            const currentIdx = activePlayer.hand.findIndex(c => c.uid === uid);
+            if (currentIdx !== -1) {
+                activePlayer.hand.splice(currentIdx, 1);
+            }
             activePlayer.discard.push(card);
+            
             if (isPlayer) activePlayer.selectedUid = null;
         }
         return success;
@@ -1179,8 +1184,11 @@ export class TCGMatch {
             }
         }
 
-        for (let i = this.ai.hand.length - 1; i >= 0; i--) {
-            const card = this.ai.hand[i];
+        // Iterate over a safe snapshot of the hand
+        for (const card of [...this.ai.hand]) {
+            // Verify the card hasn't been discarded by a previous Trainer effect (like Computer Search)
+            if (!this.ai.hand.some(c => c.uid === card.uid)) continue;
+
             if (isTrainerCard(card)) {
                 const effect = TrainerEffects[card.id] ?? TrainerEffects[card.name];
                 if (effect && !effect.requiresTarget) {
