@@ -30,13 +30,17 @@ export class PokemonInstance {
     attachedEnergy: InGameCard[];
     attachedItems: AttachedItem[];
     currentDamage: number;
+    // The turn number this instance was placed in play — used to enforce the
+    // "you can only evolve a Pokémon that was in play at the start of your turn" rule.
+    turnPlaced: number;
 
-    constructor(basic: InGameCard) {
+    constructor(basic: InGameCard, turnPlaced = 0) {
         this.uid = basic.uid;
         this.cards = [basic];
         this.attachedEnergy = [];
         this.attachedItems = [];
         this.currentDamage = 0;
+        this.turnPlaced = turnPlaced;
     }
 
     get topCard(): InGameCard {
@@ -79,53 +83,53 @@ export function hasEnoughEnergy(instance: PokemonInstance, attackIndex: number):
     const attack = instance.topCard.attacks?.[attackIndex];
     if (!attack || !attack.cost || attack.cost.length === 0) return true;
 
+    // Tally what the attack costs
     const required: Record<string, number> = {};
     let colorlessRequired = 0;
-    
     for (const type of attack.cost) {
         if (type === 'Colorless') colorlessRequired++;
         else required[type] = (required[type] || 0) + 1;
     }
 
-    // Build what energy we have, tracking colorless-equivalent surplus
-    const provided: Record<string, number> = {};
-    let freeSurplus = 0; // surplus that can fill Colorless slots
-    
+    // Separate energy into three buckets:
+    //   typed       — specific-type (Fire, Water, etc.); can only satisfy matching typed cost or colorless
+    //   colorlessFlex — DCE: provides Colorless only, cannot satisfy typed requirements
+    //   wildFlex    — Rainbow: can satisfy any typed requirement or colorless
+    const typed: Record<string, number> = {};
+    let colorlessFlex = 0;
+    let wildFlex = 0;
+
     for (const energy of instance.attachedEnergy) {
         if (energy.name === 'Double Colorless Energy') {
-            freeSurplus += 2;
+            colorlessFlex += 2;
         } else if (energy.name === 'Rainbow Energy') {
-            // Rainbow can be any type — we'll treat it as wild; add 1 to each type bucket
-            // Handled below as a wildcard pass
-            freeSurplus += 1; // simplified: counts as 1 colorless-flexible
+            wildFlex += 1;
         } else {
             const type = energy.name.replace(' Energy', '');
-            provided[type] = (provided[type] || 0) + 1;
+            typed[type] = (typed[type] || 0) + 1;
         }
     }
 
-    // Check typed requirements first
-    for (const [type, amount] of Object.entries(required)) {
-        const have = provided[type] || 0;
-        if (have >= amount) {
-            // Surplus from this type can fill colorless
-            freeSurplus += have - amount;
+    // Step 1: satisfy typed requirements — exact-type first, then Rainbow (wildFlex) only.
+    // DCE cannot substitute for a typed requirement.
+    for (const [type, needed] of Object.entries(required)) {
+        const have = typed[type] || 0;
+        if (have >= needed) {
+            typed[type] = have - needed;
         } else {
-            // Deficit — try to fill from rainbow/colorless surplus
-            const deficit = amount - have;
-            if (freeSurplus >= deficit) {
-                freeSurplus -= deficit;
+            const deficit = needed - have;
+            typed[type] = 0;
+            if (wildFlex >= deficit) {
+                wildFlex -= deficit;
             } else {
                 return false;
             }
         }
     }
 
-    // Remaining typed surplus + free surplus must cover colorless
-    const totalColorlessFillable = freeSurplus + Object.values(provided).reduce((a, b) => a + b, 0)
-        - Object.values(required).reduce((a, b) => a + b, 0);
-
-    return totalColorlessFillable >= colorlessRequired;
+    // Step 2: all remaining energy (typed surplus + colorlessFlex + wildFlex) fills colorless slots
+    const typedSurplus = Object.values(typed).reduce((a, b) => a + b, 0);
+    return typedSurplus + colorlessFlex + wildFlex >= colorlessRequired;
 }
 
 export class TCGPlayer {
@@ -182,10 +186,15 @@ export class TCGMatch {
     winner: 'player' | 'ai' | null = null; 
     logs: string[] = [];
     
-    hasAttachedEnergy = false; 
+    hasAttachedEnergy = false;
+    // Incremented each time a player's turn begins — used for evolution timing checks.
+    turnNumber = 0;
+    // Pool kept for chain-walking (e.g. Pokémon Breeder needs to trace Stage2 → Stage1 → Basic)
+    readonly cardPool: TCGCard[];
     private cardUidCounter = 0;
 
     constructor(userid: string, baseSetData: TCGCard[]) {
+        this.cardPool = baseSetData;
         this.player = new TCGPlayer(userid);
         this.ai = new TCGPlayer('AI');
         
@@ -201,6 +210,8 @@ export class TCGMatch {
         }
         
         this.addLog(`Match started. Player drew 7 cards and set prizes.`);
+        // Turn 1 begins for the player right away
+        this.turnNumber = 1;
     }
 
     private generateDummyDeck(pool: TCGCard[]): InGameCard[] {
@@ -314,18 +325,33 @@ export class TCGMatch {
 
         if (slot === 'active') {
             if (activePlayer.active) return false; 
-            activePlayer.active = new PokemonInstance(card);
+            activePlayer.active = new PokemonInstance(card, this.turnNumber);
             activePlayer.hand.splice(handIndex, 1);
             this.addLog(`${isPlayer ? 'Player' : 'AI'} set ${card.name} as Active Pokémon.`);
         } else {
             if (activePlayer.bench[slot]) return false; 
-            activePlayer.bench[slot] = new PokemonInstance(card);
+            activePlayer.bench[slot] = new PokemonInstance(card, this.turnNumber);
             activePlayer.hand.splice(handIndex, 1);
             this.addLog(`${isPlayer ? 'Player' : 'AI'} benched ${card.name}.`);
         }
 
         if (isPlayer) activePlayer.selectedUid = null; 
         return true;
+    }
+
+    // Walk the card pool to find the Basic at the root of a Stage 2's evolution chain.
+    // e.g. Alakazam.evolvesFrom = "Kadabra", Kadabra.evolvesFrom = "Abra" → returns "Abra"
+    private getBasicNameForStage2(stage2Card: TCGCard): string | null {
+        let current: TCGCard | undefined = stage2Card;
+        const visited = new Set<string>();
+        while (current?.evolvesFrom) {
+            if (visited.has(current.name)) return null; // guard against cycles
+            visited.add(current.name);
+            const parent = this.cardPool.find(c => c.name === current!.evolvesFrom);
+            if (!parent) return current.evolvesFrom; // best effort: return the name even if not in pool
+            current = parent;
+        }
+        return current?.name ?? null;
     }
 
     evolvePokemon(isPlayer: boolean, uid: number, slot: 'active' | number, skipStageCheck = false) {
@@ -342,16 +368,22 @@ export class TCGMatch {
         if (!targetInstance) return false;
 
         if (skipStageCheck) {
-            // Pokémon Breeder: allow Stage 2 directly on the matching Basic
-            const basicName = card.evolvesFrom;
-            // We need to trace the chain: Stage2.evolvesFrom = Stage1 name,
-            // but Breeder needs the Basic. We check if the bottom card is the right Basic.
-            // To find what Basic the Stage 2 ultimately evolves from, we walk the pool.
-            // For now we accept if the target's bottomCard is a Basic that could lead to this card.
-            // Simple approach: accept if topCard is Basic and card is Stage 2
+            // Pokémon Breeder: Stage 2 goes directly onto its matching Basic.
+            // The card must be Stage 2 (not Stage 1 — Breeder text says "Stage 2 Evolution card").
+            if (!card.subtypes?.includes('Stage 2')) return false;
+            // Target must currently be a Basic (stage 0).
             if (targetInstance.stage !== 0) return false;
+            // The target's Basic name must be the root of this Stage 2's chain.
+            const requiredBasic = this.getBasicNameForStage2(card);
+            if (!requiredBasic || targetInstance.topCard.name !== requiredBasic) return false;
+            // Enforce "when you would be allowed to evolve anyway" — Basic must have been
+            // in play since the start of this turn (placed on a previous turn).
+            if (targetInstance.turnPlaced >= this.turnNumber) return false;
         } else {
+            // Normal evolution: top card must match evolvesFrom.
             if (targetInstance.topCard.name !== card.evolvesFrom) return false;
+            // Must have been in play since start of this turn.
+            if (targetInstance.turnPlaced >= this.turnNumber) return false;
         }
 
         targetInstance.cards.push(card);
@@ -529,6 +561,7 @@ export class TCGMatch {
     executeAITurn() {
         if (this.winner) return;
         this.addLog("AI is taking its turn...");
+        this.turnNumber++;
         
         if (!this.ai.draw(1)) {
             this.winner = 'player';
@@ -602,6 +635,7 @@ export class TCGMatch {
         this.expireItems(true, 'end_of_opponent_turn');
 
         if (this.turn === 'player' && !this.winner) {
+            this.turnNumber++;
             if (!this.player.draw(1)) {
                 this.winner = 'ai';
                 this.addLog("Player ran out of cards! AI wins!");

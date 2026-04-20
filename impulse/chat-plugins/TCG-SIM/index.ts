@@ -5,7 +5,7 @@ import { TrainerEffects } from './effects';
 
 let baseSetData: TCGCard[] = [];
 try {
-    const rawData = FS('impulse/chat-plugins/TCG-SIM/base1.json').readIfExistsSync();
+    const rawData = FS('impulse/chat-plugins/tcg-test/base1.json').readIfExistsSync();
     if (rawData) {
         const parsed = JSON.parse(rawData);
         baseSetData = Array.isArray(parsed) ? parsed : (parsed.data || []);
@@ -42,6 +42,8 @@ function renderSlot(
     const isSelectedEnergy   = !!selectedCard && selectedCard.supertype?.includes('Energy');
     const isSelectedEvolution= !!selectedCard && isEvolutionPokemon(selectedCard);
     const isOwnTargetedTrainer  = !!trainerEffect?.requiresTarget && !trainerEffect?.opponentTarget;
+    // SER pending: player needs to click one of their own Pokémon's energy to discard
+    const isSERPending = !isAi && pending?.filter?.startsWith('ser_target:') && pending.needed === 0;
     const isOpponentTargeted = !!trainerEffect?.requiresTarget && !!trainerEffect?.opponentTarget;
 
     // Empty slot rendering
@@ -78,7 +80,22 @@ function renderSlot(
             }
         } else {
             // Player's own field
-            if (isSelectedEnergy) {
+            if (isSERPending && !isAi && instance.attachedEnergy.length > 0) {
+                // Show each attached energy as a removable button — rendered below the card
+                // The slot itself is not the click target; energy buttons are rendered in the info bar.
+                // We just apply a red highlight here.
+                overlayLabel = 'Pick Energy';
+                overlayColor = 'rgba(220,53,69,0.3)';
+            } else if (pending?.trainerName === 'Pokémon Breeder' && pending.selected.length >= pending.needed && !isAi) {
+                // Breeder step 2: highlight Basic slots that the selected Stage 2 can legally land on.
+                // We test by attempting a dry-run via the engine's chain-walk logic.
+                // Quick client-side check: instance must be a Basic (stage 0).
+                if (instance.stage === 0) {
+                    btnValue = `/tcg breederplace ${targetSlot}`;
+                    overlayLabel = 'Breed';
+                    overlayColor = 'rgba(255, 140, 0, 0.45)';
+                }
+            } else if (isSelectedEnergy) {
                 btnValue = `/tcg attach ${targetSlot}`;
                 overlayLabel = 'Attach';
                 overlayColor = 'rgba(0, 123, 255, 0.3)';
@@ -210,9 +227,50 @@ function renderPendingUI(match: TCGMatch): string {
 
     switch (pending.type) {
         case 'discard_for_effect': {
+            // superpotion_target special case: pick energy from specific Pokémon
+            if (pending.filter?.startsWith('superpotion_target:') && pending.needed === 0) {
+                const slotStr = pending.filter.replace('superpotion_target:', '');
+                const slot: 'active' | number = slotStr === 'active' ? 'active' : parseInt(slotStr);
+                const inst = slot === 'active' ? match.player.active : match.player.bench[slot as number];
+                if (!inst) { html += `Target Pokémon not found.`; break; }
+                html += `Pick 1 Energy to discard from <strong>${inst.topCard.name}</strong>:`;
+                html += `</div><div style="background:#fff3cd;border:1px solid #ffc107;padding:5px;border-radius:5px;overflow-x:auto;white-space:nowrap;">`;
+                for (let eIdx = 0; eIdx < inst.attachedEnergy.length; eIdx++) {
+                    const e = inst.attachedEnergy[eIdx];
+                    html += `<button class="button" name="send" value="/tcg superpotionpick ${eIdx}" style="background:transparent;border:1px solid #e67e00;padding:2px 4px;margin:2px;border-radius:4px;cursor:pointer;">`;
+                    html += `<img src="${e.images.small}" style="width:40px;display:block;" alt="${e.name}"/>`;
+                    html += `<span style="font-size:9px;">${e.name}</span></button>`;
+                }
+                html += `</div>`;
+                html += `<button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;margin-top:4px;">Cancel</button>`;
+                break;
+            }
+            // SER special case: needed = 0 means we're in own-energy selection mode
+            if (pending.filter?.startsWith('ser_target:') && pending.needed === 0) {
+                html += `Pick 1 Energy card from your own Pokémon to discard:`;
+                html += `</div><div style="background:#ffe0e0;border:1px solid #dc3545;padding:5px;border-radius:5px;overflow-x:auto;white-space:nowrap;">`;
+                // Render each attached energy on each of the player's Pokémon as a button
+                const allInPlay = match.player.getAllInPlay();
+                for (const inst of allInPlay) {
+                    for (let eIdx = 0; eIdx < inst.attachedEnergy.length; eIdx++) {
+                        const e = inst.attachedEnergy[eIdx];
+                        html += `<button class="button" name="send" value="/tcg serownpick ${inst.uid} ${eIdx}" style="background:transparent;border:1px solid #dc3545;padding:2px 4px;margin:2px;border-radius:4px;cursor:pointer;font-size:11px;">`;
+                        html += `<img src="${e.images.small}" style="width:40px;display:block;" alt="${e.name}"/>`;
+                        html += `<span style="font-size:9px;">${inst.topCard.name}</span>`;
+                        html += `</button>`;
+                    }
+                }
+                html += `</div>`;
+                html += `<button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;margin-top:4px;">Cancel</button>`;
+                break;
+            }
             const remaining = pending.needed - pending.selected.length;
             if (remaining > 0) {
-                html += `Select ${remaining} more card${remaining > 1 ? 's' : ''} from your hand to discard/return (orange highlight = selected).`;
+                if (pending.filter === 'stage2_hand') {
+                    html += `Select the <strong>Stage 2 Pokémon</strong> from your hand to place (orange highlight = selected). Then click the matching Basic on your field.`;
+                } else {
+                    html += `Select ${remaining} more card${remaining > 1 ? 's' : ''} from your hand to discard/return (orange highlight = selected).`;
+                }
                 if (pending.selected.length > 0) {
                     html += ` <button class="button" name="send" value="/tcg pendingclearsel" style="font-size:10px;margin-left:4px;">Clear</button>`;
                 }
@@ -444,8 +502,16 @@ export const commands: Chat.ChatCommands = {
             const uid = parseInt(target);
             const pending = match.player.pendingEffect;
             if (pending.selected.length >= pending.needed) return this.errorReply("Already selected enough cards.");
-            if (!match.player.hand.find(c => c.uid === uid)) return this.errorReply("Card not in hand.");
-            if (uid === pending.trainerUid) return this.errorReply("Cannot discard the Trainer card itself.");
+            const card = match.player.hand.find(c => c.uid === uid);
+            if (!card) return this.errorReply("Card not in hand.");
+            if (uid === pending.trainerUid) return this.errorReply("Cannot select the Trainer card itself.");
+            // Enforce filter constraints
+            if (pending.filter === 'stage2_hand' && !card.subtypes?.includes('Stage 2')) {
+                return this.errorReply("Pokémon Breeder requires a Stage 2 Pokémon.");
+            }
+            if (pending.filter === 'pokemon_hand' && !isBasicPokemon(card) && !isEvolutionPokemon(card)) {
+                return this.errorReply("Pokémon Trader requires a Pokémon card.");
+            }
             if (!pending.selected.includes(uid)) {
                 pending.selected.push(uid);
             }
@@ -577,6 +643,76 @@ export const commands: Chat.ChatCommands = {
         },
 
         // Pokédex: move a top-deck card to the bottom of the preview window
+        // Super Potion: player picks which energy on the target Pokémon to discard
+        superpotionpick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
+            const pending = match.player.pendingEffect;
+            if (!pending.filter?.startsWith('superpotion_target:')) return this.errorReply("No Super Potion effect active.");
+
+            const eIdx = parseInt(target);
+            if (isNaN(eIdx)) return this.errorReply("Invalid index.");
+
+            const slotStr = pending.filter.replace('superpotion_target:', '');
+            const slot: 'active' | number = slotStr === 'active' ? 'active' : parseInt(slotStr);
+            const inst = slot === 'active' ? match.player.active : match.player.bench[slot as number];
+            if (!inst || eIdx >= inst.attachedEnergy.length) return this.errorReply("Invalid energy target.");
+
+            const discarded = inst.attachedEnergy.splice(eIdx, 1)[0];
+            match.player.discard.push(discarded);
+            inst.currentDamage = Math.max(0, inst.currentDamage - 40);
+            match.addLog(`Player used Super Potion on ${inst.topCard.name}: discarded ${discarded.name}, healed 40 damage.`);
+
+            // Remove trainer from hand
+            const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
+            if (trainerIdx !== -1) match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
+            match.player.pendingEffect = null;
+            match.player.selectedUid = null;
+            this.refreshPage('tcg-match');
+        },
+
+        // Super Energy Removal: player picks which of their own attached energy to discard
+        serownpick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");
+            const pending = match.player.pendingEffect;
+            if (!pending.filter?.startsWith('ser_target:')) return this.errorReply("No SER effect active.");
+
+            const [instUidStr, eIdxStr] = target.split(' ');
+            const instUid = parseInt(instUidStr);
+            const eIdx = parseInt(eIdxStr);
+            if (isNaN(instUid) || isNaN(eIdx)) return this.errorReply("Invalid selection.");
+
+            const inst = match.player.getAllInPlay().find(i => i.uid === instUid);
+            if (!inst || eIdx >= inst.attachedEnergy.length) return this.errorReply("Invalid energy target.");
+
+            // Discard the chosen own energy
+            const selfDiscarded = inst.attachedEnergy.splice(eIdx, 1)[0];
+            match.player.discard.push(selfDiscarded);
+
+            // Now apply the opponent-side removal using the stored targetSlot
+            const targetSlotStr = pending.filter.replace('ser_target:', '');
+            const targetSlot: 'active' | number = targetSlotStr === 'active' ? 'active' : parseInt(targetSlotStr);
+            const opponent = match.ai;
+            const oppTarget = targetSlot === 'active' ? opponent.active : opponent.bench[targetSlot as number];
+            if (oppTarget) {
+                const removed: string[] = [];
+                for (let i = 0; i < 2 && oppTarget.attachedEnergy.length > 0; i++) {
+                    const r = oppTarget.attachedEnergy.pop()!;
+                    opponent.discard.push(r);
+                    removed.push(r.name);
+                }
+                match.addLog(`Player used Super Energy Removal! Discarded ${selfDiscarded.name} from own side; removed ${removed.join(', ')} from ${oppTarget.topCard.name}.`);
+            }
+
+            // Remove trainer from hand
+            const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
+            if (trainerIdx !== -1) match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
+            match.player.pendingEffect = null;
+            match.player.selectedUid = null;
+            this.refreshPage('tcg-match');
+        },
+
         pokedexmove(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect || match.player.pendingEffect.trainerName !== 'Pokédex') {
@@ -592,6 +728,33 @@ export const commands: Chat.ChatCommands = {
         },
 
         // Pokédex: confirm current order
+        // Breeder step 2: player clicked a Basic slot after selecting their Stage 2
+        breederplace(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect || match.player.pendingEffect.trainerName !== 'Pokémon Breeder') {
+                return this.errorReply("No active Pokémon Breeder effect.");
+            }
+            const pending = match.player.pendingEffect;
+            if (pending.selected.length < pending.needed) {
+                return this.errorReply("Select a Stage 2 from your hand first.");
+            }
+            const stage2Uid = pending.selected[0];
+            const slot = target === 'active' ? 'active' : parseInt(target);
+            if (match.evolvePokemon(true, stage2Uid, slot, true)) {
+                // Remove the trainer from hand
+                const trainerIdx = match.player.hand.findIndex(c => c.uid === pending.trainerUid);
+                if (trainerIdx !== -1) {
+                    match.player.discard.push(match.player.hand.splice(trainerIdx, 1)[0]);
+                }
+                match.player.pendingEffect = null;
+                match.player.selectedUid = null;
+                match.addLog(`Player played Pokémon Breeder!`);
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply("Cannot place that Stage 2 on that Pokémon. Check the evolution chain and that the Basic was in play before this turn.");
+            }
+        },
+
         pokedexconfirm(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply("No active effect.");

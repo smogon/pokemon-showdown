@@ -1,4 +1,5 @@
 import type { TCGMatch, InGameCard } from './engine';
+import { isBasicPokemon, isEvolutionPokemon, PokemonInstance } from './engine';
 
 export interface TrainerEffect {
     requiresTarget: boolean;
@@ -41,10 +42,12 @@ const effects: Record<string, TrainerEffect> = {
 
     "Professor Oak": {
         requiresTarget: false,
-        execute: (match, isPlayer) => {
+        execute: (match, isPlayer, card) => {
             const player = isPlayer ? match.player : match.ai;
-            player.discard.push(...player.hand);
-            player.hand = [];
+            // Discard every card in hand EXCEPT Oak itself — playTrainer discards Oak after execute() returns.
+            const rest = player.hand.filter(c => c.uid !== card.uid);
+            player.hand = player.hand.filter(c => c.uid === card.uid); // keep only Oak
+            player.discard.push(...rest);
             player.draw(7);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Professor Oak, discarded hand and drew 7 cards.`);
             return true;
@@ -96,7 +99,9 @@ const effects: Record<string, TrainerEffect> = {
 
     "Lass": {
         requiresTarget: false,
-        execute: (match, isPlayer) => {
+        // Returns false — manages its own hand removal because Lass itself is a Trainer
+        // and must be shuffled into the deck along with all other Trainers, not discarded.
+        execute: (match, isPlayer, card) => {
             const player = isPlayer ? match.player : match.ai;
             const opponent = isPlayer ? match.ai : match.player;
 
@@ -107,10 +112,13 @@ const effects: Record<string, TrainerEffect> = {
                 shuffle(p.deck);
             };
 
+            // removeTrainers includes Lass itself (still in hand when execute() runs),
+            // so Lass ends up shuffled into the deck correctly.
             removeTrainers(player);
             removeTrainers(opponent);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Lass! All Trainer cards shuffled into both decks.`);
-            return true;
+            if (isPlayer) player.selectedUid = null;
+            return false; // prevent playTrainer from also discarding Lass
         }
     },
 
@@ -138,13 +146,29 @@ const effects: Record<string, TrainerEffect> = {
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
             if (!target || target.currentDamage === 0) return false;
-            if (target.attachedEnergy.length === 0) return false; // Must discard 1 energy
-            // Discard the last attached energy (AI picks automatically; player UI will pre-select)
-            const discarded = target.attachedEnergy.pop()!;
-            player.discard.push(discarded);
-            target.currentDamage = Math.max(0, target.currentDamage - 40);
-            match.addLog(`${isPlayer ? 'Player' : 'AI'} used Super Potion on ${target.topCard.name}: discarded ${discarded.name}, healed 40 damage.`);
-            return true;
+            if (target.attachedEnergy.length === 0) return false;
+
+            if (!isPlayer) {
+                // AI: auto-discard last attached energy
+                const discarded = target.attachedEnergy.pop()!;
+                player.discard.push(discarded);
+                target.currentDamage = Math.max(0, target.currentDamage - 40);
+                match.addLog(`AI used Super Potion on ${target.topCard.name}: discarded ${discarded.name}, healed 40 damage.`);
+                return true;
+            }
+
+            // Player: must choose which energy to discard — pending flow
+            // Store targetSlot so the confirm step knows which Pokémon to heal
+            player.pendingEffect = {
+                type: 'discard_for_effect',
+                trainerUid: card.uid,
+                trainerName: 'Super Potion',
+                needed: 0, // energy picked from field, not hand
+                selected: [],
+                filter: `superpotion_target:${targetSlot}`,
+            };
+            match.addLog(`Super Potion: Select 1 Energy attached to ${target.topCard.name} to discard.`);
+            return false;
         }
     },
 
@@ -188,47 +212,82 @@ const effects: Record<string, TrainerEffect> = {
 
     "Defender": {
         requiresTarget: true,
+        // Returns false so playTrainer does NOT remove from hand or push to discard —
+        // the card lives on the Pokémon via attachedItems and is discarded by expireItems().
         execute: (match, isPlayer, card, targetSlot) => {
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
             if (!target) return false;
+            // Remove from hand manually here since we return false
+            const handIdx = player.hand.findIndex(c => c.uid === card.uid);
+            if (handIdx === -1) return false;
+            player.hand.splice(handIdx, 1);
             target.attachedItems.push({ card, expiresOn: 'end_of_opponent_turn' });
             match.addLog(`${isPlayer ? 'Player' : 'AI'} attached Defender to ${target.topCard.name}.`);
-            // Card is NOT discarded to discard pile yet — it lives on the Pokémon
-            // The engine's playTrainer will push it to discard, so we return true but the
-            // caller must NOT double-discard. We handle this by not pushing to discard in
-            // playTrainer when the effect itself manages the card lifecycle.
-            // Since our engine does push to discard after execute(), the card copy already
-            // on the Pokémon is the same object — that is fine for gameplay purposes.
-            return true;
+            if (isPlayer) player.selectedUid = null;
+            return false; // prevent playTrainer from double-handling
         }
     },
 
     "PlusPower": {
         requiresTarget: true,
+        // Same pattern as Defender — manages its own hand removal.
         execute: (match, isPlayer, card, targetSlot) => {
             const player = isPlayer ? match.player : match.ai;
             if (targetSlot === undefined) return false;
             const target = targetSlot === 'active' ? player.active : player.bench[targetSlot as number];
             if (!target) return false;
+            const handIdx = player.hand.findIndex(c => c.uid === card.uid);
+            if (handIdx === -1) return false;
+            player.hand.splice(handIdx, 1);
             target.attachedItems.push({ card, expiresOn: 'end_of_your_turn' });
             match.addLog(`${isPlayer ? 'Player' : 'AI'} attached PlusPower to ${target.topCard.name}.`);
-            return true;
+            if (isPlayer) player.selectedUid = null;
+            return false; // prevent playTrainer from double-handling
         }
     },
 
     "Pokémon Breeder": {
-        requiresTarget: true,
-        execute: (match, isPlayer, card, targetSlot) => {
-            // The selected card in hand should be a Stage 2. We find it via the pending state.
-            // The UI will set match.player.selectedUid to the Stage 2 card before calling playtrainer.
-            const player = isPlayer ? match.player : match.ai;
-            if (targetSlot === undefined) return false;
-            const stage2Uid = player.selectedUid;
-            if (stage2Uid === null) return false;
-            // Delegate to evolvePokemon with skipStageCheck = true
-            return match.evolvePokemon(isPlayer, stage2Uid, targetSlot, true);
+        // requiresTarget = false here because the two-step flow is handled entirely
+        // via the pendingEffect system: step 1 picks the Stage 2 from hand (stored in
+        // pending.selected[0]), step 2 (handled in index.ts pendingfinish) calls
+        // evolvePokemon with skipStageCheck = true.
+        // Returning false from execute() keeps the trainer in hand until the flow completes.
+        requiresTarget: false,
+        execute: (match, isPlayer, card) => {
+            if (!isPlayer) {
+                // AI: find a Stage 2 in hand and a matching Basic in play
+                const player = match.ai;
+                const stage2 = player.hand.find(c => c.subtypes?.includes('Stage 2'));
+                if (!stage2) return false;
+                // Find the matching basic slot using chain-walk (delegated to engine)
+                const allSlots: ('active' | number)[] = ['active', 0, 1, 2, 3, 4];
+                for (const slot of allSlots) {
+                    if (match.evolvePokemon(false, stage2.uid, slot, true)) {
+                        match.addLog(`AI played Pokémon Breeder to evolve ${stage2.name}.`);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            // Player: check there is at least one Stage 2 in hand before starting the flow
+            const player = match.player;
+            const hasStage2 = player.hand.some(c => c.uid !== card.uid && c.subtypes?.includes('Stage 2'));
+            if (!hasStage2) {
+                match.addLog('No Stage 2 Pokémon in hand to use with Pokémon Breeder.');
+                return false;
+            }
+            player.pendingEffect = {
+                type: 'discard_for_effect',
+                trainerUid: card.uid,
+                trainerName: 'Pokémon Breeder',
+                needed: 1,           // select 1 Stage 2 from hand
+                selected: [],
+                filter: 'stage2_hand',
+            };
+            match.addLog('Pokémon Breeder: Select the Stage 2 Pokémon from your hand, then click its Basic on the field.');
+            return false; // keep trainer in hand until flow completes
         }
     },
 
@@ -257,14 +316,12 @@ const effects: Record<string, TrainerEffect> = {
             const revived = player.discard[discardIndex];
             if (!revived) return false;
             // Must be a Basic Pokémon
-            const { isBasicPokemon } = require('./engine');
             if (!isBasicPokemon(revived)) return false;
             // Find an empty bench slot
             const emptySlot = player.bench.findIndex(s => s === null);
             if (emptySlot === -1) return false; // Bench full
-            const { PokemonInstance } = require('./engine');
-            const newInstance = new PokemonInstance(revived);
-            const halfHp = Math.round((parseInt(revived.hp || '0') / 2) / 10) * 10;
+            const newInstance = new PokemonInstance(revived as InGameCard, match.turnNumber);
+            const halfHp = Math.floor((parseInt(revived.hp || '0') / 2) / 10) * 10;
             newInstance.currentDamage = halfHp;
             player.bench[emptySlot] = newInstance;
             player.discard.splice(discardIndex, 1);
@@ -316,24 +373,38 @@ const effects: Record<string, TrainerEffect> = {
             const player = isPlayer ? match.player : match.ai;
             const opponent = isPlayer ? match.ai : match.player;
             if (targetSlot === undefined) return false;
-            // Player must have at least 1 energy attached to any of their Pokémon
             const ownEnergySources = player.getAllInPlay().filter(i => i.attachedEnergy.length > 0);
             if (ownEnergySources.length === 0) return false;
-            // Auto-discard from first available own Pokémon (AI) or active (player fallback)
-            const ownSource = ownEnergySources[0];
-            const selfDiscarded = ownSource.attachedEnergy.pop()!;
-            player.discard.push(selfDiscarded);
-            // Discard up to 2 from opponent's target
-            const target = targetSlot === 'active' ? opponent.active : opponent.bench[targetSlot as number];
-            if (!target) return false;
-            const removed: string[] = [];
-            for (let i = 0; i < 2 && target.attachedEnergy.length > 0; i++) {
-                const r = target.attachedEnergy.pop()!;
-                opponent.discard.push(r);
-                removed.push(r.name);
+
+            if (!isPlayer) {
+                // AI: auto-discard from its active (or first available)
+                const ownSource = ownEnergySources[0];
+                const selfDiscarded = ownSource.attachedEnergy.pop()!;
+                player.discard.push(selfDiscarded);
+                const target = targetSlot === 'active' ? opponent.active : opponent.bench[targetSlot as number];
+                if (!target) return false;
+                const removed: string[] = [];
+                for (let i = 0; i < 2 && target.attachedEnergy.length > 0; i++) {
+                    const r = target.attachedEnergy.pop()!;
+                    opponent.discard.push(r);
+                    removed.push(r.name);
+                }
+                match.addLog(`AI used Super Energy Removal! Discarded ${selfDiscarded.name} from own side; removed ${removed.join(', ')} from ${target.topCard.name}.`);
+                return true;
             }
-            match.addLog(`${isPlayer ? 'Player' : 'AI'} used Super Energy Removal! Discarded ${selfDiscarded.name} from own side; removed ${removed.join(', ')} from ${target.topCard.name}.`);
-            return true;
+
+            // Player: set up a pending flow to choose which own energy to discard.
+            // targetSlot (opponent's target) is stored in the filter field as a string.
+            player.pendingEffect = {
+                type: 'discard_for_effect',
+                trainerUid: card.uid,
+                trainerName: 'Super Energy Removal',
+                needed: 0,    // 0 = SER own-energy selection phase (picks from field, not hand)
+                selected: [],
+                filter: `ser_target:${targetSlot}`,
+            };
+            match.addLog(`Super Energy Removal: Select 1 Energy attached to your own Pokémon to discard.`);
+            return false; // multi-step
         }
     },
 
@@ -347,11 +418,10 @@ const effects: Record<string, TrainerEffect> = {
             const discardIndex = targetSlot as number;
             const target = opponent.discard[discardIndex];
             if (!target) return false;
-            const { isBasicPokemon, PokemonInstance } = require('./engine');
             if (!isBasicPokemon(target)) return false;
             const emptySlot = opponent.bench.findIndex(s => s === null);
             if (emptySlot === -1) return false; // Opponent's bench full
-            opponent.bench[emptySlot] = new PokemonInstance(target);
+            opponent.bench[emptySlot] = new PokemonInstance(target as InGameCard, match.turnNumber);
             opponent.discard.splice(discardIndex, 1);
             match.addLog(`${isPlayer ? 'Player' : 'AI'} played Pokémon Flute! Moved ${target.name} from opponent's discard to their Bench.`);
             return true;
@@ -373,7 +443,6 @@ const effects: Record<string, TrainerEffect> = {
                 if (player.hand.length < 2) return false;
                 player.discard.push(player.hand.shift()!, player.hand.shift()!);
                 const basicIdx = player.deck.findIndex(c => {
-                    const { isBasicPokemon } = require('./engine');
                     return isBasicPokemon(c);
                 });
                 if (basicIdx !== -1) {
@@ -461,7 +530,6 @@ const effects: Record<string, TrainerEffect> = {
             if (!isPlayer) {
                 const player = match.ai;
                 const basicInHand = player.hand.find(c => {
-                    const { isBasicPokemon, isEvolutionPokemon } = require('./engine');
                     return isBasicPokemon(c) || isEvolutionPokemon(c);
                 });
                 if (!basicInHand) return false;
@@ -469,7 +537,6 @@ const effects: Record<string, TrainerEffect> = {
                 player.deck.push(player.hand.splice(idx, 1)[0]);
                 shuffle(player.deck);
                 const deckBasic = player.deck.findIndex(c => {
-                    const { isBasicPokemon } = require('./engine');
                     return isBasicPokemon(c);
                 });
                 if (deckBasic !== -1) {
