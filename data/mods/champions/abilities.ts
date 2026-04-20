@@ -36,6 +36,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	regenerator: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.heal(pokemon.baseMaxhp / 3)) {
+				this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Regenerator', '[silent]');
+			}
+		},
+	},
 	spicyspray: {
 		inherit: true,
 		isNonstandard: null,
