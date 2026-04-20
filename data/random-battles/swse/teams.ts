@@ -1225,8 +1225,8 @@ export class RandomTeams {
 			if (abilities.includes(ability) && !teamDetails.energyWeather) return ability;
 		}
 		// If you have a weather present on your team prioritize weather abilities for that weather
-		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const sunAbilities = ['Heat Haze', 'Chlorophyll', 'Solar Power', 'Drought', 'Leaf Guard'];
+		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const hailAbilities = ['Ice Armor', 'Slush Rush', 'Absolute Zero', 'Snow Warning', 'Snow Cloak',
 			'Glacial Armor', 'Ice Body'];
 		const bloodMoonAbilities = ['Shadow Step', 'Malice', 'Eventide'];
@@ -1249,13 +1249,13 @@ export class RandomTeams {
 		const strongWindsAbilities = ['Gale Wings', 'Wind Rider', 'Wind Power'];
 		// This is probably a really inefficient way of doing this
 		const weatherAbilitiesAllowed: string[] = [];
-		if (teamDetails.rain) {
-			for (const ability of rainAbilities) {
+		if (teamDetails.sun) {
+			for (const ability of sunAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
-		if (teamDetails.sun) {
-			for (const ability of sunAbilities) {
+		if (teamDetails.rain) {
+			for (const ability of rainAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
@@ -1715,8 +1715,8 @@ export class RandomTeams {
 			// Prevent weather setters of opposing weathers
 			if (set.role.includes('Setter')) {
 				if (teamDetails.climateWeather) {
-					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
 					if (teamDetails.sun && !set.role.includes('Sun Setter')) continue;
+					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
 					if (teamDetails.hail && !set.role.includes('Hail Setter')) continue;
 					if (teamDetails.bloodMoon && !set.role.includes('Blood Moon Setter')) continue;
 					if (teamDetails.fog && !set.role.includes('Fog Setter')) continue;
@@ -1724,7 +1724,7 @@ export class RandomTeams {
 				if (teamDetails.irritantWeather) {
 					if (teamDetails.sand && !set.role.includes('Sandstorm Setter')) continue;
 					if (teamDetails.dust && !set.role.includes('Dust Storm Setter')) continue;
-					if (teamDetails.pollen && !set.role.includes('Pollen Setter')) continue;
+					if (teamDetails.pollen && !set.role.includes('Pollen Storm Setter')) continue;
 					if (teamDetails.fairyDust && !set.role.includes('Fairy Dust Setter')) continue;
 					if (teamDetails.pheromones && !set.role.includes('Pheromones Setter')) continue;
 					if (teamDetails.smog && !set.role.includes('Smog Setter')) continue;
@@ -2119,12 +2119,12 @@ export class RandomTeams {
 			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
-				set.moves.includes('whirlduel') || set.moves.includes('shelter')) teamDetails.rain = 1;
 			if (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday') ||
 				set.moves.includes('thermalvortex') || set.ability === 'Heat Haze') {
 				teamDetails.sun = 1;
 			}
+			if (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
+				set.moves.includes('whirlduel') || set.moves.includes('shelter')) teamDetails.rain = 1;
 			if (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception') ||
 				set.moves.includes('hail') || set.ability === 'Ice Armor') {
 				teamDetails.hail = 1;
@@ -2153,7 +2153,7 @@ export class RandomTeams {
 				set.moves.includes('strongwinds')) {
 				teamDetails.strongWinds = 1;
 			}
-			if (teamDetails.rain || teamDetails.sun || teamDetails.hail || teamDetails.bloodMoon || teamDetails.fog ||
+			if (teamDetails.sun || teamDetails.rain || teamDetails.hail || teamDetails.bloodMoon || teamDetails.fog ||
 				(isDoubles && set.ability === 'Cloud Nine')) {
 				teamDetails.climateWeather = 1;
 			}

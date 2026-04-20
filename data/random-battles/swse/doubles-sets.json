@@ -58,12 +58,11 @@
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
-                "role": "Doubles Pollen Setter",
+                "role": "Doubles Pollen Storm Setter",
                 "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up", "Pollinate"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
-                
                 "role": "Doubles Smog Setter",
                 "movepool": ["Tailwind",  "U-turn", "Protect", "Whip Up", "Smog Spread"],
                 "abilities": ["Galeforce", "Prankster"]

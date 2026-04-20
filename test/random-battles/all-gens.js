@@ -142,14 +142,14 @@ describe("New set format (slow)", () => {
 			filename: "gen7/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
-		"gen9randombattle": {
+		/* "gen9randombattle": {
 			filename: "gen9/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
 		"gen9randomdoublesbattle": {
 			filename: "gen9/doubles-sets",
 			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"],
-		},
+		}, */
 		"gen9babyrandombattle": {
 			filename: "gen9baby/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
@@ -157,6 +157,23 @@ describe("New set format (slow)", () => {
 		"gen9randombattle@@@+cap": {
 			filename: "gen9cap/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
+		// swse
+		"gen9randombattle": {
+			filename: "gen9/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot",
+				"Sun Setter", "Rain Setter", "Hail Setter", "Blood Moon Setter", "Fog Setter",
+				"Sandstorm Setter", "Dust Storm Setter", "Pollen Storm Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+			],
+		},
+		"gen9randomdoublesbattle": {
+			filename: "gen9/doubles-sets",
+			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user",
+				"Doubles Rain Setter", "Doubles Sun Setter", "Doubles Hail Setter", "Doubles Blood Moon Setter", "Doubles Fog Setter",
+				"Doubles Sandstorm Setter", "Doubles Dust Storm Setter", "Doubles Pollen Storm Setter", "Doubles Fairy Dust Setter", "Doubles Pheromones Setter", "Doubles Smog Setter",
+				"Doubles Battle Aura Setter", "Doubles Paranormal Activity Setter", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Thunderstorm Setter", "Doubles Magnetosphere Setter",
+			],
 		},
 	};
 	for (const format of Object.keys(formatInfo)) {
