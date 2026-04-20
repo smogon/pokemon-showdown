@@ -735,6 +735,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
+	sylveon: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
 	porygon: {
 		tier: "NFE",
 	},
@@ -2942,10 +2946,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	aurorus: {
 		tier: "PU",
 		doublesTier: "(DUU)",
-	},
-	sylveon: {
-		tier: "UU",
-		doublesTier: "DUU",
 	},
 	hawlucha: {
 		tier: "OU",
