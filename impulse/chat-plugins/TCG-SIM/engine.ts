@@ -1,5 +1,5 @@
 import { TrainerEffects } from './effects';
-import { resolvePokemonPower } from './power-effects';
+import { resolvePokemonPower, getPowerRequirements } from './power-effects';
 import { resolveAttackEffect } from './attack-effects';
 
 // ---------------------------------------------------------------------------
@@ -369,6 +369,8 @@ export interface DamageContext {
     protectDefender: boolean;
     preventAllDamage: boolean;
     customLog: string[];
+    forceOpponentSwitch: boolean;
+    disableOpponentAttack: boolean;
 }
 
 export function freshDamageContext(
@@ -396,6 +398,8 @@ export function freshDamageContext(
         protectDefender: false,
         preventAllDamage: false,
         customLog: [],
+        forceOpponentSwitch: false,
+        disableOpponentAttack: false,
     };
 }
 
@@ -1135,6 +1139,12 @@ export class TCGMatch {
             if (ctx.burnToApply) this.applyBurn(!isPlayer);
         }
 
+        if (ctx.forceOpponentSwitch && !this.winner) {
+            defender.active = null;
+            defender.pendingPromotion = true;
+            this.addLog(`${defenderInst.topCard.name} was forced to the Bench!`);
+        }
+
         this.finishAttack(isPlayer);
         return true;
     }
@@ -1260,7 +1270,10 @@ export class TCGMatch {
                     const power = inst.topCard.abilities![pIdx];
                     if (power.type !== 'Pokémon Power' && power.type !== 'Poké-Power') continue;
 
-                    if (power.name === 'Rain Dance') {
+                    const reqs = getPowerRequirements(power);
+                    if (!reqs) continue;
+
+                    if (reqs.filter === 'rain_dance_energy') {
                         const waterIdx = this.ai.hand.findIndex(c => c.name === 'Water Energy');
                         if (waterIdx !== -1) {
                             const target = this.ai.active?.topCard.types?.includes('Water') ? this.ai.active : this.ai.bench.find(b => b?.topCard.types?.includes('Water'));
@@ -1271,7 +1284,7 @@ export class TCGMatch {
                                 }
                             }
                         }
-                    } else if (power.name === 'Damage Swap') {
+                    } else if (reqs.filter === 'damage_swap_from') {
                         if (this.ai.active && this.ai.active.currentDamage > 0) {
                             const healthyBench = this.ai.bench.find(b => b && b.currentDamage === 0 && b.maxHP >= 50);
                             if (healthyBench) {
@@ -1280,7 +1293,7 @@ export class TCGMatch {
                                 }
                             }
                         }
-                    } else if (power.name === 'Energy Trans') {
+                    } else if (reqs.filter === 'energy_trans_from') {
                         if (this.ai.active && this.ai.active.attachedEnergy.length < 3) {
                             const benchedWithGrass = this.ai.bench.find(b => b && b.attachedEnergy.some(e => e.name === 'Grass Energy'));
                             if (benchedWithGrass) {
@@ -1290,13 +1303,7 @@ export class TCGMatch {
                                 }
                             }
                         }
-                    } else if (power.name === 'Energy Burn') {
-                        if (inst === this.ai.active && inst.attachedEnergy.some(e => e.name !== 'Fire Energy')) {
-                            if (this.usePokemonPower(false, inst.uid, pIdx, {})) {
-                                powerUsed = true;
-                            }
-                        }
-                    } else if (power.name === 'Lure' && powerLoops === 1) { 
+                    } else if (reqs.filter === 'lure_energy' && powerLoops === 1) { 
                         const fireIdx = this.ai.hand.findIndex(c => c.name === 'Fire Energy');
                         if (fireIdx !== -1) {
                             const weakBenchIdx = this.player.bench.findIndex(b => b && b.currentHP <= 50);
@@ -1305,6 +1312,11 @@ export class TCGMatch {
                                     powerUsed = true;
                                 }
                             }
+                        }
+                    } else if (reqs.needed === 0 && power.name !== 'Strikes Back' && power.name !== 'Invisible Wall') {
+                        // Instant powers (like Energy Burn)
+                        if (this.usePokemonPower(false, inst.uid, pIdx, {})) {
+                            powerUsed = true;
                         }
                     }
                 }

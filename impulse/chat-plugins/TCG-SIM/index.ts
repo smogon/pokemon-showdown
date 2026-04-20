@@ -5,6 +5,7 @@ import {
     hasEnoughEnergy, canRetreat, validateDeck,
 } from './engine';
 import { TrainerEffects } from './effects';
+import { getPowerRequirements } from './power-effects';
 
 let baseSetData: TCGCard[] = [];
 try {
@@ -595,29 +596,24 @@ export const commands: Chat.ChatCommands = {
             if (!inst) return this.errorReply('Pokémon not found.');
             const power = inst.topCard.abilities?.[powerIndex];
             if (!power) return this.errorReply('Power not found.');
+            if (inst.isPowerBlocked()) return this.errorReply(`Power is blocked by ${inst.status.volatile}.`);
 
-            // Intercept multi-step targeted powers
-            if (power.name === 'Damage Swap' || power.name === 'Rain Dance' || power.name === 'Energy Trans' || power.name === 'Lure') {
-                if (inst.isPowerBlocked()) return this.errorReply(`Power is blocked by ${inst.status.volatile}.`);
-                
-                let filterStr = '';
-                if (power.name === 'Damage Swap') filterStr = 'damage_swap_from';
-                if (power.name === 'Rain Dance') filterStr = 'rain_dance_energy';
-                if (power.name === 'Energy Trans') filterStr = 'energy_trans_from';
-                if (power.name === 'Lure') filterStr = 'lure_energy';
+            // Use the dynamic parser
+            const reqs = getPowerRequirements(power);
 
+            if (reqs && reqs.filter) {
                 match.player.pendingEffect = {
                     type: 'use_power' as any,
                     trainerUid: uid,
                     trainerName: power.name,
-                    needed: powerIndex, // Store the power index here
+                    needed: powerIndex, // Store power index here for execution
                     selected: [],
-                    filter: filterStr
+                    filter: reqs.filter
                 };
                 return this.refreshPage('tcg-match');
             }
 
-            // Standard instant powers (like Energy Burn)
+            // Standard instant powers (like Energy Burn) or powers we haven't mapped yet
             if (match.usePokemonPower(true, uid, powerIndex)) {
                 this.refreshPage('tcg-match');
             } else {
@@ -1038,11 +1034,18 @@ export const pages: Chat.PageTable = {
                     html += `<em style="color:#888;">Complete the card effect above to continue.</em>`;
 
                 } else if (match.player.active && match.player.selectedUid === match.player.active.uid) {
-                    html += `<strong style="display:block;margin-bottom:5px;">Select an Attack:</strong>`;
+                    html += `<strong style="display:block;margin-bottom:5px;">Select an Action:</strong>`;
+                    
+                    const vol = match.player.active.status.volatile;
+                    const isBlocked = vol === 'asleep' || vol === 'paralyzed';
+
                     match.player.active.topCard.attacks?.forEach((atk, i) => {
                         const canAtk = hasEnoughEnergy(match.player.active!, i);
                         const costStr = atk.cost?.join(', ') || 'Free';
-                        if (canAtk) {
+                        
+                        if (isBlocked) {
+                            html += `<button class="button disabled" style="color:#888;margin-right:5px;cursor:not-allowed;padding:5px;border:1px solid #ccc;" disabled>⚔️ ${atk.name}<br/><span style="font-size:9px;color:#d9534f;font-weight:bold;">${vol.toUpperCase()}</span></button>`;
+                        } else if (canAtk) {
                             html += `<button class="button" name="send" value="/tcg attack ${i}" style="font-weight:bold;background:#ffe6e6;border:1px solid red;margin-right:5px;padding:5px;">⚔️ ${atk.name}${atk.damage ? ` (${atk.damage})` : ''}<br/><span style="font-size:9px;">${costStr}</span></button>`;
                         } else {
                             html += `<button class="button disabled" style="color:#888;margin-right:5px;cursor:not-allowed;padding:5px;" disabled>⚔️ ${atk.name}<br/><span style="font-size:9px;">Needs Energy</span></button>`;
@@ -1052,11 +1055,10 @@ export const pages: Chat.PageTable = {
                     const powers = match.player.active.topCard.abilities?.filter(a => a.type === 'Pokémon Power' || a.type === 'Poké-Power') ?? [];
                     for (let pi = 0; pi < powers.length; pi++) {
                         const pw = powers[pi];
-                        const blocked = match.player.active.isPowerBlocked();
-                        if (!blocked) {
+                        if (!isBlocked) {
                             html += `<button class="button" name="send" value="/tcg usepower ${match.player.active.uid} ${pi}" style="font-weight:bold;background:#f3e6ff;border:1px solid #9932CC;margin-right:5px;padding:5px;">✨ ${pw.name}</button>`;
                         } else {
-                            html += `<button class="button disabled" style="color:#888;margin-right:5px;cursor:not-allowed;padding:5px;" disabled>✨ ${pw.name} (blocked)</button>`;
+                            html += `<button class="button disabled" style="color:#888;margin-right:5px;cursor:not-allowed;padding:5px;" disabled>✨ ${pw.name}<br/><span style="font-size:9px;color:#d9534f;font-weight:bold;">${vol.toUpperCase()}</span></button>`;
                         }
                     }
 
@@ -1084,15 +1086,22 @@ export const pages: Chat.PageTable = {
                     if (match.player.active && !match.hasAttackedThisTurn) {
                         const active = match.player.active;
                         const cost = active.retreatCostCount;
-                        const canDo = canRetreat(active) && active.status.volatile !== 'asleep' && active.status.volatile !== 'paralyzed' && !match.player.hasRetreatedThisTurn;
+                        const vol = active.status.volatile;
+                        const isBlocked = vol === 'asleep' || vol === 'paralyzed';
+                        const hasEnergy = canRetreat(active);
+                        const alreadyRetreated = match.player.hasRetreatedThisTurn;
+                        
                         const benchPokemon = match.player.bench.map((b, i) => ({ b, i })).filter(({ b }) => b !== null);
+                        
                         if (benchPokemon.length > 0) {
                             html += `<span style="font-size:11px;color:#555;margin:0 6px;">Retreat (cost: ${cost} ⚡):</span>`;
                             for (const { b, i } of benchPokemon) {
-                                if (canDo) {
-                                    html += `<button class="button" name="send" value="/tcg retreat ${i}" style="font-size:11px;background:#fff3cd;border:1px solid #ffc107;margin:2px;">↩ ${b!.topCard.name}</button>`;
-                                } else {
+                                if (isBlocked) {
+                                    html += `<button class="button disabled" style="font-size:11px;color:#d9534f;margin:2px;cursor:not-allowed;border:1px solid #d9534f;" disabled>↩ ${b!.topCard.name} (${vol.toUpperCase()})</button>`;
+                                } else if (!hasEnergy || alreadyRetreated) {
                                     html += `<button class="button disabled" style="font-size:11px;color:#aaa;margin:2px;cursor:not-allowed;" disabled>↩ ${b!.topCard.name}</button>`;
+                                } else {
+                                    html += `<button class="button" name="send" value="/tcg retreat ${i}" style="font-size:11px;background:#fff3cd;border:1px solid #ffc107;margin:2px;">↩ ${b!.topCard.name}</button>`;
                                 }
                             }
                         }

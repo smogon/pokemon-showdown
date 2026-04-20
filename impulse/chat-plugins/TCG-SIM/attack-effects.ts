@@ -61,6 +61,7 @@ function countAttachedEnergy(inst: PokemonInstance, type?: string): number {
 // ---------------------------------------------------------------------------
 // Base Set 1 specific attack handlers
 // Complex attacks that the generic parser cannot safely handle go here.
+// (We have removed Metronome, Amnesia, and Buzzap as they are now handled dynamically!)
 // ---------------------------------------------------------------------------
 
 const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
@@ -74,26 +75,6 @@ const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
             target.currentDamage += 10;
             ctx.customLog.push(`Curse moved 1 damage counter to ${target.topCard.name}.`);
         }
-    },
-
-    'Clefairy:Metronome': (match, isPlayer, atk, def, attack, ctx) => {
-        const opponent = isPlayer ? match.ai : match.player;
-        const oppActive = opponent.active;
-        ctx.preventAllDamage = true;
-        if (!oppActive || !oppActive.topCard.attacks?.length) {
-            ctx.customLog.push(`Metronome: Opponent has no attacks to copy.`);
-            return;
-        }
-        const copied = oppActive.topCard.attacks[Math.floor(Math.random() * oppActive.topCard.attacks.length)];
-        const raw = parseInt(copied.damage.replace(/[^0-9]/g, ''));
-        ctx.baseDamage = isNaN(raw) ? 0 : raw;
-        ctx.preventAllDamage = false;
-        ctx.customLog.push(`Metronome copied ${copied.name} (${copied.damage}).`);
-        resolveAttackEffect(match, isPlayer, atk, def, copied, ctx);
-    },
-
-    'Clefable:Metronome': (match, isPlayer, atk, def, attack, ctx) => {
-        ATTACK_HANDLERS['Clefairy:Metronome'](match, isPlayer, atk, def, attack, ctx);
     },
 
     'Machamp:Seismic Toss': (match, isPlayer, atk, def, attack, ctx) => {
@@ -119,11 +100,6 @@ const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
         ctx.customLog.push(`Step In: Dragonite may switch with a Benched Pokémon.`);
     },
 
-    'Slowbro:Amnesia': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        ctx.customLog.push(`Amnesia: Choose an attack — Slowbro is immune to it next turn. (passive)`);
-    },
-
     'Wigglytuff:Do the Wave': (match, isPlayer, atk, def, attack, ctx) => {
         const player = isPlayer ? match.player : match.ai;
         const benchCount = player.bench.filter(b => b !== null).length;
@@ -142,16 +118,6 @@ const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
         } else {
             ctx.customLog.push(`Stretch Kick: No Benched Pokémon to target.`);
         }
-    },
-
-    'Electrode:Buzzap': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        const player = isPlayer ? match.player : match.ai;
-        player.discard.push(...atk.cards, ...atk.attachedEnergy);
-        player.active = null;
-        player.pendingPromotion = true;
-        ctx.customLog.push(`Buzzap: Electrode is discarded. Attach 2 Lightning Energy to a Pokémon. (partial)`);
-        match.addLog(`Electrode used Buzzap and was discarded!`);
     },
 
 };
@@ -343,5 +309,37 @@ function parseGenericAttackText(
     // 9. Utility
     if (text.includes('does nothing') || text.includes('no effect')) {
         ctx.preventAllDamage = true;
+    }
+
+    // 10. Math Damage (e.g., Raticate's Super Fang)
+    if (text.includes('half the defending pokémon\'s remaining hp')) {
+        ctx.baseDamage = Math.ceil(defenderInst.currentHP / 20) * 10;
+        ctx.customLog.push(`Auto-parsed: Halved defender's HP.`);
+    }
+
+    // 11. Forced Switching (e.g., Whirlwind, Roar, Lure attack)
+    if (text.includes('switch it with his or her active pokémon') || text.includes('switches it with the defending pokémon')) {
+        ctx.forceOpponentSwitch = true;
+        ctx.customLog.push(`Auto-parsed: Opponent is forced to switch Active Pokémon.`);
+    }
+
+    // 12. Attack Copying (e.g., Metronome)
+    if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('copies that attack')) {
+         if (defenderInst.topCard.attacks && defenderInst.topCard.attacks.length > 0) {
+             const copied = defenderInst.topCard.attacks[Math.floor(Math.random() * defenderInst.topCard.attacks.length)];
+             const raw = parseInt(copied.damage.replace(/[^0-9]/g, '')) || 0;
+             ctx.baseDamage = raw;
+             ctx.customLog.push(`Auto-parsed: Copied ${copied.name} (${copied.damage}).`);
+             // Recursively resolve generic status effects of the copied attack
+             parseGenericAttackText(match, isPlayer, attackerInst, defenderInst, copied, ctx);
+         } else {
+             ctx.customLog.push(`Auto-parsed: No attacks to copy.`);
+         }
+    }
+
+    // 13. Attack Disabling (e.g., Amnesia)
+    if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('can\'t use that attack')) {
+        ctx.disableOpponentAttack = true;
+        ctx.customLog.push(`Auto-parsed: Attack disabled. (UI blocking not fully implemented yet)`);
     }
 }

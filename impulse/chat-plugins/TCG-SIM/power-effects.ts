@@ -3,23 +3,38 @@ import { isEnergyCard, isBasicPokemon, flipCoin } from './engine';
 import type { CardPower } from './engine';
 
 // ---------------------------------------------------------------------------
+// Power Requirements Parser
+// Reads the raw text of a Pokémon Power to determine if it requires
+// target selection before it can be executed.
+// ---------------------------------------------------------------------------
+
+export function getPowerRequirements(power: CardPower): { filter?: string, needed: number } | null {
+    const text = power.text.toLowerCase();
+    
+    // Parse target requirements from official card text
+    if (text.includes('move 1 damage counter from 1 of your pokémon to another')) {
+        return { filter: 'damage_swap_from', needed: 1 };
+    }
+    if (text.includes('attach 1 water energy card to 1 of your water pokémon')) {
+        return { filter: 'rain_dance_energy', needed: 1 };
+    }
+    if (text.includes('take 1 grass energy card attached to 1 of your pokémon and attach it to a different one')) {
+        return { filter: 'energy_trans_from', needed: 1 };
+    }
+    if (text.includes('choose 1 of them and switch it with his or her active')) {
+        return { filter: 'lure_energy', needed: 1 };
+    }
+    
+    // Instant / Self-targeted powers
+    if (text.includes('turn all energy attached') || text.includes('knock out')) {
+        return { needed: 0 };
+    }
+    
+    return null;
+}
+
+// ---------------------------------------------------------------------------
 // Pokémon Power / Ability Resolver
-//
-// Architecture:
-//   - Passive powers (Poké-Body, Ability) are applied continuously by
-//     the engine at the point of use (damage calc, attack, retreat, etc.).
-//     They are NOT routed through this file; the engine checks for them
-//     inline where applicable (e.g. Machamp Strikes Back after taking damage,
-//     Mr. Mime Invisible Wall before damage is applied).
-//
-//   - Active powers (Pokémon Power, Poké-Power) require the player to
-//     explicitly activate them. The player calls /tcg usepower <uid> [target].
-//     The engine validates status-blocking and calls resolvePokemonPower().
-//
-//   - targetData is passed through from the command handler and can be
-//     anything a power needs: a slot index, a uid, a discard index, etc.
-//
-//   Adding a new set: implement a handler and register it in POWER_HANDLERS.
 // ---------------------------------------------------------------------------
 
 export interface PowerEffectHandler {
@@ -39,9 +54,6 @@ export interface PowerEffectHandler {
 const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
 
     // ---- Alakazam: Damage Swap ----------------------------------------------
-    // Move 1 damage counter from one of your Pokémon to another.
-    // targetData = { fromUid: number, toUid: number }
-
     'Damage Swap': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { fromUid?: number; toUid?: number } | undefined;
@@ -67,9 +79,6 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     },
 
     // ---- Blastoise: Rain Dance ----------------------------------------------
-    // Attach 1 Water Energy from hand to any Water Pokémon (unlimited per turn).
-    // targetData = { energyUid: number, targetSlot: 'active' | number }
-
     'Rain Dance': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { energyUid?: number; targetSlot?: 'active' | number } | undefined;
@@ -87,8 +96,6 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     },
 
     // ---- Charizard: Energy Burn ---------------------------------------------
-    // Turn all Energy attached to Charizard into Fire Energy for this turn.
-
     'Energy Burn': (match, isPlayer, owner, power, targetData) => {
         for (const e of owner.attachedEnergy) {
             (e as any)._originalName = e.name;
@@ -99,9 +106,6 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     },
 
     // ---- Venusaur: Energy Trans ---------------------------------------------
-    // Move Basic Energy between your Pokémon freely.
-    // targetData = { energyUid: number, fromUid: number, toUid: number }
-
     'Energy Trans': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { energyUid?: number; fromUid?: number; toUid?: number } | undefined;
@@ -120,10 +124,6 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     },
 
     // ---- Ninetales: Lure ----------------------------------------------------
-    // Discard a Fire Energy from hand to switch one of the opponent's Bench Pokémon
-    // with their Active Pokémon.
-    // targetData = { energyUid: number, benchIndex: number }
-
     'Lure': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const opponent = isPlayer ? match.ai : match.player;
@@ -144,28 +144,30 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
         return true;
     },
 
-    // ---- Machamp: Strikes Back ----------------------------------------------
-    // Passive — when Machamp takes damage from an attack, place 1 damage counter
-    // on the attacker. This is applied in the engine's applyDamageToInstance().
-    // We register it here for completeness; it returns false when called as active.
+    // ---- Electrode: Buzzap --------------------------------------------------
+    'Buzzap': (match, isPlayer, owner, power, targetData) => {
+        const player = isPlayer ? match.player : match.ai;
+        player.discard.push(...owner.cards, ...owner.attachedEnergy);
+        
+        // Remove from field
+        if (player.active?.uid === owner.uid) {
+            player.active = null;
+            player.pendingPromotion = true;
+        } else {
+            const bIdx = player.bench.findIndex(b => b?.uid === owner.uid);
+            if (bIdx !== -1) player.bench[bIdx] = null;
+        }
+        
+        match.addLog(`Buzzap: ${owner.topCard.name} was Knocked Out! Attach it as 2 Lightning Energy. (Partial implementation)`);
+        return true;
+    },
 
+    // ---- Passive Power Stubs ------------------------------------------------
     'Strikes Back': () => false,
-
-    // ---- Mr. Mime: Invisible Wall -------------------------------------------
-    // Passive — prevents 30+ damage from attacks to Mr. Mime.
-    // Handled in engine computeFinalDamage / damage pipeline.
-
     'Invisible Wall': () => false,
-
-    // ---- Clefairy: Metronome (Power version — Jungle set) ------------------
-    // Use one of the Defending Pokémon's attacks as this attack.
-    // This is an attack, not a power — registered in attack-effects. Stub here.
-
     'Metronome': () => false,
 
     // ---- Fossil / Neo additions: placeholder pattern ------------------------
-    // New powers from future sets follow the same signature; just add entries.
-
     'Devolution Beam': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { targetUid?: number } | undefined;
