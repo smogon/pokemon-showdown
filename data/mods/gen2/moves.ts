@@ -55,6 +55,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
 			},
+			onLockMove: undefined, // no inherit
+			onSemiLockMove: 'bide',
 		},
 	},
 	counter: {
@@ -755,7 +757,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	triattack: {
 		inherit: true,
 		onHit(target, source, move) {
-			move.statusRoll = ['par', 'frz', 'brn'][this.random(3)];
+			move.statusRoll = this.sample(['par', 'frz', 'brn']);
 		},
 		secondary: {
 			chance: 20,

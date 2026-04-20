@@ -38,7 +38,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
@@ -2518,12 +2518,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				const item = pokemon.getItem();
 				if (/^tr\d\d/i.test(item.name)) {
 					const move = this.dex.moves.get(item.desc.split('move ')[1].split('.')[0]);
+					const pp = this.calculatePP(move);
 					pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
 						...pokemon.baseMoveSlots, {
 							id: move.id,
 							move: move.name,
-							pp: move.pp * 8 / 5,
-							maxpp: move.pp * 8 / 5,
+							pp,
+							maxpp: pp,
 							target: move.target,
 							disabled: false,
 							disabledSource: '',
@@ -2906,8 +2907,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (num > 9 || num < 3 || num % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
-			if (!['singles', 'doubles'].includes(this.format.gameType)) {
-				throw new Error("Only single and doubles battles can be a Best-of series.");
+			if (this.format.playerCount > 2) {
+				throw new Error("Free For All and Multi Battles cannot be a Best-of series.");
 			}
 			return value;
 		},

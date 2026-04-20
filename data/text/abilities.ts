@@ -1248,6 +1248,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		addItem: "#recycle",
 	},
+	piercingdrill: {
+		name: "Piercing Drill",
+		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+	},
 	pixilate: {
 		name: "Pixilate",
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -1763,6 +1767,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Speed Boost",
 		desc: "This Pokemon's Speed is raised by 1 stage at the end of each full turn it has been on the field.",
 		shortDesc: "This Pokemon's Speed is raised 1 stage at the end of each full turn on the field.",
+	},
+	spicyspray: {
+		name: "Spicy Spray",
+		shortDesc: "If this Pokemon is hit by an attack, the attacker becomes burned.",
 	},
 	stakeout: {
 		name: "Stakeout",

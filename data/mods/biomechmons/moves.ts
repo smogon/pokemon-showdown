@@ -298,17 +298,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else {
 					source.m.scrambled.moves.push({ thing: targetAbility.id, inSlot: 'Ability' });
 					const bmmMove = Dex.moves.get(targetAbility.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.calculatePP(move, ppUps);
 					const newMove = {
 						move: bmmMove.name,
 						id: bmmMove.id,
-						pp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
-						maxpp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: bmmMove.target,
 						disabled: false,
 						used: false,
 					};
 					source.baseMoveSlots.push(newMove);
 					source.moveSlots.push(newMove);
+					source.ppUps.push(ppUps);
 				}
 			}
 			this.singleEvent('Start', sourceAbility, target.abilityState, target);
@@ -321,17 +324,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else {
 					target.m.scrambled.moves.push({ thing: sourceAbility.id, inSlot: 'Ability' });
 					const bmmMove = Dex.moves.get(sourceAbility.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.calculatePP(move, ppUps);
 					const newMove = {
 						move: bmmMove.name,
 						id: bmmMove.id,
-						pp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
-						maxpp: bmmMove.noPPBoosts ? bmmMove.pp : bmmMove.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: bmmMove.target,
 						disabled: false,
 						used: false,
 					};
 					target.baseMoveSlots.push(newMove);
 					target.moveSlots.push(newMove);
+					target.ppUps.push(ppUps);
 				}
 			}
 		},
