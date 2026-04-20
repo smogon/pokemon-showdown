@@ -69,6 +69,14 @@ function renderSlot(
 
     const pending = player.pendingEffect;
     const isSERPending = !isAi && pending?.filter?.startsWith('ser_target:') && pending.needed === 0;
+    
+    // Pokemon Power Targeting Overlays
+    const isDamageSwapFrom = !isAi && pending?.filter === 'damage_swap_from';
+    const isDamageSwapTo = !isAi && pending?.filter?.startsWith('damage_swap_to:');
+    const isRainDanceTarget = !isAi && pending?.filter?.startsWith('rain_dance_target:');
+    const isEnergyTransTo = !isAi && pending?.filter?.startsWith('energy_trans_to:');
+    const isLureTarget = isAi && pending?.filter?.startsWith('lure_target:') && context === 'bench';
+
     const isOpponentTargeted = !!trainerEffect?.requiresTarget && !!trainerEffect?.opponentTarget;
     const isOwnTargetedTrainer = !!trainerEffect?.requiresTarget && !trainerEffect?.opponentTarget;
     const isSelectedEnergy = !!selectedCard && isEnergyCard(selectedCard);
@@ -97,34 +105,64 @@ function renderSlot(
                 btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
                 overlayLabel = 'Target';
                 overlayColor = 'rgba(220,53,69,0.4)';
+            } else if (isLureTarget) {
+                const eUid = parseInt(pending!.filter!.split(':')[1]);
+                btnValue = `/tcg luretarget ${eUid} ${targetSlot}`;
+                overlayLabel = 'Pull Active';
+                overlayColor = 'rgba(220,53,69,0.5)';
             }
         } else {
             if (isSERPending && instance.attachedEnergy.length > 0) {
                 overlayLabel = 'Pick Energy';
                 overlayColor = 'rgba(220,53,69,0.3)';
+            } else if (isDamageSwapFrom && instance.currentDamage > 0) {
+                btnValue = `/tcg damageswapfrom ${instance.uid}`;
+                overlayLabel = 'Take 10';
+                overlayColor = 'rgba(220,53,69,0.5)';
+            } else if (isDamageSwapTo) {
+                const fromUid = parseInt(pending!.filter!.split(':')[1]);
+                if (instance.uid !== fromUid && (instance.currentDamage + 10) <= instance.maxHP) {
+                    btnValue = `/tcg damageswapto ${fromUid} ${instance.uid}`;
+                    overlayLabel = 'Give 10';
+                    overlayColor = 'rgba(40,167,69,0.5)';
+                }
+            } else if (isRainDanceTarget && instance.topCard.types?.includes('Water')) {
+                const eUid = parseInt(pending!.filter!.split(':')[1]);
+                btnValue = `/tcg raindancetarget ${eUid} ${targetSlot}`;
+                overlayLabel = 'Attach';
+                overlayColor = 'rgba(0,123,255,0.5)';
+            } else if (isEnergyTransTo) {
+                const parts = pending!.filter!.split(':');
+                const fromUid = parseInt(parts[1]);
+                const eUid = parseInt(parts[2]);
+                if (instance.uid !== fromUid) {
+                    btnValue = `/tcg energytransto ${fromUid} ${eUid} ${targetSlot}`;
+                    overlayLabel = 'Move Here';
+                    overlayColor = 'rgba(40,167,69,0.5)';
+                }
             } else if (pending?.trainerName === 'Pokémon Breeder' && pending.selected.length >= pending.needed) {
                 if (instance.stage === 0) {
                     btnValue = `/tcg breederplace ${targetSlot}`;
                     overlayLabel = 'Breed Here';
                     overlayColor = 'rgba(255,140,0,0.45)';
                 }
-            } else if (isSelectedEnergy) {
+            } else if (isSelectedEnergy && !pending) {
                 btnValue = `/tcg attach ${targetSlot}`;
                 overlayLabel = 'Attach';
                 overlayColor = 'rgba(0,123,255,0.3)';
-            } else if (isSelectedEvolution && selectedCard!.evolvesFrom === card.name) {
+            } else if (isSelectedEvolution && selectedCard!.evolvesFrom === card.name && !pending) {
                 btnValue = `/tcg evolve ${targetSlot}`;
                 overlayLabel = 'Evolve';
                 overlayColor = 'rgba(255,193,7,0.4)';
-            } else if (isOwnTargetedTrainer) {
+            } else if (isOwnTargetedTrainer && !pending) {
                 btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
                 overlayLabel = 'Target';
                 overlayColor = 'rgba(153,50,204,0.4)';
-            } else if (!selectedCard && context === 'bench' && !player.active) {
+            } else if (!selectedCard && context === 'bench' && !player.active && !pending) {
                 btnValue = `/tcg promote ${targetSlot}`;
                 overlayLabel = 'Promote';
                 overlayColor = 'rgba(40,167,69,0.3)';
-            } else if (!selectedCard && context === 'active') {
+            } else if (!selectedCard && context === 'active' && !pending) {
                 const isSelectedField = instance.uid === player.selectedUid;
                 btnValue = isSelectedField ? `/tcg deselect` : `/tcg select ${instance.uid}`;
             }
@@ -181,20 +219,26 @@ function renderSlot(
 function renderHandCard(card: InGameCard, match: TCGMatch): string {
     const isSelected = card.uid === match.player.selectedUid;
     const pending = match.player.pendingEffect;
+    
+    const isRainDanceEnergy = pending?.filter === 'rain_dance_energy' && card.name === 'Water Energy';
+    const isLureEnergy = pending?.filter === 'lure_energy' && card.name === 'Fire Energy';
     const isPendingSelected = pending && pending.selected.includes(card.uid);
-    const isPendingCandidate = pending && !pending.selected.includes(card.uid) && card.uid !== pending.trainerUid;
+    const isPendingCandidate = pending && !pending.selected.includes(card.uid) && card.uid !== pending.trainerUid && pending.type !== 'use_power';
 
     let border = isSelected ? '2px solid #007bff' : '2px solid transparent';
     if (isPendingSelected) border = '2px solid #e67e00';
     if (isPendingCandidate) border = '1px dashed #e67e00';
+    if (isRainDanceEnergy || isLureEnergy) border = '2px solid #28a745';
 
     let btnValue = '';
     if (!match.winner) {
         if (pending) {
-            if (card.uid !== pending.trainerUid) {
-                btnValue = isPendingSelected
-                    ? `/tcg pendingdeselect ${card.uid}`
-                    : `/tcg pendingselect ${card.uid}`;
+            if (isRainDanceEnergy) {
+                btnValue = `/tcg raindancepick ${card.uid}`;
+            } else if (isLureEnergy) {
+                btnValue = `/tcg lurepick ${card.uid}`;
+            } else if (card.uid !== pending.trainerUid && pending.type !== 'use_power') {
+                btnValue = isPendingSelected ? `/tcg pendingdeselect ${card.uid}` : `/tcg pendingselect ${card.uid}`;
             }
         } else {
             btnValue = isSelected ? `/tcg deselect` : `/tcg select ${card.uid}`;
@@ -246,7 +290,46 @@ function renderPokedexUI(match: TCGMatch): string {
 function renderPendingUI(match: TCGMatch): string {
     const pending = match.player.pendingEffect!;
     let html = `<div style="background:#fff3cd;border:1px solid #ffc107;padding:8px;border-radius:6px;margin-bottom:5px;">`;
-    html += `<strong>🃏 ${pending.trainerName}</strong> — `;
+    
+    const icon = pending.type === 'use_power' ? '✨' : '🃏';
+    html += `<strong>${icon} ${pending.trainerName}</strong> — `;
+
+    if (pending.type === 'use_power') {
+        if (pending.filter === 'damage_swap_from') {
+            html += `Select one of your Pokémon to move 10 damage <strong>FROM</strong>.`;
+        } else if (pending.filter?.startsWith('damage_swap_to:')) {
+            html += `Select a different Pokémon to move 10 damage <strong>TO</strong>.`;
+        } else if (pending.filter === 'rain_dance_energy') {
+            html += `Select a <strong>Water Energy</strong> from your hand.`;
+        } else if (pending.filter?.startsWith('rain_dance_target:')) {
+            html += `Select a <strong>Water Pokémon</strong> on your field to attach the Energy to.`;
+        } else if (pending.filter === 'energy_trans_from') {
+            html += `Select a <strong>Grass Energy</strong> attached to your Pokémon to move:</div>`;
+            html += `<div style="background:#d4edda;border:1px solid #28a745;padding:5px;border-radius:5px;overflow-x:auto;white-space:nowrap;">`;
+            for (const inst of match.player.getAllInPlay()) {
+                for (let i = 0; i < inst.attachedEnergy.length; i++) {
+                    const e = inst.attachedEnergy[i];
+                    if (e.name === 'Grass Energy') {
+                        html += `<button class="button" name="send" value="/tcg energytranspick ${inst.uid} ${e.uid}" style="background:transparent;border:1px solid #28a745;padding:2px 4px;margin:2px;border-radius:4px;cursor:pointer;font-size:11px;">` +
+                            `<img src="${e.images.small}" style="width:40px;display:block;" alt="${e.name}"/><span style="font-size:9px;">${inst.topCard.name}</span></button>`;
+                    }
+                }
+            }
+            html += `</div><button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;">Cancel</button>`;
+            return html;
+        } else if (pending.filter?.startsWith('energy_trans_to:')) {
+            html += `Select a different Pokémon to move the Grass Energy <strong>TO</strong>.`;
+        } else if (pending.filter === 'lure_energy') {
+            html += `Select a <strong>Fire Energy</strong> from your hand to discard.`;
+        } else if (pending.filter?.startsWith('lure_target:')) {
+            html += `Select a Pokémon on your opponent's <strong>Bench</strong> to pull Active.`;
+        }
+        
+        if (pending.filter !== 'energy_trans_from') {
+            html += `</div><button class="button" name="send" value="/tcg pendingcancel" style="color:red;font-size:11px;margin-top:4px;">Cancel ${pending.trainerName}</button>`;
+        }
+        return html;
+    }
 
     if (pending.type === 'discard_for_effect') {
         if (pending.filter?.startsWith('superpotion_target:')) {
@@ -501,14 +584,149 @@ export const commands: Chat.ChatCommands = {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
+            if (match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
+            
             const args = target.split(' ');
             const uid = parseInt(args[0]);
             const powerIndex = args[1] ? parseInt(args[1]) : 0;
             if (isNaN(uid)) return this.errorReply('Invalid UID.');
+
+            const inst = match.player.findInPlay(uid);
+            if (!inst) return this.errorReply('Pokémon not found.');
+            const power = inst.topCard.abilities?.[powerIndex];
+            if (!power) return this.errorReply('Power not found.');
+
+            // Intercept multi-step targeted powers
+            if (power.name === 'Damage Swap' || power.name === 'Rain Dance' || power.name === 'Energy Trans' || power.name === 'Lure') {
+                if (inst.isPowerBlocked()) return this.errorReply(`Power is blocked by ${inst.status.volatile}.`);
+                
+                let filterStr = '';
+                if (power.name === 'Damage Swap') filterStr = 'damage_swap_from';
+                if (power.name === 'Rain Dance') filterStr = 'rain_dance_energy';
+                if (power.name === 'Energy Trans') filterStr = 'energy_trans_from';
+                if (power.name === 'Lure') filterStr = 'lure_energy';
+
+                match.player.pendingEffect = {
+                    type: 'use_power' as any,
+                    trainerUid: uid,
+                    trainerName: power.name,
+                    needed: powerIndex, // Store the power index here
+                    selected: [],
+                    filter: filterStr
+                };
+                return this.refreshPage('tcg-match');
+            }
+
+            // Standard instant powers (like Energy Burn)
             if (match.usePokemonPower(true, uid, powerIndex)) {
                 this.refreshPage('tcg-match');
             } else {
                 this.errorReply('Cannot use that Pokémon Power right now.');
+            }
+        },
+
+        // ---- Power UI Event Handlers ----------------------------------------
+
+        damageswapfrom(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.filter !== 'damage_swap_from') return;
+            const uid = parseInt(target);
+            if (isNaN(uid)) return;
+            match.player.pendingEffect.filter = `damage_swap_to:${uid}`;
+            this.refreshPage('tcg-match');
+        },
+
+        damageswapto(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect?.filter?.startsWith('damage_swap_to:')) return;
+            const pending = match.player.pendingEffect;
+            const args = target.split(' ');
+            const fromUid = parseInt(args[0]);
+            const toUid = parseInt(args[1]);
+            
+            if (match.usePokemonPower(true, pending.trainerUid, pending.needed, { fromUid, toUid })) {
+                match.player.pendingEffect = null;
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply('Failed to use Damage Swap.');
+            }
+        },
+
+        raindancepick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.filter !== 'rain_dance_energy') return;
+            const uid = parseInt(target);
+            if (isNaN(uid)) return;
+            match.player.pendingEffect.filter = `rain_dance_target:${uid}`;
+            this.refreshPage('tcg-match');
+        },
+
+        raindancetarget(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect?.filter?.startsWith('rain_dance_target:')) return;
+            const pending = match.player.pendingEffect;
+            const args = target.split(' ');
+            const eUid = parseInt(args[0]);
+            const slot = args[1] === 'active' ? 'active' : parseInt(args[1]);
+
+            if (match.usePokemonPower(true, pending.trainerUid, pending.needed, { energyUid: eUid, targetSlot: slot })) {
+                match.player.pendingEffect = null;
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply('Failed to use Rain Dance.');
+            }
+        },
+
+        energytranspick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.filter !== 'energy_trans_from') return;
+            const args = target.split(' ');
+            const fromUid = parseInt(args[0]);
+            const eUid = parseInt(args[1]);
+            match.player.pendingEffect.filter = `energy_trans_to:${fromUid}:${eUid}`;
+            this.refreshPage('tcg-match');
+        },
+
+        energytransto(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect?.filter?.startsWith('energy_trans_to:')) return;
+            const pending = match.player.pendingEffect;
+            const args = target.split(' ');
+            const fromUid = parseInt(args[0]);
+            const eUid = parseInt(args[1]);
+            const slot = args[2] === 'active' ? 'active' : parseInt(args[2]);
+            const targetInst = slot === 'active' ? match.player.active : match.player.bench[slot];
+
+            if (targetInst && match.usePokemonPower(true, pending.trainerUid, pending.needed, { energyUid: eUid, fromUid, toUid: targetInst.uid })) {
+                match.player.pendingEffect = null;
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply('Failed to use Energy Trans.');
+            }
+        },
+
+        lurepick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.filter !== 'lure_energy') return;
+            const uid = parseInt(target);
+            if (isNaN(uid)) return;
+            match.player.pendingEffect.filter = `lure_target:${uid}`;
+            this.refreshPage('tcg-match');
+        },
+
+        luretarget(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || !match.player.pendingEffect?.filter?.startsWith('lure_target:')) return;
+            const pending = match.player.pendingEffect;
+            const args = target.split(' ');
+            const eUid = parseInt(args[0]);
+            const slot = parseInt(args[1]);
+
+            if (match.usePokemonPower(true, pending.trainerUid, pending.needed, { energyUid: eUid, benchIndex: slot })) {
+                match.player.pendingEffect = null;
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply('Failed to use Lure.');
             }
         },
 

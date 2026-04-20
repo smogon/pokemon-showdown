@@ -45,28 +45,24 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     'Damage Swap': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { fromUid?: number; toUid?: number } | undefined;
-        if (!data?.fromUid || !data?.toUid) {
-            match.addLog(`Damage Swap: Provide fromUid and toUid.`);
-            return false;
-        }
+        if (!data?.fromUid || !data?.toUid) return false;
+        
         const from = player.findInPlay(data.fromUid);
         const to = player.findInPlay(data.toUid);
-        if (!from || !to) {
-            match.addLog(`Damage Swap: Invalid targets.`);
-            return false;
-        }
+        if (!from || !to) return false;
+        
         if (from.currentDamage < 10) {
-            match.addLog(`Damage Swap: ${from.topCard.name} has no damage counters to move.`);
+            match.addLog(`Damage Swap: ${from.topCard.name} has no damage to move.`);
             return false;
         }
-        const toMaxHP = to.maxHP;
-        if (to.currentDamage + 10 >= toMaxHP) {
-            match.addLog(`Damage Swap: Would KO ${to.topCard.name} — not allowed.`);
+        if (to.currentDamage + 10 >= to.maxHP) {
+            match.addLog(`Damage Swap: Cannot KO your own Pokémon.`);
             return false;
         }
+        
         from.currentDamage -= 10;
         to.currentDamage += 10;
-        match.addLog(`Damage Swap: Moved 1 damage counter from ${from.topCard.name} to ${to.topCard.name}.`);
+        match.addLog(`Damage Swap: Moved 10 damage from ${from.topCard.name} to ${to.topCard.name}.`);
         return true;
     },
 
@@ -77,33 +73,15 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     'Rain Dance': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { energyUid?: number; targetSlot?: 'active' | number } | undefined;
-        if (data?.energyUid === undefined || data?.targetSlot === undefined) {
-            match.addLog(`Rain Dance: Provide energyUid and targetSlot.`);
-            return false;
-        }
+        if (data?.energyUid === undefined || data?.targetSlot === undefined) return false;
+        
         const energyIdx = player.hand.findIndex(c => c.uid === data.energyUid);
-        if (energyIdx === -1) {
-            match.addLog(`Rain Dance: Energy card not in hand.`);
-            return false;
-        }
-        const energyCard = player.hand[energyIdx];
-        if (energyCard.name !== 'Water Energy') {
-            match.addLog(`Rain Dance: Can only attach Water Energy.`);
-            return false;
-        }
-        const targetInst = data.targetSlot === 'active'
-            ? player.active
-            : player.bench[data.targetSlot as number];
-        if (!targetInst) {
-            match.addLog(`Rain Dance: No Pokémon in that slot.`);
-            return false;
-        }
-        if (!targetInst.topCard.types?.includes('Water')) {
-            match.addLog(`Rain Dance: ${targetInst.topCard.name} is not a Water Pokémon.`);
-            return false;
-        }
-        player.hand.splice(energyIdx, 1);
-        targetInst.attachedEnergy.push(energyCard);
+        if (energyIdx === -1 || player.hand[energyIdx].name !== 'Water Energy') return false;
+        
+        const targetInst = data.targetSlot === 'active' ? player.active : player.bench[data.targetSlot as number];
+        if (!targetInst || !targetInst.topCard.types?.includes('Water')) return false;
+        
+        targetInst.attachedEnergy.push(player.hand.splice(energyIdx, 1)[0]);
         match.addLog(`Rain Dance: Attached Water Energy to ${targetInst.topCard.name}.`);
         return true;
     },
@@ -127,23 +105,17 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     'Energy Trans': (match, isPlayer, owner, power, targetData) => {
         const player = isPlayer ? match.player : match.ai;
         const data = targetData as { energyUid?: number; fromUid?: number; toUid?: number } | undefined;
-        if (data?.energyUid === undefined || data?.fromUid === undefined || data?.toUid === undefined) {
-            match.addLog(`Energy Trans: Provide energyUid, fromUid, toUid.`);
-            return false;
-        }
+        if (data?.energyUid === undefined || data?.fromUid === undefined || data?.toUid === undefined) return false;
+        
         const from = player.findInPlay(data.fromUid);
         const to = player.findInPlay(data.toUid);
         if (!from || !to) return false;
+        
         const eIdx = from.attachedEnergy.findIndex(e => e.uid === data.energyUid);
-        if (eIdx === -1) return false;
-        const energy = from.attachedEnergy[eIdx];
-        if (!energy.subtypes?.includes('Basic')) {
-            match.addLog(`Energy Trans: Can only move Basic Energy.`);
-            return false;
-        }
-        from.attachedEnergy.splice(eIdx, 1);
-        to.attachedEnergy.push(energy);
-        match.addLog(`Energy Trans: Moved ${energy.name} from ${from.topCard.name} to ${to.topCard.name}.`);
+        if (eIdx === -1 || from.attachedEnergy[eIdx].name !== 'Grass Energy') return false;
+        
+        to.attachedEnergy.push(from.attachedEnergy.splice(eIdx, 1)[0]);
+        match.addLog(`Energy Trans: Moved Grass Energy to ${to.topCard.name}.`);
         return true;
     },
 
@@ -156,20 +128,14 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
         const player = isPlayer ? match.player : match.ai;
         const opponent = isPlayer ? match.ai : match.player;
         const data = targetData as { energyUid?: number; benchIndex?: number } | undefined;
-        if (data?.energyUid === undefined || data?.benchIndex === undefined) {
-            match.addLog(`Lure: Provide energyUid and benchIndex.`);
-            return false;
-        }
+        if (data?.energyUid === undefined || data?.benchIndex === undefined) return false;
+        
         const eIdx = player.hand.findIndex(c => c.uid === data.energyUid);
-        if (eIdx === -1 || player.hand[eIdx].name !== 'Fire Energy') {
-            match.addLog(`Lure: Requires discarding a Fire Energy from hand.`);
-            return false;
-        }
+        if (eIdx === -1 || player.hand[eIdx].name !== 'Fire Energy') return false;
+        
         const benched = opponent.bench[data.benchIndex as number];
-        if (!benched) {
-            match.addLog(`Lure: No Pokémon on that bench slot.`);
-            return false;
-        }
+        if (!benched) return false;
+        
         player.discard.push(player.hand.splice(eIdx, 1)[0]);
         const currentActive = opponent.active;
         opponent.active = benched;
@@ -183,25 +149,19 @@ const POWER_HANDLERS: Record<string, PowerEffectHandler> = {
     // on the attacker. This is applied in the engine's applyDamageToInstance().
     // We register it here for completeness; it returns false when called as active.
 
-    'Strikes Back': (_m, _ip, _o, _p, _t) => {
-        return false;
-    },
+    'Strikes Back': () => false,
 
     // ---- Mr. Mime: Invisible Wall -------------------------------------------
     // Passive — prevents 30+ damage from attacks to Mr. Mime.
     // Handled in engine computeFinalDamage / damage pipeline.
 
-    'Invisible Wall': (_m, _ip, _o, _p, _t) => {
-        return false;
-    },
+    'Invisible Wall': () => false,
 
     // ---- Clefairy: Metronome (Power version — Jungle set) ------------------
     // Use one of the Defending Pokémon's attacks as this attack.
     // This is an attack, not a power — registered in attack-effects. Stub here.
 
-    'Metronome': (_m, _ip, _o, _p, _t) => {
-        return false;
-    },
+    'Metronome': () => false,
 
     // ---- Fossil / Neo additions: placeholder pattern ------------------------
     // New powers from future sets follow the same signature; just add entries.
@@ -232,7 +192,6 @@ export function checkPassivePowers(
     attackerInst?: PokemonInstance
 ): void {
     const player = targetIsPlayer ? match.player : match.ai;
-    const opponent = targetIsPlayer ? match.ai : match.player;
 
     for (const inst of player.getAllInPlay()) {
         if (inst.isPowerBlocked()) continue;

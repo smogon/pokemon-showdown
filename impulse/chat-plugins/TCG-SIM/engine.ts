@@ -267,7 +267,7 @@ export class TCGPlayer {
     selectedUid: number | null = null;
 
     pendingEffect: {
-        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck';
+        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck' | 'use_power';
         trainerUid: number;
         trainerName: string;
         needed: number;
@@ -347,8 +347,7 @@ export function validateDeck(cards: TCGCard[]): DeckValidationResult {
 }
 
 // ---------------------------------------------------------------------------
-// Damage calculation context — passed into attack/power effects so they can
-// modify the pipeline without touching match internals directly.
+// Damage calculation context
 // ---------------------------------------------------------------------------
 
 export interface DamageContext {
@@ -958,7 +957,7 @@ export class TCGMatch {
 
         const success = effect.execute(this, isPlayer, card, targetSlot);
         if (success) {
-            // Recalculate index in case the effect (like Professor Oak) mutated the hand
+            // Recalculate index in case the effect mutated the hand
             const currentIdx = activePlayer.hand.findIndex(c => c.uid === uid);
             if (currentIdx !== -1) {
                 activePlayer.hand.splice(currentIdx, 1);
@@ -1114,7 +1113,18 @@ export class TCGMatch {
 
         if (ctx.discardAttackerEnergy > 0 && !this.winner) {
             for (let i = 0; i < ctx.discardAttackerEnergy && attackerInst.attachedEnergy.length > 0; i++) {
-                attacker.discard.push(attackerInst.attachedEnergy.pop()!);
+                let discarded = false;
+                if (ctx.discardAttackerEnergyTypes.length > 0) {
+                    const targetType = ctx.discardAttackerEnergyTypes[i % ctx.discardAttackerEnergyTypes.length];
+                    const idx = attackerInst.attachedEnergy.findIndex(e => e.name === `${targetType} Energy`);
+                    if (idx !== -1) {
+                        attacker.discard.push(attackerInst.attachedEnergy.splice(idx, 1)[0]);
+                        discarded = true;
+                    }
+                }
+                if (!discarded) {
+                    attacker.discard.push(attackerInst.attachedEnergy.pop()!);
+                }
             }
             this.addLog(`${attackerInst.topCard.name} discarded ${ctx.discardAttackerEnergy} Energy.`);
         }
@@ -1130,20 +1140,23 @@ export class TCGMatch {
     }
 
     private finishAttack(isPlayer: boolean) {
-        if (!this.winner) this.performCheckup(isPlayer); // Checkup happens at the end of the turn
+        if (!this.winner) this.performCheckup(isPlayer);
 
         this.expireItems(isPlayer, 'end_of_your_turn');
         this.expireItems(!isPlayer, 'end_of_opponent_turn');
         
-        // Clean up current player's end-of-turn flags
         const owner = this.playerOf(isPlayer);
-        for (const inst of owner.getAllInPlay()) this.clearPerTurnFlags(inst);
         owner.hasRetreatedThisTurn = false;
+
+        // CRITICAL FIX: Clear the NEXT player's turn flags at the start of their turn!
+        // This ensures moves like Agility and Barrier properly protect you during their turn.
+        const nextPlayer = this.playerOf(!isPlayer);
+        for (const inst of nextPlayer.getAllInPlay()) this.clearPerTurnFlags(inst);
 
         if (isPlayer) this.player.selectedUid = null;
         
         if (!this.winner) {
-            this.hasAttackedThisTurn = false; // Reset for the next player!
+            this.hasAttackedThisTurn = false;
             this.hasAttachedEnergy = false;
             this.turn = isPlayer ? 'ai' : 'player';
             if (this.turn === 'ai') this.executeAITurn();
@@ -1159,8 +1172,11 @@ export class TCGMatch {
         this.performCheckup(true);
         if (this.winner) return;
         this.expireItems(true, 'end_of_your_turn');
-        this.expireItems(false, 'end_of_opponent_turn'); // Added for correctness
-        for (const inst of this.player.getAllInPlay()) this.clearPerTurnFlags(inst);
+        this.expireItems(false, 'end_of_opponent_turn');
+        
+        // Shift protection logic. Clear the AI's flags before they start their turn.
+        for (const inst of this.ai.getAllInPlay()) this.clearPerTurnFlags(inst);
+
         this.player.selectedUid = null;
         this.player.hasRetreatedThisTurn = false;
         this.hasAttachedEnergy = false;
@@ -1194,9 +1210,7 @@ export class TCGMatch {
             }
         }
 
-        // Iterate over a safe snapshot of the hand
         for (const card of [...this.ai.hand]) {
-            // Verify the card hasn't been discarded by a previous Trainer effect (like Computer Search)
             if (!this.ai.hand.some(c => c.uid === card.uid)) continue;
 
             if (isTrainerCard(card)) {
@@ -1232,6 +1246,71 @@ export class TCGMatch {
             }
         }
 
+        // ---- AI Pokémon Powers ----
+        let powerUsed = true;
+        let powerLoops = 0;
+        while (powerUsed && powerLoops < 5 && !this.winner) {
+            powerUsed = false;
+            powerLoops++;
+            
+            for (const inst of this.ai.getAllInPlay()) {
+                if (inst.isPowerBlocked()) continue;
+                
+                for (let pIdx = 0; pIdx < (inst.topCard.abilities?.length || 0); pIdx++) {
+                    const power = inst.topCard.abilities![pIdx];
+                    if (power.type !== 'Pokémon Power' && power.type !== 'Poké-Power') continue;
+
+                    if (power.name === 'Rain Dance') {
+                        const waterIdx = this.ai.hand.findIndex(c => c.name === 'Water Energy');
+                        if (waterIdx !== -1) {
+                            const target = this.ai.active?.topCard.types?.includes('Water') ? this.ai.active : this.ai.bench.find(b => b?.topCard.types?.includes('Water'));
+                            if (target) {
+                                const targetSlot = target === this.ai.active ? 'active' : this.ai.benchSlotOf(target);
+                                if (this.usePokemonPower(false, inst.uid, pIdx, { energyUid: this.ai.hand[waterIdx].uid, targetSlot })) {
+                                    powerUsed = true;
+                                }
+                            }
+                        }
+                    } else if (power.name === 'Damage Swap') {
+                        if (this.ai.active && this.ai.active.currentDamage > 0) {
+                            const healthyBench = this.ai.bench.find(b => b && b.currentDamage === 0 && b.maxHP >= 50);
+                            if (healthyBench) {
+                                if (this.usePokemonPower(false, inst.uid, pIdx, { fromUid: this.ai.active.uid, toUid: healthyBench.uid })) {
+                                    powerUsed = true;
+                                }
+                            }
+                        }
+                    } else if (power.name === 'Energy Trans') {
+                        if (this.ai.active && this.ai.active.attachedEnergy.length < 3) {
+                            const benchedWithGrass = this.ai.bench.find(b => b && b.attachedEnergy.some(e => e.name === 'Grass Energy'));
+                            if (benchedWithGrass) {
+                                const grassEnergy = benchedWithGrass.attachedEnergy.find(e => e.name === 'Grass Energy');
+                                if (grassEnergy && this.usePokemonPower(false, inst.uid, pIdx, { energyUid: grassEnergy.uid, fromUid: benchedWithGrass.uid, toUid: this.ai.active.uid })) {
+                                    powerUsed = true;
+                                }
+                            }
+                        }
+                    } else if (power.name === 'Energy Burn') {
+                        if (inst === this.ai.active && inst.attachedEnergy.some(e => e.name !== 'Fire Energy')) {
+                            if (this.usePokemonPower(false, inst.uid, pIdx, {})) {
+                                powerUsed = true;
+                            }
+                        }
+                    } else if (power.name === 'Lure' && powerLoops === 1) { 
+                        const fireIdx = this.ai.hand.findIndex(c => c.name === 'Fire Energy');
+                        if (fireIdx !== -1) {
+                            const weakBenchIdx = this.player.bench.findIndex(b => b && b.currentHP <= 50);
+                            if (weakBenchIdx !== -1) {
+                                if (this.usePokemonPower(false, inst.uid, pIdx, { energyUid: this.ai.hand[fireIdx].uid, benchIndex: weakBenchIdx })) {
+                                    powerUsed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (!this.hasAttachedEnergy && this.ai.active) {
             const energy = this.ai.hand.find(c => isEnergyCard(c));
             if (energy) this.attachEnergy(false, (energy as InGameCard).uid, 'active');
@@ -1255,7 +1334,9 @@ export class TCGMatch {
             this.performCheckup(false);
             this.expireItems(false, 'end_of_your_turn');
             this.expireItems(true, 'end_of_opponent_turn');
-            for (const inst of this.ai.getAllInPlay()) this.clearPerTurnFlags(inst);
+            
+            // Shift protection logic. Clear the player's flags before they start their turn.
+            for (const inst of this.player.getAllInPlay()) this.clearPerTurnFlags(inst);
             this.ai.hasRetreatedThisTurn = false;
 
             this.addLog('AI ends turn without attacking.');
