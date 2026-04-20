@@ -136,7 +136,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				// the game currently never ignores immunities
 				if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 					this.battle.debug('immune to status');
-					if ((sourceEffect as Move)?.status || sourceEffect?.effectType === 'Ability') {
+					if ((sourceEffect as Move)?.status ||
+						// run for defensive abilities; TODO: check Flame Body
+						(sourceEffect?.effectType === 'Ability' && source !== this.battle.activePokemon)) {
 						this.battle.add('-immune', this);
 					}
 					return false;

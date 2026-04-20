@@ -1206,6 +1206,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onDisableMove(pokemon) {
 			if (!pokemon.ateBerry) pokemon.disableMove('belch');
 		},
+		onTry(source) {
+			return source.ateBerry;
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
@@ -12249,7 +12252,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -12285,7 +12288,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -18736,7 +18739,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
