@@ -754,7 +754,9 @@ export const commands: Chat.ChatCommands = {
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
 						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
 					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
-					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
+					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
+						details["&#10003; Boosted by Sheer Force"] = "";
+					}
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
 					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
@@ -2128,7 +2130,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	faq(target, room, user) {
-		target = toID(target);
+		target = toID(this.splitOne(target)[0]);
 		const showAll = target === 'all';
 		if (showAll && this.shouldBroadcast()) {
 			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);

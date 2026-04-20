@@ -465,7 +465,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	porygon2: {
-		tier: "UUBL",
+		tier: "(OU)",
 	},
 	omanyte: {
 		tier: "ZU",

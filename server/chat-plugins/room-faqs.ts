@@ -161,7 +161,7 @@ export const commands: Chat.ChatCommands = {
 	roomfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!roomFaqs[room.roomid]) throw new Chat.ErrorMessage("This room has no FAQ topics.");
-		let topic: string = toID(target);
+		let topic: string = toID(this.splitOne(target)[0]);
 		if (topic === 'constructor') return false;
 		if (!topic) {
 			return this.parse(`/join view-roomfaqs-${room.roomid}`);
