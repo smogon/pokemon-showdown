@@ -1425,6 +1425,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Landorus' && pokemon.species.name !== 'Landorus-Ancestral') {
 				pokemon.formeChange('Landorus-Ancestral', this.effect, true);
+				pokemon.setAbility('Download', pokemon);
 			}
 		},
 		target: "normal",
