@@ -3,8 +3,7 @@ import { resolvePokemonPower, getPowerRequirements } from './power-effects';
 import { resolveAttackEffect } from './attack-effects';
 
 // ---------------------------------------------------------------------------
-// Card data interfaces — mirrors the TCG API JSON shape exactly.
-// Future sets extend naturally; no changes needed here when new cards arrive.
+// Card data interfaces
 // ---------------------------------------------------------------------------
 
 export interface WeaknessResistance {
@@ -52,7 +51,7 @@ export interface InGameCard extends TCGCard {
 }
 
 // ---------------------------------------------------------------------------
-// Attached items — Tools / temporary Trainer cards on a Pokémon
+// Attached items
 // ---------------------------------------------------------------------------
 
 export interface AttachedItem {
@@ -62,8 +61,6 @@ export interface AttachedItem {
 
 // ---------------------------------------------------------------------------
 // Status conditions
-// Poisoned / Burned can coexist with Asleep/Paralyzed/Confused (official rule).
-// We store them separately so both can be active at once.
 // ---------------------------------------------------------------------------
 
 export type VolatileStatus = 'asleep' | 'confused' | 'paralyzed' | null;
@@ -90,8 +87,20 @@ export class PokemonInstance {
     currentDamage: number;
     turnPlaced: number;
     status: StatusState;
-    protectedThisTurn: boolean;
-    damageModThisTurn: number;
+    
+    // Per-turn and advanced mechanic states
+    protectedThisTurn: boolean = false;
+    damageModThisTurn: number = 0;
+    poisonDamage: number = 10;
+    blindedThisTurn: boolean = false; // Sand-attack
+    damageThresholdProtection: number = 0; // Harden
+    destinyBondActive: boolean = false; // Destiny Bond
+    usedAttacks: string[] = []; // Leek Slap
+    overrideWeakness: string | null = null; // Conversion 1
+    overrideResistance: string | null = null; // Conversion 2
+    damageTakenLastTurn: number = 0; // Mirror Move
+    damageTakenThisTurn: number = 0;
+    disabledAttackIndex: number | null = null; // Amnesia
 
     constructor(basic: InGameCard, turnPlaced = 0) {
         this.uid = basic.uid;
@@ -101,8 +110,6 @@ export class PokemonInstance {
         this.currentDamage = 0;
         this.turnPlaced = turnPlaced;
         this.status = freshStatus();
-        this.protectedThisTurn = false;
-        this.damageModThisTurn = 0;
     }
 
     get topCard(): InGameCard {
@@ -138,6 +145,9 @@ export class PokemonInstance {
 
     clearAllStatus() {
         this.status = freshStatus();
+        this.poisonDamage = 10;
+        this.overrideWeakness = null;
+        this.overrideResistance = null;
     }
 
     hasPower(powerName: string): boolean {
@@ -152,7 +162,7 @@ export class PokemonInstance {
 }
 
 // ---------------------------------------------------------------------------
-// Helper functions exported for use across files
+// Helper functions
 // ---------------------------------------------------------------------------
 
 const EVOLUTION_SUBTYPES = new Set(['Stage 1', 'Stage 2', 'MEGA', 'VMAX', 'VSTAR', 'GX', 'EX']);
@@ -267,7 +277,7 @@ export class TCGPlayer {
     selectedUid: number | null = null;
 
     pendingEffect: {
-        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck' | 'use_power';
+        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck' | 'use_power' | 'pick_defender_energy' | 'pick_amnesia' | 'pick_conversion';
         trainerUid: number;
         trainerName: string;
         needed: number;
@@ -363,6 +373,7 @@ export interface DamageContext {
     skipKnockout: boolean;
     statusToApply: VolatileStatus | null;
     poisonToApply: boolean;
+    toxicPoison: boolean;
     burnToApply: boolean;
     discardAttackerEnergy: number;
     discardAttackerEnergyTypes: string[];
@@ -371,6 +382,10 @@ export interface DamageContext {
     customLog: string[];
     forceOpponentSwitch: boolean;
     disableOpponentAttack: boolean;
+    discardDefenderEnergy: number;
+    changeWeakness: boolean;
+    changeResistance: boolean;
+    oneTimeUseAttack: string | null;
 }
 
 export function freshDamageContext(
@@ -392,6 +407,7 @@ export function freshDamageContext(
         skipKnockout: false,
         statusToApply: null,
         poisonToApply: false,
+        toxicPoison: false,
         burnToApply: false,
         discardAttackerEnergy: 0,
         discardAttackerEnergyTypes: [],
@@ -400,6 +416,10 @@ export function freshDamageContext(
         customLog: [],
         forceOpponentSwitch: false,
         disableOpponentAttack: false,
+        discardDefenderEnergy: 0,
+        changeWeakness: false,
+        changeResistance: false,
+        oneTimeUseAttack: null,
     };
 }
 
@@ -547,10 +567,6 @@ export class TCGMatch {
         if (this.logs.length > 30) this.logs.pop();
     }
 
-    // -----------------------------------------------------------------------
-    // Internal helpers
-    // -----------------------------------------------------------------------
-
     private playerOf(isPlayer: boolean): TCGPlayer {
         return isPlayer ? this.player : this.ai;
     }
@@ -578,11 +594,13 @@ export class TCGMatch {
     private clearPerTurnFlags(inst: PokemonInstance) {
         inst.protectedThisTurn = false;
         inst.damageModThisTurn = 0;
+        inst.blindedThisTurn = false;
+        inst.damageThresholdProtection = 0;
+        inst.destinyBondActive = false;
+        inst.damageTakenLastTurn = inst.damageTakenThisTurn;
+        inst.damageTakenThisTurn = 0;
+        inst.disabledAttackIndex = null;
     }
-
-    // -----------------------------------------------------------------------
-    // Pokémon Checkup — runs between turns
-    // -----------------------------------------------------------------------
 
     performCheckup(forPlayer: boolean) {
         const owner = this.playerOf(forPlayer);
@@ -590,8 +608,8 @@ export class TCGMatch {
         if (!inst || this.winner) return;
 
         if (inst.status.poisoned) {
-            inst.currentDamage += 10;
-            this.addLog(`${inst.topCard.name} is Poisoned — 10 damage!`);
+            inst.currentDamage += inst.poisonDamage;
+            this.addLog(`${inst.topCard.name} is Poisoned — ${inst.poisonDamage} damage!`);
             if (inst.isKnockedOut()) { this.processKnockout(forPlayer); return; }
         }
 
@@ -620,14 +638,10 @@ export class TCGMatch {
         }
     }
 
-    // -----------------------------------------------------------------------
-    // Damage pipeline
-    // -----------------------------------------------------------------------
-
     computeFinalDamage(
         rawDamage: number,
         attackerTypes: string[],
-        defenderCard: TCGCard,
+        defenderInst: PokemonInstance,
         applyWR: boolean
     ): { final: number; weaknessApplied: boolean; resistanceApplied: boolean } {
         let damage = rawDamage;
@@ -636,23 +650,44 @@ export class TCGMatch {
 
         if (damage === 0 || !applyWR) return { final: damage, weaknessApplied, resistanceApplied };
 
+        const defenderCard = defenderInst.topCard;
+
         for (const atkType of attackerTypes) {
-            const weakness = defenderCard.weaknesses?.find(w => w.type === atkType);
-            if (weakness) {
-                const v = weakness.value;
-                if (v.startsWith('×') || v.startsWith('x') || v.startsWith('*')) {
-                    const mult = parseFloat(v.replace(/[×x*]/, ''));
+            let hasWeakness = defenderInst.overrideWeakness === atkType;
+            let weaknessVal = '×2';
+            
+            if (!hasWeakness) {
+                const weakness = defenderCard.weaknesses?.find(w => w.type === atkType);
+                if (weakness && defenderInst.overrideWeakness === null) {
+                    hasWeakness = true;
+                    weaknessVal = weakness.value;
+                }
+            }
+
+            if (hasWeakness) {
+                if (weaknessVal.startsWith('×') || weaknessVal.startsWith('x') || weaknessVal.startsWith('*')) {
+                    const mult = parseFloat(weaknessVal.replace(/[×x*]/, ''));
                     damage = Math.floor(damage * (isNaN(mult) ? 2 : mult));
                 } else {
-                    const flat = parseInt(v.replace(/[^0-9]/g, ''));
+                    const flat = parseInt(weaknessVal.replace(/[^0-9]/g, ''));
                     damage += isNaN(flat) ? 0 : flat;
                 }
                 weaknessApplied = true;
             }
 
-            const resistance = defenderCard.resistances?.find(r => r.type === atkType);
-            if (resistance) {
-                const flat = parseInt(resistance.value.replace(/[^0-9]/g, ''));
+            let hasResistance = defenderInst.overrideResistance === atkType;
+            let resistanceVal = '-30';
+
+            if (!hasResistance) {
+                const resistance = defenderCard.resistances?.find(r => r.type === atkType);
+                if (resistance && defenderInst.overrideResistance === null) {
+                    hasResistance = true;
+                    resistanceVal = resistance.value;
+                }
+            }
+
+            if (hasResistance) {
+                const flat = parseInt(resistanceVal.replace(/[^0-9]/g, ''));
                 damage = Math.max(0, damage - (isNaN(flat) ? 30 : flat));
                 resistanceApplied = true;
             }
@@ -665,16 +700,12 @@ export class TCGMatch {
         if (inst.protectedThisTurn || amount <= 0) return;
         let dmg = amount;
         if (applyWR) {
-            const { final } = this.computeFinalDamage(amount, attackerTypes, inst.topCard, true);
+            const { final } = this.computeFinalDamage(amount, attackerTypes, inst, true);
             dmg = final;
         }
         inst.currentDamage += dmg;
         if (inst.isKnockedOut()) this.processKnockout(isPlayerOwned);
     }
-
-    // -----------------------------------------------------------------------
-    // Knockout / prize
-    // -----------------------------------------------------------------------
 
     processKnockout(isPlayerKnockedOut: boolean) {
         const victim = this.playerOf(isPlayerKnockedOut);
@@ -684,6 +715,13 @@ export class TCGMatch {
         if (!inst) return;
 
         this.addLog(`${inst.topCard.name} was Knocked Out!`);
+        
+        let mutualKO = false;
+        if (inst.destinyBondActive && attacker.active) {
+            this.addLog(`Destiny Bond triggered! ${attacker.active.topCard.name} goes down with it!`);
+            mutualKO = true;
+        }
+
         victim.discard.push(...inst.cards, ...inst.attachedEnergy);
         for (const item of inst.attachedItems) victim.discard.push(item.card);
         victim.active = null;
@@ -695,9 +733,33 @@ export class TCGMatch {
         }
         if (prizesToTake > 0) this.addLog(`${this.label(!isPlayerKnockedOut)} took ${prizesToTake} Prize Card(s).`);
 
-        if (attacker.prizes.length === 0) {
+        if (attacker.prizes.length === 0 && !mutualKO) {
             this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
             return;
+        }
+
+        if (mutualKO && attacker.active) {
+            const oppInst = attacker.active;
+            attacker.discard.push(...oppInst.cards, ...oppInst.attachedEnergy);
+            for (const item of oppInst.attachedItems) attacker.discard.push(item.card);
+            attacker.active = null;
+            attacker.pendingPromotion = true;
+            
+            const victimPrizes = this.prizeCountForCard(oppInst.topCard);
+            for (let i = 0; i < victimPrizes && victim.prizes.length > 0; i++) {
+                victim.hand.push(victim.prizes.shift()!);
+            }
+            if (victimPrizes > 0) this.addLog(`${this.label(isPlayerKnockedOut)} took ${victimPrizes} Prize Card(s) via Destiny Bond.`);
+            
+            if (victim.prizes.length === 0 && attacker.prizes.length === 0) {
+                 this.addLog(`Draw! Both players took their last prizes! (Sudden Death)`);
+            } else if (victim.prizes.length === 0) {
+                 this.declareWinner(isPlayerKnockedOut, 'took all Prize Cards via Destiny Bond');
+                 return;
+            } else if (attacker.prizes.length === 0) {
+                 this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
+                 return;
+            }
         }
 
         const hasBench = victim.bench.some(c => c !== null);
@@ -717,10 +779,6 @@ export class TCGMatch {
         this.winner = isPlayer ? 'player' : 'ai';
         this.addLog(`${this.label(isPlayer)} wins! (${reason})`);
     }
-
-    // -----------------------------------------------------------------------
-    // Playing Basic Pokémon
-    // -----------------------------------------------------------------------
 
     playBasicPokemon(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
         if (this.winner) return false;
@@ -748,10 +806,6 @@ export class TCGMatch {
         if (isPlayer) activePlayer.selectedUid = null;
         return true;
     }
-
-    // -----------------------------------------------------------------------
-    // Evolution
-    // -----------------------------------------------------------------------
 
     private getBasicNameForStage2(stage2Card: TCGCard): string | null {
         let current: TCGCard | undefined = stage2Card;
@@ -799,10 +853,6 @@ export class TCGMatch {
         return true;
     }
 
-    // -----------------------------------------------------------------------
-    // Energy attachment
-    // -----------------------------------------------------------------------
-
     attachEnergy(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
         if (this.winner || this.hasAttachedEnergy) return false;
 
@@ -835,10 +885,6 @@ export class TCGMatch {
         if (isPlayer) activePlayer.selectedUid = null;
         return true;
     }
-
-    // -----------------------------------------------------------------------
-    // Retreat
-    // -----------------------------------------------------------------------
 
     retreat(isPlayer: boolean, benchIndex: number): boolean {
         if (this.winner) return false;
@@ -879,10 +925,6 @@ export class TCGMatch {
         return true;
     }
 
-    // -----------------------------------------------------------------------
-    // Promote from bench after KO
-    // -----------------------------------------------------------------------
-
     promote(isPlayer: boolean, benchIndex: number): boolean {
         if (this.winner) return false;
 
@@ -898,10 +940,6 @@ export class TCGMatch {
         this.addLog(`${this.label(isPlayer)} promoted ${instance.topCard.name} to Active.`);
         return true;
     }
-
-    // -----------------------------------------------------------------------
-    // Status helpers
-    // -----------------------------------------------------------------------
 
     applyVolatileStatus(isPlayer: boolean, status: VolatileStatus): boolean {
         const inst = this.playerOf(isPlayer).active;
@@ -937,10 +975,6 @@ export class TCGMatch {
         return true;
     }
 
-    // -----------------------------------------------------------------------
-    // Trainer cards
-    // -----------------------------------------------------------------------
-
     playTrainer(isPlayer: boolean, uid: number, targetSlot?: 'active' | number): boolean {
         if (this.winner) return false;
 
@@ -961,7 +995,6 @@ export class TCGMatch {
 
         const success = effect.execute(this, isPlayer, card, targetSlot);
         if (success) {
-            // Recalculate index in case the effect mutated the hand
             const currentIdx = activePlayer.hand.findIndex(c => c.uid === uid);
             if (currentIdx !== -1) {
                 activePlayer.hand.splice(currentIdx, 1);
@@ -972,10 +1005,6 @@ export class TCGMatch {
         }
         return success;
     }
-
-    // -----------------------------------------------------------------------
-    // Pokémon Powers
-    // -----------------------------------------------------------------------
 
     usePokemonPower(isPlayer: boolean, instanceUid: number, powerIndex = 0, targetData?: unknown): boolean {
         if (this.winner) return false;
@@ -1001,10 +1030,6 @@ export class TCGMatch {
         return resolvePokemonPower(this, isPlayer, inst, power, targetData);
     }
 
-    // -----------------------------------------------------------------------
-    // Attack
-    // -----------------------------------------------------------------------
-
     attack(isPlayer: boolean, attackIndex: number): boolean {
         if (this.winner) return false;
         if (this.hasAttackedThisTurn) return false;
@@ -1024,14 +1049,36 @@ export class TCGMatch {
             return false;
         }
 
+        if (attackerInst.blindedThisTurn) {
+            const hit = flipCoin();
+            this.addLog(`Accuracy check for ${attackerInst.topCard.name}: ${hit ? 'Hits!' : 'Misses! (Sand-attack)'}`);
+            if (!hit) {
+                this.finishAttack(isPlayer);
+                return true;
+            }
+        }
+
+        const attackDef = attackerInst.topCard.attacks?.[attackIndex];
+        if (!attackDef) return false;
+
+        if (attackerInst.usedAttacks.includes(attackDef.name)) {
+            this.addLog(`${attackerInst.topCard.name} cannot use ${attackDef.name} again!`);
+            return false;
+        }
+        if (attackerInst.disabledAttackIndex === attackIndex) {
+            this.addLog(`${attackerInst.topCard.name}'s ${attackDef.name} is disabled by Amnesia!`);
+            return false;
+        }
+
         if (vol === 'confused') {
             const hit = flipCoin();
             this.addLog(`${attackerInst.topCard.name} is Confused — coin flip: ${hit ? 'heads (attacks normally)' : 'tails (hurts itself)'}`);
             if (!hit) {
                 const selfCtx = freshDamageContext(20, attackerInst.topCard.types ?? [], attackerInst, attackIndex);
                 selfCtx.applyWeaknessResistance = true;
-                const { final } = this.computeFinalDamage(20, attackerInst.topCard.types ?? [], attackerInst.topCard, true);
+                const { final } = this.computeFinalDamage(20, attackerInst.topCard.types ?? [], attackerInst, true);
                 attackerInst.currentDamage += final;
+                attackerInst.damageTakenThisTurn += final;
                 this.addLog(`${attackerInst.topCard.name} hurt itself for ${final} damage (Confusion — WOTC rule)!`);
                 if (attackerInst.isKnockedOut()) this.processKnockout(isPlayer);
                 this.finishAttack(isPlayer);
@@ -1040,9 +1087,6 @@ export class TCGMatch {
         }
 
         if (!hasEnoughEnergy(attackerInst, attackIndex)) return false;
-
-        const attackDef = attackerInst.topCard.attacks?.[attackIndex];
-        if (!attackDef) return false;
 
         const damageRaw = parseInt(attackDef.damage.replace(/[^0-9]/g, ''));
         const baseDamage = isNaN(damageRaw) ? 0 : damageRaw;
@@ -1060,6 +1104,10 @@ export class TCGMatch {
 
         for (const msg of ctx.customLog) this.addLog(msg);
 
+        if (ctx.oneTimeUseAttack) {
+            attackerInst.usedAttacks.push(ctx.oneTimeUseAttack);
+        }
+
         if (!ctx.preventAllDamage) {
             let damage = ctx.baseDamage + ctx.extraDamage;
 
@@ -1075,11 +1123,16 @@ export class TCGMatch {
                 this.addLog(`Defender: -${defenders * 20} damage.`);
             }
 
+            if (defenderInst.damageThresholdProtection > 0 && damage > 0 && damage <= defenderInst.damageThresholdProtection) {
+                damage = 0;
+                this.addLog(`${defenderInst.topCard.name}'s protection prevented the damage!`);
+            }
+
             if (damage > 0 && !defenderInst.protectedThisTurn) {
                 const { final, weaknessApplied, resistanceApplied } = this.computeFinalDamage(
                     damage,
                     ctx.attackerTypes,
-                    defenderInst.topCard,
+                    defenderInst,
                     ctx.applyWeaknessResistance
                 );
                 if (weaknessApplied) this.addLog(`Weakness! Damage doubled.`);
@@ -1087,14 +1140,16 @@ export class TCGMatch {
                 damage = final;
 
                 defenderInst.currentDamage += damage;
+                defenderInst.damageTakenThisTurn += damage;
                 this.addLog(`${attackDef.name} dealt ${damage} to ${defenderInst.topCard.name}.`);
 
                 if (defenderInst.isKnockedOut()) this.processKnockout(!isPlayer);
             }
         }
 
-        if (ctx.selfDamage > 0 && !this.winner) {
+        if (ctx.selfDamage > 0 && !this.winner && attackerInst.currentHP > 0) {
             attackerInst.currentDamage += ctx.selfDamage;
+            attackerInst.damageTakenThisTurn += ctx.selfDamage;
             this.addLog(`${attackerInst.topCard.name} took ${ctx.selfDamage} recoil damage.`);
             if (attackerInst.isKnockedOut()) this.processKnockout(isPlayer);
         }
@@ -1133,10 +1188,38 @@ export class TCGMatch {
             this.addLog(`${attackerInst.topCard.name} discarded ${ctx.discardAttackerEnergy} Energy.`);
         }
 
+        if (ctx.discardDefenderEnergy > 0 && !this.winner && defenderInst.attachedEnergy.length > 0) {
+            if (!isPlayer) {
+                const r = defenderInst.attachedEnergy.pop()!;
+                this.player.discard.push(r);
+                this.addLog(`Opponent discarded ${r.name} from your Active!`);
+            } else {
+                this.player.pendingEffect = { type: 'pick_defender_energy', trainerUid: attackerInst.uid, trainerName: 'Energy Discard', needed: 1, selected: [] };
+                return true;
+            }
+        }
+
         if (!this.winner) {
             if (ctx.statusToApply !== null) this.applyVolatileStatus(!isPlayer, ctx.statusToApply);
-            if (ctx.poisonToApply) this.applyPoison(!isPlayer);
+            if (ctx.poisonToApply) {
+                this.applyPoison(!isPlayer);
+                if (ctx.toxicPoison) defenderInst.poisonDamage = 20;
+            }
             if (ctx.burnToApply) this.applyBurn(!isPlayer);
+        }
+
+        if (ctx.changeWeakness && !this.winner && isPlayer) {
+             this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 1', needed: 1, selected: [], filter: 'weakness' };
+             return true; 
+        }
+        if (ctx.changeResistance && !this.winner && isPlayer) {
+             this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 2', needed: 1, selected: [], filter: 'resistance' };
+             return true;
+        }
+        
+        if (ctx.disableOpponentAttack && !this.winner && isPlayer) {
+             this.player.pendingEffect = { type: 'pick_amnesia', trainerUid: attackerInst.uid, trainerName: 'Amnesia', needed: 1, selected: [] };
+             return true;
         }
 
         if (ctx.forceOpponentSwitch && !this.winner) {
@@ -1149,7 +1232,7 @@ export class TCGMatch {
         return true;
     }
 
-    private finishAttack(isPlayer: boolean) {
+    finishAttack(isPlayer: boolean) {
         if (!this.winner) this.performCheckup(isPlayer);
 
         this.expireItems(isPlayer, 'end_of_your_turn');
@@ -1158,8 +1241,6 @@ export class TCGMatch {
         const owner = this.playerOf(isPlayer);
         owner.hasRetreatedThisTurn = false;
 
-        // CRITICAL FIX: Clear the NEXT player's turn flags at the start of their turn!
-        // This ensures moves like Agility and Barrier properly protect you during their turn.
         const nextPlayer = this.playerOf(!isPlayer);
         for (const inst of nextPlayer.getAllInPlay()) this.clearPerTurnFlags(inst);
 
@@ -1172,11 +1253,7 @@ export class TCGMatch {
             if (this.turn === 'ai') this.executeAITurn();
         }
     }
-
-    // -----------------------------------------------------------------------
-    // End player turn
-    // -----------------------------------------------------------------------
-
+    
     endPlayerTurn() {
         if (this.winner) return;
         this.performCheckup(true);
@@ -1184,7 +1261,6 @@ export class TCGMatch {
         this.expireItems(true, 'end_of_your_turn');
         this.expireItems(false, 'end_of_opponent_turn');
         
-        // Shift protection logic. Clear the AI's flags before they start their turn.
         for (const inst of this.ai.getAllInPlay()) this.clearPerTurnFlags(inst);
 
         this.player.selectedUid = null;
@@ -1194,10 +1270,6 @@ export class TCGMatch {
         this.turn = 'ai';
         this.executeAITurn();
     }
-
-    // -----------------------------------------------------------------------
-    // AI Turn
-    // -----------------------------------------------------------------------
 
     executeAITurn() {
         if (this.winner) return;
@@ -1256,7 +1328,6 @@ export class TCGMatch {
             }
         }
 
-        // ---- AI Pokémon Powers ----
         let powerUsed = true;
         let powerLoops = 0;
         while (powerUsed && powerLoops < 5 && !this.winner) {
@@ -1314,7 +1385,6 @@ export class TCGMatch {
                             }
                         }
                     } else if (reqs.needed === 0 && power.name !== 'Strikes Back' && power.name !== 'Invisible Wall') {
-                        // Instant powers (like Energy Burn)
                         if (this.usePokemonPower(false, inst.uid, pIdx, {})) {
                             powerUsed = true;
                         }
@@ -1347,7 +1417,6 @@ export class TCGMatch {
             this.expireItems(false, 'end_of_your_turn');
             this.expireItems(true, 'end_of_opponent_turn');
             
-            // Shift protection logic. Clear the player's flags before they start their turn.
             for (const inst of this.player.getAllInPlay()) this.clearPerTurnFlags(inst);
             this.ai.hasRetreatedThisTurn = false;
 

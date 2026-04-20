@@ -61,7 +61,6 @@ function countAttachedEnergy(inst: PokemonInstance, type?: string): number {
 // ---------------------------------------------------------------------------
 // Base Set 1 specific attack handlers
 // Complex attacks that the generic parser cannot safely handle go here.
-// (We have removed Metronome, Amnesia, and Buzzap as they are now handled dynamically!)
 // ---------------------------------------------------------------------------
 
 const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
@@ -155,7 +154,6 @@ export function resolveAttackEffect(
 
 // ---------------------------------------------------------------------------
 // Advanced Generic Text Parser
-// Automatically figures out coin multipliers, healing, recoil, and discarding
 // ---------------------------------------------------------------------------
 
 function parseGenericAttackText(
@@ -183,7 +181,7 @@ function parseGenericAttackText(
         ctx.customLog.push(`Auto-parsed: Flipped ${flips} coins, ${heads} heads -> ${ctx.baseDamage} damage.`);
     }
 
-    // 2. Damage Modifiers (Minus/Plus Based on Counters or Energy)
+    // 2. Damage Modifiers
     if (attack.damage.includes('-')) {
         if (text.includes('minus 10 damage for each damage counter')) {
             const base = parseInt(attack.damage.replace(/[^0-9]/g, '')) || 50;
@@ -207,14 +205,14 @@ function parseGenericAttackText(
         }
     }
 
-    // 3. Status Effects
+    // 3. Status Effects (including Toxic Severe Poison)
     let applyStatus = true;
-    if (text.includes('flip a coin. if heads, the defending pokémon is now') || text.includes('flip a coin. if heads, the defending pokemon is now')) {
+    if (text.includes('flip a coin. if heads, the defending pokémon is now')) {
         const heads = flipCoin();
         ctx.coinResults.push(heads);
         applyStatus = heads;
         ctx.customLog.push(`Coin flip for status: ${heads ? 'Heads' : 'Tails'}.`);
-    } else if (text.includes('flip a coin. if tails, the defending') || text.includes('flip a coin. if tails, the defending')) {
+    } else if (text.includes('flip a coin. if tails, the defending')) {
         const heads = flipCoin();
         ctx.coinResults.push(heads);
         applyStatus = !heads;
@@ -225,7 +223,10 @@ function parseGenericAttackText(
         if (text.includes('is now paralyzed')) ctx.statusToApply = 'paralyzed';
         else if (text.includes('is now asleep')) ctx.statusToApply = 'asleep';
         else if (text.includes('is now confused')) ctx.statusToApply = 'confused';
-        else if (text.includes('is now poisoned')) ctx.poisonToApply = true;
+        else if (text.includes('is now poisoned')) {
+            ctx.poisonToApply = true;
+            if (text.includes('takes 20 poison damage')) ctx.toxicPoison = true; // Nidoking Toxic
+        }
         else if (text.includes('is now burned')) ctx.burnToApply = true;
     }
 
@@ -235,10 +236,8 @@ function parseGenericAttackText(
         ctx.customLog.push(`Auto-parsed: Healed all damage from ${attackerInst.topCard.name}.`);
     } else if (text.includes('remove 1 damage counter from')) {
         attackerInst.currentDamage = Math.max(0, attackerInst.currentDamage - 10);
-        ctx.customLog.push(`Auto-parsed: Removed 1 damage counter.`);
     } else if (text.includes('remove up to 2 damage counters')) {
         attackerInst.currentDamage = Math.max(0, attackerInst.currentDamage - 20);
-        ctx.customLog.push(`Auto-parsed: Healed 20 damage.`);
     }
 
     // 5. Energy Discard
@@ -251,6 +250,11 @@ function parseGenericAttackText(
     else if (text.includes('discard 1 energy')) { ctx.discardAttackerEnergy = 1; }
     else if (text.includes('discard 2 energy')) { ctx.discardAttackerEnergy = 2; }
     else if (text.includes('discard all energy')) { ctx.discardAttackerEnergy = attackerInst.attachedEnergy.length; }
+
+    // Opponent Energy Discard (Poliwrath Whirlpool / Dragonair Hyper Beam)
+    if (text.includes('defending pokémon has any energy cards attached to it, choose 1 of them and discard it')) {
+        ctx.discardDefenderEnergy = 1;
+    }
 
     // 6. Recoil / Self Damage
     if (text.match(/does [0-9]+ damage to itself/)) {
@@ -280,13 +284,11 @@ function parseGenericAttackText(
         [...player.bench, ...ai.bench].forEach(b => {
             if (b) ctx.benchDamage.push({ instanceUid: b.uid, amount: 10 });
         });
-        ctx.customLog.push(`Auto-parsed: 10 damage to all benched Pokémon.`);
     } else if (text.includes('does 10 damage to each of your own benched')) {
         const owner = isPlayer ? match.player : match.ai;
         owner.bench.forEach(b => {
             if (b) ctx.benchDamage.push({ instanceUid: b.uid, amount: 10 });
         });
-        ctx.customLog.push(`Auto-parsed: 10 damage to own bench.`);
     }
 
     // 8. Protection (Agility / Withdraw / Barrier)
@@ -311,35 +313,72 @@ function parseGenericAttackText(
         ctx.preventAllDamage = true;
     }
 
-    // 10. Math Damage (e.g., Raticate's Super Fang)
+    // 10. Math Damage (Raticate's Super Fang)
     if (text.includes('half the defending pokémon\'s remaining hp')) {
         ctx.baseDamage = Math.ceil(defenderInst.currentHP / 20) * 10;
         ctx.customLog.push(`Auto-parsed: Halved defender's HP.`);
     }
 
-    // 11. Forced Switching (e.g., Whirlwind, Roar, Lure attack)
+    // 11. Forced Switching (Whirlwind, Roar)
     if (text.includes('switch it with his or her active pokémon') || text.includes('switches it with the defending pokémon')) {
         ctx.forceOpponentSwitch = true;
         ctx.customLog.push(`Auto-parsed: Opponent is forced to switch Active Pokémon.`);
     }
 
-    // 12. Attack Copying (e.g., Metronome)
+    // 12. Attack Copying (Metronome)
     if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('copies that attack')) {
          if (defenderInst.topCard.attacks && defenderInst.topCard.attacks.length > 0) {
              const copied = defenderInst.topCard.attacks[Math.floor(Math.random() * defenderInst.topCard.attacks.length)];
              const raw = parseInt(copied.damage.replace(/[^0-9]/g, '')) || 0;
              ctx.baseDamage = raw;
              ctx.customLog.push(`Auto-parsed: Copied ${copied.name} (${copied.damage}).`);
-             // Recursively resolve generic status effects of the copied attack
+             // Recursively resolve copied text
              parseGenericAttackText(match, isPlayer, attackerInst, defenderInst, copied, ctx);
          } else {
              ctx.customLog.push(`Auto-parsed: No attacks to copy.`);
          }
     }
 
-    // 13. Attack Disabling (e.g., Amnesia)
+    // 13. Attack Disabling (Amnesia)
     if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('can\'t use that attack')) {
         ctx.disableOpponentAttack = true;
-        ctx.customLog.push(`Auto-parsed: Attack disabled. (UI blocking not fully implemented yet)`);
+        ctx.customLog.push(`Auto-parsed: Triggering Amnesia UI selection.`);
+    }
+
+    // 14. Accuracy Debuff (Sand-attack)
+    if (text.includes('if the defending pokémon tries to attack during your opponent\'s next turn, your opponent flips a coin. if tails, that attack does nothing')) {
+        defenderInst.blindedThisTurn = true;
+        ctx.customLog.push(`Auto-parsed: Opponent accuracy blinded for 1 turn.`);
+    }
+
+    // 15. Threshold Protection (Harden)
+    if (text.includes('30 or less damage is done to') && text.includes('prevent that damage')) {
+        attackerInst.damageThresholdProtection = 30;
+        ctx.customLog.push(`Auto-parsed: Preventing incoming damage 30 or below.`);
+    }
+
+    // 16. Retaliation KO (Destiny Bond)
+    if (text.includes('knocks out gastly during your opponent\'s next turn, knock out that pokémon')) {
+        attackerInst.destinyBondActive = true;
+        ctx.customLog.push(`Auto-parsed: Destiny Bond active.`);
+    }
+
+    // 17. One-Time Use Lock (Leek Slap)
+    if (text.includes('can\'t use this attack again as long as')) {
+        ctx.oneTimeUseAttack = attack.name;
+    }
+
+    // 18. Last Turn Memory (Mirror Move)
+    if (text.includes('was attacked last turn, do the final result of that attack')) {
+        ctx.baseDamage = attackerInst.damageTakenLastTurn;
+        ctx.customLog.push(`Auto-parsed: Reflecting ${attackerInst.damageTakenLastTurn} damage from last turn.`);
+    }
+
+    // 19. Dynamic Type Changes (Conversion)
+    if (text.includes('change it to a type of your choice')) {
+        ctx.changeWeakness = true;
+    }
+    if (text.includes('change porygon\'s resistance to a type of your choice')) {
+        ctx.changeResistance = true;
     }
 }

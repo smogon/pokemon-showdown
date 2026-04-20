@@ -71,7 +71,6 @@ function renderSlot(
     const pending = player.pendingEffect;
     const isSERPending = !isAi && pending?.filter?.startsWith('ser_target:') && pending.needed === 0;
     
-    // Pokemon Power Targeting Overlays
     const isDamageSwapFrom = !isAi && pending?.filter === 'damage_swap_from';
     const isDamageSwapTo = !isAi && pending?.filter?.startsWith('damage_swap_to:');
     const isRainDanceTarget = !isAi && pending?.filter?.startsWith('rain_dance_target:');
@@ -292,6 +291,52 @@ function renderPendingUI(match: TCGMatch): string {
     const pending = match.player.pendingEffect!;
     let html = `<div style="background:#fff3cd;border:1px solid #ffc107;padding:8px;border-radius:6px;margin-bottom:5px;">`;
     
+    // --- NEW PENDING UIs FOR ADVANCED EFFECTS ---
+
+    if (pending.type === 'pick_amnesia') {
+        html += `<strong>🃏 Amnesia</strong> — Choose an attack to disable on the Defending Pokémon:</div>`;
+        const oppActive = match.ai.active;
+        if (oppActive && oppActive.topCard.attacks) {
+            html += `<div style="background:#fff3cd;padding:5px;border-radius:5px;margin-top:4px;">`;
+            oppActive.topCard.attacks.forEach((atk, i) => {
+                html += `<button class="button" name="send" value="/tcg amnesiapick ${i}" style="background:#fff;border:2px solid #ffc107;margin-right:5px;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">⚔️ ${atk.name}</button>`;
+            });
+            html += `</div>`;
+        }
+        return html;
+    }
+
+    if (pending.type === 'pick_conversion') {
+        const isWeakness = pending.filter === 'weakness';
+        html += `<strong>🃏 Conversion</strong> — Choose a new ${isWeakness ? 'Weakness' : 'Resistance'} type:</div>`;
+        const types = ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting', 'Colorless'];
+        html += `<div style="background:#fff3cd;padding:5px;border-radius:5px;margin-top:4px;overflow-x:auto;white-space:nowrap;">`;
+        for (const t of types) {
+            html += `<button class="button" name="send" value="/tcg conversionpick ${t}" style="background:#fff;border:2px solid #007bff;margin-right:5px;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">${t}</button>`;
+        }
+        html += `</div>`;
+        return html;
+    }
+
+    if (pending.type === 'pick_defender_energy') {
+        html += `<strong>🃏 Discard Energy</strong> — Choose an Energy attached to the Defending Pokémon to discard:</div>`;
+        const oppActive = match.ai.active;
+        if (oppActive && oppActive.attachedEnergy.length > 0) {
+            html += `<div style="background:#ffe0e0;border:1px solid #dc3545;padding:5px;border-radius:5px;margin-top:4px;overflow-x:auto;white-space:nowrap;">`;
+            for (let i = 0; i < oppActive.attachedEnergy.length; i++) {
+                const e = oppActive.attachedEnergy[i];
+                html += `<button class="button" name="send" value="/tcg defenderenergypick ${i}" style="background:transparent;border:1px solid #dc3545;padding:2px 4px;margin:2px;border-radius:4px;cursor:pointer;font-size:11px;">` +
+                    `<img src="${e.images.small}" style="width:40px;display:block;" alt="${e.name}"/><span style="font-size:9px;">${e.name}</span></button>`;
+            }
+            html += `</div>`;
+        } else {
+            html += `<em>No energy found.</em> <button class="button" name="send" value="/tcg pendingcancel" style="color:red;">Cancel</button>`;
+        }
+        return html;
+    }
+
+    // --- EXISTING PENDING UIs ---
+
     const icon = pending.type === 'use_power' ? '✨' : '🃏';
     html += `<strong>${icon} ${pending.trainerName}</strong> — `;
 
@@ -598,7 +643,6 @@ export const commands: Chat.ChatCommands = {
             if (!power) return this.errorReply('Power not found.');
             if (inst.isPowerBlocked()) return this.errorReply(`Power is blocked by ${inst.status.volatile}.`);
 
-            // Use the dynamic parser
             const reqs = getPowerRequirements(power);
 
             if (reqs && reqs.filter) {
@@ -606,14 +650,13 @@ export const commands: Chat.ChatCommands = {
                     type: 'use_power' as any,
                     trainerUid: uid,
                     trainerName: power.name,
-                    needed: powerIndex, // Store power index here for execution
+                    needed: powerIndex,
                     selected: [],
                     filter: reqs.filter
                 };
                 return this.refreshPage('tcg-match');
             }
 
-            // Standard instant powers (like Energy Burn) or powers we haven't mapped yet
             if (match.usePokemonPower(true, uid, powerIndex)) {
                 this.refreshPage('tcg-match');
             } else {
@@ -726,6 +769,67 @@ export const commands: Chat.ChatCommands = {
             }
         },
 
+        // ---- Advanced Attack UI Event Handlers ------------------------------
+
+        amnesiapick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.type !== 'pick_amnesia') return this.errorReply('Not picking Amnesia target.');
+            const idx = parseInt(target);
+            if (isNaN(idx)) return this.errorReply('Invalid attack index.');
+            
+            const oppActive = match.ai.active;
+            if (oppActive) {
+                oppActive.disabledAttackIndex = idx;
+                match.addLog(`You disabled the opponent's ${oppActive.topCard.attacks![idx].name} attack!`);
+            }
+            
+            match.player.pendingEffect = null;
+            match.finishAttack(true);
+            this.refreshPage('tcg-match');
+        },
+
+        conversionpick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            const pending = match.player.pendingEffect;
+            if (!match || pending?.type !== 'pick_conversion') return this.errorReply('Not picking Conversion type.');
+            
+            const isWeakness = pending.filter === 'weakness';
+            const type = target;
+            const active = match.player.active;
+
+            if (active) {
+                if (isWeakness) {
+                    active.overrideWeakness = type;
+                    match.addLog(`Conversion 1: Changed weakness to ${type}!`);
+                } else {
+                    active.overrideResistance = type;
+                    match.addLog(`Conversion 2: Changed resistance to ${type}!`);
+                }
+            }
+
+            match.player.pendingEffect = null;
+            match.finishAttack(true);
+            this.refreshPage('tcg-match');
+        },
+
+        defenderenergypick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.type !== 'pick_defender_energy') return this.errorReply('Not picking opponent energy.');
+            const idx = parseInt(target);
+            if (isNaN(idx)) return this.errorReply('Invalid index.');
+
+            const oppActive = match.ai.active;
+            if (oppActive && oppActive.attachedEnergy.length > idx) {
+                const discarded = oppActive.attachedEnergy.splice(idx, 1)[0];
+                match.ai.discard.push(discarded);
+                match.addLog(`You discarded ${discarded.name} from the opponent's Active Pokémon!`);
+            }
+
+            match.player.pendingEffect = null;
+            match.finishAttack(true);
+            this.refreshPage('tcg-match');
+        },
+
         endturn(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
@@ -769,7 +873,17 @@ export const commands: Chat.ChatCommands = {
         pendingcancel(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || !match.player.pendingEffect) return this.errorReply('No active effect.');
-            match.player.pendingEffect = null;
+            
+            // Revert state if we were forced into this via an attack (e.g. Conversion/Amnesia)
+            const type = match.player.pendingEffect.type;
+            if (type === 'pick_amnesia' || type === 'pick_conversion' || type === 'pick_defender_energy') {
+                 match.addLog(`You cancelled the attack's secondary effect.`);
+                 match.player.pendingEffect = null;
+                 match.finishAttack(true);
+            } else {
+                 match.player.pendingEffect = null;
+            }
+
             match.player.selectedUid = null;
             this.refreshPage('tcg-match');
         },
