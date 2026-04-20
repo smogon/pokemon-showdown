@@ -735,10 +735,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	poisonpoint: {
 		inherit: true,
+		isNonstandard: null,
 		rating: 1.5,
 	},
 	poisontouch: {
 		inherit: true,
+		isNonstandard: null,
 		rating: 2,
 	},
 	powerconstruct: {
@@ -1225,4 +1227,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		rating: 3,
 	},
+	// swse
+	/* poisonpoint: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	poisontouch: {
+		inherit: true,
+		isNonstandard: null,
+	}, */
 };

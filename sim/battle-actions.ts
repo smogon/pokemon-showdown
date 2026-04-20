@@ -1145,11 +1145,16 @@ export class BattleActions {
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
-			this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			if (moveData.onAfterHit) {
+			if (this.battle.gen >= 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
+			}
+			if (moveData.onAfterHit && pokemon.hp) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
+			}
+			if (this.battle.gen < 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
@@ -1786,42 +1791,36 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
-		// The "???" type never gets STAB
-		// Not even if you Roost in Gen 4 and somehow manage to use
-		// Struggle in the same turn.
-		// (On second thought, it might be easier to get a MissingNo.)
-		if (type !== '???') {
-			let stab: number | [number, number] = 1;
+		let stab: number | [number, number] = 1;
 
-			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
-			if (isSTAB) {
-				stab = 1.5;
-			}
-
-			// The Stellar tera type makes this incredibly confusing
-			// If the move's type does not match one of the user's base types,
-			// the Stellar tera type applies a one-time 1.2x damage boost for that type.
-			//
-			// If the move's type does match one of the user's base types,
-			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
-			// and then goes back to using the regular 1.5x STAB boost for those types.
-			if (pokemon.terastallized === 'Stellar') {
-				if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
-					stab = isSTAB ? 2 : [4915, 4096];
-					move.stellarBoosted = true;
-					if (pokemon.species.name !== 'Terapagos-Stellar') {
-						pokemon.stellarBoostedTypes.push(type);
-					}
-				}
-			} else {
-				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
-					stab = 2;
-				}
-				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
-			}
-
-			baseDamage = this.battle.modify(baseDamage, stab);
+		const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
+		if (isSTAB) {
+			stab = 1.5;
 		}
+
+		// The Stellar tera type makes this incredibly confusing
+		// If the move's type does not match one of the user's base types,
+		// the Stellar tera type applies a one-time 1.2x damage boost for that type.
+		//
+		// If the move's type does match one of the user's base types,
+		// then the Stellar tera type applies a one-time 2x STAB boost for that type,
+		// and then goes back to using the regular 1.5x STAB boost for those types.
+		if (pokemon.terastallized === 'Stellar') {
+			if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
+				stab = isSTAB ? 2 : [4915, 4096];
+				move.stellarBoosted = true;
+				if (pokemon.species.name !== 'Terapagos-Stellar') {
+					pokemon.stellarBoostedTypes.push(type);
+				}
+			}
+		} else {
+			if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+				stab = 2;
+			}
+			stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+		}
+
+		baseDamage = this.battle.modify(baseDamage, stab);
 
 		// types
 		let typeMod = target.runEffectiveness(move);
@@ -1859,8 +1858,12 @@ export class BattleActions {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+		const bypassProtect = target.getMoveHitData(move).bypassProtect;
+		if (bypassProtect) {
 			baseDamage = this.battle.modify(baseDamage, 0.25);
+			if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+				this.battle.add('-ability', pokemon, bypassProtect.name);
+			}
 			this.battle.add('-zbroken', target);
 		}
 

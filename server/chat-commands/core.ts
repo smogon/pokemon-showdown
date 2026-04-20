@@ -924,7 +924,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		let resultString = Utils.escapeHTML(Teams.export(team, { hideStats }));
+		let resultString = Utils.escapeHTML(Teams.export(team, {
+			hideStats, useStatPoints: toID(battle.format).includes('champions'),
+		}));
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
@@ -1215,7 +1217,11 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.inRooms.has(room.roomid) || !player.hasTeam) {
 			player.invite = targetUser.id;
 			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
-			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(user.id, battle.format, user.battleSettings);
+			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(
+				user.id,
+				battle.format,
+				{ ...user.battleSettings }
+			);
 			Ladders.challenges.add(
 				new Ladders.BattleInvite(user.id, targetUser.id, ready, {
 					acceptCommand: `/acceptbattle ${user.id}`,

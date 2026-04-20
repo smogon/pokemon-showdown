@@ -25,7 +25,11 @@ export function toID(text: any): ID {
 		if (typeof text === 'number') text = `${text}`;
 		else if (typeof text !== 'string') return '';
 	}
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
+	return text
+		.replace(/Ω/g, 'O')
+		.replace(/ω/g, 'w')
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '') as ID;
 }
 
 /**

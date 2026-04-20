@@ -156,7 +156,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Ground", "Ghost"],
 		baseStats: { hp: 80, atk: 80, def: 105, spa: 50, spd: 95, spe: 100 },
-		abilities: { 0: "Battle Armor", 1: "Sand Force", H: "Justified" },
+		abilities: { 0: "Battle Armor", 1: "Earth Force", H: "Justified" },
 	},
 	// Minor Changes (mostly to prevent unevolved Pokemons in gen 1 to hold Eviolite)
 	golbat: {

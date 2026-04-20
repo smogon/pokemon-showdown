@@ -20,10 +20,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 				this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
-			} else if (move.multihitType === 'echolocation' && move.hit > 1) {
-				// Echolocation modifier
-				this.battle.debug(`Echolocation modifier: 0.25`);
-				baseDamage = this.battle.modify(baseDamage, 0.25);
 			}
 
 			// weather modifier
@@ -112,8 +108,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
+				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+					this.battle.add('-ability', pokemon, bypassProtect.name);
+				}
 				this.battle.add('-zbroken', target);
 			}
 

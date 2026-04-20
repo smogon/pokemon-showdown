@@ -352,7 +352,7 @@ export const commands: Chat.ChatCommands = {
 			`- <code>zmove</code>, <code>max</code>, or <code>gmax</code> as parameters will search for Z-Moves, Max Moves, and G-Max Moves respectively.<br/>` +
 			`- Move targets must be preceded with <code>targets </code>; e.g. <code>targets user</code> searches for moves that target the user.<br/>` +
 			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
-			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, commanding, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, metronome, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosketch, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
+			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, influencing, metronome, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosketch, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
 			`- <code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`- A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`</details><br/>` +
@@ -460,7 +460,7 @@ export const commands: Chat.ChatCommands = {
 			fog: {
 				names: ["Fog", "Condensation", "Foghorn", "Normal"],
 				desc: "During the effect, Normal-type attacks can damage Ghost types and non-Normal-type moves have their accuracy multiplied by 0.9x (this includes Typeless moves).",
-				strongWindsBoosted: "Normal-type Pokemon and moves become Typeless, allowing them to take and deal neutral damage.",
+				strongWindsBoosted: "Normal-type Pokemon and moves become Typeless and deal 1.5x damage, allowing them to take and deal neutral damage.",
 				setupAbility: "Condensation",
 				setupMove: "Foghorn",
 			},
@@ -488,7 +488,7 @@ export const commands: Chat.ChatCommands = {
 			pheromones: {
 				names: ["Pheromones", "Secretion", "Swarm Signal", "Bug"],
 				desc: "During the effect, the Speed of Bug- and Poison-type Pokémon is multiplied by 1.5x and the accuracy of moves used by Bug- and Poison-type Pokémon is multiplied by 1.33x.",
-				strongWindsBoosted: "At the end of each turn except the last, all active Pokémon are confused, unless they are a Bug or Poison type.",
+				strongWindsBoosted: "Bug- and Poison-type Pokemon restore 1/4 of their maximum HP, rounded down, when they switches out.",
 				setupAbility: "Secretion",
 				setupMove: "Swarm Signal",
 			},
@@ -574,7 +574,7 @@ export const commands: Chat.ChatCommands = {
 			['Climate', ['sun', 'rain', 'hail', 'bloodmoon', 'fog']],
 			['Irritant', ['sandstorm', 'duststorm', 'pollenstorm', 'pheromones', 'smog', 'fairydust']],
 			['Energy', ['battleaura', 'paranormalactivity', 'dreamscape', 'dragonforce', 'thunderstorm', 'magnetosphere']],
-			['Clearing', ['strongwinds']],
+			['Clearing', ['strongwinds', 'deltastream']],
 			// ['Cataclysm', ['cataclysmiclight']],
 		];
 
@@ -1919,8 +1919,8 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'commanding', 'contact', 'dance', 'defrost', 'distance', 'failcopycat',
-		'failencore', 'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'metronome', 'mirror', 'mustpressure', 'noassist',
+		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
+		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'influencing', 'metronome', 'mirror', 'mustpressure', 'noassist',
 		'nonsky', 'noparentalbond', 'nosketch', 'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable',
 		'slicing', 'snatch', 'sound', 'wind',
 

@@ -142,15 +142,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angershell: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			this.effectState.checkedAngerShell = !(
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedAngerShell = false;
-			} else {
-				this.effectState.checkedAngerShell = true;
-			}
+			);
 		},
 		onTryEatItem(item) {
 			const healingItems = [
@@ -409,15 +404,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
-			if (
-				effect.effectType === "Move" &&
-				!effect.multihit &&
+			this.effectState.checkedBerserk = !(
+				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
-			) {
-				this.effectState.checkedBerserk = false;
-			} else {
-				this.effectState.checkedBerserk = true;
-			}
+			);
 		},
 		onTryEatItem(item) {
 			const healingItems = [
@@ -930,22 +920,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	deltastream: {
 		onStart(source) {
-			this.field.setClimateWeather('deltastream');
+			this.field.setClearingWeather('deltastream');
 		},
-		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'deltastream' && !strongWeathers.includes(climateWeather.id)) return false;
+		onAnySetClearingWeather(target, source, clearingWeather) {
+			const strongWeathers = ['strongwinds', 'deltastream'];
+			if (this.field.getClearingWeather().id === 'deltastream' &&
+				strongWeathers.includes(clearingWeather.id)) {
+				return false;
+			}
 		},
 		onEnd(pokemon) {
-			if (this.field.climateWeatherState.source !== pokemon) return;
+			if (this.field.clearingWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('deltastream')) {
-					this.field.climateWeatherState.source = target;
+					this.field.clearingWeatherState.source = target;
 					return;
 				}
 			}
-			this.field.clearClimateWeather();
+			this.field.clearClearingWeather();
 		},
 		flags: {},
 		name: "Delta Stream",
@@ -957,8 +950,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setClimateWeather('desolateland');
 		},
 		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'desolateland' && !strongWeathers.includes(climateWeather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea'];
+			if (this.field.getClimateWeather().id === 'desolateland' &&
+				!strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.climateWeatherState.source !== pokemon) return;
@@ -1061,7 +1055,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
-		num: 312, // TODO confirm with generation shift
+		num: 312,
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -1119,7 +1113,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== effect.id) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 8);
 			} else if ((effect.id === 'sunnyday' || effect.id === 'desolateland') && !target.volatiles['sunscreen']) {
@@ -1172,14 +1166,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	effectspore: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target) && !source.status && source.runStatusImmunity('powder')) {
+			if (this.checkMoveMakesContact(move, source, target) && source.runStatusImmunity('powder')) {
 				const r = this.random(100);
 				if (r < 11) {
-					source.setStatus('slp', target);
+					source.trySetStatus('slp', target);
 				} else if (r < 21) {
-					source.setStatus('par', target);
+					source.trySetStatus('par', target);
 				} else if (r < 30) {
-					source.setStatus('psn', target);
+					source.trySetStatus('psn', target);
 				}
 			}
 		},
@@ -1412,7 +1406,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flowerveil: {
 		onAllyTryBoost(boost, target, source, effect) {
-			if ((source && target === source) || !target.hasType('Grass')) return;
+			if (!target.hasType('Grass')) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -1427,7 +1421,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
+			if (target.hasType('Grass') && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
@@ -2126,7 +2120,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			for (const allyActive of pokemon.adjacentAllies()) {
-				if (allyActive.status && this.randomChance(3, 10)) {
+				if (allyActive.status) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
 				}
@@ -2261,7 +2255,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	icebody: {
 		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== effect.id) return;
 			if (effect.id === 'hail' || effect.id === 'snowscape') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -2863,10 +2857,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	megasol: {
 		isNonstandard: "Future",
+		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
+			if (this.field.climateWeather !== 'sunnyday') {
+				(this.dex.conditions.getByID('sunnyday' as ID) as any).onClimateWeatherModifyDamage
+					.call(this, damage, attacker, defender, move);
+			}
+		},
 		flags: {},
 		name: "Mega Sol",
 		rating: 3,
-		num: 311, // TODO confirm with generation shift
+		num: 315,
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	merciless: {
@@ -3602,6 +3602,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 0.5,
 		num: 53,
 	},
+	piercingdrill: {
+		isNonstandard: "Future",
+		onHitProtect(source, target, move) {
+			if (move.flags['contact']) {
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
+			}
+		},
+		// breaking protect handled in Battle#checkMoveBypassesProtect()
+		flags: {},
+		name: "Piercing Drill",
+		rating: 1,
+		num: 311,
+	},
 	pixilate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -3658,6 +3672,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		isNonstandard: "Past",
 		flags: {},
 		name: "Poison Point",
 		rating: 1.5,
@@ -3761,8 +3776,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setClimateWeather('primordialsea');
 		},
 		onAnySetClimateWeather(target, source, climateWeather) {
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getClimateWeather().id === 'primordialsea' && !strongWeathers.includes(climateWeather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea'];
+			if (this.field.getClimateWeather().id === 'primordialsea' &&
+				!strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.climateWeatherState.source !== pokemon) return;
@@ -3810,7 +3826,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
+				if (source.effectiveClimateWeather() !== 'foghorn') this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
@@ -4068,7 +4084,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	raindish: {
 		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== effect.id) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -4300,9 +4316,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'sandstorm') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, source) {
+		onModifyAccuracy(accuracy, pokemon) {
 			if (typeof accuracy !== 'number') return;
-			if (['sandstorm'].includes(source.effectiveIrritantWeather())) {
+			if (['sandstorm'].includes(pokemon.effectiveIrritantWeather())) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4664,9 +4680,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'hail') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, source) {
+		onModifyAccuracy(accuracy, pokemon) {
 			if (typeof accuracy !== 'number') return;
-			if (['hail', 'snowscape'].includes(source.effectiveIrritantWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4699,7 +4715,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== effect.id) return;
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
@@ -4760,6 +4776,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Speed Boost",
 		rating: 4.5,
 		num: 3,
+	},
+	spicyspray: {
+		isNonstandard: "Future",
+		onDamagingHit(damage, target, source, move) {
+			source.trySetStatus('brn', target);
+		},
+		flags: {},
+		name: "Spicy Spray",
+		rating: 3,
+		num: 318,
 	},
 	stakeout: {
 		onModifyAtkPriority: 5,
@@ -5053,7 +5079,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpe(pokemon, source) {
 			if (this.field.isTerrain('electricterrain') ||
 				['supercell'].includes(source.effectiveEnergyWeather())) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 		flags: {},
@@ -5064,14 +5090,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	swarm: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if (move.type === 'Bug' && (attacker.hp <= attacker.maxhp / 3 ||
+				attacker.effectiveIrritantWeather() === 'swarmsignal')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if (move.type === 'Bug' && (attacker.hp <= attacker.maxhp / 3) ||
+				attacker.effectiveIrritantWeather() === 'swarmsignal') {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
@@ -5843,9 +5871,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	windrider: { // updated, untested??
 		onStart(pokemon) {
-			if (pokemon.side.sideConditions['tailwind'] || ['strongwinds'].includes(pokemon.effectiveClearingWeather())) {
+			if (pokemon.side.sideConditions['tailwind'] ||
+				(['strongwinds'].includes(pokemon.effectiveClearingWeather()) && !pokemon.abilityState.gotWindRiderClearingBoost)) {
 				this.boost({ atk: 1 }, pokemon, pokemon);
 			}
+			delete pokemon.abilityState.gotWindRiderClearingBoost;
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['wind']) {
@@ -5865,6 +5895,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const pokemon = this.effectState.target;
 			if (clearingWeather.id === 'strongwinds') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
+				if (!pokemon.isStarted) {
+					pokemon.abilityState.gotWindRiderClearingBoost = true;
+				}
 			}
 		},
 		flags: { breakable: 1 },
@@ -6085,7 +6118,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setIrritantWeather('pollinate');
 		},
 		onIrritantWeather(target, source, effect) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== effect.id) return;
 			if (effect.id === 'pollinate') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -6100,7 +6133,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setEnergyWeather('haunt');
 		},
 		onEnergyWeather(target, source, effect) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== effect.id) return;
 			if (effect.id === 'haunt') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -6112,7 +6145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	}, */
 	bloomspring: { // tested, works as intended
 		onIrritantWeather(target, source, effect) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== effect.id) return;
 			if (effect.id === 'pollinate') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -6122,7 +6155,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 10021,
 	},
-	bubblehelm: { // incomplete, needs testing
+	bubblehelm: { // tested, works as intended
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
@@ -6158,8 +6191,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (['smogspread'].includes(attacker.effectiveIrritantWeather())) {
 				if (move.type === 'Poison') {
-					this.debug('Smog damage boost');
-					return this.chainModify(1.5);
+					this.debug('Carbon Capture damage boost');
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -6172,12 +6205,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(source) {
 			this.field.setCataclysmWeather('cataclysmiclight');
 		},
+		onAnySetCataclysmWeather(target, source, cataclysmWeather) {
+			const strongWeathers = ['cataclysmiclight'];
+			if (this.field.getCataclysmWeather().id === 'cataclysmiclight' &&
+				strongWeathers.includes(cataclysmWeather.id)) {
+				return false;
+			}
+		},
 		onEnd(pokemon) {
 			if (this.field.cataclysmWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('cataclysmiclight')) {
-					this.field.climateWeatherState.source = target;
+					this.field.cataclysmWeatherState.source = target;
 					return;
 				}
 			}
@@ -6186,7 +6226,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Cataclysmic Light",
 		rating: 4.5,
-		num: 10079,
+		num: 10078,
 	}, */
 	chakra: { // tested, works as intended
 		onBasePowerPriority: 21,
@@ -6213,7 +6253,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	consecration: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6229,7 +6269,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnergyWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6242,6 +6282,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
+			if (!pokemon.hasItem('thickclub') && pokemon.species.id === 'bearvoyanceawakened') {
+				if (pokemon.isActive) {
+					pokemon.formeChange('Bearvoyance', this.effect, false, '0', '[msg]');
+				}
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
@@ -6258,7 +6306,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10010,
 	},
-	droughtproof: { // incomplete. needs testing
+	droughtproof: { // tested, works as intended
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -6290,13 +6338,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10044,
 	},
 	druidry: { // tested, works as intended
+		// idk if it'll read target as the druidry mon, if it doesnt then ig this ability will bypass safety goggles
 		onStart(target) {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (target.effectiveIrritantWeather() === 'sprinkle') {
 				this.field.setTerrain('grassyterrain');
 			}
 		},
 		onTerrainChange(target, source, sourceEffect) {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (target.effectiveIrritantWeather() === 'sprinkle' && !this.field.isTerrain('grassyterrain')) {
 				this.field.setTerrain('grassyterrain');
 			}
 		},
@@ -6316,7 +6365,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	dustgather: { // tested, works as intended
 		onIrritantWeather(target, source, effect) {
-			if (target.hasItem('safetygoggles') || target.hasAbility('overcoat')) return;
+			if (target.effectiveIrritantWeather() !== effect.id) return;
 			if (effect.id === 'duststorm') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -6347,11 +6396,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Energizer",
 		rating: 2.5,
-		num: 10034,
+		num: 10033,
 	},
 	enjoin: {
 		onAfterMove(source, target, move) {
-			if (target && move.flags['commanding']) {
+			if (target && move.flags['influencing']) {
 				const bestStat = target.getBestStat(true, true);
 				if (move.target === 'self') {
 					this.add('-activate', source, 'ability: Enjoin');
@@ -6432,7 +6481,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 10055,
 	},
-	/* expiation: { // tested, works as intended, TODO: fix text to attribute healing to proper pokemon
+	/* expiation: { // tested, works as intended
 		onFaint(target) {
 			if (!target.hp) {
 				this.add('-activate', target, 'ability: Expiation');
@@ -6452,7 +6501,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Expiation",
 		rating: 3,
-		num: 10078,
+		num: 10077,
 	}, */
 	ferroflux: { // tested, works as intended
 		onStart(source) {
@@ -6484,9 +6533,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10041,
 	},
 	flytrap: { // tested, works as intended
-		onFoeModifySpe(spe, pokemon) {
-			if (!pokemon.hasAbility('flytrap') && pokemon.hasType('Bug')) {
-				return this.chainModify(0.5);
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Flytrap') {
+				this.add('-immune', target, '[from] ability: Flytrap');
+				return null;
 			}
 		},
 		onFoeTrapPokemon(pokemon) {
@@ -6505,7 +6555,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Flytrap",
 		rating: 5,
-		num: 10070,
+		num: 10069,
 	},
 	foil: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
@@ -6530,7 +6580,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Forked",
 		rating: 0.1,
-		num: 10035,
+		num: 10034,
 	},
 	/* frigidblaze: { // tested, works as intended
 		onSourceDamagingHit(damage, target, source, move) {
@@ -6549,7 +6599,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Frigid Blaze",
 		rating: 2,
-		num: 10069,
+		num: 10068,
 	}, */
 	galeforce: { // tested, works as intended
 		onStart(source) {
@@ -6573,7 +6623,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Geiger Aura",
 		rating: 3,
-		num: 10058,
+		num: 10057,
 	}, */
 	glacialarmor: { // tested, works as intended
 		onModifyDef(def, pokemon) {
@@ -6611,9 +6661,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Heat Haze",
 		rating: 5,
-		num: 10073,
+		num: 10072,
 	}, */
-	hydrophobic: { // incomplete. needs testing
+	hydrophobic: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Water') {
@@ -6661,7 +6711,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Ice Armor",
 		rating: 5,
-		num: 10074,
+		num: 10073,
 	}, */
 	incantation: { // tested, works as intended
 		onStart(source) {
@@ -6674,7 +6724,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	indomitable: { // untested
 		onDamage(damage, target, source, effect) {
-			if (!['dragonforce'].includes(target.effectiveClimateWeather())) return;
+			if (!['dragonforce'].includes(target.effectiveEnergyWeather())) return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -6683,7 +6733,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Indomitable",
 		rating: 3.5,
-		num: 10033,
+		num: 10032,
 	},
 	/* intoxicate: {
 		onModifyTypePriority: -1,
@@ -6704,7 +6754,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Intoxicate",
 		rating: 3,
-		num: 10060,
+		num: 10059,
 	}, */
 	machineprecision: { // tested, works as intended
 		onModifyCritRatio(critRatio, source) {
@@ -6716,7 +6766,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Machine Precision",
 		rating: 1,
-		num: 10038,
+		num: 10037,
 	},
 	magnapult: { // tested, works as intended
 		onModifySpe(spe, pokemon) {
@@ -6727,7 +6777,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Magnapult",
 		rating: 2,
-		num: 10036,
+		num: 10035,
 	},
 	malice: { // tested, works as intended
 		onModifySpAPriority: 5,
@@ -6743,7 +6793,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.effectiveClimateWeather() !== effect.id) return;
 			if (effect.id === 'bloodmoon') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
@@ -6753,23 +6803,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10018,
 	},
-	masterinstinct: { // tested, works as intended
-		onSourceModifyAccuracyPriority: -1,
-		onSourceModifyAccuracy(accuracy, source) {
-			if (typeof accuracy !== 'number') return;
-			if (['auraprojection'].includes(source.effectiveEnergyWeather())) {
-				this.debug('Master Instinct accuracy boost');
-				return this.chainModify(1.3);
-			}
-		},
-		flags: {},
-		name: "Master Instinct",
-		rating: 2,
-		num: 10027,
-	},
 	nanomachines: { // tested, works as intended
 		onEnergyWeather(target, source, effect) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== effect.id) return;
 			if (effect.id === 'magnetize') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -6777,7 +6813,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Nanomachines",
 		rating: 1.5,
-		num: 10037,
+		num: 10036,
 	},
 	/* nastywebbing: { // tested, works as intended
 		onDamagingHit(damage, target, source, move) {
@@ -6791,7 +6827,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Nasty Webbing",
 		rating: 4,
-		num: 10062,
+		num: 10061,
 	}, */
 	/* neutralize: { // tested, works intendedly TODO: remove failure message when using moves that deal damage and set weather
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
@@ -6823,7 +6859,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryMove(target, source, effect) {
 			if (['sunnyday', 'raindance', 'bloodmoon', 'hail', 'foghorn',
-				'pollinate', 'sprinkle', 'smogspread', 'sandstorm', 'dustdevil',
+				'pollinate', 'sprinkle', 'smogspread', 'sandstorm', 'duststorm',
 				'haunt', 'daydream', 'supercell', 'dragonforce', 'magnetize',
 				'swarmsignal', 'auraprojection', 'strongwinds'].includes(effect.id)) {
 				this.attrLastMove('[still]');
@@ -6844,8 +6880,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return false;
 		},
 		onStart(pokemon) {
-			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
-				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'raindance', 'hail', 'snowscape',
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather();
 				this.debug('Cleared Climate Weathers');
 			}
@@ -6859,7 +6895,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.field.clearEnergyWeather();
 				this.debug('Cleared Energy Weathers');
 			}
-			if (['strongwinds'].includes(this.field.effectiveClearingWeather())) {
+			if (['strongwinds', 'deltastream'].includes(this.field.effectiveClearingWeather())) {
 				this.field.clearClearingWeather();
 				this.debug('Cleared Clearing Weathers');
 			}
@@ -6899,17 +6935,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
 		name: "Neutralize",
 		rating: 4,
-		num: 10075,
+		num: 10074,
 	}, */
-	nottobe: { // tested, works as intended
-		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
-			this.add('-ability', target, 'Not To Be');
-			source.addVolatile('perishsong');
-			target.addVolatile('perishsong');
+	nottobe: { // incomplete, not tested
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (!holder?.hp || target.side !== holder.side || target === holder) return;
+			this.add('-ability', holder, 'Not To Be');
+			for (const pokemon of this.getAllActive()) {
+				if (!pokemon.volatiles['perishsong']) pokemon.addVolatile('perishsong');
+			}
 		},
 		flags: {},
-		name: "Not To Be",
+		name: "Not to Be",
 		rating: 2,
 		num: 10048,
 	},
@@ -6962,7 +7000,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			duration: 5,
 			onModifyAccuracyPriority: -1,
 			onModifyAccuracy(accuracy, target, source, move) {
-				if (typeof accuracy === 'number') {
+				if (typeof accuracy === 'number' && source.species.id !== 'clamtrip') {
 					this.debug('Pearl Drop accuracy drop');
 					return this.chainModify(0.9);
 				}
@@ -6995,8 +7033,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Petrichor",
 		rating: 2.5,
-		num: 10061,
+		num: 10060,
 	}, */
+	poisoncoat: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('psn', target);
+				}
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Coat's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, target, source)) {
+				if (this.randomChance(3, 10)) {
+					target.trySetStatus('psn', source);
+				}
+			}
+		},
+		flags: {},
+		name: "Poison Coat",
+		rating: 3,
+		num: 10038,
+	},
 	pollution: { // tested, works as intended
 		onStart(source) {
 			this.field.setIrritantWeather('smogspread');
@@ -7106,7 +7166,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Power Within",
 		rating: 2.5,
-		num: 10032,
+		num: 10031,
 	},
 	ragestate: { // tested, works as intended
 		onModifyAtkPriority: 5,
@@ -7122,7 +7182,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnergyWeather(target, source, effect) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== effect.id) return;
 			if (effect.id === 'auraprojection') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
@@ -7140,7 +7200,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Relic Soul",
 		rating: 4.5,
-		num: 10076,
+		num: 10075,
 	}, */
 	rockybody: { // tested, works as intended
 		onDamagePriority: 1,
@@ -7189,6 +7249,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	rootcontrol: { // tested, works as intended
 		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Root Control');
 			pokemon.addVolatile('ingrain');
 		},
 		flags: {},
@@ -7236,21 +7297,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		onModifyMovePriority: -2,
-		onModifyMove(move, source) {
-			if (move.secondaries) {
-				if (['daydream'].includes(source.effectiveEnergyWeather())) {
-					this.debug('S&M 2x confuse chance');
-					for (const secondary of move.secondaries) {
-						if (secondary.chance && secondary.status === 'confusion') secondary.chance *= 2;
-					}
+		onModifyMovePriority: -1,
+		onModifyMove(move, pokemon) {
+			if (move.category === "Special" && pokemon.effectiveEnergyWeather() === 'daydream') {
+				this.debug('Adding Smoke & Mirrors confusion');
+				if (!move.secondaries) move.secondaries = [];
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'confusion') return;
 				}
+				move.secondaries.push({
+					chance: 20,
+					volatileStatus: 'confusion',
+				});
 			}
 		},
 		flags: {},
 		name: "Smoke and Mirrors",
 		rating: 2.5,
-		num: 10031,
+		num: 10030,
 	},
 	smotherbody: { // tested, works as intended
 		onModifyMovePriority: -1,
@@ -7282,16 +7346,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Songbird",
 		rating: 0,
-		num: 10068,
+		num: 10067,
 	}, */
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
 		onAnyFaint(target, source, effect) {
-			if (!effect || effect.effectType === 'Move' || !this.effectState.target.hp) return;
 			if (['haunt'].includes(this.effectState.target.effectiveEnergyWeather())) {
-				this.heal(3 * this.effectState.target.baseMaxhp / 8, this.effectState.target, this.effectState.target);
-			} else {
 				this.heal(this.effectState.target.baseMaxhp / 4, this.effectState.target, this.effectState.target);
+			} else {
+				this.heal(this.effectState.target.baseMaxhp / 8, this.effectState.target, this.effectState.target);
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -7300,35 +7363,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Soul Drain",
 		rating: 2,
-		num: 10029,
+		num: 10028,
 	},
-	/* soulpassage: { // tested, works as intended
-		onStart(target) {
+	/* soulpassage: {
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (!holder?.hp || target.side !== holder.side || target === holder) return;
 			let statName: StatIDExceptHP = 'atk';
 			let bestStat = 0;
 			const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			for (const i of stats) {
-				if (target.side.lastFaintedBoosts[i] > bestStat) {
+				if (target.boosts[i] > bestStat) {
 					statName = i;
-					bestStat = target.side.lastFaintedBoosts[i];
+					bestStat = target.boosts[i];
 				}
 			}
-			if (bestStat > 0) this.boost({ [statName]: bestStat }, target);
-		},
-		onStart(target) {
-			const bestStat = source.getBestStat(true, true);
-			this.boost({ [bestStat]: length }, source);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				const bestStat = source.getBestStat(true, true);
-				this.boost({ [bestStat]: length }, source);
-			}
+			if (bestStat > 0) this.boost({ [statName]: bestStat }, holder);
 		},
 		flags: {},
 		name: "Soul Passage",
 		rating: 2.5,
-		num: 10077,
+		num: 10076,
 	}, */
 	standoff: { // tested, works as intended
 		onStart(source) {
@@ -7396,7 +7451,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sweetdreams: { // tested, works as intended
 		onEnergyWeather(target, source, effect) {
-			if (target.hasItem('energynullifier')) return;
+			if (target.effectiveEnergyWeather() !== effect.id) return;
 			if (effect.id === 'daydream') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -7404,9 +7459,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Sweet Dreams",
 		rating: 1.5,
-		num: 10030,
+		num: 10029,
 	},
-	tobe: { // Complete.
+	tobe: {
 		onTryHit(pokemon, target, move) {
 			if (move.ohko) {
 				this.add('-immune', pokemon, '[from] ability: To Be');
@@ -7434,22 +7489,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10047,
 	},
 	trainedeye: { // tested, works as intended
-		onModifyDamage(damage, source, target, move) {
-			if (move.flags['contact'] && target.volatiles['protect']) {
-				this.effectState.protectBroken = true;
-				return this.chainModify(0.25);
+		onHitProtect(source, target, move) {
+			if (source.effectiveEnergyWeather() === 'auraprojection') {
+				if (move.flags['contact']) {
+					target.getMoveHitData(move).bypassProtect = this.effect;
+					return false;
+				}
 			}
 		},
-		onModifyMove(move) {
-			if (this.effectState.protectBroken) {
-				this.effectState.protectBroken = false;
-				delete move.flags['protect'];
-			}
-		},
+		// breaking protect handled in Battle#checkMoveBypassesProtect()
 		flags: {},
 		name: "Trained Eye",
 		rating: 2,
-		num: 10028,
+		num: 10027,
 	},
 	trumpetweevil: { // tested, works as intended
 		onModifyTypePriority: -1,
@@ -7491,7 +7543,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10039,
 	},
 	warpmist: { // tested, works as intended
-		onSwitchInPriority: -1,
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onClimateWeatherChange(pokemon) {
+			if (pokemon.effectiveClimateWeather() === 'foghorn') {
+				pokemon.addVolatile('warpmist');
+			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['warpmist'];
+			this.add('-end', pokemon, 'Warp Mist', '[silent]');
+		},
 		onTryHit(target, source, move) {
 			if (move.category === 'Status' || target.hasItem('ringtarget')) return;
 			if (target !== source && move.ignoreImmunity) {
@@ -7499,21 +7563,49 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.ignoreImmunity = false;
 			}
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.atk >= source.storedStats.spa) return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(spa, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.spa > source.storedStats.atk) return this.chainModify(1.2);
-			}
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				this.add('-activate', pokemon, 'ability: Warp Mist');
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'warpmist' + this.effectState.bestStat);
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist atk boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, pokemon) {
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist def boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spa boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(spd, pokemon) {
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spd boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpe(spe, pokemon) {
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				this.debug('Warp Mist spe boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Warp Mist');
+			},
 		},
 		flags: {},
 		name: "Warp Mist",
-		rating: 2,
+		rating: 3,
 		num: 10019,
 	},
 	/* wetanddry: { // maybe works? needs client implementation to check (i think)
@@ -7594,6 +7686,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Wet and Dry",
 		rating: 1,
-		num: 10057,
+		num: 10056,
 	}, */
 };

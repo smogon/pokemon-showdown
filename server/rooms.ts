@@ -1497,6 +1497,7 @@ export class GlobalRoomState {
 			// 32 was previously used for Multi Battles
 			if (format.bestOfDefault) displayCode |= 64;
 			if (format.teraPreviewDefault) displayCode |= 128;
+			if (format.itemClauseDefault) displayCode |= 256;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
@@ -1658,7 +1659,7 @@ export class GlobalRoomState {
 				player.setStatusType('online');
 			}
 		}
-		let display = true;
+		let display = !options.suppressBattleReport && !room.tour && !room.settings.isPrivate;
 		if (players.length === 2) {
 			display = display && this.checkId(players[0].id) && this.checkId(players[1].id);
 		}

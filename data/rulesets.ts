@@ -38,7 +38,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
@@ -640,7 +640,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
 			}
 		},
-		onTeamPreview() {
+		/* onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(', shiny', '')
@@ -649,6 +649,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					details = details
 						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
 				}
+				this.add('poke', pokemon.side.id, details, '');
+			} */
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				const details = pokemon.details.replace(/(Xerneas|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			if (this.ruleTable.has(`teratypepreview`)) {
@@ -1026,9 +1032,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	gravitysleepclause: {
 		effectType: 'ValidatorRule',
 		name: 'Gravity Sleep Clause',
-		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity or Gigantamax Orbeetle",
+		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity, Black Hole, or Gigantamax Orbeetle",
 		banlist: [
 			'Gravity ++ Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
+			'Black Hole ++ Dark Void', 'Black Hole ++ Grass Whistle', 'Black Hole ++ Hypnosis', 'Black Hole ++ Lovely Kiss', 'Black Hole ++ Sing', 'Black Hole ++ Sleep Powder',
 		],
 		onValidateTeam(team) {
 			let hasOrbeetle = false;
@@ -1054,7 +1061,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onBegin() {
-			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity or Gigantamax Orbeetle are banned');
+			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity, Black Hole, or Gigantamax Orbeetle are banned');
 		},
 	},
 	endlessbattleclause: {
@@ -1091,7 +1098,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 			for (const moveId of set.moves) {
 				const move = this.dex.moves.get(moveId);
-				if (move.id === 'flamecharge' || (move.boosts?.spe && move.boosts.spe > 0)) {
+				if ((move.id === 'flamecharge' || move.id === 'earthrush') || (move.boosts?.spe && move.boosts.spe > 0)) {
 					speedBoosted = true;
 				}
 				const nonSpeedBoostedMoves = [
@@ -1202,7 +1209,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const boostingEffects = [
 				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
 				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'charge', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
-				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
+				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'earthrush', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
 				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'lansatberry', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
 				'meteormash', 'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled',
 				'rockpolish', 'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost',
@@ -1641,6 +1648,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && move.id === 'emberplume' && type === 'Flying') return;
+			if (move && move.id === 'icebreak' && type === 'Ice') return;
 			if (move && move.id === 'slushball' && type === 'Fire') return;
 			if (move && move.id === 'deception' && type === 'Fairy') return;
 			if (move && move.id === 'darkdepletion' && type === 'Grass') return;
@@ -2241,7 +2249,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	guaranteedsecondarymod: {
 		effectType: 'Rule',
 		name: 'Guaranteed Secondary Mod',
-		desc: 'All moves\' secondary effect chances are set to 100% (Tri Attack and Dire Claw set a random status; Poison Touch is not a real secondary and remains at 30%).',
+		desc: 'All moves\' secondary effect chances are set to 100% (Tri Attack and Dire Claw set a random status; Poison Touch/Coat is not a real secondary and remains at 30%).',
 		onModifyMove(move) {
 			if (move.secondaries) {
 				this.debug('Freeze test: Guaranteeing secondary');
@@ -2527,12 +2535,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				const item = pokemon.getItem();
 				if (/^tr\d\d/i.test(item.name)) {
 					const move = this.dex.moves.get(item.desc.split('move ')[1].split('.')[0]);
+					const pp = this.calculatePP(move);
 					pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
 						...pokemon.baseMoveSlots, {
 							id: move.id,
 							move: move.name,
-							pp: move.pp * 8 / 5,
-							maxpp: move.pp * 8 / 5,
+							pp,
+							maxpp: pp,
 							target: move.target,
 							disabled: false,
 							disabledSource: '',
@@ -2915,8 +2924,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (num > 9 || num < 3 || num % 2 !== 1) {
 				throw new Error("Series length must be an odd number between three and nine (inclusive).");
 			}
-			if (!['singles', 'doubles'].includes(this.format.gameType)) {
-				throw new Error("Only single and doubles battles can be a Best-of series.");
+			if (this.format.playerCount > 2) {
+				throw new Error("Free For All and Multi Battles cannot be a Best-of series.");
 			}
 			return value;
 		},
@@ -3268,10 +3277,49 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 	// swse
 
+	weathersleepclause: {
+		effectType: 'ValidatorRule',
+		name: 'Weather Sleep Clause',
+		desc: "Bans Sleep Powder in conjunction with Pollen Storm, and sleep moves below 100% accuracy in conjunction with Pheromones",
+		onValidateTeam(team) {
+			let hasPollenStorm = false;
+			let hasPheromones = false;
+			let hasSleepPowder = false;
+			let hasInaccurateSleepMove = false;
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				const isBugOrPoison = species.types.includes('Bug') || species.types.includes('Poison');
+				const ability = this.dex.abilities.get(set.ability);
+				if (ability.id === 'hayfever') hasPollenStorm = true;
+				if (ability.id === 'secretion') hasPheromones = true;
+				for (const moveid of set.moves) {
+					const move = this.dex.moves.get(moveid);
+					if (move.id === 'pollinate') hasPollenStorm = true;
+					if (move.id === 'swarmsignal') hasPheromones = true;
+					if (move.status === 'slp' && move.flags?.powder) hasSleepPowder = true;
+					const hasMissChanceOrNeverMisses = move.accuracy === true || move.accuracy < 100;
+					if (move.status === 'slp' && hasMissChanceOrNeverMisses && isBugOrPoison) {
+						hasInaccurateSleepMove = true;
+					}
+				}
+			}
+			const problems = [];
+			if (hasPollenStorm && hasSleepPowder) {
+				problems.push(`The combination of Pollen Storm and Sleep Powder on the same team is banned.`);
+			}
+			if (hasPheromones && hasInaccurateSleepMove) {
+				problems.push(`The combination of Pheromones and sleep-inducing moves with imperfect accuracy on the same team is banned.`);
+			}
+			if (problems.length) return problems;
+		},
+		onBegin() {
+			this.add('rule', 'Weather Sleep Clause: The combination of Sleep Powder and Pollen Storm, or sleep-inducing moves with imperfect accuracy and Pheromones, are banned');
+		},
+	},
 	tsolopokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Tso-Lo Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 1 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Tso-Lo Pok&eacute;dex.",
 		banlist: [
 
 		],
@@ -3289,13 +3337,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	sandflatspokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Sand Flats Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 2 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Sand Flats Pok&eacute;dex.",
 		banlist: [
 
 		],
 		onValidateSet(set, format) {
 			const sfDex = [
-				"Ditto",
+				"Sandile", "Krokorok", "Krookodile", "Depuray", "Desoray", "Hippopotas", "Hippowdon", "Dirrun", "Blurrun", "Pudet", "Woond", "Sizzlipede", "Centiskorch", "Maractus", "Pramblo", "Glashulimp", "Torkoal", "Nacli", "Naclstack", "Garganacl", "Vullaby", "Mandibuzz", "Cubone", "Marowak", "Grubbin", "Charjabug", "Vikavolt", "Rotom", "Trapinch", "Vibrava", "Flygon", "Gligar", "Gliscor", "Dwebble", "Crustle", "Wimpod", "Golisopod", "Shellos", "Gastrodon", "Exeggcute", "Exeggutor-Alola", "Chewtle", "Drednaw", "Slowpoke", "Slowbro", "Slowking", "Numel", "Camerupt", "Rufflet", "Braviary", "Braviary-Hisui", "Baltoy", "Claydol", "Natu", "Xatu", "Sigilyph", "Rellor", "Rabsca", "Larvesta", "Volcarona", "Rockruff", "Lycanroc", "Darumaka", "Darmanitan", "Skarmory", "Drout", "Guruchi", "Magikarp", "Gyarados", "Bruxish-Kaskade", "Klink", "Klang", "Klinklang", "Porygon", "Porygon2", "Porygon-Z", "Porygon ω", "Beldum", "Metang", "Metagross", "Elgyem", "Beheeyem", "Minior", "Solosis-Kaskade", "Duosion-Kaskade", "Reuniclus-Kaskade", "Estoe", "Perpetua",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!sfDex.includes(species.baseSpecies) && !sfDex.includes(species.name) &&
@@ -3307,13 +3355,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	kaskadecountrysidepokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Kaskade Countryside Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 3 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Kaskade Countryside Pok&eacute;dex.",
 		banlist: [
 
 		],
 		onValidateSet(set, format) {
 			const kcDex = [
-				"Ditto",
+				"Blitzle", "Zebstrika", "Rookidee", "Corvisquire", "Corviknight", "Nincada", "Ninjask", "Shedinja", "Burmy", "Wormadam", "Mothim", "Tooburm", "Detrarc", "Drilbur", "Excadrill-Kaskade", "Shuckle", "Qayagus", "Miltank", "Auditaur", "Oxillery", "Lechonk", "Oinkologne", "Wooloo", "Dubwool-Kaskade", "Mudbray", "Mudsdale", "Yamper", "Boltund", "Fidough", "Dachsbun", "Applin", "Flapple", "Appletun", "Dipplin", "Hydrapple", "Oricorio", "Mienfoo", "Mienshao", "Mienflux", "Gneckle", "Rabyoose", "Milcery", "Alcremie", "Vanillite", "Vanillish", "Vanilluxe", "Avokiddo", "Alliguaca", "Poltchageist", "Sinistcha", "Furfrou", "Tandemaus", "Maushold", "Tamroast", "Weepollen", "Bounsweet", "Steenee", "Tsareena", "Cottonee", "Whimsicott", "Ralts", "Kirlia", "Gardevoir", "Gallade", "Vitisquash", "Dionysseur",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!kcDex.includes(species.baseSpecies) && !kcDex.includes(species.name) &&
@@ -3325,13 +3373,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	alkimarshpokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Alki Marsh Pokedex',
-		desc: "Only allows Pok&eacute;mon found in Quadrant 4 of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Alki Marsh Pok&eacute;dex.",
 		banlist: [
 
 		],
 		onValidateSet(set, format) {
 			const amDex = [
-				"Ditto",
+				"Aipom", "Ambipom-Kaskade", "Timburr", "Gurdurr-Kaskade", "Conkeldurr-Kaskade", "Umbralu", "Wooper-Paldea", "Clodsire", "Dewpider", "Araquanid", "Croagunk", "Toxicroak", "Fomantis", "Lurantis", "Nomobjeka", "Venipede", "Whirlipede", "Scolipede", "Scyther", "Scizor", "Kleavor", "Kleptarak", "Combee", "Vespiquen", "Riolu", "Lucario", "Kituff", "Beadamup", "Budew", "Roselia", "Roserade", "Pawniard", "Bisharp", "Kingambit", "Spinda", "Stunky", "Skuntank-Kaskade", "Pidove", "Tranquill", "Unfezant", "Trubbish", "Garbodor", "Rattata", "Raticate-Kaskade", "Rascume", "Scraggy", "Scrafty", "Whismur", "Loudred", "Exploud-Kaskade", "Smoochum", "Jynx-Kaskade", "Toxel", "Toxtricity", "Zigzagoon-Galar", "Linoone-Galar", "Obstagoon", "Shroodle", "Grafaiai", "Varoom", "Revavroom", "Faebril", "Bokshel", "Hermirt", "Aeradio", "Botnyak", "Castform", "Skrelp", "Dragalge", "Clobbopus", "Grapploct", "Pincurchin", "Hurchin", "Mareanie", "Toxapex", "Wishiwashi", "Dondozo", "Tatsugiri", "Carvanha", "Sharpedo", "Wailmer", "Wailord", "Dhelmise", "Frillish", "Jellicent", "Vendrom", "Stantler", "Wyrdeer", "Buwuve", "Wasgrowl", "Worcane",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!amDex.includes(species.baseSpecies) && !amDex.includes(species.name) &&
@@ -3343,13 +3391,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	sierrapokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Sierra Pokedex',
-		desc: "Only allows Pok&eacute;mon found in the mountains of the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Sierra Pok&eacute;dex.",
 		banlist: [
 
 		],
 		onValidateSet(set, format) {
 			const sDex = [
-				"Ditto",
+				"Zubat", "Golbat", "Crobat", "Probat", "Roggenrola", "Boldore", "Gigalith", "Sableye", "Jemineye", "Oracub", "Bearvoyance", "Munna", "Musharna", "Folleming", "Carbink", "Bellsprout-Kaskade", "Drosabell", "Shinx-Kaskade", "Luxio-Kaskade", "Luxray-Kaskade", "Togepi", "Togetic", "Togekiss", "Snom", "Frosmoth", "Yanma-Kaskade", "Yanmage", "Dunsparce", "Dudunsparce", "Cutiefly", "Ribombee", "Noibat", "Noivern", "Ponyta-Galar", "Rapidash-Galar", "Absol", "Bloomage", "Goomy", "Sliggoo", "Sliggoo-Hisui", "Goodra", "Goodra-Hisui", "Zorua", "Zorua-Hisui", "Zoroark", "Zoroark-Hisui", "Helioptile", "Heliolisk", "Obsidious", "Slugma", "Magcargo", "Mercryni", "Meraculisk", "Tyrunt", "Tyrantrum", "Charcadet", "Armarouge", "Ceruledge", "Turtonator", "Skiddo", "Gogoat", "Nosepass", "Probopass", "Joltik", "Galvantula", "Tynamo", "Eelektrik", "Eelektross", "Crabrawler", "Crabominable-Kaskade", "Axew", "Fraxure", "Haxorus", "Druddigon", "Swablu", "Altaria", "Sneasel", "Weavile", "Golett-Kaskade", "Golgre", "Relicanth", "Prospectre", "Rolycoly", "Carkol", "Coalossal", "Swinub", "Piloswine", "Mamoswine", "Bergmite", "Avalugg", "Avalugg-Hisui", "Spheal", "Sealeo", "Walrein", "Cetoddle", "Cetitan", "Feebas", "Milotic", "Amaura", "Aurorus", "Lapras-Kaskade", "Skideer", "Yuleigh", "Cryogonal", "Drampa", "Kabuto", "Kabutops", "Tirtouga", "Carracosta", "Archen", "Archeops", "Feafurr", "Vaicear", "Phisnooz", "Telemac", "Macedontus", "Crynorawst",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!sDex.includes(species.baseSpecies) && !sDex.includes(species.name) &&
@@ -3361,13 +3409,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	omegapokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Omega Pokedex',
-		desc: "Only allows Legendary and Mythical Pok&eacute;mon found in the Kaskade Region.",
+		desc: "Only allows Pok&eacute;mon found in the Omega Pok&eacute;dex.",
 		banlist: [
 
 		],
 		onValidateSet(set, format) {
 			const oDex = [
-				"Ditto",
+				"Tamunk", "Temunk", "Manadza", "Arctikull", "Wicoot", "Ωrogon", "Diancie-Kaskade", "Type: Null", "Silvally", "Rotomb", "Spiritomb", "Basculin-White", "Basculegion", "Ditto", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Stakataka", "Blacephalon", "Orbtholod", "Poipole", "Naganadel", "Pestalation", "Revylon", "Leoseace", "Lamentu", "Endram-Odai",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!oDex.includes(species.baseSpecies) && !oDex.includes(species.name) &&

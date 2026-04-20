@@ -16,7 +16,7 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Abra", ability: 'magicguard', moves: ['teleport'] },
 		]]);
-		assert(battle.field.isClimateWeather('deltastream'));
+		assert(battle.field.isClearingWeather('deltastream'));
 	});
 
 	it('should negate the type weaknesses of the Flying-type', () => {
@@ -71,9 +71,9 @@ describe('Delta Stream', () => {
 		]]);
 		for (let i = 2; i <= 5; i++) {
 			battle.makeChoices('move helpinghand', 'switch ' + i);
-			assert(battle.field.isClimateWeather('deltastream'));
+			assert(battle.field.isClearingWeather('deltastream'));
 			battle.makeChoices('move helpinghand', 'move 1');
-			assert(battle.field.isClimateWeather('deltastream'));
+			assert(battle.field.isClearingWeather('deltastream'));
 		}
 	});
 
@@ -84,7 +84,7 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Lugia", ability: 'pressure', moves: ['roost'] },
 		]]);
-		assert.sets(() => battle.field.isClimateWeather('deltastream'), false, () => battle.makeChoices('switch 2', 'move roost'));
+		assert.sets(() => battle.field.isClearingWeather('deltastream'), false, () => battle.makeChoices('switch 2', 'move roost'));
 	});
 
 	it('should not cause the Delta Stream clearingWeather to fade if it switches out and another Delta Stream Pokemon is active', () => {
@@ -94,7 +94,7 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Rayquaza", ability: 'deltastream', moves: ['bulkup'] },
 		]]);
-		assert.constant(() => battle.field.isClimateWeather('deltastream'), () => battle.makeChoices('switch 2', 'move bulkup'));
+		assert.constant(() => battle.field.isClearingWeather('deltastream'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
 	it('should cause the Delta Stream clearingWeather to fade if its ability is suppressed and no other Delta Stream Pokemon are active', () => {
@@ -103,7 +103,7 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Lugia", ability: 'pressure', moves: ['gastroacid'] },
 		]]);
-		assert.sets(() => battle.field.isClimateWeather('deltastream'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
+		assert.sets(() => battle.field.isClearingWeather('deltastream'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
 	it('should not cause the Delta Stream clearingWeather to fade if its ability is suppressed and another Delta Stream Pokemon is active', () => {
@@ -112,7 +112,7 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Rayquaza", ability: 'deltastream', moves: ['gastroacid'] },
 		]]);
-		assert.constant(() => battle.field.isClimateWeather('deltastream'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
+		assert.constant(() => battle.field.isClearingWeather('deltastream'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
 	it('should cause the Delta Stream clearingWeather to fade if its ability is changed and no other Delta Stream Pokemon are active', () => {
@@ -121,6 +121,6 @@ describe('Delta Stream', () => {
 		], [
 			{ species: "Lugia", ability: 'pressure', moves: ['entrainment'] },
 		]]);
-		assert.sets(() => battle.field.isClimateWeather('deltastream'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
+		assert.sets(() => battle.field.isClearingWeather('deltastream'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
 	});
 });

@@ -32,7 +32,6 @@ interface MoveFlags {
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	cantusetwice?: 1; // The user cannot select this move after a previous successful use.
 	charge?: 1; // The user is unable to make a move between turns.
-	commanding?: 1; // swse
 	contact?: 1; // Makes contact.
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
@@ -45,6 +44,7 @@ interface MoveFlags {
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	influencing?: 1; // (SwSe) Activates Enjoin.
 	metronome?: 1; // Can be selected by Metronome.
 	minimize?: 1; // Deals double damage if the user is minimized.
 	mirror?: 1; // Can be copied by Mirror Move.
@@ -307,7 +307,7 @@ interface MoveHitData {
 		 * Is this move a Z-Move that broke the target's protection?
 		 * (does 0.25x regular damage)
 		 */
-		zBrokeProtect: boolean,
+		bypassProtect: boolean | Effect,
 	};
 }
 
@@ -347,7 +347,6 @@ export interface ActiveMove extends MutableMove {
 	stellarBoosted?: boolean;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
-	willChangeForme?: boolean;
 	infiltrates?: boolean;
 	ruinedAtk?: Pokemon;
 	ruinedDef?: Pokemon;
