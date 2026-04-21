@@ -369,7 +369,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-/*		onModifyMovePriority: -1,
+		/*onModifyMovePriority: -1,
 		onModifyMove(move) {
 			if (move.category !== "Status") {
 				this.debug('Adding Supercritical suppress');
@@ -633,14 +633,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon's attacks deal 1.5x damage every other turn.",
 	},
 	volcanicpalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},*/
+		}, */
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Volcanic Palette neutralize');
@@ -653,7 +653,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Solid Rock.",
 	},
 	wildpalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
@@ -700,7 +700,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Flower Veil.",
 	},
 	luminiouspalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
@@ -726,7 +726,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Dazzling.",
 	},
 	storybookpalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
@@ -746,7 +746,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Magic Guard.",
 	},
 	phasicpalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
@@ -778,7 +778,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Thermal Exchange.",
 	},
 	ruffianpalette: {
-/*		onModifySTAB(stab, source, target, move) {
+		/*onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
