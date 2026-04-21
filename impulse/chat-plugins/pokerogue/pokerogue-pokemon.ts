@@ -230,31 +230,21 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	const learnset = learnsetData?.learnset;
 	if (!learnset) return ['tackle'];
 
-	// Try highest available gen learnset for each move.
-	// Match any gen level-up source (format: "{gen}L{level}", e.g. "9L30").
-	// Using all gens ensures Pokemon with no gen9 learnset (e.g. some older mon) still get moves.
-	const moveMap: Record<string, { learnLevel: number }> = {};
+	const available: { move: string, learnLevel: number }[] = [];
 
 	for (const [moveid, sources] of Object.entries(learnset)) {
-		let bestGen = -1;
-		let bestLevel = -1;
 		for (const src of sources) {
-			const match = /^(\d+)L(\d+)$/.exec(src);
+			const match = /^9L(\d+)$/.exec(src);
 			if (match) {
-				const gen = parseInt(match[1]);
-				const learnLvl = parseInt(match[2]);
-				if (learnLvl <= level && gen > bestGen) {
-					bestGen = gen;
-					bestLevel = learnLvl;
+				const learnLvl = parseInt(match[1]);
+				if (learnLvl <= level) {
+					available.push({ move: moveid, learnLevel: learnLvl });
 				}
+				break;
 			}
-		}
-		if (bestGen > 0) {
-			moveMap[moveid] = { learnLevel: bestLevel };
 		}
 	}
 
-	const available = Object.entries(moveMap).map(([move, data]) => ({ move, learnLevel: data.learnLevel }));
 	if (!available.length) return ['tackle'];
 
 	available.sort((a, b) => b.learnLevel - a.learnLevel);
@@ -265,31 +255,22 @@ export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newL
 	const learnset = Dex.species.getLearnsetData(toID(speciesId))?.learnset;
 	if (!learnset) return [];
 
-	// Track per-move best gen to avoid duplicating moves learned across gens
-	const learnedSet = new Set<string>();
+	const learned: string[] = [];
 	for (const [moveid, sources] of Object.entries(learnset)) {
-		let bestGen = -1;
-		let bestLevel = -1;
 		for (const src of sources) {
-			const match = /^(\d+)L(\d+)$/.exec(src);
+			const match = /^9L(\d+)$/.exec(src);
 			if (match) {
-				const gen = parseInt(match[1]);
-				const learnLvl = parseInt(match[2]);
-				if (gen > bestGen) {
-					bestGen = gen;
-					bestLevel = learnLvl;
+				const learnLvl = parseInt(match[1]);
+				if (learnLvl > oldLevel && learnLvl <= newLevel) {
+					learned.push(moveid);
+				} else if (isEvolution && learnLvl === 0) {
+					learned.push(moveid);
 				}
-			}
-		}
-		if (bestGen > 0) {
-			if (bestLevel > oldLevel && bestLevel <= newLevel) {
-				learnedSet.add(moveid);
-			} else if (isEvolution && bestLevel === 0) {
-				learnedSet.add(moveid);
+				break;
 			}
 		}
 	}
-	return Array.from(learnedSet);
+	return Array.from(new Set(learned));
 }
 
 export function packPokemon(mon: PokemonEntry): string {
