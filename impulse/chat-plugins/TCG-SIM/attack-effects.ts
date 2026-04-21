@@ -59,65 +59,151 @@ function countAttachedEnergy(inst: PokemonInstance, type?: string): number {
 }
 
 // ---------------------------------------------------------------------------
-// Base Set 1 specific attack handlers
-// Complex attacks that the generic parser cannot safely handle go here.
+// Named handler functions — each card effect is its own function so that
+// multiple card IDs (same Pokémon reprinted across sets) can share a single
+// implementation without duplicating code.
+// ---------------------------------------------------------------------------
+
+function gengarCurse(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    ctx.preventAllDamage = true;
+    const opponent = isPlayer ? match.ai : match.player;
+    const allOpp = opponent.getAllInPlay();
+    if (allOpp.length > 0) {
+        const target = allOpp[Math.floor(Math.random() * allOpp.length)];
+        target.currentDamage += 10;
+        ctx.customLog.push(`Curse moved 1 damage counter to ${target.topCard.name}.`);
+    }
+}
+
+function machampSeismicToss(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    ctx.baseDamage = def.topCard.hp ? parseInt(def.topCard.hp) - def.currentDamage : 0;
+    ctx.applyWeaknessResistance = false;
+    ctx.customLog.push(`Seismic Toss: ${ctx.baseDamage} damage (ignores W/R).`);
+}
+
+function moltresWildfire(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    ctx.preventAllDamage = true;
+    const player = isPlayer ? match.player : match.ai;
+    const fireEnergy = player.hand.filter(c => c.name === 'Fire Energy');
+    for (const e of fireEnergy) {
+        const idx = player.hand.indexOf(e);
+        if (idx !== -1) player.hand.splice(idx, 1);
+        player.discard.push(e);
+    }
+    ctx.customLog.push(`Wildfire: Discarded ${fireEnergy.length} Fire Energy from hand.`);
+}
+
+function dragoniteStepIn(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    ctx.preventAllDamage = true;
+    ctx.customLog.push(`Step In: Dragonite may switch with a Benched Pokémon.`);
+}
+
+function wigglytuffDoTheWave(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    const player = isPlayer ? match.player : match.ai;
+    const benchCount = player.bench.filter(b => b !== null).length;
+    ctx.baseDamage = benchCount * 10;
+    ctx.customLog.push(`Do the Wave: ${benchCount} Benched Pokémon → ${ctx.baseDamage} damage.`);
+}
+
+function hitmonleeStretchKick(
+    match: TCGMatch, isPlayer: boolean,
+    atk: PokemonInstance, def: PokemonInstance,
+    attack: CardAttack, ctx: DamageContext
+): void {
+    ctx.preventAllDamage = true;
+    const opponent = isPlayer ? match.ai : match.player;
+    const targets = opponent.bench.filter(b => b !== null);
+    if (targets.length > 0) {
+        const target = targets[Math.floor(Math.random() * targets.length)];
+        ctx.benchDamage.push({ instanceUid: target.uid, amount: 30 });
+        ctx.customLog.push(`Stretch Kick: 30 damage to ${target.topCard.name} on bench.`);
+    } else {
+        ctx.customLog.push(`Stretch Kick: No Benched Pokémon to target.`);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Handler registry
+//
+// Keys are `cardId:attackName` (preferred — exact, set-specific) or
+// `cardName:attackName` (fallback — used when a card's set ID is unknown,
+// e.g. custom cards or sets not yet registered).
+//
+// Resolution order in resolveAttackEffect():
+//   1. cardId:attackName   — most specific, wins over everything
+//   2. cardName:attackName — name-based fallback
+//   3. parseGenericAttackText — last resort text parser
 // ---------------------------------------------------------------------------
 
 const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
 
-    'Gengar:Curse': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        const opponent = isPlayer ? match.ai : match.player;
-        const allOpp = opponent.getAllInPlay();
-        if (allOpp.length > 0) {
-            const target = allOpp[Math.floor(Math.random() * allOpp.length)];
-            target.currentDamage += 10;
-            ctx.customLog.push(`Curse moved 1 damage counter to ${target.topCard.name}.`);
-        }
-    },
+    // -----------------------------------------------------------------------
+    // Gengar — Curse
+    // Base Set 1 #5, Base Set 2 #5, Legendary Collection #9
+    // -----------------------------------------------------------------------
+    'base1-5:Curse':       gengarCurse,
+    'base2-5:Curse':       gengarCurse,
+    'legendary-9:Curse':   gengarCurse,
+    'Gengar:Curse':        gengarCurse,  // name fallback
 
-    'Machamp:Seismic Toss': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.baseDamage = def.topCard.hp ? parseInt(def.topCard.hp) - def.currentDamage : 0;
-        ctx.applyWeaknessResistance = false;
-        ctx.customLog.push(`Seismic Toss: ${ctx.baseDamage} damage (ignores W/R).`);
-    },
+    // -----------------------------------------------------------------------
+    // Machamp — Seismic Toss
+    // Base Set 1 #8, Base Set 2 #8, Legendary Collection #16
+    // -----------------------------------------------------------------------
+    'base1-8:Seismic Toss':      machampSeismicToss,
+    'base2-8:Seismic Toss':      machampSeismicToss,
+    'legendary-16:Seismic Toss': machampSeismicToss,
+    'Machamp:Seismic Toss':      machampSeismicToss,  // name fallback
 
-    'Moltres:Wildfire': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        const player = isPlayer ? match.player : match.ai;
-        const fireEnergy = player.hand.filter(c => c.name === 'Fire Energy');
-        for (const e of fireEnergy) {
-            const idx = player.hand.indexOf(e);
-            if (idx !== -1) player.hand.splice(idx, 1);
-            player.discard.push(e);
-        }
-        ctx.customLog.push(`Wildfire: Discarded ${fireEnergy.length} Fire Energy from hand.`);
-    },
+    // -----------------------------------------------------------------------
+    // Moltres — Wildfire
+    // Base Set 1 #12, Legendary Collection #21
+    // -----------------------------------------------------------------------
+    'base1-12:Wildfire':     moltresWildfire,
+    'legendary-21:Wildfire': moltresWildfire,
+    'Moltres:Wildfire':      moltresWildfire,  // name fallback
 
-    'Dragonite:Step In': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        ctx.customLog.push(`Step In: Dragonite may switch with a Benched Pokémon.`);
-    },
+    // -----------------------------------------------------------------------
+    // Dragonite — Step In
+    // Fossil #4
+    // -----------------------------------------------------------------------
+    'fossil-4:Step In':  dragoniteStepIn,
+    'Dragonite:Step In': dragoniteStepIn,  // name fallback
 
-    'Wigglytuff:Do the Wave': (match, isPlayer, atk, def, attack, ctx) => {
-        const player = isPlayer ? match.player : match.ai;
-        const benchCount = player.bench.filter(b => b !== null).length;
-        ctx.baseDamage = benchCount * 10;
-        ctx.customLog.push(`Do the Wave: ${benchCount} Benched Pokémon → ${ctx.baseDamage} damage.`);
-    },
+    // -----------------------------------------------------------------------
+    // Wigglytuff — Do the Wave
+    // Jungle #16 (holo), Jungle #39 (non-holo)
+    // -----------------------------------------------------------------------
+    'jungle-16:Do the Wave':  wigglytuffDoTheWave,
+    'jungle-39:Do the Wave':  wigglytuffDoTheWave,
+    'Wigglytuff:Do the Wave': wigglytuffDoTheWave,  // name fallback
 
-    'Hitmonlee:Stretch Kick': (match, isPlayer, atk, def, attack, ctx) => {
-        ctx.preventAllDamage = true;
-        const opponent = isPlayer ? match.ai : match.player;
-        const targets = opponent.bench.filter(b => b !== null);
-        if (targets.length > 0) {
-            const target = targets[Math.floor(Math.random() * targets.length)];
-            ctx.benchDamage.push({ instanceUid: target.uid, amount: 30 });
-            ctx.customLog.push(`Stretch Kick: 30 damage to ${target.topCard.name} on bench.`);
-        } else {
-            ctx.customLog.push(`Stretch Kick: No Benched Pokémon to target.`);
-        }
-    },
+    // -----------------------------------------------------------------------
+    // Hitmonlee — Stretch Kick
+    // Fossil #7
+    // -----------------------------------------------------------------------
+    'fossil-7:Stretch Kick':  hitmonleeStretchKick,
+    'Hitmonlee:Stretch Kick': hitmonleeStretchKick,  // name fallback
 
 };
 
@@ -133,14 +219,13 @@ export function resolveAttackEffect(
     attack: CardAttack,
     ctx: DamageContext
 ): void {
+    const cardId   = attackerInst.topCard.id;
     const cardName = attackerInst.topCard.name;
-    const cardId = attackerInst.topCard.id;
     const attackName = attack.name;
 
-    const byId = cardId ? `${cardId}:${attackName}` : null;
-    const byName = `${cardName}:${attackName}`;
-
-    const handler = (byId ? ATTACK_HANDLERS[byId] : null) ?? ATTACK_HANDLERS[byName];
+    const handler =
+        (cardId ? ATTACK_HANDLERS[`${cardId}:${attackName}`] : null) ??
+        ATTACK_HANDLERS[`${cardName}:${attackName}`];
 
     if (handler) {
         handler(match, isPlayer, attackerInst, defenderInst, attack, ctx);
