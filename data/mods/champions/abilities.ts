@@ -11,6 +11,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
+	disguise: {
+		inherit: true,
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status') return;
+
+			if (move.hit === 1) delete this.effectState.neutral;
+			if (this.effectState.neutral) return 0;
+
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
+				return;
+			}
+
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move)) return;
+			this.effectState.neutral = true;
+			return 0;
+		},
+	},
 	dragonize: {
 		inherit: true,
 		isNonstandard: null,
@@ -35,6 +55,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	piercingdrill: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	regenerator: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.heal(pokemon.baseMaxhp / 3)) {
+				this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Regenerator', '[silent]');
+			}
+		},
 	},
 	spicyspray: {
 		inherit: true,
