@@ -277,7 +277,7 @@ export class TCGPlayer {
     selectedUid: number | null = null;
 
     pendingEffect: {
-        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck' | 'use_power' | 'pick_defender_energy' | 'pick_amnesia' | 'pick_conversion';
+        type: 'discard_for_effect' | 'pick_from_discard' | 'pick_from_deck' | 'use_power' | 'pick_defender_energy' | 'pick_amnesia' | 'pick_conversion' | 'mulligan_draw' | 'pick_prize' | 'pick_retreat_energy';
         trainerUid: number;
         trainerName: string;
         needed: number;
@@ -475,22 +475,29 @@ export class TCGMatch {
         this.player.draw(7);
         this.ai.draw(7);
 
-        if (aiMulligans > 0) {
-            for (let i = 0; i < aiMulligans; i++) this.player.draw(1);
-            this.addLog(`AI took ${aiMulligans} mulligan(s). Player draws ${aiMulligans} card(s).`);
-        }
-        if (playerMulligans > 0) {
-            for (let i = 0; i < playerMulligans; i++) this.ai.draw(1);
-            this.addLog(`Player took ${playerMulligans} mulligan(s). AI draws ${playerMulligans} card(s).`);
-        }
-
         for (let i = 0; i < 6; i++) {
             this.player.prizes.push(this.player.deck.shift()!);
             this.ai.prizes.push(this.ai.deck.shift()!);
         }
 
+        if (playerMulligans > 0) {
+            this.ai.draw(playerMulligans);
+            this.addLog(`Player took ${playerMulligans} mulligan(s). AI draws ${playerMulligans} extra card(s).`);
+        }
+
         this.turnNumber = 1;
         this.addLog(`Match started! Turn ${this.turnNumber} — Player's turn.`);
+
+        if (aiMulligans > 0) {
+            this.addLog(`AI took ${aiMulligans} mulligan(s). Waiting for Player choice...`);
+            this.player.pendingEffect = {
+                type: 'mulligan_draw',
+                trainerUid: -1,
+                trainerName: 'Mulligan',
+                needed: aiMulligans,
+                selected: []
+            };
+        }
     }
 
     private shuffleDeck(deck: InGameCard[]) {
@@ -639,68 +646,90 @@ export class TCGMatch {
     }
 
     computeFinalDamage(
-        rawDamage: number,
+        baseDamage: number,
         attackerTypes: string[],
+        attackerInst: PokemonInstance | null,
         defenderInst: PokemonInstance,
         applyWR: boolean
-    ): { final: number; weaknessApplied: boolean; resistanceApplied: boolean } {
-        let damage = rawDamage;
+    ): { final: number; weaknessApplied: boolean; resistanceApplied: boolean; blockedByProtection: boolean } {
+        let damage = baseDamage;
         let weaknessApplied = false;
         let resistanceApplied = false;
+        let blockedByProtection = false;
 
-        if (damage === 0 || !applyWR) return { final: damage, weaknessApplied, resistanceApplied };
+        if (damage <= 0) return { final: 0, weaknessApplied, resistanceApplied, blockedByProtection };
 
-        const defenderCard = defenderInst.topCard;
+        // STEP 1: Effects on Attacker (e.g., PlusPower)
+        if (attackerInst) {
+            const plusPowers = attackerInst.attachedItems.filter(i => i.card.name === 'PlusPower').length;
+            if (plusPowers > 0) damage += (plusPowers * 10);
+        }
 
-        for (const atkType of attackerTypes) {
-            let hasWeakness = defenderInst.overrideWeakness === atkType;
-            let weaknessVal = '×2';
-            
-            if (!hasWeakness) {
-                const weakness = defenderCard.weaknesses?.find(w => w.type === atkType);
-                if (weakness && defenderInst.overrideWeakness === null) {
-                    hasWeakness = true;
-                    weaknessVal = weakness.value;
+        // STEP 2: Weakness
+        if (applyWR) {
+            for (const atkType of attackerTypes) {
+                let hasWeakness = defenderInst.overrideWeakness === atkType;
+                let weaknessVal = '×2';
+                
+                if (!hasWeakness) {
+                    const weakness = defenderInst.topCard.weaknesses?.find(w => w.type === atkType);
+                    if (weakness && defenderInst.overrideWeakness === null) {
+                        hasWeakness = true;
+                        weaknessVal = weakness.value;
+                    }
                 }
-            }
 
-            if (hasWeakness) {
-                if (weaknessVal.startsWith('×') || weaknessVal.startsWith('x') || weaknessVal.startsWith('*')) {
+                if (hasWeakness) {
                     const mult = parseFloat(weaknessVal.replace(/[×x*]/, ''));
                     damage = Math.floor(damage * (isNaN(mult) ? 2 : mult));
-                } else {
-                    const flat = parseInt(weaknessVal.replace(/[^0-9]/g, ''));
-                    damage += isNaN(flat) ? 0 : flat;
+                    weaknessApplied = true;
+                    break;
                 }
-                weaknessApplied = true;
-            }
-
-            let hasResistance = defenderInst.overrideResistance === atkType;
-            let resistanceVal = '-30';
-
-            if (!hasResistance) {
-                const resistance = defenderCard.resistances?.find(r => r.type === atkType);
-                if (resistance && defenderInst.overrideResistance === null) {
-                    hasResistance = true;
-                    resistanceVal = resistance.value;
-                }
-            }
-
-            if (hasResistance) {
-                const flat = parseInt(resistanceVal.replace(/[^0-9]/g, ''));
-                damage = Math.max(0, damage - (isNaN(flat) ? 30 : flat));
-                resistanceApplied = true;
             }
         }
 
-        return { final: damage, weaknessApplied, resistanceApplied };
+        // STEP 3: Resistance
+        if (applyWR) {
+            for (const atkType of attackerTypes) {
+                let hasResistance = defenderInst.overrideResistance === atkType;
+                let resistanceVal = '-30';
+
+                if (!hasResistance) {
+                    const resistance = defenderInst.topCard.resistances?.find(r => r.type === atkType);
+                    if (resistance && defenderInst.overrideResistance === null) {
+                        hasResistance = true;
+                        resistanceVal = resistance.value;
+                    }
+                }
+
+                if (hasResistance) {
+                    const flat = parseInt(resistanceVal.replace(/[^0-9]/g, ''));
+                    damage = Math.max(0, damage - (isNaN(flat) ? 30 : flat));
+                    resistanceApplied = true;
+                    break;
+                }
+            }
+        }
+
+        // STEP 4: Effects on Defender
+        if (damage > 0) {
+            const defenders = defenderInst.attachedItems.filter(i => i.card.name === 'Defender').length;
+            if (defenders > 0) damage = Math.max(0, damage - (defenders * 20));
+
+            if (defenderInst.damageThresholdProtection > 0 && damage > 0 && damage <= defenderInst.damageThresholdProtection) {
+                damage = 0;
+                blockedByProtection = true;
+            }
+        }
+
+        return { final: damage, weaknessApplied, resistanceApplied, blockedByProtection };
     }
 
     applyDamageToInstance(inst: PokemonInstance, amount: number, isPlayerOwned: boolean, applyWR = false, attackerTypes: string[] = []) {
         if (inst.protectedThisTurn || amount <= 0) return;
         let dmg = amount;
         if (applyWR) {
-            const { final } = this.computeFinalDamage(amount, attackerTypes, inst, true);
+            const { final } = this.computeFinalDamage(amount, attackerTypes, null, inst, true);
             dmg = final;
         }
         inst.currentDamage += dmg;
@@ -728,14 +757,29 @@ export class TCGMatch {
         victim.pendingPromotion = true;
 
         const prizesToTake = this.prizeCountForCard(inst.topCard);
-        for (let i = 0; i < prizesToTake && attacker.prizes.length > 0; i++) {
-            attacker.hand.push(attacker.prizes.shift()!);
-        }
-        if (prizesToTake > 0) this.addLog(`${this.label(!isPlayerKnockedOut)} took ${prizesToTake} Prize Card(s).`);
-
-        if (attacker.prizes.length === 0 && !mutualKO) {
-            this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
-            return;
+        
+        if (isPlayerKnockedOut) {
+            // AI takes prizes automatically
+            for (let i = 0; i < prizesToTake && attacker.prizes.length > 0; i++) {
+                attacker.hand.push(attacker.prizes.shift()!);
+            }
+            if (prizesToTake > 0) this.addLog(`AI took ${prizesToTake} Prize Card(s).`);
+            
+            if (attacker.prizes.length === 0 && !mutualKO) {
+                this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
+                return;
+            }
+        } else {
+            // Player picks their prizes
+            if (prizesToTake > 0 && attacker.prizes.length > 0) {
+                attacker.pendingEffect = {
+                    type: 'pick_prize',
+                    trainerUid: -2,
+                    trainerName: 'Prize Selection',
+                    needed: Math.min(prizesToTake, attacker.prizes.length),
+                    selected: []
+                };
+            }
         }
 
         if (mutualKO && attacker.active) {
@@ -746,17 +790,30 @@ export class TCGMatch {
             attacker.pendingPromotion = true;
             
             const victimPrizes = this.prizeCountForCard(oppInst.topCard);
-            for (let i = 0; i < victimPrizes && victim.prizes.length > 0; i++) {
-                victim.hand.push(victim.prizes.shift()!);
-            }
-            if (victimPrizes > 0) this.addLog(`${this.label(isPlayerKnockedOut)} took ${victimPrizes} Prize Card(s) via Destiny Bond.`);
             
-            if (victim.prizes.length === 0 && attacker.prizes.length === 0) {
+            if (!isPlayerKnockedOut) {
+                for (let i = 0; i < victimPrizes && victim.prizes.length > 0; i++) {
+                    victim.hand.push(victim.prizes.shift()!);
+                }
+                if (victimPrizes > 0) this.addLog(`AI took ${victimPrizes} Prize Card(s) via Destiny Bond.`);
+            } else {
+                if (victimPrizes > 0 && victim.prizes.length > 0) {
+                    victim.pendingEffect = {
+                        type: 'pick_prize',
+                        trainerUid: -2,
+                        trainerName: 'Prize Selection',
+                        needed: Math.min(victimPrizes, victim.prizes.length),
+                        selected: []
+                    };
+                }
+            }
+            
+            if (victim.prizes.length === 0 && attacker.prizes.length === 0 && (!isPlayerKnockedOut ? !attacker.pendingEffect : !victim.pendingEffect)) {
                  this.addLog(`Draw! Both players took their last prizes! (Sudden Death)`);
-            } else if (victim.prizes.length === 0) {
+            } else if (victim.prizes.length === 0 && !victim.pendingEffect) {
                  this.declareWinner(isPlayerKnockedOut, 'took all Prize Cards via Destiny Bond');
                  return;
-            } else if (attacker.prizes.length === 0) {
+            } else if (attacker.prizes.length === 0 && !attacker.pendingEffect) {
                  this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
                  return;
             }
@@ -912,6 +969,20 @@ export class TCGMatch {
         const target = activePlayer.bench[benchIndex];
         if (!target) return false;
 
+        // If it's the player and they have choices, pause and ask them
+        if (isPlayer && active.attachedEnergy.length > cost) {
+             activePlayer.pendingEffect = {
+                 type: 'pick_retreat_energy',
+                 trainerUid: active.uid,
+                 trainerName: 'Retreat Cost',
+                 needed: cost,
+                 selected: [],
+                 filter: benchIndex.toString()
+             };
+             return true; 
+        }
+
+        // Otherwise (or if AI), just pop the last ones
         for (let i = 0; i < cost; i++) {
             activePlayer.discard.push(active.attachedEnergy.pop()!);
         }
@@ -1074,12 +1145,10 @@ export class TCGMatch {
             const hit = flipCoin();
             this.addLog(`${attackerInst.topCard.name} is Confused — coin flip: ${hit ? 'heads (attacks normally)' : 'tails (hurts itself)'}`);
             if (!hit) {
-                const selfCtx = freshDamageContext(20, attackerInst.topCard.types ?? [], attackerInst, attackIndex);
-                selfCtx.applyWeaknessResistance = true;
-                const { final } = this.computeFinalDamage(20, attackerInst.topCard.types ?? [], attackerInst, true);
-                attackerInst.currentDamage += final;
-                attackerInst.damageTakenThisTurn += final;
-                this.addLog(`${attackerInst.topCard.name} hurt itself for ${final} damage (Confusion — WOTC rule)!`);
+                // Modern rules: Exactly 3 damage counters (30 damage), ignores W/R
+                attackerInst.currentDamage += 30;
+                attackerInst.damageTakenThisTurn += 30;
+                this.addLog(`${attackerInst.topCard.name} hurt itself for 30 damage (Confusion)!`);
                 if (attackerInst.isKnockedOut()) this.processKnockout(isPlayer);
                 this.finishAttack(isPlayer);
                 return true;
@@ -1108,42 +1177,29 @@ export class TCGMatch {
             attackerInst.usedAttacks.push(ctx.oneTimeUseAttack);
         }
 
-        if (!ctx.preventAllDamage) {
-            let damage = ctx.baseDamage + ctx.extraDamage;
-
-            const plusPowers = attackerInst.attachedItems.filter(i => i.card.name === 'PlusPower').length;
-            if (plusPowers > 0) {
-                damage += plusPowers * 10;
-                this.addLog(`PlusPower: +${plusPowers * 10} damage.`);
-            }
-
-            const defenders = defenderInst.attachedItems.filter(i => i.card.name === 'Defender').length;
-            if (defenders > 0 && damage > 0) {
-                damage = Math.max(0, damage - defenders * 20);
-                this.addLog(`Defender: -${defenders * 20} damage.`);
-            }
-
-            if (defenderInst.damageThresholdProtection > 0 && damage > 0 && damage <= defenderInst.damageThresholdProtection) {
-                damage = 0;
-                this.addLog(`${defenderInst.topCard.name}'s protection prevented the damage!`);
-            }
-
-            if (damage > 0 && !defenderInst.protectedThisTurn) {
-                const { final, weaknessApplied, resistanceApplied } = this.computeFinalDamage(
-                    damage,
+        if (!ctx.preventAllDamage && !defenderInst.protectedThisTurn) {
+            const rawDamage = ctx.baseDamage + ctx.extraDamage;
+            
+            if (rawDamage > 0) {
+                const { final, weaknessApplied, resistanceApplied, blockedByProtection } = this.computeFinalDamage(
+                    rawDamage,
                     ctx.attackerTypes,
+                    attackerInst,
                     defenderInst,
                     ctx.applyWeaknessResistance
                 );
-                if (weaknessApplied) this.addLog(`Weakness! Damage doubled.`);
+
+                if (weaknessApplied) this.addLog(`Weakness! Damage multiplied.`);
                 if (resistanceApplied) this.addLog(`Resistance! Damage reduced.`);
-                damage = final;
+                if (blockedByProtection) this.addLog(`${defenderInst.topCard.name}'s protection prevented the damage!`);
 
-                defenderInst.currentDamage += damage;
-                defenderInst.damageTakenThisTurn += damage;
-                this.addLog(`${attackDef.name} dealt ${damage} to ${defenderInst.topCard.name}.`);
+                if (final > 0) {
+                    defenderInst.currentDamage += final;
+                    defenderInst.damageTakenThisTurn += final;
+                    this.addLog(`${attackDef.name} dealt ${final} damage to ${defenderInst.topCard.name}.`);
 
-                if (defenderInst.isKnockedOut()) this.processKnockout(!isPlayer);
+                    if (defenderInst.isKnockedOut()) this.processKnockout(!isPlayer);
+                }
             }
         }
 

@@ -291,7 +291,47 @@ function renderPendingUI(match: TCGMatch): string {
     const pending = match.player.pendingEffect!;
     let html = `<div style="background:#fff3cd;border:1px solid #ffc107;padding:8px;border-radius:6px;margin-bottom:5px;">`;
     
-    // --- NEW PENDING UIs FOR ADVANCED EFFECTS ---
+    // --- NEW PENDING UIs FOR GAME FLOW AND AGENCY ---
+
+    if (pending.type === 'mulligan_draw') {
+        html += `<strong>🎴 Opponent Mulligan</strong> — Your opponent took ${pending.needed} mulligan(s). How many extra cards do you want to draw?</div>`;
+        html += `<div style="background:#fff3cd;padding:5px;border-radius:5px;margin-top:4px;">`;
+        for (let i = 0; i <= pending.needed; i++) {
+            html += `<button class="button" name="send" value="/tcg mulliganpick ${i}" style="background:#fff;border:2px solid #007bff;margin-right:5px;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">Draw ${i}</button>`;
+        }
+        html += `</div>`;
+        return html;
+    }
+
+    if (pending.type === 'pick_prize') {
+        html += `<strong>🎁 Take Prizes</strong> — Select ${pending.needed - pending.selected.length} Prize Card(s):</div>`;
+        html += `<div style="background:#d4edda;padding:5px;border-radius:5px;margin-top:4px;">`;
+        match.player.prizes.forEach((prize, idx) => {
+            if (!pending.selected.includes(idx)) {
+                html += `<button class="button" name="send" value="/tcg prizepick ${idx}" style="background:#28a745;color:#fff;border:1px solid #1e7e34;margin-right:5px;padding:15px 10px;font-weight:bold;cursor:pointer;border-radius:4px;">Prize ${idx + 1}</button>`;
+            }
+        });
+        html += `</div>`;
+        return html;
+    }
+
+    if (pending.type === 'pick_retreat_energy') {
+        const inst = match.player.active;
+        html += `<strong>⚡ Retreat Cost</strong> — Select ${pending.needed - pending.selected.length} Energy to discard from ${inst?.topCard.name}:</div>`;
+        if (inst) {
+            html += `<div style="background:#fff3cd;padding:5px;border-radius:5px;margin-top:4px;overflow-x:auto;white-space:nowrap;">`;
+            inst.attachedEnergy.forEach((e, idx) => {
+                const isPicked = pending.selected.includes(idx);
+                const border = isPicked ? '2px solid red' : '1px solid #ffc107';
+                html += `<button class="button ${isPicked ? 'disabled' : ''}" name="send" value="/tcg retreatenergypick ${idx}" ${isPicked ? 'disabled' : ''} style="background:transparent;border:${border};padding:2px;margin:2px;border-radius:4px;cursor:pointer;">`;
+                html += `<img src="${e.images.small}" style="width:40px;display:block;" alt="${e.name}"/></button>`;
+            });
+            html += `</div>`;
+        }
+        return html;
+    }
+
+    // --- EXISTING PENDING UIs FOR ADVANCED EFFECTS ---
 
     if (pending.type === 'pick_amnesia') {
         html += `<strong>🃏 Amnesia</strong> — Choose an attack to disable on the Defending Pokémon:</div>`;
@@ -334,8 +374,6 @@ function renderPendingUI(match: TCGMatch): string {
         }
         return html;
     }
-
-    // --- EXISTING PENDING UIs ---
 
     const icon = pending.type === 'use_power' ? '✨' : '🃏';
     html += `<strong>${icon} ${pending.trainerName}</strong> — `;
@@ -839,6 +877,82 @@ export const commands: Chat.ChatCommands = {
             this.refreshPage('tcg-match');
         },
 
+        // ---- Pending Effect Commands (Phase 2 additions) --------------------
+
+        mulliganpick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.player.pendingEffect?.type !== 'mulligan_draw') return;
+            const amount = parseInt(target);
+            if (!isNaN(amount) && amount > 0) {
+                match.player.draw(amount);
+                match.addLog(`Player chose to draw ${amount} extra card(s) from opponent's mulligans.`);
+            } else {
+                match.addLog(`Player declined to draw extra cards.`);
+            }
+            match.player.pendingEffect = null;
+            this.refreshPage('tcg-match');
+        },
+
+        prizepick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            const pending = match.player.pendingEffect;
+            if (!match || pending?.type !== 'pick_prize') return;
+            
+            const idx = parseInt(target);
+            if (!isNaN(idx) && !pending.selected.includes(idx)) {
+                pending.selected.push(idx);
+                // Actually pull the prize
+                const prize = match.player.prizes[idx];
+                // We have to nullify the array spot to keep indices intact until the effect is over
+                match.player.prizes[idx] = null as any; 
+                match.player.hand.push(prize);
+                match.addLog(`You took a Prize Card!`);
+            }
+
+            if (pending.selected.length >= pending.needed) {
+                // Clean up the nulls we left in the prize array
+                match.player.prizes = match.player.prizes.filter(p => p !== null);
+                match.player.pendingEffect = null;
+                if (match.player.prizes.length === 0) {
+                    match.winner = 'player';
+                    match.addLog(`Player wins by taking all Prize Cards!`);
+                }
+            }
+            this.refreshPage('tcg-match');
+        },
+
+        retreatenergypick(target, room, user) {
+            const match = activeMatches.get(user.id);
+            const pending = match.player.pendingEffect;
+            if (!match || pending?.type !== 'pick_retreat_energy') return;
+            
+            const idx = parseInt(target);
+            if (!isNaN(idx) && !pending.selected.includes(idx)) {
+                pending.selected.push(idx);
+            }
+
+            if (pending.selected.length >= pending.needed) {
+                const active = match.player.active!;
+                const benchIndex = parseInt(pending.filter!);
+                const targetBench = match.player.bench[benchIndex];
+
+                // Sort indices descending so splicing doesn't mess up the array
+                pending.selected.sort((a, b) => b - a).forEach(i => {
+                    const discarded = active.attachedEnergy.splice(i, 1)[0];
+                    match.player.discard.push(discarded);
+                });
+
+                active.clearVolatileStatus();
+                match.player.active = targetBench;
+                match.player.bench[benchIndex] = active;
+                match.player.hasRetreatedThisTurn = true;
+                
+                match.addLog(`Player retreated ${active.topCard.name}, sending out ${targetBench!.topCard.name}.`);
+                match.player.pendingEffect = null;
+            }
+            this.refreshPage('tcg-match');
+        },
+
         // ---- Pending effect commands ----------------------------------------
 
         pendingselect(target, room, user) {
@@ -880,6 +994,12 @@ export const commands: Chat.ChatCommands = {
                  match.addLog(`You cancelled the attack's secondary effect.`);
                  match.player.pendingEffect = null;
                  match.finishAttack(true);
+            } else if (type === 'mulligan_draw' || type === 'pick_retreat_energy') {
+                 // You can decline to draw for mulligans or cancel retreat selection
+                 match.player.pendingEffect = null;
+            } else if (type === 'pick_prize') {
+                 // You MUST pick a prize
+                 return this.errorReply("You must select your Prize card(s).");
             } else {
                  match.player.pendingEffect = null;
             }
