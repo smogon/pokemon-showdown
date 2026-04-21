@@ -870,6 +870,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	slowbronite: {
 		inherit: true,
 		isNonstandard: null,
+		shortDesc: "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
 	},
 	smoothrock: {
 		inherit: true,
