@@ -1100,6 +1100,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Tough",
+		shortDesc: "Makes the target go Berserk.",
 	},
 	heartofoak: {
 		num: 1312,
