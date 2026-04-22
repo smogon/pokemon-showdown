@@ -226,7 +226,9 @@ export class DexItems {
 		if (this.allCache) return this.allCache;
 		const items = [];
 		for (const id in this.dex.data.Items) {
-			items.push(this.getByID(id as ID));
+			const item = this.getByID(id as ID);
+			if (item.isHeldItem === false) continue;
+			items.push(item);
 		}
 		this.allCache = Object.freeze(items);
 		return this.allCache;

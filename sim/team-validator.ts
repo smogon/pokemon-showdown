@@ -1902,6 +1902,10 @@ export class TeamValidator {
 
 		setHas['item:' + item.id] = true;
 
+		if (item.isHeldItem === false) {
+			return `${item.name} is not a holdable item.`;
+		}
+
 		let banReason = ruleTable.check('item:' + (item.id || 'noitem'));
 		if (banReason) {
 			if (!item.id) {

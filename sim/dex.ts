@@ -385,6 +385,7 @@ export class ModdedDex {
 		let searchResults: AnyObject[] | null = [];
 		for (const table of searchIn) {
 			const res = this[searchObjects[table]].get(target);
+			if (table === 'Items' && this.items.get(target).isHeldItem === false) continue;
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -402,6 +403,7 @@ export class ModdedDex {
 			for (const table of searchIn) {
 				for (const alias of fuzzyAliases) {
 					const res = this[searchObjects[table]].get(alias);
+					if (table === 'Items' && this.items.get(alias).isHeldItem === false) continue;
 					if (res.exists && res.gen <= this.gen) {
 						searchResults.push({
 							isInexact: true,
