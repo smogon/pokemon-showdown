@@ -1,0 +1,2 @@
+-- v1: initial schema (user_preferences and db_info tables)
+-- No migration needed for fresh installs; this file just marks the version.

@@ -28,6 +28,8 @@ import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
 import * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
+import * as UserPreferences from './user-preferences';
+import * as CustomFormats from './custom-formats';
 import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { Dex } from '../sim';
@@ -1555,6 +1557,8 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new Friends.FriendsDatabase();
 	readonly FriendsPM = Friends.PM;
+	readonly UserPreferences = new UserPreferences.UserPreferencesDatabase();
+	readonly CustomFormats = new CustomFormats.CustomFormatsDatabase();
 	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
@@ -1566,7 +1570,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy, UserPreferences.destroy, CustomFormats.destroy];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -2750,5 +2754,9 @@ function start(processCount: ConfigLoader.SubProcessesConfig) {
 	}
 	Chat.PrivateMessages.start(processCount);
 	Friends.start(processCount);
+	if (Config.usesqlite) {
+		UserPreferences.start(processCount);
+		CustomFormats.start(processCount);
+	}
 	Artemis.start(processCount);
 }

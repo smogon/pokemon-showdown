@@ -1738,6 +1738,7 @@ export const commands: Chat.ChatCommands = {
 			this.tr`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.`,
 			this.tr`- We log IPs to enforce bans and mutes.`,
 			this.tr`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.`,
+			this.tr`- If you are logged in, your client preferences (e.g. sound, theme, language) may be stored server-side so they sync across devices. Use <code>/exportprefs</code> to view or <code>/deleteallprefs confirm</code> to erase them.`,
 			this.tr`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
 		].join(`<br />`));
 	},

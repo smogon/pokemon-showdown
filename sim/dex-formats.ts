@@ -559,6 +559,12 @@ export class DexFormats {
 		this.formatsListCache = null;
 	}
 
+	/**
+	 * In-memory cache of DB-backed custom formats, built by loadFromDB().
+	 * Populated as a flat FormatList (with section headers) ready for mergeFormatLists.
+	 */
+	private _dbFormatList: FormatList | null = null;
+
 	load(): this {
 		if (!this.dex.isBase) throw new Error(`This should only be run on the base mod`);
 		this.dex.includeMods();
@@ -583,6 +589,12 @@ export class DexFormats {
 			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
 		}
 		if (customFormats) Formats = mergeFormatLists(Formats as any, customFormats);
+
+		// Merge in DB-backed custom formats from the pre-loaded cache.
+		// The cache is populated by DexFormats.loadFromDB() which is called after startup.
+		if (this._dbFormatList) {
+			Formats = mergeFormatLists(Formats as any, this._dbFormatList);
+		}
 
 		let section = '';
 		let column = 1;
@@ -617,6 +629,41 @@ export class DexFormats {
 
 		this.formatsListCache = formatsList;
 		return this;
+	}
+
+	/**
+	 * Loads DB-backed custom formats into the in-memory cache and then
+	 * refreshes the format list. Safe to call from async contexts (e.g. after
+	 * server startup or immediately after a custom format is mutated).
+	 */
+	async loadFromDB(): Promise<this> {
+		if (!this.dex.isBase) throw new Error(`This should only be run on the base mod`);
+		if (typeof global.Chat === 'undefined' || !global.Config?.usesqlite) {
+			return this;
+		}
+		try {
+			const sections = await Chat.CustomFormats.getAll();
+			const dbList: FormatList = [];
+			for (const { section: sectionName, formats } of sections) {
+				dbList.push({ section: sectionName });
+				for (const fmt of formats) dbList.push(fmt);
+			}
+			this._dbFormatList = dbList;
+		} catch {
+			// DB not available yet; leave _dbFormatList as-is
+		}
+		this.reload();
+		return this;
+	}
+
+	/**
+	 * Clears the in-memory format caches so the next call to `load()` or `all()`
+	 * rebuilds from scratch (picking up any changes to `_dbFormatList`).
+	 */
+	reload(): this {
+		this.formatsListCache = null;
+		this.rulesetCache = new Map();
+		return this.load();
 	}
 
 	checkDeprecated(format: AnyObject) {

@@ -144,6 +144,12 @@ export const readyPromise = cleanupStale().then(() => {
 	TeamValidatorAsync.start(Config.subprocessescache);
 	Chat.start(Config.subprocessescache);
 
+	// After Chat (and thus the custom-formats subprocess) has started, load
+	// DB-backed custom formats into the live format list.
+	if (Config.usesqlite) {
+		void Dex.formats.loadFromDB();
+	}
+
 	/*********************************************************
 	 * Monitor config file and display diagnostics
 	 *********************************************************/

@@ -18,7 +18,8 @@ type InputConfig = Omit<DefaultConfig, 'subprocesses'> & {
 
 type ProcessType = (
 	'localartemis' | 'remoteartemis' | 'battlesearch' | 'datasearch' | 'friends' |
-	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
+	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier' |
+	'userprefs' | 'customformats'
 );
 
 export type SubProcessesConfig = Partial<Record<ProcessType, number>>;
@@ -38,6 +39,7 @@ const FLAG_PRESETS = new Map([
 const processTypes: ProcessType[] = [
 	'localartemis', 'remoteartemis', 'battlesearch', 'datasearch', 'friends',
 	'chatdb', 'pm', 'modlog', 'network', 'simulator', 'validator', 'verifier',
+	'userprefs', 'customformats',
 ];
 
 const CONFIG_PATH = FS('./config/config.js').path;

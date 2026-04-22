@@ -1,0 +1,2 @@
+-- v1: initial schema (custom_formats, custom_format_rules, custom_format_base_snapshot, db_info)
+-- No migration needed for fresh installs; this file just marks the version.
