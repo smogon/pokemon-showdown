@@ -63,6 +63,7 @@ function renderSlot(
     match: TCGMatch
 ): string {
     const player = match.player;
+    const isSetup = match.phase === 'setup';
     const selectedCard = player.hand.find(c => c.uid === player.selectedUid);
     const trainerEffect = selectedCard && isTrainerCard(selectedCard)
         ? (TrainerEffects[selectedCard.id] ?? TrainerEffects[selectedCard.name])
@@ -86,13 +87,20 @@ function renderSlot(
     const isSelectedEvolution = !!selectedCard && isEvolutionPokemon(selectedCard);
     const isSelectedBasic = !!selectedCard && isBasicPokemon(selectedCard);
 
+    // During setup: player can place basics on their own field only.
+    // Clicking an occupied own slot returns the Pokémon to hand.
     if (!instance) {
         let btnValue = '';
         if (!isAi && !match.winner) {
-            if (isSelectedBasic) btnValue = `/tcg place ${targetSlot}`;
+            if (isSetup && isSelectedBasic) {
+                btnValue = `/tcg place ${targetSlot}`;
+            } else if (!isSetup && isSelectedBasic) {
+                btnValue = `/tcg place ${targetSlot}`;
+            }
         }
         if (btnValue) {
-            return `<button class="button" name="send" value="${btnValue}" style="width:75px;height:104px;margin:1px;background:#e6f2ff;border:2px dashed #007bff;border-radius:6px;cursor:pointer;color:#007bff;font-weight:bold;font-size:11px;">Place<br/>Here</button>`;
+            const label = isSetup ? 'Place Here' : 'Place<br/>Here';
+            return `<button class="button" name="send" value="${btnValue}" style="width:75px;height:104px;margin:1px;background:#e6f2ff;border:2px dashed #007bff;border-radius:6px;cursor:pointer;color:#007bff;font-weight:bold;font-size:11px;">${label}</button>`;
         }
         return `<div style="width:75px;height:104px;border:1px dashed #888;border-radius:6px;display:inline-block;vertical-align:top;margin:1px;text-align:center;line-height:104px;color:#888;font-size:10px;">Empty</div>`;
     }
@@ -103,76 +111,82 @@ function renderSlot(
     let overlayColor = '';
 
     if (!match.winner) {
-        if (isAi) {
-            if (isOpponentTargeted && !player.pendingEffect) {
-                btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
-                overlayLabel = 'Target';
-                overlayColor = 'rgba(220,53,69,0.4)';
-            } else if (isLureTarget) {
-                const eUid = parseInt(pending!.filter!.split(':')[1]);
-                btnValue = `/tcg luretarget ${eUid} ${targetSlot}`;
-                overlayLabel = 'Pull Active';
-                overlayColor = 'rgba(220,53,69,0.5)';
-            }
-        } else {
-            if (isSERPending && instance.attachedEnergy.length > 0) {
-                overlayLabel = 'Pick Energy';
-                overlayColor = 'rgba(220,53,69,0.3)';
-            } else if (isDamageSwapFrom && instance.currentDamage > 0) {
-                btnValue = `/tcg damageswapfrom ${instance.uid}`;
-                overlayLabel = 'Take 10';
-                overlayColor = 'rgba(220,53,69,0.5)';
-            } else if (isDamageSwapTo) {
-                const fromUid = parseInt(pending!.filter!.split(':')[1]);
-                if (instance.uid !== fromUid) {
-                    btnValue = `/tcg damageswapto ${fromUid} ${instance.uid}`;
-                    overlayLabel = 'Give 10';
-                    overlayColor = 'rgba(40,167,69,0.5)';
+        if (isSetup && !isAi) {
+            // During setup: clicking an occupied own slot returns it to hand
+            btnValue = `/tcg setupreturn ${targetSlot}`;
+            overlayLabel = 'Return';
+            overlayColor = 'rgba(220,53,69,0.25)';
+        } else if (!isSetup) {
+            if (isAi) {
+                if (isOpponentTargeted && !player.pendingEffect) {
+                    btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
+                    overlayLabel = 'Target';
+                    overlayColor = 'rgba(220,53,69,0.4)';
+                } else if (isLureTarget) {
+                    const eUid = parseInt(pending!.filter!.split(':')[1]);
+                    btnValue = `/tcg luretarget ${eUid} ${targetSlot}`;
+                    overlayLabel = 'Pull Active';
+                    overlayColor = 'rgba(220,53,69,0.5)';
                 }
-            } else if (isRainDanceTarget && instance.topCard.types?.includes('Water')) {
-                const eUid = parseInt(pending!.filter!.split(':')[1]);
-                btnValue = `/tcg raindancetarget ${eUid} ${targetSlot}`;
-                overlayLabel = 'Attach';
-                overlayColor = 'rgba(0,123,255,0.5)';
-            } else if (isEnergyTransTo) {
-                const parts = pending!.filter!.split(':');
-                const fromUid = parseInt(parts[1]);
-                const eUid = parseInt(parts[2]);
-                if (instance.uid !== fromUid) {
-                    btnValue = `/tcg energytransto ${fromUid} ${eUid} ${targetSlot}`;
-                    overlayLabel = 'Move Here';
-                    overlayColor = 'rgba(40,167,69,0.5)';
+            } else {
+                if (isSERPending && instance.attachedEnergy.length > 0) {
+                    overlayLabel = 'Pick Energy';
+                    overlayColor = 'rgba(220,53,69,0.3)';
+                } else if (isDamageSwapFrom && instance.currentDamage > 0) {
+                    btnValue = `/tcg damageswapfrom ${instance.uid}`;
+                    overlayLabel = 'Take 10';
+                    overlayColor = 'rgba(220,53,69,0.5)';
+                } else if (isDamageSwapTo) {
+                    const fromUid = parseInt(pending!.filter!.split(':')[1]);
+                    if (instance.uid !== fromUid) {
+                        btnValue = `/tcg damageswapto ${fromUid} ${instance.uid}`;
+                        overlayLabel = 'Give 10';
+                        overlayColor = 'rgba(40,167,69,0.5)';
+                    }
+                } else if (isRainDanceTarget && instance.topCard.types?.includes('Water')) {
+                    const eUid = parseInt(pending!.filter!.split(':')[1]);
+                    btnValue = `/tcg raindancetarget ${eUid} ${targetSlot}`;
+                    overlayLabel = 'Attach';
+                    overlayColor = 'rgba(0,123,255,0.5)';
+                } else if (isEnergyTransTo) {
+                    const parts = pending!.filter!.split(':');
+                    const fromUid = parseInt(parts[1]);
+                    const eUid = parseInt(parts[2]);
+                    if (instance.uid !== fromUid) {
+                        btnValue = `/tcg energytransto ${fromUid} ${eUid} ${targetSlot}`;
+                        overlayLabel = 'Move Here';
+                        overlayColor = 'rgba(40,167,69,0.5)';
+                    }
+                } else if (isStepInSwitch) {
+                    btnValue = `/tcg stepinswitch ${targetSlot}`;
+                    overlayLabel = 'Switch In';
+                    overlayColor = 'rgba(0,123,255,0.55)';
+                } else if (pending?.trainerName === 'Pokémon Breeder' && pending.selected.length >= pending.needed) {
+                    if (instance.stage === 0) {
+                        btnValue = `/tcg breederplace ${targetSlot}`;
+                        overlayLabel = 'Breed Here';
+                        overlayColor = 'rgba(255,140,0,0.45)';
+                    }
+                } else if (isSelectedEnergy && !pending) {
+                    btnValue = `/tcg attach ${targetSlot}`;
+                    overlayLabel = 'Attach';
+                    overlayColor = 'rgba(0,123,255,0.3)';
+                } else if (isSelectedEvolution && selectedCard!.evolvesFrom === card.name && !pending) {
+                    btnValue = `/tcg evolve ${targetSlot}`;
+                    overlayLabel = 'Evolve';
+                    overlayColor = 'rgba(255,193,7,0.4)';
+                } else if (isOwnTargetedTrainer && !pending) {
+                    btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
+                    overlayLabel = 'Target';
+                    overlayColor = 'rgba(153,50,204,0.4)';
+                } else if (!selectedCard && context === 'bench' && !player.active && !pending) {
+                    btnValue = `/tcg promote ${targetSlot}`;
+                    overlayLabel = 'Promote';
+                    overlayColor = 'rgba(40,167,69,0.3)';
+                } else if (!selectedCard && context === 'active' && !pending) {
+                    const isSelectedField = instance.uid === player.selectedUid;
+                    btnValue = isSelectedField ? `/tcg deselect` : `/tcg select ${instance.uid}`;
                 }
-            } else if (isStepInSwitch) {
-                // FIX: Step In — highlight bench slots as swap targets
-                btnValue = `/tcg stepinswitch ${targetSlot}`;
-                overlayLabel = 'Switch In';
-                overlayColor = 'rgba(0,123,255,0.55)';
-            } else if (pending?.trainerName === 'Pokémon Breeder' && pending.selected.length >= pending.needed) {
-                if (instance.stage === 0) {
-                    btnValue = `/tcg breederplace ${targetSlot}`;
-                    overlayLabel = 'Breed Here';
-                    overlayColor = 'rgba(255,140,0,0.45)';
-                }
-            } else if (isSelectedEnergy && !pending) {
-                btnValue = `/tcg attach ${targetSlot}`;
-                overlayLabel = 'Attach';
-                overlayColor = 'rgba(0,123,255,0.3)';
-            } else if (isSelectedEvolution && selectedCard!.evolvesFrom === card.name && !pending) {
-                btnValue = `/tcg evolve ${targetSlot}`;
-                overlayLabel = 'Evolve';
-                overlayColor = 'rgba(255,193,7,0.4)';
-            } else if (isOwnTargetedTrainer && !pending) {
-                btnValue = `/tcg playtrainer ${selectedCard!.uid} ${targetSlot}`;
-                overlayLabel = 'Target';
-                overlayColor = 'rgba(153,50,204,0.4)';
-            } else if (!selectedCard && context === 'bench' && !player.active && !pending) {
-                btnValue = `/tcg promote ${targetSlot}`;
-                overlayLabel = 'Promote';
-                overlayColor = 'rgba(40,167,69,0.3)';
-            } else if (!selectedCard && context === 'active' && !pending) {
-                const isSelectedField = instance.uid === player.selectedUid;
-                btnValue = isSelectedField ? `/tcg deselect` : `/tcg select ${instance.uid}`;
             }
         }
     }
@@ -209,11 +223,61 @@ function renderSlot(
         html += `<div style="position:absolute;top:-2px;left:-2px;pointer-events:none;">${statusBadge}</div>`;
     }
 
-    if (instance.topCard.abilities?.length) {
+    if (instance.topCard.abilities?.length && !isSetup) {
         const hasPower = instance.topCard.abilities.some(a => a.type === 'Pokémon Power' || a.type === 'Poké-Power');
         if (hasPower && !isAi) {
             html += `<div style="position:absolute;top:50%;left:0;width:100%;transform:translateY(-50%);pointer-events:none;text-align:center;"><span style="background:rgba(83,74,183,0.8);color:#fff;border-radius:3px;font-size:9px;padding:1px 4px;">POWER</span></div>`;
         }
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+// ---------------------------------------------------------------------------
+// Setup phase UI renderer
+// ---------------------------------------------------------------------------
+
+function renderSetupUI(match: TCGMatch): string {
+    const player = match.player;
+    const hasActive = !!player.active;
+    const benchCount = player.bench.filter(b => b !== null).length;
+
+    let html = `<div style="background:linear-gradient(135deg,#1a1a3e 0%,#2d1b69 100%);border:2px solid #7c3aed;padding:10px 12px;border-radius:8px;margin-bottom:6px;">`;
+    html += `<div style="color:#e9d5ff;font-weight:bold;font-size:13px;margin-bottom:6px;display:flex;align-items:center;gap:6px;">`;
+    html += `<span style="font-size:16px;">🎴</span> Setup Phase — Choose Your Starting Pokémon`;
+    html += `</div>`;
+
+    html += `<div style="color:#c4b5fd;font-size:11px;line-height:1.5;margin-bottom:8px;">`;
+    html += `Select a <strong style="color:#fbbf24;">Basic Pokémon</strong> from your hand to place as your <strong style="color:#34d399;">Active</strong> (required). `;
+    html += `You may also place up to 5 Basics on your <strong style="color:#60a5fa;">Bench</strong>. `;
+    html += `Click a placed card to return it to your hand.`;
+    html += `</div>`;
+
+    // Status row
+    html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">`;
+
+    // Active status
+    if (hasActive) {
+        html += `<span style="background:#065f46;color:#6ee7b7;border:1px solid #34d399;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:bold;">✅ Active: ${player.active!.topCard.name}</span>`;
+    } else {
+        html += `<span style="background:#450a0a;color:#fca5a5;border:1px solid #ef4444;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:bold;">❌ No Active yet</span>`;
+    }
+
+    // Bench count
+    html += `<span style="background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6;border-radius:4px;padding:2px 8px;font-size:11px;">Bench: ${benchCount}/5</span>`;
+
+    // AI status
+    const aiActive = match.ai.active;
+    html += `<span style="background:#1a1a1a;color:#9ca3af;border:1px solid #374151;border-radius:4px;padding:2px 8px;font-size:11px;">🤖 AI ready${aiActive ? ` (${aiActive.topCard.name})` : ''}</span>`;
+
+    html += `</div>`;
+
+    // Start Battle button
+    if (hasActive) {
+        html += `<button class="button" name="send" value="/tcg confirmsetup" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:bold;font-size:13px;padding:7px 20px;border:none;border-radius:6px;cursor:pointer;box-shadow:0 2px 8px rgba(5,150,105,0.4);">⚔️ Start Battle!</button>`;
+    } else {
+        html += `<button class="button disabled" style="background:#374151;color:#6b7280;font-size:13px;padding:7px 20px;border:none;border-radius:6px;cursor:not-allowed;" disabled>⚔️ Start Battle! (place Active first)</button>`;
     }
 
     html += `</div>`;
@@ -227,6 +291,7 @@ function renderSlot(
 function renderHandCard(card: InGameCard, match: TCGMatch): string {
     const isSelected = card.uid === match.player.selectedUid;
     const pending = match.player.pendingEffect;
+    const isSetup = match.phase === 'setup';
     
     const isRainDanceEnergy = pending?.filter === 'rain_dance_energy' && card.name === 'Water Energy';
     const isLureEnergy = pending?.filter === 'lure_energy' && card.name === 'Fire Energy';
@@ -238,9 +303,18 @@ function renderHandCard(card: InGameCard, match: TCGMatch): string {
     if (isPendingCandidate) border = '1px dashed #e67e00';
     if (isRainDanceEnergy || isLureEnergy) border = '2px solid #28a745';
 
+    // During setup: only basics are selectable; others shown dimmed
+    const isBasic = isBasicPokemon(card);
+    const dimmedDuringSetup = isSetup && !isBasic;
+
     let btnValue = '';
     if (!match.winner) {
-        if (pending) {
+        if (isSetup) {
+            // Only allow selecting basics during setup; non-basics are unclickable
+            if (isBasic) {
+                btnValue = isSelected ? `/tcg deselect` : `/tcg select ${card.uid}`;
+            }
+        } else if (pending) {
             if (isRainDanceEnergy) {
                 btnValue = `/tcg raindancepick ${card.uid}`;
             } else if (isLureEnergy) {
@@ -253,12 +327,16 @@ function renderHandCard(card: InGameCard, match: TCGMatch): string {
         }
     }
 
-    let html = `<div style="width:75px;display:inline-block;vertical-align:top;margin:1px;text-align:center;border:${border};border-radius:6px;position:relative;">`;
+    let html = `<div style="width:75px;display:inline-block;vertical-align:top;margin:1px;text-align:center;border:${border};border-radius:6px;position:relative;${dimmedDuringSetup ? 'opacity:0.4;' : ''}">`;
     if (btnValue) html += `<button class="button" name="send" value="${btnValue}" style="background:transparent;border:none;padding:0;margin:0;width:100%;cursor:pointer;display:block;box-shadow:none;">`;
     html += `<img src="${card.images.small}" style="width:100%;border-radius:4px;display:block;" alt="${card.name}" />`;
     if (btnValue) html += `</button>`;
     if (isPendingSelected) {
         html += `<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(230,126,0,0.35);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;text-shadow:1px 1px 2px black;">✓</div>`;
+    }
+    // During setup, show a "BASIC" badge on playable cards
+    if (isSetup && isBasic) {
+        html += `<div style="position:absolute;bottom:0;left:0;width:100%;background:rgba(0,100,200,0.75);color:#fff;font-size:8px;font-weight:bold;text-align:center;border-radius:0 0 4px 4px;padding:1px 0;pointer-events:none;">BASIC</div>`;
     }
     html += `</div>`;
     return html;
@@ -550,11 +628,44 @@ export const commands: Chat.ChatCommands = {
             this.parse('/join view-tcg-match');
         },
 
+        // ---- Setup Phase Commands -------------------------------------------
+
+        // Confirm setup and begin turn 1
+        confirmsetup(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match) return this.errorReply('No active match.');
+            if (match.phase !== 'setup') return this.errorReply('Setup already complete.');
+            // Resolve mulligan draw first if still pending
+            if (match.player.pendingEffect?.type === 'mulligan_draw') {
+                return this.errorReply('Please resolve the mulligan draw first.');
+            }
+            const result = match.confirmSetup();
+            if (!result.ok) return this.errorReply(result.error ?? 'Cannot start yet.');
+            this.refreshPage('tcg-match');
+        },
+
+        // Return a setup-placed Pokémon back to hand (own field only, setup phase only)
+        setupreturn(target, room, user) {
+            const match = activeMatches.get(user.id);
+            if (!match || match.phase !== 'setup') return this.errorReply('Not in setup phase.');
+            const slot = target === 'active' ? 'active' : parseInt(target);
+            if (typeof slot === 'number' && isNaN(slot)) return this.errorReply('Invalid slot.');
+            if (match.returnSetupPokemon(true, slot)) {
+                this.refreshPage('tcg-match');
+            } else {
+                this.errorReply('Nothing to return there.');
+            }
+        },
+
+        // ---- Normal Phase Commands (all guard against setup phase) ----------
+
         select(target, room, user) {
             const match = activeMatches.get(user.id);
-            if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
-            if (match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
-            if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
+            if (!match) return this.errorReply('No active match.');
+            // Allow select during setup (for picking basics from hand)
+            if (match.phase !== 'setup' && (match.turn !== 'player' || match.winner)) return this.errorReply('Not your turn.');
+            if (match.phase !== 'setup' && match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
+            if (match.phase !== 'setup' && match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
             const uid = parseInt(target);
             match.player.selectedUid = isNaN(uid) ? null : uid;
             this.refreshPage('tcg-match');
@@ -568,7 +679,9 @@ export const commands: Chat.ChatCommands = {
 
         place(target, room, user) {
             const match = activeMatches.get(user.id);
-            if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (!match) return this.errorReply('No active match.');
+            // Allow placement during setup phase too
+            if (match.phase !== 'setup' && (match.turn !== 'player' || match.winner)) return this.errorReply('Not your turn.');
             if (match.player.selectedUid === null) return this.errorReply('No card selected.');
             const slot = target === 'active' ? 'active' : parseInt(target);
             if (match.playBasicPokemon(true, match.player.selectedUid, slot)) {
@@ -581,6 +694,7 @@ export const commands: Chat.ChatCommands = {
         evolve(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot evolve during setup.');
             if (match.player.selectedUid === null) return this.errorReply('No card selected.');
             const slot = target === 'active' ? 'active' : parseInt(target);
             if (match.evolvePokemon(true, match.player.selectedUid, slot)) {
@@ -593,6 +707,7 @@ export const commands: Chat.ChatCommands = {
         attach(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot attach Energy during setup.');
             if (match.player.selectedUid === null) return this.errorReply('No card selected.');
             const slot = target === 'active' ? 'active' : parseInt(target);
             if (match.attachEnergy(true, match.player.selectedUid, slot)) {
@@ -605,6 +720,7 @@ export const commands: Chat.ChatCommands = {
         playtrainer(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot play Trainers during setup.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
             const args = target.split(' ');
             const uid = parseInt(args[0]);
@@ -624,6 +740,7 @@ export const commands: Chat.ChatCommands = {
         playtargetdiscard(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot play Trainers during setup.');
             const index = parseInt(target);
             if (isNaN(index)) return this.errorReply('Invalid index.');
             const selectedCard = match.player.hand.find(c => c.uid === match.player.selectedUid);
@@ -650,9 +767,9 @@ export const commands: Chat.ChatCommands = {
         retreat(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot retreat during setup.');
             if (match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
-            // FIX: Cannot retreat after attacking — checked in engine too, but guard here for clear UX
             if (match.hasAttackedThisTurn) return this.errorReply('You cannot retreat after attacking.');
             const benchIndex = parseInt(target);
             if (isNaN(benchIndex)) return this.errorReply('Invalid bench index.');
@@ -666,6 +783,7 @@ export const commands: Chat.ChatCommands = {
         attack(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot attack during setup.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
             const index = parseInt(target);
             if (isNaN(index)) return this.errorReply('Invalid attack index.');
@@ -679,6 +797,7 @@ export const commands: Chat.ChatCommands = {
         usepower(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Cannot use Pokémon Powers during setup.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
             if (match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
             
@@ -830,7 +949,6 @@ export const commands: Chat.ChatCommands = {
             const benched = player.bench[benchIndex];
             if (!benched) return this.errorReply('No Pokémon at that bench slot.');
 
-            // Swap active (Dragonite) with chosen benched Pokémon
             const currentActive = player.active;
             player.active = benched;
             player.bench[benchIndex] = currentActive;
@@ -839,7 +957,6 @@ export const commands: Chat.ChatCommands = {
             match.addLog(`Step In: ${currentActive?.topCard.name} switched with ${player.active?.topCard.name}.`);
             player.pendingEffect = null;
 
-            // Now finish the attack (Step In happens after the attack resolves)
             match.finishAttack(true);
             this.refreshPage('tcg-match');
         },
@@ -908,6 +1025,7 @@ export const commands: Chat.ChatCommands = {
         endturn(target, room, user) {
             const match = activeMatches.get(user.id);
             if (!match || match.turn !== 'player' || match.winner) return this.errorReply('Not your turn.');
+            if (match.phase === 'setup') return this.errorReply('Use "Start Battle!" to begin play after setup.');
             if (match.player.pendingEffect) return this.errorReply('Complete or cancel the current effect first.');
             if (match.player.pendingPromotion) return this.errorReply('You must promote a Pokémon first.');
             match.endPlayerTurn();
@@ -1027,7 +1145,6 @@ export const commands: Chat.ChatCommands = {
                  match.player.pendingEffect = null;
                  match.finishAttack(true);
             } else if (filter === 'step_in_switch') {
-                // FIX: Cancelling Step In — just clear the pending effect; attack already happened
                 match.addLog(`Step In: No switch made.`);
                 match.player.pendingEffect = null;
                 match.finishAttack(true);
@@ -1230,6 +1347,7 @@ export const pages: Chat.PageTable = {
                 return this.setHTML(`<div class="pad"><h2>Pokémon TCG Simulator</h2><p>No active match.</p><button class="button" name="send" value="/tcg start">Start Match vs AI</button></div>`);
             }
 
+            const isSetup = match.phase === 'setup';
             let html = `<div class="pad" style="max-width:900px;margin:auto;font-size:13px;">`;
 
             if (match.winner) {
@@ -1239,8 +1357,8 @@ export const pages: Chat.PageTable = {
                 html += `</div>`;
             }
 
-            // FIX: Show first-turn restriction banner
-            if (match.isFirstPlayerTurn && match.turn === 'player' && !match.winner) {
+            // First-turn restriction banner (playing phase only)
+            if (!isSetup && match.isFirstPlayerTurn && match.turn === 'player' && !match.winner) {
                 html += `<div style="background:#e8f4fd;border:1px solid #3498db;padding:6px 10px;border-radius:6px;margin-bottom:5px;font-size:12px;">`;
                 html += `<strong style="color:#2980b9;">⚠ First Turn:</strong> You cannot attack this turn. Set up your Pokémon, attach Energy, and play Trainer cards.`;
                 html += `</div>`;
@@ -1250,8 +1368,9 @@ export const pages: Chat.PageTable = {
             const trainerEffect = selectedCard && isTrainerCard(selectedCard)
                 ? (TrainerEffects[selectedCard.id] ?? TrainerEffects[selectedCard.name])
                 : null;
-            const isOppTargeted = !!trainerEffect?.requiresTarget && !!trainerEffect?.opponentTarget;
+            const isOppTargeted = !isSetup && !!trainerEffect?.requiresTarget && !!trainerEffect?.opponentTarget;
 
+            // AI field
             html += `<div style="background:${isOppTargeted ? '#ffe8e8' : '#e8e8e8'};padding:5px;border-radius:6px;margin-bottom:5px;">`;
             html += `<strong>AI</strong> (Hand: ${match.ai.hand.length} | Deck: ${match.ai.deck.length} | Prizes: ${match.ai.prizes.length} | Discard: ${match.ai.discard.length})`;
             if (isOppTargeted) html += ` <span style="color:red;font-weight:bold;">← Click a target</span>`;
@@ -1261,7 +1380,7 @@ export const pages: Chat.PageTable = {
             for (let i = 0; i < 5; i++) html += renderSlot(match.ai.bench[i], 'bench', i, true, match);
             html += `</div></div>`;
 
-            if (isOppTargeted && selectedCard?.name === 'Pokémon Flute') {
+            if (!isSetup && isOppTargeted && selectedCard?.name === 'Pokémon Flute') {
                 html += `<div style="margin-top:4px;"><strong style="font-size:11px;">Opponent's Discard (pick a Basic):</strong><br/>`;
                 html += renderOpponentDiscardPicker(match);
                 html += `</div>`;
@@ -1270,6 +1389,7 @@ export const pages: Chat.PageTable = {
 
             html += `<hr style="margin:5px 0;"/>`;
 
+            // Player field
             html += `<div style="background:#f0f8ff;padding:5px;border-radius:6px;margin-bottom:5px;">`;
             html += `<strong>Your Field</strong> (Deck: ${match.player.deck.length} | Prizes: ${match.player.prizes.length} | Discard: ${match.player.discard.length})`;
             html += `<div style="display:flex;gap:5px;margin-top:3px;">`;
@@ -1278,35 +1398,57 @@ export const pages: Chat.PageTable = {
             for (let i = 0; i < 5; i++) html += renderSlot(match.player.bench[i], 'bench', i, false, match);
             html += `</div></div></div>`;
 
-            const pending = match.player.pendingEffect;
-            if (pending) {
-                if (pending.filter === 'pokedex') {
-                    html += renderPokedexUI(match);
-                } else {
+            // Setup UI replaces all other action areas during setup
+            if (isSetup) {
+                // Mulligan draw takes priority during setup
+                const pending = match.player.pendingEffect;
+                if (pending?.type === 'mulligan_draw') {
                     html += renderPendingUI(match);
+                }
+                html += renderSetupUI(match);
+            } else {
+                // Normal play: pending effects, promotion, etc.
+                const pending = match.player.pendingEffect;
+                if (pending) {
+                    if (pending.filter === 'pokedex') {
+                        html += renderPokedexUI(match);
+                    } else {
+                        html += renderPendingUI(match);
+                    }
+                }
+
+                if (match.player.pendingPromotion && match.turn === 'player' && !match.winner) {
+                    html += renderPromotionRequired(match);
                 }
             }
 
-            if (match.player.pendingPromotion && match.turn === 'player' && !match.winner) {
-                html += renderPromotionRequired(match);
-            }
-
+            // Hand
             html += `<strong>Your Hand</strong>`;
+            if (isSetup) {
+                html += ` <span style="color:#7c3aed;font-size:11px;">(Select Basic Pokémon to place — other cards are unavailable during setup)</span>`;
+            }
             html += `<div style="overflow-x:auto;white-space:nowrap;padding-bottom:5px;">`;
             for (const card of match.player.hand) html += renderHandCard(card, match);
             html += `</div>`;
 
+            // Action bar
             html += `<div style="padding:5px;background:#fff;border-top:1px solid #ccc;">`;
 
             if (match.winner) {
                 html += `<div style="text-align:center;"><button class="button" name="send" value="/tcg quit" style="font-weight:bold;padding:5px 15px;">Close Match</button></div>`;
+
+            } else if (isSetup) {
+                // Setup: action bar just shows quit (all setup actions are in renderSetupUI)
+                html += `<em style="color:#888;font-size:11px;">Place your Pokémon above, then click Start Battle!</em> `;
+                html += `<button class="button" name="send" value="/tcg quit" style="color:red;float:right;">Quit</button>`;
+                html += `<div style="clear:both;"></div>`;
 
             } else if (match.turn === 'player') {
 
                 if (match.player.pendingPromotion) {
                     html += `<em style="color:#888;">Choose your next Active Pokémon above.</em>`;
 
-                } else if (pending) {
+                } else if (match.player.pendingEffect) {
                     html += `<em style="color:#888;">Complete the card effect above to continue.</em>`;
 
                 } else if (match.player.active && match.player.selectedUid === match.player.active.uid) {
@@ -1319,7 +1461,6 @@ export const pages: Chat.PageTable = {
                         const canAtk = hasEnoughEnergy(match.player.active!, i);
                         const costStr = atk.cost?.join(', ') || 'Free';
                         
-                        // FIX: Show first-turn restriction on attack buttons
                         if (match.isFirstPlayerTurn) {
                             html += `<button class="button disabled" style="color:#aaa;margin-right:5px;cursor:not-allowed;padding:5px;border:1px solid #ccc;" disabled title="Cannot attack on the first turn">⚔️ ${atk.name}<br/><span style="font-size:9px;color:#d9534f;font-weight:bold;">FIRST TURN</span></button>`;
                         } else if (isBlocked) {
@@ -1412,6 +1553,7 @@ export const pages: Chat.PageTable = {
 
             html += `</div>`;
 
+            // Log
             html += `<div style="margin-top:5px;background:#222;color:#fff;padding:5px;height:100px;overflow-y:scroll;border-radius:5px;font-family:monospace;font-size:11px;">`;
             for (const log of match.logs) html += `<div>> ${log}</div>`;
             html += `</div>`;

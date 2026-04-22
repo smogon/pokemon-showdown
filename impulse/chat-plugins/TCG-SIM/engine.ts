@@ -453,6 +453,11 @@ export class TCGMatch {
     hasAttackedThisTurn = false;
     turnNumber = 0;
 
+    // Setup phase: both players choose Active + Bench before turn 1 begins.
+    // The player stays in 'setup' until they call confirmSetup(); the AI
+    // resolves its setup automatically inside setupGame().
+    phase: 'setup' | 'playing' = 'setup';
+
     // FIX: Track whether this is genuinely the first player turn (no attacking allowed)
     isFirstPlayerTurn = true;
 
@@ -486,7 +491,6 @@ export class TCGMatch {
         this.player.draw(7);
         while (!this.player.hand.some(c => isBasicPokemon(c))) {
             playerMulligans++;
-            // Shuffle hand back into deck
             this.player.deck.push(...this.player.hand);
             this.player.hand = [];
             this.shuffleDeck(this.player.deck);
@@ -514,11 +518,6 @@ export class TCGMatch {
             this.ai.draw(playerMulligans);
             this.addLog(`Player took ${playerMulligans} mulligan(s). AI draws ${playerMulligans} extra card(s).`);
         }
-
-        this.turnNumber = 1;
-        this.isFirstPlayerTurn = true;
-        this.addLog(`Match started! Turn ${this.turnNumber} — Player's turn.`);
-
         if (aiMulligans > 0) {
             this.addLog(`AI took ${aiMulligans} mulligan(s). You may draw up to ${aiMulligans} extra card(s).`);
             this.player.pendingEffect = {
@@ -529,6 +528,60 @@ export class TCGMatch {
                 selected: []
             };
         }
+
+        // AI resolves its setup immediately (picks Active + fills Bench with basics)
+        this.resolveAISetup();
+
+        // Phase remains 'setup' — player must choose their Pokémon before turn 1
+        this.turnNumber = 1;
+        this.addLog(`Both players choose their starting Pokémon. Select your Active (required) and up to 5 Bench Pokémon, then click "Start Battle!"`);
+    }
+
+    // AI setup: place the highest-HP basic as Active, fill bench with remaining basics.
+    private resolveAISetup() {
+        const basics = this.ai.hand.filter(c => isBasicPokemon(c)) as InGameCard[];
+
+        // Sort by HP descending so the tankiest Pokémon goes Active
+        basics.sort((a, b) => parseInt(b.hp || '0') - parseInt(a.hp || '0'));
+
+        if (basics.length === 0) return; // shouldn't happen after mulligan logic
+
+        // Place first basic as Active
+        const activeCard = basics[0];
+        const activeIdx = this.ai.hand.findIndex(c => c.uid === activeCard.uid);
+        this.ai.hand.splice(activeIdx, 1);
+        this.ai.active = new PokemonInstance(activeCard, this.turnNumber);
+
+        // Fill bench with remaining basics (up to 5 slots)
+        for (let i = 1; i < basics.length; i++) {
+            const slot = this.ai.firstEmptyBenchSlot();
+            if (slot === -1) break;
+            const card = basics[i];
+            const handIdx = this.ai.hand.findIndex(c => c.uid === card.uid);
+            this.ai.hand.splice(handIdx, 1);
+            this.ai.bench[slot] = new PokemonInstance(card, this.turnNumber);
+        }
+
+        this.addLog(`AI has chosen their starting Pokémon.`);
+    }
+
+    // Called by the player once they have placed at least an Active during setup.
+    // Validates, transitions to 'playing', and starts turn 1 with a draw.
+    confirmSetup(): { ok: boolean; error?: string } {
+        if (this.phase !== 'setup') return { ok: false, error: 'Setup already complete.' };
+        if (!this.player.active) return { ok: false, error: 'You must place at least one Active Pokémon before starting.' };
+
+        this.phase = 'playing';
+        this.isFirstPlayerTurn = true;
+
+        // Player draws their first card for turn 1
+        if (!this.player.draw(1)) {
+            this.declareWinner(false, 'Player ran out of cards on turn 1');
+            return { ok: true };
+        }
+
+        this.addLog(`Setup complete! Turn ${this.turnNumber} — Player's turn. (You cannot attack on the first turn.)`);
+        return { ok: true };
     }
 
     private shuffleDeck(deck: InGameCard[]) {
@@ -871,6 +924,9 @@ export class TCGMatch {
         this.addLog(`${this.label(isPlayer)} wins! (${reason})`);
     }
 
+    // During setup phase, playBasicPokemon is also used for setup placement.
+    // turnPlaced is set to 0 during setup so evolution restrictions work correctly
+    // on turn 1 (turnPlaced < turnNumber required).
     playBasicPokemon(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
         if (this.winner) return false;
 
@@ -881,20 +937,44 @@ export class TCGMatch {
         const card = activePlayer.hand[handIndex];
         if (!isBasicPokemon(card)) return false;
 
+        // During setup, only allow placement into active/bench (no other restrictions)
         if (slot === 'active') {
             if (activePlayer.active) return false;
-            activePlayer.active = new PokemonInstance(card, this.turnNumber);
+            // turnPlaced = 0 during setup so evolution can happen on turn 1
+            activePlayer.active = new PokemonInstance(card, this.phase === 'setup' ? 0 : this.turnNumber);
             activePlayer.hand.splice(handIndex, 1);
             activePlayer.pendingPromotion = false;
             this.addLog(`${this.label(isPlayer)} set ${card.name} as Active Pokémon.`);
         } else {
             if (activePlayer.bench[slot as number]) return false;
-            activePlayer.bench[slot as number] = new PokemonInstance(card, this.turnNumber);
+            activePlayer.bench[slot as number] = new PokemonInstance(card, this.phase === 'setup' ? 0 : this.turnNumber);
             activePlayer.hand.splice(handIndex, 1);
             this.addLog(`${this.label(isPlayer)} benched ${card.name}.`);
         }
 
         if (isPlayer) activePlayer.selectedUid = null;
+        return true;
+    }
+
+    // Return a placed setup Pokémon back to hand (only valid during setup phase)
+    returnSetupPokemon(isPlayer: boolean, slot: 'active' | number): boolean {
+        if (this.phase !== 'setup') return false;
+        const player = this.playerOf(isPlayer);
+
+        let inst: PokemonInstance | null = null;
+        if (slot === 'active') {
+            inst = player.active;
+            player.active = null;
+        } else {
+            inst = player.bench[slot as number];
+            player.bench[slot as number] = null;
+        }
+
+        if (!inst) return false;
+        // Return all cards in the instance back to hand (only the base card during setup)
+        player.hand.push(...inst.cards);
+        this.addLog(`${this.label(isPlayer)} returned ${inst.topCard.name} to hand.`);
+        if (isPlayer) player.selectedUid = null;
         return true;
     }
 
@@ -945,6 +1025,8 @@ export class TCGMatch {
     }
 
     attachEnergy(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
+        // No energy attachment during setup
+        if (this.phase === 'setup') return false;
         if (this.winner || this.hasAttachedEnergy) return false;
 
         const activePlayer = this.playerOf(isPlayer);
@@ -979,6 +1061,8 @@ export class TCGMatch {
 
     retreat(isPlayer: boolean, benchIndex: number): boolean {
         if (this.winner) return false;
+        // No retreating during setup
+        if (this.phase === 'setup') return false;
 
         const activePlayer = this.playerOf(isPlayer);
 
@@ -1086,6 +1170,8 @@ export class TCGMatch {
     }
 
     playTrainer(isPlayer: boolean, uid: number, targetSlot?: 'active' | number): boolean {
+        // No trainer plays during setup
+        if (this.phase === 'setup') return false;
         if (this.winner) return false;
 
         const activePlayer = this.playerOf(isPlayer);
@@ -1143,6 +1229,8 @@ export class TCGMatch {
     attack(isPlayer: boolean, attackIndex: number): boolean {
         if (this.winner) return false;
         if (this.hasAttackedThisTurn) return false;
+        // No attacking during setup
+        if (this.phase === 'setup') return false;
 
         // FIX: First player turn — no attacking allowed (GBC rule)
         if (isPlayer && this.isFirstPlayerTurn) {
@@ -1364,6 +1452,8 @@ export class TCGMatch {
     
     endPlayerTurn() {
         if (this.winner) return;
+        // Cannot end turn during setup — must confirm setup first
+        if (this.phase === 'setup') return;
 
         // FIX: Ending the first turn clears the first-turn attack restriction
         if (this.isFirstPlayerTurn) {
