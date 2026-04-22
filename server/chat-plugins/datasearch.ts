@@ -2159,7 +2159,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 						break;
 					}
 				} else if (flag === 'heal') {
-					if (!move.heal === !alts.flags[flag] || moveid === 'gmaxfinale') {
+					if (!(move.heal || moveid === 'gmaxfinale') === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
@@ -2180,7 +2180,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 				for (const recoveryType in alts.other) {
 					let hasRecovery = false;
 					if (recoveryType === "recovery") {
-						hasRecovery = !!move.drain || !!move.flags.heal;
+						hasRecovery = !!move.drain || !!move.flags.heal || moveid === 'gmaxfinale';
 					} else if (recoveryType === "zrecovery") {
 						hasRecovery = (move.zMove?.effect === 'heal');
 					}
