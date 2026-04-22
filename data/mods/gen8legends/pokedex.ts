@@ -6,22 +6,22 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	alakazam: {
 		inherit: true,
 		evoType: "other",
-		evoItem: "Linking Cord or trade",
+		evoCondition: "trade or use Linking Cord",
 	},
 	machamp: {
 		inherit: true,
 		evoType: "other",
-		evoItem: "Linking Cord or trade",
+		evoCondition: "trade or use Linking Cord",
 	},
 	golem: {
 		inherit: true,
 		evoType: "other",
-		evoItem: "Linking Cord or trade",
+		evoCondition: "trade or use Linking Cord",
 	},
 	gengar: {
 		inherit: true,
 		evoType: "other",
-		evoItem: "Linking Cord or trade",
+		evoCondition: "trade or use Linking Cord",
 	},
 	chansey: {
 		inherit: true,
@@ -126,12 +126,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	basculegion: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Receive 294+ recoil without fainting",
+		evoCondition: "receive 294+ recoil without fainting",
 	},
 	basculegionf: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Receive 294+ recoil without fainting",
+		evoCondition: "receive 294+ recoil without fainting",
 	},
 	sneasler: {
 		inherit: true,
@@ -140,6 +140,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	overqwil: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Use strong style Barb Barrage 20 times",
+		evoCondition: "use strong style Barb Barrage 20 times",
 	},
 };

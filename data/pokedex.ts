@@ -16699,7 +16699,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		prevo: "Yamask-Galar",
 		evoType: "other",
-		evoCondition: "Take 49+ damage w/o fainting and walk under the stone arch in Dusty Bowl",
+		evoCondition: "take 49+ damage w/o fainting and walk under the stone arch in Dusty Bowl",
 		eggGroups: ["Mineral", "Amorphous"],
 	},
 	milcery: {
@@ -17437,7 +17437,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		prevo: "Stantler",
 		evoType: "other",
-		evoCondition: "Use agile style Psyshield Bash 20 times",
+		evoCondition: "use agile style Psyshield Bash 20 times",
 		eggGroups: ["Field"],
 	},
 	kleavor: {

@@ -14,17 +14,17 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	runerigus: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Take 49+ damage w/o fainting and stand under a bridge at Coulant Waterway",
+		evoCondition: "take 49+ damage w/o fainting and stand under a bridge at Coulant Waterway",
 	},
 	overqwil: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Land 20 hits with Barb Barrage",
+		evoCondition: "land 20 hits with Barb Barrage",
 	},
 	annihilape: {
 		inherit: true,
 		evoLevel: undefined,
 		evoType: "other",
-		evoCondition: "Land 20 hits with Rage Fist",
+		evoCondition: "land 20 hits with Rage Fist",
 	},
 };

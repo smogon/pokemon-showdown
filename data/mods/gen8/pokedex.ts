@@ -113,12 +113,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	urshifu: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Interact with the Scroll of Darkness in the Tower of Darkness",
+		evoCondition: "interact with the Scroll of Darkness in the Tower of Darkness",
 	},
 	urshifurapidstrike: {
 		inherit: true,
 		evoType: "other",
-		evoCondition: "Interact with the Scroll of Waters in the Tower of Waters",
+		evoCondition: "interact with the Scroll of Waters in the Tower of Waters",
 	},
 	kleavor: {
 		inherit: true,
