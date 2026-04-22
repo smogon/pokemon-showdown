@@ -23094,7 +23094,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 	},
-	/* pricklypear: { // untested
+	pricklypear: { // untested
 		num: 10078,
 		accuracy: 80,
 		basePower: 0,
@@ -23130,7 +23130,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Grass",
-	}, */
+	},
 	psionrush: { // tested, works as intended
 		num: 10047,
 		accuracy: 100,
@@ -23258,7 +23258,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ground",
 	},
-	/* sandstonesweep: { // untested
+	sandstonesweep: { // untested
 		num: 10079,
 		accuracy: 80,
 		basePower: 100,
@@ -23295,7 +23295,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Rock",
-	}, */
+	},
 	/* scavenge: { // untested
 		num: 10085,
 		accuracy: 100,
