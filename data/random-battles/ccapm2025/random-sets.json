@@ -39,7 +39,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Glacier Fang", "Close Combat", "Earthquake", "Play Rough"],
+                "movepool": ["Glacier Fang", "Close Combat", "Liquidation", "Play Rough"],
                 "abilities": ["Slush Rush"]
             },
             {
@@ -65,7 +65,7 @@
         ]
     },
 	 "clawitzer": {
-        "level": 94,
+        "level": 89,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -154,7 +154,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Infernal Parade", "Air Slash", "Strength Sap", "Stored Power"],
+                "movepool": ["Infernal Parade", "Air Slash", "Strength Sap", "Thunderbolt"],
                 "abilities": ["Aftermath"]
             },
             {
@@ -309,7 +309,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Kaleidostorm", "Knock Off", "Power-Up Punch", "Drain Punch"],
+                "movepool": ["Kaleidostorm", "Knock Off", "Fire Punch", "Drain Punch"],
                 "abilities": ["Color Change"]
             }
         ]
@@ -547,7 +547,7 @@
         ]
     },
 	"rhyperior": {
-        "level": 95,
+        "level": 92,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -662,7 +662,7 @@
         ]
     },
 	"sylveon": {
-        "level": 95,
+        "level": 92,
         "sets": [
             {
                 "role": "AV Pivot",
