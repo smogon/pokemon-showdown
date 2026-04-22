@@ -465,7 +465,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	porygon2: {
-		tier: "(OU)",
+		tier: "UUBL",
 	},
 	omanyte: {
 		tier: "PU",
@@ -732,7 +732,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	raikou: {
-		tier: "(OU)",
+		tier: "UUBL",
 	},
 	entei: {
 		tier: "UUBL",
@@ -1137,7 +1137,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	regice: {
-		tier: "(OU)",
+		tier: "UUBL",
 	},
 	registeel: {
 		tier: "UUBL",
