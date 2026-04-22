@@ -12,6 +12,7 @@ import * as ConfigLoader from './config-loader';
 import * as path from 'path';
 
 export const DEFAULT_FILE = FS('databases/custom-formats.db').path;
+/** Matches the friends system timeout — long enough to tolerate slow disks. */
 const PM_TIMEOUT = 30 * 60 * 1000;
 
 export const CUSTOM_FORMAT_PREFIX = '[Custom] ';
@@ -76,7 +77,10 @@ export class CustomFormatsDatabase {
 			if (version === undefined) {
 				database.exec(FS('databases/schemas/custom-formats.sql').readSync());
 			} else if (Number(version) !== actualVersion) {
-				throw new Error(`Custom formats DB is out of date, please migrate to the latest version.`);
+				throw new Error(
+					`Custom formats DB is at version ${version}, but the server expects version ${actualVersion}. ` +
+					`Please run the migration scripts in databases/migrations/custom-formats/.`
+				);
 			}
 		}
 		for (const k in ACTIONS) {
@@ -105,7 +109,7 @@ export class CustomFormatsDatabase {
 	run(statement: string, data: any[] | AnyObject): Promise<{ changes: number }> {
 		return this.query({ statement, data, type: 'run' });
 	}
-	get(statement: string, data: any[] | AnyObject): Promise<AnyObject | null> {
+	getRow(statement: string, data: any[] | AnyObject): Promise<AnyObject | null> {
 		return this.query({ statement, data, type: 'get' });
 	}
 
@@ -128,7 +132,9 @@ export class CustomFormatsDatabase {
 		for (const snap of snapshots) {
 			try {
 				snapshotByFormat.set(snap.format_id, JSON.parse(snap.snapshot_json));
-			} catch {}
+			} catch (e: any) {
+				Monitor.crashlog(new Error(`Corrupt snapshot JSON for custom format '${snap.format_id}': ${e.message}`), 'Custom formats DB');
+			}
 		}
 
 		// Group by section
@@ -170,7 +176,9 @@ export class CustomFormatsDatabase {
 		const snapRow = (await this.query({ type: 'get', statement: 'getSnapshot', data: [id] })) as { snapshot_json: string } | null;
 		let snapshot: BaseSnapshot = { ruleset: [], banlist: [], unbanlist: [], restricted: [] };
 		if (snapRow) {
-			try { snapshot = JSON.parse(snapRow.snapshot_json); } catch {}
+			try { snapshot = JSON.parse(snapRow.snapshot_json); } catch (e: any) {
+				Monitor.crashlog(new Error(`Corrupt snapshot JSON for custom format '${id}': ${e.message}`), 'Custom formats DB');
+			}
 		}
 		return { format, rules, snapshot };
 	}

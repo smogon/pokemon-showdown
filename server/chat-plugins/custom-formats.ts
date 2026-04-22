@@ -73,8 +73,9 @@ export const commands: Chat.ChatCommands = {
 		};
 
 		const id = await Chat.CustomFormats.create(displayName, baseFormat.id, user.id, snapshot);
-		// Reload the live format list immediately
-		Dex.formats.load();
+		// Intentionally synchronous reload: changes must be live immediately (plan requirement #4).
+		// Format creation is rare (admin/driver only) so the rebuild cost is acceptable.
+		Dex.formats.reload();
 		this.globalModlog('CREATEFORMAT', null, `${fullName} (base: ${baseFormat.name}) by ${user.name}`);
 		return this.sendReply(`Custom format '${fullName}' created (id: ${id}).`);
 	},
@@ -91,7 +92,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`/formatban - Only the format owner or admins can modify this format.`);
 		}
 		await Chat.CustomFormats.addRule(id, rawThing, 'ban');
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('FORMATBAN', null, `${rawThing} in ${id} by ${user.name}`);
 		return this.sendReply(`'${rawThing}' has been banned in '${data.format.display_name}'.`);
 	},
@@ -108,7 +109,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`/formatunban - Only the format owner or admins can modify this format.`);
 		}
 		await Chat.CustomFormats.addRule(id, rawThing, 'unban');
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('FORMATUNBAN', null, `${rawThing} in ${id} by ${user.name}`);
 		return this.sendReply(`'${rawThing}' has been unbanned in '${data.format.display_name}'.`);
 	},
@@ -125,7 +126,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`/formatrestrict - Only the format owner or admins can modify this format.`);
 		}
 		await Chat.CustomFormats.addRule(id, rawThing, 'restrict');
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('FORMATRESTRICT', null, `${rawThing} in ${id} by ${user.name}`);
 		return this.sendReply(`'${rawThing}' has been restricted in '${data.format.display_name}'.`);
 	},
@@ -148,7 +149,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Invalid rule: ${e.message}`);
 		}
 		await Chat.CustomFormats.addRule(id, rawRule, 'ruleset');
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('FORMATADDRULE', null, `${rawRule} in ${id} by ${user.name}`);
 		return this.sendReply(`Rule '${rawRule}' added to '${data.format.display_name}'.`);
 	},
@@ -165,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`/formatremoverule - Only the format owner or admins can modify this format.`);
 		}
 		await Chat.CustomFormats.removeRule(id, rawRule);
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('FORMATREMOVERULE', null, `${rawRule} in ${id} by ${user.name}`);
 		return this.sendReply(`Rule '${rawRule}' removed from '${data.format.display_name}'.`);
 	},
@@ -178,7 +179,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`/deleteformat - Only the format owner or admins can delete this format.`);
 		}
 		await Chat.CustomFormats.deactivate(id);
-		Dex.formats.load();
+		Dex.formats.reload(); // immediate live update
 		this.globalModlog('DELETEFORMAT', null, `${id} by ${user.name}`);
 		return this.sendReply(`Custom format '${data.format.display_name}' has been deactivated.`);
 	},

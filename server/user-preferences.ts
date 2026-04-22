@@ -12,7 +12,11 @@ import * as ConfigLoader from './config-loader';
 import * as path from 'path';
 
 export const DEFAULT_FILE = FS('databases/user-preferences.db').path;
+/** Matches the friends system timeout — long enough to tolerate slow disks. */
 const PM_TIMEOUT = 30 * 60 * 1000;
+
+/** Maximum character length for a preference value. */
+export const MAX_PREFERENCE_VALUE_LENGTH = 2000;
 
 /** Keys that clients are permitted to store. */
 export const ALLOWED_PREFERENCE_KEYS = new Set([
@@ -58,7 +62,10 @@ export class UserPreferencesDatabase {
 			if (version === undefined) {
 				database.exec(FS('databases/schemas/user-preferences.sql').readSync());
 			} else if (Number(version) !== actualVersion) {
-				throw new Error(`User preferences DB is out of date, please migrate to the latest version.`);
+				throw new Error(
+					`User preferences DB is at version ${version}, but the server expects version ${actualVersion}. ` +
+					`Please run the migration scripts in databases/migrations/user-preferences/.`
+				);
 			}
 		}
 

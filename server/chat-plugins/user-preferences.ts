@@ -6,7 +6,7 @@
  */
 
 import { Utils } from '../../lib/utils';
-import { ALLOWED_PREFERENCE_KEYS } from '../user-preferences';
+import { ALLOWED_PREFERENCE_KEYS, MAX_PREFERENCE_VALUE_LENGTH } from '../user-preferences';
 
 export const commands: Chat.ChatCommands = {
 	async getpref(target, room, user, connection) {
@@ -33,7 +33,9 @@ export const commands: Chat.ChatCommands = {
 		if (!ALLOWED_PREFERENCE_KEYS.has(key)) {
 			return this.errorReply(`Unknown preference key: ${key}`);
 		}
-		if (value.length > 2000) return this.errorReply(`Preference value is too long (max 2000 characters).`);
+		if (value.length > MAX_PREFERENCE_VALUE_LENGTH) {
+			return this.errorReply(`Preference value is too long (max ${MAX_PREFERENCE_VALUE_LENGTH} characters).`);
+		}
 		await Chat.UserPreferences.set(user.id, key, value);
 		this.sendReply(`|queryresponse|pref|${JSON.stringify({ key, value, saved: true })}`);
 	},

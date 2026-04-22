@@ -649,8 +649,12 @@ export class DexFormats {
 				for (const fmt of formats) dbList.push(fmt);
 			}
 			this._dbFormatList = dbList;
-		} catch {
-			// DB not available yet; leave _dbFormatList as-is
+		} catch (e: any) {
+			// DB subprocess may not be ready yet at early startup; leave _dbFormatList as-is.
+			// Errors other than a missing/closed PM are unexpected and should be logged.
+			if (!e?.message?.includes('process')) {
+				Monitor.crashlog(e, 'DexFormats.loadFromDB');
+			}
 		}
 		this.reload();
 		return this;
