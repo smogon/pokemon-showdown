@@ -17545,6 +17545,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 60.5,
 		color: "Black",
 		prevo: "Qwilfish-Hisui",
+		evoLevel: 29,
 		evoType: "levelMove",
 		evoMove: "Barb Barrage",
 		eggGroups: ["Water 2"],
@@ -18731,10 +18732,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 56,
 		color: "Gray",
 		prevo: "Primeape",
-		// Technically incorrect, as Primeape only needs to use Rage Fist 20 times to evolve. Documented this way for validation purposes.
-		evoType: "levelMove",
+		evoLevel: 36,
+		evoType: "other",
 		evoMove: "Rage Fist",
-		evoCondition: "after using it 20 times",
+		evoCondition: "level-up after using Rage Fist 20 times",
 		eggGroups: ["Field"],
 	},
 	clodsire: {

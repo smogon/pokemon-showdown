@@ -139,7 +139,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	overqwil: {
 		inherit: true,
+		evoLevel: undefined,
 		evoType: "other",
+		evoMove: "Barb Barrage",
 		evoCondition: "use strong style Barb Barrage 20 times",
 	},
 };

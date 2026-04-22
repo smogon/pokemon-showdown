@@ -18,13 +18,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	overqwil: {
 		inherit: true,
+		evoLevel: undefined,
 		evoType: "other",
+		evoMove: "Barb Barrage",
 		evoCondition: "land 20 hits with Barb Barrage",
 	},
 	annihilape: {
 		inherit: true,
 		evoLevel: undefined,
 		evoType: "other",
+		evoMove: "Rage Fist",
 		evoCondition: "land 20 hits with Rage Fist",
 	},
 };
