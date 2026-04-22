@@ -1,6 +1,7 @@
 import { TrainerEffects } from './effects';
 import { resolvePokemonPower, getPowerRequirements, checkPassivePowers } from './power-effects';
 import { resolveAttackEffect } from './attack-effects';
+import { executeAITurn } from './ai';
 
 // ---------------------------------------------------------------------------
 // Card data interfaces
@@ -87,7 +88,7 @@ export class PokemonInstance {
     currentDamage: number;
     turnPlaced: number;
     status: StatusState;
-    
+
     // Per-turn and advanced mechanic states
     protectedThisTurn: boolean = false;
     damageModThisTurn: number = 0;
@@ -584,7 +585,7 @@ export class TCGMatch {
         return { ok: true };
     }
 
-    private shuffleDeck(deck: InGameCard[]) {
+    shuffleDeck(deck: InGameCard[]) {
         for (let i = deck.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -670,7 +671,8 @@ export class TCGMatch {
         return isPlayer ? 'Player' : 'AI';
     }
 
-    private expireItems(forPlayer: boolean, timing: 'end_of_your_turn' | 'end_of_opponent_turn') {
+    // Changed from private to public so ai.ts can call it
+    expireItems(forPlayer: boolean, timing: 'end_of_your_turn' | 'end_of_opponent_turn') {
         const owner = this.playerOf(forPlayer);
         for (const inst of owner.getAllInPlay()) {
             const expired = inst.attachedItems.filter(i => i.expiresOn === timing);
@@ -682,7 +684,8 @@ export class TCGMatch {
         }
     }
 
-    private clearPerTurnFlags(inst: PokemonInstance) {
+    // Changed from private to public so ai.ts can call it
+    clearPerTurnFlags(inst: PokemonInstance) {
         // FIX: Restore Energy Burn before clearing flags — names must be reset each turn end
         inst.restoreEnergyBurn();
 
@@ -757,7 +760,7 @@ export class TCGMatch {
             for (const atkType of attackerTypes) {
                 let hasWeakness = defenderInst.overrideWeakness === atkType;
                 let weaknessVal = '×2';
-                
+
                 if (!hasWeakness) {
                     const weakness = defenderInst.topCard.weaknesses?.find(w => w.type === atkType);
                     if (weakness && defenderInst.overrideWeakness === null) {
@@ -833,7 +836,7 @@ export class TCGMatch {
         if (!inst) return;
 
         this.addLog(`${inst.topCard.name} was Knocked Out!`);
-        
+
         let mutualKO = false;
         if (inst.destinyBondActive && attacker.active) {
             this.addLog(`Destiny Bond triggered! ${attacker.active.topCard.name} goes down with it!`);
@@ -846,13 +849,13 @@ export class TCGMatch {
         victim.pendingPromotion = true;
 
         const prizesToTake = this.prizeCountForCard(inst.topCard);
-        
+
         if (isPlayerKnockedOut) {
             for (let i = 0; i < prizesToTake && attacker.prizes.length > 0; i++) {
                 attacker.hand.push(attacker.prizes.shift()!);
             }
             if (prizesToTake > 0) this.addLog(`AI took ${prizesToTake} Prize Card(s).`);
-            
+
             if (attacker.prizes.length === 0 && !mutualKO) {
                 this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
                 return;
@@ -875,9 +878,9 @@ export class TCGMatch {
             for (const item of oppInst.attachedItems) attacker.discard.push(item.card);
             attacker.active = null;
             attacker.pendingPromotion = true;
-            
+
             const victimPrizes = this.prizeCountForCard(oppInst.topCard);
-            
+
             if (!isPlayerKnockedOut) {
                 for (let i = 0; i < victimPrizes && victim.prizes.length > 0; i++) {
                     victim.hand.push(victim.prizes.shift()!);
@@ -894,15 +897,15 @@ export class TCGMatch {
                     };
                 }
             }
-            
+
             if (victim.prizes.length === 0 && attacker.prizes.length === 0 && (!isPlayerKnockedOut ? !attacker.pendingEffect : !victim.pendingEffect)) {
-                 this.addLog(`Draw! Both players took their last prizes! (Sudden Death)`);
+                this.addLog(`Draw! Both players took their last prizes! (Sudden Death)`);
             } else if (victim.prizes.length === 0 && !victim.pendingEffect) {
-                 this.declareWinner(isPlayerKnockedOut, 'took all Prize Cards via Destiny Bond');
-                 return;
+                this.declareWinner(isPlayerKnockedOut, 'took all Prize Cards via Destiny Bond');
+                return;
             } else if (attacker.prizes.length === 0 && !attacker.pendingEffect) {
-                 this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
-                 return;
+                this.declareWinner(!isPlayerKnockedOut, 'took all Prize Cards');
+                return;
             }
         }
 
@@ -919,7 +922,8 @@ export class TCGMatch {
         return 1;
     }
 
-    private declareWinner(isPlayer: boolean, reason: string) {
+    // Changed from private to public so ai.ts can call it
+    declareWinner(isPlayer: boolean, reason: string) {
         this.winner = isPlayer ? 'player' : 'ai';
         this.addLog(`${this.label(isPlayer)} wins! (${reason})`);
     }
@@ -1095,15 +1099,15 @@ export class TCGMatch {
         if (!target) return false;
 
         if (isPlayer && active.attachedEnergy.length > cost) {
-             activePlayer.pendingEffect = {
-                 type: 'pick_retreat_energy',
-                 trainerUid: active.uid,
-                 trainerName: 'Retreat Cost',
-                 needed: cost,
-                 selected: [],
-                 filter: benchIndex.toString()
-             };
-             return true; 
+            activePlayer.pendingEffect = {
+                type: 'pick_retreat_energy',
+                trainerUid: active.uid,
+                trainerName: 'Retreat Cost',
+                needed: cost,
+                selected: [],
+                filter: benchIndex.toString()
+            };
+            return true;
         }
 
         for (let i = 0; i < cost; i++) {
@@ -1196,7 +1200,7 @@ export class TCGMatch {
                 activePlayer.hand.splice(currentIdx, 1);
             }
             activePlayer.discard.push(card);
-            
+
             if (isPlayer) activePlayer.selectedUid = null;
         }
         return success;
@@ -1314,7 +1318,7 @@ export class TCGMatch {
 
         if (!ctx.preventAllDamage && !defenderInst.protectedThisTurn) {
             const rawDamage = ctx.baseDamage + ctx.extraDamage;
-            
+
             if (rawDamage > 0) {
                 const { final, weaknessApplied, resistanceApplied, blockedByProtection } = this.computeFinalDamage(
                     rawDamage,
@@ -1405,17 +1409,17 @@ export class TCGMatch {
         }
 
         if (ctx.changeWeakness && !this.winner && isPlayer) {
-             this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 1', needed: 1, selected: [], filter: 'weakness' };
-             return true; 
+            this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 1', needed: 1, selected: [], filter: 'weakness' };
+            return true;
         }
         if (ctx.changeResistance && !this.winner && isPlayer) {
-             this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 2', needed: 1, selected: [], filter: 'resistance' };
-             return true;
+            this.player.pendingEffect = { type: 'pick_conversion', trainerUid: attackerInst.uid, trainerName: 'Conversion 2', needed: 1, selected: [], filter: 'resistance' };
+            return true;
         }
-        
+
         if (ctx.disableOpponentAttack && !this.winner && isPlayer) {
-             this.player.pendingEffect = { type: 'pick_amnesia', trainerUid: attackerInst.uid, trainerName: 'Amnesia', needed: 1, selected: [] };
-             return true;
+            this.player.pendingEffect = { type: 'pick_amnesia', trainerUid: attackerInst.uid, trainerName: 'Amnesia', needed: 1, selected: [] };
+            return true;
         }
 
         if (ctx.forceOpponentSwitch && !this.winner) {
@@ -1433,7 +1437,7 @@ export class TCGMatch {
 
         this.expireItems(isPlayer, 'end_of_your_turn');
         this.expireItems(!isPlayer, 'end_of_opponent_turn');
-        
+
         const owner = this.playerOf(isPlayer);
         owner.hasRetreatedThisTurn = false;
 
@@ -1441,7 +1445,7 @@ export class TCGMatch {
         for (const inst of nextPlayer.getAllInPlay()) this.clearPerTurnFlags(inst);
 
         if (isPlayer) this.player.selectedUid = null;
-        
+
         if (!this.winner) {
             this.hasAttackedThisTurn = false;
             this.hasAttachedEnergy = false;
@@ -1449,7 +1453,7 @@ export class TCGMatch {
             if (this.turn === 'ai') this.executeAITurn();
         }
     }
-    
+
     endPlayerTurn() {
         if (this.winner) return;
         // Cannot end turn during setup — must confirm setup first
@@ -1464,7 +1468,7 @@ export class TCGMatch {
         if (this.winner) return;
         this.expireItems(true, 'end_of_your_turn');
         this.expireItems(false, 'end_of_opponent_turn');
-        
+
         for (const inst of this.ai.getAllInPlay()) this.clearPerTurnFlags(inst);
 
         this.player.selectedUid = null;
@@ -1475,168 +1479,10 @@ export class TCGMatch {
         this.executeAITurn();
     }
 
+    // ---------------------------------------------------------------------------
+    // AI turn — delegated entirely to ai.ts
+    // ---------------------------------------------------------------------------
     executeAITurn() {
-        if (this.winner) return;
-        this.addLog(`AI's turn (turn ${this.turnNumber}).`);
-        this.turnNumber++;
-
-        if (!this.ai.draw(1)) {
-            this.declareWinner(true, 'AI ran out of cards');
-            return;
-        }
-
-        if (this.ai.pendingPromotion) {
-            const benchIdx = this.ai.bench.findIndex(b => b !== null);
-            if (benchIdx !== -1) {
-                this.promote(false, benchIdx);
-            } else {
-                const basic = this.ai.hand.find(c => isBasicPokemon(c));
-                if (basic) this.playBasicPokemon(false, (basic as InGameCard).uid, 'active');
-                else { this.declareWinner(true, 'AI has no Pokémon to promote'); return; }
-            }
-        }
-
-        for (const card of [...this.ai.hand]) {
-            if (!this.ai.hand.some(c => c.uid === card.uid)) continue;
-
-            if (isTrainerCard(card)) {
-                const effect = TrainerEffects[card.id] ?? TrainerEffects[card.name];
-                if (effect && !effect.requiresTarget) {
-                    this.playTrainer(false, card.uid);
-                }
-            }
-        }
-
-        if (!this.ai.active) {
-            const benchedIndex = this.ai.bench.findIndex(c => c !== null);
-            if (benchedIndex !== -1) {
-                this.promote(false, benchedIndex);
-            } else {
-                const basic = this.ai.hand.find(c => isBasicPokemon(c));
-                if (basic) this.playBasicPokemon(false, (basic as InGameCard).uid, 'active');
-            }
-        }
-
-        for (const card of [...this.ai.hand]) {
-            if (isBasicPokemon(card)) {
-                const slot = this.ai.firstEmptyBenchSlot();
-                if (slot !== -1) this.playBasicPokemon(false, (card as InGameCard).uid, slot);
-            } else if (isEvolutionPokemon(card)) {
-                const evFrom = card.evolvesFrom;
-                if (this.ai.active?.topCard.name === evFrom) {
-                    this.evolvePokemon(false, (card as InGameCard).uid, 'active');
-                } else {
-                    const bi = this.ai.bench.findIndex(b => b?.topCard.name === evFrom);
-                    if (bi !== -1) this.evolvePokemon(false, (card as InGameCard).uid, bi);
-                }
-            }
-        }
-
-        let powerUsed = true;
-        let powerLoops = 0;
-        while (powerUsed && powerLoops < 5 && !this.winner) {
-            powerUsed = false;
-            powerLoops++;
-            
-            for (const inst of this.ai.getAllInPlay()) {
-                if (inst.isPowerBlocked()) continue;
-                
-                for (let pIdx = 0; pIdx < (inst.topCard.abilities?.length || 0); pIdx++) {
-                    const power = inst.topCard.abilities![pIdx];
-                    if (power.type !== 'Pokémon Power' && power.type !== 'Poké-Power') continue;
-
-                    const reqs = getPowerRequirements(power);
-                    if (!reqs) continue;
-
-                    if (reqs.filter === 'rain_dance_energy') {
-                        const waterIdx = this.ai.hand.findIndex(c => c.name === 'Water Energy');
-                        if (waterIdx !== -1) {
-                            const target = this.ai.active?.topCard.types?.includes('Water') ? this.ai.active : this.ai.bench.find(b => b?.topCard.types?.includes('Water'));
-                            if (target) {
-                                const targetSlot = target === this.ai.active ? 'active' : this.ai.benchSlotOf(target);
-                                if (this.usePokemonPower(false, inst.uid, pIdx, { energyUid: this.ai.hand[waterIdx].uid, targetSlot })) {
-                                    powerUsed = true;
-                                }
-                            }
-                        }
-                    } else if (reqs.filter === 'damage_swap_from') {
-                        if (this.ai.active && this.ai.active.currentDamage > 0) {
-                            const healthyBench = this.ai.bench.find(b => b && b.currentDamage === 0 && b.maxHP >= 50);
-                            if (healthyBench) {
-                                if (this.usePokemonPower(false, inst.uid, pIdx, { fromUid: this.ai.active.uid, toUid: healthyBench.uid })) {
-                                    powerUsed = true;
-                                }
-                            }
-                        }
-                    } else if (reqs.filter === 'energy_trans_from') {
-                        if (this.ai.active && this.ai.active.attachedEnergy.length < 3) {
-                            const benchedWithGrass = this.ai.bench.find(b => b && b.attachedEnergy.some(e => e.name === 'Grass Energy'));
-                            if (benchedWithGrass) {
-                                const grassEnergy = benchedWithGrass.attachedEnergy.find(e => e.name === 'Grass Energy');
-                                if (grassEnergy && this.usePokemonPower(false, inst.uid, pIdx, { energyUid: grassEnergy.uid, fromUid: benchedWithGrass.uid, toUid: this.ai.active.uid })) {
-                                    powerUsed = true;
-                                }
-                            }
-                        }
-                    } else if (reqs.filter === 'lure_energy' && powerLoops === 1) { 
-                        const fireIdx = this.ai.hand.findIndex(c => c.name === 'Fire Energy');
-                        if (fireIdx !== -1) {
-                            const weakBenchIdx = this.player.bench.findIndex(b => b && b.currentHP <= 50);
-                            if (weakBenchIdx !== -1) {
-                                if (this.usePokemonPower(false, inst.uid, pIdx, { energyUid: this.ai.hand[fireIdx].uid, benchIndex: weakBenchIdx })) {
-                                    powerUsed = true;
-                                }
-                            }
-                        }
-                    } else if (reqs.needed === 0 && power.name !== 'Strikes Back' && power.name !== 'Invisible Wall') {
-                        if (this.usePokemonPower(false, inst.uid, pIdx, {})) {
-                            powerUsed = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!this.hasAttachedEnergy && this.ai.active) {
-            const energy = this.ai.hand.find(c => isEnergyCard(c));
-            if (energy) this.attachEnergy(false, (energy as InGameCard).uid, 'active');
-        }
-
-        let attacked = false;
-        const aiActive = this.ai.active;
-        if (aiActive && aiActive.topCard.attacks && !this.winner) {
-            const vol = aiActive.status.volatile;
-            if (vol !== 'asleep' && vol !== 'paralyzed') {
-                for (let i = aiActive.topCard.attacks.length - 1; i >= 0; i--) {
-                    if (hasEnoughEnergy(aiActive, i)) {
-                        attacked = this.attack(false, i);
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (!attacked && !this.winner) {
-            this.performCheckup(false);
-            this.expireItems(false, 'end_of_your_turn');
-            this.expireItems(true, 'end_of_opponent_turn');
-            
-            for (const inst of this.player.getAllInPlay()) this.clearPerTurnFlags(inst);
-            this.ai.hasRetreatedThisTurn = false;
-
-            this.addLog('AI ends turn without attacking.');
-            this.turn = 'player';
-            this.hasAttachedEnergy = false;
-            this.hasAttackedThisTurn = false;
-        }
-
-        if (this.turn === 'player' && !this.winner) {
-            this.turnNumber++;
-            if (!this.player.draw(1)) {
-                this.declareWinner(false, 'Player ran out of cards');
-            } else {
-                this.addLog(`Player draws a card (turn ${this.turnNumber}).`);
-            }
-        }
+        executeAITurn(this);
     }
 }
