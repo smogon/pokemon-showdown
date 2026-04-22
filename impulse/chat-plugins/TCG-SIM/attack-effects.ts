@@ -2,9 +2,6 @@ import type { TCGMatch, PokemonInstance, DamageContext } from './engine';
 import { flipCoin, flipCoins, freshDamageContext } from './engine';
 import type { CardAttack } from './engine';
 
-// ---------------------------------------------------------------------------
-// Attack Effect Resolver
-// ---------------------------------------------------------------------------
 
 export interface AttackEffectHandler {
     (
@@ -17,9 +14,6 @@ export interface AttackEffectHandler {
     ): void;
 }
 
-// ---------------------------------------------------------------------------
-// Reusable building blocks
-// ---------------------------------------------------------------------------
 
 function coinFlipParalyze(
     ctx: DamageContext,
@@ -58,9 +52,6 @@ function countAttachedEnergy(inst: PokemonInstance, type?: string): number {
     return inst.attachedEnergy.filter(e => e.name === `${type} Energy` || e.name === type).length;
 }
 
-// ---------------------------------------------------------------------------
-// Named handler functions
-// ---------------------------------------------------------------------------
 
 function gengarCurse(
     match: TCGMatch, isPlayer: boolean,
@@ -87,8 +78,6 @@ function machampSeismicToss(
     ctx.customLog.push(`Seismic Toss: ${ctx.baseDamage} damage (ignores W/R).`);
 }
 
-// FIX: Moltres Wildfire — discard any number of Fire Energy from hand,
-// then opponent discards that many cards from the top of their deck.
 function moltresWildfire(
     match: TCGMatch, isPlayer: boolean,
     atk: PokemonInstance, def: PokemonInstance,
@@ -98,7 +87,6 @@ function moltresWildfire(
     const player = isPlayer ? match.player : match.ai;
     const opponent = isPlayer ? match.ai : match.player;
 
-    // Find all Fire Energy in the player's hand
     const fireEnergy = player.hand.filter(c => c.name === 'Fire Energy');
     const discardCount = fireEnergy.length;
 
@@ -108,7 +96,6 @@ function moltresWildfire(
         player.discard.push(e);
     }
 
-    // Opponent discards that many cards from the top of their deck
     let opponentDiscarded = 0;
     for (let i = 0; i < discardCount; i++) {
         const top = opponent.deck.shift();
@@ -124,8 +111,6 @@ function moltresWildfire(
     );
 }
 
-// FIX: Dragonite Step In — triggers a pending effect for the player to choose
-// a benched Pokémon to switch in, or the AI auto-switches.
 function dragoniteStepIn(
     match: TCGMatch, isPlayer: boolean,
     atk: PokemonInstance, def: PokemonInstance,
@@ -141,7 +126,6 @@ function dragoniteStepIn(
     }
 
     if (!isPlayer) {
-        // AI: switch with the first benched Pokémon automatically
         const benchIdx = player.bench.findIndex(b => b !== null);
         if (benchIdx !== -1) {
             const currentActive = player.active;
@@ -151,7 +135,6 @@ function dragoniteStepIn(
             ctx.customLog.push(`Step In: AI switched ${currentActive?.topCard.name} with ${player.active?.topCard.name}.`);
         }
     } else {
-        // Player: set a pending effect so they can choose which benched Pokémon to switch in
         player.pendingEffect = {
             type: 'discard_for_effect',
             trainerUid: atk.uid,
@@ -192,47 +175,35 @@ function hitmonleeStretchKick(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Handler registry
-// ---------------------------------------------------------------------------
 
 const ATTACK_HANDLERS: Record<string, AttackEffectHandler> = {
 
-    // Gengar — Curse
     'base1-5:Curse':       gengarCurse,
     'base2-5:Curse':       gengarCurse,
     'legendary-9:Curse':   gengarCurse,
     'Gengar:Curse':        gengarCurse,
 
-    // Machamp — Seismic Toss
     'base1-8:Seismic Toss':      machampSeismicToss,
     'base2-8:Seismic Toss':      machampSeismicToss,
     'legendary-16:Seismic Toss': machampSeismicToss,
     'Machamp:Seismic Toss':      machampSeismicToss,
 
-    // Moltres — Wildfire (FIXED)
     'base1-12:Wildfire':     moltresWildfire,
     'legendary-21:Wildfire': moltresWildfire,
     'Moltres:Wildfire':      moltresWildfire,
 
-    // Dragonite — Step In (FIXED)
     'fossil-4:Step In':  dragoniteStepIn,
     'Dragonite:Step In': dragoniteStepIn,
 
-    // Wigglytuff — Do the Wave
     'jungle-16:Do the Wave':  wigglytuffDoTheWave,
     'jungle-39:Do the Wave':  wigglytuffDoTheWave,
     'Wigglytuff:Do the Wave': wigglytuffDoTheWave,
 
-    // Hitmonlee — Stretch Kick
     'fossil-7:Stretch Kick':  hitmonleeStretchKick,
     'Hitmonlee:Stretch Kick': hitmonleeStretchKick,
 
 };
 
-// ---------------------------------------------------------------------------
-// Public resolver
-// ---------------------------------------------------------------------------
 
 export function resolveAttackEffect(
     match: TCGMatch,
@@ -260,9 +231,6 @@ export function resolveAttackEffect(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Advanced Generic Text Parser
-// ---------------------------------------------------------------------------
 
 function parseGenericAttackText(
     match: TCGMatch,
@@ -274,22 +242,20 @@ function parseGenericAttackText(
 ): void {
     const text = attack.text.toLowerCase();
 
-    // 1. Coin Flip Multipliers (e.g. 30x)
     if (attack.damage.includes('×') || attack.damage.includes('x')) {
         const base = parseInt(attack.damage.replace(/[^0-9]/g, '')) || 10;
         let flips = 1;
         if (text.includes('flip 2 coins')) flips = 2;
         else if (text.includes('flip 3 coins')) flips = 3;
         else if (text.includes('flip 4 coins')) flips = 4;
-        
-        const results = flipCoins(flips);
+
+                const results = flipCoins(flips);
         ctx.coinResults.push(...results);
         const heads = results.filter(Boolean).length;
         ctx.baseDamage = base * heads;
         ctx.customLog.push(`Auto-parsed: Flipped ${flips} coins, ${heads} heads -> ${ctx.baseDamage} damage.`);
     }
 
-    // 2. Damage Modifiers
     if (attack.damage.includes('-')) {
         if (text.includes('minus 10 damage for each damage counter')) {
             const base = parseInt(attack.damage.replace(/[^0-9]/g, '')) || 50;
@@ -313,7 +279,6 @@ function parseGenericAttackText(
         }
     }
 
-    // 3. Status Effects
     let applyStatus = true;
     if (text.includes('flip a coin. if heads, the defending pokémon is now')) {
         const heads = flipCoin();
@@ -338,7 +303,6 @@ function parseGenericAttackText(
         else if (text.includes('is now burned')) ctx.burnToApply = true;
     }
 
-    // 4. Healing
     if (text.includes('remove all damage counters from')) {
         attackerInst.currentDamage = 0;
         ctx.customLog.push(`Auto-parsed: Healed all damage from ${attackerInst.topCard.name}.`);
@@ -348,7 +312,6 @@ function parseGenericAttackText(
         attackerInst.currentDamage = Math.max(0, attackerInst.currentDamage - 20);
     }
 
-    // 5. Energy Discard
     if (text.includes('discard 1 water energy')) { ctx.discardAttackerEnergy = 1; ctx.discardAttackerEnergyTypes.push('Water'); }
     else if (text.includes('discard 1 fire energy')) { ctx.discardAttackerEnergy = 1; ctx.discardAttackerEnergyTypes.push('Fire'); }
     else if (text.includes('discard 1 psychic energy')) { ctx.discardAttackerEnergy = 1; ctx.discardAttackerEnergyTypes.push('Psychic'); }
@@ -359,17 +322,15 @@ function parseGenericAttackText(
     else if (text.includes('discard 2 energy')) { ctx.discardAttackerEnergy = 2; }
     else if (text.includes('discard all energy')) { ctx.discardAttackerEnergy = attackerInst.attachedEnergy.length; }
 
-    // Opponent Energy Discard
     if (text.includes('defending pokémon has any energy cards attached to it, choose 1 of them and discard it')) {
         ctx.discardDefenderEnergy = 1;
     }
 
-    // 6. Recoil / Self Damage
     if (text.match(/does [0-9]+ damage to itself/)) {
         const amtStr = text.match(/does ([0-9]+) damage to itself/);
         const amt = amtStr ? parseInt(amtStr[1]) : 10;
-        
-        if (text.includes('if tails,')) {
+
+                if (text.includes('if tails,')) {
             let tails = false;
             if (ctx.coinResults.length > 0) {
                 tails = !ctx.coinResults[ctx.coinResults.length - 1];
@@ -385,7 +346,6 @@ function parseGenericAttackText(
         }
     }
 
-    // 7. Bench Damage
     if (text.includes('does 10 damage to each pokémon on each player\'s bench')) {
         const player = match.player;
         const ai = match.ai;
@@ -399,7 +359,6 @@ function parseGenericAttackText(
         });
     }
 
-    // 8. Protection (Agility / Withdraw / Barrier)
     if (text.includes('prevent all damage done to') || text.includes('prevent all effects of attacks')) {
         let protect = true;
         if (text.includes('flip a coin')) {
@@ -415,26 +374,21 @@ function parseGenericAttackText(
             ctx.customLog.push(`Auto-parsed: Protected from attacks next turn.`);
         }
     }
-    
-    // 9. Utility
+
     if (text.includes('does nothing') || text.includes('no effect')) {
         ctx.preventAllDamage = true;
     }
 
-    // 10. FIX: Super Fang — halve the defending Pokémon's remaining HP, round down to nearest 10
     if (text.includes('half the defending pokémon\'s remaining hp')) {
-        // Correct formula: floor(currentHP / 2) then floor to nearest 10 damage counter
         ctx.baseDamage = Math.floor(defenderInst.currentHP / 20) * 10;
         ctx.customLog.push(`Auto-parsed: Super Fang — dealt ${ctx.baseDamage} damage (half of ${defenderInst.currentHP} HP).`);
     }
 
-    // 11. Forced Switching
     if (text.includes('switch it with his or her active pokémon') || text.includes('switches it with the defending pokémon')) {
         ctx.forceOpponentSwitch = true;
         ctx.customLog.push(`Auto-parsed: Opponent is forced to switch Active Pokémon.`);
     }
 
-    // 12. Attack Copying (Metronome)
     if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('copies that attack')) {
          if (defenderInst.topCard.attacks && defenderInst.topCard.attacks.length > 0) {
              const copied = defenderInst.topCard.attacks[Math.floor(Math.random() * defenderInst.topCard.attacks.length)];
@@ -447,42 +401,35 @@ function parseGenericAttackText(
          }
     }
 
-    // 13. Attack Disabling (Amnesia)
     if (text.includes('choose 1 of the defending pokémon\'s attacks') && text.includes('can\'t use that attack')) {
         ctx.disableOpponentAttack = true;
         ctx.customLog.push(`Auto-parsed: Triggering Amnesia UI selection.`);
     }
 
-    // 14. Accuracy Debuff (Sand-attack)
     if (text.includes('if the defending pokémon tries to attack during your opponent\'s next turn, your opponent flips a coin. if tails, that attack does nothing')) {
         defenderInst.blindedThisTurn = true;
         ctx.customLog.push(`Auto-parsed: Opponent accuracy blinded for 1 turn.`);
     }
 
-    // 15. Threshold Protection (Harden)
     if (text.includes('30 or less damage is done to') && text.includes('prevent that damage')) {
         attackerInst.damageThresholdProtection = 30;
         ctx.customLog.push(`Auto-parsed: Preventing incoming damage 30 or below.`);
     }
 
-    // 16. Retaliation KO (Destiny Bond)
     if (text.includes('knocks out gastly during your opponent\'s next turn, knock out that pokémon')) {
         attackerInst.destinyBondActive = true;
         ctx.customLog.push(`Auto-parsed: Destiny Bond active.`);
     }
 
-    // 17. One-Time Use Lock (Leek Slap)
     if (text.includes('can\'t use this attack again as long as')) {
         ctx.oneTimeUseAttack = attack.name;
     }
 
-    // 18. Last Turn Memory (Mirror Move)
     if (text.includes('was attacked last turn, do the final result of that attack')) {
         ctx.baseDamage = attackerInst.damageTakenLastTurn;
         ctx.customLog.push(`Auto-parsed: Reflecting ${attackerInst.damageTakenLastTurn} damage from last turn.`);
     }
 
-    // 19. Dynamic Type Changes (Conversion)
     if (text.includes('change it to a type of your choice')) {
         ctx.changeWeakness = true;
     }

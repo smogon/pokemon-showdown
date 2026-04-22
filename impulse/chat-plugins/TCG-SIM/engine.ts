@@ -3,9 +3,6 @@ import { resolvePokemonPower, getPowerRequirements, checkPassivePowers } from '.
 import { resolveAttackEffect } from './attack-effects';
 import { executeAITurn } from './ai';
 
-// ---------------------------------------------------------------------------
-// Card data interfaces
-// ---------------------------------------------------------------------------
 
 export interface WeaknessResistance {
     type: string;
@@ -51,18 +48,12 @@ export interface InGameCard extends TCGCard {
     uid: number;
 }
 
-// ---------------------------------------------------------------------------
-// Attached items
-// ---------------------------------------------------------------------------
 
 export interface AttachedItem {
     card: InGameCard;
     expiresOn: 'end_of_your_turn' | 'end_of_opponent_turn' | 'permanent';
 }
 
-// ---------------------------------------------------------------------------
-// Status conditions
-// ---------------------------------------------------------------------------
 
 export type VolatileStatus = 'asleep' | 'confused' | 'paralyzed' | null;
 
@@ -76,9 +67,6 @@ function freshStatus(): StatusState {
     return { volatile: null, poisoned: false, burned: false };
 }
 
-// ---------------------------------------------------------------------------
-// PokemonInstance
-// ---------------------------------------------------------------------------
 
 export class PokemonInstance {
     uid: number;
@@ -89,7 +77,6 @@ export class PokemonInstance {
     turnPlaced: number;
     status: StatusState;
 
-    // Per-turn and advanced mechanic states
     protectedThisTurn: boolean = false;
     damageModThisTurn: number = 0;
     poisonDamage: number = 10;
@@ -103,7 +90,6 @@ export class PokemonInstance {
     damageTakenThisTurn: number = 0;
     disabledAttackIndex: number | null = null;
 
-    // FIX: Energy Burn — track original energy names to restore at end of turn
     energyBurnActive: boolean = false;
 
     constructor(basic: InGameCard, turnPlaced = 0) {
@@ -164,7 +150,6 @@ export class PokemonInstance {
             || this.status.volatile === 'paralyzed';
     }
 
-    // FIX: Restore Energy Burn — reset mutated energy names back to originals
     restoreEnergyBurn() {
         if (!this.energyBurnActive) return;
         for (const e of this.attachedEnergy) {
@@ -177,9 +162,6 @@ export class PokemonInstance {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Helper functions
-// ---------------------------------------------------------------------------
 
 const EVOLUTION_SUBTYPES = new Set(['Stage 1', 'Stage 2', 'MEGA', 'VMAX', 'VSTAR', 'GX', 'EX']);
 
@@ -275,9 +257,6 @@ export function canRetreat(instance: PokemonInstance): boolean {
     return instance.attachedEnergy.length >= instance.retreatCostCount;
 }
 
-// ---------------------------------------------------------------------------
-// TCGPlayer
-// ---------------------------------------------------------------------------
 
 export class TCGPlayer {
     userid: string;
@@ -339,9 +318,6 @@ export class TCGPlayer {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Deck validation
-// ---------------------------------------------------------------------------
 
 export interface DeckValidationResult {
     valid: boolean;
@@ -372,9 +348,6 @@ export function validateDeck(cards: TCGCard[]): DeckValidationResult {
     return { valid: errors.length === 0, errors };
 }
 
-// ---------------------------------------------------------------------------
-// Damage calculation context
-// ---------------------------------------------------------------------------
 
 export interface DamageContext {
     baseDamage: number;
@@ -439,9 +412,6 @@ export function freshDamageContext(
     };
 }
 
-// ---------------------------------------------------------------------------
-// TCGMatch
-// ---------------------------------------------------------------------------
 
 export class TCGMatch {
     player: TCGPlayer;
@@ -454,12 +424,8 @@ export class TCGMatch {
     hasAttackedThisTurn = false;
     turnNumber = 0;
 
-    // Setup phase: both players choose Active + Bench before turn 1 begins.
-    // The player stays in 'setup' until they call confirmSetup(); the AI
-    // resolves its setup automatically inside setupGame().
     phase: 'setup' | 'playing' = 'setup';
 
-    // FIX: Track whether this is genuinely the first player turn (no attacking allowed)
     isFirstPlayerTurn = true;
 
     readonly cardPool: TCGCard[];
@@ -480,7 +446,6 @@ export class TCGMatch {
         return cards.map(c => ({ ...c, uid: this.cardUidCounter++ }));
     }
 
-    // FIX: Mulligan — draw 7 first, check hand for Basic, reshuffle if none
     private setupGame() {
         this.shuffleDeck(this.player.deck);
         this.shuffleDeck(this.ai.deck);
@@ -488,7 +453,6 @@ export class TCGMatch {
         let playerMulligans = 0;
         let aiMulligans = 0;
 
-        // Player mulligan: draw 7, check hand for a Basic; if none, reshuffle and redraw
         this.player.draw(7);
         while (!this.player.hand.some(c => isBasicPokemon(c))) {
             playerMulligans++;
@@ -498,7 +462,6 @@ export class TCGMatch {
             this.player.draw(7);
         }
 
-        // AI mulligan: same logic
         this.ai.draw(7);
         while (!this.ai.hand.some(c => isBasicPokemon(c))) {
             aiMulligans++;
@@ -508,13 +471,11 @@ export class TCGMatch {
             this.ai.draw(7);
         }
 
-        // Set prizes
         for (let i = 0; i < 6; i++) {
             this.player.prizes.push(this.player.deck.shift()!);
             this.ai.prizes.push(this.ai.deck.shift()!);
         }
 
-        // Opponents draw bonus cards for each of the other player's mulligans
         if (playerMulligans > 0) {
             this.ai.draw(playerMulligans);
             this.addLog(`Player took ${playerMulligans} mulligan(s). AI draws ${playerMulligans} extra card(s).`);
@@ -530,30 +491,24 @@ export class TCGMatch {
             };
         }
 
-        // AI resolves its setup immediately (picks Active + fills Bench with basics)
         this.resolveAISetup();
 
-        // Phase remains 'setup' — player must choose their Pokémon before turn 1
         this.turnNumber = 1;
         this.addLog(`Both players choose their starting Pokémon. Select your Active (required) and up to 5 Bench Pokémon, then click "Start Battle!"`);
     }
 
-    // AI setup: place the highest-HP basic as Active, fill bench with remaining basics.
     private resolveAISetup() {
         const basics = this.ai.hand.filter(c => isBasicPokemon(c)) as InGameCard[];
 
-        // Sort by HP descending so the tankiest Pokémon goes Active
         basics.sort((a, b) => parseInt(b.hp || '0') - parseInt(a.hp || '0'));
 
-        if (basics.length === 0) return; // shouldn't happen after mulligan logic
+        if (basics.length === 0) return;
 
-        // Place first basic as Active
         const activeCard = basics[0];
         const activeIdx = this.ai.hand.findIndex(c => c.uid === activeCard.uid);
         this.ai.hand.splice(activeIdx, 1);
         this.ai.active = new PokemonInstance(activeCard, this.turnNumber);
 
-        // Fill bench with remaining basics (up to 5 slots)
         for (let i = 1; i < basics.length; i++) {
             const slot = this.ai.firstEmptyBenchSlot();
             if (slot === -1) break;
@@ -566,8 +521,6 @@ export class TCGMatch {
         this.addLog(`AI has chosen their starting Pokémon.`);
     }
 
-    // Called by the player once they have placed at least an Active during setup.
-    // Validates, transitions to 'playing', and starts turn 1 with a draw.
     confirmSetup(): { ok: boolean; error?: string } {
         if (this.phase !== 'setup') return { ok: false, error: 'Setup already complete.' };
         if (!this.player.active) return { ok: false, error: 'You must place at least one Active Pokémon before starting.' };
@@ -575,7 +528,6 @@ export class TCGMatch {
         this.phase = 'playing';
         this.isFirstPlayerTurn = true;
 
-        // Player draws their first card for turn 1
         if (!this.player.draw(1)) {
             this.declareWinner(false, 'Player ran out of cards on turn 1');
             return { ok: true };
@@ -671,7 +623,6 @@ export class TCGMatch {
         return isPlayer ? 'Player' : 'AI';
     }
 
-    // Changed from private to public so ai.ts can call it
     expireItems(forPlayer: boolean, timing: 'end_of_your_turn' | 'end_of_opponent_turn') {
         const owner = this.playerOf(forPlayer);
         for (const inst of owner.getAllInPlay()) {
@@ -684,9 +635,7 @@ export class TCGMatch {
         }
     }
 
-    // Changed from private to public so ai.ts can call it
     clearPerTurnFlags(inst: PokemonInstance) {
-        // FIX: Restore Energy Burn before clearing flags — names must be reset each turn end
         inst.restoreEnergyBurn();
 
         inst.protectedThisTurn = false;
@@ -749,13 +698,11 @@ export class TCGMatch {
 
         if (damage <= 0) return { final: 0, weaknessApplied, resistanceApplied, blockedByProtection };
 
-        // STEP 1: PlusPower
         if (attackerInst) {
             const plusPowers = attackerInst.attachedItems.filter(i => i.card.name === 'PlusPower').length;
             if (plusPowers > 0) damage += (plusPowers * 10);
         }
 
-        // STEP 2: Weakness
         if (applyWR) {
             for (const atkType of attackerTypes) {
                 let hasWeakness = defenderInst.overrideWeakness === atkType;
@@ -778,7 +725,6 @@ export class TCGMatch {
             }
         }
 
-        // STEP 3: Resistance
         if (applyWR) {
             for (const atkType of attackerTypes) {
                 let hasResistance = defenderInst.overrideResistance === atkType;
@@ -801,7 +747,6 @@ export class TCGMatch {
             }
         }
 
-        // STEP 4: Defender item and threshold protection
         if (damage > 0) {
             const defenders = defenderInst.attachedItems.filter(i => i.card.name === 'Defender').length;
             if (defenders > 0) damage = Math.max(0, damage - (defenders * 20));
@@ -812,7 +757,6 @@ export class TCGMatch {
             }
         }
 
-        // Always clamp final damage to 0 minimum
         const final = Math.max(0, damage);
         return { final, weaknessApplied, resistanceApplied, blockedByProtection };
     }
@@ -922,15 +866,11 @@ export class TCGMatch {
         return 1;
     }
 
-    // Changed from private to public so ai.ts can call it
     declareWinner(isPlayer: boolean, reason: string) {
         this.winner = isPlayer ? 'player' : 'ai';
         this.addLog(`${this.label(isPlayer)} wins! (${reason})`);
     }
 
-    // During setup phase, playBasicPokemon is also used for setup placement.
-    // turnPlaced is set to 0 during setup so evolution restrictions work correctly
-    // on turn 1 (turnPlaced < turnNumber required).
     playBasicPokemon(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
         if (this.winner) return false;
 
@@ -941,10 +881,8 @@ export class TCGMatch {
         const card = activePlayer.hand[handIndex];
         if (!isBasicPokemon(card)) return false;
 
-        // During setup, only allow placement into active/bench (no other restrictions)
         if (slot === 'active') {
             if (activePlayer.active) return false;
-            // turnPlaced = 0 during setup so evolution can happen on turn 1
             activePlayer.active = new PokemonInstance(card, this.phase === 'setup' ? 0 : this.turnNumber);
             activePlayer.hand.splice(handIndex, 1);
             activePlayer.pendingPromotion = false;
@@ -960,7 +898,6 @@ export class TCGMatch {
         return true;
     }
 
-    // Return a placed setup Pokémon back to hand (only valid during setup phase)
     returnSetupPokemon(isPlayer: boolean, slot: 'active' | number): boolean {
         if (this.phase !== 'setup') return false;
         const player = this.playerOf(isPlayer);
@@ -975,7 +912,6 @@ export class TCGMatch {
         }
 
         if (!inst) return false;
-        // Return all cards in the instance back to hand (only the base card during setup)
         player.hand.push(...inst.cards);
         this.addLog(`${this.label(isPlayer)} returned ${inst.topCard.name} to hand.`);
         if (isPlayer) player.selectedUid = null;
@@ -1029,7 +965,6 @@ export class TCGMatch {
     }
 
     attachEnergy(isPlayer: boolean, uid: number, slot: 'active' | number): boolean {
-        // No energy attachment during setup
         if (this.phase === 'setup') return false;
         if (this.winner || this.hasAttachedEnergy) return false;
 
@@ -1065,12 +1000,10 @@ export class TCGMatch {
 
     retreat(isPlayer: boolean, benchIndex: number): boolean {
         if (this.winner) return false;
-        // No retreating during setup
         if (this.phase === 'setup') return false;
 
         const activePlayer = this.playerOf(isPlayer);
 
-        // FIX: Cannot retreat after attacking
         if (isPlayer && this.hasAttackedThisTurn) {
             this.addLog(`Cannot retreat after attacking.`);
             return false;
@@ -1174,7 +1107,6 @@ export class TCGMatch {
     }
 
     playTrainer(isPlayer: boolean, uid: number, targetSlot?: 'active' | number): boolean {
-        // No trainer plays during setup
         if (this.phase === 'setup') return false;
         if (this.winner) return false;
 
@@ -1233,10 +1165,8 @@ export class TCGMatch {
     attack(isPlayer: boolean, attackIndex: number): boolean {
         if (this.winner) return false;
         if (this.hasAttackedThisTurn) return false;
-        // No attacking during setup
         if (this.phase === 'setup') return false;
 
-        // FIX: First player turn — no attacking allowed (GBC rule)
         if (isPlayer && this.isFirstPlayerTurn) {
             this.addLog(`You cannot attack on the first turn!`);
             return false;
@@ -1305,7 +1235,6 @@ export class TCGMatch {
             attackIndex
         );
 
-        // FIX: Check passive powers (Invisible Wall) BEFORE resolving attack effect
         checkPassivePowers(this, 'before_damage', defenderInst, !isPlayer, baseDamage, attackerInst);
 
         resolveAttackEffect(this, isPlayer, attackerInst, defenderInst, attackDef, ctx);
@@ -1342,7 +1271,6 @@ export class TCGMatch {
             }
         }
 
-        // FIX: Check Strikes Back AFTER damage is applied
         if (!this.winner) {
             checkPassivePowers(this, 'after_damage', defenderInst, !isPlayer, ctx.baseDamage + ctx.extraDamage, attackerInst);
         }
@@ -1456,10 +1384,8 @@ export class TCGMatch {
 
     endPlayerTurn() {
         if (this.winner) return;
-        // Cannot end turn during setup — must confirm setup first
         if (this.phase === 'setup') return;
 
-        // FIX: Ending the first turn clears the first-turn attack restriction
         if (this.isFirstPlayerTurn) {
             this.isFirstPlayerTurn = false;
         }
@@ -1479,9 +1405,6 @@ export class TCGMatch {
         this.executeAITurn();
     }
 
-    // ---------------------------------------------------------------------------
-    // AI turn — delegated entirely to ai.ts
-    // ---------------------------------------------------------------------------
     executeAITurn() {
         executeAITurn(this);
     }
