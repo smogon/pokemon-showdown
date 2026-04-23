@@ -6947,31 +6947,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
+			this.add('-ability', pokemon, 'Nullify');
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
-		onAnySetClimateWeather(climateWeather) {
+		onAnySetClimateWeather() {
 			return false;
 		},
-		onAnySetIrritantWeather(irritantWeather) {
+		onAnySetIrritantWeather() {
 			return false;
 		},
-		onAnySetEnergyWeather(energyWeather) {
+		onAnySetEnergyWeather() {
 			return false;
 		},
-		onAnySetClearingWeather(clearingWeather) {
+		onAnySetClearingWeather() {
 			return false;
 		},
 		onStart(pokemon) {
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Nullify');
-				this.effectState.switchingIn = false;
-			}
+			pokemon.abilityState.ending = false;
 			this.eachEvent('ClimateWeatherChange', this.effect);
 			this.eachEvent('IrritantWeatherChange', this.effect);
 			this.eachEvent('EnergyWeatherChange', this.effect);
 			this.eachEvent('ClearingWeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
+			pokemon.abilityState.ending = true;
 			this.eachEvent('ClimateWeatherChange', this.effect);
 			this.eachEvent('IrritantWeatherChange', this.effect);
 			this.eachEvent('EnergyWeatherChange', this.effect);
@@ -6981,6 +6980,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		suppressIrritantWeather: true,
 		suppressEnergyWeather: true,
 		suppressClearingWeather: true,
+		suppressCataclysmWeather: true,
 		flags: {},
 		name: "Nullify",
 		rating: 2.5,

@@ -135,6 +135,10 @@ export const commands: Chat.ChatCommands = {
 			megaSpecies = dex.species.get("Zacian-Crowned");
 			baseSpecies = dex.species.get("Zacian");
 			break;
+		case 'whirligig':
+			megaSpecies = dex.species.get("Castform-Whirly");
+			baseSpecies = dex.species.get("Castform");
+			break;
 		default:
 			const forcedForme = stone.forcedForme;
 			if (forcedForme) {
@@ -291,6 +295,10 @@ export const commands: Chat.ChatCommands = {
 			case 'rustedsword':
 				megaSpecies = dex.species.get("Zacian-Crowned");
 				baseSpecies = dex.species.get("Zacian");
+				break;
+			case 'whirligig':
+				megaSpecies = dex.species.get("Castform-Whirly");
+				baseSpecies = dex.species.get("Castform");
 				break;
 			default:
 				const forcedForme = aStone.forcedForme;

@@ -2541,8 +2541,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	nullify: {
 		name: "Nullify",
-		desc: "While this Pokemon is active, the effects of Weathergy are disabled and any other Weathergies are prevented from being set up.",
-		shortDesc: "While this Pokemon is active, Weathergy conditions are disabled and can't be set up.",
+		desc: "On switch-in, this Pokemon nullifies all Weathergy and prevents Weathergy from being set up while it is active.",
+		shortDesc: "On switch-in, nullifies Weathergy. While active, Weathergy can't be set up.",
 
 		start: "  The effects of the Weathergy disappeared.",
 	},
