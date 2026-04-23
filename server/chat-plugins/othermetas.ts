@@ -53,7 +53,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 		}
 	}
 	if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
-		!item.isPrimalOrb && !item.name.startsWith("Rusted") && item.id !== 'whirligig') return null;
+		!item.isPrimalOrb && !item.name.startsWith("Rusted")) return null;
 	return item;
 }
 
@@ -134,10 +134,6 @@ export const commands: Chat.ChatCommands = {
 		case 'rustedsword':
 			megaSpecies = dex.species.get("Zacian-Crowned");
 			baseSpecies = dex.species.get("Zacian");
-			break;
-		case 'whirligig':
-			megaSpecies = dex.species.get("Castform-Whirly");
-			baseSpecies = dex.species.get("Castform");
 			break;
 		default:
 			const forcedForme = stone.forcedForme;

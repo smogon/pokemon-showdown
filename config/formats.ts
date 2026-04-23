@@ -6920,7 +6920,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			for (const set of team) {
 				const item = this.dex.items.get(set.item);
 				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
-					!item.isPrimalOrb && !item.name.startsWith('Rusted') && item.id !== 'whirligig') continue;
+					!item.isPrimalOrb && !item.name.startsWith('Rusted')) continue;
 				const natdex = this.ruleTable.has('natdexmod');
 				if (natdex && item.id !== 'ultranecroziumz') continue;
 				const species = this.dex.species.get(set.species);

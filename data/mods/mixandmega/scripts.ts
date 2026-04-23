@@ -115,8 +115,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Zacian-Crowned', pokemon);
 				} else if (item.id === 'rustedshield') {
 					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Zamazenta-Crowned', pokemon);
-				} else if (item.id === 'whirligig') {
-					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Castform-Whirly', pokemon);
 				}
 				if (!rawSpecies) continue;
 				const species = pokemon.setSpecies(rawSpecies);

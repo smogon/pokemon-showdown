@@ -8591,6 +8591,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		forcedForme: "Castform-Whirly",
 		itemUser: ["Castform-Whirly"],
 		num: 10015,
 		gen: 9,
