@@ -515,6 +515,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.isMega && !formeType) formeType = 'Mega';
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
+			if (formeChangeSpecies.name.endsWith('Whirly')) formeType = 'Whirly';
 			if (formeType) deltas.formeType = formeType;
 			if (!deltas.formeType && formeChangeSpecies.abilities['H'] &&
 				pokemon && pokemon.baseSpecies.abilities['H'] === pokemon.getAbility().name) {
