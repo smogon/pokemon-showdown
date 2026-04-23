@@ -53,7 +53,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 		}
 	}
 	if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
-		!item.isPrimalOrb && !item.name.startsWith("Rusted")) return null;
+		!item.isPrimalOrb && !item.name.startsWith("Rusted") && item.id !== 'whirligig') return null;
 	return item;
 }
 
@@ -113,7 +113,7 @@ export const commands: Chat.ChatCommands = {
 		const stone = getMegaStone(stoneName[0], mod);
 		const species = dex.species.get(sep[0]);
 		if (!stone) {
-			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted Item/Origin Item/Mask not found.`);
+			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted item/Origin item/Ogerpon Mask/Arceus Plate/Silvally Memory/Whirligig not found.`);
 		}
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon not found.`);
 		let baseSpecies: Species;
@@ -134,6 +134,10 @@ export const commands: Chat.ChatCommands = {
 		case 'rustedsword':
 			megaSpecies = dex.species.get("Zacian-Crowned");
 			baseSpecies = dex.species.get("Zacian");
+			break;
+		case 'whirligig':
+			megaSpecies = dex.species.get("Castform-Whirly");
+			baseSpecies = dex.species.get("Castform");
 			break;
 		default:
 			const forcedForme = stone.forcedForme;
@@ -170,7 +174,13 @@ export const commands: Chat.ChatCommands = {
 		}
 		const mixedSpecies = Utils.deepClone(species);
 		mixedSpecies.abilities = Utils.deepClone(megaSpecies.abilities);
-		if (['Arceus', 'Silvally'].includes(baseSpecies.name) || deltas.primaryTypeChange) {
+		if (stone.id === 'whirligig') {
+			if (!mixedSpecies.types.includes(deltas.type)) {
+				const secondType = mixedSpecies.types[1];
+				mixedSpecies.types = [deltas.type];
+				if (secondType && secondType !== deltas.type) mixedSpecies.types.push(secondType);
+			}
+		} else if (['Arceus', 'Silvally'].includes(baseSpecies.name) || deltas.primaryTypeChange) {
 			const secondType = mixedSpecies.types[1];
 			mixedSpecies.types = [deltas.type];
 			if (secondType && secondType !== deltas.type) mixedSpecies.types.push(secondType);

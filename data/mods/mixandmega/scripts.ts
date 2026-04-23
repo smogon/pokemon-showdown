@@ -115,6 +115,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Zacian-Crowned', pokemon);
 				} else if (item.id === 'rustedshield') {
 					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Zamazenta-Crowned', pokemon);
+				} else if (item.id === 'whirligig') {
+					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Castform-Whirly', pokemon);
 				}
 				if (!rawSpecies) continue;
 				const species = pokemon.setSpecies(rawSpecies);
@@ -527,7 +529,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
 			species.abilities = { '0': deltas.ability };
-			if (deltas.formeType === 'Primary') {
+			if (deltas.formeType === 'Whirly') {
+				if (!species.types.includes(deltas.type)) {
+					const secondType = species.types[1];
+					species.types = [deltas.type];
+					if (secondType && secondType !== deltas.type) species.types.push(secondType);
+				}
+			} else if (deltas.formeType === 'Primary') {
 				const secondType = species.types[1];
 				species.types = [deltas.type];
 				if (secondType && secondType !== deltas.type) species.types.push(secondType);
