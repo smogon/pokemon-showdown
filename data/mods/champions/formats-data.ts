@@ -50,7 +50,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	blastoisemega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	blastoisegmax: {
 		isNonstandard: "Past",
