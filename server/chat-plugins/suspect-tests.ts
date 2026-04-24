@@ -1,5 +1,6 @@
 import { Utils } from '../../lib';
 import { FS } from '../../lib/fs';
+import { type BestOfGame } from '../room-battle-bestof';
 
 const SUSPECTS_FILE = 'config/suspects.json';
 
@@ -54,6 +55,45 @@ export const commands: Chat.ChatCommands = {
 				buffer += `${Utils.escapeHTML(test.tier)}: <a href="${test.url}">${Utils.escapeHTML(test.suspect)}</a> (${test.date})`;
 			}
 			return this.sendReplyBox(buffer);
+		},
+
+		async join(target, room, user) {
+			const format = Dex.formats.get(target);
+			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${target}" is not a valid tier.`);
+
+			const suspect = suspectTests.suspects[format.id];
+			if (!suspect) throw new Chat.ErrorMessage(`There is not currently a suspect test in ${format.name}`);
+
+			// don't allow a user to reset RD while in a rated game of the same format
+			for (const gameid of user.games) {
+				const game = Rooms.get(gameid)?.game;
+				if (!game || game.ended) continue;
+				if (!game.playerTable[user.id]) continue;
+				if (game.gameid === 'battle') {
+					const battle = game as RoomBattle;
+					if (battle.rated && battle.format === format.id) {
+						throw new Chat.ErrorMessage(`You are currently in a rated ${format.name} battle.`);
+					}
+				} else if (game.gameid === 'bestof') {
+					const bestof = game as BestOfGame;
+					if (bestof.options.rated && bestof.format.id === format.id) {
+						throw new Chat.ErrorMessage(`You are currently in a rated ${format.name} game.`);
+					}
+				}
+			}
+
+			const [out, error] = await LoginServer.request('suspects/join', {
+				format: format.id,
+				user: user.id,
+			});
+			if (out?.actionerror || error) {
+				throw new Chat.ErrorMessage("Error joining suspect test: " + (out?.actionerror || error?.message));
+			}
+
+			this.sendReplyBox(`You are now participating in the ${suspect.suspect} suspect test in ${format.name}!<br />` +
+				`If you achieve the required COIL value on this account, you will be eligible to vote.<br />` +
+				`Your rating has become provisional; you will not appear on the ${format.name} ladder until you have played a few games.<br />` +
+				`(Remember to use the <code>/linksmogon</code> command!)`);
 		},
 
 		edit: 'add',
@@ -117,7 +157,7 @@ export const commands: Chat.ChatCommands = {
 				tier: format.name,
 				suspect: suspectString,
 				date: dateActual,
-				url: out.url || prevSuspect.url,
+				url: out.url || prevSuspect?.url,
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
@@ -230,7 +270,7 @@ export const commands: Chat.ChatCommands = {
 		async setbvalue(target, room, user, connection, cmd) {
 			checkPermissions(this);
 			if (!toID(target)) {
-				return this.parse(`/help ${cmd}`);
+				return this.parse(`/help suspects ${cmd}`);
 			}
 			const [formatStr, source] = this.splitOne(target);
 			const format = Dex.formats.get(formatStr);
@@ -280,7 +320,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
 			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
 			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +
-			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
+			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value]. ` +
 			`Requires: suspect whitelist ~`
 		);
 	},
