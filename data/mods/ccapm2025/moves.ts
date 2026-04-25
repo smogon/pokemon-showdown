@@ -710,6 +710,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		shortDesc: "If used twice, transforms Jirachi.",
 		pp: 1,
+		noPPBoosts: true,
 	},
 	lunarblessing: {
 		inherit: true,
@@ -1099,6 +1100,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Tough",
+		shortDesc: "Makes the target go Berserk.",
 	},
 	heartofoak: {
 		num: 1312,
@@ -1435,7 +1437,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	soulboundslash: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 70,
 		category: "Physical",
 		name: "Soulbound Slash",
 		pp: 10,

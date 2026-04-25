@@ -274,11 +274,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 			// attacker.setAbility('interdimensionalmissile', attacker);
 		},
-		// airborneness implemented in scripts.ts:Pokemon#isGrounded
+		// airborneness implemented in scripts.ts:Pokemon#isGrounded (it doesn't work but we don't need it to anymore)
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Stack Shift",
 		rating: 4,
-		shortDesc: "Stakataka: Levitate + Fire moves 1.5x pow. Missile before attacks, Base before Stack Shield.",
+		shortDesc: "Stakataka: Fire moves 1.5x pow. -Missile before attacks, -Base before Stack Shield.",
 	},
 	interdimensionalmissile: {
 		onModifyAtkPriority: 5,
@@ -369,7 +369,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-		onModifyMovePriority: -1,
+		/* onModifyMovePriority: -1,
 		onModifyMove(move) {
 			if (move.category !== "Status") {
 				this.debug('Adding Supercritical suppress');
@@ -379,7 +379,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					volatileStatus: 'gastroacid',
 				});
 			}
-		},
+		}, */
 		onTryHit(pokemon, target, move) {
 			if (move.type === 'Water') {
 				this.add('-immune', pokemon, '[from] ability: Supercritical');
@@ -389,7 +389,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Supercritical",
 		rating: 3,
-		shortDesc: "User's Water moves have 1.5x power and suppress the target's ability; Water immunity.",
+		shortDesc: "User's Water moves have 1.5x power. Water immunity.",
 	},
 	bitterness: {
 		onResidualOrder: 28,
@@ -480,13 +480,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod <= 0) {
 				this.debug('Shroom n Doom boost');
-				return this.chainModify(1.5);
+				return this.chainModify([5448, 4096]);
 			}
 		},
 		flags: {},
 		name: "Shroom n' Doom",
 		rating: 2,
-		shortDesc: "User is under the effects of Torment. Non-SE moves deal 1.5x damage.",
+		shortDesc: "User is under the effects of Torment. Non-SE moves deal 1.33x damage.",
 	},
 	focusedfire: {
 		onSourceModifyAccuracyPriority: -1,
@@ -633,14 +633,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon's attacks deal 1.5x damage every other turn.",
 	},
 	volcanicpalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Volcanic Palette neutralize');
@@ -650,17 +650,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Volcanic Palette",
 		rating: 4,
-		shortDesc: "Effects of Solid Rock + Adaptability.",
+		shortDesc: "Effects of Solid Rock.",
 	},
 	wildpalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onAllyTryBoost(boost, target, source, effect) {
 			if ((source && target === source) || !target.hasType('Grass')) return;
 			let showMsg = false;
@@ -697,17 +697,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Wild Palette",
 		rating: 4,
-		shortDesc: "Effects of Flower Veil + Adaptability.",
+		shortDesc: "Effects of Flower Veil.",
 	},
 	luminiouspalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onFoeTryMove(target, source, move) {
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
 			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
@@ -723,17 +723,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Luminious Palette",
 		rating: 4,
-		shortDesc: "Effects of Dazzling + Adaptability.",
+		shortDesc: "Effects of Dazzling.",
 	},
 	storybookpalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
@@ -743,17 +743,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 		name: "Storybook Palette",
 		rating: 4,
-		shortDesc: "Effects of Magic Guard + Adaptability.",
+		shortDesc: "Effects of Magic Guard.",
 	},
 	phasicpalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Fire') {
 				this.boost({ atk: 1 });
@@ -775,17 +775,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Phasic Palette",
 		rating: 4,
-		shortDesc: "Effects of Thermal Exchange + Adaptability.",
+		shortDesc: "Effects of Thermal Exchange.",
 	},
 	ruffianpalette: {
-		onModifySTAB(stab, source, target, move) {
+		/* onModifySTAB(stab, source, target, move) {
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
 				}
 				return 2;
 			}
-		},
+		}, */
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source);
@@ -794,7 +794,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 		name: "Ruffian Palette",
 		rating: 4,
-		shortDesc: "Effects of Moxie + Adaptability.",
+		shortDesc: "Effects of Moxie.",
 	},
 	evileye: {
 		onStart(pokemon) {
@@ -906,7 +906,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			if (!this.effectState.counter) {
 				this.add('-start', pokemon, 'ability: Growing Bitterness');
-				this.effectState.counter = 8;
+				this.effectState.counter = 4;
 			}
 		},
 		onResidualOrder: 28,
@@ -953,18 +953,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			delete move.flags['contact'];
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy) {
-			if (this.effectState.headOn) return;
-			this.effectState.headOn = true;
+		onModifyDamage(damage) {
 			this.add('-ability', this.effectState.target, 'Head-On');
-			this.hint("Torterra-Old! dodges the first attack that targets it.");
-			this.debug('Head-On forcing miss');
-			return 0;
+			this.chainModify(0.5);
+			this.hint("Torterra-Old! takes half damage from the first attack that targets it.");
+			this.debug('Head-On lowering damage');
 		},
 		flags: {},
 		name: "Head-On",
 		rating: 5,
-		shortDesc: "Effects of Magic Guard and Long Reach. The first move to target this Pokemon always misses.",
+		shortDesc: "Effects of Magic Guard and Long Reach. The first move to target this Pokemon deals 50% damage.",
 	},
 	// advent
 	snowface: {

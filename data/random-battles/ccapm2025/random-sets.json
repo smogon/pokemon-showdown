@@ -198,8 +198,8 @@
         "level": 92,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Thunderbolt", "U-turn", "Air Slash", "Energy Ball", "Nuzzle", "Roost"],
+                "role": "Bulky Attacker",
+                "movepool": ["Thunderbolt", "Air Slash", "Energy Ball", "Nuzzle", "Roost"],
                 "abilities": ["Speed Boost"]
             }
         ]
@@ -592,7 +592,7 @@
         ]
     },
 	"shedinja": {
-        "level": 96,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -631,11 +631,6 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Stack Shield", "Taunt", "Stone Edge", "Heavy Slam"],
-                "abilities": ["Stack Shift"]
-            },
-            {
-                "role": "Wallbreaker",
                 "movepool": ["Stack Shield", "Heat Crash", "Stone Edge", "Heavy Slam"],
                 "abilities": ["Stack Shift"]
             }

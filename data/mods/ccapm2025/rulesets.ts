@@ -99,6 +99,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
 				if (move.type === 'Fire' && target.species.name === "Beartic") {
 					target.formeChange('Beartic-Freshwater', null, true);
+					target.setAbility('drizzle', target);
 
 					const glacierFangIndex = target.set.moves
 						.map(setMove => setMove.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('glacierfang' as ID);
@@ -119,6 +120,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					target.baseMoveSlots[glacierFangIndex] = sketchedMove;
 				} else if (move.type === 'Ice' && target.species.name === "Beartic-Freshwater") {
 					target.formeChange('Beartic', null, true);
+					target.setAbility('slushrush', target);
 
 					const meltingMaulIndex = target.set.moves
 						.map(setMove => setMove.toLowerCase().replace(/[^a-z0-9]/g, '')).indexOf('meltingmaul' as ID);
