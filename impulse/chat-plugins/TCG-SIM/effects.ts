@@ -1,9 +1,6 @@
 import type { TCGMatch, InGameCard } from './engine';
 import { isBasicPokemon, isEvolutionPokemon, isEnergyCard, PokemonInstance } from './engine';
 
-// ---------------------------------------------------------------------------
-// Trainer Effect interface
-// ---------------------------------------------------------------------------
 
 export interface TrainerEffect {
     requiresTarget: boolean;
@@ -19,15 +16,9 @@ function shuffle<T>(arr: T[]): T[] {
     return arr;
 }
 
-// ---------------------------------------------------------------------------
-// Effect implementations — keyed by canonical name
-// ---------------------------------------------------------------------------
 
 const effects: Record<string, TrainerEffect> = {
 
-    // -----------------------------------------------------------------------
-    // Untargeted trainers
-    // -----------------------------------------------------------------------
 
     "Bill": {
         requiresTarget: false,
@@ -119,9 +110,6 @@ const effects: Record<string, TrainerEffect> = {
         }
     },
 
-    // -----------------------------------------------------------------------
-    // Targeted trainers — own field
-    // -----------------------------------------------------------------------
 
     "Potion": {
         requiresTarget: true,
@@ -312,9 +300,6 @@ const effects: Record<string, TrainerEffect> = {
         }
     },
 
-    // -----------------------------------------------------------------------
-    // Targeted trainers — opponent's field
-    // -----------------------------------------------------------------------
 
     "Gust of Wind": {
         requiresTarget: true,
@@ -403,9 +388,6 @@ const effects: Record<string, TrainerEffect> = {
         }
     },
 
-    // -----------------------------------------------------------------------
-    // Clefairy Doll — acts as a Basic Pokémon (minimal: place on bench)
-    // -----------------------------------------------------------------------
 
     "Clefairy Doll": {
         requiresTarget: false,
@@ -423,9 +405,6 @@ const effects: Record<string, TrainerEffect> = {
         }
     },
 
-    // -----------------------------------------------------------------------
-    // Multi-step trainers — pending effect system
-    // -----------------------------------------------------------------------
 
     "Computer Search": {
         requiresTarget: false,
@@ -597,9 +576,6 @@ const effects: Record<string, TrainerEffect> = {
     },
 };
 
-// ---------------------------------------------------------------------------
-// TrainerEffects registry — the engine always looks here
-// ---------------------------------------------------------------------------
 
 export const TrainerEffects: Record<string, TrainerEffect> = {};
 
@@ -607,11 +583,6 @@ for (const [name, effect] of Object.entries(effects)) {
     TrainerEffects[name] = effect;
 }
 
-// ---------------------------------------------------------------------------
-// Set ID maps
-// Each set registers its card IDs → canonical effect name.
-// To add a new set: add its ID map below and call registerSetIds().
-// ---------------------------------------------------------------------------
 
 function registerSetIds(idMap: Record<string, string>) {
     for (const [id, name] of Object.entries(idMap)) {
