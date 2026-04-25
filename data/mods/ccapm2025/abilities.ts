@@ -480,7 +480,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod <= 0) {
 				this.debug('Shroom n Doom boost');
-				return this.chainModify(1.33);
+				return this.chainModify([5448, 4096]);
 			}
 		},
 		flags: {},
