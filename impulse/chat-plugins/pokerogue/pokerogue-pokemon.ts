@@ -13,7 +13,90 @@
  * =======================================================================
  */
 
+import { FS } from '../../../lib';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
+
+// ---------------------------------------------------------------------------
+// exp.json types & loader
+// ---------------------------------------------------------------------------
+
+interface ExpEntry {
+	expYield: number;
+	expType: string;
+	evYield: {
+		hp: number;
+		atk: number;
+		def: number;
+		spa: number;
+		spd: number;
+		spe: number;
+	};
+}
+
+type ExpData = Record<string, ExpEntry>;
+
+let expData: ExpData = {};
+
+/**
+ * Load exp.json once at startup.  The file lives at
+ * `impulse/db/exp.json` (same folder as pokerogue.json).
+ */
+export async function loadExpData(): Promise<void> {
+	try {
+		const raw = await FS('impulse/db/exp.json').readIfExists();
+		if (raw) expData = JSON.parse(raw) as ExpData;
+	} catch {
+		expData = {};
+	}
+}
+
+void loadExpData();
+
+/**
+ * Returns the base expYield for a species, falling back to a BST-derived
+ * estimate when the species is not in exp.json (regional forms, fakemons…).
+ */
+export function getExpYield(speciesId: string): number {
+	const id = toID(speciesId);
+	if (expData[id]) return expData[id].expYield;
+
+	// Fallback: estimate from BST (roughly mirrors official yields)
+	const sp = Dex.species.get(id);
+	if (!sp.exists) return 70;
+	const bs = sp.baseStats ?? { hp: 45, atk: 45, def: 45, spa: 45, spd: 45, spe: 45 };
+	const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+	return Math.round(bst / 3.5);
+}
+
+/**
+ * Calculate the EXP a player's Pokémon earns for defeating an AI Pokémon.
+ *
+ * Formula mirrors the main-series Gen-5+ traded-Pokémon formula
+ * (without trade bonus since it doesn't apply here):
+ *
+ *   exp = floor(baseYield * enemyLevel / 5)
+ *
+ * Then we apply the Lucky Charm multiplier and a boss-floor bonus.
+ */
+export function calcKillExp(
+	enemySpeciesId: string,
+	enemyLevel: number,
+	luckyCharmActive: boolean,
+	isBossFloor: boolean,
+): number {
+	const baseYield = getExpYield(enemySpeciesId);
+	let exp = Math.floor((baseYield * enemyLevel) / 5);
+	if (isBossFloor) exp = Math.floor(exp * 1.5);
+	if (luckyCharmActive) exp *= 2;
+	return Math.max(1, exp);
+}
+
+// ---------------------------------------------------------------------------
+// Existing code below – unchanged except for removing the old flat EXP
+// helper exports that are no longer used by the battle handler
+// (floorExpReward kept for any references elsewhere, but the handler no
+// longer calls it for per-Pokémon exp distribution).
+// ---------------------------------------------------------------------------
 
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
@@ -194,6 +277,10 @@ export function expForLevel(level: number): number {
 	return 15 * level * (level - 1);
 }
 
+/**
+ * Kept for backwards-compat (shop reroll cost display, etc.) but no longer
+ * used to calculate per-battle EXP distribution.
+ */
 export function floorExpReward(floor: number): number {
 	const currentTarget = botLevel(floor);
 	const nextTarget = botLevel(floor + 1);
