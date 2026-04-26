@@ -2064,12 +2064,14 @@ export class Pokemon {
 		if (this.battle.reportExactHP) {
 			shared = secret;
 		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
-			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(100 * this.hp / this.maxhp);
-			if (percentage === 100 && this.hp < this.maxhp) {
-				percentage = 99;
-			}
+			// Pokemon Champions mechanics
+			const percentage = Math.floor(100 * this.hp / this.maxhp) || 1;
 			shared = `${percentage}/100`;
+			if (percentage === 20) {
+				shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+			} else if (percentage === 50) {
+				shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+			}
 		} else {
 			/**
 			 * In-game accurate pixel health mechanics
@@ -2208,6 +2210,7 @@ export class Pokemon {
 		}
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
 			!this.battle.suppressingAbility(this)) {
+			if (move.hit === 1) delete this.abilityState.resisted; // reset for first hit
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move) ||
 				totalTypeMod < 0 || this.hp < this.maxhp) {

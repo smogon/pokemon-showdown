@@ -55,6 +55,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 	},
 
+	/**
+	 * If Utility Umbrella continues to work as in previous gens and Mega Sol continues to bypass defensive
+	 * weather boosts, the best implementation is:
+	 * - run WeatherModifyDamage with `fastExit`
+	 * - give WeatherModifyDamagePriority to Mega Sol
+	 * - delete the weather conditions below
+	 */
 	raindance: {
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
