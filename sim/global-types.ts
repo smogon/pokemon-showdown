@@ -389,7 +389,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	checkMoveMakesContact?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
-	checkMoveBreaksProtect?: (
+	checkMoveBypassesProtect?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
@@ -398,6 +398,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getTarget?: (
 		this: Battle, pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon
 	) => Pokemon | null;
+
+	// OM
+	resolveTargetLoc?: (this: Battle, targetLoc: number, action: Action, move: ActiveMove) => number;
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;

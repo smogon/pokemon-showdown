@@ -164,6 +164,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			},
 		},
 	},
+	fullincense: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
+	},
 	griseousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -171,6 +176,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1.2);
 			}
 		},
+		onTakeItem: false,
+		onSetAbility: false,
 	},
 	heavyball: {
 		inherit: true,
@@ -206,6 +213,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				});
 			}
 		},
+	},
+	laggingtail: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
 	},
 	laxincense: {
 		inherit: true,

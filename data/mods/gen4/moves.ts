@@ -468,7 +468,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem(true)) return false;
-			if (source.hasAbility('multitype')) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
 			if (!item.fling) return false;
@@ -696,7 +695,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onAfterHit(target, source, move) {
 			if (!target.item) return;
-			if (target.ability === 'multitype') return;
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
 				target.item = '';
@@ -1019,7 +1017,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onTryHit(target, source, move) {
-				if (this.checkMoveBreaksProtect(move, source, target)) return;
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -1152,15 +1150,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	rockblast: {
 		inherit: true,
 		accuracy: 80,
-	},
-	roleplay: {
-		inherit: true,
-		onTryHit(target, source) {
-			if (target.ability === source.ability || source.hasItem('griseousorb')) return false;
-			if (target.getAbility().flags['failroleplay'] || source.ability === 'multitype') {
-				return false;
-			}
-		},
 	},
 	safeguard: {
 		inherit: true,
@@ -1345,13 +1334,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return !!source.volatiles['stockpile'];
 		},
 	},
-	switcheroo: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (target.itemKnockedOff || source.itemKnockedOff) return false;
-			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
-		},
-	},
 	synthesis: {
 		inherit: true,
 		onHit(pokemon) {
@@ -1462,13 +1444,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { bypasssub: 1, metronome: 1, failencore: 1 },
 	},
-	trick: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (target.itemKnockedOff || source.itemKnockedOff) return false;
-			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
-		},
-	},
 	trickroom: {
 		inherit: true,
 		condition: {
@@ -1536,15 +1511,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	woodhammer: {
 		inherit: true,
 		recoil: [1, 3],
-	},
-	worryseed: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability) || pokemon.hasItem('griseousorb')) {
-				return false;
-			}
-		},
 	},
 	wrap: {
 		inherit: true,

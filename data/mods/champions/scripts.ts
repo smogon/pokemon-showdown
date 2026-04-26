@@ -30,17 +30,17 @@ export const Scripts: ModdedBattleScriptsData = {
 	calculatePP(move, ppUps) {
 		return move.noPPBoosts ? move.pp : (move.pp / 5 + 1) * 4;
 	},
-	checkMoveBreaksProtect(move, attacker, defender, blockStatus = true) {
-		if (move.flags['protect'] && (move.category !== 'Status' || blockStatus)) {
-			return false;
-		}
-		if ((move.isZOrMaxPowered || attacker.hasAbility(['piercingdrill', 'unseenfist'])) &&
-			!['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
-			defender.getMoveHitData(move).brokeProtect = true;
-		}
-		return true;
-	},
 	pokemon: {
+		// Remove Trick Room underflow
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
+				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
+			if (trickRoomCheck) {
+				speed = -speed;
+			}
+			return speed;
+		},
 		// Don't revert Mega Evolutions after fainting
 		// TODO: confirm interaction with Revival Blessing
 		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
@@ -109,153 +109,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return true;
 		},
-		// Announce status immunities from abilities without revealing the ability
-		// TODO: check if this happens to other abilities besides Spicy Spray (Static, Poison Touch, etc.)
-		setStatus(status, source, sourceEffect, ignoreImmunities) {
-			if (!this.hp) return false;
-			status = this.battle.dex.conditions.get(status);
-			if (this.battle.event) {
-				if (!source) source = this.battle.event.source;
-				if (!sourceEffect) sourceEffect = this.battle.effect;
-			}
-			if (!source) source = this;
-
-			if (this.status === status.id) {
-				if ((sourceEffect as Move)?.status === this.status) {
-					this.battle.add('-fail', this, this.status);
-				} else if ((sourceEffect as Move)?.status) {
-					this.battle.add('-fail', source);
-					this.battle.attrLastMove('[still]');
-				}
-				return false;
-			}
-
-			if (
-				!ignoreImmunities && status.id && !(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))
-			) {
-				// the game currently never ignores immunities
-				if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
-					this.battle.debug('immune to status');
-					if ((sourceEffect as Move)?.status || sourceEffect?.effectType === 'Ability') {
-						this.battle.add('-immune', this);
-					}
-					return false;
-				}
-			}
-			const prevStatus = this.status;
-			const prevStatusState = this.statusState;
-			if (status.id) {
-				const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
-				if (!result) {
-					this.battle.debug('set status [' + status.id + '] interrupted');
-					return result;
-				}
-			}
-
-			this.status = status.id;
-			this.statusState = this.battle.initEffectState({ id: status.id, target: this });
-			if (source) this.statusState.source = source;
-			if (status.duration) this.statusState.duration = status.duration;
-			if (status.durationCallback) {
-				this.statusState.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
-			}
-
-			if (status.id && !this.battle.singleEvent('Start', status, this.statusState, this, source, sourceEffect)) {
-				this.battle.debug('status start [' + status.id + '] interrupted');
-				// cancel the setstatus
-				this.status = prevStatus;
-				this.statusState = prevStatusState;
-				return false;
-			}
-			if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
-				return false;
-			}
-			return true;
-		},
-		// Disable Fake Out if the user has already acted since switching in
-		getMoves(lockedMove, restrictData) {
-			if (lockedMove) {
-				lockedMove = this.battle.toID(lockedMove);
-				if (lockedMove === 'recharge') {
-					return [{
-						move: 'Recharge',
-						id: 'recharge' as ID,
-					}];
-				}
-				for (const moveSlot of this.moveSlots) {
-					if (moveSlot.id !== lockedMove) continue;
-					return [{
-						move: moveSlot.move,
-						id: moveSlot.id,
-					}];
-				}
-				// does this happen?
-				return [{
-					move: this.battle.dex.moves.get(lockedMove).name,
-					id: lockedMove,
-				}];
-			}
-			const moves = [];
-			let hasValidMove = false;
-			for (const moveSlot of this.moveSlots) {
-				let moveName = moveSlot.move;
-				if (moveSlot.id === 'hiddenpower') {
-					moveName = `Hidden Power ${this.hpType}`;
-					if (this.battle.gen < 6) moveName += ` ${this.hpPower}`;
-				} else if (moveSlot.id === 'return' || moveSlot.id === 'frustration') {
-					const basePowerCallback = this.battle.dex.moves.get(moveSlot.id).basePowerCallback as (pokemon: Pokemon) => number;
-					moveName += ` ${basePowerCallback(this)}`;
-				}
-				let target = moveSlot.target;
-				switch (moveSlot.id) {
-				case 'curse':
-					if (!this.hasType('Ghost')) {
-						target = this.battle.dex.moves.get('curse').nonGhostTarget;
-					}
-					break;
-				case 'pollenpuff':
-					// Heal Block only prevents Pollen Puff from targeting an ally when the user has Heal Block
-					if (this.volatiles['healblock']) {
-						target = 'adjacentFoe';
-					}
-					break;
-				case 'terastarstorm':
-					if (this.species.name === 'Terapagos-Stellar') {
-						target = 'allAdjacentFoes';
-					}
-					break;
-				}
-				let disabled = moveSlot.disabled;
-				if (this.volatiles['dynamax']) {
-					// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
-					const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
-					disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-				} else if (moveSlot.pp <= 0 || (moveSlot.id === 'fakeout' && this.activeMoveActions > 0)) {
-					disabled = true;
-				}
-
-				if (disabled === 'hidden') {
-					disabled = !restrictData;
-				}
-				if (!disabled) {
-					hasValidMove = true;
-				}
-
-				moves.push({
-					move: moveName,
-					id: moveSlot.id,
-					pp: moveSlot.pp,
-					maxpp: moveSlot.maxpp,
-					target,
-					disabled,
-				});
-			}
-			return hasValidMove ? moves : [];
-		},
 	},
 	actions: {
 		canTerastallize(pokemon) {
 			return null;
+		},
+		canMegaEvo(pokemon: Pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+			// Mega Rayquaza
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
+				this.battle.ruleTable.has('+pokemontag:future')) &&
+				altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				return altForme.name;
+			}
+			return item.megaStone?.[species.name] || null;
 		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
@@ -360,9 +230,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (target.getMoveHitData(move).brokeProtect) {
+			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
-				if (move.isZOrMaxPowered) this.battle.add('-zbroken', target);
+				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+					this.battle.add('-ability', pokemon, bypassProtect.name);
+				}
+				this.battle.add('-zbroken', target);
 			}
 
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
@@ -483,6 +357,200 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return [damage, targets];
+		},
+		// Parental Bond shouldn't announce hit count if it only hits once
+		hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
+			let damage: (number | boolean | undefined)[] = [];
+			for (const i of targets.keys()) {
+				damage[i] = 0;
+			}
+			move.totalDamage = 0;
+			pokemon.lastDamage = 0;
+			let targetHits = move.multihit || 1;
+			if (Array.isArray(targetHits)) {
+				// yes, it's hardcoded... meh
+				if (targetHits[0] === 2 && targetHits[1] === 5) {
+					if (this.battle.gen >= 5) {
+						// 35-35-15-15 out of 100 for 2-3-4-5 hits
+						targetHits = this.battle.sample([2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5]);
+						if (targetHits < 4 && pokemon.hasItem('loadeddice')) {
+							targetHits = 5 - this.battle.random(2);
+						}
+					} else {
+						targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+					}
+				} else {
+					targetHits = this.battle.random(targetHits[0], targetHits[1] + 1);
+				}
+			}
+			if (targetHits === 10 && pokemon.hasItem('loadeddice')) targetHits -= this.battle.random(7);
+			targetHits = Math.floor(targetHits);
+			let nullDamage = true;
+			let moveDamage: (number | boolean | undefined)[] = [];
+			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
+			const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
+
+			let targetsCopy: (Pokemon | false | null)[] = targets.slice(0);
+			let hit: number;
+			for (hit = 1; hit <= targetHits; hit++) {
+				if (damage.includes(false)) break;
+				if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
+				if (targets.every(target => !target?.hp)) break;
+				move.hit = hit;
+				move.lastHit = move.hit === targetHits;
+				if (move.smartTarget && targets.length > 1) {
+					targetsCopy = [targets[hit - 1]];
+					damage = [damage[hit - 1]];
+				} else {
+					targetsCopy = targets.slice(0);
+				}
+				const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
+				if (target && typeof move.smartTarget === 'boolean') {
+					if (hit > 1) {
+						this.battle.addMove('-anim', pokemon, move.name, target);
+					} else {
+						this.battle.retargetLastMove(target);
+					}
+				}
+
+				// like this (Triple Kick)
+				if (target && move.multiaccuracy && hit > 1) {
+					let accuracy = move.accuracy;
+					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+					if (accuracy !== true) {
+						if (!move.ignoreAccuracy) {
+							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
+							const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
+							if (boost > 0) {
+								accuracy *= boostTable[boost];
+							} else {
+								accuracy /= boostTable[-boost];
+							}
+						}
+						if (!move.ignoreEvasion) {
+							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
+							if (boost > 0) {
+								accuracy /= boostTable[boost];
+							} else if (boost < 0) {
+								accuracy *= boostTable[-boost];
+							}
+						}
+					}
+					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					if (!move.alwaysHit) {
+						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
+					}
+				}
+
+				const moveData = move;
+				if (!moveData.flags) moveData.flags = {};
+
+				let moveDamageThisHit;
+				// Modifies targetsCopy (which is why it's a copy)
+				[moveDamageThisHit, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
+				// When Dragon Darts targets two different pokemon, targetsCopy is a length 1 array each hit
+				// so spreadMoveHit returns a length 1 damage array
+				if (move.smartTarget) {
+					moveDamage.push(...moveDamageThisHit);
+				} else {
+					moveDamage = moveDamageThisHit;
+				}
+
+				if (!moveDamage.some(val => val !== false)) break;
+				nullDamage = false;
+
+				for (const [i, md] of moveDamage.entries()) {
+					if (move.smartTarget && i !== hit - 1) continue;
+					// Damage from each hit is individually counted for the
+					// purposes of Counter, Metal Burst, and Mirror Coat.
+					damage[i] = md === true || !md ? 0 : md;
+					// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
+					move.totalDamage += damage[i];
+				}
+				if (move.mindBlownRecoil) {
+					const hpBeforeRecoil = pokemon.hp;
+					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
+					move.mindBlownRecoil = false;
+					if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+					}
+				}
+				this.battle.eachEvent('Update');
+				if (!pokemon.hp && targets.length === 1) {
+					hit++; // report the correct number of hits for multihit moves
+					break;
+				}
+			}
+			// hit is 1 higher than the actual hit count
+			if (hit === 1) return damage.fill(false);
+			if (nullDamage) damage.fill(false);
+			this.battle.faintMessages(false, false, !pokemon.hp);
+			if (move.multihit && typeof move.smartTarget !== 'boolean' &&
+				!(move.hit === 1 && move.multihitType === 'parentalbond')) {
+				this.battle.add('-hitcount', targets[0], hit - 1);
+			}
+
+			if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
+				const hpBeforeRecoil = pokemon.hp;
+				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
+				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
+
+			if (move.struggleRecoil) {
+				const hpBeforeRecoil = pokemon.hp;
+				let recoilDamage;
+				if (this.dex.gen >= 5) {
+					recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
+				} else {
+					recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
+				}
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
+				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
+
+			// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
+			if (move.smartTarget) {
+				targetsCopy = targets.slice(0);
+			}
+
+			for (const [i, target] of targetsCopy.entries()) {
+				if (target && pokemon !== target) {
+					target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
+					if (typeof moveDamage[i] === 'number') {
+						target.timesAttacked += move.smartTarget ? 1 : hit - 1;
+					}
+				}
+			}
+
+			if (move.ohko && !targets[0].hp) this.battle.add('-ohko');
+
+			if (!damage.some(val => !!val || val === 0)) return damage;
+
+			this.battle.eachEvent('Update');
+
+			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
+
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+				for (const [i, d] of damage.entries()) {
+					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
+					// The previous check was for `move.multihit`, but that fails for Dragon Darts
+					const curDamage = targets.length === 1 ? move.totalDamage : d;
+					if (typeof curDamage === 'number' && targets[i].hp) {
+						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
+						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
+							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
+						}
+					}
+				}
+			}
+
+			return damage;
 		},
 	},
 };

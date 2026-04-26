@@ -53,6 +53,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 120,
 		pp: 5,
 	},
+	belch: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
+		desc: "Fails unless the user has eaten a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
+		shortDesc: "Fails unless the user has eaten a Berry.",
+	},
 	behemothbash: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -109,6 +115,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	burnup: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	ceaselessedge: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			}
+		},
 	},
 	celebrate: {
 		inherit: true,
@@ -193,6 +209,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 30,
 			onHit(target, source) {
 				const status = this.sample(['psn', 'par', 'slp']);
+				// This seems to only happen with Dire Claw
+				if (target.status) {
+					if (target.status === status) {
+						this.add('-fail', target, status);
+					} else {
+						this.add('-fail', source);
+					}
+					return;
+				}
 				target.trySetStatus(status, source);
 			},
 		},
@@ -292,14 +317,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const action = this.queue.willMove(target);
 				if (!action) {
 					this.effectState.duration!++;
-				} else {
+					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
+				} else if (!target.hasItem('mentalherb')) {
+					const priority = action.priority -
+						this.dex.moves.get(action.moveid).priority +
+						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
-						order: action.order, // TODO: check Quash + Encore interaction
+						order: action.order,
 					});
+					this.queue.willMove(target)!.priority = priority;
 				}
 			},
 		},
@@ -311,6 +341,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fairywind: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	fakeout: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
+				pokemon.disableMove('fakeout');
+			}
+		},
+		desc: "Has a 100% chance to make the target flinch. This move cannot be selected unless it is the user's first turn on the field.",
 	},
 	falsesurrender: {
 		inherit: true,
@@ -339,6 +378,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	firstimpression: {
 		inherit: true,
 		basePower: 100,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 1) {
+				pokemon.disableMove('firstimpression');
+			}
+		},
+		desc: "This move cannot be selected unless it is the user's first turn on the field.",
 	},
 	fishiousrend: {
 		inherit: true,
@@ -359,6 +404,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	forcepalm: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	freezedry: {
+		inherit: true,
+		secondary: undefined, // no inherit
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Water.",
 	},
 	freezeshock: {
 		inherit: true,
@@ -419,6 +470,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	growth: {
 		inherit: true,
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasAbility('megasol') && this.field.weather !== 'sunnyday') {
+				// TODO: check in future patches
+				delete move.boosts;
+			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				move.boosts = { atk: 2, spa: 2 };
+			}
+		},
 		type: "Grass",
 	},
 	gust: {
@@ -741,10 +800,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	// ragepowder: {
-	// 	inherit: true,
-	// 	flags: { noassist: 1, failcopycat: 1 },
-	// },
 	razorleaf: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -932,6 +987,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	stoneaxe: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock');
+				}
+			}
+		},
+	},
 	stormthrow: {
 		inherit: true,
 		isNonstandard: null,
@@ -943,6 +1008,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	strength: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	stuffcheeks: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
+		desc: "Fails if the user is not holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room.",
+		shortDesc: "Fails unless the user has a berry. User eats Berry, Def +2.",
 	},
 	sunsteelstrike: {
 		inherit: true,
