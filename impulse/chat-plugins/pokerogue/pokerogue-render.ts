@@ -30,34 +30,6 @@ export function refreshGamePage(user: User): void {
 
 const PAGE_REFRESH_SECONDS = 20;
 
-// Sprite number mapping for item icons, sourced from smogon/sprites ps-items.sheet.mjs.
-// Items served from: https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/i{num}.png
-const SMOGON_ITEM_SPRITE_BASE = 'https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/';
-const ITEM_SPRITE_NUMS: Record<string, number> = {
-	absorbbulb: 2, aguavberry: 5, airballoon: 6, apicotberry: 10,
-	assaultvest: 581, bigroot: 29, blackbelt: 32, blackglasses: 35,
-	blacksludge: 34, blunderpolicy: 716, boosterenergy: 745, brightpowder: 51,
-	cellbattery: 60, charcoal: 61, cheriberry: 63, chestoberry: 65,
-	choiceband: 68, choicescarf: 69, choicespecs: 70, clearamulet: 747,
-	covertcloak: 750, custapberry: 86, damprock: 88, dragonfang: 106,
-	ejectbutton: 118, ejectpack: 714, eviolite: 130, expertbelt: 132,
-	flameorb: 145, focussash: 151, ganlonberry: 158, greatball: 174,
-	hardstone: 187, heavydutyboots: 715, heatrock: 193, icyrock: 221,
-	lansatberry: 238, laxincense: 240, leftovers: 242, liechiberry: 248,
-	lifeorb: 249, loadeddice: 751, lumberry: 262, luminousmoss: 595,
-	magnet: 273, masterball: 276, metalcoat: 286, metronome: 289,
-	miracleseed: 292, mirrorherb: 748, muscleband: 297, mysticwater: 300,
-	nevermeltice: 305, pechaberry: 333, petayaberry: 335, pixieplate: 610,
-	poisonbarb: 343, powerherb: 358, protectivepads: 663, quickclaw: 373,
-	rawstberry: 381, redcard: 387, rockyhelmet: 417, roomservice: 717,
-	safetygoggles: 604, salacberry: 426, scopelens: 429, shedshell: 437,
-	sharpbeak: 436, silkscarf: 444, silverpowder: 447, sitrusberry: 448,
-	smoothrock: 453, snowball: 606, softsand: 456, spelltag: 461,
-	terrainextender: 662, throatspray: 713, toxicorb: 515, twistedspoon: 520,
-	ultraball: 521, utilityumbrella: 718, weaknesspolicy: 609, whiteherb: 535,
-	widelens: 537, wiseglasses: 539,
-};
-
 function getSprite(species: string, size = 80): string {
 	const id = toID(species);
 	const sp = Dex.species.get(id);
@@ -66,13 +38,14 @@ function getSprite(species: string, size = 80): string {
 	let src: string;
 	let fallback1: string | null = null;
 	let fallback2: string | null = null;
+	const spriteId = sp.exists ? sp.spriteid : id;
 	if (sp.exists && (sp.gen >= 6 || !!sp.forme)) {
-		src = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
-		fallback1 = `https://play.pokemonshowdown.com/sprites/home-centered/${id}.png`;
-		fallback2 = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
+		src = `https://play.pokemonshowdown.com/sprites/dex/${spriteId}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/home-centered/${spriteId}.png`;
+		fallback2 = `https://play.pokemonshowdown.com/sprites/gen5/${spriteId}.png`;
 	} else {
-		src = `https://play.pokemonshowdown.com/sprites/gen5/${id}.png`;
-		fallback1 = `https://play.pokemonshowdown.com/sprites/dex/${id}.png`;
+		src = `https://play.pokemonshowdown.com/sprites/gen5/${spriteId}.png`;
+		fallback1 = `https://play.pokemonshowdown.com/sprites/dex/${spriteId}.png`;
 	}
 	let onerror = '';
 	if (fallback1 && fallback2) {
@@ -87,19 +60,23 @@ function getSprite(species: string, size = 80): string {
 
 function getItemSprite(itemId: string): string {
 	const id = toID(itemId);
-	const spriteNum = ITEM_SPRITE_NUMS[id];
 	const initial = Utils.escapeHTML(id.substring(0, 2).toUpperCase());
-	if (spriteNum !== undefined) {
-		const src = `${SMOGON_ITEM_SPRITE_BASE}i${spriteNum}.png`;
-		const escapedSrc = Utils.escapeHTML(src);
-		return `<div class="pr-shop-item-icon">` +
-			`<img src="${escapedSrc}" alt="${Utils.escapeHTML(id)}" width="32" height="32" style="image-rendering:pixelated" ` +
-			`onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'" />` +
-			`<span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
-			`</div>`;
+	let src: string;
+	const dexItem = Dex.items.get(id);
+	if (dexItem.exists && dexItem.spritenum !== undefined) {
+		src = `https://raw.githubusercontent.com/smogon/sprites/master/src/minisprites/items/i${dexItem.spritenum}.png`;
+	} else if (dexItem.exists) {
+		const hyphenatedName = dexItem.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+		src = `https://www.smogon.com/forums/media/minisprites/${hyphenatedName}.png`;
+	} else {
+		src = `https://www.smogon.com/forums/media/minisprites/${id}.png`;
 	}
+
+	const escapedSrc = Utils.escapeHTML(src);
 	return `<div class="pr-shop-item-icon">` +
-		`<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
+		`<img src="${escapedSrc}" alt="${Utils.escapeHTML(id)}" width="32" height="32" style="image-rendering:pixelated" ` +
+		`onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'" />` +
+		`<span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:bold;color:#c4a8ff">${initial}</span>` +
 		`</div>`;
 }
 
