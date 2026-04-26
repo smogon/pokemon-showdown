@@ -165,7 +165,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	souldew: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
 			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
