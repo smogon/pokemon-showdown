@@ -14,7 +14,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	},
 	flatrules: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Beat Up Nicknames Mod', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 	},
 	teampreview: {
 		inherit: true,
@@ -28,28 +28,6 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 			this.makeRequest('teampreview');
-		},
-	},
-	validatestats: {
-		inherit: true,
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			const item = this.dex.items.get(set.item);
-			if (item && item.id === 'griseousorb' && species.num !== 487) {
-				return ['Griseous Orb can only be held by Giratina in Generation 4.'];
-			}
-			if (species.num === 493 && set.evs) {
-				const isEventArceus = set.moves.includes('roaroftime') || set.moves.includes('shadowforce') ||
-					set.moves.includes('spacialrend');
-				if (isEventArceus) {
-					let stat: StatID;
-					for (stat in set.evs) {
-						if (set.evs[stat] > 100) {
-							return ["Event Arceus may not have more than 100 of any EVs in Generation 4."];
-						}
-					}
-				}
-			}
 		},
 	},
 };

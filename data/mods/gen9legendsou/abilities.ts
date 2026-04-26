@@ -7,4 +7,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	piercingdrill: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	spicyspray: {
+		inherit: true,
+		isNonstandard: null,
+	},
 };
