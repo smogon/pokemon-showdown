@@ -20,8 +20,9 @@ import {
 	getLevelUpEvo, pickRandom,
 	getTier1Pokemon, getTier2Pokemon, getTier3Pokemon, getTier4Pokemon,
 	packPokemon, packTeam, botLevel,
+	calcKillExp,
 } from './pokerogue-pokemon';
-import { setState } from './pokerogue-state';
+import { setState, getState } from './pokerogue-state';
 
 function botTeamSize(floor: number): number {
 	if (floor <= 5) return 1;
@@ -217,36 +218,28 @@ function buildBotTeam(state: PokeRogueState): string {
 	const size = botTeamSize(floor);
 	const isBoss = floor % 10 === 0;
 
-	// --- Dynamic AI Level Scaling ---
 	const playerMaxLevel = Math.max(...state.team.map(m => m.level));
 	let level = Math.max(botLevel(floor), playerMaxLevel);
 
 	const floorMod = floor % 10;
 	if (floorMod === 0) {
-		// Boss floors grant +1 to +3 levels over the player
 		level += Math.floor(Math.random() * 3) + 1;
 	}
 
 	level = Math.min(999, level);
-	// --- END Dynamic AI Level Scaling ---
 
 	let poolA: string[];
 	let poolB: string[];
 	let chanceA: number;
 
 	if (isBoss) {
-		// Progressive Boss Scaling
 		if (floor === 10) {
-			// Floor 10: Fully evolved standard Pokémon, slight chance of Elite
 			poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.8;
 		} else if (floor === 20) {
-			// Floor 20: Guaranteed Elite OU tier Pokémon
 			poolA = getTier3Pokemon(); poolB = getTier3Pokemon(); chanceA = 1.0;
 		} else if (floor === 30) {
-			// Floor 30: Elites with a chance of Legendaries
 			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
 		} else {
-			// Floor 40+: Heavy Legendary presence
 			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.4;
 		}
 	} else {
@@ -281,8 +274,6 @@ function buildBotTeam(state: PokeRogueState): string {
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
-
-	// Pass the full state to calculate dynamic levels
 	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
 
@@ -330,3 +321,76 @@ export function startBattle(user: User, state: PokeRogueState): boolean {
 
 	return true;
 }
+
+export const start = (): void => {
+	const { Dex } = require('../../../sim/dex');
+	const { Format } = require('../../../sim/dex-formats');
+	const FORMAT_ID = 'roguelikebattle' as ID;
+	if (Dex.formats.rulesetCache.has(FORMAT_ID)) return;
+	Dex.formats.load();
+	const format = new Format({
+		name: 'PokéRogue Battle', mod: 'gen9', effectType: 'Format', section: 'Roguelike',
+		ruleset: ['Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 999', 'Default Level = 5', 'HP Percentage Mod', 'Cancel Mod'],
+		rated: false,
+
+		onFaint(pokemon: AnyObject) {
+			// Only process bot (p2) Pokémon fainting.
+			if (pokemon.side.id !== 'p2') return;
+
+			const room = this.battle.room as AnyObject | undefined;
+			if (!room) return;
+
+			const match = activeMatches.get(room.roomid);
+			if (!match) return;
+
+			const state = getState(match.userId);
+			if (!state) return;
+
+			const isBossFloor = match.floor % 10 === 0;
+			const luckyCharmActive = (state.doubleExpFloors ?? 0) > 0;
+
+			// `faintedBy` is set by the simulator to the last Pokémon that
+			// dealt damage. Fall back to whatever is active in p1 slot 0.
+			const attacker: AnyObject | null =
+				pokemon.faintedBy ??
+				this.battle.sides[0]?.active?.[0] ??
+				null;
+
+			if (!attacker || attacker.side?.id !== 'p1') return;
+
+			// Resolve attacker species → player team index.
+			const attackerSpeciesId = toID(
+				attacker.baseSpecies?.name ?? attacker.species?.name ?? attacker.name ?? ''
+			);
+			let teamIdx = -1;
+			for (let i = 0; i < state.team.length; i++) {
+				if (toID(state.team[i].species) === attackerSpeciesId) {
+					teamIdx = i;
+					break;
+				}
+			}
+			if (teamIdx === -1) return;
+
+			const enemySpeciesId = toID(
+				pokemon.baseSpecies?.name ?? pokemon.species?.name ?? pokemon.name ?? ''
+			);
+			const enemyLevel: number = pokemon.level ?? botLevel(match.floor);
+
+			const exp = calcKillExp(enemySpeciesId, enemyLevel, luckyCharmActive, isBossFloor);
+
+			// Accumulate on the room object so onBattleEnd can read it.
+			if (!room._rogueKillExp) room._rogueKillExp = new Map<number, number>();
+			const prev: number = room._rogueKillExp.get(teamIdx) ?? 0;
+			room._rogueKillExp.set(teamIdx, prev + exp);
+
+			// Post a message in the battle room.
+			const attackerDisplayName = Dex.species.get(attackerSpeciesId).name || attacker.name;
+			const enemyDisplayName = Dex.species.get(enemySpeciesId).name || pokemon.name;
+			room.add(
+				`|c|~PokéRogue|${attackerDisplayName} defeated ${enemyDisplayName} and earned ${exp} EXP!`
+			);
+			room.update();
+		},
+	});
+	Dex.formats.rulesetCache.set(FORMAT_ID, format);
+};
