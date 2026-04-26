@@ -169,9 +169,18 @@ function parseKillExp(
 	// Slot → team index maps
 	// -------------------------------------------------------------------------
 
-	/** p1 battle slot ('p1a', 'p1b'…) → team array index */
+	/**
+	 * p1 battle slot ('p1a', 'p1b'…) → team array index
+	 * Updated on EVERY switch-in so that a slot always points to the
+	 * currently-active Pokémon, not the first one that ever used it.
+	 */
 	const p1SlotToTeamIdx: Record<string, number> = {};
-	const p1AssignedIdx = new Set<number>();
+
+	/**
+	 * Track which team indices have been fainted so we never credit a dead mon.
+	 * Set when |faint|p1X is seen.
+	 */
+	const p1TeamFainted = new Set<number>();
 
 	/** p2 battle slot → species id currently in that slot */
 	const p2SlotSpecies: Record<string, string> = {};
@@ -184,54 +193,41 @@ function parseKillExp(
 
 	/**
 	 * The last p1 slot to use a *direct* damaging move against each p2 slot.
-	 * Updated on every |move|p1X: ...|p2Y: line.
-	 * This is the primary attribution for direct hits AND the fallback for
-	 * self-harm / explosion / unresolvable indirect sources.
+	 * Reset when the p2 slot gets a new Pokémon (switch/drag on p2).
 	 */
 	const lastDirectAttacker: Record<string, string> = {};
 
 	/**
 	 * The p1 slot that inflicted a status condition on each p2 slot.
-	 * Key: p2 slot.  Value: p1 slot.
-	 * Set on `|-status|p2X: ...|brn/psn/tox` lines when the immediately
-	 * preceding move was from p1.
+	 * Reset when p2 slot gets a new Pokémon.
 	 */
 	const statusInflicter: Record<string, string> = {};
 
 	/**
-	 * The p1 slot that applied a residual-damage effect on each p2 slot
-	 * (Leech Seed, Curse, trapping moves, Future Sight, Perish Song, etc.).
+	 * The p1 slot that applied a residual-damage effect on each p2 slot.
 	 * Key: `p2Slot:effectName`.  Value: p1 slot.
 	 */
 	const residualInflicter: Record<string, string> = {};
 
 	/**
-	 * p2 slot → p1 slot that set entry hazards (Stealth Rock, Spikes, etc.).
-	 * Because hazards are side-wide we use a single entry per side:
-	 * key 'stealthrock', 'spikes', 'toxicspikes', 'stickyweb'.
-	 */
-	const hazardSetter: Record<string, string> = {};
-
-	/**
 	 * p1 slot → p2 slot targeted by a Future Sight / Doom Desire move.
-	 * We record this when the move is *used* so we can attribute the delayed hit.
 	 */
 	const delayedMoveTarget: Record<string, string> = {};
 
 	/**
-	 * The most-recent p1 slot to take *any* action (move, switch) — used as
-	 * absolute last-resort fallback.
+	 * Entry hazard setter: key = hazard name, value = p1 slot that set it.
+	 */
+	const hazardSetter: Record<string, string> = {};
+
+	/**
+	 * Most-recent p1 slot to take *any* action — absolute last-resort fallback.
 	 */
 	let lastAnyP1Slot: string | undefined;
 
-	/**
-	 * Track the move the *last* |move| line referred to, and who used it and
-	 * what their target was.  Used to attribute status/residual effects that
-	 * appear on the lines immediately following the move.
-	 */
-	let lastMoveUser = '';   // e.g. 'p1a'
-	let lastMoveTarget = ''; // e.g. 'p2a'
-	let lastMoveName = '';   // e.g. 'willowisp'
+	/** Last |move| context */
+	let lastMoveUser = '';
+	let lastMoveTarget = '';
+	let lastMoveName = '';
 
 	/** Whether weather was set by p1 (true) or p2 (false/undefined). */
 	const weatherSetByP1: Record<string, boolean> = {};
@@ -245,49 +241,78 @@ function parseKillExp(
 	for (const line of logLines) {
 
 		// -----------------------------------------------------------------------
-		// 1. p1 switch / drag  →  establish slot → teamIdx
+		// 1. p1 switch / drag  →  update slot → teamIdx (always, not just first time)
 		// -----------------------------------------------------------------------
-		// |switch|p1a: Nickname|Species, L50, M|HP/maxHP
 		const p1Switch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)/.exec(line);
 		if (p1Switch) {
 			const slot = 'p1' + p1Switch[1];
 			const sid = toID(p1Switch[2].trim());
-			if (!(slot in p1SlotToTeamIdx)) {
-				for (let i = 0; i < state.team.length; i++) {
-					if (!p1AssignedIdx.has(i) && toID(state.team[i].species) === sid) {
-						p1SlotToTeamIdx[slot] = i;
-						p1AssignedIdx.add(i);
-						break;
-					}
+
+			// Always re-resolve: find the team member matching this species
+			// that hasn't been assigned to a *different currently-active* slot.
+			const otherSlots = new Set(
+				Object.entries(p1SlotToTeamIdx)
+					.filter(([s]) => s !== slot)
+					.map(([, idx]) => idx)
+			);
+
+			let matched = -1;
+			for (let i = 0; i < state.team.length; i++) {
+				if (toID(state.team[i].species) === sid && !otherSlots.has(i)) {
+					matched = i;
+					break;
 				}
 			}
+
+			if (matched !== -1) {
+				p1SlotToTeamIdx[slot] = matched;
+			}
+
+			// When a NEW Pokémon enters a p1 slot, clear that slot's direct
+			// attacker record so kills by the previous occupant don't bleed through.
+			// (We keep hazardSetter / residualInflicter since those are p2-keyed.)
 			lastAnyP1Slot = slot;
 			continue;
 		}
 
 		// -----------------------------------------------------------------------
-		// 2. p2 switch / drag  →  record species + level in slot
+		// 2. p1 faint  →  mark team index as fainted
 		// -----------------------------------------------------------------------
-		// |switch|p2a: Nickname|Species, L50, M|HP/maxHP
+		const p1FaintLine = /^\|faint\|p1([a-z]):/.exec(line);
+		if (p1FaintLine) {
+			const slot = 'p1' + p1FaintLine[1];
+			const teamIdx = p1SlotToTeamIdx[slot];
+			if (teamIdx !== undefined) p1TeamFainted.add(teamIdx);
+			continue;
+		}
+
+		// -----------------------------------------------------------------------
+		// 3. p2 switch / drag  →  record species + level; reset per-slot attribution
+		// -----------------------------------------------------------------------
 		const p2Switch = /^\|(?:switch|drag)\|p2([a-z]): [^|]+\|([^|,]+)(?:, L(\d+))?[^|]*\|/.exec(line);
 		if (p2Switch) {
 			const slot = 'p2' + p2Switch[1];
 			p2SlotSpecies[slot] = toID(p2Switch[2].trim());
 			p2SlotLevel[slot] = p2Switch[3] ? parseInt(p2Switch[3]) : botLevel(floor);
+
+			// Reset attribution for this p2 slot — new Pokémon, fresh slate
+			delete lastDirectAttacker[slot];
+			delete statusInflicter[slot];
+			// Clear residual inflicters keyed to this slot
+			for (const key of Object.keys(residualInflicter)) {
+				if (key.startsWith(`${slot}:`)) delete residualInflicter[key];
+			}
 			continue;
 		}
 
 		// -----------------------------------------------------------------------
-		// 3. |move| lines  →  update direct attacker + residual-move attribution
+		// 4. |move| lines
 		// -----------------------------------------------------------------------
-		// |move|p1a: Name|MoveName|p2a: Name     (p1 attacking p2)
-		// |move|p2a: Name|MoveName|p1a: Name     (p2 attacking p1, tracked for context)
-		// |move|p1a: Name|MoveName|p1a: Name     (self-targeting, e.g. Swords Dance)
 		const moveMatch = /^\|move\|([p][12][a-z]): [^|]+\|([^|]+)\|([p][12][a-z]):/.exec(line);
 		if (moveMatch) {
-			const user = moveMatch[1];   // e.g. 'p1a'
+			const user = moveMatch[1];
 			const move = toID(moveMatch[2]);
-			const target = moveMatch[3]; // e.g. 'p2a'
+			const target = moveMatch[3];
 
 			lastMoveName = move;
 			lastMoveUser = user;
@@ -297,10 +322,8 @@ function parseKillExp(
 				lastAnyP1Slot = user;
 
 				if (target.startsWith('p2')) {
-					// Direct move targeting a p2 slot
 					lastDirectAttacker[target] = user;
 
-					// Hazard-setting moves: attribute to this p1 slot
 					const HAZARD_MOVES: Record<string, string> = {
 						stealthrock: 'stealthrock',
 						spikes: 'spikes',
@@ -313,14 +336,12 @@ function parseKillExp(
 						hazardSetter[HAZARD_MOVES[move]] = user;
 					}
 
-					// Future Sight / Doom Desire: record delayed target
 					if (move === 'futuresight' || move === 'doomdesire') {
 						delayedMoveTarget[move] = target;
 						residualInflicter[`${target}:${move}`] = user;
 					}
 				}
 
-				// Weather-setting moves by p1
 				const WEATHER_MOVES: Record<string, string> = {
 					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
 					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
@@ -329,7 +350,6 @@ function parseKillExp(
 					weatherSetByP1[WEATHER_MOVES[move]] = true;
 				}
 			} else {
-				// p2 used a move — track weather set by AI
 				const WEATHER_MOVES: Record<string, string> = {
 					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
 					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
@@ -342,34 +362,26 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 4. |-status|p2X: ...|brn/psn/tox   →  record status inflicter
+		// 5. |-status|p2X  →  record status inflicter
 		// -----------------------------------------------------------------------
-		// |-status|p2a: Nickname|brn
 		const statusApply = /^\|-status\|p2([a-z]): [^|]+\|(brn|psn|tox)/.exec(line);
 		if (statusApply) {
 			const p2Slot = 'p2' + statusApply[1];
-			// Credit the move that just ran if it was a p1 move targeting this slot
 			if (lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot) {
 				statusInflicter[p2Slot] = lastMoveUser;
 			} else if (lastMoveUser.startsWith('p1')) {
-				// e.g. Scald hit a different slot, flame body, etc. — use last direct
 				statusInflicter[p2Slot] = lastDirectAttacker[p2Slot] ?? lastMoveUser;
 			}
-			// If status was from a p2 ability / item / move, we don't set statusInflicter
-			// so it won't be attributed to any p1 slot.
 			continue;
 		}
 
 		// -----------------------------------------------------------------------
-		// 5. |-start| lines for Leech Seed, Curse, trapping, Perish Song etc.
+		// 6. |-start| lines for residual effects
 		// -----------------------------------------------------------------------
-		// |-start|p2a: Nickname|move: Leech Seed
-		// |-start|p2a: Nickname|Perish Song   (count doesn't matter, attribute on apply)
 		const residualStart = /^\|-start\|p2([a-z]): [^|]+\|(?:move: )?([^|[]+)/.exec(line);
 		if (residualStart) {
 			const p2Slot = 'p2' + residualStart[1];
-			const effectRaw = residualStart[2].trim();
-			const effectKey = effectRaw.replace(/^move: /, '');
+			const effectKey = residualStart[2].trim().replace(/^move: /, '');
 			if (RESIDUAL_FROM_TAGS[effectKey] && lastMoveUser.startsWith('p1')) {
 				residualInflicter[`${p2Slot}:${toID(effectKey)}`] = lastMoveUser;
 			}
@@ -377,24 +389,7 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 6. |-damage| on p2 slots  →  attribute indirect sources
-		//    We use this to handle edge cases where the kill came from residual
-		//    damage, NOT direct moves (those are already tracked by lastDirectAttacker).
-		// -----------------------------------------------------------------------
-		// |-damage|p2a: Nickname|HP/maxHP|[from] brn
-		// |-damage|p2a: Nickname|HP/maxHP|[from] Stealth Rock
-		// |-damage|p2a: Nickname|0 fnt|[from] recoil
-		// (no [from] tag = direct move damage, already handled by move line)
-		const p2Damage = /^\|-damage\|p2([a-z]): [^|]+\|\d+(?: fnt)?\|(?:\[from\] (?:\[of\] [^|]+\|)?)?(.+)?$/.exec(line);
-		if (p2Damage) {
-			// We mainly care about the [from] tag here for secondary tracking.
-			// Direct damage attribution is already done via |move| lines.
-			// (No action needed here for the main flow; faint lines drive attribution.)
-			continue;
-		}
-
-		// -----------------------------------------------------------------------
-		// 7. |faint|p2X:  →  resolve attribution and award EXP
+		// 7. |faint|p2X  →  resolve attribution and award EXP
 		// -----------------------------------------------------------------------
 		const faintLine = /^\|faint\|p2([a-z]):/.exec(line);
 		if (!faintLine) continue;
@@ -404,47 +399,23 @@ function parseKillExp(
 		const enemyLevel = p2SlotLevel[p2Slot] ?? botLevel(floor);
 
 		// --- Resolve which p1 slot gets the kill credit ---
-
 		let creditedP1Slot: string | undefined;
 
-		// Check the move that immediately preceded (or recently preceded) the faint.
-		// Covers:
-		//   a) Direct hit:           |move|p1a → p2a| then |faint|p2a
-		//   b) Explosion/Self-destruct: |move|p2a → p1a|Explosion| then |faint|p2a
-		//      → p2 KO'd itself; credit last p1 attacker (forced the situation)
-		//   c) Recoil / Life Orb:    |move|p2a → ...|then |-damage|p2a|[from] recoil|
-		//      then |faint|p2a  → same fallback
-		//   d) Status (burn/psn):    statusInflicter[p2Slot]
-		//   e) Leech Seed / Curse etc.: residualInflicter[p2Slot:effect]
-		//   f) Entry hazards:        hazardSetter[hazardName]
-		//   g) Weather (p1 set):     weatherSetByP1[weather]
-		//   h) Absolute fallback:    lastDirectAttacker[p2Slot] or lastAnyP1Slot
-
-		// The last move line tells us what just happened
 		const lastMoveWasSelfKO = SELF_KO_MOVES.has(lastMoveName) && lastMoveUser.startsWith('p2');
 		const lastMoveWasP1Direct = lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot;
-		const lastMoveWasP1Indirect = lastMoveUser.startsWith('p1'); // aimed elsewhere or self
 
 		if (lastMoveWasP1Direct && !lastMoveWasSelfKO) {
-			// Case (a): last move was a direct p1 hit on this slot
 			creditedP1Slot = lastMoveUser;
 		} else if (lastMoveWasSelfKO) {
-			// Case (b): AI used Explosion/Self-Destruct etc.
-			// Credit the p1 Pokémon that forced the AI into this corner
 			creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 		} else if (statusInflicter[p2Slot]) {
-			// Case (d): burn / poison killed it
 			creditedP1Slot = statusInflicter[p2Slot];
 		} else {
-			// Scan residual inflicters for this slot
 			const residualKey = Object.keys(residualInflicter).find(k => k.startsWith(`${p2Slot}:`));
 			if (residualKey) {
-				// Case (e): Leech Seed, Curse, trap, Perish Song, Future Sight, etc.
 				creditedP1Slot = residualInflicter[residualKey];
 			} else {
-				// Try to infer from the last |-damage| [from] tag for this slot.
-				// We back-scan the log from the faint line index for the nearest
-				// |-damage|p2Slot| line and read its [from] tag.
+				// Back-scan for [from] tag
 				const faintIdx = logLines.indexOf(line);
 				let fromTag = '';
 				for (let j = faintIdx - 1; j >= Math.max(0, faintIdx - 8); j--) {
@@ -455,43 +426,35 @@ function parseKillExp(
 				}
 
 				if (fromTag) {
-					// Stealth Rock / Spikes / Toxic Spikes / Sticky Web
 					const hazardMatch = /^(?:Stealth Rock|Spikes|Toxic Spikes|Sticky Web)$/.exec(fromTag);
 					if (hazardMatch) {
 						const hKey = toID(hazardMatch[0]);
 						creditedP1Slot = hazardSetter[hKey] ?? lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
-					}
-					// Weather damage — only credit if p1 set the weather
-					else if (/^(?:Sandstorm|Hail|Snow)$/.test(fromTag)) {
+					} else if (/^(?:Sandstorm|Hail|Snow)$/.test(fromTag)) {
 						const wKey = fromTag.toLowerCase();
 						creditedP1Slot = weatherSetByP1[wKey]
 							? (lastDirectAttacker[p2Slot] ?? lastAnyP1Slot)
-							: undefined; // AI's own weather — no credit
-					}
-					// Self-inflicted: recoil, Life Orb, Black Sludge, crash, etc.
-					else if (/^(?:recoil|Life Orb|Black Sludge|crash)$/i.test(fromTag)) {
-						// AI hurt itself — credit whoever last hit it
+							: undefined;
+					} else if (/^(?:recoil|Life Orb|Black Sludge|crash)$/i.test(fromTag)) {
+						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
+					} else if (RESIDUAL_FROM_TAGS[fromTag]) {
 						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 					}
-					// Residual effects not caught by |-start|
-					else if (RESIDUAL_FROM_TAGS[fromTag]) {
-						// Already covered above, but handle edge-case ordering
-						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
-					}
-					// Unknown tag — fall through to final fallback
 				}
 
-				// Final fallback: whoever last directly hit this slot, or any p1 action
 				if (!creditedP1Slot) {
 					creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 				}
 			}
 		}
 
-		if (!creditedP1Slot) continue; // Truly unattributable (e.g. AI's Sandstorm, no p1 action yet)
+		if (!creditedP1Slot) continue;
 
 		const teamIdx = p1SlotToTeamIdx[creditedP1Slot];
 		if (teamIdx === undefined) continue;
+
+		// *** KEY FIX: Never award EXP to a fainted Pokémon ***
+		if (p1TeamFainted.has(teamIdx)) continue;
 
 		const exp = calcKillExp(enemySpecies, enemyLevel, luckyCharmActive, isBossFloor);
 		expMap.set(teamIdx, (expMap.get(teamIdx) ?? 0) + exp);
