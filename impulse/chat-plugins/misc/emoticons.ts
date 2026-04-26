@@ -104,7 +104,6 @@ const addEmoticon = (name: string, url: string, user: User): void => {
 
 const deleteEmoticon = (name: string): void => {
 	delete data.emoticons[name];
-
 	delete emoticons[name];
 	saveData();
 	buildEmoteRegex();
@@ -115,16 +114,52 @@ const saveEmoteSize = (size: number): void => {
 	saveData();
 };
 
+const linkifyUrl = (escaped: string): string =>
+	`<a href="${escaped}" rel="noopener noreferrer" target="_blank">${escaped}</a>`;
+
+const formatMessageText = (raw: string): string => {
+	let out = Utils.escapeHTML(raw);
+
+	out = out.replace(/&#x2f;/g, '/');
+
+	out = out.replace(/``(.+?)``|`(.+?)`/g, (_, a, b) =>
+		`<code>${Utils.escapeHTML(a ?? b)}</code>`
+	);
+
+	out = out.replace(/\*\*(.+?)\*\*|__(.+?)__/g, (_, a, b) =>
+		`<b>${a ?? b}</b>`
+	);
+
+	out = out.replace(
+		/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)|(?<!_)_(?!_)(.+?)(?<!_)_(?!_)/g,
+		(_, a, b) => `<i>${a ?? b}</i>`
+	);
+
+	out = out.replace(/~~(.+?)~~/g, (_, a) => `<s>${a}</s>`);
+
+	out = out.replace(
+		/\[([^\]]*)\]\((https:\/\/[^\s)"'<>]+)\)/g,
+		(_, label, url) =>
+			`<a href="${Utils.escapeHTML(url)}" rel="noopener noreferrer" target="_blank">${label}</a>`
+	);
+
+	out = out.replace(
+		/(?<!href=")https?:\/\/[^\s"'<>)]+/g,
+		match => linkifyUrl(match)
+	);
+
+	return out;
+};
+
 function parseMessage(message: string): string {
 	if (message.startsWith('/html')) {
 		return message.slice(5).replace(/&#x2f;/g, '/');
 	}
-	return Chat.formatText(message).replace(/&#x2f;/g, '/');
+	return formatMessageText(message);
 }
 Impulse.parseMessage = parseMessage;
 
 const parseEmoticons = (message: string, _room?: Room): string | false => {
-	// reset lastIndex before testing to avoid stateful regex bugs.
 	emoteRegex.lastIndex = 0;
 	if (!emoteRegex.test(message)) return false;
 
@@ -135,10 +170,12 @@ const parseEmoticons = (message: string, _room?: Room): string | false => {
 		emoteRegex,
 		(match: string) => {
 			const url = emoticons[match];
-			// url was loaded from disk and validated on write, but double-check
-			// before injecting into HTML to prevent stored-XSS.
 			if (!url || !isValidEmoticonUrl(url)) return Utils.escapeHTML(match);
-			return `<img src="${Utils.escapeHTML(url)}" title="${Utils.escapeHTML(match)}" height="${size}" width="${size}" loading="lazy">`;
+			return (
+				`<img src="${Utils.escapeHTML(url)}" ` +
+				`title="${Utils.escapeHTML(match)}" ` +
+				`height="${size}" width="${size}" loading="lazy">`
+			);
 		}
 	);
 
@@ -265,13 +302,13 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			delete data.ignores[user.id];
-
 			delete Impulse.ignoreEmotes[user.id];
 			saveData();
 			this.sendReply('No longer ignoring emoticons.');
 		},
 
 		size(target, room, user): void {
+			room = this.requireRoom();
 			this.checkCan('roomowner');
 			if (!target) throw new Chat.ErrorMessage(`Specify a size (${MIN_EMOTE_SIZE}–${MAX_EMOTE_SIZE}).`);
 
@@ -301,30 +338,19 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|html|${Table(`Emoticon: ${Utils.escapeHTML(target)}`, [], rows)}`);
 		},
 
-		help(): void {
+		help() {
 			if (!this.runBroadcast()) return;
-
-			const helpList: { cmd: string, desc: string }[] = [
-				{ cmd: '/emoticon', desc: 'Shows all emoticons' },
-				{ cmd: '/emoticon add [name], [url]', desc: 'Add emoticon. Requires: &.' },
-				{ cmd: '/emoticon delete [name]', desc: 'Remove emoticon. Requires: &.' },
-				{ cmd: '/emoticon toggle', desc: 'Enable/disable emoticons in room. Requires: #.' },
-				{ cmd: '/emoticon ignore', desc: 'Ignore emoticons' },
-				{ cmd: '/emoticon unignore', desc: 'Show emoticons' },
-				{ cmd: '/emoticon size [px]', desc: 'Set size of emoticons. Requires: &.' },
-				{ cmd: '/emoticon info [name]', desc: 'Info about emoticon' },
-				{ cmd: '<small>Note: History may show emoticons even if ignored</small>', desc: '' },
-			];
-
-			const items = helpList
-				.map(({ cmd, desc }, i) =>
-					`<li><b>${cmd}</b>${desc ? ` - ${desc}` : ''}</li>${i < helpList.length - 1 ? '<hr>' : ''}`
-				)
-				.join('');
-
 			this.sendReplyBox(
-				`<center><strong>Emoticon Commands:<br>Alias: /emote, /emotes, /emoticons</strong></center>` +
-				`<hr><ul style="list-style-type:none;padding-left:0;">${items}</ul>`
+				`<div style="max-height: 350px; overflow-y: auto;"><center><strong><h4>Emoticon Commands</strong></h4><hr>Commands Alias: /emote, /emotes, /emoticons</center><hr>` +
+				`<b>/emoticon</b> - Shows all emoticons<hr>` +
+				`<b>/emoticon add [name], [url]</b> - Add emoticon. Requires: ~<hr>` +
+				`<b>/emoticon delete [name]</b> - Remove emoticon. Requires: ~<hr>` +
+				`<b>/emoticon toggle</b> - Enable/disable emoticons in room. Requires: #<hr>` +
+				`<b>/emoticon ignore</b> - Ignore emoticons<hr>` +
+				`<b>/emoticon unignore</b> - Show emoticons<hr>` +
+				`<b>/emoticon size [px]</b> - Set size of emoticons. Requires: ~<hr>` +
+				`<b>/emoticon info [name]</b> - Info about emoticon<hr>` +
+				`<center><small>Note: History may show emoticons even if ignored</small></center></div>`
 			);
 		},
 	},
