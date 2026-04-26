@@ -210,7 +210,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		const statusInflictingMoves = ['hypnosis', 'stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
@@ -766,6 +766,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
@@ -776,6 +777,35 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item,
 			role,
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const incompatibilityList = [
+			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Prevent Dry Skin + sun setting ability
+			[['parasect', 'toxicroak'], 'groudon'],
+			// Prevent Shedinja + sand/hail setting ability
+			['shedinja', ['tyranitar', 'hippowdon', 'abomasnow']],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 }
 

@@ -924,7 +924,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		let resultString = Utils.escapeHTML(Teams.export(team, { hideStats }));
+		let resultString = Utils.escapeHTML(Teams.export(team, {
+			hideStats, useStatPoints: toID(battle.format).includes('champions'),
+		}));
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
