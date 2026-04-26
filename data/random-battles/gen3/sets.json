@@ -188,8 +188,13 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "icebeam", "shadowball", "sludgebomb", "substitute", "thunderbolt"],
+                "abilities": ["Poison Point"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "rockslide", "shadowball", "sludgebomb"],
                 "abilities": ["Poison Point"]
             }
         ]
@@ -198,8 +203,13 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "shadowball", "sludgebomb", "substitute", "thunderbolt"],
+                "abilities": ["Poison Point"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "rockslide", "shadowball", "sludgebomb"],
                 "abilities": ["Poison Point"]
             }
         ]
@@ -607,6 +617,11 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["doubleedge", "hiddenpowerghost", "hiddenpowerground", "surf", "swordsdance"],
+                "abilities": ["Hyper Cutter"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["doubleedge", "hiddenpowerghost", "mudshot", "swordsdance"],
                 "abilities": ["Hyper Cutter"]
             }
         ]
@@ -1222,7 +1237,7 @@
         ]
     },
     "crobat": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1470,7 +1485,7 @@
         ]
     },
     "slowking": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1544,7 +1559,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "protect", "psychic", "return", "shadowball", "thunderbolt", "thunderwave", "toxic", "wish"],
+                "movepool": ["doubleedge", "earthquake", "protect", "psychic", "return", "thunderwave", "toxic", "wish"],
                 "abilities": ["Early Bird"]
             }
         ]
@@ -1585,7 +1600,7 @@
         ]
     },
     "steelix": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1621,7 +1636,7 @@
         ]
     },
     "qwilfish": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1719,7 +1734,7 @@
         ]
     },
     "magcargo": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1770,7 +1785,7 @@
         ]
     },
     "delibird": {
-        "level": 99,
+        "level": 98,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2363,7 +2378,7 @@
         ]
     },
     "mawile": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2552,7 +2567,7 @@
         ]
     },
     "torkoal": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",

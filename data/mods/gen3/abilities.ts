@@ -12,15 +12,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	effectspore: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (damage && move.flags['contact'] && !source.status) {
-				const r = this.random(300);
-				if (r < 10) {
-					source.setStatus('slp', target);
-				} else if (r < 20) {
-					source.setStatus('par', target);
-				} else if (r < 30) {
-					source.setStatus('psn', target);
-				}
+			if (damage && move.flags['contact'] && this.randomChance(1, 10)) {
+				const status = this.sample(['slp', 'par', 'psn']);
+				source.trySetStatus(status, target);
 			}
 		},
 	},
@@ -91,6 +85,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 	lightningrod: {
+		inherit: true,
+		onAnyRedirectTarget: undefined, // no inherit
 		onFoeRedirectTarget(target, source, source2, move) {
 			// don't count Hidden Power as Electric-type
 			if (this.dex.moves.get(move.id).type !== 'Electric') return;
@@ -98,15 +94,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.effectState.target;
 			}
 		},
-		flags: { breakable: 1 },
-		name: "Lightning Rod",
-		rating: 0,
-		num: 32,
 	},
 	magnetpull: {
 		inherit: true,
-		onFoeTrapPokemon() {},
-		onFoeMaybeTrapPokemon() {},
+		onFoeTrapPokemon: undefined, // no inherit
+		onFoeMaybeTrapPokemon: undefined, // no inherit
 		onAnyTrapPokemon(pokemon) {
 			if (pokemon.hasType('Steel') && pokemon.isAdjacent(this.effectState.target)) {
 				pokemon.tryTrap(true);
@@ -158,7 +150,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	raindish: {
 		inherit: true,
-		onWeather() {},
+		onWeather: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
@@ -193,7 +185,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	trace: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
@@ -204,7 +196,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	truant: {
 		inherit: true,
-		onStart() {},
+		onStart: undefined, // no inherit
 		onSwitchIn(pokemon) {
 			pokemon.truantTurn = this.turn !== 0;
 		},
