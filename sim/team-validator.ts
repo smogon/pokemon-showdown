@@ -705,7 +705,8 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if ((this.gen === 9 && !ruleTable.has('terastalclause')) || ruleTable.has('bonustypemod')) {
+		if ((this.gen === 9 && dex.currentMod !== 'champions' && !ruleTable.has('terastalclause')) ||
+			ruleTable.has('bonustypemod')) {
 			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
@@ -1126,6 +1127,7 @@ export class TeamValidator {
 		const dex = this.dex;
 
 		const allowAVs = !ruleTable.has('lgpenormalrules');
+		const useStatPoints = dex.currentMod === 'champions';
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
@@ -1136,6 +1138,9 @@ export class TeamValidator {
 		const name = set.name || set.species;
 
 		const maxedIVs = Object.values(set.ivs).every(stat => stat === 31);
+		if (useStatPoints && !maxedIVs) {
+			problems.push(`${name}'s IVs are not maxed out, but this format requires all IVs to be 31.`);
+		}
 		for (const moveName of set.moves) {
 			const move = dex.moves.get(moveName);
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
@@ -1266,7 +1271,8 @@ export class TeamValidator {
 
 		for (const stat in set.evs) {
 			if (set.evs[stat as 'hp'] < 0) {
-				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
+				const statValue = allowAVs ? 'Awakening Values' : useStatPoints ? 'Stat Points' : 'EVs';
+				problems.push(`${name} has less than 0 ${statValue} in ${Dex.stats.names[stat as 'hp']}.`);
 			}
 		}
 
@@ -1277,6 +1283,12 @@ export class TeamValidator {
 					break;
 				} else if (set.evs[stat as 'hp'] > 200) {
 					problems.push(`${name} has more than 200 Awakening Values in ${Dex.stats.names[stat as 'hp']}.`);
+				}
+			}
+		} else if (useStatPoints) {
+			for (const stat in set.evs) {
+				if (set.evs[stat as StatID] > 32) {
+					problems.push(`${name} has more than 32 Stat Points in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}
 		} else { // EVs
@@ -1312,10 +1324,11 @@ export class TeamValidator {
 		}
 
 		if (evLimit !== null && totalEV > evLimit) {
+			const statName = useStatPoints ? 'Stat Points' : 'EVs';
 			if (!evLimit) {
-				problems.push(`${name} has EVs, which is not allowed by this format.`);
+				problems.push(`${name} has ${statName}, which is not allowed by this format.`);
 			} else {
-				problems.push(`${name} has ${totalEV} total EVs, which is more than this format's limit of ${evLimit}.`);
+				problems.push(`${name} has ${totalEV} total ${statName}, which is more than this format's limit of ${evLimit}.`);
 			}
 		}
 
