@@ -17,20 +17,31 @@ import { ObjectReadWriteStream } from '../../../lib/streams';
 import { StreamWorker } from '../../../lib/process-manager';
 import { type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 import {
-	getLevelUpEvo, pickRandom,
-	getTier1Pokemon, getTier2Pokemon, getTier3Pokemon, getTier4Pokemon,
-	packPokemon, packTeam, botLevel,
+	genAIPokemon, packAITeam, packTeam,
+	type AIPokemonSet, botLevel,
 } from './pokerogue-pokemon';
 import { setState } from './pokerogue-state';
 
+// ---------------------------------------------------------------------------
+// Team size scaling
+// ---------------------------------------------------------------------------
+
+/**
+ * Maps floor to team size using the same 7-step table as poketest.ts:
+ *   [2, 3, 3, 4, 4, 5, 6] indexed by difficulty tier (0–6).
+ * Every 10 floors advances one tier, so:
+ *   floors 1–9 → 2 mons, 10–19 → 3, 20–29 → 3, 30–39 → 4, etc.
+ */
+const TEAM_SIZE_BY_TIER = [2, 3, 3, 4, 4, 5, 6] as const;
+
 function botTeamSize(floor: number): number {
-	if (floor <= 5) return 1;
-	if (floor <= 10) return 2;
-	if (floor <= 20) return 3;
-	if (floor <= 30) return 4;
-	if (floor <= 40) return 5;
-	return 6;
+	const tier = Math.min(6, Math.floor((floor - 1) / 10));
+	return TEAM_SIZE_BY_TIER[tier];
 }
+
+// ---------------------------------------------------------------------------
+// Bot infrastructure (unchanged from original)
+// ---------------------------------------------------------------------------
 
 class NoopStream extends ObjectReadWriteStream<string> {
 	override _write(_data: string): void { /* discard */ }
@@ -112,6 +123,10 @@ function createBotUser(playerId: string): User {
 
 	return botUser;
 }
+
+// ---------------------------------------------------------------------------
+// AI move selection (unchanged from original — handles the in-battle choices)
+// ---------------------------------------------------------------------------
 
 function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
@@ -204,6 +219,10 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 	return 'move 1';
 }
 
+// ---------------------------------------------------------------------------
+// Active match registry
+// ---------------------------------------------------------------------------
+
 interface ActiveRougeMatch {
 	userId: ID;
 	botUserId: ID;
@@ -212,77 +231,70 @@ interface ActiveRougeMatch {
 
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
+// ---------------------------------------------------------------------------
+// Bot team builder — now uses BST-weighted genAIPokemon()
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds the AI team for the given floor using a BST-weighted probability pool
+ * that mirrors poketest.ts genPokemon() difficulty scaling.
+ *
+ * Key changes from the old tier-bucket approach:
+ *
+ * 1. TEAM SIZE: Uses the same 7-step table as poketest.ts ([2,3,3,4,4,5,6]
+ *    indexed by tier, one tier per 10 floors), instead of the old
+ *    floor-threshold ladder. Boss floors always use the full tier-size.
+ *
+ * 2. POKEMON SELECTION: genAIPokemon() uses a parabolic BST weight so the
+ *    "ideal" BST rises smoothly with floor, not in hard tiers.
+ *
+ * 3. LEVELS: Each mon gets its own level drawn from [minLevel, maxLevel]
+ *    (both scaled with floor), not a single botLevel() for everyone.
+ *
+ * 4. BOSS FLOOR BONUS: Boss floors (floor % 10 === 0) force a full-sized
+ *    team and apply a +1 to +3 level bonus to every mon's level, capped at
+ *    100. Player's max level is also factored in (dynamic scaling).
+ *
+ * 5. RICH SETS: Each mon now has random natures, random IVs (0–31 per stat),
+ *    1/20 chance of a functional held item, random ability selection, and
+ *    a random TeraType — all matching poketest.ts realism.
+ */
 function buildBotTeam(state: PokeRogueState): string {
 	const floor = state.floor;
-	const size = botTeamSize(floor);
 	const isBoss = floor % 10 === 0;
 
-	// --- Dynamic AI Level Scaling ---
-	const playerMaxLevel = Math.max(...state.team.map(m => m.level));
-	let level = Math.max(botLevel(floor), playerMaxLevel);
+	// Team size — full 6 on boss floors, otherwise tier-scaled
+	const size = isBoss ? 6 : botTeamSize(floor);
 
-	const floorMod = floor % 10;
-	if (floorMod === 0) {
-		// Boss floors grant +1 to +3 levels over the player
-		level += Math.floor(Math.random() * 3) + 1;
-	}
+	// Generate the pool of AI mons using BST-weighted selection
+	let aiTeam: AIPokemonSet[] = genAIPokemon(size, floor);
 
-	level = Math.min(999, level);
-	// --- END Dynamic AI Level Scaling ---
+	// --- Dynamic level adjustment ---
+	// Ensure no AI mon falls below the player's weakest active mon,
+	// and apply boss bonus on boss floors (mirrors original dynamic scaling)
+	const playerMaxLevel = state.team.length
+		? Math.max(...state.team.map(m => m.level))
+		: 1;
 
-	let poolA: string[];
-	let poolB: string[];
-	let chanceA: number;
+	const bossBonus = isBoss ? Math.floor(Math.random() * 3) + 1 : 0;
 
-	if (isBoss) {
-		// Progressive Boss Scaling
-		if (floor === 10) {
-			// Floor 10: Fully evolved standard Pokémon, slight chance of Elite
-			poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.8;
-		} else if (floor === 20) {
-			// Floor 20: Guaranteed Elite OU tier Pokémon
-			poolA = getTier3Pokemon(); poolB = getTier3Pokemon(); chanceA = 1.0;
-		} else if (floor === 30) {
-			// Floor 30: Elites with a chance of Legendaries
-			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
-		} else {
-			// Floor 40+: Heavy Legendary presence
-			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.4;
-		}
-	} else {
-		if (floor < 10) {
-			poolA = getTier1Pokemon(); poolB = getTier1Pokemon(); chanceA = 1.0;
-		} else if (floor < 30) {
-			poolA = getTier1Pokemon(); poolB = getTier2Pokemon(); chanceA = 0.5;
-		} else if (floor < 50) {
-			poolA = getTier2Pokemon(); poolB = getTier3Pokemon(); chanceA = 0.6;
-		} else {
-			poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.8;
-		}
-	}
+	aiTeam = aiTeam.map(mon => {
+		// Push the mon's level up if the player outlevels it
+		let newLevel = Math.max(mon.level, playerMaxLevel);
+		// Boss floor: add +1 to +3 over the player
+		newLevel = Math.min(100, newLevel + bossBonus);
+		return { ...mon, level: newLevel };
+	});
 
-	const picks: string[] = [];
-	for (let i = 0; i < size; i++) {
-		const activePool = Math.random() < chanceA ? poolA : poolB;
-		const pick = pickRandom(activePool, 1, picks);
-		if (pick.length) picks.push(pick[0]);
-	}
-
-	return picks.map(starter => {
-		let species = starter;
-		let evo = getLevelUpEvo(species);
-		while (evo && level >= evo.evoLevel) {
-			species = evo.evoTo;
-			evo = getLevelUpEvo(species);
-		}
-		return packPokemon({ species, level, exp: 0 } as PokemonEntry);
-	}).join(']');
+	return packAITeam(aiTeam);
 }
+
+// ---------------------------------------------------------------------------
+// startBattle (unchanged interface — only buildBotTeam internals changed)
+// ---------------------------------------------------------------------------
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
 	const playerTeam = packTeam(state.team);
-
-	// Pass the full state to calculate dynamic levels
 	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
 
