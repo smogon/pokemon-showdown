@@ -696,8 +696,8 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 				const gap = maxLevel - curLevel;
 				// Skip levels where the species hasn't met its minimum level requirement
 				// (mirrors poketest.ts TeamValidator check for "must be at least level")
-				const sp2 = Dex.species.get(finalSpecies);
-				if (sp2.evoLevel && curLevel < sp2.evoLevel) continue;
+				// Use sp.id here — finalSpecies is declared after level is resolved
+				if (sp.evoLevel && curLevel < sp.evoLevel) continue;
 
 				if (gap === 0 || Math.floor(Math.random() * gap) === 0) {
 					level = curLevel;
