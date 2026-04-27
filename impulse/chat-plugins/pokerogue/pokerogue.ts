@@ -576,9 +576,9 @@ export const commands: Chat.ChatCommands = {
 			if (!state?.pendingChoice || isNaN(n) || n < 0 || n >= state.pendingChoice.length) return;
 			const choice = state.pendingChoice[n];
 
-			let addedLevel = 1;
+			let addedLevel = 5;
 			if (state.pendingChoiceType !== 'starter') {
-				addedLevel = Math.max(1, botLevel(state.floor) - 2);
+				addedLevel = Math.max(5, botLevel(state.floor) - 2);
 			}
 
 			let finalSpecies = choice;
