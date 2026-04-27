@@ -35,6 +35,9 @@ const BP_PER_WIN = 5;
 const BP_PER_STREAK = 5;
 const STARTING_BP = 10;
 
+/** The key item name stored in state.keyItems for Exp. Share */
+const EXP_SHARE_NAME = 'Exp. Share';
+
 function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 	if (!state.pendingChoice || state.pendingChoice.length) return;
 	if (state.pendingChoiceType === 'add' && state.team?.length) {
@@ -271,6 +274,40 @@ function parseKillExp(
 	}
 
 	return expMap;
+}
+
+/**
+ * Applies Exp. Share logic (Scarlet/Violet style):
+ * - Pokémon that participated keep their full earned EXP.
+ * - Living non-participants each receive 50% of the TOTAL EXP earned in the battle.
+ * - Fainted Pokémon receive nothing regardless.
+ *
+ * Returns a new Map with the final EXP amounts per team index.
+ */
+function applyExpShare(
+	expMap: Map<number, number>,
+	state: PokeRogueState,
+): Map<number, number> {
+	// Only apply if the player owns the Exp. Share key item
+	if (!(state.keyItems ?? []).includes(EXP_SHARE_NAME)) return expMap;
+
+	const totalExp = [...expMap.values()].reduce((sum, v) => sum + v, 0);
+	if (totalExp === 0) return expMap;
+
+	const sharedExp = Math.floor(totalExp * 0.5);
+	const result = new Map<number, number>(expMap);
+
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		// Skip fainted Pokémon
+		if ((mon.currentHp ?? 100) <= 0) continue;
+		// Skip Pokémon that already earned EXP directly (they keep full EXP)
+		if (result.has(i)) continue;
+		// Non-participants get 50% of total EXP
+		result.set(i, sharedExp);
+	}
+
+	return result;
 }
 
 function syncBattleOutcome(
@@ -624,6 +661,12 @@ export const commands: Chat.ChatCommands = {
 				state.keyItems.push(item.name);
 				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
 				state.notification = `Bought key item: <b>${item.name}</b>!`;
+
+				// Special message for Exp. Share
+				if (item.name === EXP_SHARE_NAME) {
+					state.notification += ` All party Pokémon will now receive EXP after every battle!`;
+				}
+
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -1101,18 +1144,36 @@ export const handlers: Chat.Handlers = {
 		delete state.battleRoomId;
 
 		if (toID(winner) === match.userId) {
-			const expMap = parseKillExp(logLines, state, match.floor, isBossFloor);
-			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
+			// ── Step 1: Calculate per-battler EXP from kills ──────────────────
+			const rawExpMap = parseKillExp(logLines, state, match.floor, isBossFloor);
+
+			// ── Step 2: Apply Exp. Share to non-participating living Pokémon ──
+			const expMap = applyExpShare(rawExpMap, state);
+
+			const totalExpEarned = [...rawExpMap.values()].reduce((sum, v) => sum + v, 0);
+			const expShareActive = (state.keyItems ?? []).includes(EXP_SHARE_NAME);
 			const detailMsgs: string[] = [];
 
-			if (totalExpEarned > 0) {
-				// Instead of summing and sharing equally:
+			if (expMap.size > 0) {
 				for (const [teamIdx, expGained] of expMap) {
 					const mon = state.team[teamIdx];
 					if (!mon || (mon.currentHp ?? 100) === 0) continue;
 					const oldSpecies = mon.species;
 					const { evolved, oldLevel } = applyExpAndLevelUp(mon, expGained);
 					detailMsgs.push(...processLevelUp(mon, oldLevel, oldSpecies, evolved, teamIdx, state));
+				}
+
+				// Show Exp. Share notification if it distributed EXP to benched Pokémon
+				if (expShareActive && totalExpEarned > 0) {
+					const benchedCount = [...expMap.entries()].filter(
+						([idx]) => !rawExpMap.has(idx)
+					).length;
+					if (benchedCount > 0) {
+						const sharedAmt = Math.floor(totalExpEarned * 0.5);
+						detailMsgs.push(
+							`<span style="color:#8ab4f8">📡 Exp. Share: ${benchedCount} benched Pokémon each received <b>${sharedAmt}</b> EXP.</span>`
+						);
+					}
 				}
 			}
 
