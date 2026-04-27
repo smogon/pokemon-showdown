@@ -332,7 +332,7 @@ export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evol
 	const oldLevel = mon.level;
 	mon.exp += expGained;
 
-	const expType = getExpType(mon.species);
+	const expType = mon.expType ?? getExpType(mon.species);
 	while (mon.level < 100 && mon.exp >= expForLevel(mon.level + 1, expType)) {
 		mon.level++;
 	}
@@ -341,6 +341,7 @@ export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evol
 	while (true) {
 		const evo = getLevelUpEvo(mon.species);
 		if (!evo || mon.level < evo.evoLevel) break;
+		mon.expType = getExpType(evo.evoTo);
 		mon.species = evo.evoTo;
 		evolved = true;
 	}
