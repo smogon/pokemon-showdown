@@ -349,8 +349,17 @@ export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evol
 }
 
 export function getLevelUpMoves(speciesId: string, level: number): string[] {
-	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
-	const learnset = learnsetData?.learnset;
+	const id = toID(speciesId);
+	const sp = Dex.species.get(id);
+
+	// For formes/regionals the learnset lives on the base species entry.
+	// Walk: own learnset → base species learnset → bail to tackle.
+	const learnsetData = Dex.species.getLearnsetData(id);
+	const baseLearnsetData = (sp.baseSpecies && toID(sp.baseSpecies) !== id)
+		? Dex.species.getLearnsetData(toID(sp.baseSpecies))
+		: null;
+
+	const learnset = learnsetData?.learnset ?? baseLearnsetData?.learnset;
 	if (!learnset) return ['tackle'];
 
 	const available: { move: string, learnLevel: number }[] = [];
@@ -375,7 +384,15 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 }
 
 export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newLevel: number, isEvolution = false): string[] {
-	const learnset = Dex.species.getLearnsetData(toID(speciesId))?.learnset;
+	const id = toID(speciesId);
+	const sp = Dex.species.get(id);
+
+	const learnsetData = Dex.species.getLearnsetData(id);
+	const baseLearnsetData = (sp.baseSpecies && toID(sp.baseSpecies) !== id)
+		? Dex.species.getLearnsetData(toID(sp.baseSpecies))
+		: null;
+
+	const learnset = learnsetData?.learnset ?? baseLearnsetData?.learnset;
 	if (!learnset) return [];
 
 	const learned: string[] = [];
@@ -432,25 +449,41 @@ function pickRandomHeldItem(speciesName: string): string {
 
 function pickAIMoves(speciesId: string, level: number): string[] {
 	const id = toID(speciesId);
+	const sp = Dex.species.get(id);
 
 	const prevoList: string[] = [];
-	let dexSpecies = Dex.species.get(id);
+	let dexSpecies = sp;
 	while (dexSpecies.prevo) {
 		prevoList.push(toID(dexSpecies.prevo));
 		dexSpecies = Dex.species.get(dexSpecies.prevo);
 	}
 
+	// Also collect base species ID so we don't skip its learnset for formes.
+	const baseSpeciesId = sp.baseSpecies ? toID(sp.baseSpecies) : id;
+
 	const fullLearn = Dex.species.getFullLearnset(id);
 	let viableMoves: string[] = [];
 
 	for (const learnsetIndex of fullLearn) {
-		if (prevoList.includes(toID(learnsetIndex.species.name))) continue;
+		const entryId = toID(learnsetIndex.species.name);
+
+		// Skip prevo learnsets, but always keep the base species learnset
+		// so that formes/regionals (whose moves live on the base) are included.
+		if (prevoList.includes(entryId) && entryId !== baseSpeciesId) continue;
 
 		const learnset = learnsetIndex.learnset ?? {};
 		for (const moveid in learnset) {
-			if (learnset[moveid].some((src: string) => src === `9L${level}` ||
-				(/^9L(\d+)$/.test(src) && parseInt(src.slice(2)) <= level))) {
-				if (!viableMoves.includes(moveid)) viableMoves.push(moveid);
+			for (const src of learnset[moveid]) {
+				// Fix: use regex capture group instead of src.slice(2) which
+				// produced "L25" causing parseInt to return NaN, silently
+				// dropping every move not learned at the exact current level.
+				const match = /^9L(\d+)$/.exec(src);
+				if (match) {
+					if (parseInt(match[1]) <= level) {
+						if (!viableMoves.includes(moveid)) viableMoves.push(moveid);
+					}
+					break;
+				}
 			}
 		}
 	}
