@@ -361,8 +361,6 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	const id = toID(speciesId);
 	const sp = Dex.species.get(id);
 
-	// For formes/regionals the learnset lives on the base species entry.
-	// Walk: own learnset → base species learnset → bail to tackle.
 	const learnsetData = Dex.species.getLearnsetData(id);
 	const baseLearnsetData = (sp.baseSpecies && toID(sp.baseSpecies) !== id)
 		? Dex.species.getLearnsetData(toID(sp.baseSpecies))
@@ -479,7 +477,6 @@ function pickAIMoves(speciesId: string, level: number): string[] {
 		dexSpecies = Dex.species.get(dexSpecies.prevo);
 	}
 
-	// Also collect base species ID so we don't skip its learnset for formes.
 	const baseSpeciesId = sp.baseSpecies ? toID(sp.baseSpecies) : id;
 
 	const fullLearn = Dex.species.getFullLearnset(id);
@@ -488,16 +485,11 @@ function pickAIMoves(speciesId: string, level: number): string[] {
 	for (const learnsetIndex of fullLearn) {
 		const entryId = toID(learnsetIndex.species.name);
 
-		// Skip prevo learnsets, but always keep the base species learnset
-		// so that formes/regionals (whose moves live on the base) are included.
 		if (prevoList.includes(entryId) && entryId !== baseSpeciesId) continue;
 
 		const learnset = learnsetIndex.learnset ?? {};
 		for (const moveid in learnset) {
 			for (const src of learnset[moveid]) {
-				// Fix: use regex capture group instead of src.slice(2) which
-				// produced "L25" causing parseInt to return NaN, silently
-				// dropping every move not learned at the exact current level.
 				const match = /^9L(\d+)$/.exec(src);
 				if (match) {
 					if (parseInt(match[1]) <= level) {
