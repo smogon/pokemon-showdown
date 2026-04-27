@@ -30,6 +30,96 @@ export function refreshGamePage(user: User): void {
 
 const PAGE_REFRESH_SECONDS = 20;
 
+// ---------------------------------------------------------------------------
+// Shared CSS — injected once per page render
+// ---------------------------------------------------------------------------
+function renderCSS(): string {
+	return `<style>
+.pr{--pr-r:8px;--pr-rl:12px;font-family:system-ui,sans-serif;color:#e0d4ff;max-width:680px}
+.pr-card{background:rgba(255,255,255,.04);border:0.5px solid rgba(255,255,255,.1);border-radius:var(--pr-rl);padding:12px 14px;margin-bottom:10px}
+.pr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid rgba(255,255,255,.1);margin-bottom:10px}
+.pr-header h2{font-size:16px;font-weight:500;margin:0;color:#e0d4ff}
+.pr-statbar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.pr-statbar.cols2{grid-template-columns:repeat(2,1fr)}
+.pr-stat{background:rgba(255,255,255,.05);border-radius:var(--pr-r);padding:7px 10px;text-align:center}
+.pr-stat-label{font-size:10px;color:#aaa;margin-bottom:2px}
+.pr-stat-val{font-size:15px;font-weight:500;color:#e0d4ff}
+.pr-section-title{font-size:10px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.pr-team{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.pr-mon{background:rgba(255,255,255,.05);border-radius:var(--pr-r);padding:8px 10px;display:flex;align-items:center;gap:10px}
+.pr-mon-img{width:44px;height:44px;flex-shrink:0;image-rendering:pixelated}
+.pr-mon-body{flex:1;min-width:0}
+.pr-mon-top{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.pr-mon-name{font-size:13px;font-weight:500;color:#e0d4ff}
+.pr-mon-lv{font-size:10px;color:#aaa}
+.pr-types{display:flex;gap:3px;margin-bottom:4px}
+.pr-type{font-size:9px;font-weight:500;padding:1px 5px;border-radius:3px;color:#fff}
+.pr-bars{display:flex;flex-direction:column;gap:3px}
+.pr-bar-row{display:flex;align-items:center;gap:6px}
+.pr-bar-track{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.pr-bar-fill{height:100%;border-radius:2px}
+.pr-bar-label{font-size:9px;color:#888;min-width:36px;text-align:right}
+.pr-item-tag{font-size:9px;color:#8ab4f8;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-actions{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:5px;margin-top:4px}
+.pr-btn{background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.18);border-radius:var(--pr-r);padding:7px 8px;font-size:12px;font-weight:500;color:#e0d4ff;cursor:pointer;text-align:center;white-space:nowrap}
+.pr-btn:hover{background:rgba(255,255,255,.11)}
+.pr-btn.primary{border-color:#534AB7;color:#c4a8ff;background:rgba(83,74,183,.15)}
+.pr-btn.primary:hover{background:rgba(83,74,183,.25)}
+.pr-btn.danger{color:#f87171;border-color:rgba(248,113,113,.25)}
+.pr-btn.danger:hover{background:rgba(248,113,113,.08)}
+.pr-btn[disabled]{opacity:.4;cursor:default}
+.pr-notification{background:rgba(59,130,246,.12);border:0.5px solid rgba(59,130,246,.3);border-radius:var(--pr-r);padding:7px 10px;font-size:12px;color:#93c5fd;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pr-notification-dismiss{font-size:11px;opacity:.6;cursor:pointer;flex-shrink:0;background:none;border:none;color:inherit;padding:0}
+.pr-shop-grid{display:flex;flex-direction:column;gap:4px}
+.pr-shop-row{display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-r)}
+.pr-shop-name{font-size:12px;font-weight:500;color:#e0d4ff;flex-shrink:0}
+.pr-shop-desc{font-size:10px;color:#888;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-shop-cost{font-size:11px;font-weight:500;color:#c4a8ff;white-space:nowrap}
+.pr-shop-buy{font-size:11px;padding:3px 8px;border:0.5px solid rgba(255,255,255,.18);border-radius:var(--pr-r);background:rgba(255,255,255,.06);color:#e0d4ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.pr-shop-buy:hover{background:rgba(255,255,255,.11)}
+.pr-shop-buy[disabled]{opacity:.4;cursor:default}
+.pr-shop-icon{width:20px;height:20px;flex-shrink:0;image-rendering:pixelated;vertical-align:middle}
+.pr-tab{display:flex;gap:1px;background:rgba(255,255,255,.08);border-radius:var(--pr-r);padding:1px;margin-bottom:8px}
+.pr-tab-btn{flex:1;font-size:11px;padding:5px;border:none;background:transparent;cursor:pointer;color:#aaa;border-radius:calc(var(--pr-r) - 1px)}
+.pr-tab-btn.active{background:rgba(255,255,255,.1);color:#e0d4ff;font-weight:500}
+.pr-reroll-row{display:flex;justify-content:flex-end;margin-bottom:5px}
+.pr-choice-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.pr-choice-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-rl);border:0.5px solid rgba(255,255,255,.1)}
+.pr-choice-row.leg{border-color:rgba(196,168,255,.35);background:rgba(196,168,255,.07)}
+.pr-ct-name{font-size:13px;font-weight:500;color:#e0d4ff;margin-bottom:3px}
+.pr-ct-stats{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.pr-ct-stats span{font-size:9px;color:#888}
+.pr-ct-stats span b{color:#c4a8ff}
+.pr-ct-ability{font-size:10px;color:#aaa;margin-top:2px}
+.pr-legendary-badge{font-size:9px;font-weight:500;color:#c4a8ff;background:rgba(196,168,255,.15);border-radius:3px;padding:1px 5px;display:inline-block;margin-top:3px}
+.pr-sprite-wrap{position:relative;flex-shrink:0}
+.pr-pokeball-overlay{position:absolute;bottom:0;right:0;width:14px;height:14px;image-rendering:pixelated}
+.pr-pick-btn{font-size:12px;padding:5px 12px;border:0.5px solid #534AB7;border-radius:var(--pr-r);background:rgba(83,74,183,.15);color:#c4a8ff;cursor:pointer;white-space:nowrap}
+.pr-pick-btn:hover{background:rgba(83,74,183,.28)}
+.pr-expbar{height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:2px}
+.pr-expbar-fill{height:100%;border-radius:2px;background:#7F77DD}
+.pr-hpbar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.pr-hpbar-fill{height:100%;border-radius:2px}
+.pr-bag-item-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.1);border-radius:var(--pr-r);padding:3px 8px;margin-top:4px}
+.pr-lb-row{display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-r)}
+.pr-lb-rank{font-size:12px;font-weight:500;min-width:22px;color:#888}
+.pr-lb-name{flex:1;font-size:12px;font-weight:500;color:#e0d4ff}
+.pr-lb-floor{font-size:11px;color:#aaa;white-space:nowrap}
+.pr-lb-team{display:flex;gap:2px}
+.pr-gameover{text-align:center;padding:28px 20px}
+.pr-go-title{font-size:22px;font-weight:500;color:#f87171;margin-bottom:8px}
+.pr-go-sub{font-size:13px;color:#aaa;margin-bottom:20px}
+.pr-newrun-btn{font-size:14px;padding:9px 24px;border:0.5px solid #534AB7;border-radius:var(--pr-r);background:rgba(83,74,183,.2);color:#c4a8ff;cursor:pointer}
+.pr-newrun-btn:hover{background:rgba(83,74,183,.32)}
+.pr-choice-heading{font-size:15px;font-weight:500;color:#e0d4ff;margin:0 0 8px}
+.pr-popup-actions{display:flex;flex-direction:column;gap:5px}
+.pr-warning-box{background:rgba(239,68,68,.08);border:0.5px solid rgba(239,68,68,.25);border-radius:var(--pr-r);padding:8px 12px;color:#f87171;font-size:12px;text-align:center;margin-bottom:10px}
+</style>`;
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 function itemURLFormat(item: string): string {
 	return item.replaceAll(/[^a-zA-Z0-9\s-]+/g, '').toLowerCase().replaceAll(' ', '-');
 }
@@ -58,13 +148,13 @@ function getSprite(species: string, size = 80): string {
 		onerror = ` onerror="this.onerror=function(){this.onerror=null;this.style.display='none'};this.src='${fallback1}'"`;
 	} else {
 		onerror = ` onerror="this.onerror=null;this.style.display='none'"`;
-    }
-	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
+	}
+	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" class="pr-mon-img" style="width:${size}px;height:${size}px" />`;
 }
 
-function getShopItemIcon(icon: string, size = 24): string {
+function getShopItemIcon(icon: string, size = 20): string {
 	const url = `https://www.smogon.com/forums/media/minisprites/${itemURLFormat(icon)}.png`;
-	return `<img src="${Utils.escapeHTML(url)}" width="${size}" height="${size}" style="image-rendering:pixelated;vertical-align:middle" onerror="this.style.display='none'" />`;
+	return `<img src="${Utils.escapeHTML(url)}" width="${size}" height="${size}" class="pr-shop-icon" onerror="this.style.display='none'" />`;
 }
 
 function getPokeballInfo(speciesId: string): { src: string, alt: string } {
@@ -82,10 +172,26 @@ function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 
 export function getSpriteWithBall(species: string, size = 80): string {
 	const ball = getPokeballInfo(species);
-	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px">` +
+	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px;flex-shrink:0">` +
 		getSprite(species, size) +
 		`<img src="${ball.src}" alt="${Utils.escapeHTML(ball.alt)}" class="pr-pokeball-overlay" />` +
 		`</div>`;
+}
+
+function typeColor(type: string): string {
+	const colors: Record<string, string> = {
+		Normal: '9fa19f', Fire: 'e62829', Water: '2980ef', Grass: '3fa129', Electric: 'fac000',
+		Ice: '3dcef3', Fighting: 'ff8000', Poison: '9141cb', Ground: '915121', Flying: '81b9ef',
+		Psychic: 'ef4179', Bug: '91a119', Rock: 'afa981', Ghost: '704170', Dragon: '5060e1',
+		Dark: '624d4e', Steel: '60a1b8', Fairy: 'ef70ef',
+	};
+	return colors[type] ?? '68a090';
+}
+
+export function renderTypeBadge(types: string[], large = false): string {
+	return types.map(t =>
+		`<span class="pr-type" style="background:#${typeColor(t)};font-size:${large ? '10px' : '9px'}">${t}</span>`
+	).join(' ');
 }
 
 function renderExpBar(mon: PokemonEntry): string {
@@ -102,24 +208,60 @@ function renderExpBar(mon: PokemonEntry): string {
 function renderHpBar(mon: PokemonEntry): string {
 	const hpPct = mon.currentHp ?? 100;
 	const color = hpPct > 50 ? '#4caf50' : hpPct > 25 ? '#ff9800' : '#f44336';
-	return `<div class="pr-hpbar"><div class="pr-hpbar-fill" style="width:${hpPct}%;background:${color}"></div></div>` +
-		`<span style="font-size:9px;color:#aaa">${hpPct}% HP</span>`;
+	return `<div class="pr-bar-row">` +
+		`<div class="pr-bar-track"><div class="pr-bar-fill" style="width:${hpPct}%;background:${color}"></div></div>` +
+		`<span class="pr-bar-label">${hpPct}% HP</span>` +
+		`</div>`;
 }
 
-function typeColor(type: string): string {
-	const colors: Record<string, string> = {
-		Normal: '9fa19f', Fire: 'e62829', Water: '2980ef', Grass: '3fa129', Electric: 'fac000',
-		Ice: '3dcef3', Fighting: 'ff8000', Poison: '9141cb', Ground: '915121', Flying: '81b9ef',
-		Psychic: 'ef4179', Bug: '91a119', Rock: 'afa981', Ghost: '704170', Dragon: '5060e1',
-		Dark: '624d4e', Steel: '60a1b8', Fairy: 'ef70ef',
-	};
-	return colors[type] ?? '68a090';
+// ---------------------------------------------------------------------------
+// Sub-section renderers
+// ---------------------------------------------------------------------------
+
+function renderNotification(state: PokeRogueState): string {
+	if (!state.notification) return '';
+	return `<div class="pr-notification">${state.notification}` +
+		`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">✕</button></div>`;
 }
 
-export function renderTypeBadge(types: string[], large = false): string {
-	return types.map(t =>
-		`<span style="background:#${typeColor(t)};color:#fff;border-radius:${large ? '4px' : '3px'};padding:${large ? '2px 6px' : '1px 5px'};font-size:${large ? '10px' : '9px'};font-weight:bold">${t}</span>`
-	).join(' ');
+function renderStatBar(state: PokeRogueState, cols2 = false): string {
+	if (cols2) {
+		return `<div class="pr-statbar cols2">` +
+			`<div class="pr-stat"><div class="pr-stat-label">Battle Points</div><div class="pr-stat-val">${state.battlePoints ?? 0} BP</div></div>` +
+			`<div class="pr-stat"><div class="pr-stat-label">Streak</div><div class="pr-stat-val">${state.streaksWon ?? 0}</div></div>` +
+			`</div>`;
+	}
+	return `<div class="pr-statbar">` +
+		`<div class="pr-stat"><div class="pr-stat-label">Floor</div><div class="pr-stat-val">${state.floor}</div></div>` +
+		`<div class="pr-stat"><div class="pr-stat-label">Battle Points</div><div class="pr-stat-val">${state.battlePoints ?? 0} BP</div></div>` +
+		`<div class="pr-stat"><div class="pr-stat-label">Streaks</div><div class="pr-stat-val">${state.streaksWon ?? 0}</div></div>` +
+		`</div>`;
+}
+
+function renderTeamCard(mon: PokemonEntry, actions?: string): string {
+	const spData = Dex.species.get(toID(mon.species));
+	const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
+	let buf = `<div class="pr-mon">`;
+	buf += getSpriteWithBall(mon.species, 44);
+	buf += `<div class="pr-mon-body">`;
+	buf += `<div class="pr-mon-top"><span class="pr-mon-name">${spData.name}</span><span class="pr-mon-lv">Lv. ${mon.level}`;
+	if (mon.level < 999) buf += ` <small style="color:#666">(${expNeeded} EXP)</small>`;
+	buf += `</span></div>`;
+	buf += `<div class="pr-types">${renderTypeBadge(spData.types ?? [])}</div>`;
+	buf += `<div class="pr-bars">`;
+	buf += renderHpBar(mon);
+	buf += `<div class="pr-bar-row"><div class="pr-bar-track">${renderExpBar(mon).replace('pr-expbar', 'pr-bar-track').replace('<div class="pr-expbar"><', '<').replace('</div></div>', '</div>')}</div></div>`;
+	buf += `</div>`;
+	if (mon.heldItem) {
+		const dexHeld = Dex.items.get(mon.heldItem);
+		buf += `<div class="pr-item-tag">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</div>`;
+	}
+	if (mon.status) {
+		buf += `<div style="font-size:9px;color:#ff9800;margin-top:2px">${mon.status.toUpperCase()}</div>`;
+	}
+	if (actions) buf += actions;
+	buf += `</div></div>`;
+	return buf;
 }
 
 function renderShopTable(
@@ -128,327 +270,545 @@ function renderShopTable(
 	keyItems: string[],
 	cmd: string,
 ): string {
-	let buf = `<table style="width:100%;border-collapse:collapse;font-size:11px" border="1">`;
-	buf += `<tr><th>Item</th><th>Description</th><th>Price</th><th></th></tr>`;
+	let buf = `<div class="pr-shop-grid">`;
 	for (const [key, item] of items) {
-		buf += `<tr>`;
-		buf += `<td style="padding:3px 5px;white-space:nowrap">${getShopItemIcon(item.icon)} ${Utils.escapeHTML(item.name)}</td>`;
-		buf += `<td style="padding:3px 5px;color:#ccc;font-size:10px">${Utils.escapeHTML(item.desc)}</td>`;
-		buf += `<td style="padding:3px 5px;text-align:center;white-space:nowrap">${item.cost} BP</td>`;
-
 		const isKey = (item as any).type === 'key';
 		const alreadyHas = isKey && keyItems.includes(item.name);
+		const canBuy = item.cost <= bp && !alreadyHas;
+
+		buf += `<div class="pr-shop-row">`;
+		buf += getShopItemIcon(item.icon, 20);
+		buf += `<span class="pr-shop-name">${Utils.escapeHTML(item.name)}</span>`;
+		buf += `<span class="pr-shop-desc">${Utils.escapeHTML(item.desc)}</span>`;
+		buf += `<span class="pr-shop-cost">${item.cost} BP</span>`;
+
 		if (alreadyHas) {
-			buf += `<td style="padding:3px 5px"><button class="button" disabled>Owned</button></td>`;
-		} else if (item.cost > bp) {
-			buf += `<td style="padding:3px 5px"><button class="button" disabled>Need BP</button></td>`;
+			buf += `<button class="pr-shop-buy" disabled>Owned</button>`;
+		} else if (!canBuy) {
+			buf += `<button class="pr-shop-buy" disabled>Need BP</button>`;
 		} else {
-			buf += `<td style="padding:3px 5px"><button name="send" value="/${cmd} ${key}" class="button pr-pick-btn">Buy</button></td>`;
+			buf += `<button name="send" value="/${cmd} ${key}" class="pr-shop-buy">Buy</button>`;
 		}
-		buf += `</tr>`;
+		buf += `</div>`;
 	}
-	buf += `</table>`;
+	buf += `</div>`;
 	return buf;
 }
 
-export function renderGamePage(state: PokeRogueState): string {
-	const view = (state as any).view || 'main';
-	let buf = (state.battleRoomId || state.notification) ? `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
-	buf += `<div class="pr-popup">`;
-
-	buf += `<div class="pr-popup-header"><h2>PokéRogue${view !== 'main' ? ` - ${view.toUpperCase()}` : ''}</h2>`;
-	if (view !== 'main' && !state.gameOver) buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-left:auto">Back</button>`;
-	buf += `</div>`;
-
-	if (state.gameOver) {
-		buf += `<div class="pr-gameover" style="text-align:center;padding:20px">`;
-		buf += `<div style="font-size:24px;color:#ff8080;font-weight:bold;margin-bottom:15px">GAME OVER</div>`;
-		buf += `<div style="margin-bottom:20px;color:#8ab4f8">Your run has ended. Floor: <b>${state.lastRunFloor || 1}</b></div>`;
-		buf += `<button name="send" value="/pokerogue newgame confirm" class="button pr-newrun-btn" style="padding:10px 20px;font-size:16px">Start New Run</button>`;
-		buf += `</div></div>`;
-		return buf;
-	}
-
-	if (view === 'resetconfirm') {
-		buf += `<div style="text-align:center;padding:24px 16px">`;
-		buf += `<div style="font-size:18px;color:#ff8080;font-weight:bold;margin-bottom:12px">Reset Run?</div>`;
-		buf += `<div style="color:#aaa;margin-bottom:20px">This will permanently end your current run on Floor <b>${state.floor}</b>. Are you sure?</div>`;
-		buf += `<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">`;
-		buf += `<button name="send" value="/pokerogue quit" class="button" style="background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;border:1px solid #ef4444;padding:8px 20px">Yes, Reset Run</button>`;
-		buf += `<button name="send" value="/pokerogue view main" class="button" style="padding:8px 20px">Cancel</button>`;
-		buf += `</div></div></div>`;
-		return buf;
-	}
-
-	if (view === 'top') {
-		const entries = Object.entries(savedData)
-			.filter(([, s]) => (s.highestFloor ?? 0) > 0)
-			.sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0))
-			.slice(0, 100);
-		if (!entries.length) return buf + '<em>No records yet!</em></div>';
-		const rows = entries.map(([userid, s], i) => {
-			const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
-			const teamStr = (displayTeam ?? []).map((m: PokemonEntry) => getSprite(m.species, 30)).join(' ');
-			return [i + 1, Impulse.nameColor(s.displayName || userid, true, true), `Floor ${s.highestFloor}`, teamStr];
-		});
-		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
-	}
-
-	if (state.notification) {
-		buf += `<div class="pr-notification">${state.notification}<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button></div>`;
-	}
+// ---------------------------------------------------------------------------
+// View: Main
+// ---------------------------------------------------------------------------
+function renderMainView(state: PokeRogueState): string {
+	let buf = '';
 
 	if (state.battleRoomId) {
-		return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#fac000;font-weight:bold">Battle in progress!</p></div></div>`;
+		return `<div style="text-align:center;padding:18px 0;color:#fac000;font-weight:500">Battle in progress!</div>`;
 	}
 
+	buf += renderStatBar(state);
+
+	buf += `<div class="pr-section-title">Your team</div>`;
+	buf += `<div class="pr-team">`;
+	for (const mon of state.team) {
+		buf += renderTeamCard(mon);
+	}
+	buf += `</div>`;
+
+	buf += `<div class="pr-actions">`;
+	buf += `<button name="send" value="/pokerogue battle" class="pr-btn primary">Start battle</button>`;
+	buf += `<button name="send" value="/pokerogue view bag" class="pr-btn">Bag</button>`;
+	buf += `<button name="send" value="/pokerogue view shop" class="pr-btn">Shop</button>`;
+	buf += `<button name="send" value="/pokerogue view top" class="pr-btn">Top 100</button>`;
+	buf += `<button name="send" value="/pokerogue view resetconfirm" class="pr-btn danger">Reset</button>`;
+	buf += `</div>`;
+
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// View: Shop
+// ---------------------------------------------------------------------------
+function renderShopView(state: PokeRogueState): string {
+	const bp = state.battlePoints ?? 0;
+	const streak = state.streaksWon ?? 0;
+	const timesRerolled = state.timesRerolled ?? 0;
+	const rerollCost = 2 + timesRerolled;
+
+	let buf = renderStatBar(state, true);
+
+	// Rotational deals
+	if (state.rotationalShop?.length) {
+		buf += `<div class="pr-section-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">`;
+		buf += `<span>Current deals</span>`;
+		if (rerollCost > bp) {
+			buf += `<button class="pr-shop-buy" disabled style="font-size:10px">Reroll (${rerollCost} BP)</button>`;
+		} else {
+			buf += `<button name="send" value="/pokerogue reroll" class="pr-shop-buy" style="font-size:10px">Reroll (${rerollCost} BP)</button>`;
+		}
+		buf += `</div>`;
+
+		const rotItems = state.rotationalShop
+			.map(key => [key, ROTATIONAL_ITEM_POOL[key]] as [string, typeof ROTATIONAL_ITEM_POOL[string]])
+			.filter(([, item]) => item && item.minStreak <= streak);
+		buf += renderShopTable(rotItems, bp, state.keyItems ?? [], 'pokerogue buy');
+		buf += `<div style="margin:10px 0 5px"></div>`;
+	}
+
+	// Permanent items
+	buf += `<div class="pr-section-title">Always available</div>`;
+	const permItems = Object.entries(SHOP_ITEMS)
+		.filter(([, item]) => item.minStreak <= streak) as Array<[string, typeof SHOP_ITEMS[string]]>;
+	buf += renderShopTable(permItems, bp, state.keyItems ?? [], 'pokerogue buy');
+
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// View: Bag
+// ---------------------------------------------------------------------------
+function renderBagView(state: PokeRogueState): string {
+	let buf = `<div class="pr-section-title">Manage held items</div><div class="pr-team">`;
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		const spBag = Dex.species.get(toID(mon.species));
+
+		let actions = '';
+		if (mon.heldItem) {
+			const dexHeld = Dex.items.get(mon.heldItem);
+			actions = `<div class="pr-bag-item-row">` +
+				`<span class="pr-item-tag" style="margin:0">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</span>` +
+				`<button name="send" value="/pokerogue unequip ${i + 1}" class="pr-shop-buy">Take</button>` +
+				`</div>`;
+		} else {
+			actions = `<div style="font-size:10px;color:#555;margin-top:4px">No item held</div>`;
+		}
+
+		buf += `<div class="pr-mon">`;
+		buf += getSpriteWithBall(mon.species, 44);
+		buf += `<div class="pr-mon-body">`;
+		buf += `<div class="pr-mon-top"><span class="pr-mon-name">${spBag.name}</span><span class="pr-mon-lv">Lv. ${mon.level}</span></div>`;
+		buf += `<div class="pr-types">${renderTypeBadge(spBag.types ?? [])}</div>`;
+		buf += actions;
+		buf += `</div></div>`;
+	}
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// View: Leaderboard
+// ---------------------------------------------------------------------------
+function renderTopView(): string {
+	const entries = Object.entries(savedData)
+		.filter(([, s]) => (s.highestFloor ?? 0) > 0)
+		.sort((a, b) => (b[1].highestFloor ?? 0) - (a[1].highestFloor ?? 0))
+		.slice(0, 100);
+
+	if (!entries.length) return `<div style="text-align:center;padding:16px;color:#888;font-size:13px">No records yet!</div>`;
+
+	let buf = `<div class="pr-section-title">Top 100 runs</div>`;
+	buf += `<div style="display:flex;flex-direction:column;gap:4px">`;
+	entries.forEach(([userid, s], i) => {
+		const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
+		const teamSprites = (displayTeam ?? [])
+			.slice(0, 6)
+			.map((m: PokemonEntry) => getSprite(m.species, 28))
+			.join('');
+		buf += `<div class="pr-lb-row">`;
+		buf += `<span class="pr-lb-rank">#${i + 1}</span>`;
+		buf += `<span class="pr-lb-name">${Impulse.nameColor(s.displayName || userid, true, true)}</span>`;
+		buf += `<span class="pr-lb-floor">Floor ${s.highestFloor}</span>`;
+		buf += `<div class="pr-lb-team">${teamSprites}</div>`;
+		buf += `</div>`;
+	});
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// View: Reset Confirm
+// ---------------------------------------------------------------------------
+function renderResetConfirmView(state: PokeRogueState): string {
+	let buf = `<div style="text-align:center;padding:20px 12px">`;
+	buf += `<div style="font-size:17px;font-weight:500;color:#f87171;margin-bottom:8px">Reset run?</div>`;
+	buf += `<div style="color:#aaa;font-size:12px;margin-bottom:18px">This will permanently end your current run on Floor <b>${state.floor}</b>.</div>`;
+	buf += `<div style="display:flex;gap:10px;justify-content:center">`;
+	buf += `<button name="send" value="/pokerogue quit" class="pr-btn danger" style="padding:8px 18px">Yes, reset run</button>`;
+	buf += `<button name="send" value="/pokerogue view main" class="pr-btn" style="padding:8px 18px">Cancel</button>`;
+	buf += `</div></div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// View: Game Over
+// ---------------------------------------------------------------------------
+function renderGameOverView(state: PokeRogueState): string {
+	return `<div class="pr-gameover">` +
+		`<div class="pr-go-title">Game over</div>` +
+		`<div class="pr-go-sub">Your run ended on Floor <b>${state.lastRunFloor || 1}</b> with <b>${state.lastRunStreaks || 0}</b> streaks.</div>` +
+		`<button name="send" value="/pokerogue newgame confirm" class="pr-newrun-btn">Start new run</button>` +
+		`</div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Starter / Add Pokémon choice
+// ---------------------------------------------------------------------------
+function renderPendingChoice(state: PokeRogueState): string {
+	const isStarter = state.pendingChoiceType === 'starter';
+	let buf = `<h2 class="pr-choice-heading">${isStarter ? 'Choose your starter!' : 'Milestone! Add to team:'}</h2>`;
+	buf += `<div class="pr-choice-grid">`;
+
+	for (let i = 0; i < state.pendingChoice!.length; i++) {
+		const sp = Dex.species.get(toID(state.pendingChoice![i]));
+		const isLeg = sp.tags?.some((t: string) => LEGENDARY_TAGS.has(t)) ?? false;
+		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const abilities = sp.abilities ?? {};
+		const ability = (abilities as unknown as Record<string, string>)['0'] || 'Unknown';
+
+		buf += `<div class="pr-choice-row${isLeg ? ' leg' : ''}">`;
+		buf += getSpriteWithBall(sp.id, 52);
+		buf += `<div style="flex:1;min-width:0">`;
+		buf += `<div class="pr-ct-name">${sp.name}`;
+		if (isLeg) buf += ` <span class="pr-legendary-badge">Legendary</span>`;
+		buf += `</div>`;
+		buf += `<div class="pr-types">${renderTypeBadge(sp.types ?? [])}</div>`;
+		buf += `<div class="pr-ct-stats">`;
+		for (const [stat, val] of Object.entries(bs)) {
+			buf += `<span>${stat.toUpperCase()} <b>${val}</b></span>`;
+		}
+		buf += `</div>`;
+		buf += `<div class="pr-ct-ability" style="margin-top:2px">Ability: <b>${Utils.escapeHTML(ability)}</b></div>`;
+		buf += `</div>`;
+		buf += `<button name="send" value="/pokerogue choose ${i + 1}" class="pr-pick-btn">Pick</button>`;
+		buf += `</div>`;
+	}
+
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Swap Pokémon
+// ---------------------------------------------------------------------------
+function renderPendingSwap(state: PokeRogueState): string {
+	const sp = Dex.species.get(toID(state.pendingSwap!.species));
+	let buf = `<h2 class="pr-choice-heading">Team is full!</h2>`;
+	buf += `<div style="text-align:center;margin-bottom:10px">`;
+	buf += getSpriteWithBall(sp.id, 64);
+	buf += `<div style="font-size:12px;color:#aaa;margin-top:6px"><b>Lv. ${state.pendingSwap!.level} ${sp.name}</b> wants to join. Replace a Pokémon:</div>`;
+	buf += `</div>`;
+	buf += `<div class="pr-choice-grid">`;
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		const spName = Dex.species.get(toID(mon.species)).name;
+		buf += `<div class="pr-choice-row" style="cursor:pointer">`;
+		buf += getSpriteWithBall(mon.species, 40);
+		buf += `<div style="flex:1"><span style="font-size:12px;font-weight:500">${spName}</span> <span style="font-size:10px;color:#888">Lv. ${mon.level}</span></div>`;
+		buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="pr-pick-btn">Replace</button>`;
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue swapmon skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Keep current team</button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Learn Move
+// ---------------------------------------------------------------------------
+function renderPendingMoves(state: PokeRogueState): string {
+	const pending = state.pendingMoves![0];
+	const mon = state.team[pending.pokemonIndex];
+	const sp = Dex.species.get(toID(mon.species));
+	const newMove = Dex.moves.get(pending.move);
+
+	let buf = `<h2 class="pr-choice-heading">New move!</h2>`;
+	buf += `<div style="text-align:center;margin-bottom:10px">`;
+	buf += getSpriteWithBall(sp.id, 60);
+	buf += `<div style="font-size:12px;color:#aaa;margin-top:6px"><b>${sp.name}</b> wants to learn <b style="color:#c4a8ff">${newMove.name}</b>.<br>Choose a move to forget:</div>`;
+	buf += `</div>`;
+	buf += `<div class="pr-choice-grid">`;
+	for (let i = 0; i < mon.moves.length; i++) {
+		const oldMove = Dex.moves.get(mon.moves[i]);
+		buf += `<div class="pr-choice-row" style="justify-content:space-between">`;
+		buf += `<div>`;
+		buf += `<div style="font-size:12px;font-weight:500">${oldMove.name}</div>`;
+		buf += `<div style="font-size:10px;color:#888">Type: ${oldMove.type} &nbsp;|&nbsp; BP: ${oldMove.basePower || '—'}</div>`;
+		buf += `</div>`;
+		buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="pr-pick-btn">Forget</button>`;
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue learnmove skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Keep old moves</button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Teach TM (choose Pokémon)
+// ---------------------------------------------------------------------------
+function renderTeachTM(state: PokeRogueState): string {
+	const moveName = Dex.moves.get(state.moveToLearn!).name;
+	let buf = `<h2 class="pr-choice-heading">Teach ${Utils.escapeHTML(moveName)}?</h2>`;
+	buf += `<div style="font-size:12px;color:#aaa;margin-bottom:8px">Choose a Pokémon to learn <b style="color:#c4a8ff">${Utils.escapeHTML(moveName)}</b>:</div>`;
+	buf += `<div class="pr-choice-grid">`;
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		const spName = Dex.species.get(toID(mon.species)).name;
+		const canLearn = Dex.species.getFullLearnset(toID(mon.species))
+			.some(l => Object.keys(l.learnset ?? {}).includes(toID(state.moveToLearn!)));
+		const alreadyKnows = mon.moves.includes(state.moveToLearn!);
+		const disabled = !canLearn || alreadyKnows;
+		const reason = alreadyKnows ? 'already knows' : !canLearn ? 'cannot learn' : '';
+
+		buf += `<div class="pr-choice-row" style="${disabled ? 'opacity:.45' : ''}">`;
+		buf += getSpriteWithBall(mon.species, 40);
+		buf += `<div style="flex:1"><span style="font-size:12px;font-weight:500">${spName}</span> <span style="font-size:10px;color:#888">Lv. ${mon.level}${reason ? ` (${reason})` : ''}</span></div>`;
+		if (!disabled) {
+			buf += `<button name="send" value="/pokerogue teachtm ${i + 1}" class="pr-pick-btn">Teach</button>`;
+		}
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue teachtm skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Cancel <small style="color:#888">(refund)</small></button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Item Pack choice
+// ---------------------------------------------------------------------------
+function renderItemOptions(state: PokeRogueState): string {
+	let buf = `<h2 class="pr-choice-heading">Choose an item!</h2>`;
+	buf += `<div class="pr-choice-grid">`;
+	for (const itemName of state.itemOptions!) {
+		const dexItem = Dex.items.get(itemName);
+		buf += `<div class="pr-choice-row" style="justify-content:space-between">`;
+		buf += `<div style="display:flex;align-items:center;gap:8px">`;
+		buf += getShopItemIcon(itemURLFormat(itemName), 24);
+		buf += `<span style="font-size:13px;font-weight:500">${Utils.escapeHTML(dexItem.name || itemName)}</span>`;
+		buf += `</div>`;
+		buf += `<button name="send" value="/pokerogue pickitem ${toID(itemName)}" class="pr-pick-btn">Pick</button>`;
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue pickitem skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Skip</button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Give item to Pokémon
+// ---------------------------------------------------------------------------
+function renderGiveItem(state: PokeRogueState): string {
+	const dexItem = Dex.items.get(state.pendingItemName!);
+	let buf = `<h2 class="pr-choice-heading">Give ${Utils.escapeHTML(dexItem.name || state.pendingItemName!)}?</h2>`;
+	buf += `<div style="font-size:12px;color:#aaa;margin-bottom:8px">Choose a Pokémon to give it to:</div>`;
+	buf += `<div class="pr-choice-grid">`;
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		const spName = Dex.species.get(toID(mon.species)).name;
+		buf += `<div class="pr-choice-row">`;
+		buf += getSpriteWithBall(mon.species, 40);
+		buf += `<div style="flex:1">`;
+		buf += `<span style="font-size:12px;font-weight:500">${spName}</span> <span style="font-size:10px;color:#888">Lv. ${mon.level}</span>`;
+		if (mon.heldItem) {
+			const held = Dex.items.get(mon.heldItem);
+			buf += `<div style="font-size:9px;color:#8ab4f8">Holds: ${Utils.escapeHTML(held.name || mon.heldItem)}</div>`;
+		}
+		buf += `</div>`;
+		buf += `<button name="send" value="/pokerogue giveitem ${i + 1}" class="pr-pick-btn">Give</button>`;
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue giveitem skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Cancel <small style="color:#888">(refund)</small></button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Pending: Consumable item (heal/revive/cure)
+// ---------------------------------------------------------------------------
+function renderConsumable(state: PokeRogueState): string {
+	const consumableKey = state.purchasedItem!;
+	const consumableItem = SHOP_ITEMS[consumableKey] ?? ROTATIONAL_ITEM_POOL[consumableKey];
+	const consumableType = state.pendingConsumableType!;
+
+	let buf = `<h2 class="pr-choice-heading">Use ${Utils.escapeHTML(consumableItem?.name ?? consumableKey)}?</h2>`;
+	buf += `<div style="font-size:12px;color:#aaa;margin-bottom:8px">Choose a Pokémon:</div>`;
+	buf += `<div class="pr-choice-grid">`;
+
+	for (let i = 0; i < state.team.length; i++) {
+		const mon = state.team[i];
+		const hp = mon.currentHp ?? 100;
+		let disabled = false;
+		let reason = '';
+
+		switch (consumableType) {
+		case 'healHP':
+			disabled = hp >= 100 || hp <= 0;
+			reason = hp <= 0 ? 'fainted' : hp >= 100 ? 'full HP' : '';
+			break;
+		case 'healPP': {
+			const allFull = (mon.ppLeft ?? []).every((v, idx) => {
+				const max = Math.floor((Dex.moves.get(mon.moves[idx]).pp ?? 5) * (8 / 5));
+				return v >= max;
+			});
+			disabled = allFull || hp <= 0;
+			reason = hp <= 0 ? 'fainted' : allFull ? 'PP full' : '';
+			break;
+		}
+		case 'revive':
+			disabled = hp > 0;
+			reason = hp > 0 ? 'not fainted' : '';
+			break;
+		case 'cureStatus':
+			disabled = !mon.status || hp <= 0;
+			reason = hp <= 0 ? 'fainted' : !mon.status ? 'no status' : '';
+			break;
+		}
+
+		const spName = Dex.species.get(toID(mon.species)).name;
+		buf += `<div class="pr-choice-row" style="${disabled ? 'opacity:.45' : ''}">`;
+		buf += getSpriteWithBall(mon.species, 40);
+		buf += `<div style="flex:1">`;
+		buf += `<span style="font-size:12px;font-weight:500">${spName}</span> <span style="font-size:10px;color:#888">Lv. ${mon.level}${reason ? ` (${reason})` : ''}</span>`;
+		if (mon.status) buf += `<div style="font-size:9px;color:#ff9800">${mon.status.toUpperCase()}</div>`;
+		if (hp < 100 && hp > 0) buf += `<div style="font-size:9px;color:#aaa">${hp}% HP</div>`;
+		buf += `</div>`;
+		if (!disabled) {
+			buf += `<button name="send" value="/pokerogue useshopitem ${i + 1}" class="pr-pick-btn">Use</button>`;
+		}
+		buf += `</div>`;
+	}
+	buf += `<button name="send" value="/pokerogue useshopitem skip" class="pr-btn" style="width:100%;padding:8px;margin-top:2px">Cancel</button>`;
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Header bar
+// ---------------------------------------------------------------------------
+function renderHeader(view: string, hasGameOver: boolean): string {
+	const titles: Record<string, string> = {
+		main: 'PokéRogue', shop: 'Shop', bag: 'Bag', top: 'Leaderboard',
+		resetconfirm: 'Reset run',
+	};
+	const title = titles[view] ?? 'PokéRogue';
+	let buf = `<div class="pr-header"><h2>${title}</h2>`;
+	if (view !== 'main' && !hasGameOver) {
+		buf += `<button name="send" value="/pokerogue view main" class="pr-btn" style="font-size:11px;padding:5px 10px">← Back</button>`;
+	}
+	buf += `</div>`;
+	return buf;
+}
+
+// ---------------------------------------------------------------------------
+// Main export
+// ---------------------------------------------------------------------------
+export function renderGamePage(state: PokeRogueState): string {
+	const view = (state as any).view || 'main';
+
+	let buf = renderCSS();
+
+	// Auto-refresh during battles or when a notification is pending
+	if (state.battleRoomId || state.notification) {
+		buf += `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">`;
+	}
+
+	buf += `<div class="pr">`;
+
+	// ── Game Over ──────────────────────────────────────────────────────────
+	if (state.gameOver) {
+		buf += renderHeader('main', true);
+		buf += `<div style="padding:0 14px 14px">`;
+		buf += renderGameOverView(state);
+		buf += `</div></div>`;
+		return buf;
+	}
+
+	// ── Reset confirm ──────────────────────────────────────────────────────
+	if (view === 'resetconfirm') {
+		buf += renderHeader('resetconfirm', false);
+		buf += `<div style="padding:0 14px 14px">`;
+		buf += renderResetConfirmView(state);
+		buf += `</div></div>`;
+		return buf;
+	}
+
+	// ── Leaderboard ────────────────────────────────────────────────────────
+	if (view === 'top') {
+		buf += renderHeader('top', false);
+		buf += `<div style="padding:0 14px 14px">`;
+		buf += renderTopView();
+		buf += `</div></div>`;
+		return buf;
+	}
+
+	// ── Header + notification (all remaining views) ────────────────────────
+	buf += renderHeader(view, false);
+	buf += `<div style="padding:0 14px 14px">`;
+	buf += renderNotification(state);
+
+	// ── Pending: starter / add choice ─────────────────────────────────────
 	if (state.pendingChoice?.length) {
-		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
-		buf += `<table class="pr-choice-table" style="width:100%"><tbody>`;
-		for (let i = 0; i < state.pendingChoice.length; i++) {
-			const sp = Dex.species.get(toID(state.pendingChoice[i]));
-			const isLeg = sp.tags?.some((t: string) => LEGENDARY_TAGS.has(t)) ?? false;
-			const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-			const abilities = sp.abilities ?? {};
-			const ability = (abilities as unknown as Record<string, string>)['0'] || 'Unknown';
-			buf += `<tr class="pr-choice-row${isLeg ? ' legendary' : ''}">`;
-			buf += `<td class="pr-ct-status">${getSpriteWithBall(sp.id, 64)}${isLeg ? '<div class="pr-legendary-badge">LEGENDARY</div>' : ''}</td>`;
-			buf += `<td class="pr-ct-info">`;
-			buf += `<div class="pr-ct-name">${sp.name}</div>`;
-			buf += `<div style="margin-bottom:4px">${renderTypeBadge(sp.types ?? [])}</div>`;
-			buf += `<div class="pr-ct-stats">`;
-			for (const [stat, val] of Object.entries(bs)) {
-				buf += `<span>${stat.toUpperCase()} <b>${val}</b></span>`;
-			}
-			buf += `</div>`;
-			buf += `<div class="pr-ct-ability">Ability: <b>${Utils.escapeHTML(ability)}</b></div>`;
-			buf += `</td>`;
-			buf += `<td class="pr-ct-action"><button name="send" value="/pokerogue choose ${i + 1}" class="button pr-pick-btn">Pick</button></td>`;
-			buf += `</tr>`;
-		}
-		return buf + `</tbody></table></div>`;
+		buf += renderPendingChoice(state);
+		buf += `</div></div>`;
+		return buf;
 	}
 
+	// ── Pending: swap Pokémon ──────────────────────────────────────────────
 	if (state.pendingSwap) {
-		const sp = Dex.species.get(toID(state.pendingSwap.species));
-		buf += `<h2 class="pr-choice-heading">Your team is full!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px">${getSpriteWithBall(sp.id, 80)}<br><b>Lv. ${state.pendingSwap.level}</b> wants to join your team!<br>Choose a Pokémon to replace:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (let i = 0; i < state.team.length; i++) {
-			const mon = state.team[i];
-			buf += `<button name="send" value="/pokerogue swapmon ${i + 1}" class="button" style="text-align:left;padding:8px;display:flex;align-items:center">`;
-			buf += `${getSprite(mon.species, 40)} <span style="margin-left:10px"><b>Replace</b> <small>(Lv. ${mon.level})</small></span></button>`;
-		}
-		buf += `<button name="send" value="/pokerogue swapmon skip" class="button" style="padding:8px;margin-top:8px"><b>Keep current team</b> <small>(Discard new Pokémon)</small></button>`;
+		buf += renderPendingSwap(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Pending: learn move ────────────────────────────────────────────────
 	if (state.pendingMoves?.length) {
-		const pending = state.pendingMoves[0];
-		const mon = state.team[pending.pokemonIndex];
-		const sp = Dex.species.get(toID(mon.species));
-		const newMove = Dex.moves.get(pending.move);
-		buf += `<h2 class="pr-choice-heading">New Move!</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px">${getSpriteWithBall(sp.id, 80)}<br>wants to learn <b>${newMove.name}</b>!<br>It already knows 4 moves. Choose a move to forget:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (let i = 0; i < mon.moves.length; i++) {
-			const oldMove = Dex.moves.get(mon.moves[i]);
-			buf += `<button name="send" value="/pokerogue learnmove ${i + 1}" class="button" style="text-align:left;padding:8px">`;
-			buf += `<b>Forget:</b> ${oldMove.name} <small>(Type: ${oldMove.type} | BP: ${oldMove.basePower || '-'})</small></button>`;
-		}
-		buf += `<button name="send" value="/pokerogue learnmove skip" class="button" style="padding:8px;margin-top:8px"><b>Keep old moves</b> <small>(Give up learning ${newMove.name})</small></button>`;
+		buf += renderPendingMoves(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Pending: teach TM ─────────────────────────────────────────────────
 	if (state.moveToLearn && state.purchasedItem && state.pokemonForTM === undefined) {
-		const moveName = Dex.moves.get(state.moveToLearn).name;
-		buf += `<h2 class="pr-choice-heading">Teach ${Utils.escapeHTML(moveName)}?</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px;color:#ccc">Choose a Pokémon to teach <b>${Utils.escapeHTML(moveName)}</b> to:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (let i = 0; i < state.team.length; i++) {
-			const mon = state.team[i];
-			const canLearn = Dex.species.getFullLearnset(toID(mon.species))
-				.some(l => Object.keys(l.learnset ?? {}).includes(toID(state.moveToLearn!)));
-			const alreadyKnows = mon.moves.includes(state.moveToLearn);
-			const disabled = !canLearn || alreadyKnows;
-			if (disabled) {
-				buf += `<button class="button" disabled style="padding:8px;text-align:left;opacity:0.5">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Dex.species.get(toID(mon.species)).name} Lv.${mon.level} ${alreadyKnows ? '(already knows)' : '(cannot learn)'}</span></button>`;
-			} else {
-				buf += `<button name="send" value="/pokerogue teachtm ${i + 1}" class="button" style="padding:8px;text-align:left">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Dex.species.get(toID(mon.species)).name} Lv.${mon.level}</span></button>`;
-			}
-		}
-		buf += `<button name="send" value="/pokerogue teachtm skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b> <small>(refund purchase)</small></button>`;
+		buf += renderTeachTM(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Pending: item pack pick ────────────────────────────────────────────
 	if (state.itemOptions?.length) {
-		buf += `<h2 class="pr-choice-heading">Choose an Item!</h2>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (const itemName of state.itemOptions) {
-			const dexItem = Dex.items.get(itemName);
-			buf += `<button name="send" value="/pokerogue pickitem ${toID(itemName)}" class="button" style="padding:8px;text-align:left">`;
-			buf += `${getShopItemIcon(itemURLFormat(itemName), 28)} <b>${Utils.escapeHTML(dexItem.name || itemName)}</b></button>`;
-		}
-		buf += `<button name="send" value="/pokerogue pickitem skip" class="button" style="padding:8px;margin-top:8px"><b>Skip</b></button>`;
+		buf += renderItemOptions(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Pending: give item ────────────────────────────────────────────────
 	if (state.pendingItemName) {
-		const dexItem = Dex.items.get(state.pendingItemName);
-		buf += `<h2 class="pr-choice-heading">Give ${Utils.escapeHTML(dexItem.name || state.pendingItemName)}?</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px;color:#ccc">Choose a Pokémon to give it to:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (let i = 0; i < state.team.length; i++) {
-			const mon = state.team[i];
-			buf += `<button name="send" value="/pokerogue giveitem ${i + 1}" class="button" style="padding:8px;text-align:left">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Dex.species.get(toID(mon.species)).name} Lv.${mon.level}${mon.heldItem ? ` (holds: ${mon.heldItem})` : ''}</span></button>`;
-		}
-		buf += `<button name="send" value="/pokerogue giveitem skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b> <small>(refund purchase)</small></button>`;
+		buf += renderGiveItem(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Pending: consumable (heal/revive/cure) ────────────────────────────
 	if (state.pendingConsumableType && state.purchasedItem) {
-		const consumableKey = state.purchasedItem;
-		const consumableItem = SHOP_ITEMS[consumableKey] ?? ROTATIONAL_ITEM_POOL[consumableKey];
-		const consumableType = state.pendingConsumableType;
-		const typeLabels: Record<string, string> = {
-			healHP: 'Restore HP',
-			healPP: 'Restore PP',
-			revive: 'Revive',
-			cureStatus: 'Cure Status',
-		};
-		buf += `<h2 class="pr-choice-heading">Use ${Utils.escapeHTML(consumableItem?.name ?? consumableKey)}?</h2>`;
-		buf += `<div style="text-align:center;margin-bottom:10px;color:#ccc">Choose a Pokémon:</div>`;
-		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
-		for (let i = 0; i < state.team.length; i++) {
-			const mon = state.team[i];
-			const hp = mon.currentHp ?? 100;
-			let disabled = false;
-			let reason = '';
-			switch (consumableType) {
-			case 'healHP':
-				disabled = hp >= 100 || hp <= 0;
-				reason = hp <= 0 ? '(fainted)' : '(full HP)';
-				break;
-			case 'healPP': {
-				const allFull = (mon.ppLeft ?? []).every((v, idx) => {
-					const max = Math.floor((Dex.moves.get(mon.moves[idx]).pp ?? 5) * (8 / 5));
-					return v >= max;
-				});
-				disabled = allFull || hp <= 0;
-				reason = hp <= 0 ? '(fainted)' : allFull ? '(PP full)' : '';
-				break;
-			}
-			case 'revive':
-				disabled = hp > 0;
-				reason = hp > 0 ? '(not fainted)' : '';
-				break;
-			case 'cureStatus':
-				disabled = !mon.status || hp <= 0;
-				reason = hp <= 0 ? '(fainted)' : !mon.status ? '(no status)' : '';
-				break;
-			}
-			const spName = Dex.species.get(toID(mon.species)).name;
-			if (disabled) {
-				buf += `<button class="button" disabled style="padding:8px;text-align:left;opacity:0.5">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Utils.escapeHTML(spName)} Lv.${mon.level} ${reason}</span></button>`;
-			} else {
-				buf += `<button name="send" value="/pokerogue useshopitem ${i + 1}" class="button" style="padding:8px;text-align:left">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Utils.escapeHTML(spName)} Lv.${mon.level}${mon.status ? ` [${mon.status.toUpperCase()}]` : ''}${hp < 100 ? ` (${hp}% HP)` : ''}</span></button>`;
-			}
-		}
-		buf += `<button name="send" value="/pokerogue useshopitem skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b></button>`;
+		buf += renderConsumable(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
+	// ── Named views ───────────────────────────────────────────────────────
 	if (view === 'shop') {
-		const bp = state.battlePoints ?? 0;
-		const streak = state.streaksWon ?? 0;
-		const timesRerolled = state.timesRerolled ?? 0;
-		const rerollCost = 2 + timesRerolled;
-
-		buf += `<div style="margin-bottom:8px"><b>BP:</b> ${bp} &nbsp;|&nbsp; <b>Streak:</b> ${streak}</div>`;
-
-		if (state.rotationalShop?.length) {
-			buf += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">`;
-			buf += `<b style="color:#c4a8ff">Current Deals</b>`;
-			if (rerollCost > bp) {
-				buf += `<button class="button" disabled style="font-size:10px">Reroll (${rerollCost} BP) — not enough!</button>`;
-			} else {
-				buf += `<button name="send" value="/pokerogue reroll" class="button" style="font-size:10px">Reroll Shop (${rerollCost} BP)</button>`;
-			}
-			buf += `</div>`;
-
-			const rotItems = state.rotationalShop
-				.map(key => [key, ROTATIONAL_ITEM_POOL[key]] as [string, typeof ROTATIONAL_ITEM_POOL[string]])
-				.filter(([, item]) => item && item.minStreak <= streak);
-
-			buf += renderShopTable(rotItems, bp, state.keyItems ?? [], 'pokerogue buy');
-			buf += `<br>`;
-		}
-
-		buf += `<b style="color:#8ab4f8">Always Available</b>`;
-		const permItems = Object.entries(SHOP_ITEMS)
-			.filter(([, item]) => item.minStreak <= streak) as Array<[string, typeof SHOP_ITEMS[string]]>;
-		buf += renderShopTable(permItems, bp, state.keyItems ?? [], 'pokerogue buy');
-
-		return buf + `<div style="margin-top:8px"><button name="send" value="/pokerogue view main" class="button">Back</button></div></div>`;
+		buf += renderShopView(state);
+		buf += `</div></div>`;
+		return buf;
 	}
 
 	if (view === 'bag') {
-		buf += `<h3 style="margin:0">Manage Team Items</h3>`;
-		buf += `<div class="pr-popup-team" style="margin-top:10px">`;
-		for (let i = 0; i < state.team.length; i++) {
-			const mon = state.team[i];
-			const spBag = Dex.species.get(toID(mon.species));
-			buf += `<div class="pr-popup-mon" style="align-items:center">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
-			buf += `<span style="font-size:11px;font-weight:bold;color:#e0d4ff">${spBag.name}</span> <span style="font-size:9px">${renderTypeBadge(spBag.types ?? [])}</span><br>`;
-			buf += `<span style="font-size:10px;color:#aaa">Lv.${mon.level}</span><br>`;
-			if (mon.heldItem) {
-				const dexHeld = Dex.items.get(mon.heldItem);
-				buf += `<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.2);padding:2px 4px;border-radius:4px;margin-top:4px">`;
-				buf += `<span style="font-size:10px;color:#8ab4f8">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</span>`;
-				buf += `<button name="send" value="/pokerogue unequip ${i + 1}" class="button" style="font-size:9px;padding:2px 4px">Take</button>`;
-				buf += `</div>`;
-			} else {
-				buf += `<div style="font-size:10px;color:#888;margin-top:4px">No Item</div>`;
-			}
-			buf += `</div></div>`;
-		}
+		buf += renderBagView(state);
 		buf += `</div></div>`;
 		return buf;
 	}
 
-	buf += `<div class="pr-popup-stats">Floor <b>${state.floor}</b> | BP <b>${state.battlePoints ?? 0}</b> | Streaks <b>${state.streaksWon ?? 0}</b></div>`;
-
-	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;
-	for (const mon of state.team) {
-		const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
-		const spData = Dex.species.get(toID(mon.species));
-		buf += `<div class="pr-popup-mon" style="align-items:center">${getSpriteWithBall(mon.species, 52)}<div style="flex:1">`;
-		buf += `<span style="font-size:12px;font-weight:bold;color:#e0d4ff">${spData.name}</span> `;
-		buf += `<span style="font-size:9px">${renderTypeBadge(spData.types ?? [])}</span><br>`;
-		buf += `<span style="font-size:11px">Lv.${mon.level} <small style="color:#888">(${expNeeded} EXP)</small></span>`;
-		buf += renderExpBar(mon);
-		buf += renderHpBar(mon);
-		if (mon.heldItem) {
-			const dexHeld = Dex.items.get(mon.heldItem);
-			buf += `<br><span style="font-size:10px;color:#8ab4f8">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</span>`;
-		}
-		buf += `</div></div>`;
-	}
-	buf += `</div>`;
-
-	buf += `<div class="pr-popup-actions" style="margin-top:12px;display:flex;gap:6px">`;
-	buf += `<button name="send" value="/pokerogue battle" class="button" style="flex:1.5">Start Battle</button>`;
-	buf += `<button name="send" value="/pokerogue view bag" class="button" style="flex:1">Bag</button>`;
-	buf += `<button name="send" value="/pokerogue view shop" class="button" style="flex:1">Shop</button>`;
-	buf += `<button name="send" value="/pokerogue view top" class="button" style="flex:1">Leaderboard</button>`;
-	buf += `<button name="send" value="/pokerogue view resetconfirm" class="button" style="color:#ff8080;flex:1">Reset Run</button>`;
-	buf += `</div>`;
-
-	return buf + `</div>`;
+	// ── Main ──────────────────────────────────────────────────────────────
+	buf += renderMainView(state);
+	buf += `</div></div>`;
+	return buf;
 }
