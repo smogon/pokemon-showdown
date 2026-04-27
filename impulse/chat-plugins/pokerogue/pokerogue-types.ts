@@ -60,6 +60,7 @@ export interface PokeRogueState {
 	lastRunFloor?: number;
 	lastRunStreaks?: number;
 	notification?: string;
+	pendingChoiceFloor?: number;
 }
 
 export type SavedData = Record<string, PokeRogueState>;
