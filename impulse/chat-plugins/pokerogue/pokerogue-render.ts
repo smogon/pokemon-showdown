@@ -183,18 +183,22 @@ function renderShopTable(
 	keyItems: string[],
 	cmd: string,
 ): string {
-	let buf = `<div class="pr-shop-grid">`;
+	let buf = `<div class="pr-table-container"><table class="pr-table">`;
+	buf += `<thead><tr><th colspan="2">Name</th><th>Description</th><th>Cost</th><th style="text-align:right">Action</th></tr></thead>`;
+	buf += `<tbody>`;
+	
 	for (const [key, item] of items) {
 		const isKey = (item as any).type === 'key';
 		const alreadyHas = isKey && keyItems.includes(item.name);
 		const canBuy = item.cost <= bp && !alreadyHas;
 
-		buf += `<div class="pr-shop-row">`;
-		buf += getShopItemIcon(item.icon, 20);
-		buf += `<span class="pr-shop-name">${Utils.escapeHTML(item.name)}</span>`;
-		buf += `<span class="pr-shop-desc">${Utils.escapeHTML(item.desc)}</span>`;
-		buf += `<span class="pr-shop-cost">${item.cost} BP</span>`;
-
+		buf += `<tr>`;
+		buf += `<td class="pr-td-icon">${getShopItemIcon(item.icon, 20)}</td>`;
+		buf += `<td class="pr-td-name">${Utils.escapeHTML(item.name)}</td>`;
+		buf += `<td class="pr-td-desc">${Utils.escapeHTML(item.desc)}</td>`;
+		buf += `<td class="pr-td-cost">${item.cost} BP</td>`;
+		buf += `<td class="pr-td-action">`;
+		
 		if (alreadyHas) {
 			buf += `<button class="pr-shop-buy" disabled>Owned</button>`;
 		} else if (!canBuy) {
@@ -202,9 +206,11 @@ function renderShopTable(
 		} else {
 			buf += `<button name="send" value="/${cmd} ${key}" class="pr-shop-buy">Buy</button>`;
 		}
-		buf += `</div>`;
+		
+		buf += `</td></tr>`;
 	}
-	buf += `</div>`;
+	
+	buf += `</tbody></table></div>`;
 	return buf;
 }
 
@@ -254,9 +260,9 @@ function renderShopView(state: PokeRogueState): string {
 		buf += `<div class="pr-section-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">`;
 		buf += `<span>Current deals</span>`;
 		if (rerollCost > bp) {
-			buf += `<button class="pr-shop-buy" disabled style="font-size:10px">Reroll (${rerollCost} BP)</button>`;
+			buf += `<button class="pr-shop-buy" disabled style="font-size:10px;padding:4px 8px">Reroll (${rerollCost} BP)</button>`;
 		} else {
-			buf += `<button name="send" value="/pokerogue reroll" class="pr-shop-buy" style="font-size:10px">Reroll (${rerollCost} BP)</button>`;
+			buf += `<button name="send" value="/pokerogue reroll" class="pr-shop-buy" style="font-size:10px;padding:4px 8px">Reroll (${rerollCost} BP)</button>`;
 		}
 		buf += `</div>`;
 
@@ -320,21 +326,26 @@ function renderTopView(): string {
 	if (!entries.length) return `<div style="text-align:center;padding:16px;color:#888;font-size:13px">No records yet!</div>`;
 
 	let buf = `<div class="pr-section-title">Top 100 runs</div>`;
-	buf += `<div style="display:flex;flex-direction:column;gap:4px">`;
+	buf += `<div class="pr-table-container"><table class="pr-table">`;
+	buf += `<thead><tr><th>Rank</th><th>Player</th><th>Floor</th><th>Team</th></tr></thead>`;
+	buf += `<tbody>`;
+	
 	entries.forEach(([userid, s], i) => {
 		const displayTeam = s.recordTeam?.length ? s.recordTeam : s.team;
 		const teamSprites = (displayTeam ?? [])
 			.slice(0, 6)
 			.map((m: PokemonEntry) => getSprite(m.species, 28))
 			.join('');
-		buf += `<div class="pr-lb-row">`;
-		buf += `<span class="pr-lb-rank">#${i + 1}</span>`;
-		buf += `<span class="pr-lb-name">${Impulse.nameColor(s.displayName || userid, true, true)}</span>`;
-		buf += `<span class="pr-lb-floor">Floor ${s.highestFloor}</span>`;
-		buf += `<div class="pr-lb-team">${teamSprites}</div>`;
-		buf += `</div>`;
+		
+		buf += `<tr>`;
+		buf += `<td class="pr-td-desc" style="font-weight:500;">#${i + 1}</td>`;
+		buf += `<td class="pr-td-name">${Impulse.nameColor(s.displayName || userid, true, true)}</td>`;
+		buf += `<td class="pr-td-desc" style="white-space:nowrap;">Floor ${s.highestFloor}</td>`;
+		buf += `<td><div class="pr-lb-team">${teamSprites}</div></td>`;
+		buf += `</tr>`;
 	});
-	buf += `</div>`;
+	
+	buf += `</tbody></table></div>`;
 	return buf;
 }
 
