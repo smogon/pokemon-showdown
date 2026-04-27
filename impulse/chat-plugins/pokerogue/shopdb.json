@@ -1,0 +1,106 @@
+{
+	"pokeballpack": {
+		"name": "Poke Ball Pack",
+		"icon": "Poke Ball",
+		"type": "pokemonPack",
+		"desc": "Pick 1 of 3 weak random Pokemon.",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"greatballpack": {
+		"name": "Great Ball Pack",
+		"icon": "Great Ball",
+		"type": "pokemonPack",
+		"desc": "Pick 1 of 3 decent random Pokemon.",
+		"cost": 8,
+		"minStreak": 1
+	},
+	"ultraballpack": {
+		"name": "Ultra Ball Pack",
+		"icon": "Ultra Ball",
+		"type": "pokemonPack",
+		"desc": "Pick 1 of 3 good random Pokemon.",
+		"cost": 12,
+		"minStreak": 3
+	},
+	"masterballpack": {
+		"name": "Master Ball Pack",
+		"icon": "Master Ball",
+		"type": "pokemonPack",
+		"desc": "Pick 1 of 3 strong random Pokemon.",
+		"cost": 25,
+		"minStreak": 7
+	},
+	"helditempack": {
+		"name": "Held Item Pack",
+		"icon": "Leftovers",
+		"type": "itemPack",
+		"desc": "Pick 1 of 3 held items to put on a Pokemon",
+		"cost": 3,
+		"minStreak": 0
+	},
+	"potion": {
+		"name": "Potion",
+		"icon": "Potion",
+		"type": "healHP",
+		"desc": "Heals 20 HP for a Pokemon.",
+		"cost": 3,
+		"minStreak": 0
+	},
+	"superpotion": {
+		"name": "Super Potion",
+		"icon": "Super Potion",
+		"type": "healHP",
+		"desc": "Heals 50 HP for a Pokemon.",
+		"cost": 5,
+		"minStreak": 1
+	},
+	"hyperpotion": {
+		"name": "Hyper Potion",
+		"icon": "Hyper Potion",
+		"type": "healHP",
+		"desc": "Heals 120 HP for a Pokemon.",
+		"cost": 7,
+		"minStreak": 4
+	},
+	"maxpotion": {
+		"name": "Max Potion",
+		"icon": "Max Potion",
+		"type": "healHP",
+		"desc": "Heals a pokemon's HP fully.",
+		"cost": 10,
+		"minStreak": 6
+	},
+	"maxelixir": {
+		"name": "Max Elixir",
+		"icon": "Max Elixir",
+		"type": "healPP",
+		"desc": "Restores the PP of all of a pokemon's moves.",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fullheal": {
+		"name": "Full Heal",
+		"icon": "Full Heal",
+		"type": "cureStatus",
+		"desc": "Cures a pokemon's status.",
+		"cost": 3,
+		"minStreak": 0
+	},
+	"revive": {
+		"name": "Revive",
+		"icon": "Revive",
+		"type": "revive",
+		"desc": "Revives a Pokemon to half its maximum HP.",
+		"cost": 7,
+		"minStreak": 1
+	},
+	"expall": {
+		"name": "Exp. All",
+		"icon": "Exp Share",
+		"type": "key",
+		"desc": "Gives 50% Exp. to all non-fainted Pokemon not in the battle",
+		"cost": 25,
+		"minStreak": 2
+	}
+}

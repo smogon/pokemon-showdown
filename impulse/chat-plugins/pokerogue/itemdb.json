@@ -1,0 +1,3042 @@
+{
+	"abilityshield": {
+		"name": "Ability Shield",
+		"desc": "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
+		"icon": "Ability Shield",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"abomasite": {
+		"name": "Abomasite",
+		"desc": "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
+		"icon": "Abomasite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"absolite": {
+		"name": "Absolite",
+		"desc": "If held by an Absol, this item allows it to Mega Evolve in battle.",
+		"icon": "Absolite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"absorbbulb": {
+		"name": "Absorb Bulb",
+		"desc": "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
+		"icon": "Absorb Bulb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"adamantcrystal": {
+		"name": "Adamant Crystal",
+		"desc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+		"icon": "Adamant Crystal",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"adamantorb": {
+		"name": "Adamant Orb",
+		"desc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+		"icon": "Adamant Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"adrenalineorb": {
+		"name": "Adrenaline Orb",
+		"desc": "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use.",
+		"icon": "Adrenaline Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"aerodactylite": {
+		"name": "Aerodactylite",
+		"desc": "If held by an Aerodactyl, this item allows it to Mega Evolve in battle.",
+		"icon": "Aerodactylite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"aggronite": {
+		"name": "Aggronite",
+		"desc": "If held by an Aggron, this item allows it to Mega Evolve in battle.",
+		"icon": "Aggronite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"aguavberry": {
+		"name": "Aguav Berry",
+		"desc": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
+		"icon": "Aguav Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"airballoon": {
+		"name": "Air Balloon",
+		"desc": "Holder is immune to Ground-type attacks. Pops when holder is hit.",
+		"icon": "Air Balloon",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"alakazite": {
+		"name": "Alakazite",
+		"desc": "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
+		"icon": "Alakazite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"aloraichiumz": {
+		"name": "Aloraichium Z",
+		"desc": "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
+		"icon": "Aloraichium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"altarianite": {
+		"name": "Altarianite",
+		"desc": "If held by an Altaria, this item allows it to Mega Evolve in battle.",
+		"icon": "Altarianite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ampharosite": {
+		"name": "Ampharosite",
+		"desc": "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
+		"icon": "Ampharosite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"apicotberry": {
+		"name": "Apicot Berry",
+		"desc": "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
+		"icon": "Apicot Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"aspearberry": {
+		"name": "Aspear Berry",
+		"desc": "Holder is cured if it is frozen. Single use.",
+		"icon": "Aspear Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"assaultvest": {
+		"name": "Assault Vest",
+		"desc": "Holder's Sp. Def is 1.5x, but it can only select damaging moves.",
+		"icon": "Assault Vest",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"audinite": {
+		"name": "Audinite",
+		"desc": "If held by an Audino, this item allows it to Mega Evolve in battle.",
+		"icon": "Audinite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"auspiciousarmor": {
+		"name": "Auspicious Armor",
+		"desc": "Evolves Charcadet into Armarouge when used.",
+		"icon": "Auspicious Armor",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"babiriberry": {
+		"name": "Babiri Berry",
+		"desc": "Halves damage taken from a supereffective Steel-type attack. Single use.",
+		"icon": "Babiri Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"banettite": {
+		"name": "Banettite",
+		"desc": "If held by a Banette, this item allows it to Mega Evolve in battle.",
+		"icon": "Banettite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"beastball": {
+		"name": "Beast Ball",
+		"desc": "A special Poke Ball designed to catch Ultra Beasts.",
+		"icon": "Beast Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"beedrillite": {
+		"name": "Beedrillite",
+		"desc": "If held by a Beedrill, this item allows it to Mega Evolve in battle.",
+		"icon": "Beedrillite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"berrysweet": {
+		"name": "Berry Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Berry Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"bignugget": {
+		"name": "Big Nugget",
+		"desc": "A big nugget of pure gold that gives off a lustrous gleam.",
+		"icon": "Big Nugget",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"bigroot": {
+		"name": "Big Root",
+		"desc": "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+		"icon": "Big Root",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"bindingband": {
+		"name": "Binding Band",
+		"desc": "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8.",
+		"icon": "Binding Band",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blackbelt": {
+		"name": "Black Belt",
+		"desc": "Holder's Fighting-type attacks have 1.2x power.",
+		"icon": "Black Belt",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blackglasses": {
+		"name": "Black Glasses",
+		"desc": "Holder's Dark-type attacks have 1.2x power.",
+		"icon": "Black Glasses",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blacksludge": {
+		"name": "Black Sludge",
+		"desc": "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
+		"icon": "Black Sludge",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blastoisinite": {
+		"name": "Blastoisinite",
+		"desc": "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
+		"icon": "Blastoisinite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blazikenite": {
+		"name": "Blazikenite",
+		"desc": "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
+		"icon": "Blazikenite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blueorb": {
+		"name": "Blue Orb",
+		"desc": "If held by a Kyogre, this item triggers its Primal Reversion in battle.",
+		"icon": "Blue Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"blunderpolicy": {
+		"name": "Blunder Policy",
+		"desc": "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
+		"icon": "Blunder Policy",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"boosterenergy": {
+		"name": "Booster Energy",
+		"desc": "Activates the Protosynthesis or Quark Drive Abilities. Single use.",
+		"icon": "Booster Energy",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"bottlecap": {
+		"name": "Bottle Cap",
+		"desc": "Used for Hyper Training. One of a Pokemon's stats is calculated with an IV of 31.",
+		"icon": "Bottle Cap",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"brightpowder": {
+		"name": "Bright Powder",
+		"desc": "The accuracy of attacks against the holder is 0.9x.",
+		"icon": "Bright Powder",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"buggem": {
+		"name": "Bug Gem",
+		"desc": "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
+		"icon": "Bug Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"bugmemory": {
+		"name": "Bug Memory",
+		"desc": "Holder's Multi-Attack is Bug type.",
+		"icon": "Bug Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"buginiumz": {
+		"name": "Buginium Z",
+		"desc": "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
+		"icon": "Buginium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"burndrive": {
+		"name": "Burn Drive",
+		"desc": "Holder's Techno Blast is Fire type.",
+		"icon": "Burn Drive",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cameruptite": {
+		"name": "Cameruptite",
+		"desc": "If held by a Camerupt, this item allows it to Mega Evolve in battle.",
+		"icon": "Cameruptite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cellbattery": {
+		"name": "Cell Battery",
+		"desc": "Raises holder's Attack by 1 if hit by an Electric-type attack. Single use.",
+		"icon": "Cell Battery",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"charcoal": {
+		"name": "Charcoal",
+		"desc": "Holder's Fire-type attacks have 1.2x power.",
+		"icon": "Charcoal",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"charizarditex": {
+		"name": "Charizardite X",
+		"desc": "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		"icon": "Charizardite X",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"charizarditey": {
+		"name": "Charizardite Y",
+		"desc": "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		"icon": "Charizardite Y",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chartiberry": {
+		"name": "Charti Berry",
+		"desc": "Halves damage taken from a supereffective Rock-type attack. Single use.",
+		"icon": "Charti Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cheriberry": {
+		"name": "Cheri Berry",
+		"desc": "Holder cures itself if it is paralyzed. Single use.",
+		"icon": "Cheri Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chestoberry": {
+		"name": "Chesto Berry",
+		"desc": "Holder wakes up if it is asleep. Single use.",
+		"icon": "Chesto Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chilanberry": {
+		"name": "Chilan Berry",
+		"desc": "Halves damage taken from a Normal-type attack. Single use.",
+		"icon": "Chilan Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chilldrive": {
+		"name": "Chill Drive",
+		"desc": "Holder's Techno Blast is Ice type.",
+		"icon": "Chill Drive",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chippedpot": {
+		"name": "Chipped Pot",
+		"desc": "Evolves Sinistea-Antique into Polteageist-Antique when used.",
+		"icon": "Chipped Pot",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"choiceband": {
+		"name": "Choice Band",
+		"desc": "Holder's Attack is 1.5x, but it can only select the first move it executes.",
+		"icon": "Choice Band",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"choicescarf": {
+		"name": "Choice Scarf",
+		"desc": "Holder's Speed is 1.5x, but it can only select the first move it executes.",
+		"icon": "Choice Scarf",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"choicespecs": {
+		"name": "Choice Specs",
+		"desc": "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes.",
+		"icon": "Choice Specs",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"chopleberry": {
+		"name": "Chople Berry",
+		"desc": "Halves damage taken from a supereffective Fighting-type attack. Single use.",
+		"icon": "Chople Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"clearamulet": {
+		"name": "Clear Amulet",
+		"desc": "Prevents other Pokemon from lowering the holder's stat stages.",
+		"icon": "Clear Amulet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cloversweet": {
+		"name": "Clover Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Clover Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cobaberry": {
+		"name": "Coba Berry",
+		"desc": "Halves damage taken from a supereffective Flying-type attack. Single use.",
+		"icon": "Coba Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"colburberry": {
+		"name": "Colbur Berry",
+		"desc": "Halves damage taken from a supereffective Dark-type attack. Single use.",
+		"icon": "Colbur Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"cornerstonemask": {
+		"name": "Cornerstone Mask",
+		"desc": "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		"icon": "Cornerstone Mask",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"covertcloak": {
+		"name": "Covert Cloak",
+		"desc": "Holder is not affected by the secondary effect of another Pokemon's attack.",
+		"icon": "Covert Cloak",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"crackedpot": {
+		"name": "Cracked Pot",
+		"desc": "Evolves Sinistea into Polteageist when used.",
+		"icon": "Cracked Pot",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"custapberry": {
+		"name": "Custap Berry",
+		"desc": "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
+		"icon": "Custap Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"damprock": {
+		"name": "Damp Rock",
+		"desc": "Holder's use of Rain Dance lasts 8 turns instead of 5.",
+		"icon": "Damp Rock",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"darkgem": {
+		"name": "Dark Gem",
+		"desc": "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
+		"icon": "Dark Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"darkmemory": {
+		"name": "Dark Memory",
+		"desc": "Holder's Multi-Attack is Dark type.",
+		"icon": "Dark Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"darkiniumz": {
+		"name": "Darkinium Z",
+		"desc": "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
+		"icon": "Darkinium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dawnstone": {
+		"name": "Dawn Stone",
+		"desc": "Evolves male Kirlia into Gallade and female Snorunt into Froslass when used.",
+		"icon": "Dawn Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"decidiumz": {
+		"name": "Decidium Z",
+		"desc": "If held by a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
+		"icon": "Decidium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"deepseascale": {
+		"name": "Deep Sea Scale",
+		"desc": "If held by a Clamperl, its Sp. Def is doubled. Evolves Clamperl into Gorebyss when traded.",
+		"icon": "Deep Sea Scale",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"deepseatooth": {
+		"name": "Deep Sea Tooth",
+		"desc": "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
+		"icon": "Deep Sea Tooth",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"destinyknot": {
+		"name": "Destiny Knot",
+		"desc": "If holder becomes infatuated, the other Pokemon also becomes infatuated.",
+		"icon": "Destiny Knot",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"diancite": {
+		"name": "Diancite",
+		"desc": "If held by a Diancie, this item allows it to Mega Evolve in battle.",
+		"icon": "Diancite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"diveball": {
+		"name": "Dive Ball",
+		"desc": "A Poke Ball that works especially well on Pokemon that live underwater.",
+		"icon": "Dive Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dousedrive": {
+		"name": "Douse Drive",
+		"desc": "Holder's Techno Blast is Water type.",
+		"icon": "Douse Drive",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dracoplate": {
+		"name": "Draco Plate",
+		"desc": "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
+		"icon": "Draco Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dragonfang": {
+		"name": "Dragon Fang",
+		"desc": "Holder's Dragon-type attacks have 1.2x power.",
+		"icon": "Dragon Fang",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dragongem": {
+		"name": "Dragon Gem",
+		"desc": "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
+		"icon": "Dragon Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dragonmemory": {
+		"name": "Dragon Memory",
+		"desc": "Holder's Multi-Attack is Dragon type.",
+		"icon": "Dragon Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dragonscale": {
+		"name": "Dragon Scale",
+		"desc": "Evolves Seadra into Kingdra when traded.",
+		"icon": "Dragon Scale",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dragoniumz": {
+		"name": "Dragonium Z",
+		"desc": "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
+		"icon": "Dragonium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dreadplate": {
+		"name": "Dread Plate",
+		"desc": "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
+		"icon": "Dread Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dreamball": {
+		"name": "Dream Ball",
+		"desc": "A Poke Ball that makes it easier to catch wild Pokémon while they're asleep.",
+		"icon": "Dream Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"dubiousdisc": {
+		"name": "Dubious Disc",
+		"desc": "Evolves Porygon2 into Porygon-Z when traded.",
+		"icon": "Dubious Disc",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"duskball": {
+		"name": "Dusk Ball",
+		"desc": "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
+		"icon": "Dusk Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"duskstone": {
+		"name": "Dusk Stone",
+		"desc": "Evolves Murkrow into Honchkrow, Misdreavus into Mismagius, Lampent into Chandelure, and Doublade into Aegislash when used.",
+		"icon": "Dusk Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"earthplate": {
+		"name": "Earth Plate",
+		"desc": "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
+		"icon": "Earth Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"eeviumz": {
+		"name": "Eevium Z",
+		"desc": "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
+		"icon": "Eevium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ejectbutton": {
+		"name": "Eject Button",
+		"desc": "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
+		"icon": "Eject Button",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ejectpack": {
+		"name": "Eject Pack",
+		"desc": "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
+		"icon": "Eject Pack",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"electirizer": {
+		"name": "Electirizer",
+		"desc": "Evolves Electabuzz into Electivire when traded.",
+		"icon": "Electirizer",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"electricgem": {
+		"name": "Electric Gem",
+		"desc": "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
+		"icon": "Electric Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"electricmemory": {
+		"name": "Electric Memory",
+		"desc": "Holder's Multi-Attack is Electric type.",
+		"icon": "Electric Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"electricseed": {
+		"name": "Electric Seed",
+		"desc": "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use.",
+		"icon": "Electric Seed",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"electriumz": {
+		"name": "Electrium Z",
+		"desc": "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
+		"icon": "Electrium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"enigmaberry": {
+		"name": "Enigma Berry",
+		"desc": "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
+		"icon": "Enigma Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"eviolite": {
+		"name": "Eviolite",
+		"desc": "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
+		"icon": "Eviolite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"expertbelt": {
+		"name": "Expert Belt",
+		"desc": "Holder's attacks that are super effective against the target do 1.2x damage.",
+		"icon": "Expert Belt",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fairiumz": {
+		"name": "Fairium Z",
+		"desc": "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
+		"icon": "Fairium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fairyfeather": {
+		"name": "Fairy Feather",
+		"desc": "Holder's Fairy-type attacks have 1.2x power.",
+		"icon": "Fairy Feather",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fairygem": {
+		"name": "Fairy Gem",
+		"desc": "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
+		"icon": "Fairy Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fairymemory": {
+		"name": "Fairy Memory",
+		"desc": "Holder's Multi-Attack is Fairy type.",
+		"icon": "Fairy Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fastball": {
+		"name": "Fast Ball",
+		"desc": "A Poke Ball that makes it easier to catch Pokemon which are quick to run away.",
+		"icon": "Fast Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fightinggem": {
+		"name": "Fighting Gem",
+		"desc": "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
+		"icon": "Fighting Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fightingmemory": {
+		"name": "Fighting Memory",
+		"desc": "Holder's Multi-Attack is Fighting type.",
+		"icon": "Fighting Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fightiniumz": {
+		"name": "Fightinium Z",
+		"desc": "If holder has a Fighting move, this item allows it to use a Fighting Z-Move.",
+		"icon": "Fightinium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"figyberry": {
+		"name": "Figy Berry",
+		"desc": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
+		"icon": "Figy Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"firegem": {
+		"name": "Fire Gem",
+		"desc": "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
+		"icon": "Fire Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"firememory": {
+		"name": "Fire Memory",
+		"desc": "Holder's Multi-Attack is Fire type.",
+		"icon": "Fire Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"firestone": {
+		"name": "Fire Stone",
+		"desc": "Evolves Vulpix into Ninetales, Growlithe into Arcanine, Eevee into Flareon, and Pansear into Simisear when used.",
+		"icon": "Fire Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"firiumz": {
+		"name": "Firium Z",
+		"desc": "If holder has a Fire move, this item allows it to use a Fire Z-Move.",
+		"icon": "Firium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"fistplate": {
+		"name": "Fist Plate",
+		"desc": "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
+		"icon": "Fist Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flameorb": {
+		"name": "Flame Orb",
+		"desc": "At the end of every turn, this item attempts to burn the holder.",
+		"icon": "Flame Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flameplate": {
+		"name": "Flame Plate",
+		"desc": "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
+		"icon": "Flame Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"floatstone": {
+		"name": "Float Stone",
+		"desc": "Holder's weight is halved.",
+		"icon": "Float Stone",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flowersweet": {
+		"name": "Flower Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Flower Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flyinggem": {
+		"name": "Flying Gem",
+		"desc": "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
+		"icon": "Flying Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flyingmemory": {
+		"name": "Flying Memory",
+		"desc": "Holder's Multi-Attack is Flying type.",
+		"icon": "Flying Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"flyiniumz": {
+		"name": "Flyinium Z",
+		"desc": "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
+		"icon": "Flyinium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"focusband": {
+		"name": "Focus Band",
+		"desc": "Holder has a 10% chance to survive an attack that would KO it with 1 HP.",
+		"icon": "Focus Band",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"focussash": {
+		"name": "Focus Sash",
+		"desc": "If holder's HP is full, will survive an attack that would KO it with 1 HP. Single use.",
+		"icon": "Focus Sash",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"friendball": {
+		"name": "Friend Ball",
+		"desc": "A Poke Ball that makes caught Pokemon more friendly.",
+		"icon": "Friend Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"galaricacuff": {
+		"name": "Galarica Cuff",
+		"desc": "Evolves Galarian Slowpoke into Galarian Slowbro when used.",
+		"icon": "Galarica Cuff",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"galaricawreath": {
+		"name": "Galarica Wreath",
+		"desc": "Evolves Galarian Slowpoke into Galarian Slowking when used.",
+		"icon": "Galarica Wreath",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"galladite": {
+		"name": "Galladite",
+		"desc": "If held by a Gallade, this item allows it to Mega Evolve in battle.",
+		"icon": "Galladite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ganlonberry": {
+		"name": "Ganlon Berry",
+		"desc": "Raises holder's Defense by 1 stage when at 1/4 max HP or less. Single use.",
+		"icon": "Ganlon Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"garchompite": {
+		"name": "Garchompite",
+		"desc": "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
+		"icon": "Garchompite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"gardevoirite": {
+		"name": "Gardevoirite",
+		"desc": "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
+		"icon": "Gardevoirite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"gengarite": {
+		"name": "Gengarite",
+		"desc": "If held by a Gengar, this item allows it to Mega Evolve in battle.",
+		"icon": "Gengarite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ghostgem": {
+		"name": "Ghost Gem",
+		"desc": "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
+		"icon": "Ghost Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ghostmemory": {
+		"name": "Ghost Memory",
+		"desc": "Holder's Multi-Attack is Ghost type.",
+		"icon": "Ghost Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ghostiumz": {
+		"name": "Ghostium Z",
+		"desc": "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
+		"icon": "Ghostium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"glalitite": {
+		"name": "Glalitite",
+		"desc": "If held by a Glalie, this item allows it to Mega Evolve in battle.",
+		"icon": "Glalitite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"goldbottlecap": {
+		"name": "Gold Bottle Cap",
+		"desc": "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
+		"icon": "Gold Bottle Cap",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"grassgem": {
+		"name": "Grass Gem",
+		"desc": "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
+		"icon": "Grass Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"grassmemory": {
+		"name": "Grass Memory",
+		"desc": "Holder's Multi-Attack is Grass type.",
+		"icon": "Grass Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"grassiumz": {
+		"name": "Grassium Z",
+		"desc": "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
+		"icon": "Grassium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"grassyseed": {
+		"name": "Grassy Seed",
+		"desc": "If the terrain is Grassy Terrain, raises holder's Defense by 1 stage. Single use.",
+		"icon": "Grassy Seed",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"greatball": {
+		"name": "Great Ball",
+		"desc": "A high-performance Ball that provides a higher catch rate than a Poke Ball.",
+		"icon": "Great Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"grepaberry": {
+		"name": "Grepa Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Grepa Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"gripclaw": {
+		"name": "Grip Claw",
+		"desc": "Holder's partial-trapping moves always last 7 turns.",
+		"icon": "Grip Claw",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"griseouscore": {
+		"name": "Griseous Core",
+		"desc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+		"icon": "Griseous Core",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"griseousorb": {
+		"name": "Griseous Orb",
+		"desc": "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+		"icon": "Griseous Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"groundgem": {
+		"name": "Ground Gem",
+		"desc": "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
+		"icon": "Ground Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"groundmemory": {
+		"name": "Ground Memory",
+		"desc": "Holder's Multi-Attack is Ground type.",
+		"icon": "Ground Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"groundiumz": {
+		"name": "Groundium Z",
+		"desc": "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
+		"icon": "Groundium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"gyaradosite": {
+		"name": "Gyaradosite",
+		"desc": "If held by a Gyarados, this item allows it to Mega Evolve in battle.",
+		"icon": "Gyaradosite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"habanberry": {
+		"name": "Haban Berry",
+		"desc": "Halves damage taken from a supereffective Dragon-type attack. Single use.",
+		"icon": "Haban Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"hardstone": {
+		"name": "Hard Stone",
+		"desc": "Holder's Rock-type attacks have 1.2x power.",
+		"icon": "Hard Stone",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"healball": {
+		"name": "Heal Ball",
+		"desc": "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
+		"icon": "Heal Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"hearthflamemask": {
+		"name": "Hearthflame Mask",
+		"desc": "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		"icon": "Hearthflame Mask",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"heatrock": {
+		"name": "Heat Rock",
+		"desc": "Holder's use of Sunny Day lasts 8 turns instead of 5.",
+		"icon": "Heat Rock",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"heavyball": {
+		"name": "Heavy Ball",
+		"desc": "A Poke Ball for catching very heavy Pokemon.",
+		"icon": "Heavy Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"heavydutyboots": {
+		"name": "Heavy-Duty Boots",
+		"desc": "When switching in, the holder is unaffected by hazards on its side of the field.",
+		"icon": "Heavy-Duty Boots",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"heracronite": {
+		"name": "Heracronite",
+		"desc": "If held by a Heracross, this item allows it to Mega Evolve in battle.",
+		"icon": "Heracronite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"hondewberry": {
+		"name": "Hondew Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Hondew Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"houndoominite": {
+		"name": "Houndoominite",
+		"desc": "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
+		"icon": "Houndoominite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"iapapaberry": {
+		"name": "Iapapa Berry",
+		"desc": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
+		"icon": "Iapapa Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"icegem": {
+		"name": "Ice Gem",
+		"desc": "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
+		"icon": "Ice Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"icememory": {
+		"name": "Ice Memory",
+		"desc": "Holder's Multi-Attack is Ice type.",
+		"icon": "Ice Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"icestone": {
+		"name": "Ice Stone",
+		"desc": "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, Eevee into Glaceon, and Galarian Darumaka into Galarian Darmanitan when used.",
+		"icon": "Ice Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"icicleplate": {
+		"name": "Icicle Plate",
+		"desc": "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
+		"icon": "Icicle Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"iciumz": {
+		"name": "Icium Z",
+		"desc": "If holder has an Ice move, this item allows it to use an Ice Z-Move.",
+		"icon": "Icium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"icyrock": {
+		"name": "Icy Rock",
+		"desc": "Holder's use of Snowscape lasts 8 turns instead of 5.",
+		"icon": "Icy Rock",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"inciniumz": {
+		"name": "Incinium Z",
+		"desc": "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
+		"icon": "Incinium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"insectplate": {
+		"name": "Insect Plate",
+		"desc": "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
+		"icon": "Insect Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ironball": {
+		"name": "Iron Ball",
+		"desc": "Holder is grounded, Speed halved. If Flying type, takes neutral Ground damage.",
+		"icon": "Iron Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ironplate": {
+		"name": "Iron Plate",
+		"desc": "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
+		"icon": "Iron Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"jabocaberry": {
+		"name": "Jaboca Berry",
+		"desc": "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
+		"icon": "Jaboca Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kasibberry": {
+		"name": "Kasib Berry",
+		"desc": "Halves damage taken from a supereffective Ghost-type attack. Single use.",
+		"icon": "Kasib Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kebiaberry": {
+		"name": "Kebia Berry",
+		"desc": "Halves damage taken from a supereffective Poison-type attack. Single use.",
+		"icon": "Kebia Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"keeberry": {
+		"name": "Kee Berry",
+		"desc": "Raises holder's Defense by 1 stage after it is hit by a physical attack. Single use.",
+		"icon": "Kee Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kelpsyberry": {
+		"name": "Kelpsy Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Kelpsy Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kangaskhanite": {
+		"name": "Kangaskhanite",
+		"desc": "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
+		"icon": "Kangaskhanite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kingsrock": {
+		"name": "King's Rock",
+		"desc": "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
+		"icon": "King's Rock",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"kommoniumz": {
+		"name": "Kommonium Z",
+		"desc": "If held by a Kommo-o with Clanging Scales, it can use Clangorous Soulblaze.",
+		"icon": "Kommonium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"laggingtail": {
+		"name": "Lagging Tail",
+		"desc": "Holder moves last in its priority bracket.",
+		"icon": "Lagging Tail",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lansatberry": {
+		"name": "Lansat Berry",
+		"desc": "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use.",
+		"icon": "Lansat Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"latiasite": {
+		"name": "Latiasite",
+		"desc": "If held by a Latias, this item allows it to Mega Evolve in battle.",
+		"icon": "Latiasite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"latiosite": {
+		"name": "Latiosite",
+		"desc": "If held by a Latios, this item allows it to Mega Evolve in battle.",
+		"icon": "Latiosite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"leafstone": {
+		"name": "Leaf Stone",
+		"desc": "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Eevee into Leafeon, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
+		"icon": "Leaf Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"leek": {
+		"name": "Leek",
+		"desc": "If held by a Farfetch’d or Sirfetch’d, its critical hit ratio is raised by 2 stages.",
+		"icon": "Leek",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"leftovers": {
+		"name": "Leftovers",
+		"desc": "At the end of every turn, holder restores 1/16 of its max HP.",
+		"icon": "Leftovers",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"leppaberry": {
+		"name": "Leppa Berry",
+		"desc": "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
+		"icon": "Leppa Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"levelball": {
+		"name": "Level Ball",
+		"desc": "A Poke Ball for catching Pokemon that are a lower level than your own.",
+		"icon": "Level Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"liechiberry": {
+		"name": "Liechi Berry",
+		"desc": "Raises holder's Attack by 1 stage when at 1/4 max HP or less. Single use.",
+		"icon": "Liechi Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lifeorb": {
+		"name": "Life Orb",
+		"desc": "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
+		"icon": "Life Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lightball": {
+		"name": "Light Ball",
+		"desc": "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+		"icon": "Light Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lightclay": {
+		"name": "Light Clay",
+		"desc": "Holder's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
+		"icon": "Light Clay",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"loadeddice": {
+		"name": "Loaded Dice",
+		"desc": "The holder's moves that normally hit 2 to 5 times instead hit 4 or 5 times. If the first hit is successful, the holder's use of Triple Kick or Triple Axel hits 3 times, and Population Bomb hits 4 to 10 times, at random.",
+		"icon": "Loaded Dice",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lopunnite": {
+		"name": "Lopunnite",
+		"desc": "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
+		"icon": "Lopunnite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"loveball": {
+		"name": "Love Ball",
+		"desc": "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon.",
+		"icon": "Love Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lovesweet": {
+		"name": "Love Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Love Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lucarionite": {
+		"name": "Lucarionite",
+		"desc": "If held by a Lucario, this item allows it to Mega Evolve in battle.",
+		"icon": "Lucarionite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"luckypunch": {
+		"name": "Lucky Punch",
+		"desc": "If held by a Chansey, its critical hit ratio is raised by 2 stages.",
+		"icon": "Lucky Punch",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lumberry": {
+		"name": "Lum Berry",
+		"desc": "Holder cures itself if it has a non-volatile status or is confused. Single use.",
+		"icon": "Lum Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"luminousmoss": {
+		"name": "Luminous Moss",
+		"desc": "Raises holder's Sp. Def by 1 stage if hit by a Water-type attack. Single use.",
+		"icon": "Luminous Moss",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lunaliumz": {
+		"name": "Lunalium Z",
+		"desc": "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move.",
+		"icon": "Lunalium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lureball": {
+		"name": "Lure Ball",
+		"desc": "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
+		"icon": "Lure Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lustrousglobe": {
+		"name": "Lustrous Globe",
+		"desc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		"icon": "Lustrous Globe",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lustrousorb": {
+		"name": "Lustrous Orb",
+		"desc": "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		"icon": "Lustrous Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"luxuryball": {
+		"name": "Luxury Ball",
+		"desc": "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.",
+		"icon": "Luxury Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"lycaniumz": {
+		"name": "Lycanium Z",
+		"desc": "If held by a Lycanroc forme with Stone Edge, it can use Splintered Stormshards.",
+		"icon": "Lycanium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"magmarizer": {
+		"name": "Magmarizer",
+		"desc": "Evolves Magmar into Magmortar when traded.",
+		"icon": "Magmarizer",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"magnet": {
+		"name": "Magnet",
+		"desc": "Holder's Electric-type attacks have 1.2x power.",
+		"icon": "Magnet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"magoberry": {
+		"name": "Mago Berry",
+		"desc": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
+		"icon": "Mago Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"maliciousarmor": {
+		"name": "Malicious Armor",
+		"desc": "Evolves Charcadet into Ceruledge when used.",
+		"icon": "Malicious Armor",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"manectite": {
+		"name": "Manectite",
+		"desc": "If held by a Manectric, this item allows it to Mega Evolve in battle.",
+		"icon": "Manectite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"marangaberry": {
+		"name": "Maranga Berry",
+		"desc": "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
+		"icon": "Maranga Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"marshadiumz": {
+		"name": "Marshadium Z",
+		"desc": "If held by Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
+		"icon": "Marshadium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"masterball": {
+		"name": "Master Ball",
+		"desc": "The best Ball with the ultimate performance. It will catch any wild Pokemon.",
+		"icon": "Master Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"masterpieceteacup": {
+		"name": "Masterpiece Teacup",
+		"desc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
+		"icon": "Masterpiece Teacup",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mawilite": {
+		"name": "Mawilite",
+		"desc": "If held by a Mawile, this item allows it to Mega Evolve in battle.",
+		"icon": "Mawilite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"meadowplate": {
+		"name": "Meadow Plate",
+		"desc": "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
+		"icon": "Meadow Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"medichamite": {
+		"name": "Medichamite",
+		"desc": "If held by a Medicham, this item allows it to Mega Evolve in battle.",
+		"icon": "Medichamite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mentalherb": {
+		"name": "Mental Herb",
+		"desc": "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
+		"icon": "Mental Herb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"metagrossite": {
+		"name": "Metagrossite",
+		"desc": "If held by a Metagross, this item allows it to Mega Evolve in battle.",
+		"icon": "Metagrossite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"metalalloy": {
+		"name": "Metal Alloy",
+		"desc": "Evolves Duraludon into Archaludon when used.",
+		"icon": "Metal Alloy",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"metalcoat": {
+		"name": "Metal Coat",
+		"desc": "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		"icon": "Metal Coat",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"metalpowder": {
+		"name": "Metal Powder",
+		"desc": "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
+		"icon": "Metal Powder",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"metronome": {
+		"name": "Metronome",
+		"desc": "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+		"icon": "Metronome",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mewniumz": {
+		"name": "Mewnium Z",
+		"desc": "If held by a Mew with Psychic, it can use Genesis Supernova.",
+		"icon": "Mewnium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mewtwonitex": {
+		"name": "Mewtwonite X",
+		"desc": "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		"icon": "Mewtwonite X",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mewtwonitey": {
+		"name": "Mewtwonite Y",
+		"desc": "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		"icon": "Mewtwonite Y",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"micleberry": {
+		"name": "Micle Berry",
+		"desc": "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
+		"icon": "Micle Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mimikiumz": {
+		"name": "Mimikium Z",
+		"desc": "If held by a Mimikyu with Play Rough, it can use Let's Snuggle Forever.",
+		"icon": "Mimikium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mindplate": {
+		"name": "Mind Plate",
+		"desc": "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
+		"icon": "Mind Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"miracleseed": {
+		"name": "Miracle Seed",
+		"desc": "Holder's Grass-type attacks have 1.2x power.",
+		"icon": "Miracle Seed",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mirrorherb": {
+		"name": "Mirror Herb",
+		"desc": "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
+		"icon": "Mirror Herb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mistyseed": {
+		"name": "Misty Seed",
+		"desc": "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use.",
+		"icon": "Misty Seed",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"moonball": {
+		"name": "Moon Ball",
+		"desc": "A Poke Ball for catching Pokemon that evolve using the Moon Stone.",
+		"icon": "Moon Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"moonstone": {
+		"name": "Moon Stone",
+		"desc": "Evolves Nidorina into Nidoqueen, Nidorino into Nidoking, Clefairy into Clefable, Jigglypuff into Wigglytuff, Skitty into Delcatty, and Munna into Musharna when used.",
+		"icon": "Moon Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"muscleband": {
+		"name": "Muscle Band",
+		"desc": "Holder's physical attacks have 1.1x power.",
+		"icon": "Muscle Band",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"mysticwater": {
+		"name": "Mystic Water",
+		"desc": "Holder's Water-type attacks have 1.2x power.",
+		"icon": "Mystic Water",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"nestball": {
+		"name": "Nest Ball",
+		"desc": "A Poke Ball that works especially well on weaker Pokemon in the wild.",
+		"icon": "Nest Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"netball": {
+		"name": "Net Ball",
+		"desc": "A Poke Ball that works especially well on Water- and Bug-type Pokemon.",
+		"icon": "Net Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"nevermeltice": {
+		"name": "Never-Melt Ice",
+		"desc": "Holder's Ice-type attacks have 1.2x power.",
+		"icon": "Never-Melt Ice",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"normalgem": {
+		"name": "Normal Gem",
+		"desc": "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
+		"icon": "Normal Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"normaliumz": {
+		"name": "Normalium Z",
+		"desc": "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
+		"icon": "Normalium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"occaberry": {
+		"name": "Occa Berry",
+		"desc": "Halves damage taken from a supereffective Fire-type attack. Single use.",
+		"icon": "Occa Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"oranberry": {
+		"name": "Oran Berry",
+		"desc": "Restores 10 HP when at 1/2 max HP or less. Single use.",
+		"icon": "Oran Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ovalstone": {
+		"name": "Oval Stone",
+		"desc": "Evolves Happiny into Chansey when held and leveled up during the day.",
+		"icon": "Oval Stone",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"passhoberry": {
+		"name": "Passho Berry",
+		"desc": "Halves damage taken from a supereffective Water-type attack. Single use.",
+		"icon": "Passho Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"payapaberry": {
+		"name": "Payapa Berry",
+		"desc": "Halves damage taken from a supereffective Psychic-type attack. Single use.",
+		"icon": "Payapa Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pechaberry": {
+		"name": "Pecha Berry",
+		"desc": "Holder is cured if it is poisoned. Single use.",
+		"icon": "Pecha Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"persimberry": {
+		"name": "Persim Berry",
+		"desc": "Holder is cured if it is confused. Single use.",
+		"icon": "Persim Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"petayaberry": {
+		"name": "Petaya Berry",
+		"desc": "Raises holder's Sp. Atk by 1 stage when at 1/4 max HP or less. Single use.",
+		"icon": "Petaya Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pidgeotite": {
+		"name": "Pidgeotite",
+		"desc": "If held by a Pidgeot, this item allows it to Mega Evolve in battle.",
+		"icon": "Pidgeotite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pikaniumz": {
+		"name": "Pikanium Z",
+		"desc": "If held by a Pikachu with Volt Tackle, it can use Catastropika.",
+		"icon": "Pikanium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pikashuniumz": {
+		"name": "Pikashunium Z",
+		"desc": "If held by cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
+		"icon": "Pikashunium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pinsirite": {
+		"name": "Pinsirite",
+		"desc": "If held by a Pinsir, this item allows it to Mega Evolve in battle.",
+		"icon": "Pinsirite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pixieplate": {
+		"name": "Pixie Plate",
+		"desc": "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
+		"icon": "Pixie Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"poisonbarb": {
+		"name": "Poison Barb",
+		"desc": "Holder's Poison-type attacks have 1.2x power.",
+		"icon": "Poison Barb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"poisongem": {
+		"name": "Poison Gem",
+		"desc": "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
+		"icon": "Poison Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"poisonmemory": {
+		"name": "Poison Memory",
+		"desc": "Holder's Multi-Attack is Poison type.",
+		"icon": "Poison Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"poisoniumz": {
+		"name": "Poisonium Z",
+		"desc": "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
+		"icon": "Poisonium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pokeball": {
+		"name": "Poke Ball",
+		"desc": "A device for catching wild Pokemon. It is designed as a capsule system.",
+		"icon": "Poke Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"pomegberry": {
+		"name": "Pomeg Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Pomeg Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"poweranklet": {
+		"name": "Power Anklet",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Anklet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerband": {
+		"name": "Power Band",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Band",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerbelt": {
+		"name": "Power Belt",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Belt",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerbracer": {
+		"name": "Power Bracer",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Bracer",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerherb": {
+		"name": "Power Herb",
+		"desc": "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
+		"icon": "Power Herb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerlens": {
+		"name": "Power Lens",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Lens",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"powerweight": {
+		"name": "Power Weight",
+		"desc": "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
+		"icon": "Power Weight",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"premierball": {
+		"name": "Premier Ball",
+		"desc": "A rare Poke Ball that has been crafted to commemorate an event.",
+		"icon": "Premier Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"primariumz": {
+		"name": "Primarium Z",
+		"desc": "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
+		"icon": "Primarium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"prismscale": {
+		"name": "Prism Scale",
+		"desc": "Evolves Feebas into Milotic when traded.",
+		"icon": "Prism Scale",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"protectivepads": {
+		"name": "Protective Pads",
+		"desc": "Holder's moves are protected from adverse contact effects, except Pickpocket.",
+		"icon": "Protective Pads",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"protector": {
+		"name": "Protector",
+		"desc": "Evolves Rhydon into Rhyperior when traded.",
+		"icon": "Protector",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"psychicgem": {
+		"name": "Psychic Gem",
+		"desc": "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
+		"icon": "Psychic Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"psychicmemory": {
+		"name": "Psychic Memory",
+		"desc": "Holder's Multi-Attack is Psychic type.",
+		"icon": "Psychic Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"psychicseed": {
+		"name": "Psychic Seed",
+		"desc": "If the terrain is Psychic Terrain, raises holder's Sp. Def by 1 stage. Single use.",
+		"icon": "Psychic Seed",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"psychiumz": {
+		"name": "Psychium Z",
+		"desc": "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
+		"icon": "Psychium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"punchingglove": {
+		"name": "Punching Glove",
+		"desc": "Holder's punch-based attacks have 1.1x power and do not make contact.",
+		"icon": "Punching Glove",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"qualotberry": {
+		"name": "Qualot Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Qualot Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"quickball": {
+		"name": "Quick Ball",
+		"desc": "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
+		"icon": "Quick Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"quickclaw": {
+		"name": "Quick Claw",
+		"desc": "Each turn, holder has a 20% chance to move first in its priority bracket.",
+		"icon": "Quick Claw",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"quickpowder": {
+		"name": "Quick Powder",
+		"desc": "If held by a Ditto that hasn't Transformed, its Speed is doubled.",
+		"icon": "Quick Powder",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rarebone": {
+		"name": "Rare Bone",
+		"desc": "No competitive use other than when used with Fling.",
+		"icon": "Rare Bone",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rawstberry": {
+		"name": "Rawst Berry",
+		"desc": "Holder is cured if it is burned. Single use.",
+		"icon": "Rawst Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"razorclaw": {
+		"name": "Razor Claw",
+		"desc": "Holder's critical hit ratio is raised by 1 stage. Evolves Sneasel into Weavile when held and leveled up during the night.",
+		"icon": "Razor Claw",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"razorfang": {
+		"name": "Razor Fang",
+		"desc": "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
+		"icon": "Razor Fang",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"reapercloth": {
+		"name": "Reaper Cloth",
+		"desc": "Evolves Dusclops into Dusknoir when traded.",
+		"icon": "Reaper Cloth",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"redcard": {
+		"name": "Red Card",
+		"desc": "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
+		"icon": "Red Card",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"redorb": {
+		"name": "Red Orb",
+		"desc": "If held by a Groudon, this item triggers its Primal Reversion in battle.",
+		"icon": "Red Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"repeatball": {
+		"name": "Repeat Ball",
+		"desc": "A Poke Ball that works well on Pokemon species that were previously caught.",
+		"icon": "Repeat Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ribbonsweet": {
+		"name": "Ribbon Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Ribbon Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rindoberry": {
+		"name": "Rindo Berry",
+		"desc": "Halves damage taken from a supereffective Grass-type attack. Single use.",
+		"icon": "Rindo Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ringtarget": {
+		"name": "Ring Target",
+		"desc": "The holder's type immunities granted solely by its typing are negated.",
+		"icon": "Ring Target",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rockgem": {
+		"name": "Rock Gem",
+		"desc": "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
+		"icon": "Rock Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rockmemory": {
+		"name": "Rock Memory",
+		"desc": "Holder's Multi-Attack is Rock type.",
+		"icon": "Rock Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rockiumz": {
+		"name": "Rockium Z",
+		"desc": "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
+		"icon": "Rockium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rockyhelmet": {
+		"name": "Rocky Helmet",
+		"desc": "If holder is hit by a contact move, the attacker loses 1/6 of its max HP.",
+		"icon": "Rocky Helmet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"roomservice": {
+		"name": "Room Service",
+		"desc": "If Trick Room is active, the holder's Speed is lowered by 1 stage. Single use.",
+		"icon": "Room Service",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"roseliberry": {
+		"name": "Roseli Berry",
+		"desc": "Halves damage taken from a supereffective Fairy-type attack. Single use.",
+		"icon": "Roseli Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rowapberry": {
+		"name": "Rowap Berry",
+		"desc": "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
+		"icon": "Rowap Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rustedshield": {
+		"name": "Rusted Shield",
+		"desc": "If held by a Zamazenta, this item changes its forme to Crowned Shield.",
+		"icon": "Rusted Shield",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"rustedsword": {
+		"name": "Rusted Sword",
+		"desc": "If held by a Zacian, this item changes its forme to Crowned Sword.",
+		"icon": "Rusted Sword",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sablenite": {
+		"name": "Sablenite",
+		"desc": "If held by a Sableye, this item allows it to Mega Evolve in battle.",
+		"icon": "Sablenite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"safariball": {
+		"name": "Safari Ball",
+		"desc": "A special Poke Ball that is used only in the Safari Zone and Great Marsh.",
+		"icon": "Safari Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"safetygoggles": {
+		"name": "Safety Goggles",
+		"desc": "Holder is immune to powder moves and damage from Sandstorm or Hail.",
+		"icon": "Safety Goggles",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"salacberry": {
+		"name": "Salac Berry",
+		"desc": "Raises holder's Speed by 1 stage when at 1/4 max HP or less. Single use.",
+		"icon": "Salac Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"salamencite": {
+		"name": "Salamencite",
+		"desc": "If held by a Salamence, this item allows it to Mega Evolve in battle.",
+		"icon": "Salamencite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sceptilite": {
+		"name": "Sceptilite",
+		"desc": "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
+		"icon": "Sceptilite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"scizorite": {
+		"name": "Scizorite",
+		"desc": "If held by a Scizor, this item allows it to Mega Evolve in battle.",
+		"icon": "Scizorite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"scopelens": {
+		"name": "Scope Lens",
+		"desc": "Holder's critical hit ratio is raised by 1 stage.",
+		"icon": "Scope Lens",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sharpbeak": {
+		"name": "Sharp Beak",
+		"desc": "Holder's Flying-type attacks have 1.2x power.",
+		"icon": "Sharp Beak",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sharpedonite": {
+		"name": "Sharpedonite",
+		"desc": "If held by a Sharpedo, this item allows it to Mega Evolve in battle.",
+		"icon": "Sharpedonite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"shedshell": {
+		"name": "Shed Shell",
+		"desc": "Holder cannot be prevented from choosing to switch out by any effect.",
+		"icon": "Shed Shell",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"shellbell": {
+		"name": "Shell Bell",
+		"desc": "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
+		"icon": "Shell Bell",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"shinystone": {
+		"name": "Shiny Stone",
+		"desc": "Evolves Togetic into Togekiss, Roselia into Roserade, Minccino into Cinccino, and Floette into Florges when used.",
+		"icon": "Shiny Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"shockdrive": {
+		"name": "Shock Drive",
+		"desc": "Holder's Techno Blast is Electric type.",
+		"icon": "Shock Drive",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"shucaberry": {
+		"name": "Shuca Berry",
+		"desc": "Halves damage taken from a supereffective Ground-type attack. Single use.",
+		"icon": "Shuca Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"silkscarf": {
+		"name": "Silk Scarf",
+		"desc": "Holder's Normal-type attacks have 1.2x power.",
+		"icon": "Silk Scarf",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"silverpowder": {
+		"name": "Silver Powder",
+		"desc": "Holder's Bug-type attacks have 1.2x power.",
+		"icon": "Silver Powder",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sitrusberry": {
+		"name": "Sitrus Berry",
+		"desc": "Restores 1/4 max HP when at 1/2 max HP or less. Single use.",
+		"icon": "Sitrus Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"skyplate": {
+		"name": "Sky Plate",
+		"desc": "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
+		"icon": "Sky Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"slowbronite": {
+		"name": "Slowbronite",
+		"desc": "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+		"icon": "Slowbronite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"smoothrock": {
+		"name": "Smooth Rock",
+		"desc": "Holder's use of Sandstorm lasts 8 turns instead of 5.",
+		"icon": "Smooth Rock",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"snorliumz": {
+		"name": "Snorlium Z",
+		"desc": "If held by a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
+		"icon": "Snorlium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"snowball": {
+		"name": "Snowball",
+		"desc": "Raises holder's Attack by 1 if hit by an Ice-type attack. Single use.",
+		"icon": "Snowball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"softsand": {
+		"name": "Soft Sand",
+		"desc": "Holder's Ground-type attacks have 1.2x power.",
+		"icon": "Soft Sand",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"solganiumz": {
+		"name": "Solganium Z",
+		"desc": "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move.",
+		"icon": "Solganium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"souldew": {
+		"name": "Soul Dew",
+		"desc": "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
+		"icon": "Soul Dew",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"spelltag": {
+		"name": "Spell Tag",
+		"desc": "Holder's Ghost-type attacks have 1.2x power.",
+		"icon": "Spell Tag",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"splashplate": {
+		"name": "Splash Plate",
+		"desc": "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
+		"icon": "Splash Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"spookyplate": {
+		"name": "Spooky Plate",
+		"desc": "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
+		"icon": "Spooky Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sportball": {
+		"name": "Sport Ball",
+		"desc": "A special Poke Ball for the Bug-Catching Contest.",
+		"icon": "Sport Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"starfberry": {
+		"name": "Starf Berry",
+		"desc": "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use.",
+		"icon": "Starf Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"starsweet": {
+		"name": "Star Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Star Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"steelixite": {
+		"name": "Steelixite",
+		"desc": "If held by a Steelix, this item allows it to Mega Evolve in battle.",
+		"icon": "Steelixite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"steelgem": {
+		"name": "Steel Gem",
+		"desc": "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
+		"icon": "Steel Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"steelmemory": {
+		"name": "Steel Memory",
+		"desc": "Holder's Multi-Attack is Steel type.",
+		"icon": "Steel Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"steeliumz": {
+		"name": "Steelium Z",
+		"desc": "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
+		"icon": "Steelium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"stick": {
+		"name": "Stick",
+		"desc": "If held by a Farfetch’d, its critical hit ratio is raised by 2 stages.",
+		"icon": "Stick",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"stickybarb": {
+		"name": "Sticky Barb",
+		"desc": "Each turn, holder loses 1/8 max HP. An attacker making contact can receive it.",
+		"icon": "Sticky Barb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"stoneplate": {
+		"name": "Stone Plate",
+		"desc": "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
+		"icon": "Stone Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"strawberrysweet": {
+		"name": "Strawberry Sweet",
+		"desc": "Evolves Milcery into Alcremie when held and spun around.",
+		"icon": "Strawberry Sweet",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sunstone": {
+		"name": "Sun Stone",
+		"desc": "Evolves Gloom into Bellossom, Sunkern into Sunflora, Cottonee into Whimsicott, Petilil into Lilligant, and Helioptile into Heliolisk when used.",
+		"icon": "Sun Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"swampertite": {
+		"name": "Swampertite",
+		"desc": "If held by a Swampert, this item allows it to Mega Evolve in battle.",
+		"icon": "Swampertite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"sweetapple": {
+		"name": "Sweet Apple",
+		"desc": "Evolves Applin into Appletun when used.",
+		"icon": "Sweet Apple",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"syrupyapple": {
+		"name": "Syrupy Apple",
+		"desc": "Evolves Applin into Dipplin when used.",
+		"icon": "Syrupy Apple",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"tamatoberry": {
+		"name": "Tamato Berry",
+		"desc": "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+		"icon": "Tamato Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"tangaberry": {
+		"name": "Tanga Berry",
+		"desc": "Halves damage taken from a supereffective Bug-type attack. Single use.",
+		"icon": "Tanga Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"tapuniumz": {
+		"name": "Tapunium Z",
+		"desc": "If held by a Tapu with Nature's Madness, it can use Guardian of Alola.",
+		"icon": "Tapunium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"tartapple": {
+		"name": "Tart Apple",
+		"desc": "Evolves Applin into Flapple when used.",
+		"icon": "Tart Apple",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"terrainextender": {
+		"name": "Terrain Extender",
+		"desc": "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
+		"icon": "Terrain Extender",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"thickclub": {
+		"name": "Thick Club",
+		"desc": "If held by a Cubone or a Marowak, its Attack is doubled.",
+		"icon": "Thick Club",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"throatspray": {
+		"name": "Throat Spray",
+		"desc": "Raises holder's Special Attack by 1 stage after it uses a sound move. Single use.",
+		"icon": "Throat Spray",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"thunderstone": {
+		"name": "Thunder Stone",
+		"desc": "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, Eelektrik into Eelektross, and Charjabug into Vikavolt when used.",
+		"icon": "Thunder Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"timerball": {
+		"name": "Timer Ball",
+		"desc": "A Poke Ball that becomes better the more turns there are in a battle.",
+		"icon": "Timer Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"toxicorb": {
+		"name": "Toxic Orb",
+		"desc": "At the end of every turn, this item attempts to badly poison the holder.",
+		"icon": "Toxic Orb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"toxicplate": {
+		"name": "Toxic Plate",
+		"desc": "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
+		"icon": "Toxic Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"twistedspoon": {
+		"name": "Twisted Spoon",
+		"desc": "Holder's Psychic-type attacks have 1.2x power.",
+		"icon": "Twisted Spoon",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"tyranitarite": {
+		"name": "Tyranitarite",
+		"desc": "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
+		"icon": "Tyranitarite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ultraball": {
+		"name": "Ultra Ball",
+		"desc": "An ultra-performance Ball that provides a higher catch rate than a Great Ball.",
+		"icon": "Ultra Ball",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"ultranecroziumz": {
+		"name": "Ultranecrozium Z",
+		"desc": "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
+		"icon": "Ultranecrozium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"unremarkableteacup": {
+		"name": "Unremarkable Teacup",
+		"desc": "Evolves Poltchageist into Sinistcha when used.",
+		"icon": "Unremarkable Teacup",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"upgrade": {
+		"name": "Up-Grade",
+		"desc": "Evolves Porygon into Porygon2 when traded.",
+		"icon": "Up-Grade",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"utilityumbrella": {
+		"name": "Utility Umbrella",
+		"desc": "The holder ignores rain- and sun-based effects, including those of its Ability unless it is Orichalcum Pulse or Protosynthesis. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
+		"icon": "Utility Umbrella",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"venusaurite": {
+		"name": "Venusaurite",
+		"desc": "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
+		"icon": "Venusaurite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"wacanberry": {
+		"name": "Wacan Berry",
+		"desc": "Halves damage taken from a supereffective Electric-type attack. Single use.",
+		"icon": "Wacan Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"watergem": {
+		"name": "Water Gem",
+		"desc": "Holder's first successful Water-type attack will have 1.3x power. Single use.",
+		"icon": "Water Gem",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"watermemory": {
+		"name": "Water Memory",
+		"desc": "Holder's Multi-Attack is Water type.",
+		"icon": "Water Memory",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"waterstone": {
+		"name": "Water Stone",
+		"desc": "Evolves Poliwhirl into Poliwrath, Shellder into Cloyster, Staryu into Starmie, Eevee into Vaporeon, Lombre into Ludicolo, and Panpour into Simipour when used.",
+		"icon": "Water Stone",
+		"type": "evolveItem",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"wateriumz": {
+		"name": "Waterium Z",
+		"desc": "If holder has a Water move, this item allows it to use a Water Z-Move.",
+		"icon": "Waterium Z",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"weaknesspolicy": {
+		"name": "Weakness Policy",
+		"desc": "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
+		"icon": "Weakness Policy",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"wellspringmask": {
+		"name": "Wellspring Mask",
+		"desc": "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		"icon": "Wellspring Mask",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"whiteherb": {
+		"name": "White Herb",
+		"desc": "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
+		"icon": "White Herb",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"widelens": {
+		"name": "Wide Lens",
+		"desc": "The accuracy of attacks by the holder is 1.1x.",
+		"icon": "Wide Lens",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"wikiberry": {
+		"name": "Wiki Berry",
+		"desc": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
+		"icon": "Wiki Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"wiseglasses": {
+		"name": "Wise Glasses",
+		"desc": "Holder's special attacks have 1.1x power.",
+		"icon": "Wise Glasses",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"yacheberry": {
+		"name": "Yache Berry",
+		"desc": "Halves damage taken from a supereffective Ice-type attack. Single use.",
+		"icon": "Yache Berry",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"zapplate": {
+		"name": "Zap Plate",
+		"desc": "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
+		"icon": "Zap Plate",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"zoomlens": {
+		"name": "Zoom Lens",
+		"desc": "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
+		"icon": "Zoom Lens",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"crucibellite": {
+		"name": "Crucibellite",
+		"desc": "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
+		"icon": "Crucibellite",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	},
+	"vilevial": {
+		"name": "Vile Vial",
+		"desc": "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+		"icon": "Vile Vial",
+		"type": "item",
+		"cost": 5,
+		"minStreak": 0
+	}
+}

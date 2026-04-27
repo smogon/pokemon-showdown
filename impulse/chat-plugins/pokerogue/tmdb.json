@@ -1,0 +1,2063 @@
+{
+	"tm001": {
+		"name": "TM001 (Take Down)",
+		"desc": "Teaches a Pokemon Take Down. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Take Down"
+	},
+	"tm002": {
+		"name": "TM002 (Charm)",
+		"desc": "Teaches a Pokemon Charm. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Charm"
+	},
+	"tm003": {
+		"name": "TM003 (Fake Tears)",
+		"desc": "Teaches a Pokemon Fake Tears. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fake Tears"
+	},
+	"tm004": {
+		"name": "TM004 (Agility)",
+		"desc": "Teaches a Pokemon Agility. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Agility"
+	},
+	"tm005": {
+		"name": "TM005 (Mud-Slap)",
+		"desc": "Teaches a Pokemon Mud-Slap. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Mud-Slap"
+	},
+	"tm006": {
+		"name": "TM006 (Scary Face)",
+		"desc": "Teaches a Pokemon Scary Face. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Scary Face"
+	},
+	"tm007": {
+		"name": "TM007 (Protect)",
+		"desc": "Teaches a Pokemon Protect. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Protect"
+	},
+	"tm008": {
+		"name": "TM008 (Fire Fang)",
+		"desc": "Teaches a Pokemon Fire Fang. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fire Fang"
+	},
+	"tm009": {
+		"name": "TM009 (Thunder Fang)",
+		"desc": "Teaches a Pokemon Thunder Fang. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thunder Fang"
+	},
+	"tm010": {
+		"name": "TM010 (Ice Fang)",
+		"desc": "Teaches a Pokemon Ice Fang. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Ice Fang"
+	},
+	"tm011": {
+		"name": "TM011 (Water Pulse)",
+		"desc": "Teaches a Pokemon Water Pulse. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Water Pulse"
+	},
+	"tm012": {
+		"name": "TM012 (Low Kick)",
+		"desc": "Teaches a Pokemon Low Kick. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Low Kick"
+	},
+	"tm013": {
+		"name": "TM013 (Acid Spray)",
+		"desc": "Teaches a Pokemon Acid Spray. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Acid Spray"
+	},
+	"tm014": {
+		"name": "TM014 (Acrobatics)",
+		"desc": "Teaches a Pokemon Acrobatics. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Acrobatics"
+	},
+	"tm015": {
+		"name": "TM015 (Struggle Bug)",
+		"desc": "Teaches a Pokemon Struggle Bug. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Struggle Bug"
+	},
+	"tm016": {
+		"name": "TM016 (Psybeam)",
+		"desc": "Teaches a Pokemon Psybeam. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psybeam"
+	},
+	"tm017": {
+		"name": "TM017 (Confuse Ray)",
+		"desc": "Teaches a Pokemon Confuse Ray. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Confuse Ray"
+	},
+	"tm018": {
+		"name": "TM018 (Thief)",
+		"desc": "Teaches a Pokemon Thief. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thief"
+	},
+	"tm019": {
+		"name": "TM019 (Disarming Voice)",
+		"desc": "Teaches a Pokemon Disarming Voice. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Disarming Voice"
+	},
+	"tm020": {
+		"name": "TM020 (Trailblaze)",
+		"desc": "Teaches a Pokemon Trailblaze. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Trailblaze"
+	},
+	"tm021": {
+		"name": "TM021 (Pounce)",
+		"desc": "Teaches a Pokemon Pounce. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Pounce"
+	},
+	"tm022": {
+		"name": "TM022 (Chilling Water)",
+		"desc": "Teaches a Pokemon Chilling Water. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Chilling Water"
+	},
+	"tm023": {
+		"name": "TM023 (Charge Beam)",
+		"desc": "Teaches a Pokemon Charge Beam. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Charge Beam"
+	},
+	"tm024": {
+		"name": "TM024 (Fire Spin)",
+		"desc": "Teaches a Pokemon Fire Spin. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fire Spin"
+	},
+	"tm025": {
+		"name": "TM025 (Facade)",
+		"desc": "Teaches a Pokemon Facade. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Facade"
+	},
+	"tm026": {
+		"name": "TM026 (Poison Tail)",
+		"desc": "Teaches a Pokemon Poison Tail. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Poison Tail"
+	},
+	"tm027": {
+		"name": "TM027 (Aerial Ace)",
+		"desc": "Teaches a Pokemon Aerial Ace. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Aerial Ace"
+	},
+	"tm028": {
+		"name": "TM028 (Bulldoze)",
+		"desc": "Teaches a Pokemon Bulldoze. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Bulldoze"
+	},
+	"tm029": {
+		"name": "TM029 (Hex)",
+		"desc": "Teaches a Pokemon Hex. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hex"
+	},
+	"tm030": {
+		"name": "TM030 (Snarl)",
+		"desc": "Teaches a Pokemon Snarl. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Snarl"
+	},
+	"tm031": {
+		"name": "TM031 (Metal Claw)",
+		"desc": "Teaches a Pokemon Metal Claw. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Metal Claw"
+	},
+	"tm032": {
+		"name": "TM032 (Swift)",
+		"desc": "Teaches a Pokemon Swift. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Swift"
+	},
+	"tm033": {
+		"name": "TM033 (Magical Leaf)",
+		"desc": "Teaches a Pokemon Magical Leaf. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Magical Leaf"
+	},
+	"tm034": {
+		"name": "TM034 (Icy Wind)",
+		"desc": "Teaches a Pokemon Icy Wind. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Icy Wind"
+	},
+	"tm035": {
+		"name": "TM035 (Mud Shot)",
+		"desc": "Teaches a Pokemon Mud Shot. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Mud Shot"
+	},
+	"tm036": {
+		"name": "TM036 (Rock Tomb)",
+		"desc": "Teaches a Pokemon Rock Tomb. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Rock Tomb"
+	},
+	"tm037": {
+		"name": "TM037 (Draining Kiss)",
+		"desc": "Teaches a Pokemon Draining Kiss. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Draining Kiss"
+	},
+	"tm038": {
+		"name": "TM038 (Flame Charge)",
+		"desc": "Teaches a Pokemon Flame Charge. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Flame Charge"
+	},
+	"tm039": {
+		"name": "TM039 (Low Sweep)",
+		"desc": "Teaches a Pokemon Low Sweep. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Low Sweep"
+	},
+	"tm040": {
+		"name": "TM040 (Air Cutter)",
+		"desc": "Teaches a Pokemon Air Cutter. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Air Cutter"
+	},
+	"tm041": {
+		"name": "TM041 (Stored Power)",
+		"desc": "Teaches a Pokemon Stored Power. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Stored Power"
+	},
+	"tm042": {
+		"name": "TM042 (Night Shade)",
+		"desc": "Teaches a Pokemon Night Shade. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Night Shade"
+	},
+	"tm043": {
+		"name": "TM043 (Fling)",
+		"desc": "Teaches a Pokemon Fling. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fling"
+	},
+	"tm044": {
+		"name": "TM044 (Dragon Tail)",
+		"desc": "Teaches a Pokemon Dragon Tail. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dragon Tail"
+	},
+	"tm045": {
+		"name": "TM045 (Venoshock)",
+		"desc": "Teaches a Pokemon Venoshock. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Venoshock"
+	},
+	"tm046": {
+		"name": "TM046 (Avalanche)",
+		"desc": "Teaches a Pokemon Avalanche. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Avalanche"
+	},
+	"tm047": {
+		"name": "TM047 (Endure)",
+		"desc": "Teaches a Pokemon Endure. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Endure"
+	},
+	"tm048": {
+		"name": "TM048 (Volt Switch)",
+		"desc": "Teaches a Pokemon Volt Switch. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Volt Switch"
+	},
+	"tm049": {
+		"name": "TM049 (Sunny Day)",
+		"desc": "Teaches a Pokemon Sunny Day. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sunny Day"
+	},
+	"tm050": {
+		"name": "TM050 (Rain Dance)",
+		"desc": "Teaches a Pokemon Rain Dance. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Rain Dance"
+	},
+	"tm051": {
+		"name": "TM051 (Sandstorm)",
+		"desc": "Teaches a Pokemon Sandstorm. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sandstorm"
+	},
+	"tm052": {
+		"name": "TM052 (Snowscape)",
+		"desc": "Teaches a Pokemon Snowscape. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Snowscape"
+	},
+	"tm053": {
+		"name": "TM053 (Smart Strike)",
+		"desc": "Teaches a Pokemon Smart Strike. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Smart Strike"
+	},
+	"tm054": {
+		"name": "TM054 (Psyshock)",
+		"desc": "Teaches a Pokemon Psyshock. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psyshock"
+	},
+	"tm055": {
+		"name": "TM055 (Dig)",
+		"desc": "Teaches a Pokemon Dig. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dig"
+	},
+	"tm056": {
+		"name": "TM056 (Bullet Seed)",
+		"desc": "Teaches a Pokemon Bullet Seed. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Bullet Seed"
+	},
+	"tm057": {
+		"name": "TM057 (False Swipe)",
+		"desc": "Teaches a Pokemon False Swipe. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "False Swipe"
+	},
+	"tm058": {
+		"name": "TM058 (Brick Break)",
+		"desc": "Teaches a Pokemon Brick Break. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Brick Break"
+	},
+	"tm059": {
+		"name": "TM059 (Zen Headbutt)",
+		"desc": "Teaches a Pokemon Zen Headbutt. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Zen Headbutt"
+	},
+	"tm060": {
+		"name": "TM060 (U-turn)",
+		"desc": "Teaches a Pokemon U-turn. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "U-turn"
+	},
+	"tm061": {
+		"name": "TM061 (Shadow Claw)",
+		"desc": "Teaches a Pokemon Shadow Claw. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Shadow Claw"
+	},
+	"tm062": {
+		"name": "TM062 (Foul Play)",
+		"desc": "Teaches a Pokemon Foul Play. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Foul Play"
+	},
+	"tm063": {
+		"name": "TM063 (Psychic Fangs)",
+		"desc": "Teaches a Pokemon Psychic Fangs. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psychic Fangs"
+	},
+	"tm064": {
+		"name": "TM064 (Bulk Up)",
+		"desc": "Teaches a Pokemon Bulk Up. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Bulk Up"
+	},
+	"tm065": {
+		"name": "TM065 (Air Slash)",
+		"desc": "Teaches a Pokemon Air Slash. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Air Slash"
+	},
+	"tm066": {
+		"name": "TM066 (Body Slam)",
+		"desc": "Teaches a Pokemon Body Slam. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Body Slam"
+	},
+	"tm067": {
+		"name": "TM067 (Fire Punch)",
+		"desc": "Teaches a Pokemon Fire Punch. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fire Punch"
+	},
+	"tm068": {
+		"name": "TM068 (Thunder Punch)",
+		"desc": "Teaches a Pokemon Thunder Punch. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thunder Punch"
+	},
+	"tm069": {
+		"name": "TM069 (Ice Punch)",
+		"desc": "Teaches a Pokemon Ice Punch. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Ice Punch"
+	},
+	"tm070": {
+		"name": "TM070 (Sleep Talk)",
+		"desc": "Teaches a Pokemon Sleep Talk. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sleep Talk"
+	},
+	"tm071": {
+		"name": "TM071 (Seed Bomb)",
+		"desc": "Teaches a Pokemon Seed Bomb. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Seed Bomb"
+	},
+	"tm072": {
+		"name": "TM072 (Electro Ball)",
+		"desc": "Teaches a Pokemon Electro Ball. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Electro Ball"
+	},
+	"tm073": {
+		"name": "TM073 (Drain Punch)",
+		"desc": "Teaches a Pokemon Drain Punch. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Drain Punch"
+	},
+	"tm074": {
+		"name": "TM074 (Reflect)",
+		"desc": "Teaches a Pokemon Reflect. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Reflect"
+	},
+	"tm075": {
+		"name": "TM075 (Light Screen)",
+		"desc": "Teaches a Pokemon Light Screen. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Light Screen"
+	},
+	"tm076": {
+		"name": "TM076 (Rock Blast)",
+		"desc": "Teaches a Pokemon Rock Blast. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Rock Blast"
+	},
+	"tm077": {
+		"name": "TM077 (Waterfall)",
+		"desc": "Teaches a Pokemon Waterfall. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Waterfall"
+	},
+	"tm078": {
+		"name": "TM078 (Dragon Claw)",
+		"desc": "Teaches a Pokemon Dragon Claw. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dragon Claw"
+	},
+	"tm079": {
+		"name": "TM079 (Dazzling Gleam)",
+		"desc": "Teaches a Pokemon Dazzling Gleam. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dazzling Gleam"
+	},
+	"tm080": {
+		"name": "TM080 (Metronome)",
+		"desc": "Teaches a Pokemon Metronome. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Metronome"
+	},
+	"tm081": {
+		"name": "TM081 (Grass Knot)",
+		"desc": "Teaches a Pokemon Grass Knot. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Grass Knot"
+	},
+	"tm082": {
+		"name": "TM082 (Thunder Wave)",
+		"desc": "Teaches a Pokemon Thunder Wave. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thunder Wave"
+	},
+	"tm083": {
+		"name": "TM083 (Poison Jab)",
+		"desc": "Teaches a Pokemon Poison Jab. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Poison Jab"
+	},
+	"tm084": {
+		"name": "TM084 (Stomping Tantrum)",
+		"desc": "Teaches a Pokemon Stomping Tantrum. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Stomping Tantrum"
+	},
+	"tm085": {
+		"name": "TM085 (Rest)",
+		"desc": "Teaches a Pokemon Rest. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Rest"
+	},
+	"tm086": {
+		"name": "TM086 (Rock Slide)",
+		"desc": "Teaches a Pokemon Rock Slide. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Rock Slide"
+	},
+	"tm087": {
+		"name": "TM087 (Taunt)",
+		"desc": "Teaches a Pokemon Taunt. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Taunt"
+	},
+	"tm088": {
+		"name": "TM088 (Swords Dance)",
+		"desc": "Teaches a Pokemon Swords Dance. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Swords Dance"
+	},
+	"tm089": {
+		"name": "TM089 (Body Press)",
+		"desc": "Teaches a Pokemon Body Press. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Body Press"
+	},
+	"tm090": {
+		"name": "TM090 (Spikes)",
+		"desc": "Teaches a Pokemon Spikes. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Spikes"
+	},
+	"tm091": {
+		"name": "TM091 (Toxic Spikes)",
+		"desc": "Teaches a Pokemon Toxic Spikes. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Toxic Spikes"
+	},
+	"tm092": {
+		"name": "TM092 (Imprison)",
+		"desc": "Teaches a Pokemon Imprison. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Imprison"
+	},
+	"tm093": {
+		"name": "TM093 (Flash Cannon)",
+		"desc": "Teaches a Pokemon Flash Cannon. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Flash Cannon"
+	},
+	"tm094": {
+		"name": "TM094 (Dark Pulse)",
+		"desc": "Teaches a Pokemon Dark Pulse. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dark Pulse"
+	},
+	"tm095": {
+		"name": "TM095 (Leech Life)",
+		"desc": "Teaches a Pokemon Leech Life. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Leech Life"
+	},
+	"tm096": {
+		"name": "TM096 (Eerie Impulse)",
+		"desc": "Teaches a Pokemon Eerie Impulse. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Eerie Impulse"
+	},
+	"tm097": {
+		"name": "TM097 (Fly)",
+		"desc": "Teaches a Pokemon Fly. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fly"
+	},
+	"tm098": {
+		"name": "TM098 (Skill Swap)",
+		"desc": "Teaches a Pokemon Skill Swap. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Skill Swap"
+	},
+	"tm099": {
+		"name": "TM099 (Iron Head)",
+		"desc": "Teaches a Pokemon Iron Head. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Iron Head"
+	},
+	"tm100": {
+		"name": "TM100 (Dragon Dance)",
+		"desc": "Teaches a Pokemon Dragon Dance. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dragon Dance"
+	},
+	"tm101": {
+		"name": "TM101 (Power Gem)",
+		"desc": "Teaches a Pokemon Power Gem. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Power Gem"
+	},
+	"tm102": {
+		"name": "TM102 (Gunk Shot)",
+		"desc": "Teaches a Pokemon Gunk Shot. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Gunk Shot"
+	},
+	"tm103": {
+		"name": "TM103 (Substitute)",
+		"desc": "Teaches a Pokemon Substitute. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Substitute"
+	},
+	"tm104": {
+		"name": "TM104 (Iron Defense)",
+		"desc": "Teaches a Pokemon Iron Defense. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Iron Defense"
+	},
+	"tm105": {
+		"name": "TM105 (X-Scissor)",
+		"desc": "Teaches a Pokemon X-Scissor. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "X-Scissor"
+	},
+	"tm106": {
+		"name": "TM106 (Drill Run)",
+		"desc": "Teaches a Pokemon Drill Run. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Drill Run"
+	},
+	"tm107": {
+		"name": "TM107 (Will-O-Wisp)",
+		"desc": "Teaches a Pokemon Will-O-Wisp. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Will-O-Wisp"
+	},
+	"tm108": {
+		"name": "TM108 (Crunch)",
+		"desc": "Teaches a Pokemon Crunch. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Crunch"
+	},
+	"tm109": {
+		"name": "TM109 (Trick)",
+		"desc": "Teaches a Pokemon Trick. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Trick"
+	},
+	"tm110": {
+		"name": "TM110 (Liquidation)",
+		"desc": "Teaches a Pokemon Liquidation. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Liquidation"
+	},
+	"tm111": {
+		"name": "TM111 (Giga Drain)",
+		"desc": "Teaches a Pokemon Giga Drain. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Giga Drain"
+	},
+	"tm112": {
+		"name": "TM112 (Aura Sphere)",
+		"desc": "Teaches a Pokemon Aura Sphere. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Aura Sphere"
+	},
+	"tm113": {
+		"name": "TM113 (Tailwind)",
+		"desc": "Teaches a Pokemon Tailwind. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Tailwind"
+	},
+	"tm114": {
+		"name": "TM114 (Shadow Ball)",
+		"desc": "Teaches a Pokemon Shadow Ball. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Shadow Ball"
+	},
+	"tm115": {
+		"name": "TM115 (Dragon Pulse)",
+		"desc": "Teaches a Pokemon Dragon Pulse. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dragon Pulse"
+	},
+	"tm116": {
+		"name": "TM116 (Stealth Rock)",
+		"desc": "Teaches a Pokemon Stealth Rock. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Stealth Rock"
+	},
+	"tm117": {
+		"name": "TM117 (Hyper Voice)",
+		"desc": "Teaches a Pokemon Hyper Voice. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hyper Voice"
+	},
+	"tm118": {
+		"name": "TM118 (Heat Wave)",
+		"desc": "Teaches a Pokemon Heat Wave. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Heat Wave"
+	},
+	"tm119": {
+		"name": "TM119 (Energy Ball)",
+		"desc": "Teaches a Pokemon Energy Ball. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Energy Ball"
+	},
+	"tm120": {
+		"name": "TM120 (Psychic)",
+		"desc": "Teaches a Pokemon Psychic. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psychic"
+	},
+	"tm121": {
+		"name": "TM121 (Heavy Slam)",
+		"desc": "Teaches a Pokemon Heavy Slam. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Heavy Slam"
+	},
+	"tm122": {
+		"name": "TM122 (Encore)",
+		"desc": "Teaches a Pokemon Encore. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Encore"
+	},
+	"tm123": {
+		"name": "TM123 (Surf)",
+		"desc": "Teaches a Pokemon Surf. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Surf"
+	},
+	"tm124": {
+		"name": "TM124 (Ice Spinner)",
+		"desc": "Teaches a Pokemon Ice Spinner. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Ice Spinner"
+	},
+	"tm125": {
+		"name": "TM125 (Flamethrower)",
+		"desc": "Teaches a Pokemon Flamethrower. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Flamethrower"
+	},
+	"tm126": {
+		"name": "TM126 (Thunderbolt)",
+		"desc": "Teaches a Pokemon Thunderbolt. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thunderbolt"
+	},
+	"tm127": {
+		"name": "TM127 (Play Rough)",
+		"desc": "Teaches a Pokemon Play Rough. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Play Rough"
+	},
+	"tm128": {
+		"name": "TM128 (Amnesia)",
+		"desc": "Teaches a Pokemon Amnesia. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Amnesia"
+	},
+	"tm129": {
+		"name": "TM129 (Calm Mind)",
+		"desc": "Teaches a Pokemon Calm Mind. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Calm Mind"
+	},
+	"tm130": {
+		"name": "TM130 (Helping Hand)",
+		"desc": "Teaches a Pokemon Helping Hand. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Helping Hand"
+	},
+	"tm131": {
+		"name": "TM131 (Pollen Puff)",
+		"desc": "Teaches a Pokemon Pollen Puff. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Pollen Puff"
+	},
+	"tm132": {
+		"name": "TM132 (Baton Pass)",
+		"desc": "Teaches a Pokemon Baton Pass. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Baton Pass"
+	},
+	"tm133": {
+		"name": "TM133 (Earth Power)",
+		"desc": "Teaches a Pokemon Earth Power. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Earth Power"
+	},
+	"tm134": {
+		"name": "TM134 (Reversal)",
+		"desc": "Teaches a Pokemon Reversal. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Reversal"
+	},
+	"tm135": {
+		"name": "TM135 (Ice Beam)",
+		"desc": "Teaches a Pokemon Ice Beam. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Ice Beam"
+	},
+	"tm136": {
+		"name": "TM136 (Electric Terrain)",
+		"desc": "Teaches a Pokemon Electric Terrain. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Electric Terrain"
+	},
+	"tm137": {
+		"name": "TM137 (Grassy Terrain)",
+		"desc": "Teaches a Pokemon Grassy Terrain. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Grassy Terrain"
+	},
+	"tm138": {
+		"name": "TM138 (Psychic Terrain)",
+		"desc": "Teaches a Pokemon Psychic Terrain. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psychic Terrain"
+	},
+	"tm139": {
+		"name": "TM139 (Misty Terrain)",
+		"desc": "Teaches a Pokemon Misty Terrain. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Misty Terrain"
+	},
+	"tm140": {
+		"name": "TM140 (Nasty Plot)",
+		"desc": "Teaches a Pokemon Nasty Plot. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Nasty Plot"
+	},
+	"tm141": {
+		"name": "TM141 (Fire Blast)",
+		"desc": "Teaches a Pokemon Fire Blast. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fire Blast"
+	},
+	"tm142": {
+		"name": "TM142 (Hydro Pump)",
+		"desc": "Teaches a Pokemon Hydro Pump. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hydro Pump"
+	},
+	"tm143": {
+		"name": "TM143 (Blizzard)",
+		"desc": "Teaches a Pokemon Blizzard. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Blizzard"
+	},
+	"tm144": {
+		"name": "TM144 (Fire Pledge)",
+		"desc": "Teaches a Pokemon Fire Pledge. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Fire Pledge"
+	},
+	"tm145": {
+		"name": "TM145 (Water Pledge)",
+		"desc": "Teaches a Pokemon Water Pledge. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Water Pledge"
+	},
+	"tm146": {
+		"name": "TM146 (Grass Pledge)",
+		"desc": "Teaches a Pokemon Grass Pledge. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Grass Pledge"
+	},
+	"tm147": {
+		"name": "TM147 (Wild Charge)",
+		"desc": "Teaches a Pokemon Wild Charge. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Wild Charge"
+	},
+	"tm148": {
+		"name": "TM148 (Sludge Bomb)",
+		"desc": "Teaches a Pokemon Sludge Bomb. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sludge Bomb"
+	},
+	"tm149": {
+		"name": "TM149 (Earthquake)",
+		"desc": "Teaches a Pokemon Earthquake. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Earthquake"
+	},
+	"tm150": {
+		"name": "TM150 (Stone Edge)",
+		"desc": "Teaches a Pokemon Stone Edge. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Stone Edge"
+	},
+	"tm151": {
+		"name": "TM151 (Phantom Force)",
+		"desc": "Teaches a Pokemon Phantom Force. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Phantom Force"
+	},
+	"tm152": {
+		"name": "TM152 (Giga Impact)",
+		"desc": "Teaches a Pokemon Giga Impact. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Giga Impact"
+	},
+	"tm153": {
+		"name": "TM153 (Blast Burn)",
+		"desc": "Teaches a Pokemon Blast Burn. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Blast Burn"
+	},
+	"tm154": {
+		"name": "TM154 (Hydro Cannon)",
+		"desc": "Teaches a Pokemon Hydro Cannon. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hydro Cannon"
+	},
+	"tm155": {
+		"name": "TM155 (Frenzy Plant)",
+		"desc": "Teaches a Pokemon Frenzy Plant. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Frenzy Plant"
+	},
+	"tm156": {
+		"name": "TM156 (Outrage)",
+		"desc": "Teaches a Pokemon Outrage. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Outrage"
+	},
+	"tm157": {
+		"name": "TM157 (Overheat)",
+		"desc": "Teaches a Pokemon Overheat. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Overheat"
+	},
+	"tm158": {
+		"name": "TM158 (Focus Blast)",
+		"desc": "Teaches a Pokemon Focus Blast. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Focus Blast"
+	},
+	"tm159": {
+		"name": "TM159 (Leaf Storm)",
+		"desc": "Teaches a Pokemon Leaf Storm. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Leaf Storm"
+	},
+	"tm160": {
+		"name": "TM160 (Hurricane)",
+		"desc": "Teaches a Pokemon Hurricane. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hurricane"
+	},
+	"tm161": {
+		"name": "TM161 (Trick Room)",
+		"desc": "Teaches a Pokemon Trick Room. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Trick Room"
+	},
+	"tm162": {
+		"name": "TM162 (Bug Buzz)",
+		"desc": "Teaches a Pokemon Bug Buzz. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Bug Buzz"
+	},
+	"tm163": {
+		"name": "TM163 (Hyper Beam)",
+		"desc": "Teaches a Pokemon Hyper Beam. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hyper Beam"
+	},
+	"tm164": {
+		"name": "TM164 (Brave Bird)",
+		"desc": "Teaches a Pokemon Brave Bird. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Brave Bird"
+	},
+	"tm165": {
+		"name": "TM165 (Flare Blitz)",
+		"desc": "Teaches a Pokemon Flare Blitz. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Flare Blitz"
+	},
+	"tm166": {
+		"name": "TM166 (Thunder)",
+		"desc": "Teaches a Pokemon Thunder. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Thunder"
+	},
+	"tm167": {
+		"name": "TM167 (Close Combat)",
+		"desc": "Teaches a Pokemon Close Combat. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Close Combat"
+	},
+	"tm168": {
+		"name": "TM168 (Solar Beam)",
+		"desc": "Teaches a Pokemon Solar Beam. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Solar Beam"
+	},
+	"tm169": {
+		"name": "TM169 (Draco Meteor)",
+		"desc": "Teaches a Pokemon Draco Meteor. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Draco Meteor"
+	},
+	"tm170": {
+		"name": "TM170 (Steel Beam)",
+		"desc": "Teaches a Pokemon Steel Beam. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Steel Beam"
+	},
+	"tm171": {
+		"name": "TM171 (Tera Blast)",
+		"desc": "Teaches a Pokemon Tera Blast. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Tera Blast"
+	},
+	"tm172": {
+		"name": "TM172 (Roar)",
+		"desc": "Teaches a Pokemon Roar. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Roar"
+	},
+	"tm173": {
+		"name": "TM173 (Charge)",
+		"desc": "Teaches a Pokemon Charge. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Charge"
+	},
+	"tm174": {
+		"name": "TM174 (Haze)",
+		"desc": "Teaches a Pokemon Haze. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Haze"
+	},
+	"tm175": {
+		"name": "TM175 (Toxic)",
+		"desc": "Teaches a Pokemon Toxic. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Toxic"
+	},
+	"tm176": {
+		"name": "TM176 (Sand Tomb)",
+		"desc": "Teaches a Pokemon Sand Tomb. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sand Tomb"
+	},
+	"tm177": {
+		"name": "TM177 (Spite)",
+		"desc": "Teaches a Pokemon Spite. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Spite"
+	},
+	"tm178": {
+		"name": "TM178 (Gravity)",
+		"desc": "Teaches a Pokemon Gravity. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Gravity"
+	},
+	"tm179": {
+		"name": "TM179 (Smack Down)",
+		"desc": "Teaches a Pokemon Smack Down. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Smack Down"
+	},
+	"tm180": {
+		"name": "TM180 (Gyro Ball)",
+		"desc": "Teaches a Pokemon Gyro Ball. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Gyro Ball"
+	},
+	"tm181": {
+		"name": "TM181 (Knock Off)",
+		"desc": "Teaches a Pokemon Knock Off. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Knock Off"
+	},
+	"tm182": {
+		"name": "TM182 (Bug Bite)",
+		"desc": "Teaches a Pokemon Bug Bite. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Bug Bite"
+	},
+	"tm183": {
+		"name": "TM183 (Super Fang)",
+		"desc": "Teaches a Pokemon Super Fang. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Super Fang"
+	},
+	"tm184": {
+		"name": "TM184 (Vacuum Wave)",
+		"desc": "Teaches a Pokemon Vacuum Wave. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Vacuum Wave"
+	},
+	"tm185": {
+		"name": "TM185 (Lunge)",
+		"desc": "Teaches a Pokemon Lunge. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Lunge"
+	},
+	"tm186": {
+		"name": "TM186 (High Horsepower)",
+		"desc": "Teaches a Pokemon High Horsepower. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "High Horsepower"
+	},
+	"tm187": {
+		"name": "TM187 (Icicle Spear)",
+		"desc": "Teaches a Pokemon Icicle Spear. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Icicle Spear"
+	},
+	"tm188": {
+		"name": "TM188 (Scald)",
+		"desc": "Teaches a Pokemon Scald. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Scald"
+	},
+	"tm189": {
+		"name": "TM189 (Heat Crash)",
+		"desc": "Teaches a Pokemon Heat Crash. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Heat Crash"
+	},
+	"tm190": {
+		"name": "TM190 (Solar Blade)",
+		"desc": "Teaches a Pokemon Solar Blade. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Solar Blade"
+	},
+	"tm191": {
+		"name": "TM191 (Uproar)",
+		"desc": "Teaches a Pokemon Uproar. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Uproar"
+	},
+	"tm192": {
+		"name": "TM192 (Focus Punch)",
+		"desc": "Teaches a Pokemon Focus Punch. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Focus Punch"
+	},
+	"tm193": {
+		"name": "TM193 (Weather Ball)",
+		"desc": "Teaches a Pokemon Weather Ball. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Weather Ball"
+	},
+	"tm194": {
+		"name": "TM194 (Grassy Glide)",
+		"desc": "Teaches a Pokemon Grassy Glide. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Grassy Glide"
+	},
+	"tm195": {
+		"name": "TM195 (Burning Jealousy)",
+		"desc": "Teaches a Pokemon Burning Jealousy. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Burning Jealousy"
+	},
+	"tm196": {
+		"name": "TM196 (Flip Turn)",
+		"desc": "Teaches a Pokemon Flip Turn. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Flip Turn"
+	},
+	"tm197": {
+		"name": "TM197 (Dual Wingbeat)",
+		"desc": "Teaches a Pokemon Dual Wingbeat. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dual Wingbeat"
+	},
+	"tm198": {
+		"name": "TM198 (Poltergeist)",
+		"desc": "Teaches a Pokemon Poltergeist. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Poltergeist"
+	},
+	"tm199": {
+		"name": "TM199 (Lash Out)",
+		"desc": "Teaches a Pokemon Lash Out. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Lash Out"
+	},
+	"tm200": {
+		"name": "TM200 (Scale Shot)",
+		"desc": "Teaches a Pokemon Scale Shot. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Scale Shot"
+	},
+	"tm201": {
+		"name": "TM201 (Misty Explosion)",
+		"desc": "Teaches a Pokemon Misty Explosion. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Misty Explosion"
+	},
+	"tm202": {
+		"name": "TM202 (Pain Split)",
+		"desc": "Teaches a Pokemon Pain Split. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Pain Split"
+	},
+	"tm203": {
+		"name": "TM203 (Psych Up)",
+		"desc": "Teaches a Pokemon Psych Up. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psych Up"
+	},
+	"tm204": {
+		"name": "TM204 (Double-Edge)",
+		"desc": "Teaches a Pokemon Double-Edge. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Double-Edge"
+	},
+	"tm205": {
+		"name": "TM205 (Endeavor)",
+		"desc": "Teaches a Pokemon Endeavor. Single use.",
+		"icon": "TR00",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Endeavor"
+	},
+	"tm206": {
+		"name": "TM206 (Petal Blizzard)",
+		"desc": "Teaches a Pokemon Petal Blizzard. Single use.",
+		"icon": "TR50",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Petal Blizzard"
+	},
+	"tm207": {
+		"name": "TM207 (Temper Flare)",
+		"desc": "Teaches a Pokemon Temper Flare. Single use.",
+		"icon": "TR02",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Temper Flare"
+	},
+	"tm208": {
+		"name": "TM208 (Whirlpool)",
+		"desc": "Teaches a Pokemon Whirlpool. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Whirlpool"
+	},
+	"tm209": {
+		"name": "TM209 (Muddy Water)",
+		"desc": "Teaches a Pokemon Muddy Water. Single use.",
+		"icon": "TR04",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Muddy Water"
+	},
+	"tm210": {
+		"name": "TM210 (Supercell Slam)",
+		"desc": "Teaches a Pokemon Supercell Slam. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Supercell Slam"
+	},
+	"tm211": {
+		"name": "TM211 (Electroweb)",
+		"desc": "Teaches a Pokemon Electroweb. Single use.",
+		"icon": "TR08",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Electroweb"
+	},
+	"tm212": {
+		"name": "TM212 (Triple Axel)",
+		"desc": "Teaches a Pokemon Triple Axel. Single use.",
+		"icon": "TR05",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Triple Axel"
+	},
+	"tm213": {
+		"name": "TM213 (Coaching)",
+		"desc": "Teaches a Pokemon Coaching. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Coaching"
+	},
+	"tm214": {
+		"name": "TM214 (Sludge Wave)",
+		"desc": "Teaches a Pokemon Sludge Wave. Single use.",
+		"icon": "TR54",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Sludge Wave"
+	},
+	"tm215": {
+		"name": "TM215 (Scorching Sands)",
+		"desc": "Teaches a Pokemon Scorching Sands. Single use.",
+		"icon": "TR10",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Scorching Sands"
+	},
+	"tm216": {
+		"name": "TM216 (Feather Dance)",
+		"desc": "Teaches a Pokemon Feather Dance. Single use.",
+		"icon": "TR66",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Feather Dance"
+	},
+	"tm217": {
+		"name": "TM217 (Future Sight)",
+		"desc": "Teaches a Pokemon Future Sight. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Future Sight"
+	},
+	"tm218": {
+		"name": "TM218 (Expanding Force)",
+		"desc": "Teaches a Pokemon Expanding Force. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Expanding Force"
+	},
+	"tm219": {
+		"name": "TM219 (Skitter Smack)",
+		"desc": "Teaches a Pokemon Skitter Smack. Single use.",
+		"icon": "TR18",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Skitter Smack"
+	},
+	"tm220": {
+		"name": "TM220 (Meteor Beam)",
+		"desc": "Teaches a Pokemon Meteor Beam. Single use.",
+		"icon": "TR63",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Meteor Beam"
+	},
+	"tm221": {
+		"name": "TM221 (Throat Chop)",
+		"desc": "Teaches a Pokemon Throat Chop. Single use.",
+		"icon": "TR32",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Throat Chop"
+	},
+	"tm222": {
+		"name": "TM222 (Breaking Swipe)",
+		"desc": "Teaches a Pokemon Breaking Swipe. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Breaking Swipe"
+	},
+	"tm223": {
+		"name": "TM223 (Metal Sound)",
+		"desc": "Teaches a Pokemon Metal Sound. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Metal Sound"
+	},
+	"tm224": {
+		"name": "TM224 (Curse)",
+		"desc": "Teaches a Pokemon Curse. Single use.",
+		"icon": "TR33",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Curse"
+	},
+	"tm225": {
+		"name": "TM225 (Hard Press)",
+		"desc": "Teaches a Pokemon Hard Press. Single use.",
+		"icon": "TR31",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Hard Press"
+	},
+	"tm226": {
+		"name": "TM226 (Dragon Cheer)",
+		"desc": "Teaches a Pokemon Dragon Cheer. Single use.",
+		"icon": "TR24",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Dragon Cheer"
+	},
+	"tm227": {
+		"name": "TM227 (Alluring Voice)",
+		"desc": "Teaches a Pokemon Alluring Voice. Single use.",
+		"icon": "TR90",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Alluring Voice"
+	},
+	"tm228": {
+		"name": "TM228 (Psychic Noise)",
+		"desc": "Teaches a Pokemon Psychic Noise. Single use.",
+		"icon": "TR11",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Psychic Noise"
+	},
+	"tm229": {
+		"name": "TM229 (Upper Hand)",
+		"desc": "Teaches a Pokemon Upper Hand. Single use.",
+		"icon": "TR07",
+		"type": "TM",
+		"cost": 5,
+		"minStreak": 0,
+		"move": "Upper Hand"
+	}
+}

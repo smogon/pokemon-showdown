@@ -13,22 +13,33 @@
  * =======================================================================
  */
 
-import { SHOP_ITEMS, rollShopInventory } from './pokerogue-items';
+import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, TMItem, genItem, rollShop } from './pokerogue-items';
 import { type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 import { getState, setState, deleteState } from './pokerogue-state';
 import {
 	pickStarterOptions, pickNewPokemonOptions,
 	expForLevel, floorCoinReward,
 	applyExpAndLevelUp, getLevelUpEvo,
-	getLevelUpMoves, rollGachaPokemon,
-	getMovesLearnedBetween, botLevel,
-	calcKillExp, getExpType,
+	getLevelUpMoves, getMovesLearnedBetween,
+	botLevel, calcKillExp, getExpType,
+	genAIPokemon, packTeam, packAIPokemon,
 } from './pokerogue-pokemon';
 import { renderGamePage, refreshGamePage } from './pokerogue-render';
 import {
 	activeMatches,
 	startBattle, destroyBotUser,
 } from './pokerogue-battle';
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/** BP awarded for winning a battle. */
+const BP_PER_WIN = 5;
+/** Extra BP awarded at end of each streak (every 7 battles). */
+const BP_PER_STREAK = 5;
+/** Starting BP for a new run. */
+const STARTING_BP = 5;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -45,8 +56,29 @@ function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 }
 
 /**
- * Apply level-up moves / evolution chains to a single Pokémon after it gains
- * EXP, and queue any move-learning prompts. Returns detail messages.
+ * Returns true if the player is "at a streak boundary" — i.e., they have
+ * just won the 7th battle in a streak (battle % 7 === 0 after incrementing).
+ * Mirrors poketest.ts: `if (this.battle % 7 === 0)`.
+ * `floor` here is the floor *before* incrementing.
+ */
+function isStreakBoundary(floor: number): boolean {
+	return floor % 7 === 0;
+}
+
+/**
+ * Fully heals PP for a Pokémon entry (all moves to max PP).
+ * Mirrors poketest.ts streak-heal logic.
+ */
+function fullHealPP(mon: PokemonEntry): void {
+	mon.ppLeft = mon.moves.map(m => {
+		const dexMove = Dex.moves.get(m);
+		return Math.floor((dexMove.pp ?? 5) * (8 / 5));
+	});
+}
+
+/**
+ * Process level-ups and queue move-learning prompts.
+ * Returns notification message fragments.
  */
 function processLevelUp(
 	mon: PokemonEntry,
@@ -69,9 +101,7 @@ function processLevelUp(
 	const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
 	if (evolved) {
 		const evoMoves = getMovesLearnedBetween(mon.species, oldLevel, mon.level, true);
-		for (const m of evoMoves) {
-			if (!newMoves.includes(m)) newMoves.push(m);
-		}
+		for (const m of evoMoves) if (!newMoves.includes(m)) newMoves.push(m);
 	}
 
 	state.pendingMoves = state.pendingMoves ?? [];
@@ -92,35 +122,20 @@ function processLevelUp(
 }
 
 // ---------------------------------------------------------------------------
-// Kill → EXP tracking
+// Kill → EXP tracking (unchanged from original)
 // ---------------------------------------------------------------------------
 
-/** Moves that cause the user to faint immediately (self-KO moves). */
 const SELF_KO_MOVES = new Set([
 	'explosion', 'selfdestruct', 'mistyexplosion', 'memento',
 	'healingwish', 'lunardance', 'finalgambit',
 ]);
 
 const RESIDUAL_FROM_TAGS: Record<string, true> = {
-	'Leech Seed': true,
-	'Salt Cure': true,
-	'Infestation': true,
-	'Whirlpool': true,
-	'Bind': true,
-	'Wrap': true,
-	'Clamp': true,
-	'Fire Spin': true,
-	'Sand Tomb': true,
-	'Magma Storm': true,
-	'Snap Trap': true,
-	'Thunder Cage': true,
-	'Octolock': true,
-	'Curse': true,
-	'Nightmare': true,
-	'Bad Dreams': true,
-	'Perish Song': true,
-	'Future Sight': true,
-	'Doom Desire': true,
+	'Leech Seed': true, 'Salt Cure': true, 'Infestation': true, 'Whirlpool': true,
+	'Bind': true, 'Wrap': true, 'Clamp': true, 'Fire Spin': true, 'Sand Tomb': true,
+	'Magma Storm': true, 'Snap Trap': true, 'Thunder Cage': true, 'Octolock': true,
+	'Curse': true, 'Nightmare': true, 'Bad Dreams': true, 'Perish Song': true,
+	'Future Sight': true, 'Doom Desire': true,
 };
 
 function parseKillExp(
@@ -129,114 +144,40 @@ function parseKillExp(
 	floor: number,
 	isBossFloor: boolean,
 ): Map<number, number> {
-	const luckyCharmActive = (state.doubleExpFloors ?? 0) > 0;
+	const luckyCharmActive = false; // Lucky Charm removed in new item system
 
-	// -------------------------------------------------------------------------
-	// Slot → team index maps
-	// -------------------------------------------------------------------------
-
-	/**
-	 * FIX: p1 battle slot → team array index.
-	 * Updated on EVERY switch-in (not just the first) so that when a Pokémon
-	 * faints and a new one enters the same slot, kills are credited to the
-	 * correct (new) team member and not the old fainted one.
-	 */
 	const p1SlotToTeamIdx: Record<string, number> = {};
-
-	/**
-	 * FIX: Track which team indices have fainted so we never award EXP to a
-	 * dead Pokémon regardless of attribution.
-	 */
 	const p1TeamFainted = new Set<number>();
-
-	/** p2 battle slot → species id currently in that slot */
 	const p2SlotSpecies: Record<string, string> = {};
-	/** p2 battle slot → level currently in that slot */
 	const p2SlotLevel: Record<string, number> = {};
-
-	// -------------------------------------------------------------------------
-	// Attribution tables (p2 slot → p1 slot responsible)
-	// -------------------------------------------------------------------------
-
-	/**
-	 * The last p1 slot to use a direct damaging move against each p2 slot.
-	 * FIX: Reset per p2-slot when the AI sends out a new Pokémon into that
-	 * slot, preventing old attribution bleeding onto a fresh Pokémon.
-	 */
 	const lastDirectAttacker: Record<string, string> = {};
-
-	/**
-	 * The p1 slot that inflicted a status condition on each p2 slot.
-	 * FIX: Also reset when a new p2 Pokémon enters the slot.
-	 */
 	const statusInflicter: Record<string, string> = {};
-
-	/**
-	 * The p1 slot that applied a residual-damage effect on each p2 slot.
-	 * Key: `p2Slot:effectName`. Value: p1 slot.
-	 * FIX: Cleared per-slot on p2 switch-in.
-	 */
 	const residualInflicter: Record<string, string> = {};
-
-	/**
-	 * Entry hazard setter: key = hazard name ('stealthrock' etc), value = p1 slot.
-	 */
 	const hazardSetter: Record<string, string> = {};
-
-	/**
-	 * Most-recent p1 slot to take any action — absolute last-resort fallback.
-	 */
 	let lastAnyP1Slot: string | undefined;
-
-	/** Last |move| context */
 	let lastMoveUser = '';
 	let lastMoveTarget = '';
 	let lastMoveName = '';
-
-	/** Whether each weather type was set by p1. */
 	const weatherSetByP1: Record<string, boolean> = {};
-
-	// Result: teamIdx → cumulative exp earned via kills
 	const expMap = new Map<number, number>();
 
-	// =========================================================================
-	// Single-pass log scan
-	// =========================================================================
 	for (const line of logLines) {
-
-		// -----------------------------------------------------------------------
-		// 1. p1 switch / drag → update slot→teamIdx (always, not just first time)
-		// -----------------------------------------------------------------------
-		// Format: |switch|p1a: Nickname|Species, L50, M|HP/maxHP
 		const p1Switch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)/.exec(line);
 		if (p1Switch) {
 			const slot = 'p1' + p1Switch[1];
 			const sid = toID(p1Switch[2].trim());
-
-			// Re-resolve on every switch: find the team member matching this
-			// species that isn't currently occupying a different active slot.
 			const otherActiveIndices = new Set(
-				Object.entries(p1SlotToTeamIdx)
-					.filter(([s]) => s !== slot)
-					.map(([, idx]) => idx)
+				Object.entries(p1SlotToTeamIdx).filter(([s]) => s !== slot).map(([, idx]) => idx)
 			);
-
 			let matched = -1;
 			for (let i = 0; i < state.team.length; i++) {
-				if (toID(state.team[i].species) === sid && !otherActiveIndices.has(i)) {
-					matched = i;
-					break;
-				}
+				if (toID(state.team[i].species) === sid && !otherActiveIndices.has(i)) { matched = i; break; }
 			}
 			if (matched !== -1) p1SlotToTeamIdx[slot] = matched;
-
 			lastAnyP1Slot = slot;
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 2. p1 faint → mark team index as fainted
-		// -----------------------------------------------------------------------
 		const p1FaintLine = /^\|faint\|p1([a-z]):/.exec(line);
 		if (p1FaintLine) {
 			const slot = 'p1' + p1FaintLine[1];
@@ -245,18 +186,11 @@ function parseKillExp(
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 3. p2 switch / drag → record species + level; reset per-slot attribution
-		// -----------------------------------------------------------------------
-		// Format: |switch|p2a: Nickname|Species, L50, M|HP/maxHP
 		const p2Switch = /^\|(?:switch|drag)\|p2([a-z]): [^|]+\|([^|,]+)(?:, L(\d+))?[^|]*\|/.exec(line);
 		if (p2Switch) {
 			const slot = 'p2' + p2Switch[1];
 			p2SlotSpecies[slot] = toID(p2Switch[2].trim());
 			p2SlotLevel[slot] = p2Switch[3] ? parseInt(p2Switch[3]) : botLevel(floor);
-
-			// FIX: Reset all attribution for this slot so prior-Pokémon data
-			// doesn't carry over to the new one entering the same slot.
 			delete lastDirectAttacker[slot];
 			delete statusInflicter[slot];
 			for (const key of Object.keys(residualInflicter)) {
@@ -265,61 +199,27 @@ function parseKillExp(
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 4. |move| lines → track direct attacker + residual setup
-		// -----------------------------------------------------------------------
-		// Format: |move|p1a: Name|MoveName|p2a: Name
 		const moveMatch = /^\|move\|([p][12][a-z]): [^|]+\|([^|]+)\|([p][12][a-z]):/.exec(line);
 		if (moveMatch) {
-			const user = moveMatch[1];
-			const move = toID(moveMatch[2]);
-			const target = moveMatch[3];
-
-			lastMoveName = move;
-			lastMoveUser = user;
-			lastMoveTarget = target;
-
+			const user = moveMatch[1]; const move = toID(moveMatch[2]); const target = moveMatch[3];
+			lastMoveName = move; lastMoveUser = user; lastMoveTarget = target;
 			if (user.startsWith('p1')) {
 				lastAnyP1Slot = user;
-
 				if (target.startsWith('p2')) {
 					lastDirectAttacker[target] = user;
-
-					const HAZARD_MOVES: Record<string, string> = {
-						stealthrock: 'stealthrock',
-						spikes: 'spikes',
-						toxicspikes: 'toxicspikes',
-						stickyweb: 'stickyweb',
-						stoneaxe: 'stealthrock',
-						ceaselessedge: 'spikes',
-					};
-					if (HAZARD_MOVES[move]) {
-						hazardSetter[HAZARD_MOVES[move]] = user;
-					}
-
-					if (move === 'futuresight' || move === 'doomdesire') {
-						residualInflicter[`${target}:${move}`] = user;
-					}
+					const HAZARD_MOVES: Record<string, string> = { stealthrock: 'stealthrock', spikes: 'spikes', toxicspikes: 'toxicspikes', stickyweb: 'stickyweb', stoneaxe: 'stealthrock', ceaselessedge: 'spikes' };
+					if (HAZARD_MOVES[move]) hazardSetter[HAZARD_MOVES[move]] = user;
+					if (move === 'futuresight' || move === 'doomdesire') residualInflicter[`${target}:${move}`] = user;
 				}
-
-				const WEATHER_MOVES: Record<string, string> = {
-					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
-					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
-				};
+				const WEATHER_MOVES: Record<string, string> = { raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand', snowscape: 'snow', hail: 'hail', chillyreception: 'snow' };
 				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = true;
 			} else {
-				const WEATHER_MOVES: Record<string, string> = {
-					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
-					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
-				};
+				const WEATHER_MOVES: Record<string, string> = { raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand', snowscape: 'snow', hail: 'hail', chillyreception: 'snow' };
 				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = false;
 			}
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 5. |-status|p2X → record who inflicted the status
-		// -----------------------------------------------------------------------
 		const statusApply = /^\|-status\|p2([a-z]): [^|]+\|(brn|psn|tox)/.exec(line);
 		if (statusApply) {
 			const p2Slot = 'p2' + statusApply[1];
@@ -331,10 +231,6 @@ function parseKillExp(
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 6. |-start| lines → record residual effect inflicters
-		// -----------------------------------------------------------------------
-		// e.g. |-start|p2a: Nickname|move: Leech Seed
 		const residualStart = /^\|-start\|p2([a-z]): [^|]+\|(?:move: )?([^|[]+)/.exec(line);
 		if (residualStart) {
 			const p2Slot = 'p2' + residualStart[1];
@@ -345,9 +241,6 @@ function parseKillExp(
 			continue;
 		}
 
-		// -----------------------------------------------------------------------
-		// 7. |faint|p2X → resolve attribution and record kill EXP
-		// -----------------------------------------------------------------------
 		const faintLine = /^\|faint\|p2([a-z]):/.exec(line);
 		if (!faintLine) continue;
 
@@ -355,28 +248,21 @@ function parseKillExp(
 		const enemySpecies = p2SlotSpecies[p2Slot] ?? '';
 		const enemyLevel = p2SlotLevel[p2Slot] ?? botLevel(floor);
 
-		// --- Resolve which p1 slot gets the kill credit ---
 		let creditedP1Slot: string | undefined;
-
 		const lastMoveWasSelfKO = SELF_KO_MOVES.has(lastMoveName) && lastMoveUser.startsWith('p2');
 		const lastMoveWasP1Direct = lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot;
 
 		if (lastMoveWasP1Direct && !lastMoveWasSelfKO) {
-			// Direct p1 hit was the killing blow
 			creditedP1Slot = lastMoveUser;
 		} else if (lastMoveWasSelfKO) {
-			// AI used Explosion/Self-Destruct etc. — credit whoever last hit it
 			creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 		} else if (statusInflicter[p2Slot]) {
-			// Burn / poison / toxic finished it off
 			creditedP1Slot = statusInflicter[p2Slot];
 		} else {
-			// Check residual inflicters (Leech Seed, Curse, trapping, Future Sight…)
 			const residualKey = Object.keys(residualInflicter).find(k => k.startsWith(`${p2Slot}:`));
 			if (residualKey) {
 				creditedP1Slot = residualInflicter[residualKey];
 			} else {
-				// Back-scan recent log lines for a [from] tag on the damage line
 				const faintIdx = logLines.indexOf(line);
 				let fromTag = '';
 				for (let j = faintIdx - 1; j >= Math.max(0, faintIdx - 8); j--) {
@@ -385,37 +271,26 @@ function parseKillExp(
 					const fromMatch = /\[from\] (?:\[of\] [^|]+\|)?(.+)$/.exec(dmgLine);
 					if (fromMatch) { fromTag = fromMatch[1].trim(); break; }
 				}
-
 				if (fromTag) {
 					const hazardMatch = /^(?:Stealth Rock|Spikes|Toxic Spikes|Sticky Web)$/.exec(fromTag);
 					if (hazardMatch) {
-						const hKey = toID(hazardMatch[0]);
-						creditedP1Slot = hazardSetter[hKey] ?? lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
+						creditedP1Slot = hazardSetter[toID(hazardMatch[0])] ?? lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 					} else if (/^(?:Sandstorm|Hail|Snow)$/.test(fromTag)) {
 						const wKey = fromTag.toLowerCase();
-						// Only credit if p1 set this weather
-						creditedP1Slot = weatherSetByP1[wKey]
-							? (lastDirectAttacker[p2Slot] ?? lastAnyP1Slot)
-							: undefined;
+						creditedP1Slot = weatherSetByP1[wKey] ? (lastDirectAttacker[p2Slot] ?? lastAnyP1Slot) : undefined;
 					} else if (/^(?:recoil|Life Orb|Black Sludge|crash)$/i.test(fromTag)) {
 						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 					} else if (RESIDUAL_FROM_TAGS[fromTag]) {
 						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 					}
 				}
-
-				if (!creditedP1Slot) {
-					creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
-				}
+				if (!creditedP1Slot) creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 			}
 		}
 
 		if (!creditedP1Slot) continue;
-
 		const teamIdx = p1SlotToTeamIdx[creditedP1Slot];
 		if (teamIdx === undefined) continue;
-
-		// FIX: Never award kill EXP to a Pokémon that has already fainted
 		if (p1TeamFainted.has(teamIdx)) continue;
 
 		const exp = calcKillExp(enemySpecies, enemyLevel, luckyCharmActive, isBossFloor);
@@ -426,11 +301,73 @@ function parseKillExp(
 }
 
 // ---------------------------------------------------------------------------
+// HP + PP sync after battle
+// ---------------------------------------------------------------------------
+
+function syncBattleOutcome(
+	logLines: string[],
+	state: PokeRogueState,
+): { consumedItems: string[] } {
+	const hpSlotToTeamIdx: Record<string, number> = {};
+	const hpAssignedIdx = new Set<number>();
+	const slotHp: Record<string, number> = {};
+
+	for (const line of logLines) {
+		const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
+		if (switchMatch) {
+			const slot = 'p1' + switchMatch[1];
+			if (!(slot in hpSlotToTeamIdx)) {
+				const sid = toID(switchMatch[2].trim());
+				for (let i = 0; i < state.team.length; i++) {
+					if (!hpAssignedIdx.has(i) && toID(state.team[i].species) === sid) {
+						hpSlotToTeamIdx[slot] = i;
+						hpAssignedIdx.add(i);
+						break;
+					}
+				}
+			}
+			slotHp[slot] = parseInt(switchMatch[3]);
+		}
+
+		const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?/.exec(line);
+		if (hpMatch) slotHp['p1' + hpMatch[1]] = parseInt(hpMatch[2]);
+
+		const faintP1 = /^\|faint\|p1([a-z]):/.exec(line);
+		if (faintP1) slotHp['p1' + faintP1[1]] = 0;
+	}
+
+	for (const [slot, hp] of Object.entries(slotHp)) {
+		const idx = hpSlotToTeamIdx[slot];
+		if (idx !== undefined) state.team[idx].currentHp = hp;
+	}
+
+	// Consumed items (PS |-enditem| lines)
+	const consumedItems: string[] = [];
+	for (const line of logLines) {
+		const endItemMatch = /^\|-enditem\|p1([a-z]): [^|]+\|([^|]+)/.exec(line);
+		if (!endItemMatch) continue;
+		if (line.includes('[from] move: Knock Off') || line.includes('[from] move: Thief') || line.includes('[from] move: Incinerate')) continue;
+		const slot = 'p1' + endItemMatch[1];
+		const itemId = toID(endItemMatch[2].trim());
+		const teamIdx = hpSlotToTeamIdx[slot];
+		if (teamIdx !== undefined && state.team[teamIdx].heldItem === itemId) {
+			delete state.team[teamIdx].heldItem;
+			const dexItem = Dex.items.get(itemId);
+			consumedItems.push(dexItem.name || itemId);
+		}
+	}
+
+	return { consumedItems };
+}
+
+// ---------------------------------------------------------------------------
 // Commands
 // ---------------------------------------------------------------------------
 
 export const commands: Chat.ChatCommands = {
 	pokerogue: {
+
+		// ── Start / new game ──────────────────────────────────────────────
 		start(target, room, user) {
 			if (!user.named) return this.errorReply("Login required.");
 			let state = getState(user.id);
@@ -442,8 +379,20 @@ export const commands: Chat.ChatCommands = {
 				const highestFloor = state?.highestFloor || 0;
 				const displayName = state?.displayName || user.name;
 				const recordTeam = state?.recordTeam || [];
-
-				state = { floor: 1, team: [], pendingChoice: pickStarterOptions(), pendingChoiceType: 'starter', coins: 150, streaksWon: 0, highestFloor, displayName, recordTeam } as any;
+				state = {
+					floor: 1,
+					team: [],
+					battlePoints: STARTING_BP,
+					timesRerolled: 0,
+					rotationalShop: [],
+					keyItems: [],
+					pendingChoice: pickStarterOptions(),
+					pendingChoiceType: 'starter',
+					streaksWon: 0,
+					highestFloor,
+					displayName,
+					recordTeam,
+				} as PokeRogueState;
 				setState(user.id, state);
 			}
 			repairEmptyPendingChoice(state, user.id);
@@ -456,27 +405,28 @@ export const commands: Chat.ChatCommands = {
 			if (hasProgress && !existing.gameOver && target !== 'confirm') {
 				return this.sendReplyBox(`<b>Warning: Run in progress!</b><br><button name="send" value="/pokerogue newgame confirm" class="button">Yes, start fresh</button>`);
 			}
-
 			const highestFloor = existing?.highestFloor || 0;
 			const displayName = existing?.displayName || user.name;
 			const recordTeam = existing?.recordTeam || [];
-
-			const newState = {
+			const newState: PokeRogueState = {
 				floor: 1,
 				team: [],
+				battlePoints: STARTING_BP,
+				timesRerolled: 0,
+				rotationalShop: [],
+				keyItems: [],
 				pendingChoice: pickStarterOptions(),
 				pendingChoiceType: 'starter',
-				coins: 150,
 				streaksWon: 0,
 				highestFloor,
 				displayName,
 				recordTeam,
-			} as any;
-
+			};
 			setState(user.id, newState);
 			return this.parse('/pokerogue start');
 		},
 
+		// ── View navigation ────────────────────────────────────────────────
 		view(target, room, user) {
 			const state = getState(user.id);
 			if (!state) return;
@@ -488,14 +438,14 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
+		// ── Battle ─────────────────────────────────────────────────────────
 		battle(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
-
-			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
-				return this.errorReply("Handle pending choices or team swaps first.");
+			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
-
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);
@@ -503,73 +453,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		learnmove(target, room, user) {
-			const state = getState(user.id);
-			if (!state?.pendingMoves?.length) return;
-
-			const pending = state.pendingMoves[0];
-			const mon = state.team[pending.pokemonIndex];
-			if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, mon.level);
-
-			const targetTrimmed = target.trim();
-
-			if (targetTrimmed === 'skip') {
-				state.notification = `Your Pokémon gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
-			} else {
-				const slot = parseInt(targetTrimmed) - 1;
-				if (isNaN(slot) || slot < 0 || slot >= mon.moves.length) return this.errorReply("Invalid move slot.");
-
-				const oldMoveName = Dex.moves.get(mon.moves[slot]).name;
-				const newMoveName = Dex.moves.get(pending.move).name;
-
-				mon.moves[slot] = pending.move;
-				state.notification = `Forgot ${oldMoveName} and learned <b>${newMoveName}</b>!`;
-			}
-
-			state.pendingMoves.shift();
-			setState(user.id, state);
-			refreshGamePage(user);
-		},
-
-		swapmon(target, room, user) {
-			const state = getState(user.id);
-			if (!state?.pendingSwap) return;
-
-			const targetTrimmed = target.trim();
-			const newMon = state.pendingSwap;
-			const spName = Dex.species.get(toID(newMon.species)).name;
-
-			if (targetTrimmed === 'skip') {
-				state.notification = `You let the new Pokémon go.`;
-			} else {
-				const slot = parseInt(targetTrimmed) - 1;
-				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
-
-				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
-
-				if (state.team[slot].heldItem) {
-					const heldId = state.team[slot].heldItem;
-					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
-					const bagId = shopEntry ? shopEntry[0] : heldId;
-
-					state.items = state.items || {};
-					state.items[bagId] = (state.items[bagId] || 0) + 1;
-				}
-
-				state.team[slot] = newMon;
-
-				if (state.pendingMoves) {
-					state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
-				}
-
-				state.notification = `You replaced ${oldMonName} with <b>${spName}</b>!`;
-			}
-
-			delete state.pendingSwap;
-			setState(user.id, state);
-			refreshGamePage(user);
-		},
-
+		// ── Pokémon choice (starter / pack) ────────────────────────────────
 		choose(target, room, user) {
 			const state = getState(user.id);
 			const n = parseInt(target) - 1;
@@ -589,12 +473,12 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
-			// FIX: use the species' own expType curve when seeding the mon's starting EXP
 			const newMon: PokemonEntry = {
 				species: finalSpecies,
 				level: addedLevel,
 				exp: expForLevel(addedLevel, getExpType(finalSpecies)),
 				moves: initialMoves,
+				ppLeft: initialMoves.map(m => Math.floor((Dex.moves.get(m).pp ?? 5) * (8 / 5))),
 			};
 
 			if (state.pendingChoiceType === 'starter') {
@@ -605,242 +489,462 @@ export const commands: Chat.ChatCommands = {
 				state.pendingSwap = newMon;
 			}
 
-			delete state.pendingChoice; delete state.pendingChoiceType;
-			setState(user.id, state); refreshGamePage(user);
+			delete state.pendingChoice;
+			delete state.pendingChoiceType;
+			setState(user.id, state);
+			refreshGamePage(user);
 		},
 
+		// ── Move learning ──────────────────────────────────────────────────
+		learnmove(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingMoves?.length) return;
+			const pending = state.pendingMoves[0];
+			const mon = state.team[pending.pokemonIndex];
+			if (!mon.moves) mon.moves = getLevelUpMoves(mon.species, mon.level);
+			const t = target.trim();
+			if (t === 'skip') {
+				state.notification = `Your Pokémon gave up on learning <b>${Dex.moves.get(pending.move).name}</b>.`;
+			} else {
+				const slot = parseInt(t) - 1;
+				if (isNaN(slot) || slot < 0 || slot >= mon.moves.length) return this.errorReply("Invalid move slot.");
+				const oldMoveName = Dex.moves.get(mon.moves[slot]).name;
+				mon.moves[slot] = pending.move;
+				if (mon.ppLeft) mon.ppLeft[slot] = Math.floor((Dex.moves.get(pending.move).pp ?? 5) * (8 / 5));
+				state.notification = `Forgot ${oldMoveName} and learned <b>${Dex.moves.get(pending.move).name}</b>!`;
+			}
+			state.pendingMoves.shift();
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Team swap ──────────────────────────────────────────────────────
+		swapmon(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingSwap) return;
+			const t = target.trim();
+			const newMon = state.pendingSwap;
+			if (t === 'skip') {
+				state.notification = `You let the new Pokémon go.`;
+			} else {
+				const slot = parseInt(t) - 1;
+				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
+				// Return held item to... it's just lost (no bag in new system for held items)
+				state.team[slot] = newMon;
+				if (state.pendingMoves) state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
+				state.notification = `You replaced ${oldMonName} with <b>${Dex.species.get(toID(newMon.species)).name}</b>!`;
+			}
+			delete state.pendingSwap;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Shop reroll ────────────────────────────────────────────────────
+		reroll(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+			if (state.battleRoomId) return this.errorReply("Can't reroll during a battle.");
+			const price = 2 + (state.timesRerolled ?? 0);
+			if (price > (state.battlePoints ?? 0)) return this.errorReply(`Not enough BP! Need ${price} BP.`);
+			state.battlePoints -= price;
+			state.timesRerolled = (state.timesRerolled ?? 0) + 1;
+
+			// Build a PokemonSet-compatible team for rollShop (only needs species)
+			const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
+			state.rotationalShop = rollShop(pseudoTeam, state.streaksWon ?? 0);
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Buy ────────────────────────────────────────────────────────────
 		buy(target, room, user) {
 			const state = getState(user.id);
-			if (!state) return;
-
-			if (state.battleRoomId) {
-				return this.errorReply("You cannot buy items while a battle is in progress.");
-			}
-			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
-				return this.errorReply("Please resolve your pending choices before using the shop.");
+			if (!state || state.gameOver) return this.errorReply("No active run.");
+			if (state.battleRoomId) return this.errorReply("Can't shop during a battle.");
+			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				return this.errorReply("Resolve pending choices first.");
 			}
 
-			const item = SHOP_ITEMS[toID(target)];
-			if (item && (state.coins ?? 0) >= item.cost && state.shopInventory?.includes(item.id)) {
-				state.coins! -= item.cost;
-				state.items = state.items ?? {};
-				state.items[item.id] = (state.items[item.id] ?? 0) + 1;
-				setState(user.id, state); refreshGamePage(user);
-			}
-		},
+			const key = toID(target);
+			const item = SHOP_ITEMS[key] || ROTATIONAL_ITEM_POOL[key];
+			if (!item) return this.errorReply("Unknown item.");
 
-		refreshshop(target, room, user) {
-			const state = getState(user.id);
-			if (!state) return;
+			const bp = state.battlePoints ?? 0;
+			if (item.cost > bp) return this.errorReply(`Not enough BP! Need ${item.cost} BP.`);
 
-			if (state.battleRoomId) {
-				return this.errorReply("You cannot reroll the shop during a battle.");
-			}
-			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
-				return this.errorReply("Please resolve your pending choices before using the shop.");
+			// Check streak gate
+			if (item.minStreak > (state.streaksWon ?? 0)) return this.errorReply("Your streak isn't high enough for this item.");
+
+			// Check rotational shop membership (rotational items must be in the shop)
+			const isRotational = !!ROTATIONAL_ITEM_POOL[key];
+			const isPermanent = !!SHOP_ITEMS[key];
+			if (isRotational && !isPermanent && !state.rotationalShop?.includes(key)) {
+				return this.errorReply("That item isn't currently in the shop.");
 			}
 
-			if ((state.coins ?? 0) >= 5) {
-				state.coins! -= 5;
-				state.shopInventory = rollShopInventory();
+			// Key items: can only buy once
+			if (item.type === 'key') {
+				if ((state.keyItems ?? []).includes(item.name)) return this.errorReply("You already own this key item.");
+				state.battlePoints -= item.cost;
+				state.keyItems = state.keyItems ?? [];
+				state.keyItems.push(item.name);
+				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
+				state.notification = `Bought key item: <b>${item.name}</b>!`;
 				setState(user.id, state);
 				refreshGamePage(user);
-			} else {
-				return this.errorReply("You don't have enough coins to reroll the shop.");
-			}
-		},
-
-		use(target, room, user) {
-			const state = getState(user.id);
-			if (!state) return;
-
-			if (state.battleRoomId) {
-				return this.errorReply("You cannot manage your bag or items while a battle is in progress.");
-			}
-			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
-				return this.errorReply("You cannot use items while you have pending choices or moves to learn.");
+				return;
 			}
 
-			const [id, slotStr] = target.split(' ');
-			const itemId = toID(id);
-			const slot = parseInt(slotStr) - 1;
-			if (!state.items?.[itemId]) return this.errorReply("Item not found.");
-			const item = SHOP_ITEMS[itemId];
-
-			const requiresSlot = itemId === 'rarecandy' || item?.heldItem || item?.healHp !== undefined;
-			if (requiresSlot) {
-				if (isNaN(slot) || slot < 0 || slot >= state.team.length) {
-					return this.errorReply("Invalid team slot.");
-				}
+			// Pokemon pack: generate options then redirect to choose
+			if (item.type === 'pokemonPack') {
+				const scale = [5, 10].map(e => Math.min(100, Math.max(1, e + (state.streaksWon ?? 0) * 5)));
+				const packWeightings: Record<string, { midpoint: number; range: number; weightcap: number }> = {
+					'Poke Ball Pack':   { midpoint: 263, range: 100, weightcap: 100 },
+					'Great Ball Pack':  { midpoint: 450, range: 35,  weightcap: 100 },
+					'Ultra Ball Pack':  { midpoint: 540, range: 30,  weightcap: 100 },
+					'Master Ball Pack': { midpoint: 640, range: 50,  weightcap: 100 },
+				};
+				const weighting = packWeightings[item.name];
+				// genAIPokemon can't be used directly here since it returns AIPokemonSet[],
+				// so we re-use pickNewPokemonOptions which returns species IDs.
+				// For packs we want BST-weighted picks similar to genPokemon.
+				// We'll use the same tier system with floor influence.
+				state.battlePoints -= item.cost;
+				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
+				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
+				state.pendingChoiceType = 'add';
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
 
-			if (itemId === 'rarecandy' && state.team[slot].level >= 999) {
-				return this.errorReply(`That Pokémon is already at Max Level!`);
+			// Item pack: generate 3 item options
+			if (item.type === 'itemPack') {
+				const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
+				const options = genItem(3, pseudoTeam);
+				state.battlePoints -= item.cost;
+				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
+				state.itemOptions = options;
+				state.purchasedItem = key;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
 
-			if (itemId === 'revive' && state.hasRevive) {
-				return this.errorReply("You already have an active Revive!");
+			// Held item or evolve item: queue assignment to a Pokémon
+			if (item.type === 'item' || item.type === 'evolveItem') {
+				// Don't deduct BP yet — deduct on assignment (giveitem)
+				state.pendingItemName = item.name;
+				state.purchasedItem = key;
+				state.isRotationalItem = isRotational;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
 
-			state.items[itemId]--;
+			// TM: queue teaching
+			if (item.type === 'TM') {
+				const move = (item as TMItem).move;
+				state.moveToLearn = move;
+				state.purchasedItem = key;
+				state.isRotationalItem = isRotational;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
+			}
 
-			if (itemId === 'rarecandy') {
-				const mon = state.team[slot];
-				const oldLevel = mon.level;
-				const oldSpecies = mon.species;
-				let evolved = false;
-
-				mon.level = Math.min(999, mon.level + 5);
-				// FIX: use the species' own expType curve when setting EXP after Rare Candy
-				mon.exp = expForLevel(mon.level, getExpType(mon.species));
-				while (true) {
-					const evo = getLevelUpEvo(mon.species);
-					if (!evo || mon.level < evo.evoLevel) break;
-					mon.species = evo.evoTo;
-					evolved = true;
-				}
-				state.notification = `Your Pokémon grew to Lv. ${mon.level}!`;
-
-				if (!mon.moves) mon.moves = getLevelUpMoves(oldSpecies, oldLevel);
-
-				const newMoves = getMovesLearnedBetween(oldSpecies, oldLevel, mon.level);
-				if (evolved) {
-					const evoMoves = getMovesLearnedBetween(mon.species, oldLevel, mon.level, true);
-					for (const m of evoMoves) {
-						if (!newMoves.includes(m)) newMoves.push(m);
-					}
-				}
-
-				state.pendingMoves = state.pendingMoves || [];
-
-				for (const move of newMoves) {
-					const alreadyKnown = mon.moves.includes(move);
-					const alreadyQueued = state.pendingMoves.some(p => p.pokemonIndex === slot && p.move === move);
-
-					if (!alreadyKnown && !alreadyQueued) {
-						if (mon.moves.length < 4) {
-							mon.moves.push(move);
-						} else {
-							state.pendingMoves.push({ pokemonIndex: slot, move, speciesName: mon.species });
-						}
-					}
-				}
-			} else if (itemId === 'luckycharm') {
-				state.doubleExpFloors = (state.doubleExpFloors ?? 0) + 3;
-			} else if (itemId === 'revive') {
-				state.hasRevive = true;
-			} else if (item?.healHp !== undefined) {
-				const mon = state.team[slot];
-				const oldHp = mon.currentHp ?? 100;
-				if (oldHp >= 100) {
-					state.items[itemId]++;
-					setState(user.id, state);
-					return this.errorReply(`${Dex.species.get(toID(mon.species)).name}'s HP is already full!`);
-				}
-				mon.currentHp = item.healHp >= 100 ? 100 : Math.min(100, oldHp + item.healHp);
-				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> restored HP! (${oldHp}% -> ${mon.currentHp}%)`;
-			} else if (item?.gachaType) {
-				const { species, isFeatured } = rollGachaPokemon(item.gachaType, state.team.map(m => m.species));
-				state.pendingGachaOffer = { species, sourceItemId: itemId, isFeatured };
-			} else if (item?.heldItem) {
-				if (state.team[slot].heldItem) {
-					const oldItem = state.team[slot].heldItem;
-					const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === oldItem);
-					const bagId = shopEntry ? shopEntry[0] : oldItem;
-					state.items[bagId] = (state.items[bagId] ?? 0) + 1;
-				}
-				state.team[slot].heldItem = item.heldItem;
+			// Consumable shop items: healHP, healPP, revive, cureStatus
+			// These require selecting a target Pokémon — set flag and refresh
+			if (['healHP', 'healPP', 'revive', 'cureStatus'].includes(item.type)) {
+				state.purchasedItem = key;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
 
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
-		unequip(target, room, user) {
+		// ── TM: teach move to a Pokémon ────────────────────────────────────
+		teachtm(target, room, user) {
 			const state = getState(user.id);
-			if (!state) return;
+			if (!state?.moveToLearn || !state.purchasedItem) return this.errorReply("No TM pending.");
+			const t = target.trim();
+			const itemKey = state.purchasedItem;
+			const item = ROTATIONAL_ITEM_POOL[itemKey] ?? SHOP_ITEMS[itemKey];
 
-			if (state.battleRoomId) {
-				return this.errorReply("You cannot manage items while a battle is in progress.");
+			if (t === 'skip') {
+				// Refund — don't deduct BP
+				delete state.moveToLearn;
+				delete state.purchasedItem;
+				delete state.isRotationalItem;
+				delete state.pokemonForTM;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
-			if (state.pendingChoice?.length || state.pendingGachaOffer || state.pendingMoves?.length || state.pendingSwap) {
-				return this.errorReply("You cannot change items while you have pending choices.");
+
+			const slot = parseInt(t) - 1;
+			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+			const mon = state.team[slot];
+
+			// Check if mon can learn the move
+			const canLearn = Dex.species.getFullLearnset(toID(mon.species))
+				.some(l => Object.keys(l.learnset ?? {}).includes(toID(state.moveToLearn!)));
+			if (!canLearn) return this.errorReply("That Pokémon can't learn this TM move.");
+			if (mon.moves.includes(state.moveToLearn)) return this.errorReply("That Pokémon already knows this move.");
+
+			// Deduct BP and remove from rotational shop
+			state.battlePoints -= item.cost;
+			if (state.isRotationalItem) state.rotationalShop = state.rotationalShop.filter(k => k !== itemKey);
+
+			state.pokemonForTM = slot;
+
+			if (mon.moves.length < 4) {
+				mon.moves.push(state.moveToLearn);
+				if (!mon.ppLeft) mon.ppLeft = mon.moves.map(m => Math.floor((Dex.moves.get(m).pp ?? 5) * (8 / 5)));
+				else mon.ppLeft.push(Math.floor((Dex.moves.get(state.moveToLearn).pp ?? 5) * (8 / 5)));
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> learned <b>${Dex.moves.get(state.moveToLearn).name}</b>!`;
+				delete state.moveToLearn;
+				delete state.purchasedItem;
+				delete state.isRotationalItem;
+				delete state.pokemonForTM;
+			} else {
+				// Need to forget a move — queue pendingMoves
+				state.pendingMoves = state.pendingMoves ?? [];
+				state.pendingMoves.unshift({ pokemonIndex: slot, move: state.moveToLearn, speciesName: mon.species });
+				delete state.moveToLearn;
+				delete state.purchasedItem;
+				delete state.isRotationalItem;
+				delete state.pokemonForTM;
 			}
+
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Item pack: pick one item ───────────────────────────────────────
+		pickitem(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.itemOptions?.length) return;
+			const t = target.trim();
+			if (t === 'skip') {
+				delete state.itemOptions;
+				delete state.purchasedItem;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
+			}
+			const dexItem = Dex.items.get(t);
+			if (!dexItem.exists) return this.errorReply("Unknown item.");
+
+			// Queue give-item flow
+			state.pendingItemName = dexItem.name;
+			delete state.itemOptions;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Give item to a Pokémon ─────────────────────────────────────────
+		giveitem(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.pendingItemName) return this.errorReply("No item pending.");
+			const t = target.trim();
+
+			if (t === 'skip') {
+				// Refund if came from rotational shop
+				if (state.isRotationalItem && state.purchasedItem) {
+					// BP not deducted yet — nothing to refund
+				}
+				delete state.pendingItemName;
+				delete state.purchasedItem;
+				delete state.isRotationalItem;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
+			}
+
+			const slot = parseInt(t) - 1;
+			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+
+			// Deduct BP now (was held pending confirmation)
+			if (state.purchasedItem) {
+				const item = ROTATIONAL_ITEM_POOL[state.purchasedItem] ?? SHOP_ITEMS[state.purchasedItem];
+				if (item) {
+					state.battlePoints -= item.cost;
+					if (state.isRotationalItem) state.rotationalShop = state.rotationalShop.filter(k => k !== state.purchasedItem);
+				}
+			}
+
+			const mon = state.team[slot];
+			const dexNewItem = Dex.items.get(state.pendingItemName);
+			const dexSpecies = Dex.species.get(toID(mon.species));
+
+			// Handle forme changes (e.g. Arceus plates, Genesect drives)
+			if (dexNewItem.forcedForme && dexSpecies.otherFormes?.includes(dexNewItem.forcedForme)) {
+				mon.species = toID(dexNewItem.forcedForme);
+			} else if (mon.heldItem) {
+				const dexOldItem = Dex.items.get(mon.heldItem);
+				if (dexOldItem.forcedForme && dexSpecies.otherFormes?.includes(dexOldItem.forcedForme)) {
+					mon.species = toID(dexSpecies.changesFrom ?? dexSpecies.baseSpecies);
+				}
+			}
+
+			mon.heldItem = toID(state.pendingItemName);
+			state.notification = `Gave <b>${Utils.escapeHTML(dexNewItem.name)}</b> to <b>${dexSpecies.name}</b>!`;
+
+			delete state.pendingItemName;
+			delete state.purchasedItem;
+			delete state.isRotationalItem;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Use consumable shop items (healHP / healPP / revive / cureStatus)
+		// These work on a selected Pokémon by slot number.
+		useshopitem(target, room, user) {
+			const state = getState(user.id);
+			if (!state?.purchasedItem) return this.errorReply("No item selected.");
+			const itemKey = state.purchasedItem;
+			const item = SHOP_ITEMS[itemKey] ?? ROTATIONAL_ITEM_POOL[itemKey];
+			if (!item) return this.errorReply("Unknown item.");
 
 			const slot = parseInt(target.trim()) - 1;
 			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
-
 			const mon = state.team[slot];
-			if (!mon.heldItem) return this.errorReply("That Pokémon isn't holding an item.");
+			const hp = mon.currentHp ?? 100;
 
-			const heldId = mon.heldItem;
-			const shopEntry = Object.entries(SHOP_ITEMS).find(([, i]) => i.heldItem === heldId);
-			const bagId = shopEntry ? shopEntry[0] : heldId;
+			if (item.type === 'healHP') {
+				if (hp >= 100) return this.errorReply("That Pokémon is already at full HP.");
+				state.battlePoints -= item.cost;
+				let healAmt = 20;
+				switch (item.name) {
+				case 'Potion':       healAmt = 20; break;
+				case 'Super Potion': healAmt = 50; break;
+				case 'Hyper Potion': healAmt = 120; break;
+				case 'Max Potion':   healAmt = 100; break;
+				}
+				mon.currentHp = item.name === 'Max Potion' ? 100 : Math.min(100, hp + healAmt);
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> restored HP! (${hp}% → ${mon.currentHp}%)`;
 
-			state.items = state.items || {};
-			state.items[bagId] = (state.items[bagId] || 0) + 1;
-			delete mon.heldItem;
+			} else if (item.type === 'healPP') {
+				const allFull = (mon.ppLeft ?? []).every((v, i) => {
+					const max = Math.floor((Dex.moves.get(mon.moves[i]).pp ?? 5) * (8 / 5));
+					return v >= max;
+				});
+				if (allFull) return this.errorReply("That Pokémon's PP is already full.");
+				state.battlePoints -= item.cost;
+				fullHealPP(mon);
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s PP was fully restored!`;
 
-			state.notification = `You took the ${SHOP_ITEMS[bagId]?.name || bagId} from ${mon.species}.`;
+			} else if (item.type === 'cureStatus') {
+				// In our system status isn't tracked directly; just heal HP to signal alive
+				if (hp <= 0) return this.errorReply("Can't cure a fainted Pokémon.");
+				state.battlePoints -= item.cost;
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s status was cured!`;
 
+			} else if (item.type === 'revive') {
+				if (hp > 0) return this.errorReply("That Pokémon hasn't fainted.");
+				state.battlePoints -= item.cost;
+				mon.currentHp = mon.species === 'shedinja' ? 100 : 50;
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> was revived!`;
+			}
+
+			delete state.purchasedItem;
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
+		// ── Unequip held item ──────────────────────────────────────────────
+		unequip(target, room, user) {
+			const state = getState(user.id);
+			if (!state) return;
+			if (state.battleRoomId) return this.errorReply("Can't manage items during a battle.");
+			const slot = parseInt(target.trim()) - 1;
+			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
+			const mon = state.team[slot];
+			if (!mon.heldItem) return this.errorReply("That Pokémon isn't holding an item.");
+			const dexItem = Dex.items.get(mon.heldItem);
+			state.notification = `Took <b>${Utils.escapeHTML(dexItem.name || mon.heldItem)}</b> from ${Dex.species.get(toID(mon.species)).name}. (Item removed — no bag storage.)`;
+			delete mon.heldItem;
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
+		// ── Dismiss notification ───────────────────────────────────────────
+		dismissnotif(target, room, user) {
+			const s = getState(user.id);
+			if (s?.notification) { delete s.notification; setState(user.id, s); }
+			refreshGamePage(user);
+		},
+
+		// ── Status info ────────────────────────────────────────────────────
 		status(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const tId = toID(target) || user.id;
 			const s = getState(tId);
 			if (!s) return this.errorReply(`No run found for ${tId}.`);
-			let buf = `<b>PokéRogue Status: ${tId}</b><br>Floor ${s.floor} | Coins: ${s.coins}<br>${s.team.map(m => `Lv.${m.level} ${m.species}`).join(', ')}`;
-			if (s.pendingChoice?.length) buf += `<br><b>Choice Pending!</b> <button name="send" value="/pokerogue start">Open Game</button>`;
+			const buf = `<b>PokéRogue Status: ${tId}</b><br>Floor ${s.floor} | BP: ${s.battlePoints ?? 0}<br>${s.team.map(m => `Lv.${m.level} ${m.species}`).join(', ')}`;
 			this.sendReplyBox(buf);
 		},
 
-		acceptgacha(target, room, user) {
-			const state = getState(user.id);
-			if (!state?.pendingGachaOffer) return;
-
-			const addedLevel = Math.max(1, botLevel(state.floor) - 2);
-			let finalSpecies = toID(state.pendingGachaOffer.species);
-
-			while (true) {
-				const evo = getLevelUpEvo(finalSpecies);
-				if (!evo || addedLevel < evo.evoLevel) break;
-				finalSpecies = evo.evoTo;
+		// ── Quit / reset run ───────────────────────────────────────────────
+		quit(target, room, user) {
+			const s = getState(user.id);
+			if (s?.battleRoomId) {
+				const match = activeMatches.get(s.battleRoomId as RoomID);
+				if (match) {
+					const bot = Users.get(match.botUserId);
+					if (bot) destroyBotUser(bot);
+					activeMatches.delete(s.battleRoomId as RoomID);
+				}
+				Rooms.get(s.battleRoomId)?.battle?.forfeit(user);
 			}
-
-			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
-			// FIX: use the species' own expType curve
-			const newMon: PokemonEntry = {
-				species: finalSpecies,
-				level: addedLevel,
-				exp: expForLevel(addedLevel, getExpType(finalSpecies)),
-				moves: initialMoves,
-			};
-
-			if (state.team.length < 6) {
-				state.team.push(newMon);
-			} else {
-				state.pendingSwap = newMon;
+			if (s) {
+				s.gameOver = true;
+				s.lastRunFloor = s.floor;
+				s.lastRunStreaks = s.streaksWon || 0;
+				s.team = [];
+				delete s.pendingMoves;
+				delete s.pendingSwap;
+				delete s.pendingChoice;
+				delete s.moveToLearn;
+				delete s.pendingItemName;
+				delete s.itemOptions;
+				delete s.purchasedItem;
+				setState(user.id, s);
 			}
-
-			delete state.pendingGachaOffer;
-			setState(user.id, state); refreshGamePage(user);
+			refreshGamePage(user);
 		},
 
-		declinegacha(target, room, user) {
-			const state = getState(user.id);
-			if (!state?.pendingGachaOffer) return;
+		// ── Staff commands ─────────────────────────────────────────────────
+		givebp(target, room, user) {
+			this.checkCan('lock');
+			let [name, amt] = target.split(',').map(s => s?.trim());
+			if (!amt && !isNaN(parseInt(name))) { amt = name; name = user.id; }
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) {
+				s.battlePoints = (s.battlePoints ?? 0) + parseInt(amt || '5');
+				setState(tId, s);
+				this.sendReply(`Gave ${amt || '5'} BP to ${tId}.`);
+			}
+		},
 
-			const sourceItem = state.pendingGachaOffer.sourceItemId;
-			state.items = state.items || {};
-			state.items[sourceItem] = (state.items[sourceItem] || 0) + 1;
-			state.notification = `You declined the Pokémon and kept your ${SHOP_ITEMS[sourceItem]?.name}.`;
-
-			delete state.pendingGachaOffer;
-			setState(user.id, state);
-			refreshGamePage(user);
+		removebp(target, room, user) {
+			this.checkCan('lock');
+			let [name, amt] = target.split(',').map(s => s?.trim());
+			if (!amt && !isNaN(parseInt(name))) { amt = name; name = user.id; }
+			const tId = toID(name) || user.id;
+			const s = getState(tId);
+			if (s) {
+				s.battlePoints = Math.max(0, (s.battlePoints ?? 0) - parseInt(amt || '5'));
+				setState(tId, s);
+				this.sendReply(`Removed ${amt || '5'} BP from ${tId}.`);
+			}
 		},
 
 		addmon(target, room, user) {
@@ -848,93 +952,33 @@ export const commands: Chat.ChatCommands = {
 			const [name, mon, lvl] = target.split(',').map(s => s.trim());
 			const tId = toID(name) || user.id;
 			const s = getState(tId);
-
-			if (!s) return this.errorReply(`No active run found for ${tId}.`);
-
-			if (s.team.length >= 6) {
-				return this.errorReply(`${tId}'s team is already full! They must lose a Pokemon before you can add one.`);
-			}
-
+			if (!s) return this.errorReply(`No active run for ${tId}.`);
+			if (s.team.length >= 6) return this.errorReply(`${tId}'s team is full.`);
 			const species = Dex.species.get(toID(mon));
 			if (!species.exists) return this.errorReply("Invalid Pokémon.");
 			const level = parseInt(lvl) || 1;
-
 			let finalSpecies = species.id;
 			while (true) {
 				const evo = getLevelUpEvo(finalSpecies);
 				if (!evo || level < evo.evoLevel) break;
 				finalSpecies = evo.evoTo;
 			}
-
-			const initialMoves = getLevelUpMoves(finalSpecies, level);
-			// FIX: use the species' own expType curve
+			const moves = getLevelUpMoves(finalSpecies, level);
 			s.team.push({
 				species: finalSpecies,
 				level,
 				exp: expForLevel(level, getExpType(finalSpecies)),
-				moves: initialMoves,
+				moves,
+				ppLeft: moves.map(m => Math.floor((Dex.moves.get(m).pp ?? 5) * (8 / 5))),
 			});
-
 			setState(tId, s);
 			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
-		},
-
-		givemoney(target, room, user) {
-			this.checkCan('lock');
-			let [name, amt] = target.split(',').map(s => s?.trim());
-
-			if (!amt && !isNaN(parseInt(name))) {
-				amt = name;
-				name = user.id;
-			}
-
-			const tId = toID(name) || user.id;
-			const s = getState(tId);
-			if (s) {
-				s.coins = (s.coins ?? 0) + parseInt(amt || '100');
-				setState(tId, s);
-				this.sendReply(`Gave ${amt || '100'} coins to ${tId}.`);
-			}
-		},
-
-		removecoins(target, room, user) {
-			this.checkCan('lock');
-			let [name, amt] = target.split(',').map(s => s?.trim());
-
-			if (!amt && !isNaN(parseInt(name))) {
-				amt = name;
-				name = user.id;
-			}
-
-			const tId = toID(name) || user.id;
-			const s = getState(tId);
-			if (s) {
-				s.coins = Math.max(0, (s.coins ?? 0) - parseInt(amt || '100'));
-				setState(tId, s);
-				this.sendReply(`Removed ${amt || '100'} coins from ${tId}.`);
-			}
-		},
-
-		resetcoins(target, room, user) {
-			this.checkCan('lock');
-			const tId = toID(target) || user.id;
-			const s = getState(tId);
-			if (s) {
-				s.coins = 0;
-				setState(tId, s);
-				this.sendReply(`Reset coins for ${tId}.`);
-			}
 		},
 
 		setfloor(target, room, user) {
 			this.checkCan('lock');
 			let [name, fl] = target.split(',').map(s => s?.trim());
-
-			if (!fl && !isNaN(parseInt(name))) {
-				fl = name;
-				name = user.id;
-			}
-
+			if (!fl && !isNaN(parseInt(name))) { fl = name; name = user.id; }
 			const tId = toID(name) || user.id;
 			const s = getState(tId);
 			if (s) {
@@ -949,8 +993,10 @@ export const commands: Chat.ChatCommands = {
 			const tId = toID(target) || user.id;
 			const s = getState(tId);
 			if (s) {
-				// FIX: use each mon's own expType curve when healing
-				for (const m of s.team) m.exp = expForLevel(m.level, getExpType(m.species));
+				for (const m of s.team) {
+					m.currentHp = 100;
+					fullHealPP(m);
+				}
 				setState(tId, s);
 				this.sendReply(`Healed team for ${tId}.`);
 			}
@@ -962,52 +1008,18 @@ export const commands: Chat.ChatCommands = {
 			if (getState(tId)) { deleteState(tId); this.sendReply(`Wiped data for ${tId}.`); }
 		},
 
-		dismissnotif(target, room, user) {
-			const s = getState(user.id);
-			if (s?.notification) { delete s.notification; setState(user.id, s); }
-			refreshGamePage(user);
-		},
-
-		quit(target, room, user) {
-			const s = getState(user.id);
-			if (s?.battleRoomId) {
-				const match = activeMatches.get(s.battleRoomId as RoomID);
-				if (match) {
-					const bot = Users.get(match.botUserId);
-					if (bot) destroyBotUser(bot);
-					activeMatches.delete(s.battleRoomId as RoomID);
-				}
-				Rooms.get(s.battleRoomId)?.battle?.forfeit(user);
-			}
-
-			if (s) {
-				s.gameOver = true;
-				s.lastRunFloor = s.floor;
-				s.lastRunStreaks = s.streaksWon || 0;
-				s.team = [];
-
-				delete s.pendingMoves;
-				delete s.pendingSwap;
-				delete s.pendingChoice;
-				delete s.pendingGachaOffer;
-
-				setState(user.id, s);
-			}
-			refreshGamePage(user);
-		},
-
 		help(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const isStaff = user.can('lock');
 			let html = `<b>PokéRogue - Player Commands:</b><br>` +
 				`<code>/pokerogue start</code> - Open the game page.<br>` +
 				`<code>/pokerogue battle</code> - Start floor battle.<br>` +
-				`<code>/pokerogue shop</code> - Item shop.<br>` +
+				`<code>/pokerogue view shop</code> - Item shop.<br>` +
 				`<code>/pokerogue status</code> - View run info.<br>` +
-				`<code>/pokerogue top</code> - Leaderboard.<br>` +
+				`<code>/pokerogue view top</code> - Leaderboard.<br>` +
 				`<code>/pokerogue quit</code> - Abandon run.<br>`;
 			if (isStaff) {
-				html += `<br><b>Staff Commands:</b> givemoney, removecoins, resetcoins, setfloor, healteam, addmon, removemon.`;
+				html += `<br><b>Staff Commands:</b> givebp, removebp, setfloor, healteam, addmon, removemon.`;
 			}
 			this.sendReplyBox(html);
 		},
@@ -1042,162 +1054,88 @@ export const handlers: Chat.Handlers = {
 		if (!state) return;
 
 		const isBossFloor = match.floor % 10 === 0;
-
-		// -----------------------------------------------------------------------
-		// Step 1: Consumable item tracking + HP tracking
-		// -----------------------------------------------------------------------
 		const room = Rooms.get(battle.roomid);
 		const logLines: string[] = room?.log?.log ?? [];
-		const consumedItems: string[] = [];
 
-		const hpSlotToTeamIdx: Record<string, number> = {};
-		const hpAssignedIdx = new Set<number>();
-		const slotHp: Record<string, number> = {};
-
-		for (const line of logLines) {
-			// p1 switch/drag for HP tracking
-			const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
-			if (switchMatch) {
-				const slot = 'p1' + switchMatch[1];
-				const hp = parseInt(switchMatch[3]);
-				if (!(slot in hpSlotToTeamIdx)) {
-					const sid = toID(switchMatch[2].trim());
-					for (let i = 0; i < state.team.length; i++) {
-						if (!hpAssignedIdx.has(i) && toID(state.team[i].species) === sid) {
-							hpSlotToTeamIdx[slot] = i;
-							hpAssignedIdx.add(i);
-							break;
-						}
-					}
-				}
-				slotHp[slot] = hp;
-			}
-
-			// HP delta events
-			const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?/.exec(line);
-			if (hpMatch) slotHp['p1' + hpMatch[1]] = parseInt(hpMatch[2]);
-
-			// Faint → HP 0
-			const faintP1Match = /^\|faint\|p1([a-z]):/.exec(line);
-			if (faintP1Match) slotHp['p1' + faintP1Match[1]] = 0;
-
-			// Consumable items used by p1
-			const endItemMatch = /^\|-enditem\|p1([a-z]): [^|]+\|([^|]+)/.exec(line);
-			if (endItemMatch) {
-				if (
-					line.includes('[from] move: Knock Off') ||
-					line.includes('[from] move: Thief') ||
-					line.includes('[from] move: Incinerate')
-				) continue;
-
-				const slot = 'p1' + endItemMatch[1];
-				const itemId = toID(endItemMatch[2].trim());
-				const shopItem = SHOP_ITEMS[itemId];
-				if (shopItem?.isConsumable) {
-					const teamIdx = hpSlotToTeamIdx[slot];
-					if (teamIdx !== undefined && state.team[teamIdx].heldItem === itemId) {
-						delete state.team[teamIdx].heldItem;
-						consumedItems.push(shopItem.name);
-					}
-				}
-			}
-		}
-
-		// Apply final HP percentages
-		for (const [slot, hp] of Object.entries(slotHp)) {
-			const teamIdx = hpSlotToTeamIdx[slot];
-			if (teamIdx !== undefined) {
-				state.team[teamIdx].currentHp = hp;
-			}
-		}
-
-		if (consumedItems.length > 0) {
+		// Sync HP and consumed items
+		const { consumedItems } = syncBattleOutcome(logLines, state);
+		if (consumedItems.length) {
 			state.notification = (state.notification ?? '') +
 				`<br><b style="color:#ffb84d">Consumed items:</b> ${consumedItems.join(', ')}`;
 		}
 
 		delete state.battleRoomId;
 
-		// -----------------------------------------------------------------------
-		// Step 2: Win / Loss branching
-		// -----------------------------------------------------------------------
 		if (toID(winner) === match.userId) {
-			// -------------------------------------------------------------------
-			// Step 2a: Parse kill → EXP from battle log
-			// -------------------------------------------------------------------
+			// ── Win ──────────────────────────────────────────────────────
 			const expMap = parseKillExp(logLines, state, match.floor, isBossFloor);
-
-			const luckyCharmActive = (state.doubleExpFloors ?? 0) > 0;
-			const coinMult = isBossFloor ? 1.5 : 1.0;
-			const luckyMult = luckyCharmActive ? 2 : 1;
-			const coinReward = Math.floor(floorCoinReward(match.floor) * coinMult * luckyMult);
-
+			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
 			const detailMsgs: string[] = [];
 
-			// -------------------------------------------------------------------
-			// FIX #2: EXP Share — sum all kill EXP earned this battle, then
-			// give the full total to every living party member.
-			//
-			// This matches the real PokéRogue game where all party members
-			// receive full EXP for every faint regardless of who landed the kill.
-			// Fainted Pokémon (currentHp === 0) are excluded from the share,
-			// consistent with how the main-series games handle EXP Share.
-			// -------------------------------------------------------------------
-			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
-
+			// EXP share to all living Pokémon
 			if (totalExpEarned > 0) {
 				for (let i = 0; i < state.team.length; i++) {
 					const mon = state.team[i];
-
-					// Skip fainted Pokémon — they don't receive shared EXP
 					if ((mon.currentHp ?? 100) === 0) continue;
-
 					const oldSpecies = mon.species;
 					const { evolved, oldLevel } = applyExpAndLevelUp(mon, totalExpEarned);
-
-					const msgs = processLevelUp(mon, oldLevel, oldSpecies, evolved, i, state);
-					detailMsgs.push(...msgs);
+					detailMsgs.push(...processLevelUp(mon, oldLevel, oldSpecies, evolved, i, state));
 				}
 			}
 
-			// -------------------------------------------------------------------
-			// Step 2b: Post-battle bookkeeping
-			// -------------------------------------------------------------------
-			state.coins = (state.coins ?? 0) + coinReward;
-			if (state.doubleExpFloors) state.doubleExpFloors--;
-
-			const prevFl = state.floor;
+			// BP reward
+			let bpGained = BP_PER_WIN;
+			const prevFloor = state.floor;
 			state.floor++;
 			state.streaksWon = (state.streaksWon ?? 0) + 1;
 
+			// Streak boundary: full heal + bonus BP
+			if (isStreakBoundary(prevFloor)) {
+				bpGained += BP_PER_STREAK;
+				for (const mon of state.team) {
+					mon.currentHp = 100;
+					fullHealPP(mon);
+				}
+				state.notification = (state.notification ?? '') + `<br><b style="color:#4caf50">Streak complete! Full heal!</b>`;
+			}
+
+			state.battlePoints = (state.battlePoints ?? 0) + bpGained;
+
+			// Record keeping
 			if (state.floor > (state.highestFloor ?? 0)) {
 				state.highestFloor = state.floor;
 				state.recordTeam = JSON.parse(JSON.stringify(state.team));
 			}
-
 			state.displayName = Users.get(match.userId)?.name || match.userId;
 
 			state.notification = (state.notification ?? '') +
-				`<br><b>Floor ${prevFl} Cleared!</b> +${coinReward} coins.<br>` +
+				`<br><b>Floor ${prevFloor} Cleared!</b> +${bpGained} BP.<br>` +
 				detailMsgs.join('<br>');
+
+			// Roll new rotational shop
+			state.timesRerolled = 0;
+			const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
+			state.rotationalShop = rollShop(pseudoTeam, state.streaksWon ?? 0);
 
 			// Every 5 floors: milestone Pokémon offer
 			if ((state.floor - 1) % 5 === 0) {
-				state.pendingChoice = pickNewPokemonOptions(state.team, prevFl);
+				state.pendingChoice = pickNewPokemonOptions(state.team, prevFloor);
 				state.pendingChoiceType = 'add';
-				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokemon to add!</b>`;
+				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
 			}
 
-			delete state.shopInventory;
 		} else {
-			// -------------------------------------------------------------------
-			// Loss handling
-			// -------------------------------------------------------------------
+			// ── Loss ─────────────────────────────────────────────────────
 			delete state.pendingMoves;
 			delete state.pendingSwap;
+			delete state.moveToLearn;
+			delete state.pendingItemName;
+			delete state.itemOptions;
+			delete state.purchasedItem;
 
-			if (state.hasRevive) {
-				state.hasRevive = false;
+			// Check if player has a Revive key item
+			if ((state.keyItems ?? []).includes('Revive')) {
+				state.keyItems = state.keyItems!.filter(k => k !== 'Revive');
 				state.notification = (state.notification ?? '') +
 					'<br><b>Revive used!</b> Retrying Floor ' + String(match.floor);
 			} else {
