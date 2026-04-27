@@ -133,7 +133,8 @@ function renderHpBar(mon: PokemonEntry): string {
 
 function renderNotification(state: PokeRogueState): string {
 	if (!state.notification) return '';
-	return `<div class="pr-notification">${state.notification}` +
+	return `<div class="pr-notification">` +
+		`<div class="pr-notif-text">${state.notification}</div>` +
 		`<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">✕</button></div>`;
 }
 
