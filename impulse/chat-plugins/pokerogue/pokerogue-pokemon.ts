@@ -505,9 +505,13 @@ function floorToDifficultyTier(floor: number): number {
  *
  * Matches the formula in poketest.ts genPokemon().
  */
+/**
+ * Utils.clampIntRange in PS truncates toward zero (same as Math.trunc for
+ * positive numbers), not Math.round. Match that exactly.
+ */
 function bstWeight(bst: number, midpoint: number, range: number, weightcap: number): number {
 	const raw = (-1 / range) * (bst - midpoint) ** 2 + (weightcap + range);
-	return Math.max(0, Math.min(weightcap, Math.round(raw)));
+	return Math.max(0, Math.min(weightcap, Math.trunc(raw)));
 }
 
 /**
@@ -545,64 +549,70 @@ function pickRandomHeldItem(speciesName: string): string {
 }
 
 /**
- * Picks moves for an AI Pokémon: collects all level-up moves up to `level`,
- * sorts by learn level descending (most recently learned first), takes top 4,
- * then reverses to ascending order. Mirrors poketest.ts genPokemon() move logic.
+ * Picks moves for an AI Pokémon matching poketest.ts getMovesAtTarget() exactly:
+ *
+ * 1. Uses getFullLearnset (full chain) not just getLearnsetData
+ * 2. Builds prevo list and SKIPS prevo learnset entries (only species' own moves)
+ * 3. Collects all level-up moves learned at or below `level`
+ * 4. Deduplicates (Set), shuffles (randomises equal-level ties)
+ * 5. Reverses (most recent first), takes top 4, reverses back to chronological
  */
 function pickAIMoves(speciesId: string, level: number): string[] {
-	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
-	const learnset = learnsetData?.learnset;
+	const id = toID(speciesId);
 
-	if (!learnset) return ['tackle'];
+	// Build prevo list (same walk as poketest.ts)
+	const prevoList: string[] = [];
+	let dexSpecies = Dex.species.get(id);
+	while (dexSpecies.prevo) {
+		prevoList.push(toID(dexSpecies.prevo));
+		dexSpecies = Dex.species.get(dexSpecies.prevo);
+	}
 
-	const available: { move: string, learnLevel: number }[] = [];
+	// getFullLearnset includes the full inheritance chain
+	const fullLearn = Dex.species.getFullLearnset(id);
+	let viableMoves: string[] = [];
 
-	for (const [moveid, sources] of Object.entries(learnset)) {
-		for (const src of sources) {
-			const match = /^9L(\d+)$/.exec(src);
-			if (match) {
-				const learnLvl = parseInt(match[1]);
-				if (learnLvl <= level) {
-					// Avoid duplicates — keep the highest learn level entry
-					const existing = available.findIndex(a => a.move === moveid);
-					if (existing === -1) {
-						available.push({ move: moveid, learnLevel: learnLvl });
-					} else if (learnLvl > available[existing].learnLevel) {
-						available[existing].learnLevel = learnLvl;
-					}
-				}
-				break;
+	for (const learnsetIndex of fullLearn) {
+		// Skip prevo learnset entries — only use the species' own entry
+		// (mirrors poketest.ts: if prevoList.includes(learnsetIndex.species.name) continue)
+		if (prevoList.includes(toID(learnsetIndex.species.name))) continue;
+
+		const learnset = learnsetIndex.learnset ?? {};
+		for (const moveid in learnset) {
+			// Match gen9 level-up source strings: "9L5", "9L20", etc.
+			if (learnset[moveid].some((src: string) => src === `9L${level}` ||
+				(/^9L(\d+)$/.test(src) && parseInt(src.slice(2)) <= level))) {
+				if (!viableMoves.includes(moveid)) viableMoves.push(moveid);
 			}
 		}
 	}
 
-	if (!available.length) return ['tackle'];
+	if (!viableMoves.length) return ['tackle'];
 
-	// Sort descending by learn level (most recent first), shuffle equal-level ties
-	// by randomising the array before sorting (mirrors Utils.shuffle in poketest.ts)
-	for (let i = available.length - 1; i > 0; i--) {
+	// Shuffle (mirrors Utils.shuffle for equal-level tiebreaking)
+	for (let i = viableMoves.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		[available[i], available[j]] = [available[j], available[i]];
+		[viableMoves[i], viableMoves[j]] = [viableMoves[j], viableMoves[i]];
 	}
-	available.sort((a, b) => b.learnLevel - a.learnLevel);
 
-	// Take up to 4, then reverse back to chronological order
-	const top4 = available.slice(0, 4);
+	// Reverse (most recently learned first), take top 4, reverse back to order
+	viableMoves = viableMoves.reverse();
+	const top4 = viableMoves.slice(0, 4);
 	top4.reverse();
-	return top4.map(m => m.move);
+	return top4.map(m => Dex.moves.get(m).id || m);
 }
 
 /**
  * Picks a random ability for an AI Pokémon.
- * Weights: hidden ability 1/20, special ability (S) 1/50,
- *           ability[1] 50%, else ability[0].
- * Mirrors poketest.ts genPokemon() ability logic.
+ * Weights match poketest.ts exactly (=== 1, not === 0 — same probability,
+ * verbatim source match):
+ *   special (S): 1/50, hidden (H): 1/20, ability[1]: 1/2, else ability[0].
  */
 function pickRandomAbility(species: Species): string {
 	const abilities = species.abilities as Record<string, string>;
-	if (abilities['S'] && Math.floor(Math.random() * 50) === 0) return abilities['S'];
-	if (abilities['H'] && Math.floor(Math.random() * 20) === 0) return abilities['H'];
-	if (abilities['1'] && Math.floor(Math.random() * 2) === 0) return abilities['1'];
+	if (abilities['S'] && Math.floor(Math.random() * 50) === 1) return abilities['S'];
+	if (abilities['H'] && Math.floor(Math.random() * 20) === 1) return abilities['H'];
+	if (abilities['1'] && Math.floor(Math.random() * 2) === 1) return abilities['1'];
 	return abilities['0'] ?? '';
 }
 
@@ -672,16 +682,28 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 		if (usedBaseSpecies.has(sp.baseSpecies)) continue;
 		usedBaseSpecies.add(sp.baseSpecies);
 
-		// Pick level in range, biased toward max like poketest.ts
-		// (poketest.ts: for curLevel from min to max, adds if randomNo===0 where
-		//  randomNo = floor(random*(maxLevel-curLevel)), biasing toward higher levels)
-		let level = minLevel;
-		for (let cur = minLevel; cur <= maxLevel; cur++) {
-			const gap = maxLevel - cur;
-			if (gap === 0 || Math.floor(Math.random() * gap) === 0) {
-				level = cur;
-				break;
+		// Pick level in range matching poketest.ts exactly:
+		// Walk from minLevel to maxLevel; at each step roll random*(maxLevel-curLevel).
+		// If the roll is 0 (probability 1/(maxLevel-curLevel)), lock in that level.
+		// At maxLevel the range is 0, so the mon is always accepted there.
+		// After 500 total pool attempts use a flat random fallback (depth guard).
+		let level = maxLevel; // default if loop doesn't break early
+		if (attempts <= 500) {
+			for (let curLevel = minLevel; curLevel <= maxLevel; curLevel++) {
+				const gap = maxLevel - curLevel;
+				// Skip levels where the species hasn't met its minimum level requirement
+				// (mirrors poketest.ts TeamValidator check for "must be at least level")
+				const sp2 = Dex.species.get(finalSpecies);
+				if (sp2.evoLevel && curLevel < sp2.evoLevel) continue;
+
+				if (gap === 0 || Math.floor(Math.random() * gap) === 0) {
+					level = curLevel;
+					break;
+				}
 			}
+		} else {
+			// Depth > 500 fallback: flat random in [minLevel, maxLevel)
+			level = Math.floor(Math.random() * (maxLevel - minLevel)) + minLevel;
 		}
 
 		// Apply evolution based on level (same as existing buildBotTeam logic)
