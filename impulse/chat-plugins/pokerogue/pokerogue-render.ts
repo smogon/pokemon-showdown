@@ -282,7 +282,9 @@ export function renderGamePage(state: PokeRogueState): string {
 	}
 
 	// ── TM: choose which Pokémon to teach ─────────────────────────────────
-	if (state.moveToLearn && state.purchasedItem && !state.pokemonForTM !== undefined) {
+	// FIX: was `!state.pokemonForTM !== undefined` which is always true.
+	// Correct check: only show this screen when pokemonForTM has NOT been set yet.
+	if (state.moveToLearn && state.purchasedItem && state.pokemonForTM === undefined) {
 		const moveName = Dex.moves.get(state.moveToLearn).name;
 		buf += `<h2 class="pr-choice-heading">Teach ${Utils.escapeHTML(moveName)}?</h2>`;
 		buf += `<div style="text-align:center;margin-bottom:10px;color:#ccc">Choose a Pokémon to teach <b>${Utils.escapeHTML(moveName)}</b> to:</div>`;
@@ -382,7 +384,7 @@ export function renderGamePage(state: PokeRogueState): string {
 				buf += `<button name="send" value="/pokerogue useshopitem ${i + 1}" class="button" style="padding:8px;text-align:left">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Utils.escapeHTML(spName)} Lv.${mon.level}${mon.status ? ` [${mon.status.toUpperCase()}]` : ''}${hp < 100 ? ` (${hp}% HP)` : ''}</span></button>`;
 			}
 		}
-		buf += `<button name="send" value="/pokerogue useshopitem skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b> <small>(refund purchase)</small></button>`;
+		buf += `<button name="send" value="/pokerogue useshopitem skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b></button>`;
 		buf += `</div></div>`;
 		return buf;
 	}
