@@ -14,7 +14,7 @@
  */
 
 import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, TMItem, genItem, rollShop } from './pokerogue-items';
-import { type PokemonEntry, type PokeRogueState } from './pokerogue-types';
+import { type PokemonEntry, type PokeRogueState, type StatusCondition } from './pokerogue-types';
 import { getState, setState, deleteState } from './pokerogue-state';
 import {
 	pickStarterOptions, pickNewPokemonOptions,
@@ -58,8 +58,6 @@ function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 /**
  * Returns true if the player is "at a streak boundary" — i.e., they have
  * just won the 7th battle in a streak (battle % 7 === 0 after incrementing).
- * Mirrors poketest.ts: `if (this.battle % 7 === 0)`.
- * `floor` here is the floor *before* incrementing.
  */
 function isStreakBoundary(floor: number): boolean {
 	return floor % 7 === 0;
@@ -67,7 +65,6 @@ function isStreakBoundary(floor: number): boolean {
 
 /**
  * Fully heals PP for a Pokémon entry (all moves to max PP).
- * Mirrors poketest.ts streak-heal logic.
  */
 function fullHealPP(mon: PokemonEntry): void {
 	mon.ppLeft = mon.moves.map(m => {
@@ -78,7 +75,6 @@ function fullHealPP(mon: PokemonEntry): void {
 
 /**
  * Process level-ups and queue move-learning prompts.
- * Returns notification message fragments.
  */
 function processLevelUp(
 	mon: PokemonEntry,
@@ -122,7 +118,7 @@ function processLevelUp(
 }
 
 // ---------------------------------------------------------------------------
-// Kill → EXP tracking (unchanged from original)
+// Kill → EXP tracking
 // ---------------------------------------------------------------------------
 
 const SELF_KO_MOVES = new Set([
@@ -144,7 +140,7 @@ function parseKillExp(
 	floor: number,
 	isBossFloor: boolean,
 ): Map<number, number> {
-	const luckyCharmActive = false; // Lucky Charm removed in new item system
+	const luckyCharmActive = false;
 
 	const p1SlotToTeamIdx: Record<string, number> = {};
 	const p1TeamFainted = new Set<number>();
@@ -301,7 +297,7 @@ function parseKillExp(
 }
 
 // ---------------------------------------------------------------------------
-// HP + PP sync after battle
+// HP + PP + Status sync after battle
 // ---------------------------------------------------------------------------
 
 function syncBattleOutcome(
@@ -311,6 +307,7 @@ function syncBattleOutcome(
 	const hpSlotToTeamIdx: Record<string, number> = {};
 	const hpAssignedIdx = new Set<number>();
 	const slotHp: Record<string, number> = {};
+	const slotStatus: Record<string, StatusCondition | ''> = {};
 
 	for (const line of logLines) {
 		const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
@@ -327,18 +324,54 @@ function syncBattleOutcome(
 				}
 			}
 			slotHp[slot] = parseInt(switchMatch[3]);
+			// Status is appended after the HP fraction in switch lines: |100/100 brn|
+			const statusInSwitch = /\|\d+\/\d+ (brn|psn|tox|par|slp|frz)/.exec(line);
+			if (statusInSwitch) slotStatus[slot] = statusInSwitch[1] as StatusCondition;
 		}
 
-		const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?/.exec(line);
-		if (hpMatch) slotHp['p1' + hpMatch[1]] = parseInt(hpMatch[2]);
+		// |-damage| and |-heal| lines carry the current HP and optional status token
+		const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?( (brn|psn|tox|par|slp|frz))?/.exec(line);
+		if (hpMatch) {
+			const slot = 'p1' + hpMatch[1];
+			slotHp[slot] = parseInt(hpMatch[2]);
+			if (hpMatch[4]) slotStatus[slot] = hpMatch[4].trim() as StatusCondition;
+		}
 
+		// Explicit status application
+		const statusApply = /^\|-status\|p1([a-z]): [^|]+\|(brn|psn|tox|par|slp|frz)/.exec(line);
+		if (statusApply) {
+			slotStatus['p1' + statusApply[1]] = statusApply[2] as StatusCondition;
+		}
+
+		// Status cured mid-battle (Aromatherapy, Heal Bell, Lum Berry, etc.)
+		const statusCure = /^\|-curestatus\|p1([a-z]): /.exec(line);
+		if (statusCure) {
+			slotStatus['p1' + statusCure[1]] = '';
+		}
+
+		// Fainted Pokémon: HP → 0, status cleared (fainted mons don't carry status)
 		const faintP1 = /^\|faint\|p1([a-z]):/.exec(line);
-		if (faintP1) slotHp['p1' + faintP1[1]] = 0;
+		if (faintP1) {
+			const slot = 'p1' + faintP1[1];
+			slotHp[slot] = 0;
+			slotStatus[slot] = '';
+		}
 	}
 
 	for (const [slot, hp] of Object.entries(slotHp)) {
 		const idx = hpSlotToTeamIdx[slot];
 		if (idx !== undefined) state.team[idx].currentHp = hp;
+	}
+
+	for (const [slot, status] of Object.entries(slotStatus)) {
+		const idx = hpSlotToTeamIdx[slot];
+		if (idx !== undefined) {
+			if (status) {
+				state.team[idx].status = status;
+			} else {
+				delete state.team[idx].status;
+			}
+		}
 	}
 
 	// Consumed items (PS |-enditem| lines)
@@ -530,7 +563,6 @@ export const commands: Chat.ChatCommands = {
 				const slot = parseInt(t) - 1;
 				if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
 				const oldMonName = Dex.species.get(toID(state.team[slot].species)).name;
-				// Return held item to... it's just lost (no bag in new system for held items)
 				state.team[slot] = newMon;
 				if (state.pendingMoves) state.pendingMoves = state.pendingMoves.filter(p => p.pokemonIndex !== slot);
 				state.notification = `You replaced ${oldMonName} with <b>${Dex.species.get(toID(newMon.species)).name}</b>!`;
@@ -550,7 +582,6 @@ export const commands: Chat.ChatCommands = {
 			state.battlePoints -= price;
 			state.timesRerolled = (state.timesRerolled ?? 0) + 1;
 
-			// Build a PokemonSet-compatible team for rollShop (only needs species)
 			const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
 			state.rotationalShop = rollShop(pseudoTeam, state.streaksWon ?? 0);
 			setState(user.id, state);
@@ -574,17 +605,14 @@ export const commands: Chat.ChatCommands = {
 			const bp = state.battlePoints ?? 0;
 			if (item.cost > bp) return this.errorReply(`Not enough BP! Need ${item.cost} BP.`);
 
-			// Check streak gate
 			if (item.minStreak > (state.streaksWon ?? 0)) return this.errorReply("Your streak isn't high enough for this item.");
 
-			// Check rotational shop membership (rotational items must be in the shop)
 			const isRotational = !!ROTATIONAL_ITEM_POOL[key];
 			const isPermanent = !!SHOP_ITEMS[key];
 			if (isRotational && !isPermanent && !state.rotationalShop?.includes(key)) {
 				return this.errorReply("That item isn't currently in the shop.");
 			}
 
-			// Key items: can only buy once
 			if (item.type === 'key') {
 				if ((state.keyItems ?? []).includes(item.name)) return this.errorReply("You already own this key item.");
 				state.battlePoints -= item.cost;
@@ -597,20 +625,7 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Pokemon pack: generate options then redirect to choose
 			if (item.type === 'pokemonPack') {
-				const scale = [5, 10].map(e => Math.min(100, Math.max(1, e + (state.streaksWon ?? 0) * 5)));
-				const packWeightings: Record<string, { midpoint: number; range: number; weightcap: number }> = {
-					'Poke Ball Pack':   { midpoint: 263, range: 100, weightcap: 100 },
-					'Great Ball Pack':  { midpoint: 450, range: 35,  weightcap: 100 },
-					'Ultra Ball Pack':  { midpoint: 540, range: 30,  weightcap: 100 },
-					'Master Ball Pack': { midpoint: 640, range: 50,  weightcap: 100 },
-				};
-				const weighting = packWeightings[item.name];
-				// genAIPokemon can't be used directly here since it returns AIPokemonSet[],
-				// so we re-use pickNewPokemonOptions which returns species IDs.
-				// For packs we want BST-weighted picks similar to genPokemon.
-				// We'll use the same tier system with floor influence.
 				state.battlePoints -= item.cost;
 				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
 				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
@@ -620,7 +635,6 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Item pack: generate 3 item options
 			if (item.type === 'itemPack') {
 				const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
 				const options = genItem(3, pseudoTeam);
@@ -633,9 +647,7 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Held item or evolve item: queue assignment to a Pokémon
 			if (item.type === 'item' || item.type === 'evolveItem') {
-				// Don't deduct BP yet — deduct on assignment (giveitem)
 				state.pendingItemName = item.name;
 				state.purchasedItem = key;
 				state.isRotationalItem = isRotational;
@@ -644,7 +656,6 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// TM: queue teaching
 			if (item.type === 'TM') {
 				const move = (item as TMItem).move;
 				state.moveToLearn = move;
@@ -655,8 +666,6 @@ export const commands: Chat.ChatCommands = {
 				return;
 			}
 
-			// Consumable shop items: healHP, healPP, revive, cureStatus
-			// These require selecting a target Pokémon — set flag and refresh
 			if (['healHP', 'healPP', 'revive', 'cureStatus'].includes(item.type)) {
 				state.purchasedItem = key;
 				setState(user.id, state);
@@ -677,7 +686,6 @@ export const commands: Chat.ChatCommands = {
 			const item = ROTATIONAL_ITEM_POOL[itemKey] ?? SHOP_ITEMS[itemKey];
 
 			if (t === 'skip') {
-				// Refund — don't deduct BP
 				delete state.moveToLearn;
 				delete state.purchasedItem;
 				delete state.isRotationalItem;
@@ -691,13 +699,11 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
 			const mon = state.team[slot];
 
-			// Check if mon can learn the move
 			const canLearn = Dex.species.getFullLearnset(toID(mon.species))
 				.some(l => Object.keys(l.learnset ?? {}).includes(toID(state.moveToLearn!)));
 			if (!canLearn) return this.errorReply("That Pokémon can't learn this TM move.");
 			if (mon.moves.includes(state.moveToLearn)) return this.errorReply("That Pokémon already knows this move.");
 
-			// Deduct BP and remove from rotational shop
 			state.battlePoints -= item.cost;
 			if (state.isRotationalItem) state.rotationalShop = state.rotationalShop.filter(k => k !== itemKey);
 
@@ -713,7 +719,6 @@ export const commands: Chat.ChatCommands = {
 				delete state.isRotationalItem;
 				delete state.pokemonForTM;
 			} else {
-				// Need to forget a move — queue pendingMoves
 				state.pendingMoves = state.pendingMoves ?? [];
 				state.pendingMoves.unshift({ pokemonIndex: slot, move: state.moveToLearn, speciesName: mon.species });
 				delete state.moveToLearn;
@@ -741,7 +746,6 @@ export const commands: Chat.ChatCommands = {
 			const dexItem = Dex.items.get(t);
 			if (!dexItem.exists) return this.errorReply("Unknown item.");
 
-			// Queue give-item flow
 			state.pendingItemName = dexItem.name;
 			delete state.itemOptions;
 			setState(user.id, state);
@@ -755,10 +759,6 @@ export const commands: Chat.ChatCommands = {
 			const t = target.trim();
 
 			if (t === 'skip') {
-				// Refund if came from rotational shop
-				if (state.isRotationalItem && state.purchasedItem) {
-					// BP not deducted yet — nothing to refund
-				}
 				delete state.pendingItemName;
 				delete state.purchasedItem;
 				delete state.isRotationalItem;
@@ -770,7 +770,6 @@ export const commands: Chat.ChatCommands = {
 			const slot = parseInt(t) - 1;
 			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
 
-			// Deduct BP now (was held pending confirmation)
 			if (state.purchasedItem) {
 				const item = ROTATIONAL_ITEM_POOL[state.purchasedItem] ?? SHOP_ITEMS[state.purchasedItem];
 				if (item) {
@@ -783,7 +782,6 @@ export const commands: Chat.ChatCommands = {
 			const dexNewItem = Dex.items.get(state.pendingItemName);
 			const dexSpecies = Dex.species.get(toID(mon.species));
 
-			// Handle forme changes (e.g. Arceus plates, Genesect drives)
 			if (dexNewItem.forcedForme && dexSpecies.otherFormes?.includes(dexNewItem.forcedForme)) {
 				mon.species = toID(dexNewItem.forcedForme);
 			} else if (mon.heldItem) {
@@ -804,7 +802,6 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		// ── Use consumable shop items (healHP / healPP / revive / cureStatus)
-		// These work on a selected Pokémon by slot number.
 		useshopitem(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.purchasedItem) return this.errorReply("No item selected.");
@@ -841,15 +838,19 @@ export const commands: Chat.ChatCommands = {
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s PP was fully restored!`;
 
 			} else if (item.type === 'cureStatus') {
-				// In our system status isn't tracked directly; just heal HP to signal alive
 				if (hp <= 0) return this.errorReply("Can't cure a fainted Pokémon.");
+				if (!mon.status) return this.errorReply("That Pokémon has no status condition.");
 				state.battlePoints -= item.cost;
-				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s status was cured!`;
+				const oldStatus = mon.status;
+				delete mon.status;
+				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s ${oldStatus.toUpperCase()} was cured!`;
 
 			} else if (item.type === 'revive') {
 				if (hp > 0) return this.errorReply("That Pokémon hasn't fainted.");
 				state.battlePoints -= item.cost;
 				mon.currentHp = mon.species === 'shedinja' ? 100 : 50;
+				// Reviving clears any lingering status
+				delete mon.status;
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> was revived!`;
 			}
 
@@ -995,6 +996,7 @@ export const commands: Chat.ChatCommands = {
 			if (s) {
 				for (const m of s.team) {
 					m.currentHp = 100;
+					delete m.status;
 					fullHealPP(m);
 				}
 				setState(tId, s);
@@ -1057,7 +1059,6 @@ export const handlers: Chat.Handlers = {
 		const room = Rooms.get(battle.roomid);
 		const logLines: string[] = room?.log?.log ?? [];
 
-		// Sync HP and consumed items
 		const { consumedItems } = syncBattleOutcome(logLines, state);
 		if (consumedItems.length) {
 			state.notification = (state.notification ?? '') +
@@ -1072,7 +1073,6 @@ export const handlers: Chat.Handlers = {
 			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
 			const detailMsgs: string[] = [];
 
-			// EXP share to all living Pokémon
 			if (totalExpEarned > 0) {
 				for (let i = 0; i < state.team.length; i++) {
 					const mon = state.team[i];
@@ -1083,17 +1083,16 @@ export const handlers: Chat.Handlers = {
 				}
 			}
 
-			// BP reward
 			let bpGained = BP_PER_WIN;
 			const prevFloor = state.floor;
 			state.floor++;
 			state.streaksWon = (state.streaksWon ?? 0) + 1;
 
-			// Streak boundary: full heal + bonus BP
 			if (isStreakBoundary(prevFloor)) {
 				bpGained += BP_PER_STREAK;
 				for (const mon of state.team) {
 					mon.currentHp = 100;
+					delete mon.status;
 					fullHealPP(mon);
 				}
 				state.notification = (state.notification ?? '') + `<br><b style="color:#4caf50">Streak complete! Full heal!</b>`;
@@ -1101,7 +1100,6 @@ export const handlers: Chat.Handlers = {
 
 			state.battlePoints = (state.battlePoints ?? 0) + bpGained;
 
-			// Record keeping
 			if (state.floor > (state.highestFloor ?? 0)) {
 				state.highestFloor = state.floor;
 				state.recordTeam = JSON.parse(JSON.stringify(state.team));
@@ -1112,12 +1110,10 @@ export const handlers: Chat.Handlers = {
 				`<br><b>Floor ${prevFloor} Cleared!</b> +${bpGained} BP.<br>` +
 				detailMsgs.join('<br>');
 
-			// Roll new rotational shop
 			state.timesRerolled = 0;
 			const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
 			state.rotationalShop = rollShop(pseudoTeam, state.streaksWon ?? 0);
 
-			// Every 5 floors: milestone Pokémon offer
 			if ((state.floor - 1) % 5 === 0) {
 				state.pendingChoice = pickNewPokemonOptions(state.team, prevFloor);
 				state.pendingChoiceType = 'add';
@@ -1133,7 +1129,6 @@ export const handlers: Chat.Handlers = {
 			delete state.itemOptions;
 			delete state.purchasedItem;
 
-			// Check if player has a Revive key item
 			if ((state.keyItems ?? []).includes('Revive')) {
 				state.keyItems = state.keyItems!.filter(k => k !== 'Revive');
 				state.notification = (state.notification ?? '') +
