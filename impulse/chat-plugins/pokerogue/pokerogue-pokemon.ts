@@ -42,9 +42,18 @@ export function getExpYield(speciesId: string): number {
 
 export function getExpType(speciesId: string): string {
 	const id = toID(speciesId);
+
+	// 1. Direct hit in exp.json
 	if (expData[id]) return expData[id].expType;
 
+	// 2. Forme/regional: try the base species entry in exp.json
 	const sp = Dex.species.get(id);
+	if (sp.exists && sp.baseSpecies) {
+		const baseId = toID(sp.baseSpecies);
+		if (baseId !== id && expData[baseId]) return expData[baseId].expType;
+	}
+
+	// 3. BST heuristic fallback (same as before)
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
