@@ -17,6 +17,8 @@ export const LEGENDARY_TAGS = new Set<string>([
 	'Sub-Legendary', 'Restricted Legendary', 'Mythical', 'Ultra Beast', 'Paradox',
 ]);
 
+export type StatusCondition = 'brn' | 'psn' | 'tox' | 'par' | 'slp' | 'frz';
+
 export interface PokemonEntry {
 	species: string;
 	level: number;
@@ -28,6 +30,8 @@ export interface PokemonEntry {
 	currentHp?: number;
 	/** PP remaining per move slot (index-matched to moves[]). Undefined = full PP. */
 	ppLeft?: number[];
+	/** Persistent status condition carried between battles. */
+	status?: StatusCondition;
 }
 
 export interface PokeRogueState {
