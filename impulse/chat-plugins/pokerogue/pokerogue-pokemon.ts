@@ -252,8 +252,88 @@ export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclud
 	return { species, isFeatured };
 }
 
+/**
+ * Generates 3 starter options using the same BST-weighted pool and filters
+ * as poketest.ts genPokemon() with starter=true.
+ *
+ * Filters applied (matching poketest.ts exactly):
+ *   - No prevo (must be a base-form species)
+ *   - No Mythical, Restricted Legendary, Sub-Legendary tags
+ *   - No Paradox tag, and no specific paradox mons by base species name
+ *   - No Ultra Beasts EXCEPT Poipole
+ *   - No Ursaluna-Bloodmoon or Floette-Eternal edge cases
+ *   - No Gmax, Totem, Dusk, Bond formes
+ *   - No nonstandard mons (Past-tag allowed)
+ *
+ * Weighting: midpoint=250, range=50, weightcap=100 (floor-1/tier-0 defaults)
+ * so weak unevolved mons cluster around BST 250 appear most often.
+ */
 export function pickStarterOptions(): string[] {
-	return pickRandom(getTier1Pokemon(), 3);
+	const PARADOX_EDGE_CASES = new Set([
+		'Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder',
+	]);
+	const NAME_BLOCKLIST = new Set(['Ursaluna-Bloodmoon', 'Floette-Eternal']);
+
+	const candidates = Dex.species.all().filter(s => {
+		if (!s.exists || s.num <= 0) return false;
+		if (s.battleOnly) return false;
+		if (s.requiredItems?.length) return false;
+		if (s.forme === 'Gmax' || s.forme.includes('Totem') ||
+			s.forme === 'Dusk' || s.forme === 'Bond') return false;
+		if (s.isNonstandard && s.isNonstandard !== 'Past') return false;
+
+		// Must be a base form — no prevo
+		if (s.prevo) return false;
+
+		// No legendary/mythical categories
+		if (s.tags.includes('Mythical') ||
+			s.tags.includes('Restricted Legendary') ||
+			s.tags.includes('Sub-Legendary')) return false;
+
+		// No Paradox (by tag or known paradox base species)
+		if (s.tags.includes('Paradox')) return false;
+		if (PARADOX_EDGE_CASES.has(s.baseSpecies)) return false;
+
+		// No Ultra Beasts except Poipole
+		if (s.tags.includes('Ultra Beast') && s.name !== 'Poipole') return false;
+
+		// Edge-case name blocklist
+		if (NAME_BLOCKLIST.has(s.name)) return false;
+
+		return true;
+	});
+
+	// Build BST-weighted pool at tier-0 defaults (midpoint=250, range=50, weightcap=100)
+	const midpoint = 250;
+	const range = 50;
+	const weightcap = 100;
+
+	const pool: Array<{ id: string, weight: number }> = [];
+	for (const s of candidates) {
+		const effectiveBST = toID(s.name) === 'shedinja' ? 500 : (s.bst ?? getBST(s));
+		const w = bstWeight(effectiveBST, midpoint, range, weightcap);
+		if (w > 0) pool.push({ id: toID(s.name), weight: w });
+	}
+
+	// Pick 3 unique starters via weighted selection
+	const picks: string[] = [];
+	const remaining = pool.slice();
+
+	while (picks.length < 3 && remaining.length > 0) {
+		const weights = remaining.map(p => p.weight);
+		const idx = weightedPickIndex(weights);
+		if (idx === -1) break;
+		picks.push(remaining[idx].id);
+		remaining.splice(idx, 1);
+	}
+
+	// Fallback to uniform random from Tier 1 if weighted pool came up short
+	if (picks.length < 3) {
+		const extras = pickRandom(getTier1Pokemon(), 3 - picks.length, picks);
+		picks.push(...extras);
+	}
+
+	return picks;
 }
 
 export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
