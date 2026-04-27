@@ -1,17 +1,18 @@
 /*
  * =======================================================================
  *
- *    ___ __  __ ___ _   _ _    ___ ___
- *   |_ _|  \/  | _ \ | | | |  / __| __|
- *    | || |\/| |  _/ |_| | |__\__ \ _|
- *   |___|_|  |_|_|  \___/|____|___/___|
+ * ___ __  __ ___ _   _ _    ___ ___
+ * |_ _|  \/  | _ \ | | | |  / __| __|
+ * | || |\/| |  _/ |_| | |__\__ \ _|
+ * |___|_|  |_|_|  \___/|____|___/___|
  *
- *   Server: Impulse
- *   Plugin: PokéRogue
- *   Made by: @TurboRx
+ * Server: Impulse
+ * Plugin: PokéRogue
+ * Made by: @TurboRx
  *
  * =======================================================================
  */
+
 import { Utils } from '../../../lib';
 import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, TMItem, genItem, rollShop } from './pokerogue-items';
 import { type PokemonEntry, type PokeRogueState, type StatusCondition } from './pokerogue-types';
@@ -30,20 +31,9 @@ import {
 	startBattle, destroyBotUser,
 } from './pokerogue-battle';
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-/** BP awarded for winning a battle. */
 const BP_PER_WIN = 5;
-/** Extra BP awarded at end of each streak (every 7 battles). */
 const BP_PER_STREAK = 5;
-/** Starting BP for a new run. */
 const STARTING_BP = 5;
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 	if (!state.pendingChoice || state.pendingChoice.length) return;
@@ -55,17 +45,10 @@ function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 	setState(userId, state);
 }
 
-/**
- * Returns true if the player is "at a streak boundary" — i.e., they have
- * just won the 7th battle in a streak (battle % 7 === 0 after incrementing).
- */
 function isStreakBoundary(floor: number): boolean {
 	return floor % 7 === 0;
 }
 
-/**
- * Fully heals PP for a Pokémon entry (all moves to max PP).
- */
 function fullHealPP(mon: PokemonEntry): void {
 	mon.ppLeft = mon.moves.map(m => {
 		const dexMove = Dex.moves.get(m);
@@ -73,9 +56,6 @@ function fullHealPP(mon: PokemonEntry): void {
 	});
 }
 
-/**
- * Process level-ups and queue move-learning prompts.
- */
 function processLevelUp(
 	mon: PokemonEntry,
 	oldLevel: number,
@@ -116,10 +96,6 @@ function processLevelUp(
 
 	return detailMsgs;
 }
-
-// ---------------------------------------------------------------------------
-// Kill → EXP tracking
-// ---------------------------------------------------------------------------
 
 const SELF_KO_MOVES = new Set([
 	'explosion', 'selfdestruct', 'mistyexplosion', 'memento',
@@ -296,45 +272,27 @@ function parseKillExp(
 	return expMap;
 }
 
-// ---------------------------------------------------------------------------
-// HP + PP + Status sync after battle
-// ---------------------------------------------------------------------------
-
 function syncBattleOutcome(
 	logLines: string[],
 	state: PokeRogueState,
 ): { consumedItems: string[] } {
-	// slot → team index. Re-mapped every time a Pokémon switches in so that
-	// a slot can be reused by a different Pokémon across the battle.
 	const slotToTeamIdx: Record<string, number> = {};
-	// Track which team indices have been assigned to a slot so far (prevents
-	// two slots from being mapped to the same mon simultaneously).
 	const activelyAssigned = new Set<number>();
-
-	// Final HP / status per team index, written as we see log lines.
 	const teamHp: Record<number, number> = {};
 	const teamStatus: Record<number, StatusCondition | ''> = {};
-	// Team indices that were recorded as fainted during the battle.
 	const faintedIndices = new Set<number>();
-
-	// Helper: resolve a slot to its current team index.
 	const idxOf = (slot: string): number | undefined => slotToTeamIdx[slot];
 
 	for (const line of logLines) {
-		// Switch / drag — (re-)assign a slot to a team member.
 		const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
 		if (switchMatch) {
 			const slot = 'p1' + switchMatch[1];
 			const sid = toID(switchMatch[2].trim());
 			const hp = parseInt(switchMatch[3]);
 
-			// Release the previous occupant of this slot from activelyAssigned
-			// so it can be matched again if it switches back in later.
 			const prev = slotToTeamIdx[slot];
 			if (prev !== undefined) activelyAssigned.delete(prev);
 
-			// Find the team member with matching species that isn't already
-			// mapped to another active slot.
 			let matched = -1;
 			for (let i = 0; i < state.team.length; i++) {
 				if (!activelyAssigned.has(i) && toID(state.team[i].species) === sid) {
@@ -354,7 +312,6 @@ function syncBattleOutcome(
 			continue;
 		}
 
-		// |-damage| and |-heal| — update HP (and optional inline status token).
 		const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?( (brn|psn|tox|par|slp|frz))?/.exec(line);
 		if (hpMatch) {
 			const idx = idxOf('p1' + hpMatch[1]);
@@ -365,7 +322,6 @@ function syncBattleOutcome(
 			continue;
 		}
 
-		// |-status| — explicit status infliction.
 		const statusApply = /^\|-status\|p1([a-z]): [^|]+\|(brn|psn|tox|par|slp|frz)/.exec(line);
 		if (statusApply) {
 			const idx = idxOf('p1' + statusApply[1]);
@@ -373,7 +329,6 @@ function syncBattleOutcome(
 			continue;
 		}
 
-		// |-curestatus| — status cleared mid-battle.
 		const statusCure = /^\|-curestatus\|p1([a-z]): /.exec(line);
 		if (statusCure) {
 			const idx = idxOf('p1' + statusCure[1]);
@@ -381,7 +336,6 @@ function syncBattleOutcome(
 			continue;
 		}
 
-		// |faint| — record HP 0, clear status, mark as fainted.
 		const faintP1 = /^\|faint\|p1([a-z]):/.exec(line);
 		if (faintP1) {
 			const slot = 'p1' + faintP1[1];
@@ -390,7 +344,6 @@ function syncBattleOutcome(
 				teamHp[idx] = 0;
 				teamStatus[idx] = '';
 				faintedIndices.add(idx);
-				// Release slot so it can be reused.
 				activelyAssigned.delete(idx);
 				delete slotToTeamIdx[slot];
 			}
@@ -398,18 +351,14 @@ function syncBattleOutcome(
 		}
 	}
 
-	// Commit HP — fainted Pokémon are always written as 0 regardless of any
-	// later HP entry that might have slipped through (belt-and-suspenders).
 	for (const [idxStr, hp] of Object.entries(teamHp)) {
 		const idx = Number(idxStr);
 		state.team[idx].currentHp = faintedIndices.has(idx) ? 0 : hp;
 	}
-	// Ensure every fainted mon is 0 even if it never appeared in teamHp.
 	for (const idx of faintedIndices) {
 		state.team[idx].currentHp = 0;
 	}
 
-	// Commit status.
 	for (const [idxStr, status] of Object.entries(teamStatus)) {
 		const idx = Number(idxStr);
 		if (status) {
@@ -419,9 +368,6 @@ function syncBattleOutcome(
 		}
 	}
 
-	// Consumed items (PS |-enditem| lines).
-	// Re-walk the log with a fresh slot→index map that follows switches in order,
-	// since slotToTeamIdx above was mutated (slots released on faint).
 	const consumedItems: string[] = [];
 	const itemSlotMap: Record<string, number> = {};
 	const itemAssigned = new Set<number>();
@@ -457,14 +403,9 @@ function syncBattleOutcome(
 	return { consumedItems };
 }
 
-// ---------------------------------------------------------------------------
-// Commands
-// ---------------------------------------------------------------------------
-
 export const commands: Chat.ChatCommands = {
 	pokerogue: {
 
-		// ── Start / new game ──────────────────────────────────────────────
 		start(target, room, user) {
 			if (!user.named) return this.errorReply("Login required.");
 			let state = getState(user.id);
@@ -523,7 +464,6 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/pokerogue start');
 		},
 
-		// ── View navigation ────────────────────────────────────────────────
 		view(target, room, user) {
 			const state = getState(user.id);
 			if (!state) return;
@@ -535,7 +475,6 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		// ── Battle ─────────────────────────────────────────────────────────
 		battle(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
@@ -544,8 +483,6 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
 
-			// startBattle() already filters fainted mons, so no re-sort needed.
-			// Just guard against a fully fainted team.
 			if (!state.team.some(m => (m.currentHp ?? 100) > 0)) {
 				return this.errorReply("All your Pokémon have fainted! Buy a Revive from the shop before battling.");
 			}
@@ -557,7 +494,6 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
-		// ── Pokémon choice (starter / pack) ────────────────────────────────
 		choose(target, room, user) {
 			const state = getState(user.id);
 			const n = parseInt(target) - 1;
@@ -599,7 +535,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Move learning ──────────────────────────────────────────────────
 		learnmove(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingMoves?.length) return;
@@ -622,7 +557,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Team swap ──────────────────────────────────────────────────────
 		swapmon(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingSwap) return;
@@ -643,7 +577,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Shop reroll ────────────────────────────────────────────────────
 		reroll(target, room, user) {
 			const state = getState(user.id);
 			if (!state) return;
@@ -659,7 +592,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Buy ────────────────────────────────────────────────────────────
 		buy(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("No active run.");
@@ -722,6 +654,7 @@ export const commands: Chat.ChatCommands = {
 				state.pendingItemName = item.name;
 				state.purchasedItem = key;
 				state.isRotationalItem = isRotational;
+				state.pendingItemIsEvo = item.type === 'evolveItem';
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -738,19 +671,17 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (['healHP', 'healPP', 'revive', 'cureStatus'].includes(item.type)) {
-			// BP is deducted only after the player picks a Pokémon, not here.
-			state.purchasedItem = key;
-			state.pendingConsumableType = item.type as 'healHP' | 'healPP' | 'revive' | 'cureStatus';
-			setState(user.id, state);
-			refreshGamePage(user);
-			return;
+				state.purchasedItem = key;
+				state.pendingConsumableType = item.type as 'healHP' | 'healPP' | 'revive' | 'cureStatus';
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
 			}
 
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
-		// ── TM: teach move to a Pokémon ────────────────────────────────────
 		teachtm(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.moveToLearn || !state.purchasedItem) return this.errorReply("No TM pending.");
@@ -804,7 +735,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Item pack: pick one item ───────────────────────────────────────
 		pickitem(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.itemOptions?.length) return;
@@ -825,7 +755,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Give item to a Pokémon ─────────────────────────────────────────
 		giveitem(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingItemName) return this.errorReply("No item pending.");
@@ -835,6 +764,8 @@ export const commands: Chat.ChatCommands = {
 				delete state.pendingItemName;
 				delete state.purchasedItem;
 				delete state.isRotationalItem;
+				delete state.pendingItemIsEvo;
+				delete state.pendingConsumableType;
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -843,46 +774,81 @@ export const commands: Chat.ChatCommands = {
 			const slot = parseInt(t) - 1;
 			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
 
-			if (state.purchasedItem) {
-				const item = ROTATIONAL_ITEM_POOL[state.purchasedItem] ?? SHOP_ITEMS[state.purchasedItem];
-				if (item) {
-					state.battlePoints -= item.cost;
-					if (state.isRotationalItem) state.rotationalShop = state.rotationalShop.filter(k => k !== state.purchasedItem);
-				}
-			}
-
 			const mon = state.team[slot];
 			const dexNewItem = Dex.items.get(state.pendingItemName);
 			const dexSpecies = Dex.species.get(toID(mon.species));
 
-			if (dexNewItem.forcedForme && dexSpecies.otherFormes?.includes(dexNewItem.forcedForme)) {
-				mon.species = toID(dexNewItem.forcedForme);
-			} else if (mon.heldItem) {
-				const dexOldItem = Dex.items.get(mon.heldItem);
-				if (dexOldItem.forcedForme && dexSpecies.otherFormes?.includes(dexOldItem.forcedForme)) {
-					mon.species = toID(dexSpecies.changesFrom ?? dexSpecies.baseSpecies);
+			let evoTarget = '';
+			if (state.pendingItemIsEvo) {
+				const evoList = dexSpecies.evos;
+				if (evoList) {
+					for (const newEvo of evoList) {
+						const evoData = Dex.species.get(newEvo);
+						if (evoData.evoType === 'useItem' && toID(evoData.evoItem) === toID(dexNewItem.name)) {
+							evoTarget = evoData.id;
+							break;
+						}
+					}
+				}
+				if (!evoTarget) return this.errorReply("That Pokémon can't evolve with this item.");
+			}
+
+			if (state.purchasedItem) {
+				const item = ROTATIONAL_ITEM_POOL[state.purchasedItem] ?? SHOP_ITEMS[state.purchasedItem];
+				if (item) {
+					state.battlePoints -= item.cost;
+					if (state.isRotationalItem) {
+						state.rotationalShop = state.rotationalShop.filter(k => k !== state.purchasedItem);
+					}
 				}
 			}
 
-			mon.heldItem = toID(state.pendingItemName);
-			state.notification = `Gave <b>${Utils.escapeHTML(dexNewItem.name)}</b> to <b>${dexSpecies.name}</b>!`;
+			if (state.pendingItemIsEvo) {
+				mon.species = evoTarget;
+				const evoName = Dex.species.get(evoTarget).name;
+				state.notification = `<b>${dexSpecies.name}</b> evolved into <b>${evoName}</b>!`;
+			} else {
+				if (dexNewItem.forcedForme && dexSpecies.otherFormes?.includes(dexNewItem.forcedForme)) {
+					mon.species = toID(dexNewItem.forcedForme);
+				} else if (mon.heldItem) {
+					const dexOldItem = Dex.items.get(mon.heldItem);
+					if (dexOldItem.forcedForme && dexSpecies.otherFormes?.includes(dexOldItem.forcedForme)) {
+						mon.species = toID(dexSpecies.changesFrom ?? dexSpecies.baseSpecies);
+					}
+				}
+
+				mon.heldItem = toID(state.pendingItemName);
+				state.notification = `Gave <b>${Utils.escapeHTML(dexNewItem.name)}</b> to <b>${dexSpecies.name}</b>!`;
+			}
 
 			delete state.pendingItemName;
 			delete state.purchasedItem;
 			delete state.isRotationalItem;
+			delete state.pendingItemIsEvo;
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
-		// ── Use consumable shop items (healHP / healPP / revive / cureStatus)
 		useshopitem(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.purchasedItem) return this.errorReply("No item selected.");
+			
+			const t = target.trim();
+			
+			if (t === 'skip') {
+				delete state.purchasedItem;
+				delete state.pendingConsumableType;
+				delete state.isRotationalItem;
+				setState(user.id, state);
+				refreshGamePage(user);
+				return;
+			}
+
 			const itemKey = state.purchasedItem;
 			const item = SHOP_ITEMS[itemKey] ?? ROTATIONAL_ITEM_POOL[itemKey];
 			if (!item) return this.errorReply("Unknown item.");
 
-			const slot = parseInt(target.trim()) - 1;
+			const slot = parseInt(t) - 1;
 			if (isNaN(slot) || slot < 0 || slot >= state.team.length) return this.errorReply("Invalid team slot.");
 			const mon = state.team[slot];
 			const hp = mon.currentHp ?? 100;
@@ -922,17 +888,17 @@ export const commands: Chat.ChatCommands = {
 				if (hp > 0) return this.errorReply("That Pokémon hasn't fainted.");
 				state.battlePoints -= item.cost;
 				mon.currentHp = mon.species === 'shedinja' ? 100 : 50;
-				// Reviving clears any lingering status
 				delete mon.status;
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> was revived!`;
 			}
 
 			delete state.purchasedItem;
+			delete state.pendingConsumableType; 
+			delete state.isRotationalItem;
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
 
-		// ── Unequip held item ──────────────────────────────────────────────
 		unequip(target, room, user) {
 			const state = getState(user.id);
 			if (!state) return;
@@ -948,14 +914,12 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Dismiss notification ───────────────────────────────────────────
 		dismissnotif(target, room, user) {
 			const s = getState(user.id);
 			if (s?.notification) { delete s.notification; setState(user.id, s); }
 			refreshGamePage(user);
 		},
 
-		// ── Status info ────────────────────────────────────────────────────
 		status(target, room, user) {
 			if (!this.runBroadcast()) return;
 			const tId = toID(target) || user.id;
@@ -965,7 +929,6 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 
-		// ── Quit / reset run ───────────────────────────────────────────────
 		quit(target, room, user) {
 			const s = getState(user.id);
 			if (s?.battleRoomId) {
@@ -995,7 +958,6 @@ export const commands: Chat.ChatCommands = {
 			refreshGamePage(user);
 		},
 
-		// ── Staff commands ─────────────────────────────────────────────────
 		givebp(target, room, user) {
 			this.checkCan('lock');
 			let [name, amt] = target.split(',').map(s => s?.trim());
@@ -1115,10 +1077,6 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-// ---------------------------------------------------------------------------
-// Battle end handler
-// ---------------------------------------------------------------------------
-
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {
 		const match = activeMatches.get(battle.roomid);
@@ -1142,7 +1100,6 @@ export const handlers: Chat.Handlers = {
 		delete state.battleRoomId;
 
 		if (toID(winner) === match.userId) {
-			// ── Win ──────────────────────────────────────────────────────
 			const expMap = parseKillExp(logLines, state, match.floor, isBossFloor);
 			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
 			const detailMsgs: string[] = [];
@@ -1195,7 +1152,6 @@ export const handlers: Chat.Handlers = {
 			}
 
 		} else {
-			// ── Loss ─────────────────────────────────────────────────────
 			delete state.pendingMoves;
 			delete state.pendingSwap;
 			delete state.moveToLearn;
