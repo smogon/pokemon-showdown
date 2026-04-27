@@ -290,11 +290,24 @@ function buildBotTeam(state: PokeRogueState): string {
 }
 
 // ---------------------------------------------------------------------------
-// startBattle (unchanged interface — only buildBotTeam internals changed)
+// startBattle
 // ---------------------------------------------------------------------------
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
-	const playerTeam = packTeam(state.team);
+	// Only pack living Pokémon into the battle team. If a fainted mon is
+	// included in the packed team, the PS battle engine will accept it as a
+	// valid (but already-fainted) team slot. When the last living mon faints,
+	// PS prompts for a replacement, finds the pre-fainted mon, and the AI
+	// continues attacking indefinitely because it can never cleanly faint
+	// again. Filtering here prevents that entirely.
+	const livingTeam = state.team.filter(m => (m.currentHp ?? 100) > 0);
+
+	if (!livingTeam.length) {
+		user.popup('All your Pokémon have fainted! Use a Revive from the shop before battling.');
+		return false;
+	}
+
+	const playerTeam = packTeam(livingTeam);
 	const botTeam = buildBotTeam(state);
 	const isBoss = state.floor % 10 === 0;
 

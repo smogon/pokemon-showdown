@@ -551,6 +551,14 @@ export const commands: Chat.ChatCommands = {
 			const fainted = state.team.filter(m => (m.currentHp ?? 100) <= 0);
 			state.team = [...living, ...fainted];
 
+			// Guard: if every Pokémon on the team has fainted, refuse to start
+			// a battle. startBattle() also checks this, but catching it here
+			// gives the player a clear, actionable error message in chat rather
+			// than a generic popup.
+			if (!living.length) {
+				return this.errorReply("All your Pokémon have fainted! Buy a Revive from the shop before battling.");
+			}
+
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);

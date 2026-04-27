@@ -687,8 +687,32 @@ export interface AIPokemonSet {
  * Packed format tail: HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE,HP,STATUS
  * We only need HP and STATUS, leaving all preceding fields blank.
  * When HP is 100 and status is absent the tail is omitted entirely (PS default).
+ *
+ * IMPORTANT: This function must never be called with a fainted Pokémon
+ * (currentHp === 0). startBattle() filters those out before calling packTeam,
+ * but a defensive log is emitted here in case a regression slips through.
  */
 export function packPokemon(mon: PokemonEntry): string {
+	// Defensive guard: a fainted mon must never be packed into a battle team.
+	// If one slips through despite the filter in startBattle, log the error and
+	// treat the mon as full HP so the battle engine at least starts cleanly.
+	if ((mon.currentHp ?? 100) <= 0) {
+		Monitor.crashlog(
+			new Error(`packPokemon called on fainted Pokémon: ${mon.species} (hp=${mon.currentHp}). ` +
+				`It should have been filtered out by startBattle. Battle may behave unexpectedly.`),
+			'PokéRogue packPokemon'
+		);
+		// Do not encode 0 HP — skip the tail so the engine uses its own default.
+		const speciesDataFainted = Dex.species.get(toID(mon.species));
+		const nameFainted = speciesDataFainted.exists ? speciesDataFainted.name : mon.species;
+		const abilitiesFainted = speciesDataFainted.abilities ?? {};
+		const abilityFainted = (abilitiesFainted as unknown as Record<string, string>)['0'] || '';
+		if (!mon.moves) mon.moves = getLevelUpMoves(toID(mon.species), mon.level);
+		const movesFainted = mon.moves.join(',');
+		const itemFainted = mon.heldItem ?? '';
+		return `${nameFainted}||${itemFainted}|${abilityFainted}|${movesFainted}|Hardy||M|||${mon.level}|`;
+	}
+
 	const speciesData = Dex.species.get(toID(mon.species));
 	const name = speciesData.exists ? speciesData.name : mon.species;
 
