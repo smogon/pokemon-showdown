@@ -380,7 +380,19 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	if (!available.length) return ['tackle'];
 
 	available.sort((a, b) => b.learnLevel - a.learnLevel);
-	return available.slice(0, 4).map(m => m.move);
+	const top4 = available.slice(0, 4);
+
+	const hasAttack = top4.some(m => (Dex.moves.get(m.move).basePower ?? 0) > 0);
+	if (!hasAttack) {
+		const attackingMove = available.slice(4).find(m => (Dex.moves.get(m.move).basePower ?? 0) > 0);
+		if (attackingMove) {
+			top4[top4.length - 1] = attackingMove;
+		} else {
+			top4[top4.length - 1] = { move: 'tackle', learnLevel: 0 };
+		}
+	}
+
+	return top4.map(m => m.move);
 }
 
 export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newLevel: number, isEvolution = false): string[] {
@@ -498,8 +510,20 @@ function pickAIMoves(speciesId: string, level: number): string[] {
 	viableMoves = viableMoves.reverse();
 	const top4 = viableMoves.slice(0, 4);
 	top4.reverse();
+
+	const hasAttack = top4.some(m => (Dex.moves.get(m).basePower ?? 0) > 0);
+	if (!hasAttack) {
+		const attackingMove = viableMoves.slice(4).find(m => (Dex.moves.get(m).basePower ?? 0) > 0);
+		if (attackingMove) {
+			top4[top4.length - 1] = attackingMove;
+		} else {
+			top4[top4.length - 1] = 'tackle';
+		}
+	}
+
 	return top4.map(m => Dex.moves.get(m).id || m);
 }
+	
 
 function pickRandomAbility(species: Species): string {
 	const abilities = species.abilities as Record<string, string>;
