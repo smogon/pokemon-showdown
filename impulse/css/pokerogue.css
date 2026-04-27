@@ -1,0 +1,625 @@
+/* * ==========================================
+ * PokéRogue Render UI (No CSS Variables)
+ * ==========================================
+ */
+
+/* Base & Global Rules */
+.pr {
+    font-family: system-ui, sans-serif;
+    color: #333333;
+    max-width: 680px;
+}
+.dark .pr {
+    color: #e0d4ff;
+}
+
+/* Force removal of text-shadow in BOTH modes */
+.pr, .pr * {
+    text-shadow: none !important;
+}
+
+/* ==========================================
+ * Components
+ * ========================================== */
+
+.pr-card {
+    background: rgba(0, 0, 0, 0.04);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
+.dark .pr-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.pr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+.dark .pr-header {
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.pr-header h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    color: #333333;
+}
+.dark .pr-header h2 {
+    color: #e0d4ff;
+}
+
+.pr-statbar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.pr-statbar.cols2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.pr-stat {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    padding: 7px 10px;
+    text-align: center;
+}
+.dark .pr-stat {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.pr-stat-label {
+    font-size: 10px;
+    color: #666666;
+    margin-bottom: 2px;
+}
+.dark .pr-stat-label {
+    color: #aaaaaa;
+}
+
+.pr-stat-val {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+.dark .pr-stat-val {
+    color: #e0d4ff;
+}
+
+.pr-section-title {
+    font-size: 10px;
+    font-weight: 500;
+    color: #666666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+.dark .pr-section-title {
+    color: #aaaaaa;
+}
+
+.pr-mon-img {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+}
+
+.pr-mon-lv {
+    font-size: 10px;
+    color: #666666;
+    font-weight: normal;
+}
+.dark .pr-mon-lv {
+    color: #aaaaaa;
+}
+
+.pr-types {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 4px;
+    margin-top: 2px;
+}
+
+.pr-type {
+    font-size: 9px;
+    font-weight: 500;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #ffffff;
+}
+
+.pr-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.pr-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pr-bar-track {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+.dark .pr-bar-track {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.pr-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.pr-bar-label {
+    font-size: 9px;
+    color: #666666;
+    min-width: 36px;
+    text-align: right;
+}
+.dark .pr-bar-label {
+    color: #aaaaaa;
+}
+
+.pr-item-tag {
+    font-size: 9px;
+    color: #3b82f6; 
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dark .pr-item-tag {
+    color: #8ab4f8; 
+}
+
+.pr-actions {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+/* ==========================================
+ * Buttons
+ * ========================================== */
+
+.pr-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 7px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #333333;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+}
+.dark .pr-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    color: #e0d4ff;
+}
+
+.pr-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.dark .pr-btn:hover {
+    background: rgba(255, 255, 255, 0.11);
+}
+
+.pr-btn.primary {
+    border-color: #534AB7;
+    color: #413a8f;
+    background: rgba(83, 74, 183, 0.1);
+}
+.dark .pr-btn.primary {
+    color: #c4a8ff;
+    background: rgba(83, 74, 183, 0.15);
+}
+
+.pr-btn.primary:hover {
+    background: rgba(83, 74, 183, 0.2);
+}
+.dark .pr-btn.primary:hover {
+    background: rgba(83, 74, 183, 0.28);
+}
+
+.pr-btn.danger {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.3);
+    background: rgba(220, 38, 38, 0.05);
+}
+.dark .pr-btn.danger {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.25);
+    background: transparent;
+}
+
+.pr-btn.danger:hover {
+    background: rgba(220, 38, 38, 0.1);
+}
+.dark .pr-btn.danger:hover {
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.pr-btn[disabled], .dark .pr-btn[disabled] {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* ==========================================
+ * Tables (Team / Shop / Leaderboard)
+ * ========================================== */
+
+.pr-table-container {
+    background: rgba(0, 0, 0, 0.03);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.dark .pr-table-container {
+    background: rgba(255, 255, 255, 0.04);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.pr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+    table-layout: auto;
+}
+.pr-table th {
+    font-weight: 500;
+    color: #666666;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 8px 10px;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.04);
+}
+.dark .pr-table th {
+    color: #aaaaaa;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.15);
+}
+.pr-table td {
+    padding: 8px 10px;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    vertical-align: middle;
+}
+.dark .pr-table td {
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+.pr-table tr:last-child td {
+    border-bottom: none;
+}
+
+.pr-td-icon { width: 44px; text-align: center; padding-right: 0 !important; }
+.pr-td-name { font-weight: 500; color: #333333; font-size: 13px; }
+.dark .pr-td-name { color: #e0d4ff; }
+.pr-td-desc { color: #666666; font-size: 11px; }
+.dark .pr-td-desc { color: #aaaaaa; }
+.pr-td-cost { font-weight: 500; color: #534AB7; white-space: nowrap; }
+.dark .pr-td-cost { color: #c4a8ff; }
+.pr-td-action { text-align: right; white-space: nowrap; width: 60px; }
+.pr-td-bars { width: 35%; min-width: 120px; }
+
+.pr-shop-buy {
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.dark .pr-shop-buy {
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    color: #e0d4ff;
+}
+.pr-shop-buy:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.dark .pr-shop-buy:hover {
+    background: rgba(255, 255, 255, 0.11);
+}
+.pr-shop-buy[disabled], .dark .pr-shop-buy[disabled] {
+    opacity: 0.4;
+    cursor: default;
+}
+.pr-shop-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+    vertical-align: middle;
+}
+.pr-lb-team {
+    display: flex;
+    gap: 2px;
+}
+
+/* ==========================================
+ * Specific Views & Elements
+ * ========================================== */
+
+.pr-notification {
+    background: rgba(59, 130, 246, 0.12);
+    border: 0.5px solid rgba(59, 130, 246, 0.3);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 12px;
+    color: #1d4ed8;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+.dark .pr-notification {
+    color: #93c5fd;
+}
+
+.pr-notification-dismiss {
+    font-size: 11px;
+    opacity: 0.6;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+}
+
+.pr-choice-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.pr-choice-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+.dark .pr-choice-row {
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.pr-choice-row.leg {
+    border-color: rgba(83, 74, 183, 0.35);
+    background: rgba(83, 74, 183, 0.07);
+}
+.dark .pr-choice-row.leg {
+    border-color: rgba(196, 168, 255, 0.35);
+    background: rgba(196, 168, 255, 0.07);
+}
+
+.pr-ct-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 3px;
+}
+.dark .pr-ct-name {
+    color: #e0d4ff;
+}
+
+.pr-ct-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 3px;
+}
+
+.pr-ct-stats span {
+    font-size: 9px;
+    color: #666666;
+}
+.dark .pr-ct-stats span {
+    color: #888888;
+}
+
+.pr-ct-stats span b {
+    color: #534AB7;
+}
+.dark .pr-ct-stats span b {
+    color: #c4a8ff;
+}
+
+.pr-ct-ability {
+    font-size: 10px;
+    color: #666666;
+    margin-top: 2px;
+}
+.dark .pr-ct-ability {
+    color: #aaaaaa;
+}
+
+.pr-legendary-badge {
+    font-size: 9px;
+    font-weight: 500;
+    color: #534AB7;
+    background: rgba(83, 74, 183, 0.15);
+    border-radius: 3px;
+    padding: 1px 5px;
+    display: inline-block;
+    margin-top: 3px;
+}
+.dark .pr-legendary-badge {
+    color: #c4a8ff;
+    background: rgba(196, 168, 255, 0.15);
+}
+
+.pr-sprite-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.pr-pokeball-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    image-rendering: pixelated;
+}
+
+.pr-pick-btn {
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 0.5px solid #534AB7;
+    border-radius: 8px;
+    background: rgba(83, 74, 183, 0.1);
+    color: #413a8f;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.dark .pr-pick-btn {
+    background: rgba(83, 74, 183, 0.15);
+    color: #c4a8ff;
+}
+
+.pr-pick-btn:hover {
+    background: rgba(83, 74, 183, 0.2);
+}
+.dark .pr-pick-btn:hover {
+    background: rgba(83, 74, 183, 0.28);
+}
+
+.pr-expbar {
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    margin-top: 2px;
+}
+.dark .pr-expbar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pr-expbar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: #7F77DD;
+}
+
+.pr-hpbar {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+.dark .pr-hpbar {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.pr-hpbar-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.pr-gameover {
+    text-align: center;
+    padding: 28px 20px;
+}
+
+.pr-go-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: #dc2626;
+    margin-bottom: 8px;
+}
+.dark .pr-go-title {
+    color: #f87171;
+}
+
+.pr-go-sub {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 20px;
+}
+.dark .pr-go-sub {
+    color: #aaaaaa;
+}
+
+.pr-newrun-btn {
+    font-size: 14px;
+    padding: 9px 24px;
+    border: 0.5px solid #534AB7;
+    border-radius: 8px;
+    background: rgba(83, 74, 183, 0.1);
+    color: #413a8f;
+    cursor: pointer;
+}
+.dark .pr-newrun-btn {
+    background: rgba(83, 74, 183, 0.2);
+    color: #c4a8ff;
+}
+
+.pr-newrun-btn:hover {
+    background: rgba(83, 74, 183, 0.2);
+}
+.dark .pr-newrun-btn:hover {
+    background: rgba(83, 74, 183, 0.32);
+}
+
+.pr-choice-heading {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin: 0 0 8px;
+}
+.dark .pr-choice-heading {
+    color: #e0d4ff;
+}
+
+.pr-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.pr-warning-box {
+    background: rgba(220, 38, 38, 0.05);
+    border: 0.5px solid rgba(220, 38, 38, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #dc2626;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.dark .pr-warning-box {
+    background: rgba(239, 68, 68, 0.08);
+    border: 0.5px solid rgba(239, 68, 68, 0.25);
+    color: #f87171;
+  }
