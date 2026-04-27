@@ -33,7 +33,7 @@ import {
 
 const BP_PER_WIN = 5;
 const BP_PER_STREAK = 5;
-const STARTING_BP = 5;
+const STARTING_BP = 10;
 
 function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 	if (!state.pendingChoice || state.pendingChoice.length) return;
