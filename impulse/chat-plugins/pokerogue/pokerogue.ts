@@ -543,6 +543,14 @@ export const commands: Chat.ChatCommands = {
 				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
+
+			// Move fainted Pokémon to the back so the battle engine never
+			// auto-sends one out as the lead. Preserve relative order within
+			// each group so the player's intended lineup is respected.
+			const living = state.team.filter(m => (m.currentHp ?? 100) > 0);
+			const fainted = state.team.filter(m => (m.currentHp ?? 100) <= 0);
+			state.team = [...living, ...fainted];
+
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);
