@@ -265,7 +265,8 @@ function parseKillExp(
 		if (teamIdx === undefined) continue;
 		if (p1TeamFainted.has(teamIdx)) continue;
 
-		const exp = calcKillExp(enemySpecies, enemyLevel, luckyCharmActive, isBossFloor);
+		const playerLevel = state.team[teamIdx]?.level ?? 1;
+		const exp = calcKillExp(enemySpecies, enemyLevel, playerLevel, luckyCharmActive, isBossFloor);
 		expMap.set(teamIdx, (expMap.get(teamIdx) ?? 0) + exp);
 	}
 
@@ -1105,12 +1106,13 @@ export const handlers: Chat.Handlers = {
 			const detailMsgs: string[] = [];
 
 			if (totalExpEarned > 0) {
-				for (let i = 0; i < state.team.length; i++) {
-					const mon = state.team[i];
-					if ((mon.currentHp ?? 100) === 0) continue;
+				// Instead of summing and sharing equally:
+				for (const [teamIdx, expGained] of expMap) {
+					const mon = state.team[teamIdx];
+					if (!mon || (mon.currentHp ?? 100) === 0) continue;
 					const oldSpecies = mon.species;
-					const { evolved, oldLevel } = applyExpAndLevelUp(mon, totalExpEarned);
-					detailMsgs.push(...processLevelUp(mon, oldLevel, oldSpecies, evolved, i, state));
+					const { evolved, oldLevel } = applyExpAndLevelUp(mon, expGained);
+					detailMsgs.push(...processLevelUp(mon, oldLevel, oldSpecies, evolved, teamIdx, state));
 				}
 			}
 
