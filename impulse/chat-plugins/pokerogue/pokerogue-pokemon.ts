@@ -1,6 +1,25 @@
+/*
+ * =======================================================================
+ *
+ *    ___ __  __ ___ _   _ _    ___ ___
+ *   |_ _|  \/  | _ \ | | | |  / __| __|
+ *    | || |\/| |  _/ |_| | |__\__ \ __|
+ *   |___|_|  |_|_|  \___/|____|___/___|
+ *
+ *   Server: Impulse
+ *   Plugin: PokéRogue Pokemon
+ *   Made by: @TurboRx
+ *
+ * =======================================================================
+ */
 
 import { FS } from '../../../lib';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
+
+// ---------------------------------------------------------------------------
+// exp.json types & loader
+// ---------------------------------------------------------------------------
+
 interface ExpEntry {
 	expYield: number;
 	expType: string;
@@ -13,8 +32,11 @@ interface ExpEntry {
 		spe: number;
 	};
 }
+
 type ExpData = Record<string, ExpEntry>;
+
 let expData: ExpData = {};
+
 export async function loadExpData(): Promise<void> {
 	try {
 		const raw = await FS('impulse/chat-plugins/pokerogue/exp.json').readIfExists();
@@ -23,19 +45,32 @@ export async function loadExpData(): Promise<void> {
 		expData = {};
 	}
 }
+
 void loadExpData();
+
+/**
+ * Returns the base expYield for a species from exp.json, falling back to a
+ * BST-derived estimate when the species is not in exp.json.
+ */
 export function getExpYield(speciesId: string): number {
 	const id = toID(speciesId);
 	if (expData[id]) return expData[id].expYield;
+
 	const sp = Dex.species.get(id);
 	if (!sp.exists) return 70;
 	const bs = sp.baseStats ?? { hp: 45, atk: 45, def: 45, spa: 45, spd: 45, spe: 45 };
 	const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 	return Math.round(bst / 3.5);
 }
+
+/**
+ * Returns the expType for a species from exp.json.
+ * Falls back to 'Slow' for high-BST species, 'Medium Fast' otherwise.
+ */
 export function getExpType(speciesId: string): string {
 	const id = toID(speciesId);
 	if (expData[id]) return expData[id].expType;
+
 	const sp = Dex.species.get(id);
 	if (sp.exists) {
 		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -44,33 +79,61 @@ export function getExpType(speciesId: string): string {
 	}
 	return 'Medium Fast';
 }
+
+// ---------------------------------------------------------------------------
+// EXP formula — exact Game Freak curves (matches poketest.ts getMinExpForMonAtLevel)
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns the TOTAL EXP required to reach `level` from level 1.
+ * Uses the exact official formulas for each growth rate curve.
+ * This replaces the previous simplified linear approximation.
+ *
+ * Curves matched to poketest.ts:
+ *   Erratic, Fast, Medium Fast, Medium Slow, Slow, Fluctuating
+ */
 export function expForLevel(level: number, expType = 'Medium Fast'): number {
 	if (level <= 1) return 0;
 	const n = level;
+
 	switch (expType) {
 	case 'Erratic':
 		if (n < 50)  return Math.floor((n ** 3 * (100 - n)) / 50);
 		if (n < 68)  return Math.floor((n ** 3 * (150 - n)) / 100);
 		if (n < 90)  return Math.floor((n ** 3 * ((1911 - (10 * n)) / 3)) / 500);
-		 return Math.floor((n ** 3 * (160 - n)) / 100);
+		/* n >= 90 */ return Math.floor((n ** 3 * (160 - n)) / 100);
+
 	case 'Fast':
 		return Math.floor((4 * n ** 3) / 5);
+
 	case 'Medium Fast':
 		return Math.floor(n ** 3);
+
 	case 'Medium Slow': {
 		const val = Math.floor((6 / 5) * n ** 3 - 15 * n ** 2 + 100 * n - 140);
 		return Math.max(0, val);
 	}
+
 	case 'Slow':
 		return Math.floor((5 * n ** 3) / 4);
+
 	case 'Fluctuating':
 		if (n < 15)  return Math.floor((n ** 3 * (((n + 1) / 3) + 24)) / 50);
 		if (n < 36)  return Math.floor((n ** 3 * (n + 14)) / 50);
-		 return Math.floor((n ** 3 * ((n / 2) + 32)) / 50);
+		/* n >= 36 */ return Math.floor((n ** 3 * ((n / 2) + 32)) / 50);
+
 	default:
-		return Math.floor(n ** 3); 
+		return Math.floor(n ** 3); // Medium Fast fallback
 	}
 }
+
+/**
+ * Calculate the EXP earned for defeating one AI Pokémon.
+ *
+ * Mirrors main-series Gen-5+ formula (no trade/Exp.Share bonus):
+ *   exp = floor(baseYield * enemyLevel / 5)
+ * Then applies boss-floor bonus and Lucky Charm multiplier.
+ */
 export function calcKillExp(
 	enemySpeciesId: string,
 	enemyLevel: number,
@@ -83,6 +146,11 @@ export function calcKillExp(
 	if (luckyCharmActive) exp *= 2;
 	return Math.max(1, exp);
 }
+
+// ---------------------------------------------------------------------------
+// EVO type fallback levels
+// ---------------------------------------------------------------------------
+
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
 	useItem: 36,
@@ -91,14 +159,21 @@ const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	levelExtra: 20,
 	levelHold: 30,
 };
+
+// ---------------------------------------------------------------------------
+// Legacy tier caches (kept for starter-picking & player new-pokemon offers)
+// ---------------------------------------------------------------------------
+
 let t1Cache: string[] | null = null;
 let t2Cache: string[] | null = null;
 let t3Cache: string[] | null = null;
 let t4Cache: string[] | null = null;
+
 function getBST(species: Species): number {
 	const bs = species.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 	return bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
 }
+
 export function getTier1Pokemon(): string[] {
 	if (t1Cache?.length) return t1Cache;
 	const all = Dex.species.all();
@@ -109,6 +184,7 @@ export function getTier1Pokemon(): string[] {
 	}).map(s => toID(s.name));
 	return t1Cache;
 }
+
 export function getTier2Pokemon(): string[] {
 	if (t2Cache?.length) return t2Cache;
 	const all = Dex.species.all();
@@ -121,6 +197,7 @@ export function getTier2Pokemon(): string[] {
 	}).map(s => toID(s.name));
 	return t2Cache;
 }
+
 export function getTier3Pokemon(): string[] {
 	if (t3Cache?.length) return t3Cache;
 	const all = Dex.species.all();
@@ -133,6 +210,7 @@ export function getTier3Pokemon(): string[] {
 	}).map(s => toID(s.name));
 	return t3Cache;
 }
+
 export function getTier4Pokemon(): string[] {
 	if (t4Cache?.length) return t4Cache;
 	const all = Dex.species.all();
@@ -142,6 +220,7 @@ export function getTier4Pokemon(): string[] {
 	}).map(s => toID(s.name));
 	return t4Cache;
 }
+
 export function pickRandom(pool: string[], n: number, exclude: string[] = []): string[] {
 	const filtered = pool.filter(id => !exclude.includes(id));
 	const shuffled = filtered.slice();
@@ -151,10 +230,12 @@ export function pickRandom(pool: string[], n: number, exclude: string[] = []): s
 	}
 	return shuffled.slice(0, n);
 }
+
 export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclude: string[] = []): { species: string, isFeatured: boolean } {
 	const rand = Math.random();
 	let pool: string[];
 	let isFeatured = false;
+
 	if (gachaType === 'master') {
 		if (rand <= 0.30) { pool = getTier4Pokemon(); isFeatured = true; }
 		else { pool = getTier3Pokemon(); }
@@ -165,18 +246,22 @@ export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclud
 		if (rand <= 0.70) { pool = getTier2Pokemon(); isFeatured = true; }
 		else { pool = getTier3Pokemon(); }
 	}
+
 	const picks = pickRandom(pool, 1, exclude);
 	const species = picks.length ? picks[0] : (pickRandom(getTier1Pokemon(), 1)[0] ?? 'bulbasaur');
 	return { species, isFeatured };
 }
+
 export function pickStarterOptions(): string[] {
 	return pickRandom(getTier1Pokemon(), 3);
 }
+
 export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number): string[] {
 	const existing = currentTeam.map(m => m.species);
 	let poolA: string[];
 	let poolB: string[];
 	let chanceA: number;
+
 	if (floor < 20) {
 		poolA = getTier1Pokemon(); poolB = getTier2Pokemon(); chanceA = 0.7;
 	} else if (floor < 35) {
@@ -184,30 +269,43 @@ export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number
 	} else {
 		poolA = getTier3Pokemon(); poolB = getTier4Pokemon(); chanceA = 0.7;
 	}
+
 	const options: string[] = [];
 	for (let i = 0; i < 3; i++) {
 		const activePool = Math.random() < chanceA ? poolA : poolB;
 		const pick = pickRandom(activePool, 1, [...existing, ...options]);
 		if (pick.length) options.push(pick[0]);
 	}
+
 	return options.length === 3 ? options : pickRandom([...getTier1Pokemon(), ...getTier2Pokemon()], 3, existing);
 }
+
 export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: number } | null {
 	const species = Dex.species.get(toID(speciesId));
 	if (!species.exists || !species.evos.length) return null;
+
 	const validEvos: { evoTo: string, evoLevel: number }[] = [];
+
 	for (const evoName of species.evos) {
 		const evo = Dex.species.get(toID(evoName));
 		if (evo.evoType === 'other') continue;
+
 		const fallback = evo.evoType ? (EVO_TYPE_FALLBACK_LEVEL[evo.evoType] ?? 36) : 36;
 		const evoLevel = evo.evoLevel ?? fallback;
+
 		if (evoLevel > 0) {
 			validEvos.push({ evoTo: toID(evoName), evoLevel });
 		}
 	}
+
 	if (!validEvos.length) return null;
 	return validEvos[Math.floor(Math.random() * validEvos.length)];
 }
+
+// ---------------------------------------------------------------------------
+// Level / EXP helpers
+// ---------------------------------------------------------------------------
+
 export function botLevel(floor: number): number {
 	let level = 1;
 	if (floor <= 20) {
@@ -219,23 +317,34 @@ export function botLevel(floor: number): number {
 	}
 	return Math.min(100, level);
 }
+
 export function floorExpReward(floor: number): number {
 	const currentTarget = botLevel(floor);
 	const nextTarget = botLevel(floor + 1);
+
 	if (currentTarget === 100) return 500000;
+
 	const expGap = expForLevel(nextTarget, 'Medium Fast') - expForLevel(currentTarget, 'Medium Fast');
 	return Math.floor(expGap * 1.15);
 }
+
 export function floorCoinReward(floor: number): number {
 	return 30 + floor * 10;
 }
+
+/**
+ * Applies gained EXP to a Pokémon and handles level-ups and evolution.
+ * Uses the species' own expType curve for accurate level thresholds.
+ */
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
+
 	const expType = getExpType(mon.species);
 	while (mon.level < 100 && mon.exp >= expForLevel(mon.level + 1, expType)) {
 		mon.level++;
 	}
+
 	let evolved = false;
 	while (true) {
 		const evo = getLevelUpEvo(mon.species);
@@ -245,11 +354,14 @@ export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evol
 	}
 	return { evolved, oldLevel };
 }
+
 export function getLevelUpMoves(speciesId: string, level: number): string[] {
 	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
 	const learnset = learnsetData?.learnset;
 	if (!learnset) return ['tackle'];
+
 	const available: { move: string, learnLevel: number }[] = [];
+
 	for (const [moveid, sources] of Object.entries(learnset)) {
 		for (const src of sources) {
 			const match = /^9L(\d+)$/.exec(src);
@@ -262,13 +374,17 @@ export function getLevelUpMoves(speciesId: string, level: number): string[] {
 			}
 		}
 	}
+
 	if (!available.length) return ['tackle'];
+
 	available.sort((a, b) => b.learnLevel - a.learnLevel);
 	return available.slice(0, 4).map(m => m.move);
 }
+
 export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newLevel: number, isEvolution = false): string[] {
 	const learnset = Dex.species.getLearnsetData(toID(speciesId))?.learnset;
 	if (!learnset) return [];
+
 	const learned: string[] = [];
 	for (const [moveid, sources] of Object.entries(learnset)) {
 		for (const src of sources) {
@@ -286,13 +402,38 @@ export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newL
 	}
 	return Array.from(new Set(learned));
 }
+
+// ---------------------------------------------------------------------------
+// AI Pokémon generation — BST-weighted pool (mirrors poketest.ts genPokemon)
+// ---------------------------------------------------------------------------
+
+/**
+ * Maps a floor number to a difficulty tier (0–6), same scale as poketest.ts
+ * streak index. Every 10 floors ≈ one streak tier.
+ */
 function floorToDifficultyTier(floor: number): number {
 	return Math.min(6, Math.floor((floor - 1) / 10));
 }
+
+/**
+ * Builds a parabolic BST weight for a species.
+ *
+ *   weight = (-1/range) * (bst - midpoint)² + (weightcap + range)
+ *
+ * Clamped to [0, weightcap]. Species whose BST is too far from midpoint
+ * get weight 0 and are excluded.
+ *
+ * Matches the formula in poketest.ts genPokemon().
+ */
 function bstWeight(bst: number, midpoint: number, range: number, weightcap: number): number {
 	const raw = (-1 / range) * (bst - midpoint) ** 2 + (weightcap + range);
 	return Math.max(0, Math.min(weightcap, Math.round(raw)));
 }
+
+/**
+ * Chooses a random item from a weighted pool using cumulative-sum selection.
+ * Returns the chosen index, or -1 if the pool is empty.
+ */
 function weightedPickIndex(weights: number[]): number {
 	const total = weights.reduce((a, b) => a + b, 0);
 	if (total <= 0) return -1;
@@ -303,28 +444,46 @@ function weightedPickIndex(weights: number[]): number {
 	}
 	return weights.length - 1;
 }
+
+/**
+ * Picks a random functional held item for an AI Pokémon (1-in-20 chance).
+ * Mirrors poketest.ts genItem() — only picks items that do something in battle.
+ */
 function pickRandomHeldItem(speciesName: string): string {
-	if (Math.random() >= 0.05) return ''; 
+	if (Math.random() >= 0.05) return ''; // 1/20 chance
+
 	const allItems = Dex.items.all().filter(i => {
 		if (i.isNonstandard && i.isNonstandard !== 'Past') return false;
+		// Must have battle utility: z-move crystal, species-specific, or functional
 		if (i.zMove) return true;
 		if (i.itemUser) return i.itemUser.some(u => toID(u) === toID(speciesName));
 		return Object.keys(i).some(k => typeof (i as any)[k] === 'function');
 	});
+
 	if (!allItems.length) return '';
 	return allItems[Math.floor(Math.random() * allItems.length)].id;
 }
+
+/**
+ * Picks moves for an AI Pokémon: collects all level-up moves up to `level`,
+ * sorts by learn level descending (most recently learned first), takes top 4,
+ * then reverses to ascending order. Mirrors poketest.ts genPokemon() move logic.
+ */
 function pickAIMoves(speciesId: string, level: number): string[] {
 	const learnsetData = Dex.species.getLearnsetData(toID(speciesId));
 	const learnset = learnsetData?.learnset;
+
 	if (!learnset) return ['tackle'];
+
 	const available: { move: string, learnLevel: number }[] = [];
+
 	for (const [moveid, sources] of Object.entries(learnset)) {
 		for (const src of sources) {
 			const match = /^9L(\d+)$/.exec(src);
 			if (match) {
 				const learnLvl = parseInt(match[1]);
 				if (learnLvl <= level) {
+					// Avoid duplicates — keep the highest learn level entry
 					const existing = available.findIndex(a => a.move === moveid);
 					if (existing === -1) {
 						available.push({ move: moveid, learnLevel: learnLvl });
@@ -336,16 +495,29 @@ function pickAIMoves(speciesId: string, level: number): string[] {
 			}
 		}
 	}
+
 	if (!available.length) return ['tackle'];
+
+	// Sort descending by learn level (most recent first), shuffle equal-level ties
+	// by randomising the array before sorting (mirrors Utils.shuffle in poketest.ts)
 	for (let i = available.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[available[i], available[j]] = [available[j], available[i]];
 	}
 	available.sort((a, b) => b.learnLevel - a.learnLevel);
+
+	// Take up to 4, then reverse back to chronological order
 	const top4 = available.slice(0, 4);
 	top4.reverse();
 	return top4.map(m => m.move);
 }
+
+/**
+ * Picks a random ability for an AI Pokémon.
+ * Weights: hidden ability 1/20, special ability (S) 1/50,
+ *           ability[1] 50%, else ability[0].
+ * Mirrors poketest.ts genPokemon() ability logic.
+ */
 function pickRandomAbility(species: Species): string {
 	const abilities = species.abilities as Record<string, string>;
 	if (abilities['S'] && Math.floor(Math.random() * 50) === 0) return abilities['S'];
@@ -353,13 +525,29 @@ function pickRandomAbility(species: Species): string {
 	if (abilities['1'] && Math.floor(Math.random() * 2) === 0) return abilities['1'];
 	return abilities['0'] ?? '';
 }
+
+/**
+ * Generates `quantity` AI Pokémon using a BST-weighted probability pool,
+ * scaled by floor difficulty. Mirrors poketest.ts genPokemon().
+ *
+ * Difficulty scaling (floor → streak mapping):
+ *   - midpoint starts at 250 (weak unevolved mons) and rises +50 per tier
+ *   - level range starts [5,10] and scales +5 per tier on each end
+ *   - legendaries/Gmax/Totem forms excluded
+ */
 export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 	const tier = floorToDifficultyTier(floor);
+
+	// BST weighting parameters — scaled with tier exactly as in poketest.ts
 	const midpoint = Math.min(650, 250 + tier * 50);
 	const range = 50;
 	const weightcap = 100;
+
+	// Level range — each endpoint scales +5 per tier
 	const minLevel = Math.min(100, 5 + tier * 5);
 	const maxLevel = Math.min(100, 10 + tier * 5);
+
+	// Filter candidates — same exclusions as poketest.ts
 	const allSpecies = Dex.species.all().filter(s =>
 		s.exists &&
 		s.num > 0 &&
@@ -371,27 +559,42 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 		s.forme !== 'Bond' &&
 		!(s.isNonstandard && s.isNonstandard !== 'Past')
 	);
+
+	// Build weighted pool
 	let pool: Array<{ species: Species, weight: number }> = [];
 	for (const s of allSpecies) {
+		// Shedinja special case (mirrors poketest.ts)
 		const effectiveBST = toID(s.name) === 'shedinja' ? 500 : (s.bst ?? getBST(s));
 		const w = bstWeight(effectiveBST, midpoint, range, weightcap);
 		if (w > 0) pool.push({ species: s, weight: w });
 	}
+
 	const natures = Dex.natures.all().map(n => n.name);
 	const allTypes = Dex.types.all().map(t => t.name);
 	const result: AIPokemonSet[] = [];
 	const usedBaseSpecies = new Set<string>();
+
 	let attempts = 0;
+
 	while (result.length < quantity && attempts < 2000) {
 		attempts++;
+
 		if (!pool.length) break;
+
 		const weights = pool.map(p => p.weight);
 		const idx = weightedPickIndex(weights);
 		if (idx === -1) break;
+
 		const { species: sp } = pool[idx];
-		pool.splice(idx, 1); 
+		pool.splice(idx, 1); // Remove to avoid duplicates (mirrors pokePool.splice in poketest.ts)
+
+		// Skip if another mon from the same base species was already picked
 		if (usedBaseSpecies.has(sp.baseSpecies)) continue;
 		usedBaseSpecies.add(sp.baseSpecies);
+
+		// Pick level in range, biased toward max like poketest.ts
+		// (poketest.ts: for curLevel from min to max, adds if randomNo===0 where
+		//  randomNo = floor(random*(maxLevel-curLevel)), biasing toward higher levels)
 		let level = minLevel;
 		for (let cur = minLevel; cur <= maxLevel; cur++) {
 			const gap = maxLevel - cur;
@@ -400,15 +603,24 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 				break;
 			}
 		}
+
+		// Apply evolution based on level (same as existing buildBotTeam logic)
 		let finalSpecies = sp.id;
 		let evo = getLevelUpEvo(finalSpecies);
 		while (evo && level >= evo.evoLevel) {
 			finalSpecies = evo.evoTo;
 			evo = getLevelUpEvo(finalSpecies);
 		}
+
 		const finalSp = Dex.species.get(finalSpecies);
+
+		// Ability
 		const ability = pickRandomAbility(finalSp.exists ? finalSp : sp);
+
+		// Nature — random
 		const nature = natures[Math.floor(Math.random() * natures.length)] ?? 'Hardy';
+
+		// IVs — random 0–31 per stat (mirrors poketest.ts)
 		const ivs = {
 			hp:  Math.floor(Math.random() * 32),
 			atk: Math.floor(Math.random() * 32),
@@ -417,14 +629,25 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 			spd: Math.floor(Math.random() * 32),
 			spe: Math.floor(Math.random() * 32),
 		};
+
+		// EVs — all 0 (mirrors poketest.ts)
 		const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+
+		// Held item — 1/20 chance of functional item
 		const item = pickRandomHeldItem(finalSp.name);
+
+		// Shiny — 1/1024 (mirrors poketest.ts)
 		const shiny = Math.floor(Math.random() * 1024) === 69;
+
+		// TeraType — 1/20 any type, else random from species' types (mirrors poketest.ts)
 		const speciesTypes = finalSp.exists ? (finalSp.types ?? ['Normal']) : ['Normal'];
 		const teraType = (Math.floor(Math.random() * 20) === 0)
 			? allTypes[Math.floor(Math.random() * allTypes.length)]
 			: speciesTypes[Math.floor(Math.random() * speciesTypes.length)];
+
+		// Moves — most recent 4 level-up moves (mirrors poketest.ts)
 		const moves = pickAIMoves(finalSpecies, level);
+
 		result.push({
 			species: finalSpecies,
 			name: finalSp.baseSpecies || finalSp.name,
@@ -440,9 +663,17 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 			gender: sp.gender || (Math.random() < 0.5 ? 'M' : 'F'),
 		});
 	}
+
+	// Sort ascending by level (mirrors poketest.ts's opponentTeam sort)
 	result.sort((a, b) => a.level - b.level);
+
 	return result;
 }
+
+// ---------------------------------------------------------------------------
+// AI Pokémon set type
+// ---------------------------------------------------------------------------
+
 export interface AIPokemonSet {
 	species: string;
 	name: string;
@@ -457,28 +688,50 @@ export interface AIPokemonSet {
 	moves: string[];
 	gender: string;
 }
+
+// ---------------------------------------------------------------------------
+// Pack helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Packs a PLAYER Pokémon for the battle format string.
+ * Player mons retain their existing item/moves from state.
+ */
 export function packPokemon(mon: PokemonEntry): string {
 	const speciesData = Dex.species.get(toID(mon.species));
 	const name = speciesData.exists ? speciesData.name : mon.species;
+
 	const abilities = speciesData.abilities ?? {};
 	const ability = (abilities as unknown as Record<string, string>)['0'] || '';
+
 	if (!mon.moves) mon.moves = getLevelUpMoves(toID(mon.species), mon.level);
 	const movesStr = mon.moves.join(',');
+
 	const item = mon.heldItem ?? '';
 	return `${name}||${item}|${ability}|${movesStr}|Hardy||M|||${mon.level}|`;
 }
+
+/**
+ * Packs an AI Pokémon set (from genAIPokemon) into PS team format string.
+ * Includes full nature/IV/ability/item/tera for realistic battles.
+ */
 export function packAIPokemon(set: AIPokemonSet): string {
 	const speciesData = Dex.species.get(toID(set.species));
 	const name = speciesData.exists ? speciesData.name : set.species;
+
 	const ivStr = `${set.ivs.hp},${set.ivs.atk},${set.ivs.def},${set.ivs.spa},${set.ivs.spd},${set.ivs.spe}`;
 	const evStr = `${set.evs.hp},${set.evs.atk},${set.evs.def},${set.evs.spa},${set.evs.spd},${set.evs.spe}`;
 	const movesStr = set.moves.join(',');
 	const shinyStr = set.shiny ? 'S' : '';
+
+	// Format: name|nickname|item|ability|moves|nature|evs|gender|ivs|shiny|level|happiness,dynamaxLevel,gigantamax,teraType
 	return `${name}||${set.item}|${set.ability}|${movesStr}|${set.nature}|${evStr}|${set.gender}|${ivStr}|${shinyStr}|${set.level}|,,,${set.teraType}`;
 }
+
 export function packTeam(mons: PokemonEntry[]): string {
 	return mons.map(m => packPokemon(m)).join(']');
 }
+
 export function packAITeam(sets: AIPokemonSet[]): string {
 	return sets.map(s => packAIPokemon(s)).join(']');
 }
