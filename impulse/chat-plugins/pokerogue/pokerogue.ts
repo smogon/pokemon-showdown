@@ -36,7 +36,7 @@ const BP_PER_STREAK = 5;
 const STARTING_BP = 10;
 
 /** The key item name stored in state.keyItems for Exp. Share */
-const EXP_SHARE_NAME = 'Exp. Share';
+const EXP_SHARE_NAME = 'Exp. All';
 
 function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 	if (!state.pendingChoice || state.pendingChoice.length) return;
@@ -1163,7 +1163,7 @@ export const handlers: Chat.Handlers = {
 					detailMsgs.push(...processLevelUp(mon, oldLevel, oldSpecies, evolved, teamIdx, state));
 				}
 
-				// Show Exp. Share notification if it distributed EXP to benched Pokémon
+				// Show Exp. All notification if it distributed EXP to benched Pokémon
 				if (expShareActive && totalExpEarned > 0) {
 					const benchedCount = [...expMap.entries()].filter(
 						([idx]) => !rawExpMap.has(idx)
@@ -1171,7 +1171,7 @@ export const handlers: Chat.Handlers = {
 					if (benchedCount > 0) {
 						const sharedAmt = Math.floor(totalExpEarned * 0.5);
 						detailMsgs.push(
-							`<span style="color:#8ab4f8">📡 Exp. Share: ${benchedCount} benched Pokémon each received <b>${sharedAmt}</b> EXP.</span>`
+							`<span style="color:#8ab4f8">Exp. All: ${benchedCount} benched Pokémon each received <b>${sharedAmt}</b> EXP.</span>`
 						);
 					}
 				}
