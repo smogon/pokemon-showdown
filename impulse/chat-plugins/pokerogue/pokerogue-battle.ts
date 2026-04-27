@@ -1,14 +1,14 @@
 /*
  * =======================================================================
  *
- *    ___ __  __ ___ _   _ _    ___ ___
- *   |_ _|  \/  | _ \ | | | |  / __| __|
- *    | || |\/| |  _/ |_| | |__\__ \ _|
- *   |___|_|  |_|_|  \___/|____|___/___|
+ * ___ __  __ ___ _   _ _    ___ ___
+ * |_ _|  \/  | _ \ | | | |  / __| __|
+ * | || |\/| |  _/ |_| | |__\__ \ _|
+ * |___|_|  |_|_|  \___/|____|___/___|
  *
- *   Server: Impulse
- *   Plugin: PokéRogue Battle
- *   Made by: @TurboRx
+ * Server: Impulse
+ * Plugin: PokéRogue Battle
+ * Made by: @TurboRx
  *
  * =======================================================================
  */
@@ -22,16 +22,6 @@ import {
 } from './pokerogue-pokemon';
 import { setState } from './pokerogue-state';
 
-// ---------------------------------------------------------------------------
-// Team size scaling
-// ---------------------------------------------------------------------------
-
-/**
- * Maps floor to team size using the same 7-step table as poketest.ts:
- *   [2, 3, 3, 4, 4, 5, 6] indexed by difficulty tier (0–6).
- * Every 10 floors advances one tier, so:
- *   floors 1–9 → 2 mons, 10–19 → 3, 20–29 → 3, 30–39 → 4, etc.
- */
 const TEAM_SIZE_BY_TIER = [2, 3, 3, 4, 4, 5, 6] as const;
 
 function botTeamSize(floor: number): number {
@@ -39,12 +29,8 @@ function botTeamSize(floor: number): number {
 	return TEAM_SIZE_BY_TIER[tier];
 }
 
-// ---------------------------------------------------------------------------
-// Bot infrastructure (unchanged from original)
-// ---------------------------------------------------------------------------
-
 class NoopStream extends ObjectReadWriteStream<string> {
-	override _write(_data: string): void { /* discard */ }
+	override _write(_data: string): void {}
 }
 
 const noopWorker = new StreamWorker(new NoopStream());
@@ -123,10 +109,6 @@ function createBotUser(playerId: string): User {
 
 	return botUser;
 }
-
-// ---------------------------------------------------------------------------
-// AI move selection (unchanged from original — handles the in-battle choices)
-// ---------------------------------------------------------------------------
 
 function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string[] = []): string {
 	let request: any;
@@ -219,10 +201,6 @@ function makeAIChoice(requestJson: string, _floor: number, defenderTypes: string
 	return 'move 1';
 }
 
-// ---------------------------------------------------------------------------
-// Active match registry
-// ---------------------------------------------------------------------------
-
 interface ActiveRougeMatch {
 	userId: ID;
 	botUserId: ID;
@@ -231,47 +209,14 @@ interface ActiveRougeMatch {
 
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
-// ---------------------------------------------------------------------------
-// Bot team builder — now uses BST-weighted genAIPokemon()
-// ---------------------------------------------------------------------------
-
-/**
- * Builds the AI team for the given floor using a BST-weighted probability pool
- * that mirrors poketest.ts genPokemon() difficulty scaling.
- *
- * Key changes from the old tier-bucket approach:
- *
- * 1. TEAM SIZE: Uses the same 7-step table as poketest.ts ([2,3,3,4,4,5,6]
- *    indexed by tier, one tier per 10 floors), instead of the old
- *    floor-threshold ladder. Boss floors always use the full tier-size.
- *
- * 2. POKEMON SELECTION: genAIPokemon() uses a parabolic BST weight so the
- *    "ideal" BST rises smoothly with floor, not in hard tiers.
- *
- * 3. LEVELS: Each mon gets its own level drawn from [minLevel, maxLevel]
- *    (both scaled with floor), not a single botLevel() for everyone.
- *
- * 4. BOSS FLOOR BONUS: Boss floors (floor % 10 === 0) force a full-sized
- *    team and apply a +1 to +3 level bonus to every mon's level, capped at
- *    100. Player's max level is also factored in (dynamic scaling).
- *
- * 5. RICH SETS: Each mon now has random natures, random IVs (0–31 per stat),
- *    1/20 chance of a functional held item, random ability selection, and
- *    a random TeraType — all matching poketest.ts realism.
- */
 function buildBotTeam(state: PokeRogueState): string {
 	const floor = state.floor;
 	const isBoss = floor % 10 === 0;
 
-	// Team size — full 6 on boss floors, otherwise tier-scaled
 	const size = isBoss ? 6 : botTeamSize(floor);
 
-	// Generate the pool of AI mons using BST-weighted selection
 	let aiTeam: AIPokemonSet[] = genAIPokemon(size, floor);
 
-	// --- Dynamic level adjustment ---
-	// Ensure no AI mon falls below the player's weakest active mon,
-	// and apply boss bonus on boss floors (mirrors original dynamic scaling)
 	const playerMaxLevel = state.team.length
 		? Math.max(...state.team.map(m => m.level))
 		: 1;
@@ -279,9 +224,7 @@ function buildBotTeam(state: PokeRogueState): string {
 	const bossBonus = isBoss ? Math.floor(Math.random() * 3) + 1 : 0;
 
 	aiTeam = aiTeam.map(mon => {
-		// Push the mon's level up if the player outlevels it
 		let newLevel = Math.max(mon.level, playerMaxLevel);
-		// Boss floor: add +1 to +3 over the player
 		newLevel = Math.min(100, newLevel + bossBonus);
 		return { ...mon, level: newLevel };
 	});
@@ -289,17 +232,7 @@ function buildBotTeam(state: PokeRogueState): string {
 	return packAITeam(aiTeam);
 }
 
-// ---------------------------------------------------------------------------
-// startBattle
-// ---------------------------------------------------------------------------
-
 export function startBattle(user: User, state: PokeRogueState): boolean {
-	// Only pack living Pokémon into the battle team. If a fainted mon is
-	// included in the packed team, the PS battle engine will accept it as a
-	// valid (but already-fainted) team slot. When the last living mon faints,
-	// PS prompts for a replacement, finds the pre-fainted mon, and the AI
-	// continues attacking indefinitely because it can never cleanly faint
-	// again. Filtering here prevents that entirely.
 	const livingTeam = state.team.filter(m => (m.currentHp ?? 100) > 0);
 
 	if (!livingTeam.length) {

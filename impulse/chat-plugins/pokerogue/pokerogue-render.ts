@@ -1,14 +1,14 @@
 /*
  * =======================================================================
  *
- *    ___ __  __ ___ _   _ _    ___ ___
- *   |_ _|  \/  | _ \ | | | |  / __| __|
- *    | || |\/| |  _/ |_| | |__\__ \ _|
- *   |___|_|  |_|_|  \___/|____|___/___|
+ * ___ __  __ ___ _   _ _    ___ ___
+ * |_ _|  \/  | _ \ | | | |  / __| __|
+ * | || |\/| |  _/ |_| | |__\__ \ _|
+ * |___|_|  |_|_|  \___/|____|___/___|
  *
- *   Server: Impulse
- *   Plugin: PokéRogue Render
- *   Made by: @TurboRx
+ * Server: Impulse
+ * Plugin: PokéRogue Render
+ * Made by: @TurboRx
  *
  * =======================================================================
  */
@@ -58,7 +58,7 @@ function getSprite(species: string, size = 80): string {
 		onerror = ` onerror="this.onerror=function(){this.onerror=null;this.style.display='none'};this.src='${fallback1}'"`;
 	} else {
 		onerror = ` onerror="this.onerror=null;this.style.display='none'"`;
-	}
+    }
 	return `<img src="${src}"${onerror} width="${size}" height="${size}" alt="${altName} sprite" style="image-rendering:pixelated" />`;
 }
 
@@ -122,19 +122,11 @@ export function renderTypeBadge(types: string[], large = false): string {
 	).join(' ');
 }
 
-// ---------------------------------------------------------------------------
-// Shop rendering helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Renders one shop table (permanent or rotational).
- * `items` is an array of [key, item] pairs already filtered to streak level.
- */
 function renderShopTable(
 	items: Array<[string, typeof SHOP_ITEMS[string] | typeof ROTATIONAL_ITEM_POOL[string]]>,
 	bp: number,
 	keyItems: string[],
-	cmd: string, // e.g. "pokerogue buy"
+	cmd: string,
 ): string {
 	let buf = `<table style="width:100%;border-collapse:collapse;font-size:11px" border="1">`;
 	buf += `<tr><th>Item</th><th>Description</th><th>Price</th><th></th></tr>`;
@@ -159,10 +151,6 @@ function renderShopTable(
 	return buf;
 }
 
-// ---------------------------------------------------------------------------
-// Main page renderer
-// ---------------------------------------------------------------------------
-
 export function renderGamePage(state: PokeRogueState): string {
 	const view = (state as any).view || 'main';
 	let buf = (state.battleRoomId || state.notification) ? `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">` : '';
@@ -172,7 +160,6 @@ export function renderGamePage(state: PokeRogueState): string {
 	if (view !== 'main' && !state.gameOver) buf += `<button name="send" value="/pokerogue view main" class="button" style="margin-left:auto">Back</button>`;
 	buf += `</div>`;
 
-	// ── Game Over ──────────────────────────────────────────────────────────
 	if (state.gameOver) {
 		buf += `<div class="pr-gameover" style="text-align:center;padding:20px">`;
 		buf += `<div style="font-size:24px;color:#ff8080;font-weight:bold;margin-bottom:15px">GAME OVER</div>`;
@@ -182,7 +169,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Reset confirm ──────────────────────────────────────────────────────
 	if (view === 'resetconfirm') {
 		buf += `<div style="text-align:center;padding:24px 16px">`;
 		buf += `<div style="font-size:18px;color:#ff8080;font-weight:bold;margin-bottom:12px">Reset Run?</div>`;
@@ -194,7 +180,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Leaderboard ────────────────────────────────────────────────────────
 	if (view === 'top') {
 		const entries = Object.entries(savedData)
 			.filter(([, s]) => (s.highestFloor ?? 0) > 0)
@@ -209,7 +194,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf + Table('PokéRogue Top 100', ['#', 'Player', 'Best Floor', 'Last Team'], rows) + `</div>`;
 	}
 
-	// ── Notification banner ────────────────────────────────────────────────
 	if (state.notification) {
 		buf += `<div class="pr-notification">${state.notification}<button name="send" value="/pokerogue dismissnotif" class="pr-notification-dismiss">x</button></div>`;
 	}
@@ -218,7 +202,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf + `<div style="text-align:center;padding:14px 0"><p style="color:#fac000;font-weight:bold">Battle in progress!</p></div></div>`;
 	}
 
-	// ── Starter / Pokémon choice ───────────────────────────────────────────
 	if (state.pendingChoice?.length) {
 		buf += `<h2 class="pr-choice-heading">${state.pendingChoiceType === 'add' ? 'Milestone! Add to Team:' : 'Choose a starter!'}</h2>`;
 		buf += `<table class="pr-choice-table" style="width:100%"><tbody>`;
@@ -246,7 +229,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf + `</tbody></table></div>`;
 	}
 
-	// ── Team swap UI ───────────────────────────────────────────────────────
 	if (state.pendingSwap) {
 		const sp = Dex.species.get(toID(state.pendingSwap.species));
 		buf += `<h2 class="pr-choice-heading">Your team is full!</h2>`;
@@ -262,7 +244,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Move learning UI ───────────────────────────────────────────────────
 	if (state.pendingMoves?.length) {
 		const pending = state.pendingMoves[0];
 		const mon = state.team[pending.pokemonIndex];
@@ -281,9 +262,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── TM: choose which Pokémon to teach ─────────────────────────────────
-	// FIX: was `!state.pokemonForTM !== undefined` which is always true.
-	// Correct check: only show this screen when pokemonForTM has NOT been set yet.
 	if (state.moveToLearn && state.purchasedItem && state.pokemonForTM === undefined) {
 		const moveName = Dex.moves.get(state.moveToLearn).name;
 		buf += `<h2 class="pr-choice-heading">Teach ${Utils.escapeHTML(moveName)}?</h2>`;
@@ -306,7 +284,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Item pack: choose which item to take ──────────────────────────────
 	if (state.itemOptions?.length) {
 		buf += `<h2 class="pr-choice-heading">Choose an Item!</h2>`;
 		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
@@ -320,7 +297,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Item: choose which Pokémon to give it to ──────────────────────────
 	if (state.pendingItemName) {
 		const dexItem = Dex.items.get(state.pendingItemName);
 		buf += `<h2 class="pr-choice-heading">Give ${Utils.escapeHTML(dexItem.name || state.pendingItemName)}?</h2>`;
@@ -335,7 +311,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Consumable item: choose which Pokémon to use it on ───────────────
 	if (state.pendingConsumableType && state.purchasedItem) {
 		const consumableKey = state.purchasedItem;
 		const consumableItem = SHOP_ITEMS[consumableKey] ?? ROTATIONAL_ITEM_POOL[consumableKey];
@@ -389,7 +364,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Shop view ──────────────────────────────────────────────────────────
 	if (view === 'shop') {
 		const bp = state.battlePoints ?? 0;
 		const streak = state.streaksWon ?? 0;
@@ -398,7 +372,6 @@ export function renderGamePage(state: PokeRogueState): string {
 
 		buf += `<div style="margin-bottom:8px"><b>BP:</b> ${bp} &nbsp;|&nbsp; <b>Streak:</b> ${streak}</div>`;
 
-		// --- Rotational shop ---
 		if (state.rotationalShop?.length) {
 			buf += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">`;
 			buf += `<b style="color:#c4a8ff">Current Deals</b>`;
@@ -417,7 +390,6 @@ export function renderGamePage(state: PokeRogueState): string {
 			buf += `<br>`;
 		}
 
-		// --- Permanent shop ---
 		buf += `<b style="color:#8ab4f8">Always Available</b>`;
 		const permItems = Object.entries(SHOP_ITEMS)
 			.filter(([, item]) => item.minStreak <= streak) as Array<[string, typeof SHOP_ITEMS[string]]>;
@@ -426,7 +398,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf + `<div style="margin-top:8px"><button name="send" value="/pokerogue view main" class="button">Back</button></div></div>`;
 	}
 
-	// ── Bag view ───────────────────────────────────────────────────────────
 	if (view === 'bag') {
 		buf += `<h3 style="margin:0">Manage Team Items</h3>`;
 		buf += `<div class="pr-popup-team" style="margin-top:10px">`;
@@ -451,7 +422,6 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
-	// ── Main view ──────────────────────────────────────────────────────────
 	buf += `<div class="pr-popup-stats">Floor <b>${state.floor}</b> | BP <b>${state.battlePoints ?? 0}</b> | Streaks <b>${state.streaksWon ?? 0}</b></div>`;
 
 	buf += `<h3>Your Team</h3><div class="pr-popup-team">`;

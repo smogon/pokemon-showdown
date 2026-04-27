@@ -1,24 +1,20 @@
 /*
  * =======================================================================
  *
- *    ___ __  __ ___ _   _ _    ___ ___
- *   |_ _|  \/  | _ \ | | | |  / __| __|
- *    | || |\/| |  _/ |_| | |__\__ \ __|
- *   |___|_|  |_|_|  \___/|____|___/___|
+ * ___ __  __ ___ _   _ _    ___ ___
+ * |_ _|  \/  | _ \ | | | |  / __| __|
+ * | || |\/| |  _/ |_| | |__\__ \ __|
+ * |___|_|  |_|_|  \___/|____|___/___|
  *
- *   Server: Impulse
- *   Plugin: PokéRogue Pokemon
- *   Made by: @TurboRx
+ * Server: Impulse
+ * Plugin: PokéRogue Pokemon
+ * Made by: @TurboRx
  *
  * =======================================================================
  */
 
 import { FS } from '../../../lib';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
-
-// ---------------------------------------------------------------------------
-// exp.json types & loader
-// ---------------------------------------------------------------------------
 
 interface ExpEntry {
 	expYield: number;
@@ -48,10 +44,6 @@ export async function loadExpData(): Promise<void> {
 
 void loadExpData();
 
-/**
- * Returns the base expYield for a species from exp.json, falling back to a
- * BST-derived estimate when the species is not in exp.json.
- */
 export function getExpYield(speciesId: string): number {
 	const id = toID(speciesId);
 	if (expData[id]) return expData[id].expYield;
@@ -63,10 +55,6 @@ export function getExpYield(speciesId: string): number {
 	return Math.round(bst / 3.5);
 }
 
-/**
- * Returns the expType for a species from exp.json.
- * Falls back to 'Slow' for high-BST species, 'Medium Fast' otherwise.
- */
 export function getExpType(speciesId: string): string {
 	const id = toID(speciesId);
 	if (expData[id]) return expData[id].expType;
@@ -80,18 +68,6 @@ export function getExpType(speciesId: string): string {
 	return 'Medium Fast';
 }
 
-// ---------------------------------------------------------------------------
-// EXP formula — exact Game Freak curves (matches poketest.ts getMinExpForMonAtLevel)
-// ---------------------------------------------------------------------------
-
-/**
- * Returns the TOTAL EXP required to reach `level` from level 1.
- * Uses the exact official formulas for each growth rate curve.
- * This replaces the previous simplified linear approximation.
- *
- * Curves matched to poketest.ts:
- *   Erratic, Fast, Medium Fast, Medium Slow, Slow, Fluctuating
- */
 export function expForLevel(level: number, expType = 'Medium Fast'): number {
 	if (level <= 1) return 0;
 	const n = level;
@@ -101,7 +77,7 @@ export function expForLevel(level: number, expType = 'Medium Fast'): number {
 		if (n < 50)  return Math.floor((n ** 3 * (100 - n)) / 50);
 		if (n < 68)  return Math.floor((n ** 3 * (150 - n)) / 100);
 		if (n < 90)  return Math.floor((n ** 3 * ((1911 - (10 * n)) / 3)) / 500);
-		/* n >= 90 */ return Math.floor((n ** 3 * (160 - n)) / 100);
+		return Math.floor((n ** 3 * (160 - n)) / 100);
 
 	case 'Fast':
 		return Math.floor((4 * n ** 3) / 5);
@@ -120,20 +96,13 @@ export function expForLevel(level: number, expType = 'Medium Fast'): number {
 	case 'Fluctuating':
 		if (n < 15)  return Math.floor((n ** 3 * (((n + 1) / 3) + 24)) / 50);
 		if (n < 36)  return Math.floor((n ** 3 * (n + 14)) / 50);
-		/* n >= 36 */ return Math.floor((n ** 3 * ((n / 2) + 32)) / 50);
+		return Math.floor((n ** 3 * ((n / 2) + 32)) / 50);
 
 	default:
-		return Math.floor(n ** 3); // Medium Fast fallback
+		return Math.floor(n ** 3);
 	}
 }
 
-/**
- * Calculate the EXP earned for defeating one AI Pokémon.
- *
- * Mirrors main-series Gen-5+ formula (no trade/Exp.Share bonus):
- *   exp = floor(baseYield * enemyLevel / 5)
- * Then applies boss-floor bonus and Lucky Charm multiplier.
- */
 export function calcKillExp(
 	enemySpeciesId: string,
 	enemyLevel: number,
@@ -147,10 +116,6 @@ export function calcKillExp(
 	return Math.max(1, exp);
 }
 
-// ---------------------------------------------------------------------------
-// EVO type fallback levels
-// ---------------------------------------------------------------------------
-
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	trade: 36,
 	useItem: 36,
@@ -159,10 +124,6 @@ const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	levelExtra: 20,
 	levelHold: 30,
 };
-
-// ---------------------------------------------------------------------------
-// Legacy tier caches (kept for starter-picking & player new-pokemon offers)
-// ---------------------------------------------------------------------------
 
 let t1Cache: string[] | null = null;
 let t2Cache: string[] | null = null;
@@ -252,10 +213,6 @@ export function rollGachaPokemon(gachaType: 'master' | 'ultra' | 'great', exclud
 	return { species, isFeatured };
 }
 
-/**
- * Generates 3 starter options using the same BST-weighted pool and filters
- * as poketest.ts genPokemon() with starter=true.
- */
 export function pickStarterOptions(): string[] {
 	const PARADOX_EDGE_CASES = new Set([
 		'Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder',
@@ -356,10 +313,6 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 	return validEvos[Math.floor(Math.random() * validEvos.length)];
 }
 
-// ---------------------------------------------------------------------------
-// Level / EXP helpers
-// ---------------------------------------------------------------------------
-
 export function botLevel(floor: number): number {
 	let level = 1;
 	if (floor <= 20) {
@@ -386,10 +339,6 @@ export function floorCoinReward(floor: number): number {
 	return 30 + floor * 10;
 }
 
-/**
- * Applies gained EXP to a Pokémon and handles level-ups and evolution.
- * Uses the species' own expType curve for accurate level thresholds.
- */
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
@@ -456,10 +405,6 @@ export function getMovesLearnedBetween(speciesId: string, oldLevel: number, newL
 	}
 	return Array.from(new Set(learned));
 }
-
-// ---------------------------------------------------------------------------
-// AI Pokémon generation — BST-weighted pool (mirrors poketest.ts genPokemon)
-// ---------------------------------------------------------------------------
 
 function floorToDifficultyTier(floor: number): number {
 	return Math.min(6, Math.floor((floor - 1) / 10));
@@ -657,10 +602,6 @@ export function genAIPokemon(quantity: number, floor: number): AIPokemonSet[] {
 	return result;
 }
 
-// ---------------------------------------------------------------------------
-// AI Pokémon set type
-// ---------------------------------------------------------------------------
-
 export interface AIPokemonSet {
 	species: string;
 	name: string;
@@ -676,33 +617,8 @@ export interface AIPokemonSet {
 	gender: string;
 }
 
-// ---------------------------------------------------------------------------
-// Pack helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Packs a PLAYER Pokémon for the battle format string.
- * Includes currentHp% and status so the battle starts from the correct state.
- *
- * Packed format tail: HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE,HP,STATUS
- * We only need HP and STATUS, leaving all preceding fields blank.
- * When HP is 100 and status is absent the tail is omitted entirely (PS default).
- *
- * IMPORTANT: This function must never be called with a fainted Pokémon
- * (currentHp === 0). startBattle() filters those out before calling packTeam,
- * but a defensive log is emitted here in case a regression slips through.
- */
 export function packPokemon(mon: PokemonEntry): string {
-	// Defensive guard: a fainted mon must never be packed into a battle team.
-	// If one slips through despite the filter in startBattle, log the error and
-	// treat the mon as full HP so the battle engine at least starts cleanly.
 	if ((mon.currentHp ?? 100) <= 0) {
-		Monitor.crashlog(
-			new Error(`packPokemon called on fainted Pokémon: ${mon.species} (hp=${mon.currentHp}). ` +
-				`It should have been filtered out by startBattle. Battle may behave unexpectedly.`),
-			'PokéRogue packPokemon'
-		);
-		// Do not encode 0 HP — skip the tail so the engine uses its own default.
 		const speciesDataFainted = Dex.species.get(toID(mon.species));
 		const nameFainted = speciesDataFainted.exists ? speciesDataFainted.name : mon.species;
 		const abilitiesFainted = speciesDataFainted.abilities ?? {};
@@ -727,23 +643,15 @@ export function packPokemon(mon: PokemonEntry): string {
 	const hp = mon.currentHp ?? 100;
 	const status = mon.status ?? '';
 
-	// Only append the tail when there is non-default data to encode.
-	// Positional fields: happiness,pokeball,hptype,gmax,dynamaxlevel,teratype,hp,status
-	// Leave fields 0–5 blank (six leading commas), then emit hp and status.
 	let tail = '';
 	if (hp !== 100 || status) {
 		tail = `,,,,,,${hp !== 100 ? hp : ''},${status}`;
-		// Trim a trailing bare comma when status is empty.
 		if (!status) tail = tail.replace(/,$/, '');
 	}
 
 	return `${name}||${item}|${ability}|${movesStr}|Hardy||M|||${mon.level}|${tail}`;
 }
 
-/**
- * Packs an AI Pokémon set (from genAIPokemon) into PS team format string.
- * Includes full nature/IV/ability/item/tera for realistic battles.
- */
 export function packAIPokemon(set: AIPokemonSet): string {
 	const speciesData = Dex.species.get(toID(set.species));
 	const name = speciesData.exists ? speciesData.name : set.species;
