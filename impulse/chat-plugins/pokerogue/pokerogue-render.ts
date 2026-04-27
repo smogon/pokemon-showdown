@@ -31,93 +31,6 @@ export function refreshGamePage(user: User): void {
 const PAGE_REFRESH_SECONDS = 20;
 
 // ---------------------------------------------------------------------------
-// Shared CSS — injected once per page render
-// ---------------------------------------------------------------------------
-function renderCSS(): string {
-	return `<style>
-.pr{--pr-r:8px;--pr-rl:12px;font-family:system-ui,sans-serif;color:#e0d4ff;max-width:680px}
-.pr-card{background:rgba(255,255,255,.04);border:0.5px solid rgba(255,255,255,.1);border-radius:var(--pr-rl);padding:12px 14px;margin-bottom:10px}
-.pr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid rgba(255,255,255,.1);margin-bottom:10px}
-.pr-header h2{font-size:16px;font-weight:500;margin:0;color:#e0d4ff}
-.pr-statbar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.pr-statbar.cols2{grid-template-columns:repeat(2,1fr)}
-.pr-stat{background:rgba(255,255,255,.05);border-radius:var(--pr-r);padding:7px 10px;text-align:center}
-.pr-stat-label{font-size:10px;color:#aaa;margin-bottom:2px}
-.pr-stat-val{font-size:15px;font-weight:500;color:#e0d4ff}
-.pr-section-title{font-size:10px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-.pr-team{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
-.pr-mon{background:rgba(255,255,255,.05);border-radius:var(--pr-r);padding:8px 10px;display:flex;align-items:center;gap:10px}
-.pr-mon-img{width:44px;height:44px;flex-shrink:0;image-rendering:pixelated}
-.pr-mon-body{flex:1;min-width:0}
-.pr-mon-top{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
-.pr-mon-name{font-size:13px;font-weight:500;color:#e0d4ff}
-.pr-mon-lv{font-size:10px;color:#aaa}
-.pr-types{display:flex;gap:3px;margin-bottom:4px}
-.pr-type{font-size:9px;font-weight:500;padding:1px 5px;border-radius:3px;color:#fff}
-.pr-bars{display:flex;flex-direction:column;gap:3px}
-.pr-bar-row{display:flex;align-items:center;gap:6px}
-.pr-bar-track{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
-.pr-bar-fill{height:100%;border-radius:2px}
-.pr-bar-label{font-size:9px;color:#888;min-width:36px;text-align:right}
-.pr-item-tag{font-size:9px;color:#8ab4f8;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pr-actions{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:5px;margin-top:4px}
-.pr-btn{background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.18);border-radius:var(--pr-r);padding:7px 8px;font-size:12px;font-weight:500;color:#e0d4ff;cursor:pointer;text-align:center;white-space:nowrap}
-.pr-btn:hover{background:rgba(255,255,255,.11)}
-.pr-btn.primary{border-color:#534AB7;color:#c4a8ff;background:rgba(83,74,183,.15)}
-.pr-btn.primary:hover{background:rgba(83,74,183,.25)}
-.pr-btn.danger{color:#f87171;border-color:rgba(248,113,113,.25)}
-.pr-btn.danger:hover{background:rgba(248,113,113,.08)}
-.pr-btn[disabled]{opacity:.4;cursor:default}
-.pr-notification{background:rgba(59,130,246,.12);border:0.5px solid rgba(59,130,246,.3);border-radius:var(--pr-r);padding:7px 10px;font-size:12px;color:#93c5fd;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.pr-notification-dismiss{font-size:11px;opacity:.6;cursor:pointer;flex-shrink:0;background:none;border:none;color:inherit;padding:0}
-.pr-shop-grid{display:flex;flex-direction:column;gap:4px}
-.pr-shop-row{display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-r)}
-.pr-shop-name{font-size:12px;font-weight:500;color:#e0d4ff;flex-shrink:0}
-.pr-shop-desc{font-size:10px;color:#888;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pr-shop-cost{font-size:11px;font-weight:500;color:#c4a8ff;white-space:nowrap}
-.pr-shop-buy{font-size:11px;padding:3px 8px;border:0.5px solid rgba(255,255,255,.18);border-radius:var(--pr-r);background:rgba(255,255,255,.06);color:#e0d4ff;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.pr-shop-buy:hover{background:rgba(255,255,255,.11)}
-.pr-shop-buy[disabled]{opacity:.4;cursor:default}
-.pr-shop-icon{width:20px;height:20px;flex-shrink:0;image-rendering:pixelated;vertical-align:middle}
-.pr-tab{display:flex;gap:1px;background:rgba(255,255,255,.08);border-radius:var(--pr-r);padding:1px;margin-bottom:8px}
-.pr-tab-btn{flex:1;font-size:11px;padding:5px;border:none;background:transparent;cursor:pointer;color:#aaa;border-radius:calc(var(--pr-r) - 1px)}
-.pr-tab-btn.active{background:rgba(255,255,255,.1);color:#e0d4ff;font-weight:500}
-.pr-reroll-row{display:flex;justify-content:flex-end;margin-bottom:5px}
-.pr-choice-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.pr-choice-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-rl);border:0.5px solid rgba(255,255,255,.1)}
-.pr-choice-row.leg{border-color:rgba(196,168,255,.35);background:rgba(196,168,255,.07)}
-.pr-ct-name{font-size:13px;font-weight:500;color:#e0d4ff;margin-bottom:3px}
-.pr-ct-stats{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
-.pr-ct-stats span{font-size:9px;color:#888}
-.pr-ct-stats span b{color:#c4a8ff}
-.pr-ct-ability{font-size:10px;color:#aaa;margin-top:2px}
-.pr-legendary-badge{font-size:9px;font-weight:500;color:#c4a8ff;background:rgba(196,168,255,.15);border-radius:3px;padding:1px 5px;display:inline-block;margin-top:3px}
-.pr-sprite-wrap{position:relative;flex-shrink:0}
-.pr-pokeball-overlay{position:absolute;bottom:0;right:0;width:14px;height:14px;image-rendering:pixelated}
-.pr-pick-btn{font-size:12px;padding:5px 12px;border:0.5px solid #534AB7;border-radius:var(--pr-r);background:rgba(83,74,183,.15);color:#c4a8ff;cursor:pointer;white-space:nowrap}
-.pr-pick-btn:hover{background:rgba(83,74,183,.28)}
-.pr-expbar{height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:2px}
-.pr-expbar-fill{height:100%;border-radius:2px;background:#7F77DD}
-.pr-hpbar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
-.pr-hpbar-fill{height:100%;border-radius:2px}
-.pr-bag-item-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.1);border-radius:var(--pr-r);padding:3px 8px;margin-top:4px}
-.pr-lb-row{display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:var(--pr-r)}
-.pr-lb-rank{font-size:12px;font-weight:500;min-width:22px;color:#888}
-.pr-lb-name{flex:1;font-size:12px;font-weight:500;color:#e0d4ff}
-.pr-lb-floor{font-size:11px;color:#aaa;white-space:nowrap}
-.pr-lb-team{display:flex;gap:2px}
-.pr-gameover{text-align:center;padding:28px 20px}
-.pr-go-title{font-size:22px;font-weight:500;color:#f87171;margin-bottom:8px}
-.pr-go-sub{font-size:13px;color:#aaa;margin-bottom:20px}
-.pr-newrun-btn{font-size:14px;padding:9px 24px;border:0.5px solid #534AB7;border-radius:var(--pr-r);background:rgba(83,74,183,.2);color:#c4a8ff;cursor:pointer}
-.pr-newrun-btn:hover{background:rgba(83,74,183,.32)}
-.pr-choice-heading{font-size:15px;font-weight:500;color:#e0d4ff;margin:0 0 8px}
-.pr-popup-actions{display:flex;flex-direction:column;gap:5px}
-.pr-warning-box{background:rgba(239,68,68,.08);border:0.5px solid rgba(239,68,68,.25);border-radius:var(--pr-r);padding:8px 12px;color:#f87171;font-size:12px;text-align:center;margin-bottom:10px}
-</style>`;
-}
-
-// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 function itemURLFormat(item: string): string {
@@ -704,7 +617,7 @@ function renderHeader(view: string, hasGameOver: boolean): string {
 export function renderGamePage(state: PokeRogueState): string {
 	const view = (state as any).view || 'main';
 
-	let buf = renderCSS();
+	let buf = '';
 
 	// Auto-refresh during battles or when a notification is pending
 	if (state.battleRoomId || state.notification) {
