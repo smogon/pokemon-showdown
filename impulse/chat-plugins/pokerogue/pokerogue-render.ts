@@ -131,7 +131,7 @@ export function renderTypeBadge(types: string[], large = false): string {
  * `items` is an array of [key, item] pairs already filtered to streak level.
  */
 function renderShopTable(
-	items: Array<[string, typeof SHOP_ITEMS[string] | typeof ROTATIONAL_ITEM_POOL[string]>],
+	items: Array<[string, typeof SHOP_ITEMS[string] | typeof ROTATIONAL_ITEM_POOL[string]]>,
 	bp: number,
 	keyItems: string[],
 	cmd: string, // e.g. "pokerogue buy"
