@@ -549,11 +549,14 @@ export const commands: Chat.ChatCommands = {
 				finalSpecies = evo.evoTo;
 			}
 
+			const finalExpType = getExpType(finalSpecies);
+
 			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
 			const newMon: PokemonEntry = {
 				species: finalSpecies,
 				level: addedLevel,
-				exp: expForLevel(addedLevel, getExpType(finalSpecies)),
+				exp: expForLevel(addedLevel, finalExpType),
+				expType: finalExpType,
 				moves: initialMoves,
 				ppLeft: initialMoves.map(m => Math.floor((Dex.moves.get(m).pp ?? 5) * (8 / 5))),
 			};
@@ -1043,18 +1046,20 @@ export const commands: Chat.ChatCommands = {
 				if (!evo || level < evo.evoLevel) break;
 				finalSpecies = evo.evoTo;
 			}
+			const finalExpType = getExpType(finalSpecies);
 			const moves = getLevelUpMoves(finalSpecies, level);
 			s.team.push({
 				species: finalSpecies,
 				level,
-				exp: expForLevel(level, getExpType(finalSpecies)),
+				exp: expForLevel(level, finalExpType),
+				expType: finalExpType,
 				moves,
 				ppLeft: moves.map(m => Math.floor((Dex.moves.get(m).pp ?? 5) * (8 / 5))),
 			});
 			setState(tId, s);
 			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
 		},
-
+		
 		setfloor(target, room, user) {
 			this.checkCan('lock');
 			let [name, fl] = target.split(',').map(s => s?.trim());
