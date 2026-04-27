@@ -288,23 +288,22 @@ function applyExpShare(
 	expMap: Map<number, number>,
 	state: PokeRogueState,
 ): Map<number, number> {
-	// Only apply if the player owns the Exp. Share key item
 	if (!(state.keyItems ?? []).includes(EXP_SHARE_NAME)) return expMap;
 
 	const totalExp = [...expMap.values()].reduce((sum, v) => sum + v, 0);
 	if (totalExp === 0) return expMap;
 
 	const sharedExp = Math.floor(totalExp * 0.5);
-	const result = new Map<number, number>(expMap);
+	const result = new Map<number, number>();
 
 	for (let i = 0; i < state.team.length; i++) {
 		const mon = state.team[i];
-		// Skip fainted Pokémon
 		if ((mon.currentHp ?? 100) <= 0) continue;
-		// Skip Pokémon that already earned EXP directly (they keep full EXP)
-		if (result.has(i)) continue;
-		// Non-participants get 50% of total EXP
-		result.set(i, sharedExp);
+
+		const directExp = expMap.get(i) ?? 0;
+		// In S/V, all living Pokémon receive the share bonus.
+		// Participants also keep their full direct kill EXP on top of it.
+		result.set(i, directExp + sharedExp);
 	}
 
 	return result;
