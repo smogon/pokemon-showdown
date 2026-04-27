@@ -85,7 +85,7 @@ function getPokeballInfo(speciesId: string): { src: string, alt: string } {
 
 export function getSpriteWithBall(species: string, size = 80): string {
 	const ball = getPokeballInfo(species);
-	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px;flex-shrink:0">` +
+	return `<div class="pr-sprite-wrap" style="width:${size}px;height:${size}px;flex-shrink:0;margin:0 auto;">` +
 		getSprite(species, size) +
 		`<img src="${ball.src}" alt="${Utils.escapeHTML(ball.alt)}" class="pr-pokeball-overlay" />` +
 		`</div>`;
@@ -151,29 +151,43 @@ function renderStatBar(state: PokeRogueState, cols2 = false): string {
 		`</div>`;
 }
 
-function renderTeamCard(mon: PokemonEntry, actions?: string): string {
+function renderTeamTableRow(mon: PokemonEntry, actionButton?: string): string {
 	const spData = Dex.species.get(toID(mon.species));
 	const expNeeded = mon.level < 999 ? expForLevel(mon.level + 1) - mon.exp : 0;
-	let buf = `<div class="pr-mon">`;
-	buf += getSpriteWithBall(mon.species, 44);
-	buf += `<div class="pr-mon-body">`;
-	buf += `<div class="pr-mon-top"><span class="pr-mon-name">${spData.name}</span><span class="pr-mon-lv">Lv. ${mon.level}`;
-	if (mon.level < 999) buf += ` <small style="color:#666">(${expNeeded} EXP)</small>`;
-	buf += `</span></div>`;
+	
+	let buf = `<tr>`;
+	buf += `<td class="pr-td-icon">${getSpriteWithBall(mon.species, 44)}</td>`;
+	
+	// Details Column
+	buf += `<td>`;
+	buf += `<div class="pr-td-name">${spData.name} <span class="pr-mon-lv">Lv. ${mon.level}</span></div>`;
 	buf += `<div class="pr-types">${renderTypeBadge(spData.types ?? [])}</div>`;
-	buf += `<div class="pr-bars">`;
-	buf += renderHpBar(mon);
-	buf += `<div class="pr-bar-row"><div class="pr-bar-track">${renderExpBar(mon).replace('pr-expbar', 'pr-bar-track').replace('<div class="pr-expbar"><', '<').replace('</div></div>', '</div>')}</div></div>`;
-	buf += `</div>`;
 	if (mon.heldItem) {
 		const dexHeld = Dex.items.get(mon.heldItem);
 		buf += `<div class="pr-item-tag">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</div>`;
 	}
 	if (mon.status) {
-		buf += `<div style="font-size:9px;color:#ff9800;margin-top:2px">${mon.status.toUpperCase()}</div>`;
+		buf += `<div style="font-size:9px;color:#ff9800;font-weight:500;margin-top:2px">${mon.status.toUpperCase()}</div>`;
 	}
-	if (actions) buf += actions;
-	buf += `</div></div>`;
+	buf += `</td>`;
+
+	// Health and EXP Bars Column
+	buf += `<td class="pr-td-bars">`;
+	buf += `<div class="pr-bars">`;
+	buf += renderHpBar(mon);
+	buf += `<div class="pr-bar-row">`;
+	buf += `<div class="pr-bar-track">${renderExpBar(mon).replace('pr-expbar', 'pr-bar-track').replace('<div class="pr-expbar"><', '<').replace('</div></div>', '</div>')}</div>`;
+	if (mon.level < 999) {
+		buf += `<span class="pr-bar-label" style="min-width:36px;font-size:8px">${expNeeded} to Lv</span>`;
+	}
+	buf += `</div></div></td>`;
+
+	// Actions Column (Optional)
+	if (actionButton !== undefined) {
+		buf += `<td class="pr-td-action">${actionButton}</td>`;
+	}
+
+	buf += `</tr>`;
 	return buf;
 }
 
@@ -227,11 +241,15 @@ function renderMainView(state: PokeRogueState): string {
 	buf += renderStatBar(state);
 
 	buf += `<div class="pr-section-title">Your team</div>`;
-	buf += `<div class="pr-team">`;
+	
+	// Create Table for Team
+	buf += `<div class="pr-table-container"><table class="pr-table">`;
+	buf += `<thead><tr><th colspan="2">Pokémon</th><th>Condition</th></tr></thead>`;
+	buf += `<tbody>`;
 	for (const mon of state.team) {
-		buf += renderTeamCard(mon);
+		buf += renderTeamTableRow(mon);
 	}
-	buf += `</div>`;
+	buf += `</tbody></table></div>`;
 
 	buf += `<div class="pr-actions">`;
 	buf += `<button name="send" value="/pokerogue battle" class="pr-btn primary">Start battle</button>`;
@@ -286,31 +304,26 @@ function renderShopView(state: PokeRogueState): string {
 // View: Bag
 // ---------------------------------------------------------------------------
 function renderBagView(state: PokeRogueState): string {
-	let buf = `<div class="pr-section-title">Manage held items</div><div class="pr-team">`;
+	let buf = `<div class="pr-section-title">Manage held items</div>`;
+	
+	buf += `<div class="pr-table-container"><table class="pr-table">`;
+	buf += `<thead><tr><th colspan="2">Pokémon</th><th>Condition</th><th style="text-align:right">Action</th></tr></thead>`;
+	buf += `<tbody>`;
+	
 	for (let i = 0; i < state.team.length; i++) {
 		const mon = state.team[i];
-		const spBag = Dex.species.get(toID(mon.species));
-
-		let actions = '';
+		let actionBtn = '';
+		
 		if (mon.heldItem) {
-			const dexHeld = Dex.items.get(mon.heldItem);
-			actions = `<div class="pr-bag-item-row">` +
-				`<span class="pr-item-tag" style="margin:0">${Utils.escapeHTML(dexHeld.name || mon.heldItem)}</span>` +
-				`<button name="send" value="/pokerogue unequip ${i + 1}" class="pr-shop-buy">Take</button>` +
-				`</div>`;
+			actionBtn = `<button name="send" value="/pokerogue unequip ${i + 1}" class="pr-shop-buy">Take Item</button>`;
 		} else {
-			actions = `<div style="font-size:10px;color:#555;margin-top:4px">No item held</div>`;
+			actionBtn = `<div style="font-size:10px;color:#888;">No item</div>`;
 		}
-
-		buf += `<div class="pr-mon">`;
-		buf += getSpriteWithBall(mon.species, 44);
-		buf += `<div class="pr-mon-body">`;
-		buf += `<div class="pr-mon-top"><span class="pr-mon-name">${spBag.name}</span><span class="pr-mon-lv">Lv. ${mon.level}</span></div>`;
-		buf += `<div class="pr-types">${renderTypeBadge(spBag.types ?? [])}</div>`;
-		buf += actions;
-		buf += `</div></div>`;
+		
+		buf += renderTeamTableRow(mon, actionBtn);
 	}
-	buf += `</div>`;
+	
+	buf += `</tbody></table></div>`;
 	return buf;
 }
 
