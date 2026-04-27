@@ -539,7 +539,8 @@ export const commands: Chat.ChatCommands = {
 
 			let addedLevel = 5;
 			if (state.pendingChoiceType !== 'starter') {
-				addedLevel = Math.max(5, botLevel(state.floor) - 2);
+				const choiceFloor = state.pendingChoiceFloor ?? state.floor;
+				addedLevel = Math.max(5, botLevel(choiceFloor) - 2);
 			}
 
 			let finalSpecies = choice;
@@ -571,10 +572,11 @@ export const commands: Chat.ChatCommands = {
 
 			delete state.pendingChoice;
 			delete state.pendingChoiceType;
+			delete state.pendingChoiceFloor;
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
-
+		
 		learnmove(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingMoves?.length) return;
@@ -679,6 +681,7 @@ export const commands: Chat.ChatCommands = {
 				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
 				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
 				state.pendingChoiceType = 'add';
+				state.pendingChoiceFloor = state.floor;   // <-- store current floor for shop packs
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -1198,9 +1201,11 @@ export const handlers: Chat.Handlers = {
 
 			state.battlePoints = (state.battlePoints ?? 0) + bpGained;
 
-			if (state.floor > (state.highestFloor ?? 0)) {
-				state.highestFloor = state.floor;
-				state.recordTeam = JSON.parse(JSON.stringify(state.team));
+			if ((state.floor - 1) % 5 === 0) {
+				state.pendingChoice = pickNewPokemonOptions(state.team, prevFloor);
+				state.pendingChoiceType = 'add';
+				state.pendingChoiceFloor = prevFloor;   // <-- store the floor the choice is for
+				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
 			}
 			state.displayName = Users.get(match.userId)?.name || match.userId;
 
