@@ -540,25 +540,17 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+			state.moveToLearn || state.pendingItemName || state.itemOptions?.length ||
+			state.pendingConsumableType) {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
 
-			// Move fainted Pokémon to the back so the battle engine never
-			// auto-sends one out as the lead. Preserve relative order within
-			// each group so the player's intended lineup is respected.
-			const living = state.team.filter(m => (m.currentHp ?? 100) > 0);
-			const fainted = state.team.filter(m => (m.currentHp ?? 100) <= 0);
-			state.team = [...living, ...fainted];
-
-			// Guard: if every Pokémon on the team has fainted, refuse to start
-			// a battle. startBattle() also checks this, but catching it here
-			// gives the player a clear, actionable error message in chat rather
-			// than a generic popup.
-			if (!living.length) {
+			// startBattle() already filters fainted mons, so no re-sort needed.
+			// Just guard against a fully fainted team.
+			if (!state.team.some(m => (m.currentHp ?? 100) > 0)) {
 				return this.errorReply("All your Pokémon have fainted! Buy a Revive from the shop before battling.");
 			}
-
+			
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);
@@ -674,7 +666,8 @@ export const commands: Chat.ChatCommands = {
 			if (!state || state.gameOver) return this.errorReply("No active run.");
 			if (state.battleRoomId) return this.errorReply("Can't shop during a battle.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+			state.moveToLearn || state.pendingItemName || state.itemOptions?.length ||
+			state.pendingConsumableType) {
 				return this.errorReply("Resolve pending choices first.");
 			}
 
@@ -747,10 +740,12 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (['healHP', 'healPP', 'revive', 'cureStatus'].includes(item.type)) {
-				state.purchasedItem = key;
-				setState(user.id, state);
-				refreshGamePage(user);
-				return;
+			// BP is deducted only after the player picks a Pokémon, not here.
+			state.purchasedItem = key;
+			state.pendingConsumableType = item.type as 'healHP' | 'healPP' | 'revive' | 'cureStatus';
+			setState(user.id, state);
+			refreshGamePage(user);
+			return;
 			}
 
 			setState(user.id, state);
@@ -996,6 +991,7 @@ export const commands: Chat.ChatCommands = {
 				delete s.pendingItemName;
 				delete s.itemOptions;
 				delete s.purchasedItem;
+				delete s.pendingConsumableType;
 				setState(user.id, s);
 			}
 			refreshGamePage(user);
