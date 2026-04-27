@@ -23,6 +23,7 @@ export interface PokemonEntry {
 	species: string;
 	level: number;
 	exp: number;
+	expType?: string;
 	heldItem?: string;
 	moves: string[];
 	currentHp?: number;
