@@ -304,85 +304,149 @@ function syncBattleOutcome(
 	logLines: string[],
 	state: PokeRogueState,
 ): { consumedItems: string[] } {
-	const hpSlotToTeamIdx: Record<string, number> = {};
-	const hpAssignedIdx = new Set<number>();
-	const slotHp: Record<string, number> = {};
-	const slotStatus: Record<string, StatusCondition | ''> = {};
+	// slot → team index. Re-mapped every time a Pokémon switches in so that
+	// a slot can be reused by a different Pokémon across the battle.
+	const slotToTeamIdx: Record<string, number> = {};
+	// Track which team indices have been assigned to a slot so far (prevents
+	// two slots from being mapped to the same mon simultaneously).
+	const activelyAssigned = new Set<number>();
+
+	// Final HP / status per team index, written as we see log lines.
+	const teamHp: Record<number, number> = {};
+	const teamStatus: Record<number, StatusCondition | ''> = {};
+	// Team indices that were recorded as fainted during the battle.
+	const faintedIndices = new Set<number>();
+
+	// Helper: resolve a slot to its current team index.
+	const idxOf = (slot: string): number | undefined => slotToTeamIdx[slot];
 
 	for (const line of logLines) {
+		// Switch / drag — (re-)assign a slot to a team member.
 		const switchMatch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)(?:\/\d+)?/.exec(line);
 		if (switchMatch) {
 			const slot = 'p1' + switchMatch[1];
-			if (!(slot in hpSlotToTeamIdx)) {
-				const sid = toID(switchMatch[2].trim());
-				for (let i = 0; i < state.team.length; i++) {
-					if (!hpAssignedIdx.has(i) && toID(state.team[i].species) === sid) {
-						hpSlotToTeamIdx[slot] = i;
-						hpAssignedIdx.add(i);
-						break;
-					}
+			const sid = toID(switchMatch[2].trim());
+			const hp = parseInt(switchMatch[3]);
+
+			// Release the previous occupant of this slot from activelyAssigned
+			// so it can be matched again if it switches back in later.
+			const prev = slotToTeamIdx[slot];
+			if (prev !== undefined) activelyAssigned.delete(prev);
+
+			// Find the team member with matching species that isn't already
+			// mapped to another active slot.
+			let matched = -1;
+			for (let i = 0; i < state.team.length; i++) {
+				if (!activelyAssigned.has(i) && toID(state.team[i].species) === sid) {
+					matched = i;
+					break;
 				}
 			}
-			slotHp[slot] = parseInt(switchMatch[3]);
-			// Status is appended after the HP fraction in switch lines: |100/100 brn|
-			const statusInSwitch = /\|\d+\/\d+ (brn|psn|tox|par|slp|frz)/.exec(line);
-			if (statusInSwitch) slotStatus[slot] = statusInSwitch[1] as StatusCondition;
+
+			if (matched !== -1) {
+				slotToTeamIdx[slot] = matched;
+				activelyAssigned.add(matched);
+				teamHp[matched] = hp;
+
+				const statusInSwitch = /\|\d+\/\d+ (brn|psn|tox|par|slp|frz)/.exec(line);
+				teamStatus[matched] = statusInSwitch ? statusInSwitch[1] as StatusCondition : (teamStatus[matched] ?? '');
+			}
+			continue;
 		}
 
-		// |-damage| and |-heal| lines carry the current HP and optional status token
+		// |-damage| and |-heal| — update HP (and optional inline status token).
 		const hpMatch = /^\|(?:-damage|-heal)\|p1([a-z]): [^|]+\|(\d+)(?:\/\d+)?( (brn|psn|tox|par|slp|frz))?/.exec(line);
 		if (hpMatch) {
-			const slot = 'p1' + hpMatch[1];
-			slotHp[slot] = parseInt(hpMatch[2]);
-			if (hpMatch[4]) slotStatus[slot] = hpMatch[4].trim() as StatusCondition;
+			const idx = idxOf('p1' + hpMatch[1]);
+			if (idx !== undefined) {
+				teamHp[idx] = parseInt(hpMatch[2]);
+				if (hpMatch[4]) teamStatus[idx] = hpMatch[4].trim() as StatusCondition;
+			}
+			continue;
 		}
 
-		// Explicit status application
+		// |-status| — explicit status infliction.
 		const statusApply = /^\|-status\|p1([a-z]): [^|]+\|(brn|psn|tox|par|slp|frz)/.exec(line);
 		if (statusApply) {
-			slotStatus['p1' + statusApply[1]] = statusApply[2] as StatusCondition;
+			const idx = idxOf('p1' + statusApply[1]);
+			if (idx !== undefined) teamStatus[idx] = statusApply[2] as StatusCondition;
+			continue;
 		}
 
-		// Status cured mid-battle (Aromatherapy, Heal Bell, Lum Berry, etc.)
+		// |-curestatus| — status cleared mid-battle.
 		const statusCure = /^\|-curestatus\|p1([a-z]): /.exec(line);
 		if (statusCure) {
-			slotStatus['p1' + statusCure[1]] = '';
+			const idx = idxOf('p1' + statusCure[1]);
+			if (idx !== undefined) teamStatus[idx] = '';
+			continue;
 		}
 
-		// Fainted Pokémon: HP → 0, status cleared (fainted mons don't carry status)
+		// |faint| — record HP 0, clear status, mark as fainted.
 		const faintP1 = /^\|faint\|p1([a-z]):/.exec(line);
 		if (faintP1) {
 			const slot = 'p1' + faintP1[1];
-			slotHp[slot] = 0;
-			slotStatus[slot] = '';
-		}
-	}
-
-	for (const [slot, hp] of Object.entries(slotHp)) {
-		const idx = hpSlotToTeamIdx[slot];
-		if (idx !== undefined) state.team[idx].currentHp = hp;
-	}
-
-	for (const [slot, status] of Object.entries(slotStatus)) {
-		const idx = hpSlotToTeamIdx[slot];
-		if (idx !== undefined) {
-			if (status) {
-				state.team[idx].status = status;
-			} else {
-				delete state.team[idx].status;
+			const idx = idxOf(slot);
+			if (idx !== undefined) {
+				teamHp[idx] = 0;
+				teamStatus[idx] = '';
+				faintedIndices.add(idx);
+				// Release slot so it can be reused.
+				activelyAssigned.delete(idx);
+				delete slotToTeamIdx[slot];
 			}
+			continue;
 		}
 	}
 
-	// Consumed items (PS |-enditem| lines)
+	// Commit HP — fainted Pokémon are always written as 0 regardless of any
+	// later HP entry that might have slipped through (belt-and-suspenders).
+	for (const [idxStr, hp] of Object.entries(teamHp)) {
+		const idx = Number(idxStr);
+		state.team[idx].currentHp = faintedIndices.has(idx) ? 0 : hp;
+	}
+	// Ensure every fainted mon is 0 even if it never appeared in teamHp.
+	for (const idx of faintedIndices) {
+		state.team[idx].currentHp = 0;
+	}
+
+	// Commit status.
+	for (const [idxStr, status] of Object.entries(teamStatus)) {
+		const idx = Number(idxStr);
+		if (status) {
+			state.team[idx].status = status;
+		} else {
+			delete state.team[idx].status;
+		}
+	}
+
+	// Consumed items (PS |-enditem| lines).
+	// Re-walk the log with a fresh slot→index map that follows switches in order,
+	// since slotToTeamIdx above was mutated (slots released on faint).
 	const consumedItems: string[] = [];
+	const itemSlotMap: Record<string, number> = {};
+	const itemAssigned = new Set<number>();
 	for (const line of logLines) {
+		const sw = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)/.exec(line);
+		if (sw) {
+			const slot = 'p1' + sw[1];
+			const sid = toID(sw[2].trim());
+			const prev = itemSlotMap[slot];
+			if (prev !== undefined) itemAssigned.delete(prev);
+			for (let i = 0; i < state.team.length; i++) {
+				if (!itemAssigned.has(i) && toID(state.team[i].species) === sid) {
+					itemSlotMap[slot] = i;
+					itemAssigned.add(i);
+					break;
+				}
+			}
+			continue;
+		}
 		const endItemMatch = /^\|-enditem\|p1([a-z]): [^|]+\|([^|]+)/.exec(line);
 		if (!endItemMatch) continue;
 		if (line.includes('[from] move: Knock Off') || line.includes('[from] move: Thief') || line.includes('[from] move: Incinerate')) continue;
 		const slot = 'p1' + endItemMatch[1];
 		const itemId = toID(endItemMatch[2].trim());
-		const teamIdx = hpSlotToTeamIdx[slot];
+		const teamIdx = itemSlotMap[slot];
 		if (teamIdx !== undefined && state.team[teamIdx].heldItem === itemId) {
 			delete state.team[teamIdx].heldItem;
 			const dexItem = Dex.items.get(itemId);
