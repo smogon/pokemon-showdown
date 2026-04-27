@@ -22,7 +22,7 @@ import {
 	applyExpAndLevelUp, getLevelUpEvo,
 	getLevelUpMoves, rollGachaPokemon,
 	getMovesLearnedBetween, botLevel,
-	calcKillExp,
+	calcKillExp, getExpType,
 } from './pokerogue-pokemon';
 import { renderGamePage, refreshGamePage } from './pokerogue-render';
 import {
@@ -46,7 +46,7 @@ function repairEmptyPendingChoice(state: PokeRogueState, userId: string): void {
 
 /**
  * Apply level-up moves / evolution chains to a single Pokémon after it gains
- * EXP, and queue any move-learning prompts.  Returns detail messages.
+ * EXP, and queue any move-learning prompts. Returns detail messages.
  */
 function processLevelUp(
 	mon: PokemonEntry,
@@ -95,36 +95,10 @@ function processLevelUp(
 // Kill → EXP tracking
 // ---------------------------------------------------------------------------
 
-/**
- * Which p1 slot to credit for indirect damage sources on a p2 slot.
- *
- * Categories handled:
- *  DIRECT    – |move|p1X → p2Y            → credit p1X, update per-slot
- *  STATUS    – burn / poison / toxic       → credit whoever inflicted the status
- *  HAZARDS   – Stealth Rock / Spikes etc.  → credit whoever set the hazard
- *  WEATHER   – sandstorm / hail            → credit whoever set the weather (p1 only)
- *  SELF-HARM – recoil / Life Orb / Crash   → AI's own fault; credit last p1 attacker
- *  EXPLOSION – AI used Explosion/Self-Destruct → credit last p1 attacker (forced the trade)
- *  RESIDUAL  – Leech Seed / Curse / Nightmare / Bad Dreams / Perish Song / Future Sight
- *              / Doom Desire / Salt Cure / Trapped     → credit inflicter
- *  DESTINY BOND – p2 took the hit for p1's move; already credited by the move line
- *  UNATTRIBUTABLE – no p1 responsible (sandstorm set by AI, weather not set, etc.)
- *                   → fallback: credit the active p1 slot with most recent action overall
- */
-
 /** Moves that cause the user to faint immediately (self-KO moves). */
 const SELF_KO_MOVES = new Set([
 	'explosion', 'selfdestruct', 'mistyexplosion', 'memento',
 	'healingwish', 'lunardance', 'finalgambit',
-]);
-
-/**
- * Indirect damage tags in `|-damage|` lines whose kills should be credited
- * to whoever *inflicted the condition*, not whoever last attacked.
- * These are handled via the statusInflicter / residualInflicter maps.
- */
-const STATUS_TAGS = new Set([
-	'brn', 'psn', 'tox',                          // burn, poison, bad-poison
 ]);
 
 const RESIDUAL_FROM_TAGS: Record<string, true> = {
@@ -149,14 +123,6 @@ const RESIDUAL_FROM_TAGS: Record<string, true> = {
 	'Doom Desire': true,
 };
 
-/** Weather/hazard tags that are the AI's own problem (no p1 credit). */
-const AI_SELF_TAGS = new Set([
-	'Hail', 'Sandstorm', 'Snow',  // only if set by AI
-	'recoil',
-	'Life Orb',
-	'Black Sludge',
-]);
-
 function parseKillExp(
 	logLines: string[],
 	state: PokeRogueState,
@@ -170,21 +136,22 @@ function parseKillExp(
 	// -------------------------------------------------------------------------
 
 	/**
-	 * p1 battle slot ('p1a', 'p1b'…) → team array index
-	 * Updated on EVERY switch-in so that a slot always points to the
-	 * currently-active Pokémon, not the first one that ever used it.
+	 * FIX: p1 battle slot → team array index.
+	 * Updated on EVERY switch-in (not just the first) so that when a Pokémon
+	 * faints and a new one enters the same slot, kills are credited to the
+	 * correct (new) team member and not the old fainted one.
 	 */
 	const p1SlotToTeamIdx: Record<string, number> = {};
 
 	/**
-	 * Track which team indices have been fainted so we never credit a dead mon.
-	 * Set when |faint|p1X is seen.
+	 * FIX: Track which team indices have fainted so we never award EXP to a
+	 * dead Pokémon regardless of attribution.
 	 */
 	const p1TeamFainted = new Set<number>();
 
 	/** p2 battle slot → species id currently in that slot */
 	const p2SlotSpecies: Record<string, string> = {};
-	/** p2 battle slot → level of the Pokémon currently in that slot */
+	/** p2 battle slot → level currently in that slot */
 	const p2SlotLevel: Record<string, number> = {};
 
 	// -------------------------------------------------------------------------
@@ -192,35 +159,32 @@ function parseKillExp(
 	// -------------------------------------------------------------------------
 
 	/**
-	 * The last p1 slot to use a *direct* damaging move against each p2 slot.
-	 * Reset when the p2 slot gets a new Pokémon (switch/drag on p2).
+	 * The last p1 slot to use a direct damaging move against each p2 slot.
+	 * FIX: Reset per p2-slot when the AI sends out a new Pokémon into that
+	 * slot, preventing old attribution bleeding onto a fresh Pokémon.
 	 */
 	const lastDirectAttacker: Record<string, string> = {};
 
 	/**
 	 * The p1 slot that inflicted a status condition on each p2 slot.
-	 * Reset when p2 slot gets a new Pokémon.
+	 * FIX: Also reset when a new p2 Pokémon enters the slot.
 	 */
 	const statusInflicter: Record<string, string> = {};
 
 	/**
 	 * The p1 slot that applied a residual-damage effect on each p2 slot.
-	 * Key: `p2Slot:effectName`.  Value: p1 slot.
+	 * Key: `p2Slot:effectName`. Value: p1 slot.
+	 * FIX: Cleared per-slot on p2 switch-in.
 	 */
 	const residualInflicter: Record<string, string> = {};
 
 	/**
-	 * p1 slot → p2 slot targeted by a Future Sight / Doom Desire move.
-	 */
-	const delayedMoveTarget: Record<string, string> = {};
-
-	/**
-	 * Entry hazard setter: key = hazard name, value = p1 slot that set it.
+	 * Entry hazard setter: key = hazard name ('stealthrock' etc), value = p1 slot.
 	 */
 	const hazardSetter: Record<string, string> = {};
 
 	/**
-	 * Most-recent p1 slot to take *any* action — absolute last-resort fallback.
+	 * Most-recent p1 slot to take any action — absolute last-resort fallback.
 	 */
 	let lastAnyP1Slot: string | undefined;
 
@@ -229,10 +193,10 @@ function parseKillExp(
 	let lastMoveTarget = '';
 	let lastMoveName = '';
 
-	/** Whether weather was set by p1 (true) or p2 (false/undefined). */
+	/** Whether each weather type was set by p1. */
 	const weatherSetByP1: Record<string, boolean> = {};
 
-	// Result accumulator: teamIdx → cumulative exp
+	// Result: teamIdx → cumulative exp earned via kills
 	const expMap = new Map<number, number>();
 
 	// =========================================================================
@@ -241,16 +205,17 @@ function parseKillExp(
 	for (const line of logLines) {
 
 		// -----------------------------------------------------------------------
-		// 1. p1 switch / drag  →  update slot → teamIdx (always, not just first time)
+		// 1. p1 switch / drag → update slot→teamIdx (always, not just first time)
 		// -----------------------------------------------------------------------
+		// Format: |switch|p1a: Nickname|Species, L50, M|HP/maxHP
 		const p1Switch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)/.exec(line);
 		if (p1Switch) {
 			const slot = 'p1' + p1Switch[1];
 			const sid = toID(p1Switch[2].trim());
 
-			// Always re-resolve: find the team member matching this species
-			// that hasn't been assigned to a *different currently-active* slot.
-			const otherSlots = new Set(
+			// Re-resolve on every switch: find the team member matching this
+			// species that isn't currently occupying a different active slot.
+			const otherActiveIndices = new Set(
 				Object.entries(p1SlotToTeamIdx)
 					.filter(([s]) => s !== slot)
 					.map(([, idx]) => idx)
@@ -258,25 +223,19 @@ function parseKillExp(
 
 			let matched = -1;
 			for (let i = 0; i < state.team.length; i++) {
-				if (toID(state.team[i].species) === sid && !otherSlots.has(i)) {
+				if (toID(state.team[i].species) === sid && !otherActiveIndices.has(i)) {
 					matched = i;
 					break;
 				}
 			}
+			if (matched !== -1) p1SlotToTeamIdx[slot] = matched;
 
-			if (matched !== -1) {
-				p1SlotToTeamIdx[slot] = matched;
-			}
-
-			// When a NEW Pokémon enters a p1 slot, clear that slot's direct
-			// attacker record so kills by the previous occupant don't bleed through.
-			// (We keep hazardSetter / residualInflicter since those are p2-keyed.)
 			lastAnyP1Slot = slot;
 			continue;
 		}
 
 		// -----------------------------------------------------------------------
-		// 2. p1 faint  →  mark team index as fainted
+		// 2. p1 faint → mark team index as fainted
 		// -----------------------------------------------------------------------
 		const p1FaintLine = /^\|faint\|p1([a-z]):/.exec(line);
 		if (p1FaintLine) {
@@ -287,18 +246,19 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 3. p2 switch / drag  →  record species + level; reset per-slot attribution
+		// 3. p2 switch / drag → record species + level; reset per-slot attribution
 		// -----------------------------------------------------------------------
+		// Format: |switch|p2a: Nickname|Species, L50, M|HP/maxHP
 		const p2Switch = /^\|(?:switch|drag)\|p2([a-z]): [^|]+\|([^|,]+)(?:, L(\d+))?[^|]*\|/.exec(line);
 		if (p2Switch) {
 			const slot = 'p2' + p2Switch[1];
 			p2SlotSpecies[slot] = toID(p2Switch[2].trim());
 			p2SlotLevel[slot] = p2Switch[3] ? parseInt(p2Switch[3]) : botLevel(floor);
 
-			// Reset attribution for this p2 slot — new Pokémon, fresh slate
+			// FIX: Reset all attribution for this slot so prior-Pokémon data
+			// doesn't carry over to the new one entering the same slot.
 			delete lastDirectAttacker[slot];
 			delete statusInflicter[slot];
-			// Clear residual inflicters keyed to this slot
 			for (const key of Object.keys(residualInflicter)) {
 				if (key.startsWith(`${slot}:`)) delete residualInflicter[key];
 			}
@@ -306,8 +266,9 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 4. |move| lines
+		// 4. |move| lines → track direct attacker + residual setup
 		// -----------------------------------------------------------------------
+		// Format: |move|p1a: Name|MoveName|p2a: Name
 		const moveMatch = /^\|move\|([p][12][a-z]): [^|]+\|([^|]+)\|([p][12][a-z]):/.exec(line);
 		if (moveMatch) {
 			const user = moveMatch[1];
@@ -337,7 +298,6 @@ function parseKillExp(
 					}
 
 					if (move === 'futuresight' || move === 'doomdesire') {
-						delayedMoveTarget[move] = target;
 						residualInflicter[`${target}:${move}`] = user;
 					}
 				}
@@ -346,23 +306,19 @@ function parseKillExp(
 					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
 					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
 				};
-				if (WEATHER_MOVES[move]) {
-					weatherSetByP1[WEATHER_MOVES[move]] = true;
-				}
+				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = true;
 			} else {
 				const WEATHER_MOVES: Record<string, string> = {
 					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
 					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
 				};
-				if (WEATHER_MOVES[move]) {
-					weatherSetByP1[WEATHER_MOVES[move]] = false;
-				}
+				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = false;
 			}
 			continue;
 		}
 
 		// -----------------------------------------------------------------------
-		// 5. |-status|p2X  →  record status inflicter
+		// 5. |-status|p2X → record who inflicted the status
 		// -----------------------------------------------------------------------
 		const statusApply = /^\|-status\|p2([a-z]): [^|]+\|(brn|psn|tox)/.exec(line);
 		if (statusApply) {
@@ -376,8 +332,9 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 6. |-start| lines for residual effects
+		// 6. |-start| lines → record residual effect inflicters
 		// -----------------------------------------------------------------------
+		// e.g. |-start|p2a: Nickname|move: Leech Seed
 		const residualStart = /^\|-start\|p2([a-z]): [^|]+\|(?:move: )?([^|[]+)/.exec(line);
 		if (residualStart) {
 			const p2Slot = 'p2' + residualStart[1];
@@ -389,7 +346,7 @@ function parseKillExp(
 		}
 
 		// -----------------------------------------------------------------------
-		// 7. |faint|p2X  →  resolve attribution and award EXP
+		// 7. |faint|p2X → resolve attribution and record kill EXP
 		// -----------------------------------------------------------------------
 		const faintLine = /^\|faint\|p2([a-z]):/.exec(line);
 		if (!faintLine) continue;
@@ -405,17 +362,21 @@ function parseKillExp(
 		const lastMoveWasP1Direct = lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot;
 
 		if (lastMoveWasP1Direct && !lastMoveWasSelfKO) {
+			// Direct p1 hit was the killing blow
 			creditedP1Slot = lastMoveUser;
 		} else if (lastMoveWasSelfKO) {
+			// AI used Explosion/Self-Destruct etc. — credit whoever last hit it
 			creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 		} else if (statusInflicter[p2Slot]) {
+			// Burn / poison / toxic finished it off
 			creditedP1Slot = statusInflicter[p2Slot];
 		} else {
+			// Check residual inflicters (Leech Seed, Curse, trapping, Future Sight…)
 			const residualKey = Object.keys(residualInflicter).find(k => k.startsWith(`${p2Slot}:`));
 			if (residualKey) {
 				creditedP1Slot = residualInflicter[residualKey];
 			} else {
-				// Back-scan for [from] tag
+				// Back-scan recent log lines for a [from] tag on the damage line
 				const faintIdx = logLines.indexOf(line);
 				let fromTag = '';
 				for (let j = faintIdx - 1; j >= Math.max(0, faintIdx - 8); j--) {
@@ -432,6 +393,7 @@ function parseKillExp(
 						creditedP1Slot = hazardSetter[hKey] ?? lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
 					} else if (/^(?:Sandstorm|Hail|Snow)$/.test(fromTag)) {
 						const wKey = fromTag.toLowerCase();
+						// Only credit if p1 set this weather
 						creditedP1Slot = weatherSetByP1[wKey]
 							? (lastDirectAttacker[p2Slot] ?? lastAnyP1Slot)
 							: undefined;
@@ -453,7 +415,7 @@ function parseKillExp(
 		const teamIdx = p1SlotToTeamIdx[creditedP1Slot];
 		if (teamIdx === undefined) continue;
 
-		// *** KEY FIX: Never award EXP to a fainted Pokémon ***
+		// FIX: Never award kill EXP to a Pokémon that has already fainted
 		if (p1TeamFainted.has(teamIdx)) continue;
 
 		const exp = calcKillExp(enemySpecies, enemyLevel, luckyCharmActive, isBossFloor);
@@ -627,7 +589,13 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
-			const newMon: PokemonEntry = { species: finalSpecies, level: addedLevel, exp: expForLevel(addedLevel), moves: initialMoves };
+			// FIX: use the species' own expType curve when seeding the mon's starting EXP
+			const newMon: PokemonEntry = {
+				species: finalSpecies,
+				level: addedLevel,
+				exp: expForLevel(addedLevel, getExpType(finalSpecies)),
+				moves: initialMoves,
+			};
 
 			if (state.pendingChoiceType === 'starter') {
 				state.team = [newMon];
@@ -723,7 +691,8 @@ export const commands: Chat.ChatCommands = {
 				let evolved = false;
 
 				mon.level = Math.min(999, mon.level + 5);
-				mon.exp = expForLevel(mon.level);
+				// FIX: use the species' own expType curve when setting EXP after Rare Candy
+				mon.exp = expForLevel(mon.level, getExpType(mon.species));
 				while (true) {
 					const evo = getLevelUpEvo(mon.species);
 					if (!evo || mon.level < evo.evoLevel) break;
@@ -842,7 +811,13 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const initialMoves = getLevelUpMoves(finalSpecies, addedLevel);
-			const newMon: PokemonEntry = { species: finalSpecies, level: addedLevel, exp: expForLevel(addedLevel), moves: initialMoves };
+			// FIX: use the species' own expType curve
+			const newMon: PokemonEntry = {
+				species: finalSpecies,
+				level: addedLevel,
+				exp: expForLevel(addedLevel, getExpType(finalSpecies)),
+				moves: initialMoves,
+			};
 
 			if (state.team.length < 6) {
 				state.team.push(newMon);
@@ -892,7 +867,13 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const initialMoves = getLevelUpMoves(finalSpecies, level);
-			s.team.push({ species: finalSpecies, level, exp: expForLevel(level), moves: initialMoves });
+			// FIX: use the species' own expType curve
+			s.team.push({
+				species: finalSpecies,
+				level,
+				exp: expForLevel(level, getExpType(finalSpecies)),
+				moves: initialMoves,
+			});
 
 			setState(tId, s);
 			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
@@ -968,7 +949,8 @@ export const commands: Chat.ChatCommands = {
 			const tId = toID(target) || user.id;
 			const s = getState(tId);
 			if (s) {
-				for (const m of s.team) m.exp = expForLevel(m.level);
+				// FIX: use each mon's own expType curve when healing
+				for (const m of s.team) m.exp = expForLevel(m.level, getExpType(m.species));
 				setState(tId, s);
 				this.sendReply(`Healed team for ${tId}.`);
 			}
@@ -1062,13 +1044,12 @@ export const handlers: Chat.Handlers = {
 		const isBossFloor = match.floor % 10 === 0;
 
 		// -----------------------------------------------------------------------
-		// Step 1: Consumable item tracking + HP tracking (unchanged from before)
+		// Step 1: Consumable item tracking + HP tracking
 		// -----------------------------------------------------------------------
 		const room = Rooms.get(battle.roomid);
 		const logLines: string[] = room?.log?.log ?? [];
 		const consumedItems: string[] = [];
 
-		// p1 slot → team index (for HP tracking)
 		const hpSlotToTeamIdx: Record<string, number> = {};
 		const hpAssignedIdx = new Set<number>();
 		const slotHp: Record<string, number> = {};
@@ -1146,7 +1127,6 @@ export const handlers: Chat.Handlers = {
 			// -------------------------------------------------------------------
 			const expMap = parseKillExp(logLines, state, match.floor, isBossFloor);
 
-			// Coin reward (unchanged formula, with boss bonus)
 			const luckyCharmActive = (state.doubleExpFloors ?? 0) > 0;
 			const coinMult = isBossFloor ? 1.5 : 1.0;
 			const luckyMult = luckyCharmActive ? 2 : 1;
@@ -1155,22 +1135,33 @@ export const handlers: Chat.Handlers = {
 			const detailMsgs: string[] = [];
 
 			// -------------------------------------------------------------------
-			// Step 2b: Apply EXP to each Pokémon that earned kills
+			// FIX #2: EXP Share — sum all kill EXP earned this battle, then
+			// give the full total to every living party member.
+			//
+			// This matches the real PokéRogue game where all party members
+			// receive full EXP for every faint regardless of who landed the kill.
+			// Fainted Pokémon (currentHp === 0) are excluded from the share,
+			// consistent with how the main-series games handle EXP Share.
 			// -------------------------------------------------------------------
-			for (let i = 0; i < state.team.length; i++) {
-				const expGained = expMap.get(i) ?? 0;
-				if (expGained === 0) continue; // Pokémon that never landed a kill gets no exp
+			const totalExpEarned = [...expMap.values()].reduce((sum, v) => sum + v, 0);
 
-				const mon = state.team[i];
-				const oldSpecies = mon.species;
-				const { evolved, oldLevel } = applyExpAndLevelUp(mon, expGained);
+			if (totalExpEarned > 0) {
+				for (let i = 0; i < state.team.length; i++) {
+					const mon = state.team[i];
 
-				const msgs = processLevelUp(mon, oldLevel, oldSpecies, evolved, i, state);
-				detailMsgs.push(...msgs);
+					// Skip fainted Pokémon — they don't receive shared EXP
+					if ((mon.currentHp ?? 100) === 0) continue;
+
+					const oldSpecies = mon.species;
+					const { evolved, oldLevel } = applyExpAndLevelUp(mon, totalExpEarned);
+
+					const msgs = processLevelUp(mon, oldLevel, oldSpecies, evolved, i, state);
+					detailMsgs.push(...msgs);
+				}
 			}
 
 			// -------------------------------------------------------------------
-			// Step 2c: Post-battle bookkeeping (coins, floor, streaks, milestones)
+			// Step 2b: Post-battle bookkeeping
 			// -------------------------------------------------------------------
 			state.coins = (state.coins ?? 0) + coinReward;
 			if (state.doubleExpFloors) state.doubleExpFloors--;
@@ -1200,7 +1191,7 @@ export const handlers: Chat.Handlers = {
 			delete state.shopInventory;
 		} else {
 			// -------------------------------------------------------------------
-			// Loss handling (unchanged)
+			// Loss handling
 			// -------------------------------------------------------------------
 			delete state.pendingMoves;
 			delete state.pendingSwap;

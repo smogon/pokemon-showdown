@@ -38,12 +38,14 @@ type ExpData = Record<string, ExpEntry>;
 let expData: ExpData = {};
 
 /**
- * Load exp.json once at startup.  The file lives at
- * `impulse/db/exp.json` (same folder as pokerogue.json).
+ * FIX #1: Corrected path from 'impulse/db/exp.json' to the actual file
+ * location 'impulse/chat-plugins/pokerogue/exp.json'.
+ * The wrong path meant expData was always {}, causing every species to fall
+ * back to the inaccurate BST estimation instead of real exp yields.
  */
 export async function loadExpData(): Promise<void> {
 	try {
-		const raw = await FS('impulse/db/exp.json').readIfExists();
+		const raw = await FS('impulse/chat-plugins/pokerogue/exp.json').readIfExists();
 		if (raw) expData = JSON.parse(raw) as ExpData;
 	} catch {
 		expData = {};
@@ -53,8 +55,8 @@ export async function loadExpData(): Promise<void> {
 void loadExpData();
 
 /**
- * Returns the base expYield for a species, falling back to a BST-derived
- * estimate when the species is not in exp.json (regional forms, fakemons…).
+ * Returns the base expYield for a species from exp.json, falling back to a
+ * BST-derived estimate when the species is not in exp.json.
  */
 export function getExpYield(speciesId: string): number {
 	const id = toID(speciesId);
@@ -69,14 +71,68 @@ export function getExpYield(speciesId: string): number {
 }
 
 /**
- * Calculate the EXP a player's Pokémon earns for defeating an AI Pokémon.
+ * FIX #3: Returns the expType for a species from exp.json so that the
+ * correct EXP curve can be applied when calculating level thresholds.
+ * Falls back to 'Slow' for high-BST species, 'Medium Fast' otherwise.
+ */
+export function getExpType(speciesId: string): string {
+	const id = toID(speciesId);
+	if (expData[id]) return expData[id].expType;
+
+	// Estimate: high-BST species (legendaries etc.) are typically Slow
+	const sp = Dex.species.get(id);
+	if (sp.exists) {
+		const bs = sp.baseStats ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		const bst = bs.hp + bs.atk + bs.def + bs.spa + bs.spd + bs.spe;
+		if (bst >= 580) return 'Slow';
+	}
+	return 'Medium Fast';
+}
+
+/**
+ * FIX #3: EXP curve multipliers per expType.
  *
- * Formula mirrors the main-series Gen-5+ traded-Pokémon formula
- * (without trade bonus since it doesn't apply here):
+ * The base formula (15 * n * (n-1)) is kept as the roguelike-compressed
+ * scale. These multipliers preserve the correct relative difficulty between
+ * curves, matching real-game ratios:
+ *   Fast (800k/lv100) vs Slow (1,250k/lv100) → 0.80 vs 1.25.
  *
+ * Previously expForLevel() used no multiplier at all, meaning a Dragonite
+ * (Slow) needed the exact same EXP as a Caterpie (Medium Fast) to level up.
+ */
+const EXP_TYPE_MULTIPLIER: Record<string, number> = {
+	'Erratic':     0.88,
+	'Fast':        0.80,
+	'Medium Fast': 1.00,
+	'Medium Slow': 1.06,
+	'Fluctuating': 1.15,
+	'Slow':        1.25,
+};
+
+/**
+ * FIX #3: Returns total EXP needed to reach the given level.
+ *
+ * Now accepts expType so Slow-curve species require proportionally more EXP
+ * than Fast-curve species, matching real-game experience curve distinctions.
+ * The base formula (15 * n * (n-1)) is an intentional roguelike-compressed
+ * scale — expType scales it proportionally without changing overall pace.
+ *
+ * Default is 'Medium Fast' for backwards-compat with any direct callers
+ * that don't pass an expType (e.g. floorExpReward).
+ */
+export function expForLevel(level: number, expType = 'Medium Fast'): number {
+	const base = 15 * level * (level - 1);
+	const mult = EXP_TYPE_MULTIPLIER[expType] ?? 1.0;
+	return Math.round(base * mult);
+}
+
+/**
+ * Calculate the EXP earned for defeating one AI Pokémon.
+ *
+ * Formula mirrors main-series Gen-5+ (without trade bonus):
  *   exp = floor(baseYield * enemyLevel / 5)
  *
- * Then we apply the Lucky Charm multiplier and a boss-floor bonus.
+ * Then applies boss-floor bonus and Lucky Charm multiplier.
  */
 export function calcKillExp(
 	enemySpeciesId: string,
@@ -92,10 +148,7 @@ export function calcKillExp(
 }
 
 // ---------------------------------------------------------------------------
-// Existing code below – unchanged except for removing the old flat EXP
-// helper exports that are no longer used by the battle handler
-// (floorExpReward kept for any references elsewhere, but the handler no
-// longer calls it for per-Pokémon exp distribution).
+// Evo type fallback levels
 // ---------------------------------------------------------------------------
 
 const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
@@ -107,7 +160,9 @@ const EVO_TYPE_FALLBACK_LEVEL: Partial<Record<string, number>> = {
 	levelHold: 30,
 };
 
-// --- TIERING SYSTEM ---
+// ---------------------------------------------------------------------------
+// Tiering system
+// ---------------------------------------------------------------------------
 
 let t1Cache: string[] | null = null;
 let t2Cache: string[] | null = null;
@@ -259,7 +314,9 @@ export function getLevelUpEvo(speciesId: string): { evoTo: string, evoLevel: num
 	return validEvos[Math.floor(Math.random() * validEvos.length)];
 }
 
-// --- LEVEL 999 MATH & EXP ---
+// ---------------------------------------------------------------------------
+// Level / EXP helpers
+// ---------------------------------------------------------------------------
 
 export function botLevel(floor: number): number {
 	let level = 1;
@@ -273,13 +330,9 @@ export function botLevel(floor: number): number {
 	return Math.min(999, level);
 }
 
-export function expForLevel(level: number): number {
-	return 15 * level * (level - 1);
-}
-
 /**
- * Kept for backwards-compat (shop reroll cost display, etc.) but no longer
- * used to calculate per-battle EXP distribution.
+ * Kept for backwards-compat (shop reroll cost display, etc.).
+ * Uses 'Medium Fast' as the baseline since we don't have a specific mon here.
  */
 export function floorExpReward(floor: number): number {
 	const currentTarget = botLevel(floor);
@@ -287,7 +340,7 @@ export function floorExpReward(floor: number): number {
 
 	if (currentTarget === 999) return 500000;
 
-	const expGap = expForLevel(nextTarget) - expForLevel(currentTarget);
+	const expGap = expForLevel(nextTarget, 'Medium Fast') - expForLevel(currentTarget, 'Medium Fast');
 	return Math.floor(expGap * 1.15);
 }
 
@@ -295,13 +348,22 @@ export function floorCoinReward(floor: number): number {
 	return 30 + floor * 10;
 }
 
+/**
+ * Applies gained EXP to a Pokémon and handles level-ups and evolution.
+ *
+ * FIX #3: Now reads the mon's own expType via getExpType() and passes it to
+ * expForLevel() so that level thresholds are correctly per-curve.
+ * Previously all mons used the same flat formula regardless of expType.
+ */
 export function applyExpAndLevelUp(mon: PokemonEntry, expGained: number): { evolved: boolean, oldLevel: number } {
 	const oldLevel = mon.level;
 	mon.exp += expGained;
 
-	while (mon.level < 999 && mon.exp >= expForLevel(mon.level + 1)) {
+	const expType = getExpType(mon.species);
+	while (mon.level < 999 && mon.exp >= expForLevel(mon.level + 1, expType)) {
 		mon.level++;
 	}
+
 	let evolved = false;
 	while (true) {
 		const evo = getLevelUpEvo(mon.species);
