@@ -540,8 +540,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-			state.moveToLearn || state.pendingItemName || state.itemOptions?.length ||
-			state.pendingConsumableType) {
+			state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
 
@@ -666,8 +665,7 @@ export const commands: Chat.ChatCommands = {
 			if (!state || state.gameOver) return this.errorReply("No active run.");
 			if (state.battleRoomId) return this.errorReply("Can't shop during a battle.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-			state.moveToLearn || state.pendingItemName || state.itemOptions?.length ||
-			state.pendingConsumableType) {
+			state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
 				return this.errorReply("Resolve pending choices first.");
 			}
 
