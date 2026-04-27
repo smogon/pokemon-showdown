@@ -1,18 +1,3 @@
-/*
- * =======================================================================
- *
- * ___ __  __ ___ _   _ _    ___ ___
- * |_ _|  \/  | _ \ | | | |  / __| __|
- * | || |\/| |  _/ |_| | |__\__ \ __|
- * |___|_|  |_|_|  \___/|____|___/___|
- *
- * Server: Impulse
- * Plugin: PokéRogue Pokemon
- * Made by: @TurboRx
- *
- * =======================================================================
- */
-
 import { FS } from '../../../lib';
 import { LEGENDARY_TAGS, type PokemonEntry, type PokeRogueState } from './pokerogue-types';
 
@@ -106,11 +91,15 @@ export function expForLevel(level: number, expType = 'Medium Fast'): number {
 export function calcKillExp(
 	enemySpeciesId: string,
 	enemyLevel: number,
+	playerLevel: number,
 	luckyCharmActive: boolean,
 	isBossFloor: boolean,
 ): number {
 	const baseYield = getExpYield(enemySpeciesId);
-	let exp = Math.floor((baseYield * enemyLevel) / 5);
+	const base = Math.floor((baseYield * enemyLevel) / 5);
+	const scalingNumer = Math.pow(2 * enemyLevel + 10, 1.5);
+	const scalingDenom = Math.pow(enemyLevel + playerLevel + 10, 1.5);
+	let exp = Math.floor(base * (scalingNumer / scalingDenom)) + 1;
 	if (isBossFloor) exp = Math.floor(exp * 1.5);
 	if (luckyCharmActive) exp *= 2;
 	return Math.max(1, exp);
