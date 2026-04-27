@@ -333,6 +333,60 @@ export function renderGamePage(state: PokeRogueState): string {
 		return buf;
 	}
 
+	// ── Consumable item: choose which Pokémon to use it on ───────────────
+	if (state.pendingConsumableType && state.purchasedItem) {
+		const consumableKey = state.purchasedItem;
+		const consumableItem = SHOP_ITEMS[consumableKey] ?? ROTATIONAL_ITEM_POOL[consumableKey];
+		const consumableType = state.pendingConsumableType;
+		const typeLabels: Record<string, string> = {
+			healHP: 'Restore HP',
+			healPP: 'Restore PP',
+			revive: 'Revive',
+			cureStatus: 'Cure Status',
+		};
+		buf += `<h2 class="pr-choice-heading">Use ${Utils.escapeHTML(consumableItem?.name ?? consumableKey)}?</h2>`;
+		buf += `<div style="text-align:center;margin-bottom:10px;color:#ccc">Choose a Pokémon:</div>`;
+		buf += `<div style="display:flex;flex-direction:column;gap:6px">`;
+		for (let i = 0; i < state.team.length; i++) {
+			const mon = state.team[i];
+			const hp = mon.currentHp ?? 100;
+			let disabled = false;
+			let reason = '';
+			switch (consumableType) {
+			case 'healHP':
+				disabled = hp >= 100 || hp <= 0;
+				reason = hp <= 0 ? '(fainted)' : '(full HP)';
+				break;
+			case 'healPP': {
+				const allFull = (mon.ppLeft ?? []).every((v, idx) => {
+					const max = Math.floor((Dex.moves.get(mon.moves[idx]).pp ?? 5) * (8 / 5));
+					return v >= max;
+				});
+				disabled = allFull || hp <= 0;
+				reason = hp <= 0 ? '(fainted)' : allFull ? '(PP full)' : '';
+				break;
+			}
+			case 'revive':
+				disabled = hp > 0;
+				reason = hp > 0 ? '(not fainted)' : '';
+				break;
+			case 'cureStatus':
+				disabled = !mon.status || hp <= 0;
+				reason = hp <= 0 ? '(fainted)' : !mon.status ? '(no status)' : '';
+				break;
+			}
+			const spName = Dex.species.get(toID(mon.species)).name;
+			if (disabled) {
+				buf += `<button class="button" disabled style="padding:8px;text-align:left;opacity:0.5">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Utils.escapeHTML(spName)} Lv.${mon.level} ${reason}</span></button>`;
+			} else {
+				buf += `<button name="send" value="/pokerogue useshopitem ${i + 1}" class="button" style="padding:8px;text-align:left">${getSprite(mon.species, 36)} <span style="margin-left:8px">${Utils.escapeHTML(spName)} Lv.${mon.level}${mon.status ? ` [${mon.status.toUpperCase()}]` : ''}${hp < 100 ? ` (${hp}% HP)` : ''}</span></button>`;
+			}
+		}
+		buf += `<button name="send" value="/pokerogue useshopitem skip" class="button" style="padding:8px;margin-top:8px"><b>Cancel</b> <small>(refund purchase)</small></button>`;
+		buf += `</div></div>`;
+		return buf;
+	}
+
 	// ── Shop view ──────────────────────────────────────────────────────────
 	if (view === 'shop') {
 		const bp = state.battlePoints ?? 0;
