@@ -303,9 +303,12 @@ export function pickStarterOptions(): string[] {
 		return true;
 	});
 
-	// Build BST-weighted pool at tier-0 defaults (midpoint=250, range=50, weightcap=100)
-	const midpoint = 250;
-	const range = 50;
+	// Build BST-weighted pool matching poketest.ts createSaveData() call exactly:
+	//   genPokemon(3, 5, { midpoint: 315, range: 65, weightcap: 100 }, true)
+	// midpoint=315 (slightly above basic unevolved mons), range=65 (wider bell curve)
+	// Level is fixed at 5 (handled in pokerogue.ts choose command)
+	const midpoint = 315;
+	const range = 65;
 	const weightcap = 100;
 
 	const pool: Array<{ id: string, weight: number }> = [];
