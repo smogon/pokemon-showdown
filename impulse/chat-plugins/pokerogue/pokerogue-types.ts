@@ -58,6 +58,10 @@ export interface PokeRogueState {
 	// --- Shop flags (mirrors poketest.ts userData.flags) ---
 	/** The item/rotational-item the player just paid for and is awaiting to redeem. */
 	purchasedItem?: string; // key into SHOP_ITEMS or ROTATIONAL_ITEM_POOL
+	
+	/** The consumable item type awaiting Pokémon selection (healHP / healPP / revive / cureStatus). */	
+	pendingConsumableType?: 'healHP' | 'healPP' | 'revive' | 'cureStatus';
+	
 	/** The PS item name pending assignment to a Pokémon (from 'item' / 'itemPack' / 'evolveItem' types). */
 	pendingItemName?: string;
 	/** When true, pendingItemName is an evolution item — applying it evolves the target Pokémon. */
