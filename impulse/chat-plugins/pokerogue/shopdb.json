@@ -44,7 +44,7 @@
 		"icon": "Potion",
 		"type": "healHP",
 		"desc": "Heals 20 HP for a Pokemon.",
-		"cost": 3,
+		"cost": 2,
 		"minStreak": 0
 	},
 	"superpotion": {
@@ -52,7 +52,7 @@
 		"icon": "Super Potion",
 		"type": "healHP",
 		"desc": "Heals 50 HP for a Pokemon.",
-		"cost": 5,
+		"cost": 3,
 		"minStreak": 1
 	},
 	"hyperpotion": {
@@ -60,7 +60,7 @@
 		"icon": "Hyper Potion",
 		"type": "healHP",
 		"desc": "Heals 120 HP for a Pokemon.",
-		"cost": 7,
+		"cost": 6,
 		"minStreak": 4
 	},
 	"maxpotion": {
@@ -68,7 +68,7 @@
 		"icon": "Max Potion",
 		"type": "healHP",
 		"desc": "Heals a pokemon's HP fully.",
-		"cost": 10,
+		"cost": 8,
 		"minStreak": 6
 	},
 	"maxelixir": {
@@ -92,7 +92,7 @@
 		"icon": "Revive",
 		"type": "revive",
 		"desc": "Revives a Pokemon to half its maximum HP.",
-		"cost": 7,
+		"cost": 6,
 		"minStreak": 1
 	},
 	"expall": {
@@ -100,7 +100,7 @@
 		"icon": "Exp Share",
 		"type": "key",
 		"desc": "Gives 50% Exp. to all non-fainted Pokemon not in the battle",
-		"cost": 25,
+		"cost": 20,
 		"minStreak": 2
 	}
 }
