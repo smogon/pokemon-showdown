@@ -259,7 +259,7 @@ function renderMainView(state: PokeRogueState, user: User): string {
 	buf += `<button name="send" value="/pokerogue view top" class="pr-btn">Top 100</button>`;
 	buf += `<button name="send" value="/pokerogue view resetconfirm" class="pr-btn danger">Reset</button>`;
 	if (user.can('lock')) {
-		buf += `<button name="send" value="/pokerogue view devtools" class="pr-btn" style="background:#552288;color:white;border-color:#441177">Developer Tools</button>`;
+			buf += `<button name="send" value="/pokerogue view devtools" class="pr-btn">Dev Tools</button>`;
 	}
 	buf += `</div>`;
 
@@ -343,7 +343,7 @@ function renderTopView(): string {
 	if (!entries.length) return `<div style="text-align:center;padding:16px;color:#888;font-size:13px">No records yet!</div>`;
 
 	let buf = `<div class="pr-section-title">Top 100 runs</div>`;
-	buf += `<div class="pr-table-container"><table class="pr-table">`;
+	buf += `<div class="pr-table-container" style="overflow-x:auto;"><table class="pr-table">`;
 	buf += `<thead><tr><th>Rank</th><th>Player</th><th>Floor</th><th>Team</th></tr></thead>`;
 	buf += `<tbody>`;
 
@@ -691,7 +691,7 @@ export function renderGamePage(state: PokeRogueState, user: User): string {
 
 	// Handle access denied for devtools
 	if (view === 'devtools' && !user.can('lock')) {
-		let buf = `<div class="pr">`;
+		let buf = `<div class="pr" style="max-width:600px;margin:auto">`;
 		buf += renderHeader('devtools', false);
 		buf += renderAccessDenied();
 		buf += `</div>`;
@@ -705,7 +705,7 @@ export function renderGamePage(state: PokeRogueState, user: User): string {
 		buf += `<meta http-equiv="refresh" content="${PAGE_REFRESH_SECONDS}">`;
 	}
 
-	buf += `<div class="pr">`;
+	buf += `<div class="pr" style="max-width:600px;margin:auto">`;
 
 	// ── Game Over ──────────────────────────────────────────────────────────
 	if (state.gameOver) {

@@ -189,10 +189,13 @@
 }
 
 .pr-actions {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 5px;
     margin-top: 4px;
+}
+.pr-actions > * {
+    flex: 1 1 auto;
 }
 
 /* ==========================================
