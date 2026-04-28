@@ -738,7 +738,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', 'Same Color Clause'],
 		banlist: ['Ogerpon-Wellspring'],
-		unbanlist: ['Archaludon', 'Volcarona'],
+		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
 	},
 	{
 		name: "[Gen 9] National Dex 35 Pokes",
