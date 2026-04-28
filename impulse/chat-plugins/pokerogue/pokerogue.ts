@@ -17,7 +17,7 @@ import { Utils } from '../../../lib';
 import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, TMItem, genItem, rollShop } from './pokerogue-items';
 import { type PokemonEntry, type PokeRogueState, type StatusCondition } from './pokerogue-types';
 import { getState, setState, deleteState } from './pokerogue-state';
-import {
+import { genPackPokemon,
 	pickStarterOptions, pickNewPokemonOptions,
 	expForLevel, floorCoinReward,
 	applyExpAndLevelUp, getLevelUpEvo,
@@ -679,9 +679,11 @@ export const commands: Chat.ChatCommands = {
 			if (item.type === 'pokemonPack') {
 				state.battlePoints -= item.cost;
 				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
-				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
+				// Use genPackPokemon with the pack name and current streak
+				const packOptions = genPackPokemon(item.name, state.streaksWon ?? 0);
+				state.pendingChoice = packOptions.map(m => m.species);
 				state.pendingChoiceType = 'add';
-				state.pendingChoiceFloor = state.floor;   // <-- store current floor for shop packs
+				state.pendingChoiceFloor = state.floor;
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
