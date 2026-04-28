@@ -1,5 +1,5 @@
 import { FS } from '../../../lib';
-import { type PokemonEntry, type PokeRogueState } from './pokerogue-types';
+import { type PokemonEntry } from './pokerogue-types';
 
 // ─── Exp data ────────────────────────────────────────────────────────────────
 
@@ -336,7 +336,7 @@ export function genPokemon(
 		pokePool.splice(idx, 1);
 
 		// Remove same base species from pool (poketest.ts behaviour)
-		all = all.filter(s => s.baseSpecies !== specie.baseSpecies);
+		pokePool = pokePool.filter(p => p.specie.baseSpecies !== specie.baseSpecies);
 
 		const ability = pickRandomAbility(specie);
 		const nature = natures[Math.floor(Math.random() * natures.length)] ?? 'Hardy';
@@ -355,7 +355,7 @@ export function genPokemon(
 			? allTypes[Math.floor(Math.random() * allTypes.length)]
 			: specie.types[Math.floor(Math.random() * specie.types.length)];
 
-		// Level selection: random in [min, max], biased toward lower via poketest.ts pattern
+		// Level selection: biased toward lower via poketest.ts pattern, no validator
 		let chosenLevel: number;
 		if (depth > 500) {
 			chosenLevel = Math.floor(Math.random() * (maxLevel - minLevel)) + minLevel;
@@ -409,7 +409,7 @@ export function genPokemon(
 
 /**
  * Returns the [min, max] level scale for a given streak, matching poketest.ts win():
- *   scale = [5, 10], each value clamped to [1, 100] after adding streak * 5
+ *   base = [5, 10], each value += streak * 5, clamped to [1, 100].
  */
 export function levelScaleForStreak(streak: number): [number, number] {
 	const min = Math.min(100, Math.max(1, 5 + streak * 5));
@@ -428,7 +428,7 @@ export function pickStarterOptions(): string[] {
 }
 
 /**
- * New pokemon options for a pack purchase, using the same weighting as poketest.ts win().
+ * New pokemon options for a pack purchase, using the same default weighting as poketest.ts win().
  * `streak` is the current streaks-won count (used to scale level range).
  */
 export function pickNewPokemonOptions(currentTeam: PokemonEntry[], floor: number, streak = 0): string[] {
@@ -471,7 +471,7 @@ export function genPackPokemon(packName: string, streak: number): AIPokemonSet[]
  * AI opponent team, using same weighting curve as poketest.ts win().
  * `streak` drives both level scale and BST midpoint.
  */
-export function genAIPokemon(quantity: number, floor: number, streak = 0): AIPokemonSet[] {
+export function genAIPokemon(quantity: number, streak = 0): AIPokemonSet[] {
 	const scale = levelScaleForStreak(streak);
 	const midpoint = Math.min(650, 250 + streak * 50);
 	const weighting: PokePackWeighting = { midpoint, range: 50, weightcap: 100 };
