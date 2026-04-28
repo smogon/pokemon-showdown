@@ -517,6 +517,10 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state) return this.errorReply("No active run to modify.");
 
+			if (state.battleRoomId || room?.battle) {
+				return this.errorReply("Cannot use developer tools during an active battle.");
+			}
+
 			const args = target.split(' ').map(s => s.trim());
 			const action = args[0];
 
@@ -552,8 +556,11 @@ export const commands: Chat.ChatCommands = {
 					const lvls = parseInt(args[2]);
 					if (!isNaN(lvls)) {
 						for (const mon of state.team) {
-							mon.level = Math.min(999, mon.level + lvls);
-							mon.exp = expForLevel(mon.level, mon.expType);
+							const targetLevel = Math.min(999, mon.level + lvls);
+							const targetExp = expForLevel(targetLevel, mon.expType);
+							const expDelta = Math.max(0, targetExp - mon.exp);
+							const { evolved, oldLevel } = applyExpAndLevelUp(mon, expDelta);
+							processLevelUp(mon, oldLevel, mon.species, evolved, state.team.indexOf(mon), state);
 						}
 						state.notification = `Team leveled up by ${lvls}!`;
 					}
@@ -583,7 +590,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (action === 'prompt') {
 				const sub = args[1];
 				if (sub === 'addmon') {
-					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue addmon {mon}, {lvl}">Add Pokémon (Name): <input name="mon" type="text" placeholder="Pikachu" required> Level: <input name="lvl" type="number" value="5" min="1" max="999" style="width:50px"> <button type="submit" class="button">Add</button></form>`);
+					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue addmon ${user.id}, {mon}, {lvl}">Add Pokémon (Name): <input name="mon" type="text" placeholder="Pikachu" required> Level: <input name="lvl" type="number" value="5" min="1" max="999" style="width:50px"> <button type="submit" class="button">Add</button></form>`);
 					return;
 				} else if (sub === 'giveitem') {
 					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue dev giveitem {item}">Give Item (Name): <input name="item" type="text" placeholder="Leftovers" required> <button type="submit" class="button">Give</button></form>`);
@@ -610,7 +617,7 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length || state.pendingConsumableType) {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
 
@@ -733,7 +740,7 @@ export const commands: Chat.ChatCommands = {
 			if (!state || state.gameOver) return this.errorReply("No active run.");
 			if (state.battleRoomId) return this.errorReply("Can't shop during a battle.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length || state.pendingConsumableType) {
 				return this.errorReply("Resolve pending choices first.");
 			}
 
