@@ -210,20 +210,22 @@ interface ActiveRougeMatch {
 export const activeMatches = new Map<RoomID, ActiveRougeMatch>();
 
 function buildBotTeam(state: PokeRogueState): string {
-    const floor = state.floor;
-    const isBoss = floor % 10 === 0;
-    const streak = state.streaksWon ?? 0;
-    const size = isBoss ? 6 : botTeamSize(floor);
-    let aiTeam = genAIPokemon(size, floor, streak);
-    // boss level bonus
-    const playerMaxLevel = state.team.length
-        ? Math.max(...state.team.map(m => m.level)) : 1;
-    const bossBonus = isBoss ? Math.floor(Math.random() * 3) + 1 : 0;
-    aiTeam = aiTeam.map(mon => ({
-        ...mon,
-        level: Math.min(100, Math.max(mon.level, playerMaxLevel) + bossBonus),
-    }));
-    return packAITeam(aiTeam);
+	const floor = state.floor;
+	const isBoss = floor % 10 === 0;
+	const streak = state.streaksWon ?? 0;
+	const size = isBoss ? 6 : botTeamSize(floor);
+
+	let aiTeam: AIPokemonSet[] = genAIPokemon(size, streak);
+
+	if (isBoss) {
+		const bossBonus = Math.floor(Math.random() * 3) + 1;
+		aiTeam = aiTeam.map(mon => ({
+			...mon,
+			level: Math.min(100, mon.level + bossBonus),
+		}));
+	}
+
+	return packAITeam(aiTeam);
 }
 
 export function startBattle(user: User, state: PokeRogueState): boolean {
