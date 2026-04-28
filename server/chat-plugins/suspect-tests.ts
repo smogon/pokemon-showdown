@@ -91,8 +91,8 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			this.sendReplyBox(`You are now participating in the ${suspect.suspect} suspect test in ${format.name}!<br />` +
+				`Your wins and losses in ${format.name} during the test will be counted separately and used to calculate your COIL.<br />` +
 				`If you achieve the required COIL value on this account, you will be eligible to vote.<br />` +
-				`Your rating has become provisional; you will not appear on the ${format.name} ladder until you have played a few games.<br />` +
 				`(Remember to use the <code>/linksmogon</code> command!)`);
 		},
 
