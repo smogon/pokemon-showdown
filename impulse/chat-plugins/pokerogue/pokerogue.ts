@@ -121,52 +121,88 @@ function parseKillExp(
 ): Map<number, number> {
 	const luckyCharmActive = false;
 
+	// Maps p1 slot (e.g. 'p1a') -> current team index
 	const p1SlotToTeamIdx: Record<string, number> = {};
+	// Tracks which team indices have fainted (no exp credit)
 	const p1TeamFainted = new Set<number>();
+	// p2 slot -> current species id
 	const p2SlotSpecies: Record<string, string> = {};
+	// p2 slot -> current level
 	const p2SlotLevel: Record<string, number> = {};
-	const lastDirectAttacker: Record<string, string> = {};
-	const statusInflicter: Record<string, string> = {};
-	const residualInflicter: Record<string, string> = {};
-	const hazardSetter: Record<string, string> = {};
+
+	// All p1 team indices that were sent out while a given p2 slot was occupied (persists across switches)
+	const participatedAgainst: Record<string, Set<number>> = {};
+	// Last p1 slot to use a move targeting a given p2 slot (for status/residual credit)
+	const lastAttackerSlot: Record<string, string> = {};
+	// p2 slot -> p1 team index that inflicted a status
+	const statusInflicter: Record<string, number> = {};
+	// residual effect key -> p1 team index (e.g. 'p2a:leechseed')
+	const residualInflicter: Record<string, number> = {};
+	// hazard type -> p1 team index
+	const hazardSetter: Record<string, number> = {};
+	// weather type -> whether a p1 mon set it
+	const weatherSetByP1: Record<string, boolean> = {};
+
+	// Last p1 slot and move info for attribution fallback
 	let lastAnyP1Slot: string | undefined;
 	let lastMoveUser = '';
 	let lastMoveTarget = '';
 	let lastMoveName = '';
-	const weatherSetByP1: Record<string, boolean> = {};
+
 	const expMap = new Map<number, number>();
 
 	for (const line of logLines) {
+		// ── p1 switch/drag ──────────────────────────────────────────────────
 		const p1Switch = /^\|(?:switch|drag)\|p1([a-z]): [^|]+\|([^|,]+)[^|]*\|(\d+)/.exec(line);
 		if (p1Switch) {
 			const slot = 'p1' + p1Switch[1];
 			const sid = toID(p1Switch[2].trim());
-			const otherActiveIndices = new Set(
-				Object.entries(p1SlotToTeamIdx).filter(([s]) => s !== slot).map(([, idx]) => idx)
+			// Find matching team index not already active in another slot
+			const otherActive = new Set(
+				Object.entries(p1SlotToTeamIdx)
+					.filter(([s]) => s !== slot)
+					.map(([, i]) => i)
 			);
 			let matched = -1;
 			for (let i = 0; i < state.team.length; i++) {
-				if (toID(state.team[i].species) === sid && !otherActiveIndices.has(i)) { matched = i; break; }
+				if (toID(state.team[i].species) === sid && !otherActive.has(i)) {
+					matched = i;
+					break;
+				}
 			}
-			if (matched !== -1) p1SlotToTeamIdx[slot] = matched;
+			if (matched !== -1) {
+				p1SlotToTeamIdx[slot] = matched;
+				// Register this mon as a participant against every currently occupied p2 slot
+				for (const p2Slot of Object.keys(p2SlotSpecies)) {
+					if (!participatedAgainst[p2Slot]) participatedAgainst[p2Slot] = new Set();
+					participatedAgainst[p2Slot].add(matched);
+				}
+			}
 			lastAnyP1Slot = slot;
 			continue;
 		}
 
-		const p1FaintLine = /^\|faint\|p1([a-z]):/.exec(line);
-		if (p1FaintLine) {
-			const slot = 'p1' + p1FaintLine[1];
-			const teamIdx = p1SlotToTeamIdx[slot];
-			if (teamIdx !== undefined) p1TeamFainted.add(teamIdx);
+		// ── p1 faint ────────────────────────────────────────────────────────
+		const p1Faint = /^\|faint\|p1([a-z]):/.exec(line);
+		if (p1Faint) {
+			const idx = p1SlotToTeamIdx['p1' + p1Faint[1]];
+			if (idx !== undefined) p1TeamFainted.add(idx);
 			continue;
 		}
 
+		// ── p2 switch/drag ──────────────────────────────────────────────────
 		const p2Switch = /^\|(?:switch|drag)\|p2([a-z]): [^|]+\|([^|,]+)(?:, L(\d+))?[^|]*\|/.exec(line);
 		if (p2Switch) {
 			const slot = 'p2' + p2Switch[1];
 			p2SlotSpecies[slot] = toID(p2Switch[2].trim());
 			p2SlotLevel[slot] = p2Switch[3] ? parseInt(p2Switch[3]) : botLevel(floor);
-			delete lastDirectAttacker[slot];
+			// New enemy in this slot — reset participation for the new occupant
+			participatedAgainst[slot] = new Set();
+			// Any p1 mons currently on the field are already facing this new enemy
+			for (const teamIdx of Object.values(p1SlotToTeamIdx)) {
+				participatedAgainst[slot].add(teamIdx);
+			}
+			delete lastAttackerSlot[slot];
 			delete statusInflicter[slot];
 			for (const key of Object.keys(residualInflicter)) {
 				if (key.startsWith(`${slot}:`)) delete residualInflicter[key];
@@ -174,48 +210,74 @@ function parseKillExp(
 			continue;
 		}
 
+		// ── move used ───────────────────────────────────────────────────────
 		const moveMatch = /^\|move\|([p][12][a-z]): [^|]+\|([^|]+)\|([p][12][a-z]):/.exec(line);
 		if (moveMatch) {
-			const user = moveMatch[1]; const move = toID(moveMatch[2]); const target = moveMatch[3];
-			lastMoveName = move; lastMoveUser = user; lastMoveTarget = target;
+			const user = moveMatch[1];
+			const move = toID(moveMatch[2]);
+			const target = moveMatch[3];
+			lastMoveName = move;
+			lastMoveUser = user;
+			lastMoveTarget = target;
+
 			if (user.startsWith('p1')) {
 				lastAnyP1Slot = user;
 				if (target.startsWith('p2')) {
-					lastDirectAttacker[target] = user;
-					const HAZARD_MOVES: Record<string, string> = { stealthrock: 'stealthrock', spikes: 'spikes', toxicspikes: 'toxicspikes', stickyweb: 'stickyweb', stoneaxe: 'stealthrock', ceaselessedge: 'spikes' };
-					if (HAZARD_MOVES[move]) hazardSetter[HAZARD_MOVES[move]] = user;
-					if (move === 'futuresight' || move === 'doomdesire') residualInflicter[`${target}:${move}`] = user;
+					lastAttackerSlot[target] = user;
+					const HAZARD_MOVES: Record<string, string> = {
+						stealthrock: 'stealthrock', spikes: 'spikes',
+						toxicspikes: 'toxicspikes', stickyweb: 'stickyweb',
+						stoneaxe: 'stealthrock', ceaselessedge: 'spikes',
+					};
+					if (HAZARD_MOVES[move]) {
+						const teamIdx = p1SlotToTeamIdx[user];
+						if (teamIdx !== undefined) hazardSetter[HAZARD_MOVES[move]] = teamIdx;
+					}
+					if (move === 'futuresight' || move === 'doomdesire') {
+						const teamIdx = p1SlotToTeamIdx[user];
+						if (teamIdx !== undefined) residualInflicter[`${target}:${move}`] = teamIdx;
+					}
 				}
-				const WEATHER_MOVES: Record<string, string> = { raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand', snowscape: 'snow', hail: 'hail', chillyreception: 'snow' };
+				const WEATHER_MOVES: Record<string, string> = {
+					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
+					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
+				};
 				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = true;
 			} else {
-				const WEATHER_MOVES: Record<string, string> = { raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand', snowscape: 'snow', hail: 'hail', chillyreception: 'snow' };
+				const WEATHER_MOVES: Record<string, string> = {
+					raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand',
+					snowscape: 'snow', hail: 'hail', chillyreception: 'snow',
+				};
 				if (WEATHER_MOVES[move]) weatherSetByP1[WEATHER_MOVES[move]] = false;
 			}
 			continue;
 		}
 
+		// ── status applied to p2 ────────────────────────────────────────────
 		const statusApply = /^\|-status\|p2([a-z]): [^|]+\|(brn|psn|tox)/.exec(line);
 		if (statusApply) {
 			const p2Slot = 'p2' + statusApply[1];
-			if (lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot) {
-				statusInflicter[p2Slot] = lastMoveUser;
-			} else if (lastMoveUser.startsWith('p1')) {
-				statusInflicter[p2Slot] = lastDirectAttacker[p2Slot] ?? lastMoveUser;
+			if (lastMoveUser.startsWith('p1')) {
+				const src = (lastMoveTarget === p2Slot ? lastMoveUser : lastAttackerSlot[p2Slot]) ?? lastMoveUser;
+				const teamIdx = p1SlotToTeamIdx[src];
+				if (teamIdx !== undefined) statusInflicter[p2Slot] = teamIdx;
 			}
 			continue;
 		}
 
+		// ── residual effects applied to p2 ──────────────────────────────────
 		const residualStart = /^\|-start\|p2([a-z]): [^|]+\|(?:move: )?([^|[]+)/.exec(line);
 		if (residualStart) {
 			const p2Slot = 'p2' + residualStart[1];
 			const effectKey = residualStart[2].trim().replace(/^move: /, '');
 			if (RESIDUAL_FROM_TAGS[effectKey] && lastMoveUser.startsWith('p1')) {
-				residualInflicter[`${p2Slot}:${toID(effectKey)}`] = lastMoveUser;
+				const teamIdx = p1SlotToTeamIdx[lastMoveUser];
+				if (teamIdx !== undefined) residualInflicter[`${p2Slot}:${toID(effectKey)}`] = teamIdx;
 			}
 			continue;
 		}
 
+		// ── p2 faint → award exp ────────────────────────────────────────────
 		const faintLine = /^\|faint\|p2([a-z]):/.exec(line);
 		if (!faintLine) continue;
 
@@ -223,54 +285,77 @@ function parseKillExp(
 		const enemySpecies = p2SlotSpecies[p2Slot] ?? '';
 		const enemyLevel = p2SlotLevel[p2Slot] ?? botLevel(floor);
 
-		let creditedP1Slot: string | undefined;
+		// Determine the single credited p1 team index for the killing blow,
+		// then award exp to all participants who damaged this enemy.
+		const SELF_KO_MOVES = new Set([
+			'explosion', 'selfdestruct', 'mistyexplosion', 'memento',
+			'healingwish', 'lunardance', 'finalgambit',
+		]);
+
 		const lastMoveWasSelfKO = SELF_KO_MOVES.has(lastMoveName) && lastMoveUser.startsWith('p2');
 		const lastMoveWasP1Direct = lastMoveUser.startsWith('p1') && lastMoveTarget === p2Slot;
 
+		// Killing blow creditor (for exp split reference / fallback)
+		let killerTeamIdx: number | undefined;
 		if (lastMoveWasP1Direct && !lastMoveWasSelfKO) {
-			creditedP1Slot = lastMoveUser;
+			killerTeamIdx = p1SlotToTeamIdx[lastMoveUser];
 		} else if (lastMoveWasSelfKO) {
-			creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
-		} else if (statusInflicter[p2Slot]) {
-			creditedP1Slot = statusInflicter[p2Slot];
+			const fallbackSlot = lastAttackerSlot[p2Slot] ?? lastAnyP1Slot;
+			killerTeamIdx = fallbackSlot ? p1SlotToTeamIdx[fallbackSlot] : undefined;
+		} else if (statusInflicter[p2Slot] !== undefined) {
+			killerTeamIdx = statusInflicter[p2Slot];
 		} else {
 			const residualKey = Object.keys(residualInflicter).find(k => k.startsWith(`${p2Slot}:`));
 			if (residualKey) {
-				creditedP1Slot = residualInflicter[residualKey];
+				killerTeamIdx = residualInflicter[residualKey];
 			} else {
+				// Inspect the lines just before faint for a [from] tag
 				const faintIdx = logLines.indexOf(line);
 				let fromTag = '';
 				for (let j = faintIdx - 1; j >= Math.max(0, faintIdx - 8); j--) {
-					const dmgLine = logLines[j];
-					if (!dmgLine.startsWith(`|-damage|p2${faintLine[1]}`)) continue;
-					const fromMatch = /\[from\] (?:\[of\] [^|]+\|)?(.+)$/.exec(dmgLine);
+					const dl = logLines[j];
+					if (!dl.startsWith(`|-damage|p2${faintLine[1]}`)) continue;
+					const fromMatch = /\[from\] (?:\[of\] [^|]+\|)?(.+)$/.exec(dl);
 					if (fromMatch) { fromTag = fromMatch[1].trim(); break; }
 				}
 				if (fromTag) {
 					const hazardMatch = /^(?:Stealth Rock|Spikes|Toxic Spikes|Sticky Web)$/.exec(fromTag);
 					if (hazardMatch) {
-						creditedP1Slot = hazardSetter[toID(hazardMatch[0])] ?? lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
+						killerTeamIdx = hazardSetter[toID(hazardMatch[0])];
 					} else if (/^(?:Sandstorm|Hail|Snow)$/.test(fromTag)) {
 						const wKey = fromTag.toLowerCase();
-						creditedP1Slot = weatherSetByP1[wKey] ? (lastDirectAttacker[p2Slot] ?? lastAnyP1Slot) : undefined;
-					} else if (/^(?:recoil|Life Orb|Black Sludge|crash)$/i.test(fromTag)) {
-						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
-					} else if (RESIDUAL_FROM_TAGS[fromTag]) {
-						creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
+						if (weatherSetByP1[wKey]) {
+							const fallbackSlot = lastAttackerSlot[p2Slot] ?? lastAnyP1Slot;
+							killerTeamIdx = fallbackSlot ? p1SlotToTeamIdx[fallbackSlot] : undefined;
+						}
+					} else if (/^(?:recoil|Life Orb|Black Sludge|crash)$/i.test(fromTag) || RESIDUAL_FROM_TAGS[fromTag]) {
+						const fallbackSlot = lastAttackerSlot[p2Slot] ?? lastAnyP1Slot;
+						killerTeamIdx = fallbackSlot ? p1SlotToTeamIdx[fallbackSlot] : undefined;
 					}
 				}
-				if (!creditedP1Slot) creditedP1Slot = lastDirectAttacker[p2Slot] ?? lastAnyP1Slot;
+				if (killerTeamIdx === undefined) {
+					const fallbackSlot = lastAttackerSlot[p2Slot] ?? lastAnyP1Slot;
+					killerTeamIdx = fallbackSlot ? p1SlotToTeamIdx[fallbackSlot] : undefined;
+				}
 			}
 		}
 
-		if (!creditedP1Slot) continue;
-		const teamIdx = p1SlotToTeamIdx[creditedP1Slot];
-		if (teamIdx === undefined) continue;
-		if (p1TeamFainted.has(teamIdx)) continue;
+		// Build the set of participants: everyone who was ever sent out against this enemy + the killer
+		const participants = new Set(participatedAgainst[p2Slot] ?? []);
+		if (killerTeamIdx !== undefined) participants.add(killerTeamIdx);
 
-		const playerLevel = state.team[teamIdx]?.level ?? 1;
-		const exp = calcKillExp(enemySpecies, enemyLevel, playerLevel, luckyCharmActive, isBossFloor);
-		expMap.set(teamIdx, (expMap.get(teamIdx) ?? 0) + exp);
+		// Remove fainted participants (they get nothing)
+		for (const idx of p1TeamFainted) participants.delete(idx);
+
+		if (!participants.size) continue;
+
+		// Award each participant their own full exp calculation based on their level
+		for (const teamIdx of participants) {
+			const mon = state.team[teamIdx];
+			if (!mon) continue;
+			const exp = calcKillExp(enemySpecies, enemyLevel, mon.level, luckyCharmActive, isBossFloor);
+			expMap.set(teamIdx, (expMap.get(teamIdx) ?? 0) + exp);
+		}
 	}
 
 	return expMap;
