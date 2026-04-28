@@ -737,7 +737,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `All Pok&eacute;mon on a team must share a color.`,
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', 'Same Color Clause'],
-		banlist: ['Ogerpon-Wellspring'],
+		banlist: ['Ogerpon-Wellspring', 'Regieleki'],
 		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
 	},
 	{
