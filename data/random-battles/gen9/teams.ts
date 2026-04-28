@@ -2172,7 +2172,6 @@ export class RandomTeams {
 			}
 			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
-				console.log(species.changesFrom);
 				// We don't want to revert Arceus and Silvally to normal type in monotype
 				if (isMonotype && ["Arceus", "Silvally"].includes(species.changesFrom))
 					item = this.sample(species.requiredItems);
