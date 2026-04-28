@@ -14,7 +14,7 @@
  */
 
 import { Utils } from '../../../lib';
-import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, TMItem, genItem, rollShop } from './pokerogue-items';
+import { SHOP_ITEMS, ROTATIONAL_ITEM_POOL, type TMItem, genItem, rollShop } from './pokerogue-items';
 import { type PokemonEntry, type PokeRogueState, type StatusCondition } from './pokerogue-types';
 import { getState, setState, deleteState } from './pokerogue-state';
 import {
@@ -505,25 +505,119 @@ export const commands: Chat.ChatCommands = {
 			const state = getState(user.id);
 			if (!state) return;
 			const v = target.trim() as any;
-			if (['main', 'shop', 'top', 'bag', 'resetconfirm'].includes(v)) {
+			if (['main', 'shop', 'top', 'bag', 'resetconfirm', 'devtools'].includes(v)) {
 				(state as any).view = v;
 				setState(user.id, state);
 				refreshGamePage(user);
 			}
 		},
 
+		dev(target, room, user) {
+			this.checkCan('lock');
+			const state = getState(user.id);
+			if (!state) return this.errorReply("No active run to modify.");
+
+			const args = target.split(' ').map(s => s.trim());
+			const action = args[0];
+
+			if (action === 'addbp') {
+				const amt = parseInt(args[1]);
+				if (!isNaN(amt)) {
+					state.battlePoints = (state.battlePoints ?? 0) + amt;
+					state.notification = `Added ${amt} BP!`;
+				}
+			} else if (action === 'floor') {
+				if (args[1] === 'next') {
+					state.floor++;
+					state.notification = `Advanced to Floor ${state.floor}!`;
+				} else if (args[1] === 'boss') {
+					state.floor = Math.ceil(state.floor / 10) * 10;
+					state.notification = `Advanced to Boss Floor ${state.floor}!`;
+				}
+			} else if (action === 'streak') {
+				const amt = parseInt(args[1]);
+				if (!isNaN(amt)) {
+					state.streaksWon = Math.max(0, (state.streaksWon ?? 0) + amt);
+					state.notification = `Streak changed by ${amt}!`;
+				}
+			} else if (action === 'team') {
+				if (args[1] === 'heal') {
+					for (const mon of state.team) {
+						mon.currentHp = 100;
+						delete mon.status;
+						fullHealPP(mon);
+					}
+					state.notification = `Team fully healed!`;
+				} else if (args[1] === 'level') {
+					const lvls = parseInt(args[2]);
+					if (!isNaN(lvls)) {
+						for (const mon of state.team) {
+							mon.level = Math.min(999, mon.level + lvls);
+							mon.exp = expForLevel(mon.level, mon.expType);
+						}
+						state.notification = `Team leveled up by ${lvls}!`;
+					}
+				} else if (args[1] === 'exp') {
+					const expAmt = parseInt(args[2]);
+					if (!isNaN(expAmt)) {
+						for (const mon of state.team) {
+							const { evolved, oldLevel } = applyExpAndLevelUp(mon, expAmt);
+							processLevelUp(mon, oldLevel, mon.species, evolved, state.team.indexOf(mon), state);
+						}
+						state.notification = `Gave ${expAmt} EXP to team!`;
+					}
+				}
+			} else if (action === 'keyitem') {
+				const itemName = args.slice(1).join(' ');
+				if (itemName) {
+					state.keyItems = state.keyItems ?? [];
+					if (!state.keyItems.includes(itemName)) {
+						state.keyItems.push(itemName);
+						state.notification = `Added Key Item: ${itemName}!`;
+					}
+				}
+			} else if (action === 'wipe') {
+				deleteState(user.id);
+				this.sendReply("Data wiped.");
+				return this.parse('/pokerogue start');
+			} else if (action === 'prompt') {
+				const sub = args[1];
+				if (sub === 'addmon') {
+					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue addmon {mon}, {lvl}">Add Pokémon (Name): <input name="mon" type="text" placeholder="Pikachu" required> Level: <input name="lvl" type="number" value="5" min="1" max="999" style="width:50px"> <button type="submit" class="button">Add</button></form>`);
+					return;
+				} else if (sub === 'giveitem') {
+					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue dev giveitem {item}">Give Item (Name): <input name="item" type="text" placeholder="Leftovers" required> <button type="submit" class="button">Give</button></form>`);
+					return;
+				}
+			} else if (action === 'giveitem') {
+				const itemName = args.slice(1).join(' ');
+				const dexItem = Dex.items.get(itemName);
+				if (dexItem.exists) {
+					if (state.team.length) {
+						state.team[0].heldItem = dexItem.id; // Just give to lead for simplicity via command
+						state.notification = `Gave ${dexItem.name} to ${state.team[0].species}!`;
+					}
+				} else {
+					return this.errorReply(`Item ${itemName} not found.`);
+				}
+			}
+
+			setState(user.id, state);
+			refreshGamePage(user);
+		},
+
 		battle(target, room, user) {
 			const state = getState(user.id);
 			if (!state || state.gameOver) return this.errorReply("The run is over. Start a new run first.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-			state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
 				return this.errorReply("Resolve all pending choices before starting a battle.");
 			}
 
 			if (!state.team.some(m => (m.currentHp ?? 100) > 0)) {
 				return this.errorReply("All your Pokémon have fainted! Buy a Revive from the shop before battling.");
 			}
-			
+
 			if (startBattle(user, state)) {
 				(state as any).view = 'main';
 				setState(user.id, state);
@@ -576,7 +670,7 @@ export const commands: Chat.ChatCommands = {
 			setState(user.id, state);
 			refreshGamePage(user);
 		},
-		
+
 		learnmove(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.pendingMoves?.length) return;
@@ -639,7 +733,7 @@ export const commands: Chat.ChatCommands = {
 			if (!state || state.gameOver) return this.errorReply("No active run.");
 			if (state.battleRoomId) return this.errorReply("Can't shop during a battle.");
 			if (state.pendingChoice?.length || state.pendingMoves?.length || state.pendingSwap ||
-			state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
+				state.moveToLearn || state.pendingItemName || state.itemOptions?.length) {
 				return this.errorReply("Resolve pending choices first.");
 			}
 
@@ -681,7 +775,7 @@ export const commands: Chat.ChatCommands = {
 				if (isRotational) state.rotationalShop = state.rotationalShop.filter(k => k !== key);
 				state.pendingChoice = pickNewPokemonOptions(state.team, state.floor);
 				state.pendingChoiceType = 'add';
-				state.pendingChoiceFloor = state.floor;   // <-- store current floor for shop packs
+				state.pendingChoiceFloor = state.floor; // <-- store current floor for shop packs
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -721,7 +815,7 @@ export const commands: Chat.ChatCommands = {
 
 			if (['healHP', 'healPP', 'revive', 'cureStatus'].includes(item.type)) {
 				state.purchasedItem = key;
-				state.pendingConsumableType = item.type as 'healHP' | 'healPP' | 'revive' | 'cureStatus';
+				state.pendingConsumableType = item.type;
 				setState(user.id, state);
 				refreshGamePage(user);
 				return;
@@ -881,9 +975,9 @@ export const commands: Chat.ChatCommands = {
 		useshopitem(target, room, user) {
 			const state = getState(user.id);
 			if (!state?.purchasedItem) return this.errorReply("No item selected.");
-			
+
 			const t = target.trim();
-			
+
 			if (t === 'skip') {
 				delete state.purchasedItem;
 				delete state.pendingConsumableType;
@@ -907,14 +1001,13 @@ export const commands: Chat.ChatCommands = {
 				state.battlePoints -= item.cost;
 				let healAmt = 20;
 				switch (item.name) {
-				case 'Potion':       healAmt = 20; break;
+				case 'Potion': healAmt = 20; break;
 				case 'Super Potion': healAmt = 50; break;
 				case 'Hyper Potion': healAmt = 120; break;
-				case 'Max Potion':   healAmt = 100; break;
+				case 'Max Potion': healAmt = 100; break;
 				}
 				mon.currentHp = item.name === 'Max Potion' ? 100 : Math.min(100, hp + healAmt);
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b> restored HP! (${hp}% → ${mon.currentHp}%)`;
-
 			} else if (item.type === 'healPP') {
 				const allFull = (mon.ppLeft ?? []).every((v, i) => {
 					const max = Math.floor((Dex.moves.get(mon.moves[i]).pp ?? 5) * (8 / 5));
@@ -924,7 +1017,6 @@ export const commands: Chat.ChatCommands = {
 				state.battlePoints -= item.cost;
 				fullHealPP(mon);
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s PP was fully restored!`;
-
 			} else if (item.type === 'cureStatus') {
 				if (hp <= 0) return this.errorReply("Can't cure a fainted Pokémon.");
 				if (!mon.status) return this.errorReply("That Pokémon has no status condition.");
@@ -932,7 +1024,6 @@ export const commands: Chat.ChatCommands = {
 				const oldStatus = mon.status;
 				delete mon.status;
 				state.notification = `<b>${Dex.species.get(toID(mon.species)).name}</b>'s ${oldStatus.toUpperCase()} was cured!`;
-
 			} else if (item.type === 'revive') {
 				if (hp > 0) return this.errorReply("That Pokémon hasn't fainted.");
 				state.battlePoints -= item.cost;
@@ -942,7 +1033,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			delete state.purchasedItem;
-			delete state.pendingConsumableType; 
+			delete state.pendingConsumableType;
 			delete state.isRotationalItem;
 			setState(user.id, state);
 			refreshGamePage(user);
@@ -1062,7 +1153,7 @@ export const commands: Chat.ChatCommands = {
 			setState(tId, s);
 			this.sendReply(`Added ${finalSpecies} to ${tId}'s team.`);
 		},
-		
+
 		setfloor(target, room, user) {
 			this.checkCan('lock');
 			let [name, fl] = target.split(',').map(s => s?.trim());
@@ -1124,7 +1215,7 @@ export const pages: Chat.PageTable = {
 		if (!state) return `<div class="pr-popup"><div class="pr-popup-header"><h2>PokéRogue</h2></div><div style="text-align:center;padding:16px"><button name="send" value="/pokerogue start" class="button">Start New Run</button></div></div>`;
 		const v = (state as any).view || 'main';
 		this.title = `PokéRogue - ${v.toUpperCase()}`;
-		return renderGamePage(state);
+		return renderGamePage(state, user);
 	},
 };
 
@@ -1204,8 +1295,8 @@ export const handlers: Chat.Handlers = {
 			if ((state.floor - 1) % 5 === 0) {
 				state.pendingChoice = pickNewPokemonOptions(state.team, prevFloor);
 				state.pendingChoiceType = 'add';
-				state.pendingChoiceFloor = prevFloor;   // <-- store the floor the choice is for
-				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
+				state.pendingChoiceFloor = prevFloor; // <-- store the floor the choice is for
+				state.notification = (state.notification ?? '') + `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
 			}
 			state.displayName = Users.get(match.userId)?.name || match.userId;
 
@@ -1222,7 +1313,6 @@ export const handlers: Chat.Handlers = {
 				state.pendingChoiceType = 'add';
 				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
 			}
-
 		} else {
 			delete state.pendingMoves;
 			delete state.pendingSwap;
@@ -1232,7 +1322,7 @@ export const handlers: Chat.Handlers = {
 			delete state.purchasedItem;
 
 			if ((state.keyItems ?? []).includes('Revive')) {
-				state.keyItems = state.keyItems!.filter(k => k !== 'Revive');
+				state.keyItems = state.keyItems.filter(k => k !== 'Revive');
 				state.notification = (state.notification ?? '') +
 					'<br><b>Revive used!</b> Retrying Floor ' + String(match.floor);
 			} else {
