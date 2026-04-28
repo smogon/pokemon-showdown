@@ -583,7 +583,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (action === 'prompt') {
 				const sub = args[1];
 				if (sub === 'addmon') {
-					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue addmon , {mon}, {lvl}">Add Pokémon (Name): <input name="mon" type="text" placeholder="Pikachu" required> Level: <input name="lvl" type="number" value="5" min="1" max="999" style="width:50px"> <button type="submit" class="button">Add</button></form>`);
+					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue addmon {mon}, {lvl}">Add Pokémon (Name): <input name="mon" type="text" placeholder="Pikachu" required> Level: <input name="lvl" type="number" value="5" min="1" max="999" style="width:50px"> <button type="submit" class="button">Add</button></form>`);
 					return;
 				} else if (sub === 'giveitem') {
 					user.sendTo(room?.roomid || 'lobby', `|html|<form data-submitsend="/pokerogue dev giveitem {item}">Give Item (Name): <input name="item" type="text" placeholder="Leftovers" required> <button type="submit" class="button">Give</button></form>`);
@@ -1307,12 +1307,6 @@ export const handlers: Chat.Handlers = {
 			state.timesRerolled = 0;
 			const pseudoTeam = state.team.map(m => ({ species: Dex.species.get(toID(m.species)).name } as PokemonSet));
 			state.rotationalShop = rollShop(pseudoTeam, state.streaksWon ?? 0);
-
-			if ((state.floor - 1) % 5 === 0) {
-				state.pendingChoice = pickNewPokemonOptions(state.team, prevFloor);
-				state.pendingChoiceType = 'add';
-				state.notification += `<br><b style="color:#c4a8ff">Milestone! Choose a new Pokémon to add!</b>`;
-			}
 		} else {
 			delete state.pendingMoves;
 			delete state.pendingSwap;
