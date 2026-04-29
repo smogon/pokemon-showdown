@@ -1,4 +1,3 @@
-import { Dex } from '../../../sim/dex';
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	init() {
@@ -114,9 +113,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "morelull").learnset.nightmare = ["9L1"];
 		this.modData("Learnsets", "morelull").learnset.scorchingsands = ["9L1"];
 		delete this.modData('Learnsets', 'morelull').learnset.spore;
-	
-	// Slate 2
 
+		// Slate 2
 		// Houndour
 		this.modData("Learnsets", "houndour").learnset.knockoff = ["9L1"];
 		this.modData("Learnsets", "houndour").learnset.slackoff = ["9L1"];

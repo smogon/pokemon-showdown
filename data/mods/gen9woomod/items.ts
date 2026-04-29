@@ -84,27 +84,27 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		itemUser: ["Farfetch'd"],
 	},
 	dragonairite: {
- 		name: "Dragonairite",
+		name: "Dragonairite",
 		megaStone: { "Dragonair": "Dragonair-Mega" },
- 		itemUser: ["Dragonair"],
+		itemUser: ["Dragonair"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 	},
 	amaurite: {
- 		name: "Amaurite",
+		name: "Amaurite",
 		megaStone: { "Amaura": "Amaura-Mega" },
- 		itemUser: ["Amaura"],
+		itemUser: ["Amaura"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
- 	},
+	},
 	superpikachumegastone: {
- 		name: "Super Pikachu Mega Stone",
+		name: "Super Pikachu Mega Stone",
 		megaStone: { "Pikachu": "Pikachu-Mega" },
- 		itemUser: ["Pikachu"],
+		itemUser: ["Pikachu"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
- 	},
+	},
 };

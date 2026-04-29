@@ -5,14 +5,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-ability', pokemon, 'Vessel of Sigma');
 		},
 		onAnyModifySpe(spe, source, target, move) {
-			const abilityHolder = this.effectState.target;
+			// const abilityHolder = this.effectState.target;
 			if (source.hasAbility('Vessel of Sigma')) return;
 			this.debug('Vessel of Sigma Spe drop');
 			return this.chainModify(0.75);
 		},
 		flags: {},
 		name: "Vessel of Sigma",
-		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75."
+		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75.",
 	},
 	tacticalretreat: {
 		onAfterMove(source, target, move) {
@@ -26,15 +26,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	forbiddenjuice: {
 		onStart(pokemon) {
 			if (pokemon.side.sideConditions['toxicspikes']) {
-				this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+				this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 				pokemon.side.removeSideCondition('toxicspikes');
-				this.boost({def: 1});
+				this.boost({ def: 1 });
 			}
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Poison') {
-				if (!this.boost({def: 1})) {
+				if (!this.boost({ def: 1 })) {
 					this.add('-immune', target, '[from] ability: Forbidden Juice');
 				}
 				return null;
@@ -51,7 +51,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (move.category === 'Special') {
 				if (!target.hasType('Flying')) return;
-				let newType = target.getTypes().filter(t => t !== 'Flying');
+				const newType = target.getTypes().filter(t => t !== 'Flying');
 				if (target.setType(newType)) {
 					this.add('-start', target, 'typechange', newType.join('/'), '[silent]');
 				}
@@ -85,7 +85,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Protective Aura",
 		shortDesc: "This Pokemon takes 0.5x damage from Ghost/Dark attacks. Immune to confusion/Taunt/Heal Block/Torment.",
 	},
@@ -243,24 +243,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			let newType = '';
 			switch (pokemon.item) {
-				case 'hearthflamemask':
-					newType = 'Fire';
-					break;
-				case 'wellspringmask':
-					newType = 'Water';
-					break;
-				case 'cornerstonemask':
-					newType = 'Rock';
-					break;
-				case 'stormbringermask':
-					newType = 'Electric';
-					break;
-				case 'leek':
-					newType = 'Grass';
-					break;
+			case 'hearthflamemask':
+				newType = 'Fire';
+				break;
+			case 'wellspringmask':
+				newType = 'Water';
+				break;
+			case 'cornerstonemask':
+				newType = 'Rock';
+				break;
+			case 'stormbringermask':
+				newType = 'Electric';
+				break;
+			case 'leek':
+				newType = 'Grass';
+				break;
 			}
 			this.add('-ability', pokemon, 'Masquerade');
-			if(pokemon.addType(newType)) this.add('-start', pokemon, 'typeadd', newType);
+			if (pokemon.addType(newType)) this.add('-start', pokemon, 'typeadd', newType);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Masquerade",
@@ -270,8 +270,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch-in, this Pokemon lowers the Special Attack of adjacent opponents.",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !target.isAdjacent(pokemon)) continue;
+			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Debilitate', 'boost');
 					activated = true;
@@ -344,7 +343,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyAfterSetStatus(status, target, source, effect) {
 			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
 			if (status.id === 'psn' || status.id === 'tox') {
-				this.debug('Poison Puppeteer activated on ' + target);
 				target.addVolatile('confusion');
 			}
 		},
@@ -400,7 +398,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Soothing Presence",
-		shortDesc: "Immune to poison. On switch-in, cures the status of the Pokemon it replaced."
+		shortDesc: "Immune to poison. On switch-in, cures the status of the Pokemon it replaced.",
 	},
 
 	// Unfinished / idk how to
@@ -408,15 +406,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	hoothootability: {
 		onStart(pokemon) {
 			pokemon.addVolatile('ability:normalize');
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasType('Normal') || !pokemon.addType('Normal')) continue;
-				this.add('-start', pokemon, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
+			for (const allMons of this.getAllActive()) {
+				if (allMons.hasType('Normal') || !allMons.addType('Normal')) continue;
+				this.add('-start', allMons, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
 			}
 		},
 		onUpdate(pokemon) {
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasType('Normal') || !pokemon.addType('Normal')) continue;
-				this.add('-start', pokemon, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
+			for (const allMons of this.getAllActive()) {
+				if (allMons.hasType('Normal') || !allMons.addType('Normal')) continue;
+				this.add('-start', allMons, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
 			}
 		},
 		flags: {},
@@ -428,7 +426,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!move || move.effectType !== 'Move' || source === target) return;
 			const stats: BoostID[] = [];
 			let stat: BoostID;
-			//console.log(target);
+			// console.log(target);
 			for (stat in target.boosts) {
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);

@@ -339,7 +339,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots') || pokemon.side.getSlotCondition(pokemon, 'phantomchute')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
 		},
 	},
@@ -382,7 +382,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('forbiddenjuice') ||
 					pokemon.side.getSlotCondition(pokemon, 'phantomchute')) {
@@ -459,7 +459,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 		type: "Ice",
-		shortDesc: "Freezes the target."
+		shortDesc: "Freezes the target.",
 	},
 	woopout: {
 		name: "Woop Out",
@@ -510,7 +510,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					category: "Physical",
 					priority: -6,
 					flags: { protect: 1 },
-					onTryHit(target, source) {
+					onTryHit() {
 						if (source.fainted || !source.isActive) return false;
 					},
 					ignoreImmunity: false,
@@ -538,5 +538,5 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				spd: -1,
 			},
 		},
-	}
+	},
 };
