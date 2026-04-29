@@ -2908,7 +2908,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const ruleTable = Dex.formats.getRuleTable(format);
-			if (rule.hasValue) {
+			if (rule.value!.type !== 'flag') {
 				const enabled = args[`${id}-enabled`][0] || "";
 				val = args[`${id}-val`][0] || "";
 				if (enabled) {
@@ -3191,7 +3191,7 @@ export const pages: Chat.PageTable = {
 			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`,
 		];
 		for (const rule of rules) {
-			if (rule.hasValue) continue;
+			if (rule.value!.type !== 'flag') continue;
 			const desc = rule.desc ? rule.desc : "No description.";
 			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
@@ -3204,7 +3204,7 @@ export const pages: Chat.PageTable = {
 			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`
 		);
 		for (const rule of rules) {
-			if (!rule.hasValue) continue;
+			if (rule.value!.type === 'flag') continue;
 			const desc = rule.desc ? rule.desc : "No description.";
 			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
@@ -3265,7 +3265,7 @@ export const pages: Chat.PageTable = {
 		buf += `<p>Note that if you do not explicitly check a mod to include it, it will not be included in the final output.</p>`;
 		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
 		for (const rule of rules) {
-			if (rule.hasValue) continue;
+			if (rule.value!.type !== 'flag') continue;
 			const desc = rule.desc || "No description.";
 			const id = toID(rule.name);
 			buf += `<tr>`;
@@ -3279,7 +3279,7 @@ export const pages: Chat.PageTable = {
 		buf += `Click the "enabled" checkbox and fill in a value to enable a rule - uncheck the box to remove the rule.`;
 		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
 		for (const rule of rules) {
-			if (!rule.hasValue) continue;
+			if (rule.value!.type === 'flag') continue;
 			const desc = rule.desc || "No description.";
 			buf += `<tr>`;
 			const id = toID(rule.name);

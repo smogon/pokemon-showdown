@@ -2280,7 +2280,7 @@ export class TeamValidator {
 	}
 
 	validateMoves(
-		species: Species, moves: string[], setSources: PokemonSources, set?: Partial<PokemonSet>,
+		species: Species, moves: string[], setSources: PokemonSources, set: Partial<PokemonSet>,
 		name: string = species.name, moveLegalityWhitelist: { [k: string]: true | undefined } = {}
 	) {
 		const dex = this.dex;

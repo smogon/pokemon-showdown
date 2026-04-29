@@ -189,10 +189,10 @@ export class RandomTeams {
 		this.maxTeamSize = ruleTable.maxTeamSize;
 		this.adjustLevel = ruleTable.adjustLevel;
 		this.maxMoveCount = ruleTable.maxMoveCount;
-		const forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		const forceMonotype = ruleTable.getRuleValue<ID>('forcemonotype')!;
 		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
 			this.dex.types.get(forceMonotype).name : undefined;
-		const forceTeraType = ruleTable.valueRules.get('forceteratype');
+		const forceTeraType = ruleTable.getRuleValue<ID>('forceteratype')!;
 		this.forceTeraType = forceTeraType && this.dex.types.get(forceTeraType).exists ?
 			this.dex.types.get(forceTeraType).name : undefined;
 

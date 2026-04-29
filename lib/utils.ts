@@ -439,6 +439,10 @@ export function bufReadHex(buf: Uint8Array, start = 0, end?: number) {
 	return [...buf.slice(start, end)].map(val => val.toString(16).padStart(2, '0')).join('');
 }
 
+export function assertUnreachable(x: never): never {
+	throw new Error("Expected unreachable path");
+}
+
 export class Multiset<T> extends Map<T, number> {
 	override get(key: T) {
 		return super.get(key) ?? 0;
@@ -464,5 +468,6 @@ export const Utils = {
 	stripHTML, visualize, getString,
 	escapeRegex, formatSQLArray,
 	bufFromHex, bufReadHex, bufWriteHex,
+	assertUnreachable,
 	Multiset,
 };
