@@ -299,7 +299,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 
 	houndour: {
 		learnset: {
-			inherit: true,
 			beatup: ["9L1"],
 			bite: ["9L1"],
 			bodyslam: ["9L1"],
@@ -370,7 +369,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	koffing: {
 		learnset: {
-			inherit: true,
 			acidspray: ["9L1"],
 			assurance: ["9L1"],
 			belch: ["9L1"],
@@ -432,16 +430,8 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			surf: ["9L1"],
 		},
 	},
-	maushold: {
-		learnset: {
-			inherit: true,
-			rockblast: ["9L1"],
-			iciclespear: ["9L1"],
-		},
-	},
 	hakamoo: {
 		learnset: {
-			inherit: true,
 			aerialace: ["9L1"],
 			bodyslam: ["9L1"],
 			breakingswipe: ["9L1"],
@@ -553,7 +543,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	ledyba: {
 		learnset: {
-			inherit: true,
 			acrobatics: ["9L1"],
 			aerialace: ["9L1"],
 			agility: ["9L1"],
@@ -812,7 +801,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	honedge: {
 		learnset: {
-			inherit: true,
 			aerialace: ["9L1"],
 			afteryou: ["9L1"],
 			attract: ["9L1"],
@@ -875,7 +863,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	roselia: {
 		learnset: {
-			inherit: true,
 			absorb: ["9L1"],
 			aromatherapy: ["9L1"],
 			attract: ["9L1"],
@@ -955,7 +942,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	skiploom: {
 		learnset: {
-			inherit: true,
 			acrobatics: ["9L1"],
 			aerialace: ["9L1"],
 			amnesia: ["9L1"],
@@ -1037,7 +1023,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	spritzee: {
 		learnset: {
-			inherit: true,
 			afteryou: ["9L1"],
 			allyswitch: ["9L1"],
 			aromatherapy: ["9L1"],
@@ -1107,7 +1092,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	helioptile: {
 		learnset: {
-			inherit: true,
 			agility: ["9L1"],
 			allyswitch: ["9L1"],
 			attract: ["9L1"],
@@ -1178,16 +1162,8 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			earthpower: ["9L1"],
 		},
 	},
-	jigglypuff: {
-		learnset: {
-			inherit: true,
-			dig: null,
-			subsitute: null
-		}
-	},
 	piplup: {
 		learnset: {
-			inherit: true,
 			aerialace: ["9L1"],
 			agility: ["9L1"],
 			aquaring: ["9L1"],

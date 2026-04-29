@@ -116,8 +116,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DOU",
 	},
 	ditto: {
-		tier: "woober",
-		doublesTier: "dwoober",
+		tier: "Uber",
+		doublesTier: "DOU",
 	},
 	// Slate 2
 	amauramega: {

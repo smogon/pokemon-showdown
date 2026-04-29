@@ -3,7 +3,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		name: "Bellibolt Keychain",
 		shortDesc: "Tadbulb: contact moves lower the target's SpD by 1.",
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!source.baseSpecies.name === 'Tadbulb') return;
+			if (source.baseSpecies.name !== 'Tadbulb') return;
 			this.boost({ spd: -1 }, target, source, null, true);
 		},
 		onTakeItem(item, source) {

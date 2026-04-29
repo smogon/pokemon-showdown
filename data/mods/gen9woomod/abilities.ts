@@ -17,6 +17,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	tacticalretreat: {
 		onAfterMove(source, target, move) {
 			if (!source || !target.hp || !move.totalDamage) return;
+			if (!move.self.boosts) return;
 			if (Object.values(move.self.boosts).some(boost => boost < 0)) source.switchFlag = true;
 		},
 		flags: {},
@@ -202,11 +203,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			const flingable = this.dex.items.all().filter(item => item.fling);
-			pokemon.currentItem = pokemon.item;
+			const currentItem = pokemon.item;
 			const newItem = this.sample(flingable);
 			pokemon.setItem(newItem);
 			this.actions.useMove('fling', pokemon);
-			pokemon.setItem(pokemon.currentItem);
+			pokemon.setItem(currentItem);
 		},
 		flags: {},
 		name: "Magic Bag",
@@ -363,7 +364,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, target, source);
+				this.actions.useMove(newMove, target, { target: source });
 				return null;
 			},
 		},
@@ -372,7 +373,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch: if targeted by a Ground-type attack, take no damage and use the move on the opponent.",
 	},
 	soothingpresence: {
-		onStart(pokemon) {
+		/* onStart(pokemon) { // fix later
 			const last = pokemon.side.lastSwitchedOut;
 			if (last && last !== pokemon && !last.fainted && last.status) {
 				const status = last.status;
@@ -381,7 +382,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-curestatus', last, status, '[from] ability: Soothing Presence');
 			}
 			pokemon.side.lastSwitchedOut = null;
-		},
+		}, */
 		onTryHit(target, source, move) {
 			if (target !== this.effectState.target) return;
 			if (move.type === 'Poison') {
@@ -398,7 +399,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Soothing Presence",
-		shortDesc: "Immune to poison. On switch-in, cures the status of the Pokemon it replaced.",
+		shortDesc: "(Placeholder) Immune to poison. On switch-in, cures the status of the Pokemon it replaced.",
 	},
 
 	// Unfinished / idk how to

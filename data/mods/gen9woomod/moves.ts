@@ -58,7 +58,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const bp = 75 + 15 * allLayers;
 			this.add('-message', `Downtown Slide currently has a BP of ${bp}!`);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
@@ -80,7 +79,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Dragon') return 1;
 		},
-		secondary: null,
 		target: "normal",
 	},
 	bluemoon: {
@@ -98,7 +96,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', pokemon, "Moonblast", target);
 		},
 		drain: [1, 2],
-		secondary: null,
 		target: "normal",
 	},
 	nymblekick: {
@@ -116,9 +113,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', pokemon, "Thunderous Kick", target);
 		},
 		onHit(target, source) {
-			if (target?.effectiveWeather() === 'raindance') this.field.weatherState.duration++;
+			if (target && target.effectiveWeather() === 'raindance') this.field.weatherState.duration++;
 		},
-		secondary: null,
 		target: "normal",
 	},
 	vanilliteattackwithtoomanyeffects: {
@@ -138,7 +134,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, pokemon) {
 			if (pokemon.trySetStatus('brn')) this.field.setWeather('sunnyday');
 		},
-		secondary: null,
 		target: "normal",
 	},
 	starsmash: {
@@ -158,7 +153,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) move.category = 'Special';
 		},
-		secondary: null,
 		target: "normal",
 	},
 	mentalspin: {
@@ -241,7 +235,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		secondary: null,
 		target: "normal",
 	},
 	burialblast: {
@@ -264,7 +257,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 			this.add('-anim', pokemon, "Earth Power", target);
 		},
-		secondary: null,
 		target: "normal",
 	},
 	duoshock: {
@@ -287,7 +279,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!target.addType('Fighting')) return false;
 			this.add('-start', target, 'typeadd', 'Fighting', '[from] move: Duoshock');
 		},
-		secondary: null,
 		target: "normal",
 	},
 	ivycudgel: {
@@ -325,7 +316,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', pokemon, "Draco Meteor", target);
 		},
 		recoil: [33, 100],
-		secondary: null,
 		target: "normal",
 	},
 
@@ -441,7 +431,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			spa: 1,
 			spe: 1,
 		},
-		secondary: null,
 		target: "self",
 		type: "Bug",
 	},
@@ -474,7 +463,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source) {
 			let boostSum = 0;
 			for (const stat in target.boosts) {
-				boostSum += target.boosts[stat as BoostName];
+				boostSum += target.boosts[stat as BoostID];
 			}
 			let layers = 0;
 			if (boostSum > 0) layers = 1;
