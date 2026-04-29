@@ -179,6 +179,7 @@ export const commands: Chat.ChatCommands = {
 	forceroompromote: 'roompromote',
 	forceroomdemote: 'roompromote',
 	silentroompromote: 'roompromote',
+	forcesilentroompromote: 'roompromote',
 	roompromote(target, room, user, connection, cmd) {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
@@ -188,9 +189,9 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help roompromote');
 
 		const force = cmd.startsWith('force');
-		const silent = cmd.startsWith('silent');
 		const users = target.split(',').map(part => part.trim());
 		let nextSymbol = users.pop() as GroupSymbol | 'deauth';
+		const silent = cmd.startsWith('silent') || cmd.startsWith('forcesilent') || nextSymbol === 'deauth';
 		if (nextSymbol === 'deauth') nextSymbol = Users.Auth.defaultSymbol();
 		const nextGroup = Users.Auth.getGroup(nextSymbol);
 
@@ -248,20 +249,20 @@ export const commands: Chat.ChatCommands = {
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
 				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else if (nextSymbol === '#') {
-				if (!silent) {
-					this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
+				if (silent) {
+					this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
 				} else {
-				this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+					this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
 				}
 				const logRoom = Rooms.get(room.settings.isPrivate === true ? 'upperstaff' : 'staff');
 				logRoom?.addByUser(user, `<<${room.roomid}>> ${name} was appointed Room Owner by ${user.name}.`);
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
-				if (!silent) {
-					this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				if (silent) {
+					this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
 				} else {
-				this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+					this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
 				}
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
 				shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
