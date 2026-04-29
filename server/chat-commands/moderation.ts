@@ -216,6 +216,11 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(toPromote);
 			if (!userid) return this.parse('/help roompromote');
 
+			if (silent && nextSymbol === '#') {
+				this.errorReply('You cannot silently appoint Room Owners.');
+				continue;
+			}
+
 			// weird ts bug (?) - 7022
 			// it implicitly is 'any' because it has no annotation and is "is referenced directly or indirectly in its own initializer."
 			// dunno why this happens, but for now we can just cast over it.
@@ -249,11 +254,7 @@ export const commands: Chat.ChatCommands = {
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
 				shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else if (nextSymbol === '#') {
-				if (silent) {
-					this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
-				} else {
-					this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
-				}
+				this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
 				const logRoom = Rooms.get(room.settings.isPrivate === true ? 'upperstaff' : 'staff');
 				logRoom?.addByUser(user, `<<${room.roomid}>> ${name} was appointed Room Owner by ${user.name}.`);
 				this.modlog('ROOM OWNER', userid);
