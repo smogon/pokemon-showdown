@@ -1,0 +1,148 @@
+{
+    "amaura": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Meteor Beam", "Meteor Crash", "Freeze-Dry", "Earth Power", "Calm Mind"],
+			    "abilities": ["Reckless"]
+			}
+        ]
+    },
+    "amauramega": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Ice Beam", "Meteor Crash", "Freeze-Dry", "Earth Power", "Chilly Reception"],
+			    "abilities": ["Snow Warning"]
+			}
+        ]
+    },
+    "anorith": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Stone Axe", "U-turn", "Knock Off", "Rapid Spin", "Wish", "Explosion"],
+			    "abilities": ["LAST CALL"]
+			}
+        ]
+    },
+    "bronzor": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Mental Spin", "Iron Defense", "Body Press", "Iron Head"],
+			    "abilities": ["Iron Barbs"]
+			}
+        ]
+    },
+    "charmander": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Flamethrower", "Flip Turn", "Will-O-Wisp", "Flip Turn"],
+			    "abilities": ["Rain Curse"]
+			}
+        ]
+    },
+    "chingling": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Wish", "Protect", "Psychic Noise", "Volt Switch", "Future Sight"],
+			    "abilities": ["Protective Aura"]
+			}
+        ]
+    },
+    "dragonair": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Blue Moon", "Flamethrower", "Moonlight", "Toxic", "Calm Mind"],
+			    "abilities": ["Dry Skin"]
+			}
+        ]
+    },
+    "dragonairmega": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Blue Moon", "Flamethrower", "Draco Meteor", "Thunderbolt"],
+			    "abilities": ["Dry Skin"]
+			}
+        ]
+    },
+    "elgyem": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Swords Dance", "Duoshock", "Return", "Recover"],
+			    "abilities": ["Pure Power"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Swords Dance", "Duoshock", "Return", "Trick"],
+			    "abilities": ["Pure Power"]
+			}
+        ]
+    },
+    "farfetchd": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Knock Off", "Close Combat", "U-turn"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Night Slash", "Ivy Cudgel", "Brave Bird", "Close Combat"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Close Combat"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Fast Bulky Setup",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Leaf Blade"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Roost"],
+			    "abilities": ["Masquerade"]
+			}
+        ]
+    },
+    "baltoywaterrider": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Agility", "Hydro Pump", "Earth Power", "Ice Beam"],
+			    "abilities": ["As One (Seadra)"]
+			}
+        ]
+    },
+    "baltoygearrider": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Earthquake", "Gear Grind", "Rapid Spin", "Stealth Rock", "Toxic"],
+			    "abilities": ["As One (Klang)"],
+				"teraTypes": ["Ground"]
+			}
+        ]
+    }
+}
