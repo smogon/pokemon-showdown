@@ -2059,6 +2059,24 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			return problems;
 		},
 	},
+	permanentweather: {
+		effectType: 'Rule',
+		name: "Permanent Weather",
+		desc: "Weather effects do not naturally expire.",
+		onBegin() {
+			this.add('rule', 'Permanent Weather: Weather effects will not end naturally')
+		},
+		// hardcoded in sim/field.ts
+	},
+	permanentterrain: {
+		effectType: 'Rule',
+		name: "Permanent Terrain",
+		desc: "Terrain effects do not naturally expire.",
+		onBegin() {
+			this.add('rule', 'Permanent Terrain: Terrain effects will not end naturally')
+		},
+		// hardcoded in sim/field.ts
+	},
 	pickedteamsize: {
 		effectType: 'Rule',
 		name: 'Picked Team Size',

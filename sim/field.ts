@@ -77,7 +77,11 @@ export class Field {
 		}
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting weather without a source`);
-			this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			if (this.battle.ruleTable.has('permanentweather')) {
+				this.weatherState.duration = Infinity;
+			} else {
+				this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			}
 		}
 		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
 			this.weather = prevWeather;
@@ -145,7 +149,11 @@ export class Field {
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
-			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			if (this.battle.ruleTable.has('permanentterrain')) {
+				this.terrainState.duration = Infinity;
+			} else {
+				this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			}
 		}
 		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
 			this.terrain = prevTerrain;
