@@ -2064,7 +2064,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: "Permanent Weather",
 		desc: "Weather effects do not naturally expire.",
 		onBegin() {
-			this.add('rule', 'Permanent Weather: Weather effects will not end naturally')
+			this.add('rule', 'Permanent Weather: Weather effects will not end naturally');
 		},
 		// hardcoded in sim/field.ts
 	},
@@ -2073,7 +2073,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: "Permanent Terrain",
 		desc: "Terrain effects do not naturally expire.",
 		onBegin() {
-			this.add('rule', 'Permanent Terrain: Terrain effects will not end naturally')
+			this.add('rule', 'Permanent Terrain: Terrain effects will not end naturally');
 		},
 		// hardcoded in sim/field.ts
 	},
