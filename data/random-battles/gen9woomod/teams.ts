@@ -688,7 +688,6 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'hakamoo' && role === 'Fast Bulky Setup') return 'Throat Spray';
 		if (species.id === 'gible' && role === 'Wallbreaker') return 'Life Orb';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
-		
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
 			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
