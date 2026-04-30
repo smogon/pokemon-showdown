@@ -651,7 +651,8 @@ export class RandomWMTeams extends RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
-		if (species.id === 'pikachu') return 'Light Ball';
+		if (species.id === 'pikachu' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'pikachu' && role === 'Wallbreaker') return 'Life Orb';
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.id === 'farfetchd') {
 			if (role === 'Setup Sweeper') {
@@ -671,12 +672,23 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'baltoywaterrider') return 'Scope Lens';
 		if (species.id === 'dragonair' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
 		if (species.id === 'elgyem' && role === 'Setup Sweeper') return 'Heavy-Duty Boots';
+		if (species.id === 'jigglypuff' || species.id === 'helioptile') return 'Heavy-Duty Boots';
 		if (species.id === 'elgyem' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'anorith') return 'Focus Sash';
 		if (species.id === 'amaura' && moves.has('meteorbeam')) return 'Power Herb';
-		if (species.id === 'gyarados') return 'Sitrus Berry';
-		if (species.id === 'regieleki') return 'Magnet';
+		if (species.id === 'koffing') return 'Black Sludge';
+		if (species.id === 'hoothoot') return 'Silk Scarf';
+		if (species.id === 'krokorok' && role === 'Fast Support') return 'Focus Sash';
+		if (species.id === 'krokorok' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'nymble' && role === 'Fast Attacker') return 'Life Orb';
+		if (species.id === 'nymble' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'honedge' && role === 'Setup Sweeper') return 'Spell Tag';
+		if (species.id === 'honedge' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'hakamoo' && role === 'Setup Sweeper') return 'Life Orb';
+		if (species.id === 'hakamoo' && role === 'Fast Bulky Setup') return 'Throat Spray';
+		if (species.id === 'gible' && role === 'Wallbreaker') return 'Life Orb';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
+		
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
 			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
@@ -716,7 +728,7 @@ export class RandomWMTeams extends RandomTeams {
 		if (counter.get('Status') && (species.name === 'Latias' || species.name === 'Latios')) return 'Soul Dew';
 		if (species.id === 'scyther' && !isDoubles) return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
 		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
-		if (species.nfe) return 'Eviolite';
+		// if (species.nfe) return 'Eviolite';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}

@@ -124,6 +124,196 @@
 			}
         ]
     },
+    "gible": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Draco Meteor", "Scale Shot", "Earth Power", "Overheat"],
+			    "abilities": ["Perseverance"]
+			},
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Dragon Tail", "Rapid Spin", "Earth Power", "Toxic", "Stealth Rock"],
+			    "abilities": ["Rough Skin"]
+			}
+        ]
+    },
+    "hakamoo": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Bulky Setup",
+			    "movepool": ["Clangorous Soul", "Dragon Pulse", "Flash Cannon", "Focus Blast"],
+			    "abilities": ["Multiscale"]
+			},
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Dragon Dance", "Drain Punch", "Dragon Claw", "Earthquake"],
+			    "abilities": ["Multiscale"]
+			}
+        ]
+    },
+    "golett": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Meteor Beam", "Burial Blast", "Shadow Ball", "Focus Blast"],
+			    "abilities": ["Unburden"]
+			}
+        ]
+    },
+    "helioptile": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Volt Switch", "Glare", "Electro Ball", "Power Gem"],
+			    "abilities": ["Seismic Sensor"]
+			}
+        ]
+    },
+    "honedge": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Aegi Slash", "Iron Head", "Swords Dance", "Close Combat"],
+			    "abilities": ["Slush Rush"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Aegi Slash", "Iron Head", "Pursuit", "Close Combat"],
+			    "abilities": ["Slush Rush"]
+			}
+        ]
+    },
+    "hoothoot": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Synchronoise", "Nasty Plot", "Roost", "Hypnosis"],
+			    "abilities": ["Hoothoot Ability"]
+			}
+        ]
+    },
+    "houndour": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Friendly Fire", "Knock Off", "Slack Off", "Taunt", "Will-O-Wisp"],
+			    "abilities": ["Flash Fire"]
+			}
+        ]
+    },
+    "jigglypuff": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Star Smash", "Wish", "Protect", "Dig", "Spikes"],
+			    "abilities": ["Magic Bag"]
+			}
+        ]
+    },
+    "kartana": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Leaf Blade", "Swords Dance", "Strength Sap", "Knock Off", "Sacred Sword"],
+			    "abilities": ["Supreme Overlord"]
+			}
+        ]
+    },
+    "koffing": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Flip Turn", "Scald", "Sludge Bomb", "Pain Split"],
+			    "abilities": ["Levitate", "Neutralizing Gas"]
+			}
+        ]
+    },
+    "krokorok": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Earthquake", "Ceaseless Edge", "Pursuit", "Knock Off", "Stone Edge"],
+			    "abilities": ["Vessel of Sigma"]
+			},
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Earthquake", "Ceaseless Edge", "Stealth Rock", "Knock Off"],
+			    "abilities": ["Vessel of Sigma"]
+			}
+        ]
+    },
+    "ledyba": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Bug Buzz", "Air Slash", "Ladybug Dance", "Roost", "Ice Beam"],
+			    "abilities": ["Flash Fire"]
+			}
+        ]
+    },
+    "morelull": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Moonblast", "Strength Sap", "Thunder Wave", "Protect", "Giga Drain"],
+			    "abilities": ["Malicious Roots"]
+			}
+        ]
+    },
+    "nymble": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Nymble Kick", "First Impression", "Leech Life", "U-turn"],
+			    "abilities": ["Swift Swim"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Nymble Kick", "First Impression", "Leech Life", "Rain Dance"],
+			    "abilities": ["Swift Swim"]
+			}
+        ]
+    },
+    "pikachu": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Thunderbolt", "Tachyon Cutter", "Volt Switch", "Surf"],
+			    "abilities": ["Regenerator"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Volt Tackle", "Extreme Speed", "Flip Turn", "Fake Out", "Knock Off"],
+			    "abilities": ["Levitate"]
+			},
+        ]
+    },
+    "pikachumega": {
+        "level": 100,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Nasty Plot", "Thunderbolt", "Tachyon Cutter", "Surf"],
+			    "abilities": ["Regenerator"]
+			}
+        ]
+    },
     "baltoywaterrider": {
         "level": 100,
         "sets": [
