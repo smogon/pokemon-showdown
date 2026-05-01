@@ -678,8 +678,8 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'amaura' && moves.has('meteorbeam')) return 'Power Herb';
 		if (species.id === 'koffing') return 'Black Sludge';
 		if (species.id === 'roselia') return 'Black Sludge';
-		if (species.id === 'qwilfishhisui' && role !== 'AV Pivot') return 'Black Sludge';
-		if (species.id === 'wooperpaldea' && role !== 'Bulky Support') return 'Black Sludge';
+		if (species.id === 'qwilfishhisui' && role === 'Fast Attacker') return 'Black Sludge';
+		if (species.id === 'wooperpaldea' && role === 'Bulky Attacker') return 'Black Sludge';
 		if (species.id === 'wooperpaldea' && role === 'Bulky Support') return 'Rocky Helmet';
 		if (species.id === 'hoothoot') return 'Silk Scarf';
 		if (species.id === 'krokorok' && role === 'Fast Support') return 'Focus Sash';
