@@ -162,6 +162,7 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	priorityPokemon: string[];
 	readonly maxTeamSize: number;
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
@@ -185,6 +186,7 @@ export class RandomTeams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -207,7 +209,7 @@ export class RandomTeams {
 				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, role
 			) => {
 				if (
-					counter.get('Dark') < 2 && PRIORITY_POKEMON.includes(species.id) && role === 'Wallbreaker'
+					counter.get('Dark') < 2 && this.priorityPokemon.includes(species.id) && role === 'Wallbreaker'
 				) return true;
 				return !counter.get('Dark');
 			},
@@ -413,7 +415,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || this.priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
 					if (moveType === 'Rock' && abilities.includes('Ancient Body')) counter.add('stab');
@@ -916,7 +918,7 @@ export class RandomTeams {
 		// Enforce STAB priority
 		if (
 			['Bulky Attacker', 'Bulky Setup', 'Wallbreaker', 'Doubles Wallbreaker'].includes(role) ||
-			PRIORITY_POKEMON.includes(species.id)
+			this.priorityPokemon.includes(species.id)
 		) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
@@ -2197,7 +2199,11 @@ export class RandomTeams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
+		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
+		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
+		const type = isMonotype ? this.forceMonotype || this.sample(typePool) : undefined;
+
+		const randomN = this.randomNPokemon(this.maxTeamSize, type, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -2225,8 +2231,13 @@ export class RandomTeams {
 				forme = species.name;
 			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
-				species = dex.species.get(species.changesFrom);
-				forme = species.name;
+				// We don't want to revert Arceus and Silvally to normal type in monotype
+				if (isMonotype && ["Arceus", "Silvally"].includes(species.changesFrom))
+					item = this.sample(species.requiredItems);
+				else {
+					species = dex.species.get(species.changesFrom);
+					forme = species.name;
+				}
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
