@@ -906,7 +906,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		// searchShow: false,
 		ruleset: ['Standard', 'Mega Rayquaza Clause'],
-		banlist: ['Swagger'],
+		banlist: ['Baton Pass', 'Swagger'],
 	},
 	{
 		name: "[Gen 8] 1v1",
