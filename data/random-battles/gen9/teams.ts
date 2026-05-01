@@ -2141,7 +2141,11 @@ export class RandomTeams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
+		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
+		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
+		const type = isMonotype ? this.forceMonotype || this.sample(typePool) : undefined;
+
+		const randomN = this.randomNPokemon(this.maxTeamSize, type, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -2170,8 +2174,13 @@ export class RandomTeams {
 			}
 			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
-				species = dex.species.get(species.changesFrom);
-				forme = species.name;
+				// We don't want to revert Arceus and Silvally to normal type in monotype
+				if (isMonotype && ["Arceus", "Silvally"].includes(species.changesFrom))
+					item = this.sample(species.requiredItems);
+				else {
+					species = dex.species.get(species.changesFrom);
+					forme = species.name;
+				}
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
