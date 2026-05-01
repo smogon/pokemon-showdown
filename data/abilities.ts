@@ -6220,7 +6220,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Cataclysmic Light",
 		rating: 4.5,
-		num: 10078,
+		num: 10079,
 	}, */
 	chakra: { // tested, works as intended
 		onBasePowerPriority: 21,
@@ -6495,7 +6495,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Expiation",
 		rating: 3,
-		num: 10077,
+		num: 10078,
 	}, */
 	ferroflux: { // tested, works as intended
 		onStart(source) {
@@ -6549,7 +6549,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Flytrap",
 		rating: 5,
-		num: 10069,
+		num: 10070,
 	},
 	foil: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
@@ -6593,7 +6593,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Frigid Blaze",
 		rating: 2,
-		num: 10068,
+		num: 10069,
 	}, */
 	galeforce: { // tested, works as intended
 		onStart(source) {
@@ -6604,7 +6604,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10014,
 	},
-	/* geigeraura: { // tested, works as intended
+	geigeraura: { // tested, works as intended
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
@@ -6617,8 +6617,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Geiger Aura",
 		rating: 3,
-		num: 10057,
-	}, */
+		num: 10058,
+	},
 	glacialarmor: { // tested, works as intended
 		onModifyDef(def, pokemon) {
 			if (['hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
@@ -6655,7 +6655,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Heat Haze",
 		rating: 5,
-		num: 10072,
+		num: 10073,
 	}, */
 	hydrophobic: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
@@ -6705,7 +6705,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Ice Armor",
 		rating: 5,
-		num: 10073,
+		num: 10074,
 	}, */
 	incantation: { // tested, works as intended
 		onStart(source) {
@@ -6748,7 +6748,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Intoxicate",
 		rating: 3,
-		num: 10059,
+		num: 10060,
 	}, */
 	machineprecision: { // tested, works as intended
 		onModifyCritRatio(critRatio, source) {
@@ -6821,7 +6821,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Nasty Webbing",
 		rating: 4,
-		num: 10061,
+		num: 10062,
 	}, */
 	/* neutralize: { // tested, works intendedly TODO: remove failure message when using moves that deal damage and set weather
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
@@ -6929,7 +6929,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
 		name: "Neutralize",
 		rating: 4,
-		num: 10074,
+		num: 10075,
 	}, */
 	nottobe: { // incomplete, not tested
 		onAnyFaint(target) {
@@ -7027,7 +7027,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Petrichor",
 		rating: 2.5,
-		num: 10060,
+		num: 10061,
 	}, */
 	poisoncoat: {
 		onDamagingHit(damage, target, source, move) {
@@ -7090,7 +7090,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 10024,
 	},
-	/* powerplumage: { // tested, works as intended
+	powerplumage: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Blurrun' || pokemon.transformed) return;
@@ -7146,7 +7146,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Power Plumage",
 		rating: 5,
 		num: 10056,
-	}, */
+	},
 	powerwithin: { // tested, works as intended
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
@@ -7194,7 +7194,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Relic Soul",
 		rating: 4.5,
-		num: 10075,
+		num: 10076,
 	}, */
 	rockybody: { // tested, works as intended
 		onDamagePriority: 1,
@@ -7340,7 +7340,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Songbird",
 		rating: 0,
-		num: 10067,
+		num: 10068,
 	}, */
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
@@ -7377,7 +7377,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Soul Passage",
 		rating: 2.5,
-		num: 10076,
+		num: 10077,
 	}, */
 	standoff: { // tested, works as intended
 		onStart(source) {
@@ -7680,6 +7680,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Wet and Dry",
 		rating: 1,
-		num: 10056,
+		num: 10057,
 	}, */
 };

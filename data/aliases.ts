@@ -2589,25 +2589,26 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	tarm: "Tarmendoa",
 	quail: "Quailstion",
 	zog: "Kaskazog",
+
+	// formes
+
+	bearvoyancedormant: "Bearvoyance",
+	bearvoyancea: "Bearvoyance-Awakened",
+	bearvoyancemega: "Bearvoyance-Awakened",
 	botnyaklb: "Botnyak",
 	botnyaklr: "Botnyak",
 	botnyaklg: "Botnyak",
 	botnyakdb: "Botnyak",
 	botnyakdr: "Botnyak",
 	botnyakdg: "Botnyak",
-
-	// formes
-
-	snoverhighland: "Snover",
-	abomasnowhighland: "Abomasnow",
-	// droutwet: "Drout",
+	droutwet: "Drout",
 	eecroachsolo: "Eecroach",
 	mosskratlakebloom: "Mosskrat",
 	// tamroastm: "Tamroast",
 	// weepollenm: "Weepollen",
-	bearvoyancedormant: "Bearvoyance",
-	bearvoyancea: "Bearvoyance-Awakened",
-	bearvoyancemega: "Bearvoyance-Awakened",
+
+	abomasnowhighland: "Abomasnow",
+	snoverhighland: "Snover",
 
 	// UBs
 

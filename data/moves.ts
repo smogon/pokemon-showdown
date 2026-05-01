@@ -22580,7 +22580,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Steel",
 	},
-	/* hydrocharge: { // untested
+	hydrocharge: { // untested
 		num: 10080,
 		accuracy: 95,
 		basePower: 100,
@@ -22594,7 +22594,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		target: "any",
 		type: "Water",
-	}, */
+	},
 	icebreak: { // tested, works as intended
 		num: 10050,
 		accuracy: 100,
@@ -23533,23 +23533,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Snooze",
 		pp: 5,
 		priority: 0,
-		flags: { snatch: 1, sound: 1, heal: 1, bypasssub: 1, metronome: 1 },
-		heal: [1, 2],
+		flags: { sound: 1, reflectable: 1, heal: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
+			let success = false;
 			for (const pokemon of this.getAllActive()) {
-				if (
-					!(pokemon.volatiles['protect'] || pokemon.volatiles['banefulbunker'] || pokemon.volatiles['kingsshield'] ||
-						pokemon.volatiles['spikyshield'] || pokemon.side.getSideCondition('matblock') || pokemon.volatiles['comradesarmor'] ||
-						pokemon.volatiles['shockshelter'] || pokemon.volatiles['frostification'] ||
-						pokemon.side.getSideCondition('wideguard'))
-				) {
-					if (!pokemon.status && pokemon.runStatusImmunity('slp') && !pokemon.hasAbility('soundproof')) {
-						pokemon.addVolatile('yawn');
-					}
-				}
+				if (pokemon !== target && !this.runEvent('TryHit', pokemon, source, move)) continue;
+				if (pokemon.status || !pokemon.runStatusImmunity('slp') || !pokemon.addVolatile('yawn', source)) continue;
+				success = true;
 			}
+			if (!success) {
+				this.add('-fail', source);
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
+			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
-		target: "self",
+		target: "normal",
 		type: "Normal",
 	},
 	spectrum: { // tested, works as intended
@@ -23987,7 +23986,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Flying",
 	},
-	/* wrangle: { // tested, works as intended
+	wrangle: { // tested, works as intended
 		num: 10076,
 		accuracy: 95,
 		basePower: 80,
@@ -23999,5 +23998,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'partiallytrapped',
 		target: "normal",
 		type: "Fighting",
-	}, */
+	},
 };

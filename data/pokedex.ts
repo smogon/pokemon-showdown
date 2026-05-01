@@ -11580,10 +11580,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Duosion"],
 		eggGroups: ["Amorphous"],
-		// otherFormes: ["Solosis-Kaskade"],
-		// formeOrder: ["Solosis", "Solosis-Kaskade"],
+		otherFormes: ["Solosis-Kaskade"],
+		formeOrder: ["Solosis", "Solosis-Kaskade"],
 	},
-	/* solosiskaskade: {
+	solosiskaskade: {
 		num: 577,
 		name: "Solosis-Kaskade",
 		baseSpecies: "Solosis",
@@ -11597,7 +11597,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Duosion-Kaskade"],
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	}, */
+	},
 	duosion: { // updated
 		num: 578,
 		name: "Duosion",
@@ -11611,10 +11611,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 32,
 		evos: ["Reuniclus"],
 		eggGroups: ["Amorphous"],
-		// otherFormes: ["Duosion-Kaskade"],
-		// formeOrder: ["Duosion", "Duosion-Kaskade"],
+		otherFormes: ["Duosion-Kaskade"],
+		formeOrder: ["Duosion", "Duosion-Kaskade"],
 	},
-	/* duosionkaskade: {
+	duosionkaskade: {
 		num: 578,
 		name: "Duosion-Kaskade",
 		baseSpecies: "Duosion",
@@ -11630,7 +11630,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Reuniclus-Kaskade"],
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	}, */
+	},
 	reuniclus: { // updated
 		num: 579,
 		name: "Reuniclus",
@@ -11643,10 +11643,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Duosion",
 		evoLevel: 41,
 		eggGroups: ["Amorphous"],
-		// otherFormes: ["Reuniclus-Kaskade"],
-		// formeOrder: ["Reuniclus", "Reuniclus-Kaskade"],
+		otherFormes: ["Reuniclus-Kaskade"],
+		formeOrder: ["Reuniclus", "Reuniclus-Kaskade"],
 	},
-	/* reunicluskaskade: {
+	reunicluskaskade: {
 		num: 579,
 		name: "Reuniclus-Kaskade",
 		baseSpecies: "Reuniclus",
@@ -11662,7 +11662,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Water Stone",
 		eggGroups: ["Amorphous"],
 		gen: 9,
-	}, */
+	},
 	ducklett: { // updated
 		num: 580,
 		name: "Ducklett",
@@ -16082,10 +16082,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 19,
 		color: "Pink",
 		eggGroups: ["Water 2"],
-		// otherFormes: ["Bruxish-Kaskade"],
-		// formeOrder: ["Bruxish", "Bruxish-Kaskade"],
+		otherFormes: ["Bruxish-Kaskade"],
+		formeOrder: ["Bruxish", "Bruxish-Kaskade"],
 	},
-	/* bruxishkaskade: {
+	bruxishkaskade: {
 		num: 779,
 		name: "Bruxish-Kaskade",
 		baseSpecies: "Bruxish",
@@ -16098,7 +16098,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Orange",
 		eggGroups: ["Water 2"],
 		gen: 9,
-	}, */
+	},
 	drampa: { // updated
 		num: 780,
 		name: "Drampa",
@@ -22703,7 +22703,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],
 	},
-	/* depuray: {
+	depuray: {
 		num: 10049,
 		name: "Depuray",
 		types: ["Fighting", "Ground"],
@@ -22768,7 +22768,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Flying", "Field"],
 		requiredAbility: "Power Plumage",
 		battleOnly: "Blurrun",
-	}, */
+	},
 	pudet: {
 		num: 10053,
 		name: "Pudet",
@@ -22793,7 +22793,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Pudet",
 		eggGroups: ["Field"],
 	},
-	/* pramblo: {
+	pramblo: {
 		num: 10055,
 		name: "Pramblo",
 		types: ["Fire", "Ground"],
@@ -22857,7 +22857,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 19,
 		color: "Green",
 		eggGroups: ["Field", "Fairy"],
-	}, */
+	},
 	porygonw: {
 		num: 10059,
 		name: "Porygon ω",
@@ -22872,7 +22872,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Amaze-Drive",
 		eggGroups: ["Mineral"],
 	},
-	/* estoe: {
+	estoe: {
 		num: 10060,
 		name: "Estoe",
 		types: ["Psychic", "Poison"],
@@ -22896,7 +22896,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Estoe",
 		eggGroups: ["Human-Like"],
 	},
-	tooburm: {
+	/* tooburm: {
 		num: 10062,
 		name: "Tooburm",
 		types: ["Ground", "Electric"],
