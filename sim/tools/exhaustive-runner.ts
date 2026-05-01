@@ -71,6 +71,7 @@ export class ExhaustiveRunner {
 
 	async run() {
 		const dex = Dex.forFormat(this.format);
+		const format = dex.formats.get(this.format);
 
 		const seed = this.prng.getSeed();
 		const pools = this.createPools(dex);
@@ -80,7 +81,7 @@ export class ExhaustiveRunner {
 		do {
 			this.games++;
 			try {
-				const is4P = dex.formats.get(this.format).gameType === 'multi';
+				const is4P = dex.formats.getRuleTable(format).gameType === 'multi';
 				// We run these sequentially instead of async so that the team generator
 				// and the AI can coordinate usage properly.
 				await new Runner({

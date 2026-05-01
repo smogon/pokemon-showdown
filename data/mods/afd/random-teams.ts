@@ -597,7 +597,7 @@ export class RandomAFDTeams extends RandomTeams {
 		const [afdPool, baseAfdPool] = this.getPokemonPool('', pokemon, false, afdList);
 		const [zaMegaPool, zaBaseMegaPool] = this.getPokemonPool('', pokemon, false, zaMegaList);
 
-		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
+		let leadsRemaining = ruleTable.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			let baseSpecies, species;
 			if (pokemon.length === 0) {

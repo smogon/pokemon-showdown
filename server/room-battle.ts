@@ -180,9 +180,9 @@ export class RoomBattleTimer {
 		this.battle = battle;
 
 		const format = Dex.formats.get(battle.format, true);
-		const hasLongTurns = format.gameType !== 'singles';
-		const isChallenge = (battle.challengeType === 'challenge');
 		const ruleTable = Dex.formats.getRuleTable(format);
+		const hasLongTurns = ruleTable.gameType !== 'singles';
+		const isChallenge = (battle.challengeType === 'challenge');
 		const timerSettings = ruleTable.timer?.[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
@@ -545,17 +545,18 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
+		const ruleTable = Dex.formats.getRuleTable(format);
 		this.title = format.name;
 		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
 		this.format = options.format;
-		this.gameType = format.gameType;
+		this.gameType = ruleTable.gameType;
 		this.challengeType = options.challengeType || 'challenge';
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
-		this.playerCap = format.playerCount;
+		this.playerCap = ruleTable.playerCount;
 
 		this.stream = PM.createStream();
 

@@ -378,7 +378,7 @@ class Ladder extends LadderStore {
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
 			formatTable = {
-				playerCount: Dex.formats.get(formatid).playerCount,
+				playerCount: Dex.formats.getRuleTable(Dex.formats.get(formatid)).playerCount,
 				searches: new Map(),
 			};
 			Ladders.searches.set(formatid, formatTable);
@@ -469,7 +469,7 @@ class Ladder extends LadderStore {
 			return undefined;
 		}
 		const format = Dex.formats.get(formatid);
-		const delayedStart = format.playerCount > players.length ? 'multi' : false;
+		const delayedStart = Dex.formats.getRuleTable(format).playerCount > players.length ? 'multi' : false;
 		return Rooms.createBattle({
 			format: formatid,
 			players,
