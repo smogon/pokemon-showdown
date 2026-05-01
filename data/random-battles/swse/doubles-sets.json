@@ -184,8 +184,13 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Drain Punch", "Mach Punch", "Poison Jab", "U-Turn"],
+                "movepool": ["Drain Punch", "Mach Punch", "Poison Jab", "U-turn"],
                 "abilities": ["Iron Fist"]
+            },
+            {
+                "role": "Doubles Battle Aura Setter",
+                "movepool": ["Focus Punch", "Mach Punch", "Poison Jab", "U-turn", "Protect"],
+                "abilities": ["Stand Off"]
             }
         ]
     },
@@ -195,16 +200,6 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Shadow Fang", "Wild Charge"],
-                "abilities": ["Scrappy"]
-            }
-        ]
-    },
-    "pudet": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Choice Item user",
-                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Wild Charge"],
                 "abilities": ["Scrappy"]
             }
         ]
@@ -306,6 +301,51 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Protect", "Dazzling Gleam", "Psychic", "Shadow Ball", "Calm Mind", "Helping Hand", "Black Hole"],
                 "abilities": ["Dreamer", "Sweet Dreams", "Comatose"]
+            }
+        ]
+    },
+    "vaquamael": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Protect", "Bug Buzz", "Whirlduel", "Hydro Pump", "Parting Shot", "Ice Beam", "Aura Sphere"],
+                "abilities": ["Bubble Helm"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["U-turn", "Bug Buzz", "Whirlduel", "Hydro Pump", "Ice Beam", "Aura Sphere"],
+                "abilities": ["Bubble Helm"]
+            }
+        ]
+    },
+    "kaskazog": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Helping Hand", "Taunt", "Fake Out", "Dazzling Gleam", "Sticky Web", "Muck Volley"],
+                "abilities": ["Prankster", "Poison Coat"]
+            },
+            {
+                "role":"Choice Item user",
+                "movepool": ["Trick", "Dazzling Gleam", "Muck Volley", "U-turn"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "noivern": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Draconic Roar", "Whip Up", "U-turn", "Hyper Voice", "Heat Wave"],
+                "abilities": ["Echolocation"]
+            },
+            {
+                "role":"Doubles Protect",
+                "movepool": ["Protect", "Draconic Roar", "Whip Up", "Boomburst", "Shredding Riff", "Taunt"],
+                "abilities": ["Echolocation", "Malice"]
             }
         ]
     }
