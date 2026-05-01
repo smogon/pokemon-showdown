@@ -892,8 +892,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['[Gen 9] OU OLD', 'Same Color Clause'],
-		banlist: ['Ogerpon-Wellspring'],
-		unbanlist: ['Archaludon', 'Volcarona'],
+		banlist: ['Ogerpon-Wellspring', 'Regieleki'],
+		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
 	},
 	{
 		name: "[Gen 9] National Dex 35 Pokes",
