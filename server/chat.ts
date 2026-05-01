@@ -2487,7 +2487,7 @@ export const Chat = new class {
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
-	getDataMoveHTML(move: Move) {
+	getDataMoveHTML(move: Move, isChampions = false) {
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
 		// encoding is important for the ??? type icon
@@ -2499,7 +2499,8 @@ export const Chat = new class {
 		}
 		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (`${move.accuracy}%`) : '—'}</span> `;
 		const basePP = move.pp || 1;
-		const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
+		let pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
+		if (isChampions) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
 		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
 		buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
