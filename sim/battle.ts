@@ -225,7 +225,7 @@ export class Battle {
 		this.prngSeed = this.prng.startingSeed;
 		this.rated = options.rated || !!options.rated;
 		this.reportExactHP = !!format.debug;
-		this.reportPercentages = this.dex.currentMod === 'champions';
+		this.reportPercentages = false;
 		this.supportCancel = false;
 
 		this.queue = new BattleQueue(this);
