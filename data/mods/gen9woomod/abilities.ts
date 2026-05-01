@@ -334,7 +334,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	honeygather: {
 		inherit: true,
-		shortDesc: "Heals 1/6 max HP at the end of every turn.",
+		shortDesc: "Heals 1/16 max HP at the end of every turn.",
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16);
 		},

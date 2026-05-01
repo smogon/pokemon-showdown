@@ -677,6 +677,10 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'anorith') return 'Focus Sash';
 		if (species.id === 'amaura' && moves.has('meteorbeam')) return 'Power Herb';
 		if (species.id === 'koffing') return 'Black Sludge';
+		if (species.id === 'roselia') return 'Black Sludge';
+		if (species.id === 'qwilfishhisui' && role !== 'AV Pivot') return 'Black Sludge';
+		if (species.id === 'wooperpaldea' && role !== 'Bulky Support') return 'Black Sludge';
+		if (species.id === 'wooperpaldea' && role === 'Bulky Support') return 'Rocky Helmet';
 		if (species.id === 'hoothoot') return 'Silk Scarf';
 		if (species.id === 'krokorok' && role === 'Fast Support') return 'Focus Sash';
 		if (species.id === 'krokorok' && role === 'Wallbreaker') return 'Choice Band';
@@ -687,6 +691,13 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'hakamoo' && role === 'Setup Sweeper') return 'Life Orb';
 		if (species.id === 'hakamoo' && role === 'Fast Bulky Setup') return 'Throat Spray';
 		if (species.id === 'gible' && role === 'Wallbreaker') return 'Life Orb';
+		if (species.id === 'shuppet') return 'Leftovers';
+		if (species.id === 'wailmer' && ability !== 'Poison Heal') return 'Leftovers';
+		if (species.id === 'skiploom') return 'Heavy-Duty Boots';
+		if (species.id === 'spritzee' && role === 'Setup Sweeper') return 'Heavy-Duty Boots';
+		if (species.id === 'spritzee' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'toxelhisui') return 'Rocky Helmet';
+		if (species.id === 'wimpod' && role === 'Wallbreaker') return 'Choice Band';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
@@ -871,43 +882,12 @@ export class RandomWMTeams extends RandomTeams {
 		}
 
 		// hidden power time
-		// Hidden Power Ice IVs
-		if (
-			moves.has('hiddenpower') &&
-			(
-				species.id === 'ninetales' || species.id === 'electrode' || species.id === 'jolteon' || species.id === 'zapdos' ||
-				species.id === 'blastoise' || species.id === 'butterfree' || species.id === 'pikachu' || species.id === 'raichu'
-			)
-		) {
-			ivs.atk = 0;
+		// Hidden Power Rock IVs
+		if (species.id === 'snivy' && moves.has('hiddenpower')) {
+			ivs.atk = 3;
 			ivs.def = 30;
-		}
-
-		// Hidden Power Ground IVs
-		if (
-			moves.has('hiddenpower') && (species.id === 'vileplume' || species.id === 'magneton' || species.id === 'victreebel')
-		) {
-			ivs.atk = 1;
-			ivs.spa = 30;
-			ivs.spd = 30;
-		}
-
-		// Hidden Power Fighting IVs
-		if (
-			moves.has('hiddenpower') &&
-			(species.id === 'persian' || species.id === 'gengar' || species.id === 'exeggutor' || species.id === 'porygon')
-		) {
-			ivs.atk = 1;
-			ivs.def = 30;
-			ivs.spa = 30;
 			ivs.spd = 30;
 			ivs.spe = 30;
-		}
-
-		// Hidden Power Grass IVs
-		if ((species.id === 'vaporeon' || species.id === 'omastar') && moves.has('hiddenpower')) {
-			ivs.atk = 0;
-			ivs.spa = 30;
 		}
 
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
