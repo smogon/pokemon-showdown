@@ -160,6 +160,7 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	priorityPokemon: string[];
 	readonly maxTeamSize: number;
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
@@ -184,6 +185,7 @@ export class RandomTeams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -209,7 +211,7 @@ export class RandomTeams {
 				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
 			) => {
 				if (
-					counter.get('Dark') < 2 && PRIORITY_POKEMON.includes(species.id) && role === 'Wallbreaker'
+					counter.get('Dark') < 2 && this.priorityPokemon.includes(species.id) && role === 'Wallbreaker'
 				) return true;
 				return !counter.get('Dark');
 			},
@@ -419,7 +421,7 @@ export class RandomTeams {
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
 				counter.basePowerMoves.add(move);
-				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || this.priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
 					if (teraType === moveType) counter.add('stabtera');
@@ -841,7 +843,7 @@ export class RandomTeams {
 		// Enforce STAB priority
 		if (
 			['Bulky Attacker', 'Bulky Setup', 'Wallbreaker', 'Doubles Wallbreaker'].includes(role) ||
-			PRIORITY_POKEMON.includes(species.id)
+			this.priorityPokemon.includes(species.id)
 		) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
