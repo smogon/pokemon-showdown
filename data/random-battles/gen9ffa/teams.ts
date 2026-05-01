@@ -80,13 +80,13 @@ const NO_LEAD_POKEMON = [
 // Specific to FFA
 // Spread moves are only enforced as STABs when a non-spread STAB of that type is unavailable
 const SPREAD = [
-	"Acid", "Air Cutter", "Astral Barrage", "Bleakwind Storm", "Blizzard", "Breaking Swipe", "Brutal Swing",
-	"Bulldoze", "Burning Jealousy", "Clanging Scales", "Dazzling Gleam", "Diamond Storm", "Disarming Voice", "Discharge",
-	"Dragon Energy", "Earthquake", "Electroweb", "Eruption", "Explosion", "Fiery Wrath", "Glacial Lance", "Glaciate",
-	"Heat Wave", "Hyper Voice", "Icy Wind", "Incinerate", "Lava Plume", "Make It Rain", "Matcha Gotcha", "Misty Explosion",
-	"Mortal Spin", "Muddy Water", "Origin Pulse", "Overdrive", "Parabolic Charge", "Petal Blizzard", "Powder Snow",
-	"Precipice Blades", "Razor Leaf", "Relic Song", "Rock Slide", "Sandsear Storm", "Self-Destruct", "Sludge Wave", "Snarl",
-	"Sparkling Aria", "Springtide Storm", "Struggle Bug", "Surf", "Swift", "Twister", "Water Spout", "Wildbolt Storm",
+	"acid", "aircutter", "astralbarrage", "bleakwindstorm", "blizzard", "breakingswipe", "brutalswing",
+	"bulldoze", "burningjealousy", "clangingscales", "dazzlinggleam", "diamondstorm", "disarmingvoice", "discharge",
+	"dragonenergy", "earthquake", "electroweb", "eruption", "explosion", "fierywrath", "glaciallance", "glaciate",
+	"heatwave", "hypervoice", "icywind", "incinerate", "lavaplume", "makeitrain", "matchagotcha", "mistyexplosion",
+	"mortalspin", "muddywater", "originpulse", "overdrive", "paraboliccharge", "petalblizzard", "powdersnow",
+	"precipiceblades", "razorleaf", "relicsong", "rockslide", "sandsearstorm", "selfdestruct", "sludgewave", "snarl",
+	"sparklingaria", "springtidestorm", "strugglebug", "surf", "swift", "twister", "waterspout", "wildboltstorm",
 ];
 
 export class RandomFFATeams extends RandomTeams {
@@ -94,6 +94,7 @@ export class RandomFFATeams extends RandomTeams {
 		super(format, prng);
 
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		// Overwrite enforcementcheckers where needed here
 		this.moveEnforcementCheckers['Grass'] = (movePool, moves, abilities, types, counter, species) => (
@@ -363,7 +364,7 @@ export class RandomFFATeams extends RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (role === 'Wallbreaker' || PRIORITY_POKEMON.includes(species.id)) {
+		if (role === 'Wallbreaker' || this.priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -396,8 +397,7 @@ export class RandomFFATeams extends RandomTeams {
 			// Don't enforce spread STAB if non-spread STAB is available
 			const nonSpreadSTAB = stabMoves.filter(s => !SPREAD.includes(s));
 			if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
-			while (runEnforcementChecker(type)) {
-				if (!stabMoves.length) break;
+			while (stabMoves.length && runEnforcementChecker(type)) {
 				const moveid = this.sampleNoReplace(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);

@@ -158,6 +158,10 @@ describe("New set format (slow)", () => {
 			filename: "gen9cap/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
+		"gen9freeforallrandombattle": {
+			filename: "gen9ffa/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner"],
+		},
 	};
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
@@ -167,63 +171,78 @@ describe("New set format (slow)", () => {
 		const rounds = 100;
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
+			const problems = [];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = dex.species.get(id);
-				assert(species.exists, `In ${format}, misspelled species ID: ${id}`);
+				if (!species.exists) problems.push(`misspelled species ID: ${id}`);
 				assert(Array.isArray(sets.sets));
 				for (const set of sets.sets) {
-					assert(validRoles.includes(set.role), `In ${format}, set for ${species.name} has invalid role: ${set.role}`);
+					if (!validRoles.includes(set.role)) problems.push(`set for ${species.name} has invalid role: ${set.role}`);
 					for (const move of set.movepool) {
 						const dexMove = dex.moves.get(move);
-						assert(dexMove.exists, `In ${format}, ${species.name} has invalid move: ${move}`);
+						if (!dexMove.exists) problems.push(`${species.name} has invalid move: ${move}`);
 						// Old gens have moves in id form, currently.
 						if (genNum === 9) {
-							assert.equal(move, dexMove.name, `In ${format}, ${species.name} has misformatted move: ${move}`);
+							if (move !== dexMove.name) problems.push(`${species.name} has misformatted move: ${move}`);
 						} else {
-							assert(move === dexMove.id || move.startsWith('hiddenpower'), `In ${format}, ${species.name} has misformatted move: ${move}`);
+							if (!(move === dexMove.id || move.startsWith('hiddenpower'))) {
+								problems.push(`${species.name} has misformatted move: ${move}`);
+							}
 						}
-						assert(validateLearnset(dexMove, { species }, 'ubers', `gen${genNum}`), `In ${format}, ${species.name} can't learn ${move}`);
+						if (!validateLearnset(dexMove, { species }, 'ubers', `gen${genNum}`)) {
+							problems.push(`${species.name} can't learn ${move}`);
+						}
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
-						assert(set.movepool[i + 1] > set.movepool[i], `In ${format}, ${species.name} movepool should be sorted alphabetically`);
+						if (!set.movepool[i + 1] > set.movepool[i]) {
+							problems.push(`${species.name} movepool should be sorted alphabetically`);
+						}
 					}
 					if (genNum >= 3) {
-						assert(set.abilities, `In ${format}, ${set.abilities} has no abilities`);
+						if (!set.abilities) problems.push(`${set.abilities} has no abilities`);
 						for (const ability of set.abilities) {
 							const dexAbility = dex.abilities.get(ability);
-							assert(dexAbility.exists, `In ${format}, ${species.name} has invalid ability: ${ability}`);
+							if (!dexAbility.exists) problems.push(`${species.name} has invalid ability: ${ability}`);
 							// Mega/Primal Pokemon have abilities from their base formes
 							const allowedAbilities = new Set(Object.values((species.battleOnly && !species.requiredAbility) ? dex.species.get(species.battleOnly).abilities : species.abilities));
 							if (species.unreleasedHidden) allowedAbilities.delete(species.abilities.H);
-							assert(allowedAbilities.has(ability), `In ${format}, ${species.name} can't have ${ability}`);
+							if (!allowedAbilities.has(ability)) problems.push(`${species.name} can't have ${ability}`);
 						}
 						for (let i = 0; i < set.abilities.length - 1; i++) {
-							assert(set.abilities[i + 1] > set.abilities[i], `In ${format}, ${species.name} abilities should be sorted alphabetically`);
+							if (!set.abilities[i + 1] > set.abilities[i]) {
+								problems.push(`${species.name} abilities should be sorted alphabetically`);
+							}
 						}
 					}
 					if (genNum === 9) {
-						assert(set.teraTypes, `In ${format}, ${species.name} has no Tera Types`);
+						if (!set.teraTypes) problems.push(`${species.name} has no Tera Types`);
 						for (const type of set.teraTypes) {
 							const dexType = dex.types.get(type);
-							assert(dexType.exists, `In ${format}, ${species.name} has invalid Tera Type: ${type}`);
-							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Tera Type: ${type}`);
+							if (!dexType.exists) problems.push(`${species.name} has invalid Tera Type: ${type}`);
+							if (type !== dexType.name) problems.push(`${species.name} has misformatted Tera Type: ${type}`);
 						}
 						for (let i = 0; i < set.teraTypes.length - 1; i++) {
-							assert(set.teraTypes[i + 1] > set.teraTypes[i], `In ${format}, ${species.name} teraTypes should be sorted alphabetically`);
+							if (!set.teraTypes[i + 1] > set.teraTypes[i]) {
+								problems.push(`${species.name} teraTypes should be sorted alphabetically`);
+							}
 						}
 					}
 					if (set.preferredTypes) {
 						for (const type of set.preferredTypes) {
 							const dexType = dex.types.get(type);
-							assert(dexType.exists, `In ${format}, ${species.name} has invalid Preferred Type: ${type}`);
-							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Preferred Type: ${type}`);
+							if (!dexType.exists) problems.push(`${species.name} has invalid Preferred Type: ${type}`);
+							if (type !== dexType.name) problems.push(`${species.name} has misformatted Preferred Type: ${type}`);
 						}
 						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
-							assert(set.preferredTypes[i + 1] > set.preferredTypes[i], `In ${format}, ${species.name} preferredTypes should be sorted alphabetically`);
+							if (!set.preferredTypes[i + 1] > set.preferredTypes[i]) {
+								problems.push(`${species.name} preferredTypes should be sorted alphabetically`);
+							}
 						}
 					}
 				}
 			}
+
+			assert.false(!!problems.length, `In ${format},\n\t${problems.join('\n\t')}`);
 		});
 		it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 			testTeam({ format, rounds }, team => {

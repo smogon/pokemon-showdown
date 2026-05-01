@@ -2063,7 +2063,7 @@ export class Pokemon {
 		let shared;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
+		} else if (this.battle.dex.currentMod === 'champions') {
 			// Pokemon Champions mechanics
 			const percentage = Math.floor(100 * this.hp / this.maxhp) || 1;
 			shared = `${percentage}/100`;
@@ -2072,6 +2072,13 @@ export class Pokemon {
 			} else if (percentage === 50) {
 				shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
 			}
+		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
+			// HP Percentage Mod mechanics
+			let percentage = Math.ceil(100 * this.hp / this.maxhp);
+			if (percentage === 100 && this.hp < this.maxhp) {
+				percentage = 99;
+			}
+			shared = `${percentage}/100`;
 		} else {
 			/**
 			 * In-game accurate pixel health mechanics
