@@ -1,4 +1,8 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
+	bouncybubble: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	downtownslide: {
 		accuracy: 100,
 		basePower: 75,
