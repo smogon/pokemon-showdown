@@ -419,7 +419,7 @@
 		"sets": [
 			{
 				"role": "Setup Sweeper",
-				"movepool": ["Tidy Up", "Population Bomb", "Rock Blast", "Icicle Spear"],
+				"movepool": ["Tidy Up", "Population Bomb", "Rock Blast", "Icicle Spear", "U-turn"],
 				"abilities": ["Mitosis"]
 			}
 		]

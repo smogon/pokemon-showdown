@@ -422,26 +422,33 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Adds the Normal type to all Pokemon on the field. This Pokemon has Normalize.",
 	},
 	mitosis: {
-		onDamagingHit(damage, target, source, move) {
-			if (!move || move.effectType !== 'Move' || source === target) return;
-			const stats: BoostID[] = [];
-			let stat: BoostID;
-			// console.log(target);
-			for (stat in target.boosts) {
-				if (target.boosts[stat] < 6) {
-					stats.push(stat);
-				}
-			}
-			if (stats.length) {
-				const randomStat = this.sample(stats);
-				const boost: SparseBoostsTable = {};
-				boost[randomStat] = 1;
-				this.boost(boost);
-			}
+		onAfterMove(source, target, move) {
+			if (!source.hp || !move.multihit) return;
+			// save me
+			this.add('-ability', source, 'Mitosis');
+			source.baseStoredStats.atk = Math.min(255, source.baseStoredStats.atk + 4);
+			source.baseStoredStats.def = Math.min(255, source.baseStoredStats.def + 4);
+			source.baseStoredStats.spa = Math.min(255, source.baseStoredStats.spa + 4);
+			source.baseStoredStats.spd = Math.min(255, source.baseStoredStats.spd + 4);
+			source.baseStoredStats.spe = Math.min(255, source.baseStoredStats.spe + 4);
+			
+			// Recalculate new stats
+			source.storedStats.atk = source.baseStoredStats.atk;
+			source.storedStats.def = source.baseStoredStats.def;
+			source.storedStats.spa = source.baseStoredStats.spa;
+			source.storedStats.spd = source.baseStoredStats.spd;
+			source.storedStats.spe = source.baseStoredStats.spe;
+			source.speed = source.storedStats.spe;
+			
+			// Apply new stats
+			this.add('-setboost', source, 'basestats', 'atk', source.baseStoredStats.atk, '[silent]');
+			this.add('-setboost', source, 'basestats', 'def', source.baseStoredStats.def, '[silent]');
+			this.add('-setboost', source, 'basestats', 'spa', source.baseStoredStats.spa, '[silent]');
+			this.add('-setboost', source, 'basestats', 'spd', source.baseStoredStats.spd, '[silent]');
+			this.add('-setboost', source, 'basestats', 'spe', source.baseStoredStats.spe, '[silent]');
 		},
 		flags: {},
 		name: "Mitosis",
-		shortDesc: "Raises a random stat stage when hit.",
-		// Not the preferred implementation
+		shortDesc: "When this Pokemon uses a multi-hit move, its stats increase by 4.",
 	},
 };
