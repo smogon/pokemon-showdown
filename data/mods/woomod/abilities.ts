@@ -423,7 +423,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Hoothoot Ability",
-		shortDesc: "Adds the Normal type to all Pokemon on the field. This Pokemon has Normalize.",
+		shortDesc: "Effects of Normalize + On switch, adds the Normal type to all Pokemon on the field.",
 	},
 	mitosis: {
 		onAfterMove(source, target, move) {
