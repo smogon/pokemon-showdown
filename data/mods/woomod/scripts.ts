@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
-	// soothing prescence is fun and easy to code 
+	// soothing prescence is fun and easy to code
 	actions: {
 		switchIn(pokemon, pos, sourceEffect, isDrag) {
 			if (!pokemon || pokemon.isActive) {
@@ -34,7 +34,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					return 'pursuitfaint';
 				}
 
-				(this.battle as any).log?.();
 				(side as any).lastSwitchedOut = oldActive;
 
 				this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);

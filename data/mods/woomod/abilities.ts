@@ -6,21 +6,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		// @ts-expect-error
 		onAnyModifySpe(spe, source, target) {
-			const abilityHolder = this.effectState.target;
 			if (source.hasAbility('Vessel of Sigma')) return;
 			this.debug('Vessel of Sigma Spe drop');
 			return this.chainModify(0.75);
 		},
 		flags: {},
 		name: "Vessel of Sigma",
-		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75."
+		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75.",
 	},
 	tacticalretreat: {
 		onAfterMove(source, target, move) {
 			if (!source || !target.hp || !move.totalDamage) return;
 			if (!move.self.boosts) return;
-			if (Object.values(move.self.boosts).some(boost => boost < 0)) source.switchFlag = true;
-			if (source.switchFlag = true) this.add('-ability', source, 'Tactical Retreat');
+			if (Object.values(move.self.boosts).some(boost => boost < 0)) { 
+				source.switchFlag = true;
+				this.add('-ability', source, 'Tactical Retreat');
+			};
 		},
 		flags: {},
 		name: "Tactical Retreat",
@@ -138,7 +139,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	pyromorphosis: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if(!target.getVolatile('pyromorphosis')) target.addVolatile('pyromorphosis');
+			if (!target.getVolatile('pyromorphosis')) target.addVolatile('pyromorphosis');
 		},
 		condition: {
 			onStart(pokemon, source, effect) {
@@ -227,7 +228,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	phantomchute: {
 		onSwitchOut(pokemon) {
 			pokemon.side.addSlotCondition(pokemon, 'phantomchute');
-			this.add('-ability', pokemon, 'Phantom Chute')
+			this.add('-ability', pokemon, 'Phantom Chute');
 		},
 		condition: {
 			duration: 1,
@@ -429,7 +430,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			source.baseStoredStats.spa = Math.min(255, source.baseStoredStats.spa + 4);
 			source.baseStoredStats.spd = Math.min(255, source.baseStoredStats.spd + 4);
 			source.baseStoredStats.spe = Math.min(255, source.baseStoredStats.spe + 4);
-			
+
 			// Recalculate new stats
 			source.storedStats.atk = source.baseStoredStats.atk;
 			source.storedStats.def = source.baseStoredStats.def;
@@ -437,7 +438,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			source.storedStats.spd = source.baseStoredStats.spd;
 			source.storedStats.spe = source.baseStoredStats.spe;
 			source.speed = source.storedStats.spe;
-			
+
 			// Apply new stats
 			this.add('-setboost', source, 'basestats', 'atk', source.baseStoredStats.atk, '[silent]');
 			this.add('-setboost', source, 'basestats', 'def', source.baseStoredStats.def, '[silent]');
