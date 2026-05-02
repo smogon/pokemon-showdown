@@ -44,7 +44,7 @@
         "sets": [
 			{
 			    "role": "Fast Attacker",
-			    "movepool": ["Flamethrower", "Flip Turn", "Will-O-Wisp", "Flip Turn"],
+			    "movepool": ["Flamethrower", "Weather Ball", "Will-O-Wisp", "Flip Turn"],
 			    "abilities": ["Rain Curse"]
 			}
         ]
@@ -99,7 +99,7 @@
         "sets": [
 			{
 			    "role": "Setup Sweeper",
-			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Knock Off", "Close Combat", "U-turn"],
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Knock Off", "Close Combat"],
 			    "abilities": ["Masquerade"]
 			},
 			{
@@ -300,7 +300,7 @@
 			{
 			    "role": "Wallbreaker",
 			    "movepool": ["Volt Tackle", "Extreme Speed", "Flip Turn", "Fake Out", "Knock Off"],
-			    "abilities": ["Metalize"]
+			    "abilities": ["Metallize"]
 			}
         ]
     },
@@ -519,8 +519,13 @@
 			},
 			{
 			    "role": "Bulky Attacker",
+			    "movepool": ["Woop Out", "Recover", "Poison Jab", "Toxic Spikes", "Stealth Rock"],
+			    "abilities": ["Unaware"]
+			},
+			{
+			    "role": "Bulky Attacker",
 			    "movepool": ["Woop Out", "Recover", "Poison Jab", "Toxic Spikes", "Stealth Rock", "Haze"],
-			    "abilities": ["Unaware", "Water Absorb"]
+			    "abilities": ["Water Absorb"]
 			}
         ]
     },

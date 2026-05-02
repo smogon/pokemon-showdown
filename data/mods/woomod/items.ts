@@ -90,6 +90,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
+		shortDesc: "If held by a Dragonair, this item allows it to Mega Evolve in battle.",
 	},
 	amaurite: {
 		name: "Amaurite",
@@ -98,6 +99,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
+		shortDesc: "If held by an Amaura, this item allows it to Mega Evolve in battle.",
 	},
 	superpikachumegastone: {
 		name: "Super Pikachu Mega Stone",
@@ -106,5 +108,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
+		shortDesc: "pikachu mega evolve",
 	},
 };

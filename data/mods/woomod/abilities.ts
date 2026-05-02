@@ -20,6 +20,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!source || !target.hp || !move.totalDamage) return;
 			if (!move.self.boosts) return;
 			if (Object.values(move.self.boosts).some(boost => boost < 0)) source.switchFlag = true;
+			if (source.switchFlag = true) this.add('-ability', source, 'Tactical Retreat');
 		},
 		flags: {},
 		name: "Tactical Retreat",
@@ -137,7 +138,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	pyromorphosis: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			target.addVolatile('pyromorphosis');
+			if(!target.getVolatile('pyromorphosis')) target.addVolatile('pyromorphosis');
 		},
 		condition: {
 			onStart(pokemon, source, effect) {
@@ -184,11 +185,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.effectState.switchingIn = true;
 		},
 		onStart(pokemon) {
-			// Imposter does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			if (!this.effectState.switchingIn) return;
-			// copies across in doubles/triples
-			// (also copies across in multibattle and diagonally in free-for-all,
-			// but side.foe already takes care of those)
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				target.transformInto(pokemon, this.dex.abilities.get('narcissus'));
@@ -230,6 +227,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	phantomchute: {
 		onSwitchOut(pokemon) {
 			pokemon.side.addSlotCondition(pokemon, 'phantomchute');
+			this.add('-ability', pokemon, 'Phantom Chute')
 		},
 		condition: {
 			duration: 1,
@@ -374,7 +372,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch: if targeted by a Ground-type attack, take no damage and use the move on the opponent.",
 	},
 	soothingpresence: {
-		/* onStart(pokemon) { // fix later
+		onStart(pokemon) {
 			const last = pokemon.side.lastSwitchedOut;
 			if (last && last !== pokemon && !last.fainted && last.status) {
 				const status = last.status;
@@ -383,7 +381,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-curestatus', last, status, '[from] ability: Soothing Presence');
 			}
 			pokemon.side.lastSwitchedOut = null;
-		}, */
+		},
 		onTryHit(target, source, move) {
 			if (target !== this.effectState.target) return;
 			if (move.type === 'Poison') {
@@ -400,7 +398,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Soothing Presence",
-		shortDesc: "(Placeholder) Immune to poison. On switch-in, cures the status of the Pokemon it replaced.",
+		shortDesc: "Immune to poison. On switch-in, cures the status of the Pokemon it replaced.",
 	},
 
 	hoothootability: {
@@ -424,7 +422,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	mitosis: {
 		onAfterMove(source, target, move) {
 			if (!source.hp || !move.multihit) return;
-			// save me
+			// this is a horrible implementation, but it works
 			this.add('-ability', source, 'Mitosis');
 			source.baseStoredStats.atk = Math.min(255, source.baseStoredStats.atk + 4);
 			source.baseStoredStats.def = Math.min(255, source.baseStoredStats.def + 4);
