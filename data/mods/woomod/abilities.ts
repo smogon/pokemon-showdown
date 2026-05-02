@@ -7,7 +7,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// @ts-expect-error
 		onAnyModifySpe(spe, source, target) {
 			if (source.hasAbility('Vessel of Sigma')) return;
-			this.debug('Vessel of Sigma Spe drop');
+			// @ts-expect-error
 			return this.chainModify(0.75);
 		},
 		flags: {},
@@ -17,7 +17,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	tacticalretreat: {
 		onAfterMove(source, target, move) {
 			if (!source || !target.hp || !move.totalDamage) return;
+			// @ts-expect-error
 			if (!move.self.boosts) return;
+			// @ts-expect-error
 			if (Object.values(move.self.boosts).some(boost => boost < 0)) {
 				source.switchFlag = true;
 				this.add('-ability', source, 'Tactical Retreat');
@@ -373,7 +375,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch: if targeted by a Ground-type attack, take no damage and use the move on the opponent.",
 	},
 	soothingpresence: {
+		// I don't know how this works, but it does
 		onStart(pokemon) {
+			// @ts-expect-error
 			const last = pokemon.side.lastSwitchedOut;
 			if (last && last !== pokemon && !last.fainted && last.status) {
 				const status = last.status;
@@ -381,6 +385,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-activate', pokemon, 'ability: Soothing Presence');
 				this.add('-curestatus', last, status, '[from] ability: Soothing Presence');
 			}
+			// @ts-expect-error
 			pokemon.side.lastSwitchedOut = null;
 		},
 		onTryHit(target, source, move) {

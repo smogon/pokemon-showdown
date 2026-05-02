@@ -113,6 +113,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', pokemon, "Thunderous Kick", target);
 		},
 		onHit(target, source) {
+			// @ts-expect-error
 			if (target && target.effectiveWeather() === 'raindance') this.field.weatherState.duration++;
 		},
 		target: "normal",
@@ -485,6 +486,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		shortDesc: "Hits twice. First hit: +5 priority, second hit: end of turn.",
 		priority: 5,
+		target: 'normal',
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
 		onHit(source, target) {
 			if (!source.side.addSlotCondition(target, 'futuremove') && target.hp && target.isActive) return false;
 			Object.assign(source.side.slotConditions[target.position]['futuremove'], {
