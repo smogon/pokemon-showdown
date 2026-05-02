@@ -18,7 +18,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAfterMove(source, target, move) {
 			if (!source || !target.hp || !move.totalDamage) return;
 			if (!move.self.boosts) return;
-			if (Object.values(move.self.boosts).some(boost => boost < 0)) { 
+			if (Object.values(move.self.boosts).some(boost => boost < 0)) {
 				source.switchFlag = true;
 				this.add('-ability', source, 'Tactical Retreat');
 			};
