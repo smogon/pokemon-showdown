@@ -409,7 +409,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	hoothootability: {
 		onStart(pokemon) {
-			pokemon.addVolatile('ability:normalize');
 			for (const allMons of this.getAllActive()) {
 				if (allMons.hasType('Normal') || !allMons.addType('Normal')) continue;
 				this.add('-start', allMons, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
@@ -420,6 +419,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (allMons.hasType('Normal') || !allMons.addType('Normal')) continue;
 				this.add('-start', allMons, 'typeadd', 'Normal', '[from] ability: Hoothoot Ability');
 			}
+		},
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (!(move.isZ && move.category !== 'Status') &&
+				// TODO: Figure out actual interaction
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Normal';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		flags: {},
 		name: "Hoothoot Ability",

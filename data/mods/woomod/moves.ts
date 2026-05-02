@@ -419,6 +419,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 		type: "Fire",
+		shortDesc: "Super effective on Fire types.",
 	},
 	ladybugdance: {
 		accuracy: true,
