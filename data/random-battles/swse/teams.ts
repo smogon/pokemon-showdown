@@ -68,11 +68,12 @@ type MoveEnforcementChecker = (
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis', 'snooze', 'cidercannon', 'juicedrink',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
+	'juicedrink', 'snooze', 'cidercannon',
 ];
 // Moves that drop stats:
 const CONTRARY_MOVES = [
-	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate', 'shreddingriff',
+	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
@@ -84,25 +85,29 @@ const SPECIAL_SETUP = [
 ];
 // Moves that boost Attack AND Special Attack:
 const MIXED_SETUP = [
-	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup', 'evoboost',
+	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
+	'evoboost',
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'earthrush', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze', 'hail',
+	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze',
+	'earthrush',
 ];
 // Conglomerate for ease of access
 const SETUP = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance', 'earthrush',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
 	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance', 'evoboost',
-	'fluffbuff',
+	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'earthrush', 'evoboost', 'fluffbuff',
 ];
 const WEATHER_SETUP = [
 	'sunnyday', 'raindance', 'hail', 'snowscape', 'foghorn', 'bloodmoon', 'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread',
-	'sprinkle', 'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize', 'strongwinds', 'brainstorm',
+	'sprinkle', 'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize', 'strongwinds',
+	'brainstorm', 'efflorescence', 'fluffbuff', 'languishingaura', 'thermalvortex', 'whirlduel', 'whiteout', 'witheout',
 ];
 const SPEED_CONTROL = [
-	'electroweb', 'glare', 'icywind', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom', 'mockery',
+	'electroweb', 'glare', 'icywind', 'kihop', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom',
+	'mockery',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
@@ -110,19 +115,23 @@ const NO_STAB = [
 	'dragontail', 'doomdesire', 'earthrush', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit',
 	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'trailblaze',
-	'uturn', 'vacuumwave', 'voltswitch', 'watershuriken', 'waterspout', 'mockery', 'lavajet', 'scavenge',
+	'uturn', 'vacuumwave', 'voltswitch', 'watershuriken', 'waterspout',
+	'kihop', 'lavajet', 'mockery', 'scavenge', 'slushball',
 ];
 // Hazard-setting moves
 const HAZARDS = [
-	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes', 'steelbarbs',
+	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
+	'steelbarbs',
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
-	'banefulbunker', 'burningbulwark', 'protect', 'silktrap', 'spikyshield', 'shockshelter', 'frostification',
+	'banefulbunker', 'burningbulwark', 'protect', 'silktrap', 'spikyshield',
+	'frostification', 'shockshelter',
 ];
 // Moves that switch the user out
 const PIVOT_MOVES = [
-	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch', 'escaperoot', 'heartshock', // heartshock is technically a pivot move lmao
+	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
+	'escaperoot', 'heartshock', // heartshock is technically a pivot move lmao
 ];
 
 // Moves that should be paired together when possible
@@ -145,10 +154,10 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Zacian', 'Zamazenta', 'Leoseance',
+	'Leoseace',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
-	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta', 'Leoseance',
+	'Basculegion', 'Leoseace',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -246,7 +255,9 @@ export class RandomTeams {
 				!counter.get('Steel') &&
 				(isDoubles || species.baseStats.atk >= 90 || movePool.includes('gigatonhammer') || movePool.includes('makeitrain'))
 			),
-			Water: (movePool, moves, abilities, types, counter) => (!counter.get('Water') && !types.includes('Ground')),
+			Water: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => (
+				!counter.get('Water') && (!types.includes('Ground') || isDoubles)
+			),
 		};
 		this.poolsCacheKey = undefined;
 		this.cachedPool = undefined;

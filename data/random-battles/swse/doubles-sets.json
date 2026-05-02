@@ -44,7 +44,7 @@
             },
             {
                 "role": "Doubles Fog Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Double Edge", "Foghorn"],
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Double-Edge", "Foghorn"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
@@ -105,7 +105,7 @@
             },
             {
                 "role": "Doubles Magnetosphere Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Iron Tail", "Magnetize"],
+                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Magnetize"],
                 "abilities": ["Galeforce", "Prankster"]
             }
         ]
@@ -140,7 +140,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect"],
+                "movepool": ["Shadow Ball", "Dazzling Gleam", "Psychic", "Protect"],
                 "abilities": ["Dreamer"]
             }
         ]
@@ -155,7 +155,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Tail Glow", "Dragon Pulse", "Bug Buzz", "Deception", "Heat Wave"],
+                "movepool": ["Nasty Plot", "Dragon Pulse", "Bug Buzz", "Deception", "Heat Wave"],
                 "abilities": ["Magic Guard", "Power Within", "Arcanum"]
             }
         ]

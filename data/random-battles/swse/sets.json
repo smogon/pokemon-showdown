@@ -34,7 +34,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Blizzard", "Bubble", "Leer", "Lunge"],
+                "movepool": ["Ice Beam", "Bubble", "Muddy Water", "Lunge"],
                 "abilities": ["Torrent", "Bubble Helm"]
             }
         ]
@@ -54,7 +54,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Lick", "Mimic", "Scratch", "Snarl"],
+                "movepool": ["Shadow Ball", "Mimic", "Scratch", "Double-Edge"],
                 "abilities": ["Wandering Spirit", "Not To Be", "To Be"]
             }
         ]
@@ -64,8 +64,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Knock Off", "Leaf Blade", "Lunge", "Swords Dance", "Triple Axel"],
-                "abilities": ["Powder Cure", "Chlorophyll", "Overcoat"]
+                "movepool": ["Knock Off", "Leaf Blade", "X-Scissor", "Swords Dance"],
+                "abilities": ["Powder Cure", "Chlorophyll"]
             }
         ]
     },
@@ -114,7 +114,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Avalanche", "Body Press", "Body Press", "Brick Break"],
+                "movepool": ["Swords Dance", "Body Press", "Body Slam", "Brick Break"],
                 "abilities": ["Guts", "Bulletproof", "Unnerve"]
             }
         ]
@@ -245,7 +245,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Aura Sphere", "Black Hole", "Body Slam", "Calm Mind"],
-                "abilities": ["Anticipation", "Super Luck", "Shadow Step"]
+                "abilities": ["Anticipation", "Super Luck"]
             }
         ]
     },
@@ -285,7 +285,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Acid Armor", "Acrobatics", "Aromatherapy", "Dazzling Gleam"],
-                "abilities": ["Poison Touch", "Druidry", "Prankster"]
+                "abilities": ["Poison Coat", "Druidry", "Prankster"]
             }
         ]
     },

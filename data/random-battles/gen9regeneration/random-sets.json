@@ -93,7 +93,7 @@
 			{
 			    "role": "Fast Attacker",
 			    "movepool": ["crunch", "doubleedge", "gunkshot", "pestspread", "closecombat", "uturn"],
-			    "abilities": ["Hustle", "Poison Touch"]
+			    "abilities": ["Hustle", "Poison Coat"]
 			}
         ]
     },
@@ -179,7 +179,7 @@
 			{
 			    "role": "Wallbreaker",
 			    "movepool": ["earthpower", "poisonjab", "stealthrock", "toxicspikes", "moonlight"],
-			    "abilities": ["Sheer Force", "Natural Cure", "Poison Point"],
+			    "abilities": ["Sheer Force", "Natural Cure", "Poison Coat"],
 			    "preferredTypes": ["Ice"]
 			}
         ]
@@ -539,13 +539,13 @@
 			{
 			    "role": "Bulky Attacker",
 			    "movepool": ["brickbreak", "curse", "gunkshot", "haze", "icepunch", "poisonjab", "shadowsneak"],
-			    "abilities": ["Poison Touch"],
+			    "abilities": ["Poison Coat"],
 			    "preferredTypes": ["Fighting"]
 			},
 			{
 			    "role": "AV Pivot",
 			    "movepool": ["Drain Punch", "Gunk Shot", "Ice Punch", "Knock Off", "Poison Jab", "Shadow Sneak"],
-			    "abilities": ["Poison Touch"]
+			    "abilities": ["Poison Coat"]
 			}
 
         ]

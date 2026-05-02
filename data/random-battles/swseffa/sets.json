@@ -88,12 +88,6 @@
                 "teraTypes": ["Dark", "Fairy", "Grass"]
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Protect", "Tera Blast", "Thunderbolt"],
-                "abilities": ["Lightning Rod"],
-                "teraTypes": ["Ice"]
-            },
-            {
                 "role": "AV Pivot",
                 "movepool": ["Discharge", "Knock Off", "Nuzzle", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Lightning Rod"],
@@ -606,12 +600,6 @@
                 "movepool": ["Discharge", "Foul Play", "Protect", "Taunt", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Aftermath", "Soundproof", "Static"],
                 "teraTypes": ["Dark", "Flying"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Discharge", "Protect", "Taunt", "Tera Blast", "Thunderbolt", "Volt Switch"],
-                "abilities": ["Aftermath", "Soundproof", "Static"],
-                "teraTypes": ["Ice"]
             }
         ]
     },
@@ -844,12 +832,6 @@
                 "movepool": ["Dragon Dance", "Earthquake", "Protect", "Waterfall"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Ground"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Dragon Dance", "Protect", "Tera Blast", "Waterfall"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying"]
             }
         ]
     },
@@ -906,12 +888,6 @@
                 "movepool": ["Alluring Voice", "Calm Mind", "Discharge", "Protect", "Shadow Ball", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Volt Absorb"],
                 "teraTypes": ["Fairy"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Protect", "Tera Blast", "Thunderbolt"],
-                "abilities": ["Volt Absorb"],
-                "teraTypes": ["Ice"]
             }
         ]
     },
@@ -1041,12 +1017,6 @@
                 "movepool": ["Breaking Swipe", "Dragon Claw", "Fire Punch", "Extreme Speed", "Hurricane", "Protect", "Roost", "Thunder Wave"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Dragon Claw", "Dragon Dance", "Protect", "Tera Blast"],
-                "abilities": ["Inner Focus"],
-                "teraTypes": ["Flying"]
             }
         ]
     },
@@ -1233,12 +1203,6 @@
                 "movepool": ["Giga Drain", "Protect", "Quiver Dance", "Sludge Bomb", "Strength Sap"],
                 "abilities": ["Chlorophyll"],
                 "teraTypes": ["Poison", "Water"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Giga Drain", "Quiver Dance", "Strength Sap", "Tera Blast"],
-                "abilities": ["Chlorophyll"],
-                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },
@@ -1627,12 +1591,6 @@
                 "movepool": ["Discharge", "Ice Beam", "Protect", "Recover", "Tri Attack"],
                 "abilities": ["Download"],
                 "teraTypes": ["Electric", "Ghost", "Poison"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Protect", "Recover", "Shadow Ball", "Tera Blast"],
-                "abilities": ["Download"],
-                "teraTypes": ["Fairy", "Fighting"]
             }
         ]
     },
@@ -3065,12 +3023,6 @@
                 "movepool": ["Air Slash", "Bug Buzz", "Giga Drain", "U-turn"],
                 "abilities": ["Tinted Lens"],
                 "teraTypes": ["Bug"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Air Slash", "Bug Buzz", "Protect", "Tera Blast"],
-                "abilities": ["Speed Boost"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -3162,12 +3114,6 @@
                 "movepool": ["Ice Beam", "Protect", "Recover", "Shadow Ball", "Thunderbolt", "Tri Attack"],
                 "abilities": ["Adaptability", "Download"],
                 "teraTypes": ["Electric", "Ghost"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Protect", "Shadow Ball", "Tera Blast"],
-                "abilities": ["Adaptability"],
-                "teraTypes": ["Fairy", "Fighting"]
             },
             {
                 "role": "Wallbreaker",
@@ -3800,12 +3746,6 @@
                 "movepool": ["Dragon Pulse", "Glare", "Leaf Storm", "Leech Seed", "Protect", "Synthesis"],
                 "abilities": ["Contrary"],
                 "teraTypes": ["Dragon", "Grass"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Leaf Storm", "Protect", "Synthesis", "Tera Blast"],
-                "abilities": ["Contrary"],
-                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },
@@ -3943,12 +3883,6 @@
         "level": 88,
         "sets": [
             {
-                "role": "Tera Blast user",
-                "movepool": ["Energy Ball", "Protect", "Quiver Dance", "Tera Blast"],
-                "abilities": ["Chlorophyll"],
-                "teraTypes": ["Fire", "Rock"]
-            },
-            {
                 "role": "Setup Sweeper",
                 "movepool": ["Alluring Voice", "Energy Ball", "Protect", "Quiver Dance"],
                 "abilities": ["Chlorophyll"],
@@ -4076,12 +4010,6 @@
                 "movepool": ["Bitter Malice", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Protect"],
                 "abilities": ["Illusion"],
                 "teraTypes": ["Normal"]
-            },
-            {
-                "role": "Imprisoner",
-                "movepool": ["Bitter Malice", "Imprison", "Protect", "Tera Blast"],
-                "abilities": ["Illusion"],
-                "teraTypes": ["Fairy", "Fighting"]
             }
         ]
     },
@@ -4470,12 +4398,6 @@
                 "movepool": ["Acrobatics", "Grass Knot", "Knock Off", "Protect", "Taunt", "Thunderbolt", "Thunder Wave", "Wildbolt Storm"],
                 "abilities": ["Defiant", "Prankster"],
                 "teraTypes": ["Electric"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Protect", "Tera Blast", "Wildbolt Storm"],
-                "abilities": ["Defiant"],
-                "teraTypes": ["Flying"]
             }
         ]
     },
@@ -4487,12 +4409,6 @@
                 "movepool": ["Grass Knot", "Protect", "Sludge Bomb", "Volt Switch", "Wildbolt Storm"],
                 "abilities": ["Volt Absorb"],
                 "teraTypes": ["Electric", "Grass", "Poison"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Protect", "Tera Blast", "Wildbolt Storm"],
-                "abilities": ["Volt Absorb"],
-                "teraTypes": ["Flying"]
             }
         ]
     },
@@ -4701,12 +4617,6 @@
                 "movepool": ["Bug Buzz", "Hurricane", "Protect", "Quiver Dance"],
                 "abilities": ["Compound Eyes"],
                 "teraTypes": ["Flying", "Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Hurricane", "Protect", "Quiver Dance", "Tera Blast"],
-                "abilities": ["Compound Eyes"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -4718,12 +4628,6 @@
                 "movepool": ["Fire Blast", "Heat Wave", "Hyper Voice", "Protect", "Taunt", "Will-O-Wisp"],
                 "abilities": ["Unnerve"],
                 "teraTypes": ["Fire", "Normal", "Water"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Fire Blast", "Hyper Voice", "Protect", "Tera Blast"],
-                "abilities": ["Unnerve"],
-                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -4842,12 +4746,6 @@
                 "movepool": ["Calm Mind", "Hyper Voice", "Protect", "Wish"],
                 "abilities": ["Pixilate"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Hyper Voice", "Protect", "Tera Blast", "Wish"],
-                "abilities": ["Pixilate"],
-                "teraTypes": ["Fire", "Ground"]
             }
         ]
     },
@@ -5375,12 +5273,6 @@
                 "movepool": ["Draining Kiss", "Encore", "Knock Off", "Leech Seed", "Protect", "Substitute", "Synthesis", "U-turn"],
                 "abilities": ["Triage"],
                 "teraTypes": ["Poison", "Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Draining Kiss", "Protect", "Tera Blast"],
-                "abilities": ["Triage"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -5579,12 +5471,6 @@
                 "movepool": ["Calm Mind", "Earth Power", "Future Sight", "Moongeist Beam", "Moonlight", "Morning Sun", "Photon Geyser", "Stealth Rock", "Trick Room"],
                 "abilities": ["Prism Armor"],
                 "teraTypes": ["Dark", "Ghost"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Moongeist Beam", "Protect", "Tera Blast"],
-                "abilities": ["Prism Armor"],
-                "teraTypes": ["Fairy", "Fighting"]
             }
         ]
     },
@@ -5761,12 +5647,6 @@
                 "movepool": ["Draco Meteor", "Grav Apple", "Protect", "U-turn"],
                 "abilities": ["Ripen"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Dragon Dance", "Grav Apple", "Protect", "Tera Blast"],
-                "abilities": ["Hustle"],
-                "teraTypes": ["Dragon", "Fire", "Rock"]
             }
         ]
     },
@@ -5952,12 +5832,6 @@
                 "movepool": ["Defog", "Giga Drain", "Ice Beam", "Protect", "Quiver Dance"],
                 "abilities": ["Ice Scales"],
                 "teraTypes": ["Water"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Ice Beam", "Protect", "Quiver Dance", "Tera Blast"],
-                "abilities": ["Ice Scales"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -6217,12 +6091,6 @@
                 "movepool": ["Electroweb", "Protect", "Rapid Spin", "Thunderbolt", "Thunder Cage", "Volt Switch"],
                 "abilities": ["Transistor"],
                 "teraTypes": ["Electric"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Protect", "Rapid Spin", "Tera Blast", "Thunderbolt"],
-                "abilities": ["Transistor"],
-                "teraTypes": ["Ice"]
             }
         ]
     },
@@ -6268,12 +6136,6 @@
                 "movepool": ["Draining Kiss", "Nasty Plot", "Protect", "Shadow Ball"],
                 "abilities": ["Grim Neigh"],
                 "teraTypes": ["Fairy"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Protect", "Shadow Ball", "Tera Blast"],
-                "abilities": ["Grim Neigh"],
-                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -6783,12 +6645,6 @@
                 "movepool": ["Baton Pass", "Dazzling Gleam", "Lumina Crash", "Protect", "Shadow Ball"],
                 "abilities": ["Speed Boost"],
                 "teraTypes": ["Fairy"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Lumina Crash", "Protect", "Stored Power", "Tera Blast"],
-                "abilities": ["Speed Boost"],
-                "teraTypes": ["Fighting"]
             }
         ]
     },

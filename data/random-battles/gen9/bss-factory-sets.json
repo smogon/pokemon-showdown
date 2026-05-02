@@ -2995,7 +2995,7 @@
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Fighting", "Flying"],
-              "ability": ["Poison Touch"]
+              "ability": ["Poison Coat"]
           },
           {
               "species": "Sneasler",
@@ -6023,7 +6023,7 @@
               "nature": "Jolly",
               "evs": {"hp": 252, "spd": 4, "spe": 252},
               "teraType": ["Dark", "Water"],
-              "ability": ["Poison Point"]
+              "ability": ["Poison Coat"]
           },
           {
               "species": "Overqwil",
@@ -6038,7 +6038,7 @@
               "nature": "Jolly",
               "evs": {"hp": 252, "spd": 4, "spe": 252},
               "teraType": ["Poison"],
-              "ability": ["Poison Point"]
+              "ability": ["Poison Coat"]
           }
       ]
   },
