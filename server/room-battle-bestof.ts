@@ -205,10 +205,26 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			players,
 		};
 	}
+	lockTeams() {
+		for (const player of this.players) {
+			const team = Teams.unpack(player.options.team || "");
+			if (!team) continue;
+			let changed = false;
+			for (const set of team) {
+				if (set.gender) continue;
+				const species = Dex.species.get(set.species || set.name);
+				if (!species.exists || species.gender) continue;
+				set.gender = Math.random() < 0.5 ? 'M' : 'F';
+				changed = true;
+			}
+			if (changed) player.options.team = Teams.pack(team);
+		}
+	}
 	nextGame() {
 		const prevBattleRoom = this.waitingBattle;
 		if (!prevBattleRoom && this.games.length) return; // should never happen
 		this.clearWaiting();
+		if (!this.games.length) this.lockTeams();
 
 		const options = this.getOptions();
 		if (!options) {
