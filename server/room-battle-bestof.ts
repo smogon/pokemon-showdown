@@ -214,7 +214,11 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 				if (set.gender) continue;
 				const species = Dex.species.get(set.species || set.name);
 				if (!species.exists || species.gender) continue;
-				set.gender = Math.random() < 0.5 ? 'M' : 'F';
+				const maleRatio = species.genderRatio?.M ?? 0.5;
+				const femaleRatio = species.genderRatio?.F ?? 0.5;
+				const ratioTotal = maleRatio + femaleRatio;
+				if (!ratioTotal) continue;
+				set.gender = Math.random() * ratioTotal < maleRatio ? 'M' : 'F';
 				changed = true;
 			}
 			if (changed) player.options.team = Teams.pack(team);
