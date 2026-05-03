@@ -781,8 +781,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Breloom', 'Sudowood', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Moody', 'Neutralizing Gas',
 			'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple', 'Spicy Spray', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'Beedrillite', 'Blazikenite', 'Damp Rock', 'Eviolite',
-			'Gengarite', 'Heat Rock', 'Kangaskhanite', 'Light Ball', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Scovillainite', 'Starminite', 'Victreebelite', 'Baton Pass', 'Last Respects',
-			'Shed Tail',
+			'Gengarite', 'Heat Rock', 'Kangaskhanite', 'Light Ball', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Scovillainite', 'Starminite', 'Victreebelite', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
 			'Blissey', 'Chansey', 'Happiny', 'Smeargle', 'Vigoroth', 'Ceaseless Edge', 'Dire Claw', 'Electrify', 'Extreme Speed', 'Revival Blessing', 'Salt Cure', 'Shed Tail',
