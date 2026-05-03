@@ -314,6 +314,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  It started to snow!",
 		end: "  The snow stopped.",
 		upkeep: "  (The snow is falling down.)",
+		damage: "  [POKEMON] is buffeted by the snow!",
 	},
 	bloodmoon: {
 		weatherName: "Blood Moon",

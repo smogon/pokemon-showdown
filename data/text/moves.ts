@@ -132,7 +132,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	anchorshot: {
 		name: "Anchor Shot",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -296,8 +296,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "Aurora Veil",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
-		shortDesc: "For 5 turns, damage to allies halved. Hail only.",
+		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
+		shortDesc: "For 5 turns, damage to allies halved. Snow only.",
 		gen8: {
 			desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
 			shortDesc: "For 5 turns, damage to allies is halved. Hail only.",
@@ -485,7 +485,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bind: {
 		name: "Bind",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -556,8 +556,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blizzard: {
 		name: "Blizzard",
-		desc: "Has a 10% chance to inflict the target with frostbite and a 5% chance to freeze the target. If the weather is Hail, this move does not check accuracy and the effect chances are doubled.",
-		shortDesc: "10% frosbite / 5% freeze foe(s). Hail: can't miss.",
+		desc: "Has a 10% chance to inflict the target with frostbite and a 10% chance to freeze the target. If the weather is Snow, this move does not check accuracy.",
+		shortDesc: "10% frostbite / 10% freeze foe(s). Snow: can't miss.",
 		gen8: {
 			desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
 			shortDesc: "10% chance to freeze foe(s). Hail: can't miss.",
@@ -572,7 +572,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	block: {
 		name: "Block",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -909,10 +909,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
 		shortDesc: "100% chance to lower the foe(s) Attack by 1.",
 	},
-	chillyreception: { // updated
+	chillyreception: {
 		name: "Chilly Reception",
-		desc: "For 5 turns, the weather becomes Hail. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		shortDesc: "Starts Hail. User switches out.",
+		desc: "For 5 turns, the weather becomes Snow. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		shortDesc: "Starts Snow. User switches out.",
 
 		prepare: "  [POKEMON] is preparing to tell a chillingly bad joke!",
 	},
@@ -933,7 +933,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	clamp: {
 		name: "Clamp",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -1922,7 +1922,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairylock: {
 		name: "Fairy Lock",
-		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. Fails if the effect is already active.",
+		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. Fails if the effect is already active.",
 		shortDesc: "Prevents all Pokemon from switching next turn.",
 		gen7: {
 			desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
@@ -2053,7 +2053,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firespin: {
 		name: "Fire Spin",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -2522,7 +2522,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxcentiferno: {
 		name: "G-Max Centiferno",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell, have the Ability Run Away, or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
 	},
 	gmaxchistrike: {
@@ -2611,7 +2611,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsandblast: {
 		name: "G-Max Sandblast",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell, have the Ability Run Away, or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
 	},
 	gmaxsmite: {
@@ -2655,7 +2655,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxterror: {
 		name: "G-Max Terror",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell, have the Ability Run Away, or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Base move affects power. Foes: trapped.",
 	},
 	gmaxvinelash: {
@@ -3296,7 +3296,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icywind: {
 		name: "Icy Wind",
-		desc: "Has a 100% chance to lower the target's Speed by 1 stage. This move bypasses accuracy checks during Hail.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. This move bypasses accuracy checks during Snow.",
 		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		gen2: {
 			shortDesc: "100% chance to lower the target's Speed by 1.",
@@ -3346,7 +3346,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infestation: {
 		name: "Infestation",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -3421,7 +3421,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	jawlock: {
 		name: "Jaw Lock",
-		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents both user and target from switching out.",
 	},
 	jetpunch: {
@@ -3779,7 +3779,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magmastorm: {
 		name: "Magma Storm",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -3959,7 +3959,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meanlook: {
 		name: "Mean Look",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -4249,7 +4249,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mist: { // updated
 		name: "Mist",
-		desc: "For 5 turns, the user and its party members are protected from having their stat stages lowered by other Pokemon. The duration is 8 turns if Mist is set during Hail or Fog. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members are protected from having their stat stages lowered by other Pokemon. The duration is 8 turns if Mist is set during Snow or Fog. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, protects user's party from stat drops.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
@@ -4279,7 +4279,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
-		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition nor confusion. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
+		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5, spread moves deal 0.5x damage to grounded Pokemon, and grounded Pokemon cannot be inflicted with a non-volatile status condition nor confusion. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		shortDesc: "5 turns. Can't status,-Dragon power vs grounded.",
 		gen6: {
 			desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
@@ -4297,7 +4297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moonlight: { // updated
 		name: "Moonlight",
-		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Blood Moon, 1/8 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, or Foghorn, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Blood Moon, 1/8 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
@@ -4317,7 +4317,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	morningsun: { // updated
 		name: "Morning Sun",
-		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun, 1/8 of its maximum HP if the weather is Blood Moon, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, or Foghorn, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun, 1/8 of its maximum HP if the weather is Blood Moon, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
@@ -4518,7 +4518,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octolock: {
 		name: "Octolock",
-		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Traps target, lowers Def and SpD by 1 each turn.",
 
 		start: "  [POKEMON] can no longer escape because of Octolock!",
@@ -5519,7 +5519,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandtomb: {
 		name: "Sand Tomb",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -6000,7 +6000,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snaptrap: {
 		name: "Snap Trap",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -6036,7 +6036,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snowscape: {
 		name: "Snowscape",
-		desc: "For 5 turns, the weather becomes Snow. During the effect, the Defense of Ice-type Pokemon is multiplied by 1.5 when taking damage from a physical attack. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Snow.",
+		desc: "For 5 turns, the weather becomes Snow. During the effect, the Defense of Ice-type Pokemon is multiplied by 1.5. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Snow.",
 		shortDesc: "For 5 turns, snow falls. Ice: 1.5x Def.",
 	},
 	soak: {
@@ -6066,7 +6066,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarbeam: { // updated
 		name: "Solar Beam",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
 			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
@@ -6095,7 +6095,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarblade: { // updated
 		name: "Solar Blade",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
 			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
@@ -6159,7 +6159,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiderweb: {
 		name: "Spider Web",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -6238,7 +6238,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiritshackle: {
 		name: "Spirit Shackle",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -6555,7 +6555,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	supercellslam: {
 		name: "Supercell Slam",
-		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. If the weather is Thunderstorm, this move does not check accuracy. If this move is used against a Pokemon holding Energy Nullifier, this move's accuracy remains at 95%.",
+		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. If the weather is Thunderstorm, this move does not check accuracy. If this move is used against a Pokemon holding Energy Nullifier, this move's accuracy remains at 90%.",
 		shortDesc: "User loses 50% max HP if miss. T.Storm: can't miss.",
 
 		damage: "#crash",
@@ -6678,7 +6678,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	synthesis: { // updated
 		name: "Synthesis",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun or Desolate Land, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun or Desolate Land, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Snow, Blood Moon, Fog, or Delta Stream, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
@@ -6898,7 +6898,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thousandwaves: {
 		name: "Thousand Waves",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Hits adjacent foes. Prevents them from switching.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
@@ -6963,7 +6963,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thundercage: {
 		name: "Thunder Cage",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -7086,7 +7086,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triattack: { // updated
 		name: "Tri Attack",
-		desc: "Has a 20% chance to either burn, frostbite, or paralyze the target. If Sunny Day, Hail, or Thunderstorm are active their corresponding status has an additional 3.333% chance of triggering above the base 20% chance.",
+		desc: "Has a 20% chance to either burn, frostbite, or paralyze the target. If Sunny Day, Snow, or Thunderstorm are active their corresponding status has an additional 3.333% chance of triggering above the base 20% chance.",
 		shortDesc: "20% chance to paralyze or burn or frostbite target.",
 		gen2: {
 			desc: "This move selects burn, freeze, or paralysis at random, and has a 20% chance to inflict the target with that status. If the target is frozen and burn was selected, it thaws out.",
@@ -7401,7 +7401,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlpool: {
 		name: "Whirlpool",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wrap: {
 		name: "Wrap",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
@@ -7633,7 +7633,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bearhug: {
 		name: "Bear Hug",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 
 		start: "  [POKEMON] became trapped in a vicious hug!",
@@ -7649,8 +7649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bloodmoon: {
 		name: "Blood Moon",
-		desc: "For 5 turns, the weather becomes Blood Moon. During the effect, the damage of supereffective attacks is multiplied by 1.5 and Dark-type Status moves have their priority increased by 1. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Blood Moon.",
-		shortDesc: "For 5 turns, the moon powers supereffective moves.",
+		desc: "For 5 turns, the weather becomes Blood Moon. During the effect, Fairy-type moves have their damage multiplied by 0.5 and Status moves used by Dark-type Pokemon have their priority increased by 1. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Blood Moon.",
+		shortDesc: "Fairy damage halved; Dark Pokemon's Status moves get +1 priority.",
 	},
 	brainstorm: {
 		name: "Brainstorm",
@@ -7711,7 +7711,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonforce: {
 		name: "Dragon Force",
-		desc: "For 5 turns, the weather becomes Dragon Force. During the effect, the damage of supereffective attacks is multiplied by 0.8 and the Attack and Special Attack of Dragon-type Pokemon is multiplied by 1.15. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Dragon Force.",
+		desc: "For 5 turns, the weather becomes Dragon Force. During the effect, the damage of supereffective attacks is multiplied by 0.8 and Dragon-type attacks have their damage multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Dragon Force.",
 		shortDesc: "For 5 turns, the arcane empowers Dragon attacks.",
 	},
 	dragonsdice: {
@@ -7884,8 +7884,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magnetize: {
 		name: "Magnetize",
-		desc: "For 5 turns, the weather becomes Magnetosphere. During the effect, Steel-type moves and Electric-type moves targeted at Steel-type Pokemon ignore accuracy checks, and the Special Defense of Steel-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Magnetosphere.",
-		shortDesc: "For 5 turns, Steel moves ignore accuracy checks.",
+		desc: "For 5 turns, the weather becomes Magnetosphere. During the effect, Steel-type Pokemon become non-grounded, unless Strong Winds-boosted Dust Storm is active. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Magnetosphere.",
+		shortDesc: "Steel Pokemon become non-grounded.",
 	},
 	mindmeld: {
 		name: "Mind Meld",
@@ -7909,8 +7909,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	overbearingcommand: {
 		name: "Overbearing Command",
-		desc: "Has a 70% chance to confuse the target. Has a 30% chance to sleep the target. If the target is already confused, the sleep chance is increase to 80%.",
-		shortDesc: "70% confusion chance; 30% sleep chance.",
+		desc: "Confuses the target if it is not already confused. If the target is already confused, this move puts it to sleep.",
+		shortDesc: "Confuses target; confused targets fall asleep.",
 	},
 	paddle: {
 		name: "Paddle",
@@ -7938,7 +7938,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	possess: {
 		name: "Possess",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 
 		start: "  [POKEMON] became trapped by evil spirits!",
@@ -8025,8 +8025,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slushball: {
 		name: "Slushball",
-		desc: "During Rain, Primordial Sea, or Hail, this move has x1.5 power. This move's type effectiveness against Fire is changed to be super effective no matter what this move's type is.",
-		shortDesc: "Rain/Hail: x1.5 BP. Super effective on Fire.",
+		desc: "During Rain, Primordial Sea, or Snow, this move has x1.5 power. This move's type effectiveness against Fire is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Rain/Snow: x1.5 BP. Super effective on Fire.",
 	},
 	smogspread: {
 		name: "Smog Spread",
@@ -8035,8 +8035,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snooze: {
 		name: "Snooze",
-		desc: "The user restores 1/2 of its maximum HP, rounded half up. Causes all Pokemon to fall asleep at the end of the next turn. At the end of the next turn, if a Pokemon is still active, does not have a non-volatile status condition, and can fall asleep, it falls asleep. If a Pokemon becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
-		shortDesc: "Heals user 50% max HP. Makes all Pokemon drowsy.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. Causes all Pokemon on the field to fall asleep at the end of the next turn. Fails for a Pokemon if it cannot fall asleep or if it already has a non-volatile status condition. At the end of the next turn, if an affected Pokemon is still active, does not have a non-volatile status condition, and can fall asleep, it falls asleep. If a Pokemon becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
+		shortDesc: "Heals the user by 50% of its max HP; Yawns all Pokemon.",
 	},
 	spectrum: {
 		name: "Spectrum",
@@ -8064,7 +8064,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strongwinds: {
 		name: "Strong Winds",
-		desc: "For 5 turns, the weather becomes Strong Winds. Clears all active Weathergies on activation. If other Weathergies are activated after Strong Winds, they gain boosted effects for as long as Strong Winds remains active. During the effect, wind moves ignore accuracy checks and the Speed of Flying-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Portable Turbine. Fails if the current weather is Strong Winds.",
+		desc: "For 5 turns, the weather becomes Strong Winds. Clears all active Weathergies on activation. If other Weathergies are activated after Strong Winds, they gain boosted effects for as long as Strong Winds remains active. During the effect, wind moves ignore accuracy checks and the Speed of non-grounded Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Portable Turbine. Fails if the current weather is Strong Winds.",
 		shortDesc: "Clears weather. For 5 turns, boosts all weather.",
 	},
 	stunningsolo: {
@@ -8129,7 +8129,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlduel: {
 		name: "Whirlduel",
-		desc: "Sets Rain Dance. Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Sets Rain Dance. Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Sets Rain. Traps + damages the target for 4-5 turns.",
 
 		start: "  [POKEMON] was lassoed!",
@@ -8141,8 +8141,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whiteout: {
 		name: "Whiteout",
-		desc: "Sets Hail. Has a 100% chance to inflict the target(s) with frostbite.",
-		shortDesc: "Sets Hail. 100% frostbite chance. Hits all Pokemon.",
+		desc: "Sets Snow. Has a 100% chance to inflict the target(s) with frostbite.",
+		shortDesc: "Sets Snow. 100% frostbite chance. Hits all Pokemon.",
 	},
 	wildmagic: {
 		name: "Wild Magic",
@@ -8166,7 +8166,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wrangle: {
 		name: "Wrangle",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell, has the Ability Run Away, or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, Substitute, or Windrage successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 
 		start: "  [POKEMON] was wrangled by [SOURCE]!",

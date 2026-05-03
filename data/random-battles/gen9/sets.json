@@ -7021,7 +7021,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Belly Drum", "Earthquake", "Ice Shard", "Ice Spinner"],
-                "abilities": ["Slush Rush", "Thick Fat"],
+                "abilities": ["Slush Rush"],
                 "teraTypes": ["Ice"]
             }
         ]

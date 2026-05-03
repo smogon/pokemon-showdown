@@ -168,7 +168,7 @@ describe("New set format (slow)", () => {
 		},
 		"gen9swserandomdoublesbattle": {
 			filename: "swse/doubles-sets",
-			roles: ["Choice Item user", "Doubles Battle Aura Setter", "Doubles Blood Moon Setter", "Doubles Bulky Setup Sweeper", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Dust Storm Setter", "Doubles Fairy Dust Setter", "Doubles Fog Setter", "Doubles Hail Setter", "Doubles Magnetosphere Setter", "Doubles Paranormal Activity Setter", "Doubles Pheromones Setter", "Doubles Pollen Setter", "Doubles Rain Setter", "Doubles Sandstorm Setter", "Doubles Setup Sweeper", "Doubles Smog Setter", "Doubles Sun Setter", "Doubles Support", "Doubles Thunderstorm Setter", "Doubles Wallbreaker", "Offensive Protect"],
+			roles: ["Choice Item user", "Doubles Battle Aura Setter", "Doubles Blood Moon Setter", "Doubles Bulky Setup Sweeper", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Dust Storm Setter", "Doubles Fairy Dust Setter", "Doubles Fog Setter", "Doubles Snow Setter", "Doubles Magnetosphere Setter", "Doubles Paranormal Activity Setter", "Doubles Pheromones Setter", "Doubles Pollen Setter", "Doubles Rain Setter", "Doubles Sandstorm Setter", "Doubles Setup Sweeper", "Doubles Smog Setter", "Doubles Sun Setter", "Doubles Support", "Doubles Thunderstorm Setter", "Doubles Wallbreaker", "Offensive Protect"],
 		},
 		"gen9swsebabyrandombattle": {
 			filename: "swsebaby/sets",
@@ -218,7 +218,7 @@ describe("New set format (slow)", () => {
 						}
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
-						if (!set.movepool[i + 1] > set.movepool[i]) {
+						if (set.movepool[i + 1] < set.movepool[i]) {
 							problems.push(`${species.name} movepool should be sorted alphabetically`);
 						}
 					}
@@ -233,7 +233,7 @@ describe("New set format (slow)", () => {
 							if (!allowedAbilities.has(ability)) problems.push(`${species.name} can't have ${ability}`);
 						}
 						for (let i = 0; i < set.abilities.length - 1; i++) {
-							if (!set.abilities[i + 1] > set.abilities[i]) {
+							if (set.abilities[i + 1] < set.abilities[i]) {
 								problems.push(`${species.name} abilities should be sorted alphabetically`);
 							}
 						}
@@ -246,7 +246,7 @@ describe("New set format (slow)", () => {
 							if (type !== dexType.name) problems.push(`${species.name} has misformatted Tera Type: ${type}`);
 						}
 						for (let i = 0; i < set.teraTypes.length - 1; i++) {
-							if (!set.teraTypes[i + 1] > set.teraTypes[i]) {
+							if (set.teraTypes[i + 1] < set.teraTypes[i]) {
 								problems.push(`${species.name} teraTypes should be sorted alphabetically`);
 							}
 						}
@@ -258,7 +258,7 @@ describe("New set format (slow)", () => {
 							if (type !== dexType.name) problems.push(`${species.name} has misformatted Preferred Type: ${type}`);
 						}
 						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
-							if (!set.preferredTypes[i + 1] > set.preferredTypes[i]) {
+							if (set.preferredTypes[i + 1] < set.preferredTypes[i]) {
 								problems.push(`${species.name} preferredTypes should be sorted alphabetically`);
 							}
 						}

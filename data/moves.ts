@@ -1501,23 +1501,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, source, target) {
 			if (target && ['hail', 'snowscape'].includes(target.effectiveClimateWeather())) {
-				if (move.secondaries) {
-					for (const secondary of move.secondaries) {
-						if (secondary.chance) secondary.chance *= 2;
-					}
-				}
 				move.accuracy = true;
 			}
 		},
 		secondary: {
-			chance: 15,
+			chance: 20,
 			onHit(target, source) {
-				const result = this.random(3);
-				if (result > 0) {
-					target.trySetStatus('fst', source);
-				} else {
-					target.trySetStatus('frz', source);
-				}
+				const status = this.sample(['frz', 'fst']);
+				target.trySetStatus(status, source);
 			},
 		},
 		target: "allAdjacentFoes",
@@ -2412,7 +2403,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	chillyreception: { // updated
+	chillyreception: {
 		num: 881,
 		accuracy: true,
 		basePower: 0,
@@ -2424,7 +2415,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priorityChargeCallback(source) {
 			source.addVolatile('chillyreception');
 		},
-		climateWeather: 'hail',
+		climateWeather: 'snowscape',
 		selfSwitch: true,
 		condition: {
 			duration: 1,
@@ -3638,7 +3629,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type === 'snowscape') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude'].includes(move.id)) {
@@ -3805,7 +3796,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type === 'snowscape') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool'].includes(move.id)) {
@@ -8148,7 +8139,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Hail",
-		pp: 5,
+		isNonstandard: "Past",
+		pp: 10,
 		priority: 0,
 		flags: { metronome: 1 },
 		climateWeather: 'hail',
@@ -12197,7 +12189,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (['hail', 'foghorn'].includes(source.effectiveClimateWeather())) {
+				if (['hail', 'snowscape', 'foghorn'].includes(source.effectiveClimateWeather())) {
 					return 8;
 				}
 				return 5;
@@ -12312,6 +12304,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (move.type === 'Dragon' && defender.isTerrainAffected() &&
 					!defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
+					return this.chainModify(0.5);
+				}
+			},
+			onModifyDamage(damage, source, target, move) {
+				if (move.spreadHit && target.isTerrainAffected() && !target.isSemiInvulnerable()) {
+					this.debug('Misty Terrain spread move suppress');
 					return this.chainModify(0.5);
 				}
 			},
@@ -17394,8 +17392,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Snowscape",
-		isNonstandard: "Past",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {},
 		climateWeather: 'snowscape',
@@ -18678,8 +18675,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	supercellslam: { // updated
 		num: 916,
-		accuracy: 95,
-		basePower: 100,
+		accuracy: 90,
+		basePower: 120,
 		category: "Physical",
 		name: "Supercell Slam",
 		pp: 15,
@@ -20995,6 +20992,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		onModifyType(move, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Castform' && pokemon.hasItem('weathervane')) {
+				move.type = pokemon.getTypes()[0] || 'Normal';
+				return;
+			}
 			switch (this.field.getRecentWeather(null, pokemon)) {
 			case 'sunnyday':
 			case 'desolateland':
@@ -21059,6 +21060,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
+			if (pokemon.baseSpecies.baseSpecies === 'Castform' && pokemon.hasItem('weathervane') &&
+				pokemon.species.id !== 'castform') {
+				this.debug(`BP: ${move.basePower}`);
+				return move.basePower * 2;
+			}
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
 				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather()) ||
 				['sandstorm', 'duststorm', 'pollinate',
@@ -22467,7 +22473,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	/* glacialcharge: { // untested
 		num: 10098,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 100,
 		category: "Physical",
 		name: "Glacial Charge",
 		pp: 15,
@@ -22959,32 +22965,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	/* overbearingcommand: { // untested
 		num: 10096,
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		name: "Overbearing Command",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, influencing: 1 },
-		onModifyMove(move, pokemon, target) {
-			move.secondaries = [];
-			if (target?.volatiles['confusion']) {
-				move.secondaries.push({
-					chance: 80,
-					status: 'slp',
-				});
+		onHit(target, source) {
+			if (target.volatiles['confusion']) {
+				target.trySetStatus('slp', source);
+			} else {
+				target.addVolatile('confusion', source);
 			}
-		},
-		secondary: {
-			chance: 100,
-			onHit(target, source) {
-				const result = this.random(10);
-				if (result <= 6) {
-					target.addVolatile('confusion', source);
-				} else {
-					target.trySetStatus('slp', source);
-				}
-			},
 		},
 		target: "normal",
 		type: "Psychic",
@@ -23504,7 +23497,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (type === 'Fire') return 1;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (['raindance', 'primordialsea', 'hail'].includes(pokemon.effectiveClimateWeather())) {
+			if (['raindance', 'primordialsea', 'hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('powered by Weathergy');
 				return this.chainModify(1.5);
 			}
@@ -23533,22 +23526,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Snooze",
 		pp: 5,
 		priority: 0,
-		flags: { sound: 1, reflectable: 1, heal: 1, bypasssub: 1, metronome: 1 },
-		onHit(target, source, move) {
-			let success = false;
+		flags: { protect: 1, sound: 1, reflectable: 1, heal: 1, bypasssub: 1, metronome: 1 },
+		onHitField(target, source, move) {
+			let success = !!this.heal(Math.ceil(source.maxhp * 0.5), source);
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== target && !this.runEvent('TryHit', pokemon, source, move)) continue;
-				if (pokemon.status || !pokemon.runStatusImmunity('slp') || !pokemon.addVolatile('yawn', source)) continue;
-				success = true;
+				if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
+					this.add('-miss', source, pokemon);
+					success = true;
+					continue;
+				}
+				const hitResult = this.runEvent('TryHit', pokemon, source, move);
+				if (hitResult === false || hitResult === this.NOT_FAIL) {
+					continue;
+				} else if (hitResult === null) {
+					success = true;
+				} else if (!pokemon.status && pokemon.runStatusImmunity('slp') && pokemon.addVolatile('yawn', source)) {
+					success = true;
+				}
 			}
-			if (!success) {
-				this.add('-fail', source);
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
-			}
-			this.heal(Math.ceil(source.maxhp * 0.5), source);
+			if (!success) return false;
 		},
-		target: "normal",
+		target: "all",
 		type: "Normal",
 	},
 	spectrum: { // tested, works as intended
@@ -23765,7 +23763,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thermalvortex: { // tested, works as intended TODO: fix move failure message when unable to set the weather
 		num: 10071,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 70,
 		category: "Physical",
 		name: "Thermal Vortex",
 		pp: 10,
@@ -23849,7 +23847,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1 },
-		climateWeather: "Hail",
+		climateWeather: "snowscape",
 		secondary: {
 			chance: 100,
 			status: 'fst',

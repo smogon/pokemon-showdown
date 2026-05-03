@@ -105,6 +105,106 @@ const WEATHER_SETUP = [
 	'sprinkle', 'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize', 'strongwinds',
 	'brainstorm', 'efflorescence', 'fluffbuff', 'languishingaura', 'thermalvortex', 'whirlduel', 'whiteout', 'witheout',
 ];
+const WEATHER_ABILITY_CHECKS: {
+	ability: string,
+	id: ID,
+	detail: keyof RandomTeamsTypes.TeamDetails,
+	group: keyof RandomTeamsTypes.TeamDetails,
+	setupMove: string,
+}[] = [
+	{
+		ability: 'Drought', id: 'drought' as ID, detail: 'sun',
+		group: 'climateWeather', setupMove: 'sunnyday',
+	},
+	{
+		ability: 'Drizzle', id: 'drizzle' as ID, detail: 'rain',
+		group: 'climateWeather', setupMove: 'raindance',
+	},
+	{
+		ability: 'Snow Warning', id: 'snowwarning' as ID, detail: 'snow',
+		group: 'climateWeather', setupMove: 'snowscape',
+	},
+	{
+		ability: 'Eventide', id: 'eventide' as ID, detail: 'bloodMoon',
+		group: 'climateWeather', setupMove: 'bloodmoon',
+	},
+	{
+		ability: 'Condensation', id: 'condensation' as ID, detail: 'fog',
+		group: 'climateWeather', setupMove: 'foghorn',
+	},
+	{
+		ability: 'Sand Stream', id: 'sandstream' as ID, detail: 'sand',
+		group: 'irritantWeather', setupMove: 'sandstorm',
+	},
+	{
+		ability: 'Dust Devil', id: 'dustdevil' as ID, detail: 'dust',
+		group: 'irritantWeather', setupMove: 'duststorm',
+	},
+	{
+		ability: 'Hay Fever', id: 'hayfever' as ID, detail: 'pollen',
+		group: 'irritantWeather', setupMove: 'pollinate',
+	},
+	{
+		ability: 'Secretion', id: 'secretion' as ID, detail: 'pheromones',
+		group: 'irritantWeather', setupMove: 'swarmsignal',
+	},
+	{
+		ability: 'Pollution', id: 'pollution' as ID, detail: 'smog',
+		group: 'irritantWeather', setupMove: 'smogspread',
+	},
+	{
+		ability: 'Incantation', id: 'incantation' as ID, detail: 'fairyDust',
+		group: 'irritantWeather', setupMove: 'sprinkle',
+	},
+	{
+		ability: 'Stand Off', id: 'standoff' as ID, detail: 'battleAura',
+		group: 'energyWeather', setupMove: 'auraprojection',
+	},
+	{
+		ability: 'Se\u0301ance', id: 'seance' as ID, detail: 'paranormalActivity',
+		group: 'energyWeather', setupMove: 'haunt',
+	},
+	{
+		ability: 'Dreamer', id: 'dreamer' as ID, detail: 'dreamscape',
+		group: 'energyWeather', setupMove: 'daydream',
+	},
+	{
+		ability: 'Arcanum', id: 'arcanum' as ID, detail: 'dragonForce',
+		group: 'energyWeather', setupMove: 'dragonforce',
+	},
+	{
+		ability: 'Stormfront', id: 'stormfront' as ID, detail: 'thunderstorm',
+		group: 'energyWeather', setupMove: 'supercell',
+	},
+	{
+		ability: 'Ferroflux', id: 'ferroflux' as ID, detail: 'magnetosphere',
+		group: 'energyWeather', setupMove: 'magnetize',
+	},
+	{
+		ability: 'Galeforce', id: 'galeforce' as ID, detail: 'strongWinds',
+		group: 'strongWinds', setupMove: 'strongwinds',
+	},
+];
+const WEATHER_ABILITY_MOVE_CHECKS: { id: ID, moves: string[] }[] = [
+	{ id: 'drought' as ID, moves: ['solarbeam', 'solarblade', 'sunscreen'] },
+	{ id: 'drizzle' as ID, moves: [] },
+	{ id: 'snowwarning' as ID, moves: ['auroraveil'] },
+	{ id: 'eventide' as ID, moves: ['deception'] },
+	{ id: 'condensation' as ID, moves: [] },
+	{ id: 'sandstream' as ID, moves: ['stonestorm'] },
+	{ id: 'dustdevil' as ID, moves: ['stonestorm'] },
+	{ id: 'hayfever' as ID, moves: [] },
+	{ id: 'secretion' as ID, moves: [] },
+	{ id: 'pollution' as ID, moves: [] },
+	{ id: 'incantation' as ID, moves: [] },
+	{ id: 'standoff' as ID, moves: ['focuspunch'] },
+	{ id: 'seance' as ID, moves: ['ectoplasma'] },
+	{ id: 'dreamer' as ID, moves: ['dreameater'] },
+	{ id: 'arcanum' as ID, moves: [] },
+	{ id: 'stormfront' as ID, moves: [] },
+	{ id: 'ferroflux' as ID, moves: [] },
+	{ id: 'galeforce' as ID, moves: ['windrage'] },
+];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'kihop', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom',
 	'mockery',
@@ -162,6 +262,29 @@ const DOUBLES_NO_LEAD_POKEMON = [
 
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance > 20 && move.secondary.chance < 100;
+}
+
+function getWeatherAbility(abilities: string[], abilityid: ID) {
+	return abilities.find(ability => toID(ability) === abilityid);
+}
+
+function getWeatherDetails(teamDetails: RandomTeamsTypes.TeamDetails, abilities: string[]) {
+	const weatherDetails: RandomTeamsTypes.TeamDetails = { ...teamDetails };
+	for (const check of WEATHER_ABILITY_CHECKS) {
+		if (getWeatherAbility(abilities, check.id)) {
+			weatherDetails[check.detail] = 1;
+			weatherDetails[check.group] = 1;
+		}
+	}
+	return weatherDetails;
+}
+
+function hasWeatherDetail(
+	teamDetails: RandomTeamsTypes.TeamDetails,
+	abilities: string[],
+	detail: keyof RandomTeamsTypes.TeamDetails
+) {
+	return !!getWeatherDetails(teamDetails, abilities)[detail];
 }
 
 export class RandomTeams {
@@ -507,6 +630,7 @@ export class RandomTeams {
 
 		// Develop additional move lists
 		const statusMoves = this.cachedStatusMoves;
+		const weatherDetails = getWeatherDetails(teamDetails, abilities);
 
 		// Team-based move culls
 		if (teamDetails.screens) {
@@ -545,45 +669,45 @@ export class RandomTeams {
 			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (!teamDetails.battleAura) {
-			if (movePool.includes('focuspunch')) this.fastPop(movePool, movePool.indexOf('focuspunch'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (!teamDetails.strongWinds) {
-			if (movePool.includes('windrage')) this.fastPop(movePool, movePool.indexOf('windrage'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (!teamDetails.paranormalActivity) {
-			if (movePool.includes('ectoplasma')) this.fastPop(movePool, movePool.indexOf('ectoplasma'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (teamDetails.fairyDust && !teamDetails.bloodMoon) {
-			if (movePool.includes('deception')) this.fastPop(movePool, movePool.indexOf('deception'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (teamDetails.bloodMoon) {
-			if (movePool.includes('morningsun')) this.fastPop(movePool, movePool.indexOf('morningsun'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (teamDetails.sun) {
+		if (weatherDetails.sun) {
 			if (movePool.includes('moonlight')) this.fastPop(movePool, movePool.indexOf('moonlight'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (teamDetails.fog) {
-			if (movePool.includes('defog')) this.fastPop(movePool, movePool.indexOf('defog'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
-		if (!teamDetails.sun && teamDetails.climateWeather) {
+		if (!weatherDetails.sun && weatherDetails.climateWeather) {
 			if (movePool.includes('solarbeam')) this.fastPop(movePool, movePool.indexOf('solarbeam'));
 			if (movePool.includes('solarblade')) this.fastPop(movePool, movePool.indexOf('solarblade'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (!teamDetails.sand && !teamDetails.dust) {
+		if (weatherDetails.bloodMoon) {
+			if (movePool.includes('morningsun')) this.fastPop(movePool, movePool.indexOf('morningsun'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (weatherDetails.fog) {
+			if (movePool.includes('defog')) this.fastPop(movePool, movePool.indexOf('defog'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (!weatherDetails.sand && !weatherDetails.dust) {
 			if (movePool.includes('stonestorm')) this.fastPop(movePool, movePool.indexOf('stonestorm'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (!teamDetails.dreamscape) {
+		if (weatherDetails.fairyDust && !weatherDetails.bloodMoon) {
+			if (movePool.includes('deception')) this.fastPop(movePool, movePool.indexOf('deception'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (!weatherDetails.battleAura) {
+			if (movePool.includes('focuspunch')) this.fastPop(movePool, movePool.indexOf('focuspunch'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (!weatherDetails.paranormalActivity) {
+			if (movePool.includes('ectoplasma')) this.fastPop(movePool, movePool.indexOf('ectoplasma'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (!weatherDetails.dreamscape) {
 			if (movePool.includes('dreameater')) this.fastPop(movePool, movePool.indexOf('dreameater'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (!weatherDetails.strongWinds) {
+			if (movePool.includes('windrage')) this.fastPop(movePool, movePool.indexOf('windrage'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
 
@@ -858,7 +982,8 @@ export class RandomTeams {
 		}
 
 		// Enforce Aurora Veil if the team doesn't already have screens
-		if (!teamDetails.screens && movePool.includes('auroraveil') && teamDetails.hail) {
+		if (!teamDetails.screens && movePool.includes('auroraveil') &&
+			hasWeatherDetail(teamDetails, abilities, 'snow')) {
 			counter = this.addMove('auroraveil', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, role);
 		}
@@ -880,7 +1005,7 @@ export class RandomTeams {
 		}
 
 		// Enforce Conduction on Magnetosphere teams
-		if (teamDetails.magnetosphere) {
+		if (hasWeatherDetail(teamDetails, abilities, 'magnetosphere')) {
 			if (movePool.includes('conduction')) {
 				counter = this.addMove('conduction', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, role);
@@ -888,12 +1013,14 @@ export class RandomTeams {
 		}
 
 		// Encourage Deception on Dragon types or on Blood Moon teams
-		if (teamDetails.bloodMoon && types.includes('Dragon')) {
+		const hasBloodMoon = hasWeatherDetail(teamDetails, abilities, 'bloodMoon');
+		const hasFairyDust = hasWeatherDetail(teamDetails, abilities, 'fairyDust');
+		if (hasBloodMoon && types.includes('Dragon')) {
 			if (movePool.includes('deception')) {
 				counter = this.addMove('deception', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, role);
 			}
-		} else if ((teamDetails.bloodMoon || (types.includes('Dragon') && !teamDetails.fairyDust)) && this.randomChance(1, 2)) {
+		} else if ((hasBloodMoon || (types.includes('Dragon') && !hasFairyDust)) && this.randomChance(1, 2)) {
 			if (movePool.includes('deception')) {
 				counter = this.addMove('deception', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, role);
@@ -1150,7 +1277,7 @@ export class RandomTeams {
 		case 'Sand Rush': case 'Sand Veil':
 			return !teamDetails.sand;
 		case 'Slush Rush': case 'Snow Cloak': case 'Absolute Zero': case 'Glacial Armor':
-			return !teamDetails.hail;
+			return !teamDetails.snow;
 		case 'Shadow Step':
 			return !(teamDetails.bloodMoon || teamDetails.paranormalActivity);
 		case 'Malice':
@@ -1220,34 +1347,34 @@ export class RandomTeams {
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
 		if (abilities.includes('Regenerator') && counter.get('pivot')) return 'Regenerator';
 		if (species.id === 'umbralu' && (teamDetails.rain || teamDetails.bloodMoon)) return 'Petrichor';
+		for (const check of WEATHER_ABILITY_MOVE_CHECKS) {
+			if (!check.moves.some(move => moves.has(move))) continue;
+			const ability = getWeatherAbility(abilities, check.id);
+			if (ability) return ability;
+		}
+		for (const check of WEATHER_ABILITY_CHECKS) {
+			if (!moves.has(check.setupMove)) continue;
+			const ability = getWeatherAbility(abilities, check.id);
+			if (ability) return ability;
+		}
 
 		// Hard-code weather abilities
 		// If you don't have a weather setter for a category prioritize a weather setup ability
-		const climateSetUp = ['Drizzle', 'Heat Haze', 'Drought', 'Ice Armor', 'Snow Warning', 'Eventide', 'Condesation'];
-		const irritantSetUp = ['Sand Stream', 'Dust Devil', 'Arena Bloom', 'Hay Fever', 'Secretion', 'Pollution',
-			'Incantation'];
-		const energySetUp = ['Stand Off', 'Se\u0301ance', 'Arena Curse', 'Dreamer', 'Arcanum', 'Relic Soul', 'Stormfront',
-			'Ferroflux'];
-		for (const ability of climateSetUp) {
-			if (abilities.includes(ability) && !teamDetails.climateWeather) return ability;
-		}
-		for (const ability of irritantSetUp) {
-			if (abilities.includes(ability) && !teamDetails.irritantWeather) return ability;
-		}
-		for (const ability of energySetUp) {
-			if (abilities.includes(ability) && !teamDetails.energyWeather) return ability;
+		for (const check of WEATHER_ABILITY_CHECKS) {
+			const ability = getWeatherAbility(abilities, check.id);
+			if (ability && !teamDetails[check.group]) return ability;
 		}
 		// If you have a weather present on your team prioritize weather abilities for that weather
 		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const sunAbilities = ['Heat Haze', 'Chlorophyll', 'Solar Power', 'Drought', 'Leaf Guard'];
-		const hailAbilities = ['Ice Armor', 'Slush Rush', 'Absolute Zero', 'Snow Warning', 'Snow Cloak',
+		const snowAbilities = ['Ice Armor', 'Slush Rush', 'Absolute Zero', 'Snow Warning', 'Snow Cloak',
 			'Glacial Armor', 'Ice Body'];
 		const bloodMoonAbilities = ['Shadow Step', 'Malice', 'Eventide'];
 		const fogAbilities = ['Warp Mist', 'Foghorn'];
 		const sandAbilities = ['Sand Stream', 'Sand Veil', 'Earth Force', 'Sand Rush'];
 		const dustAbilities = ['Earth Force', 'Dust Gather', 'Dust Devil'];
 		const pollenAbilities = ['Hay Fever', 'Leaf Guard', 'Bloomspring', 'Grass Pelt', 'Arena Bloom'];
-		const pheremonesAbilities = ['Secretion', 'Powder Cure'];
+		const pheromonesAbilities = ['Secretion', 'Powder Cure'];
 		const smogAbilities = ['Pollution', 'Carbon Capture', 'Poison Heal', 'Corrosion', 'Guts',
 			'Quick Feet', 'Toxic Boost'];
 		const fairyDustAbilities = ['Incantation', 'Power Above', 'Druidry'];
@@ -1259,7 +1386,7 @@ export class RandomTeams {
 			'Volt Absorb', 'Motor Drive', 'Relic Soul', 'Surge Surfer'];
 		const magnetosphereAbilities = ['Ferroflux', 'Magnapult', 'Machine Precision', 'Nanomachines'];
 		// Since SW can't be overridden by other weathers have multiple setters is pointless
-		const strongWindsAbilities = ['Gale Wings', 'Wind Rider', 'Wind Power'];
+		const strongWindsAbilities = ['Galeforce', 'Gale Wings', 'Wind Rider', 'Wind Power'];
 		// This is probably a really inefficient way of doing this
 		const weatherAbilitiesAllowed: string[] = [];
 		if (teamDetails.rain) {
@@ -1272,8 +1399,8 @@ export class RandomTeams {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
-		if (teamDetails.hail) {
-			for (const ability of hailAbilities) {
+		if (teamDetails.snow) {
+			for (const ability of snowAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
@@ -1308,7 +1435,7 @@ export class RandomTeams {
 			}
 		}
 		if (teamDetails.pheromones) {
-			for (const ability of pheremonesAbilities) {
+			for (const ability of pheromonesAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
@@ -1513,7 +1640,7 @@ export class RandomTeams {
 			moves.has('flipturn') && moves.has('protect') && (moves.has('aquajet') || (moves.has('jetpunch')))
 		) return 'Mystic Water';
 		if (counter.get('speedsetup') && role === 'Doubles Bulky Setup') return 'Weakness Policy';
-		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.hail) return 'Blunder Policy';
+		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 
 		if (role === 'Choice Item user') {
 			if (scarfReqs || moves.has('finalgambit') || species.id === 'jirachi') return 'Choice Scarf';
@@ -1730,7 +1857,7 @@ export class RandomTeams {
 				if (teamDetails.climateWeather) {
 					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
 					if (teamDetails.sun && !set.role.includes('Sun Setter')) continue;
-					if (teamDetails.hail && !set.role.includes('Hail Setter')) continue;
+					if (teamDetails.snow && !set.role.includes('Snow Setter')) continue;
 					if (teamDetails.bloodMoon && !set.role.includes('Blood Moon Setter')) continue;
 					if (teamDetails.fog && !set.role.includes('Fog Setter')) continue;
 				}
@@ -1963,28 +2090,6 @@ export class RandomTeams {
 					(this.dex.getEffectiveness('Dark', species) > 0 ||
 						(this.dex.getEffectiveness('Dark', species) > -2 && types.includes('Water')))
 			);
-			/* set.moves.includes('sunnyday') || set.moves.includes('thermalvortex') || set.ability === 'Heat Haze');
-			const hasRainSetup = (set.ability === 'Snow Warning' || set.moves.includes('snowscape') ||
-				const hasRainSetup = (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
-				set.moves.includes('whirlduel') || set.moves.includes('shelter'));
-			const hasRainSetup = (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' ||
-				set.moves.includes('chillyreception') || set.moves.includes('hail') || set.ability === 'Ice Armor');
-			const hasRainSetup = (set.ability === 'Eventtide' || set.moves.includes('bloodmoon'));
-			const hasRainSetup = (set.ability === 'Condensation' || set.moves.includes('foghorn'));
-			const hasRainSetup = (set.ability === 'Sand Stream' || set.moves.includes('sandstorm'));
-			const hasRainSetup = (set.ability === 'Dust Devil' || set.moves.includes('duststorm'));
-			const hasRainSetup = (set.ability === 'Hay Fever' || set.ability === 'Arena Bloom' || set.moves.includes('pollinate'));
-			const hasRainSetup = (set.ability === 'Secretion' || set.moves.includes('swarmsignal'));
-			const hasRainSetup = (set.ability === 'Pollution' || set.moves.includes('smogspread'));
-			const hasRainSetup = (set.ability === 'Incantation' || set.moves.includes('sprinkle'));
-			const hasRainSetup = (set.ability === 'Stand Off' || set.moves.includes('auraprojection'));
-			const hasRainSetup = (set.ability === 'Seance' || set.ability === 'Arena Curse' || set.moves.includes('haunt'));
-			const hasRainSetup = (set.ability === 'Dreamer' || set.moves.includes('daydream'));
-			const hasRainSetup = (set.ability === 'Arcanum' || set.moves.includes('dragonforce'));
-			const hasRainSetup = (set.ability === 'Stormfront' || set.ability === 'Relic Soul' || set.moves.includes('supercell'));
-			const hasRainSetup = (set.ability === 'Ferroflux' || set.moves.includes('magnetize'));
-			const hasRainSetup = (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' ||
-				set.moves.includes('strongwinds')); */
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
@@ -2132,41 +2237,20 @@ export class RandomTeams {
 			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance') ||
-				set.moves.includes('whirlduel') || set.moves.includes('shelter')) teamDetails.rain = 1;
-			if (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday') ||
-				set.moves.includes('thermalvortex') || set.ability === 'Heat Haze') {
-				teamDetails.sun = 1;
+			for (const check of WEATHER_ABILITY_CHECKS) {
+				if (toID(set.ability) === check.id || set.moves.includes(check.setupMove)) {
+					teamDetails[check.detail] = 1;
+				}
 			}
-			if (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception') ||
-				set.moves.includes('hail') || set.ability === 'Ice Armor') {
-				teamDetails.hail = 1;
-			}
-			if (set.ability === 'Eventtide' || set.moves.includes('bloodmoon')) teamDetails.bloodMoon = 1;
-			if (set.ability === 'Condensation' || set.moves.includes('foghorn')) teamDetails.fog = 1;
-			if (set.ability === 'Sand Stream' || set.moves.includes('sandstorm')) teamDetails.sand = 1;
-			if (set.ability === 'Dust Devil' || set.moves.includes('duststorm')) teamDetails.dust = 1;
-			if (set.ability === 'Hay Fever' || set.ability === 'Arena Bloom' || set.moves.includes('pollinate')) {
-				teamDetails.pollen = 1;
-			}
-			if (set.ability === 'Secretion' || set.moves.includes('swarmsignal')) teamDetails.pheromones = 1;
-			if (set.ability === 'Pollution' || set.moves.includes('smogspread')) teamDetails.smog = 1;
-			if (set.ability === 'Incantation' || set.moves.includes('sprinkle')) teamDetails.fairyDust = 1;
-			if (set.ability === 'Stand Off' || set.moves.includes('auraprojection')) teamDetails.battleAura = 1;
-			if (set.ability === 'Se\u0301ance' || set.ability === 'Arena Curse' || set.moves.includes('haunt')) {
-				teamDetails.paranormalActivity = 1;
-			}
-			if (set.ability === 'Dreamer' || set.moves.includes('daydream')) teamDetails.dreamscape = 1;
-			if (set.ability === 'Arcanum' || set.moves.includes('dragonforce')) teamDetails.dragonForce = 1;
-			if (set.ability === 'Stormfront' || set.ability === 'Relic Soul' || set.moves.includes('supercell')) {
-				teamDetails.thunderstorm = 1;
-			}
-			if (set.ability === 'Ferroflux' || set.moves.includes('magnetize')) teamDetails.magnetosphere = 1;
-			if (set.ability === 'Galeforce' || set.ability === 'Heat Haze' || set.ability === 'Ice Armor' ||
-				set.moves.includes('strongwinds')) {
-				teamDetails.strongWinds = 1;
-			}
-			if (teamDetails.rain || teamDetails.sun || teamDetails.hail || teamDetails.bloodMoon || teamDetails.fog ||
+			if (set.moves.includes('whirlduel') || set.moves.includes('shelter')) teamDetails.rain = 1;
+			if (set.ability === 'Orichalcum Pulse' || set.moves.includes('thermalvortex') ||
+				set.ability === 'Heat Haze') teamDetails.sun = 1;
+			if (set.moves.includes('chillyreception') || set.ability === 'Ice Armor') teamDetails.snow = 1;
+			if (set.ability === 'Arena Bloom') teamDetails.pollen = 1;
+			if (set.ability === 'Arena Curse') teamDetails.paranormalActivity = 1;
+			if (set.ability === 'Relic Soul') teamDetails.thunderstorm = 1;
+			if (set.ability === 'Heat Haze' || set.ability === 'Ice Armor') teamDetails.strongWinds = 1;
+			if (teamDetails.rain || teamDetails.sun || teamDetails.snow || teamDetails.bloodMoon || teamDetails.fog ||
 				(isDoubles && set.ability === 'Cloud Nine')) {
 				teamDetails.climateWeather = 1;
 			}
@@ -3056,7 +3140,7 @@ export class RandomTeams {
 			trickroom: 1,
 			auroraveil: 1,
 		};
-		const weatherAbilities = ['drizzle', 'drought', 'snowwarning', 'sandstream'];
+		const weatherAbilities = WEATHER_ABILITY_CHECKS.map(check => check.id);
 		const terrainAbilities: { [k: string]: string } = {
 			electricsurge: "electric",
 			psychicsurge: "psychic",
@@ -3187,8 +3271,22 @@ export class RandomTeams {
 		const weatherAbilitiesSet: { [k: string]: string } = {
 			drought: "sunnyday",
 			drizzle: "raindance",
-			snowwarning: "hail",
+			snowwarning: "snowscape",
+			eventide: "bloodmoon",
+			condensation: "foghorn",
 			sandstream: "sandstorm",
+			dustdevil: "duststorm",
+			hayfever: "pollinate",
+			secretion: "swarmsignal",
+			pollution: "smogspread",
+			incantation: "sprinkle",
+			standoff: "auraprojection",
+			seance: "haunt",
+			dreamer: "daydream",
+			arcanum: "dragonforce",
+			stormfront: "supercell",
+			ferroflux: "magnetize",
+			galeforce: "strongwinds",
 		};
 		const resistanceAbilities: { [k: string]: string[] } = {
 			waterabsorb: ["Water"],

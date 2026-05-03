@@ -3130,7 +3130,7 @@ export class RandomGen9Teams {
 		const weatherAbilitiesSet: { [k: string]: string } = {
 			drizzle: "raindance",
 			drought: "sunnyday",
-			snowwarning: "hail",
+			snowwarning: "snowscape",
 			sandstream: "sandstorm",
 		};
 		const resistanceAbilities: { [k: string]: string[] } = {

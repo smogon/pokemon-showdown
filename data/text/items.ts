@@ -2710,8 +2710,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	weathervane: {
 		name: "Weather Vane",
-		desc: "If held by a Castform, it will not be able to change out of the first form it changes into during battle. It remains in this form throughout the entire battle.",
-		shortDesc: "Locks Castform to the first forme it changes into during battle.",
+		desc: "If held by a Pokemon with Consecration, Evergreen, Flower Gift, Forecast, Power Plumage, Swarming, or Wet and Dry, it will not be able to change out of the first forme it changes into during battle. If held by a Castform, Weather Ball's type and power match that forme. These effects remain after switching out.",
+		shortDesc: "Locks the holder's first weather forme. Castform: Weather Ball matches it.",
 	},
 	whirligig: {
 		name: "Whirligig",
