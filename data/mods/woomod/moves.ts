@@ -7,26 +7,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 75,
 		basePowerCallback(pokemon, target, move) {
-			const yourSide = pokemon.side;
-			const targetSide = target.side;
 			let allLayers = 0;
-			if (yourSide.getSideCondition('stealthrock')) allLayers++;
-			if (yourSide.getSideCondition('stickyweb')) allLayers++;
-			if (yourSide.sideConditions['spikes']) {
-				allLayers += yourSide.sideConditions['spikes'].layers;
-			}
-			if (yourSide.sideConditions['toxicspikes']) {
-				allLayers += yourSide.sideConditions['toxicspikes'].layers;
-			}
-			if (targetSide.getSideCondition('stealthrock')) allLayers++;
-			if (targetSide.getSideCondition('stickyweb')) allLayers++;
-			if (targetSide.sideConditions['spikes']) {
-				allLayers += targetSide.sideConditions['spikes'].layers;
-			}
-			if (targetSide.sideConditions['toxicspikes']) {
-				allLayers += targetSide.sideConditions['toxicspikes'].layers;
+			for (const side of this.sides) {
+				for (const id of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']) {
+					const sideCondition = side.sideConditions[id];
+					if (!sideCondition) continue;
+					allLayers += sideCondition.layers ?? 1;
+				}
 			}
 			this.debug('Downtown Slide damage boost');
+			const bp = 75 + 15 * allLayers;
+			this.add('-message', `Downtown Slide currently has a BP of ${bp}!`);
 			return 75 + 15 * allLayers;
 		},
 		category: "Physical",
@@ -117,8 +108,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', pokemon, "Thunderous Kick", target);
 		},
 		onHit(target, source) {
-			// @ts-expect-error
-			if (target && target.effectiveWeather() === 'raindance') this.field.weatherState.duration++;
+			if (this.field.weather === 'raindance') this.field.weatherState.duration!++;
 		},
 		target: "normal",
 	},
@@ -280,9 +270,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		multihit: 2,
 		onHit(target) {
-			if (target.hasType('Fighting')) return false;
-			if (!target.addType('Fighting')) return false;
-			this.add('-start', target, 'typeadd', 'Fighting', '[from] move: Duoshock');
+			if (!target.hasType('Fighting') && target.addType('Fighting')) {
+				this.add('-start', target, 'typeadd', 'Fighting', '[from] move: Duoshock');
+			}
 		},
 		target: "normal",
 	},
@@ -523,6 +513,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	electroball: {
 		inherit: true,
 		basePower: 90,
+		basePowerCallback: undefined,
 		overrideOffensiveStat: 'spe',
 		shortDesc: "Uses Spe as Atk in damage calculation.",
 	},

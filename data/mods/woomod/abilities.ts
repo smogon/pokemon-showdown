@@ -15,14 +15,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75.",
 	},
 	tacticalretreat: {
-		onAfterMove(source, target, move) {
-			if (!source || !target.hp || !move.totalDamage) return;
-			// @ts-expect-error
-			if (!move.self.boosts) return;
-			// @ts-expect-error
-			if (Object.values(move.self.boosts).some(boost => boost < 0)) {
-				source.switchFlag = true;
-				this.add('-ability', source, 'Tactical Retreat');
+		onAfterBoost(boosts, target, source, move) {
+			if (!target || !source.hp || target !== source || !move.totalDamage) return;
+			if (Object.values(boosts).some(boost => boost < 0)) {
+				target.switchFlag = true;
+				this.add('-ability', target, 'Tactical Retreat');
 			};
 		},
 		flags: {},
@@ -53,7 +50,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	typhoon: {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
-				target.addVolatile('ability:deltastream');
+				target.setAbility('deltastream', target);
 			}
 			if (move.category === 'Special') {
 				if (!target.hasType('Flying')) return;
@@ -66,6 +63,30 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 		name: "Typhoon",
 		shortDesc: "When hit by a physical move, set Delta Stream. When hit by a special move, lose Flying.",
+	},
+	deltastream: {
+		inherit: true,
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
+				if (!target.hasType('Flying')) return;
+				const newType = target.getTypes().filter(t => t !== 'Flying');
+				if (target.setType(newType)) {
+					this.add('-start', target, 'typechange', newType.join('/'), '[silent]');
+				}
+			}
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+			pokemon.setAbility('typhoon');
+		},
 	},
 	protectiveaura: {
 		onSourceModifyAtkPriority: 6,
@@ -96,9 +117,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon takes 0.5x damage from Ghost/Dark attacks. Immune to confusion/Taunt/Heal Block/Torment.",
 	},
 	asoneklang: {
+		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			pokemon.addVolatile('ability:levitate');
-			pokemon.addVolatile('ability:clearbody');
+			this.add('-ability', pokemon, 'Levitate');
+			this.add('-ability', pokemon, 'Clear Body');
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Clear Body", `[of] ${target}`);
+			}
 		},
 		flags: {},
 		name: "As One (Klang)",
@@ -106,8 +142,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	asoneseadra: {
 		onStart(pokemon) {
-			pokemon.addVolatile('ability:levitate');
-			pokemon.addVolatile('ability:sniper');
+			this.add('-ability', pokemon, 'Levitate');
+			this.add('-ability', pokemon, 'Sniper');
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).crit) {
+				this.debug('Sniper boost');
+				return this.chainModify(1.5);
+			}
 		},
 		flags: {},
 		name: "As One (Seadra)",
@@ -117,8 +159,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSwitchOut(pokemon) {
 			this.field.setWeather('raindance');
 		},
-		onSourceBasePowerPriority: 17,
-		onSourceBasePower(basePower, attacker, defender, move) {
+		onSourceModifyDamagePriority: 17,
+		onSourceModifyDamage(basePower, attacker, defender, move) {
 			if (['raindance', 'primordialsea'].includes(defender.effectiveWeather())) {
 				return this.chainModify(2);
 			}
@@ -128,10 +170,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon sets Rain when switching out. Takes 2x damage in rain.",
 	},
 	spicycream: {
-		onUpdate(pokemon) {
+		onSetStatus(status, pokemon, source, effect) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Vanillite') return;
-			if (pokemon.status === 'brn' && pokemon.species.forme !== 'Melted') {
-				pokemon.formeChange('Vanillite-Melted', this.effect, true);
+			if (status.id === 'brn' && pokemon.species.forme !== 'Melted') {
+				pokemon.formeChange('Vanillite-Melted', effect, true);
 			}
 		},
 		flags: {},
@@ -176,8 +218,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "When this Pokemon is damaged by an attack, its next Fire move has doubled power.",
 	},
 	lastcall: {
-		onFaint(pokemon) {
-			this.actions.useMove(pokemon.moveSlots[pokemon.moveSlots.length - 1].id, pokemon);
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.actions.useMove(target.moveSlots[target.moveSlots.length - 1].id, target);
+			}
 		},
 		flags: {},
 		name: "LAST CALL",
@@ -185,19 +229,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	narcissus: {
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
-		},
-		onStart(pokemon) {
-			if (!this.effectState.switchingIn) return;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				target.transformInto(pokemon, this.dex.abilities.get('narcissus'));
 			}
-			this.effectState.switchingIn = false;
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Narcissus",
-		shortDesc: "On switchin, the opponent transforms into this Pokemon.",
+		shortDesc: "On switch-in, the foe transforms into this Pokemon.",
 	},
 	magicbag: {
 		onResidualOrder: 28,
@@ -270,7 +309,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Farfetch'd gains a secondary typing according to its held Ogerpon mask/Leek.",
 	},
 	debilitate: {
-		shortDesc: "On switch-in, this Pokemon lowers the Special Attack of adjacent opponents.",
+		shortDesc: "On switch-in, this Pokemon lowers the Special Attack of adjacent foes.",
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
@@ -321,7 +360,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	// Slate 2
 	alpinist: {
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'stealthrock') {
+			if (effect?.id === 'stealthrock') {
 				return false;
 			}
 		},
@@ -333,6 +372,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { breakable: 1 },
 		name: "Alpinist",
+		shortDesc: "Immune to Stealth Rock damage and Rock type moves on switch-in.",
 	},
 	honeygather: {
 		inherit: true,
@@ -342,6 +382,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 	poisonpuppeteer: {
+		inherit: true,
 		shortDesc: "If this Pokémon inflicts poison, it also confuses the target.",
 		onAnyAfterSetStatus(status, target, source, effect) {
 			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
@@ -349,7 +390,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				target.addVolatile('confusion');
 			}
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
 		name: "Poison Puppeteer",
 	},
 	seismicsensor: {
