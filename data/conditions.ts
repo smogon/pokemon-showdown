@@ -1660,7 +1660,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-energyWeather', 'Magnetize', '[upkeep]');
-			if (this.field.energyWeatherState.boosted && this.field.isClearingWeather('strongwinds')) {
+			if (this.field.energyWeatherState.boosted) {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.effectiveEnergyWeather() === 'magnetize' && pokemon.hasType('Steel')) {
 						pokemon.addVolatile('magnetizeboost');
@@ -1692,14 +1692,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyAtkPriority: 10,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.effectiveEnergyWeather() !== 'magnetize' || !pokemon.hasType('Steel') ||
-				!this.field.isClearingWeather('strongwinds')) return;
+			if (pokemon.effectiveEnergyWeather() !== 'magnetize' || !pokemon.hasType('Steel')) return;
 			return this.modify(atk, 1 + 0.2 * this.effectState.layers);
 		},
 		onModifySpAPriority: 10,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.effectiveEnergyWeather() !== 'magnetize' || !pokemon.hasType('Steel') ||
-				!this.field.isClearingWeather('strongwinds')) return;
+			if (pokemon.effectiveEnergyWeather() !== 'magnetize' || !pokemon.hasType('Steel')) return;
 			return this.modify(spa, 1 + 0.2 * this.effectState.layers);
 		},
 	},
