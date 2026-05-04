@@ -2161,6 +2161,19 @@ export class RandomTeams {
 					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
 					isBadItem = item.startsWith("TR") || this.dex.items.get(item).isPokeball;
 				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
+
+				// We don't want to revert to different types in monotype
+				if (isMonotype && species.requiredItems) {
+					if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
+
+					if (!dex.species.get(species.changesFrom).types.includes(type!)) {
+						const legalRequiredItems = species.requiredItems.filter(i => (
+							dex.items.get(i).gen <= this.gen && !dex.items.get(i).isNonstandard
+						));
+						if (!legalRequiredItems.length) throw new Error(`${species.name} has no legal required items`);
+						item = this.sample(legalRequiredItems);
+					}
+				}
 			}
 
 			// Make sure forme is legal
@@ -2172,15 +2185,10 @@ export class RandomTeams {
 				}
 				forme = species.name;
 			}
-			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			if (species.requiredItems?.every(req => toID(req) !== toID(item))) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
-				// We don't want to revert Arceus and Silvally to normal type in monotype
-				if (isMonotype && ["Arceus", "Silvally"].includes(species.changesFrom))
-					item = this.sample(species.requiredItems);
-				else {
-					species = dex.species.get(species.changesFrom);
-					forme = species.name;
-				}
+				species = dex.species.get(species.changesFrom);
+				forme = species.name;
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
