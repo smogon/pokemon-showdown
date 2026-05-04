@@ -2167,7 +2167,9 @@ export class RandomTeams {
 					if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 
 					if (!dex.species.get(species.changesFrom).types.includes(type!)) {
-						const legalRequiredItems = species.requiredItems.filter(i => dex.items.get(i).gen <= this.gen && !dex.items.get(i).isNonstandard);
+						const legalRequiredItems = species.requiredItems.filter(i => (
+							dex.items.get(i).gen <= this.gen && !dex.items.get(i).isNonstandard
+						));
 						if (!legalRequiredItems.length) throw new Error(`${species.name} has no legal required items`);
 						item = this.sample(legalRequiredItems);
 					}
@@ -2183,7 +2185,7 @@ export class RandomTeams {
 				}
 				forme = species.name;
 			}
-			if (species.requiredItems?.some(req => toID(req) !== toID(item))) {
+			if (species.requiredItems?.every(req => toID(req) !== toID(item))) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
