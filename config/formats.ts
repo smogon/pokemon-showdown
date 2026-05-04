@@ -552,12 +552,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Godly Gift Random Battle",
-		desc: `Each Pok&eacute;mon receives one base stat from the God in the first slot depending on its position in the team.`,
-		team: 'randomGodlyGift',
-		ruleset: ['[Gen 9] Random Battle', 'Godly Gift Mod', 'Team Preview'],
+		name: "[Gen 9] Mega Invasion Random Battle",
+		desc: `Each Pok&eacute;mon that could mega evolve in gen 7 using a mega stone can do so here, too. Terastallizing is banned for all Pok&eacute;mon.`,
+		team: 'randomMegaInvasion',
+		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause'],
 		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>In this format, the "God" in the first slot has "gifted" (shared) its base attack to the Pok&eacute;mon in the second slot, defense to the one in the third slot, etc."`);
+			this.add(`raw|<div class="broadcast-blue"><b>Pok&eacute;mon that could undergo mega evolution or primal reversion in Gen 7 can do so here, too. Their sets are based on Gen 9 movepools, and can be viewed using the /randbats command.</b></div>`);
 		},
 	},
 	{
