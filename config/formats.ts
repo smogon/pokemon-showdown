@@ -861,18 +861,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Shedinja', 'Assist'],
 	},
 	{
-		name: "[Gen 9] ReGeneration Random Battle",
-		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
-		mod: 'gen9regeneration',
+		name: "[Gen 9] woomod Random Battle",
+		desc: 'mod by <username>woo</username>',
+		mod: `woomod`,
 		team: 'random',
-		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview'],
+		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to ReGeneration!`);
-			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mxSj-XvWzBk8RgAZ7_Th61Saczc89xwffBLLJsOlYTc/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `woo mod.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3711007/page-13#post-10645868`);
+			this.add('-message', `Be sure to swing by the Pet Mods room to discuss the metagame and participate in roomtours:`);
+			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
 		},
 	},
 	{
@@ -3651,28 +3651,26 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] ReGeneration", // Roomtours
-		desc: `A Kanto-only Gen 9 metagame where many of the Pokemon have been redesigned with modern design philosophies.`,
-		mod: 'gen9regeneration',
+		name: "[Gen 9] Woomod", // roomtours
+		desc: `woo mod`,
+		mod: 'woomod',
 		searchShow: false,
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview'],
-		banlist: [
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
-			'Aerodactylite', 'Alakazite', 'Beedrillite', 'Blastoisinite', 'Charizardite X', 'Charizardite Y', 'Gyaradosite',
-			'Gengarite', 'Kangaskhanite', 'Mewtwonite X', 'Mewtwonite Y', 'Pidgeotite', 'Pinsirite', 'Slowbronite', 'Venusaurite',
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Mega Data Mod', 'Z-Move Clause'],
+		banlist: ['All Pokemon', 'Eviolite', 'Light Ball', 'Baton Pass'],
+		unbanlist: [
+			'Krokorok', 'Qwilfish-Hisui', 'Snivy', 'Dragonair', 'Wimpod', 'Toxel-Hisui', 'Tadbulb', 'Pikipek',
+			'Chingling', 'Baltoy-Gear Rider', 'Baltoy-Water Rider', 'Charmander', 'Nymble', 'Vanillite', 'Spheal', 'Anorith',
+			'Jigglypuff', 'Bronzor', 'Wiglett', 'Gible', 'Vulpix', 'Shuppet', 'Golett', 'Elgyem', 'Farfetch\'d',
+			'Amaura', 'Wailmer', 'Pikachu', 'Morelull', 'Houndour', 'Koffing', 'Maushold', 'Hakamo-o', 'Kartana',
+			'Ledyba', 'Wooper-Paldea', 'Hoothoot', 'Raboot-Sinnoh', 'Honedge', 'Roselia', 'Skiploom', 'Spritzee', 'Helioptile',
 		],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1wbFWGR5pVcnTTyuy7vAUSrPxqSZsNF-Okx-v1hvD2Vc/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to ReGeneration!`);
-			this.add('-message', `This is a Generation 9 Pet Mod where many Kanto Pokemon have been redesigned to fit the modern era!`);
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add('-message', `woo mod.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3718196/`);
-		},
-		onValidateSet(set, format) {
-			const species = this.dex.species.get(set.species || set.name);
-			if (species.num >= 152 && !this.ruleTable.has('+' + species.id)) {
-				return [`${species.baseSpecies} is not in the Kanto Pokédex.`];
-			}
+			this.add('-message', `https://www.smogon.com/forums/threads/3711007/page-13#post-10645868`);
+			this.add('-message', `Be sure to swing by the Pet Mods room to discuss the metagame and participate in roomtours:`);
+			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
 		},
 	},
 	{

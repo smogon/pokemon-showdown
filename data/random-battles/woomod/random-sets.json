@@ -1,0 +1,563 @@
+{
+    "amaura": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Meteor Beam", "Meteor Crash", "Freeze-Dry", "Earth Power", "Calm Mind"],
+			    "abilities": ["Reckless"]
+			}
+        ]
+    },
+    "amauramega": {
+        "level": 64,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Ice Beam", "Meteor Crash", "Freeze-Dry", "Earth Power", "Chilly Reception"],
+			    "abilities": ["Snow Warning"]
+			}
+        ]
+    },
+    "anorith": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Stone Axe", "U-turn", "Knock Off", "Rapid Spin", "Wish", "Explosion"],
+			    "abilities": ["LAST CALL"]
+			}
+        ]
+    },
+    "bronzor": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Mental Spin", "Iron Defense", "Body Press", "Iron Head"],
+			    "abilities": ["Iron Barbs"]
+			}
+        ]
+    },
+    "charmander": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Flamethrower", "Weather Ball", "Will-O-Wisp", "Flip Turn"],
+			    "abilities": ["Rain Curse"]
+			}
+        ]
+    },
+    "chingling": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Wish", "Protect", "Psychic Noise", "Volt Switch", "Future Sight"],
+			    "abilities": ["Protective Aura"]
+			}
+        ]
+    },
+    "dragonair": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Blue Moon", "Flamethrower", "Moonlight", "Toxic", "Calm Mind"],
+			    "abilities": ["Dry Skin"]
+			}
+        ]
+    },
+    "dragonairmega": {
+        "level": 64,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Blue Moon", "Flamethrower", "Draco Meteor", "Thunderbolt"],
+			    "abilities": ["Dry Skin"]
+			}
+        ]
+    },
+    "elgyem": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Swords Dance", "Duoshock", "Return", "Recover"],
+			    "abilities": ["Pure Power"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Swords Dance", "Duoshock", "Return", "Trick"],
+			    "abilities": ["Pure Power"]
+			}
+        ]
+    },
+    "farfetchd": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Knock Off", "Close Combat"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Night Slash", "Ivy Cudgel", "Brave Bird", "Close Combat"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Close Combat"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Fast Bulky Setup",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Leaf Blade"],
+			    "abilities": ["Masquerade"]
+			},
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Swords Dance", "Ivy Cudgel", "Brave Bird", "Roost"],
+			    "abilities": ["Masquerade"]
+			}
+        ]
+    },
+    "gible": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Draco Meteor", "Scale Shot", "Earth Power", "Overheat"],
+			    "abilities": ["Perseverance"]
+			},
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Dragon Tail", "Rapid Spin", "Earth Power", "Toxic", "Stealth Rock"],
+			    "abilities": ["Rough Skin"]
+			}
+        ]
+    },
+    "hakamoo": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Bulky Setup",
+			    "movepool": ["Clangorous Soul", "Dragon Pulse", "Flash Cannon", "Focus Blast"],
+			    "abilities": ["Multiscale"]
+			},
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Dragon Dance", "Drain Punch", "Dragon Claw", "Earthquake"],
+			    "abilities": ["Multiscale"]
+			}
+        ]
+    },
+    "golett": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Meteor Beam", "Burial Blast", "Shadow Ball", "Focus Blast"],
+			    "abilities": ["Unburden"]
+			}
+        ]
+    },
+    "helioptile": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Volt Switch", "Glare", "Electro Ball", "Power Gem"],
+			    "abilities": ["Seismic Sensor"]
+			}
+        ]
+    },
+    "honedge": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Aegi Slash", "Iron Head", "Swords Dance", "Close Combat"],
+			    "abilities": ["Slush Rush"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Aegi Slash", "Iron Head", "Pursuit", "Close Combat"],
+			    "abilities": ["Slush Rush"]
+			}
+        ]
+    },
+    "hoothoot": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Synchronoise", "Nasty Plot", "Roost", "Hypnosis"],
+			    "abilities": ["Hoothoot Ability"]
+			}
+        ]
+    },
+    "houndour": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Friendly Fire", "Knock Off", "Slack Off", "Taunt", "Will-O-Wisp"],
+			    "abilities": ["Flash Fire"]
+			}
+        ]
+    },
+    "jigglypuff": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Star Smash", "Wish", "Protect", "Dig", "Spikes"],
+			    "abilities": ["Magic Bag"]
+			}
+        ]
+    },
+    "kartana": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Leaf Blade", "Swords Dance", "Strength Sap", "Knock Off", "Sacred Sword"],
+			    "abilities": ["Supreme Overlord"]
+			}
+        ]
+    },
+    "koffing": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Flip Turn", "Scald", "Sludge Bomb", "Pain Split"],
+			    "abilities": ["Levitate", "Neutralizing Gas"]
+			}
+        ]
+    },
+    "krokorok": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Earthquake", "Ceaseless Edge", "Pursuit", "Knock Off", "Stone Edge"],
+			    "abilities": ["Vessel of Sigma"]
+			},
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Earthquake", "Ceaseless Edge", "Stealth Rock", "Knock Off"],
+			    "abilities": ["Vessel of Sigma"]
+			}
+        ]
+    },
+    "ledyba": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Setup",
+			    "movepool": ["Bug Buzz", "Air Slash", "Ladybug Dance", "Roost", "Ice Beam"],
+			    "abilities": ["Flash Fire"]
+			}
+        ]
+    },
+    "morelull": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Moonblast", "Strength Sap", "Thunder Wave", "Protect", "Giga Drain"],
+			    "abilities": ["Malicious Roots"]
+			}
+        ]
+    },
+    "nymble": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Nymble Kick", "First Impression", "Leech Life", "U-turn"],
+			    "abilities": ["Swift Swim"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Nymble Kick", "First Impression", "Leech Life", "Rain Dance"],
+			    "abilities": ["Swift Swim"]
+			}
+        ]
+    },
+    "pikachu": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Thunderbolt", "Tachyon Cutter", "Volt Switch", "Surf"],
+			    "abilities": ["Regenerator"]
+			},
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Volt Tackle", "Extreme Speed", "Flip Turn", "Fake Out", "Knock Off"],
+			    "abilities": ["Metallize"]
+			}
+        ]
+    },
+    "pikachumega": {
+        "level": 64,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Nasty Plot", "Thunderbolt", "Tachyon Cutter", "Surf"],
+			    "abilities": ["Regenerator"]
+			}
+        ]
+    },
+   "pikipek": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Brave Bird", "Defog", "U-turn", "Roost", "Play Rough"],
+			    "abilities": ["Typhoon"]
+			},
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Brave Bird", "Swords Dance", "Roost", "Play Rough"],
+			    "abilities": ["Typhoon"]
+			}
+        ]
+    },
+    "piplup": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["Make It Rain", "Hydro Pump", "Blizzard", "Flip Turn"],
+			    "abilities": ["Mold Breaker"]
+			}
+        ]
+    },
+   "qwilfishhisui": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "AV Pivot",
+			    "movepool": ["Gunk Shot", "Crunch", "Rapid Spin", "Liquidation"],
+			    "abilities": ["Regenerator"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Downtown Slide", "Swords Dance", "Liquidation", "Crunch", "Spikes", "Recover"],
+			    "abilities": ["Levitate"]
+			}
+        ]
+    },
+    "rabootsinnoh": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Frigidly Slide", "Chilly Reception", "Taunt", "Electro Ball"],
+			    "abilities": ["Alpinist"]
+			}
+        ]
+    },
+    "roselia": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Mortal Spin", "Giga Drain", "Sludge Bomb", "Leech Seed", "Spikes"],
+			    "abilities": ["Poison Puppeteer"]
+			}
+        ]
+    },
+    "shuppet": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Foul Play", "Wish", "Protect", "Teleport", "Will-O-Wisp"],
+			    "abilities": ["Phantom Chute"]
+			}
+        ]
+    },
+    "snivy": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Shimmering Sap", "Focus Blast", "Hidden Power", "U-turn", "Encore"],
+			    "abilities": ["Flower Veil"]
+			}
+        ]
+    },
+    "spheal": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Hydro Steam", "Ice Beam", "Flamethrower", "Flip Turn"],
+			    "abilities": ["Pyromorphosis"]
+			}
+        ]
+    },
+    "tadbulb": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Bouncy Bubble", "Electro Drift", "Thunder Wave", "Flip Turn", "Acid Spray"],
+			    "abilities": ["Regenerator"]
+			}
+        ]
+    },
+	"tandemaus": {
+		"level": 67,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Tidy Up", "Population Bomb", "Rock Blast", "Icicle Spear", "U-turn"],
+				"abilities": ["Mitosis"]
+			}
+		]
+	},
+    "spritzee": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Setup Sweeper",
+			    "movepool": ["Moonblast", "Nasty Plot", "Close Combat", "Psychic"],
+			    "abilities": ["Fairy Aura"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Moonblast", "U-turn", "Close Combat", "Psychic"],
+			    "abilities": ["Fairy Aura"]
+			}
+        ]
+    },
+    "toxelhisui": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Drain Punch", "Nuzzle", "Slack Off", "Stealth Rock", "Toxic Spikes"],
+			    "abilities": ["Forbidden Juice"]
+			}
+        ]
+    },
+    "vanillite": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Vanillite Move With Too Many Effects", "Ice Beam", "Scald", "Volt Switch"],
+			    "abilities": ["Spicy Cream"]
+			}
+        ]
+    },
+    "vulpix": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["V-create", "Overheat", "Toxic", "Healing Wish"],
+			    "abilities": ["Perseverance"]
+			}
+        ]
+    },
+   "wailmer": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Scald", "Defog", "Toxic", "Ice Beam"],
+			    "abilities": ["Debilitate"]
+			},
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Scald", "Defog", "Protect", "Ice Beam", "Clear Smog"],
+			    "abilities": ["Poison Heal"]
+			}
+        ]
+    },
+    "wiglett": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Wiggling Lash", "Gunk Shot", "Knock Off", "Stomping Tantrum", "Liquidation"],
+			    "abilities": ["Grassy Surge"]
+			}
+        ]
+    },
+   "wimpod": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Wallbreaker",
+			    "movepool": ["V-create", "Leech Life", "Sticky Web", "Taunt"],
+			    "abilities": ["Tactical Retreat"]
+			},
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Overheat", "Bug Buzz", "Sticky Web", "Spikes"],
+			    "abilities": ["Tactical Retreat"]
+			}
+        ]
+    },
+   "wooperpaldea": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Support",
+			    "movepool": ["Woop Out", "Recover", "Poison Jab", "Toxic Spikes", "Stealth Rock", "Haze"],
+			    "abilities": ["Honey Gather"]
+			},
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Woop Out", "Recover", "Poison Jab", "Toxic Spikes", "Stealth Rock"],
+			    "abilities": ["Unaware"]
+			},
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Woop Out", "Recover", "Poison Jab", "Toxic Spikes", "Stealth Rock", "Haze"],
+			    "abilities": ["Water Absorb"]
+			}
+        ]
+    },
+    "skiploom": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Support",
+			    "movepool": ["Hurricane", "Defog", "Strength Sap", "U-turn", "Encore"],
+			    "abilities": ["Soothing Presence"]
+			}
+        ]
+    },
+    "baltoywaterrider": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Fast Attacker",
+			    "movepool": ["Agility", "Hydro Pump", "Earth Power", "Ice Beam"],
+			    "abilities": ["As One (Seadra)"]
+			}
+        ]
+    },
+    "baltoygearrider": {
+        "level": 67,
+        "sets": [
+			{
+			    "role": "Bulky Attacker",
+			    "movepool": ["Earthquake", "Gear Grind", "Rapid Spin", "Stealth Rock", "Toxic"],
+			    "abilities": ["As One (Klang)"],
+				"teraTypes": ["Ground"]
+			}
+        ]
+    }
+}
