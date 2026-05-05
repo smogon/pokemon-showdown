@@ -15,7 +15,7 @@
         ]
     },
     "aerogen": {
-        "level": 80,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -110,7 +110,7 @@
         ]
     },
     "bearvoyance": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -130,7 +130,7 @@
         ]
     },
     "espeon": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -145,7 +145,7 @@
         ]
     },
     "yanmage": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Dragon Force Setter",
@@ -160,7 +160,7 @@
         ]
     },
     "enigmeon": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Fog Setter",
@@ -179,8 +179,43 @@
             }
         ]
     },
+    "bludgen": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Drain Punch", "Mach Punch", "Poison Jab", "U-turn"],
+                "abilities": ["Iron Fist"]
+            },
+            {
+                "role": "Doubles Battle Aura Setter",
+                "movepool": ["Focus Punch", "Mach Punch", "Poison Jab", "Protect", "U-turn"],
+                "abilities": ["Stand Off"]
+            }
+        ]
+    },
+    "woond": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Shadow Fang", "Wild Charge"],
+                "abilities": ["Scrappy"]
+            }
+        ]
+    },
+    "rotombrawl": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Aura Sphere", "Nasty Plot", "Protect", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
     "tarmendoa": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -195,7 +230,7 @@
         ]
     },
     "stackem": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -205,7 +240,7 @@
         ]
     },
     "quailstion": {
-        "level": 85,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -213,7 +248,7 @@
                 "abilities": ["Foil", "Vital Spirit"]
             },
             {
-                "role": "Doubles Bulky Setup Sweeper",
+                "role": "Doubles Bulky Setup",
                 "movepool": ["Body Press", "Brave Bird", "Earthquake", "No Retreat", "Protect", "Roost"],
                 "abilities": ["Foil", "Vital Spirit"]
             },
@@ -221,6 +256,96 @@
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Acrobatics", "Earthquake", "Protect", "Rock Slide", "Shell Smash"],
                 "abilities": ["Foil", "Vital Spirit"]
+            }
+        ]
+    },
+    "breloom": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Bulldoze", "Close Combat", "Mach Punch", "Protect", "Spore", "Trailblaze"],
+                "abilities": ["Technician"]
+            }
+        ]
+    },
+    "lilliganthisui": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Close Combat", "Leaf Blade", "Protect", "Sleep Powder", "Victory Dance"],
+                "abilities": ["Hustle"]
+            }
+        ]
+    },
+    "umbreon": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Black Hole", "Helping Hand", "Knock Off", "Protect"],
+                "abilities": ["Eventide", "Poison Coat"]
+            }
+        ]
+    },
+    "musharna": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Dreamscape Setter",
+                "movepool": ["Black Hole", "Calm Mind", "Dazzling Gleam", "Dream Eater", "Helping Hand", "Protect", "Shadow Ball"],
+                "abilities": ["Dreamer"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Black Hole", "Calm Mind", "Dazzling Gleam", "Helping Hand", "Protect", "Psychic", "Shadow Ball"],
+                "abilities": ["Comatose", "Dreamer", "Sweet Dreams"]
+            }
+        ]
+    },
+    "vaquamael": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Aura Sphere", "Bug Buzz", "Hydro Pump", "Ice Beam", "Parting Shot", "Protect", "Whirlduel"],
+                "abilities": ["Bubble Helm"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Aura Sphere", "Bug Buzz", "Hydro Pump", "Ice Beam", "U-turn", "Whirlduel"],
+                "abilities": ["Bubble Helm"]
+            }
+        ]
+    },
+    "kaskazog": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Dazzling Gleam", "Fake Out", "Helping Hand", "Muck Volley", "Sticky Web", "Taunt"],
+                "abilities": ["Poison Coat", "Prankster"]
+            },
+            {
+                "role":"Choice Item user",
+                "movepool": ["Dazzling Gleam", "Muck Volley", "Trick", "U-turn"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "noivern": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Draconic Roar", "Heat Wave", "Hyper Voice", "U-turn", "Whip Up"],
+                "abilities": ["Echolocation"]
+            },
+            {
+                "role":"Offensive Protect",
+                "movepool": ["Boomburst", "Draconic Roar", "Protect", "Shredding Riff", "Taunt", "Whip Up"],
+                "abilities": ["Echolocation", "Malice"]
             }
         ]
     }

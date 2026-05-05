@@ -1356,8 +1356,8 @@ export class RandomTeams {
 			if (ability && !teamDetails[check.group]) return ability;
 		}
 		// If you have a weather present on your team prioritize weather abilities for that weather
-		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const sunAbilities = ['Heat Haze', 'Chlorophyll', 'Solar Power', 'Drought', 'Leaf Guard'];
+		const rainAbilities = ['Swift Swim', 'Drizzle', 'Hydration', 'Rain Dish', 'Dry Skin'];
 		const snowAbilities = ['Ice Armor', 'Slush Rush', 'Absolute Zero', 'Snow Warning', 'Snow Cloak',
 			'Glacial Armor', 'Ice Body'];
 		const bloodMoonAbilities = ['Shadow Step', 'Malice', 'Eventide'];
@@ -1380,13 +1380,13 @@ export class RandomTeams {
 		const strongWindsAbilities = ['Galeforce', 'Gale Wings', 'Wind Rider', 'Wind Power'];
 		// This is probably a really inefficient way of doing this
 		const weatherAbilitiesAllowed: string[] = [];
-		if (teamDetails.rain) {
-			for (const ability of rainAbilities) {
+		if (teamDetails.sun) {
+			for (const ability of sunAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
-		if (teamDetails.sun) {
-			for (const ability of sunAbilities) {
+		if (teamDetails.rain) {
+			for (const ability of rainAbilities) {
 				if (abilities.includes(ability)) weatherAbilitiesAllowed.push(ability);
 			}
 		}
@@ -1860,8 +1860,8 @@ export class RandomTeams {
 			// Prevent weather setters of opposing weathers
 			if (set.role.includes('Setter')) {
 				if (teamDetails.climateWeather) {
-					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
 					if (teamDetails.sun && !set.role.includes('Sun Setter')) continue;
+					if (teamDetails.rain && !set.role.includes('Rain Setter')) continue;
 					if (teamDetails.snow && !set.role.includes('Snow Setter')) continue;
 					if (teamDetails.bloodMoon && !set.role.includes('Blood Moon Setter')) continue;
 					if (teamDetails.fog && !set.role.includes('Fog Setter')) continue;
