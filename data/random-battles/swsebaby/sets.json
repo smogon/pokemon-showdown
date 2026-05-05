@@ -1,0 +1,2917 @@
+{
+    "aipom": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Brick Break", "Double-Edge", "Fake Out", "Knock Off", "U-turn"],
+                "abilities": ["Pickup"]
+            }
+        ]
+    },
+    "arrokuda": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Close Combat", "Crunch", "Flip Turn", "Psychic Fangs", "Waterfall"],
+                "abilities": ["Swift Swim"]
+            }
+        ]
+    },
+    "axew": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Claw", "Dragon Dance", "Iron Head", "Outrage", "Stomping Tantrum"],
+                "abilities": ["Mold Breaker"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Iron Head", "Scale Shot", "Stomping Tantrum", "Swords Dance"],
+                "abilities": ["Mold Breaker"]
+            }
+        ]
+    },
+    "azurill": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aqua Jet", "Belly Drum", "Body Slam", "Facade"],
+                "abilities": ["Huge Power"]
+            }
+        ]
+    },
+    "bagon": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Claw", "Dragon Dance", "Fire Fang", "Iron Head", "Outrage"],
+                "abilities": ["Sheer Force"]
+            }
+        ]
+    },
+    "barboach": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Stone Edge", "Waterfall"],
+                "abilities": ["Oblivious"]
+            }
+        ]
+    },
+    "basculinwhitestriped": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Aqua Jet", "Hydro Pump", "Ice Beam", "Wave Crash"],
+                "abilities": ["Adaptability"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Aqua Jet", "Hydro Pump", "Ice Beam", "Wave Crash"],
+                "abilities": ["Adaptability"]
+            }
+        ]
+    },
+    "beldum": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Iron Defense", "Iron Head", "Stored Power", "Zen Headbutt"],
+                "abilities": ["Clear Body"]
+            }
+        ]
+    },
+    "bellsprout": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Poison Jab", "Power Whip", "Sucker Punch", "Swords Dance"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Knock Off", "Power Whip", "Sleep Powder", "Sludge Bomb", "Strength Sap", "Sucker Punch"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Power Whip", "Sludge Bomb", "Sunny Day", "Weather Ball"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "bergmite": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Curse", "Icicle Spear", "Rapid Spin", "Recover", "Stone Edge"],
+                "abilities": ["Sturdy"]
+            }
+        ]
+    },
+    "blitzle": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Body Slam", "Double-Edge", "Flame Charge", "Supercell Slam", "Thunder Wave", "Trailblaze", "Volt Switch"],
+                "abilities": ["Motor Drive"]
+            }
+        ]
+    },
+    "bonsly": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Spikes", "Stealth Rock", "Stone Edge", "Sucker Punch"],
+                "abilities": ["Sturdy"]
+            }
+        ]
+    },
+    "bounsweet": {
+        "level": 9,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Dazzling Gleam", "Giga Drain", "Rapid Spin", "Synthesis", "Zen Headbutt"],
+                "abilities": ["Oblivious"]
+            }
+        ]
+    },
+    "bramblin": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Poltergeist", "Power Whip", "Rapid Spin", "Spikes", "Strength Sap"],
+                "abilities": ["Wind Rider"]
+            }
+        ]
+    },
+    "bronzor": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Flash Cannon", "Hypnosis", "Psychic", "Stealth Rock"],
+                "abilities": ["Levitate"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Flash Cannon", "Psychic", "Shadow Ball"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "buizel": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Crunch", "Flip Turn", "Ice Spinner", "Wave Crash"],
+                "abilities": ["Swift Swim", "Water Veil"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Crunch", "Ice Spinner", "Wave Crash"],
+                "abilities": ["Swift Swim", "Water Veil"]
+            }
+        ]
+    },
+    "bulbasaur": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Giga Drain", "Knock Off", "Power Whip", "Sleep Powder", "Sludge Bomb", "Synthesis"],
+                "abilities": ["Chlorophyll", "Overgrow"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Power Whip", "Sludge Bomb", "Sunny Day", "Weather Ball"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "cacnea": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Drain Punch", "Giga Drain", "Leaf Storm", "Poison Jab", "Spikes", "Sucker Punch", "Toxic Spikes"],
+                "abilities": ["Water Absorb"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bullet Seed", "Drain Punch", "Sucker Punch", "Swords Dance", "Thunder Punch"],
+                "abilities": ["Water Absorb"]
+            }
+        ]
+    },
+    "capsakid": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Bullet Seed", "Crunch", "Leaf Storm", "Stomping Tantrum"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Giga Drain", "Leaf Storm", "Stomping Tantrum", "Super Fang", "Thief"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "cetoddle": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Spear", "Knock Off", "Yawn"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Belly Drum", "Earthquake", "Ice Shard", "Icicle Spear"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "charcadet": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Clear Smog", "Flame Charge", "Lava Plume", "Will-O-Wisp"],
+                "abilities": ["Flame Body", "Flash Fire"]
+            }
+        ]
+    },
+    "charmander": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Brick Break", "Dragon Dance", "Flare Blitz", "Outrage", "Thunder Punch"],
+                "abilities": ["Blaze"]
+            }
+        ]
+    },
+    "chespin": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bullet Seed", "Drain Punch", "Rock Slide", "Spikes", "Synthesis"],
+                "abilities": ["Bulletproof"]
+            }
+        ]
+    },
+    "chewtle": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aqua Tail", "Crunch", "Hydro Pump", "Liquidation"],
+                "abilities": ["Strong Jaw"]
+            }
+        ]
+    },
+    "chikorita": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Bullet Seed", "Double-Edge", "Swords Dance", "Synthesis"],
+                "abilities": ["Overgrow"]
+            }
+        ]
+    },
+    "chimchar": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Flare Blitz", "Knock Off", "Slack Off"],
+                "abilities": ["Blaze"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Gunk Shot", "Knock Off", "Swords Dance", "Thunder Punch", "U-turn"],
+                "abilities": ["Blaze", "Iron Fist"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Encore", "Flamethrower", "Knock Off", "Slack Off", "Stealth Rock", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Blaze"]
+            }
+        ]
+    },
+    "chinchou": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Discharge", "Ice Beam", "Scald", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Volt Absorb"]
+            }
+        ]
+    },
+    "chingling": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Knock Off", "Psychic", "Recover", "Thunder Wave"],
+                "abilities": ["Levitate"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Psychic", "Recover"],
+                "abilities": ["Levitate"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Cosmic Power", "Dazzling Gleam", "Recover", "Stored Power"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "clauncher": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Flip Turn", "Ice Beam", "Water Pulse"],
+                "abilities": ["Mega Launcher"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Flip Turn", "Ice Beam", "Water Pulse"],
+                "abilities": ["Mega Launcher"]
+            }
+        ]
+    },
+    "cleffa": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draining Kiss", "Fire Blast", "Psyshock"],
+                "abilities": ["Magic Guard"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Alluring Voice", "Draining Kiss", "Encore", "Protect", "Thunder Wave", "Wish"],
+                "abilities": ["Magic Guard"]
+            }
+        ]
+    },
+    "corphish": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aqua Jet", "Crabhammer", "Dragon Dance", "Knock Off"],
+                "abilities": ["Adaptability"]
+            }
+        ]
+    },
+    "cottonee": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Dazzling Gleam", "Encore", "Giga Drain", "Stun Spore", "Taunt"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "crabrawler": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Earthquake", "Gunk Shot", "Ice Punch", "Knock Off", "Thunder Punch"],
+                "abilities": ["Iron Fist"]
+            }
+        ]
+    },
+    "cranidos": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Earthquake", "Fire Punch", "Head Smash", "Rock Slide", "Zen Headbutt"],
+                "abilities": ["Sheer Force"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Earthquake", "Fire Punch", "Rock Slide", "Swords Dance", "Zen Headbutt"],
+                "abilities": ["Sheer Force"]
+            }
+        ]
+    },
+    "croagunk": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Gunk Shot", "Knock Off"],
+                "abilities": ["Dry Skin"]
+            }
+        ]
+    },
+    "cubchoo": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Blizzard", "Liquidation", "Play Rough", "Snowscape", "Surf"],
+                "abilities": ["Slush Rush"]
+            }
+        ]
+    },
+    "cufant": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Iron Head", "Play Rough", "Rock Slide", "Stealth Rock", "Superpower"],
+                "abilities": ["Sheer Force"]
+            }
+        ]
+    },
+    "cutiefly": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Bug Buzz", "Play Rough", "Stun Spore", "U-turn"],
+                "abilities": ["Shield Dust"]
+            }
+        ]
+    },
+    "cyndaquil": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Eruption", "Extrasensory", "Fire Blast", "Play Rough"],
+                "abilities": ["Flash Fire"]
+            }
+        ]
+    },
+    "deerling": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Body Slam", "Bullet Seed", "Double-Edge", "Thunder Wave"],
+                "abilities": ["Serene Grace"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Body Slam", "Bullet Seed", "Double-Edge", "Thunder Wave"],
+                "abilities": ["Serene Grace"]
+            }
+        ]
+    },
+    "deino": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crunch", "Outrage", "Thunder Wave", "Work Up"],
+                "abilities": ["Hustle"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Crunch", "Outrage", "Roar", "Thunder Wave"],
+                "abilities": ["Hustle"]
+            }
+        ]
+    },
+    "dewpider": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Ice Beam", "Leech Life", "Liquidation", "Sticky Web", "Surf"],
+                "abilities": ["Water Bubble"]
+            }
+        ]
+    },
+    "diglett": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Earthquake", "Stealth Rock", "Stone Edge", "Sucker Punch", "Swords Dance"],
+                "abilities": ["Arena Trap"]
+            }
+        ]
+    },
+    "diglettalola": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Earthquake", "Iron Head", "Stealth Rock", "Stone Edge", "Swords Dance"],
+                "abilities": ["Earth Force", "Tangling Hair"]
+            }
+        ]
+    },
+    "doduo": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Slam", "Brave Bird", "Double-Edge", "Knock Off", "Swords Dance"],
+                "abilities": ["Early Bird"]
+            }
+        ]
+    },
+    "dratini": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dragon Dance", "Extreme Speed", "Iron Head", "Outrage", "Rest"],
+                "abilities": ["Shed Skin"]
+            }
+        ]
+    },
+    "drifloon": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Defog", "Knock Off", "Shadow Ball", "Thunder Wave", "Will-O-Wisp"],
+                "abilities": ["Aftermath"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Acrobatics", "Defog", "Knock Off", "Shadow Ball", "Thunder Wave", "Will-O-Wisp"],
+                "abilities": ["Unburden"]
+            }
+        ]
+    },
+    "drilbur": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Rapid Spin", "Rock Slide", "Swords Dance"],
+                "abilities": ["Mold Breaker", "Sand Rush"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Poison Jab", "Rapid Spin", "Swords Dance"],
+                "abilities": ["Mold Breaker", "Sand Rush"]
+            }
+        ]
+    },
+    "drowzee": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Draining Kiss", "Knock Off", "Psychic"],
+                "abilities": ["Inner Focus", "Insomnia"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draining Kiss", "Encore", "Focus Blast", "Psychic", "Thunder Wave"],
+                "abilities": ["Inner Focus", "Insomnia"]
+            }
+        ]
+    },
+    "ducklett": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Aqua Jet", "Brave Bird", "Defog", "Roost"],
+                "abilities": ["Hydration"]
+            }
+        ]
+    },
+    "dunsparce": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Coil", "Earthquake", "Roost"],
+                "abilities": ["Serene Grace"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Body Slam", "Earthquake", "Glare", "Roost"],
+                "abilities": ["Serene Grace"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Earth Power", "Hyper Voice", "Roost", "Shadow Ball"],
+                "abilities": ["Simple"]
+            }
+        ]
+    },
+    "duraludon": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Press", "Draco Meteor", "Dragon Pulse", "Flash Cannon", "Iron Defense"],
+                "abilities": ["Light Metal"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Body Press", "Draco Meteor", "Flash Cannon", "Thunderbolt"],
+                "abilities": ["Light Metal"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Press", "Draco Meteor", "Dragon Pulse", "Flash Cannon", "Stealth Rock", "Thunder Wave"],
+                "abilities": ["Light Metal"]
+            }
+        ]
+    },
+    "duskull": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Leech Life", "Pain Split", "Poltergeist", "Shadow Sneak", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "eevee": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Body Slam", "Double-Edge", "Protect", "Shadow Ball"],
+                "abilities": ["Adaptability"]
+            }
+        ]
+    },
+    "ekans": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Glare", "Gunk Shot", "Knock Off", "Toxic Spikes"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "elekid": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Cross Chop", "Ice Punch", "Knock Off", "Psychic", "Supercell Slam", "Taunt", "Volt Switch"],
+                "abilities": ["Static", "Vital Spirit"]
+            }
+        ]
+    },
+    "espurr": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Nasty Plot", "Psychic", "Thunderbolt"],
+                "abilities": ["Infiltrator"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Dark Pulse", "Play Rough", "Psychic", "Thunder Wave", "Thunderbolt", "Trick"],
+                "abilities": ["Infiltrator"]
+            }
+        ]
+    },
+    "exeggcute": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Leaf Storm", "Psychic", "Solar Beam"],
+                "abilities": ["Harvest"]
+            }
+        ]
+    },
+    "feebas": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Hydro Pump", "Ice Beam", "Liquidation", "Muddy Water"],
+                "abilities": ["Adaptability"]
+            }
+        ]
+    },
+    "fennekin": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Encore", "Flamethrower", "Mud Shot", "Psychic", "Will-O-Wisp"],
+                "abilities": ["Blaze"]
+            }
+        ]
+    },
+    "fidough": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Play Rough", "Protect", "Stomping Tantrum", "Wish"],
+                "abilities": ["Own Tempo"]
+            }
+        ]
+    },
+    "finizen": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Agility", "Boomburst", "Encore", "Ice Beam", "Surf"],
+                "abilities": ["Water Veil"]
+            }
+        ]
+    },
+    "finneon": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Alluring Voice", "Ice Beam", "Surf", "Thief", "U-turn"],
+                "abilities": ["Storm Drain", "Swift Swim"]
+            }
+        ]
+    },
+    "flabebe": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Moonblast", "Psychic"],
+                "abilities": ["Flower Veil"]
+            }
+        ]
+    },
+    "fletchling": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Brave Bird", "Defog", "Double-Edge", "Heat Wave", "Roost", "Taunt", "U-turn"],
+                "abilities": ["Gale Wings"]
+            }
+        ]
+    },
+    "flittle": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Protect", "Stored Power", "Substitute"],
+                "abilities": ["Speed Boost"]
+            }
+        ]
+    },
+    "fomantis": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Defog", "Leaf Storm", "Superpower", "Synthesis"],
+                "abilities": ["Contrary"]
+            }
+        ]
+    },
+    "foongus": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Clear Smog", "Foul Play", "Giga Drain", "Leaf Storm", "Sludge Bomb", "Spore", "Stun Spore"],
+                "abilities": ["Regenerator"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Sludge Bomb", "Spore", "Synthesis"],
+                "abilities": ["Regenerator"]
+            }
+        ]
+    },
+    "frigibax": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Crunch", "Icicle Spear", "Outrage", "Swords Dance"],
+                "abilities": ["Thermal Exchange"]
+            }
+        ]
+    },
+    "froakie": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Ice Beam", "Spikes", "Surf", "Toxic Spikes", "U-turn"],
+                "abilities": ["Protean"]
+            }
+        ]
+    },
+    "fuecoco": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Encore", "Flamethrower", "Roar", "Slack Off", "Stomping Tantrum", "Will-O-Wisp"],
+                "abilities": ["Unaware"]
+            }
+        ]
+    },
+    "gastly": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Shadow Ball", "Sludge Bomb", "Trick", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Shadow Ball", "Sludge Bomb", "Thunderbolt"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "geodude": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Explosion", "Rock Blast", "Rock Polish", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Sturdy"]
+            }
+        ]
+    },
+    "geodudealola": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Double-Edge", "Earthquake", "Explosion", "Rock Blast", "Rock Polish", "Stealth Rock", "Stone Edge", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Galvanize"]
+            }
+        ]
+    },
+    "gible": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Iron Head", "Scale Shot", "Swords Dance"],
+                "abilities": ["Rough Skin"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dragon Claw", "Earthquake", "Iron Head", "Outrage", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Rough Skin"]
+            }
+        ]
+    },
+    "gimmighoul": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Nasty Plot", "Power Gem", "Rest", "Shadow Ball", "Sleep Talk"],
+                "abilities": ["Rattled"]
+            }
+        ]
+    },
+    "gimmighoulroaming": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Power Gem", "Shadow Ball", "Substitute"],
+                "abilities": ["Run Away"]
+            }
+        ]
+    },
+    "girafarig": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Psychic", "Shadow Ball", "Thunderbolt"],
+                "abilities": ["Sap Sipper"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Hyper Voice", "Nasty Plot", "Psychic", "Psyshock", "Thunderbolt"],
+                "abilities": ["Sap Sipper"]
+            }
+        ]
+    },
+    "gligar": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dual Wingbeat", "Earthquake", "Knock Off", "Swords Dance"],
+                "abilities": ["Immunity"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Earthquake", "Knock Off", "Spikes", "Stealth Rock", "Toxic Spikes", "U-turn"],
+                "abilities": ["Immunity"]
+            }
+        ]
+    },
+    "glimmet": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Mud Shot", "Power Gem", "Sludge Wave", "Spikes", "Stealth Rock"],
+                "abilities": ["Toxic Debris"]
+            }
+        ]
+    },
+    "golett": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dynamic Punch", "Earthquake", "Poltergeist", "Rock Tomb", "Stealth Rock"],
+                "abilities": ["No Guard"]
+            }
+        ]
+    },
+    "goomy": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dragon Pulse", "Rest", "Sleep Talk", "Sludge Bomb"],
+                "abilities": ["Sap Sipper"]
+            }
+        ]
+    },
+    "gothita": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dark Pulse", "Nasty Plot", "Psychic", "Thunderbolt", "Trick"],
+                "abilities": ["Shadow Tag"]
+            }
+        ]
+    },
+    "greavard": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Pain Split", "Play Rough", "Poltergeist", "Roar", "Shadow Sneak", "Yawn"],
+                "abilities": ["Fluffy"]
+            }
+        ]
+    },
+    "grimer": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Curse", "Drain Punch", "Gunk Shot", "Poison Jab", "Shadow Sneak"],
+                "abilities": ["Poison Coat"]
+            }
+        ]
+    },
+    "grimeralola": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Curse", "Drain Punch", "Gunk Shot", "Knock Off", "Poison Jab"],
+                "abilities": ["Poison Coat"]
+            }
+        ]
+    },
+    "grookey": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Drain Punch", "Grassy Glide", "Knock Off", "Swords Dance", "U-turn", "Wood Hammer"],
+                "abilities": ["Grassy Surge"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Grassy Glide", "Knock Off", "U-turn", "Wood Hammer"],
+                "abilities": ["Grassy Surge"]
+            }
+        ]
+    },
+    "growlithe": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Close Combat", "Flamethrower", "Morning Sun", "Roar", "Wild Charge", "Will-O-Wisp"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "growlithehisui": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Close Combat", "Flare Blitz", "Head Smash", "Morning Sun", "Stealth Rock", "Wild Charge", "Will-O-Wisp"],
+                "abilities": ["Rock Head"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Flare Blitz", "Head Smash", "Wild Charge"],
+                "abilities": ["Rock Head"]
+            }
+        ]
+    },
+    "grubbin": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Hive Shriek", "Sticky Web", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Swarm"]
+            }
+        ]
+    },
+    "gulpin": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Encore", "Fire Punch", "Giga Drain", "Pain Split", "Sludge Bomb", "Thunder Wave", "Toxic Spikes"],
+                "abilities": ["Sticky Hold"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bullet Seed", "Fire Punch", "Gunk Shot", "Swords Dance"],
+                "abilities": ["Sticky Hold"]
+            }
+        ]
+    },
+    "happiny": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Hyper Voice", "Rest", "Shadow Ball", "Thunder Wave"],
+                "abilities": ["Natural Cure"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Heal Bell", "Hyper Voice", "Rest", "Thunder Wave"],
+                "abilities": ["Natural Cure"]
+            }
+        ]
+    },
+    "hatenna": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Draining Kiss", "Mystical Fire", "Nuzzle", "Psychic"],
+                "abilities": ["Magic Bounce"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Draining Kiss", "Mystical Fire", "Psychic"],
+                "abilities": ["Magic Bounce"]
+            }
+        ]
+    },
+    "hippopotas": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Earthquake", "Slack Off", "Stealth Rock", "Stone Edge", "Yawn"],
+                "abilities": ["Sand Stream"]
+            }
+        ]
+    },
+    "hoothoot": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Defog", "Hurricane", "Hyper Voice", "Nasty Plot", "Roost"],
+                "abilities": ["Tinted Lens"]
+            }
+        ]
+    },
+    "hoppip": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Acrobatics", "Encore", "Sleep Powder", "Strength Sap", "Stun Spore", "U-turn"],
+                "abilities": ["Chlorophyll", "Infiltrator"]
+            }
+        ]
+    },
+    "horsea": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Dragon Pulse", "Flip Turn", "Ice Beam", "Surf"],
+                "abilities": ["Sniper", "Swift Swim"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Pulse", "Ice Beam", "Rain Dance", "Surf"],
+                "abilities": ["Swift Swim"]
+            }
+        ]
+    },
+    "houndour": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dark Pulse", "Flamethrower", "Nasty Plot", "Sludge Bomb", "Sucker Punch"],
+                "abilities": ["Flash Fire"]
+            }
+        ]
+    },
+    "igglybuff": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Alluring Voice", "Encore", "Flamethrower", "Protect", "Thunder Wave", "Wish"],
+                "abilities": ["Competitive"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Draining Kiss", "Protect", "Wish"],
+                "abilities": ["Competitive"]
+            }
+        ]
+    },
+    "impidimp": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Burning Jealousy", "Dark Pulse", "Dazzling Gleam", "Nasty Plot", "Thunder Wave"],
+                "abilities": ["Prankster"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Dazzling Gleam", "Draining Kiss", "Light Screen", "Parting Shot", "Reflect", "Taunt", "Thunder Wave"],
+                "abilities": ["Prankster"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Dark Pulse", "Dazzling Gleam", "Draining Kiss", "Parting Shot", "Sucker Punch", "Taunt", "Thunder Wave"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "inkay": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Hypnosis", "Knock Off", "Psycho Cut", "Rest", "Sleep Talk", "Superpower"],
+                "abilities": ["Contrary"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Knock Off", "Psycho Cut", "Superpower", "Trick", "Trick Room"],
+                "abilities": ["Contrary"]
+            }
+        ]
+    },
+    "jangmoo": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Iron Head", "Outrage"],
+                "abilities": ["Bulletproof"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Iron Head", "Scale Shot", "Swords Dance"],
+                "abilities": ["Bulletproof"]
+            }
+        ]
+    },
+    "joltik": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Giga Drain", "Leech Life", "Thunder", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Compound Eyes"]
+            }
+        ]
+    },
+    "koffing": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Flamethrower", "Pain Split", "Sludge Bomb", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "kubfu": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Ice Punch", "Iron Head", "Swords Dance"],
+                "abilities": ["Inner Focus"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Ice Punch", "Iron Head", "Swords Dance", "U-turn"],
+                "abilities": ["Inner Focus"]
+            }
+        ]
+    },
+    "larvesta": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Flare Blitz", "Leech Life", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Flame Body"]
+            }
+        ]
+    },
+    "larvitar": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Facade", "Rock Blast", "Stone Edge"],
+                "abilities": ["Guts"]
+            }
+        ]
+    },
+    "lechonk": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Bullet Seed", "Double-Edge", "Play Rough", "Thief", "Yawn"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Curse", "Rest", "Sleep Talk"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "litleo": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Flamethrower", "Hyper Voice", "Will-O-Wisp", "Work Up"],
+                "abilities": ["Unnerve"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Flamethrower", "Hyper Voice", "Solar Beam", "Sunny Day"],
+                "abilities": ["Unnerve"]
+            }
+        ]
+    },
+    "litten": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Flare Blitz", "Leech Life", "Swords Dance", "Trailblaze"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Leech Life", "Overheat", "Parting Shot", "Will-O-Wisp"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "litwick": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Energy Ball", "Flame Charge", "Flamethrower", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
+                "abilities": ["Flash Fire"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Flamethrower", "Hex", "Pain Split", "Will-O-Wisp"],
+                "abilities": ["Flash Fire"]
+            }
+        ]
+    },
+    "lotad": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Ice Beam", "Rain Dance", "Solar Beam"],
+                "abilities": ["Swift Swim"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Giga Drain", "Ice Beam", "Rain Dance", "Solar Beam"],
+                "abilities": ["Swift Swim"]
+            }
+        ]
+    },
+    "magby": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Belly Drum", "Cross Chop", "Fire Punch", "Mach Punch", "Thunder Punch"],
+                "abilities": ["Flame Body", "Vital Spirit"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Cross Chop", "Fire Blast", "Flare Blitz", "Thunder Punch"],
+                "abilities": ["Flame Body", "Vital Spirit"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Cross Chop", "Flare Blitz", "Overheat", "Thunder Punch"],
+                "abilities": ["Flame Body", "Vital Spirit"]
+            }
+        ]
+    },
+    "magnemite": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Flash Cannon", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Analytic", "Magnet Pull"]
+            }
+        ]
+    },
+    "makuhita": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Bullet Punch", "Drain Punch", "Earthquake", "Heavy Slam", "Knock Off", "Stone Edge"],
+                "abilities": ["Guts", "Thick Fat"]
+            }
+        ]
+    },
+    "mankey": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Close Combat", "Earthquake", "Gunk Shot", "Stone Edge", "Throat Chop", "U-turn"],
+                "abilities": ["Defiant"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Earthquake", "Stone Edge", "Throat Chop"],
+                "abilities": ["Defiant"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Bulk Up", "Close Combat", "Earthquake", "Gunk Shot", "Stone Edge", "Throat Chop", "U-turn"],
+                "abilities": ["Defiant"]
+            }
+        ]
+    },
+    "mareanie": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Gunk Shot", "Liquidation", "Poison Jab", "Recover", "Toxic Spikes"],
+                "abilities": ["Regenerator"]
+            }
+        ]
+    },
+    "mareep": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Static"]
+            }
+        ]
+    },
+    "maschiff": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Crunch", "Hone Claws", "Play Rough", "Trailblaze"],
+                "abilities": ["Stakeout"]
+            }
+        ]
+    },
+    "meditite": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Trailblaze", "Zen Headbutt"],
+                "abilities": ["Pure Power"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Ice Punch", "Poison Jab", "Zen Headbutt"],
+                "abilities": ["Pure Power"]
+            }
+        ]
+    },
+    "meowth": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Double-Edge", "Fake Out", "Knock Off", "Thunder Wave", "U-turn"],
+                "abilities": ["Technician"]
+            }
+        ]
+    },
+    "meowthalola": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Gunk Shot", "Knock Off", "Parting Shot", "Play Rough", "Thunder Wave"],
+                "abilities": ["Rattled"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Hypnosis", "Nasty Plot", "Power Gem", "Thunderbolt"],
+                "abilities": ["Rattled"]
+            }
+        ]
+    },
+    "meowthgalar": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Iron Head", "Knock Off", "Swords Dance", "Trailblaze"],
+                "abilities": ["Tough Claws"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Iron Head", "Knock Off", "Play Rough", "Stealth Rock", "U-turn"],
+                "abilities": ["Tough Claws"]
+            }
+        ]
+    },
+    "mienfoo": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance"],
+                "abilities": ["Regenerator"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Fake Out", "High Jump Kick", "Knock Off", "U-turn"],
+                "abilities": ["Regenerator"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance", "U-turn"],
+                "abilities": ["Regenerator"]
+            }
+        ]
+    },
+    "milcery": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Acid Armor", "Dazzling Gleam", "Draining Kiss", "Recover", "Stored Power"],
+                "abilities": ["Aroma Veil"]
+            }
+        ]
+    },
+    "minccino": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bullet Seed", "Knock Off", "Tail Slap", "Tidy Up"],
+                "abilities": ["Skill Link"]
+            }
+        ]
+    },
+    "misdreavus": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draining Kiss", "Shadow Ball", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Pain Split", "Shadow Ball", "Thunder Wave", "Thunderbolt", "Will-O-Wisp"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "mudbray": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Close Combat", "Earthquake", "Heavy Slam", "Rest", "Sleep Talk", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Stamina"]
+            }
+        ]
+    },
+    "mudkip": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Ice Beam", "Liquidation", "Rest", "Roar", "Sleep Talk", "Sludge Wave", "Yawn"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "munchlax": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Crunch", "Earthquake", "Rest", "Sleep Talk"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Curse", "Rest", "Sleep Talk"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "murkrow": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Heat Wave", "Hurricane", "Nasty Plot", "Sucker Punch"],
+                "abilities": ["Super Luck"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Brave Bird", "Sucker Punch", "Thunder Wave", "U-turn"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "nacli": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Earthquake", "Recover", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Purifying Salt"]
+            }
+        ]
+    },
+    "noibat": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Defog", "Draco Meteor", "Heat Wave", "Hurricane", "Roost", "U-turn"],
+                "abilities": ["Infiltrator"]
+            }
+        ]
+    },
+    "nosepass": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Pain Split", "Power Gem", "Thunder Wave"],
+                "abilities": ["Magnet Pull"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Press", "Pain Split", "Power Gem", "Stealth Rock", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Magnet Pull"]
+            }
+        ]
+    },
+    "numel": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Fire Blast", "Heat Wave", "Trailblaze"],
+                "abilities": ["Simple"]
+            }
+        ]
+    },
+    "nymble": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["First Impression", "Leech Life", "Sucker Punch", "U-turn"],
+                "abilities": ["Tinted Lens"]
+            }
+        ]
+    },
+    "oddish": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Sleep Powder", "Sludge Bomb", "Strength Sap", "Stun Spore"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "oshawott": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Aqua Jet", "Encore", "Flip Turn", "Ice Beam", "Knock Off", "Sacred Sword", "Surf", "X-Scissor"],
+                "abilities": ["Torrent"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aqua Jet", "Knock Off", "Liquidation", "Sacred Sword", "Swords Dance"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "pawmi": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Discharge", "Encore", "Nuzzle", "Play Rough", "Super Fang", "Thief", "Volt Switch"],
+                "abilities": ["Natural Cure", "Static"]
+            }
+        ]
+    },
+    "pawniard": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Iron Head", "Night Slash", "Sucker Punch", "Swords Dance"],
+                "abilities": ["Defiant"]
+            }
+        ]
+    },
+    "petilil": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Giga Drain", "Leaf Storm", "Pollen Puff", "Sleep Powder", "Stun Spore", "Synthesis"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "phanpy": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Gunk Shot", "Ice Shard", "Knock Off", "Rest", "Sleep Talk", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Pickup"]
+            }
+        ]
+    },
+    "phantump": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Horn Leech", "Poltergeist", "Rest", "Will-O-Wisp"],
+                "abilities": ["Natural Cure"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Horn Leech", "Poltergeist", "Protect", "Will-O-Wisp"],
+                "abilities": ["Harvest"]
+            }
+        ]
+    },
+    "pichu": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Nuzzle", "Play Rough", "Volt Switch", "Volt Tackle"],
+                "abilities": ["Static"]
+            }
+        ]
+    },
+    "pikipek": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Brave Bird", "Bullet Seed", "Knock Off", "Roost", "Swords Dance", "U-turn"],
+                "abilities": ["Pickup", "Skill Link"]
+            }
+        ]
+    },
+    "pineco": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Pin Missile", "Rapid Spin", "Rock Blast", "Spikes", "Stealth Rock", "Toxic Spikes"],
+                "abilities": ["Sturdy"]
+            }
+        ]
+    },
+    "piplup": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Flip Turn", "Haze", "Ice Beam", "Roost", "Surf", "Yawn"],
+                "abilities": ["Competitive"]
+            }
+        ]
+    },
+    "poliwag": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Belly Drum", "Body Slam", "Encore", "Hypnosis", "Waterfall"],
+                "abilities": ["Swift Swim", "Water Absorb"]
+            }
+        ]
+    },
+    "poltchageist": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Giga Drain", "Scald", "Shadow Ball", "Stun Spore"],
+                "abilities": ["Heatproof"]
+            }
+        ]
+    },
+    "poochyena": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crunch", "Play Rough", "Poison Fang", "Sucker Punch", "Super Fang", "Taunt", "Yawn"],
+                "abilities": ["Rattled"]
+            }
+        ]
+    },
+    "popplio": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Encore", "Flip Turn", "Moonblast", "Surf", "Triple Axel"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "porygon": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Discharge", "Ice Beam", "Recover", "Tri Attack"],
+                "abilities": ["Download"]
+            }
+        ]
+    },
+    "psyduck": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Encore", "Flip Turn", "Ice Beam", "Knock Off", "Surf", "Yawn"],
+                "abilities": ["Cloud Nine", "Swift Swim"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Ice Beam", "Nasty Plot", "Surf", "Trailblaze"],
+                "abilities": ["Cloud Nine", "Swift Swim"]
+            }
+        ]
+    },
+    "quaxly": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Brave Bird", "Encore", "Liquidation", "Rapid Spin", "Roost"],
+                "abilities": ["Moxie"]
+            }
+        ]
+    },
+    "qwilfishhisui": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Crunch", "Gunk Shot", "Liquidation", "Swords Dance"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crunch", "Gunk Shot", "Spikes", "Taunt", "Toxic Spikes"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "ralts": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Draining Kiss", "Knock Off", "Psychic", "Thunder Wave", "Will-O-Wisp"],
+                "abilities": ["Trace"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draining Kiss", "Mystical Fire", "Psychic"],
+                "abilities": ["Trace"]
+            }
+        ]
+    },
+    "rellor": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bug Buzz", "Gunk Shot", "Leech Life", "U-turn"],
+                "abilities": ["Shed Skin"]
+            }
+        ]
+    },
+    "rhyhorn": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Megahorn", "Rock Blast", "Rock Polish", "Stealth Rock", "Stone Edge", "Swords Dance"],
+                "abilities": ["Lightning Rod"]
+            }
+        ]
+    },
+    "riolu": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Close Combat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
+                "abilities": ["Inner Focus"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Copycat", "Crunch", "Ice Punch"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "rockruff": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Play Rough", "Stealth Rock", "Stone Edge", "Swords Dance"],
+                "abilities": ["Vital Spirit"]
+            }
+        ]
+    },
+    "rolycoly": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Power Gem", "Rapid Spin", "Spikes", "Stealth Rock", "Temper Flare", "Will-O-Wisp"],
+                "abilities": ["Steam Engine"]
+            }
+        ]
+    },
+    "rookidee": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Brave Bird", "Defog", "Roost", "Taunt", "U-turn"],
+                "abilities": ["Unnerve"]
+            }
+        ]
+    },
+    "rowlet": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Brave Bird", "Leaf Blade", "Roost", "Swords Dance"],
+                "abilities": ["Overgrow"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Brave Bird", "Defog", "Giga Drain", "Knock Off", "Roost"],
+                "abilities": ["Long Reach", "Overgrow"]
+            }
+        ]
+    },
+    "rufflet": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aerial Ace", "Bulk Up", "Close Combat", "Roost"],
+                "abilities": ["Hustle"]
+            }
+        ]
+    },
+    "salandit": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Pulse", "Flamethrower", "Nasty Plot", "Sludge Bomb"],
+                "abilities": ["Corrosion"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Flamethrower", "Knock Off", "Sludge Bomb", "Thunder Wave", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Corrosion"]
+            }
+        ]
+    },
+    "sandile": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Crunch", "Earthquake", "Knock Off", "Stealth Rock"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "sandshrew": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Knock Off", "Rapid Spin", "Spikes", "Stone Edge", "Swords Dance"],
+                "abilities": ["Sand Rush"]
+            }
+        ]
+    },
+    "sandshrewalola": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Spear", "Rapid Spin", "Swords Dance"],
+                "abilities": ["Slush Rush"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Icicle Spear", "Iron Head", "Knock Off", "Rapid Spin", "Stealth Rock"],
+                "abilities": ["Slush Rush"]
+            }
+        ]
+    },
+    "sandygast": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earth Power", "Giga Drain", "Shadow Ball", "Shore Up", "Sludge Bomb", "Stealth Rock"],
+                "abilities": ["Water Compaction"]
+            }
+        ]
+    },
+    "scorbunny": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Flare Blitz", "Gunk Shot", "High Jump Kick", "Sucker Punch", "U-turn"],
+                "abilities": ["Libero"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Gunk Shot", "High Jump Kick", "U-turn"],
+                "abilities": ["Libero"]
+            }
+        ]
+    },
+    "scraggy": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Rest"],
+                "abilities": ["Shed Skin"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dragon Dance", "Drain Punch", "Knock Off", "Poison Jab"],
+                "abilities": ["Intimidate", "Moxie"]
+            }
+        ]
+    },
+    "scyther": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bug Bite", "Close Combat", "Dual Wingbeat", "Swords Dance"],
+                "abilities": ["Technician"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Close Combat", "Defog", "Dual Wingbeat", "U-turn"],
+                "abilities": ["Technician"]
+            }
+        ]
+    },
+    "seedot": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Body Slam", "Defog", "Sucker Punch", "Synthesis"],
+                "abilities": ["Chlorophyll", "Pickpocket"]
+            }
+        ]
+    },
+    "seel": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Encore", "Flip Turn", "Haze", "Icicle Spear", "Surf", "Thief"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Aqua Jet", "Fake Out", "Icicle Spear", "Surf"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Icicle Spear", "Rest", "Sleep Talk", "Surf"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "sentret": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Brick Break", "Double-Edge", "Knock Off", "Tidy Up"],
+                "abilities": ["Frisk"]
+            }
+        ]
+    },
+    "sewaddle": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Giga Drain", "Hive Shriek", "Iron Defense", "Sticky Web"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "shellder": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Icicle Spear", "Liquidation", "Rock Blast", "Shell Smash"],
+                "abilities": ["Skill Link"]
+            }
+        ]
+    },
+    "shellos": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Hydro Pump", "Ice Beam", "Recover", "Stealth Rock"],
+                "abilities": ["Storm Drain"]
+            }
+        ]
+    },
+    "shieldon": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earth Power", "Flamethrower", "Flash Cannon", "Rock Blast", "Stealth Rock"],
+                "abilities": ["Sturdy"]
+            }
+        ]
+    },
+    "shinx": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crunch", "Ice Fang", "Play Rough", "Roar", "Thunder Wave", "Volt Switch", "Wild Charge"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Crunch", "Facade", "Play Rough", "Trailblaze", "Wild Charge"],
+                "abilities": ["Guts"]
+            }
+        ]
+    },
+    "shroodle": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Encore", "Gunk Shot", "Knock Off", "Parting Shot"],
+                "abilities": ["Prankster"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Double-Edge", "Gunk Shot", "Knock Off", "Swords Dance"],
+                "abilities": ["Pickpocket"]
+            }
+        ]
+    },
+    "shroomish": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Drain Punch", "Giga Drain", "Sludge Bomb", "Spore", "Stun Spore"],
+                "abilities": ["Effect Spore"]
+            }
+        ]
+    },
+    "shuppet": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Gunk Shot", "Poltergeist", "Shadow Sneak", "Thunder Wave", "Trick", "Will-O-Wisp"],
+                "abilities": ["Cursed Body"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Shadow Ball", "Thunderbolt", "Will-O-Wisp"],
+                "abilities": ["Cursed Body"]
+            }
+        ]
+    },
+    "silicobra": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Coil", "Earthquake", "Glare", "Rest", "Rock Blast", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Shed Skin"]
+            }
+        ]
+    },
+    "sinistea": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Giga Drain", "Shadow Ball", "Shell Smash", "Stored Power", "Will-O-Wisp"],
+                "abilities": ["Cursed Body"]
+            }
+        ]
+    },
+    "skiddo": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Horn Leech", "Milk Drink", "Rock Slide", "Stomping Tantrum"],
+                "abilities": ["Sap Sipper"]
+            }
+        ]
+    },
+    "skrelp": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Flip Turn", "Gunk Shot", "Hydro Pump", "Sludge Bomb", "Toxic Spikes"],
+                "abilities": ["Adaptability"]
+            }
+        ]
+    },
+    "skwovet": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Belly Drum", "Body Slam", "Crunch", "Trailblaze"],
+                "abilities": ["Cheek Pouch"]
+            }
+        ]
+    },
+    "slakoth": {
+        "level": 9,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Body Slam", "Gunk Shot", "Hammer Arm", "Play Rough", "Throat Chop"],
+                "abilities": ["Truant"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Hammer Arm", "Slack Off", "Throat Chop"],
+                "abilities": ["Truant"]
+            }
+        ]
+    },
+    "slowpoke": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Liquidation", "Slack Off", "Thunder Wave", "Zen Headbutt"],
+                "abilities": ["Regenerator"]
+            }
+        ]
+    },
+    "slowpokegalar": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Earthquake", "Slack Off", "Thunder Wave", "Zen Headbutt"],
+                "abilities": ["Regenerator"]
+            }
+        ]
+    },
+    "smoliv": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earth Power", "Giga Drain", "Protect", "Strength Sap"],
+                "abilities": ["Harvest"]
+            }
+        ]
+    },
+    "slugma": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earth Power", "Lava Plume", "Recover", "Stealth Rock", "Will-O-Wisp", "Yawn"],
+                "abilities": ["Flame Body"]
+            }
+        ]
+    },
+    "sneasel": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Brick Break", "Ice Shard", "Knock Off", "Swords Dance", "Triple Axel"],
+                "abilities": ["Inner Focus", "Pickpocket"]
+            }
+        ]
+    },
+    "sneaselhisui": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Gunk Shot", "Swords Dance", "Throat Chop", "Toxic Spikes"],
+                "abilities": ["Inner Focus", "Pickpocket"]
+            }
+        ]
+    },
+    "snivy": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Glare", "Knock Off", "Leaf Storm", "Substitute", "Synthesis"],
+                "abilities": ["Contrary"]
+            }
+        ]
+    },
+    "snom": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Bug Buzz", "Icy Wind", "Rest", "Sleep Talk"],
+                "abilities": ["Ice Scales"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bug Buzz", "Icy Wind", "Rest", "Sleep Talk"],
+                "abilities": ["Ice Scales"]
+            }
+        ]
+    },
+    "snorunt": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Crunch", "Ice Shard", "Icicle Spear", "Spikes"],
+                "abilities": ["Inner Focus"]
+            }
+        ]
+    },
+    "snover": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Blizzard", "Giga Drain", "Ice Shard", "Swords Dance"],
+                "abilities": ["Snow Warning"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Blizzard", "Giga Drain", "Ice Shard", "Trailblaze"],
+                "abilities": ["Snow Warning"]
+            }
+        ]
+    },
+    "snubbull": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earthquake", "Encore", "Play Rough", "Rest", "Sleep Talk", "Thunder Wave"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Earthquake", "Play Rough", "Trailblaze"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "sobble": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Haze", "Hydro Pump", "Light Screen", "Reflect", "Surf", "U-turn"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "solosis": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Psychic", "Recover", "Shadow Ball", "Thunder Wave"],
+                "abilities": ["Magic Guard"]
+            }
+        ]
+    },
+    "spinarak": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Knock Off", "Leech Life", "Poison Jab", "Sticky Web", "Sucker Punch", "Toxic Spikes"],
+                "abilities": ["Insomnia", "Swarm"]
+            }
+        ]
+    },
+    "spoink": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Psychic", "Shadow Ball", "Thunder Wave", "Trick"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "sprigatito": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Bullet Seed", "Play Rough", "Shadow Claw", "Sucker Punch", "U-turn"],
+                "abilities": ["Protean"]
+            }
+        ]
+    },
+    "squirtle": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Flip Turn", "Ice Beam", "Rapid Spin", "Surf", "Yawn"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "stantler": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Double-Edge", "Earthquake", "Hypnosis", "Megahorn", "Throat Chop", "Thunder Wave", "Trick"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "starly": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Brave Bird", "Double-Edge", "Heat Wave", "U-turn"],
+                "abilities": ["Reckless"]
+            }
+        ]
+    },
+    "stunky": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Fire Blast", "Gunk Shot", "Knock Off", "Sucker Punch", "Taunt", "Toxic Spikes"],
+                "abilities": ["Aftermath"]
+            }
+        ]
+    },
+    "sunkern": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Earth Power", "Solar Beam", "Sunny Day", "Weather Ball"],
+                "abilities": ["Chlorophyll"]
+            }
+        ]
+    },
+    "surskit": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Bug Buzz", "Giga Drain", "Hydro Pump", "Ice Beam", "Sticky Web"],
+                "abilities": ["Swift Swim"]
+            }
+        ]
+    },
+    "swablu": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Body Slam", "Brave Bird", "Defog", "Haze", "Heat Wave", "Roost"],
+                "abilities": ["Natural Cure"]
+            }
+        ]
+    },
+    "swinub": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Spear", "Stealth Rock", "Trailblaze"],
+                "abilities": ["Thick Fat"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Spear", "Stealth Rock", "Trailblaze"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+    "tadbulb": {
+        "level": 8,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Acid Spray", "Discharge", "Muddy Water", "Thunder Wave", "Volt Switch"],
+                "abilities": ["Static"]
+            }
+        ]
+    },
+    "tandemaus": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Crunch", "Double-Edge", "Encore", "Low Sweep", "Switcheroo", "Thunder Wave", "U-turn"],
+                "abilities": ["Own Tempo", "Pickup"]
+            }
+        ]
+    },
+    "tarountula": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Circle Throw", "Knock Off", "Leech Life", "Spikes", "Sticky Web", "Toxic Spikes"],
+                "abilities": ["Stakeout"]
+            }
+        ]
+    },
+    "teddiursa": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Crunch", "Facade", "Swords Dance"],
+                "abilities": ["Quick Feet"]
+            }
+        ]
+    },
+    "tentacool": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Flip Turn", "Ice Beam", "Knock Off", "Rapid Spin", "Sludge Bomb", "Surf", "Toxic Spikes"],
+                "abilities": ["Clear Body", "Liquid Ooze"]
+            }
+        ]
+    },
+    "tepig": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Head Smash", "Superpower", "Wild Charge"],
+                "abilities": ["Blaze"]
+            }
+        ]
+    },
+    "timburr": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Bulk Up", "Defog", "Drain Punch", "Knock Off", "Stone Edge"],
+                "abilities": ["Guts"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Bulk Up", "Defog", "Drain Punch", "Knock Off", "Mach Punch"],
+                "abilities": ["Guts"]
+            }
+        ]
+    },
+    "tinkatink": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Encore", "Knock Off", "Play Rough", "Stealth Rock", "Thunder Wave"],
+                "abilities": ["Pickpocket"]
+            }
+        ]
+    },
+    "toedscool": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Leaf Storm", "Spikes", "Spore", "Toxic Spikes"],
+                "abilities": ["Mycelium Might"]
+            }
+        ]
+    },
+    "torchic": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Flare Blitz", "Protect", "Rock Slide", "Swords Dance"],
+                "abilities": ["Speed Boost"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Flare Blitz", "Overheat", "Protect", "Rock Slide"],
+                "abilities": ["Speed Boost"]
+            }
+        ]
+    },
+    "totodile": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Ice Punch", "Liquidation", "Trailblaze"],
+                "abilities": ["Sheer Force"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Crunch", "Dragon Dance", "Ice Punch", "Liquidation"],
+                "abilities": ["Sheer Force"]
+            }
+        ]
+    },
+    "trapinch": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earth Power", "Earthquake", "Stone Edge", "Superpower"],
+                "abilities": ["Arena Trap"]
+            }
+        ]
+    },
+    "treecko": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Drain Punch", "Giga Drain", "Leaf Storm", "Rock Slide", "Synthesis", "Thunder Punch"],
+                "abilities": ["Overgrow"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Bullet Seed", "Drain Punch", "Swords Dance"],
+                "abilities": ["Unburden"]
+            }
+        ]
+    },
+    "turtwig": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Bullet Seed", "Crunch", "Earth Power", "Shell Smash"],
+                "abilities": ["Overgrow"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bullet Seed", "Shell Smash", "Superpower", "Zen Headbutt"],
+                "abilities": ["Overgrow"]
+            }
+        ]
+    },
+    "tynamo": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Charge Beam", "Knock Off", "Spark", "Thunder Wave"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+    "tyrogue": {
+        "level": 9,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "High Jump Kick", "Rapid Spin", "Rock Slide"],
+                "abilities": ["Guts"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["High Jump Kick", "Rapid Spin", "Rock Slide", "Thief"],
+                "abilities": ["Guts"]
+            }
+        ]
+    },
+    "varoom": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Gunk Shot", "Iron Head", "Parting Shot", "Taunt", "Toxic Spikes"],
+                "abilities": ["Filter"]
+            }
+        ]
+    },
+    "venonat": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Leech Life", "Morning Sun", "Sleep Powder", "Stun Spore", "Toxic Spikes"],
+                "abilities": ["Tinted Lens"]
+            }
+        ]
+    },
+    "voltorb": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Explosion", "Foul Play", "Thief", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Aftermath", "Static"]
+            }
+        ]
+    },
+    "voltorbhisui": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Giga Drain", "Leaf Storm", "Taunt", "Thief", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Aftermath", "Static"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Giga Drain", "Leaf Storm", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Aftermath", "Static"]
+            }
+        ]
+    },
+    "vullaby": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Brave Bird", "Defog", "Knock Off", "Roost", "U-turn"],
+                "abilities": ["Overcoat"]
+            }
+        ]
+    },
+    "vulpix": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Energy Ball", "Extrasensory", "Fire Blast", "Nasty Plot", "Will-O-Wisp"],
+                "abilities": ["Drought"]
+            }
+        ]
+    },
+    "vulpixalola": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Nasty Plot"],
+                "abilities": ["Snow Warning"]
+            }
+        ]
+    },
+    "wattrel": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Hurricane", "Roost", "Thunder Wave", "Thunderbolt", "U-turn"],
+                "abilities": ["Volt Absorb"]
+            }
+        ]
+    },
+    "wiglett": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Aqua Jet", "Ice Beam", "Liquidation", "Stomping Tantrum", "Throat Chop"],
+                "abilities": ["Gooey"]
+            }
+        ]
+    },
+    "wingull": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Hurricane", "Knock Off", "Roost", "Surf"],
+                "abilities": ["Hydration"]
+            }
+        ]
+    },
+    "wooper": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Earthquake", "Recover", "Spikes", "Stealth Rock", "Stone Edge"],
+                "abilities": ["Unaware", "Water Absorb"]
+            }
+        ]
+    },
+    "wooperpaldea": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Curse", "Earthquake", "Gunk Shot", "Poison Jab", "Recover", "Spikes", "Stealth Rock", "Toxic Spikes"],
+                "abilities": ["Unaware", "Water Absorb"]
+            }
+        ]
+    },
+    "yanma": {
+        "level": 5,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Air Slash", "Bug Buzz", "Giga Drain", "Hypnosis", "Protect", "U-turn"],
+                "abilities": ["Speed Boost"]
+            }
+        ]
+    },
+    "yungoos": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Crunch", "Double-Edge", "Stomping Tantrum", "U-turn", "Yawn"],
+                "abilities": ["Adaptability", "Stakeout"]
+            }
+        ]
+    },
+    "zorua": {
+        "level": 7,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Burning Jealousy", "Encore", "Extrasensory", "Knock Off", "Sludge Bomb", "Trick", "U-turn"],
+                "abilities": ["Illusion"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Extrasensory", "Nasty Plot", "Sludge Bomb"],
+                "abilities": ["Illusion"]
+            }
+        ]
+    },
+    "zoruahisui": {
+        "level": 6,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Bitter Malice", "Burning Jealousy", "Knock Off", "Trick", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Illusion"]
+            }
+        ]
+    }
+}
