@@ -21659,6 +21659,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 10105,
 		accuracy: 100,
 		basePower: 90,
+		category: "Special",
+		name: "Amaze-Assault",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
 			if (pokemon.effectiveClimateWeather() && pokemon.effectiveClimateWeather() !== '') {
@@ -21679,11 +21684,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.debug(`BP: ${bp}`);
 			return bp;
 		},
-		category: "Special",
-		name: "Amaze-Assault",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1 },
 		onHit(target, pokemon, move) {
 			if (pokemon.effectiveClimateWeather() && pokemon.effectiveClimateWeather() !== '') {
 				this.field.climateWeatherState.duration! += 1;
