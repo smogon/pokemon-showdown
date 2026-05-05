@@ -142,14 +142,14 @@ describe("New set format (slow)", () => {
 			filename: "gen7/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
-		/* "gen9randombattle": {
+		"gen9randombattle": {
 			filename: "gen9/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
 		"gen9randomdoublesbattle": {
 			filename: "gen9/doubles-sets",
 			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"],
-		}, */
+		},
 		"gen9babyrandombattle": {
 			filename: "gen9baby/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
@@ -158,89 +158,136 @@ describe("New set format (slow)", () => {
 			filename: "gen9cap/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
+		"gen9freeforallrandombattle": {
+			filename: "gen9ffa/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner"],
+		},
 		// swse
-		"gen9randombattle": {
-			filename: "gen9/sets",
+		"gen9swserandombattle": {
+			filename: "swse/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot",
-				"Sun Setter", "Rain Setter", "Hail Setter", "Blood Moon Setter", "Fog Setter",
-				"Sandstorm Setter", "Dust Storm Setter", "Pollen Storm Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
+				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
+				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
 				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
 			],
 		},
-		"gen9randomdoublesbattle": {
-			filename: "gen9/doubles-sets",
+		"gen9swserandomdoublesbattle": {
+			filename: "swse/doubles-sets",
 			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user",
-				"Doubles Rain Setter", "Doubles Sun Setter", "Doubles Hail Setter", "Doubles Blood Moon Setter", "Doubles Fog Setter",
-				"Doubles Sandstorm Setter", "Doubles Dust Storm Setter", "Doubles Pollen Storm Setter", "Doubles Fairy Dust Setter", "Doubles Pheromones Setter", "Doubles Smog Setter",
+				"Doubles Rain Setter", "Doubles Sun Setter", "Doubles Snow Setter", "Doubles Blood Moon Setter", "Doubles Fog Setter",
+				"Doubles Sandstorm Setter", "Doubles Dust Storm Setter", "Doubles Pollen Setter", "Doubles Fairy Dust Setter", "Doubles Pheromones Setter", "Doubles Smog Setter",
 				"Doubles Battle Aura Setter", "Doubles Paranormal Activity Setter", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Thunderstorm Setter", "Doubles Magnetosphere Setter",
+			],
+		},
+		"gen9swsebabyrandombattle": {
+			filename: "swsebaby/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support",
+				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
+				"Sandstorm Setter", "Dust Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+			],
+		},
+		"gen9swserandombattle@@@+cap": {
+			filename: "swsecap/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot",
+				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
+				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+			],
+		},
+		"gen9swsefreeforallrandombattle": {
+			filename: "swseffa/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner",
+				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
+				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
 			],
 		},
 	};
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
 		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-		const dex = common.mod(common.getFormat({ formatid: format }).mod).dex; // verifies format exists
+		const fullFormat = common.getFormat({ formatid: format });
+		const dex = common.mod(fullFormat.mod).dex;
 		const genNum = dex.gen;
+		const isSwSe = fullFormat.name.includes('SwSe');
+		const usesTeraTypes = genNum !== 9 || !isSwSe;
+		const usesTeraArg = !isSwSe;
 		const rounds = 100;
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
+			const problems = [];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = dex.species.get(id);
-				assert(species.exists, `In ${format}, misspelled species ID: ${id}`);
+				if (!species.exists) problems.push(`misspelled species ID: ${id}`);
 				assert(Array.isArray(sets.sets));
 				for (const set of sets.sets) {
-					assert(validRoles.includes(set.role), `In ${format}, set for ${species.name} has invalid role: ${set.role}`);
+					if (!validRoles.includes(set.role)) problems.push(`set for ${species.name} has invalid role: ${set.role}`);
 					for (const move of set.movepool) {
 						const dexMove = dex.moves.get(move);
-						assert(dexMove.exists, `In ${format}, ${species.name} has invalid move: ${move}`);
+						if (!dexMove.exists) problems.push(`${species.name} has invalid move: ${move}`);
 						// Old gens have moves in id form, currently.
 						if (genNum === 9) {
-							assert.equal(move, dexMove.name, `In ${format}, ${species.name} has misformatted move: ${move}`);
+							if (move !== dexMove.name) problems.push(`${species.name} has misformatted move: ${move}`);
 						} else {
-							assert(move === dexMove.id || move.startsWith('hiddenpower'), `In ${format}, ${species.name} has misformatted move: ${move}`);
+							if (!(move === dexMove.id || move.startsWith('hiddenpower'))) {
+								problems.push(`${species.name} has misformatted move: ${move}`);
+							}
 						}
-						assert(validateLearnset(dexMove, { species }, 'ubers', `gen${genNum}`), `In ${format}, ${species.name} can't learn ${move}`);
+						if (!validateLearnset(dexMove, { species }, 'ubers', `gen${genNum}`)) {
+							problems.push(`${species.name} can't learn ${move}`);
+						}
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
-						assert(set.movepool[i + 1] > set.movepool[i], `In ${format}, ${species.name} movepool should be sorted alphabetically`);
+						if (set.movepool[i + 1] < set.movepool[i]) {
+							problems.push(`${species.name} movepool should be sorted alphabetically`);
+						}
 					}
 					if (genNum >= 3) {
-						assert(set.abilities, `In ${format}, ${set.abilities} has no abilities`);
+						if (!set.abilities) problems.push(`${set.abilities} has no abilities`);
 						for (const ability of set.abilities) {
 							const dexAbility = dex.abilities.get(ability);
-							assert(dexAbility.exists, `In ${format}, ${species.name} has invalid ability: ${ability}`);
+							if (!dexAbility.exists) problems.push(`${species.name} has invalid ability: ${ability}`);
 							// Mega/Primal Pokemon have abilities from their base formes
 							const allowedAbilities = new Set(Object.values((species.battleOnly && !species.requiredAbility) ? dex.species.get(species.battleOnly).abilities : species.abilities));
 							if (species.unreleasedHidden) allowedAbilities.delete(species.abilities.H);
-							assert(allowedAbilities.has(ability), `In ${format}, ${species.name} can't have ${ability}`);
+							if (!allowedAbilities.has(ability)) problems.push(`${species.name} can't have ${ability}`);
 						}
 						for (let i = 0; i < set.abilities.length - 1; i++) {
-							assert(set.abilities[i + 1] > set.abilities[i], `In ${format}, ${species.name} abilities should be sorted alphabetically`);
+							if (set.abilities[i + 1] < set.abilities[i]) {
+								problems.push(`${species.name} abilities should be sorted alphabetically`);
+							}
 						}
 					}
-					if (genNum === 9) {
-						assert(set.teraTypes, `In ${format}, ${species.name} has no Tera Types`);
+					if (genNum === 9 && usesTeraTypes) {
+						if (!set.teraTypes) problems.push(`${species.name} has no Tera Types`);
 						for (const type of set.teraTypes) {
 							const dexType = dex.types.get(type);
-							assert(dexType.exists, `In ${format}, ${species.name} has invalid Tera Type: ${type}`);
-							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Tera Type: ${type}`);
+							if (!dexType.exists) problems.push(`${species.name} has invalid Tera Type: ${type}`);
+							if (type !== dexType.name) problems.push(`${species.name} has misformatted Tera Type: ${type}`);
 						}
 						for (let i = 0; i < set.teraTypes.length - 1; i++) {
-							assert(set.teraTypes[i + 1] > set.teraTypes[i], `In ${format}, ${species.name} teraTypes should be sorted alphabetically`);
+							if (set.teraTypes[i + 1] < set.teraTypes[i]) {
+								problems.push(`${species.name} teraTypes should be sorted alphabetically`);
+							}
 						}
 					}
 					if (set.preferredTypes) {
 						for (const type of set.preferredTypes) {
 							const dexType = dex.types.get(type);
-							assert(dexType.exists, `In ${format}, ${species.name} has invalid Preferred Type: ${type}`);
-							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Preferred Type: ${type}`);
+							if (!dexType.exists) problems.push(`${species.name} has invalid Preferred Type: ${type}`);
+							if (type !== dexType.name) problems.push(`${species.name} has misformatted Preferred Type: ${type}`);
 						}
 						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
-							assert(set.preferredTypes[i + 1] > set.preferredTypes[i], `In ${format}, ${species.name} preferredTypes should be sorted alphabetically`);
+							if (set.preferredTypes[i + 1] < set.preferredTypes[i]) {
+								problems.push(`${species.name} preferredTypes should be sorted alphabetically`);
+							}
 						}
 					}
 				}
 			}
+
+			assert.false(!!problems.length, `In ${format},\n\t${problems.join('\n\t')}`);
 		});
 		it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 			testTeam({ format, rounds }, team => {
@@ -259,7 +306,7 @@ describe("New set format (slow)", () => {
 					const role = set.role;
 					const moves = new Set(set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id)));
 					const abilities = set.abilities || [];
-					const specialTypes = genNum === 9 ? set.teraTypes : set.preferredTypes;
+					const specialTypes = (genNum === 9 && usesTeraTypes) ? set.teraTypes : set.preferredTypes;
 					// Go through all possible teamDetails combinations, if necessary
 					for (let j = 0; j < rounds; j++) {
 						// In Gens 2-3, if a set has multiple preferred types, we enforce moves of all the types.
@@ -275,8 +322,14 @@ describe("New set format (slow)", () => {
 							// randomMoveset() deletes moves from the movepool, so recreate it every time
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
-							if (genNum === 9) {
+							if (genNum === 9 && usesTeraTypes) {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, format.includes('doubles'), movePool, specialType, role);
+							} else if (genNum === 9) {
+								if (usesTeraArg) {
+									moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, format.includes('doubles'), movePool, '', role);
+								} else {
+									moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, format.includes('doubles'), movePool, role);
+								}
 							} else {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role);
 							}

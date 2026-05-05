@@ -2100,6 +2100,15 @@ export class Pokemon {
 		let shared;
 		if (this.battle.reportExactHP) {
 			shared = secret;
+		} else if (this.battle.dex.currentMod === 'champions') {
+			// Pokemon Champions mechanics
+			const percentage = Math.floor(100 * this.hp / this.maxhp) || 1;
+			shared = `${percentage}/100`;
+			if (percentage === 20) {
+				shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+			} else if (percentage === 50) {
+				shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+			}
 		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
 			let percentage = Math.ceil(100 * this.hp / this.maxhp);
@@ -2184,8 +2193,8 @@ export class Pokemon {
 		if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
-		if (this.hasType('Steel') && this.battle.field.energyWeatherState.boosted &&
-			this.effectiveEnergyWeather() === 'magnetize') return null;
+		if (this.hasType('Steel') && this.effectiveEnergyWeather() === 'magnetize' &&
+			!(this.effectiveIrritantWeather() === 'duststorm' && this.battle.field.irritantWeatherState.boosted)) return null;
 		if (this.hasAbility('surgesurfer') && !this.battle.suppressingAbility(this) &&
 			(this.battle.field.isTerrain('electricterrain') || this.effectiveEnergyWeather() === 'supercell')) return null;
 		if (this.hasAbility('relicsoul') && !this.battle.suppressingAbility(this)) return null;
@@ -2304,6 +2313,7 @@ export class Pokemon {
 		}
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
 			!this.battle.suppressingAbility(this)) {
+			if (move.hit === 1) delete this.abilityState.resisted; // reset for first hit
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move) ||
 				totalTypeMod < 0 || this.hp < this.maxhp) {

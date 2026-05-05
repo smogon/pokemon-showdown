@@ -66,7 +66,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	arenatrap: {
 		name: "Arena Trap",
-		desc: "Prevents opposing Pokemon from choosing to switch out unless they are airborne, are holding a Shed Shell, or are a Ghost type.",
+		desc: "Prevents opposing Pokemon from choosing to switch out unless they are airborne, are holding a Shed Shell, have the Ability Run Away, or are a Ghost type.",
 		shortDesc: "Prevents opposing Pokemon from choosing to switch out unless they are airborne.",
 		gen6: {
 			desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are airborne, are holding a Shed Shell, or are a Ghost type.",
@@ -489,8 +489,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flamebody: { // updated
 		name: "Flame Body",
-		desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This Pokemon takes no damage from Hail.",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; Hail immunity.",
+		desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This Pokemon takes no damage from Snow.",
+		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; Snow immunity.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -716,8 +716,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -725,8 +725,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	iceface: {
 		name: "Ice Face",
-		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
-		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Hail.",
+		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Snow begins or when Eiscue switches in while Snow is active. Confusion damage also breaks the ice face.",
+		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
 		gen8: {
 			desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
 			shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
@@ -965,12 +965,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magmaarmor: { // updated
 		name: "Magma Armor",
-		desc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it. This Pokemon takes no damage from Hail.",
-		shortDesc: "Immunity to Hail damage and being frozen.",
+		desc: "This Pokemon cannot be frozen or frostbitten. Gaining this Ability while frozen or frostbitten cures it. This Pokemon takes no damage from Snow.",
+		shortDesc: "Immunity to Snow damage, freezing, and frostbite.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
-		desc: "Prevents opposing Steel-type Pokemon from choosing to switch out, unless they are holding a Shed Shell or are a Ghost type.",
+		desc: "Prevents opposing Steel-type Pokemon from choosing to switch out, unless they are holding a Shed Shell, have the Ability Run Away, or are a Ghost type.",
 		shortDesc: "Prevents opposing Steel-type Pokemon from choosing to switch out.",
 		gen6: {
 			desc: "Prevents adjacent opposing Steel-type Pokemon from choosing to switch out, unless they are holding a Shed Shell or are a Ghost type.",
@@ -1537,7 +1537,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	runaway: {
 		name: "Run Away",
-		shortDesc: "No competitive use.",
+		shortDesc: "User cannot be prevented from choosing to switch out by any effect.",
 	},
 	sandrush: {
 		name: "Sand Rush",
@@ -1604,7 +1604,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowtag: {
 		name: "Shadow Tag",
-		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability.",
+		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, have the Ability Run Away, are a Ghost type, or also have this Ability.",
 		shortDesc: "Prevents foes from choosing to switch unless they also have this Ability.",
 		gen6: {
 			desc: "Prevents adjacent opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability.",
@@ -1717,8 +1717,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	slushrush: {
 		name: "Slush Rush",
-		desc: "If Hail is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
+		desc: "If Snow is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Snow is active, this Pokemon's Speed is doubled.",
 		gen8: {
 			shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
 		},
@@ -1736,9 +1736,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "If Hail is active, this Pokemon's evasiveness is 1.25x; immunity to Hail.",
 		},
 	},
-	snowwarning: { // updated
+	snowwarning: {
 		name: "Snow Warning",
-		shortDesc: "On switch-in, this Pokemon summons Hail.",
+		shortDesc: "On switch-in, this Pokemon summons Snow.",
 		gen8: {
 			shortDesc: "On switch-in, this Pokemon summons Hail.",
 		},
@@ -1986,7 +1986,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	telepathy: {
 		name: "Telepathy",
-		shortDesc: "This Pokemon does not take damage from attacks made by its allies.",
+		desc: "This Pokemon is not hit by non-Status attacks made by its allies, and this Pokemon's non-Status spread moves do not hit its allies.",
+		shortDesc: "Ally non-Status attacks do not hit this Pokemon or this Pokemon's allies.",
 
 		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00E9mon!",
 	},
@@ -2312,8 +2313,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 	absolutezero: {
 		name: "Absolute Zero",
-		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Hail. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "This Pokemon's Ice attacks do 1.3x in Hail; immunity to it.",
+		desc: "If Snow is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "This Pokemon's Ice attacks do 1.3x in Snow; immunity to it.",
 	},
 	ancientbody: {
 		name: "Ancient Body",
@@ -2418,8 +2419,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	evergreen: {
 		name: "Evergreen",
-		desc: "If this Pokemon is a Snover or Abomasnow, it will change to Lowland Form if Sun is active and Highland Form if Hail is active.",
-		shortDesc: "If user is Snover/Abomasnow, changes to Lowland/Highland Form in Sun/Hail.",
+		desc: "If this Pokemon is a Snover or Abomasnow, it will change to Lowland Form if Sun is active and Highland Form if Snow is active.",
+		shortDesc: "If user is Snover/Abomasnow, changes to Lowland/Highland Form in Sun/Snow.",
 
 		transform: "[POKEMON] adapted to the climate!",
 	},
@@ -2438,7 +2439,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flytrap: {
 		name: "Flytrap",
-		desc: "Prevents opposing Bug-type Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. Halves the speed of opposing Bug-type Pokemon unless they also have this ability.",
+		desc: "Prevents opposing Bug-type Pokemon from choosing to switch out, unless they are holding a Shed Shell, have the Ability Run Away, are a Ghost type, or also have this Ability. Halves the speed of opposing Bug-type Pokemon unless they also have this ability.",
 		shortDesc: "Prevents opposing Bug-type Pokemon from choosing to switch out and halves their Speed.",
 	},
 	foil: {
@@ -2466,8 +2467,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	glacialarmor: {
 		name: "Glacial Armor",
-		desc: "If Hail is active, Defense and Special Defense are multipled by 1.2. This Pokemon takes no damage from Hail. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "1.2x Defense and Special Defense in Hail; immunity to it.",
+		desc: "If Snow is active, Defense and Special Defense are multipled by 1.2. This Pokemon takes no damage from Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "1.2x Defense and Special Defense in Snow; immunity to it.",
 	},
 	hayfever: {
 		name: "Hay Fever",
@@ -2479,12 +2480,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hydrophobic: {
 		name: "Hydrophobic",
-		desc: "This Pokemon ignores Rain and Hail's negative effects. If a Pokemon uses a Water-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
-		shortDesc: "User ignores Rain and Hail's negative effects; Water power against it is halved.",
+		desc: "This Pokemon ignores Rain and Snow's negative effects. If a Pokemon uses a Water-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
+		shortDesc: "User ignores Rain and Snow's negative effects; Water power against it is halved.",
 	},
 	icearmor: {
 		name: "Ice Armor",
-		shortDesc: "On switch-in, this Pokemon summons Strong Winds and Hail.",
+		shortDesc: "On switch-in, this Pokemon summons Strong Winds and Snow.",
 	},
 	incantation: {
 		name: "Incantation",
@@ -2541,8 +2542,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	nullify: {
 		name: "Nullify",
-		desc: "While this Pokemon is active, the effects of Weathergy are disabled and any other Weathergies are prevented from being set up.",
-		shortDesc: "While this Pokemon is active, Weathergy conditions are disabled and can't be set up.",
+		desc: "On switch-in, this Pokemon nullifies all Weathergy and prevents Weathergy from being set up while it is active.",
+		shortDesc: "On switch-in, nullifies Weathergy. While active, Weathergy can't be set up.",
 
 		start: "  The effects of the Weathergy disappeared.",
 	},
@@ -2708,8 +2709,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wetanddry: {
 		name: "Wet and Dry",
-		desc: "If this Pokemon is a Drout, it will change to Wet Form if Rain, Primordial Sea, Hail, or Fog is active and Dry Form if Sun, Desolate Land, Sandstorm, or Dust Storm is active.",
-		shortDesc: "(Drout only) Changes to Wet/Dry Form in Rain/Hail/Fog or Sun/Sand/Dust.",
+		desc: "If this Pokemon is a Drout, it will change to Wet Form if Rain, Primordial Sea, Snow, or Fog is active and Dry Form if Sun, Desolate Land, Sandstorm, or Dust Storm is active.",
+		shortDesc: "(Drout only) Changes to Wet/Dry Form in Rain/Snow/Fog or Sun/Sand/Dust.",
 
 		transform: "[POKEMON] adapted to the climate!",
 	},

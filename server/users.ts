@@ -43,7 +43,7 @@ const NAMES_PER_THROTTLE = 3;
 
 const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
-const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
+const DEFAULT_TRAINER_SPRITES = [1, 2, 3];
 
 import { Utils, type ProcessManager } from '../lib';
 import {

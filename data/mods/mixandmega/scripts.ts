@@ -515,6 +515,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.isMega && !formeType) formeType = 'Mega';
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
+			if (formeChangeSpecies.name.endsWith('Whirly')) formeType = 'Whirly';
 			if (formeType) deltas.formeType = formeType;
 			if (!deltas.formeType && formeChangeSpecies.abilities['H'] &&
 				pokemon && pokemon.baseSpecies.abilities['H'] === pokemon.getAbility().name) {
@@ -526,7 +527,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
 			species.abilities = { '0': deltas.ability };
-			if (deltas.formeType === 'Primary') {
+			if (deltas.formeType === 'Whirly') {
+				if (!species.types.includes(deltas.type)) {
+					const secondType = species.types[1];
+					species.types = [deltas.type];
+					if (secondType && secondType !== deltas.type) species.types.push(secondType);
+				}
+			} else if (deltas.formeType === 'Primary') {
 				const secondType = species.types[1];
 				species.types = [deltas.type];
 				if (secondType && secondType !== deltas.type) species.types.push(secondType);

@@ -6323,7 +6323,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'snowscape') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude'].includes(move.id)) {
@@ -6343,7 +6343,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'snowscape') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool'].includes(move.id)) {

@@ -11,6 +11,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
+	disguise: {
+		inherit: true,
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status') return;
+
+			if (move.hit === 1) delete this.effectState.neutral;
+			if (this.effectState.neutral) return 0;
+
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
+				return;
+			}
+
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move)) return;
+			this.effectState.neutral = true;
+			return 0;
+		},
+	},
 	dragonize: {
 		inherit: true,
 		isNonstandard: null,
@@ -32,25 +52,37 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	naturalcure: {
+		inherit: true,
+		onCheckShow: undefined, // no inherit
+		onSwitchOut(pokemon) {
+			if (!pokemon.status || pokemon.status === 'fnt') return;
+
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
+			pokemon.clearStatus();
+		},
+	},
 	piercingdrill: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	shedskin: {
+	regenerator: {
 		inherit: true,
-		onResidual(pokemon) {
-			if (pokemon.hp && pokemon.status && this.randomChance(3, 10)) {
-				this.debug('shed skin');
-				this.add('-activate', pokemon, 'ability: Shed Skin');
-				pokemon.cureStatus();
+		onSwitchOut(pokemon) {
+			if (pokemon.heal(pokemon.baseMaxhp / 3)) {
+				this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Regenerator', '[silent]');
 			}
 		},
-		desc: "This Pokemon has a 30% chance to have its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "This Pokemon has a 30% chance to have its status cured at the end of each turn.",
 	},
 	spicyspray: {
 		inherit: true,
 		isNonstandard: null,
+		onDamagingHit(damage, target, source, move) {
+			// this is only in the mod folder because it is weird like Dire Claw
+			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
+				this.add('-immune', source);
+			}
+		},
 	},
 	unseenfist: {
 		onModifyMove: undefined, // no inherit

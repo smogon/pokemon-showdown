@@ -130,6 +130,7 @@ const MOVE_PAIRS = [
 	['protect', 'wish'],
 	['leechseed', 'protect'],
 	['leechseed', 'substitute'],
+	['perishsong', 'protect'],
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
@@ -160,6 +161,7 @@ export class RandomGen9Teams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	priorityPokemon: string[];
 	readonly maxTeamSize: number;
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
@@ -184,6 +186,7 @@ export class RandomGen9Teams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -202,14 +205,14 @@ export class RandomGen9Teams {
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
-				movePool.includes('megahorn') || movePool.includes('xscissor') ||
+				['megahorn', 'pinmissile', 'xscissor'].some(m => movePool.includes(m)) ||
 				(!counter.get('Bug') && (types.includes('Electric') || types.includes('Psychic')))
 			),
 			Dark: (
 				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
 			) => {
 				if (
-					counter.get('Dark') < 2 && PRIORITY_POKEMON.includes(species.id) && role === 'Wallbreaker'
+					counter.get('Dark') < 2 && this.priorityPokemon.includes(species.id) && role === 'Wallbreaker'
 				) return true;
 				return !counter.get('Dark');
 			},
@@ -419,7 +422,7 @@ export class RandomGen9Teams {
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
 				counter.basePowerMoves.add(move);
-				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || this.priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
 					if (teraType === moveType) counter.add('stabtera');
@@ -595,6 +598,7 @@ export class RandomGen9Teams {
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
+			['dragonclaw', 'outrage'],
 			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
 
@@ -841,7 +845,7 @@ export class RandomGen9Teams {
 		// Enforce STAB priority
 		if (
 			['Bulky Attacker', 'Bulky Setup', 'Wallbreaker', 'Doubles Wallbreaker'].includes(role) ||
-			PRIORITY_POKEMON.includes(species.id)
+			this.priorityPokemon.includes(species.id)
 		) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
@@ -1419,6 +1423,8 @@ export class RandomGen9Teams {
 		isDoubles: boolean,
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
+		// Temporarily modified for Mega Invasion randomized spotlight
+		if (Object.keys(this.randomMegaSets).includes(species.id)) return this.randomMegaSets[species.id]["level"]!;
 		// doubles levelling
 		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
@@ -1468,7 +1474,13 @@ export class RandomGen9Teams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
+		let sets;
+		// Temporarily modified for Mega Invasion randomized spotlight
+		if (Object.keys(this.randomMegaSets).includes(species.id)) {
+			sets = this.randomMegaSets[species.id]["sets"];
+		} else {
+			sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
+		}
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -1920,7 +1932,11 @@ export class RandomGen9Teams {
 		return pokemon;
 	}
 
-	randomGodlyGiftTeam() {
+	randomMegaSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets-megainvasion.json');
+
+	randomMegaInvasionTeam(depth = 0): RandomTeamsTypes.RandomSet[] {
+		const forceResult = depth >= 4;
+
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -1938,6 +1954,7 @@ export class RandomGen9Teams {
 		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
 		const baseFormes: { [k: string]: number } = {};
+		let hasMega = false;
 
 		const typeCount: { [k: string]: number } = {};
 		const typeComboCount: { [k: string]: number } = {};
@@ -1946,38 +1963,35 @@ export class RandomGen9Teams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
-		// God Pokemon are those with at least 510 BST, not including HP
-		const godPokemonList = pokemonList.filter(poke => {
-			const baseStats = this.dex.species.get(poke).baseStats;
-			return baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe >= 510;
-		});
+		const pokemonList = [...Object.keys(this.randomSets), ...Object.keys(this.randomMegaSets)];
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-		const [godPokemonPool, godBaseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, godPokemonList);
 
+		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			let baseSpecies, species;
-			// Generate a God Pokemon in the lead slot
-			if (pokemon.length === 0) {
-				baseSpecies = this.sampleNoReplace(godBaseSpeciesPool);
-				species = this.dex.species.get(this.sample(godPokemonPool[baseSpecies]));
-			} else {
-				baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-				species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
-
-				// Ensure that the species isn't harmed by Godly Gift stat passing
-				if (pokemon.length < 6) {
-					const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
-					const passedStatName = s[pokemon.length];
-					const passedStat = (this.dex.species.get(pokemon[0].speciesId).baseStats[passedStatName]);
-					// If Deoxys-Attack is the god, just make sure the def/spd stat is <= 50
-					if (Math.max(passedStat, 50) < species.baseStats[passedStatName]) continue;
-				}
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const currentSpeciesPool: Species[] = [];
+			// Check if the base species has a mega forme available
+			let canMega = false;
+			for (const poke of pokemonPool[baseSpecies]) {
+				const species = this.dex.species.get(poke);
+				if (!hasMega && species.isMega) canMega = true;
 			}
+			for (const poke of pokemonPool[baseSpecies]) {
+				const species = this.dex.species.get(poke);
+				// Prevent multiple megas
+				if (hasMega && species.isMega) continue;
+				// Prevent base forme, if a mega is available
+				if (canMega && !species.isMega) continue;
+				currentSpeciesPool.push(species);
+			}
+			let species = this.dex.species.get(this.sample(currentSpeciesPool));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
+
+			// Limit one Mega per team
+			if (hasMega && species.isMega) continue;
 
 			// Treat Ogerpon formes and Terapagos like the Tera Blast user role; reject if team has one already
 			if (['ogerpon', 'ogerponhearthflame', 'terapagos'].includes(species.id) && teamDetails.teraBlast) continue;
@@ -2056,8 +2070,25 @@ export class RandomGen9Teams {
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
-			const set = this.randomSet(species, teamDetails, false, isDoubles);
-			pokemon.push(set);
+			let set: RandomTeamsTypes.RandomSet;
+
+			if (leadsRemaining) {
+				if (
+					isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.baseSpecies) ||
+					!isDoubles && NO_LEAD_POKEMON.includes(species.baseSpecies)
+				) {
+					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
+					set = this.randomSet(species, teamDetails, false, isDoubles);
+					pokemon.push(set);
+				} else {
+					set = this.randomSet(species, teamDetails, true, isDoubles);
+					pokemon.unshift(set);
+					leadsRemaining--;
+				}
+			} else {
+				set = this.randomSet(species, teamDetails, false, isDoubles);
+				pokemon.push(set);
+			}
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;
@@ -2099,8 +2130,13 @@ export class RandomGen9Teams {
 			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
-			if (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday')) {
+			const item = this.dex.items.get(set.item);
+
+			if (item.megaStone) hasMega = true;
+			if (set.ability === 'Drizzle' && !item.isPrimalOrb || set.moves.includes('raindance')) teamDetails.rain = 1;
+			if (
+				set.ability === 'Drought' && !item.isPrimalOrb || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday')
+			) {
 				teamDetails.sun = 1;
 			}
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
@@ -2126,6 +2162,9 @@ export class RandomGen9Teams {
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
+		if (!forceResult) {
+			if (!hasMega) return this.randomMegaInvasionTeam(++depth);
+		}
 
 		return pokemon;
 	}
@@ -2139,7 +2178,11 @@ export class RandomGen9Teams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
+		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
+		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
+		const type = isMonotype ? this.forceMonotype || this.sample(typePool) : undefined;
+
+		const randomN = this.randomNPokemon(this.maxTeamSize, type, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -2155,6 +2198,19 @@ export class RandomGen9Teams {
 					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
 					isBadItem = item.startsWith("TR") || this.dex.items.get(item).isPokeball;
 				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
+
+				// We don't want to revert to different types in monotype
+				if (isMonotype && species.requiredItems) {
+					if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
+
+					if (!dex.species.get(species.changesFrom).types.includes(type!)) {
+						const legalRequiredItems = species.requiredItems.filter(i => (
+							dex.items.get(i).gen <= this.gen && !dex.items.get(i).isNonstandard
+						));
+						if (!legalRequiredItems.length) throw new Error(`${species.name} has no legal required items`);
+						item = this.sample(legalRequiredItems);
+					}
+				}
 			}
 
 			// Make sure forme is legal
@@ -2166,7 +2222,7 @@ export class RandomGen9Teams {
 				}
 				forme = species.name;
 			}
-			if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+			if (species.requiredItems?.every(req => toID(req) !== toID(item))) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
@@ -3119,7 +3175,7 @@ export class RandomGen9Teams {
 		const weatherAbilitiesSet: { [k: string]: string } = {
 			drizzle: "raindance",
 			drought: "sunnyday",
-			snowwarning: "hail",
+			snowwarning: "snowscape",
 			sandstream: "sandstorm",
 		};
 		const resistanceAbilities: { [k: string]: string[] } = {

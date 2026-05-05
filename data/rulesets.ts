@@ -77,7 +77,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
 			'Standard AG',
-			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Weather Sleep Clause',
 		],
 	},
 	standardoms: {

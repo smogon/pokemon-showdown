@@ -1307,7 +1307,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		flags: {},
 		name: "Flame Body",
@@ -1377,10 +1377,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hp) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
-					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
+					pokemon.formeChange('Cherrim-Sunshine', this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 				}
 			} else {
 				if (pokemon.species.id === 'cherrimsunshine') {
+					if (pokemon.hasItem('weathervane')) return;
 					pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 				}
 			}
@@ -1388,14 +1389,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather()) ||
+				(this.effectState.target.hasItem('weathervane') && this.effectState.target.species.id === 'cherrimsunshine')) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather()) ||
+				(this.effectState.target.hasItem('weathervane') && this.effectState.target.species.id === 'cherrimsunshine')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2261,7 +2264,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		flags: {},
 		name: "Ice Body",
@@ -2443,6 +2446,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
+				if (!move.smartTarget) damage += Number(move.totalDamage);
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
@@ -2799,14 +2803,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	magmaarmor: { // updated
 		onUpdate(pokemon) {
-			if (pokemon.status === 'frz') {
+			if (pokemon.status === 'frz' || pokemon.status === 'fst') {
 				this.add('-activate', pokemon, 'ability: Magma Armor');
 				pokemon.cureStatus();
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'frz') return false;
-			if (type === 'hail') return false;
+			if (type === 'frz' || type === 'fst') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		flags: { breakable: 1 },
 		name: "Magma Armor",
@@ -3179,7 +3183,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// is known
 			if (pokemon.showCure === undefined) pokemon.showCure = true;
 
-			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
 			pokemon.clearStatus();
 
 			// only reset .showCure if it's false
@@ -4274,6 +4278,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 24,
 	},
 	runaway: {
+		onTrapPokemonPriority: -10,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = false;
+		},
+		onMaybeTrapPokemonPriority: -10,
+		onMaybeTrapPokemon(pokemon) {
+			pokemon.maybeTrapped = false;
+		},
 		flags: {},
 		name: "Run Away",
 		rating: 0,
@@ -4677,7 +4689,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	snowcloak: {
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, pokemon) {
@@ -4692,9 +4704,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 81,
 	},
-	snowwarning: { // updated
+	snowwarning: {
 		onStart(source) {
-			this.field.setClimateWeather('hail');
+			this.field.setClimateWeather('snowscape');
 		},
 		flags: {},
 		name: "Snow Warning",
@@ -5254,10 +5266,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 101,
 	},
-	telepathy: {
+	telepathy: { // updated
 		onTryHit(target, source, move) {
 			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
 				this.add('-activate', target, 'ability: Telepathy');
+				return null;
+			}
+		},
+		onAnyTryHit(target, source, move) {
+			if (source === this.effectState.target && target.isAlly(source) && move.spreadHit && move.category !== 'Status') {
+				this.add('-activate', source, 'ability: Telepathy');
 				return null;
 			}
 		},
@@ -5287,13 +5305,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	terashell: {
 		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
-		// needs two checks to reset between regular moves and future attacks
-		onAnyBeforeMove() {
-			delete this.effectState.resisted;
-		},
-		onAnyAfterMove() {
-			delete this.effectState.resisted;
-		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, breakable: 1 },
 		name: "Tera Shell",
 		rating: 3.5,
@@ -6073,7 +6084,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		flags: {},
 		name: "Absolute Zero",
@@ -6226,7 +6237,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Cataclysmic Light",
 		rating: 4.5,
-		num: 10078,
+		num: 10079,
 	}, */
 	chakra: { // tested, works as intended
 		onBasePowerPriority: 21,
@@ -6253,7 +6264,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	consecration: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' ||
+				(!pokemon.hasItem('thickclub') && !pokemon.hasItem('weathervane')) || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6265,11 +6277,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		onEnergyWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || !pokemon.hasItem('thickclub') || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' ||
+				(!pokemon.hasItem('thickclub') && !pokemon.hasItem('weathervane')) || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveEnergyWeather()) {
 			case 'haunt':
@@ -6281,12 +6294,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		onUpdate(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Bearvoyance' || pokemon.transformed) return;
 			if (!pokemon.hasItem('thickclub') && pokemon.species.id === 'bearvoyanceawakened') {
+				if (pokemon.hasItem('weathervane')) return;
 				if (pokemon.isActive) {
 					pokemon.formeChange('Bearvoyance', this.effect, false, '0', '[msg]');
 				}
@@ -6308,12 +6322,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	droughtproof: { // tested, works as intended
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea',
-				'hail', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
+				'hail', 'snowscape', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
@@ -6321,13 +6335,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea',
-				'hail', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
+				'hail', 'snowscape', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
 			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea',
-				'hail', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
+				'hail', 'snowscape', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
@@ -6450,7 +6464,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		onClimateWeatherChange(pokemon) {
@@ -6473,7 +6487,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				if (pokemon.hasItem('weathervane') &&
+					['snoverlowland', 'abomasnowlowland'].includes(pokemon.species.id)) return;
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
@@ -6501,7 +6517,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Expiation",
 		rating: 3,
-		num: 10077,
+		num: 10078,
 	}, */
 	ferroflux: { // tested, works as intended
 		onStart(source) {
@@ -6555,7 +6571,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Flytrap",
 		rating: 5,
-		num: 10069,
+		num: 10070,
 	},
 	foil: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
@@ -6599,7 +6615,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Frigid Blaze",
 		rating: 2,
-		num: 10068,
+		num: 10069,
 	}, */
 	galeforce: { // tested, works as intended
 		onStart(source) {
@@ -6610,7 +6626,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10014,
 	},
-	/* geigeraura: { // tested, works as intended
+	geigeraura: { // tested, works as intended
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
@@ -6623,8 +6639,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Geiger Aura",
 		rating: 3,
-		num: 10057,
-	}, */
+		num: 10058,
+	},
 	glacialarmor: { // tested, works as intended
 		onModifyDef(def, pokemon) {
 			if (['hail', 'snowscape'].includes(pokemon.effectiveClimateWeather())) {
@@ -6637,7 +6653,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		flags: { breakable: 1 },
 		name: "Glacial Armor",
@@ -6661,7 +6677,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Heat Haze",
 		rating: 5,
-		num: 10072,
+		num: 10073,
 	}, */
 	hydrophobic: { // tested, works as intended
 		onSourceModifyAtkPriority: 5,
@@ -6677,23 +6693,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
+			if (type === 'hail' || type === 'snowscape') return false;
 		},
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['raindance', 'primordialsea', 'hail'].includes(this.field.effectiveClimateWeather())) {
+			if (['raindance', 'primordialsea', 'hail', 'snowscape'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['raindance', 'primordialsea', 'hail'].includes(this.field.effectiveClimateWeather())) {
+			if (['raindance', 'primordialsea', 'hail', 'snowscape'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['raindance', 'primordialsea', 'hail'].includes(this.field.effectiveClimateWeather())) {
+			if (['raindance', 'primordialsea', 'hail', 'snowscape'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
@@ -6706,12 +6722,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	/* icearmor: { // tested, works as intended
 		onStart(source) {
 			this.field.setClearingWeather('strongwinds');
-			this.field.setClimateWeather('hail');
+			this.field.setClimateWeather('snowscape');
 		},
 		flags: {},
 		name: "Ice Armor",
 		rating: 5,
-		num: 10073,
+		num: 10074,
 	}, */
 	incantation: { // tested, works as intended
 		onStart(source) {
@@ -6754,7 +6770,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Intoxicate",
 		rating: 3,
-		num: 10059,
+		num: 10060,
 	}, */
 	machineprecision: { // tested, works as intended
 		onModifyCritRatio(critRatio, source) {
@@ -6827,7 +6843,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Nasty Webbing",
 		rating: 4,
-		num: 10061,
+		num: 10062,
 	}, */
 	/* neutralize: { // tested, works intendedly TODO: remove failure message when using moves that deal damage and set weather
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
@@ -6858,7 +6874,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnyTryMove(target, source, effect) {
-			if (['sunnyday', 'raindance', 'bloodmoon', 'hail', 'foghorn',
+			if (['sunnyday', 'raindance', 'bloodmoon', 'hail', 'snowscape', 'foghorn',
 				'pollinate', 'sprinkle', 'smogspread', 'sandstorm', 'duststorm',
 				'haunt', 'daydream', 'supercell', 'dragonforce', 'magnetize',
 				'swarmsignal', 'auraprojection', 'strongwinds'].includes(effect.id)) {
@@ -6935,7 +6951,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
 		name: "Neutralize",
 		rating: 4,
-		num: 10074,
+		num: 10075,
 	}, */
 	nottobe: { // incomplete, not tested
 		onAnyFaint(target) {
@@ -6953,31 +6969,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	nullify: { // tested, works as intended TODO: remove failure message when using moves that deal damage and set weather
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
+			this.add('-ability', pokemon, 'Nullify');
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
-		onAnySetClimateWeather(climateWeather) {
+		onAnySetClimateWeather() {
 			return false;
 		},
-		onAnySetIrritantWeather(irritantWeather) {
+		onAnySetIrritantWeather() {
 			return false;
 		},
-		onAnySetEnergyWeather(energyWeather) {
+		onAnySetEnergyWeather() {
 			return false;
 		},
-		onAnySetClearingWeather(clearingWeather) {
+		onAnySetClearingWeather() {
 			return false;
 		},
 		onStart(pokemon) {
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Nullify');
-				this.effectState.switchingIn = false;
-			}
+			pokemon.abilityState.ending = false;
 			this.eachEvent('ClimateWeatherChange', this.effect);
 			this.eachEvent('IrritantWeatherChange', this.effect);
 			this.eachEvent('EnergyWeatherChange', this.effect);
 			this.eachEvent('ClearingWeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
+			pokemon.abilityState.ending = true;
 			this.eachEvent('ClimateWeatherChange', this.effect);
 			this.eachEvent('IrritantWeatherChange', this.effect);
 			this.eachEvent('EnergyWeatherChange', this.effect);
@@ -6987,6 +7002,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		suppressIrritantWeather: true,
 		suppressEnergyWeather: true,
 		suppressClearingWeather: true,
+		suppressCataclysmWeather: true,
 		flags: {},
 		name: "Nullify",
 		rating: 2.5,
@@ -7021,19 +7037,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	/* petrichor: { // tested, works as intended
 		onStart(target) {
-			if (this.field.climateWeather && target.effectiveClimateWeather() === this.field.climateWeather) {
+			const weather = target.effectiveClimateWeather();
+			if (['raindance', 'bloodmoon'].includes(weather) && weather === this.field.climateWeather) {
 				this.add('-activate', target, 'ability: Petrichor');
 			}
 		},
 		onClimateWeatherChange(target, source, sourceEffect) {
-			if (this.field.climateWeather && target.effectiveClimateWeather() === this.field.climateWeather) {
+			const weather = target.effectiveClimateWeather();
+			if (['raindance', 'bloodmoon'].includes(weather) && weather === this.field.climateWeather) {
 				this.add('-activate', target, 'ability: Petrichor');
 			}
 		},
 		flags: {},
 		name: "Petrichor",
 		rating: 2.5,
-		num: 10060,
+		num: 10061,
 	}, */
 	poisoncoat: {
 		onDamagingHit(damage, target, source, move) {
@@ -7096,17 +7114,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 10024,
 	},
-	/* powerplumage: { // tested, works as intended
+	powerplumage: { // tested, works as intended
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Blurrun' || pokemon.transformed) return;
 			if (!pokemon.hp) return;
 			if (['supercell'].includes(pokemon.effectiveEnergyWeather())) {
 				if (pokemon.species.id !== 'blurruncharged') {
-					pokemon.formeChange('Blurrun-Charged', this.effect, false, '0', '[msg]');
+					pokemon.formeChange('Blurrun-Charged', this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 				}
 			} else {
 				if (pokemon.species.id === 'blurruncharged') {
+					if (pokemon.hasItem('weathervane')) return;
 					pokemon.formeChange('Blurrun', this.effect, false, '0', '[msg]');
 				}
 			}
@@ -7116,10 +7135,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hp) return;
 			if (['supercell'].includes(pokemon.effectiveEnergyWeather())) {
 				if (pokemon.species.id !== 'blurruncharged') {
-					pokemon.formeChange('Blurrun-Charged', this.effect, false, '0', '[msg]');
+					pokemon.formeChange('Blurrun-Charged', this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 				}
 			} else {
 				if (pokemon.species.id === 'blurruncharged') {
+					if (pokemon.hasItem('weathervane')) return;
 					pokemon.formeChange('Blurrun', this.effect, false, '0', '[msg]');
 				}
 			}
@@ -7128,7 +7148,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target.isActive || target.baseSpecies.baseSpecies !== 'Blurrun' || target.transformed) return;
 			if (target !== source && move.type === 'Electric') {
 				if (target.species.id !== 'blurruncharged') {
-					target.formeChange('Blurrun-Charged', this.effect, false, '0', '[msg]');
+					target.formeChange('Blurrun-Charged', this.effect, target.hasItem('weathervane'), '0', '[msg]');
 				}
 				return null;
 			}
@@ -7152,7 +7172,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Power Plumage",
 		rating: 5,
 		num: 10056,
-	}, */
+	},
 	powerwithin: { // tested, works as intended
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
@@ -7200,7 +7220,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Relic Soul",
 		rating: 4.5,
-		num: 10075,
+		num: 10076,
 	}, */
 	rockybody: { // tested, works as intended
 		onDamagePriority: 1,
@@ -7346,7 +7366,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Songbird",
 		rating: 0,
-		num: 10067,
+		num: 10068,
 	}, */
 	souldrain: { // tested, works as intended
 		onAnyFaintPriority: 1,
@@ -7383,7 +7403,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Soul Passage",
 		rating: 2.5,
-		num: 10076,
+		num: 10077,
 	}, */
 	standoff: { // tested, works as intended
 		onStart(source) {
@@ -7418,11 +7438,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Eecroach' || pokemon.level < 20 || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'eecroach') {
-					pokemon.formeChange('Eecroach-Swarm');
+					pokemon.formeChange('Eecroach-Swarm', this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 				}
 			} else {
 				if (pokemon.species.id === 'eecroachswarm' &&
 					!['swarmsignal'].includes(pokemon.effectiveIrritantWeather())) {
+					if (pokemon.hasItem('weathervane')) return;
 					pokemon.formeChange('Eecroach');
 				}
 			}
@@ -7435,11 +7456,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'eecroach') {
-					pokemon.formeChange('Eecroach-Swarm');
+					pokemon.formeChange('Eecroach-Swarm', this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 				}
 			} else {
 				if (pokemon.species.id === 'eecroachswarm' &&
 					!['swarmsignal'].includes(pokemon.effectiveIrritantWeather())) {
+					if (pokemon.hasItem('weathervane')) return;
 					pokemon.formeChange('Eecroach');
 				}
 			}
@@ -7608,7 +7630,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10019,
 	},
-	/* wetanddry: { // maybe works? needs client implementation to check (i think)
+	wetanddry: { // maybe works? needs client implementation to check (i think)
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Drout' || pokemon.transformed) return;
@@ -7632,7 +7654,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		onClimateWeatherChange(pokemon) {
@@ -7656,7 +7678,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				if (pokemon.hasItem('weathervane') && pokemon.species.id === 'droutdry' && forme === 'Drout') return;
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		onIrritantWeatherChange(pokemon) {
@@ -7680,12 +7703,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				if (pokemon.hasItem('weathervane') && pokemon.species.id === 'droutdry' && forme === 'Drout') return;
+				pokemon.formeChange(forme, this.effect, pokemon.hasItem('weathervane'), '0', '[msg]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 		name: "Wet and Dry",
 		rating: 1,
-		num: 10056,
-	}, */
+		num: 10057,
+	},
 };

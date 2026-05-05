@@ -139,7 +139,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Body Slam", "Double-Edge", "Flame Charge", "Supercell Slam", "Thunder Wave", "Trailblaze", "Volt Switch"],
-                "abilities": ["Sap Sipper"],
+                "abilities": ["Motor Drive"],
                 "teraTypes": ["Electric", "Fire", "Grass", "Normal"]
             }
         ]
@@ -705,7 +705,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Earth Power", "Hyper Voice", "Roost", "Shadow Ball"],
-                "abilities": ["Rattled"],
+                "abilities": ["Simple"],
                 "teraTypes": ["Ghost", "Ground", "Poison"]
             }
         ]
@@ -1175,7 +1175,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Curse", "Drain Punch", "Gunk Shot", "Poison Jab", "Shadow Sneak"],
-                "abilities": ["Poison Touch"],
+                "abilities": ["Poison Coat"],
                 "teraTypes": ["Dark", "Fighting"]
             }
         ]
@@ -1186,7 +1186,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Curse", "Drain Punch", "Gunk Shot", "Knock Off", "Poison Jab"],
-                "abilities": ["Poison Touch"],
+                "abilities": ["Poison Coat"],
                 "teraTypes": ["Dark", "Fighting"]
             }
         ]
@@ -1551,13 +1551,13 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Energy Ball", "Flame Charge", "Flamethrower", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
-                "abilities": ["Flame Body", "Flash Fire"],
+                "abilities": ["Flash Fire"],
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
             },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Flamethrower", "Hex", "Pain Split", "Will-O-Wisp"],
-                "abilities": ["Flame Body", "Flash Fire"],
+                "abilities": ["Flash Fire"],
                 "teraTypes": ["Fairy", "Grass"]
             }
         ]
@@ -2028,13 +2028,13 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Encore", "Nuzzle", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Static"],
                 "teraTypes": ["Water"]
             },
             {
                 "role": "Tera Blast user",
                 "movepool": ["Encore", "Nasty Plot", "Surf", "Tera Blast", "Thunderbolt"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Static"],
                 "teraTypes": ["Ice"]
             }
         ]
@@ -2257,7 +2257,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Power Gem", "Rapid Spin", "Spikes", "Stealth Rock", "Temper Flare", "Will-O-Wisp"],
-                "abilities": ["Flash Fire"],
+                "abilities": ["Steam Engine"],
                 "teraTypes": ["Ghost", "Steel"]
             }
         ]
@@ -2470,7 +2470,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Giga Drain", "Iron Defense", "Lunge", "Sticky Web", "Synthesis"],
-                "abilities": ["Chlorophyll", "Swarm"],
+                "abilities": ["Chlorophyll"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -2559,13 +2559,13 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Dazzling Gleam", "Gunk Shot", "Pain Split", "Poltergeist", "Shadow Sneak", "Thunder Wave", "Trick", "Will-O-Wisp"],
-                "abilities": ["Cursed Body", "Insomnia"],
+                "abilities": ["Cursed Body"],
                 "teraTypes": ["Fairy"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["Dazzling Gleam", "Nasty Plot", "Shadow Ball", "Thunderbolt", "Will-O-Wisp"],
-                "abilities": ["Cursed Body", "Insomnia"],
+                "abilities": ["Cursed Body"],
                 "teraTypes": ["Electric", "Fairy"]
             }
         ]
@@ -3190,7 +3190,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Gunk Shot", "Iron Head", "Parting Shot", "Taunt", "Toxic Spikes"],
-                "abilities": ["Overcoat"],
+                "abilities": ["Filter"],
                 "teraTypes": ["Water"]
             }
         ]

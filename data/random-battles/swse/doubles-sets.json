@@ -4,13 +4,13 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Baton Pass", "Hydro Pump", "Hurricane", "Bug Buzz", "Giga Drain", "Quiver Dance"],
-                "abilities": ["Intimidate", "Drizzle"]
+                "movepool": ["Baton Pass", "Bug Buzz", "Giga Drain", "Hurricane", "Hydro Pump", "Quiver Dance"],
+                "abilities": ["Drizzle", "Intimidate"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Hydro Pump", "Hurricane", "Hive Shriek", "Protect", "Tailwind"],
-                "abilities": ["Intimidate", "Drizzle"]
+                "movepool": ["Hive Shriek", "Hurricane", "Hydro Pump", "Protect", "Tailwind"],
+                "abilities": ["Drizzle", "Intimidate"]
             }
         ]
     },
@@ -19,92 +19,92 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up"],
+                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Tailwind"],
                 "abilities": ["Galeforce"]
             },
             {
                 "role": "Doubles Sun Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Heat Wave", "Sunny Day"],
+                "movepool": ["Sunny Day", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Rain Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Rain Dance"],
+                "movepool": ["Rain Dance", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
-                "role": "Doubles Hail Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Hail"],
+                "role": "Doubles Snow Setter",
+                "movepool": ["Snowscape", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Blood Moon Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Weather Ball", "Whip Up", "Blood Moon"],
+                "movepool": ["Blood Moon", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Fog Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Double Edge", "Foghorn"],
+                "movepool": ["Foghorn", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Sandstorm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Sandstorm"],
+                "movepool": ["Sandstorm", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Dust Storm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Earth Power", "Whip Up", "Dust Storm"],
+                "movepool": ["Dust Storm", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
-                "role": "Doubles Pollen Storm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up", "Pollinate"],
+                "role": "Doubles Pollen Setter",
+                "movepool": ["Pollinate", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Smog Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Whip Up", "Smog Spread"],
+                "movepool": ["Smog Spread", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Pheromones Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Swarm Signal"],
+                "movepool": ["Swarm Signal", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Fairy Dust Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Sprinkle"],
+                "movepool": ["Sprinkle", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Battle Aura Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Aura Projection"],
+                "movepool": ["Aura Projection", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Paranormal Activity Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Shadow Claw", "Whip Up", "Haunt"],
+                "movepool": ["Haunt", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Dragon Force Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Dragon Claw", "Dragon Force"],
+                "movepool": ["Dragon Force", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Dreamscape Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Daydream"],
+                "movepool": ["Daydream", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Thunderstorm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Supercell"],
+                "movepool": ["Supercell", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             },
             {
                 "role": "Doubles Magnetosphere Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Iron Tail", "Magnetize"],
+                "movepool": ["Magnetize", "Tailwind", "Weather Ball", "Whip Up"],
                 "abilities": ["Galeforce", "Prankster"]
             }
         ]
@@ -114,17 +114,17 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect"],
+                "movepool": ["Aura Sphere", "Mind Meld", "Protect", "Shadow Ball"],
                 "abilities": ["Consecration"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect", "Calm Mind"],
+                "movepool": ["Aura Sphere", "Calm Mind", "Mind Meld", "Protect", "Shadow Ball"],
                 "abilities": ["Consecration"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect", "Nasty Plot"],
+                "movepool": ["Aura Sphere", "Nasty Plot", "Protect", "Psychic", "Shadow Ball"],
                 "abilities": ["Consecration"]
             }
         ]
@@ -134,13 +134,13 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Shadow Ball", "Dazzling Gleam", "Power Gem", "Mind Meld", "Psychic"],
-                "abilities": ["Dreamer", "Magic Bounce"]
+                "movepool": ["Dazzling Gleam", "Mind Meld", "Power Gem", "Psychic", "Shadow Ball"],
+                "abilities": ["Dreamer"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect"],
-                "abilities": ["Dreamer", "Magic Bounce"]
+                "movepool": ["Dazzling Gleam", "Protect", "Psychic", "Shadow Ball"],
+                "abilities": ["Dreamer"]
             }
         ]
     },
@@ -149,13 +149,13 @@
         "sets": [
             {
                 "role": "Doubles Dragon Force Setter",
-                "movepool": ["Draco Meteor", "Protect", "Bug Buzz", "Deception", "Thunder", "Heat Wave"],
+                "movepool": ["Bug Buzz", "Deception", "Draco Meteor", "Heat Wave", "Protect", "Thunder"],
                 "abilities": ["Arcanum"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Tail Glow", "Dragon Pulse", "Bug Buzz", "Deception", "Heat Wave"],
-                "abilities": ["Magic Guard", "Power Within", "Arcanum"]
+                "movepool": ["Bug Buzz", "Deception", "Dragon Pulse", "Heat Wave", "Nasty Plot"],
+                "abilities": ["Arcanum", "Magic Guard", "Power Within"]
             }
         ]
     },
@@ -164,17 +164,17 @@
         "sets": [
             {
                 "role": "Doubles Fog Setter",
-                "movepool": ["Boomburst", "Hyper Voice", "Whip Up", "Protect", "Helping Hand"],
+                "movepool": ["Boomburst", "Helping Hand", "Hyper Voice", "Protect", "Whip Up"],
                 "abilities": ["Condensation"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Trick Room", "Boomburst", "Hyper Voice", "Whip Up", "Calm Mind"],
+                "movepool": ["Boomburst", "Calm Mind", "Hyper Voice", "Trick Room", "Whip Up"],
                 "abilities": ["Condensation", "Unaware", "Warp Mist"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Trick Room", "Hyper Voice", "Helping Hand", "Protect"],
+                "movepool": ["Helping Hand", "Hyper Voice", "Protect", "Trick Room"],
                 "abilities": ["Condensation", "Unaware", "Warp Mist"]
             }
         ]
@@ -189,7 +189,7 @@
             },
             {
                 "role": "Doubles Battle Aura Setter",
-                "movepool": ["Focus Punch", "Mach Punch", "Poison Jab", "U-turn", "Protect"],
+                "movepool": ["Focus Punch", "Mach Punch", "Poison Jab", "Protect", "U-turn"],
                 "abilities": ["Stand Off"]
             }
         ]
@@ -209,7 +209,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Nasty Plot", "Protect", "Aura Sphere", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
+                "movepool": ["Aura Sphere", "Nasty Plot", "Protect", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -219,12 +219,12 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Thermal Vortex", "Headlong Rush", "U-turn", "Rock Slide"],
+                "movepool": ["Headlong Rush", "Rock Slide", "Thermal Vortex", "U-turn"],
                 "abilities": ["Hydrophobic"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Coil", "Thermal Vortex", "Earthquake", "Rapid Spin", "Gunk Shot"],
+                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Rapid Spin", "Thermal Vortex"],
                 "abilities": ["Hydrophobic"]
             }
         ]
@@ -234,7 +234,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Follow Me", "Wide Guard", "Rock Slide", "Knock Off"],
+                "movepool": ["Follow Me", "Knock Off", "Rock Slide", "Wide Guard"],
                 "abilities": ["Rocky Body"]
             }
         ]
@@ -244,17 +244,17 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Follow Me", "Bulldoze", "Coaching", "Brave Bird", "Protect"],
+                "movepool": ["Brave Bird", "Bulldoze", "Coaching", "Follow Me", "Protect"],
                 "abilities": ["Foil", "Vital Spirit"]
             },
             {
-                "role": "Doubles Bulky Setup Sweeper",
-                "movepool": ["No Retreat", "Roost", "Earthquake", "Brave Bird", "Protect", "Body Press"],
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Body Press", "Brave Bird", "Earthquake", "No Retreat", "Protect", "Roost"],
                 "abilities": ["Foil", "Vital Spirit"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Shell Smash", "Earthquake", "Acrobatics", "Protect", "Rock Slide"],
+                "movepool": ["Acrobatics", "Earthquake", "Protect", "Rock Slide", "Shell Smash"],
                 "abilities": ["Foil", "Vital Spirit"]
             }
         ]
@@ -264,7 +264,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Close Combat", "Mach Punch", "Protect", "Trailblaze", "Bulldoze", "Spore"],
+                "movepool": ["Bulldoze", "Close Combat", "Mach Punch", "Protect", "Spore", "Trailblaze"],
                 "abilities": ["Technician"]
             }
         ]
@@ -284,8 +284,8 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Knock Off", "Black Hole", "Protect", "Helping Hand"],
-                "abilities": ["Eventide", "Immunity"]
+                "movepool": ["Black Hole", "Helping Hand", "Knock Off", "Protect"],
+                "abilities": ["Eventide", "Poison Coat"]
             }
         ]
     },
@@ -294,13 +294,13 @@
         "sets": [
             {
                 "role": "Doubles Dreamscape Setter",
-                "movepool": ["Protect", "Dazzling Gleam", "Dream Eater", "Shadow Ball", "Calm Mind", "Helping Hand", "Black Hole"],
+                "movepool": ["Black Hole", "Calm Mind", "Dazzling Gleam", "Dream Eater", "Helping Hand", "Protect", "Shadow Ball"],
                 "abilities": ["Dreamer"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Protect", "Dazzling Gleam", "Psychic", "Shadow Ball", "Calm Mind", "Helping Hand", "Black Hole"],
-                "abilities": ["Dreamer", "Sweet Dreams", "Comatose"]
+                "movepool": ["Black Hole", "Calm Mind", "Dazzling Gleam", "Helping Hand", "Protect", "Psychic", "Shadow Ball"],
+                "abilities": ["Comatose", "Dreamer", "Sweet Dreams"]
             }
         ]
     },
@@ -309,12 +309,12 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Protect", "Bug Buzz", "Whirlduel", "Hydro Pump", "Parting Shot", "Ice Beam", "Aura Sphere"],
+                "movepool": ["Aura Sphere", "Bug Buzz", "Hydro Pump", "Ice Beam", "Parting Shot", "Protect", "Whirlduel"],
                 "abilities": ["Bubble Helm"]
             },
             {
                 "role": "Choice Item user",
-                "movepool": ["U-turn", "Bug Buzz", "Whirlduel", "Hydro Pump", "Ice Beam", "Aura Sphere"],
+                "movepool": ["Aura Sphere", "Bug Buzz", "Hydro Pump", "Ice Beam", "U-turn", "Whirlduel"],
                 "abilities": ["Bubble Helm"]
             }
         ]
@@ -324,12 +324,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Taunt", "Fake Out", "Dazzling Gleam", "Sticky Web", "Muck Volley"],
-                "abilities": ["Prankster", "Poison Coat"]
+                "movepool": ["Dazzling Gleam", "Fake Out", "Helping Hand", "Muck Volley", "Sticky Web", "Taunt"],
+                "abilities": ["Poison Coat", "Prankster"]
             },
             {
                 "role":"Choice Item user",
-                "movepool": ["Trick", "Dazzling Gleam", "Muck Volley", "U-turn"],
+                "movepool": ["Dazzling Gleam", "Muck Volley", "Trick", "U-turn"],
                 "abilities": ["Prankster"]
             }
         ]
@@ -339,12 +339,12 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Draconic Roar", "Whip Up", "U-turn", "Hyper Voice", "Heat Wave"],
+                "movepool": ["Draconic Roar", "Heat Wave", "Hyper Voice", "U-turn", "Whip Up"],
                 "abilities": ["Echolocation"]
             },
             {
-                "role":"Doubles Protect",
-                "movepool": ["Protect", "Draconic Roar", "Whip Up", "Boomburst", "Shredding Riff", "Taunt"],
+                "role":"Offensive Protect",
+                "movepool": ["Boomburst", "Draconic Roar", "Protect", "Shredding Riff", "Taunt", "Whip Up"],
                 "abilities": ["Echolocation", "Malice"]
             }
         ]

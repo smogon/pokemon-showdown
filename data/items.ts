@@ -8575,7 +8575,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (source.baseSpecies.baseSpecies === 'Castform') return false;
 			return true;
 		},
-		itemUser: ["Castform"],
+		itemUser: [
+			"Abomasnow", "Bearvoyance", "Blurrun", "Castform", "Cherrim", "Drout", "Eecroach", "Snover",
+		],
 		num: 10014,
 		gen: 9,
 	},
@@ -8591,6 +8593,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		forcedForme: "Castform-Whirly",
 		itemUser: ["Castform-Whirly"],
 		num: 10015,
 		gen: 9,

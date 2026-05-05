@@ -115,7 +115,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	safetygoggles: {
 		inherit: true,
 		onImmunity(type, pokemon) {
-			if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'powder') return false;
+			if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'snowscape' ||
+				type === 'powder') return false;
 		},
 	},
 	utilityumbrella: {

@@ -300,4 +300,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onTakeItem: false,
 	},
+	whirligig: {
+		inherit: true,
+		onTakeItem: false,
+	},
 };

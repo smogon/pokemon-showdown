@@ -282,6 +282,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 	ice: {
 		damageTaken: {
 			hail: 3,
+			snowscape: 3,
 			frz: 3,
 			fst: 3,
 			Bug: 0,

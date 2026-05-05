@@ -1,312 +1,711 @@
 {
 	"masquerain": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Baton Pass", "Hydro Pump", "Hurricane", "Bug Buzz", "Giga Drain", "Quiver Dance"],
-                "abilities": ["Intimidate", "Drizzle"]
-            },
+                "movepool": ["Air Slash", "Bug Buzz", "Giga Drain", "Quiver Dance"],
+                "abilities": ["Drizzle", "Intimidate"]
+            }
+        ]
+    },
+	"alfalphalops": {
+        "level": 87,
+        "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Hydro Pump", "Hurricane", "Hive Shriek", "Protect", "Tailwind"],
-                "abilities": ["Intimidate", "Drizzle"]
+                "role": "Setup Sweeper",
+                "movepool": ["Growl", "Growth", "Headbutt", "Tackle"],
+                "abilities": ["Droughtproof", "Overgrow"]
+            }
+        ]
+    },
+	"tarmendoa": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bite", "Body Slam", "Coil", "Earthquake"],
+                "abilities": ["Blaze", "Hydrophobic"]
+            }
+        ]
+    },
+	"vaquamael": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bubble", "Ice Beam", "Lunge", "Muddy Water"],
+                "abilities": ["Bubble Helm", "Torrent"]
+            }
+        ]
+    },
+	"cheekat": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Belch", "Bite", "Tackle", "Yawn"],
+                "abilities": ["Cheek Pouch", "Gluttony", "Prankster"]
+            }
+        ]
+    },
+	"opakespiel": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Double-Edge", "Mimic", "Scratch", "Shadow Ball"],
+                "abilities": ["Not To Be", "To Be", "Wandering Spirit"]
+            }
+        ]
+    },
+    "leavanny": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Knock Off", "Leaf Blade", "Swords Dance", "X-Scissor"],
+                "abilities": ["Chlorophyll", "Powder Cure"]
+            }
+        ]
+    },
+    "glaceon": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Blizzard", "Chilling Water", "Freeze-Dry", "Icy Wind"],
+                "abilities": ["Ice Body", "Slush Rush", "Snow Warning"]
+            }
+        ]
+    },
+    "catatomb": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Black Hole", "Body Slam", "Crunch", "Curse"],
+                "abilities": ["Cursed Body", "Infiltrator", "Warp Mist"]
+            }
+        ]
+    },
+    "probaska": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Body Press", "Body Slam", "Boomburst"],
+                "abilities": ["Dancer", "Soundproof", "Trumpet Weevil"]
+            }
+        ]
+    },
+    "diggersbykaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Avalanche", "Blizzard", "Body Press", "Body Slam"],
+                "abilities": ["Huge Power", "Ice Body", "Slush Rush"]
+            }
+        ]
+    },
+    "ursaluna": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Press", "Body Slam", "Brick Break", "Swords Dance"],
+                "abilities": ["Bulletproof", "Guts", "Unnerve"]
+            }
+        ]
+    },
+    "flareon": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Curse", "Evoboost", "Facade", "Flamethrower"],
+                "abilities": ["Drought", "Flash Fire", "Guts"]
+            }
+        ]
+    },
+    "bloomage": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Agility", "Aromatherapy", "Brave Bird"],
+                "abilities": ["Bloomspring", "Solar Power", "Vegetate"]
+            }
+        ]
+    },
+    "chandelure": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Black Hole", "Calm Mind", "Curse"],
+                "abilities": ["Flash Fire", "Séance", "Soul Drain"]
+            }
+        ]
+    },
+    "ninetales": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Slam", "Calm Mind", "Crunch", "Curse"],
+                "abilities": ["Drought", "Solar Power"]
+            }
+        ]
+    },
+    "aspfault": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bite", "Body Slam", "Coil", "Earthquake"],
+                "abilities": ["Blaze", "Hydrophobic"]
             }
         ]
     },
     "aerogen": {
-        "level": 80,
+        "level": 87,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up"],
-                "abilities": ["Galeforce"]
-            },
-            {
-                "role": "Sun Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Heat Wave", "Sunny Day"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Rain Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Rain Dance"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Hail Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Hail"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Blood Moon Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Weather Ball", "Whip Up", "Blood Moon"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Fog Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Double Edge", "Foghorn"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Sandstorm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Sandstorm"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Dust Storm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Earth Power", "Whip Up", "Dust Storm"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Pollen Storm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Helping Hand", "Protect", "Windrage", "Whip Up", "Pollinate"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                
-                "role": "Smog Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Whip Up", "Smog Spread"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Pheromones Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Swarm Signal"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Fairy Dust Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Sprinkle"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Battle Aura Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Close Combat", "Aura Projection"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Paranormal Activity Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Shadow Claw", "Whip Up", "Haunt"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Dragon Force Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Dragon Claw", "Dragon Force"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Dreamscape Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Whip Up", "Daydream"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Thunderstorm Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Supercell"],
-                "abilities": ["Galeforce", "Prankster"]
-            },
-            {
-                "role": "Magnetosphere Setter",
-                "movepool": ["Tailwind",  "U-turn", "Protect", "Windrage", "Hurricane", "Iron Tail", "Magnetize"],
-                "abilities": ["Galeforce", "Prankster"]
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Agility", "Body Slam", "Brick Break"],
+                "abilities": ["Galeforce", "Prankster", "Speed Boost"]
             }
         ]
     },
-    "bearvoyance": {
-        "level": 83,
+    "crobat": {
+        "level": 87,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect"],
-                "abilities": ["Consecration"]
-            },
-            {
                 "role": "Setup Sweeper",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Mind Meld", "Protect", "Calm Mind"],
-                "abilities": ["Consecration"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect", "Nasty Plot"],
-                "abilities": ["Consecration"]
+                "movepool": ["Acrobatics", "Air Slash", "Brave Bird", "Crunch"],
+                "abilities": ["Infiltrator", "Inner Focus"]
             }
         ]
     },
-    "espeon": {
-        "level": 83,
+    "drifblim": {
+        "level": 87,
         "sets": [
             {
-                "role": "Choice Item user",
-                "movepool": ["Shadow Ball", "Dazzling Gleam", "Power Gem", "Mind Meld", "Psychic"],
-                "abilities": ["Dreamer", "Magic Bounce"]
-            },
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Aura Sphere", "Body Slam", "Calm Mind"],
+                "abilities": ["Aftermath", "Flare Boost", "Unburden"]
+            }
+        ]
+    },
+    "emolga": {
+        "level": 87,
+        "sets": [
             {
-                "role": "Offensive Protect",
-                "movepool": ["Shadow Ball", "Aura Sphere", "Psychic", "Protect"],
-                "abilities": ["Dreamer", "Magic Bounce"]
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Agility", "Defog", "Discharge"],
+                "abilities": ["Motor Drive", "Static", "Wind Power"]
+            }
+        ]
+    },
+    "honchkrow": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Black Hole", "Brave Bird", "Dark Pulse"],
+                "abilities": ["Malice", "Moxie", "Super Luck"]
+            }
+        ]
+    },
+    "caragen": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Slam", "Brick Break", "Bug Buzz", "Bulk Up"],
+                "abilities": ["Secretion", "Shield Dust", "Tinted Lens"]
+            }
+        ]
+    },
+    "frosmoth": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Aurora Veil", "Avalanche", "Blizzard"],
+                "abilities": ["Ice Scales", "Powder Cure", "Shield Dust"]
+            }
+        ]
+    },
+    "absol": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Black Hole", "Body Slam", "Calm Mind"],
+                "abilities": ["Anticipation", "Super Luck"]
+            }
+        ]
+    },
+    "carbink": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Body Press", "Body Slam", "Bulk Up"],
+                "abilities": ["Clear Body", "Sturdy"]
+            }
+        ]
+    },
+    "excadrillkaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Body Slam", "Brick Break", "Calm Mind"],
+                "abilities": ["Chakra", "Incantation", "Sand Rush"]
+            }
+        ]
+    },
+    "florges": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aromatherapy", "Calm Mind", "Chilling Water", "Dazzling Gleam"],
+                "abilities": ["Druidry", "Flower Veil", "Symbiosis"]
+            }
+        ]
+    },
+    "kaskazog": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Armor", "Acrobatics", "Aromatherapy", "Dazzling Gleam"],
+                "abilities": ["Druidry", "Poison Coat", "Prankster"]
+            }
+        ]
+    },
+    "klefki": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Press", "Calm Mind", "Dazzling Gleam", "Double-Edge"],
+                "abilities": ["Magician", "Prankster"]
+            }
+        ]
+    },
+    "basculegion": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aqua Jet", "Aqua Tail", "Aura Sphere", "Blizzard"],
+                "abilities": ["Adaptability", "Mold Breaker", "Shadow Step"]
+            }
+        ]
+    },
+    "drifblimamazeall": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Aura Sphere", "Baton Pass", "Body Press"],
+                "abilities": ["Levitate", "Pickup", "Surveillance"]
+            }
+        ]
+    },
+    "abomasnow": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aromatherapy", "Aurora Veil", "Avalanche", "Blizzard"],
+                "abilities": ["Evergreen", "Snow Warning", "Soundproof"]
+            }
+        ]
+    },
+    "luxraykaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Avalanche", "Blizzard", "Body Press", "Body Slam"],
+                "abilities": ["Fur Coat", "Moxie", "Slush Rush"]
+            }
+        ]
+    },
+    "ninetalesalola": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aurora Veil", "Avalanche", "Blizzard", "Body Slam"],
+                "abilities": ["Absolute Zero", "Snow Warning"]
+            }
+        ]
+    },
+    "goodra": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Armor", "Aqua Tail", "Blizzard", "Body Press"],
+                "abilities": ["Gooey", "Hydration", "Sap Sipper"]
+            }
+        ]
+    },
+    "goodrahisui": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Armor", "Aqua Tail", "Blizzard", "Body Press"],
+                "abilities": ["Gooey", "Overcoat", "Sap Sipper"]
             }
         ]
     },
     "yanmage": {
-        "level": 84,
-        "sets": [
-            {
-                "role": "Dragon Force Setter",
-                "movepool": ["Draco Meteor", "Protect", "Bug Buzz", "Deception", "Thunder", "Heat Wave"],
-                "abilities": ["Arcanum"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Tail Glow", "Dragon Pulse", "Bug Buzz", "Deception", "Heat Wave"],
-                "abilities": ["Magic Guard", "Power Within", "Arcanum"]
-            }
-        ]
-    },
-    "enigmeon": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Fog Setter",
-                "movepool": ["Boomburst", "Hyper Voice", "Whip Up", "Protect", "Helping Hand"],
-                "abilities": ["Condensation"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["Trick Room", "Boomburst", "Hyper Voice", "Whip Up", "Calm Mind"],
-                "abilities": ["Condensation", "Unaware", "Warp Mist"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["Trick Room", "Hyper Voice", "Helping Hand", "Protect"],
-                "abilities": ["Condensation", "Unaware", "Warp Mist"]
-            }
-        ]
-    },
-    "bludgen": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Choice Item user",
-                "movepool": ["Drain Punch", "Mach Punch", "Poison Jab", "U-Turn"],
-                "abilities": ["Iron Fist"]
-            }
-        ]
-    },
-    "woond": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Choice Item user",
-                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Shadow Fang", "Wild Charge"],
-                "abilities": ["Scrappy"]
-            }
-        ]
-    },
-    "pudet": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Choice Item user",
-                "movepool": ["Close Combat", "Crunch", "Iron Head", "Play Rough", "Wild Charge"],
-                "abilities": ["Scrappy"]
-            }
-        ]
-    },
-    "rotombrawl": {
-        "level": 90,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Nasty Plot", "Protect", "Aura Sphere", "Thunderbolt", "Volt Switch", "Will-O-Wisp"],
-                "abilities": ["Levitate"]
-            }
-        ]
-    },
-    "tarmendoa": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Choice Item user",
-                "movepool": ["Thermal Vortex", "Headlong Rush", "U-turn", "Rock Slide"],
-                "abilities": ["Hydrophobic"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Coil", "Thermal Vortex", "Earthquake", "Rapid Spin", "Gunk Shot"],
-                "abilities": ["Hydrophobic"]
-            }
-        ]
-    },
-    "stackem": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Follow Me", "Wide Guard", "Rock Slide", "Knock Off"],
-                "abilities": ["Rocky Body"]
-            }
-        ]
-    },
-    "quailstion": {
-        "level": 85,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Follow Me", "Bulldoze", "Coaching", "Brave Bird", "Protect"],
-                "abilities": ["Foil", "Vital Spirit"]
-            },
-            {
-                "role": "Bulky Setup Sweeper",
-                "movepool": ["No Retreat", "Roost", "Earthquake", "Brave Bird", "Protect", "Body Press"],
-                "abilities": ["Foil", "Vital Spirit"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Shell Smash", "Earthquake", "Acrobatics", "Protect", "Rock Slide"],
-                "abilities": ["Foil", "Vital Spirit"]
-            }
-        ]
-    },
-    "breloom": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Mach Punch", "Protect", "Trailblaze", "Bulldoze", "Spore"],
-                "abilities": ["Technician"]
-            }
-        ]
-    },
-    "lilliganthisui": {
-        "level": 84,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Close Combat", "Leaf Blade", "Protect", "Sleep Powder", "Victory Dance"],
-                "abilities": ["Hustle"]
+                "movepool": ["Aura Sphere", "Blizzard", "Bug Buzz", "Dazzling Gleam"],
+                "abilities": ["Arcanum", "Magic Guard", "Power Within"]
+            }
+        ]
+    },
+    "legen": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Blizzard", "Body Press", "Body Slam", "Brick Break"],
+                "abilities": ["Arcanum", "Moxie", "Multiscale"]
+            }
+        ]
+    },
+    "noivern": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Air Slash", "Body Slam", "Boomburst"],
+                "abilities": ["Echolocation", "Infiltrator", "Malice"]
+            }
+        ]
+    },
+    "sliggoohisui": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Armor", "Blizzard", "Body Press", "Body Slam"],
+                "abilities": ["Gooey", "Overcoat", "Sap Sipper"]
+            }
+        ]
+    },
+    "yanmakaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bug Buzz", "Dazzling Gleam", "Deception", "Double-Edge"],
+                "abilities": ["Arcanum", "Magic Guard", "Power Within"]
+            }
+        ]
+    },
+    "azumarillkaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aqua Jet", "Aqua Tail", "Aromatherapy", "Body Slam"],
+                "abilities": ["Drizzle", "Sticky Hold", "Vegetate"]
+            }
+        ]
+    },
+    "clamtrip": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Body Slam", "Bulk Up", "Crystal Force"],
+                "abilities": ["Pearl Drop"]
+            }
+        ]
+    },
+    "relicanth": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aqua Jet", "Aqua Tail", "Blizzard", "Body Press"],
+                "abilities": ["Rock Head", "Sturdy", "Swift Swim"]
+            }
+        ]
+    },
+    "thievul": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Black Hole", "Dark Pulse", "Nasty Plot", "Psychic"],
+                "abilities": ["Run Away", "Stakeout", "Unburden"]
+            }
+        ]
+    },
+    "sableye": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Black Hole", "Calm Mind", "Dark Pulse", "Dazzling Gleam"],
+                "abilities": ["Keen Eye", "Magic Bounce", "Prankster"]
+            }
+        ]
+    },
+    "shiftry": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Energy Ball", "Growth", "Hurricane"],
+                "abilities": ["Chlorophyll", "Pickpocket", "Wind Rider"]
             }
         ]
     },
     "umbreon": {
-        "level": 84,
+        "level": 87,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Knock Off", "Black Hole", "Protect", "Helping Hand"],
-                "abilities": ["Eventide", "Immunity"]
+                "role": "Setup Sweeper",
+                "movepool": ["Black Hole", "Calm Mind", "Dark Pulse", "Moonlight"],
+                "abilities": ["Eventide", "Poison Coat", "Synchronize"]
             }
         ]
     },
-    "musharna": {
-        "level": 85,
+    "jolteon": {
+        "level": 87,
         "sets": [
             {
-                "role": "Dreamscape Setter",
-                "movepool": ["Protect", "Dazzling Gleam", "Dream Eater", "Shadow Ball", "Calm Mind", "Helping Hand", "Black Hole"],
-                "abilities": ["Dreamer"]
-            },
+                "role": "Setup Sweeper",
+                "movepool": ["Agility", "Discharge", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Quick Feet", "Stormfront", "Volt Absorb"]
+            }
+        ]
+    },
+    "raichu": {
+        "level": 87,
+        "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Protect", "Dazzling Gleam", "Psychic", "Shadow Ball", "Calm Mind", "Helping Hand", "Black Hole"],
-                "abilities": ["Dreamer", "Sweet Dreams", "Comatose"]
+                "role": "Setup Sweeper",
+                "movepool": ["Discharge", "Focus Blast", "Nasty Plot", "Thunderbolt"],
+                "abilities": ["Forked", "Lightning Rod", "Static"]
+            }
+        ]
+    },
+    "bludgen": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Close Combat", "Drain Punch", "Mach Punch"],
+                "abilities": ["Guts", "Iron Fist", "Stand Off"]
+            }
+        ]
+    },
+    "breloom": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Close Combat", "Seed Bomb", "Spore"],
+                "abilities": ["Effect Spore", "Poison Heal", "Technician"]
+            }
+        ]
+    },
+    "lilliganthisui": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Leaf Blade", "Sleep Powder", "Victory Dance"],
+                "abilities": ["Chlorophyll", "Hay Fever", "Hustle"]
+            }
+        ]
+    },
+    "pudet": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Close Combat", "Crunch", "Swords Dance"],
+                "abilities": ["Guard Dog", "Guts", "Scrappy"]
+            }
+        ]
+    },
+    "woond": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Close Combat", "Crunch", "Shadow Claw"],
+                "abilities": ["Guard Dog", "Scrappy", "Shadow Step"]
+            }
+        ]
+    },
+    "rotombrawl": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Focus Blast", "Nasty Plot", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Adaptability", "Levitate", "Rage State"]
+            }
+        ]
+    },
+    "quailstion": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Earthquake", "No Retreat", "Stone Edge"],
+                "abilities": ["Foil", "Steadfast", "Vital Spirit"]
+            }
+        ]
+    },
+    "kilowattrel": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Agility", "Hurricane", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Competitive", "Volt Absorb", "Wind Power"]
+            }
+        ]
+    },
+    "seismitoad": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Drain Punch", "Earthquake", "Muddy Water", "Sludge Wave"],
+                "abilities": ["Poison Coat", "Swift Swim", "Water Absorb"]
+            }
+        ]
+    },
+    "cereboral": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Power Gem", "Psychic", "Recover"],
+                "abilities": ["Rain Dish", "Storm Drain", "Synchronize"]
+            }
+        ]
+    },
+    "roserade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Energy Ball", "Nasty Plot", "Sludge Wave", "Synthesis"],
+                "abilities": ["Natural Cure", "Poison Coat", "Technician"]
+            }
+        ]
+    },
+    "trevenantkaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Shadow Claw", "Sludge Wave", "Spore"],
+                "abilities": ["Effect Spore", "Poison Coat", "Soul Drain"]
+            }
+        ]
+    },
+    "probat": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Hyper Voice", "Nasty Plot", "Psychic"],
+                "abilities": ["Echolocation", "Soundproof", "Surveillance"]
+            }
+        ]
+    },
+    "jemineye": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Power Gem", "Psychic"],
+                "abilities": ["Magic Guard", "Solid Rock"]
+            }
+        ]
+    },
+    "folleming": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Discharge", "Nasty Plot", "Psychic"],
+                "abilities": ["Enjoin"]
+            }
+        ]
+    },
+    "bearvoyance": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Mind Meld", "Nasty Plot", "Shadow Ball"],
+                "abilities": ["Consecration", "Smoke and Mirrors"]
+            }
+        ]
+    },
+    "bibarelkaskade": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Flash Cannon", "Mind Meld", "Psyshock"],
+                "abilities": ["Machine Precision", "Magnapult", "Simple"]
+            }
+        ]
+    },
+    "pathagen": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Spray", "Nasty Plot", "Sludge Bomb", "Sludge Wave"],
+                "abilities": ["Corrosion", "Poison Coat", "Pollution"]
+            }
+        ]
+    },
+    "ananoop": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acid Armor", "Giga Drain", "Muck Volley", "Sludge Bomb"],
+                "abilities": ["Dry Skin", "Liquid Ooze", "Regenerator"]
+            }
+        ]
+    },
+    "botnyak": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Flash Cannon", "Nasty Plot", "Psychic"],
+                "abilities": ["Analytic", "Surveillance", "Trace"]
             }
         ]
     }

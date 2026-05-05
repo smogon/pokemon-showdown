@@ -93,10 +93,12 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	zaou: "[Gen 9] Legends Z-A OU",
 	legendsou: "[Gen 9] Legends Z-A OU",
 	plzaou: "[Gen 9] Legends Z-A OU",
-	omotm: "[Gen 9] Alphabet Cup",
-	lcotm: "[Gen 9] Cross Evolution",
-	ommotm: "[Gen 9] STAAABmons",
-	ommspotlight: "[Gen 9] STAAABmons",
+	omotm: "[Gen 9] Inheritance",
+	lcotm: "[Gen 9] Camomons",
+	ommotm: "[Gen 9] Ultra Mix and Mega",
+	ommspotlight: "[Gen 9] Ultra Mix and Mega",
+	pmotm: "[Gen 9] woomod Random Battle",
+	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias
 	megasnow: "Abomasnow-Mega",
@@ -2588,25 +2590,26 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	tarm: "Tarmendoa",
 	quail: "Quailstion",
 	zog: "Kaskazog",
+
+	// formes
+
+	bearvoyancedormant: "Bearvoyance",
+	bearvoyancea: "Bearvoyance-Awakened",
+	bearvoyancemega: "Bearvoyance-Awakened",
 	botnyaklb: "Botnyak",
 	botnyaklr: "Botnyak",
 	botnyaklg: "Botnyak",
 	botnyakdb: "Botnyak",
 	botnyakdr: "Botnyak",
 	botnyakdg: "Botnyak",
-
-	// formes
-
-	snoverhighland: "Snover",
-	abomasnowhighland: "Abomasnow",
-	// droutwet: "Drout",
+	droutwet: "Drout",
 	eecroachsolo: "Eecroach",
 	mosskratlakebloom: "Mosskrat",
 	// tamroastm: "Tamroast",
 	// weepollenm: "Weepollen",
-	bearvoyancedormant: "Bearvoyance",
-	bearvoyancea: "Bearvoyance-Awakened",
-	bearvoyancemega: "Bearvoyance-Awakened",
+
+	abomasnowhighland: "Abomasnow",
+	snoverhighland: "Snover",
 
 	// UBs
 
