@@ -12308,8 +12308,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onModifyDamage(damage, source, target, move) {
-				if (move.spreadHit && target.isTerrainAffected() && !target.isSemiInvulnerable()) {
-					this.debug('Misty Terrain spread move suppress');
+				if (move.type !== 'Fairy' && move.spreadHit && target.isTerrainAffected() && !target.isSemiInvulnerable()) {
+					this.debug('Misty Terrain spread move weaken');
 					return this.chainModify(0.5);
 				}
 			},
