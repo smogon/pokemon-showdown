@@ -31,7 +31,7 @@ describe('value rule support (slow)', () => {
 			if (gen === 1 && count !== 1) continue;
 			const format = Dex.formats.get(`${formatID}@@@Max Move Count = ${count}`);
 			// New set format
-			if ([2, 3, 4, 5, 6, 7, 9].includes(gen)) {
+			if (gen >= 2) {
 				// Due to frontloading of moveset generation, formats with the new set format do not support
 				// Max Move Counts less than 4
 				if (count < 4) continue;
@@ -142,6 +142,10 @@ describe("New set format (slow)", () => {
 			filename: "gen7/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
+		"gen8randombattle": {
+			filename: "gen8/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Dynamax User", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
 		"gen9randombattle": {
 			filename: "gen9/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
@@ -182,7 +186,7 @@ describe("New set format (slow)", () => {
 						const dexMove = dex.moves.get(move);
 						if (!dexMove.exists) problems.push(`${species.name} has invalid move: ${move}`);
 						// Old gens have moves in id form, currently.
-						if (genNum === 9) {
+						if (genNum >= 8) {
 							if (move !== dexMove.name) problems.push(`${species.name} has misformatted move: ${move}`);
 						} else {
 							if (!(move === dexMove.id || move.startsWith('hiddenpower'))) {
@@ -255,7 +259,7 @@ describe("New set format (slow)", () => {
 				const species = dex.species.get(pokemon);
 				assert(species.exists, `In ${format}, Pokemon ${species} does not exist`);
 				const sets = setsJSON[pokemon]["sets"];
-				const types = species.types;
+				const types = new Set(species.types);
 				for (const set of sets) {
 					assert(set.movepool.every(m => dex.moves.get(m).exists), `In ${format}, for Pokemon ${species}, one of ${set.movepool} does not exist.`);
 					const role = set.role;
@@ -278,7 +282,7 @@ describe("New set format (slow)", () => {
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
 							if (genNum === 9) {
-								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, format.includes('doubles'), movePool, specialType, role);
+								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role, format.includes('doubles'));
 							} else {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role);
 							}
