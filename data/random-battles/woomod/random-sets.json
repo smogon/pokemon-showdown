@@ -10,7 +10,7 @@
         ]
     },
     "amauramega": {
-        "level": 64,
+        "level": 65,
         "sets": [
 			{
 			    "role": "Fast Attacker",
@@ -70,7 +70,7 @@
         ]
     },
     "dragonairmega": {
-        "level": 64,
+        "level": 65,
         "sets": [
 			{
 			    "role": "Fast Attacker",
@@ -214,7 +214,7 @@
         "sets": [
 			{
 			    "role": "Bulky Support",
-			    "movepool": ["Star Smash", "Wish", "Protect", "Dig", "Spikes"],
+			    "movepool": ["Star Smash", "Wish", "Protect", "Spikes"],
 			    "abilities": ["Magic Bag"]
 			}
         ]
@@ -229,7 +229,7 @@
 			}
         ]
     },
-    "koffing": {
+    "koffinghoenn": {
         "level": 67,
         "sets": [
 			{
@@ -305,7 +305,7 @@
         ]
     },
     "pikachumega": {
-        "level": 64,
+        "level": 62,
         "sets": [
 			{
 			    "role": "Setup Sweeper",
@@ -359,7 +359,7 @@
         "sets": [
 			{
 			    "role": "Fast Support",
-			    "movepool": ["Frigidly Slide", "Chilly Reception", "Taunt", "Electro Ball"],
+			    "movepool": ["Frigidly Slide", "Chilly Reception", "Taunt", "Dragon Rush"],
 			    "abilities": ["Alpinist"]
 			}
         ]
@@ -454,7 +454,7 @@
         "sets": [
 			{
 			    "role": "Fast Attacker",
-			    "movepool": ["Vanillite Move With Too Many Effects", "Ice Beam", "Scald", "Volt Switch"],
+			    "movepool": ["Vanillite Attack With Too Many Effects", "Ice Beam", "Scald", "Volt Switch"],
 			    "abilities": ["Spicy Cream"]
 			}
         ]
@@ -555,8 +555,7 @@
 			{
 			    "role": "Bulky Attacker",
 			    "movepool": ["Earthquake", "Gear Grind", "Rapid Spin", "Stealth Rock", "Toxic"],
-			    "abilities": ["As One (Klang)"],
-				"teraTypes": ["Ground"]
+			    "abilities": ["As One (Klang)"]
 			}
         ]
     }

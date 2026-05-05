@@ -305,18 +305,19 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	koffing: {
 		inherit: true,
-		name: "Koffing",
+		otherFormes: ["Koffing-Hoenn"],
+		formeOrder: ["Koffing", "Koffing-Hoenn"],
+	},
+	koffinghoenn: {
+		name: "Koffing-Hoenn",
 		types: ["Poison", "Water"],
 		baseStats: { hp: 70, atk: 30, def: 100, spa: 95, spd: 75, spe: 80 },
 		abilities: { 0: "Neutralizing Gas", H: "Levitate" },
+		num: 109,
+		weightkg: 1,
+		eggGroups: ["Amorphous"],
 	},
-	maushold: {
-		inherit: true,
-		types: ["Normal"],
-		baseStats: { hp: 70, atk: 75, def: 70, spa: 85, spd: 70, spe: 100 },
-		abilities: { 0: "Mitosis" },
-	},
-	mausholdfour: {
+	tandemaus: {
 		inherit: true,
 		types: ["Normal"],
 		baseStats: { hp: 70, atk: 75, def: 70, spa: 85, spd: 70, spe: 100 },

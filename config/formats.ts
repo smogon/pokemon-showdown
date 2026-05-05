@@ -862,7 +862,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] woomod Random Battle",
-		desc: 'mod by <username>woo</username>',
+		desc: 'A Solomod by <user>woo</user> featuring custom Pokemon, moves, Abilities, and more!',
 		mod: `woomod`,
 		team: 'random',
 		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
@@ -3661,8 +3661,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: [
 			'Krokorok', 'Qwilfish-Hisui', 'Snivy', 'Dragonair', 'Wimpod', 'Toxel-Hisui', 'Tadbulb', 'Pikipek',
 			'Chingling', 'Baltoy-Gear Rider', 'Baltoy-Water Rider', 'Charmander', 'Nymble', 'Vanillite', 'Spheal', 'Anorith',
-			'Jigglypuff', 'Bronzor', 'Wiglett', 'Gible', 'Vulpix', 'Shuppet', 'Golett', 'Elgyem', 'Farfetch\'d',
-			'Amaura', 'Wailmer', 'Pikachu', 'Morelull', 'Houndour', 'Koffing', 'Maushold', 'Hakamo-o', 'Kartana',
+			'Jigglypuff', 'Bronzor', 'Wiglett', 'Gible', 'Vulpix', 'Shuppet', 'Golett', 'Elgyem', 'Farfetch\'d', 'Piplup',
+			'Amaura', 'Wailmer', 'Pikachu', 'Morelull', 'Houndour', 'Koffing-Hoenn', 'Tandemaus', 'Hakamo-o', 'Kartana',
 			'Ledyba', 'Wooper-Paldea', 'Hoothoot', 'Raboot-Sinnoh', 'Honedge', 'Roselia', 'Skiploom', 'Spritzee', 'Helioptile',
 		],
 		onBegin() {
