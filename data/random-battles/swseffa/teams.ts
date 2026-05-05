@@ -100,7 +100,7 @@ export class RandomFFATeams extends RandomTeams {
 		this.moveEnforcementCheckers['Grass'] = (movePool, moves, abilities, types, counter, species) => (
 			!counter.get('Grass') && (
 				movePool.includes('leafstorm') || species.baseStats.atk >= 100 ||
-				types.includes('Electric') || abilities.includes('Seed Sower') ||
+				types.has('Electric') || abilities.includes('Seed Sower') ||
 				species.id === 'ludicolo'
 			)
 		);
@@ -110,7 +110,7 @@ export class RandomFFATeams extends RandomTeams {
 	}
 
 	override cullMovePool(
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
 		counter: MoveCounter,
@@ -118,8 +118,8 @@ export class RandomFFATeams extends RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 	): void {
 		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
@@ -231,13 +231,13 @@ export class RandomFFATeams extends RandomTeams {
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-		if (!types.includes('Ice')) this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
+		if (!types.has('Ice')) this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
 
-		if (!types.includes('Dark')) this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
+		if (!types.has('Dark')) this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
 
-		if (!types.includes('Rock')) this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
+		if (!types.has('Rock')) this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
 
-		if (!types.includes('Ground')) this.incompatibleMoves(moves, movePool, 'earthquake', 'stompingtantrum');
+		if (!types.has('Ground')) this.incompatibleMoves(moves, movePool, 'earthquake', 'stompingtantrum');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context:
 
@@ -249,18 +249,18 @@ export class RandomFFATeams extends RandomTeams {
 
 	// Generate random moveset for a given species and role.
 	override randomMoveset(
-		types: string[],
+		types: Set<string>,
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean,
 		movePool: string[],
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, abilities);
-		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, role);
+		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, role, isDoubles);
 
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
@@ -282,73 +282,73 @@ export class RandomFFATeams extends RandomTeams {
 		const addPairedMove = (moveid: string) => {
 			for (const pair of MOVE_PAIRS) {
 				if (moveid === pair[0] && movePool.includes(pair[1])) {
-					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, role);
+					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead,
+						movePool, role, isDoubles);
 				}
 				if (moveid === pair[1] && movePool.includes(pair[0])) {
-					counter = this.addMove(pair[0], moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, role);
+					counter = this.addMove(pair[0], moves, types, abilities, teamDetails, species, isLead,
+						movePool, role, isDoubles);
 				}
 			}
 		};
 
 		if (role === 'Imprisoner') {
-			counter = this.addMove('imprison', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove('imprison', moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 		}
 
 		// Add required move (e.g. Relic Song for Meloetta-P)
 		if (species.requiredMove) {
 			const move = this.dex.moves.get(species.requiredMove).id;
-			counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 		}
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup.
 
 		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.includes('Guts')) {
-			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 		}
 
 		// Enforce Sticky Web
 		if (movePool.includes('stickyweb')) {
-			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 		}
 
 		// Enforce Aurora Veil
 		if (movePool.includes('auroraveil')) {
-			counter = this.addMove('auroraveil', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove('auroraveil', moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 		}
 
 		// Enforce hazard removal on Bulky Support if the team doesn't already have it
 		if (role === 'Bulky Support' && !teamDetails.defog && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
-				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 			if (movePool.includes('defog')) {
-				counter = this.addMove('defog', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove('defog', moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
 		// Enforce Knock Off on pure Normal- and Fighting-types
-		if (types.length === 1 && (types.includes('Normal') || types.includes('Fighting'))) {
+		if (types.size === 1 && (types.has('Normal') || types.has('Fighting'))) {
 			if (movePool.includes('knockoff')) {
-				counter = this.addMove('knockoff', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove('knockoff', moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
 		// Enforce Rock Slide on Wallbreaker Rock types
-		if (types.includes('Rock') && role === 'Wallbreaker') {
+		if (types.has('Rock') && role === 'Wallbreaker') {
 			if (movePool.includes('rockslide')) {
-				counter = this.addMove('rockslide', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove('rockslide', moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -359,7 +359,7 @@ export class RandomFFATeams extends RandomTeams {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities);
 				if (
-					types.includes(moveType) && (move.priority > 0 || (moveid === 'grassyglide' && abilities.includes('Grassy Surge'))) &&
+					types.has(moveType) && (move.priority > 0 || (moveid === 'grassyglide' && abilities.includes('Grassy Surge'))) &&
 					(move.basePower || move.basePowerCallback)
 				) {
 					priorityMoves.push(moveid);
@@ -367,8 +367,8 @@ export class RandomFFATeams extends RandomTeams {
 			}
 			if (priorityMoves.length) {
 				const moveid = this.sample(priorityMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -388,8 +388,8 @@ export class RandomFFATeams extends RandomTeams {
 			if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
 			while (stabMoves.length && runEnforcementChecker(type)) {
 				const moveid = this.sampleNoReplace(stabMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 				// Enforce Thunderbolt on Regice
 				addPairedMove(moveid);
 			}
@@ -401,14 +401,14 @@ export class RandomFFATeams extends RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.has(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
 			if (stabMoves.length) {
 				const moveid = this.sample(stabMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -417,8 +417,8 @@ export class RandomFFATeams extends RandomTeams {
 			const pivotMoves = movePool.filter(moveid => ['uturn', 'voltswitch'].includes(moveid));
 			if (pivotMoves.length) {
 				const moveid = this.sample(pivotMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -427,8 +427,8 @@ export class RandomFFATeams extends RandomTeams {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -438,15 +438,15 @@ export class RandomFFATeams extends RandomTeams {
 			const nonSpeedSetupMoves = movePool.filter(moveid => SETUP.includes(moveid) && !SPEED_SETUP.includes(moveid));
 			if (nonSpeedSetupMoves.length) {
 				const moveid = this.sample(nonSpeedSetupMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
 				const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
 				if (setupMoves.length) {
 					const moveid = this.sample(setupMoves);
-					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, role);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+						movePool, role, isDoubles);
 				}
 			}
 		}
@@ -456,8 +456,8 @@ export class RandomFFATeams extends RandomTeams {
 			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 				// Enforce Wish and Leech Seed with Protect/Spiky Shield
 				addPairedMove(moveid);
 			}
@@ -473,8 +473,8 @@ export class RandomFFATeams extends RandomTeams {
 			}
 			if (attackingMoves.length) {
 				const moveid = this.sample(attackingMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, role, isDoubles);
 			}
 		}
 
@@ -490,8 +490,8 @@ export class RandomFFATeams extends RandomTeams {
 				break;
 			}
 			const moveid = this.sample(movePool);
-			counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, role);
+			counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+				movePool, role, isDoubles);
 			addPairedMove(moveid);
 		}
 		return moves;
@@ -499,15 +499,15 @@ export class RandomFFATeams extends RandomTeams {
 
 	override shouldCullAbility(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		role: RandomTeamsTypes.Role,
 		isLead: boolean,
 		isDoubles: boolean,
-		role: RandomTeamsTypes.Role,
 	): boolean {
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves or with team support
@@ -539,7 +539,7 @@ export class RandomFFATeams extends RandomTeams {
 	}
 
 	override getAbility(
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
 		counter: MoveCounter,
@@ -555,7 +555,7 @@ export class RandomFFATeams extends RandomTeams {
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilities) {
 			if (!this.shouldCullAbility(
-				ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, role
+				ability, types, moves, abilities, counter, teamDetails, species, role, isLead, isDoubles,
 			)) {
 				abilityAllowed.push(ability);
 			}
@@ -578,14 +578,14 @@ export class RandomFFATeams extends RandomTeams {
 
 	override getPriorityItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 	) {
 		if (species.requiredItems) {
 			// Z-Crystals aren't available in Gen 9, so require Plates
@@ -645,7 +645,7 @@ export class RandomFFATeams extends RandomTeams {
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (species.nfe) return 'Eviolite';
 		if (moves.has('facade')) {
-			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
+			return (types.has('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (moves.has('dragondance')) return 'Clear Amulet';
@@ -662,13 +662,13 @@ export class RandomFFATeams extends RandomTeams {
 		}
 		if (
 			species.id !== 'yanmega' &&
-			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying'))
+			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.has('Flying'))
 		) return 'Heavy-Duty Boots';
 	}
 
 	override getItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -763,11 +763,11 @@ export class RandomFFATeams extends RandomTeams {
 		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
-		const types = species.types;
+		const types = new Set(species.types);
 		const abilities = set.abilities!;
 
 		// Get moves
-		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, role);
+		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool, role, isDoubles);
 		const counter = this.queryMoves(moves, species, abilities);
 
 		// Get ability
@@ -775,7 +775,7 @@ export class RandomFFATeams extends RandomTeams {
 
 		// Get items
 		// First, the priority items
-		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, role);
+		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, role, isDoubles);
 		if (item === undefined) {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, role);
 		}
