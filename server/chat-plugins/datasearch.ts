@@ -488,7 +488,7 @@ export const commands: Chat.ChatCommands = {
 			pheromones: {
 				names: ["Pheromones", "Secretion", "Swarm Signal", "Bug"],
 				desc: "During the effect, the Speed of Bug- and Poison-type Pokemon is multiplied by 1.5x and the accuracy of moves used by Bug- and Poison-type Pokemon is multiplied by 1.3x.",
-				strongWindsBoosted: "Bug-type Pokemon gain the effects of Tinted Lens.",
+				strongWindsBoosted: "Bug-type Pokémon deal double damage with not very effective attacks.",
 				setupAbility: "Secretion",
 				setupMove: "Swarm Signal",
 			},
