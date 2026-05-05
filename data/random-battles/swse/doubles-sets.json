@@ -15,7 +15,7 @@
         ]
     },
     "aerogen": {
-        "level": 80,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -110,7 +110,7 @@
         ]
     },
     "bearvoyance": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -130,7 +130,7 @@
         ]
     },
     "espeon": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -145,7 +145,7 @@
         ]
     },
     "yanmage": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Dragon Force Setter",
@@ -160,7 +160,7 @@
         ]
     },
     "enigmeon": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Fog Setter",
@@ -180,7 +180,7 @@
         ]
     },
     "bludgen": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -195,7 +195,7 @@
         ]
     },
     "woond": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -215,7 +215,7 @@
         ]
     },
     "tarmendoa": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -230,7 +230,7 @@
         ]
     },
     "stackem": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -240,7 +240,7 @@
         ]
     },
     "quailstion": {
-        "level": 85,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -260,7 +260,7 @@
         ]
     },
     "breloom": {
-        "level": 83,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -270,7 +270,7 @@
         ]
     },
     "lilliganthisui": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -280,7 +280,7 @@
         ]
     },
     "umbreon": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -290,7 +290,7 @@
         ]
     },
     "musharna": {
-        "level": 85,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Dreamscape Setter",
@@ -305,7 +305,7 @@
         ]
     },
     "vaquamael": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -320,7 +320,7 @@
         ]
     },
     "kaskazog": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -335,7 +335,7 @@
         ]
     },
     "noivern": {
-        "level": 85,
+        "level": 90,
         "sets": [
             {
                 "role": "Choice Item user",

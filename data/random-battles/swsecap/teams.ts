@@ -7,7 +7,7 @@ const NO_LEAD_POKEMON = [
 
 export class RandomCAPTeams extends RandomTeams {
 	getCAPAbility(
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
 		counter: MoveCounter,
@@ -25,7 +25,7 @@ export class RandomCAPTeams extends RandomTeams {
 
 	getCAPPriorityItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -79,11 +79,11 @@ export class RandomCAPTeams extends RandomTeams {
 		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
-		const types = species.types;
+		const types = new Set(species.types);
 		const abilities = set.abilities!;
 
 		// Get moves
-		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, role);
+		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool, role, isDoubles);
 		const counter = this.queryMoves(moves, species, abilities);
 
 		// Get ability
@@ -93,7 +93,7 @@ export class RandomCAPTeams extends RandomTeams {
 		// First, the priority items
 		item = this.getCAPPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, role);
 		if (item === undefined) {
-			item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, role);
+			item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, role, isDoubles);
 		}
 		if (item === undefined) {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, role);
