@@ -3505,7 +3505,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Target's item is lost and it cannot obtain another.",
 		},
 		gen3: {
-			desc: "The target's held item is lost for the rest of the battle, unless it has the Sticky Hold Ability and the user does not have the Mold Breaker Ability. During the effect, the target cannot gain a new item by any means.",
+			desc: "The target's held item is lost for the rest of the battle, unless it has the Sticky Hold Ability. During the effect, the target cannot gain a new item by any means.",
 		},
 
 		removeItem: "  [SOURCE] knocked off [POKEMON]'s [ITEM]!",
