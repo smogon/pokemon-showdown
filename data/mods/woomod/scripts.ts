@@ -94,6 +94,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	pokemon: {
+		inherit: true,
 		isGrounded(negateImmunity = false) {
 			if ('gravity' in this.battle.field.pseudoWeather) return true;
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
