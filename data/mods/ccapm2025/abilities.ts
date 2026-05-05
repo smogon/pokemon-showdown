@@ -241,10 +241,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove(move, attacker, defender) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.id === 'kingsshield' && attacker.species.forme !== 'Aegislash') attacker.formeChange('Aegislash');
-			if (move.category !== 'Status' && move.id === 'soulboundslash'
-				&& attacker.species.forme !== 'Aegislash-Soulbound') attacker.formeChange('Aegislash-Soulbound');
-			if (move.category !== 'Status' && move.id !== 'soulboundslash'
-				&& attacker.species.forme === 'Aegislash') attacker.formeChange('Aegislash-Blade');
+			if (move.category !== 'Status' && move.id === 'soulboundslash' &&
+				attacker.species.forme !== 'Aegislash-Soulbound') attacker.formeChange('Aegislash-Soulbound');
+			if (move.category !== 'Status' && move.id !== 'soulboundslash' &&
+				attacker.species.forme === 'Aegislash') attacker.formeChange('Aegislash-Blade');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Stance Change",

@@ -866,7 +866,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: `woomod`,
 		team: 'random',
 		ruleset: ['Obtainable', 'NatDex Mod', 'Terastal Clause', 'Sleep Clause Mod',
-				'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
+			'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mxSj-XvWzBk8RgAZ7_Th61Saczc89xwffBLLJsOlYTc/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
 			this.add('-message', `woo mod.`);

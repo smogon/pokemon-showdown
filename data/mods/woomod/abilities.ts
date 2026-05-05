@@ -119,8 +119,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	asoneklang: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			this.add('-ability', pokemon, 'As One (Klang)'),
-			this.add('-message', 'Baltoy-Gear-Rider has two Abilities!'),
+			this.add('-ability', pokemon, 'As One (Klang)');
+			this.add('-message', 'Baltoy-Gear-Rider has two Abilities!');
 			this.add('-ability', pokemon, 'Levitate');
 			this.add('-ability', pokemon, 'Clear Body');
 		},
@@ -144,8 +144,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	asoneseadra: {
 		onStart(pokemon) {
-			this.add('-ability', pokemon, 'As One (Seadra)'),
-			this.add('-message', 'Baltoy-Water-Rider has two Abilities!'),
+			this.add('-ability', pokemon, 'As One (Seadra)');
+			this.add('-message', 'Baltoy-Water-Rider has two Abilities!');
 			this.add('-ability', pokemon, 'Levitate');
 			this.add('-ability', pokemon, 'Sniper');
 		},
@@ -355,7 +355,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onUpdate(pokemon) {
 			for (const target of pokemon.adjacentFoes()) {
 				if (target.status && !target.volatiles['leechseed']) {
-					this.add('-ability', pokemon, 'Malicious Roots', '[of] ' + target);
+					this.add('-ability', pokemon, 'Malicious Roots');
 					target.addVolatile('leechseed', pokemon);
 				}
 			}
