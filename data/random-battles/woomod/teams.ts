@@ -61,7 +61,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomRGTeams extends RandomGen9Teams {
+export class RandomWMTeams extends RandomGen9Teams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -615,7 +615,7 @@ export class RandomRGTeams extends RandomGen9Teams {
 		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
 			const weatherAbilities = abilities.filter(
-				a => ['Chlorophyll', 'Hydration', 'Earth Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
+				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
 			);
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}
@@ -651,13 +651,54 @@ export class RandomRGTeams extends RandomGen9Teams {
 			}
 			return this.sample(species.requiredItems);
 		}
-		if (species.id === 'pikachu') return 'Light Ball';
+		if (species.id === 'pikachu' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'pikachu' && role === 'Wallbreaker') return 'Life Orb';
 		if (role === 'AV Pivot') return 'Assault Vest';
-		if (species.id === 'marowak') return 'Thick Club';
-		if (ability === 'Tropical Current') return 'Flame Orb';
-		if (ability === 'Blackout') return 'Heavy-Duty Boots';
-		if (species.id === 'gyarados') return 'Sitrus Berry';
-		if (species.id === 'regieleki') return 'Magnet';
+		if (species.id === 'farfetchd') {
+			if (role === 'Setup Sweeper') {
+				return 'Stormbringer Mask';
+			} else if (role === 'Fast Attacker') {
+				return 'Leek';
+			} else if (role === 'Wallbreaker') {
+				return 'Cornerstone Mask';
+			} else if (role === 'Fast Bulky Setup') {
+				return 'Hearthflame Mask';
+			} else if (role === 'Bulky Setup') {
+				return 'Wellspring Mask';
+			}
+		}
+		if (species.id === 'tadbulb') return 'Bellibolt Keychain';
+		if (species.id === 'charmander') return 'Damp Rock';
+		if (species.id === 'baltoywaterrider') return 'Scope Lens';
+		if (species.id === 'tandemaus') return 'Loaded Dice';
+		if (species.id === 'dragonair' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
+		if (species.id === 'elgyem' && role === 'Setup Sweeper') return 'Heavy-Duty Boots';
+		if (species.id === 'jigglypuff' || species.id === 'helioptile') return 'Heavy-Duty Boots';
+		if (species.id === 'elgyem' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'anorith') return 'Focus Sash';
+		if (species.id === 'amaura' && moves.has('meteorbeam')) return 'Power Herb';
+		if (species.id === 'koffing') return 'Black Sludge';
+		if (species.id === 'roselia') return 'Black Sludge';
+		if (species.id === 'qwilfishhisui' && role === 'Fast Attacker') return 'Black Sludge';
+		if (species.id === 'wooperpaldea' && role === 'Bulky Attacker') return 'Black Sludge';
+		if (species.id === 'wooperpaldea' && role === 'Bulky Support') return 'Rocky Helmet';
+		if (species.id === 'hoothoot') return 'Silk Scarf';
+		if (species.id === 'krokorok' && role === 'Fast Support') return 'Focus Sash';
+		if (species.id === 'krokorok' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'nymble' && role === 'Fast Attacker') return 'Life Orb';
+		if (species.id === 'nymble' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'honedge' && role === 'Setup Sweeper') return 'Spell Tag';
+		if (species.id === 'honedge' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'hakamoo' && role === 'Setup Sweeper') return 'Life Orb';
+		if (species.id === 'hakamoo' && role === 'Fast Bulky Setup') return 'Throat Spray';
+		if (species.id === 'gible' && role === 'Wallbreaker') return 'Life Orb';
+		if (species.id === 'shuppet') return 'Leftovers';
+		if (species.id === 'wailmer' && ability !== 'Poison Heal') return 'Leftovers';
+		if (species.id === 'skiploom') return 'Heavy-Duty Boots';
+		if (species.id === 'spritzee' && role === 'Setup Sweeper') return 'Heavy-Duty Boots';
+		if (species.id === 'spritzee' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'toxelhisui') return 'Rocky Helmet';
+		if (species.id === 'wimpod' && role === 'Wallbreaker') return 'Choice Band';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
@@ -698,7 +739,7 @@ export class RandomRGTeams extends RandomGen9Teams {
 		if (counter.get('Status') && (species.name === 'Latias' || species.name === 'Latios')) return 'Soul Dew';
 		if (species.id === 'scyther' && !isDoubles) return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
 		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
-		if (species.nfe) return 'Eviolite';
+		// if (species.nfe) return 'Eviolite';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
@@ -842,43 +883,12 @@ export class RandomRGTeams extends RandomGen9Teams {
 		}
 
 		// hidden power time
-		// Hidden Power Ice IVs
-		if (
-			moves.has('hiddenpower') &&
-			(
-				species.id === 'ninetales' || species.id === 'electrode' || species.id === 'jolteon' || species.id === 'zapdos' ||
-				species.id === 'blastoise' || species.id === 'butterfree' || species.id === 'pikachu' || species.id === 'raichu'
-			)
-		) {
-			ivs.atk = 0;
+		// Hidden Power Rock IVs
+		if (species.id === 'snivy' && moves.has('hiddenpower')) {
+			ivs.atk = 3;
 			ivs.def = 30;
-		}
-
-		// Hidden Power Ground IVs
-		if (
-			moves.has('hiddenpower') && (species.id === 'vileplume' || species.id === 'magneton' || species.id === 'victreebel')
-		) {
-			ivs.atk = 1;
-			ivs.spa = 30;
-			ivs.spd = 30;
-		}
-
-		// Hidden Power Fighting IVs
-		if (
-			moves.has('hiddenpower') &&
-			(species.id === 'persian' || species.id === 'gengar' || species.id === 'exeggutor' || species.id === 'porygon')
-		) {
-			ivs.atk = 1;
-			ivs.def = 30;
-			ivs.spa = 30;
 			ivs.spd = 30;
 			ivs.spe = 30;
-		}
-
-		// Hidden Power Grass IVs
-		if ((species.id === 'vaporeon' || species.id === 'omastar') && moves.has('hiddenpower')) {
-			ivs.atk = 0;
-			ivs.spa = 30;
 		}
 
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
@@ -905,7 +915,7 @@ export class RandomRGTeams extends RandomGen9Teams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomRGTeam() {
+	randomWMTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -1146,4 +1156,4 @@ export class RandomRGTeams extends RandomGen9Teams {
 	}
 }
 
-export default RandomRGTeams;
+export default RandomWMTeams;
