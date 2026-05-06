@@ -2512,11 +2512,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	megasol: {
 		isNonstandard: "Future",
+		onWeatherModifyDamagePriority: 1,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (this.field.weather !== 'sunnyday') {
-				(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
-					.call(this, damage, attacker, defender, move);
-			}
+			(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
+				.call(this, damage, attacker, defender, move);
+			return damage; // fast exit from event
 		},
 		flags: {},
 		name: "Mega Sol",
@@ -4421,7 +4421,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	spicyspray: {
 		isNonstandard: "Future",
 		onDamagingHit(damage, target, source, move) {
-			source.trySetStatus('brn', target);
+			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
+				this.add('-immune', source);
+			}
 		},
 		flags: {},
 		name: "Spicy Spray",

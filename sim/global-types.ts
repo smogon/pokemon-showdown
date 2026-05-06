@@ -279,7 +279,7 @@ interface ModdedBattlePokemon {
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon, message?: string | boolean) => ID;
+	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,
