@@ -7867,7 +7867,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (!this.field.isWeather('sunnyday') && pokemon.hasAbility('megasol')) {
+			if (pokemon.hasAbility('megasol') && !this.field.isWeather('sunnyday')) {
 				delete move.boosts;
 			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				move.boosts = { atk: 2, spa: 2 };
