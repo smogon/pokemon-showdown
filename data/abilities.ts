@@ -2814,7 +2814,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: { breakable: 1 },
 		name: "Magma Armor",
-		rating: 0.5,
+		rating: 1,
 		num: 40,
 	},
 	magnetpull: {
@@ -4288,7 +4288,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Run Away",
-		rating: 0,
+		rating: 1,
 		num: 50,
 	},
 	sandrush: {
@@ -5281,7 +5281,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: { breakable: 1 },
 		name: "Telepathy",
-		rating: 0,
+		rating: 1.5,
 		num: 140,
 	},
 	teraformzero: {
@@ -5877,7 +5877,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Wind Power",
-		rating: 1,
+		rating: 2,
 		num: 277,
 	},
 	windrider: { // updated, untested??
@@ -7382,7 +7382,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Soul Drain",
-		rating: 2,
+		rating: 4,
 		num: 10028,
 	},
 	/* soulpassage: {
