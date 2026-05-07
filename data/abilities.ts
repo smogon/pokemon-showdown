@@ -3676,7 +3676,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		isNonstandard: "Past",
 		flags: {},
 		name: "Poison Point",
 		rating: 1.5,
