@@ -234,7 +234,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Discharge", "Roost", "Thunderbolt", "U-turn", "Whip Up"],
+                "movepool": ["Defog", "Discharge", "Hurricane", "Roost", "Thunderbolt", "U-turn", "Whip Up"],
                 "abilities": ["Volt Absorb"]
             }
         ]
