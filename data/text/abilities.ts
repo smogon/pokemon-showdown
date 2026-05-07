@@ -2641,7 +2641,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	souldrain: {
 		name: "Soul Drain",
 		desc: "When another Pokemon faints, this Pokemon restores 1/8 of its maximum HP, rounded down. If Paranormal Activity is active, this Pokemon instead restores 1/4 of its maximum HP. This Pokemon takes no damage from Paranormal Activity. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
-		shortDesc: "Other Pokemon faints: heals 1/8, 1/4 in P.Activity.",
+		shortDesc: "This Pokemon heals 1/8 of its max HP when another Pokemon faints, 1/4 in P.Activity.",
 	},
 	soulpassage: {
 		name: "Soul Passage",
