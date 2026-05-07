@@ -155,11 +155,11 @@ const PRIORITY_POKEMON = [
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
 	'Zacian', 'Zamazenta',
-	'Leoseace',
+	'Castform', 'Leoseace',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
-	'Leoseace',
+	'Castform', 'Leoseace',
 ];
 
 const WEATHER_DATA: {
