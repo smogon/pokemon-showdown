@@ -446,7 +446,6 @@ export const commands: Chat.ChatCommands = {
 				names: ["Snow", "Snowscape", "Snow Warning", "Hail", "Ice"],
 				desc: "During the effect, the Defense of Ice-type Pokemon is multiplied by 1.5x.",
 				strongWindsBoosted: "The Sp. Def of Ice-type Pokemon is multiplied by 1.5x. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice type.",
-				extra: "Hail does not exist in Swirling Seasons.",
 				setupAbility: "Snow Warning",
 				setupMove: "Snowscape",
 			},
@@ -464,21 +463,21 @@ export const commands: Chat.ChatCommands = {
 				setupAbility: "Condensation",
 				setupMove: "Foghorn",
 			},
-			sandstorm: {
+			sand: {
 				names: ["Sandstorm", "Sand Stream", "Rock", "Sand"],
 				desc: "At the end of each turn except the last, all active Pokémon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type. During the effect, the Sp.Def of Rock-type Pokémon is multiplied by 1.5x.",
 				strongWindsBoosted: "The Defense of Rock-type Pokémon is multiplied by 1.5x. The Sp.Def of Ground- and Steel- type Pokémon is multiplied by 1.5x.",
 				setupMove: "Sandstorm",
 				setupAbility: "Sand Stream",
 			},
-			duststorm: {
+			dust: {
 				names: ["Dust Storm", "Dust Devil", "Ground", "Dust"],
 				desc: "During the effect, the Speed of Ground-type Pokémon is multiplied by 1.25x and the the damage of Water- and Grass-type attacks is multiplied by 0.5x.",
 				strongWindsBoosted: "Non-grounded Pokémon can be hit with Ground-type attacks.",
 				setupAbility: "Dust Devil",
 				setupMove: "Dust Storm",
 			},
-			pollenstorm: {
+			pollen: {
 				names: ["Pollen Storm", "Hay Fever", "Pollinate", "Grass", "Pollen"],
 				desc: "During the effect, powder moves ignore accuracy checks and the Attack and Sp.Atk of non-Grass- and Bug-type Pokémon is multiplied by 0.75x.",
 				strongWindsBoosted: "Activates Grassy Terrain.",
@@ -571,10 +570,10 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const groups: [string, string[]][] = [
-			['Climate', ['sun', 'rain', 'hail', 'bloodmoon', 'fog']],
-			['Irritant', ['sandstorm', 'duststorm', 'pollenstorm', 'pheromones', 'smog', 'fairydust']],
+			['Climate', ['sun', 'rain', 'snow', 'bloodmoon', 'fog']],
+			['Irritant', ['sand', 'dust', 'pollen', 'pheromones', 'smog', 'fairydust']],
 			['Energy', ['battleaura', 'paranormalactivity', 'dreamscape', 'dragonforce', 'thunderstorm', 'magnetosphere']],
-			['Clearing', ['strongwinds', 'deltastream']],
+			['Clearing', ['strongwinds']],
 			// ['Cataclysm', ['cataclysmiclight']],
 		];
 
