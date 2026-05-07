@@ -32,7 +32,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	charizardmegay: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	charizardgmax: {
 		isNonstandard: "Past",
@@ -449,7 +449,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	alakazammega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	machop: {
 		isNonstandard: "Past",
