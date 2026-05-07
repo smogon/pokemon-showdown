@@ -557,7 +557,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	blizzard: {
 		name: "Blizzard",
 		desc: "Has a 10% chance to inflict the target with frostbite and a 10% chance to freeze the target. If the weather is Snow, this move does not check accuracy.",
-		shortDesc: "10% frostbite / 10% freeze foe(s). Snow: can't miss.",
+		shortDesc: "10% frostbite/10% freeze foe(s). Snow: can't miss.",
 		gen8: {
 			desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
 			shortDesc: "10% chance to freeze foe(s). Hail: can't miss.",
@@ -1870,8 +1870,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	expandingforce: {
 		name: "Expanding Force",
-		desc: "If the current terrain is Psychic Terrain and the user is grounded, this move hits all opposing Pokemon and has its power multiplied by 1.5.",
-		shortDesc: "User on Psychic Terrain: 1.5x power, hits foes.",
+		desc: "If the current terrain is Psychic Terrain and the user is grounded, or if Dreamscape is active, this move hits all opposing Pokemon and has its power multiplied by 1.5.",
+		shortDesc: "Psychic Terrain/Dreamscape: 1.5x power, hits foes.",
 	},
 	explosion: {
 		name: "Explosion",
@@ -2712,8 +2712,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassyglide: {
 		name: "Grassy Glide",
-		desc: "If the current terrain is Grassy Terrain and the user is grounded, this move has its priority increased by 1.",
-		shortDesc: "User on Grassy Terrain: +1 priority.",
+		desc: "If the current terrain is Grassy Terrain and the user is grounded, or if Pollen Storm is active, this move has its priority increased by 1.",
+		shortDesc: "Grassy Terrain/Pollen Storm: +1 priority.",
 	},
 	grassyterrain: {
 		name: "Grassy Terrain",
@@ -4274,8 +4274,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistyexplosion: {
 		name: "Misty Explosion",
-		desc: "If the current terrain is Misty Terrain and the user is grounded, this move's power is multiplied by 1.5. The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "User faints. User on Misty Terrain: 1.5x power.",
+		desc: "If the current terrain is Misty Terrain and the user is grounded, or if Fairy Dust is active, this move's power is multiplied by 1.5. The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		shortDesc: "User faints. Misty Terrain/Fairy Dust: 1.5x power.",
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
@@ -5312,8 +5312,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	risingvoltage: {
 		name: "Rising Voltage",
-		desc: "If the current terrain is Electric Terrain and the target is grounded, this move's power is doubled.",
-		shortDesc: "2x power if target is grounded in Electric Terrain.",
+		desc: "If the current terrain is Electric Terrain and the target is grounded, or if Thunderstorm is active for the target, this move's power is doubled.",
+		shortDesc: "2x power in Electric Terrain or Thunderstorm.",
 	},
 	roar: {
 		name: "Roar",
@@ -7672,7 +7672,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	conduction: {
 		name: "Conduction",
 		desc: "If Magnetosphere is active, this move has x1.5 power. If Thunderstorm is active, this move has a 20% chance to paralyze the target.",
-		shortDesc: "Magnetosphere: x1.5 BP; Thunder: 20% chance to para.",
+		shortDesc: "Magnetosphere: x1.5 BP; T.Storm: 20% paralyze.",
 	},
 	crystalforce: {
 		name: "Crystal Force",

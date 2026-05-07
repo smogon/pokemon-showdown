@@ -615,7 +615,7 @@ export class RandomWMTeams extends RandomGen9Teams {
 		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
 			const weatherAbilities = abilities.filter(
-				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
+				a => ['Chlorophyll', 'Hydration', 'Earth Force', 'Sand Rush', 'Slush Rush', 'Solar Power', 'Swift Swim'].includes(a)
 			);
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}

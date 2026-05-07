@@ -4990,13 +4990,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) {
-				this.debug('terrain buff');
+			if (
+				(this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) ||
+				['daydream'].includes(source.effectiveEnergyWeather())
+			) {
+				this.debug('psychic terrain or dreamscape buff');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) {
+			if (
+				(this.field.isTerrain('psychicterrain') && source.isTerrainAffected()) ||
+				['daydream'].includes(source.effectiveEnergyWeather())
+			) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -7728,7 +7734,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyPriority(priority, source, target, move) {
-			if (this.field.isTerrain('grassyterrain') && source.isTerrainAffected()) {
+			if (
+				(this.field.isTerrain('grassyterrain') && source.isTerrainAffected()) ||
+				['pollinate'].includes(source.effectiveIrritantWeather())
+			) {
 				return priority + 1;
 			}
 		},
@@ -12255,8 +12264,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfdestruct: "always",
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('mistyterrain') && source.isTerrainAffected()) {
-				this.debug('misty terrain boost');
+			if (
+				(this.field.isTerrain('mistyterrain') && source.isTerrainAffected()) ||
+				['sprinkle'].includes(source.effectiveIrritantWeather())
+			) {
+				this.debug('misty terrain or fairy dust boost');
 				return this.chainModify(1.5);
 			}
 		},
@@ -15321,8 +15333,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback(source, target, move) {
-			if (this.field.isTerrain('electricterrain') && target.isTerrainAffected()) {
-				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
+			if (
+				(this.field.isTerrain('electricterrain') && target.isTerrainAffected()) ||
+				['supercell'].includes(target.effectiveEnergyWeather())
+			) {
+				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on target.`);
 				return move.basePower * 2;
 			}
 			return move.basePower;

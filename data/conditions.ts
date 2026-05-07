@@ -1523,7 +1523,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpe(spe, pokemon) {
 			if (pokemon.effectiveEnergyWeather() !== 'supercell') return;
 			if (pokemon.hasType('Electric')) {
-				return this.modify(spe, 1.25);
+				return this.modify(spe, 1.5);
 			}
 		},
 		onFieldStart(battle, source, effect) {
@@ -1665,19 +1665,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					if (pokemon.effectiveEnergyWeather() === 'magnetize' && pokemon.hasType('Steel')) {
 						pokemon.addVolatile('magnetizeboost');
 					} else {
-						delete pokemon.volatiles['magnetizeboost'];
+						pokemon.removeVolatile('magnetizeboost');
 					}
 				}
 			} else {
 				for (const pokemon of this.getAllActive()) {
-					delete pokemon.volatiles['magnetizeboost'];
+					pokemon.removeVolatile('magnetizeboost');
 				}
 			}
 			this.eachEvent('EnergyWeather');
 		},
 		onFieldEnd() {
 			for (const pokemon of this.getAllActive()) {
-				delete pokemon.volatiles['magnetizeboost'];
+				pokemon.removeVolatile('magnetizeboost');
 			}
 			this.add('-energyWeather', 'none');
 		},
@@ -1686,9 +1686,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onStart(pokemon) {
 			this.effectState.layers = 1;
+			this.add('-start', pokemon, 'magnetizeboost1', '[silent]');
 		},
 		onRestart(pokemon) {
+			if (this.effectState.layers >= 8) return;
+			this.add('-end', pokemon, `magnetizeboost${this.effectState.layers}`, '[silent]');
 			this.effectState.layers++;
+			this.add('-start', pokemon, `magnetizeboost${this.effectState.layers}`, '[silent]');
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `magnetizeboost${this.effectState.layers}`, '[silent]');
 		},
 		onModifyAtkPriority: 10,
 		onModifyAtk(atk, pokemon) {

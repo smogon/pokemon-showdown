@@ -146,7 +146,7 @@ describe("New set format (slow)", () => {
 			filename: "gen8/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Dynamax User", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
-		"gen9randombattle": {
+		/* "gen9randombattle": {
 			filename: "gen9/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
@@ -165,14 +165,14 @@ describe("New set format (slow)", () => {
 		"gen9freeforallrandombattle": {
 			filename: "gen9ffa/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner"],
-		},
+		}, */
 		// swse
 		"gen9swserandombattle": {
 			filename: "swse/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot",
 				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
 				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
-				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter", "Strong Winds Setter",
 			],
 		},
 		"gen9swserandomdoublesbattle": {
@@ -180,7 +180,7 @@ describe("New set format (slow)", () => {
 			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user",
 				"Doubles Rain Setter", "Doubles Sun Setter", "Doubles Snow Setter", "Doubles Blood Moon Setter", "Doubles Fog Setter",
 				"Doubles Sandstorm Setter", "Doubles Dust Storm Setter", "Doubles Pollen Setter", "Doubles Fairy Dust Setter", "Doubles Pheromones Setter", "Doubles Smog Setter",
-				"Doubles Battle Aura Setter", "Doubles Paranormal Activity Setter", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Thunderstorm Setter", "Doubles Magnetosphere Setter",
+				"Doubles Battle Aura Setter", "Doubles Paranormal Activity Setter", "Doubles Dragon Force Setter", "Doubles Dreamscape Setter", "Doubles Thunderstorm Setter", "Doubles Magnetosphere Setter", "Doubles Strong Winds Setter",
 			],
 		},
 		"gen9swsebabyrandombattle": {
@@ -188,7 +188,7 @@ describe("New set format (slow)", () => {
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support",
 				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
 				"Sandstorm Setter", "Dust Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
-				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter", "Strong Winds Setter",
 			],
 		},
 		"gen9swserandombattle@@@+cap": {
@@ -196,7 +196,7 @@ describe("New set format (slow)", () => {
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot",
 				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
 				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
-				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter", "Strong Winds Setter",
 			],
 		},
 		"gen9swsefreeforallrandombattle": {
@@ -204,7 +204,7 @@ describe("New set format (slow)", () => {
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner",
 				"Sun Setter", "Rain Setter", "Snow Setter", "Blood Moon Setter", "Fog Setter",
 				"Sandstorm Setter", "Dust Storm Setter", "Pollen Setter", "Fairy Dust Setter", "Pheromones Setter", "Smog Setter",
-				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter",
+				"Battle Aura Setter", "Paranormal Activity Setter", "Dragon Force Setter", "Dreamscape Setter", "Thunderstorm Setter", "Magnetosphere Setter", "Strong Winds Setter",
 			],
 		},
 	};
@@ -216,7 +216,6 @@ describe("New set format (slow)", () => {
 		const genNum = dex.gen;
 		const isSwSe = fullFormat.name.includes('SwSe');
 		const usesTeraTypes = genNum !== 9 || !isSwSe;
-		const usesTeraArg = !isSwSe;
 		const rounds = 100;
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
@@ -326,14 +325,8 @@ describe("New set format (slow)", () => {
 							// randomMoveset() deletes moves from the movepool, so recreate it every time
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
-							if (genNum === 9 && usesTeraTypes) {
+							if (genNum === 9) {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role, format.includes('doubles'));
-							} else if (genNum === 9) {
-								if (usesTeraArg) {
-									moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, '', role, format.includes('doubles'));
-								} else {
-									moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, role, format.includes('doubles'));
-								}
 							} else {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role);
 							}

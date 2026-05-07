@@ -1,0 +1,48 @@
+{
+    "pyukumuku": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Counter", "Mirror Coat", "Recover", "Toxic"],
+                "abilities": ["Unaware"]
+            }
+        ]
+    },
+    "pikachu": {
+        "level": 93,
+        "sets": [
+            {
+               "role": "AV Pivot",
+                "movepool": ["Fake Out", "Knock Off", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
+                "abilities": ["Forked", "Lightning Rod"],
+                "preferredTypes": ["Water"]
+            }
+        ]
+    },
+    "shiftry": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Knock Off", "Leaf Blade", "Surf", "Tailwind"],
+                "abilities": ["Wind Rider"]
+            }
+        ]
+    },
+    "raichualola": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Focus Blast", "Grass Knot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Surge Surfer"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
+                "abilities": ["Surge Surfer"]
+            }
+        ]
+    }
+}

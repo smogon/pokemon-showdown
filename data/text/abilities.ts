@@ -531,8 +531,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flowerveil: {
 		name: "Flower Veil",
-		desc: "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered by other Pokemon or have a non-volatile status condition inflicted on them by other Pokemon.",
-		shortDesc: "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
+		desc: "Grass-type Pokemon on this Pokemon's side cannot have their stat stages lowered or have a non-volatile status condition inflicted on them.",
+		shortDesc: "This side's Grass types can't have stats lowered or status inflicted.",
 
 		block: "  [POKEMON] surrounded itself with a veil of petals!",
 	},
@@ -1908,7 +1908,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
-		shortDesc: "Electric Terrain/ThunderStorm: this Pokemon's Speed is doubled.",
+		shortDesc: "Electric Terrain/Thunderstorm: this Pokemon's Speed is doubled.",
 	},
 	swarm: {
 		name: "Swarm",

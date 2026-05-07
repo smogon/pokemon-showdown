@@ -50,6 +50,10 @@ function getDefaultStats(): Stats {
 			gen9chatbats: { mons: {} },
 			gen9ccapm2025randombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
+			gen9swserandombattle: { mons: {} },
+			gen9swsefreeforallrandombattle: { mons: {} },
+			gen9swsebabyrandombattle: { mons: {} },
+			gen9swsemonotyperandombattle: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },
 			gen6randombattle: { mons: {} },
@@ -77,7 +81,8 @@ function getMonth() {
 // yes, i tried.
 export function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
-	const item = Dex.items.get(set.item);
+	const dex = Dex.mod(format.mod);
+	const item = dex.items.get(set.item);
 	const moves = set.moves;
 	const megaRayquazaPossible = ['gen6', 'gen7'].includes(format.mod) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
@@ -150,6 +155,26 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Flabe\u0301be\u0301";
 	} else if (species === "Castform" && item.name === "Whirligig") { // swse
 		return 'Castform-Whirly';
+	} else if (species === "Cherrim" && item.name === "Weather Vane") {
+		return 'Cherrim-Sunshine';
+	} else if (species === "Snover" && item.name === "Weather Vane") {
+		return 'Snover-Lowland';
+	} else if (species === "Snover-Lowland" && item.name === "Weather Vane") {
+		return 'Snover';
+	} else if (species === "Abomasnow" && item.name === "Weather Vane") {
+		return 'Abomasnow-Lowland';
+	} else if (species === "Abomasnow-Lowland" && item.name === "Weather Vane") {
+		return 'Abomasnow';
+	} else if (species === "Bearvoyance" && item.name === "Weather Vane") {
+		return 'Bearvoyance-Awakened';
+	} else if (species === "Blurrun" && item.name === "Weather Vane") {
+		return 'Blurrun-Charged';
+	} else if (species === "Drout" && item.name === "Weather Vane") {
+		return 'Drout-Dry';
+	} else if (species === "Eecroach" && item.name === "Weather Vane") {
+		return 'Eecroach-Swarm';
+	} else if (species === "Bearvoyance" && item.name === "Thick Club") {
+		return 'Bearvoyance-Awakened';
 	} else if (species.startsWith("Botnyak-")) {
 		return "Botnyak";
 	} else {
@@ -185,6 +210,9 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	} else if (format.team === 'randomBaby') {
 		// ladder is even more inactive, so an even lower threshold
 		eloFloor = 1000;
+	} else if (format.mod === 'swse') {
+		// custom ladder activity is expected to be lower than mainline gen 9
+		eloFloor = 1000;
 	} else if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	} else if (format.gameType === 'doubles') {
@@ -217,7 +245,7 @@ export const commands: Chat.ChatCommands = {
 			if (target.startsWith('gen')) target = target.slice(3);
 			target = `gen${target}randombattle`;
 		}
-		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
+		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}swserandombattle`}`);
 	},
 	randswinrateshelp: [
 		'/randswinrates OR /rwr [format] - Get a list of the win rates for all Pokemon in the given Random Battles format.',
@@ -287,6 +315,7 @@ export const pages: Chat.PageTable = {
 			];
 		}
 		const mons = Utils.sortBy(Object.entries(formatData.mons), sortFn);
+		const dex = Dex.mod(Dex.formats.get(format).mod);
 		return <div class="pad">
 			<WinratesHeader
 				formatID={format} month={month} sorter={sorter} prevMonth={prevMonth}
@@ -302,7 +331,7 @@ export const pages: Chat.PageTable = {
 						<th>Times generated</th>
 					</tr>
 					{mons.map(([mon, data]) => (<tr>
-						<td>{Dex.species.get(mon).name}</td>
+						<td>{dex.species.get(mon).name}</td>
 						<td>{((data.numWins / data.timesGenerated) * 100).toFixed(2)}%</td>
 						<td>{getZScore(data).toFixed(3)}</td>
 						<td>{data.numWins}</td>

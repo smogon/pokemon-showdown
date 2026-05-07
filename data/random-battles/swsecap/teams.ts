@@ -14,13 +14,14 @@ export class RandomCAPTeams extends RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
+		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
 		// Hard-code abilities here
 		if (species.id === 'fidgit') return moves.has('tailwind') ? 'Persistent' : 'Frisk';
 		if (species.id === 'tomohawk') return moves.has('haze') ? 'Prankster' : 'Intimidate';
 		// Default to regular ability selection
-		return this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, false, role);
+		return this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, false, preferredType, role);
 	}
 
 	getCAPPriorityItem(
@@ -72,6 +73,8 @@ export class RandomCAPTeams extends RandomTeams {
 		for (const movename of set.movepool) {
 			movePool.push(this.dex.moves.get(movename).id);
 		}
+		const preferredTypes = set.preferredTypes;
+		const preferredType = this.sampleIfArray(preferredTypes) || species.types[0];
 
 		let ability = '';
 		let item = undefined;
@@ -83,20 +86,22 @@ export class RandomCAPTeams extends RandomTeams {
 		const abilities = set.abilities!;
 
 		// Get moves
-		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool, role, isDoubles);
-		const counter = this.queryMoves(moves, species, abilities);
+		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
+			preferredType, role, isDoubles);
+		const counter = this.queryMoves(moves, species, preferredType, abilities, role);
 
 		// Get ability
-		ability = this.getCAPAbility(types, moves, abilities, counter, teamDetails, species, isLead, role);
+		ability = this.getCAPAbility(types, moves, abilities, counter, teamDetails, species, isLead, preferredType, role);
 
 		// Get items
 		// First, the priority items
 		item = this.getCAPPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, role);
 		if (item === undefined) {
-			item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, role, isDoubles);
+			item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead,
+				preferredType, role, isDoubles);
 		}
 		if (item === undefined) {
-			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, role);
+			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
 		}
 
 		// Get level

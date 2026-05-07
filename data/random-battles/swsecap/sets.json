@@ -4,41 +4,18 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Earth Power",
-                    "Focus Blast",
-                    "Spikes",
-                    "Triple Axel",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Compound Eyes"
-                ]
+                "movepool": ["Earth Power", "Focus Blast", "Spikes", "Triple Axel", "U-turn"],
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Fast Bulky Setup",
-                "movepool": [
-                    "Close Combat",
-                    "Earthquake",
-                    "Leech Life",
-                    "Swords Dance",
-                    "Triple Axel"
-                ],
-                "abilities": [
-                    "Compound Eyes"
-                ]
+                "movepool": ["Close Combat", "Earthquake", "Leech Life", "Swords Dance", "Triple Axel"],
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Bug Buzz",
-                    "Earth Power",
-                    "Ice Beam",
-                    "Tail Glow"
-                ],
-                "abilities": [
-                    "Mountaineer"
-                ]
+                "movepool": ["Bug Buzz", "Earth Power", "Ice Beam", "Tail Glow"],
+                "abilities": ["Mountaineer"]
             }
         ]
     },
@@ -47,27 +24,13 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Bulk Up",
-                    "Drain Punch",
-                    "Moonlight",
-                    "Poltergeist"
-                ],
-                "abilities": [
-                    "Triage"
-                ]
+                "movepool": ["Bulk Up", "Drain Punch", "Moonlight", "Poltergeist"],
+                "abilities": ["Triage"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Bulk Up",
-                    "Drain Punch",
-                    "Poltergeist",
-                    "Shadow Sneak"
-                ],
-                "abilities": [
-                    "Triage"
-                ]
+                "movepool": ["Bulk Up", "Drain Punch", "Poltergeist", "Shadow Sneak"],
+                "abilities": ["Triage"]
             }
         ]
     },
@@ -76,27 +39,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Earth Power",
-                    "Energy Ball",
-                    "Overheat",
-                    "Synthesis"
-                ],
-                "abilities": [
-                    "Contrary"
-                ]
+                "movepool": ["Earth Power", "Energy Ball", "Overheat", "Synthesis"],
+                "abilities": ["Contrary"]
             },
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Dragon Tail",
-                    "Earth Power",
-                    "Giga Drain",
-                    "Overheat"
-                ],
-                "abilities": [
-                    "Contrary"
-                ]
+                "movepool": ["Dragon Tail", "Earth Power", "Giga Drain", "Overheat"],
+                "abilities": ["Contrary"]
             }
         ]
     },
@@ -105,21 +54,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Earth Power",
-                    "Encore",
-                    "Rapid Spin",
-                    "Sludge Bomb",
-                    "Spikes",
-                    "Stealth Rock",
-                    "Tailwind",
-                    "Toxic Spikes",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Frisk",
-                    "Persistent"
-                ]
+                "movepool": ["Earth Power", "Encore", "Rapid Spin", "Sludge Bomb", "Spikes", "Stealth Rock", "Tailwind", "Toxic Spikes", "U-turn"],
+                "abilities": ["Frisk", "Persistent"]
             }
         ]
     },
@@ -128,27 +64,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": [
-                    "Energy Ball",
-                    "Fire Blast",
-                    "Paleo Wave",
-                    "Trick"
-                ],
-                "abilities": [
-                    "Levitate"
-                ]
+                "movepool": ["Energy Ball", "Fire Blast", "Paleo Wave", "Trick"],
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Energy Ball",
-                    "Fire Blast",
-                    "Meteor Beam",
-                    "Paleo Wave"
-                ],
-                "abilities": [
-                    "Levitate"
-                ]
+                "movepool": ["Energy Ball", "Fire Blast", "Meteor Beam", "Paleo Wave"],
+                "abilities": ["Levitate"]
             }
         ]
     },
@@ -157,27 +79,13 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Bulk Up",
-                    "Drain Punch",
-                    "Recover",
-                    "Waterfall"
-                ],
-                "abilities": [
-                    "Unaware"
-                ]
+                "movepool": ["Bulk Up", "Drain Punch", "Recover", "Waterfall"],
+                "abilities": ["Unaware"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Circle Throw",
-                    "Knock Off",
-                    "Recover",
-                    "Spikes"
-                ],
-                "abilities": [
-                    "Unaware"
-                ]
+                "movepool": ["Circle Throw", "Knock Off", "Recover", "Spikes"],
+                "abilities": ["Unaware"]
             }
         ]
     },
@@ -186,33 +94,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Close Combat",
-                    "Defog",
-                    "Meteor Mash",
-                    "Poltergeist",
-                    "Strength Sap",
-                    "Trick",
-                    "U-turn",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Trace"
-                ]
+                "movepool": ["Close Combat", "Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "Trick", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Trace"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Defog",
-                    "Meteor Mash",
-                    "Poltergeist",
-                    "Strength Sap",
-                    "U-turn",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Trace"
-                ]
+                "movepool": ["Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Trace"]
             }
         ]
     },
@@ -221,35 +109,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Defog",
-                    "Discharge",
-                    "Draco Meteor",
-                    "Fire Blast",
-                    "Ice Beam",
-                    "Slack Off",
-                    "Thunderbolt",
-                    "Volt Switch"
-                ],
-                "abilities": [
-                    "Shield Dust",
-                    "Static"
-                ]
+                "movepool": ["Defog", "Discharge", "Draco Meteor", "Fire Blast", "Ice Beam", "Slack Off", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Shield Dust", "Static"]
             },
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Discharge",
-                    "Draco Meteor",
-                    "Fire Blast",
-                    "Ice Beam",
-                    "Thunderbolt",
-                    "Volt Switch"
-                ],
-                "abilities": [
-                    "Shield Dust",
-                    "Static"
-                ]
+                "movepool": ["Discharge", "Draco Meteor", "Fire Blast", "Ice Beam", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Shield Dust", "Static"]
             }
         ]
     },
@@ -258,17 +124,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Facade",
-                    "Headlong Rush",
-                    "Knock Off",
-                    "Rapid Spin",
-                    "Sucker Punch",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Guts"
-                ]
+                "movepool": ["Facade", "Headlong Rush", "Knock Off", "Rapid Spin", "Sucker Punch", "U-turn"],
+                "abilities": ["Guts"]
             }
         ]
     },
@@ -277,15 +134,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Ice Beam",
-                    "Surf",
-                    "Volt Switch",
-                    "Wild Charge"
-                ],
-                "abilities": [
-                    "Magic Guard"
-                ]
+                "movepool": ["Ice Beam", "Surf", "Volt Switch", "Wild Charge"],
+                "abilities": ["Magic Guard"]
             }
         ]
     },
@@ -294,19 +144,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Aura Sphere",
-                    "Dark Pulse",
-                    "Flash Cannon",
-                    "Focus Blast",
-                    "Nasty Plot",
-                    "Vacuum Wave",
-                    "Volt Switch"
-                ],
-                "abilities": [
-                    "Lightning Rod",
-                    "Volt Absorb"
-                ]
+                "movepool": ["Aura Sphere", "Dark Pulse", "Flash Cannon", "Focus Blast", "Nasty Plot", "Vacuum Wave", "Volt Switch"],
+                "abilities": ["Lightning Rod", "Volt Absorb"]
             }
         ]
     },
@@ -315,17 +154,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Aura Sphere",
-                    "Haze",
-                    "Hurricane",
-                    "Rapid Spin",
-                    "Roost"
-                ],
-                "abilities": [
-                    "Intimidate",
-                    "Prankster"
-                ]
+                "movepool": ["Aura Sphere", "Haze", "Hurricane", "Rapid Spin", "Roost"],
+                "abilities": ["Intimidate", "Prankster"]
             }
         ]
     },
@@ -334,44 +164,18 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Horn Leech",
-                    "Shadow Claw",
-                    "Stone Edge",
-                    "Victory Dance"
-                ],
-                "abilities": [
-                    "Forewarn"
-                ]
+                "movepool": ["Horn Leech", "Shadow Claw", "Stone Edge", "Victory Dance"],
+                "abilities": ["Forewarn"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Horn Leech",
-                    "Pain Split",
-                    "Rage Fist",
-                    "Toxic Spikes",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Forewarn"
-                ]
+                "movepool": ["Horn Leech", "Pain Split", "Rage Fist", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Forewarn"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Horn Leech",
-                    "Pain Split",
-                    "Power Whip",
-                    "Shadow Claw",
-                    "Shadow Sneak",
-                    "Sticky Web",
-                    "Toxic Spikes",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Forewarn"
-                ]
+                "movepool": ["Horn Leech", "Pain Split", "Power Whip", "Shadow Claw", "Shadow Sneak", "Sticky Web", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Forewarn"]
             }
         ]
     },
@@ -380,29 +184,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Hydro Pump",
-                    "Lava Plume",
-                    "Rapid Spin",
-                    "Recover",
-                    "Sludge Bomb",
-                    "Thunder Wave"
-                ],
-                "abilities": [
-                    "Dry Skin"
-                ]
+                "movepool": ["Hydro Pump", "Lava Plume", "Rapid Spin", "Recover", "Sludge Bomb", "Thunder Wave"],
+                "abilities": ["Dry Skin"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Eruption",
-                    "Hydro Pump",
-                    "Sludge Wave",
-                    "Trick"
-                ],
-                "abilities": [
-                    "Dry Skin"
-                ]
+                "movepool": ["Eruption", "Hydro Pump", "Sludge Wave", "Trick"],
+                "abilities": ["Dry Skin"]
             }
         ]
     },
@@ -411,44 +199,18 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Bug Buzz",
-                    "Focus Blast",
-                    "Psyshock",
-                    "Tail Glow"
-                ],
-                "abilities": [
-                    "No Guard",
-                    "Weak Armor"
-                ]
+                "movepool": ["Bug Buzz", "Focus Blast", "Psyshock", "Tail Glow"],
+                "abilities": ["No Guard", "Weak Armor"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": [
-                    "Blizzard",
-                    "Bug Buzz",
-                    "Focus Blast",
-                    "Hydro Pump",
-                    "Overheat",
-                    "Psychic",
-                    "Psyshock",
-                    "Thunder"
-                ],
-                "abilities": [
-                    "No Guard"
-                ]
+                "movepool": ["Blizzard", "Bug Buzz", "Focus Blast", "Hydro Pump", "Overheat", "Psychic", "Psyshock", "Thunder"],
+                "abilities": ["No Guard"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Close Combat",
-                    "Dragon Dance",
-                    "Megahorn",
-                    "Zen Headbutt"
-                ],
-                "abilities": [
-                    "No Guard"
-                ]
+                "movepool": ["Close Combat", "Dragon Dance", "Megahorn", "Zen Headbutt"],
+                "abilities": ["No Guard"]
             }
         ]
     },
@@ -457,44 +219,18 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Glare",
-                    "Knock Off",
-                    "Parting Shot",
-                    "Rapid Spin",
-                    "Solar Blade",
-                    "Synthesis",
-                    "Temper Flare"
-                ],
-                "abilities": [
-                    "Drought"
-                ]
+                "movepool": ["Glare", "Knock Off", "Parting Shot", "Rapid Spin", "Solar Blade", "Synthesis", "Temper Flare"],
+                "abilities": ["Drought"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Knock Off",
-                    "Solar Blade",
-                    "Sucker Punch",
-                    "Synthesis"
-                ],
-                "abilities": [
-                    "Drought"
-                ]
+                "movepool": ["Knock Off", "Solar Blade", "Sucker Punch", "Synthesis"],
+                "abilities": ["Drought"]
             },
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Knock Off",
-                    "Rapid Spin",
-                    "Solar Blade",
-                    "Sucker Punch",
-                    "Temper Flare",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Drought"
-                ]
+                "movepool": ["Knock Off", "Rapid Spin", "Solar Blade", "Sucker Punch", "Temper Flare", "U-turn"],
+                "abilities": ["Drought"]
             }
         ]
     },
@@ -503,15 +239,8 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Acrobatics",
-                    "Belly Drum",
-                    "Bullet Punch",
-                    "Drain Punch"
-                ],
-                "abilities": [
-                    "Volt Absorb"
-                ]
+                "movepool": ["Acrobatics", "Belly Drum", "Bullet Punch", "Drain Punch"],
+                "abilities": ["Volt Absorb"]
             }
         ]
     },
@@ -520,27 +249,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Flamethrower",
-                    "Hydro Pump",
-                    "Overheat",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Analytic"
-                ]
+                "movepool": ["Flamethrower", "Hydro Pump", "Overheat", "U-turn"],
+                "abilities": ["Analytic"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": [
-                    "Fire Blast",
-                    "Hydro Pump",
-                    "Scald",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Analytic"
-                ]
+                "movepool": ["Fire Blast", "Hydro Pump", "Scald", "U-turn"],
+                "abilities": ["Analytic"]
             }
         ]
     },
@@ -549,17 +264,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Discharge",
-                    "Encore",
-                    "Sludge Bomb",
-                    "Surf",
-                    "Taunt",
-                    "Thunderbolt"
-                ],
-                "abilities": [
-                    "Storm Drain"
-                ]
+                "movepool": ["Discharge", "Encore", "Sludge Bomb", "Surf", "Taunt", "Thunderbolt"],
+                "abilities": ["Storm Drain"]
             }
         ]
     },
@@ -568,15 +274,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Dragon Dance",
-                    "Facade",
-                    "Heavy Slam",
-                    "Wave Crash"
-                ],
-                "abilities": [
-                    "Guts"
-                ]
+                "movepool": ["Dragon Dance", "Facade", "Heavy Slam", "Wave Crash"],
+                "abilities": ["Guts"]
             }
         ]
     },
@@ -585,42 +284,18 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Gunk Shot",
-                    "Knock Off",
-                    "Poison Jab",
-                    "Stone Edge",
-                    "U-turn",
-                    "Wood Hammer"
-                ],
-                "abilities": [
-                    "Regenerator"
-                ]
+                "movepool": ["Gunk Shot", "Knock Off", "Poison Jab", "Stone Edge", "U-turn", "Wood Hammer"],
+                "abilities": ["Regenerator"]
             },
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Gunk Shot",
-                    "Knock Off",
-                    "Stealth Rock",
-                    "Stone Edge",
-                    "Toxic Spikes"
-                ],
-                "abilities": [
-                    "Regenerator"
-                ]
+                "movepool": ["Gunk Shot", "Knock Off", "Stealth Rock", "Stone Edge", "Toxic Spikes"],
+                "abilities": ["Regenerator"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Coil",
-                    "Gunk Shot",
-                    "Stone Edge",
-                    "Wood Hammer"
-                ],
-                "abilities": [
-                    "Regenerator"
-                ]
+                "movepool": ["Coil", "Gunk Shot", "Stone Edge", "Wood Hammer"],
+                "abilities": ["Regenerator"]
             }
         ]
     },
@@ -629,18 +304,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Aura Sphere",
-                    "Encore",
-                    "Focus Blast",
-                    "Moonblast",
-                    "Parting Shot",
-                    "Psychic",
-                    "Vacuum Wave"
-                ],
-                "abilities": [
-                    "Natural Cure"
-                ]
+                "movepool": ["Aura Sphere", "Encore", "Focus Blast", "Moonblast", "Parting Shot", "Psychic", "Vacuum Wave"],
+                "abilities": ["Natural Cure"]
             }
         ]
     },
@@ -649,17 +314,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Earthquake",
-                    "Leech Life",
-                    "Outrage",
-                    "Spirit Shackle",
-                    "Taunt",
-                    "Toxic Spikes"
-                ],
-                "abilities": [
-                    "Comatose"
-                ]
+                "movepool": ["Earthquake", "Leech Life", "Outrage", "Spirit Shackle", "Taunt", "Toxic Spikes"],
+                "abilities": ["Comatose"]
             }
         ]
     },
@@ -668,16 +324,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Focus Blast",
-                    "Healing Wish",
-                    "Moonblast",
-                    "Solar Beam",
-                    "Synthesis"
-                ],
-                "abilities": [
-                    "Drought"
-                ]
+                "movepool": ["Focus Blast", "Healing Wish", "Moonblast", "Solar Beam", "Synthesis"],
+                "abilities": ["Drought"]
             }
         ]
     },
@@ -686,28 +334,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Horn Leech",
-                    "Hyper Drill",
-                    "Knock Off",
-                    "Quick Attack",
-                    "Swords Dance"
-                ],
-                "abilities": [
-                    "Galvanize"
-                ]
+                "movepool": ["Horn Leech", "Hyper Drill", "Knock Off", "Quick Attack", "Swords Dance"],
+                "abilities": ["Galvanize"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Double-Edge",
-                    "Horn Leech",
-                    "Rapid Spin",
-                    "Swords Dance"
-                ],
-                "abilities": [
-                    "Galvanize"
-                ]
+                "movepool": ["Double-Edge", "Horn Leech", "Rapid Spin", "Swords Dance"],
+                "abilities": ["Galvanize"]
             }
         ]
     },
@@ -716,44 +349,18 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": [
-                    "Bone Rush",
-                    "Bulk Up",
-                    "Flame Charge",
-                    "Morning Sun"
-                ],
-                "abilities": [
-                    "Technician"
-                ]
+                "movepool": ["Bone Rush", "Bulk Up", "Flame Charge", "Morning Sun"],
+                "abilities": ["Technician"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Bone Rush",
-                    "Bulk Up",
-                    "Flame Wheel",
-                    "Scale Shot"
-                ],
-                "abilities": [
-                    "Technician"
-                ]
+                "movepool": ["Bone Rush", "Bulk Up", "Flame Wheel", "Scale Shot"],
+                "abilities": ["Technician"]
             },
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Bone Rush",
-                    "Clear Smog",
-                    "Defog",
-                    "Flame Wheel",
-                    "Morning Sun",
-                    "Stealth Rock",
-                    "Taunt",
-                    "Toxic",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Technician"
-                ]
+                "movepool": ["Bone Rush", "Clear Smog", "Defog", "Flame Wheel", "Morning Sun", "Stealth Rock", "Taunt", "Toxic", "Will-O-Wisp"],
+                "abilities": ["Technician"]
             }
         ]
     },
@@ -762,29 +369,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Liquidation",
-                    "Rapid Spin",
-                    "Stealth Rock",
-                    "Sticky Web",
-                    "Toxic",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Poison Heal"
-                ]
+                "movepool": ["Liquidation", "Rapid Spin", "Stealth Rock", "Sticky Web", "Toxic", "U-turn"],
+                "abilities": ["Poison Heal"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Liquidation",
-                    "Recover",
-                    "Spiky Shield",
-                    "Toxic"
-                ],
-                "abilities": [
-                    "Poison Heal"
-                ]
+                "movepool": ["Liquidation", "Recover", "Spiky Shield", "Toxic"],
+                "abilities": ["Poison Heal"]
             }
         ]
     },
@@ -793,16 +384,8 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Doom Desire",
-                    "Earth Power",
-                    "Flash Cannon",
-                    "Pain Split",
-                    "Rapid Spin"
-                ],
-                "abilities": [
-                    "Levitate"
-                ]
+                "movepool": ["Doom Desire", "Earth Power", "Flash Cannon", "Pain Split", "Rapid Spin"],
+                "abilities": ["Levitate"]
             }
         ]
     },
@@ -811,18 +394,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Defog",
-                    "Draco Meteor",
-                    "Encore",
-                    "Fire Lash",
-                    "Spikes",
-                    "Thunder Wave",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Regenerator"
-                ]
+                "movepool": ["Defog", "Draco Meteor", "Encore", "Fire Lash", "Spikes", "Thunder Wave", "Will-O-Wisp"],
+                "abilities": ["Regenerator"]
             }
         ]
     },
@@ -831,40 +404,18 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Earthquake",
-                    "Megahorn",
-                    "Scale Shot",
-                    "Swords Dance"
-                ],
-                "abilities": [
-                    "Compound Eyes"
-                ]
+                "movepool": ["Earthquake", "Megahorn", "Scale Shot", "Swords Dance"],
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Fast Bulky Setup",
-                "movepool": [
-                    "Close Combat",
-                    "Earthquake",
-                    "Gunk Shot",
-                    "Scale Shot",
-                    "Swords Dance"
-                ],
-                "abilities": [
-                    "Compound Eyes"
-                ]
+                "movepool": ["Close Combat", "Earthquake", "Gunk Shot", "Scale Shot", "Swords Dance"],
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": [
-                    "Dragon Rush",
-                    "Earthquake",
-                    "First Impression",
-                    "U-turn"
-                ],
-                "abilities": [
-                    "Compound Eyes"
-                ]
+                "movepool": ["Dragon Rush", "Earthquake", "First Impression", "U-turn"],
+                "abilities": ["Compound Eyes"]
             }
         ]
     },
@@ -873,29 +424,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": [
-                    "Boomburst",
-                    "Dark Pulse",
-                    "Recover",
-                    "Switcheroo",
-                    "Thunderbolt",
-                    "Toxic Spikes"
-                ],
-                "abilities": [
-                    "Color Change"
-                ]
+                "movepool": ["Boomburst", "Dark Pulse", "Recover", "Switcheroo", "Thunderbolt", "Toxic Spikes"],
+                "abilities": ["Color Change"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Boomburst",
-                    "Calm Mind",
-                    "Dark Pulse",
-                    "Recover"
-                ],
-                "abilities": [
-                    "Color Change"
-                ]
+                "movepool": ["Boomburst", "Calm Mind", "Dark Pulse", "Recover"],
+                "abilities": ["Color Change"]
             }
         ]
     },
@@ -904,29 +439,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Air Slash",
-                    "Body Press",
-                    "Hurricane",
-                    "Roost",
-                    "Sludge Bomb"
-                ],
-                "abilities": [
-                    "Stamina"
-                ]
+                "movepool": ["Air Slash", "Body Press", "Hurricane", "Roost", "Sludge Bomb"],
+                "abilities": ["Stamina"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Air Slash",
-                    "Body Press",
-                    "Hurricane",
-                    "Knock Off",
-                    "Roost"
-                ],
-                "abilities": [
-                    "Stamina"
-                ]
+                "movepool": ["Air Slash", "Body Press", "Hurricane", "Knock Off", "Roost"],
+                "abilities": ["Stamina"]
             }
         ]
     },
@@ -935,16 +454,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Brave Bird",
-                    "Coil",
-                    "Gunk Shot",
-                    "Roost",
-                    "Toxic Spikes"
-                ],
-                "abilities": [
-                    "Tinted Lens"
-                ]
+                "movepool": ["Brave Bird", "Coil", "Gunk Shot", "Roost", "Toxic Spikes"],
+                "abilities": ["Tinted Lens"]
             }
         ]
     },
@@ -953,43 +464,18 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Body Press",
-                    "Diamond Storm",
-                    "Earthquake",
-                    "Rapid Spin"
-                ],
-                "abilities": [
-                    "Serene Grace",
-                    "Water Absorb"
-                ]
+                "movepool": ["Body Press", "Diamond Storm", "Earthquake", "Rapid Spin"],
+                "abilities": ["Serene Grace", "Water Absorb"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Body Press",
-                    "Diamond Storm",
-                    "Earthquake",
-                    "Pain Split"
-                ],
-                "abilities": [
-                    "Serene Grace",
-                    "Water Absorb"
-                ]
+                "movepool": ["Body Press", "Diamond Storm", "Earthquake", "Pain Split"],
+                "abilities": ["Serene Grace", "Water Absorb"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Diamond Storm",
-                    "Earthquake",
-                    "Pain Split",
-                    "Rapid Spin",
-                    "Swords Dance"
-                ],
-                "abilities": [
-                    "Serene Grace",
-                    "Water Absorb"
-                ]
+                "movepool": ["Diamond Storm", "Earthquake", "Pain Split", "Rapid Spin", "Swords Dance"],
+                "abilities": ["Serene Grace", "Water Absorb"]
             }
         ]
     },
@@ -998,28 +484,13 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": [
-                    "Bulk Up",
-                    "Extreme Speed",
-                    "Flare Blitz",
-                    "Moonlight"
-                ],
-                "abilities": [
-                    "Pixilate"
-                ]
+                "movepool": ["Bulk Up", "Extreme Speed", "Flare Blitz", "Moonlight"],
+                "abilities": ["Pixilate"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": [
-                    "Explosion",
-                    "Extreme Speed",
-                    "Overheat",
-                    "Spikes",
-                    "Will-O-Wisp"
-                ],
-                "abilities": [
-                    "Pixilate"
-                ]
+                "movepool": ["Explosion", "Extreme Speed", "Overheat", "Spikes", "Will-O-Wisp"],
+                "abilities": ["Pixilate"]
             }
         ]
     },
@@ -1028,16 +499,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Moonblast",
-                    "Recover",
-                    "Scald",
-                    "Thunder Wave"
-                ],
-                "abilities": [
-                    "Multiscale",
-                    "Rough Skin"
-                ]
+                "movepool": ["Moonblast", "Recover", "Scald", "Thunder Wave"],
+                "abilities": ["Multiscale", "Rough Skin"]
             }
         ]
     },
@@ -1046,15 +509,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": [
-                    "Clanging Scales",
-                    "Clangorous Soul",
-                    "Sludge Wave",
-                    "Surf"
-                ],
-                "abilities": [
-                    "Armor Tail"
-                ]
+                "movepool": ["Clanging Scales", "Clangorous Soul", "Sludge Wave", "Surf"],
+                "abilities": ["Armor Tail"]
             }
         ]
     },
@@ -1063,40 +519,18 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": [
-                    "Glare",
-                    "Ice Beam",
-                    "Milk Drink",
-                    "Thunderbolt"
-                ],
-                "abilities": [
-                    "Electromorphosis"
-                ]
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"]
             },
             {
                 "role": "Fast Support",
-                "movepool": [
-                    "Glare",
-                    "Ice Beam",
-                    "Milk Drink",
-                    "Volt Switch"
-                ],
-                "abilities": [
-                    "Electromorphosis"
-                ]
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Volt Switch"],
+                "abilities": ["Electromorphosis"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": [
-                    "Discharge",
-                    "Ice Beam",
-                    "Knock Off",
-                    "Milk Drink",
-                    "Thunderbolt"
-                ],
-                "abilities": [
-                    "Electromorphosis"
-                ]
+                "movepool": ["Discharge", "Ice Beam", "Knock Off", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"]
             }
         ]
     },
@@ -1105,15 +539,8 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": [
-                    "Blizzard",
-                    "Inferno",
-                    "Polar Flare",
-                    "Thunder"
-                ],
-                "abilities": [
-                    "No Guard"
-                ]
+                "movepool": ["Blizzard", "Inferno", "Polar Flare", "Thunder"],
+                "abilities": ["No Guard"]
             }
         ]
     }

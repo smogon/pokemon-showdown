@@ -528,7 +528,9 @@ declare namespace RandomTeamsTypes {
 		dragonForce?: number;
 		thunderstorm?: number;
 		magnetosphere?: number;
+		clearingWeather?: number;
 		strongWinds?: number;
+		weatherSetter?: number;
 		stealthRock?: number;
 		spikes?: number;
 		toxicSpikes?: number;
