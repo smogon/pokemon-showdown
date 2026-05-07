@@ -8263,7 +8263,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 70,
 		},
-		num: 10017,
+		num: 10018,
 		gen: 9,
 	},
 	avocaberry: {
@@ -8284,7 +8284,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		num: 10007,
+		num: 10008,
 		gen: 9,
 	},
 	bacchuslaurel: {
@@ -8321,7 +8321,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10012,
+		num: 10013,
 		gen: 9,
 	},
 	energychannelizer: {
@@ -8389,7 +8389,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10013,
+		num: 10014,
 		gen: 9,
 	},
 	frostorb: {
@@ -8431,7 +8431,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		num: 10016,
+		num: 10017,
 		gen: 9,
 	},
 	mystictamroastdoppio: {
@@ -8458,7 +8458,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10011,
+		num: 10012,
 		gen: 9,
 	},
 	pikaspresso: {
@@ -8485,7 +8485,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10008,
+		num: 10009,
 		gen: 9,
 	},
 	portableturbine: {
@@ -8501,7 +8501,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Razor Hook",
 		spritenum: 801,
 		fling: {
-			basePower: 50,
+			basePower: 80,
 			volatileStatus: 'flinch',
 		},
 		onModifyMovePriority: -1,
@@ -8517,7 +8517,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				});
 			}
 		},
-		num: 10018,
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
+		num: 10007,
 		gen: 9,
 	},
 	sandygastmocha: {
@@ -8544,7 +8547,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10010,
+		num: 10011,
 		gen: 9,
 	},
 	volatilespray: {
@@ -8576,9 +8579,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return true;
 		},
 		itemUser: [
-			"Abomasnow", "Bearvoyance", "Blurrun", "Castform", "Cherrim", "Drout", "Eecroach", "Snover",
+			"Castform", "Castform-Allergy", "Castform-Dusty", "Castform-Gutsy", "Castform-Lovely", "Castform-Rainy", "Castform-Sandy", "Castform-Shady", "Castform-Smoggy",
+			"Castform-Snowy", "Castform-Sorcery", "Castform-Spooky", "Castform-Sunny", "Castform-Swarmy", "Castform-Windy", "Castform-Zappy", "Castform-Zenny",
+			"Abomasnow", "Abomasnow-Lowland", "Bearvoyance", "Bearvoyance-Awakened", "Blurrun", "Blurrun-Charged", "Cherrim", "Cherrim-Sunshine", "Drout", "Drout-Dry",
+			"Eecroach", "Eecroach-Swarm", "Snover", "Snover-Lowland",
 		],
-		num: 10014,
+		num: 10015,
 		gen: 9,
 	},
 	whirligig: {
@@ -8595,7 +8601,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		forcedForme: "Castform-Whirly",
 		itemUser: ["Castform-Whirly"],
-		num: 10015,
+		num: 10016,
 		gen: 9,
 	},
 	worcanecoldbrew: {
@@ -8622,7 +8628,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('caffeinecrash');
 			},
 		},
-		num: 10009,
+		num: 10010,
 		gen: 9,
 	},
 	zetacell: {

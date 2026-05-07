@@ -489,8 +489,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flamebody: { // updated
 		name: "Flame Body",
-		desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This Pokemon takes no damage from Snow.",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; Snow immunity.",
+		desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This Pokemon takes no damage from Strong Winds-boosted Snow.",
+		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; hail immunity.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -716,8 +716,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Strong Winds-boosted Snow. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn; immunity to hail.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -965,7 +965,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magmaarmor: { // updated
 		name: "Magma Armor",
-		desc: "This Pokemon cannot be frozen or frostbitten. Gaining this Ability while frozen or frostbitten cures it. This Pokemon takes no damage from Snow.",
+		desc: "This Pokemon cannot be frozen or frostbitten. Gaining this Ability while frozen or frostbitten cures it. This Pokemon takes no damage from Strong Winds-boosted Snow.",
 		shortDesc: "Immunity to Snow damage, freezing, and frostbite.",
 	},
 	magnetpull: {
@@ -1729,8 +1729,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	snowcloak: {
 		name: "Snow Cloak",
-		desc: "If Snow is active, the accuracy of moves used against this Pokemon is multiplied by 0.8.",
-		shortDesc: "If Snow is active, this Pokemon's evasiveness is 1.25x.",
+		desc: "If Snow is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Strong Winds-boosted Snow.",
+		shortDesc: "If Snow is active, this Pokemon's evasiveness is 1.25x; immunity to hail.",
 		gen8: {
 			desc: "If Hail is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon's evasiveness is 1.25x; immunity to Hail.",
@@ -1986,8 +1986,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	telepathy: {
 		name: "Telepathy",
-		desc: "This Pokemon is not hit by non-Status attacks made by its allies, and this Pokemon's non-Status spread moves do not hit its allies.",
-		shortDesc: "Ally non-Status attacks do not hit this Pokemon or this Pokemon's allies.",
+		shortDesc: "This Pokemon and its allies don't take damage from friendly attacks.",
 
 		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00E9mon!",
 	},
@@ -2313,7 +2312,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 	absolutezero: {
 		name: "Absolute Zero",
-		desc: "If Snow is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		desc: "If Snow is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Strong Winds-boosted Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
 		shortDesc: "This Pokemon's Ice attacks do 1.3x in Snow; immunity to it.",
 	},
 	ancientbody: {
@@ -2467,7 +2466,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	glacialarmor: {
 		name: "Glacial Armor",
-		desc: "If Snow is active, Defense and Special Defense are multipled by 1.2. This Pokemon takes no damage from Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		desc: "If Snow is active, Defense and Special Defense are multipled by 1.2. This Pokemon takes no damage from Strong Winds-boosted Snow. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
 		shortDesc: "1.2x Defense and Special Defense in Snow; immunity to it.",
 	},
 	hayfever: {
@@ -2641,7 +2640,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	souldrain: {
 		name: "Soul Drain",
 		desc: "When another Pokemon faints, this Pokemon restores 1/8 of its maximum HP, rounded down. If Paranormal Activity is active, this Pokemon instead restores 1/4 of its maximum HP. This Pokemon takes no damage from Paranormal Activity. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
-		shortDesc: "Other Pokemon faints: heals 1/8, 1/4 in P.Activity.",
+		shortDesc: "This Pokemon heals 1/8 of its max HP when another Pokemon faints, 1/4 in P.Activity.",
 	},
 	soulpassage: {
 		name: "Soul Passage",
