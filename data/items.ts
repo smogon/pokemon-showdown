@@ -8501,7 +8501,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Razor Hook",
 		spritenum: 801,
 		fling: {
-			basePower: 50,
+			basePower: 80,
 			volatileStatus: 'flinch',
 		},
 		onModifyMovePriority: -1,
@@ -8516,6 +8516,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					volatileStatus: 'flinch',
 				});
 			}
+		},
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
 		},
 		num: 10018,
 		gen: 9,

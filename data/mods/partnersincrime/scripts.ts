@@ -4,6 +4,11 @@ import { Field } from "../../../sim/field";
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
+	actions: {
+		canTerastallize(pokemon) {
+			return null;
+		},
+	},
 	fieldEvent(eventid, targets) {
 		const callbackName = `on${eventid}`;
 		let getKey: undefined | 'duration';
