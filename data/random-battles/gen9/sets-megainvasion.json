@@ -239,7 +239,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Mystical Fire", "Psyshock"],
+                "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Psyshock"],
+                "abilities": ["Trace"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Psyshock"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Stellar"]
             }
