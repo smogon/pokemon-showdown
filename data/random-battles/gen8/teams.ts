@@ -228,8 +228,7 @@ export class RandomGen8Teams extends RandomTeams {
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
 			[['scald', 'surf'], ['hydropump', 'originpulse']],
-			['lavaplume', 'magmastorm'],
-			['flamethrower', ['fireblast', 'overheat']],
+			[['flamethrower', 'lavaplume'], ['fireblast', 'magmastorm', 'overheat']],
 			['hornleech', 'woodhammer'],
 			['gigadrain', 'leafstorm'],
 			['airslash', 'hurricane'],
