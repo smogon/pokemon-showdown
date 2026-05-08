@@ -501,7 +501,7 @@ export const commands: Chat.ChatCommands = {
 			fairydust: {
 				names: ["Fairy Dust", "Incantation", "Sprinkle", "Fairy"],
 				desc: "At the end of each turn except the last, all active Pokemon have 1/16 of their maximum HP restored, rounded down. During the effect, the evasion of non-Fairy-type Pokemon is multiplied by 0.75x during accuracy checks, and the Sp. Def of Fairy-type Pokemon is multiplied by 1.25x.",
-				strongWindsBoosted: "Misty Terrain begins.",
+				strongWindsBoosted: "Activates Misty Terrain.",
 				setupAbility: "Incantation",
 				setupMove: "Sprinkle",
 			},

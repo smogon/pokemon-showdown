@@ -492,6 +492,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Sticky Hold", 1: "Storm Drain", H: "Earth Force" },
 	},
+	drifblim: {
+		inherit: true,
+		abilities: { 0: "Aftermath", 1: "Unburden", H: "Flare Boost" },
+	},
 	mismagius: {
 		inherit: true,
 		types: ["Ghost"],

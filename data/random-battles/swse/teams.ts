@@ -256,7 +256,7 @@ const WEATHER_DATA: {
 		setupAbility: ['Pollution'],
 		setupMove: ['smogspread'],
 		weatherDependentAbilities: ['Bubble Helm', 'Carbon Capture', 'Corrosion', 'Guts', 'Overcoat', 'Poison Heal', 'Quick Feet', 'Toxic Boost'],
-		weatherEnhancedMoves: ['emberplume', 'gastroacid', 'smog', 'weatherball'],
+		weatherEnhancedMoves: ['barbbarrage', 'emberplume', 'gastroacid', 'hex', 'smog', 'venoshock', 'weatherball'],
 	},
 	{
 		name: 'fairyDust', category: 'irritantWeather', role: 'Fairy Dust Setter', type: 'Fairy', item: 'Volatile Spray',

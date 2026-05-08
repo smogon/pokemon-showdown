@@ -324,7 +324,12 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Focus Blast", "Healing Wish", "Moonblast", "Solar Beam", "Synthesis"],
+                "movepool": ["Focus Blast", "Moonblast", "Solar Beam", "Synthesis"],
+                "abilities": ["Drought"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Healing Wish", "Moonblast", "Solar Beam", "Synthesis"],
                 "abilities": ["Drought"]
             }
         ]

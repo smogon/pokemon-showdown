@@ -565,7 +565,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Acrobatics", "Defog", "Knock Off", "Shadow Ball", "Thunder Wave", "Will-O-Wisp"],
-                "abilities": ["Unburden"]
+                "abilities": ["Soul Drain"]
             }
         ]
     },

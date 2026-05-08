@@ -2440,7 +2440,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Calm Mind", "Phantom Force", "Shadow Ball", "Strength Sap"],
-                "abilities": ["Unburden"]
+                "abilities": ["Soul Drain"]
             },
             {
                 "role": "Bulky Support",
@@ -2450,7 +2450,7 @@
             {
                 "role": "Imprisoner",
                 "movepool": ["Phantom Force", "Protect", "Shadow Ball", "Strength Sap"],
-                "abilities": ["Aftermath", "Unburden"]
+                "abilities": ["Aftermath", "Soul Drain"]
             }
         ]
     },
