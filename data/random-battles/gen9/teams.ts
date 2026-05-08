@@ -1438,7 +1438,7 @@ export class RandomTeams {
 				NU: 73,
 				NUBL: 71,
 				UU: 69,
-				UUBL: 67,
+				UUBL: 67, "(OU)": 67,
 				OU: 65,
 				Uber: 61,
 			};
