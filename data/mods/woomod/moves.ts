@@ -16,9 +16,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 			this.debug('Downtown Slide damage boost');
-			const bp = 75 + 15 * allLayers;
+			const bp = move.basePower + 15 * allLayers;
 			this.add('-message', `Downtown Slide currently has a BP of ${bp}!`);
-			return 75 + 15 * allLayers;
+			return bp;
 		},
 		category: "Physical",
 		shortDesc: "+15 power for each hazard layer on the field.",
