@@ -1881,7 +1881,7 @@
         ]
     },
     "shedinja": {
-        "level": 100,
+        "level": 96,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2873,7 +2873,7 @@
         ]
     },
     "vespiquen": {
-        "level": 100,
+        "level": 96,
         "sets": [
             {
                 "role": "Staller",
