@@ -3445,8 +3445,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["overheat", "painsplit", "shadowball", "thunderbolt", "trick", "willowisp"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Fire"]
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Bulky Support",
@@ -3461,8 +3460,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["hydropump", "painsplit", "shadowball", "thunderbolt", "trick", "willowisp"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Water"]
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Bulky Support",
@@ -3477,8 +3475,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["blizzard", "painsplit", "shadowball", "thunderbolt", "trick", "willowisp"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Ice"]
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Bulky Support",
@@ -3508,8 +3505,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["leafstorm", "painsplit", "shadowball", "thunderbolt", "trick", "willowisp"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Grass"]
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Bulky Support",
