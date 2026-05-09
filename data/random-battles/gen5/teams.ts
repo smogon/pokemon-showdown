@@ -680,10 +680,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			!counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') &&
 			noExpertBeltMoves.every(m => !moves.has(m))
 		);
-		if (
-			!counter.get('Status') && expertBeltReqs &&
-			(moves.has('uturn') || moves.has('voltswitch') || role === 'Fast Attacker')
-		) return 'Expert Belt';
+		if (!counter.get('Status') && expertBeltReqs && role === 'Fast Attacker') return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) && ability !== 'Sturdy'
 		) return 'Life Orb';
