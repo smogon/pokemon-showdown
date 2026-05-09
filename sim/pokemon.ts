@@ -1965,14 +1965,24 @@ export class Pokemon {
 	}
 
 	setBaseStats(baseStats: StatsTable) {
-		const clonedSpecies = this.battle.dex.deepClone(this.species);
-		clonedSpecies.baseStats = baseStats;
+		const stats = this.battle.spreadModify(baseStats, this.set);
 		const oldMaxhp = this.maxhp;
 		const oldHp = this.hp;
 		const wasFainted = this.fainted;
-		this.setSpecies(clonedSpecies);
-		this.baseMaxhp = this.baseStoredStats.hp;
-		this.maxhp = this.baseStoredStats.hp;
+		this.baseStoredStats = stats;
+		let statName: StatIDExceptHP;
+		for (statName in this.storedStats) {
+			this.storedStats[statName] = stats[statName];
+			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName];
+		}
+		// Reapply stat mods in Gen 1
+		if (this.battle.gen <= 1) {
+			if (this.status === 'par') this.modifyStat!('spe', 0.25);
+			if (this.status === 'brn') this.modifyStat!('atk', 0.5);
+		}
+		this.speed = this.storedStats.spe;
+		this.baseMaxhp = stats.hp;
+		this.maxhp = stats.hp;
 		if (wasFainted) {
 			this.hp = 0;
 		} else {
