@@ -668,8 +668,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (role === 'Fast Support') {
 			return (
 				counter.get('Physical') + counter.get('Special') >= 3 &&
-				['rapidspin', 'uturn', 'voltswitch'].every(m => !moves.has(m)) &&
-				this.dex.getEffectiveness('Rock', species) < 2
+				['rapidspin', 'uturn', 'voltswitch'].every(m => !moves.has(m))
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		// noStab moves that should reject Expert Belt
@@ -685,8 +684,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			(moves.has('uturn') || moves.has('voltswitch') || role === 'Fast Attacker')
 		) return 'Expert Belt';
 		if (
-			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			this.dex.getEffectiveness('Rock', species) < 2 && ability !== 'Sturdy'
+			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) && ability !== 'Sturdy'
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
@@ -771,8 +769,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Prepare optimal HP
-		const srImmunity = ability === 'Magic Guard';
-		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (moves.has('substitute') && !['Black Sludge', 'Leftovers'].includes(item)) {
@@ -790,12 +786,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Crash damage move users want an odd HP to survive two misses
 				if (hp % 2 > 0) break;
 			} else {
-				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || ability === 'Regenerator') break;
-				if (srWeakness === 1 && ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
-				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
-				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
-				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
+				break;
 			}
 			evs.hp -= 4;
 		}
