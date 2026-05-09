@@ -10,7 +10,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		inherit: true,
 		ruleset: [
 			'Standard AG',
-			'Sleep Moves Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause',
+			'Sleep Moves Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Clause',
 		],
 	},
 	standarddraft: {

@@ -278,7 +278,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 Champions] OU",
 		mod: 'champions',
 		ruleset: ['Standard'],
-		banlist: ['AG', 'Uber', 'Moody', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		banlist: ['AG', 'Uber', 'Moody', 'Quick Claw', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
 		name: "[Gen 9 Champions] BSS Reg M-A",
