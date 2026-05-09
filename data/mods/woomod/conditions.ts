@@ -2,7 +2,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frz: {
 		onStart(target, source, sourceEffect) {
 			this.add('-message', `${target.name} was frozen!`);
-			this.hint(`(Freeze halves SpA + 1/16 chip, like in Pokemon Legends: Arceus)`);
+			this.hint(`Freeze halves SpA + 1/16 chip, like in Pokemon Legends: Arceus`);
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {

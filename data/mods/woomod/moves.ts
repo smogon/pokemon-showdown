@@ -16,9 +16,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 			this.debug('Downtown Slide damage boost');
-			const bp = 75 + 15 * allLayers;
+			const bp = move.basePower + 15 * allLayers;
 			this.add('-message', `Downtown Slide currently has a BP of ${bp}!`);
-			return 75 + 15 * allLayers;
+			return bp;
 		},
 		category: "Physical",
 		shortDesc: "+15 power for each hazard layer on the field.",
@@ -29,29 +29,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Acid Downpour", target);
-		},
-		onHit(target, source, move) {
-			const yourSide = source.side;
-			const targetSide = target.side;
-			let allLayers = 0;
-			if (yourSide.getSideCondition('stealthrock')) allLayers++;
-			if (yourSide.getSideCondition('stickyweb')) allLayers++;
-			if (yourSide.sideConditions['spikes']) {
-				allLayers += yourSide.sideConditions['spikes'].layers;
-			}
-			if (yourSide.sideConditions['toxicspikes']) {
-				allLayers += yourSide.sideConditions['toxicspikes'].layers;
-			}
-			if (targetSide.getSideCondition('stealthrock')) allLayers++;
-			if (targetSide.getSideCondition('stickyweb')) allLayers++;
-			if (targetSide.sideConditions['spikes']) {
-				allLayers += targetSide.sideConditions['spikes'].layers;
-			}
-			if (targetSide.sideConditions['toxicspikes']) {
-				allLayers += targetSide.sideConditions['toxicspikes'].layers;
-			}
-			const bp = 75 + 15 * allLayers;
-			this.add('-message', `Downtown Slide currently has a BP of ${bp}!`);
 		},
 		target: "normal",
 		type: "Poison",
@@ -105,7 +82,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
 		onPrepareHit(target, pokemon, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', pokemon, "Thunderous Kick", target);
+			this.add('-anim', pokemon, "Mega Kick", target);
 		},
 		onHit(target, source) {
 			if (this.field.weather === 'raindance') this.field.weatherState.duration!++;
@@ -278,6 +255,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	ivycudgel: {
 		inherit: true,
+		onPrepareHit(target, pokemon, move) {
+			this.add('-anim', pokemon, "Ivy Cudgel", target);
+		},
 		onModifyType(move, pokemon) {
 			if (pokemon.species.id !== "farfetchd") return;
 			switch (pokemon.item) {
@@ -412,6 +392,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			status: 'brn',
 		},
 		target: "normal",
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Flamethrower', target);
+		},
 		type: "Fire",
 		shortDesc: "Super effective on Fire types.",
 	},
@@ -426,6 +410,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		boosts: {
 			spa: 1,
 			spe: 1,
+		},
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Quiver Dance', target);
 		},
 		target: "self",
 		type: "Bug",
@@ -456,6 +444,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
 		shortDesc: "Sets 1-3 Spikes on foe side based on target's total stat boosts.",
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Play Rough', target);
+		},
 		onHit(target, source) {
 			let boostSum = 0;
 			for (const stat in target.boosts) {
@@ -483,6 +475,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 5,
 		target: 'normal',
 		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1 },
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Night Slash', target);
+		},
 		onHit(source, target) {
 			if (!source.side.addSlotCondition(target, 'futuremove') && target.hp && target.isActive) return false;
 			Object.assign(source.side.slotConditions[target.position]['futuremove'], {
