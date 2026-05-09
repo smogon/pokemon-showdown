@@ -862,9 +862,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] woomod Random Battle",
-		desc: 'A Solomod by <user>woo</user> featuring custom Pokemon, moves, Abilities, and more!',
+		desc: 'A Solomod by <username>woo</username> featuring custom Pokemon, moves, Abilities, and more!',
 		mod: `woomod`,
 		team: 'random',
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-13#post-10645868">woomod on Smogon Forums</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">woomod on Google Sheets</a>`,
+		],
 		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mxSj-XvWzBk8RgAZ7_Th61Saczc89xwffBLLJsOlYTc/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
@@ -3652,10 +3656,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Woomod", // roomtours
-		desc: `woo mod`,
+		name: "[Gen 9] woomod", // roomtours
+		desc: 'A Solomod by <username>woo</username> featuring custom Pokemon, moves, Abilities, and more!',
 		mod: 'woomod',
 		searchShow: false,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-13#post-10645868">woomod on Smogon Forums</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">woomod on Google Sheets</a>`,
+		],
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Mega Data Mod', 'Z-Move Clause'],
 		banlist: ['All Pokemon', 'Eviolite', 'Light Ball', 'Baton Pass'],
 		unbanlist: [
