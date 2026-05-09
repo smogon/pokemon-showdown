@@ -420,8 +420,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Energy Ball", "Fire Blast", "Nasty Plot", "Psychic", "Psyshock", "Shadow Ball"],
-                "abilities": ["Drought", "Solar Power"]
+                "movepool": ["Fire Blast", "Nasty Plot", "Shadow Ball", "Solar Beam"],
+                "abilities": ["Drought"]
             },
             {
                 "role": "Sun Setter",
@@ -1146,13 +1146,13 @@
         "level": 90,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Bug Buzz", "Hurricane", "Quiver Dance", "Sleep Powder"],
-                "abilities": ["Compound Eyes", "Shield Dust"]
+                "role": "Fast Bulky Setup",
+                "movepool": ["Hive Shriek", "Hurricane", "Quiver Dance", "Sleep Powder"],
+                "abilities": ["Compound Eyes"]
             },
             {
                 "role": "Pheromones Setter",
-                "movepool": ["Bug Buzz", "Hive Shriek", "Hurricane", "Weather Ball"],
+                "movepool": ["Hive Shriek", "Hurricane", "Quiver Dance", "Sleep Powder"],
                 "abilities": ["Secretion"]
             }
         ]
@@ -1161,9 +1161,14 @@
         "level": 90,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dark Pulse", "Hurricane", "Nasty Plot", "Shadow Ball"],
-                "abilities": ["Malice", "Moxie", "Super Luck"]
+                "role": "Fast Attacker",
+                "movepool": ["Brave Bird", "Heat Wave", "Sucker Punch", "U-turn"],
+                "abilities": ["Moxie"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Brave Bird", "Deception", "Heat Wave", "Sucker Punch", "Thunder Wave"],
+                "abilities": ["Moxie"]
             }
         ]
     },
@@ -1171,13 +1176,13 @@
         "level": 90,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Energy Ball", "Leaf Storm", "Moonblast", "Nasty Plot"],
-                "abilities": ["Effect Spore", "Rain Dish"]
+                "role": "Bulky Support",
+                "movepool": ["Giga Drain", "Moonblast", "Spore", "Strength Sap"],
+                "abilities": ["Incantation"]
             },
             {
                 "role": "Fairy Dust Setter",
-                "movepool": ["Energy Ball", "Leaf Storm", "Moonblast", "Weather Ball"],
+                "movepool": ["Giga Drain", "Moonblast", "Spore", "Strength Sap"],
                 "abilities": ["Incantation"]
             }
         ]
@@ -1186,9 +1191,10 @@
         "level": 90,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dark Pulse", "Nasty Plot", "Psychic", "Shadow Ball"],
-                "abilities": ["Run Away", "Stakeout", "Unburden"]
+                "role": "Wallbreaker",
+                "movepool": ["Black Hole", "Deception", "Grass Knot", "Nasty Plot", "Psychic", "U-turn"],
+                "abilities": ["Stakeout"],
+                "preferredTypes": ["Psychic"]
             }
         ]
     },
