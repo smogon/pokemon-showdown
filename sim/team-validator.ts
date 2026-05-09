@@ -1327,14 +1327,14 @@ export class TeamValidator {
 			if (set.level === 50 && ruleTable.maxLevel !== 50 && !ruleTable.maxTotalLevel && evLimit !== 0 && totalEV % 4 === 0) {
 				problems.push(`${name} is level 50, but this format allows level ${ruleTable.maxLevel} Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
+		}
 
-			if (evLimit !== null && totalEV > evLimit) {
-				const statName = useStatPoints ? 'Stat Points' : 'EVs';
-				if (!evLimit) {
-					problems.push(`${name} has ${statName}, which is not allowed by this format.`);
-				} else {
-					problems.push(`${name} has ${totalEV} total ${statName}, which is more than this format's limit of ${evLimit}.`);
-				}
+		if (evLimit !== null && totalEV > evLimit) {
+			const statName = useStatPoints ? 'Stat Points' : 'EVs';
+			if (!evLimit) {
+				problems.push(`${name} has ${statName}, which is not allowed by this format.`);
+			} else {
+				problems.push(`${name} has ${totalEV} total ${statName}, which is more than this format's limit of ${evLimit}.`);
 			}
 		}
 
