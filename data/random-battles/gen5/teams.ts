@@ -232,9 +232,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		if (abilities.includes('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
 
-		// Cull filler moves for otherwise fixed set Stealth Rock users
+		// Ensure Mamoswine has Ice Shard
 		if (species.id === 'mamoswine') {
-			this.incompatibleMoves(moves, movePool, ['stealthrock', 'stoneedge'], ['stoneedge', 'superpower']);
+			this.incompatibleMoves(moves, movePool, ['stoneedge', 'superpower'], ['superpower', 'toxic']);
 		}
 	}
 

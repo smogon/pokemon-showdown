@@ -3417,7 +3417,7 @@
         ]
     },
     "rotomheat": {
-        "level": 77,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3447,7 +3447,7 @@
         ]
     },
     "rotomfrost": {
-        "level": 76,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3462,7 +3462,7 @@
         ]
     },
     "rotomfan": {
-        "level": 76,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
