@@ -281,6 +281,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG', 'Uber', 'Moody', 'Quick Claw', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
+		name: "[Gen 9 Champions] UU",
+		mod: 'champions',
+		searchShow: false,
+		ruleset: ['[Gen 9 Champions] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
 		name: "[Gen 9 Champions] BSS Reg M-A",
 		mod: 'champions',
 		bestOfDefault: true,
