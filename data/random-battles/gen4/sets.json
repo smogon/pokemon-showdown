@@ -434,9 +434,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "leafblade", "nightslash", "return", "swordsdance"],
-                "abilities": ["Inner Focus"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["leafblade", "nightslash", "return", "swordsdance"],
+                "abilities": ["Inner Focus"]
             }
         ]
     },
@@ -522,7 +521,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "focusblast", "nastyplot", "psychic"],
+                "movepool": ["focusblast", "nastyplot", "psychic", "shadowball"],
                 "abilities": ["Insomnia"]
             }
         ]
@@ -667,7 +666,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "encore", "focusblast", "nastyplot", "psychic", "shadowball", "substitute"],
+                "movepool": ["encore", "focusblast", "nastyplot", "psychic", "shadowball", "substitute"],
                 "abilities": ["Filter"],
                 "preferredTypes": ["Fighting"]
             }
@@ -784,7 +783,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["batonpass", "hiddenpowerice", "substitute", "thunderbolt", "toxic"],
+                "movepool": ["hiddenpowerice", "substitute", "thunderbolt", "toxic"],
                 "abilities": ["Volt Absorb"]
             },
             {
@@ -947,14 +946,13 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aurasphere", "batonpass", "earthpower", "fireblast", "nastyplot", "psychic", "softboiled"],
+                "movepool": ["aurasphere", "earthpower", "fireblast", "nastyplot", "psychic", "softboiled"],
                 "abilities": ["Synchronize"]
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["batonpass", "earthquake", "explosion", "swordsdance", "zenheadbutt"],
-                "abilities": ["Synchronize"],
-                "preferredTypes": ["Ground"]
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "explosion", "softboiled", "swordsdance", "zenheadbutt"],
+                "abilities": ["Synchronize"]
             }
         ]
     },
@@ -1025,11 +1023,6 @@
             {
                 "role": "Staller",
                 "movepool": ["encore", "focusblast", "hiddenpowerflying", "knockoff", "roost", "toxic"],
-                "abilities": ["Early Bird"]
-            },
-            {
-                "role": "Fast Support",
-                "movepool": ["agility", "batonpass", "encore", "swordsdance"],
                 "abilities": ["Early Bird"]
             }
         ]
@@ -1197,7 +1190,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "hiddenpowerfighting", "morningsun", "psychic", "substitute"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "morningsun", "psychic", "substitute"],
                 "abilities": ["Synchronize"]
             }
         ]
@@ -1259,7 +1252,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "hiddenpowerfighting", "psychic", "substitute", "thunderbolt"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "psychic", "substitute", "thunderbolt"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1665,7 +1658,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "energyball", "nastyplot", "psychic", "recover"],
+                "movepool": ["energyball", "nastyplot", "psychic", "recover"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -1836,11 +1829,6 @@
         "level": 99,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["agility", "airslash", "batonpass", "bugbuzz", "hydropump", "roost"],
-                "abilities": ["Intimidate"]
-            },
-            {
                 "role": "Bulky Support",
                 "movepool": ["airslash", "bugbuzz", "hydropump", "roost", "stunspore", "toxic"],
                 "abilities": ["Intimidate"]
@@ -1896,13 +1884,13 @@
         "level": 86,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["batonpass", "substitute", "swordsdance", "xscissor"],
+                "role": "Fast Attacker",
+                "movepool": ["aerialace", "nightslash", "swordsdance", "uturn", "xscissor"],
                 "abilities": ["Speed Boost"]
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["batonpass", "protect", "swordsdance", "xscissor"],
+                "role": "Setup Sweeper",
+                "movepool": ["aerialace", "swordsdance", "uturn", "xscissor"],
                 "abilities": ["Speed Boost"]
             }
         ]
@@ -1912,7 +1900,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
+                "movepool": ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
                 "abilities": ["Wonder Guard"]
             }
         ]
@@ -1955,11 +1943,6 @@
                 "role": "Fast Support",
                 "movepool": ["doubleedge", "fakeout", "healbell", "suckerpunch", "thunderwave", "toxic"],
                 "abilities": ["Cute Charm"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "icebeam", "thunderbolt"],
-                "abilities": ["Cute Charm"]
             }
         ]
     },
@@ -1978,7 +1961,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "ironhead", "suckerpunch", "swordsdance"],
+                "movepool": ["brickbreak", "ironhead", "suckerpunch", "swordsdance"],
                 "abilities": ["Intimidate"]
             },
             {
@@ -2030,7 +2013,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
                 "abilities": ["Plus"],
                 "preferredTypes": ["Ice"]
             },
@@ -2046,7 +2029,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
                 "abilities": ["Minus"],
                 "preferredTypes": ["Ice"]
             },
@@ -2061,18 +2044,8 @@
         "level": 99,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["batonpass", "bugbuzz", "substitute", "tailglow"],
-                "abilities": ["Swarm"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["batonpass", "bugbuzz", "encore", "tailglow"],
-                "abilities": ["Swarm"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["batonpass", "bugbuzz", "roost", "tailglow"],
+                "role": "Staller",
+                "movepool": ["encore", "roost", "seismictoss", "toxic", "uturn"],
                 "abilities": ["Swarm"]
             }
         ]
@@ -2267,7 +2240,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "earthpower", "psychic", "signalbeam", "substitute"],
+                "movepool": ["calmmind", "earthpower", "psychic", "signalbeam", "substitute"],
                 "abilities": ["Levitate"]
             },
             {
@@ -2999,7 +2972,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "hiddenpowerfighting", "rest", "shadowball", "substitute", "thunderbolt"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "rest", "shadowball", "substitute", "thunderbolt"],
                 "abilities": ["Unburden"]
             }
         ]
@@ -3009,7 +2982,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["batonpass", "encore", "return", "substitute", "thunderwave", "toxic"],
+                "movepool": ["encore", "return", "skyuppercut", "thunderwave", "toxic"],
                 "abilities": ["Cute Charm"]
             },
             {
@@ -3309,7 +3282,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["airslash", "aurasphere", "batonpass", "nastyplot", "roost", "thunderwave"],
+                "movepool": ["airslash", "aurasphere", "nastyplot", "roost", "thunderwave"],
                 "abilities": ["Serene Grace"]
             },
             {
@@ -3344,7 +3317,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "doubleedge", "leafblade", "substitute", "swordsdance", "synthesis", "xscissor"],
+                "movepool": ["doubleedge", "leafblade", "substitute", "swordsdance", "synthesis", "xscissor"],
                 "abilities": ["Leaf Guard"],
                 "preferredTypes": ["Normal"]
             }

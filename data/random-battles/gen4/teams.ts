@@ -278,14 +278,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
-		// Enforce Substitute on non-Setup sets with Baton Pass
-		if (!role.includes('Setup')) {
-			if (movePool.includes('batonpass') && movePool.includes('substitute')) {
-				counter = this.addMove('substitute', moves, types, abilities, teamDetails, species, isLead,
-					movePool, preferredType, role);
-			}
-		}
-
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
 		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
@@ -361,12 +353,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				const moveid = this.sample(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
-			} else {
-				// If they have no regular STAB move, enforce U-turn on Bug types.
-				if (movePool.includes('uturn') && types.has('Bug')) {
-					counter = this.addMove('uturn', moves, types, abilities, teamDetails, species, isLead,
-						movePool, preferredType, role);
-				}
 			}
 		}
 
@@ -608,7 +594,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (species.id === 'farfetchd') return 'Stick';
 		if (moves.has('outrage') && counter.get('setup') && !moves.has('sleeptalk')) return 'Lum Berry';
-		if (['batonpass', 'protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
 			(counter.get('hazards') || counter.get('setup')) && (!counter.get('recoil') || ability === 'Rock Head')
