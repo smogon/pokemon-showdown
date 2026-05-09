@@ -590,12 +590,6 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "earthquake", "machpunch", "stoneedge", "suckerpunch"],
-                "abilities": ["Limber"],
-                "preferredTypes": ["Rock"]
-            },
-            {
-                "role": "Setup Sweeper",
                 "movepool": ["bulkup", "closecombat", "earthquake", "machpunch", "stoneedge", "suckerpunch"],
                 "abilities": ["Limber"],
                 "preferredTypes": ["Rock"]
