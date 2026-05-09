@@ -93,6 +93,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 	},
+	pokemon: {
+		inherit: true,
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			const item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
+			if (this.hasAbility(['levitate', 'asoneseadra', 'asoneklang']) && !this.battle.suppressingAbility(this)) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			return item !== 'airballoon';
+		},
+	},
 	init() {
 		// Krokorok
 		this.modData("Learnsets", "krokorok").learnset.ceaselessedge = ["9L1"];
@@ -213,22 +229,22 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "houndour").learnset.slackoff = ["9L1"];
 		this.modData("Learnsets", "houndour").learnset.friendlyfire = ["9L1"];
 		this.modData("Learnsets", "houndour").learnset.baddybad = ["9L1"];
-		// Koffing
-		this.modData("Learnsets", "koffing").learnset.hydropump = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.liquidation = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.flipturn = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.scald = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.waterfall = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.aquaring = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.bubble = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.withdraw = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.watergun = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.soak = ["9L1"];
-		this.modData("Learnsets", "koffing").learnset.surf = ["9L1"];
-		delete this.modData('Learnsets', 'koffing').learnset.flamethrower;
-		// Maushold
-		this.modData("Learnsets", "maushold").learnset.rockblast = ["9L1"];
-		this.modData("Learnsets", "maushold").learnset.iciclespear = ["9L1"];
+		// Koffing-Hoenn
+		this.modData("Learnsets", "koffinghoenn").learnset.hydropump = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.liquidation = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.flipturn = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.scald = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.waterfall = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.aquaring = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.bubble = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.withdraw = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.watergun = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.soak = ["9L1"];
+		this.modData("Learnsets", "koffinghoenn").learnset.surf = ["9L1"];
+		delete this.modData('Learnsets', 'koffinghoenn').learnset.flamethrower;
+		// Tandemaus
+		this.modData("Learnsets", "tandemaus").learnset.rockblast = ["9L1"];
+		this.modData("Learnsets", "tandemaus").learnset.iciclespear = ["9L1"];
 		// Hakamo-o
 		this.modData("Learnsets", "hakamoo").learnset.clangoroussoul = ["9L1"];
 		this.modData("Learnsets", "hakamoo").learnset.flashcannon = ["9L1"];
@@ -634,14 +650,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "helioptile").learnset.stealthrock = ["9L1"];
 		this.modData("Learnsets", "helioptile").learnset.rockblast = ["9L1"];
 		this.modData("Learnsets", "helioptile").learnset.earthpower = ["9L1"];
-	},
-	pokemon: {
-		inherit: true,
-		hasAbility(ability) {
-			if (this.ignoringAbility()) return false;
-			if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
-			const abilityid = this.battle.toID(ability);
-			return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
-		},
 	},
 };

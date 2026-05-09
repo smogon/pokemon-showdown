@@ -17,6 +17,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	ag: "[Gen 9] Anything Goes",
 	champsou: "[Gen 9 Champions] OU",
 	cou: "[Gen 9 Champions] OU",
+	champsuu: "[Gen 9 Champions] UU",
+	cuu: "[Gen 9 Champions] UU",
 	bss: "[Gen 9 Champions] BSS Reg M-A",
 	vgc: "[Gen 9 Champions] VGC 2026 Reg M-A",
 	bsd: "[Gen 9 Champions] VGC 2026 Reg M-A",

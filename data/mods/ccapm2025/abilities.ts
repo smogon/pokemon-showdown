@@ -240,16 +240,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMovePriority: 1,
 		onModifyMove(move, attacker, defender) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
-			if (move.category === 'Status' && move.id !== 'kingsshield') return;
-			const targetForme = (move.id === 'soulboundslash' ? 'Aegislash-Soulbound' :
-				(move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade'));
-			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+			if (move.id === 'kingsshield' && attacker.species.forme !== 'Aegislash') attacker.formeChange('Aegislash');
+			if (move.category !== 'Status' && move.id === 'soulboundslash' &&
+				attacker.species.forme !== 'Aegislash-Soulbound') attacker.formeChange('Aegislash-Soulbound');
+			if (move.category !== 'Status' && move.id !== 'soulboundslash' &&
+				attacker.species.forme === 'Aegislash') attacker.formeChange('Aegislash-Blade');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Stance Change",
 		rating: 4,
 		num: 176,
-		shortDesc: "Aegislash: change Forme to Soulbound before Soulbound Slash and Shield before King's Shield.",
+		shortDesc: "Aegislash: change Forme based on move used.",
 	},
 	stackshift: {
 		onModifyAtkPriority: 5,
