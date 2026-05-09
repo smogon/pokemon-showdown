@@ -1465,8 +1465,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "iceshard", "rapidspin", "stoneedge", "toxic"],
-                "abilities": ["Sturdy"],
-                "preferredTypes": ["Rock"]
+                "abilities": ["Sturdy"]
             },
             {
                 "role": "Staller",
