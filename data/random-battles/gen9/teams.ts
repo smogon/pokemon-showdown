@@ -1423,7 +1423,7 @@ export class RandomTeams {
 		if (this.adjustLevel) return this.adjustLevel;
 		// Temporarily modified for Mega Invasion randomized spotlight
 		if (
-			this.gen === 9 && Object.keys(this.randomMegaSets).includes(species.id)
+			this.gen === 9 && (species.id in this.randomMegaSets)
 		) return this.randomMegaSets[species.id]["level"]!;
 		// doubles levelling
 		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
