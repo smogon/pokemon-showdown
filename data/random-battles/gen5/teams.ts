@@ -157,10 +157,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (teamDetails.stealthRock) {
-			if (movePool.includes('stealthrock')) this.fastPop(movePool, movePool.indexOf('stealthrock'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
 		if (teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
@@ -194,6 +190,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
 			['substitute', PIVOT_MOVES],
 			['rest', 'substitute'],
+			['toxic', 'toxicspikes'],
 
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
@@ -210,8 +207,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			['flamethrower', 'overheat'],
 			// Meganium
 			['leechseed', 'dragontail'],
-			// Volcarona and Heatran
-			[['fierydance', 'lavaplume'], 'fireblast'],
+			// Volcarona, Heatran, and Groudon
+			[['fierydance', 'lavaplume'], ['fireblast', 'magmastorm', 'overheat']],
 			// Walrein
 			['encore', 'roar'],
 			// Lunatone
@@ -304,14 +301,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Stealth Rock if the team doesn't already have it
-		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
-			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
-				movePool, preferredType, role);
-		}
-
-		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
-		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
+		// Enforce hazard removal on Bulky Support if the team doesn't already have it
+		if (['Bulky Support'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
 				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
@@ -394,8 +385,23 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			}
 		}
 
+		// Enforce one of Spikes or Toxic Spikes
+		const hazardMoves = movePool.filter(moveid => ['spikes', 'toxicspikes'].includes(moveid));
+		if (hazardMoves.length) {
+			// Enforce Toxic Spikes if the team has Spikes only
+			if (teamDetails.spikes && hazardMoves.includes('toxicspikes')) {
+				counter = this.addMove('toxicspikes', moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			} else {
+				// Enforce one of the hazards
+				const moveid = this.sample(hazardMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			}
+		}
+
 		// Enforce recovery
-		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Spinner', 'Staller'].includes(role)) {
+		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Staller'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
@@ -572,6 +578,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
+		if (species.id === 'delibird' && moves.has('counter')) return 'Focus Sash';
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (ability === 'Harvest') return 'Sitrus Berry';
@@ -580,7 +587,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
 		if (ability === 'Poison Heal' || (moves.has('facade') && species.id !== 'stoutland')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
-		if (species.nfe) return 'Eviolite';
+		if (species.nfe) return (species.name === 'Scyther' && role === 'Wallbreaker') ? 'Choice Band' : 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker' && !counter.get('priority')
@@ -592,13 +599,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (moves.has('waterspout')) return 'Choice Scarf';
-		if (moves.has('shellsmash')) return 'White Herb';
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('acrobatics')) return 'Flying Gem';
-		if (species.id === 'hitmonlee' && ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Fighting Gem';
+		if (species.id === 'hitmonlee' && ability === 'Unburden') return 'Fighting Gem';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Natural Cure', 'Shed Skin'].includes(ability)) {
 			return (moves.has('raindance') && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
@@ -644,7 +651,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
-		if (ability === 'Sturdy' && moves.has('explosion')) return 'Custap Berry';
+		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
 		if (types.has('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
@@ -653,12 +660,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
 		) return 'Rocky Helmet';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (
-			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate'
-		) {
-			return 'Air Balloon';
-		}
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
 			(counter.get('hazards') || counter.get('setup')) && (!counter.get('recoil') || ability === 'Rock Head')
@@ -700,18 +701,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
-		// Check if the Pokemon has a Spinner set
-		let canSpinner = false;
-		for (const set of sets) {
-			if (!teamDetails.rapidSpin && set.role === 'Spinner') canSpinner = true;
-		}
-		for (const set of sets) {
-			// Prevent Spinner if the team already has removal
-			if (teamDetails.rapidSpin && set.role === 'Spinner') continue;
-			// Enforce Spinner if the team does not have removal
-			if (canSpinner && set.role !== 'Spinner') continue;
-			possibleSets.push(set);
-		}
+		for (const set of sets) possibleSets.push(set);
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
