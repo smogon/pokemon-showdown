@@ -345,7 +345,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fakeout: {
 		inherit: true,
 		onDisableMove(pokemon) {
-			if (pokemon.activeMoveActions > 1) {
+			if (pokemon.activeMoveActions) {
 				pokemon.disableMove('fakeout');
 			}
 		},
@@ -379,7 +379,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 100,
 		onDisableMove(pokemon) {
-			if (pokemon.activeMoveActions > 1) {
+			if (pokemon.activeMoveActions) {
 				pokemon.disableMove('firstimpression');
 			}
 		},
