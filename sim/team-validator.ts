@@ -541,8 +541,10 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.megaStone?.[species.name]) {
-				tierSpecies = dex.species.get(item.megaStone[species.name]);
+			const megaStone = item.megaStone?.[species.name] ||
+				(dex.currentMod === 'champions' ? undefined : item.megaStone?.[species.baseSpecies]);
+			if (megaStone && megaStone !== species.name) {
+				tierSpecies = dex.species.get(megaStone);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
@@ -1773,25 +1775,53 @@ export class TeamValidator {
 			setHas['pokemon:rockruffdusk'] = true;
 		}
 
-		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
+		const getTier = (tier: string) => {
+			if (tier === '(PU)') return 'ZU';
+			if (tier === '(NU)') return 'PU';
+			if (tier === '(DUU)') return 'DNU';
+			return tier;
+		};
+		const tier = getTier(tierSpecies.tier);
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
 
-		const doublesTier = tierSpecies.doublesTier === '(DUU)' ? 'DNU' : tierSpecies.doublesTier;
+		const doublesTier = getTier(tierSpecies.doublesTier);
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
-		const ndTier = tierSpecies.natDexTier === '(PU)' ? 'ZU' :
-			tierSpecies.natDexTier === '(NU)' ? 'PU' : tierSpecies.natDexTier;
+		const ndTier = getTier(tierSpecies.natDexTier);
 		const ndTierTag = 'pokemontag:nd' + toID(ndTier);
 		setHas[ndTierTag] = true;
+		let banReason: string | null;
+		if (isMega) {
+			const baseTier = getTier(species.tier);
+			const baseTierTag = 'pokemontag:' + toID(baseTier);
+			banReason = ruleTable.check(baseTierTag);
+			if (banReason) {
+				return `${species.name} is ${banReason}.`;
+			}
+
+			const baseDoublesTier = getTier(species.doublesTier);
+			const baseDoublesTierTag = 'pokemontag:' + toID(baseDoublesTier);
+			banReason = ruleTable.check(baseDoublesTierTag);
+			if (banReason) {
+				return `${species.name} is ${banReason}.`;
+			}
+
+			const baseNdTier = getTier(species.natDexTier);
+			const baseNdTierTag = 'pokemontag:nd' + toID(baseNdTier);
+			banReason = ruleTable.check(baseNdTierTag);
+			if (banReason) {
+				return `${species.name} is ${banReason}.`;
+			}
+		}
 
 		// Only pokemon that can gigantamax should have the Gmax flag
 		if (!tierSpecies.canGigantamax && set.gigantamax) {
 			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
 		}
 
-		let banReason = ruleTable.check('pokemon:' + species.id);
+		banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
 		}
