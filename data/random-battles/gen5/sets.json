@@ -1493,7 +1493,7 @@
             {
                 "role": "Staller",
                 "movepool": ["counter", "icebeam", "iceshard", "rapidspin", "seismictoss", "toxic"],
-                "abilities": ["Vital Spirit"]
+                "abilities": ["Insomnia", "Vital Spirit"]
             }
         ]
     },
@@ -2375,13 +2375,13 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["earthquake", "rapidspin", "stoneedge", "toxic", "xscissor"],
-                "abilities": ["Battle Armor"],
+                "abilities": ["Battle Armor", "Swift Swim"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["aquatail", "earthquake", "rockpolish", "stoneedge", "swordsdance", "xscissor"],
-                "abilities": ["Battle Armor"],
+                "abilities": ["Battle Armor", "Swift Swim"],
                 "preferredTypes": ["Ground"]
             }
         ]
@@ -3624,7 +3624,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthpower", "eruption", "fireblast", "hiddenpowerice"],
+                "movepool": ["earthpower", "eruption", "fireblast", "hiddenpowergrass", "hiddenpowerice"],
                 "abilities": ["Flash Fire"]
             },
             {
@@ -4362,7 +4362,7 @@
         ]
     },
     "sigilyph": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
