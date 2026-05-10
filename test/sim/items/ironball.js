@@ -10,7 +10,7 @@ describe('Iron Ball', () => {
 		battle.destroy();
 	});
 
-	it('should reduce halve the holder\'s speed', () => {
+	it('should halve the holder\'s speed', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', item: 'ironball', moves: ['bestow'] }] });
 		battle.setPlayer('p2', { team: [{ species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock'] }] });
@@ -76,5 +76,27 @@ describe('Iron Ball', () => {
 		battle.setPlayer('p2', { team: [{ species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain'] }] });
 		battle.makeChoices('move spore', 'move electricterrain');
 		assert.equal(battle.p2.active[0].status, '');
+	});
+
+	describe('[Gen 4]', () => {
+		it('should halve the speed of a Pokemon with Klutz', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Lopunny", item: 'ironball', ability: 'klutz', moves: ['tackle'] },
+			], [
+				{ species: "Mew", moves: ['recover'] },
+			]]);
+			battle.makeChoices();
+			assert.false.fullHP(battle.p2.active[0]);
+		});
+
+		it('should not ground Pokemon with Klutz that are airborne', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Togekiss", item: 'ironball', ability: 'klutz', moves: ['sleeptalk'] },
+			], [
+				{ species: "Mamoswine", moves: ['earthquake'] },
+			]]);
+			battle.makeChoices();
+			assert.fullHP(battle.p1.active[0]);
+		});
 	});
 });
