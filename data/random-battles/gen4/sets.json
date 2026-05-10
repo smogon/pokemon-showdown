@@ -2075,8 +2075,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["hydropump", "icebeam", "selfdestruct", "waterspout"],
-                "abilities": ["Water Veil"],
-                "preferredTypes": ["Ice"]
+                "abilities": ["Water Veil"]
             },
             {
                 "role": "Bulky Attacker",
