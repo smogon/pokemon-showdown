@@ -210,11 +210,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
-
-		if (species.id === 'bastiodon') {
-			// Enforces Toxic too, for good measure.
-			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
-		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
