@@ -1002,7 +1002,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["encore", "focusblast", "hiddenpowerflying", "knockoff", "roost", "toxic"],
+                "movepool": ["encore", "focusblast", "hiddenpowerflying", "knockoff", "roost", "toxic", "uturn"],
                 "abilities": ["Early Bird"]
             }
         ]

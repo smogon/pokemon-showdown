@@ -399,7 +399,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Enforce a move not on the noSTAB list
-		if (!counter.damagingMoves.size && !(moves.has('uturn') && types.has('Bug'))) {
+		if (!counter.damagingMoves.size) {
 			// Choose an attacking move
 			const attackingMoves = [];
 			for (const moveid of movePool) {

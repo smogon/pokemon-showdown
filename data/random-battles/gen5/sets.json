@@ -1081,7 +1081,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["acrobatics", "encore", "focusblast", "knockoff", "roost", "toxic"],
+                "movepool": ["acrobatics", "encore", "focusblast", "knockoff", "roost", "toxic", "uturn"],
                 "abilities": ["Early Bird"]
             }
         ]
