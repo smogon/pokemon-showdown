@@ -2962,7 +2962,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["airslash", "bugbuzz", "hiddenpowerground", "quiverdance", "substitute"],
+                "movepool": ["airslash", "bugbuzz", "quiverdance", "roost", "substitute"],
                 "abilities": ["Tinted Lens"]
             }
         ]
