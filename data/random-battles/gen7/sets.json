@@ -2665,6 +2665,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "waterspout"],
                 "abilities": ["Water Veil"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["icebeam", "protect", "scald", "toxic"],
+                "abilities": ["Water Veil"]
             }
         ]
     },
