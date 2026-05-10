@@ -50,7 +50,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter, species) => !counter.get('Normal'),
-			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison') && !counter.get('Bug'),
+			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Psychic') && species.baseStats.spa >= 100
 			),

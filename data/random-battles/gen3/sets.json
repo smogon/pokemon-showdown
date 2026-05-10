@@ -73,13 +73,18 @@
         "sets": [
             {
                 "role": "Berry Sweeper",
-                "movepool": ["brickbreak", "endure", "hiddenpowerbug", "sludgebomb", "swordsdance"],
-                "abilities": ["Swarm"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["endure", "hiddenpowerbug", "sludgebomb", "swordsdance"],
+                "abilities": ["Swarm"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["brickbreak", "doubleedge", "hiddenpowerbug", "sludgebomb", "swordsdance"],
+                "abilities": ["Swarm"],
+                "preferredTypes": ["Bug"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["doubleedge", "hiddenpowerground", "sludgebomb", "swordsdance"],
                 "abilities": ["Swarm"]
             }
         ]
