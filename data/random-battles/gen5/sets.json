@@ -2167,6 +2167,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "waterspout"],
                 "abilities": ["Water Veil"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["icebeam", "protect", "scald", "toxic"],
+                "abilities": ["Water Veil"]
             }
         ]
     },
@@ -4445,6 +4450,11 @@
                 "role": "Fast Attacker",
                 "movepool": ["bulletseed", "rockblast", "tailslap", "uturn"],
                 "abilities": ["Skill Link"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["bulletseed", "encore", "tailslap", "uturn"],
+                "abilities": ["Skill Link"]
             }
         ]
     },
@@ -4499,9 +4509,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "hornleech", "naturepower", "return", "substitute", "swordsdance"],
-                "abilities": ["Sap Sipper"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["doubleedge", "hornleech", "naturepower", "return", "swordsdance"],
+                "abilities": ["Sap Sipper"]
             }
         ]
     },
