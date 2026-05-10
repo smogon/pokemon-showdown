@@ -675,9 +675,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			noExpertBeltMoves.every(m => !moves.has(m))
 		);
 		if (!counter.get('Status') && expertBeltReqs && role === 'Fast Attacker') return 'Expert Belt';
-		if (
-			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) && ability !== 'Sturdy'
-		) return 'Life Orb';
+		if (['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) && ability !== 'Sturdy') return 'Life Orb';
 		return 'Leftovers';
 	}
 
