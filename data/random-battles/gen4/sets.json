@@ -1258,8 +1258,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["bite", "bodyslam", "earthquake", "roost"],
-                "abilities": ["Serene Grace"],
-                "preferredTypes": ["Dark"]
+                "abilities": ["Serene Grace"]
             }
         ]
     },
