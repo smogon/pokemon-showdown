@@ -382,7 +382,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Enforce one of Spikes or Toxic Spikes
 		const hazardMoves = movePool.filter(moveid => ['spikes', 'toxicspikes'].includes(moveid));
 		if (hazardMoves.length) {
-			// Enforce Toxic Spikes if the team has Spikes only
+			// Enforce Toxic Spikes if the team has Spikes already
 			if (teamDetails.spikes && hazardMoves.includes('toxicspikes')) {
 				counter = this.addMove('toxicspikes', moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
