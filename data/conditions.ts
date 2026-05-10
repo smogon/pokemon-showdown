@@ -879,6 +879,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return [type];
 		},
 	},
+	xerneas: {
+		name: 'Xerneas',
+		onBattleStart(pokemon) {
+			const rawSpecies = this.dex.species.get('Xerneas-Active');
+			const species = pokemon.setSpecies(rawSpecies);
+			if (!species) return;
+			pokemon.baseSpecies = rawSpecies;
+			pokemon.details = pokemon.getUpdatedDetails();
+			pokemon.setAbility(species.abilities['0'], null, null, true);
+			pokemon.baseAbility = pokemon.ability;
+		},
+	},
 	zacian: {
 		name: 'Zacian',
 		onBattleStart(pokemon) {

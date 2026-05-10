@@ -2729,8 +2729,8 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	xerneas: {
 		name: "Xerneas",
 	},
-	xerneasneutral: {
-		name: "Xerneas-Neutral",
+	xerneasactive: {
+		name: "Xerneas-Active",
 	},
 	yveltal: {
 		name: "Yveltal",
