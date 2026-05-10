@@ -897,7 +897,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["aerialace", "aquatail", "earthquake", "honeclaws", "roost", "stoneedge"],
-                "abilities": ["Pressure"],
+                "abilities": ["Unnerve"],
                 "preferredTypes": ["Ground"]
             }
         ]
