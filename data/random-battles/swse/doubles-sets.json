@@ -18,13 +18,13 @@
         "level": 90,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Protect", "Tailwind", "U-turn"],
+                "role": "Doubles Support",
+                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Tailwind", "U-turn"],
                 "abilities": ["Prankster"]
             },
             {
                 "role": "Doubles Sun Setter",
-                "movepool": ["Heat Wave", "Helping Hand", "Hurricane", "Protect", "Sunny Day", "Tailwind"],
+                "movepool": ["Heat Wave", "Helping Hand", "Hurricane", "Protect", "Sunny Day", "Tailwind", "U-turn"],
                 "abilities": ["Galeforce"]
             },
             {
@@ -48,7 +48,7 @@
                 "abilities": ["Galeforce"]
             },
             {
-                "role": "Doubles Sandstorm Setter",
+                "role": "Doubles Sand Setter",
                 "movepool": ["Helping Hand", "Hurricane", "Protect", "Sandstorm", "Tailwind", "U-turn", "Weather Ball"],
                 "abilities": ["Galeforce"]
             },

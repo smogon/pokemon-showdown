@@ -225,7 +225,7 @@ const WEATHER_DATA: {
 		weatherDiscouragedMoves: ['defog'],
 	},
 	{
-		name: 'sand', category: 'irritantWeather', role: 'Sandstorm Setter', type: 'Rock', item: 'Volatile Spray',
+		name: 'sand', category: 'irritantWeather', role: 'Sand Setter', type: 'Rock', item: 'Volatile Spray',
 		setupAbility: ['Sand Stream'], setupMove: ['sandstorm'],
 		weatherDependentAbilities: ['Bubble Helm', 'Earth Force', 'Overcoat', 'Sand Rush', 'Sand Veil', 'Wet and Dry'],
 		weatherEnhancedMoves: ['sandblast', 'shoreup', 'stonestorm', 'weatherball'],
@@ -963,6 +963,7 @@ export class RandomTeams {
 			['ignition', 'blazekick'],
 			['stonestorm', 'powergem'],
 			['strongwinds', 'tailwind'],
+			['whitewand', 'willowisp'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -1994,7 +1995,7 @@ export class RandomTeams {
 					if (teamDetails.fog && !set.role.includes('Fog Setter')) continue;
 				}
 				if (teamDetails.irritantWeather) {
-					if (teamDetails.sand && !set.role.includes('Sandstorm Setter')) continue;
+					if (teamDetails.sand && !set.role.includes('Sand Setter')) continue;
 					if (teamDetails.dust && !set.role.includes('Dust Storm Setter')) continue;
 					if (teamDetails.pollen && !set.role.includes('Pollen Setter')) continue;
 					if (teamDetails.fairyDust && !set.role.includes('Fairy Dust Setter')) continue;
