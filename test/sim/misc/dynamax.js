@@ -11,13 +11,11 @@ describe("Dynamax", () => {
 	});
 
 	it('Max Move effects should not be suppressed by Sheer Force', () => {
-		battle = common.gen(8).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(8).createBattle([[
 			{ species: 'Braviary', ability: 'sheerforce', moves: ['heatwave', 'facade', 'superpower'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Shedinja', ability: 'sturdy', item: 'ringtarget', moves: ['splash'] },
-		] });
+		]]);
 		battle.makeChoices('move heatwave dynamax', 'auto');
 		assert.equal(battle.field.weather, 'sunnyday');
 		battle.makeChoices('move facade', 'auto');

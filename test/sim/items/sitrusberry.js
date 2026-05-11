@@ -11,9 +11,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should heal 25% hp when consumed', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Aggron', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] }] });
+		battle = common.createBattle([[
+			{ species: 'Aggron', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] },
+		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
@@ -21,10 +23,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should be eaten immediately if (re)gained on low hp', () => {
-		battle = common.createBattle([
-			[{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] }],
-			[{ species: 'Garchomp', ability: 'roughskin', moves: ['earthquake'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] },
+		], [
+			{ species: 'Garchomp', ability: 'roughskin', moves: ['earthquake'] },
+		]]);
 		const holder = battle.p1.active[0];
 		const hpgain = Math.floor(holder.maxhp / 4);
 		battle.makeChoices('move recycle', 'move earthquake');
@@ -33,10 +36,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should not heal if Knocked Off', () => {
-		battle = common.createBattle([
-			[{ species: 'Deoxys-Attack', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] }],
-			[{ species: 'Krookodile', ability: 'intimidate', moves: ['knockoff'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Deoxys-Attack', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Krookodile', ability: 'intimidate', moves: ['knockoff'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move knockoff');
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
