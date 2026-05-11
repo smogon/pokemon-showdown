@@ -7353,6 +7353,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'swse',
 		team: 'random',
+		challengeShow: false,
+		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 		onBegin() {
