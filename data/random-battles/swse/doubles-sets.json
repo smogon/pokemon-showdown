@@ -19,7 +19,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Tailwind", "U-turn"],
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Tailwind"],
                 "abilities": ["Prankster"]
             },
             {
