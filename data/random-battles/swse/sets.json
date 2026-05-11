@@ -1854,11 +1854,6 @@
                 "role": "Fast Attacker",
                 "movepool": ["Air Slash", "Bug Buzz", "Dragon Pulse", "U-turn"],
                 "abilities": ["Magic Guard", "Power Within"]
-            },
-            {
-                "role": "Dragon Force Setter",
-                "movepool": ["Bug Buzz", "Dragon Pulse", "Hive Shriek", "Weather Ball"],
-                "abilities": ["Arcanum"]
             }
         ]
     },
