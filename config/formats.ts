@@ -7346,6 +7346,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new stuff?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>You can use the /randbats command to see a Pok&eacute;mon's potential moves!</b></div>`);
 		},
 	},
 	{

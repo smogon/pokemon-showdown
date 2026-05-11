@@ -555,7 +555,8 @@ export const commands: Chat.ChatCommands = {
 		const doublesModifier = isDoubles ? 'doubles' : '';
 		const freeForAllModifier = isFFA ? (dex.gen !== 9 ? 'doubles' : 'freeforall') : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const formatName = `gen${dex.gen}${extraFormatModifier}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const SwSe = dex.gen === 9 ? 'swse' : '';
+		const formatName = `gen${dex.gen}${extraFormatModifier}${SwSe}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
 
 		const movesets = [];
@@ -609,7 +610,7 @@ export const commands: Chat.ChatCommands = {
 				buf += `<b>Level</b>: ${level}`;
 				for (const set of sets) {
 					buf += `<details class="details"><summary>${set.role}</summary>`;
-					if (dex.gen === 9) {
+					if (dex.gen === 9 && !format.id.includes('swse') && set.teraTypes) {
 						buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 					} else if (set.preferredTypes) {
 						buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;

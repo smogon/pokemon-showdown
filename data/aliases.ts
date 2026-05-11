@@ -1,7 +1,7 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
 	// formats
-	randbats: "[Gen 9] Random Battle",
-	randbat: "[Gen 9] Random Battle",
+	randbats: "[Gen 9] SwSe Random Battle",
+	randbat: "[Gen 9] SwSe Random Battle",
 	uber: "[Gen 9] Ubers",
 	anythinggoes: "[Gen 9] Anything Goes",
 	ubers: "[Gen 9] Ubers",
@@ -22,7 +22,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	bss: "[Gen 9 Champions] BSS Reg M-A",
 	vgc: "[Gen 9 Champions] VGC 2026 Reg M-A",
 	bsd: "[Gen 9 Champions] VGC 2026 Reg M-A",
-	randdubs: "[Gen 9] Random Doubles Battle",
+	randdubs: "[Gen 9] SwSe Random Doubles Battle",
 	doubles: "[Gen 9] Doubles OU",
 	dou: "[Gen 9] Doubles OU",
 	dubs: "[Gen 9] Doubles OU",
