@@ -1,6 +1,6 @@
 import RandomGen3Teams from '../gen3/teams';
 import type { PRNG, PRNGSeed } from '../../../sim/prng';
-import type { MoveCounter } from '../gen8/teams';
+import type { MoveCounter } from '../gen9/teams';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -48,7 +48,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	}
 
 	override cullMovePool(
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		abilities = {},
 		counter: MoveCounter,
@@ -139,7 +139,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 	// Generate random moveset for a given species, role, preferred type.
 	override randomMoveset(
-		types: string[],
+		types: Set<string>,
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
@@ -150,7 +150,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	): Set<string> {
 		const preferredTypes = preferredType ? preferredType.split(',') : [];
 		const moves = new Set<string>();
-		let counter = this.newQueryMoves(moves, species, preferredType, abilities);
+		let counter = this.queryMoves(moves, species, preferredType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead,
 			preferredType, role);
 
@@ -168,7 +168,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		const runEnforcementChecker = (checkerName: string) => {
 			if (!this.moveEnforcementCheckers[checkerName]) return false;
 			return this.moveEnforcementCheckers[checkerName](
-				movePool, moves, abilities, new Set(types), counter, species, teamDetails
+				movePool, moves, abilities, types, counter, species, teamDetails, isLead, false, preferredType, role
 			);
 		};
 
@@ -239,7 +239,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, preferredType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.has(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -351,7 +351,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 	override getItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -400,13 +400,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		const evs = { hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255 };
 		const ivs = { hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30 };
 
-		const types = species.types;
+		const types = new Set(species.types);
 		const abilities: string[] = [];
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
 			preferredType, role);
-		const counter = this.newQueryMoves(moves, species, preferredType, abilities);
+		const counter = this.queryMoves(moves, species, preferredType, abilities);
 
 		// Get items
 		item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
