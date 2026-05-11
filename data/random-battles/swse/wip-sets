@@ -1,4 +1,139 @@
 {
+    "the gourgeist sets are REALLY bad": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Leech Seed", "Power Whip", "Shadow Sneak", "Substitute", "Will-O-Wisp"],
+                "abilities": ["Soul Drain"]
+            }
+        ]
+    },
+    "ninetales": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Energy Ball", "Fire Blast", "Nasty Plot", "Shadow Ball", "Solar Beam"],
+                "abilities": ["Drought", "Solar Power"]
+            },
+            {
+                "role": "Sun Setter",
+                "movepool": ["Fire Blast", "Nasty Plot", "Shadow Ball", "Solar Beam"],
+                "abilities": ["Drought"]
+            }
+        ]
+    },
+    "aerogen": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Protect", "Tailwind", "U-turn"],
+                "abilities": ["Prankster"]
+            },
+            {
+                "role": "Doubles Sun Setter",
+                "movepool": ["Heat Wave", "Helping Hand", "Hurricane", "Protect", "Sunny Day", "Tailwind"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Rain Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Rain Dance", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Snow Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Snowscape", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Blood Moon Setter",
+                "movepool": ["Blood Moon", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Fog Setter",
+                "movepool": ["Foghorn", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Sand Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Sandstorm", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Dust Storm Setter",
+                "movepool": ["Dust Storm", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Pollen Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Pollinate", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Smog Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Smog Spread", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Pheromones Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Swarm Signal", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Fairy Dust Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Sprinkle", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Battle Aura Setter",
+                "movepool": ["Aura Projection", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Paranormal Activity Setter",
+                "movepool": ["Haunt", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Dragon Force Setter",
+                "movepool": ["Dragon Force", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Dreamscape Setter",
+                "movepool": ["Daydream", "Helping Hand", "Hurricane", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Thunderstorm Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Supercell", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Magnetosphere Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Magnetize", "Protect", "Tailwind", "U-turn", "Weather Ball"],
+                "abilities": ["Galeforce"]
+            },
+            {
+                "role": "Doubles Strong Winds Setter",
+                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Protect", "Tailwind", "U-turn"],
+                "abilities": ["Galeforce"]
+            }
+        ]
+    },
+    "togekiss": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Air Slash", "Aura Sphere", "Nasty Plot", "Roost", "Thunder Wave"],
+                "abilities": ["Serene Grace"]
+            }
+        ]
+    },
     "pyukumuku": {
         "level": 90,
         "sets": [
@@ -42,6 +177,62 @@
                 "role": "Setup Sweeper",
                 "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
                 "abilities": ["Surge Surfer"]
+            }
+        ]
+    },
+    "klefki": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Magnet Rise", "Play Rough", "Spikes", "Thunder Wave"],
+                "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "ribombee": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Bug Buzz", "Moonblast", "Sticky Web", "Stun Spore", "U-turn"],
+                "abilities": ["Bloomspring", "Druidry", "Shield Dust"]
+            }
+        ]
+    },
+    "milotic": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dragon Tail", "Haze", "Ice Beam", "Recover", "Scald"],
+                "abilities": ["Absolute Zero", "Competitive"]
+            }
+        ]
+    },
+    "basculegion": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Aqua Jet", "Flip Turn", "Poltergeist", "Wave Crash"],
+                "abilities": ["Adaptability"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "basculegionf": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Aura Sphere", "Hydro Pump", "Ice Beam", "Shadow Ball"],
+                "abilities": ["Adaptability"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Aura Sphere", "Flip Turn", "Ice Beam", "Hydro Pump", "Shadow Ball"],
+                "abilities": ["Adaptability"]
             }
         ]
     }
