@@ -7298,11 +7298,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
-	// SwSe Popular Randomized Metas
+	// SwSe Randomized Metas
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "SwSe Popular Randomized Metas",
+		section: "SwSe Randomized Metas",
 		column: 4,
 	},
 	{
