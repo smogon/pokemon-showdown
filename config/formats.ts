@@ -7342,9 +7342,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'swse',
 		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
 		bestOfDefault: true,
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 		onBegin() {
@@ -7356,9 +7353,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'swse',
 		team: 'random',
-		searchShow: false,
-		challengeShow: false,
-		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 		onBegin() {

@@ -1827,21 +1827,11 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Air Slash", "Nasty Plot", "Roost", "Thunder Wave"],
+                "movepool": ["Air Slash", "Aura Sphere", "Nasty Plot", "Roost", "Thunder Wave"],
                 "abilities": ["Serene Grace"]
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["Air Slash", "Aura Sphere", "Nasty Plot", "Thunder Wave"],
-                "abilities": ["Serene Grace"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Air Slash", "Aura Sphere", "Nasty Plot", "Roost"],
-                "abilities": ["Serene Grace"]
-            },
-            {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["Aura Sphere", "Nasty Plot", "Roost", "Whip Up", "Wild Magic"],
                 "abilities": ["Power Above"]
             }

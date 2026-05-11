@@ -335,7 +335,7 @@ describe("New set format (slow)", () => {
 						}
 						if (!moves.size) break;
 					}
-					assert.false(moves.size, `In ${format}, the following moves on ${species.name} are unused: ${[...moves].join(', ')}`);
+					assert.false(moves.size, `In ${format}, the following moves on ${species.name} (${role}) are unused: ${[...moves].join(', ')}`);
 				}
 			}
 		});

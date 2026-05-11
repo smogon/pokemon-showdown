@@ -1349,7 +1349,7 @@ export class RandomTeams {
 		}
 
 		// Enforce coverage move
-		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
+		if (!['AV Pivot', 'Fast Support', 'Bulky Protect', 'Bulky Setup', 'Bulky Support', 'Doubles Support'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttack = counter.damagingMoves.values().next().value!;

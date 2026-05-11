@@ -109,7 +109,7 @@
             },
             {
                 "role": "Doubles Strong Winds Setter",
-                "movepool": ["Helping Hand", "Hurricane", "Icy Wind", "Protect", "Tailwind", "U-turn"],
+                "movepool": ["Helping Hand", "Hurricane", "Protect", "Tailwind"],
                 "abilities": ["Galeforce"]
             }
         ]
