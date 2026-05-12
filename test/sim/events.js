@@ -11,10 +11,11 @@ describe('Battle#onEvent', () => {
 	});
 
 	it('should allow the addition of one or more event handlers to the battle engine', () => {
-		battle = common.createBattle([
-			[{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] }],
-			[{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] },
+		], [
+			{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] },
+		]]);
 		let eventCount = 0;
 		let eventCount2 = 0;
 		battle.onEvent('Hit', battle.format, () => {
@@ -34,10 +35,11 @@ describe('Battle#onEvent', () => {
 	});
 
 	it('should support and resolve priorities correctly', () => {
-		battle = common.createBattle([
-			[{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] }],
-			[{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] },
+		], [
+			{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] },
+		]]);
 		let eventCount = 0;
 		const modHandler = function (count) {
 			return function () {
@@ -53,10 +55,11 @@ describe('Battle#onEvent', () => {
 	});
 
 	it('should throw if a callback is not given for the event handler', () => {
-		battle = common.createBattle([
-			[{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] }],
-			[{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup'] },
+		], [
+			{ species: 'Talonflame', ability: 'galewings', moves: ['peck'] },
+		]]);
 		assert.throws(battle.onEvent, TypeError);
 		assert.throws(() => { battle.onEvent('Hit'); }, TypeError);
 		assert.throws(() => { battle.onEvent('Hit', battle.format); }, TypeError);

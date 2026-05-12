@@ -11,18 +11,22 @@ describe('Substitute', () => {
 	});
 
 	it('should deduct 25% of max HP, rounded down', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] },
+		], [
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] },
+		]]);
 		battle.makeChoices('move substitute', 'move recover');
 		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should not block the user\'s own moves from targeting itself', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind'] },
+		], [
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] },
+		]]);
 		battle.makeChoices('move substitute', 'move recover');
 		battle.makeChoices('move calmmind', 'move recover');
 		assert.equal(battle.p1.active[0].boosts['spa'], 1);
@@ -30,18 +34,22 @@ describe('Substitute', () => {
 	});
 
 	it('should block damage from most moves', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] },
+		], [
+			{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike'] },
+		]]);
 		battle.makeChoices('move substitute', 'move psystrike');
 		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should not block recoil damage', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge'] },
+		], [
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot'] },
+		]]);
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move doubleedge', 'move nastyplot');
 		const pokemon = battle.p1.active[0];
@@ -88,9 +96,11 @@ describe('Substitute', () => {
 	});
 
 	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] },
+		], [
+			{ species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin'] },
+		]]);
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move substitute', 'move lightofruin');
 		const pokemon = battle.p2.active[0];
@@ -98,9 +108,11 @@ describe('Substitute', () => {
 	});
 
 	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Zangoose', ability: 'pressure', moves: ['substitute'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch'] }] });
+		battle = common.createBattle([[
+			{ species: 'Zangoose', ability: 'pressure', moves: ['substitute'] },
+		], [
+			{ species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch'] },
+		]]);
 		battle.makeChoices('move substitute', 'move bellydrum');
 		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
@@ -108,9 +120,11 @@ describe('Substitute', () => {
 	});
 
 	it('should block most status moves targeting the user', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'noguard', moves: ['substitute'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp'] }] });
+		battle = common.createBattle([[
+			{ species: 'Mewtwo', ability: 'noguard', moves: ['substitute'] },
+		], [
+			{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp'] },
+		]]);
 		for (let i = 1; i <= 5; i++) {
 			battle.makeChoices('move substitute', 'move ' + i);
 			assert.equal(battle.p1.active[0].status, '');
@@ -118,9 +132,11 @@ describe('Substitute', () => {
 	});
 
 	it('should allow multi-hit moves to continue after the substitute fades', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop'] }] });
+		battle = common.createBattle([[
+			{ species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost'] },
+		], [
+			{ species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop'] },
+		]]);
 		battle.makeChoices('move substitute', 'move roost');
 		battle.makeChoices('move roost', 'move dualchop');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);

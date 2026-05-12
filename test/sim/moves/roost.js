@@ -12,26 +12,32 @@ describe('Roost', () => {
 	});
 
 	it('should fail if the user is at max HP', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost'] }] });
+		battle = common.createBattle([[
+			{ species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind'] },
+		], [
+			{ species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost'] },
+		]]);
 		battle.makeChoices('move calmmind', 'move roost');
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
 	it('should heal the user', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Clefable", ability: 'unaware', moves: ['calmmind', 'hiddenpowergrass'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance'] }] });
+		battle = common.createBattle([[
+			{ species: "Clefable", ability: 'unaware', moves: ['calmmind', 'hiddenpowergrass'] },
+		], [
+			{ species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance'] },
+		]]);
 		battle.makeChoices('move hiddenpowergrass', 'move dragondance');
 		battle.makeChoices('move calmmind', 'move roost');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should suppress user\'s current Flying type if successful', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge'] }] });
+		battle = common.createBattle([[
+			{ species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass'] },
+		], [
+			{ species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge'] },
+		]]);
 
 		battle.makeChoices('move mudslap', 'move roost');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Slap
@@ -50,15 +56,13 @@ describe('Roost', () => {
 	});
 
 	it('should suppress Flying type yet to be acquired this turn', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Pidgeot", item: 'laggingtail', ability: 'victorystar', moves: ['aircutter'] },
 			{ species: "Gligar", item: 'laggingtail', ability: 'immunity', moves: ['earthquake'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Kecleon", ability: 'colorchange', moves: ['roost'] },
 			{ species: "Venusaur", ability: 'chlorophyll', moves: ['earthquake'] },
-		] });
+		]]);
 
 		let hitCount = 0;
 		battle.p2.active[0].damage = function (...args) {
@@ -71,9 +75,11 @@ describe('Roost', () => {
 	});
 
 	it('should treat a pure Flying pokémon as Normal type', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'trickortreat'] }] });
+		battle = common.createBattle([[
+			{ species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost'] },
+		], [
+			{ species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'trickortreat'] },
+		]]);
 		battle.makeChoices('move roost', 'move astonish');
 		battle.makeChoices('move roost', 'move astonish');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
@@ -103,10 +109,11 @@ describe('Roost - DPP', () => {
 	});
 
 	it('should treat a pure Flying pokémon as `???` type', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost'] }],
-			[{ species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost'] },
+		], [
+			{ species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower'] },
+		]]);
 
 		battle.makeChoices('move roost', 'move astonish');
 		battle.makeChoices('move roost', 'move astonish');

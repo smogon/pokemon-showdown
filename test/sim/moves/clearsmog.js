@@ -11,9 +11,11 @@ describe('Clear Smog', () => {
 	});
 
 	it('should remove all stat boosts from the target', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sableye", ability: 'prankster', moves: ['calmmind'] }] });
+		battle = common.createBattle([[
+			{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog'] },
+		], [
+			{ species: "Sableye", ability: 'prankster', moves: ['calmmind'] },
+		]]);
 
 		battle.makeChoices('move clearsmog', 'move calmmind');
 
@@ -22,9 +24,11 @@ describe('Clear Smog', () => {
 	});
 
 	it('should not remove stat boosts from a target behind a substitute', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog', 'toxic'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sableye", ability: 'prankster', moves: ['substitute', 'calmmind'] }] });
+		battle = common.createBattle([[
+			{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog', 'toxic'] },
+		], [
+			{ species: "Sableye", ability: 'prankster', moves: ['substitute', 'calmmind'] },
+		]]);
 
 		battle.makeChoices('move toxic', 'move substitute');
 		battle.makeChoices('move clearsmog', 'move calmmind');
@@ -34,9 +38,11 @@ describe('Clear Smog', () => {
 	});
 
 	it('should not remove stat boosts if the target is immune to its attack type', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Amoonguss", ability: 'regenerator', item: 'laggingtail', moves: ['clearsmog'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Steelix", ability: 'prankster', moves: ['irondefense'] }] });
+		battle = common.createBattle([[
+			{ species: "Amoonguss", ability: 'regenerator', item: 'laggingtail', moves: ['clearsmog'] },
+		], [
+			{ species: "Steelix", ability: 'prankster', moves: ['irondefense'] },
+		]]);
 
 		battle.makeChoices('move clearsmog', 'move irondefense');
 
@@ -44,9 +50,11 @@ describe('Clear Smog', () => {
 	});
 
 	it('should not remove stat boosts from the user', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Arcanine", ability: 'intimidate', moves: ['morningsun'] }] });
+		battle = common.createBattle([[
+			{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog'] },
+		], [
+			{ species: "Arcanine", ability: 'intimidate', moves: ['morningsun'] },
+		]]);
 
 		battle.makeChoices('move clearsmog', 'move morningsun');
 
@@ -54,9 +62,11 @@ describe('Clear Smog', () => {
 	});
 
 	it('should trigger before Anger Point activates during critical hits', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Amoonguss", ability: 'regenerator', item: 'scopelens', moves: ['focusenergy', 'clearsmog'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Primeape", ability: 'angerpoint', moves: ['bulkup'] }] });
+		battle = common.createBattle([[
+			{ species: "Amoonguss", ability: 'regenerator', item: 'scopelens', moves: ['focusenergy', 'clearsmog'] },
+		], [
+			{ species: "Primeape", ability: 'angerpoint', moves: ['bulkup'] },
+		]]);
 
 		battle.makeChoices('move focusenergy', 'move bulkup');
 		assert.equal(battle.p2.pokemon[0].boosts['atk'], 1);

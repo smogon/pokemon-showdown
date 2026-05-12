@@ -11,9 +11,11 @@ describe('Simple', () => {
 	});
 
 	it('should double all stat boosts', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Bibarel", ability: 'simple', moves: ['curse'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Gyarados", ability: 'moxie', moves: ['splash'] }] });
+		battle = common.createBattle([[
+			{ species: "Bibarel", ability: 'simple', moves: ['curse'] },
+		], [
+			{ species: "Gyarados", ability: 'moxie', moves: ['splash'] },
+		]]);
 		battle.makeChoices('move curse', 'move splash');
 		const target = battle.p1.active[0];
 		assert.statStage(target, 'atk', 2);
@@ -28,20 +30,23 @@ describe('Simple [Gen 4]', () => {
 	});
 
 	it('should double the effect of stat boosts', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Bibarel", ability: 'simple', moves: ['defensecurl'] }],
-			[{ species: "Gyarados", ability: 'moxie', moves: ['splash'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Bibarel", ability: 'simple', moves: ['defensecurl'] },
+		], [
+			{ species: "Gyarados", ability: 'moxie', moves: ['splash'] },
+		]]);
 		const target = battle.p1.active[0];
 		assert.sets(() => target.getStat('def'), 2 * target.getStat('def'), () => battle.makeChoices('move defensecurl', 'move splash'));
 		assert.statStage(target, 'def', 1);
 	});
 
 	it('should double the effect of stat boosts passed by Baton Pass', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Sableye", ability: 'prankster', moves: ['batonpass'] }, { species: "Bibarel", ability: 'simple', moves: ['protect'] }],
-			[{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Sableye", ability: 'prankster', moves: ['batonpass'] },
+			{ species: "Bibarel", ability: 'simple', moves: ['protect'] },
+		], [
+			{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] },
+		]]);
 		battle.makeChoices('move batonpass', 'move splash');
 		battle.makeChoices('switch 2', '');
 		assert.equal(battle.p1.active[0].boosts['atk'], -1);
@@ -49,10 +54,11 @@ describe('Simple [Gen 4]', () => {
 	});
 
 	it('should be suppressed by Mold Breaker', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Bibarel", ability: 'simple', moves: ['defensecurl'] }],
-			[{ species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Bibarel", ability: 'simple', moves: ['defensecurl'] },
+		], [
+			{ species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake'] },
+		]]);
 		const target = battle.p1.active[0];
 		battle.makeChoices('move defensecurl', 'move earthquake');
 		assert.bounded(target.maxhp - target.hp, [102, 120]);

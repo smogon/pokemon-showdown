@@ -11,15 +11,13 @@ describe('Imprison', () => {
 	});
 
 	it(`should prevent foes from using moves that the user knows`, () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Abra', ability: 'prankster', moves: ['imprison', 'calmmind', 'batonpass'] },
 			{ species: 'Kadabra', ability: 'prankster', moves: ['imprison', 'calmmind'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Abra', ability: 'synchronize', moves: ['calmmind', 'gravity'] },
 			{ species: 'Kadabra', ability: 'prankster', moves: ['imprison', 'calmmind'] },
-		] });
+		]]);
 
 		battle.makeChoices('move imprison', 'move calmmind');
 		assert.statStage(battle.p2.active[0], 'spa', 0);
@@ -48,9 +46,11 @@ describe('Imprison', () => {
 	});
 
 	it(`should not prevent foes from using Z-Powered Status moves`, () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Sableye', ability: 'prankster', moves: ['imprison', 'sunnyday'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Charmander', ability: 'blaze', item: 'firiumz', moves: ['sunnyday'] }] });
+		battle = common.createBattle([[
+			{ species: 'Sableye', ability: 'prankster', moves: ['imprison', 'sunnyday'] },
+		], [
+			{ species: 'Charmander', ability: 'blaze', item: 'firiumz', moves: ['sunnyday'] },
+		]]);
 
 		battle.makeChoices('move imprison', 'move sunnyday zmove');
 		assert.statStage(battle.p2.active[0], 'spe', 1);
@@ -58,13 +58,11 @@ describe('Imprison', () => {
 	});
 
 	it(`should not prevent the user from using moves that a foe knows`, () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Abra', ability: 'prankster', moves: ['imprison', 'calmmind', 'batonpass'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Abra', ability: 'synchronize', moves: ['calmmind', 'gravity'] },
-		] });
+		]]);
 		const imprisonUser = battle.p1.active[0];
 
 		battle.makeChoices('move imprison', 'auto');
@@ -81,20 +79,22 @@ describe('Maybe locked and maybe disabled', () => {
 
 	describe('Singles', () => {
 		it(`should not show Imprisoned moves as disabled`, () => {
-			battle = common.createBattle([
-				[{ species: 'Abra', moves: ['imprison', 'tackle'] }],
-				[{ species: 'Abra', moves: ['sleeptalk', 'tackle'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Abra', moves: ['imprison', 'tackle'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk', 'tackle'] },
+			]]);
 			battle.makeChoices();
 			let request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
 			assert(request.maybeLocked);
 			assert(request.moves.every(move => !move.disabled));
 
-			battle = common.createBattle([
-				[{ species: 'Abra', moves: ['imprison', 'sleeptalk'] }],
-				[{ species: 'Abra', moves: ['sleeptalk'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Abra', moves: ['imprison', 'sleeptalk'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk'] },
+			]]);
 			battle.makeChoices();
 			request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
@@ -103,10 +103,11 @@ describe('Maybe locked and maybe disabled', () => {
 		});
 
 		it(`should disable moves as the user uses them`, () => {
-			battle = common.createBattle([
-				[{ species: 'Abra', moves: ['imprison', 'tackle', 'growl'] }],
-				[{ species: 'Abra', moves: ['sleeptalk', 'tackle', 'growl'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Abra', moves: ['imprison', 'tackle', 'growl'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk', 'tackle', 'growl'] },
+			]]);
 			battle.makeChoices('move imprison', 'move sleeptalk');
 			let request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
@@ -131,10 +132,11 @@ describe('Maybe locked and maybe disabled', () => {
 		});
 
 		it(`should lock the user into Struggle if all moves are Imprisoned`, () => {
-			battle = common.createBattle([
-				[{ species: 'Abra', moves: ['imprison', 'sleeptalk', 'tackle'] }],
-				[{ species: 'Abra', moves: ['sleeptalk', 'tackle'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Abra', moves: ['imprison', 'sleeptalk', 'tackle'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk', 'tackle'] },
+			]]);
 			battle.makeChoices('move imprison', 'move sleeptalk');
 			const request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
@@ -145,10 +147,11 @@ describe('Maybe locked and maybe disabled', () => {
 		});
 
 		it(`should not allow the user to cancel a move`, () => {
-			battle = common.createBattle({ cancel: true }, [
-				[{ species: 'Abra', moves: ['imprison', 'sleeptalk'] }],
-				[{ species: 'Abra', moves: ['sleeptalk', 'tackle'] }],
-			]);
+			battle = common.createBattle({ cancel: true }, [[
+				{ species: 'Abra', moves: ['imprison', 'sleeptalk'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk', 'tackle'] },
+			]]);
 			battle.makeChoices('move imprison', 'move sleeptalk');
 			let request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
@@ -161,10 +164,11 @@ describe('Maybe locked and maybe disabled', () => {
 			assert.cantUndo(() => battle.undoChoice('p2'));
 			battle.choose('p1', 'auto');
 
-			battle = common.createBattle([
-				[{ species: 'Abra', moves: ['imprison', 'sleeptalk'] }],
-				[{ species: 'Abra', moves: ['sleeptalk'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Abra', moves: ['imprison', 'sleeptalk'] },
+			], [
+				{ species: 'Abra', moves: ['sleeptalk'] },
+			]]);
 			battle.makeChoices('move imprison', 'move sleeptalk');
 			request = battle.p2.activeRequest.active[0];
 			assert(request.maybeDisabled);
