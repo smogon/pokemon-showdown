@@ -1772,9 +1772,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["fireblast", "hiddenpowerelectric", "hiddenpowergrass", "icebeam", "surf", "thunderwave"],
-                "abilities": ["Suction Cups"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["hiddenpowerelectric", "hiddenpowergrass", "icebeam", "surf", "thunderwave"],
+                "abilities": ["Suction Cups"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["fireblast", "hiddenpowerelectric", "hiddenpowergrass", "surf", "thunderwave"],
+                "abilities": ["Suction Cups"]
             }
         ]
     },
