@@ -2241,8 +2241,15 @@ export class Pokemon {
 	 * Like Field.effectiveClimateWeather(), but ignores Climate Weathergy
 	 * effects if the Utility Umbrella is active for the Pokemon.
 	 */
-	effectiveClimateWeather(message?: string | boolean) {
+	effectiveClimateWeather(sourceEffect?: Effect, message?: string | boolean) {
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveClimateWeather();
+		if (this.battle.activePokemon?.hasAbility('megasol') && sourceEffect &&
+			(sourceEffect.id === 'megasol' || sourceEffect.effectType === 'Move' || sourceEffect.effectType === 'ClimateWeather') &&
+			sourceEffect.id !== 'electroshot') {
+			if (weather !== 'sunnyday' && message) this.battle.add('-activate', this, 'ability: Mega Sol');
+			return 'sunnyday' as ID;
+		}
 		switch (weather) {
 		case 'sunnyday':
 		case 'desolateland':
@@ -2254,15 +2261,11 @@ export class Pokemon {
 		case 'foghorn':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
-		// TODO: check interactions of Mega Sol with Utility Umbrella and Desolate Land
-		if (this.hasAbility('megasol') && this.battle.activePokemon === this && weather !== 'sunnyday') {
-			if (message) this.battle.add('-activate', this, 'ability: Mega Sol');
-			return 'sunnyday' as ID;
-		}
 		return weather;
 	}
 
-	effectiveIrritantWeather(message?: string | boolean) {
+	effectiveIrritantWeather(sourceEffect?: Effect, message?: string | boolean) {
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveIrritantWeather();
 		switch (weather) {
 		case 'sandstorm':
@@ -2276,7 +2279,8 @@ export class Pokemon {
 		return weather;
 	}
 
-	effectiveEnergyWeather(message?: string | boolean) {
+	effectiveEnergyWeather(sourceEffect?: Effect, message?: string | boolean) {
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveEnergyWeather();
 		switch (weather) {
 		case 'auraprojection':
@@ -2290,12 +2294,14 @@ export class Pokemon {
 		return weather;
 	}
 
-	effectiveClearingWeather(message?: string | boolean) {
+	effectiveClearingWeather(sourceEffect?: Effect, message?: string | boolean) {
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveClearingWeather();
 		return weather;
 	}
 
-	effectiveCataclysmWeather(message?: string | boolean) {
+	effectiveCataclysmWeather(sourceEffect?: Effect, message?: string | boolean) {
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveCataclysmWeather();
 		return weather;
 	}

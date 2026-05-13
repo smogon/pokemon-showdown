@@ -1837,7 +1837,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["crunch", "earthquake", "fireblast", "icebeam", "pursuit", "stealthrock", "stoneedge"],
+                "movepool": ["crunch", "earthquake", "fireblast", "icebeam", "pursuit", "stealthrock", "stoneedge", "toxic"],
                 "abilities": ["Sand Stream"]
             },
             {
@@ -2424,6 +2424,11 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "waterspout"],
+                "abilities": ["Water Veil"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["icebeam", "protect", "scald", "toxic"],
                 "abilities": ["Water Veil"]
             }
         ]
@@ -4408,6 +4413,11 @@
                 "movepool": ["earthquake", "extremespeed", "recover", "stoneedge", "swordsdance"],
                 "abilities": ["Multitype"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "earthpower", "fireblast", "judgment", "recover"],
+                "abilities": ["Multitype"]
             }
         ]
     },
@@ -4417,6 +4427,11 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["defog", "earthquake", "judgment", "recover", "toxic", "willowisp"],
+                "abilities": ["Multitype"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "earthpower", "judgment", "recover"],
                 "abilities": ["Multitype"]
             }
         ]
@@ -4933,6 +4948,11 @@
                 "movepool": ["bulletseed", "knockoff", "rockblast", "tailslap", "uturn"],
                 "abilities": ["Skill Link"],
                 "preferredTypes": ["Grass"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["bulletseed", "encore", "tailslap", "uturn"],
+                "abilities": ["Skill Link"]
             }
         ]
     },
@@ -4988,9 +5008,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["hornleech", "jumpkick", "return", "substitute", "swordsdance"],
-                "abilities": ["Sap Sipper"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["hornleech", "jumpkick", "return", "swordsdance"],
+                "abilities": ["Sap Sipper"]
             }
         ]
     },
@@ -5702,9 +5721,15 @@
         "level": 84,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["drainpunch", "gunkshot", "icepunch", "knockoff", "superpower"],
+                "role": "Bulky Attacker",
+                "movepool": ["drainpunch", "gunkshot", "icepunch", "knockoff"],
                 "abilities": ["Iron Fist"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "gunkshot", "knockoff", "stoneedge", "superpower"],
+                "abilities": ["Scrappy"],
+                "preferredTypes": ["Poison"]
             },
             {
                 "role": "Setup Sweeper",

@@ -2236,7 +2236,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce) {
+			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
 				}
@@ -7945,7 +7945,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) move.boosts = { atk: 2, spa: 2 };
+			if (pokemon.hasAbility('megasol') && !this.field.isClimateWeather('sunnyday')) {
+				delete move.boosts;
+			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
+				move.boosts = { atk: 2, spa: 2 };
+			}
 		},
 		boosts: {
 			atk: 1,
@@ -12393,7 +12397,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveClimateWeather()) {
+			switch (pokemon.effectiveClimateWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.125;
@@ -12432,7 +12436,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveClimateWeather()) {
+			switch (pokemon.effectiveClimateWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -17467,7 +17471,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather(true))) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather(undefined, true))) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17503,7 +17507,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather(true))) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather(undefined, true))) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -18319,7 +18323,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce) {
+			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
 				}
@@ -18985,7 +18989,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveClimateWeather()) {
+			switch (pokemon.effectiveClimateWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -21011,7 +21015,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.type = pokemon.getTypes()[0] || 'Normal';
 				return;
 			}
-			switch (this.field.getRecentWeather(null, pokemon)) {
+			const weather = this.field.getRecentWeather(null, pokemon) || pokemon.effectiveClimateWeather();
+			switch (weather) {
 			case 'sunnyday':
 			case 'desolateland':
 				move.type = 'Fire';
@@ -21067,6 +21072,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.type = 'Steel';
 				break;
 			case 'strongwinds':
+			case 'deltastream':
 				move.type = 'Flying';
 				break;
 			case 'cataclysmiclight':
@@ -21074,24 +21080,42 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			}
 		},
-		basePowerCallback(pokemon, target, move) {
+		onModifyMove(move, pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Castform' && pokemon.hasItem('weathervane') &&
 				pokemon.species.id !== 'castform') {
+				move.basePower *= 2;
 				this.debug(`BP: ${move.basePower}`);
-				return move.basePower * 2;
+				return;
 			}
-			if (['sunnyday', 'desolateland', 'raindance', 'primordialsea', 'hail', 'snowscape',
-				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather()) ||
-				['sandstorm', 'duststorm', 'pollinate',
-					'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather()) ||
-					['auraprojection', 'haunt', 'daydream',
-						'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather()) ||
-						['strongwinds'].includes(this.field.effectiveClearingWeather()) ||
-						['cataclysmiclight'].includes(this.field.effectiveCataclysmWeather())) {
-				this.debug(`BP: ${move.basePower}`);
-				return move.basePower * 2;
+			const weather = this.field.getRecentWeather(null, pokemon) || pokemon.effectiveClimateWeather();
+			switch (weather) {
+			case 'sunnyday':
+			case 'desolateland':
+			case 'raindance':
+			case 'primordialsea':
+			case 'hail':
+			case 'snowscape':
+			case 'bloodmoon':
+			case 'foghorn':
+			case 'sandstorm':
+			case 'duststorm':
+			case 'pollinate':
+			case 'swarmsignal':
+			case 'smogspread':
+			case 'sprinkle':
+			case 'auraprojection':
+			case 'haunt':
+			case 'daydream':
+			case 'dragonforce':
+			case 'supercell':
+			case 'magnetize':
+			case 'strongwinds':
+			case 'deltastream':
+			case 'cataclysmiclight':
+				move.basePower *= 2;
+				break;
 			}
-			return move.basePower;
+			this.debug(`BP: ${move.basePower}`);
 		},
 		target: "normal",
 		type: "Normal",
@@ -23710,7 +23734,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, bypasssub: 1, metronome: 1 },
 		onTry(source) {
-			return ['sunnyday'].includes(source.effectiveClimateWeather());
+			return ['sunnyday', 'desolateland'].includes(source.effectiveClimateWeather(undefined, true));
 		},
 		volatileStatus: "sunscreen",
 		condition: {

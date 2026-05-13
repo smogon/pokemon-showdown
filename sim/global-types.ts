@@ -282,11 +282,11 @@ interface ModdedBattlePokemon {
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
 	drinkItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveClimateWeather?: (this: Pokemon, message?: string | boolean) => ID;
-	effectiveIrritantWeather?: (this: Pokemon, message?: string | boolean) => ID;
-	effectiveEnergyWeather?: (this: Pokemon, message?: string | boolean) => ID;
-	effectiveClearingWeather?: (this: Pokemon, message?: string | boolean) => ID;
-	effectiveCataclysmWeather?: (this: Pokemon, message?: string | boolean) => ID;
+	effectiveClimateWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
+	effectiveIrritantWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
+	effectiveEnergyWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
+	effectiveClearingWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
+	effectiveCataclysmWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,

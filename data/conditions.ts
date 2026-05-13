@@ -747,14 +747,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
 			if (pokemon.effectiveClimateWeather() !== 'snowscape') return;
-			if (pokemon.hasType('Ice') && this.field.isClimateWeather('snowscape')) {
+			if (pokemon.hasType('Ice') && pokemon.effectiveClimateWeather() === 'snowscape') {
 				return this.modify(def, 1.5);
 			}
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.effectiveClimateWeather() !== 'snowscape') return;
-			if (pokemon.hasType('Ice') && this.field.isClimateWeather('snowscape') && this.field.climateWeatherState.boosted) {
+			if (pokemon.hasType('Ice') &&
+				pokemon.effectiveClimateWeather() === 'snowscape' && this.field.climateWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(spd, 1.5);
 			}
@@ -987,11 +988,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.effectiveIrritantWeather() !== 'sandstorm') return;
-			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
+			if (pokemon.hasType('Rock') && pokemon.effectiveIrritantWeather() === 'sandstorm') {
 				return this.modify(spd, 1.5);
 			}
 			if ((pokemon.hasType('Steel') || pokemon.hasType('Ground')) &&
-				this.field.isIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+				pokemon.effectiveIrritantWeather() === 'sandstorm' && this.field.irritantWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(spd, 1.5);
 			}
@@ -999,7 +1000,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
 			if (pokemon.effectiveIrritantWeather() !== 'sandstorm') return;
-			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+			if (pokemon.hasType('Rock') &&
+				pokemon.effectiveIrritantWeather() === 'sandstorm' && this.field.irritantWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(def, 1.5);
 			}
@@ -1050,7 +1052,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
 			if (pokemon.effectiveIrritantWeather() !== 'duststorm') return;
-			if (pokemon.hasType('Ground') && this.field.isIrritantWeather('duststorm')) {
+			if (pokemon.hasType('Ground') && pokemon.effectiveIrritantWeather() === 'duststorm') {
 				return this.modify(spe, 1.25);
 			}
 		},
@@ -1116,7 +1118,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onAccuracy(accuracy, target, source, move) {
 			if (target.effectiveIrritantWeather() !== 'pollinate') return;
-			if (move.flags['powder'] && this.field.isIrritantWeather('pollinate')) {
+			if (move.flags['powder'] && source.effectiveIrritantWeather() === 'pollinate') {
 				return true;
 			}
 			return accuracy;

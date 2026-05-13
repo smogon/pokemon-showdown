@@ -1318,7 +1318,12 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Brave Bird", "Iron Defense", "Roost", "Spikes", "Stealth Rock", "Toxic"],
+                "movepool": ["Body Press", "Brave Bird", "Roost", "Spikes", "Stealth Rock", "Toxic"],
+                "abilities": ["Sturdy"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Press", "Brave Bird", "Iron Defense", "Roost"],
                 "abilities": ["Sturdy"]
             }
         ]

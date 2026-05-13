@@ -564,8 +564,8 @@ export class Field {
 		return this.battle.dex.conditions.getByID(this.cataclysmWeather);
 	}
 
-	getRecentWeather(exclude: string | string[] | null = null, pokemon: Pokemon | null = null) {
-		if (this.activeWeathers.length <= 0) return "bozo";
+	getRecentWeather(exclude: string | string[] | null = null, pokemon: Pokemon | null = null): ID {
+		if (this.activeWeathers.length <= 0) return '';
 		for (let i = this.activeWeathers.length; i > 0; i--) {
 			const recentWeather = this.activeWeathers[i - 1];
 			if (!exclude?.includes(recentWeather) &&
@@ -577,7 +577,7 @@ export class Field {
 				return recentWeather;
 			}
 		}
-		return "bozo"; // Default value if no weathers are found
+		return '';
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {

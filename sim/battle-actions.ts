@@ -1775,11 +1775,11 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.runEvent('ClimateWeatherModifyDamage', pokemon, target, move, baseDamage);
-		baseDamage = this.battle.runEvent('IrritantWeatherModifyDamage', pokemon, target, move, baseDamage);
-		baseDamage = this.battle.runEvent('EnergyWeatherModifyDamage', pokemon, target, move, baseDamage);
-		baseDamage = this.battle.runEvent('ClearingWeatherModifyDamage', pokemon, target, move, baseDamage);
-		baseDamage = this.battle.runEvent('CataclysmWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('ClimateWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('IrritantWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('EnergyWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('ClearingWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('CataclysmWeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;
