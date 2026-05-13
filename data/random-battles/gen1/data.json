@@ -216,7 +216,7 @@
     "parasect": {
         "level": 77,
         "moves": ["bodyslam", "megadrain", "spore"],
-        "exclusiveMoves": ["hyperbeam", "slash", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
+        "exclusiveMoves": ["hyperbeam", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
     },
     "venonat": {
         "level": 88,
@@ -539,7 +539,7 @@
     "kangaskhan": {
         "level": 73,
         "moves": ["bodyslam", "earthquake", "hyperbeam"],
-        "exclusiveMoves": ["counter", "rockslide", "rockslide", "surf"]
+        "exclusiveMoves": ["blizzard", "counter", "rockslide", "rockslide", "surf"]
     },
     "horsea": {
         "level": 88,

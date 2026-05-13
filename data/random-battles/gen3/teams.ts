@@ -50,7 +50,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter, species) => !counter.get('Normal'),
-			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison') && !counter.get('Bug'),
+			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Psychic') && species.baseStats.spa >= 100
 			),
@@ -453,12 +453,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		// First, the high-priority items
-		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'linoone' && role === 'Setup Sweeper') return 'Silk Scarf';
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
-		if (species.id === 'shedinja') return 'Lum Berry';
 		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
 		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
@@ -469,6 +467,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (counter.get('Physical') >= 3 && (moves.has('batonpass') || (role === 'Wallbreaker' && counter.get('Special')))) {
 			return 'Choice Band';
 		}
+
+		if (species.id === 'shedinja') return 'Lum Berry';
 
 		if (
 			moves.has('dragondance') && ability !== 'Natural Cure' &&
@@ -484,6 +484,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (moves.has('substitute') && counter.get('Physical') >= 3) return 'Liechi Berry';
 			if (moves.has('substitute') && counter.get('Special') >= 3) return 'Petaya Berry';
 		}
+
+		if (species.id === 'farfetchd') return 'Stick';
 
 		const salacReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && !counter.get('priority');
 

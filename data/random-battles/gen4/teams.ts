@@ -143,10 +143,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (teamDetails.stealthRock) {
-			if (movePool.includes('stealthrock')) this.fastPop(movePool, movePool.indexOf('stealthrock'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
-		}
 		if (teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
@@ -186,7 +182,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['surf', 'hydropump'],
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
 			[['energyball', 'leafstorm'], ['leafblade', 'leafstorm', 'powerwhip']],
-			['lavaplume', 'fireblast'],
+			['lavaplume', ['fireblast', 'overheat']],
 			['closecombat', 'drainpunch'],
 			['discharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
@@ -213,11 +209,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const statusInflictingMoves = ['hypnosis', 'stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
-		}
-
-		if (species.id === 'bastiodon') {
-			// Enforces Toxic too, for good measure.
-			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
 		}
 	}
 
@@ -278,16 +269,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
-		// Enforce Substitute on non-Setup sets with Baton Pass
-		if (!role.includes('Setup')) {
-			if (movePool.includes('batonpass') && movePool.includes('substitute')) {
-				counter = this.addMove('substitute', moves, types, abilities, teamDetails, species, isLead,
-					movePool, preferredType, role);
-			}
-		}
-
-		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
-		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
+		// Enforce hazard removal on Bulky Support if the team doesn't already have it
+		if (['Bulky Support'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
 				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
@@ -361,23 +344,26 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				const moveid = this.sample(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
-			} else {
-				// If they have no regular STAB move, enforce U-turn on Bug types.
-				if (movePool.includes('uturn') && types.has('Bug')) {
-					counter = this.addMove('uturn', moves, types, abilities, teamDetails, species, isLead,
-						movePool, preferredType, role);
-				}
 			}
 		}
 
-		// Enforce Stealth Rock if the team doesn't already have it
-		if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
-			counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
-				movePool, preferredType, role);
+		// Enforce one of Spikes or Toxic Spikes
+		const hazardMoves = movePool.filter(moveid => ['spikes', 'toxicspikes'].includes(moveid));
+		if (hazardMoves.length) {
+			// Enforce Toxic Spikes if the team has Spikes already
+			if (teamDetails.spikes && hazardMoves.includes('toxicspikes')) {
+				counter = this.addMove('toxicspikes', moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			} else {
+				// Enforce one of the hazards
+				const moveid = this.sample(hazardMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			}
 		}
 
 		// Enforce recovery
-		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Spinner', 'Staller'].includes(role)) {
+		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'Staller'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
@@ -408,7 +394,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Enforce a move not on the noSTAB list
-		if (!counter.damagingMoves.size && !(moves.has('uturn') && types.has('Bug'))) {
+		if (!counter.damagingMoves.size) {
 			// Choose an attacking move
 			const attackingMoves = [];
 			for (const moveid of movePool) {
@@ -537,10 +523,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
+		if (species.id === 'delibird' && moves.has('counter')) return 'Focus Sash';
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (species.id === 'ditto' || (species.id === 'rampardos' && role === 'Fast Attacker')) return 'Choice Scarf';
 		if (species.id === 'honchkrow') return 'Life Orb';
+		if (species.id === 'shuckle') return 'Leftovers';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id === 'yanmega') return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
@@ -608,7 +596,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (species.id === 'farfetchd') return 'Stick';
 		if (moves.has('outrage') && counter.get('setup') && !moves.has('sleeptalk')) return 'Lum Berry';
-		if (['batonpass', 'protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
 			(counter.get('hazards') || counter.get('setup')) && (!counter.get('recoil') || ability === 'Rock Head')
@@ -618,8 +606,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (role === 'Fast Support') {
 			return (
 				counter.get('Physical') + counter.get('Special') >= 3 &&
-				['rapidspin', 'uturn'].every(m => !moves.has(m)) &&
-				this.dex.getEffectiveness('Rock', species) < 2
+				['rapidspin', 'uturn'].every(m => !moves.has(m))
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		// noStab moves that should reject Expert Belt
@@ -630,10 +617,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			!counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') &&
 			noExpertBeltMoves.every(m => !moves.has(m))
 		);
-		if (!counter.get('Status') && expertBeltReqs && (moves.has('uturn') || role === 'Fast Attacker')) return 'Expert Belt';
+		if (!counter.get('Status') && expertBeltReqs && role === 'Fast Attacker') return 'Expert Belt';
 		if (
-			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			this.dex.getEffectiveness('Rock', species) < 2 && !moves.has('rapidspin')
+			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) && !moves.has('rapidspin')
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
@@ -649,18 +635,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
-		// Check if the Pokemon has a Spinner set
-		let canSpinner = false;
-		for (const set of sets) {
-			if (!teamDetails.rapidSpin && set.role === 'Spinner') canSpinner = true;
-		}
-		for (const set of sets) {
-			// Prevent Spinner if the team already has removal
-			if (teamDetails.rapidSpin && set.role === 'Spinner') continue;
-			// Enforce Spinner if the team does not have removal
-			if (canSpinner && set.role !== 'Spinner') continue;
-			possibleSets.push(set);
-		}
+		for (const set of sets) possibleSets.push(set);
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
@@ -718,8 +693,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Prepare optimal HP
-		const srImmunity = ability === 'Magic Guard';
-		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (moves.has('substitute') && item === 'Sitrus Berry') {
@@ -729,12 +702,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;
 			} else {
-				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0) break;
-				if (srWeakness === 1 && ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
-				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
-				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
-				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
+				break;
 			}
 			evs.hp -= 4;
 		}

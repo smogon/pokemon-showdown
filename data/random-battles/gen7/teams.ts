@@ -251,7 +251,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
 			[['scald', 'surf'], ['hydropump', 'originpulse', 'waterpulse']],
-			['return', ['bodyslam', 'doubleedge', 'headbutt']],
+			['return', ['bodyslam', 'doubleedge']],
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
@@ -617,7 +617,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'pangoro' && counter.get('ironfist')) return 'Iron Fist';
 		if (species.id === 'tornadus' && counter.get('Status')) return 'Prankster';
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
-		if (species.id === 'sawsbuck') return moves.has('headbutt') ? 'Serene Grace' : 'Sap Sipper';
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
 		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 		if (species.id === 'roserade' && counter.get('technician')) return 'Technician';

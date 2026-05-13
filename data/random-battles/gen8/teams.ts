@@ -49,7 +49,7 @@ const HAZARDS = [
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
-	'banefulbunker', 'protect', 'spikyshield',
+	'banefulbunker', 'kingsshield', 'protect', 'spikyshield',
 ];
 // Moves that switch the user out
 const PIVOT_MOVES = [
@@ -228,8 +228,7 @@ export class RandomGen8Teams extends RandomTeams {
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
 			[['scald', 'surf'], ['hydropump', 'originpulse']],
-			['lavaplume', 'magmastorm'],
-			['flamethrower', ['fireblast', 'overheat']],
+			[['flamethrower', 'lavaplume'], ['fireblast', 'magmastorm', 'overheat']],
 			['hornleech', 'woodhammer'],
 			['gigadrain', 'leafstorm'],
 			['airslash', 'hurricane'],
