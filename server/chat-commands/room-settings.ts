@@ -9,6 +9,8 @@
 import { Utils } from '../../lib';
 import type { EffectiveGroupSymbol, RoomPermission } from '../user-groups';
 
+type BattleModchatPreference = GroupSymbol | 'autoconfirmed' | 'trusted';
+
 const RANKS = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
@@ -94,7 +96,8 @@ export const commands: Chat.ChatCommands = {
 		) {
 			throw new Chat.ErrorMessage(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
-		if ((room as any).requestModchat) {
+		const isBattlePlayer = !!room.battle && !!room.battle.game?.playerTable[user.id];
+		if ((room as any).requestModchat && !isBattlePlayer) {
 			const error = (room as GameRoom).requestModchat(user);
 			if (error) throw new Chat.ErrorMessage(error);
 		}
@@ -109,19 +112,20 @@ export const commands: Chat.ChatCommands = {
 
 		target = target.toLowerCase().trim();
 		const currentModchat = room.settings.modchat;
+		let battleModchat: BattleModchatPreference | null = null;
 		switch (target) {
 		case 'off':
 		case 'false':
 		case 'no':
 		case 'disable':
-			room.settings.modchat = null;
+			battleModchat = null;
 			break;
 		case 'ac':
 		case 'autoconfirmed':
-			room.settings.modchat = 'autoconfirmed';
+			battleModchat = 'autoconfirmed';
 			break;
 		case 'trusted':
-			room.settings.modchat = 'trusted';
+			battleModchat = 'trusted';
 			break;
 		case 'player':
 			target = Users.PLAYER_SYMBOL;
@@ -136,8 +140,29 @@ export const commands: Chat.ChatCommands = {
 			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				throw new Chat.ErrorMessage(`/modchat - Access denied for setting to ${target}.`);
 			}
-			room.settings.modchat = target;
+			battleModchat = target as ModchatPreference;
 			break;
+		}
+		if (isBattlePlayer && room.battle) {
+			const result = room.battle.setPlayerModchatPreference(user, battleModchat);
+			if (!result.preferenceChanged) {
+				throw new Chat.ErrorMessage(`Your modchat preference is already set to ${battleModchat || 'off'}.`);
+			}
+			if (result.effectiveBefore !== result.effectiveAfter) {
+				if (!room.settings.modchat) {
+					this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
+				} else {
+					const modchatSetting = Utils.escapeHTML(room.settings.modchat);
+					this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
+				}
+			} else {
+				this.sendReply(`Your modchat preference is now set to ${battleModchat || 'off'}.`);
+			}
+			if ((room as GameRoom).requestModchat && !room.settings.modchat) (room as GameRoom).requestModchat(null);
+			this.privateModAction(`${user.name} set modchat to ${room.settings.modchat || "off"}`);
+			this.modlog('MODCHAT', null, `to ${room.settings.modchat || "false"}`);
+			room.saveSettings();
+			return;
 		}
 		if (currentModchat === room.settings.modchat) {
 			throw new Chat.ErrorMessage(`Modchat is already set to ${currentModchat || 'off'}.`);

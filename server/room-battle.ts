@@ -21,6 +21,8 @@ import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
 import type { GameTimerSettings } from '../sim/dex-formats';
 
+type ModchatPreference = GroupSymbol | 'autoconfirmed' | 'trusted';
+
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
 export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
@@ -519,6 +521,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	readonly allowExtraction: { [k: string]: Set<ID> } = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	override readonly timer: RoomBattleTimer;
+	readonly modchatRequesters = new Map<ID, ModchatPreference>();
 	started = false;
 	active = false;
 	password = "";
@@ -1122,6 +1125,49 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		) {
 			this.room.settings.modchat = '\u2606';
 		}
+	}
+
+	static getModchatPreferenceRank(level: ModchatPreference | null): number {
+		if (!level) return 0;
+		if (level === 'autoconfirmed') return 1;
+		if (level === 'trusted') return 2;
+		const index = Config.groupsranking.indexOf(level as EffectiveGroupSymbol);
+		return index >= 0 ? 3 + index : 0;
+	}
+
+	getEffectiveModchat(): string | null {
+		if (this.forcedSettings.modchat) return '\u2606';
+		let highestLevel: string | null = null;
+		let highestRank = 0;
+		for (const level of this.modchatRequesters.values()) {
+			const rank = RoomBattle.getModchatPreferenceRank(level);
+			if (rank > highestRank) {
+				highestRank = rank;
+				highestLevel = level;
+			}
+		}
+		return highestLevel;
+	}
+
+	setPlayerModchatPreference(user: User, target: ModchatPreference | null) {
+		const previous = this.modchatRequesters.get(user.id) ?? null;
+		const effectiveBefore = this.getEffectiveModchat();
+		if (target === null) {
+			this.modchatRequesters.delete(user.id);
+		} else {
+			this.modchatRequesters.set(user.id, target);
+		}
+		const effectiveAfter = this.getEffectiveModchat();
+		if (effectiveBefore !== effectiveAfter) {
+			this.room.settings.modchat = effectiveAfter;
+		}
+		return {
+			preferenceChanged: previous !== target,
+			effectiveBefore,
+			effectiveAfter,
+			previous,
+			target,
+		};
 	}
 
 	static battleForcedSetting(user: User, key: 'modchat' | 'privacy') {
