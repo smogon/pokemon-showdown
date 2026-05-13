@@ -3014,7 +3014,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["gigadrain", "healingwish", "hiddenpowerfire", "hiddenpowerrock", "morningsun", "naturepower"],
+                "movepool": ["gigadrain", "healingwish", "hiddenpowerfire", "hiddenpowerice", "hiddenpowerrock", "morningsun", "naturepower"],
                 "abilities": ["Flower Gift"]
             },
             {
