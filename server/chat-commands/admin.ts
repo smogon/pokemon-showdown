@@ -1649,7 +1649,7 @@ export const commands: Chat.ChatCommands = {
 		`/editbattle reseed [optional seed]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
-		`Requires: Battle Edit rule, ☆ and + % @ ~, or ~`
+		`Requires: Battle Edit rule, ☆ and + % @ ~, or ~`,
 	],
 };
 
