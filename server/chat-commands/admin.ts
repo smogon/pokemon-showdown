@@ -1621,12 +1621,19 @@ export const commands: Chat.ChatCommands = {
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('forcewin');
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
 			throw new Chat.ErrorMessage("/editbattle - This is not a battle room.");
 		}
 		const battle = room.battle;
+		const format = Dex.formats.get(battle.format, true);
+		const ruleTable = Dex.formats.getRuleTable(format);
+		if (ruleTable.has('battleedit')) {
+			this.checkCan('editprivacy', null, room);
+			this.checkCan('altsself');
+		} else {
+			this.checkCan('forcewin');
+		};
 		void battle.stream.write(`>editbattle user:${user.name}, ${target}`);
 	},
 	editbattlehelp: [
@@ -1642,6 +1649,7 @@ export const commands: Chat.ChatCommands = {
 		`/editbattle reseed [optional seed]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
 		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
+		`Requires: Battle Edit rule, ☆ and + % @ ~, or ~`
 	],
 };
 
