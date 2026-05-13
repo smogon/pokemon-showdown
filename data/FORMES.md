@@ -73,14 +73,16 @@ Learnset-based visual formes include:
 - Vivillon (Fancy Pattern)
 - Vivillon (Poké Ball Pattern)
 - Keldeo (Resolute Forme)
+- Magearna (Original Forme)
 - all totems
 
 Item-based visual formes include:
 
 - Genesect
 - Arceus
+- Silvally
 
-Arceus formes are listed as having the type enforced by Multitype. For instance, Arceus-Flying is listed to have Flying type, rather than Normal type. This is purely a convenience to display the type a user would expect: its actual type is still Normal type because it's a visual forme of Arceus-Normal (it having Flying-type in-game is an effect of the Multitype ability, not a property of the forme).
+Arceus formes are listed as having the type enforced by Multitype. For instance, Arceus-Flying is listed to have Flying type, rather than Normal type. This is purely a convenience to display the type a user would expect: its actual type is still Normal type because it's a visual forme of Arceus-Normal (it having Flying-type in-game is an effect of the Multitype ability, not a property of the forme). Silvally also follows this behavior (with RKS System).
 
 Visual formes in PS are implemented as regular formes.
 
@@ -92,7 +94,10 @@ Some Pokémon can change forme out-of-battle. These include:
 
 - Rotom
 - Arceus
+- Silvally
 - Genesect
+- Dialga
+- Palkia
 - Giratina
 
 PS establishes one of their formes as the "original forme", and gives the others a `changesFrom` property pointing to the original forme.
@@ -190,9 +195,9 @@ Alcremie garnishes and Spinda spot patterns aren't considered formes by the game
 Dynamax and Gigantamax are not considered formes by the games themselves. PS implements them correctly in the simulator as volatile statuses, but does have dex entries for Gigantamax Pokémon (treating them as in-battle formes) to make their sprites easier to access, and to make Gigantamax-capable Pokémon easier to select in the teambuilder.
 
 
-`pokedex.js`
+`pokedex.ts`
 ------------
 
-All the data shown here is information available from `Dex.species.get`. Data in `pokedex.js` will not necessarily contain the same information.
+All the data shown here is information available from `Dex.species.get`. Data in `pokedex.ts` will not necessarily contain the same information.
 
-Most importantly, note that cosmetic formes are not listed in `pokedex.js`, but generated automatically from their base forme entry.
+Most importantly, note that cosmetic formes are not listed in `pokedex.ts`, but generated automatically from their base forme entry.

@@ -28,8 +28,6 @@ If you're looking for inspiration for something to do, the Ideas issue has some 
 
 Also useful is the Suggestions forum (you don't need to worry about approval if you take Approved suggestions): https://www.smogon.com/forums/forums/suggestions.517/
 
-Also useful is the Mechanics Bugs kanban board: https://github.com/smogon/pokemon-showdown/projects/3
-
 There's no need to worry about code standards too much (unit tests will automatically catch most of what we care about, we'll point out the rest if you make a pull request), but they're here if you want them.
 
 We try to respond to pull requests within a few days, but feel free to bump yours if it seems like we forget about it. Sometimes we did, and sometimes there might be a miscommunication in terms of who is waiting for what.
@@ -216,7 +214,7 @@ Your commit summary should make it clear what part of the code you're talking ab
 
 ### CM5. Squashing
 
-OPTIONAL: If you make commits to fix commits in your pull request, you can squash/amend them into one commit. This is no longer required now that GitHub supports squash-merging.
+Commits in a pull request are almost always squashed into a single commit when they are merged, however you can squash/amend them into one commit yourself if you want.
 
 - BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
 - GOOD: `Add /lock`

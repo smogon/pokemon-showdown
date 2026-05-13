@@ -3,7 +3,7 @@ Dex
 
 `Dex` is a library for getting information about Pokémon, moves, items, abilities, natures, stats, etc.
 
-By default, `Dex` gets information about the latest games (currently Pokémon Sword and Shield), but `Dex.mod` can be used to get information about other games.
+By default, `Dex` gets information about the latest games (currently Pokémon Scarlet and Violet), but `Dex.mod` can be used to get information about other games.
 
 ```js
 const {Dex} = require('pokemon-showdown');
