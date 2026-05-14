@@ -1953,7 +1953,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["Excalibur", "Night Slash", "Sacred Sword", "Sucker Punch", "Swords Dance"],
                 "abilities": ["Sharpness"]
             }
