@@ -662,7 +662,7 @@
                 "role": "Fast Attacker",
                 "movepool": ["Giga Drain", "Hydro Pump", "Ice Beam", "Leaf Storm", "Osmosis"],
                 "abilities": ["Swift Swim"],
-                "teraTypes": ["Grass", "Water"]
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Setup Sweeper",
