@@ -552,7 +552,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		// Sheer Force shouldnt suppress Ice Spinner
+		// Sheer Force shouldnt suppress Pickpocket
 		useMoveInner(moveOrMoveName, pokemon, options) {
 			let target = options?.target;
 			let sourceEffect = options?.sourceEffect;
