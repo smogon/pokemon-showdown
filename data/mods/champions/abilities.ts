@@ -17,11 +17,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!target || move.category === 'Status') return;
 
 			if (move.hit === 1) delete this.effectState.neutral;
-			if (this.effectState.neutral) return 0;
-
 			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				return;
 			}
+
+			if (this.effectState.neutral) return 0;
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
