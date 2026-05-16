@@ -529,7 +529,7 @@ export class BattleActions {
 		}
 
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
-			let originalHp = pokemon.hp;
+			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
@@ -538,12 +538,8 @@ export class BattleActions {
 				}
 			}
 			for (const curTarget of targets) {
-				originalHp = curTarget.hp;
 				this.battle.singleEvent('AfterMoveSecondaryLast', move, null, curTarget, pokemon, move);
 				this.battle.runEvent('AfterMoveSecondaryLast', curTarget, pokemon, move);
-				if (curTarget.hp <= curTarget.maxhp / 2 && originalHp > curTarget.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', curTarget, curTarget);
-				}
 			}
 		}
 
@@ -1755,7 +1751,7 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;
