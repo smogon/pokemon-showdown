@@ -314,8 +314,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
-						// target: undefined,
-						// targetLoc: undefined,
+						targetLoc: action.targetLoc,
 						moveid: move.id,
 						order: action.order,
 					});
