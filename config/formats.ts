@@ -783,7 +783,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'mixandmega',
 		ruleset: [
 			'Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Alphabet Cup Move Legality', 'Camomons Mod',
-			'Scalemons Mod', 'Tier Shift Mod', 'Data Preview', '!Obtainable Abilities', 'Ability Clause = 1', '!Team Preview', 'Team Type Preview',
+			'Scalemons Mod', 'Tier Shift Mod', 'Data Preview', '!Obtainable Abilities', 'Ability Clause = 2', '!Team Preview', 'Team Type Preview',
 		],
 		banlist: [
 			'Breloom', 'Sudowoodo', 'Weepinbell', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
