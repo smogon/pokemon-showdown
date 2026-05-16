@@ -11,12 +11,12 @@ describe('Suction Cups', () => {
 	});
 
 	it('should prevent the user from being forced out', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Shuckle', ability: 'suctioncups', moves: ['rapidspin'] },
 			{ species: 'Forretress', ability: 'sturdy', moves: ['rapidspin'] },
-		] });
-		battle.setPlayer('p2', { team: [{ species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar'] }] });
+		], [
+			{ species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar'] },
+		]]);
 		const [cupsMon, redCardHolder] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move rapidspin', 'move healpulse');
 		assert.false.holdsItem(redCardHolder, "Red Card should activate");

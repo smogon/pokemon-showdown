@@ -1206,6 +1206,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onDisableMove(pokemon) {
 			if (!pokemon.ateBerry) pokemon.disableMove('belch');
 		},
+		onTry(source) {
+			return source.ateBerry;
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
@@ -2224,7 +2227,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce) {
+			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
 				}
@@ -7864,7 +7867,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) move.boosts = { atk: 2, spa: 2 };
+			if (pokemon.hasAbility('megasol') && !this.field.isWeather('sunnyday')) {
+				delete move.boosts;
+			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				move.boosts = { atk: 2, spa: 2 };
+			}
 		},
 		boosts: {
 			atk: 1,
@@ -12246,7 +12253,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -12282,7 +12289,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -12758,7 +12765,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		ignoreEvasion: true,
 		ignoreDefensive: true,
-		ignoreImmunity: { 'Fairy': true },
+		ignoreImmunity: { 'Dragon': true },
 		target: "allAdjacentFoes",
 		type: "Dragon",
 	},
@@ -14940,13 +14947,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 10,
 			status: 'slp',
 		},
-		onHit(target, pokemon, move) {
+		onAfterMoveSecondarySelf(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
-				move.willChangeForme = true;
-			}
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
 				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
 				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]');
 			}
@@ -17235,7 +17237,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather(true))) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather(undefined, true))) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17271,7 +17273,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather(true))) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather(undefined, true))) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -18081,7 +18083,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce) {
+			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
 				}
@@ -18738,7 +18740,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveWeather(undefined, true)) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -21297,13 +21299,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 10,
 			status: 'frz',
 		},
-		onHit(target, pokemon, move) {
+		onAfterMoveSecondarySelf(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Ramnarok' && !pokemon.transformed) {
-				move.willChangeForme = true;
-			}
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
 				const forme = pokemon.species.id === 'ramnarokradiant' ? '' : '-Radiant';
 				pokemon.formeChange('Ramnarok' + forme, this.effect, false, '0', '[msg]');
 			}

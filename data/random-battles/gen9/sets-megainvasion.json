@@ -1,0 +1,483 @@
+{
+    "venusaurmega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Sleep Powder", "Sludge Bomb", "Synthesis", "Toxic"],
+                "abilities": ["Chlorophyll"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "charizardmegax": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Claw", "Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Thunder Punch"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dragon Claw", "Flame Charge", "Flare Blitz", "Outrage", "Swords Dance"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "charizardmegay": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Air Slash", "Dragon Pulse", "Solar Beam", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Air Slash", "Scorching Sands", "Solar Beam", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Dragon Pulse", "Scorching Sands", "Solar Beam", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "blastoisemega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Ice Beam", "Shell Smash", "Water Pulse"],
+                "abilities": ["Rain Dish"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "slowbromega": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Psychic Noise", "Psyshock", "Scald", "Slack Off"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Scald", "Slack Off"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "gengarmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Encore", "Nasty Plot", "Shadow Ball", "Sludge Wave"],
+                "abilities": ["Cursed Body"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Encore", "Perish Song", "Protect", "Shadow Ball", "Substitute"],
+                "abilities": ["Cursed Body"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "gyaradosmega": {
+        "level": 74,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Crunch", "Dragon Dance", "Earthquake", "Substitute", "Taunt", "Temper Flare", "Waterfall"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "mewtwomegax": {
+        "level": 70,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Recover", "Zen Headbutt"],
+                "abilities": ["Unnerve"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "mewtwomegay": {
+        "level": 70,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Fire Blast", "Nasty Plot", "Psystrike", "Recover"],
+                "abilities": ["Unnerve"],
+                "teraTypes": ["Fighting", "Fire"]
+            }
+        ]
+    },
+    "ampharosmega": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Agility", "Dragon Pulse", "Focus Blast", "Thunderbolt"],
+                "abilities": ["Static"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Discharge", "Dragon Pulse", "Dragon Tail", "Focus Blast", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Static"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "scizormega": {
+        "level": 76,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Bullet Punch", "Close Combat", "Defog", "Knock Off", "U-turn"],
+                "abilities": ["Light Metal"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bug Bite", "Bullet Punch", "Close Combat", "Knock Off", "Swords Dance"],
+                "abilities": ["Light Metal"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "heracrossmega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Close Combat", "Earthquake", "Knock Off", "Pin Missile", "Rock Blast", "Trailblaze"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Rock"]
+            }
+        ]
+    },
+    "houndoommega": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Fire Blast", "Nasty Plot", "Sludge Bomb", "Taunt"],
+                "abilities": ["Flash Fire"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "tyranitarmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Ice Punch", "Knock Off", "Stone Edge"],
+                "abilities": ["Sand Stream"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "sceptilemega": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dragon Pulse", "Earthquake", "Focus Blast", "Giga Drain", "Leaf Storm"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Leaf Blade", "Outrage", "Swords Dance"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "blazikenmega": {
+        "level": 72,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Flare Blitz", "Knock Off", "Protect", "Stone Edge", "Swords Dance"],
+                "abilities": ["Speed Boost"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "swampertmega": {
+        "level": 81,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Ice Punch", "Liquidation", "Rain Dance"],
+                "abilities": ["Damp"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Liquidation", "Poison Jab", "Rain Dance"],
+                "abilities": ["Damp"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "gardevoirmega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Psyshock"],
+                "abilities": ["Trace"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Psyshock"],
+                "abilities": ["Trace"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "sableyemega": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Dark Pulse", "Recover", "Will-O-Wisp"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "medichammega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Fake Out", "Ice Punch", "Poison Jab", "Thief", "Trailblaze", "Zen Headbutt"],
+                "abilities": ["Pure Power"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "cameruptmega": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Ancient Power", "Earth Power", "Fire Blast", "Stealth Rock", "Will-O-Wisp"],
+                "abilities": ["Solid Rock"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "altariamega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Double-Edge", "Dragon Dance", "Earthquake", "Roost"],
+                "abilities": ["Natural Cure"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "banettemega": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Destiny Bond", "Encore", "Poltergeist", "Will-O-Wisp"],
+                "abilities": ["Frisk"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Destiny Bond", "Encore", "Gunk Shot", "Poltergeist"],
+                "abilities": ["Frisk"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "glaliemega": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Body Slam", "Earthquake", "Freeze-Dry", "Ice Shard"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Body Slam", "Earthquake", "Freeze-Dry", "Spikes"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "salamencemega": {
+        "level": 70,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Double-Edge", "Dragon Dance", "Earthquake", "Roost"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "metagrossmega": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Body Press", "Heavy Slam", "Knock Off", "Psychic Fangs"],
+                "abilities": ["Clear Body"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Body Press", "Heavy Slam", "Iron Defense", "Psychic Fangs"],
+                "abilities": ["Clear Body"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "latiasmega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draco Meteor", "Psyshock", "Recover"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "latiosmega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draco Meteor", "Psyshock", "Recover"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "kyogreprimal": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Ice Beam", "Origin Pulse", "Thunder"],
+                "abilities": ["Drizzle"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "groudonprimal": {
+        "level": 63,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Heat Crash", "Precipice Blades", "Roar", "Spikes", "Stealth Rock", "Stone Edge", "Thunder Wave", "Will-O-Wisp"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Heat Crash", "Precipice Blades", "Stone Edge", "Swords Dance", "Thunder Wave"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "garchompmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Spikes", "Stealth Rock"],
+                "abilities": ["Rough Skin"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Outrage", "Scale Shot", "Swords Dance"],
+                "abilities": ["Rough Skin"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "lucariomega": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Swords Dance"],
+                "abilities": ["Justified"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aura Sphere", "Flash Cannon", "Nasty Plot", "Vacuum Wave"],
+                "abilities": ["Justified"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "abomasnowmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Blizzard", "Earthquake", "Ice Shard", "Wood Hammer"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "gallademega": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Knock Off", "Swords Dance", "Zen Headbutt"],
+                "abilities": ["Justified"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "dianciemega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Calm Mind", "Diamond Storm", "Earth Power", "Moonblast", "Stealth Rock"],
+                "abilities": ["Clear Body"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    }
+}

@@ -14,68 +14,64 @@ describe('Trapping Moves', () => {
 
 	for (const move of trappers) {
 		it('should prevent Pokemon from switching out normally', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] },
+			], [
 				{ species: "Tangrowth", ability: 'leafguard', moves: ['swordsdance'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move swordsdance');
 			assert.trapped(() => battle.makeChoices('move ' + toID(move), 'switch 2'));
 			assert.equal(battle.p2.active[0].species.id, 'tangrowth');
 		});
 
 		it('should not prevent Pokemon from switching out using moves', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] },
+			], [
 				{ species: "Tangrowth", ability: 'leafguard', moves: ['batonpass'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move batonpass');
 			battle.makeChoices('', 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should not prevent Pokemon immune to trapping from switching out', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] },
+			], [
 				{ species: "Gourgeist", ability: 'insomnia', moves: ['synthesis'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move synthesis');
 			battle.makeChoices('move ' + toID(move), 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should stop trapping the Pokemon if the user is no longer active', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [
+			battle = common.createBattle([[
 				{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] },
 				{ species: "Kyurem", ability: 'pressure', moves: ['rest'] },
-			] });
-			battle.setPlayer('p2', { team: [
+			], [
 				{ species: "Tangrowth", ability: 'leafguard', moves: ['roar'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move roar');
 			battle.makeChoices('move rest', 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should free all trapped Pokemon if the user is no longer active', () => {
-			battle = common.createBattle({ gameType: 'doubles' });
-			battle.setPlayer('p1', { team: [
+			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: "Smeargle", ability: 'prankster', moves: [toID(move)] },
 				{ species: "Cobalion", ability: 'justified', item: 'laggingtail', moves: ['swordsdance', 'closecombat'] },
-			] });
-			battle.setPlayer('p2', { team: [
+			], [
 				{ species: "Tangrowth", ability: 'leafguard', moves: ['synthesis'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['recover'] },
 				{ species: "Cradily", ability: 'suctioncups', moves: ['recover'] },
 				{ species: "Hippowdon", ability: 'sandstream', moves: ['slackoff'] },
-			] });
+			]]);
 			if (move !== 'Thousand Waves') {
 				battle.makeChoices('move ' + toID(move) + ' 1, move swordsdance', 'move synthesis, move recover');
 				battle.makeChoices('move ' + toID(move) + ' 2, move closecombat -1', 'move synthesis, move recover');
@@ -90,15 +86,13 @@ describe('Trapping Moves', () => {
 		if (trappers.indexOf(move) < 3) {
 			// Only test on moves that existed in gen 4
 			it('should be passed when the user uses Baton Pass in Gen 4', () => {
-				battle = common.gen(4).createBattle();
-				battle.setPlayer('p1', { team: [
+				battle = common.gen(4).createBattle([[
 					{ species: "Smeargle", ability: 'prankster', moves: [toID(move), 'batonpass'] },
 					{ species: "Shedinja", ability: 'wonderguard', moves: ['rest'] },
-				] });
-				battle.setPlayer('p2', { team: [
+				], [
 					{ species: "Tangrowth", ability: 'leafguard', moves: ['synthesis', 'roar'] },
 					{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-				] });
+				]]);
 				battle.makeChoices('move ' + toID(move), 'move synthesis');
 				battle.makeChoices('move batonpass', 'move synthesis');
 				battle.makeChoices('switch 2', '');
@@ -118,9 +112,11 @@ describe('Partial Trapping Moves', () => {
 
 	for (const move of partialtrappers) {
 		it('should deal 1/8 HP per turn', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'noguard', moves: [toID(move), 'rest'] }] });
-			battle.setPlayer('p2', { team: [{ species: "Blissey", ability: 'naturalcure', moves: ['healbell'] }] });
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'noguard', moves: [toID(move), 'rest'] },
+			], [
+				{ species: "Blissey", ability: 'naturalcure', moves: ['healbell'] },
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move healbell');
 			const pokemon = battle.p2.active[0];
 			pokemon.heal(pokemon.maxhp);
@@ -129,66 +125,62 @@ describe('Partial Trapping Moves', () => {
 		});
 
 		it('should prevent Pokemon from switching out normally', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] },
+			], [
 				{ species: "Blissey", ability: 'naturalcure', moves: ['healbell'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move healbell');
 			assert.trapped(() => battle.makeChoices('move ' + toID(move), 'switch 2'));
 			assert.equal(battle.p2.active[0].species.id, 'blissey');
 		});
 
 		it('should not prevent Pokemon from switching out using moves', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] },
+			], [
 				{ species: "Blissey", ability: 'naturalcure', moves: ['batonpass'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move batonpass');
 			battle.makeChoices('', 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should not prevent Pokemon immune to trapping from switching out', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] }] });
-			battle.setPlayer('p2', { team: [
+			battle = common.createBattle([[
+				{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] },
+			], [
 				{ species: "Dusknoir", ability: 'frisk', moves: ['sleeptalk'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move sleeptalk');
 			battle.makeChoices('move ' + toID(move), 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should stop trapping the Pokemon if the user is no longer active', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [
+			battle = common.createBattle([[
 				{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] },
 				{ species: "Kyurem", ability: 'pressure', moves: ['rest'] },
-			] });
-			battle.setPlayer('p2', { team: [
+			], [
 				{ species: "Blissey", ability: 'naturalcure', moves: ['roar'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move roar');
 			battle.makeChoices('move rest', 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
 		it('should stop trapping the Pokemon if the target uses Rapid Spin', () => {
-			battle = common.createBattle();
-			battle.setPlayer('p1', { team: [
+			battle = common.createBattle([[
 				{ species: "Smeargle", ability: 'noguard', moves: [toID(move)] },
 				{ species: "Kyurem", ability: 'pressure', moves: ['rest'] },
-			] });
-			battle.setPlayer('p2', { team: [
+			], [
 				{ species: "Blissey", ability: 'naturalcure', moves: ['rapidspin'] },
 				{ species: "Starmie", ability: 'illuminate', moves: ['reflecttype'] },
-			] });
+			]]);
 			battle.makeChoices('move ' + toID(move), 'move rapidspin');
 			battle.makeChoices('move ' + toID(move), 'switch 2');
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
@@ -202,9 +194,12 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it('Wrap ends when wrapped Pokemon dies of residual damage', () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Arbok", moves: ['wrap', 'toxic'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Rhydon", moves: ['splash'] }, { species: "Exeggutor", moves: ['splash'] }] });
+		battle = common.gen(1).createBattle([[
+			{ species: "Arbok", moves: ['wrap', 'toxic'] },
+		], [
+			{ species: "Rhydon", moves: ['splash'] },
+			{ species: "Exeggutor", moves: ['splash'] },
+		]]);
 		battle.makeChoices('move toxic', 'move splash');
 		for (let i = 0; i < 6; i++) {
 			battle.makeChoices();
@@ -213,9 +208,12 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it('Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Dragonite", moves: ['wrap', 'seismictoss', 'toxic'], evs: { hp: 255 } }] });
-		battle.setPlayer('p2', { team: [{ species: "Mewtwo", moves: ['splash'], evs: { hp: 255 } }, { species: "Exeggutor", moves: ['splash'] }] });
+		battle = common.gen(1).createBattle([[
+			{ species: "Dragonite", moves: ['wrap', 'seismictoss', 'toxic'], evs: { hp: 255 } },
+		], [
+			{ species: "Mewtwo", moves: ['splash'], evs: { hp: 255 } },
+			{ species: "Exeggutor", moves: ['splash'] },
+		]]);
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices('move seismictoss', 'auto');
 		}
@@ -227,9 +225,12 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it('Wrap ends when wrapper dies to residual damage', () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Dragonite", moves: ['wrap', 'splash'] }, { species: "Exeggutor", moves: ['splash'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Rhydon", moves: ['toxic'] }] });
+		battle = common.gen(1).createBattle([[
+			{ species: "Dragonite", moves: ['wrap', 'splash'] },
+			{ species: "Exeggutor", moves: ['splash'] },
+		], [
+			{ species: "Rhydon", moves: ['toxic'] },
+		]]);
 		battle.makeChoices('move splash', 'move toxic');
 		for (let i = 0; i < 7; i++) {
 			battle.makeChoices();
@@ -238,14 +239,12 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(1).createBattle([[
 			{ species: "Rhydon", moves: ['splash'], evs: { hp: 255 } },
 			{ species: "Dragonite", moves: ['wrap'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Slowbro", moves: ['seismictoss', 'toxic'] },
-		] });
+		]]);
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
 		}
@@ -258,9 +257,11 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it('Wrap should damage the target\'s substitute', () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "charizard", moves: ['wrap'] }] });
-		battle.setPlayer('p2', { team: [{ species: "alakazam", moves: ['splash', 'substitute'] }] });
+		battle = common.gen(1).createBattle([[
+			{ species: "charizard", moves: ['wrap'] },
+		], [
+			{ species: "alakazam", moves: ['splash', 'substitute'] },
+		]]);
 		const alakazam = battle.p2.active[0];
 		battle.makeChoices('move wrap', 'move substitute');
 		for (let i = 0; i < 4; i++) {
@@ -275,10 +276,11 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 	});
 
 	it(`Wrap should never miss if the target is already trapped`, () => {
-		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [ // 3 turns of Wrap
-			[{ species: 'Dragonite', moves: ['wrap'] }],
-			[{ species: 'Cloyster', moves: ['surf'] }],
-		]);
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+			{ species: 'Dragonite', moves: ['wrap'] },
+		], [
+			{ species: 'Cloyster', moves: ['surf'] },
+		]]);
 		const cloyster = battle.p2.active[0];
 		assert.hurts(cloyster, () => battle.makeChoices());
 		assert(cloyster.volatiles['partiallytrapped']);

@@ -6,21 +6,16 @@ const common = require('./../../common');
 let battle;
 
 describe('Pledge Moves', () => {
-	beforeEach(() => {
-		battle = common.createBattle({ gameType: 'doubles' });
-	});
-
 	afterEach(() => battle.destroy());
 
 	it('should not combine if one of the users is forced to use a non-pledge move on its turn', () => {
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Venusaur', level: 90, moves: ['sludge', 'grasspledge'] },
 			{ species: 'Charizard', level: 99, moves: ['sleeptalk', 'firepledge'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Whimsicott', ability: 'prankster', moves: ['encore'] },
 			{ species: 'Blastoise', moves: ['sleeptalk'] },
-		] });
+		]]);
 
 		battle.makeChoices('move sludge 2, move sleeptalk', 'move encore 1, move sleeptalk');
 		battle.makeChoices('move grasspledge 2, move firepledge 2', 'move encore 1, move sleeptalk');

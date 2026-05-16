@@ -26,10 +26,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should request switch-out at the end of a multi-hit move`, () => {
-		battle = common.createBattle([
-			[{ species: "Cinccino", ability: 'skilllink', moves: ['bulletseed'] }],
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'] }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Cinccino", ability: 'skilllink', moves: ['bulletseed'] },
+		], [
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'] },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		]]);
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
 		assert.equal(battle.requestState, 'switch');
@@ -98,10 +100,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should request switch-out after taking hazard damage`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'] }, { species: "Magikarp", ability: 'swiftswim', moves: ['splash'] }],
-			[{ species: "Arceus-Flying", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'dragonascent'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'] },
+			{ species: "Magikarp", ability: 'swiftswim', moves: ['splash'] },
+		], [
+			{ species: "Arceus-Flying", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'dragonascent'] },
+		]]);
 		battle.makeChoices('move uturn', 'move stealthrock');
 		battle.makeChoices('switch 2', '');
 		battle.makeChoices('move splash', 'move spikes');
@@ -151,10 +155,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should not request switch-out after taking entry hazard damage and getting healed by berry`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry' }, { species: "Magikarp", ability: 'swiftswim', moves: ['splash'] }],
-			[{ species: "Ferrothorn", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'protect'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry' },
+			{ species: "Magikarp", ability: 'swiftswim', moves: ['splash'] },
+		], [
+			{ species: "Ferrothorn", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'protect'] },
+		]]);
 		battle.makeChoices('move uturn', 'move stealthrock');
 		battle.makeChoices('switch 2', '');
 		battle.makeChoices('move splash', 'move spikes');
@@ -165,10 +171,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should not request switch-out after taking poison damage and getting healed by berry`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute', 'sleeptalk'], item: 'sitrusberry' }, { species: "Magikarp", moves: ['splash'] }],
-			[{ species: "Gengar", moves: ['toxic', 'nightshade', 'protect'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute', 'sleeptalk'], item: 'sitrusberry' },
+			{ species: "Magikarp", moves: ['splash'] },
+		], [
+			{ species: "Gengar", moves: ['toxic', 'nightshade', 'protect'] },
+		]]);
 		battle.makeChoices('move substitute', 'move toxic');
 		battle.makeChoices('move sleeptalk', 'move nightshade');
 		battle.makeChoices('move sleeptalk', 'move protect');
@@ -176,10 +184,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should not request switch-out on usage of Substitute`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'], ivs: EMPTY_IVS }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-			[{ species: "Deoxys-Attack", ability: 'pressure', item: 'laggingtail', moves: ['thunderbolt'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'], ivs: EMPTY_IVS },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		], [
+			{ species: "Deoxys-Attack", ability: 'pressure', item: 'laggingtail', moves: ['thunderbolt'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move thunderbolt');
 		assert.false.atMost(eePokemon.hp, eePokemon.maxhp / 2);
@@ -207,10 +217,13 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should not prevent Red Card's activation`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', item: 'redcard', moves: ['sleeptalk'], ivs: EMPTY_IVS }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-			[{ species: "Raticate", ability: 'guts', moves: ['superfang'] }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', item: 'redcard', moves: ['sleeptalk'], ivs: EMPTY_IVS },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		], [
+			{ species: "Raticate", ability: 'guts', moves: ['superfang'] },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move superfang');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
@@ -224,10 +237,13 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it(`should not prevent Eject Button's activation`, () => {
-		battle = common.createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', item: 'ejectbutton', moves: ['sleeptalk'], ivs: EMPTY_IVS }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-			[{ species: "Raticate", ability: 'guts', moves: ['superfang'] }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', item: 'ejectbutton', moves: ['sleeptalk'], ivs: EMPTY_IVS },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		], [
+			{ species: "Raticate", ability: 'guts', moves: ['superfang'] },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('auto', 'auto');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
@@ -297,10 +313,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it('should request switchout if its HP drops to below 50% while dynamaxed', () => {
-		battle = common.gen(8).createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['closecombat'], ivs: EMPTY_IVS, level: 30 }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-			[{ species: "Gengar", ability: 'cursedbody', moves: ['nightshade'] }],
-		]);
+		battle = common.gen(8).createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['closecombat'], ivs: EMPTY_IVS, level: 30 },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		], [
+			{ species: "Gengar", ability: 'cursedbody', moves: ['nightshade'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move maxknuckle dynamax', 'move nightshade');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
@@ -308,10 +326,12 @@ describe(`Emergency Exit`, () => {
 	});
 
 	it('should not request switchout if its HP is below 50% when its dynamax ends', () => {
-		battle = common.gen(8).createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
-			[{ species: "Landorus", ability: 'sheerforce', moves: ['sludgewave'] }],
-		]);
+		battle = common.gen(8).createBattle([[
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS },
+			{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+		], [
+			{ species: "Landorus", ability: 'sheerforce', moves: ['sludgewave'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move maxquake dynamax', 'move sludgewave');
 		battle.makeChoices();

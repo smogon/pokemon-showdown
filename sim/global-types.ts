@@ -279,7 +279,7 @@ interface ModdedBattlePokemon {
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon, message?: string | boolean) => ID;
+	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,
@@ -398,6 +398,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getTarget?: (
 		this: Battle, pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon
 	) => Pokemon | null;
+
+	// OM
+	resolveTargetLoc?: (this: Battle, targetLoc: number, action: Action, move: ActiveMove) => number;
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;
@@ -492,6 +495,7 @@ declare namespace RandomTeamsTypes {
 		statusCure?: number;
 		teraBlast?: number;
 		imprison?: number;
+		dynamaxUser?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
@@ -578,5 +582,6 @@ declare namespace RandomTeamsTypes {
 		'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
 		'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
 		'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
-		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user' | 'Imprisoner';
+		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user' | 'Imprisoner' |
+		'Dynamax User';
 }

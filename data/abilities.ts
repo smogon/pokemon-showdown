@@ -2096,6 +2096,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
+				if (!move.smartTarget) damage += Number(move.totalDamage);
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
@@ -2511,11 +2512,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	megasol: {
 		isNonstandard: "Future",
+		onWeatherModifyDamagePriority: 1,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (this.field.weather !== 'sunnyday') {
-				(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
-					.call(this, damage, attacker, defender, move);
-			}
+			(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
+				.call(this, damage, attacker, defender, move);
+			return damage; // fast exit from event
 		},
 		flags: {},
 		name: "Mega Sol",
@@ -2833,7 +2834,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// is known
 			if (pokemon.showCure === undefined) pokemon.showCure = true;
 
-			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
 			pokemon.clearStatus();
 
 			// only reset .showCure if it's false
@@ -4420,7 +4421,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	spicyspray: {
 		isNonstandard: "Future",
 		onDamagingHit(damage, target, source, move) {
-			source.trySetStatus('brn', target);
+			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
+				this.add('-immune', source);
+			}
 		},
 		flags: {},
 		name: "Spicy Spray",
@@ -4910,13 +4913,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	terashell: {
 		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
-		// needs two checks to reset between regular moves and future attacks
-		onAnyBeforeMove() {
-			delete this.effectState.resisted;
-		},
-		onAnyAfterMove() {
-			delete this.effectState.resisted;
-		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, breakable: 1 },
 		name: "Tera Shell",
 		rating: 3.5,
