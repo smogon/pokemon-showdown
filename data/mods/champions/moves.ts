@@ -204,7 +204,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					if (target.status === status) {
 						this.add('-fail', target, status);
 					} else {
-						this.add('-fail', source);
+						this.add('-fail', target);
 					}
 					return;
 				}
