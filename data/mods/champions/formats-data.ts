@@ -29,7 +29,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	charizardmegax: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	charizardmegay: {
 		tier: "UUBL",
@@ -4693,7 +4693,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	espathra: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	wiglett: {
 		isNonstandard: "Past",
