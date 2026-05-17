@@ -1059,7 +1059,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
 				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega');
 				}
 			}
 		},
