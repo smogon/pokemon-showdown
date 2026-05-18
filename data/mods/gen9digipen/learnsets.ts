@@ -167,7 +167,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			icebeam: ["9M"],
 			icywind: ["9M"],
 			nastyplot: ["9L1"],
-			overchoice: ["9L65"],
+			overchoice: ["9L50"],
 			protect: ["9M"],
 			psybeam: ["9L20"],
 			psychic: ["9M"],

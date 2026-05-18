@@ -5536,7 +5536,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			encore: ["9M", "8M"],
 			endure: ["9M", "8M"],
 			extrasensory: ["9L1", "8L1"],
-			facade: ["9M", "8M", "8V", "7M"],
+			facadex: ["9M", "8M", "8V", "7M"],
 			faketears: ["9M", "8M"],
 			foulplay: ["9M", "8M", "8V", "7T"],
 			freezedry: ["9L1"],

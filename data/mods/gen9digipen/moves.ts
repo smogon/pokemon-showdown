@@ -138,7 +138,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Damocles",
+		name: "Sword of Damocles",
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },

@@ -42,14 +42,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		contributors: ["Logan C."],
 	},
 
-	// ── Ability Changes/Buffs ────────────────────────────────────────────────────
-	mountaineer: {
+	// ---- CAP Abilities -------------------------------------------------------------
+	mountaineer: { // Need to 
 		inherit: true,
 		isNonstandard: "DigiPen",
+	},
+	
+	// ── Ability Changes/Buffs ────────────────────────────────────────────────────
+	angerpoint: {
+		inherit: true,
+		modified: "DigiPen",
+		onSourceModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
+		shortDesc: "If this Pokemon takes a critical hit, +12 Attack. Increased critical hit ratio against this Pokemon.",
+		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages. If a Pokemon uses a move that targets this Pokemon, the attacker's critical hit ratio is raised by 1 stage.",
+		contributors: ["Bryce G."],
 	},
 
 	// ── Champions "Leaked" Abilities ─────────────────────────────────────────────────────────
 	nightmares: {
+		isNonstandard: "DigiPen",
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
@@ -71,6 +84,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	},
 	thermalboost: {
+		isNonstandard: "DigiPen",
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
