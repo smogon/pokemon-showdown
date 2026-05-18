@@ -43,13 +43,10 @@ declare namespace TierTypes {
 		"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC" |
-		// DigiPen mod tiers — interleaved with standard tiers in the teambuilder.
-		// Singles/NatDex: DigiPen Uber > DigiPen > DigiPen NFE > DigiPen LC
-		// Doubles:        DigiPen DUber > DigiPen > DigiPen NFE > DigiPen LC
-		// VGC:            DigiPen Restricted > DigiPen Regular > DigiPen NFE > DigiPen LC
+		// DigiPen mod tiers — these are interleaved with standard tiers in the teambuilder.
 		"DigiPen Uber" | "DigiPen" | "DigiPen NFE" | "DigiPen LC" |
 		"DigiPen DUber" | "DigiPen Restricted" | "DigiPen Mythical" | "DigiPen Regular";
-	export type DigiPen = "DigiPen" | "DigiPen NFE" | "DigiPen LC" | "DigiPen Uber" | "DigiPen DUber";
+	//export type DigiPen = "DigiPen" | "DigiPen NFE" | "DigiPen LC" | "DigiPen Uber" | "DigiPen DUber";
 }
 
 interface EventInfo {

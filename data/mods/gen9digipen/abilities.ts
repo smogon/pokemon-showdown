@@ -11,11 +11,6 @@
 // entirely. Only the fields you specify will differ in DigiPen formats.
 
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
-
-	mountaineer: {
-		inherit: true,
-		isNonstandard: "DigiPen",
-	},
 	
 	// ── DigiPen Custom Abilities ─────────────────────────────────────────────────────────
 	procrastinator: {
@@ -48,6 +43,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 
 	// ── Ability Changes/Buffs ────────────────────────────────────────────────────
+	mountaineer: {
+		inherit: true,
+		isNonstandard: "DigiPen",
+	},
 
 	// ── Champions "Leaked" Abilities ─────────────────────────────────────────────────────────
 	nightmares: {
@@ -91,8 +90,5 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 3.5,
 		num: 3002,
 		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Fire-type attack.",
-	},
-
-	// ── Overriding Existing Abilities ────────────────────────────────────────────
-	
+	},	
 };

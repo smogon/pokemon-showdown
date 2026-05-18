@@ -6,19 +6,27 @@
 // Add a new entry keyed by the Pokémon's ID (lowercase, no spaces/punctuation).
 //
 // Example:
-//   digipenmon: {
-//     num: 2000,
-//     name: "DigipenMon",
+//   pootis: {
+//     num: 2002,
+//     name: "Pootis",
+//     isNonstandard: "DigiPen",
 //     digipenIconnum: 100,
 //     digipenSprite: true,
-//     isNonstandard: "DigiPen",
-//     types: ["Normal"],
-//     baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
-//     abilities: { 0: "Levitate", 1: "Technician", H: "Magician" },
-//     heightm: 1.0,
-//     weightkg: 30.0,
-//     color: "Blue",
-//     eggGroups: ["Undiscovered"],
+//     types: ["Fighting"],
+//     gender: "M",
+//     baseStats: { hp: 50, atk: 60, def: 50, spa: 60, spd: 50, spe: 35 },
+//     abilities: { 0: "Thick Fat", 1: "Gluttony", H: "Ripen" },
+//     heightm: 0.7,
+//     weightkg: 34,
+//     color: "Red",
+//     evos: ["Armorobin"],
+//     eggGroups: ["Flying", "Monster"],
+//     title: "Punch Baby",
+//     dexEntry: "…",
+//     habitat: "…",
+//     notes: "…",
+//     contributors: ["…"],
+//     artSource: { artist: "…", url: "https://…" },
 //   },
 //
 // Regional forms are separate entries whose `baseSpecies` points at the
@@ -109,7 +117,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		habitat: "Test habitat",
 		notes: "Test note.",
 		contributors: ["Will T.", "Test contributor"],
-		artSource: { artist: "Test artist", url: "Test source" }
+		artSource: { artist: "American Bird Conservancy", url: "https://abcbirds.org/news/eight-red-birds-to-know-in-north-america/" }
 	},
 	armorobin: {
 		num: 2003,
@@ -168,7 +176,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Human-Like", "Fairy"],
 		title: "Bored",
 		dexEntry: "Its appearance is tall and lanky. Given its skeletal body, it curls up in soft clothing to keep warm, generally pajamas and robes. Lethargic by nature, it will generally attempt to spend its time pursuing its own immediate interests. If given a task to complete, it will generally wait until it is able to achieve the motivation to do so.",
-		notes: "Logan's Pokesona",
+		notes: "Logan's Pokésona",
 		contributors: ["Logan C."],
 	},
 

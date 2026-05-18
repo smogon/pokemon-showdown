@@ -21,7 +21,7 @@ interface AbilityFlags {
 }
 
 export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
-	/** Client dex: offer base vs DigiPen toggle when set */
+	/** Client dex: indicate modified abilities */
 	modified?: 'DigiPen';
 	/** Client dex: contributor names */
 	contributors?: string[];

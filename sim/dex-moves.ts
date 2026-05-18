@@ -144,9 +144,9 @@ export interface MoveEventMethods {
 
 export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	name: string;
-	/** Client dex: offer base vs DigiPen toggle when set */
-	modified?: 'DigiPen';
-	/** Client dex: custom Pokédex paragraph */
+	/** Client dex: indicate modified moves */
+	modified?: string;
+	/** Client dex: Pokédex entry */
 	dexEntry?: string;
 	/** Client dex: contributor names */
 	contributors?: string[];

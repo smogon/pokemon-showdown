@@ -17,22 +17,21 @@ export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
 	num: number;
-	iconnum?: number;
 	/** Client: load battle/teambuilder assets from DigiPen sprite host */
 	digipenSprite?: boolean;
 	/** Client: icon index on DigiPen `pokemonicons-sheet` */
 	digipenIconnum?: number;
-	/** Client dex: species category line (e.g. "Punch Baby Pokémon") */
+	/** Client dex: Pokémon title */
 	title?: string;
-	/** Client dex: custom Pokédex paragraph */
+	/** Client dex: Pokédex entry */
 	dexEntry?: string;
-	/** Client dex: habitat shown next to color */
+	/** Client dex: habitat */
 	habitat?: string;
-	/** Client dex: flavor-tab notes (plain text) */
+	/** Client dex: miscellaneous notes */
 	notes?: string;
-	/** Client dex: contributor names (strings; renderer may support objects later) */
+	/** Client dex: contributor names */
 	contributors?: string[];
-	/** Client dex: art credit for acknowledgements */
+	/** Client dex: art source */
 	artSource?: { artist?: string; url?: string };
 	types: string[];
 	abilities: SpeciesAbility;
@@ -323,8 +322,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.iconnum = data.iconnum;
-		this.digipenSprite = data.digipenSprite === true ? true : undefined;
-		this.digipenIconnum = typeof data.digipenIconnum === 'number' ? data.digipenIconnum : undefined;
+		this.digipenSprite = data.digipenSprite || undefined;
+		this.digipenIconnum = data.digipenIconnum || undefined;
 		this.abilities = data.abilities || { 0: "" };
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;

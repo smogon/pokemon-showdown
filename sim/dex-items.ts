@@ -10,7 +10,7 @@ interface FlingData {
 }
 
 export interface ItemData extends Partial<Item>, PokemonEventMethods {
-	/** Client dex: offer base vs DigiPen toggle when set */
+	/** Client dex: indicate modified items */
 	modified?: 'DigiPen';
 	/** Client dex: contributor names */
 	contributors?: string[];

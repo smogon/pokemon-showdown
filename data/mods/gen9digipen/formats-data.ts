@@ -14,8 +14,8 @@
 //   Use `inherit: true` + only the fields you want to differ.
 //   The base tier is preserved in all non-DigiPen formats.
 //
-// Example – a custom Pokémon:
-//   digipenmon: { isNonstandard: "DigiPen", tier: "DigiPen", doublesTier: "DigiPen", natDexTier: "DigiPen" },
+// Example – a custom Pokémon (see `pootis` in this file for a full entry):
+//   pootis: { isNonstandard: "DigiPen", tier: "DigiPen LC", doublesTier: "DigiPen LC", natDexTier: "DigiPen LC" },
 //
 // Example – override an existing Pokémon's tier inside DigiPen only:
 //   garchomp: { inherit: true, tier: "DigiPen Uber" },
