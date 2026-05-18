@@ -515,11 +515,17 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	koffing: {
 		name: "Koffing",
 	},
+	koffingbanerica: {
+		name: "Koffing-Banerica",
+	},
 	weezing: {
 		name: "Weezing",
 	},
 	weezinggalar: {
 		name: "Weezing-Galar",
+	},
+	weezingbanerica: {
+		name: "Weezing-Banerica",
 	},
 	rhyhorn: {
 		name: "Rhyhorn",

@@ -2262,6 +2262,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
 
+	twofaced: {
+		name: "Two-Faced",
+		desc: "If this Pokemon is a Weezing-Banerica, it changes formes between its Cute Mode and Scary Mode at the end of each turn.",
+		shortDesc: "If Weezing-Banerica, it changes between Cute and Scary Mode at the end of each turn.",
+	},
+
 	// CAP
 	mountaineer: {
 		name: "Mountaineer",

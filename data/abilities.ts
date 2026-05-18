@@ -5581,6 +5581,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 278,
 	},
 
+	twofaced: {
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Weezing-Banerica' || pokemon.terastallized) return;
+			const targetForme = pokemon.species.name === 'Weezing-Banerica' ? 'Weezing-Banerica-Scary' : 'Weezing-Banerica';
+			pokemon.formeChange(targetForme);
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
+		name: "Two-Faced",
+		rating: 1,
+		num: 258,
+	},
+
 	// CAP
 	mountaineer: {
 		onDamage(damage, target, source, effect) {
