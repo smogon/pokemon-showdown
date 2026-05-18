@@ -25,27 +25,27 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// ── Fakemon (Original) ─────────────────────────────────────────────
 	pootis: {
 		isNonstandard: "DigiPen",
-		tier: "DigiPen LC",
-		doublesTier: "DigiPen LC",
-		natDexTier: "DigiPen LC",
+		tier: "LC",
+		doublesTier: "LC",
+		natDexTier: "LC",
 	},
 	armorobin: {
 		isNonstandard: "DigiPen",
-		tier: "DigiPen NFE",
-		doublesTier: "DigiPen NFE",
-		natDexTier: "DigiPen NFE",
+		tier: "NFE",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	chickiev: {
 		isNonstandard: "DigiPen",
-		tier: "DigiPen",
-		doublesTier: "DigiPen",
-		natDexTier: "DigiPen",
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 	mojamas: {
 		isNonstandard: "DigiPen",
-		tier: "DigiPen",
-		doublesTier: "DigiPen",
-		natDexTier: "DigiPen",
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────
@@ -53,9 +53,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// ── Forms/Variants ────────────────────────────────────────────────────
 	typhlosiondigipen: {
 		isNonstandard: "DigiPen",
-		tier: "DigiPen",
-		doublesTier: "DigiPen",
-		natDexTier: "DigiPen",
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 
 	// ── Mega Evolutions ────────────────────────────────────────────────────
@@ -63,7 +63,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	hydreigonmega: {
 		isNonstandard: "DigiPen Future",
 		tier: "Illegal",
-		natDexTier: "DigiPen"
+		natDexTier: "OU"
 	},
 
 	// ── Base-game Pokémon Changes ───────────────────────────────────────
@@ -116,7 +116,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	darkraimega: {
 		inherit: true,
-		isNonstandard: "DigiPen",
 		natDexTier: "OU",
 	},
 	delphoxmega: {
