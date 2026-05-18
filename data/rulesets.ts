@@ -1352,7 +1352,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
-		desc: "Shows the HP of Pok&eacute;mon in percentages",
+		desc: "Shows the HP of Pok&eacute;mon in rounded-up percentages",
 		onBegin() {
 			this.add('rule', 'HP Percentage Mod: HP is shown in percentages');
 			this.reportPercentages = true;
