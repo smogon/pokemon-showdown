@@ -235,5 +235,15 @@
                 "abilities": ["Adaptability"]
             }
         ]
+    },
+    "banette": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Destiny Bond", "Gunk Shot", "Knock Off", "Poltergeist", "Shadow Sneak", "Taunt", "Will-O-Wisp"],
+                "abilities": ["Prankster"]
+            }
+        ]
     }
 }

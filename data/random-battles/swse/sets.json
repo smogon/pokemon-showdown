@@ -5,7 +5,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Body Press", "Iron Defense", "Leech Seed", "Spikes", "Stealth Rock", "Stone Edge", "Wood Hammer"],
-                "abilities": ["Droughtproof", "Overgrow"]
+                "abilities": ["Droughtproof"]
             },
             {
                 "role": "Pollen Setter",
@@ -20,12 +20,12 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Crunch", "Flare Blitz", "Gunk Shot", "Headlong Rush", "Iron Head", "Stone Edge", "U-turn", "Wild Charge"],
-                "abilities": ["Blaze", "Hydrophobic"]
+                "abilities": ["Hydrophobic"]
             },
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Crunch", "Flare Blitz", "Headlong Rush", "Iron Head", "Stone Edge", "Swords Dance", "Wild Charge"],
-                "abilities": ["Blaze", "Hydrophobic"]
+                "abilities": ["Hydrophobic"]
             },
             {
                 "role": "Sun Setter",
@@ -40,7 +40,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Aura Sphere", "Deception", "Hive Shriek", "Hydro Pump", "Ice Beam"],
-                "abilities": ["Bubble Helm", "Torrent"]
+                "abilities": ["Bubble Helm"]
             },
             {
                 "role": "Rain Setter",
@@ -258,7 +258,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["Body Press", "Earthquake", "Iron Head", "Knock Off", "Stone Edge"],
                 "abilities": ["Rocky Body"]
             }
@@ -419,8 +419,8 @@
         "level": 85,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Energy Ball", "Fire Blast", "Nasty Plot", "Shadow Ball"],
+                "role": "Setup Sweeper",
+                "movepool": ["Fire Blast", "Shadow Ball", "Solar Beam", "Sunny Day"],
                 "abilities": ["Solar Power"]
             },
             {
@@ -435,7 +435,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Blizzard", "Dazzling Gleam", "Freeze-Dry", "Snowscape"],
+                "movepool": ["Blizzard","Dazzling Gleam",  "Freeze-Dry", "Snowscape"],
                 "abilities": ["Absolute Zero"]
             },
             {
@@ -1307,8 +1307,13 @@
         "level": 85,
         "sets": [
             {
+                "role": "Fast Support",
+                "movepool": ["Gunk Shot", "Knock Off", "Poltergeist", "Shadow Sneak", "Taunt", "Will-O-Wisp"],
+                "abilities": ["Prankster"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["Gunk Shot", "Poltergeist", "Shadow Sneak", "Swords Dance", "Thunder Wave"],
+                "movepool": ["Gunk Shot", "Poltergeist", "Shadow Sneak", "Swords Dance", "Thunder Wave", "Will-O-Wisp"],
                 "abilities": ["Prankster"]
             }
         ]
@@ -1954,6 +1959,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
+                "movepool": ["Night Slash", "Play Rough", "Sacred Sword", "Sucker Punch"],
+                "abilities": ["Sharpness"]
+            },
+            {
+                "role": "Setup Sweeper",
                 "movepool": ["Excalibur", "Night Slash", "Sacred Sword", "Sucker Punch", "Swords Dance"],
                 "abilities": ["Sharpness"]
             }
