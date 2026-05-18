@@ -25,27 +25,27 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// ── Fakemon (Original) ─────────────────────────────────────────────
 	pootis: {
 		isNonstandard: "DigiPen",
-		tier: "LC",
-		doublesTier: "LC",
-		natDexTier: "LC",
+		tier: "DigiPen LC",
+		doublesTier: "DigiPen LC",
+		natDexTier: "DigiPen LC",
 	},
 	armorobin: {
 		isNonstandard: "DigiPen",
-		tier: "NFE",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "DigiPen NFE",
+		doublesTier: "DigiPen NFE",
+		natDexTier: "DigiPen NFE",
 	},
 	chickiev: {
 		isNonstandard: "DigiPen",
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
 	},
 	mojamas: {
 		isNonstandard: "DigiPen",
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
 	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────
@@ -53,9 +53,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// ── Forms/Variants ────────────────────────────────────────────────────
 	typhlosiondigipen: {
 		isNonstandard: "DigiPen",
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
 	},
 
 	// ── Mega Evolutions ────────────────────────────────────────────────────
