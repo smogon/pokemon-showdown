@@ -30,7 +30,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// ── Mega Stones ──────────────────────────────────────────────────────────
 	hydreigite: {
 		name: "Hydreigite",
-		spritenum: 585,
+		spritenum: 0,
 		megaStone: { "Hydreigon": "Hydreigon-Mega" },
 		itemUser: ["Hydreigon"],
 		onTakeItem(item, source) {
