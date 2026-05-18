@@ -1834,6 +1834,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	slowbronite: {
 		name: "Slowbronite",
 		shortDesc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+		champions: {
+			shortDesc: "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
+		},
 	},
 	smoothrock: {
 		name: "Smooth Rock",

@@ -647,6 +647,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Healer",
 		desc: "30% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
 		shortDesc: "30% chance this Pokemon's ally has its status cured at the end of each turn.",
+		champions: {
+			desc: "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
+			shortDesc: "50% chance this Pokemon's ally has its status cured at the end of each turn.",
+		},
 		gen6: {
 			desc: "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
 			shortDesc: "30% chance each adjacent ally has its status cured at the end of each turn.",
@@ -2156,6 +2160,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	unseenfist: {
 		name: "Unseen Fist",
 		shortDesc: "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+		champions: {
+			shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+		},
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
