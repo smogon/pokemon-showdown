@@ -252,7 +252,32 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 
 	// ── Buff Item Holders ─────────────────────────────────────────────
-	
+
+	sirfetchdarmored: {
+		num: 865,
+		name: "Sirfetch\u2019d-Armored",
+		isNonstandard: "DigiPen",
+		digipenIcon: true,
+		digipenSprite: true,
+		baseSpecies: "Sirfetch\u2019d",
+		forme: "Armored",
+		types: ["Fighting"],
+		baseStats: { hp: 62, atk: 135, def: 125, spa: 68, spd: 102, spe: 65 },
+		abilities: { 0: "Steadfast", H: "Scrappy" },
+		heightm: 0.8,
+		weightkg: 167,
+		color: "White",
+		eggGroups: ["Flying", "Field"],
+		requiredItem: "Armor",
+		changesFrom: "Sirfetch\u2019d",
+	},
+	sirfetchd: {
+		inherit: true,
+		modified: "DigiPen",
+		otherFormes: ["Sirfetch\u2019d-Armored"],
+		formeOrder: ["Sirfetch\u2019d", "Sirfetch\u2019d-Armored"],
+	},
+
 	sandslasharmored: {
 		num: 28,
 		name: "Sandslash-Armored",
@@ -268,7 +293,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 79.5,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		requiredItem: "Sandslash Armor",
+		requiredItem: "Armor",
 		changesFrom: "Sandslash",
 	},
 	sandslashalolaarmored: {
@@ -286,7 +311,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 105,
 		color: "Blue",
 		eggGroups: ["Field"],
-		requiredItem: "Sandslash Armor",
+		requiredItem: "Armor",
 		changesFrom: "Sandslash-Alola",
 	},
 	sandslash: {
@@ -294,6 +319,51 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		modified: "DigiPen",
 		otherFormes: ["Sandslash-Alola", "Sandslash-Armored", "Sandslash-Alola-Armored"],	
 		formeOrder: ["Sandslash", "Sandslash-Alola", "Sandslash-Armored", "Sandslash-Alola-Armored"],
+	},
+
+	samurottarmored: {
+		num: 503,
+		name: "Samurott-Armored",
+		isNonstandard: "DigiPen",
+		digipenIcon: true,
+		digipenSprite: true,
+		baseSpecies: "Samurott",
+		forme: "Armored",
+		types: ["Water"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 95, atk: 100, def: 105, spa: 108, spd: 110, spe: 70 },
+		abilities: { 0: "Torrent", H: "Shell Armor" },
+		heightm: 1.5,
+		weightkg: 144.6,
+		color: "Blue",
+		eggGroups: ["Field"],
+		requiredItem: "Armor",
+		changesFrom: "Samurott",
+	},
+	samurotthisuiarmored: {
+		num: 503,
+		name: "Samurott-Hisui-Armored",
+		isNonstandard: "DigiPen",
+		digipenIcon: true,
+		digipenSprite: true,
+		baseSpecies: "Samurott",
+		forme: "Hisui-Armored",
+		types: ["Water", "Dark"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 90, atk: 108, def: 110, spa: 100, spd: 105, spe: 85 },
+		abilities: { 0: "Torrent", H: "Sharpness" },
+		heightm: 1.5,
+		weightkg: 108.2,
+		color: "Blue",
+		eggGroups: ["Field"],
+		requiredItem: "Armor",
+		changesFrom: "Samurott-Hisui",
+	},
+	samurott: {
+		inherit: true,
+		modified: "DigiPen",
+		otherFormes: ["Samurott-Hisui", "Samurott-Armored", "Samurott-Hisui-Armored"],
+		formeOrder: ["Samurott", "Samurott-Hisui", "Samurott-Armored", "Samurott-Hisui-Armored"],
 	},
 
 	// ── Mon Changes/Buffs ────────────────────────────────────────────────────

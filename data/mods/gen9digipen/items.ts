@@ -61,16 +61,22 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// -- Buff Items ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
 
-	sandslasharmor: {
-		name: "Sandslash Armor",
+	armor: {
+		name: "Armor",
 		spritenum: 0,
 		fling: { basePower: 60 },
-		forcedFormes: { 'Sandslash': 'Sandslash-Armored', 'Sandslash-Alola': 'Sandslash-Alola-Armored'},
-		itemUser: ['Sandslash', 'Sandslash-Alola'],
+		forcedFormes: { 
+			'Sirfetch\u2019d': 'Sirfetch\u2019d-Armored', 
+			'Sandslash': 'Sandslash-Armored', 
+			'Sandslash-Alola': 'Sandslash-Alola-Armored',
+			'Samurott': 'Samurott-Armored',
+			'Samurott-Hisui': 'Samurott-Hisui-Armored'
+		},
+		itemUser: ['Sirfetch\u2019d', 'Sandslash', 'Sandslash-Alola', 'Samurott', 'Samurott-Hisui'],
 		num: 20002,
 		gen: 9,
 		isNonstandard: "DigiPen",
-		shortDesc: "If held by a Sandslash, this item changes its forme to Armored.",
+		shortDesc: "If held by a certain Pokemon, this item increases their base defense and special defense.",
 		quality: "specific",
 		dexEntry: "This is a test dex entry.",
 		contributors: ["Bryce G."],
