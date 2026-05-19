@@ -100,6 +100,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
+	declare readonly forcedFormes?: { [baseSpecies: string]: string }; // For DigiPen buff items that multiple Pokemon can use
 	declare readonly isChoice?: boolean;
 	declare readonly naturalGift?: { basePower: number, type: string };
 	declare readonly spritenum?: number;

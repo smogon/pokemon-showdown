@@ -65,6 +65,20 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		natDexTier: "OU"
 	},
 
+	// ── Buff Item Holders ─────────────────────────────────────────────
+	sandslasharmored: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	sandslashalolaarmored: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+
 	// ── Base-game Pokémon Changes ───────────────────────────────────────
 	// Don't forget to add inherit: true
 	// Move sufficiently buffed Pokemon to OU 

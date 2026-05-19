@@ -61,6 +61,21 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 	// -- Buff Items ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
+	sandslasharmor: {
+		name: "Sandslash Armor",
+		spritenum: 0,
+		fling: {
+			basePower: 60,
+		},
+		forcedFormes: { 'Sandslash': 'Sandslash-Armored', 'Sandslash-Alola': 'Sandslash-Alola-Armored'},
+		itemUser: ['Sandslash', 'Sandslash-Alola'],
+		num: 20002,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "If held by a Sandslash or Sandslash-Alola, this item changes its forme to Armored.",
+		quality: "specific",
+		contributors: ["Bryce G."],
+	},
 
 	// ── Mega Stones ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet of the corresponding Mega Pokemon
@@ -72,7 +87,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
-		num: 30001,
+		num: 30003,
 		gen: 9,
 		isNonstandard: "DigiPen Future",
 		shortDesc: "If held by a Hydreigon, this item allows it to Mega Evolve in battle.",

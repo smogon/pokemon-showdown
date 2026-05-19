@@ -1682,6 +1682,9 @@ export class TeamValidator {
 			if (item.forcedForme && species.name === dex.species.get(item.forcedForme).baseSpecies) {
 				set.species = item.forcedForme;
 			}
+			if (item.forcedFormes && species.name in item.forcedFormes) {
+				set.species = item.forcedFormes[species.name];
+			}
 		}
 
 		if (species.name === 'Pikachu-Cosplay') {
