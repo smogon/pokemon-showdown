@@ -81,8 +81,7 @@ export const IPTools = new class {
 	/**
 	 * IPTools.queryDnsbl(ip, callback)
 	 *
-	 * Calls callb
-	 * ack(blocklist), where blocklist is the blocklist domain
+	 * Calls callback(blocklist), where blocklist is the blocklist domain
 	 * if the passed IP is in a blocklist, or null if the IP is not in
 	 * any blocklist.
 	 *
