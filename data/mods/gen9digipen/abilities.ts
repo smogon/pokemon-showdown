@@ -3,12 +3,25 @@
 // HOW TO ADD CONTENT:
 //
 // ── Custom Abilities ─────────────────────────────────────────────────────────
-// New DigiPen abilities MUST include `isNonstandard: "DigiPen"` so they are
-// treated as illegal outside DigiPen formats.
+// New DigiPen abilities should include `isNonstandard: "DigiPen"` so they are
+// treated as illegal outside DigiPen formats and flagged as DigiPen in the Pokedex.
 //
-// ── Overriding Existing Abilities ────────────────────────────────────────────
+// ── Changing Existing Abilities ────────────────────────────────────────────
 // Use `inherit: true` to patch an existing ability without replacing it
-// entirely. Only the fields you specify will differ in DigiPen formats.
+// entirely. Only the fields you specify will differ in DigiPen formats. Add
+// the `modified: true` flag to indicate that the ability has been modified for
+// highlighting in the Pokedex
+//
+// ── Other Notes ────────────────────────────────────────────
+//// `shortDesc` field is displayed in Teambuilder and should be under 100 characters.
+//
+// `desc` field is displayed in the Pokedex. This field is optional if a longer description
+// not needed, and will default to the `shortDesc` field if omitted.
+//
+// (See data/text/abilities.ts for examples of desc and shortDesc fields.)
+//
+// `contributors` field is an optional field used to credit the person/people who contributed to the ability
+
 
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	
@@ -43,7 +56,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 
 	// ---- CAP Abilities -------------------------------------------------------------
-	mountaineer: { // Need to 
+	// Any CAP abilities on DigiPen Pokemon need to be overriden as `isNonstandard: "DigiPen"` so they are
+	// legal in DigiPen formats.
+	mountaineer: { 
 		inherit: true,
 		isNonstandard: "DigiPen",
 	},

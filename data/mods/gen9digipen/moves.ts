@@ -1,5 +1,21 @@
+// isNonstandard: "DigiPen" means the move is only legal in DigiPen formats.
+//
+// modified: "DigiPen" means the move has been modified for DigiPen formats. This is used to highlight
+// it in the Pokedex.
+// 
+// `shortDesc` field is displayed in Teambuilder and should be under 100 characters.
+//
+// `desc` field is displayed in the Pokedex. This field is optional if a longer description
+// not needed, and will default to the `shortDesc` field if omitted.
+//
+// (See data/text/moves.ts for examples of desc and shortDesc fields.)
+//
+// `contributors` field is an optional field used to credit the person/people who contributed to the move
+
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	/* ----- DigiPen Custom Moves ───────────────────────────────────────────── */
+	// Use ordering from DigiPen Spreadsheet
+	
 	inverseroom: {
 		num: 1001,
 		isNonstandard: "DigiPen",
@@ -186,11 +202,51 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contributors: ["Jared G."],
 	},
 
-	/* ----- Modified Moves ───────────────────────────────────────────── */
+	/* ----- Update/changed Moves ───────────────────────────────────────────── */
+	// Use ordering from DigiPen Spreadsheet
+
 	scald: {
 		inherit: true,
 		modified: "DigiPen",
 		basePower: 65,
 		contributors: ["Bryce G."],
-	}
+	},
+
+	/* ----- Other changes ───────────────────────────────────────────── */
+	// Moves changes not related to balance changes but rather for implementing some other change
+	// Use alphabetical ordering
+
+	trickroom: { // implementing the logic for Blueprint
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				let duration = 5;
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
+					duration += 2;
+				}
+				if (source?.hasItem('blueprint')) {
+					duration += 3;
+				}
+				return duration;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`);
+				}
+			},
+			onFieldRestart(target, source) {
+				this.field.removePseudoWeather('trickroom');
+			},
+			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 1,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Trick Room');
+			},
+		},
+	},
 };

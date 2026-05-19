@@ -29,10 +29,13 @@
 //     artSource: { artist: "…", url: "https://…" },
 //   },
 //
+/* ── Regional forms ───────────────────────────────────────────────────────── */
+//
 // Regional forms are separate entries whose `baseSpecies` points at the
 // canonical Pokémon and whose `forme` field names the region
 // (e.g. "Alola", "Hisui", "DigiPen"). Remember to add the form ID to the
-// base Pokémon's `otherFormes` / `formeOrder` lists via `inherit: true`.
+// base Pokémon's `otherFormes` / `formeOrder` lists via `inherit: true` and
+// to add it as an evolution of the base game non-regional form.
 //
 // Example:
 // Step 1 – add the form entry:
@@ -59,27 +62,16 @@
 //     formeOrder: ["Pikachu", "Pikachu-Original", ..., "Pikachu-DigiPen"],
 //   },
 //
+// Step 3 (if necessary) – add the form as an evolution of the base game non-regional form:
+//   pichu: {
+//     inherit: true,
+//     evos: ["Pikachu, Pikachu-Original", ..., "Pikachu-DigiPen"],
+//   },
+//
 // ── Mega Evolutions ─────────────────────────────────────────────────────────
 // Mega Evolutions are forme entries with `requiredItem: "<MegaStone>"`.
 // The base Pokémon's entry needs `otherFormes` / `formeOrder` updated
 // (use `inherit: true` to patch the existing entry without overwriting it).
-// Don't forget to patch the base entry with otherFormes/formeOrder.
-//
-// Example:
-//   gardevoirmega: {
-//     num: 282,
-//     name: "Gardevoir-Mega",
-//     baseSpecies: "Gardevoir",
-//     forme: "Mega",
-//     types: ["Psychic", "Fairy"],
-//     baseStats: { hp: 68, atk: 85, def: 65, spa: 165, spd: 135, spe: 100 },
-//     abilities: { 0: "Pixilate" },
-//     heightm: 1.6,
-//     weightkg: 48.4,
-//     color: "White",
-//     eggGroups: ["Amorphous", "Human-Like"],
-//     requiredItem: "Gardevoirite",
-//   },
 //
 // ── Overriding Existing Pokémon ─────────────────────────────────────────────
 // To change how a base-game Pokémon behaves *only* inside DigiPen formats,
@@ -92,9 +84,19 @@
 //     baseStats: { hp: 60, atk: 75, def: 60, spa: 65, spd: 70, spe: 115 },
 //   },
 //
-// `digipenSprite: true` — client loads gen5 battle / teambuilder sprites
-// from the DigiPen sprite host (see battle-dex.ts). Use `digipenIconnum` for
-// icons on the DigiPen `pokemonicons-sheet`, not `iconnum`.
+// ── Sprites and Icons ─────────────────────────────────────────────
+// `digipenSprite: true` means the client will (attempt to) load the sprite from the digiPen
+//  resource folder instead of the default resource folder.
+//
+// `digipenIcon: true` means the client will (attempt to) load the icon from the digiPen
+// resource folder instead of the default resource folder, and will look for an individual icon
+// file instead of the icon on a sprite sheet
+//
+// ── Other custom fields ─────────────────────────────────────────────
+// `title`, `habitat`, `dexEntry`, and `notes` are optional flavor fields that are displayed in the Pokedex.
+// `contributors and `artSource` are optional fields used to credit the person/people who contributed to
+// the Pokémon and the art source (for Pokemon inspired by fan art) respectively. These are also displayed 
+// in the Pokedex.
 
 export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	// ── Fakemon (Original) ─────────────────────────────────────────────

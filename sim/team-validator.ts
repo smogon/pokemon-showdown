@@ -1866,7 +1866,8 @@ export class TeamValidator {
 		}
 
 		if (nonexistentCheck) {
-			if (tierSpecies.isNonstandard === 'Past' || tierSpecies.isNonstandard === 'Future') {
+			if (tierSpecies.isNonstandard === 'Past' || tierSpecies.isNonstandard === 'Future'
+				|| tierSpecies.isNonstandard === 'DigiPen Past' || tierSpecies.isNonstandard === 'DigiPen Future') {
 				return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
 			}
 			if (tierSpecies.isNonstandard === 'LGPE') {
@@ -1875,17 +1876,14 @@ export class TeamValidator {
 			if (tierSpecies.isNonstandard === 'CAP') {
 				return `${tierSpecies.name} is a CAP and does not exist in this game.`;
 			}
-			if (tierSpecies.isNonstandard === 'DigiPen Past') {
-				return `${tierSpecies.name} is from a past DigiPen season and is not available in this format.`;
-			}
-			if (tierSpecies.isNonstandard === 'DigiPen Future') {
-				return `${tierSpecies.name} is planned for a future DigiPen season and is not yet available.`;
-			}
 			if (tierSpecies.isNonstandard === 'Unobtainable') {
 				return `${tierSpecies.name} is not possible to obtain in this game.`;
 			}
 			if (tierSpecies.isNonstandard === 'Gigantamax') {
 				return `${tierSpecies.name} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely to be a validator bug.)`;
+			}
+			if (tierSpecies.isNonstandard === 'DigiPen') {
+				return `${tierSpecies.name} is a DigiPen Pokemon and does not exist in this game.`;
 			}
 			return `${tierSpecies.name} does not exist in this game.`;
 		}

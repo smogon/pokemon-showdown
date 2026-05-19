@@ -212,8 +212,8 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "DigiPen Uber",
 		speciesFilter: species => species.tier === 'DigiPen Uber',
 	},
-	digipen: {
-		name: "DigiPen",
+	digipentier: {
+		name: "DigiPen Tier",
 		speciesFilter: species => species.tier === 'DigiPen'
 	},
 	digipennfe: {
@@ -299,6 +299,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	future: {
 		name: "Future",
 		genericFilter: thing => thing.isNonstandard === 'Future',
+	},
+	digipen: {
+		name: "DigiPen",
+		genericFilter: thing => thing.isNonstandard === 'DigiPen',
 	},
 	digipenpast: {
 		name: "DigiPen Past",

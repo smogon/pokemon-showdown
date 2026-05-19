@@ -1,7 +1,3 @@
-// Note: `inherit: true` does a shallow merge, so the `learnset` sub-object below
-// replaces the parent's learnset for each species. Full movesets are preserved via
-// inheritance only when learnset validation is not strictly enforced (e.g. formats
-// with officialRater: false). For strict validation, expand these to full learnsets.
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 
 	// ── Base-game Pokémon ─────────────────────────────────────────────
