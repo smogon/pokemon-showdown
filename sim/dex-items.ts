@@ -97,6 +97,9 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 	/** Item quality for teambuilder*/
 	readonly quality?: 'great' | 'good' | 'specific' | 'poor' | 'bad';
+	/** Item dex entry for Pokedex */
+	readonly dexEntry?: string;
+
 
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
@@ -131,7 +134,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.isPokeball = !!data.isPokeball;
 		this.isPrimalOrb = !!data.isPrimalOrb;
 		this.quality = data.quality || undefined;
-		
+		this.dexEntry = data.dexEntry || undefined;
 		if (!this.gen) {
 			if (this.num >= 1124) {
 				this.gen = 9;

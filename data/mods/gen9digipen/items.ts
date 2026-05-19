@@ -44,13 +44,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 	// ── Custom Items ─────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
+
 	blueprint: {
 		name: "Blueprint",
 		spritenum: 0,
-		fling: {
-			basePower: 30,
-		},
-		// implemented in the trick room move
+		fling: { basePower: 30 },
+		// battle logic implemented on Trick Room move
 		num: 10001,
 		gen: 9,
 		isNonstandard: "DigiPen",
@@ -61,24 +60,25 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 	// -- Buff Items ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
+
 	sandslasharmor: {
 		name: "Sandslash Armor",
 		spritenum: 0,
-		fling: {
-			basePower: 60,
-		},
+		fling: { basePower: 60 },
 		forcedFormes: { 'Sandslash': 'Sandslash-Armored', 'Sandslash-Alola': 'Sandslash-Alola-Armored'},
 		itemUser: ['Sandslash', 'Sandslash-Alola'],
 		num: 20002,
 		gen: 9,
 		isNonstandard: "DigiPen",
-		shortDesc: "If held by a Sandslash or Sandslash-Alola, this item changes its forme to Armored.",
+		shortDesc: "If held by a Sandslash, this item changes its forme to Armored.",
 		quality: "specific",
+		dexEntry: "This is a test dex entry.",
 		contributors: ["Bryce G."],
 	},
 
 	// ── Mega Stones ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet of the corresponding Mega Pokemon
+
 	hydreigite: {
 		name: "Hydreigite",
 		spritenum: 0,
