@@ -1763,11 +1763,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveClimateWeather())) &&
-						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveClimateWeather())) &&
+						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveClimateWeather(move))) &&
+						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveClimateWeather(move))) &&
+						!(move.id === 'lunarsurge' && ['bloodmoon'].includes(this.effectiveClimateWeather(move))) &&
 						!(move.id === 'praisethemoon' && this.battle.field.getPseudoWeather('gravity')) &&
-						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveClimateWeather())) &&
-						!(this.hasItem('powerherb') && move.id !== 'skydrop');
+						!(move.id === 'electroshot' &&
+							(['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveClimateWeather(move)) ||
+								['supercell'].includes(this.effectiveEnergyWeather(move)))) &&
+								!(this.hasItem('powerherb') && move.id !== 'skydrop');
 					if (!isCharging) {
 						target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 					}
