@@ -223,7 +223,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	hydreigonmega: {
 		num: 635,
 		name: "Hydreigon-Mega",
-		digipenIconnum: 0,
+		digipenIcon: true,
 		digipenSprite: true,
 		isNonstandard: "DigiPen",
 		baseSpecies: "Hydreigon",

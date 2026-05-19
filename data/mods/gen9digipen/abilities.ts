@@ -55,8 +55,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSourceModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
-		shortDesc: "If this Pokemon takes a critical hit, +12 Attack. Increases opponent's critical hit ratio.",
-		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages. If a Pokemon uses a move that targets this Pokemon, the attacker's critical hit ratio is raised by 1 stage.",
+		shortDesc: "If this Pokemon takes a critical hit, +12 Attack. Opponents critical hit more often.",
+		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages. Attacks used against this Pokemon are 12.5% more likely to be a critical hit.",
 		contributors: ["Bryce G."],
 	},
 
