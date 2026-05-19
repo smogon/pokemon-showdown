@@ -305,7 +305,7 @@ export function randomElement<T>(arr: T[]): T {
 
 /** Forces num to be an integer (between min and max). */
 export function clampIntRange(num: any, min?: number, max?: number): number {
-	if (typeof num !== 'number') num = 0;
+	if (typeof num !== 'number' || !Number.isFinite(num)) num = 0;
 	num = Math.floor(num);
 	if (min !== undefined && num < min) num = min;
 	if (max !== undefined && num > max) num = max;
