@@ -3,7 +3,7 @@
 // HOW TO ADD CONTENT:
 //
 // ── Custom Items ─────────────────────────────────────────────────────────────
-// New DigiPen items must include `isNonstandard: "DigiPen"` so they are
+// New DigiPen items must include `isNonstandard: "DigiPen" | "DigiPen Future" | "DigiPen Past"` so they are
 // treated as illegal outside DigiPen formats and flagged as DigiPen in the Pokedex.
 //
 // DigiPen item icons image files are in a separate resource location and uses a file
@@ -33,6 +33,17 @@
 //
 // Finally, they should be marked as `quality: "specific"` since they are specific to a single Pokemon.
 //
+// --- Buff Items ──────────────────────────────────────────────────────────────
+// Buff Items are items that increase the base stats of a Pokemon when held.
+//
+// They have the `forcedFormes` field set where the key is the base species and the value is the 
+// forme that the Pokemon transforms into.
+//
+// The `itemUser` field is set to the base species of the Pokemon that can hold them for the sake
+// of the Teambuilder
+//
+// Same as above, they should be marked as `quality: "specific"` since they are specific to a subset of Pokemon.
+//
 // ── Overriding Existing Items ─────────────────────────────────────────────────
 // Use `inherit: true` to change one or more fields of an existing item without
 // replacing the whole entry.
@@ -58,6 +69,25 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		shortDesc: "Holder's use of Trick Room lasts 8 turns instead of 5.",
 	},
 
+	// ── Mega Stones ──────────────────────────────────────────────────────────
+	// Use ordering from DigiPen Spreadsheet of the corresponding Mega Pokemon
+
+	hydreigite: {
+		name: "Hydreigite",
+		spritenum: 0,
+		megaStone: { "Hydreigon": "Hydreigon-Mega" },
+		itemUser: ["Hydreigon"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 30003,
+		gen: 9,
+		isNonstandard: "DigiPen Future",
+		shortDesc: "If held by a Hydreigon, this item allows it to Mega Evolve in battle.",
+		quality: "specific",
+		contributors: ["Bryce G."],
+	},
+
 	// -- Buff Items ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
 
@@ -76,28 +106,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: 20002,
 		gen: 9,
 		isNonstandard: "DigiPen",
-		shortDesc: "If held by a certain Pokemon, this item increases their base defense and special defense.",
+		shortDesc: "If held by certain Pokemon, this item increases their base defensive stats.",
+		desc: "If held by Sirfetch\u2019d, Sandlash, Sandlash-Alola, Samurott, or Samurott-Hisui, they transform into their Armored formes.",
 		quality: "specific",
 		dexEntry: "This is a test dex entry.",
-		contributors: ["Bryce G."],
-	},
-
-	// ── Mega Stones ──────────────────────────────────────────────────────────
-	// Use ordering from DigiPen Spreadsheet of the corresponding Mega Pokemon
-
-	hydreigite: {
-		name: "Hydreigite",
-		spritenum: 0,
-		megaStone: { "Hydreigon": "Hydreigon-Mega" },
-		itemUser: ["Hydreigon"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
-		},
-		num: 30003,
-		gen: 9,
-		isNonstandard: "DigiPen Future",
-		shortDesc: "If held by a Hydreigon, this item allows it to Mega Evolve in battle.",
-		quality: "specific",
 		contributors: ["Bryce G."],
 	},
 

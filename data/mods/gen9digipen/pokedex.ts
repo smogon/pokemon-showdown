@@ -1,9 +1,11 @@
 // DigiPen custom Pokémon definitions.
 //
-// HOW TO ADD CONTENT:
+// Remember to add the Pokemon to the format-data.ts file afterwards so it acutally appears in the
+// Teambuilder!
 //
 // ── Custom Pokémon ──────────────────────────────────────────────────────────
-// Add a new entry keyed by the Pokémon's ID (lowercase, no spaces/punctuation).
+// Add a new entry keyed by the Pokémon's ID. This should be lowercase, no spaces/punctuation, with
+// the forme info concatenated after the Pokemon name.
 //
 // Example:
 //   pootis: {
@@ -29,13 +31,14 @@
 //     artSource: { artist: "…", url: "https://…" },
 //   },
 //
-/* ── Regional forms ───────────────────────────────────────────────────────── */
+/* ── Regional Formes / Variant Formes  ───────────────────────────────────────────────────────── */
 //
-// Regional forms are separate entries whose `baseSpecies` points at the
-// canonical Pokémon and whose `forme` field names the region
-// (e.g. "Alola", "Hisui", "DigiPen"). Remember to add the form ID to the
-// base Pokémon's `otherFormes` / `formeOrder` lists via `inherit: true` and
-// to add it as an evolution of the base game non-regional form.
+// Regional formes and variant formes are separate entries whose `baseSpecies` points at the
+// base species Pokémon and whose `forme` field names the region or variant.
+// (e.g. "Alola", "Hisui", "DigiPen", "Snowman"). 
+// 
+// Remember to add the form ID to the base Pokémon's `otherFormes` / `formeOrder` lists 
+// via `inherit: true` and to add it as an evolution of the base game non-regional form.
 //
 // Example:
 // Step 1 – add the form entry:
@@ -73,6 +76,12 @@
 // The base Pokémon's entry needs `otherFormes` / `formeOrder` updated
 // (use `inherit: true` to patch the existing entry without overwriting it).
 //
+// ── Buff Item Holders ──────────────────────────────────────────────────────────────
+// Buff Item Holders are Pokemon that can hold an item that transforms them into a different forme.
+// They have the `requiredItem` field set to the item that transforms them into the different forme,
+// and the `changesFrom` field set to the Pokemon that they transform from.
+// Same as above, the base Pokémon's entry needs `otherFormes` / `formeOrder` updated.
+//
 // ── Overriding Existing Pokémon ─────────────────────────────────────────────
 // To change how a base-game Pokémon behaves *only* inside DigiPen formats,
 // add its ID with `inherit: true` and override only the fields you want to
@@ -92,7 +101,7 @@
 // resource folder instead of the default resource folder, and will look for an individual icon
 // file instead of the icon on a sprite sheet
 //
-// ── Other custom fields ─────────────────────────────────────────────
+// ── Other Custom Fields ─────────────────────────────────────────────
 // `title`, `habitat`, `dexEntry`, and `notes` are optional flavor fields that are displayed in the Pokedex.
 // `contributors and `artSource` are optional fields used to credit the person/people who contributed to
 // the Pokémon and the art source (for Pokemon inspired by fan art) respectively. These are also displayed 
@@ -331,7 +340,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		forme: "Armored",
 		types: ["Water"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 95, atk: 100, def: 105, spa: 108, spd: 110, spe: 70 },
+		baseStats: { hp: 95, atk: 100, def: 115, spa: 108, spd: 110, spe: 70 },
 		abilities: { 0: "Torrent", H: "Shell Armor" },
 		heightm: 1.5,
 		weightkg: 144.6,

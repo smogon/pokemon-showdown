@@ -66,6 +66,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 
 	// ── Buff Item Holders ─────────────────────────────────────────────
+	sirfetchdarmored: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
 	sandslasharmored: {
 		isNonstandard: "DigiPen",
 		tier: "DigiPen",
@@ -73,6 +79,18 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		natDexTier: "DigiPen",
 	},
 	sandslashalolaarmored: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	samurottarmored: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	samurotthisuiarmored: {
 		isNonstandard: "DigiPen",
 		tier: "DigiPen",
 		doublesTier: "DigiPen",

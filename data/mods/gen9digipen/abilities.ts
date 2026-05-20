@@ -31,7 +31,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			pokemon.removeVolatile('procrastinator');
 		},
+		onDeductPP(target, source) {
+			const pokemonOnBattlefield = [...source.allies(), ...source.foes()];
+			for (const pokemon of pokemonOnBattlefield) {
+				if (pokemon.hasAbility('Pressure')) {
+					return 3;
+				}
+			}
+			return;
+		},
 		onResidual(pokemon) {
+			const pokemonOnBattlefield = [...pokemon.allies(), ...pokemon.foes()];
+			for (const pokemon of pokemonOnBattlefield) {
+				if (pokemon.hasAbility('Pressure')) {
+					pokemon.removeVolatile('procrastinator');
+					return;
+				}
+			}
 			if (pokemon.removeVolatile('procrastinator')) {
 				if (pokemon.status && pokemon.status !== 'slp') {
 					this.debug('procrastinator');
