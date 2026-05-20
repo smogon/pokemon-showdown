@@ -93,8 +93,13 @@ export const Avatars = new class {
 	}
 	src(avatar: AvatarID) {
 		if (avatar.includes('.')) return '';
-		const avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
-		return `https://${Config.routes.client}/sprites/${avatarUrl}`;
+		if (avatar.startsWith('#')) {
+			return `https://chchristie.github.io/pokemon-showdown-client-resources/sprites/trainers-custom/${avatar.slice(1)}.png`;
+		}
+		if (OFFICIAL_AVATARS_DIGIPENN.has(avatar)) {
+			return `https://chchristie.github.io/pokemon-showdown-client-resources/sprites/trainers/${avatar}.png`;
+		}
+		return `https://${Config.routes.client}/sprites/trainers/${avatar}.png`;
 	}
 	exists(avatar: string) {
 		if (avatar.includes('.')) {
@@ -681,6 +686,11 @@ const OFFICIAL_AVATARS_RADU = new Set([
 	'miku-ice',
 ]);
 
+const OFFICIAL_AVATARS_DIGIPENN = new Set([
+	'sans',
+]);
+
+for (const avatar of OFFICIAL_AVATARS_DIGIPENN) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -694,23 +704,29 @@ for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_WISTERIAPURPLE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FLAMIBANE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_RADU) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_DIGIPENN) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
 		const [maybeAvatar, silent] = target.split(',');
-		const avatar = Avatars.userCanUse(user, maybeAvatar);
+		const maybeAvatarName = target.startsWith('$') ? maybeAvatar.slice(1) : maybeAvatar;
+		const avatar = Avatars.userCanUse(user, maybeAvatarName);
 
 		if (!avatar) {
 			if (silent) return false;
 			throw new Chat.ErrorMessage("Unrecognized avatar - make sure you're on the right account?");
 		}
 
+		// Hacky solution to get around rewriting the regex to allow for $ sign character at start 
+		// (Client needs the $ sign to set the correct resource location for DigiPen avatars)
+		const avatarId = OFFICIAL_AVATARS_DIGIPENN.has(avatar) ? '$' + avatar : avatar; 
+
 		this.runBroadcast();
 		if (!this.broadcasting) {
-			user.avatar = avatar;
+			user.avatar = avatarId;
 			if (user.id in customAvatars && !avatar.endsWith('xmas')) {
-				Avatars.setDefault(user.id, avatar);
+				Avatars.setDefault(user.id, avatarId);
 			}
 		}
 		if (!silent || this.broadcasting) {
