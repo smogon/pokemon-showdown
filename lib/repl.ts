@@ -156,7 +156,14 @@ export const Repl = new class {
 		const pathname = path.resolve(FS.ROOT_PATH, Config.replsocketprefix || 'logs/repl', filename);
 		try {
 			server.listen(pathname, () => {
-				fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				try {
+					fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				} catch (err: any) {
+					// the socket file can vanish between listen() firing and
+					// chmodSync running (e.g. another process cleaning up, or
+					// some sandboxed filesystems). don't crash startup over it.
+					if (err.code !== 'ENOENT') throw err;
+				}
 				Repl.socketPathnames.add(pathname);
 			});
 
