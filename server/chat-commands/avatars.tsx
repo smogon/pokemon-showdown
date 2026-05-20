@@ -96,7 +96,7 @@ export const Avatars = new class {
 		if (avatar.startsWith('#')) {
 			return `https://chchristie.github.io/pokemon-showdown-client-resources/sprites/trainers-custom/${avatar.slice(1)}.png`;
 		}
-		if (OFFICIAL_AVATARS_DIGIPENN.has(avatar)) {
+		if (OFFICIAL_AVATARS_DIGIPEN.has(avatar)) {
 			return `https://chchristie.github.io/pokemon-showdown-client-resources/sprites/trainers/${avatar}.png`;
 		}
 		return `https://${Config.routes.client}/sprites/trainers/${avatar}.png`;
@@ -686,11 +686,11 @@ const OFFICIAL_AVATARS_RADU = new Set([
 	'miku-ice',
 ]);
 
-const OFFICIAL_AVATARS_DIGIPENN = new Set([
+const OFFICIAL_AVATARS_DIGIPEN = new Set([
 	'sans',
 ]);
 
-for (const avatar of OFFICIAL_AVATARS_DIGIPENN) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_DIGIPEN) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -704,7 +704,7 @@ for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_WISTERIAPURPLE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FLAMIBANE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_RADU) OFFICIAL_AVATARS.add(avatar);
-for (const avatar of OFFICIAL_AVATARS_DIGIPENN) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_DIGIPEN) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -720,7 +720,7 @@ export const commands: Chat.ChatCommands = {
 
 		// Hacky solution to get around rewriting the regex to allow for $ sign character at start 
 		// (Client needs the $ sign to set the correct resource location for DigiPen avatars)
-		const avatarId = OFFICIAL_AVATARS_DIGIPENN.has(avatar) ? '$' + avatar : avatar; 
+		const avatarId = OFFICIAL_AVATARS_DIGIPEN.has(avatar) ? '$' + avatar : avatar; 
 
 		this.runBroadcast();
 		if (!this.broadcasting) {
