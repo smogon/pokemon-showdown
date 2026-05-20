@@ -6232,13 +6232,13 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Draco Meteor", "Dragon Claw", "Dragon Energy", "Earth Power"],
-                "abilities": ["Dragon\u0027s Maw"],
+                "abilities": ["Dragon's Maw"],
                 "teraTypes": ["Dragon"]
             },
             {
                 "role": "AV Pivot",
                 "movepool": ["Breaking Swipe", "Draco Meteor", "Dragon Claw", "Earth Power"],
-                "abilities": ["Dragon\u0027s Maw"],
+                "abilities": ["Dragon's Maw"],
                 "teraTypes": ["Dragon"]
             }
         ]
@@ -6361,7 +6361,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Blood Moon", "Earth Power", "Hyper Voice", "Moonlight", "Protect", "Vacuum Wave"],
-                "abilities": ["Mind\u0027s Eye"],
+                "abilities": ["Mind's Eye"],
                 "teraTypes": ["Fairy"]
             }
         ]
