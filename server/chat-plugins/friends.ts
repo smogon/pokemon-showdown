@@ -238,6 +238,27 @@ function headerButtons(type: string, user: User) {
 	return `<div style="line-height:25px">${buf.join(' / ')}${refresh}</div><hr />`;
 }
 
+export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
+	friends(target, user, trustable) {
+		if (!Config.usesqlitefriends || !Config.usesqlite) return null;
+		if (!user.autoconfirmed) return null;
+		if (user.locked || user.namelocked || user.semilocked || user.permalocked) return null;
+		if (!trustable) return null;
+		return Chat.Friends.getFriends(user.id).then(friends => {
+			return friends.map(f => {
+				const friend = Users.getExact(f.friend);
+				return {
+					userid: f.friend,
+					name: friend?.name || f.friend,
+					online: !!friend?.connected,
+					status: friend?.statusType || 'offline',
+					last_login: f.allowing_login ? 0 : f.last_login,
+				};
+			});
+		});
+	},
+};
+
 export const commands: Chat.ChatCommands = {
 	unfriend(target) {
 		return this.parse(`/friend remove ${target}`);
