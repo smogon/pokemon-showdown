@@ -327,9 +327,12 @@ export function clearRequireCache(options: { exclude?: string[] } = {}) {
 
 export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
 	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
-	for (const [i, child] of mod.children.entries()) {
+	// iterate backwards: splice() shifts later indices down, so a forward
+	// loop with .entries() silently skips the element after each removed one
+	for (let i = mod.children.length - 1; i >= 0; i--) {
+		const child = mod.children[i];
 		if (excludes.some(p => child.filename.includes(p))) continue;
-		mod.children?.splice(i, 1);
+		mod.children.splice(i, 1);
 		uncacheModuleTree(child, excludes);
 	}
 	delete (mod as any).children;
