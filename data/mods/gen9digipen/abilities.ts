@@ -26,24 +26,25 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	
 	// ── DigiPen Custom Abilities ─────────────────────────────────────────────────────────
-	procrastinator: {
+	procrastinator: { // Needs playtesting around how it interacts with Pressure Pokemon switching in/out
 		isNonstandard: "DigiPen",
 		onStart(pokemon) {
 			pokemon.removeVolatile('procrastinator');
-		},
-		onDeductPP(target, source) {
-			const pokemonOnBattlefield = [...source.allies(), ...source.foes()];
-			for (const pokemon of pokemonOnBattlefield) {
-				if (pokemon.hasAbility('Pressure')) {
-					return 3;
+		},			
+		onTryMove(pokemon, target, move) {
+			if (move.id === 'struggle') return;
+			const pokemonOnBattlefield = [...pokemon.allies(), ...pokemon.foes()];
+			for (const otherPokemon of pokemonOnBattlefield) {
+				if (otherPokemon.hasAbility('Pressure')) {
+					pokemon.deductPP(move.id, 3);
+					return;
 				}
 			}
-			return;
 		},
 		onResidual(pokemon) {
 			const pokemonOnBattlefield = [...pokemon.allies(), ...pokemon.foes()];
-			for (const pokemon of pokemonOnBattlefield) {
-				if (pokemon.hasAbility('Pressure')) {
+			for (const otherPokemon of pokemonOnBattlefield) {
+				if (otherPokemon.hasAbility('Pressure')) {
 					pokemon.removeVolatile('procrastinator');
 					return;
 				}
@@ -136,4 +137,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: 3002,
 		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Fire-type attack.",
 	},	
+
+	/* ----- Other changes ───────────────────────────────────────────── */
+	// Ability changes not related to balance changes but rather needed to implement new features
 };
