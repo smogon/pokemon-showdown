@@ -1759,10 +1759,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
-						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
+						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
+						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
 						!(move.id === 'praisethemoon' && this.battle.field.getPseudoWeather('gravity')) &&
-						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
+						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather(move))) &&
 						!(this.hasItem('powerherb') && move.id !== 'skydrop');
 					if (!isCharging) {
 						target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);

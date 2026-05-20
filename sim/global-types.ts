@@ -465,6 +465,7 @@ type TextFile<T> = T & {
 	gen6?: T,
 	gen7?: T,
 	gen8?: T,
+	champions?: T,
 };
 
 type AbilityText = TextFile<ConditionTextData & {
