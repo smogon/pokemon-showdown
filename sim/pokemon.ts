@@ -1156,7 +1156,9 @@ export class Pokemon {
 			ident: this.fullname,
 			details: this.details,
 			condition: this.getHealth().secret,
-			active: this.position < this.side.active.length,
+			// during team preview no pokemon is in play, so the first N
+			// pokemon should not report active:true based on team slot
+			active: this.battle.requestState !== 'teampreview' && this.position < this.side.active.length,
 			stats: {
 				atk: this.baseStoredStats['atk'],
 				def: this.baseStoredStats['def'],
