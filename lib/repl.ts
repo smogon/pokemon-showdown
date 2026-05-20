@@ -159,10 +159,12 @@ export const Repl = new class {
 				try {
 					fs.chmodSync(pathname, Config.replsocketmode || 0o600);
 				} catch (err: any) {
-					// the socket file can vanish between listen() firing and
-					// chmodSync running (e.g. another process cleaning up, or
-					// some sandboxed filesystems). don't crash startup over it.
-					if (err.code !== 'ENOENT') throw err;
+					if (err.code === 'ENOENT') {
+						server.close();
+						console.error(`Could not start REPL server "${filename}": socket file disappeared before chmod`);
+						return;
+					}
+					throw err;
 				}
 				Repl.socketPathnames.add(pathname);
 			});
