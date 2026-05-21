@@ -173,7 +173,7 @@ describe('Dex data', () => {
 				// The above was the best way to handle looking for type aliasing
 				// without more sweeping changes, since TypeChart does not include
 				// the type's name.
-				
+
 				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format/type`);
 			}
 		}
