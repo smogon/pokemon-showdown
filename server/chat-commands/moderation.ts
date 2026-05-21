@@ -216,8 +216,8 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(toPromote);
 			if (!userid) return this.parse('/help roompromote');
 
-			if (silent && nextSymbol === '#') {
-				this.errorReply('You cannot silently appoint Room Owners.');
+			if (silent && nextSymbol === '#' && !this.checkCan('bypassall')) {
+				this.errorReply('Access denied for silently promoting Room Owners.');
 				continue;
 			}
 
