@@ -170,6 +170,7 @@ describe('Dex data', () => {
 			} else if (targetid in Dex.data.Rulesets) {
 				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
 			} else if (targetid in Dex.data.TypeChart) {
+				assert.equal(Aliases[aliasid], Dex.data.TypeChart[targetid].name, `Alias ${aliasid} has incorrect Type name "${Aliases[aliasid]}"`)
 			} else {
 				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format/type`);
 			}
