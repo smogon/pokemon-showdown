@@ -308,7 +308,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!action) {
 					this.effectState.duration!++;
 					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
-				} else if (!target.hasItem('mentalherb')) {
+				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
 					const priority = action.priority -
 						this.dex.moves.get(action.moveid).priority +
 						this.dex.moves.get(move.id).priority;
