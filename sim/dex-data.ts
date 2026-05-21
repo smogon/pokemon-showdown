@@ -297,6 +297,14 @@ export class DexTypes {
 		let type = this.typeCache.get(id);
 		if (type) return type;
 
+		const alias = this.dex.getAlias(id);
+		if (alias) {
+			const aliasTypeName = this.get(alias);
+			if (aliasTypeName.exists) {
+				this.typeCache.set(id, aliasTypeName);
+			}
+			return aliasTypeName;
+		}
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
 			type = new TypeInfo({ name: typeName, id, ...this.dex.data.TypeChart[id] });
