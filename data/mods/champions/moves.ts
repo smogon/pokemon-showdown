@@ -204,7 +204,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					if (target.status === status) {
 						this.add('-fail', target, status);
 					} else {
-						this.add('-fail', source);
+						this.add('-fail', target);
 					}
 					return;
 				}
@@ -497,6 +497,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	hornattack: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	howl: {
+		inherit: true,
+		flags: { snatch: 1, sound: 1, bypasssub: 1, metronome: 1 },
 	},
 	hydrosteam: {
 		inherit: true,
