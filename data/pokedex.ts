@@ -20738,6 +20738,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		battleOnly: "Ramnarok",
 		gen: 9,
 	},
+	obliteryx: {
+		num: -80,
+		name: "Obliteryx",
+		types: ["Dark", "Flying"],
+		baseStats: { hp: 102, atk: 128, def: 126, spa: 45, spd: 90, spe: 64 },
+		abilities: { 0: "Opportunist", 1: "Analytic" },
+		heightm: 1.6,
+		weightkg: 62,
+		color: "Black",
+		eggGroups: ["Flying"],
+		gen: 9,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
