@@ -299,11 +299,11 @@ export class DexTypes {
 
 		const alias = this.dex.getAlias(id);
 		if (alias) {
-			const aliasTypeName = this.get(alias);
-			if (aliasTypeName.exists) {
-				this.typeCache.set(id, aliasTypeName);
+			const typeInfo = this.get(alias);
+			if (typeInfo.exists) {
+				this.typeCache.set(id, typeInfo);
 			}
-			return aliasTypeName;
+			return typeInfo;
 		}
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
