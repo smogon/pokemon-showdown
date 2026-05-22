@@ -170,9 +170,6 @@ describe('Dex data', () => {
 			} else if (targetid in Dex.data.Rulesets) {
 				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
 			} else if (targetid in Dex.data.TypeChart) {
-				// This seems like the best way to handle looking for type aliasing
-				// without more sweeping changes, since TypeChart does not include
-				// the type's name.
 				assert.equal(typeof Dex.data.TypeChart[targetid].damageTaken[Aliases[aliasid]], 'number', `Alias ${aliasid} has incorrect TypeChart name "${Aliases[aliasid]}"`);
 			} else {
 				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format/type`);
