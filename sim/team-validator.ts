@@ -782,8 +782,8 @@ export class TeamValidator {
 		problem = this.checkAbility(set, ability, setHas);
 		if (problem) problems.push(problem);
 
-		if (!set.nature || dex.gen <= 2) {
-			set.nature = '';
+		if (!set.nature) {
+			set.nature = dex.gen <= 2 ? '' : 'Serious';
 		}
 		nature = dex.natures.get(set.nature);
 		problem = this.checkNature(set, nature, setHas);
