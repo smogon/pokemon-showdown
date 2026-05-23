@@ -1,44 +1,20 @@
 {
-    "compilerOptions": {
-        "lib": ["es2020"],
-        "noEmit": true,
-        "jsx": "react",
-        "jsxFactory": "Chat.h",
-        "jsxFragmentFactory": "Chat.Fragment",
-        "target": "es2020",
-        "skipLibCheck": true,
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "strict": true,
-        "allowJs": true,
-        "checkJs": true,
-        "forceConsistentCasingInFileNames": true,
-        "incremental": true,
-        "allowUnreachableCode": false,
-        "esModuleInterop": true,
-        "noImplicitOverride": true,
-        "useDefineForClassFields": false
-    },
-    "types": ["node"],
-    "exclude": [
-        "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/node_modules/typescript/lib/lib.dom.d.ts",
-        "./dist/**/*",
-        "./server/chat-plugins/private/*/*.d.ts"
-    ],
-    "include": [
-        "./server.ts",
-        "./config/*.ts",
-        "./data/*",
-        "./data/text/*",
-        "./data/random-battles/**/*",
-        "./data/mods/*/*",
-        "./dev-tools/*.ts",
-        "./lib/*.ts",
-        "./server/**/*.ts",
-        "./server/**/*.tsx",
-        "./sim/**/*",
-        "./tools/set-import/*.ts",
-        "./tools/modlog/*.ts",
-        "./translations/**/*.ts",
-    ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
