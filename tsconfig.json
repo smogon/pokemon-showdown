@@ -26,6 +26,7 @@
         "./server/chat-plugins/private/*/*.d.ts"
     ],
     "include": [
+        "./server.ts",
         "./config/*.ts",
         "./data/*",
         "./data/text/*",
