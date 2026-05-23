@@ -1,125 +1,352 @@
 // src/engine.ts
 
-export type EngineData = {
-  species: Record<string, any>;
-  moves: Record<string, any>;
-  abilities: Record<string, any>;
-  items: Record<string, any>;
-  conditions?: Record<string, any>;
-  formats?: Record<string, any>;
-  rulesets?: Record<string, any>;
-  learnsets?: Record<string, any>;
-};
+export type SpeciesData = Record<string, any>;
+export type MoveData = Record<string, any>;
+export type AbilityData = Record<string, any>;
+export type ItemData = Record<string, any>;
+export type LearnsetData = Record<string, any>;
+export type ConditionData = Record<string, any>;
+
+export interface EngineInitData {
+  species: SpeciesData;
+  moves: MoveData;
+  abilities: AbilityData;
+  items: ItemData;
+
+  learnsets?: LearnsetData;
+  conditions?: ConditionData;
+}
+
+export interface BattlePokemon {
+  species: string;
+  level: number;
+  types: string[];
+
+  hp: number;
+  maxHp: number;
+
+  status?: string;
+
+  ability?: string;
+  item?: string;
+
+  fainted: boolean;
+
+  moves: string[];
+
+  volatile: Record<string, any>;
+
+  boosts: {
+    atk: number;
+    def: number;
+    spa: number;
+    spd: number;
+    spe: number;
+  };
+}
+
+export interface BattleState {
+  id: string;
+
+  turn: number;
+
+  format: string;
+
+  teams: {
+    a: BattlePokemon[];
+    b: BattlePokemon[];
+  };
+
+  active: {
+    a: BattlePokemon | null;
+    b: BattlePokemon | null;
+  };
+
+  queue: any[];
+
+  log: string[];
+
+  winner: string | null;
+
+  ended: boolean;
+}
 
 export class Engine {
-  species: Record<string, any> = {};
-  moves: Record<string, any> = {};
-  abilities: Record<string, any> = {};
-  items: Record<string, any> = {};
-  conditions: Record<string, any> = {};
-  formats: Record<string, any> = {};
-  rulesets: Record<string, any> = {};
-  learnsets: Record<string, any> = {};
-
   private initialized = false;
 
-  init(data: EngineData) {
+  public species: SpeciesData = {};
+  public moves: MoveData = {};
+  public abilities: AbilityData = {};
+  public items: ItemData = {};
+
+  public learnsets: LearnsetData = {};
+  public conditions: ConditionData = {};
+
+  // =========================
+  // INIT
+  // =========================
+
+  init(data: EngineInitData) {
     this.species = data.species;
     this.moves = data.moves;
     this.abilities = data.abilities;
     this.items = data.items;
 
-    this.conditions = data.conditions ?? {};
-    this.formats = data.formats ?? {};
-    this.rulesets = data.rulesets ?? {};
     this.learnsets = data.learnsets ?? {};
+    this.conditions = data.conditions ?? {};
 
     this.initialized = true;
   }
 
-  assertReady() {
+  private assertReady() {
     if (!this.initialized) {
-      throw new Error("Engine not initialized. Call engine.init(data) first.");
+      throw new Error(
+        "Engine not initialized. Call engine.init() before use."
+      );
     }
   }
 
-  // -------------------------
-  // CORE LOOKUPS
-  // -------------------------
+  // =========================
+  // LOOKUPS
+  // =========================
 
   getSpecies(id: string) {
     this.assertReady();
-    return this.species[id] ?? null;
+    return this.species[id.toLowerCase()] ?? null;
   }
 
   getMove(id: string) {
     this.assertReady();
-    return this.moves[id] ?? null;
+    return this.moves[id.toLowerCase()] ?? null;
   }
 
   getAbility(id: string) {
     this.assertReady();
-    return this.abilities[id] ?? null;
+    return this.abilities[id.toLowerCase()] ?? null;
   }
 
   getItem(id: string) {
     this.assertReady();
-    return this.items[id] ?? null;
+    return this.items[id.toLowerCase()] ?? null;
   }
 
-  // -------------------------
-  // TEAM VALIDATION (ROSTER SAFE)
-  // -------------------------
+  // =========================
+  // VALIDATION
+  // =========================
+
+  validatePokemon(mon: any): boolean {
+    if (!mon) return false;
+
+    const species = this.getSpecies(mon.species);
+
+    if (!species) return false;
+
+    return true;
+  }
 
   validateTeam(team: any[]) {
     this.assertReady();
 
-    return team.filter(mon => {
-      const species = this.species[mon.species];
-      return Boolean(species);
-    });
+    return team.filter(mon => this.validatePokemon(mon));
   }
 
-  // -------------------------
-  // BATTLE CORE (MINIMAL BUT STABLE)
-  // -------------------------
+  // =========================
+  // POKEMON FACTORY
+  // =========================
 
-  createBattle(teamA: any[], teamB: any[], format = "default") {
+  createPokemon(input: any): BattlePokemon {
     this.assertReady();
 
+    const species = this.getSpecies(input.species);
+
+    if (!species) {
+      throw new Error(`Invalid species: ${input.species}`);
+    }
+
+    const maxHp = species.baseStats?.hp ?? 100;
+
     return {
-      format,
-      turn: 0,
-      teams: {
-        a: this.validateTeam(teamA),
-        b: this.validateTeam(teamB),
+      species: species.name ?? input.species,
+
+      level: input.level ?? 100,
+
+      types: species.types ?? ["Normal"],
+
+      hp: maxHp,
+      maxHp,
+
+      status: "",
+
+      ability: input.ability ?? species.abilities?.["0"] ?? "",
+
+      item: input.item ?? "",
+
+      fainted: false,
+
+      moves: input.moves ?? [],
+
+      volatile: {},
+
+      boosts: {
+        atk: 0,
+        def: 0,
+        spa: 0,
+        spd: 0,
+        spe: 0,
       },
-      queue: [],
-      log: [],
-      state: "active"
     };
   }
 
-  // -------------------------
-  // MOVE RESOLUTION (SAFE DEFAULT)
-  // -------------------------
+  // =========================
+  // BATTLE CREATION
+  // =========================
+
+  createBattle(
+    teamAInput: any[],
+    teamBInput: any[],
+    format = "konivr"
+  ): BattleState {
+    this.assertReady();
+
+    const validatedA = this.validateTeam(teamAInput);
+    const validatedB = this.validateTeam(teamBInput);
+
+    const teamA = validatedA.map(mon => this.createPokemon(mon));
+    const teamB = validatedB.map(mon => this.createPokemon(mon));
+
+    return {
+      id: crypto.randomUUID(),
+
+      turn: 1,
+
+      format,
+
+      teams: {
+        a: teamA,
+        b: teamB,
+      },
+
+      active: {
+        a: teamA[0] ?? null,
+        b: teamB[0] ?? null,
+      },
+
+      queue: [],
+
+      log: [],
+
+      winner: null,
+
+      ended: false,
+    };
+  }
+
+  // =========================
+  // DAMAGE
+  // =========================
+
+  applyDamage(target: BattlePokemon, amount: number) {
+    target.hp -= amount;
+
+    if (target.hp <= 0) {
+      target.hp = 0;
+      target.fainted = true;
+    }
+  }
+
+  heal(target: BattlePokemon, amount: number) {
+    target.hp += amount;
+
+    if (target.hp > target.maxHp) {
+      target.hp = target.maxHp;
+    }
+  }
+
+  // =========================
+  // MOVE RESOLUTION
+  // =========================
 
   resolveMove(moveId: string) {
     this.assertReady();
 
-    const move = this.moves[moveId];
-    if (!move) return null;
+    const move = this.getMove(moveId);
+
+    if (!move) {
+      throw new Error(`Unknown move: ${moveId}`);
+    }
 
     return {
       id: moveId,
-      power: move.power ?? 0,
-      type: move.type ?? "normal",
-      category: move.category ?? "physical",
+
+      name: move.name ?? moveId,
+
+      type: move.type ?? "Normal",
+
+      category: move.category ?? "Physical",
+
+      power: move.basePower ?? 0,
+
       accuracy: move.accuracy ?? 100,
-      priority: move.priority ?? 0
+
+      priority: move.priority ?? 0,
+
+      target: move.target ?? "normal",
     };
+  }
+
+  useMove(
+    battle: BattleState,
+    user: BattlePokemon,
+    target: BattlePokemon,
+    moveId: string
+  ) {
+    const move = this.resolveMove(moveId);
+
+    battle.log.push(
+      `${user.species} used ${move.name}!`
+    );
+
+    if (move.power > 0) {
+      this.applyDamage(target, move.power);
+    }
+
+    if (target.fainted) {
+      battle.log.push(
+        `${target.species} fainted!`
+      );
+    }
+
+    this.checkWinState(battle);
+  }
+
+  // =========================
+  // WIN CHECK
+  // =========================
+
+  checkWinState(battle: BattleState) {
+    const aAlive = battle.teams.a.some(mon => !mon.fainted);
+    const bAlive = battle.teams.b.some(mon => !mon.fainted);
+
+    if (!aAlive) {
+      battle.winner = "Player B";
+      battle.ended = true;
+    }
+
+    if (!bAlive) {
+      battle.winner = "Player A";
+      battle.ended = true;
+    }
+  }
+
+  // =========================
+  // TURN ADVANCE
+  // =========================
+
+  nextTurn(battle: BattleState) {
+    if (battle.ended) return;
+
+    battle.turn += 1;
   }
 }
 
-// singleton export (recommended for your server)
 export const engine = new Engine();
