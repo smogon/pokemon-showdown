@@ -1,30 +1,42 @@
 /**
- * Simulator
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * =========================================================
+ * KONIVRER SIMULATION ENGINE ENTRY POINT
+ * (REPLACES SHOWDOWN SIM/INDEX)
+ * =========================================================
  *
- * Here's where all the simulator APIs get exported for general use.
- * `require('pokemon-showdown')` imports from here.
+ * Removes:
+ * - multi-engine exports
+ * - format-based instantiation logic
+ * - legacy compatibility shims
  *
- * @license MIT
+ * Replaces with:
+ * - single deterministic simulation entry point
  */
 
-// battle simulation
+import { Battle } from "./battle";
 
-export { Battle } from './battle';
-export { BattleStream, getPlayerStreams } from './battle-stream';
-export { Pokemon } from './pokemon';
-export { PRNG } from './prng';
-export { Side } from './side';
+/**
+ * =========================================================
+ * SINGLE ENGINE FACTORY
+ * =========================================================
+ */
 
-// dex API
+export function createBattle() {
+	return new Battle();
+}
 
-export { Dex, toID } from './dex';
+/**
+ * =========================================================
+ * CORE EXPORT
+ * =========================================================
+ */
 
-// teams API
+export { Battle };
 
-export { Teams } from './teams';
-export { TeamValidator } from './team-validator';
+/**
+ * =========================================================
+ * OPTIONAL: TYPE RE-EXPORTS (SAFE ONLY)
+ * =========================================================
+ */
 
-// misc libraries
-
-export * from '../lib';
+export type { BattleState, Action, Phase } from "./global-types";
