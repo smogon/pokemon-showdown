@@ -688,10 +688,6 @@ export const commands: Chat.ChatCommands = {
 		buffer += `</table></div></div>`;
 		this.sendReply(`|raw|${buffer}`);
 	},
-	rankhelp: [
-		`/rank [user] - Shows all ladder ranks for the given [user].`,
-		`If no user is given, it defaults to the user of the command.`,
-	],
 
 	showrank: 'hiderank',
 	hiderank(target, room, user, connection, cmd) {
@@ -1512,9 +1508,6 @@ export const commands: Chat.ChatCommands = {
 		}
 		return Ladders(formatName).makeChallenge(connection, targetUser);
 	},
-	challengehelp: [
-		`/challenge [user], [format] - Challenges the given [user] to a battle in the given [format].`,
-	],
 
 	bch: 'blockchallenges',
 	blockchall: 'blockchallenges',
