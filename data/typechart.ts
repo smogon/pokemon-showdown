@@ -6,7 +6,7 @@ export type Element =
 	| "aether"
 	| "nether";
 
-export type DamageRelation = 0 | 1 | 2 | 3;
+export type DamageRelation = 0 | 1;
 
 export interface ElementData {
 	damageTaken: Record<Element, DamageRelation>;
