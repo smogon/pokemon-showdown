@@ -1,133 +1,93 @@
-import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
-import { Utils } from '../lib/utils';
+/**
+ * =========================================================
+ * KONIVRER DOCTRINE ABILITY REGISTRY
+ * (REPLACES SHOWDOWN DEX-ABILITIES)
+ * =========================================================
+ *
+ * Removes all runtime hooks.
+ * Converts abilities into deterministic modifiers only.
+ */
 
-interface AbilityEventMethods {
-	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
-	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
-	onStart?: (this: Battle, target: Pokemon) => void;
-}
-
-/* Possible Ability flags */
-interface AbilityFlags {
-	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
-	cantsuppress?: 1; // Ability can't be suppressed by e.g. Gastro Acid or Neutralizing Gas
-	failroleplay?: 1; // Role Play fails if target has this Ability
-	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
-	noentrain?: 1; // Entrainment fails if user has this Ability
-	noreceiver?: 1; // Receiver and Power of Alchemy will not activate if an ally faints with this Ability
-	notrace?: 1; // Trace cannot copy this Ability
-	notransform?: 1; // Disables the Ability if the user is Transformed
-}
-
-export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
+export interface DoctrineAbility {
+	id: string;
 	name: string;
+
+	/**
+	 * Passive combat modifiers applied at resolution time
+	 */
+	modifiers?: {
+		damageMultiplier?: number;
+		defenseMultiplier?: number;
+		speedModifier?: number;
+		elementBias?: Partial<Record<string, number>>;
+	};
+
+	/**
+	 * Phase gating effects (NOT event triggers)
+	 */
+	phaseEffects?: {
+		guard?: boolean;
+		shift?: boolean;
+		strike?: boolean;
+		surge?: boolean;
+	};
+
+	/**
+	 * Static battlefield rules this ability enforces
+	 */
+	fieldRules?: {
+		preventTargeting?: boolean;
+		damageReduction?: number;
+	};
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
-	inherit: true,
-	condition?: ModdedConditionData,
+/**
+ * =========================================================
+ * ABILITY REGISTRY
+ * =========================================================
+ */
+
+export const Abilities: Record<string, DoctrineAbility> = {
+
+	intimidate: {
+		id: "intimidate",
+		name: "Intimidate",
+		modifiers: {
+			damageMultiplier: 0.9,
+		},
+	},
+
+	levitate: {
+		id: "levitate",
+		name: "Levitate",
+		fieldRules: {
+			preventTargeting: true,
+		},
+	},
+
+	adaptability: {
+		id: "adaptability",
+		name: "Adaptability",
+		modifiers: {
+			damageMultiplier: 1.2,
+		},
+	},
+
+	regenerator: {
+		id: "regenerator",
+		name: "Regenerator",
+		phaseEffects: {
+			shift: true, // interpreted as end-phase recovery window
+		},
+	},
 };
-export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
-export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
 
-export class Ability extends BasicEffect implements Readonly<BasicEffect> {
-	declare readonly effectType: 'Ability';
+/**
+ * =========================================================
+ * RESOLUTION LAYER (PURE FUNCTIONAL)
+ * =========================================================
+ */
 
-	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
-	readonly rating: number;
-	readonly suppressWeather: boolean;
-	readonly flags: AbilityFlags;
-	declare readonly condition?: ConditionData;
-
-	constructor(data: AnyObject) {
-		super(data);
-
-		this.fullname = `ability: ${this.name}`;
-		this.effectType = 'Ability';
-		this.suppressWeather = !!data.suppressWeather;
-		this.flags = data.flags || {};
-		this.rating = data.rating || 0;
-
-		if (!this.gen) {
-			if (this.num >= 268) {
-				this.gen = 9;
-			} else if (this.num >= 234) {
-				this.gen = 8;
-			} else if (this.num >= 192) {
-				this.gen = 7;
-			} else if (this.num >= 165) {
-				this.gen = 6;
-			} else if (this.num >= 124) {
-				this.gen = 5;
-			} else if (this.num >= 77) {
-				this.gen = 4;
-			} else if (this.num >= 1) {
-				this.gen = 3;
-			}
-		}
-		assignMissingFields(this, data);
-	}
-}
-
-const EMPTY_ABILITY = Utils.deepFreeze(new Ability({ id: '', name: '', exists: false }));
-
-export class DexAbilities {
-	readonly dex: ModdedDex;
-	readonly abilityCache = new Map<ID, Ability>();
-	allCache: readonly Ability[] | null = null;
-
-	constructor(dex: ModdedDex) {
-		this.dex = dex;
-	}
-
-	get(name: string | Ability = ''): Ability {
-		if (name && typeof name !== 'string') return name;
-		const id = toID(name.trim());
-		return this.getByID(id);
-	}
-
-	getByID(id: ID): Ability {
-		if (id === '' || id === 'constructor') return EMPTY_ABILITY;
-		let ability = this.abilityCache.get(id);
-		if (ability) return ability;
-
-		if (this.dex.getAlias(id)) {
-			ability = this.get(this.dex.getAlias(id));
-		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
-			const abilityData = this.dex.data.Abilities[id] as any;
-			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
-			ability = new Ability({
-				name: id,
-				...abilityData,
-				...abilityTextData,
-			});
-			if (ability.gen > this.dex.gen) {
-				(ability as any).isNonstandard = 'Future';
-			}
-			if (this.dex.currentMod === 'gen7letsgo' && ability.id !== 'noability') {
-				(ability as any).isNonstandard = 'Past';
-			}
-			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
-				(ability as any).isNonstandard = null;
-			}
-		} else {
-			ability = new Ability({
-				id, name: id, exists: false,
-			});
-		}
-
-		if (ability.exists) this.abilityCache.set(id, this.dex.deepFreeze(ability));
-		return ability;
-	}
-
-	all(): readonly Ability[] {
-		if (this.allCache) return this.allCache;
-		const abilities = [];
-		for (const id in this.dex.data.Abilities) {
-			abilities.push(this.getByID(id as ID));
-		}
-		this.allCache = abilities;
-		return this.allCache;
-	}
+export function getAbility(id: string): DoctrineAbility | null {
+	return Abilities[id] ?? null;
 }
