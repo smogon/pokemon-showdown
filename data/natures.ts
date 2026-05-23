@@ -1,117 +1,114 @@
-export const Natures: import('../sim/dex-data').NatureDataTable = {
+import { Element } from "./typechart";
+
+export type RoleBias = "Frontline" | "Backline" | "Balanced";
+
+/**
+ * =========================================================
+ * ARCHETYPE NATURE SYSTEM (REPLACES STAT MODIFIERS)
+ * =========================================================
+ *
+ * Natures no longer modify stats.
+ * They define deterministic combat identity bias.
+ */
+
+export interface Nature {
+	id: string;
+	name: string;
+
+	/**
+	 * Preferred tactical role in formation systems
+	 */
+	roleBias: RoleBias;
+
+	/**
+	 * Elemental affinity drift (soft weighting, not damage scaling)
+	 */
+	elementAffinity?: Partial<Record<Element, number>>;
+
+	/**
+	 * Action preference bias (influences AI or auto-selection systems)
+	 */
+	actionBias?: {
+		strike?: number;
+		surge?: number;
+		shift?: number;
+		guard?: number;
+	};
+
+	/**
+	 * Tempo inclination (initiative-style behavior modifier)
+	 */
+	tempoBias?: "aggressive" | "reactive" | "adaptive";
+}
+
+/**
+ * =========================================================
+ * PRUNED NATURE ARCHETYPES
+ * =========================================================
+ */
+
+export const Natures: Record<string, Nature> = {
+
 	adamant: {
-		name: "Adamant",
-		plus: 'atk',
-		minus: 'spa',
+		id: "adamant",
+		name: "Adamant Will",
+		roleBias: "Frontline",
+		actionBias: {
+			strike: 1.2,
+			guard: 1.0,
+		},
+		tempoBias: "aggressive",
 	},
-	bashful: {
-		name: "Bashful",
-	},
-	bold: {
-		name: "Bold",
-		plus: 'def',
-		minus: 'atk',
-	},
-	brave: {
-		name: "Brave",
-		plus: 'atk',
-		minus: 'spe',
-	},
-	calm: {
-		name: "Calm",
-		plus: 'spd',
-		minus: 'atk',
-	},
-	careful: {
-		name: "Careful",
-		plus: 'spd',
-		minus: 'spa',
-	},
-	docile: {
-		name: "Docile",
-	},
-	gentle: {
-		name: "Gentle",
-		plus: 'spd',
-		minus: 'def',
-	},
-	hardy: {
-		name: "Hardy",
-	},
-	hasty: {
-		name: "Hasty",
-		plus: 'spe',
-		minus: 'def',
-	},
-	impish: {
-		name: "Impish",
-		plus: 'def',
-		minus: 'spa',
-	},
-	jolly: {
-		name: "Jolly",
-		plus: 'spe',
-		minus: 'spa',
-	},
-	lax: {
-		name: "Lax",
-		plus: 'def',
-		minus: 'spd',
-	},
-	lonely: {
-		name: "Lonely",
-		plus: 'atk',
-		minus: 'def',
-	},
-	mild: {
-		name: "Mild",
-		plus: 'spa',
-		minus: 'def',
-	},
+
 	modest: {
-		name: "Modest",
-		plus: 'spa',
-		minus: 'atk',
+		id: "modest",
+		name: "Measured Focus",
+		roleBias: "Backline",
+		actionBias: {
+			surge: 1.15,
+		},
+		tempoBias: "adaptive",
 	},
-	naive: {
-		name: "Naive",
-		plus: 'spe',
-		minus: 'spd',
+
+	jolly: {
+		id: "jolly",
+		name: "Swift Instinct",
+		roleBias: "Backline",
+		actionBias: {
+			shift: 1.2,
+		},
+		tempoBias: "aggressive",
 	},
-	naughty: {
-		name: "Naughty",
-		plus: 'atk',
-		minus: 'spd',
+
+	impish: {
+		id: "impish",
+		name: "Defensive Instinct",
+		roleBias: "Frontline",
+		actionBias: {
+			guard: 1.2,
+		},
+		tempoBias: "reactive",
 	},
-	quiet: {
-		name: "Quiet",
-		plus: 'spa',
-		minus: 'spe',
+
+	calm: {
+		id: "calm",
+		name: "Balanced Resolve",
+		roleBias: "Balanced",
+		actionBias: {
+			guard: 1.1,
+			surge: 1.05,
+		},
+		tempoBias: "reactive",
 	},
-	quirky: {
-		name: "Quirky",
-	},
-	rash: {
-		name: "Rash",
-		plus: 'spa',
-		minus: 'spd',
-	},
-	relaxed: {
-		name: "Relaxed",
-		plus: 'def',
-		minus: 'spe',
-	},
-	sassy: {
-		name: "Sassy",
-		plus: 'spd',
-		minus: 'spe',
-	},
-	serious: {
-		name: "Serious",
-	},
+
 	timid: {
-		name: "Timid",
-		plus: 'spe',
-		minus: 'atk',
+		id: "timid",
+		name: "Fractured Tempo",
+		roleBias: "Backline",
+		actionBias: {
+			shift: 1.15,
+			strike: 1.05,
+		},
+		tempoBias: "aggressive",
 	},
 };
