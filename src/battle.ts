@@ -1,0 +1,1 @@
+export const battle = 'placeholder for battle logic';
