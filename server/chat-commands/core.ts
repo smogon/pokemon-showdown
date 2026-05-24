@@ -500,7 +500,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			if (!isOffline) user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff, friends, and ${target} users.`);
 		} else if (target === 'friends') {
 			if (!isOffline) user.settings.blockPMs = target;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
@@ -522,7 +522,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	blockpmshelp: [
 		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
-		`/blockpms [unlocked/ac/trusted/+/friends] - Blocks private messages except from staff and the specified group.`,
+		`/blockpms [unlocked, ac, trusted, friends, +] - Blocks PMs, except for staff, friends, and the specified group(s).`,
 	],
 
 	unblockpm: 'unblockpms',
