@@ -198,7 +198,7 @@ describe("New set format (slow)", () => {
 						}
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
-						if (!set.movepool[i + 1] > set.movepool[i]) {
+						if (set.movepool[i + 1] < set.movepool[i]) {
 							problems.push(`${species.name} movepool should be sorted alphabetically`);
 						}
 					}
@@ -213,7 +213,7 @@ describe("New set format (slow)", () => {
 							if (!allowedAbilities.has(ability)) problems.push(`${species.name} can't have ${ability}`);
 						}
 						for (let i = 0; i < set.abilities.length - 1; i++) {
-							if (!set.abilities[i + 1] > set.abilities[i]) {
+							if (set.abilities[i + 1] < set.abilities[i]) {
 								problems.push(`${species.name} abilities should be sorted alphabetically`);
 							}
 						}
@@ -226,7 +226,7 @@ describe("New set format (slow)", () => {
 							if (type !== dexType.name) problems.push(`${species.name} has misformatted Tera Type: ${type}`);
 						}
 						for (let i = 0; i < set.teraTypes.length - 1; i++) {
-							if (!set.teraTypes[i + 1] > set.teraTypes[i]) {
+							if (set.teraTypes[i + 1] < set.teraTypes[i]) {
 								problems.push(`${species.name} teraTypes should be sorted alphabetically`);
 							}
 						}
@@ -238,7 +238,7 @@ describe("New set format (slow)", () => {
 							if (type !== dexType.name) problems.push(`${species.name} has misformatted Preferred Type: ${type}`);
 						}
 						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
-							if (!set.preferredTypes[i + 1] > set.preferredTypes[i]) {
+							if (set.preferredTypes[i + 1] < set.preferredTypes[i]) {
 								problems.push(`${species.name} preferredTypes should be sorted alphabetically`);
 							}
 						}
