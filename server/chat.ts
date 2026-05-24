@@ -1303,10 +1303,7 @@ export class CommandContext extends MessageContext {
 		if (setting === true && !user.can('lock')) return false; // this is to appease TS
 		const friends = targetUser.friends || new Set();
 		if (setting === 'friends') return friends.has(user.id);
-		if (setting === 'friendsandtrusted') {
-			return friends.has(user.id) || Users.globalAuth.atLeast(user, 'trusted');
-		}
-		return Users.globalAuth.atLeast(user, setting as AuthLevel);
+		return Users.globalAuth.atLeast(user, setting as AuthLevel) || friends.has(user.id);
 	}
 	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
