@@ -3627,12 +3627,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'NatDex Mod', 'Evasion Abilities Clause'],
+		ruleset: ['Standard Doubles', 'NatDex Mod', 'Evasion Abilities Clause', 'Dynamax Clause'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Charizard', 'Dialga', 'Eternatus', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
-			'Lugia', 'Lunala', 'Magearna', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Regieleki', 'Reshiram', 'Solgaleo', 'Venusaur',
-			'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Complete', 'Power Construct', 'Shadow Tag', 'Weakness Policy',
-			'Ally Switch', 'Beat Up', 'Coaching', 'Dark Void', 'Guard Split', 'Swagger',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Eternatus', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
+			'Lugia', 'Lunala', 'Magearna', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Urshifu-Base',
+			'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Complete', 'Power Construct', 'Shadow Tag',
+			'Beat Up', 'Dark Void', 'Eevium Z', 'Guard Split', 'Swagger',
 		],
 	},
 	{
