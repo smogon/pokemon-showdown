@@ -504,9 +504,6 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'friends') {
 			if (!isOffline) user.settings.blockPMs = target;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
-		} else if (target === 'friendsandtrusted') {
-			if (!isOffline) user.settings.blockPMs = target;
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff, friends, and trusted users.`);
 		} else {
 			if (!isOffline) user.settings.blockPMs = true;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff.`);
