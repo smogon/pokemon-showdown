@@ -1,0 +1,131 @@
+#!/usr/bin/env node
+"use strict";
+
+// Branch to push server changes to. Must match `const branch` in build-indexes.
+const PUSH_BRANCH = "master";
+// Location of the client root directory.
+const clientDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-client";
+
+const child_process = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const readline = require("readline");
+
+const serverDir = __dirname;
+const buildIndexesPath = path.join(clientDir, "build-tools", "build-indexes");
+
+function shell(cmd, cwd = serverDir) {
+	child_process.execSync(cmd, { cwd, stdio: "inherit" });
+}
+
+function git(args, cwd = serverDir) {
+	child_process.execFileSync("git", args, { cwd, stdio: "inherit" });
+}
+
+function readBuildIndexesBranch() {
+	if (!fs.existsSync(buildIndexesPath)) {
+		throw new Error(`build-indexes not found at ${buildIndexesPath}`);
+	}
+	for (const line of fs.readFileSync(buildIndexesPath, "utf8").split("\n")) {
+		const trimmed = line.trim();
+		if (!trimmed.startsWith("const branch")) continue;
+
+		let value = trimmed.slice(trimmed.indexOf("=") + 1).trim();
+		if (value.endsWith(";")) value = value.slice(0, -1).trim();
+		if (
+			(value.startsWith("'") && value.endsWith("'")) ||
+			(value.startsWith('"') && value.endsWith('"'))
+		) {
+			return value.slice(1, -1);
+		}
+		throw new Error("const branch in build-indexes must be a string literal");
+	}
+	throw new Error("const branch not found in build-indexes");
+}
+
+function createReadline() {
+	return readline.createInterface({ input: process.stdin, output: process.stdout });
+}
+
+function ask(rl, prompt) {
+	return new Promise(resolve => rl.question(prompt, resolve));
+}
+
+function askYesNo(rl, prompt) {
+	return new Promise(resolve => {
+		const retry = () => {
+			rl.question(prompt, answer => {
+				const normalized = answer.trim().toLowerCase();
+				if (normalized === "y" || normalized === "yes") {
+					resolve(true);
+				} else if (normalized === "n" || normalized === "no") {
+					resolve(false);
+				} else {
+					console.log("Please answer Y or N.");
+					retry();
+				}
+			});
+		};
+		retry();
+	});
+}
+
+async function checkBuildIndexesBranch(rl) {
+	const buildIndexesBranch = readBuildIndexesBranch();
+	if (buildIndexesBranch === PUSH_BRANCH) return true;
+
+	console.warn(
+		`\nWarning: branch mismatch between this script and build-indexes.\n` +
+		`  PUSH_BRANCH:  ${PUSH_BRANCH}\n` +
+		`  build-indexes branch:        ${buildIndexesBranch}\n` +
+		`The client build syncs data from caches/pokemon-showdown, which ` +
+		`build-indexes clones from GitHub. If these branches differ, the client ` +
+		`will not pick up the server changes you just pushed to ${PUSH_BRANCH}.\n`
+	);
+	return askYesNo(rl, "Continue anyway? [Y/N] ");
+}
+
+async function promptCommitMessage(rl) {
+	while (true) {
+		const message = (await ask(rl, "Commit message: ")).trim();
+		if (message) return message;
+		console.log("Commit message cannot be empty.");
+	}
+}
+
+async function main() {
+	process.chdir(serverDir);
+
+	if (!fs.existsSync(clientDir)) {
+		console.error(`Client directory not found: ${clientDir}`);
+		process.exit(1);
+	}
+
+	const rl = createReadline();
+	try {
+		const proceed = await checkBuildIndexesBranch(rl);
+		if (!proceed) {
+			console.log("Aborted.");
+			process.exit(0);
+		}
+
+		console.log("\n=== Server: commit and push ===\n");
+		git(["add", "."]);
+		const message = await promptCommitMessage(rl);
+		git(["commit", "-m", message]);
+		git(["push", "origin", PUSH_BRANCH]);
+
+		console.log("\n=== Client: full build ===\n");
+		shell("node build full", clientDir);
+
+		console.log("\n=== Server: start ===\n");
+		shell("node pokemon-showdown", serverDir);
+	} finally {
+		rl.close();
+	}
+}
+
+main().catch(err => {
+	console.error(err);
+	process.exit(1);
+});
