@@ -2600,6 +2600,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Shuffle Madness",
+		desc: 'Randomizes Pokemons moves, items and abilities with a chance of random events.',
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Evasion Items Clause', 'Shuffle Madness Clause'],
+		banlist: [
+			'Air Balloon', 'Transform', 'Imposter',
+		],
+	},
+	{
 		name: "[Gen 9] Tera Donation",
 		desc: `The first Pok&eacute;mon sent out immediately terastallizes. The other Pok&eacute;mon in the party inherit that Tera Type as an additional type.`,
 		mod: 'gen9',

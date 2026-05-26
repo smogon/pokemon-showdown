@@ -3257,4 +3257,357 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!speciesMods.length) throw new Error('This format has no rules that modify base stats.');
 		},
 	},
+	shufflemadnessclause: {
+		effectType: 'Rule',
+		name: 'Shuffle Madness Clause',
+		desc: "Randomizes Pokemons moves, items and abilities with a chance of random events.",
+
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!pokemon || pokemon.fainted) return;
+
+			const createMoveSlot = (move: any) => {
+				return {
+					move: move.name,
+					id: move.id,
+					pp: Math.floor(move.pp * 1.6),
+					maxpp: Math.floor(move.pp * 1.6),
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+			};
+
+			const allAbilities = this.dex.abilities.all().filter(ability => {
+				return !ability.isNonstandard &&
+					!['neutralizinggas', 'illusion', 'zerotohero', 'commander'].includes(ability.id);
+			});
+
+			const comboAbilities = allAbilities.filter(ability => {
+				return ['contrary', 'noguard', 'rockhead', 'reckless', 'technician', 'skilllink', 'simple', 'serenegrace',
+					'prankster', 'triage', 'drizzle', 'drought', 'sandstream', 'snowwarning', 'mistysurge', 'psychicsurge',
+					'grassysurge', 'electricsurge', 'punkrock', 'strongjaw', 'megalauncher', 'sharpness', 'ironfist',
+					'pixilate', 'refrigerate', 'aerilate', 'galvanize'].includes(ability.id);
+			});
+
+			const allMoves = this.dex.moves.all().filter(move => {
+				return !move.isZ && !move.isMax;
+			});
+
+			const stabMoves = allMoves.filter(move => {
+				const isStab = pokemon.getTypes().includes(move.type);
+				const isNotHiddenPower = !move.id.startsWith('hiddenpower');
+				return isStab && isNotHiddenPower;
+			});
+
+			const statusMoves = allMoves.filter(move => {
+				return move.category === 'Status';
+			});
+
+			const selfBoostMoves = allMoves.filter(move => {
+				return move.category === 'Status' &&
+					move.boosts &&
+					move.target === 'self';
+			});
+
+			const targetBoostMoves = allMoves.filter(move => {
+				return move.category === 'Status' &&
+					move.boosts &&
+					move.target !== 'self';
+			});
+
+			const statusConditionMoves = allMoves.filter(move => {
+				return move.category === 'Status' && move.status;
+			});
+
+			const hazardMoves = allMoves.filter(move => {
+				return move.category === 'Status' && move.sideCondition;
+			});
+
+			const stallingMoves = allMoves.filter(move => {
+				return move.category === 'Status' && move.stallingMove;
+			});
+
+			const pokemonTypes = pokemon.getTypes();
+			const weaknesses = new Set<string>();
+			const allTypes = this.dex.types.names();
+
+			for (const attackType of allTypes) {
+				for (const pType of pokemonTypes) {
+					const effectiveness = this.dex.getEffectiveness(attackType, pType);
+					if (effectiveness > 0) {
+						weaknesses.add(attackType);
+						break;
+					}
+				}
+			}
+
+			const coverageMoves = allMoves.filter(move => {
+				if (move.category === 'Status') return false;
+				if (move.basePower < 40) return false;
+				if (pokemonTypes.includes(move.type)) return false;
+				for (const weakType of weaknesses) {
+					if (this.dex.getEffectiveness(move.type, weakType) > 0) {
+						return true;
+					}
+				}
+				return false;
+			});
+
+			const allItems = this.dex.items.all().filter(item => {
+				return !item.isPrimalOrb && !item.isPokeball && !item.megaStone && !item.name.includes("TR") &&
+					!item.isNonstandard &&
+					!item.zMove &&
+					!item.name.includes("Air Balloon");
+			});
+
+			const selfDebuffingMoves = allMoves.filter(move => {
+				if (move.self?.boosts) {
+					const boosts = Object.values(move.self.boosts);
+					if (boosts.some(valor => valor < 0)) {
+						return true;
+					}
+				}
+				return false;
+			});
+
+			const zCrystals = this.dex.items.all().filter(item => {
+				return item.zMove && item.zMoveType;
+			});
+
+			let chosenItem = null;
+			let randomAbility = null;
+			const newMoveSlots = [];
+			const baseMoveCount = pokemon.baseMoveSlots.length;
+
+			// chance to have 12 moves at once
+			if (this.random() <= 0.03) {
+				for (let i = 0; i < 12; i++) {
+					const manyMoves = this.sample(allMoves);
+					newMoveSlots.push(createMoveSlot(manyMoves));
+				}
+				this.add('-message', `${pokemon.name} has hit the jackpot!`);
+
+			// chance for every move to be the same
+			} else if (this.random() < 0.03) {
+				const epicMovesNames = ['splash', 'metronome', 'explosion', 'copycat', 'memento', 'struggle'];
+				const epicMoves = allMoves.filter(move => {
+					return epicMovesNames.includes(move.id);
+				});
+				const epicMove = this.sample(epicMoves);
+				for (let i = 0; i < baseMoveCount; i++) {
+					newMoveSlots.push(createMoveSlot(epicMove));
+				}
+
+			// chance to have an ability that pairs well with a move
+			} else {
+				if (this.random() > 0.3) {
+					randomAbility = this.sample(comboAbilities);
+					switch (randomAbility.id) {
+					case 'contrary':
+						const selfDebuffingMove = this.dex.moves.get(this.sample(selfDebuffingMoves));
+						newMoveSlots.push(createMoveSlot(selfDebuffingMove));
+						break;
+					case 'noguard':
+						const ohkoMoves = ['fissure', 'horndrill', 'guillotine', 'sheercold'];
+						const randomOHKOMove = this.dex.moves.get(this.sample(ohkoMoves));
+						newMoveSlots.push(createMoveSlot(randomOHKOMove));
+						break;
+					case 'rockhead':
+					case 'reckless':
+					{
+						const selfDamagingMoves = ['bravebird', 'doubleedge', 'flareblitz', 'headcharge', 'headsmash',
+							'submission', 'takedown', 'volttackle', 'wavecrash', 'wildcharge', 'woodhammer'];
+						const randomSelfDamagingMove = this.dex.moves.get(this.sample(selfDamagingMoves));
+						newMoveSlots.push(createMoveSlot(randomSelfDamagingMove));
+						break;
+					}
+					case 'technician':
+					case 'skilllink':
+					{
+						const multyHitMoves = ['armthrust', 'barrage', 'bonerush', 'bulletseed', 'cometpunch', 'doubleslap', 'furyattack',
+							'furyswipes', 'iciclespear', 'pinmissile', 'rockblast', 'scaleshot', 'spikecannon', 'tailslap', 'watershuriken'];
+						const multyHitMove = this.dex.moves.get(this.sample(multyHitMoves));
+						newMoveSlots.push(createMoveSlot(multyHitMove));
+						break;
+					}
+					case 'simple':
+						const selfBoostMove = this.dex.moves.get(this.sample(selfBoostMoves));
+						newMoveSlots.push(createMoveSlot(selfBoostMove));
+						break;
+					case 'serenegrace':
+						const flinchMoves = ['ironhead', 'doubleironbash', 'headbutt'];
+						const randomFlinchMove = this.dex.moves.get(this.sample(flinchMoves));
+						newMoveSlots.push(createMoveSlot(randomFlinchMove));
+						break;
+					case 'prankster':
+						const pranksterMoves = ['spore', 'willowisp', 'thunderwave', 'tailwind'];
+						const pranksterMove = this.dex.moves.get(this.sample(pranksterMoves));
+						newMoveSlots.push(createMoveSlot(pranksterMove));
+						break;
+					case 'triage':
+						const drainingMoves = ['bitterblade', 'bouncybubble', 'drainpunch', 'drainingkiss', 'gigadrain',
+							'hornleech', 'leechlife', 'matchagotcha', 'oblivionwing', 'paraboliccharge'];
+						const drainingMove = this.dex.moves.get(this.sample(drainingMoves));
+						newMoveSlots.push(createMoveSlot(drainingMove));
+						break;
+					case 'drizzle':
+						const rainMoves = ['thunder', 'hurricane', 'bleakwindstorm', 'wildboltstorm', 'sandsearstorm', 'weatherball'];
+						const rainMove = this.dex.moves.get(this.sample(rainMoves));
+						newMoveSlots.push(createMoveSlot(rainMove));
+						break;
+					case 'drought':
+						const sunMoves = ['solarbeam', 'solarblade', 'weatherball'];
+						const sunMove = this.dex.moves.get(this.sample(sunMoves));
+						newMoveSlots.push(createMoveSlot(sunMove));
+						break;
+					case 'sandstream':
+						const sandMoves = ['shoreup', 'weatherball'];
+						const sandMove = this.dex.moves.get(this.sample(sandMoves));
+						newMoveSlots.push(createMoveSlot(sandMove));
+						break;
+					case 'snowwarning':
+						const snowMoves = ['blizzard', 'auroraveil', 'weatherball'];
+						const snowMove = this.dex.moves.get(this.sample(snowMoves));
+						newMoveSlots.push(createMoveSlot(snowMove));
+						break;
+					case 'mistysurge':
+						const mistyMoves = ['steelroller', 'naturepower', 'terrainpulse', 'mistyexplosion'];
+						const mistyMove = this.dex.moves.get(this.sample(mistyMoves));
+						newMoveSlots.push(createMoveSlot(mistyMove));
+						break;
+					case 'psychicsurge':
+						const psychicSurgeMoves = ['steelroller', 'naturepower', 'terrainpulse', 'expandingforce'];
+						const psychicSurgeMove = this.dex.moves.get(this.sample(psychicSurgeMoves));
+						newMoveSlots.push(createMoveSlot(psychicSurgeMove));
+						break;
+					case 'grassysurge':
+						const grassyMoves = ['steelroller', 'naturepower', 'terrainpulse', 'grassyglide', 'floralhealing'];
+						const grassyMove = this.dex.moves.get(this.sample(grassyMoves));
+						newMoveSlots.push(createMoveSlot(grassyMove));
+						break;
+					case 'electricsurge':
+						const electricSurgeMoves = ['steelroller', 'naturepower', 'terrainpulse', 'risingvoltage'];
+						const electricSurgeMove = this.dex.moves.get(this.sample(electricSurgeMoves));
+						newMoveSlots.push(createMoveSlot(electricSurgeMove));
+						break;
+					case 'punkrock':
+						const soundMoves = ['boomburst', 'overdrive', 'torchsong', 'hypervoice', 'sparklingaria', 'snarl', 'clangoroussoul'];
+						const soundMove = this.dex.moves.get(this.sample(soundMoves));
+						newMoveSlots.push(createMoveSlot(soundMove));
+						break;
+					case 'strongjaw':
+						const biteMoves = ['fishiousrend', 'crunch', 'psychicfangs', 'jawlock', 'icefang', 'firefang', 'thunderfang'];
+						const biteMove = this.dex.moves.get(this.sample(biteMoves));
+						newMoveSlots.push(createMoveSlot(biteMove));
+						break;
+					case 'megalauncher':
+						const pulseMoves = ['aurasphere', 'darkpulse', 'dragonpulse', 'waterpulse', 'originpulse', 'terrainpulse', 'healpulse'];
+						const pulseMove = this.dex.moves.get(this.sample(pulseMoves));
+						newMoveSlots.push(createMoveSlot(pulseMove));
+						break;
+					case 'sharpness':
+						const slicingMoves = ['sacredsword', 'leafblade', 'bitterblade', 'psyblade', 'kowtowcleave', 'aquacutter',
+							'solarblade', 'behemothblade', 'ceaselessedge', 'stoneaxe'];
+						const slicingMove = this.dex.moves.get(this.sample(slicingMoves));
+						newMoveSlots.push(createMoveSlot(slicingMove));
+						break;
+					case 'ironfist':
+						const punchMoves = ['machpunch', 'drainpunch', 'plasmafists', 'surgingstrikes',
+							'firepunch', 'icepunch', 'thunderpunch', 'bulletpunch', 'meteormash'];
+						const punchMove = this.dex.moves.get(this.sample(punchMoves));
+						newMoveSlots.push(createMoveSlot(punchMove));
+						break;
+					case 'pixilate':
+					case 'refrigerate':
+					case 'aerilate':
+					case 'galvanize':
+					{
+						const normalMoves = ['boomburst', 'hypervoice', 'doubleedge', 'extremespeed', 'facade', 'quickattack'];
+						const normalMove = this.dex.moves.get(this.sample(normalMoves));
+						newMoveSlots.push(createMoveSlot(normalMove));
+						break;
+					}
+					}
+				}
+
+				// chance to have a z move
+				if (this.random() < 0.03 && (newMoveSlots.length < baseMoveCount)) {
+					const zCrystal = this.sample(zCrystals);
+					chosenItem = zCrystal.id;
+					const sameTypeMoves = allMoves.filter(move => {
+						const isSameType = (move.type === zCrystal.zMoveType);
+						const isNotHiddenPower = !move.id.startsWith('hiddenpower');
+						return isSameType && isNotHiddenPower;
+					});
+					const baseZMove = this.sample(sameTypeMoves);
+					newMoveSlots.push(createMoveSlot(baseZMove));
+					this.add('-message', `${pokemon.name} found a Z-Crystal on the battlefield!`);
+				}
+
+				let hasStab = false;
+				let hasStatus = false;
+				let hasCoverage = false;
+
+				// fill in the remaining move slots with stab, status, coverange and fully random moves
+				while (newMoveSlots.length < baseMoveCount) {
+					if (!hasStab) {
+						const randomSTABMove = this.sample(stabMoves);
+						newMoveSlots.push(createMoveSlot(randomSTABMove));
+						hasStab = true;
+					} else if (!hasStatus) {
+						const statusMoveTypeChance = this.random();
+						if (statusMoveTypeChance < 0.1) {
+							const randomHazardMove = this.sample(hazardMoves);
+							newMoveSlots.push(createMoveSlot(randomHazardMove));
+						} else if (0.1 <= statusMoveTypeChance && statusMoveTypeChance < 0.4) {
+							const randomStatusConditionMove = this.sample(statusConditionMoves);
+							newMoveSlots.push(createMoveSlot(randomStatusConditionMove));
+						} else if (0.4 <= statusMoveTypeChance && statusMoveTypeChance < 0.65) {
+							const randomSelfBoostMove = this.sample(selfBoostMoves);
+							newMoveSlots.push(createMoveSlot(randomSelfBoostMove));
+						} else if (0.65 <= statusMoveTypeChance && statusMoveTypeChance < 0.9) {
+							const randomTargetBoostMove = this.sample(targetBoostMoves);
+							newMoveSlots.push(createMoveSlot(randomTargetBoostMove));
+						} else if (0.9 <= statusMoveTypeChance && statusMoveTypeChance < 0.95) {
+							const randomStallingMove = this.sample(stallingMoves);
+							newMoveSlots.push(createMoveSlot(randomStallingMove));
+						} else {
+							const randomStatusMove = this.sample(statusMoves);
+							newMoveSlots.push(createMoveSlot(randomStatusMove));
+						}
+						hasStatus = true;
+					} else if (!hasCoverage) {
+						if (coverageMoves.length > 0) {
+							const move = this.sample(coverageMoves);
+							newMoveSlots.push(createMoveSlot(move));
+						} else {
+							const randomMove = this.sample(allMoves);
+							newMoveSlots.push(createMoveSlot(randomMove));
+						}
+						hasCoverage = true;
+					} else {
+						const randomMove = this.sample(allMoves);
+						newMoveSlots.push(createMoveSlot(randomMove));
+					}
+				}
+			}
+			pokemon.moveSlots = newMoveSlots;
+
+			// if needed randomize item and ability
+			if (chosenItem) {
+				pokemon.setItem(chosenItem);
+				chosenItem = null;
+			} else {
+				const randomItem = this.sample(allItems);
+				pokemon.setItem(randomItem.id);
+			}
+			if (!randomAbility) {
+				randomAbility = this.sample(allAbilities);
+			}
+
+			pokemon.setAbility(randomAbility.id);
+			this.add('-message', `${pokemon.name} learned new moves and found a new item!`);
+		},
+	},
 };
