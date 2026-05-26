@@ -464,7 +464,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	technichine: {
 		learnset: {
-			copcat: ["9L1"],
+			copycat: ["9L1"],
 			pound: ["9L1"],
 			acidspray: ["9M"],
 			acrobatics: ["9M"],
