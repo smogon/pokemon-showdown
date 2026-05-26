@@ -103,7 +103,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Self-Alteryzation",
 		rating: 4.5,
 		num: 2059,
-		shortDesc: "This Pokemon's secondary type changes to the type of a move it knows on switch-in and before using.",
+		shortDesc: "Secondary type changes to type of a move it knows on switch-in and before using.",
 		desc: "This Pokemon's secondary type changes to the type of a random move it knows on switch-in. This Pokemon's secondary type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect fails if the this Pokemon is Terastallized."
 	},
 	snarky: {
