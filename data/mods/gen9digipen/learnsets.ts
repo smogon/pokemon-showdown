@@ -5,32 +5,32 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	beheeyem: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	deoxys: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "7M", "6M"],
 		},
 	},
 	elgyem: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	gallade: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "8M", "7M", "6M"],
 			swordofdamocles: ["9M"],
 		},
 	},
 	gardevoir: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "8M", "7M", "6M"],
 		},
 	},
 	golduck: {
@@ -48,19 +48,19 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	jirachi: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "8M", "7M", "6M"],
 		},
 	},
 	lunala: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M"],
+			starblazing: ["9M", "8M", "7M"],
 		},
 	},
 	lunatone: {
 		inherit: true,
 		learnset: {
-			starblazing: ["8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	malamar: {
@@ -73,13 +73,13 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		inherit: true,
 		learnset: {
 			inverseroom: ["9M", "8M", "7M", "6M"],
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "8M", "7M", "6M"],
 		},
 	},
 	minior: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["9M", "7M"],
 		},
 	},
 	necrozma: {
@@ -97,38 +97,38 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	sigilyph: {
 		inherit: true,
 		learnset: {
-			inverseroom: ["9M", "8M", "7M", "6M"],
-			starblazing: ["9M, 8M, 7M, 6M"],
+			inverseroom: ["8M", "7M", "6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	solgaleo: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M"],
+			starblazing: ["9M", "8M", "7M"],
 		},
 	},
 	solrock: {
 		inherit: true,
 		learnset: {
-			starblazing: ["8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	starmie: {
 		inherit: true,
 		learnset: {
-			starblazing: ["8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	staryu: {
 		inherit: true,
 		learnset: {
-			starblazing: ["8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 	victini: {
 		inherit: true,
 		learnset: {
-			starblazing: ["9M, 8M, 7M, 6M"],
+			starblazing: ["8M", "7M", "6M"],
 		},
 	},
 
@@ -202,12 +202,12 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			calmmind: ["9M"],
 			charm: ["9M", "9L45"],
 			charge: ["9M"],
-			chargebeam: ["9M", "7M", "6M", "5M", "4M"],
+			chargebeam: ["9M"],
 			confide: ["9M"],
 			copycat: ["9L30"],
 			covet: ["9L1"],
-			conversion: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "5S0", "4L1", "3L1"],
-			conversion2: ["9L25", "8L25", "8S1", "7L1", "6L1", "5L1", "4L1", "3L1"],
+			conversion: ["9L1"],
+			conversion2: ["9L25"],
 			curse: ["9M"],
 			detect: ["9M"],
 			dig: ["9M"],
