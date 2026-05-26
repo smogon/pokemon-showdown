@@ -170,8 +170,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		// Need to playtest with Tera and added types.
 		onHit(target, source) {
-			let targetTypes = target.getTypes(true)
-			let sourceTypes = source.getTypes(true)
+			let targetTypes = [...target.getTypes(true)]
+			let sourceTypes = [...source.getTypes(true)]
 			if (sourceTypes.length > 1) {
 				if (sourceTypes[1] === targetTypes[1]) {
 					return
@@ -182,7 +182,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				targetTypes.splice(1, 1);
 			}
 			if (!target.setType(targetTypes)) return;
-			this.add('-start', target, 'typechange', '[from] move: Actualize', `[of] ${source}`);
+			this.add('-start', target, 'typechange', targetTypes.join('/'), '[from] move: Actualize', `[of] ${source}`);
 		},
 		condition: {
 			noCopy: true,

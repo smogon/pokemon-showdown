@@ -74,25 +74,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	selfalteryzation: {
 		isNonstandard: "DigiPen",
 		onSwitchInPriority: 2,
+		// Need to clarify how it should work if randomly selected move type is the same as the primary type or secondary type
 		onSwitchIn(source) {
-			let sourceTypes = source.getTypes(true)
+			let sourceTypes = [...source.getTypes(true)]
 			let moves = source.getMoves();
 			let randomMove = this.sample(moves);
 			let type = this.dex.moves.get(randomMove.id).type;
-			if (type && sourceTypes[1] !== type) {
+			if (type) {
 				sourceTypes[1] = type;
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Self-Alteryzation');
+				if (!source.setType(sourceTypes)) return;
+				this.add('-start', source, 'typechange', sourceTypes.join('/'), '[from] ability: Self-Alteryzation');
 			}
 		},
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
-			let sourceTypes = source.getTypes(true)
+			let sourceTypes = [...source.getTypes(true)]
 			if (type && sourceTypes[1] !== type) {
 				sourceTypes[1] = type;
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Self-Alteryzation');
+				if (!source.setType(sourceTypes)) return;
+				this.add('-start', source, 'typechange', sourceTypes.join('/'), '[from] ability: Self-Alteryzation');
 			}
 		},
 		flags: {},
