@@ -40,6 +40,22 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DigiPen",
 		natDexTier: "DigiPen",
 	},
+	tineon: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	asymiladi: {
+		isNonstandard: "DigiPen Past",
+		tier: "Illegal",
+		natDexTier: "DigiPen",
+	},
+	thiriniri: {
+		isNonstandard: "DigiPen Past",
+		tier: "Illegal",
+		natDexTier: "DigiPen",
+	},
 	mojamas: {
 		isNonstandard: "DigiPen",
 		tier: "DigiPen",

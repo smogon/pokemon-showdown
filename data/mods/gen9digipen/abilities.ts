@@ -98,11 +98,29 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Self-Alteryzation",
-		rating: 3,
+		rating: 4.5,
 		num: 2059,
 		shortDesc: "This Pokemon's secondary type changes to the type of a move it knows on switch-in and before using.",
 		desc: "This Pokemon's secondary type changes to the type of a random move it knows on switch-in. This Pokemon's secondary type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect fails if the this Pokemon is Terastallized."
 	},
+	venomabsorb: {
+		isNonstandard: "DigiPen",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Poison') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Venom Absorb');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Venom Absorb",
+		rating: 3.5,
+		num: 11,
+		desc: "This Pokemon is immune to Poison-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Poison-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Poison moves; Poison immunity.",
+	},
+
 	// ---- CAP Abilities -------------------------------------------------------------
 	// Any CAP abilities on DigiPen Pokemon need to be overriden as `isNonstandard: "DigiPen"` so they are
 	// legal in DigiPen formats.
