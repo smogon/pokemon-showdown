@@ -173,12 +173,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let targetTypes = [...target.getTypes(true)]
 			let sourceTypes = [...source.getTypes(true)]
 			if (sourceTypes.length > 1) {
-				if (sourceTypes[1] === targetTypes[1]) {
+				if (sourceTypes[1] === targetTypes[1] || targetTypes[1] === sourceTypes[0]) {
 					return
 				}
 				targetTypes[1] = sourceTypes[1];
 			}
 			else {
+				if (targetTypes.length <= 1) return;
 				targetTypes.splice(1, 1);
 			}
 			if (!target.setType(targetTypes)) return;
@@ -193,7 +194,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
 		shortDesc: "Changes the target's secondary type to the user's secondary type.",
-		desc: "Changes the target's secondary type to the user's secondary type. If the user has no secondary type, the target's secondary type is removed. If the target is typeless and the user has a secondary type, the target's type is changed to the user's secondary type. This move fails if used on consecutive turns.",
+		desc: "Changes the target's secondary type to the user's secondary type. Fails if the target is Arceus or Silvally, if the target's secondary type is the same as the user's secondary type, if the user and target both have no secondary type, if the target's primary type is the same as the user's secondary type, or if the target is Terastallized. If the user has no secondary type, the target's secondary type is removed. This move fails if used on consecutive turns.",
 		contributors: ["Joshua C."],
 	},
 	swordofdamocles: {

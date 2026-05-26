@@ -311,6 +311,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			doubleteam: ["7M"],
 			echoedvoice: ["7M"],
 			endure: ["8M"],
+			expandingforce: ["8T"],
 			facade: ["8M", "7M"],
 			fireblast: ["8M", "7M"],
 			flamethrower: ["8M", "7M"],
