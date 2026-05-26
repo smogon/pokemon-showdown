@@ -14,7 +14,6 @@ const serverDir = __dirname;
 const PID_FILE = path.join(serverDir, ".start-dev.pids.json");
 
 const CLIENT_URL = "http://localhost:8081/play.pokemonshowdown.com/testclient?~~localhost:8000";
-// Port 8083 is HTTPS via local-ssl-proxy (not HTTP).
 const DEX_URL = "https://localhost:8083/";
 
 const SSL_PROXY_ARGS = ["--source", "8083", "--target", "8082"];
@@ -133,8 +132,10 @@ function startSslProxy() {
 }
 
 async function main() {
+	console.log("\n=== Killing previous start-dev sessions ===\n");
+	killPrevious();
+
 	if (process.argv.includes("--kill")) {
-		killPrevious();
 		return;
 	}
 
@@ -164,9 +165,9 @@ async function main() {
 
 	console.log("\nWaiting for servers to come up...");
 	setTimeout(() => {
-		console.log(`Opening ${DEX_URL}`);
+		console.log(`Opening Dex at ${DEX_URL}`);
 		openInBrowser(DEX_URL);
-		console.log(`Opening ${CLIENT_URL}`);
+		console.log(`Opening Showdown at ${CLIENT_URL}`);
 		openInBrowser(CLIENT_URL);
 		console.log("\nDev servers are running in the background.");
 		console.log(`Stop them with: node start-dev --kill`);

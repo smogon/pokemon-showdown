@@ -118,8 +118,6 @@ async function main() {
 		console.log("\n=== Client: rebuild indexes ===\n");
 		shell("node build indexes", clientDir);
 
-		console.log("\n=== Start dev servers ===\n");
-		shell("node start-dev --kill", serverDir);
 		shell("node start-dev", serverDir);
 	} finally {
 		rl.close();
