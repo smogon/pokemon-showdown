@@ -485,6 +485,11 @@ export const commands: Chat.ChatCommands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockofflinepms: 'blockpms',
+	blockdms: 'blockpms',
+	blockdm: 'blockpms',
+	ignoredms: 'blockpms',
+	ignoredm: 'blockpms',
+	blockofflinedms: 'blockpms',
 	async blockpms(target, room, user, connection, cmd) {
 		target = target.toLowerCase().trim();
 		if (target === 'ac') target = 'autoconfirmed';
