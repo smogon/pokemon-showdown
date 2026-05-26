@@ -207,6 +207,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		heightm: 0.0, //placeholder
 		weightkg: 0.0, //placeholder
 		color: "Gray", //placeholder
+		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"], //placeholder
 		title: "Alteration", //placeholder
 		notes: "Joshua's Pokésona",
