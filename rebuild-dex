@@ -22,6 +22,24 @@ function git(args, cwd = serverDir) {
 	child_process.execFileSync("git", args, { cwd, stdio: "inherit" });
 }
 
+function gitOutput(args, cwd = serverDir) {
+	return child_process.execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
+}
+
+function serverHasUncommittedChanges() {
+	return gitOutput(["status", "--porcelain"]) !== "";
+}
+
+function serverHasUnpushedCommits() {
+	const remote = `origin/${PUSH_BRANCH}`;
+	try {
+		gitOutput(["rev-parse", "--verify", remote]);
+	} catch {
+		return true;
+	}
+	return Number(gitOutput(["rev-list", "--count", `${remote}..HEAD`])) > 0;
+}
+
 function readBuildIndexesBranch() {
 	if (!fs.existsSync(buildIndexesPath)) {
 		throw new Error(`build-indexes not found at ${buildIndexesPath}`);
@@ -109,11 +127,20 @@ async function main() {
 			process.exit(0);
 		}
 
-		console.log("\n=== Server: commit and push ===\n");
-		git(["add", "."]);
-		const message = await promptCommitMessage(rl);
-		git(["commit", "-m", message]);
-		git(["push", "origin", PUSH_BRANCH]);
+		if (serverHasUncommittedChanges()) {
+			console.log("\n=== Server: commit and push ===\n");
+			git(["add", "."]);
+			const message = await promptCommitMessage(rl);
+			git(["commit", "-m", message]);
+			git(["push", "origin", PUSH_BRANCH]);
+		} else if (serverHasUnpushedCommits()) {
+			console.log("\n=== Server: push only ===\n");
+			git(["push", "origin", PUSH_BRANCH]);
+		} else {
+			console.log(
+				`\n=== Server: skip commit/push (clean working tree, up to date with origin/${PUSH_BRANCH}) ===\n`
+			);
+		}
 
 		console.log("\n=== Client: rebuild indexes ===\n");
 		shell("node build indexes", clientDir);
