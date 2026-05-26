@@ -194,6 +194,24 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		notes: "Logan's Pokésona",
 		contributors: ["Logan C."],
 	},
+	alteraton: {
+		num: 2015,
+		name: "Alteraton",
+		isNonstandard: "DigiPen",
+		// digipenSprite: true,
+		// digipenIcon: true,
+		types: ["Normal", "???"],
+		gender: "N",
+		baseStats: { hp: 75, atk: 50, def: 111, spa: 166, spd: 111, spe:88 },
+		abilities: { 0: "Self-Alteryzation" },
+		heightm: 0.0, //placeholder
+		weightkg: 0.0, //placeholder
+		color: "Gray", //placeholder
+		eggGroups: ["Undiscovered"], //placeholder
+		title: "Alteration", //placeholder
+		notes: "Joshua's Pokésona",
+		contributors: ["Joshua C."]
+	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────
 

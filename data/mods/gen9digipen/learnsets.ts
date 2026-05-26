@@ -190,6 +190,12 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			yawn: ["9L16"],
 		}
 	},
+	alteraton: {
+		learnset: {
+			actualize: ["9L60"],
+			protect: ["9M"],
+		},
+	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────
 

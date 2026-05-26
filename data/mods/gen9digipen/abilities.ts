@@ -71,7 +71,37 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			cured. If another Pokemon has the Pressure ability, this Pokemon's moves consume 3 PP instead.",
 		contributors: ["Logan C."],
 	},
-
+	selfalteryzation: {
+		isNonstandard: "DigiPen",
+		onSwitchInPriority: 2,
+		onSwitchIn(source) {
+			let sourceTypes = source.getTypes(true)
+			let moves = source.getMoves();
+			let randomMove = this.sample(moves);
+			let type = this.dex.moves.get(randomMove.id).type;
+			if (type && sourceTypes[1] !== type) {
+				sourceTypes[1] = type;
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Self-Alteryzation');
+			}
+		},
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+			const type = move.type;
+			let sourceTypes = source.getTypes(true)
+			if (type && sourceTypes[1] !== type) {
+				sourceTypes[1] = type;
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Self-Alteryzation');
+			}
+		},
+		flags: {},
+		name: "Self-Alteryzation",
+		rating: 3,
+		num: 2059,
+		shortDesc: "This Pokemon's secondary type changes to the type of a move it knows on switch-in and before using.",
+		desc: "This Pokemon's secondary type changes to the type of a random move it knows on switch-in. This Pokemon's secondary type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect fails if the this Pokemon is Terastallized."
+	},
 	// ---- CAP Abilities -------------------------------------------------------------
 	// Any CAP abilities on DigiPen Pokemon need to be overriden as `isNonstandard: "DigiPen"` so they are
 	// legal in DigiPen formats.

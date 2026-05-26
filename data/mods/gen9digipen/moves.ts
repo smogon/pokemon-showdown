@@ -52,7 +52,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('inverseroom');
 			},
-			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 1,
 			onFieldEnd() {
@@ -147,6 +146,55 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		contestType: "Clever",
 		contributors: ["Logan C."]
+	},
+	actualize: {
+		num: 1004,
+		isNonstandard: "DigiPen",
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Actualize",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1 },
+		onTry(source) {
+			if (source.volatiles['actualize']) {
+				this.hint("Actualize cannot be used on consecutive turns.");
+				return false;
+			}
+		},
+		onPrepareHit(target, source, move) {
+			source.addVolatile('actualize');
+			this.add('-anim', source, 'Trick-or-Treat', target);
+			this.attrLastMove('[anim] Trick-or-Treat');
+		},
+		// Need to playtest with Tera and added types.
+		onHit(target, source) {
+			let targetTypes = target.getTypes(true)
+			let sourceTypes = source.getTypes(true)
+			if (sourceTypes.length > 1) {
+				if (sourceTypes[1] === targetTypes[1]) {
+					return
+				}
+				targetTypes[1] = sourceTypes[1];
+			}
+			else {
+				targetTypes.splice(1, 1);
+			}
+			if (!target.setType(targetTypes)) return;
+			this.add('-start', target, 'typechange', '[from] move: Actualize', `[of] ${source}`);
+		},
+		condition: {
+			noCopy: true,
+			duration: 2,
+		},
+		target: "normal",
+		type: "???",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Clever",
+		shortDesc: "Changes the target's secondary type to the user's secondary type.",
+		desc: "Changes the target's secondary type to the user's secondary type. If the user has no secondary type, the target's secondary type is removed. If the target is typeless and the user has a secondary type, the target's type is changed to the user's secondary type. This move fails if used on consecutive turns.",
+		contributors: ["Joshua C."],
 	},
 	swordofdamocles: {
 		num: 1006,

@@ -18,4 +18,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		}
 	},
+	actualze: {
+		name: 'actualize',
+		duration: 1,
+	}
 };
