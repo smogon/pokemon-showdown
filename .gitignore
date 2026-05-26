@@ -29,6 +29,9 @@ tools/set-import/*.js
 # visual studio live share
 .vs
 
+# start-dev pid tracking
+.start-dev.pids.json
+
 # boilerplate #
 ###############
 

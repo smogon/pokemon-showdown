@@ -113,8 +113,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		num: 2002,
 		name: "Pootis",
 		isNonstandard: "DigiPen",
-		// digipenSprite: true,
-		// digipenIcon: true,
+		digipenSprite: true,
+		digipenIcon: true,
 		types: ["Fighting"],
 		gender: "M",
 		baseStats: { hp: 50, atk: 60, def: 50, spa: 60, spd: 50, spe: 35 },
@@ -254,8 +254,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		requiredItem: "Hydreigite",
 		notes: "Inspired by its commonly used moves, Dragon Pulse and Dark Pulse",
 		contributors: ["Bryce G."],
-		// Temporary art for testing; source seems untrustworthy too
-		artSource: { artist: "TRXPICS", url: "https://www.pokemonpets.com/Mega-Hydreigon-Pokemon-Pokedex-8635" }
+		// Temporary art for testing; source seems suspicious
+		artSource: { artist: "TRXPICS (allegedly)", url: "https://www.pokemonpets.com/Mega-Hydreigon-Pokemon-Pokedex-8635" }
 	},
 	hydreigon: {
 		inherit: true,

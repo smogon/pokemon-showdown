@@ -1,0 +1,179 @@
+#!/usr/bin/env node
+"use strict";
+
+// Location of the client root directory.
+const clientDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-client";
+// Location of the dex root directory.
+const dexDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-dex";
+
+const child_process = require("child_process");
+const fs = require("fs");
+const path = require("path");
+
+const serverDir = __dirname;
+const PID_FILE = path.join(serverDir, ".start-dev.pids.json");
+
+const CLIENT_URL = "http://localhost:8081/play.pokemonshowdown.com/testclient?~~localhost:8000";
+// Port 8083 is HTTPS via local-ssl-proxy (not HTTP).
+const DEX_URL = "https://localhost:8083/";
+
+const SSL_PROXY_ARGS = ["--source", "8083", "--target", "8082"];
+const SSL_PROXY_ARGS_WITH_CERTS = [
+	...SSL_PROXY_ARGS,
+	"--cert", "localhost.pem",
+	"--key", "localhost-key.pem",
+];
+
+function writePidFile(pids) {
+	fs.writeFileSync(PID_FILE, JSON.stringify({ startedAt: new Date().toISOString(), pids }, null, "\t"));
+}
+
+function killPrevious() {
+	if (!fs.existsSync(PID_FILE)) {
+		console.log("No previous start-dev session found (missing pid file).");
+		return;
+	}
+
+	const { startedAt, pids } = JSON.parse(fs.readFileSync(PID_FILE, "utf8"));
+	console.log(`Stopping dev servers from ${startedAt}...\n`);
+
+	for (const { label, pid } of pids) {
+		if (!pid) continue;
+		try {
+			process.kill(pid, "SIGTERM");
+			console.log(`Stopped ${label} (pid ${pid})`);
+		} catch (err) {
+			if (err.code === "ESRCH") {
+				console.log(`${label} (pid ${pid}) was not running`);
+			} else {
+				console.error(`Failed to stop ${label} (pid ${pid}): ${err.message}`);
+			}
+		}
+	}
+
+	fs.unlinkSync(PID_FILE);
+	console.log("\nDone.");
+}
+
+function spawnDetached(label, command, args, cwd) {
+	const child = child_process.spawn(command, args, {
+		cwd,
+		detached: true,
+		stdio: "ignore",
+	});
+	child.unref();
+	console.log(`Started ${label} (pid ${child.pid})`);
+	return { label, pid: child.pid };
+}
+
+function openInBrowser(url) {
+	if (process.platform === "darwin") {
+		child_process.execSync(`open ${JSON.stringify(url)}`);
+	} else if (process.platform === "win32") {
+		child_process.execSync(`start ${JSON.stringify(url)}`, { shell: true });
+	} else {
+		child_process.execSync(`xdg-open ${JSON.stringify(url)}`);
+	}
+}
+
+function startSslProxy() {
+	return new Promise(resolve => {
+		const PROBE_MS = 800;
+
+		const attempt = (args, withCerts) => {
+			let settled = false;
+
+			const finish = entry => {
+				if (settled) return;
+				settled = true;
+				resolve(entry);
+			};
+
+			const retryWithoutCerts = reason => {
+				if (!withCerts) {
+					console.error(`SSL proxy failed to start (${reason})`);
+					finish(null);
+					return;
+				}
+				console.log(`SSL proxy with certs failed (${reason}), retrying without certs...`);
+				attempt(SSL_PROXY_ARGS, false);
+			};
+
+			const child = child_process.spawn("local-ssl-proxy", args, {
+				cwd: dexDir,
+				detached: true,
+				stdio: "ignore",
+			});
+
+			child.on("error", err => retryWithoutCerts(err.message));
+
+			child.on("exit", code => {
+				if (code !== null && code !== 0 && !settled) {
+					retryWithoutCerts(`exit ${code}`);
+				}
+			});
+
+			child.on("spawn", () => {
+				setTimeout(() => {
+					if (settled) return;
+					try {
+						process.kill(child.pid, 0);
+						child.unref();
+						console.log(`Started ssl-proxy (pid ${child.pid})`);
+						finish({ label: "ssl-proxy", pid: child.pid });
+					} catch {
+						retryWithoutCerts("process exited");
+					}
+				}, PROBE_MS);
+			});
+		};
+
+		attempt(SSL_PROXY_ARGS_WITH_CERTS, true);
+	});
+}
+
+async function main() {
+	if (process.argv.includes("--kill")) {
+		killPrevious();
+		return;
+	}
+
+	for (const [name, dir] of [["client", clientDir], ["dex", dexDir]]) {
+		if (!fs.existsSync(dir)) {
+			console.error(`${name} directory not found: ${dir}`);
+			process.exit(1);
+		}
+	}
+
+	process.chdir(serverDir);
+
+	if (fs.existsSync(PID_FILE)) {
+		console.log("Stopping previous start-dev session...");
+		killPrevious();
+		console.log("");
+	}
+
+	const pids = [];
+	console.log("\n=== Starting dev servers ===\n");
+	pids.push(spawnDetached("server", "node", ["pokemon-showdown"], serverDir));
+	pids.push(spawnDetached("client", "npx", ["serve", "-p", "8081"], clientDir));
+	pids.push(spawnDetached("dex", "npx", ["serve", "-s", "-p", "8082"], dexDir));
+	const sslProxy = await startSslProxy();
+	if (sslProxy) pids.push(sslProxy);
+	writePidFile(pids);
+
+	console.log("\nWaiting for servers to come up...");
+	setTimeout(() => {
+		console.log(`Opening ${DEX_URL}`);
+		openInBrowser(DEX_URL);
+		console.log(`Opening ${CLIENT_URL}`);
+		openInBrowser(CLIENT_URL);
+		console.log("\nDev servers are running in the background.");
+		console.log(`Stop them with: node start-dev --kill`);
+	}, 3000);
+}
+
+main().catch(err => {
+	console.error(err);
+	process.exit(1);
+});

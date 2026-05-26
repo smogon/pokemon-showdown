@@ -115,11 +115,12 @@ async function main() {
 		git(["commit", "-m", message]);
 		git(["push", "origin", PUSH_BRANCH]);
 
-		console.log("\n=== Client: full build ===\n");
-		shell("node build full", clientDir);
+		console.log("\n=== Client: rebuild indexes ===\n");
+		shell("node build indexes", clientDir);
 
-		console.log("\n=== Server: start ===\n");
-		shell("node pokemon-showdown", serverDir);
+		console.log("\n=== Start dev servers ===\n");
+		shell("node start-dev --kill", serverDir);
+		shell("node start-dev", serverDir);
 	} finally {
 		rl.close();
 	}
