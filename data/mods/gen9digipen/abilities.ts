@@ -106,6 +106,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon's secondary type changes to the type of a move it knows on switch-in and before using.",
 		desc: "This Pokemon's secondary type changes to the type of a random move it knows on switch-in. This Pokemon's secondary type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect fails if the this Pokemon is Terastallized."
 	},
+	snarky: {
+		isNonstandard: "DigiPen",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+				move.type = 'Psychic';
+			}
+		},
+		flags: {},
+		name: "Snarky",
+		rating: 1.5,
+		num: 2060,
+		desc: "This Pokemon's sound-based moves become Psychic-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's sound-based moves become Psychic type.",
+	},
 	venomabsorb: {
 		isNonstandard: "DigiPen",
 		onTryHit(target, source, move) {
@@ -119,7 +134,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Venom Absorb",
 		rating: 3.5,
-		num: 11,
+		num: 2086,
 		desc: "This Pokemon is immune to Poison-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Poison-type move.",
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Poison moves; Poison immunity.",
 	},

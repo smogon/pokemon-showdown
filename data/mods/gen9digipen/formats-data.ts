@@ -56,6 +56,36 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 		natDexTier: "DigiPen",
 	},
+	technichine: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	exytem: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	frostscales: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	tarantuchas: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
+	jotabyte: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
 	mojamas: {
 		isNonstandard: "DigiPen",
 		tier: "DigiPen",
@@ -63,12 +93,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		natDexTier: "DigiPen",
 	},
 	alteraton: {
-		isNonstandard: "DigiPen",
-		tier: "DigiPen",
-		doublesTier: "DigiPen",
-		natDexTier: "DigiPen",
-	},
-	technichine: {
 		isNonstandard: "DigiPen",
 		tier: "DigiPen",
 		doublesTier: "DigiPen",

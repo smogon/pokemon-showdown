@@ -1,7 +1,7 @@
 // DigiPen custom Pokémon definitions.
 //
 // Remember to add the Pokemon to the format-data.ts file afterwards so it acutally appears in the
-// Teambuilder!
+// Teambuilder
 //
 // ── Custom Pokémon ──────────────────────────────────────────────────────────
 // Add a new entry keyed by the Pokémon's ID. This should be lowercase, no spaces/punctuation, with
@@ -61,6 +61,7 @@
 // Step 2 – patch the base species to advertise the form:
 //   pikachu: {
 //     inherit: true,
+//     modified: "DigiPen",
 //     otherFormes: ["Pikachu-Original", ..., "Pikachu-DigiPen"],
 //     formeOrder: ["Pikachu", "Pikachu-Original", ..., "Pikachu-DigiPen"],
 //   },
@@ -68,6 +69,7 @@
 // Step 3 (if necessary) – add the form as an evolution of the base game non-regional form:
 //   pichu: {
 //     inherit: true,
+//     modified: "DigiPen",
 //     evos: ["Pikachu, Pikachu-Original", ..., "Pikachu-DigiPen"],
 //   },
 //
@@ -90,15 +92,16 @@
 // Example:
 //   pikachu: {
 //     inherit: true,
+//     modified: "DigiPen",
 //     baseStats: { hp: 60, atk: 75, def: 60, spa: 65, spd: 70, spe: 115 },
 //   },
 //
 // ── Sprites and Icons ─────────────────────────────────────────────
-// `digipenSprite: true` means the client will (attempt to) load the sprite from the digiPen
-//  resource folder instead of the default resource folder.
+// `digipenSprite: true` means the client will (attempt to) load the sprite from the DigiPen
+//  resource location instead of the default resource location.
 //
-// `digipenIcon: true` means the client will (attempt to) load the icon from the digiPen
-// resource folder instead of the default resource folder, and will look for an individual icon
+// `digipenIcon: true` means the client will (attempt to) load the icon from the DigiPen
+// resource location instead of the default resource location, and will look for an individual icon
 // file instead of the icon on a sprite sheet
 //
 // ── Other Custom Fields ─────────────────────────────────────────────
@@ -114,21 +117,20 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Pootis",
 		isNonstandard: "DigiPen",
 		digipenSprite: true,
-		digipenIcon: true,
+		// digipenIcon: true,
 		types: ["Fighting"],
 		gender: "M",
 		baseStats: { hp: 50, atk: 60, def: 50, spa: 60, spd: 50, spe: 35 },
 		abilities: { 0: "Thick Fat", 1: "Gluttony", H: "Ripen" },
 		heightm: 0.7,
 		weightkg: 34,
-		color: "Red",
+		// color: "TBD",
 		evos: ["Armorobin"],
 		eggGroups: ["Flying", "Monster"],
 		title: "Punch Baby",
 		dexEntry: "It enjoys punching things, but its damage is limited by its puniness. It has an affinity towards sandwiches.",
-		habitat: "Test habitat",
-		notes: "Test note.",
-		contributors: ["Will T.", "Test contributor"],
+		// habitat: "TBD",
+		contributors: ["Will T."],
 		artSource: { artist: "American Bird Conservancy", url: "https://abcbirds.org/news/eight-red-birds-to-know-in-north-america/" }
 	},
 	armorobin: {
@@ -143,13 +145,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Thick Fat", 1: "Gluttony", H: "Ripen" },
 		heightm: 1.5,
 		weightkg: 150,
-		color: "Red",
+		// color: "TBD",
 		prevo: "Pootis",
 		evoLevel: 35,
 		evos: ["Chickiev"],
 		eggGroups: ["Flying", "Monster"],
 		title: "Red Army",
 		dexEntry: "Its steel-plated feathers scatter at high speeds when it flaps its wings. If Armorobin aren't fed often, it will throw a dangerous tantrum.",
+		// habitat: "TBD",
 		notes: "Originally named Pootispenser, renamed by Jared G.",
 		contributors: ["Will T."],
 	},
@@ -165,17 +168,17 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Thick Fat", 1: "Gluttony", H: "Ripen"},
 		heightm: 1.9,
 		weightkg: 300,
-		color: "Red",
+		// color: "TBD",
 		prevo: "Armorobin",
 		evoType: "trade",
 		evoCondition: "with a Metal Coat",
 		eggGroups: ["Flying", "Monster"],
 		title: "Mow Down",
 		dexEntry: "With its newfound upgrades, it is able to produce its own sandwiches to its liking. In battle, the speed of the feathers and punches it throws surpass that of bullets.",
+		// habitat: "TBD",
 		notes: "Originally named Pootispenserheer, rename by Jared G.",
 		contributors: ["Will T."],
 	},
-
 	tineon: {
 		num: 2005, 
 		name: "Tineon",
@@ -187,17 +190,17 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Clear Body", H: "Steelworker" },
 		heightm: 1.0,
 		weightkg: 50,
-		color: "TBD",
+		// color: "TBD",
 		prevo: "Eevee",
 		evoType: "useItem",
 		evoItem: "Up-Grade",
 		eggGroups: ["Field"],
 		title: "Factory",
 		dexEntry: "It is an artificial evolution to Eevee, created using the data behind Porygon's creation. New Trainers need to be careful while petting Tineon, as one wrong move could result in serious injury due to its sharp edges.",
+		// habitat: "TBD",
 		notes: "Legacy Steel-type Eevee evolution; swapped Special/Physical stats from Guardeon.",
 		contributors: ["Alex A."],
-	},
-	// See eevee entry after other eeveelutions below for modifications to evolution list
+	}, // See eevee entry after other eeveelutions below for modifications to evolution list
 	asymiladi: {
 		num: 2006,
 		name: "Asymiladi",
@@ -210,11 +213,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Beast Boost", H: "Poison Puppeteer" },
 		heightm: 1.2,
 		weightkg: 91,
-		color: "TBD",
+		// color: "TBD",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 		title: "Mind Control",
 		dexEntry: "It can manipulate the toxins it creates in order to attach to and manipulate the bodies and minds of other Pokemon. Its motives are unknown.",
+		// habitat: "TBD",
 		notes: "Codename: UB ASSIMILATION; based on an OC sprite by pokereplicant",
 		contributors: ["Jared G."],
 	},
@@ -230,11 +234,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Beast Boost", H: "Venom Absorb" },
 		heightm: 1.6,
 		weightkg: 57,
-		color: "TBD",
+		// color: "TBD",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 		title: "Fantastical",
 		dexEntry: "Whenever it rests, it leaves behind globs of sparkly slime as cushions. Despite containing various dangerous chemicals, the slime seems to have powerful healing properties. The slime has also been noted to taste very sweet.",
+		// habitat: "TBD",
 		notes: "Codename: UB KEMONO; based on an OC sprite by pokereplicant",
 		contributors: ["Jared G."],
 	},
@@ -250,15 +255,102 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Technician", 1: "Download", H: "Trace" },
 		heightm: 0.6,
 		weightkg: 45,
-		color: "TBD",
+		//color: "TBD",
 		eggGroups: ["Mineral"],
 		title: "Move Storage",
 		dexEntry: "Technichine are very curious and capable Pokemon. Despite being limited in their initial forms, they are easily able to copy battle moves when given information about them.",
-		notes: "Based on Technical Machines, can only learn Copycat and Pound naturally, but learns all TMs",
+		// habitat: "TBD",
+		notes: "Based on Technical Machines",
 		contributors: ["Jared G."],
 	},
-	
-
+	exytem: {
+		num: 2009,
+		name: "Exytem",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Steel", "Normal"],
+		gender: "N",
+		baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 100 },
+		abilities: { 0: "Simple", 1: "Moody", H: "Protean" },
+		heightm: 1.5,
+		weightkg: 97.5,
+		// color: "TBD",
+		eggGroups: ["Mineral"],
+		title: "Potential",
+		dexEntry: "These Pokemon have a strange affinity towards X Items, and hang around places powerful Pokemon are known to train. Despite their affinity and potential for combat, they appear happier during times of peace and quiet.",
+		// habitat: "TBD",
+		notes: "Based on X Items and Mega Man X",
+		contributors: ["Jared G."],
+	},
+	frostscales: {
+		num: 2010,
+		name: "Frost Scales",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Ice", "Dragon"],
+		gender: "N", // Changed to N because paradox pokemon are genderless
+		baseStats: { hp: 100, atk: 120, def: 100, spa: 85, spd: 85, spe: 100 },
+		abilities: { 0: "Protosynthesis" },
+		heightm: 2.4,
+		weightkg: 143,
+		// color: "TBD",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+		title: "Paradox",
+		dexEntry: "This Pokemon is known to overpower its prey with its strong legs and freezes them solid for future consumption.",
+		habitat: "Secret caves within frozen tundras",
+		notes: "Paradox Yanmega",
+		contributors: ["Justice Z."],
+	},
+	tarantuchas: {
+		num: 2011,
+		name: "Tarantuchas",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Bug", "Dark"],
+		baseStats: { hp: 120, atk: 110, def: 100, spa: 60, spd: 60, spe: 65 },
+		abilities: { 0: "Stakeout", 1: "Fluffy", H: "Sniper" },
+		heightm: 1.6,
+		weightkg: 74.3,
+		// color: "TBD",
+		prevo: "Ariados",
+		evoType: "levelMove",
+		evoMove: "Ancient Power",
+		eggGroups: ["Bug"],
+		title: "Pursuing",
+		dexEntry: "An evolution of Ariados that evolved due to high amounts of prehistoric energy. It overpowers its prey until they are injured, and follows them back to their nest to find more prey.",
+		habitat: "Deep caves and prehistoric jungles",
+		notes: "Based on the Goliath birdeater tarantula and the Araneo from ARK: Survival Evolved",
+		contributors: ["Justice Z."],
+	},
+	ariados: {
+		inherit: true,
+		modified: "DigiPen",
+		evos: ["Tarantuchas"],
+	},
+	jotabyte: {
+		num: 2012,
+		name: "Jotabyte",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Fire", "Fairy"],
+		baseStats: { hp: 100, atk: 60, def: 90, spa: 110, spd: 90, spe: 100 },
+		abilities: { 0: "Magic Bounce", 1: "Download", H: "Soul-Heart" },
+		heightm: 1.8,
+		weightkg: 83.9,
+		// color: "TBD",
+		tags: ["Sub-Legendary"],
+		eggGroups: ["Undiscovered"],
+		title: "Boss Monster",
+		dexEntry: "Jotabyte is rumored to be the code of a video game come to life. It can interface with technology using its tail, and the way it executes different battle moves changes depending on the most recent game it interfaced with.",
+		// habitat: "TBD",
+		notes: "Jared's Pokésona",
+		contributors: ["Jared G."],
+	},
 	mojamas: {
 		num: 2013,
 		name: "Mojamas",
@@ -271,12 +363,33 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Analytic", 1: "Procrastinator", H: "Unaware" },
 		heightm: 1.8,
 		weightkg: 29,
-		color: "Gray",
+		//color: "TBD",
 		eggGroups: ["Human-Like", "Fairy"],
 		title: "Bored",
 		dexEntry: "Its appearance is tall and lanky. Given its skeletal body, it curls up in soft clothing to keep warm, generally pajamas and robes. Lethargic by nature, it will generally attempt to spend its time pursuing its own immediate interests. If given a task to complete, it will generally wait until it is able to achieve the motivation to do so.",
+		// habitat: "TBD",
 		notes: "Logan's Pokésona",
 		contributors: ["Logan C."],
+	},
+	quipsand: {
+		num: 2014,
+		name: "Quipsand",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Psychic", "Ground"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 100, atk: 85, def: 100, spa: 90, spd: 60, spe: 80 },
+		abilities: { 0: "Gluttony", 1: "Snarky", H: "Stamina" },
+		heightm: 1.1,
+		weightkg: 18,
+		//color: "TBD",
+		eggGroups: ["Field", "Monster"],
+		title: "Wisecracker",
+		dexEntry: "It can store sounds in balls of clay. Sometimes it will listen to these sounds to relax, but mostly it throws them at unsuspecting victims.",
+		habitat: "Swamp areas and Safari Zones",
+		notes: "Aiden's Pokésona; sprite by Aiden C.; design by Sky W.",
+		contributors: ["Aiden C."],
 	},
 	alteraton: {
 		num: 2015,
@@ -288,12 +401,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		gender: "N",
 		baseStats: { hp: 75, atk: 50, def: 111, spa: 166, spd: 111, spe:88 },
 		abilities: { 0: "Self-Alteryzation" },
-		heightm: 0.0, //placeholder
+		// heightm: 0.0, 
 		weightkg: 0.0, //placeholder
-		color: "Gray", //placeholder
+		// color: "TBD", 
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"], //placeholder
-		title: "Alteration", //placeholder
+		// title: "TBD",
+		// dexEntry: "TBD",
+		// habitat: "TBD",
 		notes: "Joshua's Pokésona",
 		contributors: ["Joshua C."]
 	},
@@ -322,7 +437,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Blaze", H: "Comatose" },
 		heightm: 1.8,
 		weightkg: 59,
-		color: "Yellow",
+		color: "TBD",
 		prevo: "Quilava",
 		evoLevel: 36,
 		eggGroups: ["Field"],

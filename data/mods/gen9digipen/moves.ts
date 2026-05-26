@@ -197,6 +197,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Changes the target's secondary type to the user's secondary type. Fails if the target is Arceus or Silvally, if the target's secondary type is the same as the user's secondary type, if the user and target both have no secondary type, if the target's primary type is the same as the user's secondary type, or if the target is Terastallized. If the user has no secondary type, the target's secondary type is removed. This move fails if used on consecutive turns.",
 		contributors: ["Joshua C."],
 	},
+	wordclay: {
+		num: 1005,
+		isNonstandard: "DigiPen",
+		accuracy: 95,
+		basePower: 75,
+		category: "Special",
+		name: "Word Clay",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		target: "normal",
+		type: "Ground",
+		contestType: "Clever",
+		beforeMoveCallback(pokemon, target, move) {
+			const moveSlot = pokemon.getMoveData(move);
+			if (moveSlot && moveSlot.pp === moveSlot.maxpp) {
+				move.willCrit = true;
+			}
+		},
+		shortDesc: "Always results in a critical hit if this move has maximum PP.",
+		desc: "Always results in a critical hit if this move has maximum PP unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities",
+		contributors: ["Aiden C."],
+	},
 	swordofdamocles: {
 		num: 1006,
 		isNonstandard: "DigiPen",
