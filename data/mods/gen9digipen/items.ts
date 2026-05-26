@@ -20,6 +20,9 @@
 // `quality` field allows for the item to be categorized in the Teambuilder. The possible
 // values are: "great", "good", "specific", "poor", "bad".
 //
+// `dexEntry` field is displayed in the Pokedex. It is for a flavor description of the item that doesn't necessarily
+// explain its battle mechanics.
+//
 // `contributors` field is an optional field used to credit the person/people who contributed to the item
 //
 // ── Mega Stones ──────────────────────────────────────────────────────────────
@@ -109,7 +112,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		shortDesc: "If held by certain Pokemon, this item increases their base defensive stats.",
 		desc: "If held by Sirfetch\u2019d, Sandlash, Sandlash-Alola, Samurott, or Samurott-Hisui, they transform into their Armored formes.",
 		quality: "specific",
-		dexEntry: "This is a test dex entry.",
+		// dexEntry:
 		contributors: ["Bryce G."],
 	},
 

@@ -62,7 +62,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	hydreigonmega: {
 		isNonstandard: "DigiPen Future",
 		tier: "Illegal",
-		natDexTier: "OU"
+		natDexTier: "DigiPen"
 	},
 
 	// ── Buff Item Holders ─────────────────────────────────────────────

@@ -141,7 +141,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.trySetStatus('par', source);
 			},		
 		},
-		shortDesc: "User -2 Evasion. Paralyzes and confuses the target. If target has Pressure, 80% accuracy and x10 damage.",
+		shortDesc: "User -2 Evasion. Paralyzes and confuses the target.",
 		desc: "Lower's the user's Evasion by 2 stages. Paralyzes and confuses the target. If the target has the Pressure ability, this move's accuracy is 80% and it deals 10x damage",
 		target: "normal",
 		type: "Normal",
