@@ -187,7 +187,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Clear Body", H: "Steelworker" },
 		heightm: 1.0,
 		weightkg: 50,
-		color: "Gray",
+		color: "TBD",
 		prevo: "Eevee",
 		evoType: "useItem",
 		evoItem: "Up-Grade",
@@ -198,12 +198,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		contributors: ["Alex A."],
 	},
 	// See eevee entry after other eeveelutions below for modifications to evolution list
-	eevee: {
-		inherit: true,
-		modified: "DigiPen",
-		evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Tineon"],
-	},
-
 	asymiladi: {
 		num: 2006,
 		name: "Asymiladi",
@@ -216,7 +210,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Beast Boost", H: "Poison Puppeteer" },
 		heightm: 1.2,
 		weightkg: 91,
-		color: "Purple",
+		color: "TBD",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 		title: "Mind Control",
@@ -236,7 +230,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Beast Boost", H: "Venom Absorb" },
 		heightm: 1.6,
 		weightkg: 57,
-		color: "Purple",
+		color: "TBD",
 		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 		title: "Fantastical",
@@ -244,6 +238,26 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		notes: "Codename: UB KEMONO; based on an OC sprite by pokereplicant",
 		contributors: ["Jared G."],
 	},
+	technichine: {
+		num: 2008,
+		name: "Technichine",
+		isNonstandard: "DigiPen",
+		//digipenSprite: true,
+		//digipenIcon: true,
+		types: ["Normal"],
+		gender: "N",
+		baseStats: { hp: 80, atk: 70, def: 60, spa: 70, spd: 60, spe: 90 },
+		abilities: { 0: "Technician", 1: "Download", H: "Trace" },
+		heightm: 0.6,
+		weightkg: 45,
+		color: "TBD",
+		eggGroups: ["Mineral"],
+		title: "Move Storage",
+		dexEntry: "Technichine are very curious and capable Pokemon. Despite being limited in their initial forms, they are easily able to copy battle moves when given information about them.",
+		notes: "Based on Technical Machines, can only learn Copycat and Pound naturally, but learns all TMs",
+		contributors: ["Jared G."],
+	},
+	
 
 	mojamas: {
 		num: 2013,
@@ -282,6 +296,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		title: "Alteration", //placeholder
 		notes: "Joshua's Pokésona",
 		contributors: ["Joshua C."]
+	},
+
+	eevee: {
+		inherit: true,
+		modified: "DigiPen",
+		evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Tineon"],
 	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────

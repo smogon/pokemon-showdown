@@ -68,6 +68,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DigiPen",
 		natDexTier: "DigiPen",
 	},
+	technichine: {
+		isNonstandard: "DigiPen",
+		tier: "DigiPen",
+		doublesTier: "DigiPen",
+		natDexTier: "DigiPen",
+	},
 
 	// ── Fakemon (from Fanart) ─────────────────────────────────────────────
 
