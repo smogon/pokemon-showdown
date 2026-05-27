@@ -239,6 +239,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		inherit: true,
 		natDexTier: "OU",
 	},
+	floetteternal: {
+		inherit: true,
+		natDexTier: "OU",
+	},
 	floettemega: {
 		inherit: true,
 		natDexTier: "OU",

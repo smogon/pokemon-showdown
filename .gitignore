@@ -1,5 +1,9 @@
 /config/*
 !/config/formats.ts
+!/config/avatars.json 
+!/config/chatrooms.json
+!/config/config.js
+!/config/custom-formats.ts
 /logs/**/*
 /test/modlogs
 /test/replays/*.html
