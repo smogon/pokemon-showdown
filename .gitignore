@@ -4,6 +4,7 @@
 !/config/chatrooms.json
 !/config/config.js
 !/config/custom-formats.ts
+!/config/usergroups.csv
 /logs/**/*
 /test/modlogs
 /test/replays/*.html
