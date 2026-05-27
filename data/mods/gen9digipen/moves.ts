@@ -216,7 +216,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.willCrit = true;
 			}
 		},
-		shortDesc: "Always results in a critical hit if this move has maximum PP.",
+		shortDesc: "Always results in a critical hit if max PP.",
 		desc: "Always results in a critical hit if this move has maximum PP unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities",
 		contributors: ["Aiden C."],
 	},
