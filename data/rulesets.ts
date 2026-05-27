@@ -3267,11 +3267,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!pokemon || pokemon.fainted) return;
 
 			const createMoveSlot = (move: any) => {
+				const basePP = move.pp || 5;
 				return {
 					move: move.name,
 					id: move.id,
-					pp: Math.floor(move.pp * 1.6),
-					maxpp: Math.floor(move.pp * 1.6),
+					pp: Math.floor(basePP * 1.6),
+					maxpp: Math.floor(basePP * 1.6),
 					target: move.target,
 					disabled: false,
 					used: false,
@@ -3287,7 +3288,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				return ['contrary', 'noguard', 'rockhead', 'reckless', 'technician', 'skilllink', 'simple', 'serenegrace',
 					'prankster', 'triage', 'drizzle', 'drought', 'sandstream', 'snowwarning', 'mistysurge', 'psychicsurge',
 					'grassysurge', 'electricsurge', 'punkrock', 'strongjaw', 'megalauncher', 'sharpness', 'ironfist',
-					'pixilate', 'refrigerate', 'aerilate', 'galvanize'].includes(ability.id);
+					'sniper', 'moody', 'speedboost', 'unburden', 'klutz', 'multiscale', 'regenerator',
+					'pixilate', 'refrigerate', 'aerilate', 'galvanize', 'poisonpuppeteer'].includes(ability.id);
 			});
 
 			const allMoves = this.dex.moves.all().filter(move => {
@@ -3358,7 +3360,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				return !item.isPrimalOrb && !item.isPokeball && !item.megaStone && !item.name.includes("TR") &&
 					!item.isNonstandard &&
 					!item.zMove &&
-					!item.name.includes("Air Balloon");
+					!item.name.includes('Air Balloon');
 			});
 
 			const selfDebuffingMoves = allMoves.filter(move => {
@@ -3381,7 +3383,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const baseMoveCount = pokemon.baseMoveSlots.length;
 
 			// chance to have 12 moves at once
-			if (this.random() <= 0.03) {
+			if (this.random() <= 0.05) {
 				for (let i = 0; i < 12; i++) {
 					const manyMoves = this.sample(allMoves);
 					newMoveSlots.push(createMoveSlot(manyMoves));
@@ -3389,19 +3391,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				this.add('-message', `${pokemon.name} has hit the jackpot!`);
 
 			// chance for every move to be the same
-			} else if (this.random() < 0.03) {
-				const epicMovesNames = ['splash', 'metronome', 'explosion', 'copycat', 'memento', 'struggle'];
-				const epicMoves = allMoves.filter(move => {
-					return epicMovesNames.includes(move.id);
+			} else if (this.random() < 0.05) {
+				const uniqueMovesNames = ['splash', 'metronome', 'explosion', 'copycat', 'memento', 'struggle'];
+				const uniqueMoves = allMoves.filter(move => {
+					return uniqueMovesNames.includes(move.id);
 				});
-				const epicMove = this.sample(epicMoves);
+				const uniqueMove = this.sample(uniqueMoves);
 				for (let i = 0; i < baseMoveCount; i++) {
-					newMoveSlots.push(createMoveSlot(epicMove));
+					newMoveSlots.push(createMoveSlot(uniqueMove));
 				}
 
 			// chance to have an ability that pairs well with a move
 			} else {
-				if (this.random() > 0.3) {
+				if (this.random() > 0.25) {
 					randomAbility = this.sample(comboAbilities);
 					switch (randomAbility.id) {
 					case 'contrary':
@@ -3425,10 +3427,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					case 'technician':
 					case 'skilllink':
 					{
-						const multyHitMoves = ['armthrust', 'barrage', 'bonerush', 'bulletseed', 'cometpunch', 'doubleslap', 'furyattack',
+						const multiHitMoves = ['armthrust', 'barrage', 'bonerush', 'bulletseed', 'cometpunch', 'doubleslap', 'furyattack',
 							'furyswipes', 'iciclespear', 'pinmissile', 'rockblast', 'scaleshot', 'spikecannon', 'tailslap', 'watershuriken'];
-						const multyHitMove = this.dex.moves.get(this.sample(multyHitMoves));
-						newMoveSlots.push(createMoveSlot(multyHitMove));
+						const multiHitMove = this.dex.moves.get(this.sample(multiHitMoves));
+						newMoveSlots.push(createMoveSlot(multiHitMove));
 						break;
 					}
 					case 'simple':
@@ -3518,6 +3520,40 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						const punchMove = this.dex.moves.get(this.sample(punchMoves));
 						newMoveSlots.push(createMoveSlot(punchMove));
 						break;
+					case 'sniper':
+						const sniperMoves = ['flowertrick', 'surgingstrikes'];
+						const sniperMove = this.dex.moves.get(this.sample(sniperMoves));
+						newMoveSlots.push(createMoveSlot(sniperMove));
+						break;
+					case 'moody':
+					case 'speedboost':
+					{
+						const moodyMoves = ['protect', 'banefullbunker', 'detect'];
+						const moodyMove = this.dex.moves.get(this.sample(moodyMoves));
+						newMoveSlots.push(createMoveSlot(moodyMove));
+						break;
+					}
+					case 'unburden':
+						const consumableItems = ['sitrusberry', 'whiteherb', 'normalgem', 'focussash'];
+						chosenItem = this.sample(consumableItems);
+						const acrobaticsMove = this.dex.moves.get('acrobatics');
+						newMoveSlots.push(createMoveSlot(acrobaticsMove));
+						break;
+					case 'klutz':
+						chosenItem = this.sample(['ironball', 'toxicorb', 'flameorb', 'laggingtail']);
+						const flingMove = this.dex.moves.get('fling');
+						newMoveSlots.push(createMoveSlot(flingMove));
+						break;
+					case 'multiscale':
+						const multiscaleMoves = ['roost', 'recover', 'slackoff', 'rest', 'softboiled'];
+						const multiscaleMove = this.dex.moves.get(this.sample(multiscaleMoves));
+						newMoveSlots.push(createMoveSlot(multiscaleMove));
+						break;
+					case 'regenerator':
+						const regeneratorMoves = ['partingshot', 'voltswitch', 'uturn', 'flipturn'];
+						const regeneratorMove = this.dex.moves.get(this.sample(regeneratorMoves));
+						newMoveSlots.push(createMoveSlot(regeneratorMove));
+						break;
 					case 'pixilate':
 					case 'refrigerate':
 					case 'aerilate':
@@ -3528,11 +3564,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						newMoveSlots.push(createMoveSlot(normalMove));
 						break;
 					}
+					case 'poisonpuppeteer':
+						const poisonMoves = ['toxic', 'direclaw', 'sludgebomb', 'smog',
+							'poisonjab', 'poisonfang', 'banefullbunker', 'sludgewave', 'sludge'];
+						const poisonMove = this.dex.moves.get(this.sample(poisonMoves));
+						newMoveSlots.push(createMoveSlot(poisonMove));
+						break;
 					}
 				}
 
 				// chance to have a z move
-				if (this.random() < 0.03 && (newMoveSlots.length < baseMoveCount)) {
+				if (this.random() < 0.05 && (newMoveSlots.length < baseMoveCount)) {
 					const zCrystal = this.sample(zCrystals);
 					chosenItem = zCrystal.id;
 					const sameTypeMoves = allMoves.filter(move => {
@@ -3600,10 +3642,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				chosenItem = null;
 			} else {
 				const randomItem = this.sample(allItems);
-				pokemon.setItem(randomItem.id);
+				if (randomItem && randomItem.id) {
+					pokemon.setItem(randomItem.id);
+				}
 			}
+
 			if (!randomAbility) {
 				randomAbility = this.sample(allAbilities);
+			}
+			if (randomAbility && randomAbility.id) {
+				pokemon.setAbility(randomAbility.id);
 			}
 
 			pokemon.setAbility(randomAbility.id);
