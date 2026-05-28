@@ -311,9 +311,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(`<p><strong>Random spotlight: ${Utils.escapeHTML(key)}</strong></p>${html}`);
 	},
 	randspotlighthelp: [
-		`/randspotlight - Shows a random spotlight from all rooms.`,
-		`/randdaily - Alias for /randspotlight.`,
-		`!randspotlight - Show a random spotlight to everyone. Requires: + % @ # ~`,
+		`/randspotlight OR /randdaily - Shows a random spotlight from the target room.`,
+		`!randspotlight OR !randdaily - Show a random spotlight to everyone. Requires: + % @ # ~`,
 	],
 	vsl: 'viewspotlights',
 	dailies: 'viewspotlights',
