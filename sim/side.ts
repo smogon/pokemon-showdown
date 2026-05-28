@@ -515,7 +515,7 @@ export class Side {
 		const type = `[${updated ? 'Unavailable' : 'Invalid'} choice]`;
 		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
 		if (updated) this.emitRequest(this.activeRequest!, true);
-		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
+		if (this.battle.strictChoices && !this.battle.ended) throw new Error(`${type} ${message}`);
 		return false;
 	}
 
