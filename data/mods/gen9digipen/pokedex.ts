@@ -61,7 +61,6 @@
 // Step 2 – patch the base species to advertise the form:
 //   pikachu: {
 //     inherit: true,
-//     modified: "DigiPen",
 //     otherFormes: ["Pikachu-Original", ..., "Pikachu-DigiPen"],
 //     formeOrder: ["Pikachu", "Pikachu-Original", ..., "Pikachu-DigiPen"],
 //   },
@@ -69,7 +68,6 @@
 // Step 3 (if necessary) – add the form as an evolution of the base game non-regional form:
 //   pichu: {
 //     inherit: true,
-//     modified: "DigiPen",
 //     evos: ["Pikachu, Pikachu-Original", ..., "Pikachu-DigiPen"],
 //   },
 //
@@ -87,8 +85,9 @@
 // ── Overriding Existing Pokémon ─────────────────────────────────────────────
 // To change how a base-game Pokémon behaves *only* inside DigiPen formats,
 // add its ID with `inherit: true` and override only the fields you want to
-// change. The base data is otherwise preserved.
-//
+// change. The base data is otherwise preserved. Include the modified: "DigiPen" 
+// flag to indicate that the Pokemon has been rebalanced as part of the DigiPen project.
+
 // Example:
 //   pikachu: {
 //     inherit: true,
@@ -328,7 +327,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	ariados: {
 		inherit: true,
-		modified: "DigiPen",
 		evos: ["Tarantuchas"],
 	},
 	jotabyte: {
@@ -415,7 +413,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 
 	eevee: {
 		inherit: true,
-		modified: "DigiPen",
 		evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Tineon"],
 	},
 
@@ -448,13 +445,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	typhlosion: {
 		inherit: true,
-		modified: "DigiPen",
 		otherFormes: ["Typhlosion-Hisui", "Typhlosion-DigiPen"],
 		formeOrder: ["Typhlosion", "Typhlosion-Hisui", "Typhlosion-DigiPen"],
 	},
 	quilava: {
 		inherit: true,
-		modified: "DigiPen",
 		evos: ["Typhlosion", "Typhlosion-Hisui", "Typhlosion-DigiPen"],
 	},
 
@@ -483,7 +478,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	hydreigon: {
 		inherit: true,
-		modified: "DigiPen",
 		otherFormes: ["Hydreigon-Mega"],
 		formeOrder: ["Hydreigon", "Hydreigon-Mega"],
 	},
@@ -510,7 +504,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	sirfetchd: {
 		inherit: true,
-		modified: "DigiPen",
 		otherFormes: ["Sirfetch\u2019d-Armored"],
 		formeOrder: ["Sirfetch\u2019d", "Sirfetch\u2019d-Armored"],
 	},
@@ -553,7 +546,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	sandslash: {
 		inherit: true,
-		modified: "DigiPen",
 		otherFormes: ["Sandslash-Alola", "Sandslash-Armored", "Sandslash-Alola-Armored"],	
 		formeOrder: ["Sandslash", "Sandslash-Alola", "Sandslash-Armored", "Sandslash-Alola-Armored"],
 	},
@@ -598,12 +590,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	samurott: {
 		inherit: true,
-		modified: "DigiPen",
 		otherFormes: ["Samurott-Hisui", "Samurott-Armored", "Samurott-Hisui-Armored"],
 		formeOrder: ["Samurott", "Samurott-Hisui", "Samurott-Armored", "Samurott-Hisui-Armored"],
 	},
 
 	// ── Mon Changes/Buffs ────────────────────────────────────────────────────
+	// Don't forget to add the modified: "DigiPen" flag to the Pokemon
 	abomasnow: {
 		inherit: true,
 		modified: "DigiPen",
