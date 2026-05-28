@@ -24,6 +24,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "S/V Singles",
+		column: 2,
 	},
 	{
 		name: "[Gen 9] Random Battle",
@@ -439,7 +440,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Draft",
-		column: 1,
+		column: 2,
 	},
 	{
 		name: "[Gen 9] Draft",
@@ -951,7 +952,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Other Metagames",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 9] Almost Any Ability",
@@ -1230,7 +1231,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Challengeable OMs",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 9] 1-2 Switch",

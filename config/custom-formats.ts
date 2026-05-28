@@ -10,7 +10,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "DigiPen Gen 9 Singles",
-		column: 6,
+		column: 1,
 	},
 	{
 		name: "[Gen 9 DigiPen] Singles",
@@ -65,7 +65,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "DigiPen Gen 9 Doubles",
-		column: 6,
+		column: 1,
 	},
 	// Would need to add natdex doubles table to build indexes first
 	/*{
