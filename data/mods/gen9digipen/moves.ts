@@ -1,7 +1,7 @@
 // isNonstandard: "DigiPen" means the move is only legal in DigiPen formats.
 //
-// modified: "DigiPen" means the move has been modified for DigiPen formats. This is used to highlight
-// it in the Pokedex.
+// modified: "DigiPen" means the move has been modified (balanced) for DigiPen formats. This is used to highlight
+// it in the Pokedex. Use for moves on the Updates/Changes section of the DigiPen Spreadsheet.
 // 
 // `shortDesc` field is displayed in Teambuilder and should be under 100 characters.
 //
@@ -276,6 +276,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 	/* ----- Update/changed Moves ───────────────────────────────────────────── */
 	// Use ordering from DigiPen Spreadsheet
+	// Don't forget to add the modified: "DigiPen" flag to the move
 
 	scald: {
 		inherit: true,
@@ -287,6 +288,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	/* ----- Other changes ───────────────────────────────────────────── */
 	// Moves changes not related to balance changes but rather for implementing some other change
 	// Use alphabetical ordering
+	// Do NOT add the modified: "DigiPen" flag to these moves
 
 	trickroom: { // implementing the logic for Blueprint
 		inherit: true,
