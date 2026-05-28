@@ -117,6 +117,29 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 
 	// ── Changing Existing Items ─────────────────────────────────────────────
-	// Use alphabetical ordering
+	// Use ordering from DigiPen Spreadsheet
 
+	shellbell :{
+		inherit: true,
+		modified: "DigiPen",
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.totalDamage && !pokemon.forceSwitchFlag) {
+				this.heal(move.totalDamage / 5, pokemon);
+			}
+		},
+		shortDesc: "After an attack, holder gains 1/5 of the damage in HP dealt to other Pokemon.",
+		contributors: ["Bryce G."],
+	},
+	bigroot: {
+		inherit: true,
+		modified: "DigiPen",
+		onTryHeal(damage, target, source, effect) {
+			const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
+			if (heals.includes(effect.id)) {
+				return this.chainModify([6144, 4096]);
+			}
+		},
+		shortDesc: "Holder gains 1.5x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+		contributors: ["Bryce G."],
+	}
 };
