@@ -193,7 +193,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "???",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
-		shortDesc: "Changes the target's secondary type to the user's secondary type.",
+		shortDesc: "Changes the target's secondary type to the user's.",
 		desc: "Changes the target's secondary type to the user's secondary type. Fails if the target is Arceus or Silvally, if the target's secondary type is the same as the user's secondary type, if the user and target both have no secondary type, if the target's primary type is the same as the user's secondary type, or if the target is Terastallized. If the user has no secondary type, the target's secondary type is removed. This move fails if used on consecutive turns.",
 		contributors: ["Joshua C."],
 	},
@@ -217,7 +217,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		shortDesc: "Always results in a critical hit if max PP.",
-		desc: "Always results in a critical hit if this move has maximum PP unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities",
+		desc: "Always results in a critical hit if this move has maximum PP unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
 		contributors: ["Aiden C."],
 	},
 	swordofdamocles: {

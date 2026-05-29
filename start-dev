@@ -158,7 +158,7 @@ async function main() {
 	console.log("\n=== Starting dev servers ===\n");
 	pids.push(spawnDetached("server", "node", ["pokemon-showdown"], serverDir));
 	pids.push(spawnDetached("client", "npx", ["serve", "-p", "8081"], clientDir));
-	pids.push(spawnDetached("dex", "npx", ["serve", "-s", "-p", "8082"], dexDir));
+	pids.push(spawnDetached("dex", "npx", ["serve", "-p", "8082", "-c", "serve.json"], dexDir));
 	const sslProxy = await startSslProxy();
 	if (sslProxy) pids.push(sslProxy);
 	writePidFile(pids);
