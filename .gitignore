@@ -33,8 +33,8 @@ tools/set-import/*.js
 
 # start-dev pid tracking
 .start-dev.pids.json
-/rebuild-dex-config
-/start-dev-config
+rebuild-dex-config
+start-dev-config
 
 # boilerplate #
 ###############
