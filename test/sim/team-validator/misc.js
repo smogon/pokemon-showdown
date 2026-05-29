@@ -91,6 +91,38 @@ describe('Team Validator', () => {
 		assert.legalTeam(team, 'gen1ou');
 	});
 
+	it('should allow evolved Pokémon that can be caught underleveled in the wild', () => {
+		// Fearow evolves at level 20 but is catchable at level 7 in Gen 4
+		let team = [
+			{ species: 'fearow', ability: 'keeneye', level: 7, moves: ['drillpeck'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen7ou');
+
+		team[0].level = 6;
+		assert.false.legalTeam(team, 'gen7ou');
+
+		// Pidgeot evolves at level 36 but is catchable at level 29 in Gen 7
+		team = [
+			{ species: 'pidgeot', ability: 'keeneye', level: 29, moves: ['wingattack'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen7ou');
+
+		team[0].level = 28;
+		assert.false.legalTeam(team, 'gen7ou');
+	});
+
+	it('should not let underleveled wild encounters transfer out of Gens 1 and 2', () => {
+		// Granbull evolves at level 23 but is catchable at level 15 in Gen 2,
+		// which can't be transferred to Gen 3 or later
+		const team = [
+			{ species: 'granbull', level: 15, moves: ['bite'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen2ou');
+
+		team[0].ability = 'intimidate';
+		assert.false.legalTeam(team, 'gen7ou');
+	});
+
 	it('should correctly enforce Shell Smash as a sketched move for Necturna prior to Gen 9', () => {
 		const team = [
 			{ species: 'necturna', ability: 'forewarn', moves: ['shellsmash', 'vcreate'], evs: { hp: 1 } },
