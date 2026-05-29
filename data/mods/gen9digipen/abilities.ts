@@ -207,4 +207,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	/* ----- Other changes ───────────────────────────────────────────── */
 	// Ability changes not related to balance changes but rather needed to implement new features
+	// Don't add modified: "DigiPen" flag to these abilities unless change is significant
+	poisonpuppeteer: {
+		inherit: true,
+		onAnyAfterSetStatus(status, target, source, effect) {
+			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
+			if (status.id === 'psn' || status.id === 'tox') {
+				target.addVolatile('confusion');
+			}
+		},
+		flags: {},
+		desc: "If this Pokemon poisons or badly poisons a target, the target also becomes confused.",
+		shortDesc: "If this Pokemon poisons a target, the target also becomes confused.",
+	},
 };
