@@ -499,7 +499,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 167,
 		color: "White",
 		eggGroups: ["Flying", "Field"],
-		requiredItem: "Armor",
+		requiredItem: "Sirfetch\u2019d Armor",
 		changesFrom: "Sirfetch\u2019d",
 	},
 	sirfetchd: {
@@ -523,7 +523,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 79.5,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		requiredItem: "Armor",
+		requiredItem: "Sandslash Armor",
 		changesFrom: "Sandslash",
 	},
 	sandslashalolaarmored: {
@@ -541,7 +541,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 105,
 		color: "Blue",
 		eggGroups: ["Field"],
-		requiredItem: "Armor",
+		requiredItem: "Sandslash Armor",
 		changesFrom: "Sandslash-Alola",
 	},
 	sandslash: {
@@ -566,7 +566,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 144.6,
 		color: "Blue",
 		eggGroups: ["Field"],
-		requiredItem: "Armor",
+		requiredItem: "Samurott Armor",
 		changesFrom: "Samurott",
 	},
 	samurotthisuiarmored: {
@@ -585,7 +585,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 108.2,
 		color: "Blue",
 		eggGroups: ["Field"],
-		requiredItem: "Armor",
+		requiredItem: "Samurott Armor",
 		changesFrom: "Samurott-Hisui",
 	},
 	samurott: {

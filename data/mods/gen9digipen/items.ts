@@ -94,23 +94,54 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// -- Buff Items ──────────────────────────────────────────────────────────
 	// Use ordering from DigiPen Spreadsheet
 
-	armor: {
-		name: "Armor",
+	sirfetchdarmor: {
+		name: "Sirfetch\u2019d Armor",
 		spritenum: 0,
 		fling: { basePower: 60 },
 		forcedFormes: { 
 			'Sirfetch\u2019d': 'Sirfetch\u2019d-Armored', 
-			'Sandslash': 'Sandslash-Armored', 
-			'Sandslash-Alola': 'Sandslash-Alola-Armored',
-			'Samurott': 'Samurott-Armored',
-			'Samurott-Hisui': 'Samurott-Hisui-Armored'
 		},
-		itemUser: ['Sirfetch\u2019d', 'Sandslash', 'Sandslash-Alola', 'Samurott', 'Samurott-Hisui'],
+		itemUser: ['Sirfetch\u2019d'],
 		num: 20002,
 		gen: 9,
 		isNonstandard: "DigiPen",
-		shortDesc: "If held by certain Pokemon, this item increases their base defensive stats.",
-		desc: "If held by Sirfetch\u2019d, Sandlash, Sandlash-Alola, Samurott, or Samurott-Hisui, they transform into their Armored formes.",
+		shortDesc: "If held by a Sirfetch\u2019d, this item transforms it into its Armored forme.",
+		quality: "specific",
+		// dexEntry:
+		contributors: ["Bryce G."],
+	},
+	sandslasharmor: {
+		name: "Sandslash Armor",
+		spritenum: 0,
+		fling: { basePower: 60 },
+		forcedFormes: { 
+			'Sandslash': 'Sandslash-Armored', 
+			'Sandslash-Alola': 'Sandslash-Alola-Armored',
+		},
+		itemUser: ['Sandslash', 'Sandslash-Alola'],
+		num: 20002,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "If held by a Sandslash, this item transforms it into its Armored forme.",
+		desc: "If held by a Sandlash or a Sandlash-Alola, this item transforms it into its Armored forme.",
+		quality: "specific",
+		// dexEntry:
+		contributors: ["Bryce G."],
+	},
+	samurottarmor: {
+		name: "Samurott Armor",
+		spritenum: 0,
+		fling: { basePower: 60 },
+		forcedFormes: { 
+			'Samurott': 'Samurott-Armored',
+			'Samurott-Hisui': 'Samurott-Hisui-Armored'
+		},
+		itemUser: ['Samurott', 'Samurott-Hisui'],
+		num: 20002,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "If held by a Samurott, this item transforms it into its Armored forme.",
+		desc: "If held by a Samurott or a Samurott-Hisui, this item transforms it into its Armored forme.",
 		quality: "specific",
 		// dexEntry:
 		contributors: ["Bryce G."],
