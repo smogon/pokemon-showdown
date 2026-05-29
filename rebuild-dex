@@ -1,17 +1,34 @@
 #!/usr/bin/env node
 "use strict";
 
-// Branch to push server changes to. Must match `const branch` in build-indexes.
-const PUSH_BRANCH = "master";
-// Location of the client root directory.
-const clientDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-client";
-
 const child_process = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
 const serverDir = __dirname;
+const CONFIG_FILE = "rebuild-dex-config";
+const CONFIG_EXAMPLE = "rebuild-dex-config.example";
+
+function loadConfig() {
+	const configPath = path.join(serverDir, CONFIG_FILE);
+	if (!fs.existsSync(configPath)) {
+		console.error(`Missing ${CONFIG_FILE}. Copy ${CONFIG_EXAMPLE} to ${CONFIG_FILE} and edit it.`);
+		process.exit(1);
+	}
+	const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+	if (!config.PUSH_BRANCH || !config.clientDir) {
+		console.error(`${CONFIG_FILE} must set PUSH_BRANCH and clientDir.`);
+		process.exit(1);
+	}
+	if (typeof config.run_start_dev !== "boolean") {
+		console.error(`${CONFIG_FILE} must set run_start_dev to true or false.`);
+		process.exit(1);
+	}
+	return config;
+}
+
+const { PUSH_BRANCH, clientDir, run_start_dev } = loadConfig();
 const buildIndexesPath = path.join(clientDir, "build-tools", "build-indexes");
 
 function shell(cmd, cwd = serverDir) {
@@ -93,7 +110,7 @@ async function checkBuildIndexesBranch(rl) {
 	if (buildIndexesBranch === PUSH_BRANCH) return true;
 
 	console.warn(
-		`\nWarning: branch mismatch between this script and build-indexes.\n` +
+		`\nWarning: branch mismatch between ${CONFIG_FILE} and build-indexes.\n` +
 		`  PUSH_BRANCH:  ${PUSH_BRANCH}\n` +
 		`  build-indexes branch:        ${buildIndexesBranch}\n` +
 		`The client build syncs data from caches/pokemon-showdown, which ` +
@@ -145,7 +162,12 @@ async function main() {
 		console.log("\n=== Client: rebuild indexes ===\n");
 		shell("node build indexes", clientDir);
 
-		shell("node start-dev", serverDir);
+		if (run_start_dev) {
+			console.log("\n=== Starting dev servers ===\n");
+			shell("node start-dev", serverDir);
+		} else {
+			console.log("\n=== Skipping start-dev (run_start_dev is false) ===\n");
+		}
 	} finally {
 		rl.close();
 	}

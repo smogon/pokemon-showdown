@@ -1,0 +1,4 @@
+{
+	"clientDir": "/path/to/pokemon-showdown-client",
+	"dexDir": "/path/to/pokemon-showdown-dex"
+}

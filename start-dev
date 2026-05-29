@@ -1,16 +1,30 @@
 #!/usr/bin/env node
 "use strict";
 
-// Location of the client root directory.
-const clientDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-client";
-// Location of the dex root directory.
-const dexDir = "/Users/chchristie/dev/pokemon-showdown-digipen/pokemon-showdown-dex";
-
 const child_process = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
 const serverDir = __dirname;
+const CONFIG_FILE = "start-dev-config";
+const CONFIG_EXAMPLE = "start-dev-config.example";
+
+function loadConfig() {
+	const configPath = path.join(serverDir, CONFIG_FILE);
+	if (!fs.existsSync(configPath)) {
+		console.error(`Missing ${CONFIG_FILE}. Copy ${CONFIG_EXAMPLE} to ${CONFIG_FILE} and edit it.`);
+		process.exit(1);
+	}
+	const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+	if (!config.clientDir || !config.dexDir) {
+		console.error(`${CONFIG_FILE} must set clientDir and dexDir.`);
+		process.exit(1);
+	}
+	return config;
+}
+
+const { clientDir, dexDir } = loadConfig();
+
 const PID_FILE = path.join(serverDir, ".start-dev.pids.json");
 
 const CLIENT_URL = "http://localhost:8081/play.pokemonshowdown.com/testclient?~~localhost:8000";
@@ -158,6 +172,7 @@ async function main() {
 	console.log("\n=== Starting dev servers ===\n");
 	pids.push(spawnDetached("server", "node", ["pokemon-showdown"], serverDir));
 	pids.push(spawnDetached("client", "npx", ["serve", "-p", "8081"], clientDir));
+	// serve.json rewrites / → testclient.html; do not use -s (that fallback is index.html only)
 	pids.push(spawnDetached("dex", "npx", ["serve", "-p", "8082", "-c", "serve.json"], dexDir));
 	const sslProxy = await startSslProxy();
 	if (sslProxy) pids.push(sslProxy);

@@ -1,0 +1,5 @@
+{
+	"PUSH_BRANCH": "master",
+	"clientDir": "/path/to/pokemon-showdown-client",
+	"run_start_dev": true
+}
