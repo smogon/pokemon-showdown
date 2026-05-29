@@ -887,6 +887,25 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Random Tandem",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695289/">Random Tandem on Smogon Forums</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing">Random Tandem on Google Sheets</a>`,
+		],
+		mod: 'randomtandem',
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Data Preview', 'Random Tandem Rule'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Tera Blast'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
+			this.add('-message', `Welcome to Random Tandem!`);
+			this.add('-message', `This is a Gen 9 OU-based "Bring 9, Pick 6" metagame where you build teams of 3 "Heads" who then generate a "Tandem" for your other 6 Pokemon.`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3695289`);
+			this.add('-message', `Be sure to swing by the Pet Mods room to discuss the metagame and participate in roomtours:`);
+			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
+		},
+	},
+	{
 		name: "[Gen 9] CCAPM2025 Random Battle",
 		desc: `A Gen 9 metagame created in the Pet Mods Room featuring Pokemon with new form changes.`,
 		mod: 'ccapm2025',
