@@ -220,13 +220,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Always results in a critical hit if this move has maximum PP unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
 		contributors: ["Aiden C."],
 	},
-	swordofdamocles: {
+	damocles: {
 		num: 1006,
 		isNonstandard: "DigiPen",
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Sword of Damocles",
+		name: "Damocles",
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },

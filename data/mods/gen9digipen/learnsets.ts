@@ -2,6 +2,13 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 
 	// ── Base-game Pokémon ─────────────────────────────────────────────
 	// Remember to add inherit: true to the base-game Pokémon learnsets.
+	
+	aegislash: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L28"],
+		},
+	},
 	ariados: {
 		inherit: true,
 		learnset: {
@@ -14,10 +21,40 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			starblazing: ["8M", "7M", "6M"],
 		},
 	},
+	bisharp: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L78"],
+		},
+	},
+	chienpao: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L80"],
+		},
+	},
+	cobalion: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L77"],
+		},
+	},
 	deoxys: {
 		inherit: true,
 		learnset: {
 			starblazing: ["9M", "7M", "6M"],
+		},
+	},
+	doublade: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L28"],
+		},
+	},
+	ceruledge: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L52"],
 		},
 	},
 	elgyem: {
@@ -30,7 +67,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		inherit: true,
 		learnset: {
 			starblazing: ["9M", "8M", "7M", "6M"],
-			swordofdamocles: ["9M"],
+			damocles: ["9L35"],
 		},
 	},
 	gardevoir: {
@@ -45,16 +82,59 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			inverseroom: ["9M", "8M", "7M", "6M"],
 		},
 	},
+	honedge: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L28"],
+		},
+	},
+	ironboulder: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L98"],
+		},
+	},
+	ironcrown: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L98"],
+		},
+	},
+	ironleaves: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L98"],
+		},
+	},
 	ironvaliant: {
 		inherit: true,
 		learnset: {
 			starblazing: ["9M"],
+			damocles: ["9L98"],
 		},
 	},
 	jirachi: {
 		inherit: true,
 		learnset: {
 			starblazing: ["9M", "8M", "7M", "6M"],
+		},
+	},
+	kartana: {
+		inherit: true,
+		learnset: {
+			damocles: ["8L75"],
+		},
+	},
+	keldeo: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L77"],
+		},
+	},
+	kingambit: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L78"],
 		},
 	},
 	lunala: {
@@ -94,6 +174,12 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			starblazing: ["9M, 8M, 7M"],
 		},
 	},
+	pawniard: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L70"],
+		},
+	},
 	pecharunt: {
 		inherit: true,
 		learnset: {
@@ -131,10 +217,34 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			starblazing: ["8M", "7M", "6M"],
 		},
 	},
+	terrakion: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L77"],
+		},
+	},
+	veluza: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L60"],
+		},
+	},
 	victini: {
 		inherit: true,
 		learnset: {
 			starblazing: ["8M", "7M", "6M"],
+		},
+	},
+	virizion: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L77"],
+		},
+	},
+	zacian: {
+		inherit: true,
+		learnset: {
+			damocles: ["9L99"],
 		},
 	},
 
