@@ -39,7 +39,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fighting', 'Steel'],
 				},
 				['tripleaxel', 'poltergeist'], ['willowisp', 'spikes', 'destinybond'],
-			]
+			],
 		],
 	},
 	slitherwing: {
@@ -82,7 +82,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['fairy', 'water'],
 				},
 				['solarblade', 'defog', 'roost', 'uturn'],
-			]
+			],
 		],
 	},
 	slowking: {
@@ -166,7 +166,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fairy', 'Water'],
 				},
 				['playrough', 'drainpunch'], ['psychicfangs', 'firepunch', 'icepunch', 'thunderpunch'],
-			]
+			],
 		],
 	},
 	keldeo: {
@@ -211,7 +211,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: 'Fire',
 				},
 				['seedflare', 'fusionflare', 'substitute', 'leechseed'],
-			]
+			],
 		],
 	},
 	keldeoresolute: {
@@ -256,7 +256,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: 'Fire',
 				},
 				['seedflare', 'fusionflare', 'substitute', 'leechseed'],
-			]
+			],
 		],
 	},
 	tsareena: {
@@ -299,7 +299,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Flying', 'Grass', 'Ice'],
 				},
 				['dragondance', 'dragonascent'], ['earthquake', 'stoneedge', 'waterfall'],
-			]
+			],
 		],
 	},
 	zapdos: {
@@ -340,7 +340,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fairy', 'Electric'],
 				},
 				['hex', 'sludgebomb'], ['taunt', 'willowisp', 'nastyplot', 'thunderwave'],
-			]
+			],
 		],
 	},
 	landorustherian: {
@@ -383,7 +383,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Water', 'Fairy'],
 				},
 				['focusenergy', 'dracometeor', 'agility', 'snipeshot'],
-			]
+			],
 		],
 	},
 	ironjugulis: {
@@ -426,7 +426,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Normal', 'Steel'],
 				},
 				['clangoroussoul', 'clangingscales'], ['drainpunch', 'boomburst', 'flashcannon'],
-			]
+			],
 		],
 	},
 	sinistcha: {
@@ -469,7 +469,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fire', 'Water', 'Electric'],
 				},
 				['hydrosteam', 'flamethrower', 'dracometeor', 'voltswitch'],
-			]
+			],
 		],
 	},
 	azumarill: {
@@ -553,7 +553,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: 'Ghost',
 				},
 				['earthpower', 'voltswitch'], ['spikes', 'thunderbolt', 'icebeam'],
-			]
+			],
 		],
 	},
 	heatran: {
@@ -596,7 +596,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fairy', 'Water'],
 				},
 				['woodhammer', 'earthquake', 'knockoff', 'uturn'],
-			]
+			],
 		],
 	},
 	indeedee: {
@@ -638,7 +638,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: ['Fighting', 'Psychic', 'Water'],
 				},
 				['diamondstorm', 'takeheart'], ['moonblast', 'storedpower', 'earthpower', 'bodypress'],
-			]
+			],
 		],
 	},
 	weavile: {
@@ -681,7 +681,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					teraType: 'Water',
 				},
 				['closecombat', 'aquastep'], ['icespinner', 'swordsdance', 'jetpunch'],
-			]
+			],
 		],
 	},
 	fezandipiti: {

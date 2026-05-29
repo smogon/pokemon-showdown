@@ -93,7 +93,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			team: PokemonSet[] | null,
 			options: {
 				removeNicknames?: boolean,
-				skipSets?: { [name: string]: { [key: string]: boolean }},
+				skipSets?: { [name: string]: { [key: string]: boolean } },
 			} = {}
 		): string[] | null {
 			const format = this.format;

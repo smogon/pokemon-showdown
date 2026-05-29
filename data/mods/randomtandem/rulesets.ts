@@ -20,9 +20,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				for (const pokemon of side.pokemon) {
 					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
-					//console.log(pokemonList);
+					// console.log(pokemonList);
 					const mons = pokemon.baseSpecies.mons.filter(mon => !pokemonList.includes(mon[0].species));
-					//console.log(mons);
+					// console.log(mons);
 					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);
 					const mon2 = this.sample(mons);
