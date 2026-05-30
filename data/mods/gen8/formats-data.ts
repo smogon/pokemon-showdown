@@ -3596,7 +3596,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	hydreigon: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	larvesta: {
 		tier: "LC",
