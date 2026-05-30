@@ -1429,6 +1429,8 @@ export class CommandContext extends MessageContext {
 							}
 						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
 							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
+						} else if (buttonName === 'copyText') {
+							// copy buttons don't do anything on click except copy to clipboard
 						} else if (buttonName) {
 							throw new Chat.ErrorMessage([
 								`This button is not allowed: <${tagContent}>`,
