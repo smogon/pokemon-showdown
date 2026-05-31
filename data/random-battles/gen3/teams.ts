@@ -13,7 +13,7 @@ const SETUP = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'eruption', 'explosion', 'fakeout', 'focuspunch', 'futuresight', 'hiddenpowerpsychic', 'icywind', 'knockoff', 'machpunch', 'pursuit',
+	'eruption', 'explosion', 'fakeout', 'focuspunch', 'futuresight', 'icywind', 'knockoff', 'machpunch', 'pursuit',
 	'quickattack', 'rapidspin', 'selfdestruct', 'skyattack', 'waterspout',
 ];
 
@@ -181,7 +181,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			preferredType, role);
 
 		// If there are only four moves, add all moves and return early
-		if (movePool.length <= this.maxMoveCount) {
+		if (movePool.length <= this.maxMoveCount || species.id === 'unown') {
 			// Still need to ensure that multiple Hidden Powers are not added (if maxMoveCount is increased)
 			while (movePool.length) {
 				const moveid = this.sample(movePool);
