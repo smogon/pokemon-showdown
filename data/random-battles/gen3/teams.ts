@@ -13,7 +13,7 @@ const SETUP = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'eruption', 'explosion', 'fakeout', 'focuspunch', 'futuresight', 'icywind', 'knockoff', 'machpunch', 'pursuit',
+	'eruption', 'explosion', 'fakeout', 'focuspunch', 'futuresight', 'hiddenpowerpsychic', 'icywind', 'knockoff', 'machpunch', 'pursuit',
 	'quickattack', 'rapidspin', 'selfdestruct', 'skyattack', 'waterspout',
 ];
 

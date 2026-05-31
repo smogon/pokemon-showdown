@@ -1286,6 +1286,9 @@ export class RandomTeams {
 			(!types.has('Flying') || this.dex.getEffectiveness('Rock', species) >= 2)
 		) return 'Heavy-Duty Boots';
 		if (
+			role === 'Doubles Support' && ability === 'Prankster' && moves.has('tailwind') && this.randomChance(3, 4)
+		) return 'Covert Cloak';
+		if (
 			(role === 'Bulky Protect' && counter.get('setup')) ||
 			['irondefense', 'coil', 'acidarmor', 'wish'].some(m => moves.has(m)) ||
 			(counter.get('recovery') && !moves.has('strengthsap') && !counter.get('speedcontrol') && !offensiveRole) ||

@@ -544,7 +544,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
 			const weatherAbilities = abilities.filter(
-				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Solar Power', 'Swift Swim'].includes(a)
+				a => ['Chlorophyll', 'Hydration', 'Leaf Guard', 'Sand Force', 'Sand Rush', 'Solar Power', 'Swift Swim'].includes(a)
 			);
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}
