@@ -2641,16 +2641,6 @@
         "level": 71,
         "sets": [
             {
-                "role": "Dynamax User",
-                "movepool": ["Dual Wingbeat", "Hone Claws", "Outrage", "Poltergeist"],
-                "abilities": ["Levitate"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Hone Claws", "Outrage", "Poltergeist", "Shadow Sneak"],
-                "abilities": ["Levitate"]
-            },
-            {
                 "role": "Fast Attacker",
                 "movepool": ["Defog", "Draco Meteor", "Poltergeist", "Shadow Sneak", "Will-O-Wisp"],
                 "abilities": ["Levitate"]
