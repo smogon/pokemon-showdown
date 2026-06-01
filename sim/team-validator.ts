@@ -525,8 +525,7 @@ export class TeamValidator {
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
-		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja' &&
-			this.format.mod !== 'gen9legendsou') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			outOfBattleSpecies = dex.species.get('greninjabond');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
