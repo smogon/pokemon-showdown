@@ -4498,7 +4498,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["hurricane", "raindance", "rest", "surf"],
+                "movepool": ["hurricane", "raindance", "rest", "scald"],
                 "abilities": ["Hydration"]
             }
         ]
