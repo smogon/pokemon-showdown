@@ -1781,7 +1781,7 @@ export class TeamValidator {
 			setHas['pokemon:rockruffdusk'] = true;
 		}
 
-		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
+		const tier = tierSpecies.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
 
@@ -1789,8 +1789,7 @@ export class TeamValidator {
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
-		const ndTier = tierSpecies.natDexTier === '(PU)' ? 'ZU' :
-			tierSpecies.natDexTier === '(NU)' ? 'PU' : tierSpecies.natDexTier;
+		const ndTier = tierSpecies.natDexTier;
 		const ndTierTag = 'pokemontag:nd' + toID(ndTier);
 		setHas[ndTierTag] = true;
 

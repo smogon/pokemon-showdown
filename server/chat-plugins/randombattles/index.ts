@@ -233,7 +233,7 @@ function getLevel(species: string | Species, format: string | Format): number {
 			NUBL: 85,
 			NU: 86,
 			PUBL: 87,
-			PU: 88, "(PU)": 88, NFE: 88,
+			PU: 88, ZU: 88, NFE: 88,
 		};
 		const customScale: { [k: string]: number } = {
 			delibird: 100, dugtrio: 76, glalie: 76, luvdisc: 100, spinda: 100, unown: 100,
