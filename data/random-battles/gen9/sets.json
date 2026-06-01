@@ -3103,7 +3103,7 @@
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Flamethrower", "Ice Punch", "Knock Off", "Supercell Slam", "Volt Switch"],
                 "abilities": ["Motor Drive"],
-                "teraTypes": ["Dark", "Electric", "Ground"]
+                "teraTypes": ["Dark", "Flying", "Ice", "Ground"]
             },
             {
                 "role": "Setup Sweeper",
