@@ -459,7 +459,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	): boolean {
 		switch (ability) {
-		case 'Chlorophyll':
+		case 'Chlorophyll': case 'Leaf Guard':
 			return !teamDetails.sun;
 		case 'Swift Swim':
 			return !teamDetails.rain;
