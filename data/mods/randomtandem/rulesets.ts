@@ -9,6 +9,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				// replace below with defining each tandem head
 				if (species.tier === 'Random') randomCount++;
 			}
 			if (randomCount < 2) {
@@ -21,8 +22,8 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					// console.log(pokemonList);
-					const mons = (pokemon.baseSpecies as any).mons.filter((mon: { 
-						species: string | (Lowercase<string> & { __isID: true; }), }[]) => !pokemonList.includes(toID(mon[0].species)));
+					const mons = (pokemon.baseSpecies as any).mons.filter((mon: {
+						species: string | (Lowercase<string> & { __isID: true, }), }[]) => !pokemonList.includes(toID(mon[0].species)));
 					// console.log(mons);
 					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);
