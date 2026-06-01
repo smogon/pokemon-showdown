@@ -134,7 +134,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// -----
 	uber: {
 		name: "Uber",
-		speciesFilter: species => species.tier === 'Uber' || species.tier === '(Uber)' || species.tier === 'AG',
+		speciesFilter: species => species.tier === 'Uber' || species.tier === 'AG' || species.tier === '(AG)',
 	},
 	ou: {
 		name: "OU",
@@ -170,7 +170,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	pu: {
 		name: "PU",
-		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
+		speciesFilter: species => species.tier === 'PU',
 	},
 	zubl: {
 		name: "ZUBL",
@@ -178,7 +178,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	zu: {
 		name: "ZU",
-		speciesFilter: species => species.tier === '(PU)' || species.tier === 'ZU',
+		speciesFilter: species => species.tier === 'ZU',
 	},
 	nfe: {
 		name: "NFE",
@@ -202,7 +202,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	ag: {
 		name: "AG",
-		speciesFilter: species => species.tier === 'AG',
+		speciesFilter: species => species.tier === 'AG' || species.tier === '(AG)',
 	},
 
 	// Doubles tiers
@@ -232,11 +232,11 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// -------------
 	ndag: {
 		name: "ND AG",
-		speciesFilter: species => species.natDexTier === 'AG',
+		speciesFilter: species => species.natDexTier === 'AG' || species.natDexTier === '(AG)',
 	},
 	nduber: {
 		name: "ND Uber",
-		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
+		speciesFilter: species => species.natDexTier === 'Uber',
 	},
 	ndou: {
 		name: "ND OU",
