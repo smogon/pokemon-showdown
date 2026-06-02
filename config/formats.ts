@@ -3266,10 +3266,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Ambipom', 'Appletun', 'Azumarill', 'Banette-Base', 'Bellossom', 'Brambleghast', 'Bruxish', 'Delcatty', 'Donphan', 'Dragalge-Base', 'Drapion', 'Eiscue',
-			'Floatzel', 'Furfrou', 'Klefki', 'Leafeon', 'Lumineon', 'Malamar-Base', 'Mimikyu-Base', 'Morpeko', 'Ninetales-Base', 'Ninjask', 'Orthworm', 'Perrserker',
-			'Pyukumuku', 'Quagsire', 'Rabsca', 'Rapidash-Galar', 'Rhydon', 'Salazzle-Base', 'Sandslash-Base', 'Tatsugiri-Curly', 'Tatsugiri-Droopy', 'Tatsugiri-Stretchy',
-			'Wugtrio', 'Xatu', 'Zoroark-Base', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Ampharos-Base', 'Arbok', 'Beheeyem', 'Bombirdier', 'Claydol', 'Cramorant-Base', 'Cursola', 'Dubwool', 'Flygon', 'Gastrodon', 'Hitmontop', 'Houndstone',
+			'Jumpluff', 'Ledian', 'Magmortar', 'Mesprit', 'Milotic', 'Okidogi', 'Pachirisu', 'Pincurchin', 'Probopass', 'Regice', 'Scrafty-Base', 'Seviper',
+			'Sharpedo-Base', 'Shiftry', 'Shiinotic', 'Sigilyph', 'Slowbro-Galar', 'Slurpuff', 'Swampert-Base', 'Torterra', 'Toxicroak', 'Virizion', 'Weezing-Base',
+			'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
