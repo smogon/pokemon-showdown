@@ -11,17 +11,21 @@ describe('Transform', () => {
 	});
 
 	it('should copy the Pokemon\'s species', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Hoopa-Unbound", ability: 'magician', moves: ['rest'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Hoopa-Unbound", ability: 'magician', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
 	it('should copy all stats except HP', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Mewtwo", ability: 'pressure', moves: ['rest'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Mewtwo", ability: 'pressure', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		const p1poke = battle.p1.active[0];
 		const p2poke = battle.p2.active[0];
@@ -33,9 +37,11 @@ describe('Transform', () => {
 	});
 
 	it('should copy all stat changes', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam'] }] });
+		battle = common.createBattle([[
+			{ species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform'] },
+		], [
+			{ species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam'] },
+		]]);
 		for (let i = 1; i <= 3; i++) {
 			battle.makeChoices('move ' + i, 'move ' + i);
 		}
@@ -47,17 +53,21 @@ describe('Transform', () => {
 	});
 
 	it("should copy the target's focus energy status", () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] },
+		]]);
 		battle.makeChoices('move transform', 'move focusenergy');
 		assert(battle.p1.active[0].volatiles['focusenergy']);
 	});
 
 	it('should copy the target\'s moves with 5 PP each', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam'] },
+		]]);
 		const p1poke = battle.p1.active[0];
 		const p2poke = battle.p2.active[0];
 		battle.makeChoices('move transform', 'move rest');
@@ -92,17 +102,21 @@ describe('Transform', () => {
 	});
 
 	it('should not copy speed boosts from Unburden', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint'] },
+		]]);
 		battle.makeChoices('move transform', 'move feint');
 		assert.notEqual(battle.p1.active[0].getStat('spe'), battle.p2.active[0].getStat('spe'));
 	});
 
 	it('should fail against Pokemon with a Substitute', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] }] });
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] },
+		]]);
 		battle.makeChoices('move transform', 'move substitute');
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
@@ -119,13 +133,13 @@ describe('Transform', () => {
 		assert.species(battle.p2.active[0], 'Zoroark');
 	});
 
-	it('should fail against tranformed Pokemon', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [
+	it('should fail against transformed Pokemon', () => {
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
 			{ species: "Magikarp", ability: 'rattled', moves: ['splash'] },
 			{ species: "Mew", ability: 'synchronize', moves: ['transform'] },
-		] });
+		]]);
 		battle.makeChoices('move transform', 'move splash');
 		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
 		battle.makeChoices('move splash', 'switch 2');
@@ -134,19 +148,21 @@ describe('Transform', () => {
 	});
 
 	it(`should copy the target's real type, even if the target is an Arceus`, () => {
-		battle = common.createBattle([
-			[{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] }],
-			[{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] },
+		], [
+			{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Steel"]);
 	});
 
 	it(`should ignore the effects of Roost`, () => {
-		battle = common.createBattle([
-			[{ species: "Mew", ability: 'synchronize', moves: ['seismictoss', 'transform'] }],
-			[{ species: "Talonflame", ability: 'flamebody', moves: ['roost'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Mew", ability: 'synchronize', moves: ['seismictoss', 'transform'] },
+		], [
+			{ species: "Talonflame", ability: 'flamebody', moves: ['roost'] },
+		]]);
 		battle.makeChoices('move seismictoss', 'move roost');
 		battle.makeChoices('move transform', 'move roost');
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
@@ -253,9 +269,11 @@ describe('Transform [Gen 5]', () => {
 	});
 
 	it("should not copy the target's focus energy status", () => {
-		battle = common.gen(5).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", ability: 'limber', moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] }] });
+		battle = common.gen(5).createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] },
+		]]);
 		assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
 	});
 });
@@ -266,38 +284,42 @@ describe('Transform [Gen 4]', () => {
 	});
 
 	it('should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Ditto", ability: 'limber', moves: ['transform'] }],
-			[{ species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.equal(battle.p1.active[0].species.name, 'Giratina');
 	});
 
 	it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform'] }],
-			[{ species: "Giratina", ability: 'pressure', moves: ['rest'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform'] },
+		], [
+			{ species: "Giratina", ability: 'pressure', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.equal(battle.p1.active[0].species.name, 'Giratina-Origin');
 	});
 
 	it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] }],
-			[{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] },
+		], [
+			{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] },
+		]]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.equal(battle.p1.active[0].species.name, 'Arceus-Fire');
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it('should succeed against a Substitute', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: "Ditto", ability: 'limber', moves: ['transform'] }],
-			[{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+		], [
+			{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] },
+		]]);
 		battle.makeChoices('move transform', 'move substitute');
 		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
@@ -309,9 +331,11 @@ describe('Transform [Gen 1]', () => {
 	});
 
 	it("should not send |-endability|", () => {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Ditto", moves: ['transform'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Gengar", moves: ['lick'] }] });
+		battle = common.gen(1).createBattle([[
+			{ species: "Ditto", moves: ['transform'] },
+		], [
+			{ species: "Gengar", moves: ['lick'] },
+		]]);
 		battle.makeChoices('move transform', 'move lick');
 
 		assert(battle.log.every(line => !line.startsWith('|-endability|')));
@@ -368,12 +392,49 @@ describe('Transform [Gen 1]', () => {
 			{ species: 'Gengar', moves: ['splash', 'thunderwave'] },
 		]]);
 		battle.makeChoices('move splash', 'move thunderwave');
-		do {
+		for (let i = 0; i < 5; i++) {
 			battle.makeChoices('move transform', 'move splash');
-		} while (!battle.p1.active[0].transformed);
+			if (battle.p1.active[0].transformed) break;
+		}
 		const p1poke = battle.p1.active[0];
 		const p2poke = battle.p2.active[0];
 		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
 		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+	});
+
+	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'Blastoise', moves: ['transform', 'splash'] },
+		], [
+			{ species: 'Golem', moves: ['tackle', 'mirrormove'] },
+		]]);
+		const blastoise = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices('move mirrormove', 'move tackle');
+		assert.equal(blastoise.moveSlots[0].pp, 5);
+		assert.equal(blastoise.moveSlots[1].pp, 4);
+		assert.equal(blastoise.baseMoveSlots[0].pp, blastoise.baseMoveSlots[0].maxpp - 1);
+		assert.equal(blastoise.baseMoveSlots[1].pp, blastoise.baseMoveSlots[1].maxpp + 1);
+	});
+
+	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented (same with two-turn moves)`, () => {
+		battle = common.gen(1).createBattle([[
+			{ species: 'Mewtwo', moves: ['transform', 'splash'] },
+		], [
+			{ species: 'Charizard', moves: ['solarbeam', 'mirrormove', 'splash'] },
+		]]);
+		const charizard = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices('move splash', 'move solarbeam');
+		battle.makeChoices('move mirrormove', 'move splash');
+		assert.equal(charizard.moveSlots[0].pp, 5);
+		assert.equal(charizard.moveSlots[1].pp, 5);
+		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+		battle.makeChoices('move solarbeam', 'move splash');
+		assert.equal(charizard.moveSlots[0].pp, 5);
+		assert.equal(charizard.moveSlots[1].pp, 4);
+		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
 	});
 });

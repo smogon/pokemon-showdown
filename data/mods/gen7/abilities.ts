@@ -19,6 +19,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
+				pokemon.formeRegression = true;
 			}
 		},
 	},
@@ -33,7 +34,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	innerfocus: {
 		inherit: true,
 		rating: 1,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	moody: {
 		inherit: true,
@@ -64,55 +65,34 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	oblivious: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	owntempo: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	rattled: {
-		onDamagingHit(damage, target, source, move) {
-			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
-				this.boost({ spe: 1 });
-			}
-		},
-		name: "Rattled",
-		rating: 1.5,
-		num: 155,
+		inherit: true,
+		onAfterBoost: undefined, // no inherit
 	},
 	scrappy: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	slowstart: {
 		inherit: true,
-		condition: {
-			duration: 5,
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onStart(target) {
-				this.add('-start', target, 'ability: Slow Start');
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon, target, move) {
-				// This is because the game checks the move's category in data, rather than what it is currently, unlike e.g. Huge Power
-				if (this.dex.moves.get(move.id).category === 'Physical') {
-					return this.chainModify(0.5);
-				}
-			},
-			onModifySpAPriority: 5,
-			onModifySpA(spa, pokemon, target, move) {
-				// Ordinary Z-moves like Breakneck Blitz will halve the user's Special Attack as well
-				if (this.dex.moves.get(move.id).category === 'Physical') {
-					return this.chainModify(0.5);
-				}
-			},
-			onModifySpe(spe, pokemon) {
+		onModifyAtk(atk, pokemon, target, move) {
+			// This is because the game checks the move's category in data, rather than what it is currently, unlike e.g. Huge Power
+			if (this.effectState.counter && this.dex.moves.get(move.id).category === 'Physical') {
 				return this.chainModify(0.5);
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
-			},
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon, target, move) {
+			// Ordinary Z-moves like Breakneck Blitz will halve the user's Special Attack as well
+			if (this.effectState.counter && this.dex.moves.get(move.id).category === 'Physical') {
+				return this.chainModify(0.5);
+			}
 		},
 	},
 	soundproof: {

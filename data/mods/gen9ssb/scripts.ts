@@ -92,7 +92,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	const details = pokemon.getUpdatedDetails();
 	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
-	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
+	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, undefined, true);
 
 	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
 		2 * pokemon.species.baseStats.hp + pokemon.set.ivs.hp + Math.floor(pokemon.set.evs.hp / 4) + 100
@@ -142,11 +142,12 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
 		const move = context.dex.moves.get(context.toID(moveName));
 		if (!move.id) continue;
+		const pp = context.calculatePP(move);
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
-			pp: Math.floor((move.noPPBoosts ? move.pp : move.pp * 8 / 5) * carryOver[slot]),
-			maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
+			pp: pp * carryOver[slot],
+			maxpp: pp,
 			target: move.target,
 			disabled: false,
 			disabledSource: '',
@@ -369,51 +370,20 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
 
-			// Change Zacian/Zamazenta into their Crowned formes
 			for (const pokemon of this.getAllPokemon()) {
-				let rawSpecies: Species | null = null;
-				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-					rawSpecies = this.dex.species.get('Zacian-Crowned');
-				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-				}
-				if (!rawSpecies) continue;
-				const species = pokemon.setSpecies(rawSpecies);
-				if (!species) continue;
-				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getUpdatedDetails();
-				// pokemon.setAbility(species.abilities['0'], null, true);
-				// pokemon.baseAbility = pokemon.ability;
-
-				const behemothMove: { [k: string]: string } = {
-					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
-						move: move.name,
-						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						disabledSource: '',
-						used: false,
-					};
-					pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				}
+				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {
@@ -427,9 +397,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -531,13 +498,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
-				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 4, spa: 4, spe: 4 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else if (percent > 33) {
 				this.add('message', `Your offering was accepted.`);
-				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else {
 				this.add('message', `Coward.`);
-				this.boost({ atk: 1, spa: 1, spe: 1 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			}
 			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
@@ -695,13 +662,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
 				pokemon.formeChange('Terapagos-Stellar', null, true);
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
 			if (!pokemon.illusion && pokemon.name === 'Neko') {
 				this.battle.add(`c:|${getName('Neko')}|Possible thermal failure if operation continues (Meow on fire ?)`);
@@ -717,7 +677,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.spreadHit) {
 				// multi-target modifier (doubles only)
-				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+				const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
@@ -728,7 +688,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// weather modifier
-			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 			// crit - not a modifier
 			const isCrit = target.getMoveHitData(move).crit;
@@ -812,8 +772,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
+				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+					this.battle.add('-ability', pokemon, bypassProtect.name);
+				}
 				this.battle.add('-zbroken', target);
 			}
 
@@ -907,8 +871,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 			}
-			pokemon.abilityState.effectOrder = this.battle.effectOrder++;
-			pokemon.itemState.effectOrder = this.battle.effectOrder++;
+			pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
+			pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
 			if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 			pokemon.previouslySwitchedIn++;
 
@@ -942,7 +906,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 			if (pokemon.canMegaEvo) {
-				pokemon.canMegaEvo = null;
+				pokemon.canMegaEvo = false;
 			} else {
 				pokemon.canUltraBurst = null;
 			}
@@ -969,11 +933,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
+			if (!item.megaStone) return null;
 			// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-			if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-				return item.megaStone;
-			}
-			return null;
+			// FIXME: Change to species.name when champions comes
+			const megaEvolution = item.megaStone[species.baseSpecies];
+			return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 		},
 
 		// 1 Z per pokemon
@@ -1312,7 +1276,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from]${sourceEffect.fullname}`;
+			if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 			if (zMove && move.isZ === true) {
 				attrs = '|[anim]' + movename + attrs;
 				movename = 'Z-' + movename;
@@ -1390,11 +1354,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (
-				!move.negateSecondary &&
-				!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-				!move.flags['futuremove']
-			) {
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 				const originalHp = pokemon.hp;
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -1582,7 +1542,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-			if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				for (const [i, d] of damage.entries()) {
 					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 					// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -1799,10 +1759,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
-						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
+						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
+						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
 						!(move.id === 'praisethemoon' && this.battle.field.getPseudoWeather('gravity')) &&
-						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
+						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather(move))) &&
 						!(this.hasItem('powerherb') && move.id !== 'skydrop');
 					if (!isCharging) {
 						target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
@@ -1845,6 +1805,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					let details = ``;
 					if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
 					if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
+					if (action.megax) details += ` megax`;
+					if (action.megay) details += ` megay`;
 					if (action.zmove) details += ` zmove`;
 					if (action.maxMove) details += ` dynamax`;
 					if (action.terastallize) details += ` terastallize`;
@@ -1947,7 +1909,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (this.requestState === 'move') {
 				if (pokemon.trapped) {
-					const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+					return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
 						let updated = false;
 						if (req.maybeTrapped) {
 							delete req.maybeTrapped;
@@ -1958,10 +1920,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							updated = true;
 						}
 						return updated;
-					});
-					const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
-					if (includeRequest) this.emitRequest(this.activeRequest!);
-					return status;
+					} });
 				} else if (pokemon.maybeTrapped) {
 					this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 				}

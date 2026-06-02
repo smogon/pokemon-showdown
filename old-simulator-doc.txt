@@ -190,7 +190,7 @@ end() [on weather, on field effect]
 	Return true to stop an effect from ending.
 
 	Most ways an effect can end are "natural". The biggest exception is
-	when a pokemon swiches out. In general, if you would receive a message
+	when a pokemon switches out. In general, if you would receive a message
 	when the effect ends, the end event would be fired.
 
 	NOTE: NOT fired when a pokemon switches out (see switchOut).

@@ -19,7 +19,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aftermath: {
 		name: "Aftermath",
-		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Damp Ability, this effect is prevented.",
+		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. This effect is prevented if the move's user has the Magic Guard Ability or if any active Pokemon has the Damp Ability.",
 		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
 
 		damage: "  [POKEMON] was hurt!",
@@ -53,16 +53,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	anticipation: {
 		name: "Anticipation",
-		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. This effect considers any move that deals direct damage as an attacking move of its respective type, Hidden Power counts as its determined type, and Judgment, Multi-Attack, Natural Gift, Revelation Dance, Techno Blast, and Weather Ball are considered Normal-type moves.",
+		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move. This effect considers Hidden Power to be its determined type, and every other move to be its original type.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
-		gen6: {
-			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. This effect considers any move that deals direct damage as an attacking move of its respective type, Hidden Power counts as its determined type, and Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
-		},
 		gen5: {
-			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. This effect considers any move that deals direct damage as an attacking move of its respective type, and Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
+			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move. This effect considers moves to be their original type.",
 		},
 		gen4: {
-			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move that this Pokemon is not immune to and if its level is less than or equal to the opposing Pokemon's level. This effect does not consider Counter, Dragon Rage, Metal Burst, Mirror Coat, Night Shade, Psywave, or Seismic Toss as attacking moves, and Hidden Power, Judgment, Natural Gift, and Weather Ball are considered Normal-type moves. This effect considers any changes to the effectiveness of attacks against this Pokemon due to the effects of Gravity or the Normalize or Scrappy Abilities.",
+			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move if this Pokemon is not immune to the type and the Pokemon with the move is not a lower level than this Pokemon. This effect considers moves to be their original type. This effect is not activated by Counter, Dragon Rage, Metal Burst, Mirror Coat, Night Shade, Psywave, or Seismic Toss. This effect checks if this Pokemon is holding an Iron Ball, if it is under the effects of Foresight (Odor Sleuth), Gravity, Ingrain, Miracle Eye, or Roost, and whether each opposing Pokemon has the Normalize or Scrappy Abilities before determining if their attacks fit the conditions.",
 		},
 
 		activate: "  [POKEMON] shuddered!",
@@ -382,6 +379,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
 	},
+	dragonize: {
+		name: "Dragonize",
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
 		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
@@ -645,6 +647,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Healer",
 		desc: "30% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
 		shortDesc: "30% chance this Pokemon's ally has its status cured at the end of each turn.",
+		champions: {
+			desc: "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
+			shortDesc: "50% chance this Pokemon's ally has its status cured at the end of each turn.",
+		},
 		gen6: {
 			desc: "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
 			shortDesc: "30% chance each adjacent ally has its status cured at the end of each turn.",
@@ -946,7 +952,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magician: {
 		name: "Magician",
-		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight.",
+		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight. If multiple targets are hit by an attack the item is stolen from the fastest Pokemon, while considering the effect of Trick Room and prioritizing opposing Pokemon before allies.",
 		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack.",
 	},
 	magmaarmor: {
@@ -982,6 +988,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Mega Launcher",
 		desc: "This Pokemon's pulse moves have their power multiplied by 1.5. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
+	},
+	megasol: {
+		name: "Mega Sol",
+		shortDesc: "This Pokemon's moves are used as if the effects of Sunny Day were active.",
 	},
 	merciless: {
 		name: "Merciless",
@@ -1241,6 +1251,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		addItem: "#recycle",
+	},
+	piercingdrill: {
+		name: "Piercing Drill",
+		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
 	},
 	pixilate: {
 		name: "Pixilate",
@@ -1633,7 +1647,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shielddust: {
 		name: "Shield Dust",
+		desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against this Pokemon.",
 		shortDesc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
+		gen8: {
+			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Spirit Shackle, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch and Stench Abilities are also prevented against this Pokemon.",
+		},
+		gen7: {
+			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, as well as Anchor Shot, Fling, Spirit Shackle, and Throat Chop. The effect of Sparkling Aria is prevented if this Pokemon is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch and Stench Abilities are also prevented against this Pokemon.",
+		},
+		gen6: {
+			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, and Fling. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch and Stench Abilities are also prevented against this Pokemon.",
+		},
+		gen4: {
+			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, cause this Pokemon's stat stages to be lowered, and Fling. Secondary effects added by King's Rock and Razor Fang are also prevented against this Pokemon.",
+		},
+		gen3: {
+			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, or cause this Pokemon's stat stages to be lowered. The secondary effect added by King's Rock is also prevented against this Pokemon.",
+		},
 	},
 	shieldsdown: {
 		name: "Shields Down",
@@ -1741,6 +1771,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Speed Boost",
 		desc: "This Pokemon's Speed is raised by 1 stage at the end of each full turn it has been on the field.",
 		shortDesc: "This Pokemon's Speed is raised 1 stage at the end of each full turn on the field.",
+	},
+	spicyspray: {
+		name: "Spicy Spray",
+		shortDesc: "If this Pokemon is hit by an attack, the attacker becomes burned.",
 	},
 	stakeout: {
 		name: "Stakeout",
@@ -2126,6 +2160,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	unseenfist: {
 		name: "Unseen Fist",
 		shortDesc: "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+		champions: {
+			shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+		},
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",

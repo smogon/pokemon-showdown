@@ -148,6 +148,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		color: "Gray",
 	},
+	burmysandy: {
+		inherit: true,
+		color: "Gray",
+	},
+	burmytrash: {
+		inherit: true,
+		color: "Gray",
+	},
 	wormadam: {
 		inherit: true,
 		color: "Gray",
@@ -163,6 +171,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	cherrim: {
 		inherit: true,
 		color: "Pink",
+	},
+	shelloseast: {
+		inherit: true,
+		color: "Purple",
+	},
+	gastrodoneast: {
+		inherit: true,
+		color: "Purple",
 	},
 	arceus: {
 		inherit: true,
@@ -297,6 +313,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		color: "Yellow",
 	},
+	deerlingsummer: {
+		inherit: true,
+		color: "Yellow",
+	},
+	deerlingautumn: {
+		inherit: true,
+		color: "Yellow",
+	},
+	deerlingwinter: {
+		inherit: true,
+		color: "Yellow",
+	},
 	cubchoo: {
 		inherit: true,
 		abilities: { 0: "Snow Cloak", H: "Rattled" },
@@ -315,6 +343,82 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Torrent", H: "Protean" },
 	},
 	vivillon: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonicysnow: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonpolar: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillontundra: {
+		inherit: true,
+		color: "Black",
+	},
+	vivilloncontinental: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillongarden: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonelegant: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonmodern: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonmarine: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonarchipelago: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonhighplains: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonsandstorm: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonriver: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonmonsoon: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonsavanna: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonsun: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonocean: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonjungle: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonfancy: {
+		inherit: true,
+		color: "Black",
+	},
+	vivillonpokeball: {
 		inherit: true,
 		color: "Black",
 	},

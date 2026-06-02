@@ -147,7 +147,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			const targets = target.split(',').map(toID).filter(Boolean);
 			if (!targets.length) {
-				return this.errorReply(`Specify at least one term.`);
+				throw new Chat.ErrorMessage(`Specify at least one term.`);
 			}
 			for (const [i, arg] of targets.entries()) {
 				if (nameList.has(arg)) {
@@ -164,7 +164,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!targets.length) {
 				// fuck you too, "mia added 0 term to the usersearch name list"
-				return this.errorReply(`No terms could be added.`);
+				throw new Chat.ErrorMessage(`No terms could be added.`);
 			}
 			const count = Chat.count(targets, 'terms');
 			Rooms.get('staff')?.addByUser(
@@ -180,7 +180,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			const targets = target.split(',').map(toID).filter(Boolean);
 			if (!targets.length) {
-				return this.errorReply(`Specify at least one term.`);
+				throw new Chat.ErrorMessage(`Specify at least one term.`);
 			}
 			for (const [i, arg] of targets.entries()) {
 				if (!nameList.has(arg)) {
@@ -191,7 +191,7 @@ export const commands: Chat.ChatCommands = {
 				nameList.delete(arg);
 			}
 			if (!targets.length) {
-				return this.errorReply(`No terms could be removed.`);
+				throw new Chat.ErrorMessage(`No terms could be removed.`);
 			}
 			const count = Chat.count(targets, 'terms');
 			Rooms.get('staff')?.addByUser(
@@ -220,7 +220,7 @@ export const pages: Chat.PageTable = {
 			const sorted: { [k: string]: number } = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
-					if (curUser.id.includes(term)) {
+					if (curUser.id.includes(term) && !curUser.id.startsWith('guest')) {
 						if (!(term in sorted)) sorted[term] = 0;
 						sorted[term]++;
 					}

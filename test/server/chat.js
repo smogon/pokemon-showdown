@@ -3,6 +3,17 @@
 const assert = require('assert').strict;
 
 describe('Chat', () => {
+	it('should not infinite loop formatText', () => {
+		assert.equal(
+			Chat.formatText(`<\\\\||^^**~~\`\`https://a/Olaaaseusbobalhos\`\`~~**^^||\\\\`),
+			`&lt;<sub><span class="spoiler"><sup><b><s><code><a href="https://a/Olaaaseusbobalhos" rel="noopener" target="_blank">https://a/Olaaaseusbobalhos</a></code></s></b></sup></span></sub>`
+		);
+		assert.equal(
+			Chat.formatText(`[[https://google.com/]]text`),
+			`<a href="//www.google.com/search?ie=UTF-8&btnI&q=https%3A%2F%2Fgoogle.com%2F" target="_blank">https://google.com/</a>text`
+		);
+	});
+
 	it('should run formatText correctly', () => {
 		assert.equal(
 			Chat.formatText(`hi **__bold italics__** ^^superscript^^ \\\\subscript\\\\ normal ~~strikethrough~~ bye`),

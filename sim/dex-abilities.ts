@@ -1,4 +1,4 @@
-import type { PokemonEventMethods, ConditionData } from './dex-conditions';
+import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 
@@ -24,7 +24,10 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 	name: string;
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & { inherit: true };
+export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
+	inherit: true,
+	condition?: ModdedConditionData,
+};
 export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
 export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
 
@@ -85,12 +88,12 @@ export class DexAbilities {
 	}
 
 	getByID(id: ID): Ability {
-		if (id === '') return EMPTY_ABILITY;
+		if (id === '' || id === 'constructor') return EMPTY_ABILITY;
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			ability = this.get(this.dex.data.Aliases[id]);
+		if (this.dex.getAlias(id)) {
+			ability = this.get(this.dex.getAlias(id));
 		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
 			const abilityData = this.dex.data.Abilities[id] as any;
 			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);

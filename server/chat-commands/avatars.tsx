@@ -554,6 +554,7 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'oleana', 'opal', 'peony', 'pesselle', 'phoebe-gen6', 'piers', 'raihan', 'rei', 'rose', 'sabi', 'sada-ai',
 	'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert', 'tateandliza-gen6',
 	'turo-ai', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu', 'miku-flying', 'miku-ground',
+	'jacinthe', 'rainbowrocketgrunt', 'rainbowrocketgruntf',
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
@@ -641,6 +642,11 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'rosa-pokestar3', 'sabrina-frlg', 'selene-masters', 'sierra', 'spark-casual', 'spark', 'spenser', 'toddsnap', 'toddsnap2',
 	'victor-masters', 'vince', 'wally-rse', 'willow-casual', 'willow', 'yancy', 'zinnia-masters',
 	'acerola-masters3', 'bianca-masters', 'cheren-masters', 'gardenia-masters', 'nemona-masters',
+	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace', 'az-lza', 'brendan-masters2', 'bugsy-masters',
+	'cynthia-masters4', 'elesa-masters3', 'elio-masters', 'erika-masters3', 'iono-masters', 'iono-masters2',
+	'lance-masters2', 'marley-masters', 'may-masters4', 'morty-masters3', 'selene-masters2', 'shauntal-masters',
+	'ansha', 'ansha-cook', 'canari', 'corbeau', 'grisham', 'gwynn', 'ivor', 'lebanne', 'phillipe', 'sbcmember',
+	'tarragon', 'taunie', 'urbain',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -656,11 +662,23 @@ const OFFICIAL_AVATARS_FIFTY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_HORO = new Set([
-	'florian-bb', 'juliana-bb', 'red-lgpe', 'liko', 'roy',
+	'florian-bb', 'juliana-bb', 'red-lgpe', 'liko', 'roy', 'emma-lza', 'lida', 'mable', 'naveen',
 ]);
 
 const OFFICIAL_AVATARS_SELENA = new Set([
 	'kris',
+]);
+
+const OFFICIAL_AVATARS_WISTERIAPURPLE = new Set([
+	'miku-fairy',
+]);
+
+const OFFICIAL_AVATARS_FLAMIBANE = new Set([
+	'miku-ghost',
+]);
+
+const OFFICIAL_AVATARS_RADU = new Set([
+	'miku-ice',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
@@ -673,6 +691,9 @@ for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_WISTERIAPURPLE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FLAMIBANE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_RADU) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -682,19 +703,21 @@ export const commands: Chat.ChatCommands = {
 
 		if (!avatar) {
 			if (silent) return false;
-			this.errorReply("Unrecognized avatar - make sure you're on the right account?");
-			return false;
+			throw new Chat.ErrorMessage("Unrecognized avatar - make sure you're on the right account?");
 		}
 
-		user.avatar = avatar;
-		if (user.id in customAvatars && !avatar.endsWith('xmas')) {
-			Avatars.setDefault(user.id, avatar);
+		this.runBroadcast();
+		if (!this.broadcasting) {
+			user.avatar = avatar;
+			if (user.id in customAvatars && !avatar.endsWith('xmas')) {
+				Avatars.setDefault(user.id, avatar);
+			}
 		}
-		if (!silent) {
-			this.sendReply(
-				`${this.tr`Avatar changed to:`}\n` +
-				Chat.html`|raw|${Avatars.img(avatar)}`
-			);
+		if (!silent || this.broadcasting) {
+			if (!this.broadcasting) {
+				this.sendReply(`${this.tr`Avatar changed to:`}`);
+			}
+			this.sendReply(Chat.html`|raw|${Avatars.img(avatar)}`);
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
@@ -717,7 +740,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
 			}
 			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/537330/">Fifty Shades of Rez</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);
@@ -725,9 +748,21 @@ export const commands: Chat.ChatCommands = {
 			if (OFFICIAL_AVATARS_SELENA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/SelenaStar00">Selena</a>)`);
 			}
+			if (OFFICIAL_AVATARS_WISTERIAPURPLE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/664887/">wisteriapurple</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FLAMIBANE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/706228/">Flamibane</a>)`);
+			}
+			if (OFFICIAL_AVATARS_RADU.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/455774/">RADU</a>)`);
+			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
+	avatarhelp: [
+		`/avatar [avatar name or number] - Change your trainer sprite.`,
+		`!avatar [avatar name or number] - Show the specified trainer sprite and credits. Requires: + % @ # ~`,
+	],
 
 	avatars(target, room, user) {
 		this.runBroadcast();
@@ -737,12 +772,11 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = this.broadcasting && !target ? null : this.getUserOrSelf(target);
 		const targetUserids = targetUser ? new Set([targetUser.id, ...targetUser.previousIDs]) :
 			target ? new Set([toID(target)]) : null;
-		if (targetUserids && targetUser !== user && !user.can('alts')) {
-			throw new Chat.ErrorMessage("You don't have permission to look at another user's avatars!");
-		}
 
 		const out = [];
-		if (targetUserids) {
+		if (targetUserids && (targetUser === user || user.can('alts'))) {
+			// If the user lacks permission to view avatars, the argument is ignored silently,
+			// so that it can highlight the target user.
 			const hasButton = !this.broadcasting && targetUser === user;
 			for (const id of targetUserids) {
 				const allowed = customAvatars[id]?.allowed;
@@ -923,7 +957,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help moveavatars`);
 		}
 		if (!customAvatars[from]?.allowed.length) {
-			return this.errorReply(`That user has no avatars.`);
+			throw new Chat.ErrorMessage(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
 		customAvatars[to] = { ...customAvatars[from] };

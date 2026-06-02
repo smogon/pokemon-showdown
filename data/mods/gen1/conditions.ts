@@ -80,6 +80,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
+		},
 	},
 	frz: {
 		name: 'frz',
@@ -97,6 +100,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (move.secondary && move.secondary.status === 'brn') {
 				target.cureStatus();
 			}
+		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
 		},
 	},
 	psn: {
@@ -185,30 +191,85 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
+		// this is the duration of Wrap if it doesn't continue.
+		// (i.e. if the attacker switches out.)
+		// the full duration is tracked in partialtrappinglock
 		duration: 2,
+		// defender still takes PSN damage, etc
+		// TODO: research exact mechanics
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
+		onRestart() {
+			this.effectState.duration = 2;
+		},
+		onAccuracy(accuracy, target, source, move) {
+			if (source === this.effectState.source) return true;
+		},
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
+		onDisableMove(target) {
+			if (this.effectState.maybeLocked) {
+				target.maybeLocked = true;
+			}
+		},
+	},
+	fakepartiallytrapped: {
+		name: 'fakepartiallytrapped',
+		// Wrap ended this turn, but you don't know that
+		// until you try to use an attack
+		duration: 2,
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
+		onDisableMove(target) {
+			target.maybeLocked = true;
+		},
 	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
 		durationCallback() {
-			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
-			return duration;
+			return this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 		},
 		onStart(target, source, effect) {
+			const foe = target.foes()[0];
+			if (!foe) return false;
+
 			this.effectState.move = effect.id;
+			this.effectState.totalDuration = this.effectState.duration!;
+			this.effectState.damage = this.lastDamage;
+			this.effectState.locked = foe;
+			foe.addVolatile('partiallytrapped', target, effect);
 		},
-		onDisableMove(pokemon) {
-			if (!pokemon.hasMove(this.effectState.move)) {
+		onBeforeMove(pokemon, target, move) {
+			if (target !== this.effectState.locked) {
+				pokemon.removeVolatile('partialtrappinglock');
+			}
+		},
+		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['partialtrappinglock'];
 				return;
 			}
-			for (const moveSlot of pokemon.moveSlots) {
-				if (moveSlot.id !== this.effectState.move) {
-					pokemon.disableMove(moveSlot.id);
+			if (this.effectState.duration === 1) {
+				if (this.effectState.totalDuration !== 5) {
+					pokemon.addVolatile('fakepartiallytrapped');
+					pokemon.volatiles['fakepartiallytrapped'].counterpart = target;
+					target.addVolatile('fakepartiallytrapped');
+					target.volatiles['fakepartiallytrapped'].counterpart = pokemon;
 				}
+			} else {
+				target.addVolatile('partiallytrapped', pokemon, move);
+				if (this.effectState.totalDuration - this.effectState.duration! > 0) {
+					target.volatiles['partiallytrapped'].maybeLocked = true;
+				}
+			}
+		},
+		onSemiLockMove() {
+			return this.effectState.move;
+		},
+		onDisableMove(pokemon) {
+			if (this.effectState.totalDuration - this.effectState.duration! > 1) {
+				pokemon.maybeLocked = true;
 			}
 		},
 	},
@@ -216,7 +277,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		duration: 0,
 		onBeforeMovePriority: 7,
-		onStart() {},
+		onStart: undefined, // no inherit
+		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['mustrecharge'];
+				return;
+			}
+			this.add('-mustrecharge', pokemon);
+		},
 	},
 	lockedmove: {
 		// Thrash and Petal Dance.
@@ -234,6 +302,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
+			}
+		},
+		onAfterMove(pokemon) {
+			if (pokemon.volatiles['lockedmove'].time <= 0) {
+				pokemon.removeVolatile('lockedmove');
 			}
 		},
 	},

@@ -207,7 +207,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	vulpixalola: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ninetales: {
 		tier: "RU",
@@ -592,7 +592,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "NFE",
 	},
 	tangrowth: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 	},
 	kangaskhan: {
@@ -916,7 +916,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	azumarill: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DUU",
 	},
 	bonsly: {

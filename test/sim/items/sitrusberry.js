@@ -11,9 +11,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should heal 25% hp when consumed', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Aggron', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] }] });
+		battle = common.createBattle([[
+			{ species: 'Aggron', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] },
+		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
@@ -21,10 +23,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should be eaten immediately if (re)gained on low hp', () => {
-		battle = common.createBattle([
-			[{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] }],
-			[{ species: 'Garchomp', ability: 'roughskin', moves: ['earthquake'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] },
+		], [
+			{ species: 'Garchomp', ability: 'roughskin', moves: ['earthquake'] },
+		]]);
 		const holder = battle.p1.active[0];
 		const hpgain = Math.floor(holder.maxhp / 4);
 		battle.makeChoices('move recycle', 'move earthquake');
@@ -33,10 +36,11 @@ describe('Sitrus Berry', () => {
 	});
 
 	it('should not heal if Knocked Off', () => {
-		battle = common.createBattle([
-			[{ species: 'Deoxys-Attack', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] }],
-			[{ species: 'Krookodile', ability: 'intimidate', moves: ['knockoff'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Deoxys-Attack', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Krookodile', ability: 'intimidate', moves: ['knockoff'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move knockoff');
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
@@ -63,5 +67,22 @@ describe('Sitrus Berry', () => {
 		battle.makeChoices();
 		battle.makeChoices();
 		assert.species(darm, 'Darmanitan', `Sitrus Berry should heal Darmanitan outside of Zen Mode range.`);
+	});
+
+	describe('[Gen 3]', () => {
+		it('should not activate in the same turn that was put below 50% HP by a status condition', () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'swampert', item: 'sitrusberry', moves: ['sleeptalk'] },
+			], [
+				{ species: 'charizard', moves: ['toxic'] },
+			]]);
+			for (let i = 0; i < 4; i++) {
+				battle.makeChoices();
+			}
+			assert.holdsItem(battle.p1.active[0]);
+			assert(battle.p1.active[0].hp < battle.p1.active[0].maxhp / 2);
+			battle.makeChoices();
+			assert.false.holdsItem(battle.p1.active[0]);
+		});
 	});
 });

@@ -93,8 +93,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					return;
 				}
 			}
-			let lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (
 				!lockedMove &&
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
@@ -199,7 +198,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
 			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
@@ -231,10 +230,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
 		tryMoveHit(target, pokemon, move) {
@@ -252,10 +249,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Then, check if the Pokemon is immune to this move.
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type, true)
-			) {
+			if (!target.runImmunity(move, true)) {
 				if (move.selfdestruct) {
 					this.battle.faint(pokemon, pokemon, move);
 				}
@@ -305,10 +299,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 
-			// Stadium fixes the 1/256 accuracy bug.
-			if (accuracy !== true && !this.battle.randomChance(accuracy + 1, 256)) {
+			// Stadium attempts to fix the 1/256 miss by rerolling if the first value
+			// would trigger the 1/256 miss.
+			let randomValue = this.battle.random(256);
+			if (randomValue === 256) randomValue = this.battle.random(256);
+			if (accuracy !== true && randomValue > accuracy) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (accuracy === 255) {
+					this.battle.hint("In Pokemon Stadium, moves with 100% accuracy can still miss 1/65536 of the time.");
+				}
 				damage = false;
 				this.battle.lastDamage = 0;
 			}
@@ -331,7 +331,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let i: number;
 					for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 						move.hit = i + 1;
-						if (move.hit === hits) move.lastHit = true;
+						move.lastHit = move.hit === hits;
 						moveDamage = this.moveHit(target, pokemon, move);
 						if (moveDamage === false) break;
 						damage = (moveDamage || 0);
@@ -365,10 +365,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			return damage;
 		},
@@ -549,10 +547,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's see if the target is immune to the move.
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, true)) {
-					return false;
-				}
+			if (!target.runImmunity(move, true)) {
+				return false;
 			}
 
 			// Is it an OHKO move?

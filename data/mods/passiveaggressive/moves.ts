@@ -215,11 +215,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -300,6 +296,6 @@ function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = '
 	const move = battle.dex.getActiveMove(moveid);
 	move.type = source.getTypes()[0];
 	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
-	if (!pokemon.runImmunity(move.type)) return 0;
+	if (!pokemon.runImmunity(move)) return 0;
 	return typeMod;
 }

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <script>
-var suffix = (document.location.port != '8000' ? '-' + (document.location.port || '80') : '');
-var port = location.hostname === 'localhost' ? "?port=" + document.location.port : "";
-document.location.replace(
-	'http://' + document.location.hostname + suffix + '.psim.us' + document.location.pathname + port
-);
+var host = document.location.hostname.replace(/-/g, '=').replace(/\./g, '-').replace(/:/g, '--').replace(/=/g, '---');
+var currentPort = document.location.port || (document.location.protocol === 'https:' ? '443' : '80');
+var defaultPort = document.location.protocol === 'https:' ? '443' : '8000';
+var suffix = (currentPort !== defaultPort ? '--' + currentPort : '');
+var protocol = 'https:';
+if (document.location.protocol !== 'https:' && host !== 'localhost') {
+	protocol = 'http:';
+	suffix += '.insecure';
+}
+document.location.replace(protocol + '//' + host + suffix + '.psim.us' + document.location.pathname);
 </script>
 <p>This is a <a href="http://www.pokemonshowdown.com">Pok&eacute;mon Showdown</a> server!</p>
-<noscript><p>Try enabling <a href="http://enable-javascript.com/en/">JavaScript</a> to play!</p></noscript>
+<noscript><p>You'll need to <a href="http://enable-javascript.com/en/">enable JavaScript</a> to play.</p></noscript>

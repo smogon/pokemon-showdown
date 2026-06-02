@@ -11,7 +11,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	absolite: {
 		name: "Absolite",
-		shortDesc: "If held by an Absol, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by an Absol, this item allows it to Mega Evolve into Mega Absol in battle.",
+	},
+	absolitez: {
+		name: "Absolite Z",
+		shortDesc: "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle.",
 	},
 	absorbbulb: {
 		name: "Absorb Bulb",
@@ -101,6 +105,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	banettite: {
 		name: "Banettite",
 		shortDesc: "If held by a Banette, this item allows it to Mega Evolve in battle.",
+	},
+	barbaracite: {
+		name: "Barbaracite",
+		shortDesc: "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
+	},
+	baxcalibrite: {
+		name: "Baxcalibrite",
+		shortDesc: "If held by a Baxcalibur, this item allows it to Mega Evolve in battle.",
 	},
 	beastball: {
 		name: "Beast Ball",
@@ -199,13 +211,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Bug-type attack will have 1.5x power. Single use.",
 		},
 	},
-	bugmemory: {
-		name: "Bug Memory",
-		shortDesc: "Holder's Multi-Attack is Bug type.",
-	},
 	buginiumz: {
 		name: "Buginium Z",
 		shortDesc: "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
+	},
+	bugmemory: {
+		name: "Bug Memory",
+		shortDesc: "Holder's Multi-Attack is Bug type.",
 	},
 	burndrive: {
 		name: "Burn Drive",
@@ -219,6 +231,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Cell Battery",
 		shortDesc: "Raises holder's Attack by 1 if hit by an Electric-type attack. Single use.",
 	},
+	chandelurite: {
+		name: "Chandelurite",
+		shortDesc: "If held by a Chandelure, this item allows it to Mega Evolve in battle.",
+	},
 	charcoal: {
 		name: "Charcoal",
 		shortDesc: "Holder's Fire-type attacks have 1.2x power.",
@@ -228,11 +244,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	charizarditex: {
 		name: "Charizardite X",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard X.",
 	},
 	charizarditey: {
 		name: "Charizardite Y",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard Y.",
 	},
 	chartiberry: {
 		name: "Charti Berry",
@@ -246,6 +262,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Cherish Ball",
 		shortDesc: "A rare Poke Ball that has been crafted to commemorate an occasion.",
 	},
+	chesnaughtite: {
+		name: "Chesnaughtite",
+		shortDesc: "If held by a Chesnaught, this item allows it to Mega Evolve in battle.",
+	},
 	chestoberry: {
 		name: "Chesto Berry",
 		shortDesc: "Holder wakes up if it is asleep. Single use.",
@@ -257,6 +277,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	chilldrive: {
 		name: "Chill Drive",
 		shortDesc: "Holder's Techno Blast is Ice type.",
+	},
+	chimechite: {
+		name: "Chimechite",
+		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
 	},
 	chippedpot: {
 		name: "Chipped Pot",
@@ -288,6 +312,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 
 		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
 	},
+	clefablite: {
+		name: "Clefablite",
+		shortDesc: "If held by a Clefable, this item allows it to Mega Evolve in battle.",
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
@@ -314,7 +342,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
+		desc: "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder.",
 		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
+	},
+	crabominite: {
+		name: "Crabominite",
+		shortDesc: "If held by a Crabominable, this item allows it to Mega Evolve in battle.",
 	},
 	crackedpot: {
 		name: "Cracked Pot",
@@ -337,13 +370,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Dark-type attack will have 1.5x power. Single use.",
 		},
 	},
+	darkiniumz: {
+		name: "Darkinium Z",
+		shortDesc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
+	},
 	darkmemory: {
 		name: "Dark Memory",
 		shortDesc: "Holder's Multi-Attack is Dark type.",
 	},
-	darkiniumz: {
-		name: "Darkinium Z",
-		shortDesc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
+	darkranite: {
+		name: "Darkranite",
+		shortDesc: "If held by a Darkrai, this item allows it to Mega Evolve in battle.",
 	},
 	dawnstone: {
 		name: "Dawn Stone",
@@ -363,6 +400,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Deep Sea Tooth",
 		desc: "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
 		shortDesc: "If held by a Clamperl, its Sp. Atk is doubled.",
+	},
+	delphoxite: {
+		name: "Delphoxite",
+		shortDesc: "If held by a Delphox, this item allows it to Mega Evolve in battle.",
 	},
 	destinyknot: {
 		name: "Destiny Knot",
@@ -388,6 +429,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Draco Plate",
 		shortDesc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
 	},
+	dragalgite: {
+		name: "Dragalgite",
+		shortDesc: "If held by a Dragalge, this item allows it to Mega Evolve in battle.",
+	},
 	dragonfang: {
 		name: "Dragon Fang",
 		shortDesc: "Holder's Dragon-type attacks have 1.2x power.",
@@ -405,6 +450,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use.",
 		},
 	},
+	dragoninite: {
+		name: "Dragoninite",
+		shortDesc: "If held by a Dragonite, this item allows it to Mega Evolve in battle.",
+	},
+	dragoniumz: {
+		name: "Dragonium Z",
+		shortDesc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
+	},
 	dragonmemory: {
 		name: "Dragon Memory",
 		shortDesc: "Holder's Multi-Attack is Dragon type.",
@@ -416,9 +469,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
 		},
 	},
-	dragoniumz: {
-		name: "Dragonium Z",
-		shortDesc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
+	drampanite: {
+		name: "Drampanite",
+		shortDesc: "If held by a Drampa, this item allows it to Mega Evolve in battle.",
 	},
 	dreadplate: {
 		name: "Dread Plate",
@@ -451,6 +504,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	earthplate: {
 		name: "Earth Plate",
 		shortDesc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
+	},
+	eelektrossite: {
+		name: "Eelektrossite",
+		shortDesc: "If held by an Eelektross, this item allows it to Mega Evolve in battle.",
 	},
 	eeviumz: {
 		name: "Eevium Z",
@@ -491,6 +548,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Electrium Z",
 		shortDesc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
+	emboarite: {
+		name: "Emboarite",
+		shortDesc: "If held by an Emboar, this item allows it to Mega Evolve in battle.",
+	},
 	enigmaberry: {
 		name: "Enigma Berry",
 		shortDesc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
@@ -501,6 +562,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	eviolite: {
 		name: "Eviolite",
 		shortDesc: "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
+	},
+	excadrite: {
+		name: "Excadrite",
+		shortDesc: "If held by an Excadrill, this item allows it to Mega Evolve in battle.",
 	},
 	expertbelt: {
 		name: "Expert Belt",
@@ -522,9 +587,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Fairy Memory",
 		shortDesc: "Holder's Multi-Attack is Fairy type.",
 	},
+	falinksite: {
+		name: "Falinksite",
+		shortDesc: "If held by a Falinks, this item allows it to Mega Evolve in battle.",
+	},
 	fastball: {
 		name: "Fast Ball",
 		shortDesc: "A Poke Ball that makes it easier to catch Pokemon which are quick to run away.",
+	},
+	feraligite: {
+		name: "Feraligite",
+		shortDesc: "If held by a Feraligatr, this item allows it to Mega Evolve in battle.",
 	},
 	fightinggem: {
 		name: "Fighting Gem",
@@ -587,6 +660,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Float Stone",
 		shortDesc: "Holder's weight is halved.",
 	},
+	floettite: {
+		name: "Floettite",
+		shortDesc: "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle.",
+	},
 	flowersweet: {
 		name: "Flower Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
@@ -644,6 +721,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Friend Ball",
 		shortDesc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
+	froslassite: {
+		name: "Froslassite",
+		shortDesc: "If held by a Froslass, this item allows it to Mega Evolve in battle.",
+	},
 	fullincense: {
 		name: "Full Incense",
 		shortDesc: "Holder moves last in its priority bracket.",
@@ -666,7 +747,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	garchompite: {
 		name: "Garchompite",
-		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp.",
+	},
+	garchompitez: {
+		name: "Garchompite Z",
+		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z.",
 	},
 	gardevoirite: {
 		name: "Gardevoirite",
@@ -683,21 +768,33 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use.",
 		},
 	},
-	ghostmemory: {
-		name: "Ghost Memory",
-		shortDesc: "Holder's Multi-Attack is Ghost type.",
-	},
 	ghostiumz: {
 		name: "Ghostium Z",
 		shortDesc: "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
+	},
+	ghostmemory: {
+		name: "Ghost Memory",
+		shortDesc: "Holder's Multi-Attack is Ghost type.",
 	},
 	glalitite: {
 		name: "Glalitite",
 		shortDesc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
+	glimmoranite: {
+		name: "Glimmoranite",
+		shortDesc: "If held by a Glimmora, this item allows it to Mega Evolve in battle.",
+	},
 	goldbottlecap: {
 		name: "Gold Bottle Cap",
 		shortDesc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
+	},
+	golisopite: {
+		name: "Golisopite",
+		shortDesc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+	},
+	golurkite: {
+		name: "Golurkite",
+		shortDesc: "If held by a Golurk, this item allows it to Mega Evolve in battle.",
 	},
 	grassgem: {
 		name: "Grass Gem",
@@ -706,13 +803,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Grass-type attack will have 1.5x power. Single use.",
 		},
 	},
-	grassmemory: {
-		name: "Grass Memory",
-		shortDesc: "Holder's Multi-Attack is Grass type.",
-	},
 	grassiumz: {
 		name: "Grassium Z",
 		shortDesc: "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
+	},
+	grassmemory: {
+		name: "Grass Memory",
+		shortDesc: "Holder's Multi-Attack is Grass type.",
 	},
 	grassyseed: {
 		name: "Grassy Seed",
@@ -721,6 +818,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	greatball: {
 		name: "Great Ball",
 		shortDesc: "A high-performance Ball that provides a higher catch rate than a Poke Ball.",
+	},
+	greninjite: {
+		name: "Greninjite",
+		shortDesc: "If held by a Greninja, this item allows it to Mega Evolve in battle.",
 	},
 	grepaberry: {
 		name: "Grepa Berry",
@@ -748,13 +849,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Ground-type attack will have 1.5x power. Single use.",
 		},
 	},
-	groundmemory: {
-		name: "Ground Memory",
-		shortDesc: "Holder's Multi-Attack is Ground type.",
-	},
 	groundiumz: {
 		name: "Groundium Z",
 		shortDesc: "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
+	},
+	groundmemory: {
+		name: "Ground Memory",
+		shortDesc: "Holder's Multi-Attack is Ground type.",
 	},
 	gyaradosite: {
 		name: "Gyaradosite",
@@ -771,6 +872,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's Rock-type attacks have 1.1x power.",
 		},
 	},
+	hawluchanite: {
+		name: "Hawluchanite",
+		shortDesc: "If held by a Hawlucha, this item allows it to Mega Evolve in battle.",
+	},
 	healball: {
 		name: "Heal Ball",
 		shortDesc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
@@ -778,6 +883,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	hearthflamemask: {
 		name: "Hearthflame Mask",
 		shortDesc: "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+	},
+	heatranite: {
+		name: "Heatranite",
+		shortDesc: "If held by a Heatran, this item allows it to Mega Evolve in battle.",
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -878,6 +987,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Jaw Fossil",
 		shortDesc: "Can be revived into Tyrunt.",
 	},
+	kangaskhanite: {
+		name: "Kangaskhanite",
+		shortDesc: "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
+	},
 	kasibberry: {
 		name: "Kasib Berry",
 		shortDesc: "Halves damage taken from a supereffective Ghost-type attack. Single use.",
@@ -893,10 +1006,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	kelpsyberry: {
 		name: "Kelpsy Berry",
 		shortDesc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
-	},
-	kangaskhanite: {
-		name: "Kangaskhanite",
-		shortDesc: "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
 	},
 	kingsrock: {
 		name: "King's Rock",
@@ -1004,7 +1113,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lucarionite: {
 		name: "Lucarionite",
-		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario in battle.",
+	},
+	lucarionitez: {
+		name: "Lucarionite Z",
+		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle.",
 	},
 	luckypunch: {
 		name: "Lucky Punch",
@@ -1049,6 +1162,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Macho Brace",
 		shortDesc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
+	magearnite: {
+		name: "Magearnite",
+		shortDesc: "If held by a Magearna, this item allows it to Mega Evolve in battle.",
+	},
 	magmarizer: {
 		name: "Magmarizer",
 		shortDesc: "Evolves Magmar into Magmortar when traded.",
@@ -1077,6 +1194,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	mail: {
 		name: "Mail",
 		shortDesc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
+	},
+	malamarite: {
+		name: "Malamarite",
+		shortDesc: "If held by a Malamar, this item allows it to Mega Evolve in battle.",
 	},
 	maliciousarmor: {
 		name: "Malicious Armor",
@@ -1114,12 +1235,20 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Medichamite",
 		shortDesc: "If held by a Medicham, this item allows it to Mega Evolve in battle.",
 	},
+	meganiumite: {
+		name: "Meganiumite",
+		shortDesc: "If held by a Meganium, this item allows it to Mega Evolve in battle.",
+	},
 	mentalherb: {
 		name: "Mental Herb",
 		shortDesc: "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
 		gen4: {
 			shortDesc: "Holder is cured if it is infatuated. Single use.",
 		},
+	},
+	meowsticite: {
+		name: "Meowsticite",
+		shortDesc: "If held by a Meowstic, this item allows it to Mega Evolve in battle.",
 	},
 	metagrossite: {
 		name: "Metagrossite",
@@ -1158,11 +1287,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	mewtwonitex: {
 		name: "Mewtwonite X",
-		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo X in battle.",
 	},
 	mewtwonitey: {
 		name: "Mewtwonite Y",
-		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo Y in battle.",
 	},
 	micleberry: {
 		name: "Micle Berry",
@@ -1337,13 +1466,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Poison-type attack will have 1.5x power. Single use.",
 		},
 	},
-	poisonmemory: {
-		name: "Poison Memory",
-		shortDesc: "Holder's Multi-Attack is Poison type.",
-	},
 	poisoniumz: {
 		name: "Poisonium Z",
 		shortDesc: "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
+	},
+	poisonmemory: {
+		name: "Poison Memory",
+		shortDesc: "Holder's Multi-Attack is Poison type.",
 	},
 	pokeball: {
 		name: "Poke Ball",
@@ -1387,6 +1516,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Premier Ball",
 		shortDesc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		shortDesc: "Though this feather is beautiful, it's just a regular feather and has no effect.",
+	},
 	primariumz: {
 		name: "Primarium Z",
 		shortDesc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
@@ -1428,6 +1561,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Punching Glove",
 		shortDesc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
 	},
+	pyroarite: {
+		name: "Pyroarite",
+		shortDesc: "If held by a Pyroar, this item allows it to Mega Evolve in battle.",
+	},
 	qualotberry: {
 		name: "Qualot Berry",
 		shortDesc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -1452,6 +1589,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	rabutaberry: {
 		name: "Rabuta Berry",
 		shortDesc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+	},
+	raichunitex: {
+		name: "Raichunite X",
+		shortDesc: "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle.",
+	},
+	raichunitey: {
+		name: "Raichunite Y",
+		shortDesc: "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle.",
 	},
 	rarebone: {
 		name: "Rare Bone",
@@ -1516,13 +1661,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Rock Incense",
 		shortDesc: "Holder's Rock-type attacks have 1.2x power.",
 	},
-	rockmemory: {
-		name: "Rock Memory",
-		shortDesc: "Holder's Multi-Attack is Rock type.",
-	},
 	rockiumz: {
 		name: "Rockium Z",
 		shortDesc: "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
+	},
+	rockmemory: {
+		name: "Rock Memory",
+		shortDesc: "Holder's Multi-Attack is Rock type.",
 	},
 	rockyhelmet: {
 		name: "Rocky Helmet",
@@ -1596,9 +1741,21 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Scizorite",
 		shortDesc: "If held by a Scizor, this item allows it to Mega Evolve in battle.",
 	},
+	scolipite: {
+		name: "Scolipite",
+		shortDesc: "If held by a Scolipede, this item allows it to Mega Evolve in battle.",
+	},
 	scopelens: {
 		name: "Scope Lens",
 		shortDesc: "Holder's critical hit ratio is raised by 1 stage.",
+	},
+	scovillainite: {
+		name: "Scovillainite",
+		shortDesc: "If held by a Scovillain, this item allows it to Mega Evolve in battle.",
+	},
+	scraftinite: {
+		name: "Scraftinite",
+		shortDesc: "If held by a Scrafty, this item allows it to Mega Evolve in battle.",
 	},
 	seaincense: {
 		name: "Sea Incense",
@@ -1662,6 +1819,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
 		},
 	},
+	skarmorite: {
+		name: "Skarmorite",
+		shortDesc: "If held by a Skarmory, this item allows it to Mega Evolve in battle.",
+	},
 	skullfossil: {
 		name: "Skull Fossil",
 		shortDesc: "Can be revived into Cranidos.",
@@ -1673,6 +1834,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	slowbronite: {
 		name: "Slowbronite",
 		shortDesc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+		champions: {
+			shortDesc: "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
+		},
 	},
 	smoothrock: {
 		name: "Smooth Rock",
@@ -1727,17 +1891,21 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Sport Ball",
 		shortDesc: "A special Poke Ball for the Bug-Catching Contest.",
 	},
+	staraptite: {
+		name: "Staraptite",
+		shortDesc: "If held by a Staraptor, this item allows it to Mega Evolve in battle.",
+	},
 	starfberry: {
 		name: "Starf Berry",
 		shortDesc: "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use.",
 	},
+	starminite: {
+		name: "Starminite",
+		shortDesc: "If held by a Starmie, this item allows it to Mega Evolve in battle.",
+	},
 	starsweet: {
 		name: "Star Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
-	},
-	steelixite: {
-		name: "Steelixite",
-		shortDesc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
 	},
 	steelgem: {
 		name: "Steel Gem",
@@ -1746,13 +1914,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Steel-type attack will have 1.5x power. Single use.",
 		},
 	},
-	steelmemory: {
-		name: "Steel Memory",
-		shortDesc: "Holder's Multi-Attack is Steel type.",
-	},
 	steeliumz: {
 		name: "Steelium Z",
 		shortDesc: "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
+	},
+	steelixite: {
+		name: "Steelixite",
+		shortDesc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
+	},
+	steelmemory: {
+		name: "Steel Memory",
+		shortDesc: "Holder's Multi-Attack is Steel type.",
 	},
 	stick: {
 		name: "Stick",
@@ -1809,6 +1981,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	tartapple: {
 		name: "Tart Apple",
 		shortDesc: "Evolves Applin into Flapple when used.",
+	},
+	tatsugirinite: {
+		name: "Tatsugirinite",
+		shortDesc: "If held by a Tatsugiri, this item allows it to Mega Evolve in battle.",
 	},
 	terrainextender: {
 		name: "Terrain Extender",
@@ -2284,6 +2460,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Venusaurite",
 		shortDesc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
+	victreebelite: {
+		name: "Victreebelite",
+		shortDesc: "If held by a Victreebel, this item allows it to Mega Evolve in battle.",
+	},
 	wacanberry: {
 		name: "Wacan Berry",
 		shortDesc: "Halves damage taken from a supereffective Electric-type attack. Single use.",
@@ -2295,6 +2475,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's first successful Water-type attack will have 1.5x power. Single use.",
 		},
 	},
+	wateriumz: {
+		name: "Waterium Z",
+		shortDesc: "If holder has a Water move, this item allows it to use a Water Z-Move.",
+	},
 	watermemory: {
 		name: "Water Memory",
 		shortDesc: "Holder's Multi-Attack is Water type.",
@@ -2303,10 +2487,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Water Stone",
 		desc: "Evolves Poliwhirl into Poliwrath, Shellder into Cloyster, Staryu into Starmie, Eevee into Vaporeon, Lombre into Ludicolo, and Panpour into Simipour when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
-	},
-	wateriumz: {
-		name: "Waterium Z",
-		shortDesc: "If holder has a Water move, this item allows it to use a Water Z-Move.",
 	},
 	watmelberry: {
 		name: "Watmel Berry",
@@ -2364,9 +2544,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Zap Plate",
 		shortDesc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
 	},
+	zeraorite: {
+		name: "Zeraorite",
+		shortDesc: "If held by a Zeraora, this item allows it to Mega Evolve in battle.",
+	},
 	zoomlens: {
 		name: "Zoom Lens",
 		shortDesc: "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
+	},
+	zygardite: {
+		name: "Zygardite",
+		shortDesc: "If held by a Zygarde in Complete Forme, this item allows it to Mega Evolve in battle.",
 	},
 
 	// Gen 2 items

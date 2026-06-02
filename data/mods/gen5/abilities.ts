@@ -31,7 +31,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	keeneye: {
 		inherit: true,
-		onModifyMove() {},
+		onModifyMove: undefined, // no inherit
 	},
 	magicbounce: {
 		inherit: true,
@@ -43,6 +43,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
 		},
 	},
@@ -64,13 +65,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	overcoat: {
 		inherit: true,
-		onTryHit() {},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onTryHit: undefined, // no inherit
 		flags: {},
 		rating: 0.5,
 	},
 	sapsipper: {
 		inherit: true,
-		onAllyTryHitSide() {},
+		onAllyTryHitSide: undefined, // no inherit
 	},
 	serenegrace: {
 		inherit: true,
@@ -85,6 +89,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	soundproof: {
 		inherit: true,
-		onAllyTryHitSide() {},
+		onAllyTryHitSide: undefined, // no inherit
+	},
+	rebound: {
+		inherit: true,
+		onAllyTryHitSide(target, source, move) {
+			if (this.effectState.target.activeTurns) return;
+
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
+			return null;
+		},
 	},
 };

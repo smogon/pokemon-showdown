@@ -1781,6 +1781,13 @@ export const Punishments = new class {
 			return '#cflood';
 		}
 
+		if (IPTools.torProxyIps.has(ip)) {
+			connection.popup(
+				`Due to persistent spam and abuse, we do not allow Tor connections. Please use another browser.`
+			);
+			return '#tor';
+		}
+
 		if (Punishments.isSharedIp(ip)) return false;
 
 		let banned: false | string = false;

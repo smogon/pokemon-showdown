@@ -11,13 +11,11 @@ describe('Mega Evolution', () => {
 	});
 
 	it('should overwrite normally immutable abilities', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: "Metagross", ability: 'comatose', item: 'metagrossite', moves: ['metalclaw'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Wishiwashi", ability: 'schooling', moves: ['uturn'] },
-		] });
+		]]);
 		const megaMon = battle.p1.active[0];
 		battle.makeChoices('move metalclaw mega', 'move uturn');
 		assert.equal(megaMon.ability, 'toughclaws');
@@ -102,13 +100,11 @@ describe('Mega Evolution', () => {
 	});
 
 	it('should not break priority', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: "Metagross", ability: 'quickfeet', item: 'metagrossite', moves: ['protect'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Ninjask", ability: 'quickfeet', moves: ['thunderwave'] },
-		] });
+		]]);
 		const megaMon = battle.p1.active[0];
 		battle.makeChoices('move protect mega', 'auto');
 		assert.equal(megaMon.status, '');
@@ -135,7 +131,7 @@ describe('Mega Evolution', () => {
 			assert.throws(() => battle.choose('p1', 'move 1 mega'));
 		}
 
-		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
+		it('should be able to Mega Evolve if it knows Dragon Ascent', () => {
 			assertCanMega('gen6anythinggoes');
 			// battle continues
 			assert.throws(() => battle.choose('p2', 'move 1 mega'));

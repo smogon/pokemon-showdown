@@ -11,13 +11,11 @@ describe("Dynamax", () => {
 	});
 
 	it('Max Move effects should not be suppressed by Sheer Force', () => {
-		battle = common.gen(8).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(8).createBattle([[
 			{ species: 'Braviary', ability: 'sheerforce', moves: ['heatwave', 'facade', 'superpower'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Shedinja', ability: 'sturdy', item: 'ringtarget', moves: ['splash'] },
-		] });
+		]]);
 		battle.makeChoices('move heatwave dynamax', 'auto');
 		assert.equal(battle.field.weather, 'sunnyday');
 		battle.makeChoices('move facade', 'auto');
@@ -109,7 +107,8 @@ describe("Dynamax", () => {
 		]]);
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
-		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
+		battle.makeChoices('move struggle dynamax', 'move splash');
+		assert.false(battle.p1.active[0].volatiles['dynamax'], 'Feebas should not be Dynamaxed.');
 
 		battle = common.gen(8).createBattle([[
 			{ species: "Feebas", moves: ['splash'] },
@@ -118,8 +117,10 @@ describe("Dynamax", () => {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move 1', 'auto');
-		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
-		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
+		battle.makeChoices('move splash dynamax', 'move splash');
+		assert.false(battle.p1.active[0].volatiles['dynamax'], 'Feebas should not be Dynamaxed.');
+		battle.makeChoices('testfight dynamax', 'move splash');
+		assert.false(battle.p1.active[0].volatiles['dynamax'], 'Feebas should not be Dynamaxed.');
 	});
 
 	it(`should not allow the user to select max moves with 0 base PP remaining`, () => {

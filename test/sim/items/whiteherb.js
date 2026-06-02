@@ -24,7 +24,27 @@ describe("White Herb", () => {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it.skip('should activate after Abilities that boost stats on KOs', () => {
+	it('should activate after Costar', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'litten', moves: ['sleeptalk'] },
+			{ species: 'blastoise', moves: ['shellsmash', 'sleeptalk'] },
+			{ species: 'flamigo', item: 'whiteherb', ability: 'costar', moves: ['sleeptalk'] },
+		], [
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'torracat', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 3, move sleeptalk', 'auto');
+		const flamigo = battle.p1.active[0];
+		assert.false.holdsItem(flamigo);
+		assert.statStage(flamigo, 'atk', 2);
+		assert.statStage(flamigo, 'spa', 2);
+		assert.statStage(flamigo, 'spe', 2);
+		assert.statStage(flamigo, 'def', 0);
+		assert.statStage(flamigo, 'spd', 0);
+	});
+
+	it('should activate after Abilities that boost stats on KOs', () => {
 		battle = common.createBattle([[
 			{ species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk'] },
 			{ species: 'torracat', moves: ['partingshot'] },

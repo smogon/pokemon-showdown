@@ -1585,7 +1585,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	huntail: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "(DUU)",
 	},
 	gorebyss: {
@@ -1678,7 +1678,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DUber",
 	},
 	deoxys: {

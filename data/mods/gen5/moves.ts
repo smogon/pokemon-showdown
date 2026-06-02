@@ -36,8 +36,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	autotomize: {
 		inherit: true,
 		volatileStatus: 'autotomize',
-		onHit(pokemon) {
-		},
+		onHit: undefined, // no inherit
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
@@ -78,6 +77,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 	},
+	bodyslam: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+	},
 	bounce: {
 		inherit: true,
 		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1, nosleeptalk: 1 },
@@ -105,7 +108,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 60,
 		onModifyMove(move, pokemon) {
-			if (pokemon.species.name !== 'Chatot') delete move.secondaries;
+			if (pokemon.species.name !== 'Chatot') {
+				const confusion = move.secondaries?.find(secondary => secondary.volatileStatus === 'confusion');
+				if (confusion) confusion.chance = 0; // boosted by Sheer Force
+			}
 		},
 		secondary: {
 			chance: 10,
@@ -146,7 +152,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		target: "normal",
 	},
 	covet: {
@@ -188,6 +194,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	drainpunch: {
 		inherit: true,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
+	},
+	dragonrush: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 	},
 	dreameater: {
 		inherit: true,
@@ -257,10 +267,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 20,
 		condition: {
-			duration: 2,
-			onStart() {
-				this.effectState.multiplier = 1;
-			},
+			inherit: true,
 			onRestart() {
 				if (this.effectState.multiplier < 8) {
 					this.effectState.multiplier <<= 1;
@@ -352,8 +359,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healpulse: {
 		inherit: true,
-		heal: [1, 2],
-		onHit() {},
+		onHit(target, source) {
+			const success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			return success;
+		},
+	},
+	heatcrash: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 	},
 	heatwave: {
 		inherit: true,
@@ -469,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	knockoff: {
 		inherit: true,
 		basePower: 20,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 	},
 	leafstorm: {
 		inherit: true,
@@ -486,13 +502,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	lightscreen: {
 		inherit: true,
 		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
-					return 8;
-				}
-				return 5;
-			},
+			inherit: true,
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
@@ -501,14 +511,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return this.chainModify(0.5);
 					}
 				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Light Screen');
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 2,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'move: Light Screen');
 			},
 		},
 	},
@@ -519,24 +521,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	magiccoat: {
 		inherit: true,
 		condition: {
-			duration: 1,
-			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Magic Coat');
-				if (effect?.effectType === 'Move') {
-					this.effectState.pranksterBoosted = effect.pranksterBoosted;
-				}
-			},
-			onTryHitPriority: 2,
-			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
-					return;
-				}
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-				this.actions.useMove(newMove, target, { target: source });
-				return null;
-			},
+			inherit: true,
 			onAllyTryHitSide(target, source, move) {
 				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 					return;
@@ -545,6 +530,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.actions.useMove(newMove, this.effectState.target, { target: source });
+				move.hasBounced = true; // only bounce once in free-for-all battles
 				return null;
 			},
 		},
@@ -578,21 +564,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 20,
 		condition: {
-			noCopy: true,
-			onSourceModifyDamage(damage, source, target, move) {
-				if (['stomp', 'steamroller'].includes(move.id)) {
-					return this.chainModify(2);
-				}
-			},
+			inherit: true,
+			onAccuracy: undefined, // no inherit
 		},
 	},
 	moonlight: {
 		inherit: true,
 		type: "Normal",
 	},
+	muddywater: {
+		inherit: true,
+		basePower: 95,
+	},
 	mudsport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'mudsport',
 		condition: {
 			noCopy: true,
@@ -608,13 +594,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
-	muddywater: {
-		inherit: true,
-		basePower: 95,
-	},
 	naturepower: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		onHit(pokemon) {
 			this.actions.useMove('earthquake', pokemon);
 		},
@@ -646,11 +628,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	poisonpowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	powergem: {
 		inherit: true,
 		basePower: 70,
+	},
+	psychoshift: {
+		inherit: true,
+		accuracy: 90,
 	},
 	psychup: {
 		inherit: true,
@@ -661,10 +647,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
-	},
-	psychoshift: {
-		inherit: true,
-		accuracy: 90,
 	},
 	psywave: {
 		inherit: true,
@@ -680,17 +662,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.addVolatile('stall');
 		},
 		condition: {
-			duration: 1,
-			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Quick Guard');
-			},
-			onTryHitPriority: 4,
-			onTryHit(target, source, effect) {
+			inherit: true,
+			onTryHit(target, source, move) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
-				if (effect && (effect.id === 'feint' || this.dex.moves.get(effect.id).priority <= 0)) {
+				if (move.id === 'feint' || this.dex.moves.get(move.id).priority <= 0) {
 					return;
 				}
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'Quick Guard');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -707,17 +686,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		priority: 3,
 		flags: { noassist: 1, failcopycat: 1 },
+		condition: {
+			inherit: true,
+			onFoeRedirectTarget(target, source, source2, move) {
+				const ragePowderUser = this.effectState.target;
+				if (ragePowderUser.isSkyDropped()) return;
+
+				if (this.validTarget(ragePowderUser, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
+					this.debug("Rage Powder redirected target of move");
+					return ragePowderUser;
+				}
+			},
+		},
 	},
 	reflect: {
 		inherit: true,
 		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
-					return 8;
-				}
-				return 5;
-			},
+			inherit: true,
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
@@ -726,14 +712,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return this.chainModify(0.5);
 					}
 				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Reflect');
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 1,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'Reflect');
 			},
 		},
 	},
@@ -785,19 +763,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
 	},
-	skillswap: {
-		inherit: true,
-		onHit(target, source) {
-			const targetAbility = target.ability;
-			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility) {
-				return false;
-			}
-			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), `[of] ${target}`);
-			source.setAbility(targetAbility);
-			target.setAbility(sourceAbility);
-		},
-	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,
@@ -829,7 +794,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeppowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	smellingsalts: {
 		inherit: true,
@@ -862,7 +827,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	stormthrow: {
 		inherit: true,
@@ -880,17 +845,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	substitute: {
 		inherit: true,
 		condition: {
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4);
-				delete target.volatiles['partiallytrapped'];
-			},
-			onTryPrimaryHitPriority: -1,
+			inherit: true,
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.flags['bypasssub']) {
 					return;
@@ -900,10 +860,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
 					return null;
-				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
 				}
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;
@@ -925,9 +881,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return this.HIT_SUBSTITUTE;
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Substitute');
 			},
 		},
 	},
@@ -985,7 +938,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxic: {
 		inherit: true,
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	uproar: {
 		inherit: true,
@@ -1013,7 +966,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	watersport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'watersport',
 		condition: {
 			noCopy: true,

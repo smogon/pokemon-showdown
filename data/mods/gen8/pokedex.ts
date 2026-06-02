@@ -58,8 +58,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	vivillonfancy: {
 		inherit: true,
 		abilities: { 0: "Shield Dust", 1: "Compound Eyes" },
-		prevo: undefined,
-		evoLevel: undefined,
+		prevo: undefined, // no inherit
+		evoLevel: undefined, // no inherit
 	},
 	vivillonpokeball: {
 		inherit: true,

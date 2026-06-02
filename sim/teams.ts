@@ -10,6 +10,12 @@
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
 
+interface ExportOptions {
+	hideStats?: boolean;
+	removeNicknames?: boolean | ((nickname: string) => string | null);
+	useStatPoints?: boolean;
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -48,7 +54,7 @@ export interface PokemonSet {
 	 * Effort Values, used in stat calculation.
 	 * These must be between 0 and 255, inclusive.
 	 *
-	 * Also used to store AVs for Let's Go
+	 * Also used to store AVs for Let's Go and Stat Points for Champions
 	 */
 	evs: StatsTable;
 	/**
@@ -358,7 +364,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
+	export(team: PokemonSet[], options?: ExportOptions) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -366,11 +372,14 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
+	exportSet(set: PokemonSet, { hideStats, removeNicknames, useStatPoints }: ExportOptions = {}) {
 		let out = ``;
 
 		// core
-		if (set.name && set.name !== set.species) {
+		if (typeof removeNicknames === 'function' && set.name && set.name !== set.species) {
+			set.name = removeNicknames(set.name) || set.species;
+		}
+		if (set.name && set.name !== set.species && removeNicknames !== true) {
 			out += `${set.name} (${set.species})`;
 		} else {
 			out += set.species;
@@ -406,7 +415,7 @@ export const Teams = new class Teams {
 		if (set.gigantamax) {
 			out += `Gigantamax: Yes  \n`;
 		}
-		if (set.teraType) {
+		if (set.teraType && !useStatPoints) {
 			out += `Tera Type: ${set.teraType}  \n`;
 		}
 
@@ -619,17 +628,21 @@ export const Teams = new class Teams {
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		let TeamGenerator;
 		format = Dex.formats.get(format);
+		let mod = format.mod;
+		if (format.mod === 'monkeyspaw') mod = 'gen9';
 		const formatID = toID(format);
-		if (formatID.includes('gen9computergeneratedteams')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (formatID.includes('gen9superstaffbrosultimate')) {
+		if (mod === 'gen9ssb') {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
+		} else if (mod === 'afd') {
+			TeamGenerator = require(`../data/mods/afd/random-teams`).default;
 		} else if (formatID.includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
+		} else if (formatID.includes('gen9freeforallrandombattle')) {
+			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${format.mod}/teams`).default;
+			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
 		}
 
 		return new TeamGenerator(format, seed);

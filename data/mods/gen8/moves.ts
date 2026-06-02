@@ -2,7 +2,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	allyswitch: {
 		inherit: true,
 		// Prevents setting the volatile used to check for Ally Switch failure
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	anchorshot: {
 		inherit: true,
@@ -59,19 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	charge: {
 		inherit: true,
 		condition: {
-			onStart(pokemon, source, effect) {
-				this.add('-start', pokemon, 'Charge');
-			},
-			onRestart(pokemon, source, effect) {
-				this.add('-start', pokemon, 'Charge');
-			},
-			onBasePowerPriority: 9,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric') {
-					this.debug('charge boost');
-					return this.chainModify(2);
-				}
-			},
+			inherit: true,
 			onMoveAborted(pokemon, target, move) {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
@@ -81,9 +69,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Charge', '[silent]');
 			},
 		},
 	},
@@ -169,7 +154,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 
 			// In SwSh, Fly's animation leaks the initial target through a camera focus
-			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge movee
+			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge move
 			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
 			// We use a generic single-target move to represent this
 			if (this.sides.length > 2) {
@@ -526,9 +511,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stickyweb: {
 		inherit: true,
 		condition: {
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Sticky Web');
-			},
+			inherit: true,
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');

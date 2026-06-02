@@ -27,6 +27,14 @@ describe("IP tools", () => {
 		assert.equal(range.maxIP, IPTools.ipToNumber('42.42.63.255'));
 	});
 
+	it('should parse CIDR ranges with an IP not at the start of the range', () => {
+		assert.equal(IPTools.getCidrRange('10.69.42.69/8').minIP, IPTools.ipToNumber('10.0.0.0'));
+	});
+
+	it('should not yield negative values when parsing CIDR ranges at 128.* or higher', () => {
+		assert.equal(IPTools.getCidrRange('173.255.160.0/19').minIP, IPTools.ipToNumber('173.255.160.0'));
+	});
+
 	it('should guess whether a range is CIDR or hyphen', () => {
 		const cidrRange = IPTools.stringToRange('42.42.0.0/18');
 		const stringRange = IPTools.stringToRange('42.42.0.0 - 42.42.63.255');

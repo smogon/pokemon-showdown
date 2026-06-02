@@ -67,7 +67,7 @@ describe('Mirror Move [Gen 1]', () => {
 			{ species: 'alakazam', moves: ['metronome'] },
 		]]);
 		battle.makeChoices();
-		assert.false(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from]Mirror Move')));
+		assert.false(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from] Mirror Move')));
 	});
 
 	it(`[Gen 1] Mirror Move should copy Metronome if Metronome calls a two-turn move`, () => {
@@ -78,7 +78,7 @@ describe('Mirror Move [Gen 1]', () => {
 		]]);
 		battle.makeChoices();
 		assert(battle.p2.active[0].volatiles['twoturnmove']);
-		assert(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from]Mirror Move')));
+		assert(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from] Mirror Move')));
 	});
 });
 

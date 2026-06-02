@@ -8,8 +8,7 @@ const assert = require('../../assert');
 
 describe.skip("Friends lists", () => {
 	const { FriendsDatabase } = require('../../../dist/server/friends');
-	const { Config } = require('../../../dist/server/config-loader');
-	const test = (Config.usesqlite ? it : it.skip);
+	const test = (Config.usesqlite && Config.usesqlitefriends ? it : it.skip);
 	test("Should properly setup database", () => {
 		assert.doesNotThrow(() => FriendsDatabase.setupDatabase(':memory:'));
 	});

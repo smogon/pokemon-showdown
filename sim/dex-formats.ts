@@ -46,6 +46,7 @@ export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
+	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	tagRules: string[];
 	valueRules: Map<string, string>;
@@ -68,6 +69,7 @@ export class RuleTable extends Map<string, string> {
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
+		this.onChooseTeam = null;
 		this.timer = null;
 		this.tagRules = [];
 		this.valueRules = new Map();
@@ -221,7 +223,7 @@ export class RuleTable extends Map<string, string> {
 		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
 		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
 		this.maxMoveCount = Number(this.valueRules.get('maxmovecount')) || 4;
-		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
+		this.minSourceGen = Number(this.valueRules.get('minsourcegen'));
 		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
 		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
@@ -229,6 +231,13 @@ export class RuleTable extends Map<string, string> {
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 		this.evLimit = Number(this.valueRules.get('evlimit'));
 		if (isNaN(this.evLimit)) this.evLimit = null;
+		if (!this.minSourceGen) {
+			if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
+				this.minSourceGen = dex.gen;
+			} else {
+				this.minSourceGen = 1;
+			}
+		}
 
 		const timer: Partial<GameTimerSettings> = {};
 		if (this.valueRules.has('timerstarting')) {
@@ -270,7 +279,10 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.get('evlimit') === 'Auto') {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'gen7letsgo') {
-				this.evLimit = this.has('allowavs') ? null : 0;
+				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
+			}
+			if (format.mod === 'champions') {
+				this.evLimit = 66;
 			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
@@ -356,28 +368,6 @@ export class RuleTable extends Map<string, string> {
 		if (timer.maxFirstTurn !== undefined && (timer.maxFirstTurn < 10 || timer.maxFirstTurn > 1200)) {
 			throw new Error(`Timer max first turn value ${timer.maxFirstTurn}${this.blame('timermaxfirstturn')} must be between 10 and 1200 seconds.`);
 		}
-
-		if ((format as any).cupLevelLimit) {
-			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
-		}
-		if ((format as any).teamLength) {
-			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
-		}
-		if ((format as any).minSourceGen) {
-			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
-		}
-		if ((format as any).maxLevel) {
-			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
-		}
-		if ((format as any).defaultLevel) {
-			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
-		}
-		if ((format as any).forcedLevel) {
-			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
-		}
-		if ((format as any).maxForcedLevel) {
-			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
-		}
 	}
 
 	hasComplexBans() {
@@ -446,6 +436,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
 	declare readonly teraPreviewDefault?: boolean;
+	declare readonly itemClauseDefault?: boolean;
 	declare readonly threads?: string[];
 	declare readonly tournamentShow?: boolean;
 	declare readonly checkCanLearn?: (
@@ -463,6 +454,9 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	) => Species | void;
 	declare readonly onBattleStart?: (this: Battle) => void;
 	declare readonly onTeamPreview?: (this: Battle) => void;
+	declare readonly onChooseTeam?: (
+		this: Battle, positions: number[], pokemon: Pokemon[], autoChoose?: boolean
+	) => number[] | string | void;
 	declare readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
@@ -610,8 +604,11 @@ export class DexFormats {
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
+			if (format.itemClauseDefault === undefined) format.itemClauseDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+
+			this.checkDeprecated(format);
 
 			const ruleset = new Format(format);
 			this.rulesetCache.set(id, ruleset);
@@ -620,6 +617,30 @@ export class DexFormats {
 
 		this.formatsListCache = formatsList;
 		return this;
+	}
+
+	checkDeprecated(format: AnyObject) {
+		if (format.cupLevelLimit) {
+			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
+		}
+		if (format.teamLength) {
+			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
+		}
+		if (format.minSourceGen) {
+			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
+		}
+		if (format.maxLevel) {
+			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
+		}
+		if (format.defaultLevel) {
+			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
+		}
+		if (format.forcedLevel) {
+			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
+		}
+		if (format.maxForcedLevel) {
+			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
+		}
 	}
 
 	/**
@@ -669,9 +690,9 @@ export class DexFormats {
 			if (ruleset) return ruleset;
 		}
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			name = this.dex.data.Aliases[id];
-			id = toID(name);
+		if (this.dex.getAlias(id)) {
+			id = this.dex.getAlias(id)!;
+			name = id;
 		}
 		if (this.dex.data.Rulesets.hasOwnProperty(DEFAULT_MOD + id)) {
 			id = (DEFAULT_MOD + id) as ID;
@@ -742,6 +763,9 @@ export class DexFormats {
 		}
 		if (format.checkCanLearn) {
 			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
+		}
+		if (format.onChooseTeam) {
+			ruleTable.onChooseTeam = [format.onChooseTeam, format.name];
 		}
 
 		// apply rule repeals before other rules
@@ -925,6 +949,15 @@ export class DexFormats {
 				}
 				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
 			}
+			if (subRuleTable.onChooseTeam) {
+				if (ruleTable.onChooseTeam) {
+					throw new Error(
+						`"${format.name}" has conflicting team selection rules from ` +
+						`"${ruleTable.onChooseTeam[1]}" and "${subRuleTable.onChooseTeam[1]}"`
+					);
+				}
+				ruleTable.onChooseTeam = subRuleTable.onChooseTeam;
+			}
 		}
 		if (!hasPokemonBans && warnForNoPokemonBans) {
 			throw new Error(`"+All Pokemon" rule has no effect (no species are banned by default, and it does not override obtainability rules)`);
@@ -1023,7 +1056,7 @@ export class DexFormats {
 			}
 		}
 		const ruleid = id;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		id = this.dex.getAlias(id) || id;
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;

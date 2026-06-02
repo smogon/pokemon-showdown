@@ -15,6 +15,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const trapper = this.effectState.source;
 			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
+				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
 			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);

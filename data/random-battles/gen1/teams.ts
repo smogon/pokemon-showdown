@@ -15,7 +15,7 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	override randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
+	randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	override randomCCTeam() {
@@ -216,10 +216,21 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		return pokemon;
 	}
 
+	override getLevel(
+		species: Species,
+	): number {
+		if (this.adjustLevel) return this.adjustLevel;
+		if (this.randomData[species.id]["level"]) return this.randomData[species.id]["level"]!;
+		// Default to 80
+		return 80;
+	}
+
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
 	override randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
@@ -275,7 +286,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical';
 		});
-		if (noAttackStatMoves && !moves.has('mimic') && !moves.has('transform')) {
+		if (noAttackStatMoves && !moves.has('mimic') && !moves.has('transform') && !ruleTable.has('forceofthefallenmod')) {
 			evs.atk = 0;
 			// We don't want to lower the HP DV/IV
 			ivs.atk = 2;

@@ -104,19 +104,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	battlebond: {
 		inherit: true,
 		onSourceAfterFaint(length, target, source, effect) {
+			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
 			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
-			}
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
-				!attacker.transformed) {
-				move.multihit = 3;
+				source.formeRegression = true;
+				source.bondTriggered = true;
 			}
 		},
 		isNonstandard: null,
@@ -279,6 +275,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	disguise: {
 		inherit: true,
+		onUpdate(pokemon) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
+				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(speciesid, this.effect, true);
+				pokemon.formeRegression = true;
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
+			}
+		},
 		rating: 3.5,
 	},
 	download: {
@@ -424,8 +428,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	heatproof: {
 		inherit: true,
-		onSourceModifyAtk() {},
-		onSourceModifySpA() {},
+		onSourceModifyAtk: undefined, // no inherit
+		onSourceModifySpA: undefined, // no inherit
 		onSourceBasePowerPriority: 18,
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
@@ -477,8 +481,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	illuminate: {
 		inherit: true,
-		onTryBoost() {},
-		onModifyMove() {},
+		onTryBoost: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		flags: {},
 		rating: 0,
 	},

@@ -17,7 +17,7 @@ const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 
 const DATA_FILE = 'config/chat-plugins/wifi.json';
 
-type Game = 'SwSh' | 'BDSP' | 'SV';
+type Game = 'SwSh' | 'BDSP' | 'SV' | 'Z-A';
 
 interface GiveawayData {
 	targetUserID: string;
@@ -90,11 +90,13 @@ const gameName: { [k in Game]: string } = {
 	SwSh: 'Sword/Shield',
 	BDSP: 'Brilliant Diamond/Shining Pearl',
 	SV: 'Scarlet/Violet',
+	'Z-A': 'Legends Z-A',
 };
 const gameidToGame: { [k: string]: Game } = {
 	swsh: 'SwSh',
 	bdsp: 'BDSP',
 	sv: 'SV',
+	plza: 'Z-A',
 };
 
 abstract class Giveaway extends Rooms.SimpleRoomGame {
@@ -122,7 +124,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string, ivs: string[],
-		prize: PokemonSet, game: Game = 'SV', ball: string, extraInfo: string
+		prize: PokemonSet, game: Game = 'Z-A', ball: string, extraInfo: string
 	) {
 		// Make into a sub-game if the gts ever opens up again
 		super(room);
@@ -160,6 +162,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 		const css: { [k: string]: string | { [k: string]: string } } = { class: "broadcast-blue" };
 		if (this.game === 'BDSP') css.style = { background: '#aa66a9', color: '#fff' };
 		if (this.game === 'SV') css.style = { background: '#CD5C5C', color: '#fff' };
+		if (this.game === 'Z-A') css.style = { background: '#10a14f', color: '#fff' };
 		return css;
 	}
 
@@ -401,10 +404,10 @@ export class QuestionGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'SV';
+		if (!game) game = 'Z-A';
 		game = gameidToGame[toID(game)] || game as Game;
-		if (!game || !['SV', 'BDSP', 'SwSh'].includes(game)) {
-			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," or "SwSh".`);
+		if (!game || !['SV', 'BDSP', 'SwSh', 'Z-A'].includes(game)) {
+			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," "SwSh," or "Z-A".`);
 		}
 		if (!ball) ball = 'pokeball';
 		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
@@ -599,10 +602,10 @@ export class LotteryGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'SV';
+		if (!game) game = 'Z-A';
 		game = gameidToGame[toID(game)] || game as Game;
-		if (!game || !['SV', 'BDSP', 'SwSh'].includes(game)) {
-			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," or "SwSh".`);
+		if (!game || !['SV', 'BDSP', 'SwSh', 'Z-A'].includes(game)) {
+			throw new Chat.ErrorMessage(`The game must be "SV," "BDSP," "SwSh," or "Z-A".`);
 		}
 		if (!ball) ball = 'pokeball';
 		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
@@ -948,19 +951,21 @@ export const commands: Chat.ChatCommands = {
 				param => param.trim()
 			);
 			if (!(giver && amountStr && summary && deposit && lookfor)) {
-				return this.errorReply("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
+				throw new Chat.ErrorMessage("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
 			}
 			const amount = parseInt(amountStr);
 			if (!amount || amount < 20 || amount > 100) {
-				return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
+				throw new Chat.ErrorMessage("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
 			}
 			const targetUser = Users.get(giver);
-			if (!targetUser?.connected) return this.errorReply(`User '${giver}' is not online.`);
+			if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
 			this.checkCan('warn', null, room);
 			if (!targetUser.autoconfirmed) {
-				return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
 			}
-			if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
+			if (Giveaway.checkBanned(room, targetUser)) {
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
+			}
 
 			room.subGame = new GTS(room, targetUser, amount, summary, deposit, lookfor);
 
@@ -981,8 +986,8 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReply(output);
 			}
 			const newamount = parseInt(target);
-			if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
-			if (newamount > game.left) return this.errorReply("The new amount must be lower than the old amount.");
+			if (isNaN(newamount)) throw new Chat.ErrorMessage("Please enter a valid amount.");
+			if (newamount > game.left) throw new Chat.ErrorMessage("The new amount must be lower than the old amount.");
 			if (newamount < game.left - 1) {
 				this.modlog(`GTS GIVEAWAY`, null, `set from ${game.left} to ${newamount} left`);
 			}
@@ -993,10 +998,10 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('wifi' as RoomID);
 			const game = this.requireGame(GTS, true);
 			if (!user.can('warn', null, room) && user !== game.giver) {
-				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+				throw new Chat.ErrorMessage("Only the host or a staff member can update GTS giveaways.");
 			}
 
-			if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
+			if (!target || target.length > 12) throw new Chat.ErrorMessage("Please enter a valid IGN.");
 
 			game.updateSent(target);
 		},
@@ -1004,9 +1009,9 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('wifi' as RoomID);
 			const game = this.requireGame(GTS, true);
 			if (!user.can('warn', null, room) && user !== game.giver) {
-				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+				throw new Chat.ErrorMessage("Only the host or a staff member can update GTS giveaways.");
 			}
-			if (game.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
+			if (game.noDeposits) throw new Chat.ErrorMessage("The GTS giveaway was already set to not accept deposits.");
 
 			game.stopDeposits();
 		},
@@ -1016,7 +1021,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('warn', null, room);
 
 			if (target && target.length > 300) {
-				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
 			}
 			const amount = game.end(true);
 			if (target) target = `: ${target}`;
@@ -1095,10 +1100,10 @@ export const commands: Chat.ChatCommands = {
 
 			const { targetUser, rest: reason } = this.requireUser(target, { allowOffline: true });
 			if (reason.length > 300) {
-				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
 			}
 			if (Punishments.hasRoomPunishType(room, targetUser.name, 'GIVEAWAYBAN')) {
-				return this.errorReply(`User '${targetUser.name}' is already giveawaybanned.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' is already giveawaybanned.`);
 			}
 
 			const duration = cmd === 'monthban' ? 30 * DAY : cmd === 'permaban' ? 3650 * DAY : 7 * DAY;
@@ -1119,7 +1124,7 @@ export const commands: Chat.ChatCommands = {
 
 			const { targetUser } = this.requireUser(target, { allowOffline: true });
 			if (!Giveaway.checkBanned(room, targetUser)) {
-				return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 			}
 
 			Giveaway.unban(room, targetUser);
@@ -1183,7 +1188,7 @@ export const commands: Chat.ChatCommands = {
 			if (user.id !== game.host.id) this.checkCan('warn', null, room);
 
 			if (target && target.length > 300) {
-				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
 			}
 			game.end(true);
 			this.modlog('GIVEAWAY END', null, target);
@@ -1396,7 +1401,7 @@ export const commands: Chat.ChatCommands = {
 			if (cmd.includes('un')) {
 				const idx = wifiData.whitelist.indexOf(targetId);
 				if (idx < 0) {
-					return this.errorReply(`'${targetId}' is not whitelisted.`);
+					throw new Chat.ErrorMessage(`'${targetId}' is not whitelisted.`);
 				}
 				wifiData.whitelist.splice(idx, 1);
 				this.privateModAction(`${user.name} removed '${targetId}' from the giveaway whitelist.`);
@@ -1404,7 +1409,7 @@ export const commands: Chat.ChatCommands = {
 				saveData();
 			} else {
 				if (wifiData.whitelist.includes(targetId)) {
-					return this.errorReply(`'${targetId}' is already whitelisted.`);
+					throw new Chat.ErrorMessage(`'${targetId}' is already whitelisted.`);
 				}
 				wifiData.whitelist.push(targetId);
 				this.privateModAction(`${user.name} added ${targetId} to the giveaway whitelist.`);
@@ -1609,7 +1614,8 @@ export const pages: Chat.PageTable = {
 							Game: <div>
 								<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 								<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+								<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+								<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 							</div><br />
 							<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 							{generatePokeballDropdown()}<br /><br />
@@ -1635,7 +1641,8 @@ export const pages: Chat.PageTable = {
 							Game: <div>
 								<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 								<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-								<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+								<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+								<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 							</div><br />
 							<label for="question">Question:</label><input name="question" /><br /><br />
 							<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
@@ -1782,7 +1789,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 										{generatePokeballDropdown()}<br /><br />
@@ -1805,7 +1813,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="question">Question:</label><input name="question" /><br /><br />
 										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
@@ -1952,7 +1961,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
 										{generatePokeballDropdown()}<br /><br />
@@ -1975,7 +1985,8 @@ export const pages: Chat.PageTable = {
 										Game: <div>
 											<input type="radio" id="bdsp" name="game" value="bdsp" /><label for="bdsp">BDSP</label>
 											<input type="radio" id="swsh" name="game"value="swsh" /><label for="swsh">SwSh</label>
-											<input type="radio" id="sv" name="game" value="sv" checked /><label for="sv">SV</label>
+											<input type="radio" id="sv" name="game" value="sv" /><label for="sv">SV</label>
+											<input type="radio" id="plza" name="game" value="plza" checked /><label for="plza">Z-A</label>
 										</div><br />
 										<label for="question">Question:</label><input name="question" /><br /><br />
 										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />

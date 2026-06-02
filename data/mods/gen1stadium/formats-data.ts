@@ -225,7 +225,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	golem: {
-		tier: "OU",
+		tier: "UU",
 	},
 	ponyta: {
 		tier: "LC",
@@ -270,7 +270,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	cloyster: {
-		tier: "OU",
+		tier: "UU",
 	},
 	gastly: {
 		tier: "LC",
@@ -279,7 +279,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	gengar: {
-		tier: "OU",
+		tier: "UU",
 	},
 	onix: {
 		tier: "UU",
@@ -342,7 +342,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	kangaskhan: {
-		tier: "OU",
+		tier: "UU",
 	},
 	horsea: {
 		tier: "LC",
@@ -369,7 +369,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	jynx: {
-		tier: "OU",
+		tier: "UU",
 	},
 	electabuzz: {
 		tier: "UU",
@@ -402,7 +402,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	jolteon: {
-		tier: "OU",
+		tier: "UU",
 	},
 	flareon: {
 		tier: "UU",

@@ -1,9 +1,9 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import { FS, Utils, ProcessManager, Repl } from '../../lib';
+import { FS, Utils, ProcessManager } from '../../lib';
 
-import { checkRipgrepAvailability, Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 import * as path from 'path';
 import * as child_process from 'child_process';
@@ -26,9 +26,8 @@ interface BattleSearchResults {
 	timesBattled: { [k: string]: number };
 }
 
-const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
-	const useRipgrep = await checkRipgrepAvailability();
+	const useRipgrep = await ConfigLoader.checkRipgrepAvailability();
 	const pathString = `${month}/${tierid}/`;
 	const results: { [k: string]: BattleSearchResults } = {};
 	let files = [];
@@ -248,7 +247,7 @@ async function rustBattleSearch(
 	const { connection, user } = context;
 	const currentDayOfMonth = (new Date()).getDate();
 	if (days < 1 || days > 15) {
-		return context.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
+		throw new Chat.ErrorMessage(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
 	}
 
 	try {
@@ -256,9 +255,7 @@ async function rustBattleSearch(
 			env: { PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin` },
 		});
 	} catch {
-		return context.errorReply(
-			`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
-		);
+		throw new Chat.ErrorMessage(`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`);
 	}
 	if (user.lastCommand !== '/battlesearch' && [30, 31, 1].includes(currentDayOfMonth)) {
 		const buf = [`Warning: Usage stats may be running currently.`];
@@ -266,7 +263,7 @@ async function rustBattleSearch(
 		buf.push(`Please exercise caution.`);
 		buf.push(`Type the command again to confirm.`);
 		user.lastCommand = '/battlesearch';
-		throw new Chat.ErrorMessage(buf.join('<br />'));
+		throw new Chat.ErrorMessage(buf);
 	}
 	user.lastCommand = '';
 
@@ -322,7 +319,7 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
 		if (Config.nobattlesearch === true) {
-			return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
+			throw new Chat.ErrorMessage(`Battlesearch has been temporarily disabled due to load issues.`);
 		}
 		if (Config.nobattlesearch === 'psbattletools') {
 			return rustBattleSearch(this, args[0], args[1], toID(args[2]));
@@ -423,7 +420,7 @@ export const commands: Chat.ChatCommands = {
 			if (part.startsWith('limit=')) {
 				const n = parseInt(part.slice('limit='.length).trim());
 				if (isNaN(n)) {
-					return this.errorReply(`Invalid limit: ${part.slice('limit='.length)}`);
+					throw new Chat.ErrorMessage(`Invalid limit: ${part.slice('limit='.length)}`);
 				}
 				turnLimit = n;
 				continue;
@@ -454,34 +451,38 @@ export const commands: Chat.ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
-	const { userids, turnLimit, month, tierid } = data;
-	const start = Date.now();
-	try {
-		const result = await runBattleSearch(userids, month, tierid, turnLimit);
-		const elapsedTime = Date.now() - start;
-		if (elapsedTime > 10 * 60 * 1000) {
-			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(
+	'battlesearch', module,
+	async data => {
+		const { userids, turnLimit, month, tierid } = data;
+		const startTime = Date.now();
+		try {
+			const result = await runBattleSearch(userids, month, tierid, turnLimit);
+			const elapsedTime = Date.now() - startTime;
+			if (elapsedTime > 10 * 60 * 1000) {
+				Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+			}
+			return result;
+		} catch (err) {
+			Monitor.crashlog(err, 'A battle search query', {
+				userids,
+				turnLimit,
+				month,
+				tierid,
+			});
 		}
-		return result;
-	} catch (err) {
-		Monitor.crashlog(err, 'A battle search query', {
-			userids,
-			turnLimit,
-			month,
-			tierid,
-		});
+		return null;
+	},
+	BATTLESEARCH_PROCESS_TIMEOUT,
+	message => {
+		if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
 	}
-	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
+);
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -499,7 +500,13 @@ if (!PM.isParentProcess) {
 	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
-	Repl.start('battlesearch', cmd => eval(cmd));
-} else {
-	PM.spawn(MAX_BATTLESEARCH_PROCESSES);
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['battlesearch'] ?? 1);
+}
+
+export function destroy() {
+	void PM.destroy();
 }

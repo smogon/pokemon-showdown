@@ -4,10 +4,15 @@
  * @author mia-pi-git
  */
 'use strict';
-const YoutubeInterface = require('../../../dist/server/chat-plugins/youtube').YoutubeInterface;
+
 const assert = require('../../assert');
 
 describe(`Youtube features`, () => {
+	let YoutubeInterface = null;
+	before(() => {
+		YoutubeInterface = require('../../../dist/server/chat-plugins/youtube').YoutubeInterface;
+	});
+
 	it.skip(`should correctly add channels to the database`, async () => {
 		if (!Config.youtubeKey) return true;
 		const Youtube = new YoutubeInterface({});

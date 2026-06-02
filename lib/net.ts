@@ -7,7 +7,6 @@
 
 import * as https from 'https';
 import * as http from 'http';
-import * as url from 'url';
 import * as Streams from './streams';
 declare const Config: any;
 
@@ -76,7 +75,7 @@ export class NetStream extends Streams.ReadWriteStream {
 			}
 		}
 
-		const protocol = url.parse(this.uri).protocol;
+		const protocol = new URL(this.uri).protocol;
 		const net = protocol === 'https:' ? https : http;
 
 		let resolveResponse: ((value: http.IncomingMessage | null) => void) | null;

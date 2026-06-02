@@ -87,6 +87,11 @@ describe("Custom Rules", () => {
 		];
 		assert.legalTeam(team, 'gen9ou@@@-allpokemon,+pikachu');
 		assert.throws(() => Dex.formats.validate('gen9ou@@@+pikachu,-allpokemon'));
+
+		team = [
+			{ species: 'zygarde-10', ability: 'aurabreak', moves: ['bodyslam'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9nationaldex@@@-allpokemon,+zygarde10');
 	});
 
 	it('should warn when rules do nothing', () => {
