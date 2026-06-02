@@ -661,7 +661,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Focus Blast", "Freeze-Dry", "Nasty Plot", "Psychic", "Rapid Spin"],
-                "abilities": ["Screen Cleaner"]
+                "abilities": ["Vital Spirit"]
             }
         ]
     },
@@ -1304,7 +1304,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Defog", "Hurricane", "Roost", "Scald", "Toxic"],
-                "abilities": ["Water Absorb"]
+                "abilities": ["Swift Swim", "Water Absorb"]
             }
         ]
     },
@@ -2641,16 +2641,6 @@
         "level": 71,
         "sets": [
             {
-                "role": "Dynamax User",
-                "movepool": ["Dual Wingbeat", "Hone Claws", "Outrage", "Poltergeist"],
-                "abilities": ["Levitate"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Hone Claws", "Outrage", "Poltergeist", "Shadow Sneak"],
-                "abilities": ["Levitate"]
-            },
-            {
                 "role": "Fast Attacker",
                 "movepool": ["Defog", "Draco Meteor", "Poltergeist", "Shadow Sneak", "Will-O-Wisp"],
                 "abilities": ["Levitate"]
@@ -2770,11 +2760,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Air Slash", "Calm Mind", "Heat Wave", "Roost", "Stored Power"],
-                "abilities": ["Simple"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Heat Wave", "Roost", "Stored Power"],
                 "abilities": ["Simple"]
             }
         ]
@@ -2929,7 +2914,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Earthquake", "Knock Off", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Bulk Up", "Close Combat", "Earthquake", "Knock Off", "Stealth Rock", "Stone Edge"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -4522,11 +4507,6 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Explosion", "Multi-Attack", "Swords Dance", "U-turn"],
-                "abilities": ["RKS System"]
-            },
-            {
                 "role": "Setup Sweeper",
                 "movepool": ["Explosion", "Flame Charge", "Multi-Attack", "Swords Dance", "X-Scissor"],
                 "abilities": ["RKS System"]
@@ -5149,7 +5129,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Press", "Brave Bird", "Bulk Up", "Defog", "Roost"],
-                "abilities": ["Mirror Armor"]
+                "abilities": ["Mirror Armor", "Pressure"]
             }
         ]
     },
@@ -5352,6 +5332,11 @@
             {
                 "role": "AV Pivot",
                 "movepool": ["Draining Kiss", "Mystical Fire", "Nuzzle", "Psychic", "Psyshock"],
+                "abilities": ["Magic Bounce"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Dazzling Gleam", "Mystical Fire", "Psychic", "Psyshock", "Trick Room"],
                 "abilities": ["Magic Bounce"]
             }
         ]
@@ -5616,6 +5601,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
+                "movepool": ["Crunch", "Fishious Rend", "Low Kick", "Outrage", "Psychic Fangs"],
+                "abilities": ["Strong Jaw"]
+            },
+            {
+                "role": "Wallbreaker",
                 "movepool": ["Crunch", "Fishious Rend", "Low Kick", "Outrage", "Psychic Fangs"],
                 "abilities": ["Strong Jaw"]
             }

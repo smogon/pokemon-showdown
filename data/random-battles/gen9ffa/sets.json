@@ -1659,7 +1659,7 @@
         ]
     },
     "blissey": {
-        "level": 96,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2275,7 +2275,7 @@
         ]
     },
     "banette": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -5900,7 +5900,7 @@
         ]
     },
     "alcremie": {
-        "level": 88,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Setup",

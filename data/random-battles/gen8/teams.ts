@@ -61,6 +61,7 @@ const MOVE_PAIRS = [
 	['lightscreen', 'reflect'],
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
+	['spikyshield', 'wish'],
 	['leechseed', 'substitute'],
 	['focuspunch', 'substitute'],
 ];
@@ -259,7 +260,7 @@ export class RandomGen8Teams extends RandomTeams {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 
-		// This space reserved for assorted hardcodes that otherwise make little sense out of context:
+		// This space reserved for assorted hardcodes that make little sense out of context and can't fit in the const:
 		// To force Will-O-Wisp on Corsola-Galar
 		if (species.id === 'corsolagalar') this.incompatibleMoves(moves, movePool, 'haze', 'stealthrock');
 	}
@@ -658,12 +659,10 @@ export class RandomGen8Teams extends RandomTeams {
 				return 'Sitrus Berry';
 			}
 		}
-		if (['boltbeak', 'dragonenergy', 'fishiousrend', 'waterspout'].some(m => moves.has(m))) {
-			if (counter.get('Flying')) {
-				return 'Choice Band';
-			}
-			return 'Choice Scarf';
-		}
+		if (moves.has('dragonenergy') || moves.has('waterspout')) return 'Choice Scarf';
+		if (
+			moves.has('boltbeak') || moves.has('fishiousrend')
+		) return (role === 'Fast Attacker') ? 'Choice Scarf' : 'Choice Band';
 		if (moves.has('geomancy') || moves.has('meteorbeam')) return 'Power Herb';
 		if (moves.has('shellsmash')) return (ability === 'Sturdy') ? 'Heavy-Duty Boots' : 'White Herb';
 		if (ability === 'Guts' && moves.has('facade')) return types.has('Fire') ? 'Toxic Orb' : 'Flame Orb';
@@ -950,6 +949,8 @@ export class RandomGen8Teams extends RandomTeams {
 			[screenSetters, screenSetters],
 
 			// These Pokemon are incompatible because the presence of one actively harms the other.
+			// Screen Cleaner is a bad ability
+			['mrrime', screenSetters],
 			// Prevent Dry Skin + sun setting ability
 			[['jynx', 'toxicroak', 'heliolisk'], sunSetters],
 			// Prevent Shedinja + sand/hail setting ability

@@ -334,13 +334,13 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "encore", "focusblast", "icebeam", "scald", "substitute"],
+                "movepool": ["calmmind", "encore", "hiddenpowergrass", "icebeam", "scald", "substitute"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "preferredTypes": ["Ice"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["calmmind", "encore", "focusblast", "hydropump", "icebeam"],
+                "movepool": ["calmmind", "encore", "hiddenpowergrass", "hydropump", "icebeam"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "preferredTypes": ["Ice"]
             }
@@ -1205,12 +1205,12 @@
             {
                 "role": "Fast Support",
                 "movepool": ["acrobatics", "encore", "sleeppowder", "uturn"],
-                "abilities": ["Chlorophyll"]
+                "abilities": ["Chlorophyll", "Leaf Guard"]
             },
             {
                 "role": "Staller",
                 "movepool": ["acrobatics", "leechseed", "sleeppowder", "substitute"],
-                "abilities": ["Chlorophyll"]
+                "abilities": ["Chlorophyll", "Leaf Guard"]
             }
         ]
     },
@@ -1509,6 +1509,11 @@
                 "role": "Setup Sweeper",
                 "movepool": ["airslash", "hydropump", "icebeam", "raindance"],
                 "abilities": ["Swift Swim"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["airslash", "protect", "scald", "toxic"],
+                "abilities": ["Water Absorb"]
             }
         ]
     },
@@ -4065,6 +4070,11 @@
                 "role": "Bulky Setup",
                 "movepool": ["darkpulse", "encore", "hiddenpowerfighting", "nastyplot", "thunderwave"],
                 "abilities": ["Prankster"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["encore", "foulplay", "thunderwave", "uturn"],
+                "abilities": ["Prankster"]
             }
         ]
     },
@@ -4488,7 +4498,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["hurricane", "raindance", "rest", "surf"],
+                "movepool": ["hurricane", "raindance", "rest", "scald"],
                 "abilities": ["Hydration"]
             }
         ]

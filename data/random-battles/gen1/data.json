@@ -570,7 +570,7 @@
         "level": 68,
         "moves": ["blizzard", "psychic", "thunderbolt"],
         "essentialMoves": ["recover", "thunderwave"],
-        "exclusiveMoves": ["hydropump", "psychic", "surf", "surf"]
+        "exclusiveMoves": ["psychic", "surf", "surf"]
     },
     "mrmime": {
         "level": 75,
@@ -604,8 +604,7 @@
     },
     "tauros": {
         "level": 68,
-        "moves": ["bodyslam", "earthquake", "hyperbeam"],
-        "exclusiveMoves": ["blizzard", "blizzard", "blizzard", "thunderbolt"]
+        "moves": ["blizzard", "bodyslam", "earthquake", "hyperbeam"]
     },
     "gyarados": {
         "level": 74,

@@ -459,7 +459,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	): boolean {
 		switch (ability) {
-		case 'Chlorophyll':
+		case 'Chlorophyll': case 'Leaf Guard':
 			return !teamDetails.sun;
 		case 'Swift Swim':
 			return !teamDetails.rain;
@@ -499,7 +499,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
-			const weatherAbilities = abilities.filter(a => ['Chlorophyll', 'Swift Swim'].includes(a));
+			const weatherAbilities = abilities.filter(a => ['Chlorophyll', 'Leaf Guard', 'Swift Swim'].includes(a));
 			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}
 
@@ -526,7 +526,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'delibird' && moves.has('counter')) return 'Focus Sash';
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
-		if (species.id === 'ditto' || (species.id === 'rampardos' && role === 'Fast Attacker')) return 'Choice Scarf';
+		if (species.id === 'ditto') return this.sample(['Choice Scarf', 'Quick Powder', 'Sitrus Berry']);
+		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'honchkrow') return 'Life Orb';
 		if (species.id === 'shuckle') return 'Leftovers';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
