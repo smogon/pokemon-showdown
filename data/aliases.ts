@@ -96,7 +96,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	lcotm: "[Gen 9] Partners in Crime",
 	ommotm: "[Gen 9] Pokebilities BH",
 	ommspotlight: "[Gen 9] Pokebilities BH",
-	pmotm: "[Gen 9] woomod Random Battle",
+	pmotm: "[Gen 9] Random Tandem",
 	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias

@@ -1,15 +1,16 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
-	randomtandemrule: {
+	randtandmechanics: {
 		effectType: 'Rule',
-		name: 'Random Tandem Rule',
-		desc: "Required for Random Tandem to function.",
+		name: 'RandTand Mechanics',
+		desc: "Generates Tandems based on the Heads brought.",
+		// @ts-expect-error this works okay
 		onValidateTeam(team) {
 			if (team.length > 3) return "You must bring at most 3 Pokemon.";
-			const randomCount = 0;
+			let randomCount = 0;
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
-				// replace below with defining each tandem head
+				// @ts-expect-error custom tier
 				if (species.tier === 'Random') randomCount++;
 			}
 			if (randomCount < 2) {
@@ -21,10 +22,8 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				for (const pokemon of side.pokemon) {
 					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
-					// console.log(pokemonList);
-					const mons = (pokemon.baseSpecies as any).mons.filter((mon: {
-						species: string | (Lowercase<string> & { __isID: true }), }[]) => !pokemonList.includes(toID(mon[0].species)));
-					// console.log(mons);
+					var mons = (pokemon.baseSpecies as any).mons.filter((mon: {
+						species: string | (Lowercase<string> & { __isID: true }), }[]) => !pokemonList.includes(this.toID(mon[0].species)));
 					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);
 					const mon2 = this.sample(mons);
@@ -48,7 +47,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					poke1.level = 100;
 					poke1.shiny = true;
 					if (Array.isArray(poke1.teraType)) poke1.teraType = this.sample(poke1.teraType);
-					// irrelevant but just in case
+					// fallback
 					poke1.happiness = 255;
 					poke1.hpType = '';
 					poke1.pokeball = '';

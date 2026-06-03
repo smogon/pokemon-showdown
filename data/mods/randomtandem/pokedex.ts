@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck custom pokedex value 'mons'
 export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	garchomp: {
 		inherit: true,
