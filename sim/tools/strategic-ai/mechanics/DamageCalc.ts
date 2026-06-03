@@ -124,6 +124,37 @@ export interface DamageCalcInput {
 	 * `Dex.gen`.
 	 */
 	gen?: number;
+	/**
+	 * True when the attacker is expected to move before the defender
+	 * this turn. Used by power-doubling moves whose effect depends on
+	 * turn order: Bolt Beak / Fishious Rend (`true` → 2× BP), Payback /
+	 * Revenge / Avalanche (`false` → 2× BP), Assurance (foe took damage
+	 * this turn → 2× BP, approximated downstream by combining this with
+	 * `defenderTookDamageThisTurn`).
+	 *
+	 * Falsy (undefined) means "unknown"; the calc falls back to neutral
+	 * scaling (no boost, no penalty).
+	 */
+	attackerMovesFirst?: boolean;
+	/**
+	 * True when the attacker's previous successful move attempt failed
+	 * (missed / immune / blocked). Used by Stomping Tantrum (2× BP) so
+	 * the AI sequences "Earthquake against Levitate → Stomping Tantrum"
+	 * intentionally instead of treating the first turn as a sunk loss.
+	 */
+	attackerLastMoveFailed?: boolean;
+	/**
+	 * True when one of the attacker's stat stages was lowered this turn
+	 * (Intimidate switch-in, Sticky Web entry, foe Sword Dance, etc.).
+	 * Used by Lash Out (2× BP).
+	 */
+	attackerLostStatThisTurn?: boolean;
+	/**
+	 * True when the defender has already been hit by another move this
+	 * turn (doubles partner, prior multi-hit, etc.). Used by Assurance
+	 * (2× BP).
+	 */
+	defenderTookDamageThisTurn?: boolean;
 }
 
 /** Output of {@link calculateDamage}. */
@@ -174,6 +205,16 @@ export function calculateDamage(input: DamageCalcInput): DamageRange {
 	const move = typeof input.move === "string" ? Dex.moves.get(input.move) : input.move;
 	const moveId = toID(move.id || (move as { name: string }).name || "");
 	const defenderHp = estimateMaxHp(input.defender);
+	// Always-crit moves (Wicked Blow, Surging Strikes, Flower Trick,
+	// Storm Throw, Frost Breath, Zippy Zap, ...) carry `willCrit: true`
+	// in dex data. Auto-promote them to `forceCrit` so callers don't
+	// have to know which moves are guaranteed: a Wicked Blow into a
+	// +6 Iron Defense Cosmoem still does its full chip because crit
+	// ignores foe positive Def stages (see `effectiveStat`).
+	const guaranteedCrit = move && (move as { willCrit?: boolean }).willCrit === true;
+	if (guaranteedCrit && !input.forceCrit) {
+		input = { ...input, forceCrit: true };
+	}
 	const baseRange: DamageRange = {
 		minDamage: 0,
 		avgDamage: 0,
@@ -544,8 +585,46 @@ function computeBasePower(move: Move, moveType: string, input: DamageCalcInput):
 			break;
 		case "boltbeak":
 		case "fishiousrend":
-			// We don't know move order; approximate as 50% chance of doubling.
-			bp *= 1.5;
+			// 2× if the attacker moves first this turn — we now have
+			// the hint from the caller. When the hint is missing
+			// (`undefined`), fall back to the historical 1.5× midpoint
+			// estimate rather than guess wrong either way.
+			if (input.attackerMovesFirst === true) bp *= 2;
+			else if (input.attackerMovesFirst === undefined) bp *= 1.5;
+			break;
+		case "payback":
+			// 2× if the attacker moves second.
+			if (input.attackerMovesFirst === false) bp *= 2;
+			break;
+		case "revenge":
+		case "avalanche":
+			// 2× if the attacker took damage from the foe this turn.
+			// We approximate that as "foe moves first" — the typical
+			// scenario where Revenge / Avalanche actually fire. (False
+			// positives in the unusual "foe used a status move first
+			// turn" case are tolerable; the scoring layer cross-checks
+			// `defender.lastMove?.category` for the higher-value
+			// branches.)
+			if (input.attackerMovesFirst === false) bp *= 2;
+			break;
+		case "assurance":
+			// 2× if the target has already taken damage this turn —
+			// classic doubles partner combo, or any prior hit on the
+			// same target in singles (multi-hit interruption, etc.).
+			if (input.defenderTookDamageThisTurn) bp *= 2;
+			break;
+		case "lashout":
+			// 2× if the attacker's stat stages were lowered this turn
+			// (Intimidate switch-in, Sticky Web, foe Sword Dance/Snarl).
+			if (input.attackerLostStatThisTurn) bp *= 2;
+			break;
+		case "stompingtantrum":
+			// 2× if the user's *previous* move failed. The engine sets
+			// this flag from `lastMoveFailedByMon` (LogParser feeds it
+			// from `|miss|` / `|-immune|` / `|cant|` events). The
+			// classic "Earthquake into Levitate → Stomping Tantrum"
+			// combo finally scores correctly.
+			if (input.attackerLastMoveFailed) bp *= 2;
 			break;
 		case "lastrespects":
 			// Scales with team faints; approximate with +1 per faint.
@@ -618,18 +697,23 @@ function computeOffensiveStat(move: Move, input: DamageCalcInput): number {
 	const physical = isPhysicalForCalc(move, input);
 	const crit = !!input.forceCrit;
 	let baseStat: number;
+	let offensiveStatKey: keyof StatBlock;
 	if (id === "bodypress") {
+		offensiveStatKey = "def";
 		baseStat = effectiveStat(input.attacker, "def", /* ignoreNeg */ crit);
 	} else if (id === "foulplay") {
 		// Foul Play reads the defender's attack as if it were the user's,
 		// so the attacker-side crit rule (ignore negative stages) applies.
+		offensiveStatKey = "atk";
 		baseStat = effectiveStat(input.defender, "atk", /* ignoreNeg */ crit);
 	} else if (id === "photongeyser") {
 		const atk = effectiveStat(input.attacker, "atk", /* ignoreNeg */ crit);
 		const spa = effectiveStat(input.attacker, "spa", /* ignoreNeg */ crit);
+		offensiveStatKey = atk >= spa ? "atk" : "spa";
 		baseStat = Math.max(atk, spa);
 	} else {
-		baseStat = effectiveStat(input.attacker, physical ? "atk" : "spa", /* ignoreNeg */ crit);
+		offensiveStatKey = physical ? "atk" : "spa";
+		baseStat = effectiveStat(input.attacker, offensiveStatKey, /* ignoreNeg */ crit);
 	}
 	const ability = toID(input.attacker.ability);
 	if ((ability === "hugepower" || ability === "purepower") && physical) baseStat *= 2;
@@ -640,6 +724,29 @@ function computeOffensiveStat(move: Move, input: DamageCalcInput): number {
 		(move.type === "Fire" || resolveMoveType(move, input) === "Fire")
 	) {
 		baseStat *= 1.5;
+	}
+	// Solar Power: +50% Special Attack in harsh sunlight.
+	const offensiveWeather = effectiveWeather(input.field, input.attacker, input.defender);
+	if (
+		ability === "solarpower" &&
+		!physical &&
+		(offensiveWeather === "sunnyday" || offensiveWeather === "desolateland")
+	) {
+		baseStat *= 1.5;
+	}
+	// Protosynthesis (sun / Booster Energy) and Quark Drive (electric
+	// terrain / Booster Energy) grant a +30% boost (+50% to Speed) to
+	// the user's highest stat. We approximate "highest stat" from the
+	// stat block (best-known) or the species' base stats, defaulting to
+	// the offensive stat if the species lookup fails so the boost still
+	// applies in the common case.
+	const paradoxBoosted = paradoxBoostedStat(input.attacker, ability, input.field, offensiveWeather);
+	// Foul Play attacks with the *defender's* Attack stat, so the user's
+	// own Protosynthesis / Quark Drive Attack boost must not be folded
+	// back in — that would make a boosted Foul Play user hit far harder
+	// than it really does.
+	if (paradoxBoosted && paradoxBoosted === offensiveStatKey && id !== "foulplay") {
+		baseStat *= paradoxBoostedMultiplier(paradoxBoosted);
 	}
 	const item = toID(input.attacker.item);
 	if (item === "choiceband" && physical) baseStat *= 1.5;
@@ -680,7 +787,111 @@ function computeDefensiveStat(move: Move, input: DamageCalcInput): number {
 	if (isSnow && stat === "def" && input.defender.types.includes("Ice")) {
 		value *= 1.5;
 	}
+	// Protosynthesis/Quark Drive defensive boost: applies whenever the
+	// defender's "highest stat" happens to be the relevant defensive
+	// stat (Def for Physical, SpD for Special / Psyshock-family).
+	const defAbility = toID(input.defender.ability);
+	const paradoxBoosted = paradoxBoostedStat(input.defender, defAbility, input.field, weather);
+	if (paradoxBoosted && paradoxBoosted === stat) {
+		value *= paradoxBoostedMultiplier(paradoxBoosted);
+	}
 	return value;
+}
+
+/**
+ * Return the stat that a Protosynthesis / Quark Drive user is currently
+ * boosting, or `null` if the ability isn't active.
+ *
+ * The boost activates when:
+ *
+ * - **Protosynthesis** holder is in harsh sun, or holds Booster Energy
+ *   (which the mon consumes on switch-in; until the calc sees the
+ *   item as consumed we treat presence-of-item as proof it'll fire).
+ * - **Quark Drive** holder is in Electric Terrain, or holds Booster
+ *   Energy under the same logic.
+ *
+ * The boosted stat is the user's highest stat after positive stat
+ * stages (per Showdown's `getActiveProto` rule). We approximate from
+ * the best-known stat block; when none is known we fall back to the
+ * species' base stats so the boost still kicks in for foe mons whose
+ * EV spread isn't visible to us.
+ *
+ * @param mon The Pokemon snapshot to evaluate.
+ * @param ability The mon's currently-active ability id.
+ * @param field The battle field state (used for the terrain check).
+ * @param effWeather The *effective* weather id (i.e. after Cloud Nine /
+ *   Air Lock suppression), so Protosynthesis doesn't activate under sun
+ *   that's currently being negated.
+ * @returns The boosted stat key, or `null` when not active.
+ */
+function paradoxBoostedStat(
+	mon: CalcPokemon,
+	ability: string,
+	field: FieldState,
+	effWeather: string
+): keyof StatBlock | null {
+	const isProto = ability === "protosynthesis";
+	const isQuark = ability === "quarkdrive";
+	if (!isProto && !isQuark) return null;
+	// Volatile already records the boosted stat — prefer it when present.
+	// Showdown emits `|-start|...|protosynthesis|atk` etc., so the
+	// tracker stores `protosynthesisatk` / `quarkdriveatk` style ids.
+	if (mon.volatiles) {
+		for (const v of mon.volatiles) {
+			if (!v.startsWith("protosynthesis") && !v.startsWith("quarkdrive")) continue;
+			const stat = v.slice(v.startsWith("protosynthesis") ? "protosynthesis".length : "quarkdrive".length);
+			if (isStatKey(stat)) return stat;
+		}
+	}
+	const terrain = field.terrain;
+	const item = toID(mon.item);
+	// Use the effective weather so Cloud Nine / Air Lock correctly
+	// suppress sun-based Protosynthesis activation. (Electric Terrain
+	// isn't weather, so Cloud Nine / Air Lock don't touch Quark Drive.)
+	const sun = effWeather === "sunnyday" || effWeather === "desolateland";
+	const eTerrain = terrain === "electricterrain";
+	const booster = item === "boosterenergy";
+	const activeForProto = isProto && (sun || booster);
+	const activeForQuark = isQuark && (eTerrain || booster);
+	if (!activeForProto && !activeForQuark) return null;
+	return highestNonHpStat(mon);
+}
+
+/**
+ * Multiplier applied by Protosynthesis / Quark Drive to the chosen
+ * stat. Speed receives a 1.5× multiplier; offensive/defensive stats
+ * receive 1.3×. The HP boost case never applies because the ability
+ * deliberately skips HP when picking its target stat.
+ *
+ * @param stat The stat key the ability boosted.
+ * @returns The multiplicative scale factor.
+ */
+function paradoxBoostedMultiplier(stat: keyof StatBlock): number {
+	if (stat === "spe") return 1.5;
+	return 1.3;
+}
+
+function highestNonHpStat(mon: CalcPokemon): keyof StatBlock {
+	const stats = ensureStats(mon);
+	// Effective post-positive-stage stats (Showdown's
+	// `getActiveProto` definition). Negative stages are ignored.
+	const keys: (keyof StatBlock)[] = ["atk", "def", "spa", "spd", "spe"];
+	let best: keyof StatBlock = "atk";
+	let bestVal = -Infinity;
+	for (const k of keys) {
+		const stage = Math.max(0, mon.boosts?.[k] || 0);
+		const base = stats[k] || 1;
+		const adjusted = stage > 0 ? Math.floor(base * (2 + stage) / 2) : base;
+		if (adjusted > bestVal) {
+			bestVal = adjusted;
+			best = k;
+		}
+	}
+	return best;
+}
+
+function isStatKey(v: string): v is keyof StatBlock {
+	return v === "hp" || v === "atk" || v === "def" || v === "spa" || v === "spd" || v === "spe";
 }
 
 /**

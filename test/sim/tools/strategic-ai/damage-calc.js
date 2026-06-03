@@ -193,4 +193,110 @@ describe('Strategic-AI DamageCalc', () => {
 		assert(sun.avgDamage > rain.avgDamage,
 			`Sun should boost Fire moves over Rain (sun=${sun.avgDamage}, rain=${rain.avgDamage})`);
 	});
+
+	// Regression: Booster Energy on Paradox mons (Protosynthesis /
+	// Quark Drive) was not boosting the relevant stat in the calc, so
+	// the AI rated Iron Valiant / Roaring Moon / Iron Bundle equally
+	// before and after consuming the item — which led it to switch
+	// them out instead of pressing the boost.
+	describe('Paradox abilities (Protosynthesis / Quark Drive)', () => {
+		it('Protosynthesis under sun raises damage on its highest stat (Roaring Moon)', () => {
+			const sunny = calc({
+				attacker: mkMon('Roaring Moon', { ability: 'protosynthesis' }),
+				defender: mkMon('Skarmory'),
+				move: 'crunch',
+				field: emptyField('sunnyday'),
+			});
+			const noWeather = calc({
+				attacker: mkMon('Roaring Moon', { ability: 'protosynthesis' }),
+				defender: mkMon('Skarmory'),
+				move: 'crunch',
+			});
+			assert(sunny.avgDamage > noWeather.avgDamage * 1.2,
+				`Protosynthesis in sun should boost damage by >20% ` +
+				`(sun=${sunny.avgDamage}, off=${noWeather.avgDamage})`);
+		});
+
+		it('Booster Energy activates Quark Drive without Electric Terrain (Iron Valiant)', () => {
+			// Iron Valiant's base Atk (130) > base SpA (120), so the
+			// boost defaults to Atk. Use a physical move to observe it.
+			const booster = calc({
+				attacker: mkMon('Iron Valiant', {
+					ability: 'quarkdrive', item: 'boosterenergy',
+				}),
+				defender: mkMon('Blissey'),
+				move: 'closecombat',
+			});
+			const plain = calc({
+				attacker: mkMon('Iron Valiant', { ability: 'quarkdrive' }),
+				defender: mkMon('Blissey'),
+				move: 'closecombat',
+			});
+			assert(booster.avgDamage > plain.avgDamage * 1.2,
+				`Booster Energy should activate Quark Drive ` +
+				`(boost=${booster.avgDamage}, off=${plain.avgDamage})`);
+		});
+
+		it('explicit volatile overrides the auto-detected stat', () => {
+			// Force the boost onto Def so a Sp.Atk should NOT see the bump.
+			const forced = calc({
+				attacker: mkMon('Iron Valiant', {
+					ability: 'quarkdrive',
+					item: 'boosterenergy',
+					volatiles: ['quarkdrivedef'],
+				}),
+				defender: mkMon('Blissey'),
+				move: 'moonblast',
+			});
+			const plain = calc({
+				attacker: mkMon('Iron Valiant', { ability: 'quarkdrive' }),
+				defender: mkMon('Blissey'),
+				move: 'moonblast',
+			});
+			// Allow a tiny rounding tolerance; the key check is that
+			// forcing Def doesn't raise SpA damage.
+			assert(Math.abs(forced.avgDamage - plain.avgDamage) < Math.max(2, plain.avgDamage * 0.05),
+				`Defense-typed volatile should NOT lift SpA damage ` +
+				`(forced=${forced.avgDamage}, plain=${plain.avgDamage})`);
+		});
+	});
+
+	// Regression: Solar Power's +50% SpA was missing from the calc, so
+	// in sun the AI under-rated Solar-Power abusers (Charizard-Y,
+	// Heliolisk, etc.) and routinely switched them out.
+	describe('Solar Power', () => {
+		it('+50% SpA in sun for Solar Power user', () => {
+			const sun = calc({
+				attacker: mkMon('Heliolisk', { ability: 'solarpower' }),
+				defender: mkMon('Blissey'),
+				move: 'thunderbolt',
+				field: emptyField('sunnyday'),
+			});
+			const noSun = calc({
+				attacker: mkMon('Heliolisk', { ability: 'solarpower' }),
+				defender: mkMon('Blissey'),
+				move: 'thunderbolt',
+			});
+			assert(sun.avgDamage > noSun.avgDamage * 1.4,
+				`Solar Power in sun should add ~50% to SpA damage ` +
+				`(sun=${sun.avgDamage}, off=${noSun.avgDamage})`);
+		});
+
+		it('does not affect physical moves', () => {
+			const sun = calc({
+				attacker: mkMon('Heliolisk', { ability: 'solarpower' }),
+				defender: mkMon('Blissey'),
+				move: 'quickattack',
+				field: emptyField('sunnyday'),
+			});
+			const noSun = calc({
+				attacker: mkMon('Heliolisk', { ability: 'solarpower' }),
+				defender: mkMon('Blissey'),
+				move: 'quickattack',
+			});
+			assert.equal(sun.avgDamage, noSun.avgDamage,
+				`Solar Power should not change physical move damage ` +
+				`(sun=${sun.avgDamage}, off=${noSun.avgDamage})`);
+		});
+	});
 });

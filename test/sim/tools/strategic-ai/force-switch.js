@@ -48,6 +48,7 @@ function emptyEngineCtx(tracker) {
 		disabledMovesByMon: new Map(),
 		trappedActiveByMon: new Set(),
 		lastSwitchTurnByMon: new Map(),
+		lastMoveFailedByMon: new Set(),
 		noiseEpsilon: 0,
 		infoForgetting: 0,
 	};

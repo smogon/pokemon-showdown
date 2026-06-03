@@ -75,6 +75,14 @@ export interface TrackedPokemon {
 	revealedMoves: Set<string>;
 	/** Last move used (id), if any. */
 	lastMove?: string;
+	/**
+	 * True iff the mon's most recent move attempt did not connect:
+	 * `|miss|`, `|-immune|`, `|-fail|`, or `|cant|` followed by no
+	 * successful `|move|` since. Cleared the next time the mon
+	 * successfully uses a move. Powers Stomping Tantrum's 2× BP and
+	 * any future "failed-move follow-up" heuristics.
+	 */
+	lastMoveFailed: boolean;
 	/** Consecutive-same-move counter. >=2 + holds an item that locks to first move => Choice. */
 	sameMoveStreak: number;
 	/** True if Choice-lock inference has triggered for this mon. */
@@ -216,6 +224,12 @@ export class BattleStateTracker {
 	winner: SideId | null;
 	/** Raw `|win|<name>` payload, when available. */
 	winnerName: string | null;
+	/**
+	 * Most recent attacker — used to attribute miss / immune / fail /
+	 * cant events back to the user whose move just resolved. Cleared
+	 * on turn change.
+	 */
+	private _lastMover: TrackedPokemon | null;
 
 	constructor(options: BattleStateTrackerOptions) {
 		this.mySide = options.mySide;
@@ -238,6 +252,7 @@ export class BattleStateTracker {
 		this.ended = false;
 		this.winner = null;
 		this.winnerName = null;
+		this._lastMover = null;
 	}
 
 	// -------------------------------------------------------------------
@@ -279,6 +294,7 @@ export class BattleStateTracker {
 			types: [],
 			terastallized: false,
 			revealedMoves: new Set(),
+			lastMoveFailed: false,
 			sameMoveStreak: 0,
 			choiceLocked: false,
 			volatiles: new Set(),
@@ -417,6 +433,7 @@ export class BattleStateTracker {
 			case "turn":
 				this.turn = event.turn;
 				this.tickTimedConditions();
+				this._lastMover = null;
 				return;
 			case "gametype":
 				this.gametype = event.gametype;
@@ -448,6 +465,10 @@ export class BattleStateTracker {
 					}
 					mon.lastMove = moveId;
 					mon.revealedMoves.add(moveId);
+					// A new move attempt clears the previous failure flag.
+					// We re-set it later if a `miss` / `immune` / `fail`
+					// follow-up event arrives for this same move.
+					mon.lastMoveFailed = false;
 					// Choice-lock inference: a foe locked into a single move
 					// for two consecutive turns while holding a Choice item
 					// (or one we haven't ruled out) must be Choice-locked.
@@ -455,6 +476,29 @@ export class BattleStateTracker {
 						mon.choiceLocked = true;
 					}
 				}
+				this._lastMover = mon;
+				return;
+			}
+			case "miss": {
+				// `event.source` is the attacker. When it's missing
+				// (older protocol), fall back to the most recent mover.
+				const mon = event.source ?
+					this.resolveByRef(event.source) :
+					this._lastMover;
+				if (mon) mon.lastMoveFailed = true;
+				return;
+			}
+			case "immune": {
+				// `event.pokemon` is the immune *target*; the failing
+				// attacker is the most recent mover.
+				if (this._lastMover) this._lastMover.lastMoveFailed = true;
+				return;
+			}
+			case "fail": {
+				// `event.pokemon` is the failing attacker (or status
+				// target whose move/status fizzled — close enough).
+				const mon = this.resolveByRef(event.pokemon);
+				mon.lastMoveFailed = true;
 				return;
 			}
 			case "switch":
@@ -738,6 +782,7 @@ export class BattleStateTracker {
 				if (event.move) {
 					mon.revealedMoves.add(toID(event.move));
 				}
+				mon.lastMoveFailed = true;
 				return;
 			}
 			default:
@@ -781,6 +826,20 @@ export class BattleStateTracker {
 	isGrounded(side: SideId, position: number): boolean {
 		const mon = this.getActive(side, position);
 		if (!mon) return true;
+		return this.isMonGrounded(mon);
+	}
+
+	/**
+	 * Groundedness check keyed directly off a {@link TrackedPokemon}
+	 * snapshot (rather than an active slot). Useful for evaluators that
+	 * already hold the mon record and need to know whether terrain
+	 * effects (Electric/Misty Terrain status blocks, terrain BP boosts)
+	 * apply to it.
+	 *
+	 * @param mon The tracked Pokemon to test.
+	 * @returns true if the mon is grounded.
+	 */
+	isPokemonGrounded(mon: TrackedPokemon): boolean {
 		return this.isMonGrounded(mon);
 	}
 

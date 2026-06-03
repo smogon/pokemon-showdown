@@ -97,6 +97,7 @@ export class PlayerAI extends BattlePlayer {
 			disabledMovesByMon: new Map(),
 			trappedActiveByMon: new Set(),
 			lastSwitchTurnByMon: new Map(),
+			lastMoveFailedByMon: new Set(),
 			noiseEpsilon: 0,
 			infoForgetting: 0,
 			searchBudgetMs: options.searchBudgetMs,

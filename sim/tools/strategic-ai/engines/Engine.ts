@@ -39,6 +39,15 @@ export interface EngineContext {
 	/** Per-Pokemon disabled-move sets (Imprison/Disable). */
 	disabledMovesByMon: Map<string, Set<string>>;
 	/**
+	 * Per-Pokemon "did the previous move attempt fail" flag, set by
+	 * {@link PlayerAI.receiveLine} when a `|miss|`, `|-immune|`, or
+	 * `|cant|` line is parsed against that mon. Cleared the next time
+	 * the same mon successfully uses a move. Used by power-doubling
+	 * moves like Stomping Tantrum (2× BP when the user's previous move
+	 * failed).
+	 */
+	lastMoveFailedByMon: Set<string>;
+	/**
 	 * Per-Pokemon "is trapped" override fed by error feedback (see
 	 * `PlayerAI.receiveError`). The simulator only sets `request.active[i]
 	 * .trapped = true` when it's been told the foe revealed a trapping
