@@ -552,7 +552,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Enamorus-Incarnate', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Kyurem',
 			'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palkia', 'Palkia-Origin', 'Rayquaza',
 			'Reshiram', 'Roaring Moon', 'Serperior', 'Shaymin-Sky', 'Sneasler', 'Solgaleo', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Urshifu-Rapid-Strike', 'Volcarona',
-			'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap',  'Magnet Pull', 'Moody', 'Shadow Tag', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects',
+			'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects',
 			'Shed Tail',
 		],
 		restricted: [
@@ -640,7 +640,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Endless Battle Clause', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Terastal Clause', 'AAA Restricted Abilities',
 		],
 		banlist: [
-			'Basculegion-M', 'Basculegion-F', 'Blaziken-Mega', 'Calyrex-Shadow','Clefable', 'Deoxys-Attack', 'Diancie-Mega', 'Enamorus-Incarnate', 'Excadrill', 'Gardevoir-Mega', 'Gengar-Mega',
+			'Basculegion-M', 'Basculegion-F', 'Blaziken-Mega', 'Calyrex-Shadow', 'Clefable', 'Deoxys-Attack', 'Diancie-Mega', 'Enamorus-Incarnate', 'Excadrill', 'Gardevoir-Mega', 'Gengar-Mega',
 			'Groudon-Primal', 'Gyarados-Mega', 'Hawlucha', 'Kangaskhan-Mega', 'Kartana', 'Koraidon', 'Kyogre-Primal', 'Kyurem-Black', 'Kyurem-White', 'Lucario-Mega',
 			'Mawile-Mega', 'Medicham-Mega', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Miraidon', 'Ogerpon-Hearthflame', 'Porygon-Z', 'Rayquaza-Mega', 'Reshiram', 'Shedinja', 'Zekrom',
 			'Arena Trap', 'Comatose', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator + Emergency Exit', 'Regenerator + Fur Coat', 'Regenerator + Ice Scales',
