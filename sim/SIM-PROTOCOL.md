@@ -434,6 +434,11 @@ stat boosts are minor actions.
 
 > Indicates that the field condition `CONDITION` has ended.
 
+`|-fieldactivate|CONDITION`
+
+> A single-event field effect `CONDITION` has triggered.
+> (i.e. Teatime, Electrify, Perish Song, extreme weather activation)
+
 `|-sidestart|SIDE|CONDITION`
 
 > A side condition `CONDITION` has started on `SIDE`. Side conditions are all
