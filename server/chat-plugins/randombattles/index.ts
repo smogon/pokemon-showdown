@@ -535,8 +535,9 @@ export const commands: Chat.ChatCommands = {
 		if (!args[0]) return this.parse(`/help randombattles`);
 
 		const { dex } = this.splitFormat(target, true);
-		const isLetsGo = (dex.currentMod === 'gen7letsgo');
-		const isBDSP = (dex.currentMod === 'gen8bdsp');
+		const mod = (dex.currentMod === 'base') ? 'gen9' : dex.currentMod;
+		const isLetsGo = (mod === 'gen7letsgo');
+		const isBDSP = (mod === 'gen8bdsp');
 
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
@@ -550,12 +551,12 @@ export const commands: Chat.ChatCommands = {
 		}
 		const species = dex.species.get(searchResults[0].name);
 		if (species.isMega || species.forme === 'Primal') isMegaInvasion = true;
-		const extraFormatModifier = isLetsGo ? 'letsgo' : (isBDSP ? 'bdsp' : '');
 		const babyModifier = isBaby ? 'baby' : '';
-		const doublesModifier = isDoubles ? 'doubles' : '';
-		const freeForAllModifier = isFFA ? (dex.gen !== 9 ? 'doubles' : 'freeforall') : '';
+		// Gen 8 Random Doubles is temporarily using singles sets
+		const doublesModifier = (isDoubles && mod === 'gen9') ? 'doubles' : '';
+		const freeForAllModifier = (isFFA && mod === 'gen9') ? 'freeforall' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const formatName = `gen${dex.gen}${extraFormatModifier}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const formatName = `${mod}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
 
 		const movesets = [];
@@ -596,11 +597,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		} else {
 			const setsToCheck = [species];
-			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (mod === 'gen8' && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 			for (const pokemon of setsToCheck) {
 				// For Gen 9, only show megas/primals if they were the argument or the command was used in a mega invasion battle room
-				if (dex.gen === 9 && (pokemon.isMega || pokemon.forme === 'Primal') && !isMegaInvasion) continue;
+				if (mod === 'gen9' && (pokemon.isMega || pokemon.forme === 'Primal') && !isMegaInvasion) continue;
 				const data = getSets(pokemon, format.id);
 				if (!data) continue;
 				const sets = data.sets;
@@ -609,7 +610,7 @@ export const commands: Chat.ChatCommands = {
 				buf += `<b>Level</b>: ${level}`;
 				for (const set of sets) {
 					buf += `<details class="details"><summary>${set.role}</summary>`;
-					if (dex.gen === 9) {
+					if (mod === 'gen9') {
 						buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 					} else if (set.preferredTypes) {
 						buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
@@ -753,6 +754,7 @@ export const commands: Chat.ChatCommands = {
 			formatOrSpecies = args.shift();
 		}
 		const dex = Dex.forFormat(format);
+		const mod = (dex.currentMod === 'base') ? 'gen9' : dex.currentMod;
 
 		// Species
 		const species = dex.species.get(formatOrSpecies);
@@ -761,14 +763,12 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if ([2, 3, 4, 5, 6, 7, 9].includes(dex.gen)) {
+		if (!['gen1', 'gen7letsgo', 'gen8bdsp'].includes(mod)) {
 			setExists = !!getSets(species, format);
 		} else {
 			const data = getData(species, format);
 			if (!data) {
 				setExists = false;
-			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
-				setExists = !!data.doublesMoves;
 			} else {
 				setExists = !!data.moves;
 			}
@@ -864,7 +864,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				break;
 			case 'tera': case 'teratype':
-				if (dex.gen < 9) throw new Chat.ErrorMessage("Tera Types do not exist in the specified format.");
+				if (mod !== 'gen9') throw new Chat.ErrorMessage("Tera Types do not exist in the specified format.");
 				const type = dex.types.get(value);
 				if (!type.exists) {
 					throw new Chat.ErrorMessage(`"${value}" is not a type in the specified format.`);
