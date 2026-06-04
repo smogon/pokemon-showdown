@@ -14,12 +14,13 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				if (species.tier === 'Random') randomCount++;
 			}
 			if (randomCount < 2) {
-				return [`You must have at least 2 Random Pokemon.`];
+				return [`You must have at least 2 Head Pokemon.`];
 			}
 		},
 		onBegin() {
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
+					// @ts-expect-error reference to custom pokedex data
 					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					var mons = (pokemon.baseSpecies as any).mons.filter((mon: {
@@ -81,8 +82,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					poke2.dynamaxLevel = 10;
 
 					const newPoke1 = side.addPokemon(poke1);
+					// @ts-expect-error is never any and reference to custom pokedex data
 					newPoke1.random = true;
 					const newPoke2 = side.addPokemon(poke2);
+					// @ts-expect-error is never any and reference to custom pokedex data
 					newPoke2.random = true;
 				}
 			}

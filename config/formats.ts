@@ -728,7 +728,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Random Tandem",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3695289/">Random Tandem on Smogon Forums</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695289/">Random Tandem Thread</a>`,
 			`&bullet; <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing">Resource Compendium</a>`,
 			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
@@ -738,10 +738,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
 			this.add('-message', `Welcome to Random Tandem!`);
-			this.add('-message', `This is a Gen 9 OU-based "Bring 9, Pick 6" metagame where you build teams of 3 "Heads" who then generate a "Tandem" for your other 6 Pokemon.`);
-			this.add(`raw|You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>:`);
-			this.add(`raw|Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours:`);
-			},
+			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+		},
 	},
 	{
 		name: "[Gen 9] CCAPM2025 Random Battle",
