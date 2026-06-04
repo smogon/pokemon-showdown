@@ -438,7 +438,7 @@ export class RandomTeams {
 				}
 			}
 			// Moves with secondary effects:
-			if (move.secondary || move.hasSheerForceBoost) {
+			if (move.secondary) {
 				counter.add('sheerforce');
 			}
 			// Moves with low accuracy:

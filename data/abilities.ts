@@ -3192,8 +3192,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 253,
 	},
 	pickpocket: {
+		onAfterMoveSecondaryLastPriority: 1,
 		onAfterMoveSecondaryLast(target, source, move) {
-			if (source && source !== target && move?.flags['contact']) {
+			if (source && source !== target && move?.flags['contact'] && !move.hasSheerForce) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
 					return;
 				}
@@ -4156,7 +4157,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sheerforce: {
 		onModifyMove(move, pokemon) {
-			if (move.secondaries && !move.hasSheerForceBoost) {
+			if (move.secondaries) {
 				delete move.secondaries;
 				// Technically not a secondary effect, but it is negated
 				delete move.self;
@@ -4167,7 +4168,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.hasSheerForce || move.hasSheerForceBoost) return this.chainModify([5325, 4096]);
+			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: "Sheer Force",

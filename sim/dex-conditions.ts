@@ -431,6 +431,7 @@ export interface EventMethods {
 	onAccuracyPriority?: number;
 	onDamagingHitOrder?: number;
 	onAfterMoveSecondaryPriority?: number;
+	onAfterMoveSecondaryLastPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
 	onAfterSetStatusPriority?: number;
