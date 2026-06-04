@@ -985,7 +985,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Fire Blast", "Nasty Plot", "Sludge Bomb", "Sucker Punch"],
+                "movepool": ["Dark Pulse", "Fire Blast", "Nasty Plot", "Sucker Punch"],
                 "abilities": ["Flash Fire"]
             }
         ]

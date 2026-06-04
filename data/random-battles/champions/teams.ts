@@ -602,6 +602,23 @@ export class RandomChampionsTeams extends RandomTeams {
 			['aerodactyl', 'gallade', 'leafeon', 'lycanroc', 'lycanrocmidnight'].includes(species.id) && !moves.has('accelerock')
 		) return 'Scope Lens';
 
+		// Hard-code type-boosting items here
+		if (species.id === 'hydreigon') return 'Dragon Fang';
+		if (['heliolisk', 'raichualola'].includes(species.id)) return 'Magnet';
+		if (species.id === 'gardevoir') return 'Fairy Feather';
+		if (
+			['armarouge', 'chandelure', 'delphox', 'scovillain', 'typhlosionhisui', 'volcarona'].includes(species.id)
+		) return 'Charcoal';
+		if (species.id === 'vivillon') return 'Sharp Beak';
+		if (species.id === 'victreebel') return 'Miracle Seed';
+		if (species.id === 'weavile') return 'Never-Melt Ice';
+		if (species.id === 'quaquaval') return 'Mystic Water';
+
+		// Randomly choose between their STABs
+		if (
+			['heracross', 'houndoom', 'infernape', 'kleavor', 'toxicroak', 'zoroarkhisui'].includes(species.id)
+		) return TYPE_BOOSTING_ITEMS[this.sample([...types])];
+
 		// Give type-boosting items if it only has one STAB attack
 		const stabTypes: string[] = [];
 		for (const type of types) {
@@ -622,23 +639,6 @@ export class RandomChampionsTeams extends RandomTeams {
 				}
 			}
 		}
-
-		// Hard-code type-boosting items here
-		if (species.id === 'hydreigon') return 'Dragon Fang';
-		if (['heliolisk', 'raichualola'].includes(species.id)) return 'Magnet';
-		if (species.id === 'gardevoir') return 'Fairy Feather';
-		if (
-			['typhlosionhisui', 'chandelure', 'volcarona', 'delphox', 'armarouge', 'scovillain', 'houndoom'].includes(species.id)
-		) return 'Charcoal';
-		if (species.id === 'vivillon') return 'Sharp Beak';
-		if (species.id === 'victreebel') return 'Miracle Seed';
-		if (['weavile', 'mamoswine'].includes(species.id)) return 'Never-Melt Ice';
-		if (species.id === 'quaquaval') return 'Mystic Water';
-
-		// Randomly choose between their STABs
-		if (
-			['toxicroak', 'heracross', 'zoroarkhisui', 'kleavor', 'infernape'].includes(species.id)
-		) return TYPE_BOOSTING_ITEMS[this.sample([...types])];
 
 		// Default to Leftovers
 		return 'Leftovers';
