@@ -21317,6 +21317,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			waterpulse: ["8M", "8L15"],
 		},
 	},
+	gastrodoneast: {},
 	ambipom: {
 		learnset: {
 			aerialace: ["8M"],
