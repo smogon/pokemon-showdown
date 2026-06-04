@@ -135,7 +135,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor',
+	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor', 'scizormega',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -1285,6 +1285,9 @@ export class RandomTeams {
 			ability === 'Intimidate' && this.dex.getEffectiveness('Rock', species) >= 1 &&
 			(!types.has('Flying') || this.dex.getEffectiveness('Rock', species) >= 2)
 		) return 'Heavy-Duty Boots';
+		if (
+			role === 'Doubles Support' && ability === 'Prankster' && moves.has('tailwind') && this.randomChance(3, 4)
+		) return 'Covert Cloak';
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) ||
 			['irondefense', 'coil', 'acidarmor', 'wish'].some(m => moves.has(m)) ||

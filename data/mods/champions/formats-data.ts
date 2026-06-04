@@ -833,7 +833,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	scizormega: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	kleavor: {
 		tier: "UU",
@@ -1928,13 +1928,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	castformsunny: {
-		isNonstandard: "Past",
 	},
 	castformrainy: {
-		isNonstandard: "Past",
 	},
 	castformsnowy: {
-		isNonstandard: "Past",
 	},
 	kecleon: {
 		isNonstandard: "Past",
@@ -2804,7 +2801,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	basculegion: {
-		tier: "UU",
+		tier: "OU",
 	},
 	basculegionf: {
 		tier: "UU",
@@ -3435,7 +3432,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	aegislashblade: {
-		isNonstandard: "Past",
 	},
 	spritzee: {
 		isNonstandard: "Past",
@@ -4879,7 +4875,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	glimmoramega: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	shroodle: {
 		isNonstandard: "Past",

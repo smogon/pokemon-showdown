@@ -525,8 +525,7 @@ export class TeamValidator {
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
-		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja' &&
-			this.format.mod !== 'gen9legendsou') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			outOfBattleSpecies = dex.species.get('greninjabond');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
@@ -782,8 +781,10 @@ export class TeamValidator {
 		problem = this.checkAbility(set, ability, setHas);
 		if (problem) problems.push(problem);
 
-		if (!set.nature || dex.gen <= 2) {
+		if (dex.gen <= 2) {
 			set.nature = '';
+		} else if (!set.nature) {
+			set.nature = 'Serious';
 		}
 		nature = dex.natures.get(set.nature);
 		problem = this.checkNature(set, nature, setHas);
@@ -1779,7 +1780,7 @@ export class TeamValidator {
 			setHas['pokemon:rockruffdusk'] = true;
 		}
 
-		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
+		const tier = tierSpecies.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
 
@@ -1787,8 +1788,7 @@ export class TeamValidator {
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
-		const ndTier = tierSpecies.natDexTier === '(PU)' ? 'ZU' :
-			tierSpecies.natDexTier === '(NU)' ? 'PU' : tierSpecies.natDexTier;
+		const ndTier = tierSpecies.natDexTier;
 		const ndTierTag = 'pokemontag:nd' + toID(ndTier);
 		setHas[ndTierTag] = true;
 
