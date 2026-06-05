@@ -12,6 +12,16 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
+	init() {
+		for (const i in this.data.Moves) {
+			const move = this.data.Moves[i];
+			if (move.category === 'Status' && (move.status === 'par' || move.status === 'slp')) {
+				const flags = { ...move.flags };
+				delete flags['bypasssub'];
+				this.modData('Moves', i).flags = flags;
+			}
+		}
+	},
 	pokemon: {
 		inherit: true,
 		// This is run on Stadium after boosts and status changes.
@@ -404,23 +414,17 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResult = this.battle.runEvent('TryHit', target, pokemon, move);
 					if (!hitResult) {
 						if (hitResult === false) this.battle.add('-fail', target);
-						// Special Substitute hit flag
-						if (hitResult !== 0) {
-							return false;
-						}
+						return false;
 					}
 					if (!this.battle.runEvent('TryFieldHit', target, pokemon, move)) {
 						return false;
 					}
-				} else if (isSecondary && !moveData.self) {
-					hitResult = this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData);
-				}
-
-				if (hitResult === 0) {
-					target = null;
-				} else if (!hitResult) {
-					if (hitResult === false) this.battle.add('-fail', target);
-					return false;
+					hitResult = this.battle.runEvent('TryPrimaryHit', target, pokemon, moveData);
+					if (hitResult === this.battle.HIT_SUBSTITUTE) {
+						target = null;
+					} else if (!hitResult) {
+						return false;
+					}
 				}
 			}
 
@@ -591,6 +595,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
 				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				if (basePower === 0) return 0;
 			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;

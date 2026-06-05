@@ -61,18 +61,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	counter: {
 		inherit: true,
-		damageCallback(pokemon, target) {
-			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
-
-			// Hidden Power counts as physical
-			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
-				return 2 * lastAttackedBy.damage;
-			}
-			return false;
+		damageCallback(pokemon) {
+			return pokemon.getLastAttackedBy()!.damage * 2;
 		},
 		beforeTurnCallback: undefined, // no inherit
-		onTry: undefined, // no inherit
+		onTry(pokemon, target) {
+			const lastAttackedBy = pokemon.getLastAttackedBy();
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn || !lastAttackedBy.damage ||
+				!(this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk')) {
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
+				return null;
+			}
+		},
 		condition: {},
 		priority: -1,
 	},
@@ -212,7 +213,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	frustration: {
 		inherit: true,
 		basePowerCallback(pokemon) {
-			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25);
 		},
 	},
 	healbell: {
@@ -305,7 +306,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	meanlook: {
 		inherit: true,
-		flags: { reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { bypasssub: 1, reflectable: 1, mirror: 1, metronome: 1 },
 	},
 	metronome: {
 		inherit: true,
@@ -324,18 +325,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mirrorcoat: {
 		inherit: true,
-		damageCallback(pokemon, target) {
-			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
-
-			// Hidden Power counts as physical
-			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {
-				return 2 * lastAttackedBy.damage;
-			}
-			return false;
+		damageCallback(pokemon) {
+			return pokemon.getLastAttackedBy()!.damage * 2;
 		},
 		beforeTurnCallback: undefined, // no inherit
-		onTry: undefined, // no inherit
+		onTry(pokemon, target) {
+			const lastAttackedBy = pokemon.getLastAttackedBy();
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn || !lastAttackedBy.damage ||
+				!(this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk')) {
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
+				return null;
+			}
+		},
 		condition: {},
 		priority: -1,
 	},
@@ -548,7 +550,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	return: {
 		inherit: true,
 		basePowerCallback(pokemon) {
-			return Math.floor((pokemon.happiness * 10) / 25) || null;
+			return Math.floor((pokemon.happiness * 10) / 25);
 		},
 	},
 	reversal: {
@@ -579,7 +581,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, nosketch: 1 },
+		flags: { failencore: 1, noassist: 1, nosketch: 1 },
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
@@ -631,7 +633,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spiderweb: {
 		inherit: true,
-		flags: { reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { bypasssub: 1, reflectable: 1, mirror: 1, metronome: 1 },
 	},
 	spikes: {
 		inherit: true,
@@ -645,39 +647,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onTryPrimaryHit(target, source, move) {
-				if (move.stallingMove) {
-					this.add('-fail', source);
-					return null;
-				}
-				if (target === source) {
-					this.debug('sub bypass: self hit');
-					return;
-				}
 				if (move.id === 'twineedle') {
 					move.secondaries = move.secondaries!.filter(p => !p.kingsrock);
+				}
+				if (move.id === 'swagger') {
+					delete move.volatileStatus;
+				}
+				if ((target === source && !move.stallingMove) || move.flags['bypasssub'] || move.infiltrates) {
+					return;
 				}
 				if (move.drain) {
 					this.add('-miss', source);
 					this.hint("In Gen 2, draining moves always miss against Substitute.");
 					return null;
 				}
-				if (move.category === 'Status') {
-					const SubBlocked = ['leechseed', 'lockon', 'mindreader', 'nightmare', 'painsplit', 'sketch'];
-					if (move.id === 'swagger') {
-						// this is safe, move is a copy
-						delete move.volatileStatus;
-					}
-					if (
-						move.status || (move.boosts && move.id !== 'swagger') ||
-						move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)
-					) {
-						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
-						return null;
-					}
-					return;
-				}
 				let damage = this.actions.getDamage(source, target, move);
-				if (!damage) {
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
 					return null;
 				}
 				if (damage > target.volatiles['substitute'].hp) {
@@ -700,6 +687,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	swagger: {
 		inherit: true,
+		flags: { bypasssub: 1, protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1 },
 		onTryHit(target, pokemon) {
 			if (target.boosts.atk >= 6 || target.getStat('atk', false, true) === 999) {
 				this.add('-miss', pokemon);

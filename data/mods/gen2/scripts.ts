@@ -319,10 +319,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (target && !isSecondary && !isSelf) {
+			if (!['all', 'foeSide', 'allySide'].includes(move.target) && target && !isSecondary && !isSelf) {
 				hitResult = this.battle.runEvent('TryPrimaryHit', target, pokemon, moveData);
-				if (hitResult === 0) {
-					// special Substitute flag
+				if (hitResult === this.battle.HIT_SUBSTITUTE) {
 					hitResult = true;
 					target = null;
 				}
@@ -436,7 +435,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 			// Secondary effects don't happen if the target faints from the attack
-			if (target?.hp && moveData.secondaries && this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+			if (target?.hp && moveData.secondaries) {
 				for (const secondary of moveData.secondaries) {
 					// We check here whether to negate the probable secondary status if it's burn or freeze.
 					// In the game, this is checked and if true, the random number generator is not called.
@@ -525,6 +524,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let basePower: number | false | null | undefined = move.basePower;
 			if (move.basePowerCallback) {
 				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				if (basePower === 0) return 0;
 			}
 
 			// We check for Base Power

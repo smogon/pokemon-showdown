@@ -1620,6 +1620,7 @@ export class BattleActions {
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this.battle, source, target, move);
+			if (basePower === 0) return 0;
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
 		basePower = this.battle.clampIntRange(basePower, 1);

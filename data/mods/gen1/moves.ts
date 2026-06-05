@@ -137,6 +137,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	conversion: {
 		inherit: true,
+		flags: { bypasssub: 1, metronome: 1 },
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
@@ -149,6 +150,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		willCrit: false,
 		basePower: 1,
 		damageCallback(pokemon, target) {
+			return 2 * this.lastDamage;
+		},
+		onTry(pokemon, target) {
 			// Counter mechanics in gen 1:
 			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
 			// - if Counter is used by the player, it will succeed if the opponent's last used move is Counterable
@@ -166,21 +170,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 			if (!lastMoveIsCounterable && !lastSelectedMoveIsCounterable) {
 				this.debug("Gen 1 Counter: last move was not Counterable");
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 			if (this.lastDamage <= 0) {
 				this.debug("Gen 1 Counter: no previous damage exists");
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 			if (!lastMoveIsCounterable || !lastSelectedMoveIsCounterable) {
 				this.hint("Desync Clause Mod activated!");
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 
-			return 2 * this.lastDamage;
+			return true;
 		},
 		flags: { contact: 1, protect: 1, metronome: 1 },
 	},
@@ -390,7 +397,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	leechseed: {
 		inherit: true,
-		onHit: undefined, // no inherit
+		flags: { bypasssub: 1, protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		condition: {
 			inherit: true,
 			onAfterMoveSelfPriority: 1,
@@ -788,28 +795,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					delete target.volatiles['partiallytrapped'];
 				}
 			},
-			onTryPrimaryHit: undefined, // no inherit
-			onTryHitPriority: -1,
-			onTryHit(target, source, move) {
-				if (move.category === 'Status') {
-					// In gen 1 it only blocks:
-					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
-					const SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
-					if (
-						move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) ||
-						move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)
-					) {
-						return false;
-					}
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
 					return;
 				}
-				if (move.volatileStatus && target === source) return;
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
-				if (!uncappedDamage && uncappedDamage !== 0) return null;
+				if (!uncappedDamage && uncappedDamage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;

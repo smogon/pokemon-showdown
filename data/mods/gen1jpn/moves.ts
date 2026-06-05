@@ -10,32 +10,32 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			status: 'frz',
 		},
 	},
+	leechseed: {
+		inherit: true,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+	},
 	substitute: {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
+			onTryPrimaryHit(target, source, move) {
 				if (move.drain) {
 					this.add('-miss', source);
 					this.hint("In the Japanese versions of Gen 1, draining moves always miss against substitutes.");
 					return null;
 				}
-				if (move.category === 'Status') {
-					// In gen 1 it only blocks:
-					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
-					const subBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
-					if ((move.status && ['psn', 'tox'].includes(move.status)) || (move.boosts && target !== source) ||
-						move.volatileStatus === 'confusion' || subBlocked.includes(move.id)) {
-						return false;
-					}
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
 					return;
 				}
-				if (move.volatileStatus && target === source) return;
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
 				const uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
-				if (!uncappedDamage && uncappedDamage !== 0) return null;
+				if (!uncappedDamage && uncappedDamage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;

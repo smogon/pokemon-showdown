@@ -93,6 +93,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		willCrit: false,
 		basePower: 1,
 		damageCallback(pokemon, target) {
+			return 2 * this.lastDamage;
+		},
+		onTry(pokemon, target) {
 			// Counter mechanics in Stadium 1:
 			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
 			// - Counter succeeds if the target used a Counterable move earlier this turn
@@ -101,7 +104,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				!this.queue.willMove(target) && this.dex.moves.get(target.side.lastMove.id);
 			if (!lastMoveThisTurn) {
 				this.debug("Stadium 1 Counter: last move was not this turn");
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 
@@ -109,16 +113,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				['Normal', 'Fighting'].includes(lastMoveThisTurn.type) && lastMoveThisTurn.id !== 'counter';
 			if (!lastMoveThisTurnIsCounterable) {
 				this.debug(`Stadium 1 Counter: last move ${lastMoveThisTurn.name} was not Counterable`);
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 			if (this.lastDamage <= 0) {
 				this.debug("Stadium 1 Counter: no previous damage exists");
-				this.add('-fail', pokemon);
+				this.attrLastMove('[miss]');
+				this.add('-miss', pokemon);
 				return false;
 			}
 
-			return 2 * this.lastDamage;
+			return true;
 		},
 	},
 	firespin: {
@@ -146,6 +152,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onMoveFail(target, source, move) {
 			source.addVolatile('mustrecharge');
 		},
+	},
+	leechseed: {
+		inherit: true,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 	},
 	psywave: {
 		inherit: true,
@@ -219,25 +229,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (target === source) {
-					this.debug('sub bypass: self hit');
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
 					return;
 				}
 				if (move.drain) {
 					this.add('-miss', source);
 					return null;
 				}
-				if (move.category === 'Status') {
-					const SubBlocked = ['leechseed', 'lockon', 'mindreader', 'nightmare'];
-					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
-						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
-						return null;
-					}
-					return;
-				}
 				if (move.volatileStatus && target === source) return;
 				let damage = this.actions.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
 				if (damage && damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp;
 				}

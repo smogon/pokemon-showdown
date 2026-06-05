@@ -21,6 +21,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			poke.gender = 'N';
 			poke.eggGroups = null;
 		}
+		for (const i in this.data.Moves) {
+			const move = this.data.Moves[i];
+			if (move.category === 'Status' && (move.status === 'par' || move.status === 'slp')) {
+				this.modData('Moves', i).flags = { bypasssub: 1, ...move.flags };
+			}
+		}
 	},
 	// BattlePokemon scripts.
 	pokemon: {
@@ -541,24 +547,18 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResult = this.battle.runEvent('TryHit', target, pokemon, move);
 					if (!hitResult) {
 						if (hitResult === false) this.battle.add('-fail', target);
-						// Special Substitute hit flag
-						if (hitResult !== 0) {
-							return false;
-						}
+						return false;
 					}
 					if (!this.battle.runEvent('TryFieldHit', target, pokemon, move)) {
 						return false;
 					}
-				} else if (isSecondary && !moveData.self) {
-					hitResult = this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData);
-				}
-
-				if (hitResult === 0) {
-					targetHasSub = !!(target?.volatiles['substitute']);
-					target = null;
-				} else if (!hitResult) {
-					if (hitResult === false) this.battle.add('-fail', target);
-					return false;
+					hitResult = this.battle.runEvent('TryPrimaryHit', target, pokemon, move);
+					if (hitResult === this.battle.HIT_SUBSTITUTE) {
+						targetHasSub = !!(target?.volatiles['substitute']);
+						target = null;
+					} else if (!hitResult) {
+						return false;
+					}
 				}
 			}
 
@@ -786,6 +786,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
 				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				if (basePower === 0) return 0;
 			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;

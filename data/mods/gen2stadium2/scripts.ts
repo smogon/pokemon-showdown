@@ -287,6 +287,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let basePower: number | false | null | undefined = move.basePower;
 			if (move.basePowerCallback) {
 				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				if (basePower === 0) return 0;
 			}
 
 			// We check for Base Power
