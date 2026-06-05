@@ -202,7 +202,6 @@ export class RandomChampionsTeams extends RandomTeams {
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			['dragonpulse', 'dracometeor'],
-			['heavyslam', 'flashcannon'],
 
 			// Status move incompatibilities
 			['taunt', 'encore'],
