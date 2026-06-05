@@ -23,7 +23,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					// @ts-expect-error reference to custom pokedex data
 					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
-					var mons = (pokemon.baseSpecies as any).mons.filter((mon: {
+					let mons = (pokemon.baseSpecies as any).mons.filter((mon: {
 						species: string | (Lowercase<string> & { __isID: true }), }[]) => !pokemonList.includes(this.toID(mon[0].species)));
 					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);

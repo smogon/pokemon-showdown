@@ -145,7 +145,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
 				let setProblems: string[] | null = null;
-				if (options?.skipSets && options?.skipSets[set.name]) {
+				if (options?.skipSets?.[set.name]) {
 					for (const i in options.skipSets[set.name]) {
 						teamHas[i] = (teamHas[i] || 0) + 1;
 					}
