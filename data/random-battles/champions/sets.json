@@ -1637,7 +1637,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Dual Wingbeat", "Earthquake", "Knock Off", "Power Whip", "Stone Edge", "Swords Dance"],
+                "movepool": ["Acrobatics", "Earthquake", "Knock Off", "Power Whip", "Stone Edge", "Swords Dance"],
                 "abilities": ["Poison Heal"]
             }
         ]
