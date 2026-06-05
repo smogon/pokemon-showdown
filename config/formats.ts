@@ -666,7 +666,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 				}
 			}
-		},gouging fire, raging bolt, palafin
+		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
