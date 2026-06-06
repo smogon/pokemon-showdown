@@ -118,10 +118,6 @@ describe('value rule support (slow)', () => {
 describe("New set format (slow)", () => {
 	// formatInfo lists filenames and roles for each format
 	const formatInfo = {
-		"championsrandombattle": {
-			filename: "champions/sets",
-			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
-		},
 		"gen2randombattle": {
 			filename: "gen2/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Generalist", "Thief user"],
@@ -169,6 +165,10 @@ describe("New set format (slow)", () => {
 		"gen9freeforallrandombattle": {
 			filename: "gen9ffa/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot", "Choice Item user", "Imprisoner"],
+		},
+		"gen9championsrandombattle": {
+			filename: "champions/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
 	};
 	for (const format of Object.keys(formatInfo)) {
