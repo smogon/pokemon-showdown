@@ -460,13 +460,8 @@
         "level": 52,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["Body Slam", "Close Combat", "Earthquake", "Throat Chop"],
-                "abilities": ["Sheer Force"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["Body Slam", "Close Combat", "Throat Chop", "Zen Headbutt"],
                 "abilities": ["Sheer Force"]
             },
             {
