@@ -746,9 +746,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
 						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
-					const mon1 = this.sample(mons) as [any, string[], string[]?];
+					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);
-					const mon2 = this.sample(mons) as [any, string[], string[]?];
+					const mon2 = this.sample(mons);
 
 					const poke1 = this.dex.deepClone(mon1[0]);
 					poke1.name = poke1.species;

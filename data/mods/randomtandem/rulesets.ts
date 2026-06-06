@@ -15,5 +15,5 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				return [`You must have at least 2 Head Pokemon.`];
 			}
 		},
-	}
+	},
 };
