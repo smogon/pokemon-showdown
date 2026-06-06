@@ -51,6 +51,7 @@ export const translations: Translations = {
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "",
 		"<strong>weekban</strong> - Bans a user from the room for a week.": "",
 		"<strong>blacklist</strong> - Bans a user for a year.": "",
+		"<strong>permablacklist</strong> - Bans a user for 10 years.": "",
 
 		"<strong>Global punishments</strong>:": "",
 		"<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.": "",
