@@ -117,6 +117,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	viewquotehelp: [
 		`/viewquote [index][, params] - View the quote from the room's quotes.`,
+		`Use 'last' as the [index] argument to view the most recently added quote.`,
 		`If 'showauthor' is used for the [params] argument, it shows who added the quote and when.`,
 	],
 
