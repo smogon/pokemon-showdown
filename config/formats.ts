@@ -733,12 +733,84 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
 		mod: 'randomtandem',
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Data Preview', 'RandTand Mechanics'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Tera Blast'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'RandTand'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
 			this.add('-message', `Welcome to Random Tandem!`);
 			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					// @ts-expect-error reference to custom pokedex data
+					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
+					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
+					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
+						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
+					const mon1 = this.sample(mons) as [any, string[], string[]?];
+					mons = mons.filter(mon => mon !== mon1);
+					const mon2 = this.sample(mons) as [any, string[], string[]?];
+
+					const poke1 = this.dex.deepClone(mon1[0]);
+					poke1.name = poke1.species;
+					if (Array.isArray(poke1.item)) poke1.item = this.sample(poke1.item);
+					if (Array.isArray(poke1.ability)) poke1.ability = this.sample(poke1.ability);
+					if (mon1[1].length === 2 && mon1[2]) {
+						const moveset = [...mon1[1]];
+						const move1 = this.sample(mon1[2]);
+						moveset.push(move1);
+						const move2 = this.sample(mon1[2].filter(move => move !== move1));
+						moveset.push(move2);
+						poke1.moves = moveset;
+					} else poke1.moves = mon1[1];
+					poke1.nature = 'Serious';
+					if (!poke1.gender) poke1.gender = this.sample(['M', 'F']);
+					poke1.evs = { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 };
+					poke1.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+					poke1.level = 100;
+					poke1.shiny = true;
+					if (Array.isArray(poke1.teraType)) poke1.teraType = this.sample(poke1.teraType);
+					// extra info
+					poke1.happiness = 255;
+					poke1.hpType = '';
+					poke1.pokeball = '';
+					poke1.gigantamax = false;
+					poke1.dynamaxLevel = 10;
+
+					const poke2 = this.dex.deepClone(mon2[0]);
+					poke2.name = poke2.species;
+					if (Array.isArray(poke2.item)) poke2.item = this.sample(poke2.item);
+					if (Array.isArray(poke2.ability)) poke2.ability = this.sample(poke2.ability);
+					if (mon2[1].length === 2 && mon2[2]) {
+						const moveset = [...mon2[1]];
+						const move1 = this.sample(mon2[2]);
+						moveset.push(move1);
+						const move2 = this.sample(mon2[2].filter(move => move !== move1));
+						moveset.push(move2);
+						poke2.moves = moveset;
+					} else poke2.moves = mon2[1];
+					poke2.nature = 'Serious';
+					if (!poke2.gender) poke2.gender = this.sample(['M', 'F']);
+					poke2.evs = { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 };
+					poke2.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+					poke2.level = 100;
+					poke2.shiny = true;
+					if (Array.isArray(poke2.teraType)) poke2.teraType = this.sample(poke2.teraType);
+					// data not for gen 9, but save it anyway
+					poke2.happiness = 255;
+					poke2.hpType = '';
+					poke2.pokeball = '';
+					poke2.gigantamax = false;
+					poke2.dynamaxLevel = 10;
+
+					const newPoke1 = side.addPokemon(poke1);
+					// @ts-expect-error is never null and reference to custom pokedex data
+					newPoke1.random = true;
+					const newPoke2 = side.addPokemon(poke2);
+					// @ts-expect-error is never null and reference to custom pokedex data
+					newPoke2.random = true;
+				}
+			}
+			this.ruleTable.pickedTeamSize = 6;
 		},
 	},
 	{
