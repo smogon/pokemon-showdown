@@ -118,7 +118,7 @@ describe('value rule support (slow)', () => {
 describe("New set format (slow)", () => {
 	// formatInfo lists filenames and roles for each format
 	const formatInfo = {
-		"gen9championsrandombattle": {
+		"championsrandombattle": {
 			filename: "champions/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
