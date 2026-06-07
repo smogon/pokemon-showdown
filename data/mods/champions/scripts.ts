@@ -13,12 +13,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		const evs = set.evs[statName];
 		if (this.ruleTable.has('levelclausemod')) {
 			// Stat calculation is modified to depend on level
-			// We use the formula from main line formats, with each stat point treated as 8 EVs
+			// We use the formula from main line formats
+			// The first stat point gives 4 EVs and the others give 8 EVs.
 			const level = set.level;
 			if (statName === 'hp') {
-				return tr((2 * stat + 31 + 2 * evs) * level / 100) + level + 10;
+				return tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + level + 10;
 			}
-			stat = tr((2 * stat + 31 + 2 * evs) * level / 100) + 5;
+			stat = tr((2 * stat + 31 + 2 * Math.max(2 * evs - 1, 0)) * level / 100) + 5;
 		} else {
 			if (statName === 'hp') {
 				return stat + evs + 75;
