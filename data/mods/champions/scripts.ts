@@ -19,7 +19,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (statName === 'hp') {
 				return tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + level + 10;
 			}
-			stat = tr((2 * stat + 31 + 2 * Math.max(2 * evs - 1, 0)) * level / 100) + 5;
+			stat = tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + 5;
 		} else {
 			if (statName === 'hp') {
 				return stat + evs + 75;
