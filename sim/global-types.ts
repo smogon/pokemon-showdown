@@ -40,7 +40,9 @@ type PokemonSet = import('./teams').PokemonSet;
 
 declare namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(AG)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-		"PUBL" | "PU" | "ZUBL" | "ZU" | "NFE" | "LC";
+		"PUBL" | "PU" | "ZUBL" | "ZU" | "NFE" | "LC" |
+		// surfnWOB custom ADV tiers: SU/IU sub-tiers and ZangOuSe
+		"SU" | "IU" | "Zang";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
