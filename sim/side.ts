@@ -794,8 +794,7 @@ export class Side {
 		if (terastallize && this.choice.terastallize) {
 			return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
 		}
-		if (terastallize && this.battle.gen !== 9) {
-			// Make this work properly
+		if (terastallize && this.battle.gen !== 9 && !this.battle.ruleTable.has('bonustypemod')) {
 			return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
 		}
 		if (moveSlot === undefined) {
