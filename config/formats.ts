@@ -19,6 +19,185 @@ The column value will be ignored for repeat sections.
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
+	// surfnWOB Customs
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "surfnWOB Customs",
+	},
+	{
+		name: "[Gen 3] Tera",
+		desc: "Gen 3 OU with Terastallization (no Fairy type). Once per battle, per player.",
+		mod: 'gen3tera',
+		ruleset: ['Standard', 'Bonus Type Mod', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] Megas",
+		desc: "Gen 3 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza).",
+		mod: 'gen3mega',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] Mega Ubers",
+		desc: "Gen 3 Megas with Ubers unbanned &mdash; everything is legal except Primal Groudon, which is treated as Anything Goes and banned.",
+		mod: 'gen3mega',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Groudon-Primal', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] PSS",
+		desc: "Gen 3 OU with the Gen 4 Physical/Special split.",
+		mod: 'gen3pss',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] ZangOuSe",
+		desc: `A curated ADV singles format with a slim Pok&eacute;mon pool. Zangoose sits in its own ZangOuSe tier; everything else is OU or NFE.`,
+		mod: 'gen3zangouse',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Sand Veil', 'Soundproof', 'King\'s Rock', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] ADV 200 UU",
+		desc: `ADV 200 below the top tier &mdash; the 23 OU Pok&eacute;mon are banned, leaving the UU pool legal.`,
+		mod: 'gen3adv200',
+		ruleset: ['Standard', 'One Boost Passer Clause'],
+		banlist: ['Uber', 'OU', 'Light Ball', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] ADV 200 LC",
+		desc: `ADV 200 Little Cup &mdash; level 5, first-stage Pok&eacute;mon only, from the Ruby/Sapphire dex.`,
+		mod: 'gen3adv200',
+		ruleset: ['Standard', 'Little Cup', 'One Boost Passer Clause'],
+		banlist: ['Meditite', 'Wynaut', 'Deep Sea Tooth', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] Tier Shift",
+		desc: "Gen 3 OU with Tier Shift: lower-tier Pokémon get stat boosts (UU +10, RU +20, NU +30, PU and below +40).",
+		mod: 'gen3',
+		ruleset: ['Standard', 'Tier Shift Mod', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
+		name: "[Gen 4] No PSS",
+		desc: "Gen 4 OU but move categories are determined by type, like in Gen 3.",
+		mod: 'gen4nopss',
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Baton Pass Stat Trap Clause', 'Freeze Clause Mod', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		banlist: ['AG', 'Uber', 'Arena Trap', 'Quick Claw', 'Soul Dew', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] Bad n Boosted",
+		desc: "Gen 3 Ubers where all base stats at or below 70 are doubled.",
+		mod: 'gen3',
+		ruleset: ['Standard', "Bad 'n Boosted Mod", 'Deoxys Camouflage Clause Mod', 'One Baton Pass Clause'],
+		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 3] Ubers UU",
+		desc: "ADV Ubers without the dominant threats. Everything ranked above C on the ADV Ubers Viability Rankings is treated as &quot;Ubers&quot; and banned; C rank and below (and unranked) is legal.",
+		mod: 'gen3',
+		ruleset: ['[Gen 3] Ubers'],
+		banlist: [
+			// S
+			'Kyogre', 'Groudon', 'Latios', 'Deoxys-Attack',
+			// A+
+			'Snorlax', 'Blissey', 'Latias', 'Mewtwo',
+			// A
+			'Metagross', 'Forretress', 'Ho-Oh', 'Lugia',
+			// A-
+			'Heracross', 'Deoxys-Defense', 'Rayquaza', 'Skarmory',
+			// B+
+			'Jirachi', 'Gengar', 'Magneton', 'Wobbuffet', 'Omastar', 'Mew',
+			// B
+			'Dusclops', 'Umbreon', 'Deoxys-Speed', 'Exeggutor', 'Qwilfish', 'Salamence',
+			'Aerodactyl', 'Smeargle', 'Ninjask', 'Celebi', 'Dugtrio', 'Tyranitar', 'Slaking',
+			// B-
+			'Victreebel', 'Kabutops', 'Cloyster', 'Shedinja',
+		],
+	},
+	{
+		name: "[Gen 3] SU",
+		desc: "Sub-Zero Used &mdash; the tier below ADV ZU. Pokemon ranked B or higher on the ZU viability rankings are banned.",
+		mod: 'gen3subzu',
+		ruleset: ['Standard', 'Baton Pass Stat Trap Clause'],
+		banlist: [
+			'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU',
+			'Wartortle', 'Clamperl', 'Magby',
+			'Swagger', 'Baton Pass + Substitute',
+		],
+	},
+	{
+		name: "[Gen 3] IU",
+		desc: "Incredibly Used &mdash; the tier below ADV SU. Only the lowest-ranked SU Pokemon are legal.",
+		mod: 'gen3subzu',
+		ruleset: ['Standard', 'Baton Pass Stat Trap Clause'],
+		banlist: [
+			'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'SU',
+			'Wartortle', 'Clamperl', 'Magby',
+			'Swagger', 'Baton Pass + Substitute',
+		],
+	},
+	{
+		name: "[Gen 3] Anything Goes",
+		mod: 'gen3',
+		ruleset: ['Standard AG'],
+		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
+	},
+	{
+		name: "[Gen 3] Almost Any Ability",
+		desc: "Pok&eacute;mon have access to almost any ability.",
+		mod: 'gen3',
+		ruleset: ['Standard', '!Obtainable Abilities', 'Ability Clause = 1', 'One Boost Passer Clause', 'Speed Pass Clause'],
+		banlist: [
+			'Slaking',
+			'Arena Trap', 'Huge Power', 'Magnet Pull', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Wonder Guard',
+			'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web',
+		],
+	},
+	{
+		name: "[Gen 3] Monotype",
+		desc: "All Pok&eacute;mon on a team must share a type.",
+		mod: 'gen3',
+		ruleset: ['Standard', 'Same Type Clause'],
+		banlist: [
+			'Uber',
+			'Shadow Tag',
+			'Focus Band', 'King\'s Rock', 'Quick Claw',
+			'Baton Pass',
+		],
+	},
+	{
+		name: "[Gen 3] Balanced Hackmons",
+		desc: "Anything directly hackable onto a set (EVs, IVs, ability, item, and move) and usable in local battles is allowed.",
+		mod: 'gen3',
+		ruleset: [
+			'OHKO Clause', 'Evasion Clause', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Endless Battle Clause', 'Hackmons Forme Legality',
+		],
+		banlist: [
+			'Deoxys-Attack', 'Shedinja', 'Slaking',
+			'Arena Trap', 'Huge Power', 'Liquid Ooze', 'Magnet Pull', 'Pure Power', 'Shadow Tag', 'Wonder Guard',
+			'Baton Pass', 'Belly Drum', 'Imprison', 'Sleep Talk', 'Substitute', 'Tail Glow',
+			'King\'s Rock',
+		],
+	},
+
+	// Yak Attack
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Yak Attack",
+	},
+	{
+		name: "[Gen 1] RBY Plus",
+		desc: "RBY with an expanded roster &mdash; later-generation Pok&eacute;mon retyped to the 15 Gen 1 types, on the original RBY engine. The whole roster is legal.",
+		mod: 'gen1rbyplus',
+		ruleset: ['Standard'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
