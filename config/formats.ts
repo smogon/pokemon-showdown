@@ -280,7 +280,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'champions',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Level Clause Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Level Clause Mod'],
 	},
 	{
 		name: "[Gen 9 Champions] OU",
