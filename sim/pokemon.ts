@@ -908,15 +908,14 @@ export class Pokemon {
 	}
 
 	moveUsed(move: ActiveMove, targetLoc?: number) {
-		if (this.battle.gen === 2) {
-			if (['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'].includes(move.id)) {
-				this.lastMove = null;
-				this.lastMoveEncore = null;
-				return;
-			}
-			this.lastMoveEncore = move;
+		if (this.battle.gen === 2 &&
+			['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'].includes(move.id)) {
+			this.lastMove = null;
+			this.lastMoveEncore = null;
+		} else {
+			this.lastMove = move;
+			if (this.battle.gen === 2) this.lastMoveEncore = move;
 		}
-		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = move.id;
 	}
@@ -1546,7 +1545,7 @@ export class Pokemon {
 		}
 
 		this.lastMove = null;
-		if (this.battle.gen === 2) this.lastMoveEncore = null;
+		this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.moveLastTurnResult = undefined;
