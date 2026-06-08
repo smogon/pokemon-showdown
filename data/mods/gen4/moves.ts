@@ -839,7 +839,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const moves = this.dex.moves.all().filter(move => (
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome'] &&
-				(this.gen === 3 || !pokemon.moves.includes(move.id)) &&
+				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
 				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
 				!(pokemon.volatiles['healblock'] && move.flags['heal'])
 			));
