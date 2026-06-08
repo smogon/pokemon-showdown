@@ -15,7 +15,7 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	override randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
+	randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	override randomCCTeam() {
@@ -214,6 +214,15 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		}
 
 		return pokemon;
+	}
+
+	override getLevel(
+		species: Species,
+	): number {
+		if (this.adjustLevel) return this.adjustLevel;
+		if (this.randomData[species.id]["level"]) return this.randomData[species.id]["level"]!;
+		// Default to 80
+		return 80;
 	}
 
 	/**

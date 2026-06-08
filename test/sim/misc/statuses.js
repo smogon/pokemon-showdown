@@ -11,10 +11,11 @@ describe('Burn', () => {
 	});
 
 	it('should inflict 1/16 of max HP at the end of the turn, rounded down', () => {
-		battle = common.createBattle([
-			[{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] }],
-			[{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] },
+		], [
+			{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
+		]]);
 		const target = battle.p1.active[0];
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
@@ -45,29 +46,32 @@ describe('Burn', () => {
 	it('should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
-		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [
-			[{ species: 'Vaporeon', moves: ['growl'] }],
-			[{ species: 'Jolteon', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [[
+			{ species: 'Vaporeon', moves: ['growl'] },
+		], [
+			{ species: 'Jolteon', moves: ['willowisp'] },
+		]]);
 		const attack = battle.p1.active[0].getStat('atk');
 		battle.makeChoices('move growl', 'move willowisp');
 		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(attack * 0.5));
 	});
 
 	it('should not halve damage from moves with set damage', () => {
-		battle = common.createBattle([
-			[{ species: 'Machamp', ability: 'noguard', moves: ['seismictoss'] }],
-			[{ species: 'Talonflame', ability: 'galewings', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Machamp', ability: 'noguard', moves: ['seismictoss'] },
+		], [
+			{ species: 'Talonflame', ability: 'galewings', moves: ['willowisp'] },
+		]]);
 		assert.hurtsBy(battle.p2.active[0], 100, () => battle.makeChoices('move seismictoss', 'move willowisp'));
 	});
 
 	describe(`[Gen 6]`, () => {
 		it('should inflict 1/8 of max HP at the end of the turn, rounded down', () => {
-			battle = common.gen(6).createBattle([
-				[{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] }],
-				[{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] }],
-			]);
+			battle = common.gen(6).createBattle([[
+				{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] },
+			], [
+				{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
+			]]);
 			const target = battle.p1.active[0];
 			assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
 		});
@@ -113,38 +117,44 @@ describe('Paralysis', () => {
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 6', () => {
-		battle = common.gen(6).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] }] });
+		battle = common.gen(6).createBattle([[
+			{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] },
+		], [
+			{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 2', () => {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] }] });
+		battle = common.gen(2).createBattle([[
+			{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] },
+		], [
+			{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Stadium', () => {
-		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [
-			[{ species: 'Vaporeon', moves: ['growl'] }],
-			[{ species: 'Jolteon', moves: ['thunderwave'] }],
-		]);
+		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [[
+			{ species: 'Vaporeon', moves: ['growl'] },
+		], [
+			{ species: 'Jolteon', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', () => {
-		battle = common.gen(1).createBattle([
-			[{ species: 'Electrode', moves: ['rest'] }],
-			[{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] }],
-		]);
+		battle = common.gen(1).createBattle([[
+			{ species: 'Electrode', moves: ['rest'] },
+		], [
+			{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] },
+		]]);
 		battle.makeChoices('move rest', 'move thunderwave');
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
@@ -152,10 +162,11 @@ describe('Paralysis', () => {
 	});
 
 	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', () => {
-		battle = common.gen(1).createBattle([
-			[{ species: 'Electrode', moves: ['rest'] }],
-			[{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] }],
-		]);
+		battle = common.gen(1).createBattle([[
+			{ species: 'Electrode', moves: ['rest'] },
+		], [
+			{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] },
+		]]);
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move amnesia');
@@ -172,10 +183,11 @@ describe('Toxic Poison', () => {
 	});
 
 	it('should inflict 1/16 of max HP rounded down, times the number of active turns with the status, at the end of the turn', () => {
-		battle = common.createBattle([
-			[{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] }],
-			[{ species: 'Gengar', ability: 'levitate', moves: ['toxic'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] },
+		], [
+			{ species: 'Gengar', ability: 'levitate', moves: ['toxic'] },
+		]]);
 		const target = battle.p1.active[0];
 		for (let i = 1; i <= 8; i++) {
 			battle.makeChoices('move softboiled', 'move toxic');
@@ -184,10 +196,12 @@ describe('Toxic Poison', () => {
 	});
 
 	it('should reset the damage counter when the Pokemon switches out', () => {
-		battle = common.createBattle([
-			[{ species: 'Chansey', ability: 'serenegrace', moves: ['counter'] }, { species: 'Snorlax', ability: 'immunity', moves: ['curse'] }],
-			[{ species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Chansey', ability: 'serenegrace', moves: ['counter'] },
+			{ species: 'Snorlax', ability: 'immunity', moves: ['curse'] },
+		], [
+			{ species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind'] },
+		]]);
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices('move counter', 'move toxic');
 		}
@@ -245,13 +259,12 @@ describe('Toxic Poison', () => {
 		});
 
 		it('should revert to regular poison on switch in, even for Poison types', () => {
-			battle = common.gen(2).createBattle([
-				[{ species: 'Smeargle', moves: ['toxic', 'splash'] }],
-				[
-					{ species: 'Qwilfish', moves: ['transform', 'splash'] },
-					{ species: 'Gengar', moves: ['nightshade'] },
-				],
-			]);
+			battle = common.gen(2).createBattle([[
+				{ species: 'Smeargle', moves: ['toxic', 'splash'] },
+			], [
+				{ species: 'Qwilfish', moves: ['transform', 'splash'] },
+				{ species: 'Gengar', moves: ['nightshade'] },
+			]]);
 			battle.makeChoices('move toxic', 'move transform');
 			battle.makeChoices('move splash', 'switch 2');
 			battle.makeChoices('move splash', 'switch 2');
@@ -316,10 +329,11 @@ describe('Freeze', () => {
 	it('should cause an afflicted Shaymin-Sky to revert to its base forme', () => {
 		battle = common.createBattle({
 			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Chansey', ability: 'serenegrace', moves: ['icebeam'] }],
-			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk'] }],
-		]);
+		}, [[
+			{ species: 'Chansey', ability: 'serenegrace', moves: ['icebeam'] },
+		], [
+			{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk'] },
+		]]);
 		battle.makeChoices('move icebeam', 'move sleeptalk');
 		assert.equal(battle.p2.active[0].status, 'frz');
 		assert.equal(battle.p2.active[0].species.name, 'Shaymin');
@@ -328,10 +342,11 @@ describe('Freeze', () => {
 	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', () => {
 		battle = common.createBattle({
 			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Ditto', ability: 'imposter', moves: ['transform'] }],
-			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk'] }],
-		]);
+		}, [[
+			{ species: 'Ditto', ability: 'imposter', moves: ['transform'] },
+		], [
+			{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');

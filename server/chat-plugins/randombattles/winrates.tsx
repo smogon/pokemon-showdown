@@ -48,6 +48,7 @@ function getDefaultStats(): Stats {
 			gen9randomdoublesbattle: { mons: {} },
 			gen9babyrandombattle: { mons: {} },
 			gen9chatbats: { mons: {} },
+			gen9ccapm2025randombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },

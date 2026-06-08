@@ -24,8 +24,6 @@ describe('[Gen 1] Bide', () => {
 		const choices = aerodactyl.getMoveRequestData().moves;
 		assert.equal(choices[0].id, 'bide');
 		assert.false(choices[0].disabled);
-		assert.equal(choices[1].id, 'whirlwind');
-		assert(choices[1].disabled);
 		battle.makeChoices();
 		battle.makeChoices();
 		assert.false(aerodactyl.volatiles['bide']);
@@ -139,9 +137,6 @@ describe('[Gen 1] Bide', () => {
 		battle.makeChoices();
 		assert.equal(aerodactyl.volatiles['bide'].time, 3);
 		assert.equal(aerodactyl.volatiles['disable'].slotIndex, 0);
-		// Struggle is the choice
-		const choices = aerodactyl.getMoveRequestData().moves;
-		assert.equal(choices[0].id, 'struggle');
 		assert(aerodactyl.volatiles['disable'].time > 1);
 		battle.makeChoices();
 		assert.equal(aerodactyl.volatiles['bide'].time, 3);

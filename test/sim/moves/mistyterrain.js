@@ -11,9 +11,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should change the current terrain to Misty Terrain for five turns', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mist'] }] });
+		battle = common.createBattle([[
+			{ species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain'] },
+		], [
+			{ species: "Florges", ability: 'symbiosis', moves: ['mist'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move mist');
 		assert(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
@@ -27,9 +29,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should halve the base power of Dragon-type attacks on grounded Pokemon', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed'] }] });
+		battle = common.createBattle([[
+			{ species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain'] },
+		], [
+			{ species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move leechseed');
 		let basePower;
 		const move = Dex.moves.get('dragonpulse');
@@ -40,9 +44,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should prevent moves from setting non-volatile status on grounded Pokemon', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'toxic'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Machamp", ability: 'noguard', item: 'airballoon', moves: ['bulkup', 'toxic'] }] });
+		battle = common.createBattle([[
+			{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'toxic'] },
+		], [
+			{ species: "Machamp", ability: 'noguard', item: 'airballoon', moves: ['bulkup', 'toxic'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move bulkup');
 		battle.makeChoices('move toxic', 'move toxic');
 		assert.equal(battle.p1.active[0].status, '');
@@ -50,17 +56,21 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should not remove active non-volatile statuses from grounded Pokemon', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Crobat", ability: 'infiltrator', moves: ['toxic'] }] });
+		battle = common.createBattle([[
+			{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain'] },
+		], [
+			{ species: "Crobat", ability: 'infiltrator', moves: ['toxic'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move toxic');
 		assert.equal(battle.p1.active[0].status, 'tox');
 	});
 
 	it('should prevent Yawn from putting grounded Pokemon to sleep, but not cause Yawn to fail', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'yawn'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sableye", ability: 'prankster', moves: ['yawn'] }] });
+		battle = common.createBattle([[
+			{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'yawn'] },
+		], [
+			{ species: "Sableye", ability: 'prankster', moves: ['yawn'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move yawn');
 		battle.makeChoices('move yawn', 'move yawn');
 		assert.equal(battle.p1.active[0].status, '');
@@ -70,9 +80,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should cause Rest to fail on grounded Pokemon', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'rest'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest'] }] });
+		battle = common.createBattle([[
+			{ species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'rest'] },
+		], [
+			{ species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move doubleedge');
 		battle.makeChoices('move rest', 'move rest');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -80,9 +92,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should not affect Pokemon in a semi-invulnerable state', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sableye", ability: 'prankster', moves: ['yawn', 'mistyterrain'] }] });
+		battle = common.createBattle([[
+			{ species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop'] },
+		], [
+			{ species: "Sableye", ability: 'prankster', moves: ['yawn', 'mistyterrain'] },
+		]]);
 		battle.makeChoices('move yawn', 'move yawn');
 		battle.makeChoices('move skydrop', 'move mistyterrain');
 		assert.equal(battle.p1.active[0].status, 'slp');
@@ -90,9 +104,11 @@ describe('Misty Terrain', () => {
 	});
 
 	it('should cause Nature Power to become Moonblast', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Shuckle", ability: 'sturdy', moves: ['naturepower'] }] });
+		battle = common.createBattle([[
+			{ species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain'] },
+		], [
+			{ species: "Shuckle", ability: 'sturdy', moves: ['naturepower'] },
+		]]);
 		battle.makeChoices('move mistyterrain', 'move naturepower');
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'moonblast');

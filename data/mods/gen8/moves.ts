@@ -2,7 +2,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	allyswitch: {
 		inherit: true,
 		// Prevents setting the volatile used to check for Ally Switch failure
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	anchorshot: {
 		inherit: true,

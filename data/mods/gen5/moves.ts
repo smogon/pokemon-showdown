@@ -36,7 +36,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	autotomize: {
 		inherit: true,
 		volatileStatus: 'autotomize',
-		onHit() {},
+		onHit: undefined, // no inherit
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
@@ -152,7 +152,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		target: "normal",
 	},
 	covet: {
@@ -485,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	knockoff: {
 		inherit: true,
 		basePower: 20,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 	},
 	leafstorm: {
 		inherit: true,
@@ -565,7 +565,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		condition: {
 			inherit: true,
-			onAccuracy() {},
+			onAccuracy: undefined, // no inherit
 		},
 	},
 	moonlight: {
@@ -578,7 +578,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mudsport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'mudsport',
 		condition: {
 			noCopy: true,
@@ -596,7 +596,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturepower: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 		onHit(pokemon) {
 			this.actions.useMove('earthquake', pokemon);
 		},
@@ -628,7 +628,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	poisonpowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	powergem: {
 		inherit: true,
@@ -663,12 +663,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			inherit: true,
-			onTryHit(target, source, effect) {
+			onTryHit(target, source, move) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
-				if (effect && (effect.id === 'feint' || this.dex.moves.get(effect.id).priority <= 0)) {
+				if (move.id === 'feint' || this.dex.moves.get(move.id).priority <= 0) {
 					return;
 				}
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'Quick Guard');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -685,6 +686,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		priority: 3,
 		flags: { noassist: 1, failcopycat: 1 },
+		condition: {
+			inherit: true,
+			onFoeRedirectTarget(target, source, source2, move) {
+				const ragePowderUser = this.effectState.target;
+				if (ragePowderUser.isSkyDropped()) return;
+
+				if (this.validTarget(ragePowderUser, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
+					this.debug("Rage Powder redirected target of move");
+					return ragePowderUser;
+				}
+			},
+		},
 	},
 	reflect: {
 		inherit: true,
@@ -780,7 +794,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeppowder: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	smellingsalts: {
 		inherit: true,
@@ -813,7 +827,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	stormthrow: {
 		inherit: true,
@@ -831,7 +845,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	substitute: {
 		inherit: true,
@@ -924,7 +938,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxic: {
 		inherit: true,
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	uproar: {
 		inherit: true,
@@ -952,7 +966,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	watersport: {
 		inherit: true,
-		pseudoWeather: undefined,
+		pseudoWeather: undefined, // no inherit
 		volatileStatus: 'watersport',
 		condition: {
 			noCopy: true,
