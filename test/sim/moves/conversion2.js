@@ -83,7 +83,7 @@ describe('Conversion2', () => {
 	describe('[Gen 2]', () => {
 		it('should not succeed after moves that clear the last move used', () => {
 			battle = common.gen(2).createBattle({ seed: [0, 0, 0, 0] }, [[
-				{ species: 'forretress', moves: ['conversion2'] }
+				{ species: 'forretress', moves: ['conversion2'] },
 			], [
 				{ species: 'salamence', moves: ['metronome', 'tackle'] },
 			]]);
