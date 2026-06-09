@@ -835,8 +835,15 @@ export class TeamValidator {
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let encounterMinLevel = Infinity;
 		let encounterMinLevelFlag = false;
+		let minEncounterGen = Infinity;
 		if (ruleTable.has('obtainablemisc')) {
 			for (const encounter of learnsetSpecies.encounters || []) {
+				if (encounter.generation <= this.gen && encounter.level && set.level >= encounter.level) {
+					if (encounter.generation < minEncounterGen) {
+						minEncounterGen = encounter.generation;
+					}
+				}
+
 				if (encounter.generation !== this.gen) continue;
 				if (!encounter.level) continue;
 
@@ -868,15 +875,19 @@ export class TeamValidator {
 			}
 		}
 		let isUnderleveled;
+		let isUnderleveledWild = false;
 		let requiredLevel;
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
-				if (set.level < (evoSpecies.evoLevel || 0) && (encounterMinLevelFlag ||
-					encounterMinLevel > (evoSpecies.evoLevel || 0))) {
-					isUnderleveled = evoSpecies.name;
-					requiredLevel = evoSpecies.evoLevel;
+				if (set.level < (evoSpecies.evoLevel || 0)) {
+					if (encounterMinLevelFlag || encounterMinLevel > (evoSpecies.evoLevel || 0)) {
+						isUnderleveled = evoSpecies.name;
+						requiredLevel = evoSpecies.evoLevel;
+					} else {
+						isUnderleveledWild = true;
+					}
 					break;
 				}
 				evoSpecies = dex.species.get(evoSpecies.prevo);
@@ -887,6 +898,34 @@ export class TeamValidator {
 		if (ruleTable.has('obtainablemoves')) {
 			moveProblems = this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist);
 			problems.push(...moveProblems);
+			if (isUnderleveledWild && minEncounterGen !== Infinity) {
+				let hasValidSource = false;
+
+				if (setSources.sourcesBefore >= minEncounterGen) {
+					hasValidSource = true;
+				} else {
+					setSources.sourcesBefore = 0;
+				}
+				const validSources = [];
+				for (const source of setSources.sources) {
+					const sourceGen = parseInt(source.charAt(0));
+					const isEgg = source.charAt(1) === 'E';
+					const isEvent = source.charAt(1) === 'S';
+
+					if (isEgg && sourceGen < 8) continue;
+					if (!isEvent && sourceGen < minEncounterGen) continue;
+
+					validSources.push(source);
+					hasValidSource = true;
+				}
+				setSources.sources = validSources;
+
+				if (!hasValidSource) {
+					const moveList = setSources.restrictiveMoves?.length ? ` (${setSources.restrictiveMoves.join(', ')})` : '';
+
+					problems.push(`${name} was encountered underleveled in the wild and cannot have pre-Gen 8 Egg moves or moves from older generations${moveList}.`);
+				}
+			}
 
 			const incompatibleMoves = setSources.goIncompatibleMoves;
 			if (pokemonGoProblems && incompatibleMoves) {
