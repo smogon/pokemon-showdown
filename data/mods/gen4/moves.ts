@@ -860,7 +860,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				used: false,
 				virtual: true,
 			};
-			this.add('-start', source, 'Mimic', move.name);
+			this.add('-activate', source, 'move: Mimic', move.name);
 		},
 	},
 	minimize: {

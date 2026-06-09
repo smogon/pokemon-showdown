@@ -11866,7 +11866,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				used: false,
 				virtual: true,
 			};
-			this.add('-start', source, 'Mimic', move.name);
+			this.add('-activate', source, 'move: Mimic', move.name);
 		},
 		target: "normal",
 		type: "Normal",
