@@ -6012,16 +6012,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['focuspunch']?.lostFocus) {
-				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
-				return true;
-			}
-		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Focus Punch');
+			},
+			onBeforeMovePriority: -100,
+			onBeforeMove(pokemon) {
+				if (this.effectState.lostFocus) {
+					this.add('cant', pokemon, 'Focus Punch');
+					return false;
+				}
 			},
 			onHit(pokemon, source, move) {
 				if (move.category !== 'Status') {

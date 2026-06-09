@@ -498,23 +498,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		priorityChargeCallback: undefined, // no inherit
 		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('focuspunch');
+			if (pokemon.status !== 'slp' && !(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) {
+				this.add('-singleturn', pokemon, 'move: Focus Punch');
+			}
 		},
-		beforeMoveCallback: undefined, // no inherit
 		onTry(pokemon) {
-			if (pokemon.volatiles['focuspunch']?.lostFocus) {
+			const lastAttackedBy = pokemon.getLastAttackedBy();
+			if (lastAttackedBy?.move && lastAttackedBy.thisTurn) {
 				this.attrLastMove('[still]');
-				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
+				this.add('cant', pokemon, 'Focus Punch');
 				return null;
 			}
 		},
-		condition: {
-			inherit: true,
-			onStart(pokemon) {
-				if (pokemon.status === 'slp' || (pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
-				this.add('-singleturn', pokemon, 'move: Focus Punch');
-			},
-		},
+		condition: undefined, // no inherit
 	},
 	foresight: {
 		inherit: true,
