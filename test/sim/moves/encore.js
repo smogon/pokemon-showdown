@@ -86,8 +86,8 @@ describe('Encore', () => {
 
 	it('should make Shell Trap always fail if the user\'s decision is changed', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
-				{ species: "Smeargle", level: 99, ability: 'owntempo', moves: ['splash', 'shelltrap'] },
-				{ species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport'] },
+			{ species: "Smeargle", level: 99, ability: 'owntempo', moves: ['splash', 'shelltrap'] },
+			{ species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport'] },
 		], [
 			{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['encore', 'splash'] },
 			{ species: "Zigzagoon", ability: 'pickup', item: 'assaultvest', moves: ['quickattack'] },

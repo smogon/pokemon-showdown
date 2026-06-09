@@ -128,7 +128,7 @@ describe('Focus Punch', () => {
 		const switchIndex = log.indexOf('|switch|p2a: Wynaut');
 		assert(focusPunchChargeIndex > switchIndex, `Focus Punch's charge message should occur after switches`);
 	});
-	
+
 	it('should not be affected by Encore if the user\'s decision is not changed', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Smeargle", level: 50, ability: 'owntempo', moves: ['splash', 'focuspunch'] },
@@ -231,8 +231,8 @@ describe('Focus Punch', () => {
 			const focusPunchChargeIndex = log.indexOf('|-singleturn|');
 			const switchIndex = log.indexOf('|switch|p2a: Wynaut');
 			assert(focusPunchChargeIndex < switchIndex, `Focus Punch's charge message should occur before switches`);
-		})
-		
+		});
+
 		it(`can lose focus if Encored into Focus Punch`, () => {
 			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wynaut', moves: ['focuspunch', 'growl'] },
