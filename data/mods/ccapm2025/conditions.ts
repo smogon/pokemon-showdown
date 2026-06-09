@@ -16,6 +16,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'ber',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			this.add('-start', target, 'Berserk');
 			this.effectState.counter = 0;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-activate', target, 'ber', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
@@ -61,6 +62,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (pokemon.species.name === 'Drifblim-Inflamed') {
 				pokemon.formeChange('Drifblim', this.effect, false);
 			}
+			this.add('-end', pokemon, 'Berserk');
 		},
 		onBeforeFaint(pokemon) {
 			for (const opponent of pokemon.side.foe.active) {
@@ -85,6 +87,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'Berserk');
 			if (this.effectState.counter >= 10000 * pokemon.maxhp) pokemon.cureStatus();
 			for (const opponent of pokemon.side.foe.active) {
 				const active = opponent.side.foe.active.filter(mon => mon.status === 'ber').length > 0;

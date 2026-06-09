@@ -13,17 +13,15 @@ describe('Follow Me', () => {
 	it('should redirect single-target moves towards it if it is a valid target', function () {
 		this.timeout(5000);
 
-		battle = common.gen(5).createBattle({ gameType: 'triples' });
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
 			{ species: 'Clefairy', ability: 'unaware', moves: ['calmmind'] },
 			{ species: 'Cleffa', ability: 'unaware', moves: ['calmmind'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Abra', ability: 'synchronize', moves: ['lowkick'] },
 			{ species: 'Kadabra', ability: 'synchronize', moves: ['lowkick'] },
 			{ species: 'Alakazam', ability: 'synchronize', moves: ['lowkick'] },
-		] });
+		]]);
 		let hitCount = 0;
 		battle.onEvent('Damage', battle.format, (damage, pokemon) => {
 			if (pokemon.species.id === 'clefable') {
@@ -35,15 +33,13 @@ describe('Follow Me', () => {
 	});
 
 	it('should not redirect self-targeting moves', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
 			{ species: 'Clefairy', ability: 'unaware', moves: ['softboiled'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Alakazam', ability: 'synchronize', moves: ['honeclaws'] },
 			{ species: 'Kadabra', ability: 'synchronize', moves: ['honeclaws'] },
-		] });
+		]]);
 		battle.makeChoices('move followme, move softboiled', 'move honeclaws, move honeclaws');
 		assert.equal(battle.p1.active[0].boosts['atk'], 0);
 		assert.equal(battle.p2.active[0].boosts['atk'], 1);

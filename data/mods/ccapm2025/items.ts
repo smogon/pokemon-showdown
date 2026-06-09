@@ -118,7 +118,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return 0;
 			}
 		},
-		shortDesc: "Parasect: Blocks 1 SE move, loses 1/8 HP instead, changes form, and becomes Berserk. Single use.",
+		shortDesc: "Parasect: Block 1 SE move, lose 1/8 HP, change form, and become Berserk. Single use.",
 		num: -5,
 		gen: 9,
 	},

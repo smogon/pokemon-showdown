@@ -52,6 +52,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	naturalcure: {
+		inherit: true,
+		onCheckShow: undefined, // no inherit
+		onSwitchOut(pokemon) {
+			if (!pokemon.status || pokemon.status === 'fnt') return;
+
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
+			pokemon.clearStatus();
+		},
+	},
 	piercingdrill: {
 		inherit: true,
 		isNonstandard: null,

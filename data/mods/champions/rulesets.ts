@@ -5,15 +5,12 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			'Obtainable', 'Team Preview', 'Cancel Mod', 'Endless Battle Clause',
 			'Adjust Level = 50', 'Species Clause', 'Item Clause = 1', 'Min Team Size = 6',
 		],
-		onBegin() {
-			this.reportPercentages = true;
-		},
 	},
 	standard: {
 		inherit: true,
 		ruleset: [
 			'Standard AG',
-			'Sleep Moves Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause',
+			'Sleep Moves Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Clause',
 		],
 	},
 	standarddraft: {
@@ -33,9 +30,6 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		desc: "The in-game Flat Rules: Adjust Level 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level = 50', 'Picked Team Size = Auto', 'Min Team Size = 6', 'Cancel Mod'],
 		banlist: ['Mythical', 'Restricted Legendary'],
-		onBegin() {
-			this.reportPercentages = true;
-		},
 	},
 	teampreview: {
 		inherit: true,
