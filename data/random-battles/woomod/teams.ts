@@ -671,6 +671,7 @@ export class RandomWMTeams extends RandomTeams {
 		if (species.id === 'charmander') return 'Damp Rock';
 		if (species.id === 'baltoywaterrider') return 'Scope Lens';
 		if (species.id === 'tandemaus') return 'Loaded Dice';
+		if (species.id === 'golett') return 'Power Herb';
 		if (species.id === 'dragonair' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
 		if (species.id === 'elgyem' && role === 'Setup Sweeper') return 'Heavy-Duty Boots';
 		if (species.id === 'jigglypuff' || species.id === 'helioptile') return 'Heavy-Duty Boots';

@@ -6,6 +6,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		otherFormes: ["Aegislash-Blade", "Aegislash-Soulbound"],
 		formeOrder: ["Aegislash", "Aegislash-Blade", "Aegislash-Soulbound"],
 	},
+	aegislashblade: {
+		inherit: true,
+		types: ["Ghost", "Fighting"],
+		baseStats: { hp: 60, atk: 140, def: 50, spa: 140, spd: 50, spe: 60 },
+	},
 	aegislashsoulbound: {
 		num: 681,
 		name: "Aegislash-Soulbound",

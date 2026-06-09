@@ -77,12 +77,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	spicyspray: {
 		inherit: true,
 		isNonstandard: null,
-		onDamagingHit(damage, target, source, move) {
-			// this is only in the mod folder because it is weird like Dire Claw
-			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
-				this.add('-immune', source);
-			}
-		},
 	},
 	unseenfist: {
 		onModifyMove: undefined, // no inherit

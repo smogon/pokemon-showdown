@@ -116,16 +116,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	ceaselessedge: {
-		inherit: true,
-		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('spikes');
-				}
-			}
-		},
-	},
 	celebrate: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -214,7 +204,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					if (target.status === status) {
 						this.add('-fail', target, status);
 					} else {
-						this.add('-fail', source);
+						this.add('-fail', target);
 					}
 					return;
 				}
@@ -318,7 +308,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!action) {
 					this.effectState.duration!++;
 					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
-				} else if (!target.hasItem('mentalherb')) {
+				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
 					const priority = action.priority -
 						this.dex.moves.get(action.moveid).priority +
 						this.dex.moves.get(move.id).priority;
@@ -345,7 +335,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fakeout: {
 		inherit: true,
 		onDisableMove(pokemon) {
-			if (pokemon.activeMoveActions > 1) {
+			if (pokemon.activeMoveActions) {
 				pokemon.disableMove('fakeout');
 			}
 		},
@@ -379,7 +369,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 100,
 		onDisableMove(pokemon) {
-			if (pokemon.activeMoveActions > 1) {
+			if (pokemon.activeMoveActions) {
 				pokemon.disableMove('firstimpression');
 			}
 		},
@@ -470,14 +460,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	growth: {
 		inherit: true,
-		onModifyMove(move, pokemon) {
-			if (pokemon.hasAbility('megasol') && this.field.weather !== 'sunnyday') {
-				// TODO: check in future patches
-				delete move.boosts;
-			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				move.boosts = { atk: 2, spa: 2 };
-			}
-		},
 		type: "Grass",
 	},
 	gust: {
@@ -515,6 +497,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	hornattack: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	howl: {
+		inherit: true,
+		flags: { snatch: 1, sound: 1, bypasssub: 1, metronome: 1 },
 	},
 	hydrosteam: {
 		inherit: true,
@@ -986,16 +972,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stomp: {
 		inherit: true,
 		isNonstandard: "Past",
-	},
-	stoneaxe: {
-		inherit: true,
-		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('stealthrock');
-				}
-			}
-		},
 	},
 	stormthrow: {
 		inherit: true,

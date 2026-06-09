@@ -367,7 +367,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			baddybad: ["9L1"],
 		},
 	},
-	koffing: {
+	koffinghoenn: {
 		learnset: {
 			acidspray: ["9L1"],
 			assurance: ["9L1"],

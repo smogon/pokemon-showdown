@@ -39,8 +39,8 @@ type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom
 type PokemonSet = import('./teams').PokemonSet;
 
 declare namespace TierTypes {
-	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-		"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
+	export type Singles = "AG" | "Uber" | "(AG)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
+		"PUBL" | "PU" | "ZUBL" | "ZU" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
@@ -277,7 +277,7 @@ interface ModdedBattlePokemon {
 	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
 	deductPP?: (this: Pokemon, move: string | Move | ActiveMove, amount?: number | null) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon, message?: string | boolean) => ID;
+	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,
@@ -460,6 +460,7 @@ type TextFile<T> = T & {
 	gen6?: T,
 	gen7?: T,
 	gen8?: T,
+	champions?: T,
 };
 
 type AbilityText = TextFile<ConditionTextData & {

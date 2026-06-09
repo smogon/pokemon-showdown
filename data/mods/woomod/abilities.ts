@@ -119,6 +119,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	asoneklang: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
+			this.add('-ability', pokemon, 'As One (Klang)');
+			this.add('-message', 'Baltoy-Gear-Rider has two Abilities!');
 			this.add('-ability', pokemon, 'Levitate');
 			this.add('-ability', pokemon, 'Clear Body');
 		},
@@ -142,6 +144,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	asoneseadra: {
 		onStart(pokemon) {
+			this.add('-ability', pokemon, 'As One (Seadra)');
+			this.add('-message', 'Baltoy-Water-Rider has two Abilities!');
 			this.add('-ability', pokemon, 'Levitate');
 			this.add('-ability', pokemon, 'Sniper');
 		},
@@ -220,6 +224,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	lastcall: {
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
+				this.add('-ability', target, 'LAST CALL');
 				this.actions.useMove(target.moveSlots[target.moveSlots.length - 1].id, target);
 			}
 		},
@@ -349,7 +354,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	maliciousroots: {
 		onUpdate(pokemon) {
 			for (const target of pokemon.adjacentFoes()) {
-				if (target.status && !target.volatiles['leechseed']) target.addVolatile('leechseed', pokemon);
+				if (target.status && !target.volatiles['leechseed']) {
+					this.add('-ability', pokemon, 'Malicious Roots');
+					target.addVolatile('leechseed', pokemon);
+				}
 			}
 		},
 		flags: {},
@@ -366,6 +374,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Rock' && !target.activeTurns) {
+				this.add('-activate', target, 'ability: Alpinist');
 				this.add('-immune', target, '[from] ability: Alpinist');
 				return null;
 			}
@@ -478,7 +487,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Hoothoot Ability",
-		shortDesc: "Effects of Normalize + On switch, adds the Normal type to all Pokemon on the field.",
+		shortDesc: "Effects of Normalize + Adds the Normal type to all Pokemon on the field.",
 	},
 	mitosis: {
 		onAfterMove(source, target, move) {

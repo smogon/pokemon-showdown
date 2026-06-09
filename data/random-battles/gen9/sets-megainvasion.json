@@ -32,13 +32,19 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Air Slash", "Dragon Pulse", "Fire Blast", "Scorching Sands", "Solar Beam"],
+                "movepool": ["Air Slash", "Dragon Pulse", "Solar Beam", "Weather Ball"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Air Slash", "Scorching Sands", "Solar Beam", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Stellar"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Dragon Pulse", "Fire Blast", "Scorching Sands", "Solar Beam"],
+                "movepool": ["Dragon Pulse", "Scorching Sands", "Solar Beam", "Weather Ball"],
                 "abilities": ["Blaze"],
                 "teraTypes": ["Stellar"]
             }
@@ -77,7 +83,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Destiny Bond", "Encore", "Shadow Ball", "Sludge Wave"],
+                "movepool": ["Encore", "Nasty Plot", "Shadow Ball", "Sludge Wave"],
                 "abilities": ["Cursed Body"],
                 "teraTypes": ["Stellar"]
             },
@@ -239,7 +245,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Mystical Fire", "Psyshock"],
+                "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Psyshock"],
+                "abilities": ["Trace"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Psyshock"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Stellar"]
             }

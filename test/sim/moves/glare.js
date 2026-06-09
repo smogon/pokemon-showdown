@@ -11,9 +11,11 @@ describe('Glare', () => {
 	});
 
 	it('should ignore natural type immunities', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Arbok", ability: 'noguard', moves: ['glare'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Gengar", ability: 'blaze', moves: ['bulkup'] }] });
+		battle = common.createBattle([[
+			{ species: "Arbok", ability: 'noguard', moves: ['glare'] },
+		], [
+			{ species: "Gengar", ability: 'blaze', moves: ['bulkup'] },
+		]]);
 		battle.makeChoices('move glare', 'move bulkup');
 		assert.equal(battle.p2.active[0].status, 'par');
 	});
@@ -25,10 +27,11 @@ describe('Glare [Gen 3]', () => {
 	});
 
 	it('should not ignore natural type immunities', () => {
-		battle = common.gen(3).createBattle([
-			[{ species: "Arbok", ability: 'noguard', moves: ['glare'] }],
-			[{ species: "Gengar", ability: 'blaze', moves: ['bulkup'] }],
-		]);
+		battle = common.gen(3).createBattle([[
+			{ species: "Arbok", ability: 'noguard', moves: ['glare'] },
+		], [
+			{ species: "Gengar", ability: 'blaze', moves: ['bulkup'] },
+		]]);
 		battle.makeChoices('move glare', 'move bulkup');
 		assert.equal(battle.p2.active[0].status, '');
 	});

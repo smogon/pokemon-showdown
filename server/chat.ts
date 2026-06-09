@@ -1303,20 +1303,13 @@ export class CommandContext extends MessageContext {
 		if (setting === true && !user.can('lock')) return false; // this is to appease TS
 		const friends = targetUser.friends || new Set();
 		if (setting === 'friends') return friends.has(user.id);
-		return Users.globalAuth.atLeast(user, setting as AuthLevel);
+		return Users.globalAuth.atLeast(user, setting as AuthLevel) || friends.has(user.id);
 	}
 	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
-		const friends = targetUser.friends || new Set();
-		if (
-			targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true ||
-				(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
-				!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
-				!this.user.can('lock')
-		) {
+		if (!this.checkCanPM(targetUser)) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
 			throw new Chat.ErrorMessage("This user is currently blocking PMs.");
 		}
@@ -1436,6 +1429,8 @@ export class CommandContext extends MessageContext {
 							}
 						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
 							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
+						} else if (buttonName === 'copyText') {
+							// copy buttons don't do anything on click except copy to clipboard
 						} else if (buttonName) {
 							throw new Chat.ErrorMessage([
 								`This button is not allowed: <${tagContent}>`,

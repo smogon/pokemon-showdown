@@ -726,7 +726,7 @@ export class RandomC25Teams extends RandomTeams {
 			species.id === 'froslass' || moves.has('populationbomb') ||
 			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
 		) return 'Wide Lens';
-		if (species.id === 'smeargle') return 'Focus Sash';
+		if (species.id === 'smeargle' || species.id === 'kecleon') return 'Focus Sash';
 		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
 		if (
 			(species.baseSpecies === 'Magearna' && role === 'Tera Blast user') ||

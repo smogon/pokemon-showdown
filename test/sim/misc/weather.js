@@ -11,10 +11,12 @@ describe('Weather damage calculation', () => {
 	});
 
 	it('should multiply the damage (not the basePower) in favorable weather', () => {
-		battle = common.createBattle();
+		battle = common.createBattle([[
+			{ species: 'Ninetales', ability: 'drought', moves: ['incinerate'] },
+		], [
+			{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] },
+		]]);
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', { team: [{ species: 'Ninetales', ability: 'drought', moves: ['incinerate'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] }] });
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
@@ -24,10 +26,12 @@ describe('Weather damage calculation', () => {
 	});
 
 	it('should reduce the damage (not the basePower) in unfavorable weather', () => {
-		battle = common.createBattle();
+		battle = common.createBattle([[
+			{ species: 'Ninetales', ability: 'drizzle', moves: ['incinerate'] },
+		], [
+			{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] },
+		]]);
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', { team: [{ species: 'Ninetales', ability: 'drizzle', moves: ['incinerate'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] }] });
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 50, () => battle.makeChoices('move incinerate', 'move splash'));
@@ -37,10 +41,12 @@ describe('Weather damage calculation', () => {
 	});
 
 	it('should make Hail/Sandstorm damage some pokemon but not others', () => {
-		battle = common.gen(8).createBattle();
+		battle = common.gen(8).createBattle([[
+			{ species: 'Abomasnow', ability: 'snowwarning', moves: ['protect'] },
+		], [
+			{ species: 'Sandslash', ability: 'sandveil', moves: ['protect'] },
+		]]);
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', { team: [{ species: 'Abomasnow', ability: 'snowwarning', moves: ['protect'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Sandslash', ability: 'sandveil', moves: ['protect'] }] });
 		battle.makeChoices('move protect', 'move protect');
 		const p1active = battle.p1.active[0];
 		const p2active = battle.p2.active[0];

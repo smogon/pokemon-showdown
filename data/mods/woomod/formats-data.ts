@@ -111,6 +111,66 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	pikachuhoenn: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachucosplay: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachurockstar: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachubelle: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachupopstar: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachuphd: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachulibre: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachuoriginal: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachusinnoh: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachuunova: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachukalos: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachualola: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachupartner: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachuworld: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
+	pikachustarter: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
 	morelull: {
 		tier: "OU",
 		doublesTier: "DOU",
