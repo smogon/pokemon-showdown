@@ -62,8 +62,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
-		onModifyMove() {},
-		onDamagingHit() {},
+		onModifyMove: undefined, // no inherit
+		onDamagingHit: undefined, // no inherit
 		onAfterMoveSecondary(target, source, move) {
 			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();
@@ -187,7 +187,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			delete target.volatiles['confusion'];
 			if (!target.side.getSideCondition('safeguard')) target.addVolatile('confusion');
 		},
-		onLockMove(pokemon) {
+		onLockMove() {
 			return this.effectState.move;
 		},
 		onMoveAborted(pokemon) {

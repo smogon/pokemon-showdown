@@ -118,7 +118,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	lockedmove: {
 		inherit: true,
-		onAfterMove() {},
+		onAfterMove: undefined, // no inherit
 	},
 	choicelock: {
 		inherit: true,

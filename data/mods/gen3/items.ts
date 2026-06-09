@@ -1,7 +1,7 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	aguavberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -12,7 +12,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	apicotberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -23,7 +23,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	berryjuice: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -37,7 +37,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackbelt: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Fighting') {
@@ -47,7 +47,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackglasses: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Dark') {
@@ -57,7 +57,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	charcoal: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Fire') {
@@ -67,7 +67,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragonfang: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Dragon') {
@@ -82,6 +82,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: 208,
 		gen: 3,
 		isNonstandard: "Unobtainable",
+		// No competitive use
 	},
 	fastball: {
 		inherit: true,
@@ -89,7 +90,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	figyberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -100,7 +101,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ganlonberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -111,7 +112,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	hardstone: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Rock') {
@@ -125,7 +126,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	iapapaberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -151,7 +152,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lansatberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -174,7 +175,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	liechiberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -190,7 +191,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(2);
 			}
 		},
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 	},
 	loveball: {
 		inherit: true,
@@ -202,7 +203,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	magnet: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Electric') {
@@ -212,7 +213,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	magoberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -223,7 +224,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	metalcoat: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Steel') {
@@ -233,7 +234,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	miracleseed: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Grass') {
@@ -247,7 +248,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	mysticwater: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Water') {
@@ -257,7 +258,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	nevermeltice: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Ice') {
@@ -267,7 +268,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	oranberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -278,7 +279,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	petayaberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -289,7 +290,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Poison') {
@@ -299,12 +300,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	quickclaw: {
 		inherit: true,
-		onFractionalPriority() {},
+		onFractionalPriority: undefined, // no inherit
 		// implemented in Pokemon#getActionSpeed()
 	},
 	salacberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -315,7 +316,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	seaincense: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Water') {
@@ -325,7 +326,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sharpbeak: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Flying') {
@@ -335,7 +336,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silkscarf: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Normal') {
@@ -345,7 +346,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silverpowder: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Bug') {
@@ -355,7 +356,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sitrusberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -369,7 +370,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	softsand: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Ground') {
@@ -379,7 +380,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spelltag: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, user, target, move) {
 			if (move?.type === 'Ghost') {
@@ -393,7 +394,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	starfberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -404,7 +405,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	twistedspoon: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, user, target, move) {
 			if (move?.type === 'Psychic') {
@@ -414,7 +415,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	wikiberry: {
 		inherit: true,
-		onUpdate() {},
+		onUpdate: undefined, // no inherit
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {

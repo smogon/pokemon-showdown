@@ -125,8 +125,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.lastDamage = 0;
-			let lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (!lockedMove) {
 				if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);
@@ -273,7 +272,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (pokemon.status === 'slp' && !isSleepUsable) break;
 					move.hit = i + 1;
-					if (move.hit === hits) move.lastHit = true;
+					move.lastHit = move.hit === hits;
 					moveDamage = this.moveHit(target, pokemon, move);
 					if (moveDamage === false) break;
 					if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;

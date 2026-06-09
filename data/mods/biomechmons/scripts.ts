@@ -167,11 +167,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.m.scrambled.moves.push({ thing: ability.id, inSlot: 'Ability' });
 					const move = Dex.moves.get(ability.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.battle.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: move.target,
 						disabled: false,
 						used: false,
@@ -179,6 +181,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (!isTransform) {
 						this.baseMoveSlots.push(newMove);
 						this.moveSlots.push(newMove);
+						this.ppUps.push(ppUps);
 					}
 				}
 			}
@@ -322,17 +325,20 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.m.scrambled.moves.push({ thing: item.id, inSlot: 'Item' });
 					const move = Dex.moves.get(item.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.battle.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: move.target,
 						disabled: false,
 						used: false,
 					};
 					this.baseMoveSlots.push(newMove);
 					this.moveSlots.push(newMove);
+					this.ppUps.push(ppUps);
 				}
 			}
 			return true;
@@ -483,16 +489,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			this.timesAttacked = pokemon.timesAttacked;
-			for (const moveSlot of pokemon.moveSlots) {
+			for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 				let moveName = moveSlot.move;
 				if (moveSlot.id === 'hiddenpower') {
 					moveName = 'Hidden Power ' + this.hpType;
 				}
+				const move = this.battle.dex.moves.get(moveSlot.id);
 				this.moveSlots.push({
 					move: moveName,
 					id: moveSlot.id,
-					pp: moveSlot.maxpp === 1 ? 1 : 5,
-					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+					pp: Math.min(5, move.pp),
+					maxpp: this.battle.gen >= 5 ? Math.min(5, move.pp) : moveSlot.maxpp,
 					target: moveSlot.target,
 					disabled: false,
 					used: false,

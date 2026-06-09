@@ -39,8 +39,8 @@ type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom
 type PokemonSet = import('./teams').PokemonSet;
 
 declare namespace TierTypes {
-	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-		"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
+	export type Singles = "AG" | "Uber" | "(AG)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
+		"PUBL" | "PU" | "ZUBL" | "ZU" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
@@ -279,9 +279,10 @@ interface ModdedBattlePokemon {
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon) => ID;
+	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
 	formeChange?: (
-		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, message?: string
+		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
+		message?: string,
 	) => boolean;
 	hasType?: (this: Pokemon, type: string | string[]) => boolean;
 	getAbility?: (this: Pokemon) => Ability;
@@ -384,8 +385,12 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
 	faintMessages?: (this: Battle, lastFirst?: boolean, forceCheck?: boolean, checkWin?: boolean) => boolean | undefined;
 	tiebreak?: (this: Battle) => boolean;
+	calculatePP?: (this: Battle, move: Move, ppUps?: number) => number;
 	checkMoveMakesContact?: (
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
+	) => boolean;
+	checkMoveBypassesProtect?: (
+		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
 	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
@@ -393,6 +398,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getTarget?: (
 		this: Battle, pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon
 	) => Pokemon | null;
+
+	// OM
+	resolveTargetLoc?: (this: Battle, targetLoc: number, action: Action, move: ActiveMove) => number;
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;
@@ -454,6 +462,7 @@ type TextFile<T> = T & {
 	gen6?: T,
 	gen7?: T,
 	gen8?: T,
+	champions?: T,
 };
 
 type AbilityText = TextFile<ConditionTextData & {
@@ -487,6 +496,7 @@ declare namespace RandomTeamsTypes {
 		statusCure?: number;
 		teraBlast?: number;
 		imprison?: number;
+		dynamaxUser?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
@@ -573,5 +583,6 @@ declare namespace RandomTeamsTypes {
 		'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
 		'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
 		'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
-		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user' | 'Imprisoner';
+		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user' | 'Imprisoner' |
+		'Dynamax User';
 }
