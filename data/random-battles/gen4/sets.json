@@ -302,7 +302,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "earthquake", "encore", "stoneedge", "uturn"],
+                "movepool": ["bulkup", "closecombat", "earthquake", "encore", "stoneedge", "uturn"],
                 "abilities": ["Vital Spirit"],
                 "preferredTypes": ["Rock"]
             }
@@ -1121,12 +1121,12 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["encore", "energyball", "sleeppowder", "toxic", "uturn"],
-                "abilities": ["Chlorophyll"]
+                "abilities": ["Chlorophyll", "Leaf Guard"]
             },
             {
                 "role": "Fast Support",
                 "movepool": ["hiddenpowerflying", "leechseed", "protect", "sleeppowder", "substitute"],
-                "abilities": ["Chlorophyll"]
+                "abilities": ["Chlorophyll", "Leaf Guard"]
             }
         ]
     },
