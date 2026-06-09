@@ -230,7 +230,7 @@ describe('Encore', () => {
 		});
 	});
 
-	describe('Encore [Gen 2]', () => {
+	describe('[Gen 2]', () => {
 		it(`Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
 				{ species: 'slowbro', moves: ['glare'] },
