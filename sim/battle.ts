@@ -377,8 +377,8 @@ export class Battle {
 		if (this.activeMove) {
 			if (!failed) {
 				this.lastMove = this.activeMove;
-			} else if (this.gen === 3 || this.gen === 4) {
-				this.lastMove = null;
+			} else if ((this.gen === 3 || this.gen === 4) && this.activePokemon) {
+				this.activePokemon.lastMove = null;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;
