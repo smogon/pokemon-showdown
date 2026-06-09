@@ -174,7 +174,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(target) {
 				const move = target.lastMoveEncore;
 				if (!move) return false;
-				const moveIndex = target.activeTurns && !this.queue.willMove(target) ? target.lastMoveSlot : target.moves.indexOf(move.id);
+				const moveIndex = target.activeTurns && !this.queue.willMove(target) ? target.lastMoveSlot :
+					target.moves.indexOf(move.id);
 				target.lastMoveSlot = moveIndex;
 				if (target.lastMoveEncore?.flags['failencore'] || moveIndex < 0 || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
