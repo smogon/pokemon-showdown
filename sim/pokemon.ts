@@ -171,6 +171,8 @@ export class Pokemon {
 	lastMoveEncore?: ActiveMove | null;
 	lastMoveUsed: ActiveMove | null;
 	lastMoveTargetLoc?: number;
+	// Gen 2 and 3 only, Gen 1 is tracked on Side
+	lastMoveSlot: number;
 	moveThisTurn: string | boolean;
 	statsRaisedThisTurn: boolean;
 	statsLoweredThisTurn: boolean;
@@ -462,6 +464,7 @@ export class Pokemon {
 		// This is used in gen 2 only
 		this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
+		this.lastMoveSlot = 0;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
 		this.statsLoweredThisTurn = false;
@@ -891,7 +894,7 @@ export class Pokemon {
 		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
-	deductPP(move: string | Move, amount?: number | null) {
+	deductPP(move: string | Move, amount?: number | null, sourceEffect?: Effect | null) {
 		move = this.battle.dex.moves.get(move);
 		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
@@ -986,9 +989,16 @@ export class Pokemon {
 				id: lockedMove,
 			}];
 		}
+		let moveSlots = this.moveSlots;
+		let encoredMove = false;
+		if (this.battle.gen <= 4 && this.volatiles['encore']) {
+			const slotIndex = this.battle.gen <= 2 ? this.lastMoveSlot : this.moves.indexOf(this.volatiles['encore'].move);
+			moveSlots = [this.moveSlots[slotIndex]];
+			encoredMove = true;
+		}
 		const moves = [];
 		let hasValidMove = false;
-		for (const moveSlot of this.moveSlots) {
+		for (const moveSlot of moveSlots) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = `Hidden Power ${this.hpType}`;
@@ -1037,7 +1047,7 @@ export class Pokemon {
 				id: moveSlot.id,
 				pp: moveSlot.pp,
 				maxpp: moveSlot.maxpp,
-				target,
+				target: encoredMove ? undefined : target,
 				disabled,
 			});
 		}
@@ -1544,6 +1554,7 @@ export class Pokemon {
 		this.lastMove = null;
 		this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
+		this.lastMoveSlot = 0;
 		this.moveThisTurn = '';
 		this.moveLastTurnResult = undefined;
 		this.moveThisTurnResult = undefined;

@@ -15,18 +15,24 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	pokemon: {
 		inherit: true,
-		deductPP(move, amount) {
+		deductPP(move, amount, effect) {
+			const moveid = toID(move);
+			if (moveid === 'struggle') return 0;
+
+			if (!effect) effect = this.battle.effect;
+
+			// Snatch and Spite deduct the first slot because the slot is not known by the opponent
+			const moveSlot = ['snatch', 'spite'].includes(effect.id) ? this.moves.indexOf(moveid) : this.lastMoveSlot;
 			// a lot of checks just to make sure the move slot is always available
-			const moveSlot = (move as ActiveMove).moveSlot;
 			if (typeof moveSlot !== 'number') {
-				throw new Error(`Non-locked move ${move} doesn't have a move slot - cannot deduct PP!`);
+				throw new Error(`Non-locked move ${moveid} doesn't have a move slot (move used: ${moveid}) - cannot deduct PP!`);
 			}
 			const ppData = this.getMoveSlot(moveSlot);
 			if (!ppData) {
-				throw new Error(`Move slot ${moveSlot} does not exist on this Pokémon - cannot deduct PP!`);
+				throw new Error(`Move slot ${moveSlot} does not exist on this Pokémon (move used: ${moveid}) - cannot deduct PP!`);
 			}
-			if (ppData.id !== toID(move)) {
-				throw new Error(`Move slot ${moveSlot} contains ${ppData.id}, not ${toID(move)} - cannot deduct PP!`);
+			if (ppData.id !== moveid && !(this.volatiles['encore'] && this.battle.gen === 2)) {
+				throw new Error(`Move slot ${moveSlot} contains ${ppData.id}, not ${moveid} (move used: ${moveid}) - cannot deduct PP!`);
 			}
 			ppData.used = true;
 			if (!ppData.pp) return 0;

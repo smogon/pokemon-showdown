@@ -104,55 +104,47 @@ describe('Snatch', () => {
 		const targetHP = battle.modify(battle.p1.active[0].maxhp, 0.25);
 		assert.hurtsBy(battle.p1.active[0], -targetHP, () => battle.makeChoices('move snatch', 'move swallow'));
 	});
-});
 
-describe('Snatch [Gen 4]', () => {
-	afterEach(() => {
-		battle.destroy();
+	describe('[Gen 4]', () => {
+		it('should Snatch moves that were called by another user of Snatch', () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'weavile', moves: ['snatch'] },
+				{ species: 'wynaut', moves: ['howl'] },
+			], [
+				{ species: 'alakazam', moves: ['snatch'] },
+				{ species: 'wynaut', moves: ['sleeptalk'] },
+			]]);
+
+			battle.makeChoices();
+			assert.statStage(battle.p2.active[0], 'atk', 1);
+		});
+
+		it(`should only deduct additional PP from Snatch if the Snatch was successful`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind'] },
+			], [
+				{ species: 'Dialga', moves: ['snatch'] },
+			]]);
+			battle.makeChoices();
+			const move = battle.p2.active[0].getMoveData(Dex.moves.get('snatch'));
+			assert.equal(move.pp, move.maxpp - 1, `Snatch should only lose 1 PP because it was not successful.`);
+
+			battle.makeChoices('move calmmind', 'move snatch');
+			assert.equal(move.pp, move.maxpp - 3, `Snatch should be at 13 PP after losing 1 PP earlier and 2 PP this turn`);
+		});
 	});
 
-	it('should Snatch moves that were called by another user of Snatch', () => {
-		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
-			{ species: 'weavile', moves: ['snatch'] },
-			{ species: 'wynaut', moves: ['howl'] },
-		], [
-			{ species: 'alakazam', moves: ['snatch'] },
-			{ species: 'wynaut', moves: ['sleeptalk'] },
-		]]);
-
-		battle.makeChoices();
-		assert.statStage(battle.p2.active[0], 'atk', 1);
-	});
-
-	it(`should only deduct additional PP from Snatch if the Snatch was successful`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind'] },
-		], [
-			{ species: 'Dialga', moves: ['snatch'] },
-		]]);
-		battle.makeChoices();
-		const move = battle.p2.active[0].getMoveData(Dex.moves.get('snatch'));
-		assert.equal(move.pp, move.maxpp - 1, `Snatch should only lose 1 PP because it was not successful.`);
-
-		battle.makeChoices('move calmmind', 'move snatch');
-		assert.equal(move.pp, move.maxpp - 3, `Snatch should be at 13 PP after losing 1 PP earlier and 2 PP this turn`);
-	});
-});
-
-describe('Snatch [Gen 3]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
-
-	it(`should deduct Pressure PP from the first Snatch slot`, () => {
-		battle = common.gen(3).createBattle([[
-			{ species: 'Mew', moves: ['snatch', 'snatch'] },
-		], [
-			{ species: 'Aerodactyl', ability: 'pressure', moves: ['howl'] },
-		]]);
-		battle.makeChoices('move 2', 'move howl');
-		const moveSlots = battle.p1.active[0].moveSlots;
-		assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 1);
-		assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+	describe('[Gen 3]', () => {
+		it(`should deduct Pressure PP from the first Snatch slot`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'Mew', moves: ['snatch', 'snatch'] },
+			], [
+				{ species: 'Aerodactyl', ability: 'pressure', moves: ['howl'] },
+			]]);
+			battle.makeChoices('move 2', 'move howl');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 1);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+		});
 	});
 });

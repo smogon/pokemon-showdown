@@ -382,14 +382,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(4, 9);
 			},
+			onOverrideAction() {
+				// override even if it is the same move to randomize the target
+				return this.effectState.move;
+			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
 			onDisableMove: undefined, // no inherit
-			onSemiLockMove(pokemon) {
-				if (this.effectState.move && pokemon.hasMove(this.effectState.move)) {
-					return this.effectState.move;
-				}
-			},
+			/**
+			 * Encore is basically semi-locked, but we don't implement the semi-locked event
+			 * because other features of semi-locked moves (like not deducting PP) don't apply to Encore
+			 * semi-locked behavior is implemented directly in Pokemon.getMoves
+			 */
 		},
 	},
 	endeavor: {
@@ -1210,15 +1214,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const ppDrop = this.runEvent('DeductPP', source, snatchUser, this.effectState.sourceEffect);
 				const extraPP = ppDrop !== true ? ppDrop : 0;
 				if (extraPP > 0) {
-					// we need to get the first instance of the move used
-					// and put the move slot in an ActiveMove object
-					// this is for Gen 3, since in Gen 4 it already uses the first move slot
-					const moveSlot = snatchUser.moves.indexOf('snatch');
-					if (moveSlot < 0) return false;
-					const snatchMove = this.dex.getActiveMove('snatch');
-					snatchMove.moveSlot = moveSlot;
-
-					snatchUser.deductPP(snatchMove, extraPP);
+					snatchUser.deductPP('snatch', extraPP);
 				}
 
 				this.actions.useMove(move.id, snatchUser);

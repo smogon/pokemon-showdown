@@ -34,8 +34,6 @@ export interface MoveAction {
 	speed: number;
 	/** the pokemon doing the move */
 	pokemon: Pokemon;
-	/** the slot of the move being used */
-	moveSlot?: number;
 	/** location of the target, relative to pokemon's side */
 	targetLoc: number;
 	/** original target pokemon, for target-tracking moves */
@@ -261,7 +259,6 @@ export class BattleQueue {
 		if (action.move) {
 			let target = null;
 			action.move = this.battle.dex.getActiveMove(action.move);
-			if (typeof action.moveSlot === 'number') (action.move as ActiveMove).moveSlot = action.moveSlot;
 
 			if (!action.targetLoc) {
 				target = this.battle.getRandomTarget(action.pokemon, action.move);

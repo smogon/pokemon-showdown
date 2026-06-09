@@ -174,17 +174,27 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(target) {
 				const move = target.lastMoveEncore;
 				if (!move) return false;
-				const moveIndex = typeof move.moveSlot === 'number' ? move.moveSlot : target.moves.indexOf(move.id);
+				const moveIndex = target.activeTurns && !this.queue.willMove(target) ? target.lastMoveSlot : target.moves.indexOf(move.id);
+				target.lastMoveSlot = moveIndex;
 				if (target.lastMoveEncore?.flags['failencore'] || moveIndex < 0 || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
 				}
 				this.effectState.move = move.id;
-				this.effectState.slotIndex = moveIndex;
 				this.add('-start', target, 'Encore');
+			},
+			onOverrideAction() {
+				return this.effectState.move;
 			},
 			onResidualOrder: 13,
 			onResidualSubOrder: undefined, // no inherit
+			onResidual(target) {
+				const moveSlot = target.moveSlots[target.lastMoveSlot];
+				if (!moveSlot || moveSlot.pp <= 0) {
+					// early termination if you run out of PP
+					target.removeVolatile('encore');
+				}
+			},
 		},
 	},
 	endure: {
@@ -619,7 +629,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, nosketch: 1 },
+		flags: { failencore: 1, noassist: 1, nosketch: 1 },
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');

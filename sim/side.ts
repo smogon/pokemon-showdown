@@ -205,11 +205,14 @@ export class Side {
 	 */
 	lastMove: Move | null;
 	/**
-	 * The move and the slot are chosen during move selection
-	 * lastSelectedMove never resets
-	 * lastSelectedMoveSlot resets on every switch
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMove (wPlayerSelectedMove) never resets
 	 */
 	lastSelectedMove: ID = '00' as ID;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMoveSlot (wPlayerMoveListIndex) resets on every switch
+	 */
 	lastSelectedMoveSlot = 0;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
@@ -657,16 +660,18 @@ export class Side {
 			}
 		}
 
-		const lockedMove = pokemon.getLockedMove();
-		const semiLockedMove = pokemon.getSemiLockedMove();
-		if (lockedMove || semiLockedMove) {
+		const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
+		const encored = this.battle.gen <= 4 && pokemon.volatiles['encore']?.move;
+		if (lockedMove || encored) {
 			let lockedMoveTargetLoc: number | undefined = pokemon.lastMoveTargetLoc || 0;
-			const lockedMoveID = toID(lockedMove || semiLockedMove);
+			const lockedMoveID = toID(lockedMove || encored);
 			if (pokemon.volatiles[lockedMoveID]?.targetLoc) {
 				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
 			}
-			if (semiLockedMove && pokemon.volatiles['encore'] && this.battle.gen <= 4) {
-				lockedMoveTargetLoc = undefined; // Encore always targets a random Pokemon
+			if (encored && (!lockedMove || this.battle.gen === 4)) {
+				// Encore always targets a random Pokemon
+				// In Gen 4, randomize the target even if during a two-turn move
+				lockedMoveTargetLoc = undefined;
 			}
 			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			this.choice.actions.push({
@@ -1160,7 +1165,9 @@ export class Side {
 				choice.moveid = this.lastSelectedMove;
 			} else if (this.battle.gen <= 3) {
 				// deduct PP from the original slot
-				choice.moveSlot = pokemon.volatiles['encore']?.slotIndex ?? choice.moveSlot;
+				if (typeof choice.moveSlot === 'number') {
+					pokemon.lastMoveSlot = choice.moveSlot;
+				}
 			}
 		}
 		this.battle.queue.addChoice(this.choice.actions);
