@@ -697,7 +697,7 @@ export class Side {
 				const selfLoc = -(pokemon.position + 1);
 				if (targetLoc < 0 && targetLoc !== selfLoc) {
 					const target = pokemon.getAtLoc(targetLoc);
-					if (!target || !target.isActive) {
+					if (!target?.isActive) {
 						return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 					}
 				}

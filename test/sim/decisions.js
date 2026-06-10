@@ -198,7 +198,7 @@ describe('Choices', () => {
 					{ species: 'Abra', moves: ['splash'] },
 				], [
 					{ species: 'Snorlax', moves: ['memento'] }, // Faints instantly
-					{ species: 'Blissey', moves: ['splash'] },  // Sole remaining opponent
+					{ species: 'Blissey', moves: ['splash'] }, // Sole remaining opponent
 				]]);
 
 				// Turn 1: Snorlax faints itself via Memento, leaving Blissey completely alone on its side.
@@ -210,7 +210,6 @@ describe('Choices', () => {
 				assert(battle.choose('p1', 'move tackle, move splash'));
 			});
 		}
-
 
 		it('should disallow specifying move targets for targetless moves (randomNormal)', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
