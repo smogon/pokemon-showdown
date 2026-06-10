@@ -690,18 +690,18 @@ export class Side {
 			}
 
 			// 3. Ally & Free-For-All validation logic
-			// Gen 1-4: targeting an empty or fainted ally slot is not allowed for selectable single-target moves.
+			// Gen 1-4: targeting an empty or fainted ally slot is not allowed.
 			// Free-for-all is excluded: in that mode opponents can occupy negative locations.
 			if (targetLoc && this.battle.gen <= 4 && this.battle.gameType !== 'freeforall') {
 				// Negative targetLoc = own side. Exclude self (position 0 → loc -1, position 1 → loc -2, …).
 				const selfLoc = -(pokemon.position + 1);
 				if (targetLoc < 0 && targetLoc !== selfLoc) {
-					// ONLY enforce choice errors if the move type actually requires normal chosen targeting
-					if (['normal', 'adjacentFoe', 'adjacentAlly'].includes(move.target)) {
-						const target = pokemon.getAtLoc(targetLoc);
-						if (!target?.isActive) {
-							return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
-						}
+					const target = pokemon.getAtLoc(targetLoc);
+
+					// ONLY block the move if the target slot is explicitly empty or completely fainted,
+					// AND the player manually chose a move requiring a selectable choice target type.
+					if (!target?.isActive && this.battle.actions.targetTypeChoices(targetType)) {
+						return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 					}
 				}
 			}
