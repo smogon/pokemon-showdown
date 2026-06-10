@@ -69,13 +69,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time > 0) {
 				this.add('cant', pokemon, 'slp');
+			} else {
+				pokemon.cureStatus();
 			}
 			pokemon.lastMove = null;
 			return false;
-		},
-		onAfterMoveSelfPriority: 3,
-		onAfterMoveSelf(pokemon) {
-			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
 		onDisableMove(target) {
 			target.maybeLocked = false; // the player knows it is locked
