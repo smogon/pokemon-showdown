@@ -649,6 +649,12 @@ export class Side {
 			if (!this.battle.validTargetLoc(targetLoc, pokemon, targetType)) {
 				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 			}
+			if (this.battle.gen <= 4 && targetLoc < 0 && targetLoc !== pokemon.getLocOf(pokemon)) {
+				const target = pokemon.getAtLoc(targetLoc);
+				if (!target || target.fainted || target.hp === 0) {
+					return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
+				}
+			}
 		} else {
 			if (targetLoc) {
 				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
