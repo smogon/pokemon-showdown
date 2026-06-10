@@ -73,6 +73,14 @@ export interface TrackedPokemon {
 	item?: string;
 	/** Set of move ids the opponent has been observed using. */
 	revealedMoves: Set<string>;
+	/**
+	 * Move *types* this mon has proven immune to in a way its known
+	 * types don't explain (a `|-immune|` against a type-chart-neutral
+	 * hit). Signals a hidden immunity ability (Levitate, Flash Fire,
+	 * Volt/Water Absorb, Sap Sipper, ...) or item (Air Balloon) that
+	 * {@link OpponentInference} folds into its distributions.
+	 */
+	inferredImmunities: Set<string>;
 	/** Last move used (id), if any. */
 	lastMove?: string;
 	/**
@@ -294,6 +302,7 @@ export class BattleStateTracker {
 			types: [],
 			terastallized: false,
 			revealedMoves: new Set(),
+			inferredImmunities: new Set(),
 			lastMoveFailed: false,
 			sameMoveStreak: 0,
 			choiceLocked: false,
@@ -430,366 +439,392 @@ export class BattleStateTracker {
 	 */
 	applyEvent(event: BattleEvent): void {
 		switch (event.kind) {
-			case "turn":
-				this.turn = event.turn;
-				this.tickTimedConditions();
-				this._lastMover = null;
-				return;
-			case "gametype":
-				this.gametype = event.gametype;
-				return;
-			case "gen":
-				this.gen = event.gen;
-				return;
-			case "battlestart":
-				this.started = true;
-				return;
-			case "win":
-				this.ended = true;
-				this.winner = event.side ?? null;
-				this.winnerName = event.name ?? null;
-				return;
-			case "tie":
-				this.ended = true;
-				this.winner = null;
-				this.winnerName = null;
-				return;
-			case "move": {
-				const mon = this.resolveByRef(event.user);
-				const moveId = toID(event.move);
-				if (moveId) {
-					if (mon.lastMove === moveId) {
-						mon.sameMoveStreak += 1;
-					} else {
-						mon.sameMoveStreak = 1;
-					}
-					mon.lastMove = moveId;
-					mon.revealedMoves.add(moveId);
-					// A new move attempt clears the previous failure flag.
-					// We re-set it later if a `miss` / `immune` / `fail`
-					// follow-up event arrives for this same move.
-					mon.lastMoveFailed = false;
-					// Choice-lock inference: a foe locked into a single move
-					// for two consecutive turns while holding a Choice item
-					// (or one we haven't ruled out) must be Choice-locked.
-					if (event.user.side === this.foeSide && mon.sameMoveStreak >= 2) {
-						mon.choiceLocked = true;
-					}
+		case "turn":
+			this.turn = event.turn;
+			this.tickTimedConditions();
+			this._lastMover = null;
+			return;
+		case "gametype":
+			this.gametype = event.gametype;
+			return;
+		case "gen":
+			this.gen = event.gen;
+			return;
+		case "battlestart":
+			this.started = true;
+			return;
+		case "win":
+			this.ended = true;
+			this.winner = event.side ?? null;
+			this.winnerName = event.name ?? null;
+			return;
+		case "tie":
+			this.ended = true;
+			this.winner = null;
+			this.winnerName = null;
+			return;
+		case "move": {
+			const mon = this.resolveByRef(event.user);
+			const moveId = toID(event.move);
+			if (moveId) {
+				if (mon.lastMove === moveId) {
+					mon.sameMoveStreak += 1;
+				} else {
+					mon.sameMoveStreak = 1;
 				}
-				this._lastMover = mon;
-				return;
-			}
-			case "miss": {
-				// `event.source` is the attacker. When it's missing
-				// (older protocol), fall back to the most recent mover.
-				const mon = event.source ?
-					this.resolveByRef(event.source) :
-					this._lastMover;
-				if (mon) mon.lastMoveFailed = true;
-				return;
-			}
-			case "immune": {
-				// `event.pokemon` is the immune *target*; the failing
-				// attacker is the most recent mover.
-				if (this._lastMover) this._lastMover.lastMoveFailed = true;
-				return;
-			}
-			case "fail": {
-				// `event.pokemon` is the failing attacker (or status
-				// target whose move/status fizzled — close enough).
-				const mon = this.resolveByRef(event.pokemon);
-				mon.lastMoveFailed = true;
-				return;
-			}
-			case "switch":
-			case "drag": {
-				const mon = this.resolveByRef(event.pokemon);
-				// Switching out resets boosts, volatiles, and Choice lock.
-				const previous = this.getActive(event.pokemon.side, event.pokemon.position);
-				if (previous && previous.id !== mon.id) {
-					previous.active = false;
-					previous.position = -1;
-					previous.boosts = {};
-					previous.volatiles.clear();
-					previous.choiceLocked = false;
-					previous.sameMoveStreak = 0;
+				mon.lastMove = moveId;
+				mon.revealedMoves.add(moveId);
+				// A new move attempt clears the previous failure flag.
+				// We re-set it later if a `miss` / `immune` / `fail`
+				// follow-up event arrives for this same move.
+				mon.lastMoveFailed = false;
+				// Choice-lock inference: a foe locked into a single move
+				// for two consecutive turns while holding a Choice item
+				// (or one we haven't ruled out) must be Choice-locked.
+				if (event.user.side === this.foeSide && mon.sameMoveStreak >= 2) {
+					mon.choiceLocked = true;
 				}
-				mon.active = true;
-				mon.position = event.pokemon.position;
-				mon.species = (event.details || "").split(",")[0].trim() || mon.species;
-				const levelMatch = /L(\d+)/.exec(event.details || "");
-				if (levelMatch) mon.level = parseInt(levelMatch[1]) || mon.level;
-				mon.condition = `${event.hp || mon.condition}${event.status ? ` ${event.status}` : ""}`;
-				mon.hpFraction = parseHpFraction(mon.condition);
-				mon.status = event.status || "";
-				mon.boosts = {};
-				mon.volatiles.clear();
-				mon.choiceLocked = false;
-				mon.sameMoveStreak = 0;
+			}
+			this._lastMover = mon;
+			return;
+		}
+		case "miss": {
+			// `event.source` is the attacker. When it's missing
+			// (older protocol), fall back to the most recent mover.
+			const mon = event.source ?
+				this.resolveByRef(event.source) :
+				this._lastMover;
+			if (mon) mon.lastMoveFailed = true;
+			return;
+		}
+		case "immune": {
+			// `event.pokemon` is the immune *target*; the failing
+			// attacker is the most recent mover.
+			const mover = this._lastMover;
+			if (mover) mover.lastMoveFailed = true;
+			// Unexplained immunity: when the type chart says the
+			// attacker's move should have connected against the
+			// target's known types, the target is hiding an
+			// immunity ability (Levitate, Flash Fire, Volt/Water
+			// Absorb, Sap Sipper, ...) or an Air Balloon. Record
+			// the move type for `OpponentInference`. Explicit
+			// `[from] ability: ...` reveals are handled by the
+			// `ability` event that accompanies them.
+			if (mover?.lastMove && !event.from) {
+				const target = this.resolveByRef(event.pokemon);
+				const moveData = Dex.moves.get(mover.lastMove);
 				if (
-					isSideId(event.pokemon.side) &&
-					isValidActivePosition(event.pokemon.position)
+					moveData?.exists && moveData.category !== "Status" &&
+					target.types.length > 0 &&
+					Dex.getImmunity(moveData.type, target.types)
 				) {
-					this.active[event.pokemon.side][event.pokemon.position] = mon.id;
+					target.inferredImmunities.add(moveData.type);
 				}
-				return;
 			}
-			case "faint": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.fainted = true;
-				mon.active = false;
+			return;
+		}
+		case "fail": {
+			// `event.pokemon` is the failing attacker (or status
+			// target whose move/status fizzled — close enough).
+			const mon = this.resolveByRef(event.pokemon);
+			mon.lastMoveFailed = true;
+			return;
+		}
+		case "switch":
+		case "drag": {
+			const mon = this.resolveByRef(event.pokemon);
+			// Switching out resets boosts, volatiles, and Choice lock.
+			const previous = this.getActive(event.pokemon.side, event.pokemon.position);
+			if (previous && previous.id !== mon.id) {
+				previous.active = false;
+				previous.position = -1;
+				previous.boosts = {};
+				previous.volatiles.clear();
+				previous.choiceLocked = false;
+				previous.sameMoveStreak = 0;
+			}
+			mon.active = true;
+			mon.position = event.pokemon.position;
+			mon.species = (event.details || "").split(",")[0].trim() || mon.species;
+			const levelMatch = /L(\d+)/.exec(event.details || "");
+			if (levelMatch) mon.level = parseInt(levelMatch[1]) || mon.level;
+			mon.condition = `${event.hp || mon.condition}${event.status ? ` ${event.status}` : ""}`;
+			mon.hpFraction = parseHpFraction(mon.condition);
+			mon.status = event.status || "";
+			mon.boosts = {};
+			mon.volatiles.clear();
+			mon.choiceLocked = false;
+			mon.sameMoveStreak = 0;
+			if (
+				isSideId(event.pokemon.side) &&
+				isValidActivePosition(event.pokemon.position)
+			) {
+				this.active[event.pokemon.side][event.pokemon.position] = mon.id;
+			}
+			return;
+		}
+		case "faint": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.fainted = true;
+			mon.active = false;
+			mon.hpFraction = 0;
+			mon.condition = "0 fnt";
+			if (!isSideId(event.pokemon.side)) return;
+			this.sides[event.pokemon.side].fainted += 1;
+			const slotIdx = event.pokemon.position;
+			if (isValidActivePosition(slotIdx) && this.active[event.pokemon.side][slotIdx] === mon.id) {
+				this.active[event.pokemon.side][slotIdx] = "";
+			}
+			return;
+		}
+		case "damage":
+		case "heal":
+		case "sethp": {
+			const mon = this.resolveByRef(event.pokemon);
+			const hp = event.hp;
+			const status = (event as { status?: string }).status ?? "";
+			if (hp.endsWith("fnt") || hp === "0") {
 				mon.hpFraction = 0;
-				mon.condition = "0 fnt";
-				if (!isSideId(event.pokemon.side)) return;
-				this.sides[event.pokemon.side].fainted += 1;
-				const slotIdx = event.pokemon.position;
-				if (isValidActivePosition(slotIdx) && this.active[event.pokemon.side][slotIdx] === mon.id) {
-					this.active[event.pokemon.side][slotIdx] = "";
+			} else {
+				mon.hpFraction = parseHpFraction(`${hp}${status ? ` ${status}` : ""}`);
+			}
+			mon.condition = `${hp}${status ? ` ${status}` : ""}`;
+			if (status) mon.status = status;
+			return;
+		}
+		case "status": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.status = event.status;
+			return;
+		}
+		case "curestatus": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.status = "";
+			return;
+		}
+		case "boost":
+		case "unboost":
+		case "setboost": {
+			const mon = this.resolveByRef(event.pokemon);
+			const cur = mon.boosts[event.stat] || 0;
+			if (event.kind === "boost") {
+				mon.boosts[event.stat] = clampStage(cur + event.amount);
+			} else if (event.kind === "unboost") {
+				mon.boosts[event.stat] = clampStage(cur - event.amount);
+			} else {
+				mon.boosts[event.stat] = clampStage(event.amount);
+			}
+			return;
+		}
+		case "clearboost": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.boosts = {};
+			return;
+		}
+		case "clearallboost":
+			for (const mon of this.pokemon.values()) mon.boosts = {};
+			return;
+		case "clearpositiveboost": {
+			const mon = this.resolveByRef(event.target);
+			for (const k of Object.keys(mon.boosts)) {
+				if ((mon.boosts[k] || 0) > 0) mon.boosts[k] = 0;
+			}
+			return;
+		}
+		case "clearnegativeboost": {
+			const mon = this.resolveByRef(event.pokemon);
+			for (const k of Object.keys(mon.boosts)) {
+				if ((mon.boosts[k] || 0) < 0) mon.boosts[k] = 0;
+			}
+			return;
+		}
+		case "invertboost": {
+			const mon = this.resolveByRef(event.pokemon);
+			for (const k of Object.keys(mon.boosts)) {
+				mon.boosts[k] = -(mon.boosts[k] || 0);
+			}
+			return;
+		}
+		case "weather":
+			if (event.weather === "none" || event.upkeep) {
+				if (event.weather === "none") {
+					this.field.weather = "";
+					this.field.weatherTurns = 0;
 				}
-				return;
+			} else {
+				this.field.weather = toID(event.weather);
+				// Weather lasts 5 turns by default; 8 with the matching rock.
+				this.field.weatherTurns = 5;
 			}
-			case "damage":
-			case "heal":
-			case "sethp": {
-				const mon = this.resolveByRef(event.pokemon);
-				const hp = event.hp;
-				const status = (event as { status?: string }).status ?? "";
-				if (hp.endsWith("fnt") || hp === "0") {
-					mon.hpFraction = 0;
-				} else {
-					mon.hpFraction = parseHpFraction(`${hp}${status ? ` ${status}` : ""}`);
-				}
-				mon.condition = `${hp}${status ? ` ${status}` : ""}`;
-				if (status) mon.status = status;
-				return;
+			return;
+		case "fieldstart": {
+			const id = toID(event.condition);
+			if (id === "trickroom") {
+				this.field.trickRoom = true;
+				this.field.trickRoomTurns = 5;
+			} else if (id === "magicroom") {
+				this.field.magicRoom = true;
+			} else if (id === "wonderroom") {
+				this.field.wonderRoom = true;
+			} else if (id === "gravity") {
+				this.field.gravity = true;
+				this.field.gravityTurns = 5;
+			} else if (id === "electricterrain" || id === "grassyterrain" || id === "mistyterrain" || id === "psychicterrain") {
+				this.field.terrain = id;
+				this.field.terrainTurns = 5;
 			}
-			case "status": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.status = event.status;
-				return;
+			return;
+		}
+		case "fieldend": {
+			const id = toID(event.condition);
+			if (id === "trickroom") {
+				this.field.trickRoom = false;
+				this.field.trickRoomTurns = 0;
+			} else if (id === "magicroom") {
+				this.field.magicRoom = false;
+			} else if (id === "wonderroom") {
+				this.field.wonderRoom = false;
+			} else if (id === "gravity") {
+				this.field.gravity = false;
+				this.field.gravityTurns = 0;
+			} else if (id === this.field.terrain) {
+				this.field.terrain = "";
+				this.field.terrainTurns = 0;
 			}
-			case "curestatus": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.status = "";
-				return;
+			return;
+		}
+		case "sidestart": {
+			if (!isSideId(event.side)) return;
+			const ss = this.sides[event.side];
+			const id = toID(event.condition);
+			switch (id) {
+			case "stealthrock": ss.stealthRock = true; break;
+			case "spikes": ss.spikes = Math.min(3, ss.spikes + 1); break;
+			case "toxicspikes": ss.toxicSpikes = Math.min(2, ss.toxicSpikes + 1); break;
+			case "stickyweb": ss.stickyWeb = true; break;
+			case "reflect": ss.reflectTurns = 5; break;
+			case "lightscreen": ss.lightScreenTurns = 5; break;
+			case "auroraveil": ss.auroraVeilTurns = 5; break;
+			case "tailwind": ss.tailwindTurns = 4; break;
+			case "safeguard": ss.safeguardTurns = 5; break;
+			case "mist": ss.mistTurns = 5; break;
 			}
-			case "boost":
-			case "unboost":
-			case "setboost": {
-				const mon = this.resolveByRef(event.pokemon);
-				const cur = mon.boosts[event.stat] || 0;
-				if (event.kind === "boost") {
-					mon.boosts[event.stat] = clampStage(cur + event.amount);
-				} else if (event.kind === "unboost") {
-					mon.boosts[event.stat] = clampStage(cur - event.amount);
-				} else {
-					mon.boosts[event.stat] = clampStage(event.amount);
-				}
-				return;
+			return;
+		}
+		case "sideend": {
+			if (!isSideId(event.side)) return;
+			const ss = this.sides[event.side];
+			const id = toID(event.condition);
+			switch (id) {
+			case "stealthrock": ss.stealthRock = false; break;
+			case "spikes": ss.spikes = 0; break;
+			case "toxicspikes": ss.toxicSpikes = 0; break;
+			case "stickyweb": ss.stickyWeb = false; break;
+			case "reflect": ss.reflectTurns = 0; break;
+			case "lightscreen": ss.lightScreenTurns = 0; break;
+			case "auroraveil": ss.auroraVeilTurns = 0; break;
+			case "tailwind": ss.tailwindTurns = 0; break;
+			case "safeguard": ss.safeguardTurns = 0; break;
+			case "mist": ss.mistTurns = 0; break;
 			}
-			case "clearboost": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.boosts = {};
-				return;
+			return;
+		}
+		case "swapsideconditions": {
+			const tmp = this.sides[this.mySide];
+			this.sides[this.mySide] = this.sides[this.foeSide];
+			this.sides[this.foeSide] = tmp;
+			return;
+		}
+		case "ability": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.ability = toID(event.ability);
+			// Only seed `baseAbility` from a fresh, non-derived reveal.
+			// Trace / Imposter / Skill Swap / Role Play / etc. show up
+			// with an `event.from` describing the source effect; those
+			// expose the *acquired* ability, not the species' own.
+			if (!mon.baseAbility && !event.from) {
+				mon.baseAbility = mon.ability;
 			}
-			case "clearallboost":
-				for (const mon of this.pokemon.values()) mon.boosts = {};
-				return;
-			case "clearpositiveboost": {
-				const mon = this.resolveByRef(event.target);
-				for (const k of Object.keys(mon.boosts)) {
-					if ((mon.boosts[k] || 0) > 0) mon.boosts[k] = 0;
-				}
-				return;
+			return;
+		}
+		case "endability": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.ability = "";
+			return;
+		}
+		case "item": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.item = toID(event.item);
+			return;
+		}
+		case "enditem": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.item = "";
+			return;
+		}
+		case "transform": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.species = event.species;
+			return;
+		}
+		case "mega": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.volatiles.add("mega");
+			return;
+		}
+		case "primal": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.volatiles.add("primal");
+			return;
+		}
+		case "burst": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.species = event.species;
+			mon.volatiles.add("ultraburst");
+			return;
+		}
+		case "zpower": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.volatiles.add("zpower");
+			return;
+		}
+		case "terastallize": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.terastallized = true;
+			mon.teraType = event.type;
+			mon.types = [event.type];
+			return;
+		}
+		case "volatilestart": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.volatiles.add(toID(event.effect));
+			return;
+		}
+		case "volatileend": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.volatiles.delete(toID(event.effect));
+			return;
+		}
+		case "cant": {
+			const mon = this.resolveByRef(event.pokemon);
+			mon.sameMoveStreak = 0;
+			if (event.move) {
+				mon.revealedMoves.add(toID(event.move));
 			}
-			case "clearnegativeboost": {
-				const mon = this.resolveByRef(event.pokemon);
-				for (const k of Object.keys(mon.boosts)) {
-					if ((mon.boosts[k] || 0) < 0) mon.boosts[k] = 0;
-				}
-				return;
-			}
-			case "invertboost": {
-				const mon = this.resolveByRef(event.pokemon);
-				for (const k of Object.keys(mon.boosts)) {
-					mon.boosts[k] = -(mon.boosts[k] || 0);
-				}
-				return;
-			}
-			case "weather":
-				if (event.weather === "none" || event.upkeep) {
-					if (event.weather === "none") {
-						this.field.weather = "";
-						this.field.weatherTurns = 0;
-					}
-				} else {
-					this.field.weather = toID(event.weather);
-					// Weather lasts 5 turns by default; 8 with the matching rock.
-					this.field.weatherTurns = 5;
-				}
-				return;
-			case "fieldstart": {
-				const id = toID(event.condition);
-				if (id === "trickroom") {
-					this.field.trickRoom = true;
-					this.field.trickRoomTurns = 5;
-				} else if (id === "magicroom") {
-					this.field.magicRoom = true;
-				} else if (id === "wonderroom") {
-					this.field.wonderRoom = true;
-				} else if (id === "gravity") {
-					this.field.gravity = true;
-					this.field.gravityTurns = 5;
-				} else if (id === "electricterrain" || id === "grassyterrain" || id === "mistyterrain" || id === "psychicterrain") {
-					this.field.terrain = id;
-					this.field.terrainTurns = 5;
-				}
-				return;
-			}
-			case "fieldend": {
-				const id = toID(event.condition);
-				if (id === "trickroom") {
-					this.field.trickRoom = false;
-					this.field.trickRoomTurns = 0;
-				} else if (id === "magicroom") {
-					this.field.magicRoom = false;
-				} else if (id === "wonderroom") {
-					this.field.wonderRoom = false;
-				} else if (id === "gravity") {
-					this.field.gravity = false;
-					this.field.gravityTurns = 0;
-				} else if (id === this.field.terrain) {
-					this.field.terrain = "";
-					this.field.terrainTurns = 0;
-				}
-				return;
-			}
-			case "sidestart": {
-				if (!isSideId(event.side)) return;
-				const ss = this.sides[event.side];
-				const id = toID(event.condition);
-				switch (id) {
-					case "stealthrock": ss.stealthRock = true; break;
-					case "spikes": ss.spikes = Math.min(3, ss.spikes + 1); break;
-					case "toxicspikes": ss.toxicSpikes = Math.min(2, ss.toxicSpikes + 1); break;
-					case "stickyweb": ss.stickyWeb = true; break;
-					case "reflect": ss.reflectTurns = 5; break;
-					case "lightscreen": ss.lightScreenTurns = 5; break;
-					case "auroraveil": ss.auroraVeilTurns = 5; break;
-					case "tailwind": ss.tailwindTurns = 4; break;
-					case "safeguard": ss.safeguardTurns = 5; break;
-					case "mist": ss.mistTurns = 5; break;
-				}
-				return;
-			}
-			case "sideend": {
-				if (!isSideId(event.side)) return;
-				const ss = this.sides[event.side];
-				const id = toID(event.condition);
-				switch (id) {
-					case "stealthrock": ss.stealthRock = false; break;
-					case "spikes": ss.spikes = 0; break;
-					case "toxicspikes": ss.toxicSpikes = 0; break;
-					case "stickyweb": ss.stickyWeb = false; break;
-					case "reflect": ss.reflectTurns = 0; break;
-					case "lightscreen": ss.lightScreenTurns = 0; break;
-					case "auroraveil": ss.auroraVeilTurns = 0; break;
-					case "tailwind": ss.tailwindTurns = 0; break;
-					case "safeguard": ss.safeguardTurns = 0; break;
-					case "mist": ss.mistTurns = 0; break;
-				}
-				return;
-			}
-			case "swapsideconditions": {
-				const tmp = this.sides[this.mySide];
-				this.sides[this.mySide] = this.sides[this.foeSide];
-				this.sides[this.foeSide] = tmp;
-				return;
-			}
-			case "ability": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.ability = toID(event.ability);
-				// Only seed `baseAbility` from a fresh, non-derived reveal.
-				// Trace / Imposter / Skill Swap / Role Play / etc. show up
-				// with an `event.from` describing the source effect; those
-				// expose the *acquired* ability, not the species' own.
-				if (!mon.baseAbility && !event.from) {
-					mon.baseAbility = mon.ability;
-				}
-				return;
-			}
-			case "endability": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.ability = "";
-				return;
-			}
-			case "item": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.item = toID(event.item);
-				return;
-			}
-			case "enditem": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.item = "";
-				return;
-			}
-			case "transform": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.species = event.species;
-				return;
-			}
-			case "mega": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.volatiles.add("mega");
-				return;
-			}
-			case "primal": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.volatiles.add("primal");
-				return;
-			}
-			case "burst": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.species = event.species;
-				mon.volatiles.add("ultraburst");
-				return;
-			}
-			case "zpower": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.volatiles.add("zpower");
-				return;
-			}
-			case "terastallize": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.terastallized = true;
-				mon.teraType = event.type;
-				mon.types = [event.type];
-				return;
-			}
-			case "volatilestart": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.volatiles.add(toID(event.effect));
-				return;
-			}
-			case "volatileend": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.volatiles.delete(toID(event.effect));
-				return;
-			}
-			case "cant": {
-				const mon = this.resolveByRef(event.pokemon);
-				mon.sameMoveStreak = 0;
-				if (event.move) {
-					mon.revealedMoves.add(toID(event.move));
-				}
-				mon.lastMoveFailed = true;
-				return;
-			}
-			default:
-				// We deliberately ignore fail/miss/crit/immune/supereffective/
-				// resisted etc. for now. They're useful but the current heuristic
-				// engine doesn't act on them. Future extensions can hook here.
-				return;
+			mon.lastMoveFailed = true;
+			return;
+		}
+		case "crit":
+		case "supereffective":
+		case "resisted":
+			// These only print for hits that actually connected, so
+			// they confirm the most recent mover's attack landed —
+			// clear any stale failure flag (e.g. a `|-miss|` from an
+			// earlier strike of a multi-hit move).
+			if (this._lastMover) this._lastMover.lastMoveFailed = false;
+			return;
+		default:
+			return;
 		}
 	}
 
@@ -865,6 +900,11 @@ export class BattleStateTracker {
 	 * Compute hazard damage in HP fraction units when `mon` switches in
 	 * to its current position. Assumes the mon is on `side`. Returns 0
 	 * for Heavy-Duty Boots / Magic Guard / Levitate-on-spikes-only cases.
+	 *
+	 * Toxic Spikes don't deal entry damage, but the poison they inflict
+	 * costs real HP over the stay; we price that in as an expected-cost
+	 * fraction so switch evaluation stops treating a T-Spiked side as
+	 * free to pivot across.
 	 */
 	hazardDamageFraction(mon: TrackedPokemon, side: SideId): number {
 		if (mon.item === "heavydutyboots") return 0;
@@ -880,6 +920,17 @@ export class BattleStateTracker {
 			if (ss.spikes === 1) damage += 1 / 8;
 			else if (ss.spikes === 2) damage += 1 / 6;
 			else if (ss.spikes >= 3) damage += 1 / 4;
+			// One layer ≈ one psn tick (1/8); two layers inflict toxic,
+			// whose ramping damage prices higher. Grounded Poison-types
+			// absorb the spikes instead (cost 0), Steel / Immunity /
+			// already-statused mons can't be poisoned.
+			const poisonable = !mon.status &&
+				!mon.types.includes("Poison") &&
+				!mon.types.includes("Steel") &&
+				toID(mon.ability ?? "") !== "immunity";
+			if (ss.toxicSpikes > 0 && poisonable) {
+				damage += ss.toxicSpikes >= 2 ? 3 / 16 : 1 / 8;
+			}
 		}
 		return damage;
 	}

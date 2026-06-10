@@ -13,6 +13,7 @@
  *
  * @license MIT
  */
+import type { Battle } from "../battle";
 import { BattlePlayer } from "../battle-stream";
 import { PRNG, type PRNGSeed } from "../prng";
 import { toID } from "../dex";
@@ -98,11 +99,18 @@ export class PlayerAI extends BattlePlayer {
 			trappedActiveByMon: new Set(),
 			lastSwitchTurnByMon: new Map(),
 			lastMoveFailedByMon: new Set(),
-			noiseEpsilon: 0,
+			switchCount: 0,
+			ladderAdvanceCap: 0.5,
+			switchMargin: 10,
 			infoForgetting: 0,
 			searchBudgetMs: options.searchBudgetMs,
 			randomMoveProb: options.randomMoveProb,
 			randomMegaProb: options.randomMegaProb,
+			// When the host hands us the raw `BattleStream` (PokeBedrock
+			// actors do; runner tooling hands a player sub-stream that
+			// has no `battle` property) the MCTS tier can fork the live
+			// battle for true multi-turn rollouts.
+			getBattle: () => (playerStream as { battle?: Battle | null }).battle ?? null,
 		};
 		applyKnobs(this.engineCtx, this.difficulty);
 		if (options.searchBudgetMs) this.engineCtx.searchBudgetMs = options.searchBudgetMs;
@@ -123,8 +131,7 @@ export class PlayerAI extends BattlePlayer {
 	override receiveLine(line: string): void {
 		if (line?.startsWith("|")) {
 			if (this.tracker) {
-				const event = parseLine(line);
-				if (event) this.tracker.applyEvent(event);
+				this.applyTrackedLine(line);
 			} else if (this.pendingLogLines.length < 1024) {
 				this.pendingLogLines.push(line);
 			}
@@ -146,6 +153,70 @@ export class PlayerAI extends BattlePlayer {
 	}
 
 	/**
+	 * Feed one protocol log line into the battle state tracker without
+	 * dispatching a choice. Hosts that drive {@link receiveRequest}
+	 * manually with delayed dispatch (PokeBedrock's `TrainerActor` /
+	 * `PokemonActor`) MUST call this for every battle log line they
+	 * interpret — without it the tracker only ever sees `|request|`
+	 * JSON, leaving the engines blind to weather, hazards, revealed foe
+	 * moves, boosts, item/ability reveals, and Choice-lock inference.
+	 *
+	 * `|request|` and `|error|` lines are ignored here: hosts deliver
+	 * those through {@link receiveRequest} / {@link receiveError}
+	 * directly, and re-processing a request would dispatch an undelayed
+	 * duplicate choice.
+	 *
+	 * @param line One raw protocol line (starting with `|`).
+	 */
+	ingestLogLine(line: string): void {
+		if (!line?.startsWith("|")) return;
+		if (line.startsWith("|request|") || line.startsWith("|error|")) return;
+		if (this.tracker) {
+			this.applyTrackedLine(line);
+		} else if (this.pendingLogLines.length < 1024) {
+			this.pendingLogLines.push(line);
+		}
+	}
+
+	/**
+	 * Parse and apply one log line to the tracker, then mirror the
+	 * tracker's per-mon `lastMoveFailed` flags onto
+	 * `engineCtx.lastMoveFailedByMon` whenever a fail-relevant event
+	 * was processed (Stomping Tantrum's 2× BP keys off that set).
+	 *
+	 * @param line One raw protocol line (starting with `|`).
+	 */
+	private applyTrackedLine(line: string): void {
+		const tracker = this.tracker;
+		if (!tracker) return;
+		const event = parseLine(line);
+		if (!event) return;
+		tracker.applyEvent(event);
+		switch (event.kind) {
+		case "move":
+		case "miss":
+		case "immune":
+		case "fail":
+		case "cant":
+		case "crit":
+		case "supereffective":
+		case "resisted":
+			this.syncLastMoveFailed();
+		}
+	}
+
+	/** Mirror per-mon `lastMoveFailed` tracker flags into the engine context. */
+	private syncLastMoveFailed(): void {
+		const tracker = this.tracker;
+		if (!tracker) return;
+		const failed = this.engineCtx.lastMoveFailedByMon;
+		for (const mon of tracker.pokemon.values()) {
+			if (mon.lastMoveFailed) failed.add(mon.id);
+			else failed.delete(mon.id);
+		}
+	}
+
+	/**
 	 * Lazily build the tracker. The first request tells us which side
 	 * is "us"; until then we buffer log lines and replay them once the
 	 * tracker exists.
@@ -155,12 +226,9 @@ export class PlayerAI extends BattlePlayer {
 		if (!sideId) return this.tracker;
 		if (!this.tracker) {
 			this.tracker = new BattleStateTracker({ mySide: sideId });
-			for (const line of this.pendingLogLines) {
-				const event = parseLine(line);
-				if (event) this.tracker.applyEvent(event);
-			}
-			this.pendingLogLines.length = 0;
 			this.engineCtx.tracker = this.tracker;
+			for (const line of this.pendingLogLines) this.applyTrackedLine(line);
+			this.pendingLogLines.length = 0;
 		}
 		if (!request.wait) this.tracker.applyRequest(request);
 		return this.tracker;

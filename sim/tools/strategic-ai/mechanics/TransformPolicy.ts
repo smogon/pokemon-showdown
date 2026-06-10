@@ -30,9 +30,11 @@
  */
 import { Dex, toID } from "../../../dex";
 import type { Move } from "../../../dex-moves";
+import type { Species } from "../../../dex-species";
 import type { PokemonMoveRequestData } from "../../../side";
 import type { BattleStateTracker, TrackedPokemon } from "../state/BattleStateTracker";
 import { calculateDamage, fromTracked } from "./DamageCalc";
+import { evaluateMatchup } from "./SwitchEvaluator";
 
 /** Decision returned by {@link chooseTransform}. */
 export interface TransformDecision {
@@ -252,13 +254,78 @@ function considerZMove(input: TransformPolicyInput): TransformDecision | null {
 // Mega
 // -----------------------------------------------------------------------
 
+/**
+ * How much worse (in matchup-score units) the mega forme may look
+ * against the current foe before we defer the transformation to a
+ * later turn.
+ */
+const MEGA_DEFER_MARGIN = 8;
+
 function considerMega(input: TransformPolicyInput): TransformDecision | null {
-	const { active } = input;
-	if (active.canMegaEvo) return { suffix: " mega", rationale: "mega" };
-	if (active.canMegaEvoX) return { suffix: " megax", rationale: "mega-x" };
-	if (active.canMegaEvoY) return { suffix: " megay", rationale: "mega-y" };
-	if (active.canUltraBurst) return { suffix: " ultra", rationale: "ultra-burst" };
-	return null;
+	const { active, myMon, foeMon, tracker } = input;
+	let suffix: string | null = null;
+	let rationale = "mega";
+	if (active.canMegaEvo) suffix = " mega";
+	else if (active.canMegaEvoX) {
+		suffix = " megax";
+		rationale = "mega-x";
+	} else if (active.canMegaEvoY) {
+		suffix = " megay";
+		rationale = "mega-y";
+	} else if (active.canUltraBurst) {
+		suffix = " ultra";
+		rationale = "ultra-burst";
+	}
+	if (!suffix) return null;
+	// Mega is nearly free power, but a few formes trade away a
+	// load-bearing ability or typing for this exact matchup (losing
+	// Levitate into an Earthquake user, dropping an Intimidate drop,
+	// gaining a 4× weakness to the foe's STAB). Compare matchup scores
+	// and defer when the mega forme is clearly worse *right now* — the
+	// one-shot resource stays available for a better turn.
+	const megaForme = megaTargetForme(myMon);
+	if (megaForme) {
+		const current = evaluateMatchup(myMon, foeMon, tracker).score;
+		const asMega = evaluateMatchup(projectForme(myMon, megaForme), foeMon, tracker).score;
+		if (asMega < current - MEGA_DEFER_MARGIN) return null;
+	}
+	return { suffix, rationale };
+}
+
+/**
+ * Resolve the forme `mon` would mega-evolve / ultra-burst into, via
+ * its held stone.
+ *
+ * @param mon The tracked mon holding a Mega Stone / Ultranecrozium Z.
+ * @returns The target forme's species data, or `null` when unknown.
+ */
+function megaTargetForme(mon: TrackedPokemon): Species | null {
+	const item = Dex.items.get(toID(mon.item));
+	if (!item?.exists) return null;
+	const formeName = item.megaStone ??
+		(item.id === "ultranecroziumz" ? "Necrozma-Ultra" : "");
+	if (!formeName) return null;
+	const forme = Dex.species.get(formeName);
+	return forme?.exists ? forme : null;
+}
+
+/**
+ * Project a tracked mon into another forme for matchup what-ifs. The
+ * known stat block is dropped so the matchup math re-estimates from
+ * the forme's base stats; boosts / HP / status carry over.
+ *
+ * @param mon The current tracked mon.
+ * @param forme The forme to project into.
+ * @returns A synthetic snapshot usable by {@link evaluateMatchup}.
+ */
+function projectForme(mon: TrackedPokemon, forme: Species): TrackedPokemon {
+	return {
+		...mon,
+		species: forme.name,
+		types: [...forme.types],
+		ability: toID(forme.abilities?.["0"] ?? ""),
+		stats: undefined,
+	};
 }
 
 // -----------------------------------------------------------------------

@@ -35,14 +35,14 @@ import { chooseBestSwitch, evaluateMatchup, scaledSpeed } from "../mechanics/Swi
 import { pickTarget } from "../mechanics/TargetPicker";
 import { chooseTransform } from "../mechanics/TransformPolicy";
 import type { BattleStateTracker, TrackedPokemon } from "../state/BattleStateTracker";
-import { applyNoise, type Engine, type EngineContext } from "./Engine";
+import { selectByScoreLadder, type Engine, type EngineContext } from "./Engine";
 
 /** Switch-out HP threshold below which we consider safe-pivoting. */
 const HP_SWITCH_OUT_THRESHOLD = 0.3;
 /** Faint-emergency HP threshold (combine with foe-faster check). */
 const FAINT_THRESHOLD = 0.1;
 /** How many turns we lock against re-switching the same mon. */
-const SWITCH_LOCK_TURNS = 2;
+export const SWITCH_LOCK_TURNS = 2;
 /** Chance per-turn to consider Protect when it's available and safe. */
 const PROTECT_CONSIDER_CHANCE = 0.15;
 /** Switch-out matchup threshold; below this, switching is favoured. */
@@ -69,10 +69,43 @@ const CONDITIONAL_PRIORITY_MOVES = new Set([
 	"firstimpression",
 	"suckerpunch",
 ]);
+/**
+ * Extra matchup margin added per recent switch (see
+ * `EngineContext.switchCount`). Damps switch-loops, pokerogue-style:
+ * each voluntary switch raises the bar for the next one until the AI
+ * commits to a few moves again.
+ */
+const SWITCH_FREQUENCY_MARGIN = 6;
+/** Cap on the accumulated switch-frequency counter. */
+const SWITCH_COUNT_CAP = 4;
+/**
+ * "Disciplined play" gate: at low ladder caps (difficulty 4-5) the
+ * deliberate noise sources — the random Protect probe and the
+ * anti-staleness move rotation — are pure handicaps, so they're
+ * disabled. Mid/low tiers keep them for human-feeling variety.
+ *
+ * @param ctx Engine context carrying the difficulty knobs.
+ * @returns true when noise sources should be suppressed.
+ */
+function isDisciplined(ctx: EngineContext): boolean {
+	return ctx.ladderAdvanceCap <= 0.3;
+}
 
 /** Lazy `Dex.moves.get`. */
 function moveOf(id: string) {
 	return Dex.moves.get(id);
+}
+
+/**
+ * Cross-slot signals shared while deciding a multi-active (doubles /
+ * triples) turn. Slots decide left-to-right, so later slots can react
+ * to what earlier slots already committed to.
+ */
+interface TurnPlan {
+	/** An earlier slot chose Helping Hand this turn. */
+	helpingHand: boolean;
+	/** An earlier slot chose a damaging move this turn. */
+	partnerAttacks: boolean;
 }
 
 /**
@@ -214,10 +247,15 @@ export class HeuristicEngine implements Engine {
 		const side = request.side;
 		if (!side || !request.active || !tracker) return "default";
 
+		// Cross-slot signals for doubles: slots decide in order, so a
+		// later slot can see that an earlier one picked Helping Hand
+		// (target-damage boost) or a damaging move (Assurance's
+		// "already took damage this turn" doubling).
+		const turnPlan: TurnPlan = { helpingHand: false, partnerAttacks: false };
 		const decisions: string[] = request.active.map((active, slotIndex) => {
 			const sideMon = side.pokemon[slotIndex];
 			if (!sideMon || sideMon.condition.endsWith(" fnt")) return "pass";
-			return this.decideForSlot(request, ctx, tracker, slotIndex, active);
+			return this.decideForSlot(request, ctx, tracker, slotIndex, active, turnPlan);
 		});
 		return decisions.join(", ");
 	}
@@ -227,7 +265,8 @@ export class HeuristicEngine implements Engine {
 		ctx: EngineContext,
 		tracker: BattleStateTracker,
 		slotIndex: number,
-		active: PokemonMoveRequestData
+		active: PokemonMoveRequestData,
+		turnPlan: TurnPlan
 	): string {
 		const side = request.side;
 		const sideMon = side.pokemon[slotIndex];
@@ -253,6 +292,7 @@ export class HeuristicEngine implements Engine {
 			);
 			if (switchDecision) {
 				if (monId) ctx.lastSwitchTurnByMon.set(monId, tracker.turn);
+				ctx.switchCount = Math.min(SWITCH_COUNT_CAP, ctx.switchCount + 1);
 				return switchDecision;
 			}
 		}
@@ -261,11 +301,13 @@ export class HeuristicEngine implements Engine {
 		const availableMoves = this.availableMoves(active, monId, ctx);
 		if (!availableMoves.length) return "default";
 
-		// 3. Optional Protect probe.
-		if (lastMoveId !== "protect" && ctx.prng.random() < PROTECT_CONSIDER_CHANCE) {
+		// 3. Optional Protect probe (suppressed at disciplined tiers —
+		// the move evaluator already scores Protect on its merits).
+		if (!isDisciplined(ctx) && lastMoveId !== "protect" && ctx.prng.random() < PROTECT_CONSIDER_CHANCE) {
 			const protectIdx = availableMoves.findIndex(m => m.id === "protect");
 			if (protectIdx >= 0) {
 				if (monId) ctx.lastMoveByMon.set(monId, "protect");
+				ctx.switchCount = Math.max(0, ctx.switchCount - 1);
 				return `move ${this.moveCommandIndex(active, "protect")}`;
 			}
 		}
@@ -285,7 +327,11 @@ export class HeuristicEngine implements Engine {
 			// Plumb "did our last attempt fizzle?" through to the move
 			// scorer. This lets Stomping Tantrum's 2× BP fire after
 			// e.g. an Earthquake into Levitate the previous turn.
-			attackerLastMoveFailed: myMon.lastMoveFailed,
+			attackerLastMoveFailed: myMon.lastMoveFailed ||
+				ctx.lastMoveFailedByMon.has(myMon.id),
+			// Doubles partner combo: an earlier slot already committed
+			// to a damaging move this turn (Assurance 2× BP).
+			defenderTookDamageThisTurn: turnPlan.partnerAttacks,
 		};
 
 		const scored = this.scoreCandidates(availableMoves, evalCtx, ctx);
@@ -293,29 +339,47 @@ export class HeuristicEngine implements Engine {
 
 		// 5. Anti-staleness: avoid repeating the same move turn-after-turn
 		// when an alternative is nearly as good (predictability hurts).
-		let pick = scored[0];
+		// Suppressed at disciplined tiers: repeating the best move is
+		// usually correct, and with a greedy ladder this rule would
+		// *always* demote it.
+		let startIndex = 0;
 		if (
+			!isDisciplined(ctx) &&
 			scored.length > 1 &&
-			pick.opt.id === lastMoveId &&
-			scored[1].score >= 0.9 * pick.score
+			scored[0].opt.id === lastMoveId &&
+			scored[1].score >= 0.9 * scored[0].score
 		) {
-			pick = scored[1];
+			startIndex = 1;
 		}
-		// 6. Apply epsilon noise.
-		const noisedPool = scored.filter(s => s.score >= pick.score * 0.5);
-		const noised = applyNoise(pick, noisedPool, ctx.noiseEpsilon, ctx.prng);
-		const chosen = noised.opt;
+		// 6. Pokerogue-style pick ladder: walk down the sorted list,
+		// advancing with probability proportional to score closeness
+		// (capped per difficulty — difficulty 5 is near-greedy).
+		const chosen = selectByScoreLadder(scored, startIndex, ctx.ladderAdvanceCap, ctx.prng).opt;
 		if (monId) ctx.lastMoveByMon.set(monId, chosen.id);
+		ctx.switchCount = Math.max(0, ctx.switchCount - 1);
+		if (chosen.id === "helpinghand") turnPlan.helpingHand = true;
+		else if (moveOf(chosen.id)?.category !== "Status") turnPlan.partnerAttacks = true;
 
 		// 7. Format command (with target for doubles).
-		return this.formatMoveCommand(active, chosen.id, slotIndex, request, ctx, tracker, myMon);
+		return this.formatMoveCommand(active, chosen.id, slotIndex, request, ctx, tracker, myMon, turnPlan);
 	}
 
 	/**
-	 * Evaluate whether the active mon should switch this turn. Returns a
-	 * `switch N` command or `null` to indicate "stay in".
+	 * Evaluate whether the active mon should switch this turn. Protected
+	 * so search engines can wrap it (e.g. {@link MctsEngine} verifies or
+	 * overrides the verdict with fork rollouts).
+	 *
+	 * @param myMon Tracked active mon for this slot.
+	 * @param foeMon Tracked foe active.
+	 * @param tracker Battle state tracker.
+	 * @param side Our side's request payload.
+	 * @param slotIndex Slot being decided.
+	 * @param ctx Engine context.
+	 * @param switchCandidates Live bench candidates with request slots.
+	 * @param active Request payload for the active slot.
+	 * @returns A `switch N` command, or `null` to indicate "stay in".
 	 */
-	private maybeSwitchOut(
+	protected maybeSwitchOut(
 		myMon: TrackedPokemon,
 		foeMon: TrackedPokemon,
 		tracker: BattleStateTracker,
@@ -441,9 +505,19 @@ export class HeuristicEngine implements Engine {
 		if (!candidateSurvives && !isEmergency) return null;
 		const slot = switchCandidates.find(c => c.mon.id === best.mon.id);
 		if (!slot) return null;
-		// Skill-gated: lower difficulty switches less reliably.
-		const skill = Math.max(0, Math.min(1, (ctx.difficulty - 1) / 4));
-		if (ctx.prng.random() > skill) return null;
+		// Margin gate (pokerogue-style), replacing the old
+		// `(difficulty - 1) / 4` coin flip that made even elite trainers
+		// ignore half of their correct switches at difficulty 3 and
+		// added pure noise at 4-5. A voluntary switch must now beat the
+		// current matchup by a difficulty-scaled margin, raised further
+		// the more we've been switching lately so the AI can't
+		// switch-loop. Emergencies are exempt — staying in is strictly
+		// worse no matter the margin.
+		if (!emergencySwitch) {
+			const requiredMargin = ctx.switchMargin +
+				ctx.switchCount * SWITCH_FREQUENCY_MARGIN;
+			if (bestScore - matchup.score < requiredMargin) return null;
+		}
 		return `switch ${slot.idx}`;
 	}
 
@@ -591,7 +665,8 @@ export class HeuristicEngine implements Engine {
 		request: MoveRequest,
 		ctx: EngineContext,
 		tracker: BattleStateTracker,
-		myMon: TrackedPokemon
+		myMon: TrackedPokemon,
+		turnPlan: TurnPlan
 	): string {
 		const idx = this.moveCommandIndex(active, moveId);
 		// Decide whether to consume a one-shot transformation (Tera/
@@ -638,6 +713,7 @@ export class HeuristicEngine implements Engine {
 				move,
 				foeSlots: foeSlotMons,
 				allySlots: allyMons,
+				allyUsedHelpingHand: turnPlan.helpingHand,
 			});
 			return t !== null ? `move ${idx} ${t}${suffix}` : `move ${idx}${suffix}`;
 		}
@@ -654,7 +730,7 @@ export class HeuristicEngine implements Engine {
 		}
 	}
 
-	private monIdForSlot(
+	protected monIdForSlot(
 		side: SideRequestData,
 		slotIndex: number,
 		ctx: EngineContext

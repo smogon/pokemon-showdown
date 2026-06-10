@@ -19,6 +19,7 @@
  *
  * @license MIT
  */
+import type { Battle } from "../../../battle";
 import type { PRNG } from "../../../prng";
 import type { ChoiceRequest } from "../../../side";
 import type { BattleStateTracker } from "../state/BattleStateTracker";
@@ -39,11 +40,12 @@ export interface EngineContext {
 	/** Per-Pokemon disabled-move sets (Imprison/Disable). */
 	disabledMovesByMon: Map<string, Set<string>>;
 	/**
-	 * Per-Pokemon "did the previous move attempt fail" flag, set by
-	 * {@link PlayerAI.receiveLine} when a `|miss|`, `|-immune|`, or
-	 * `|cant|` line is parsed against that mon. Cleared the next time
-	 * the same mon successfully uses a move. Used by power-doubling
-	 * moves like Stomping Tantrum (2× BP when the user's previous move
+	 * Per-Pokemon "did the previous move attempt fail" flag, mirrored
+	 * from the tracker by `PlayerAI` whenever a `|miss|`, `|-immune|`,
+	 * `|-fail|`, or `|cant|` line is parsed against that mon (via
+	 * `receiveLine` or `ingestLogLine`). Cleared the next time the
+	 * same mon successfully uses a move. Used by power-doubling moves
+	 * like Stomping Tantrum (2× BP when the user's previous move
 	 * failed).
 	 */
 	lastMoveFailedByMon: Set<string>;
@@ -61,11 +63,26 @@ export interface EngineContext {
 	/** Per-Pokemon last switch turn. */
 	lastSwitchTurnByMon: Map<string, number>;
 	/**
-	 * Epsilon-greedy noise probability. With probability `noiseEpsilon`
-	 * the engine picks a uniformly-random alternative from its
-	 * candidate set instead of the top-scored option. 0 disables noise.
+	 * Net "how often have we been switching lately" counter, pokerogue
+	 * style: incremented each time the engine emits a voluntary switch,
+	 * decremented (floored at 0) each time it commits to a move. The
+	 * switch gate adds a margin penalty proportional to this counter so
+	 * the AI can't ping-pong between two mons.
 	 */
-	noiseEpsilon: number;
+	switchCount: number;
+	/**
+	 * Cap on the per-step advance probability of the move-selection
+	 * ladder (see {@link selectByScoreLadder}). 0 means always-greedy;
+	 * 0.5 is the pokerogue default ("at most a coin flip to slip to
+	 * the next-best move").
+	 */
+	ladderAdvanceCap: number;
+	/**
+	 * Extra matchup-score margin the best bench mon must clear over the
+	 * active mon before a voluntary (non-emergency) switch fires. Lower
+	 * = switch-happier. Scaled per difficulty by `DifficultyPolicy`.
+	 */
+	switchMargin: number;
 	/**
 	 * For low-difficulty engines: probability to "forget" any single
 	 * piece of revealed info (a foe's revealed move, a known item, ...)
@@ -85,6 +102,14 @@ export interface EngineContext {
 	 * when available. Defaults to 0.
 	 */
 	randomMegaProb?: number;
+	/**
+	 * Optional accessor for the live simulator {@link Battle} this AI
+	 * is embedded in. When the host stream is a `BattleStream` the
+	 * shell wires this up automatically, letting the MCTS tier fork
+	 * the real battle (`Battle.toJSON` / `Battle.fromJSON`) for its
+	 * rollouts instead of the tracker-only approximation.
+	 */
+	getBattle?: () => Battle | null;
 }
 
 /**
@@ -102,25 +127,43 @@ export interface Engine {
 	choose(request: ChoiceRequest, ctx: EngineContext): string;
 }
 
-/** Pick a random element from `arr` using `prng`. */
-export function sampleArray<T>(arr: T[], prng: PRNG): T {
-	return arr[Math.floor(prng.random() * arr.length)];
-}
-
 /**
- * Apply epsilon-greedy noise: with probability `epsilon` returns a
- * uniformly-random element from `candidates`; otherwise returns
- * `bestPick`. If `candidates` is empty, returns `bestPick` unmodified.
+ * Pokerogue-style weighted pick ladder over a descending-sorted score
+ * list. Starting from `startIndex`, we advance from candidate `i` to
+ * `i + 1` with probability `min(advanceCap, ratio * advanceCap)` where
+ * `ratio` is how close the next score is to the current one (1 for a
+ * tie, smaller as the next candidate falls behind). The walk stops at
+ * the first failed roll, a score sign flip, or the end of the list.
+ *
+ * This replaces the old epsilon-uniform noise: variety is now
+ * *strength-preserving* — a close second is a frequent pick, a distant
+ * third is rare, and a negative-scored move is never reached from a
+ * positive run.
+ *
+ * @param sorted Candidates sorted by descending score.
+ * @param startIndex Index to start the walk from.
+ * @param advanceCap Maximum per-step advance probability in [0, 1].
+ * @param prng PRNG used for the advance rolls.
+ * @returns The selected candidate. `sorted` must be non-empty.
  */
-export function applyNoise<T>(
-	bestPick: T,
-	candidates: T[],
-	epsilon: number,
+export function selectByScoreLadder<T extends { score: number }>(
+	sorted: T[],
+	startIndex: number,
+	advanceCap: number,
 	prng: PRNG
 ): T {
-	if (epsilon <= 0 || candidates.length <= 1) return bestPick;
-	if (prng.random() >= epsilon) return bestPick;
-	const alternatives = candidates.filter(c => c !== bestPick);
-	if (!alternatives.length) return bestPick;
-	return sampleArray(alternatives, prng);
+	let idx = Math.max(0, Math.min(startIndex, sorted.length - 1));
+	if (advanceCap <= 0) return sorted[idx];
+	while (idx + 1 < sorted.length) {
+		const cur = sorted[idx].score;
+		const next = sorted[idx + 1].score;
+		if (Math.sign(cur) !== Math.sign(next)) break;
+		// Closeness ratio in (0, 1]: works for both positive and
+		// negative same-sign runs because the list is sorted descending.
+		const ratio = cur === next ? 1 : cur > 0 ? next / cur : cur / next;
+		if (!(ratio > 0)) break;
+		if (prng.random() >= Math.min(advanceCap, ratio * advanceCap)) break;
+		idx++;
+	}
+	return sorted[idx];
 }

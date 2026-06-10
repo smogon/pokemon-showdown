@@ -489,11 +489,11 @@ function resolveMoveType(move: Move, input: DamageCalcInput): string {
 	}
 	if (type === "Normal") {
 		switch (ability) {
-			case "aerilate": return "Flying";
-			case "pixilate": return "Fairy";
-			case "refrigerate": return "Ice";
-			case "galvanize": return "Electric";
-			case "normalize": return "Normal"; // No-op on Normal; -ate boost still applies.
+		case "aerilate": return "Flying";
+		case "pixilate": return "Fairy";
+		case "refrigerate": return "Ice";
+		case "galvanize": return "Electric";
+		case "normalize": return "Normal"; // No-op on Normal; -ate boost still applies.
 		}
 	}
 	return type;
@@ -503,22 +503,22 @@ function abilityImmunityBlocks(moveType: string, move: Move, input: DamageCalcIn
 	const ability = toID(input.defender.ability);
 	if (move.category === "Status") return false;
 	switch (ability) {
-		case "voltabsorb":
-		case "lightningrod":
-		case "motordrive":
-			return moveType === "Electric";
-		case "waterabsorb":
-		case "stormdrain":
-		case "dryskin":
-			return moveType === "Water";
-		case "flashfire":
-			return moveType === "Fire";
-		case "sapsipper":
-			return moveType === "Grass";
-		case "levitate":
-			return moveType === "Ground" && !input.field.gravity;
-		case "wonderguard":
-			return typeEffectivenessExp(moveType, input.defender) <= 0;
+	case "voltabsorb":
+	case "lightningrod":
+	case "motordrive":
+		return moveType === "Electric";
+	case "waterabsorb":
+	case "stormdrain":
+	case "dryskin":
+		return moveType === "Water";
+	case "flashfire":
+		return moveType === "Fire";
+	case "sapsipper":
+		return moveType === "Grass";
+	case "levitate":
+		return moveType === "Ground" && !input.field.gravity;
+	case "wonderguard":
+		return typeEffectivenessExp(moveType, input.defender) <= 0;
 	}
 	return false;
 }
@@ -542,96 +542,113 @@ function computeBasePower(move: Move, moveType: string, input: DamageCalcInput):
 
 	// Some ID-specific BP recomputations.
 	switch (id) {
-		case "earthquake":
-		case "magnitude":
-			break;
-		case "knockoff":
-			if (input.defender.item) bp *= 1.5;
-			break;
-		case "facade":
-			if (input.attacker.status && input.attacker.status !== "frz" && input.attacker.status !== "slp") {
-				bp *= 2;
-			}
-			break;
-		case "hex":
-			if (input.defender.status) bp *= 2;
-			break;
-		case "venoshock":
-			if (input.defender.status === "psn" || input.defender.status === "tox") bp *= 2;
-			break;
-		case "acrobatics":
-			if (!input.attacker.item) bp *= 2;
-			break;
-		case "lowkick":
-		case "grassknot":
-			// Weight-based; we approximate with average BP of 80.
-			bp = Math.max(bp, 80);
-			break;
-		case "heavyslam":
-		case "heatcrash":
-			bp = Math.max(bp, 80);
-			break;
-		case "gyroball":
-			bp = Math.max(bp, 60);
-			break;
-		case "electroball":
-			bp = Math.max(bp, 80);
-			break;
-		case "weatherball":
-			if (input.field.weather && input.field.weather !== "none") bp = 100;
-			break;
-		case "terrainpulse":
-			if (input.field.terrain) bp = 100;
-			break;
-		case "boltbeak":
-		case "fishiousrend":
-			// 2× if the attacker moves first this turn — we now have
-			// the hint from the caller. When the hint is missing
-			// (`undefined`), fall back to the historical 1.5× midpoint
-			// estimate rather than guess wrong either way.
-			if (input.attackerMovesFirst === true) bp *= 2;
-			else if (input.attackerMovesFirst === undefined) bp *= 1.5;
-			break;
-		case "payback":
-			// 2× if the attacker moves second.
-			if (input.attackerMovesFirst === false) bp *= 2;
-			break;
-		case "revenge":
-		case "avalanche":
-			// 2× if the attacker took damage from the foe this turn.
-			// We approximate that as "foe moves first" — the typical
-			// scenario where Revenge / Avalanche actually fire. (False
-			// positives in the unusual "foe used a status move first
-			// turn" case are tolerable; the scoring layer cross-checks
-			// `defender.lastMove?.category` for the higher-value
-			// branches.)
-			if (input.attackerMovesFirst === false) bp *= 2;
-			break;
-		case "assurance":
-			// 2× if the target has already taken damage this turn —
-			// classic doubles partner combo, or any prior hit on the
-			// same target in singles (multi-hit interruption, etc.).
-			if (input.defenderTookDamageThisTurn) bp *= 2;
-			break;
-		case "lashout":
-			// 2× if the attacker's stat stages were lowered this turn
-			// (Intimidate switch-in, Sticky Web, foe Sword Dance/Snarl).
-			if (input.attackerLostStatThisTurn) bp *= 2;
-			break;
-		case "stompingtantrum":
-			// 2× if the user's *previous* move failed. The engine sets
-			// this flag from `lastMoveFailedByMon` (LogParser feeds it
-			// from `|miss|` / `|-immune|` / `|cant|` events). The
-			// classic "Earthquake into Levitate → Stomping Tantrum"
-			// combo finally scores correctly.
-			if (input.attackerLastMoveFailed) bp *= 2;
-			break;
-		case "lastrespects":
-			// Scales with team faints; approximate with +1 per faint.
-			break;
-		case "rage Fist":
-		case "ragefist":
-			break;
+	case "earthquake":
+	case "magnitude":
+		break;
+	case "knockoff":
+		if (input.defender.item) bp *= 1.5;
+		break;
+	case "facade":
+		if (input.attacker.status && input.attacker.status !== "frz" && input.attacker.status !== "slp") {
+			bp *= 2;
+		}
+		break;
+	case "hex":
+		if (input.defender.status) bp *= 2;
+		break;
+	case "venoshock":
+		if (input.defender.status === "psn" || input.defender.status === "tox") bp *= 2;
+		break;
+	case "acrobatics":
+		if (!input.attacker.item) bp *= 2;
+		break;
+	case "lowkick":
+	case "grassknot": {
+		// Defender-weight ladder (hectograms): >=200kg → 120 BP
+		// down to <10kg → 20 BP.
+		const w = speciesWeightHg(input.defender);
+		bp = w >= 2000 ? 120 : w >= 1000 ? 100 : w >= 500 ? 80 : w >= 250 ? 60 : w >= 100 ? 40 : 20;
+		break;
+	}
+	case "heavyslam":
+	case "heatcrash": {
+		// Attacker/defender weight ratio ladder: >=5× → 120 BP
+		// down to <2× → 40 BP.
+		const ratio = speciesWeightHg(input.attacker) / Math.max(1, speciesWeightHg(input.defender));
+		bp = ratio >= 5 ? 120 : ratio >= 4 ? 100 : ratio >= 3 ? 80 : ratio >= 2 ? 60 : 40;
+		break;
+	}
+	case "gyroball": {
+		// BP = 25 × (target speed / user speed) + 1, capped at 150.
+		const userSpe = Math.max(1, effectiveStat(input.attacker, "spe"));
+		const targetSpe = effectiveStat(input.defender, "spe");
+		bp = Math.min(150, Math.floor((25 * targetSpe) / userSpe) + 1);
+		break;
+	}
+	case "electroball": {
+		// User/target speed ratio ladder: >=4× → 150 BP down to 40.
+		const userSpe = effectiveStat(input.attacker, "spe");
+		const targetSpe = Math.max(1, effectiveStat(input.defender, "spe"));
+		const ratio = userSpe / targetSpe;
+		bp = ratio >= 4 ? 150 : ratio >= 3 ? 120 : ratio >= 2 ? 80 : ratio >= 1 ? 60 : 40;
+		break;
+	}
+	case "weatherball":
+		if (input.field.weather && input.field.weather !== "none") bp = 100;
+		break;
+	case "terrainpulse":
+		if (input.field.terrain) bp = 100;
+		break;
+	case "boltbeak":
+	case "fishiousrend":
+		// 2× if the attacker moves first this turn — we now have
+		// the hint from the caller. When the hint is missing
+		// (`undefined`), fall back to the historical 1.5× midpoint
+		// estimate rather than guess wrong either way.
+		if (input.attackerMovesFirst === true) bp *= 2;
+		else if (input.attackerMovesFirst === undefined) bp *= 1.5;
+		break;
+	case "payback":
+		// 2× if the attacker moves second.
+		if (input.attackerMovesFirst === false) bp *= 2;
+		break;
+	case "revenge":
+	case "avalanche":
+		// 2× if the attacker took damage from the foe this turn.
+		// We approximate that as "foe moves first" — the typical
+		// scenario where Revenge / Avalanche actually fire. (False
+		// positives in the unusual "foe used a status move first
+		// turn" case are tolerable; the scoring layer cross-checks
+		// `defender.lastMove?.category` for the higher-value
+		// branches.)
+		if (input.attackerMovesFirst === false) bp *= 2;
+		break;
+	case "assurance":
+		// 2× if the target has already taken damage this turn —
+		// classic doubles partner combo, or any prior hit on the
+		// same target in singles (multi-hit interruption, etc.).
+		if (input.defenderTookDamageThisTurn) bp *= 2;
+		break;
+	case "lashout":
+		// 2× if the attacker's stat stages were lowered this turn
+		// (Intimidate switch-in, Sticky Web, foe Sword Dance/Snarl).
+		if (input.attackerLostStatThisTurn) bp *= 2;
+		break;
+	case "stompingtantrum":
+		// 2× if the user's *previous* move failed. The engine sets
+		// this flag from `lastMoveFailedByMon` (LogParser feeds it
+		// from `|miss|` / `|-immune|` / `|cant|` events). The
+		// classic "Earthquake into Levitate → Stomping Tantrum"
+		// combo finally scores correctly.
+		if (input.attackerLastMoveFailed) bp *= 2;
+		break;
+	case "lastrespects":
+		// 50 + 50 per fainted party member on the user's side.
+		bp = 50 + 50 * input.attackerSide.fainted;
+		break;
+	case "rage Fist":
+	case "ragefist":
+		break;
 	}
 
 	// Terrain BP boosts (only when grounded, simplified).
@@ -649,38 +666,38 @@ function computeBasePower(move: Move, moveType: string, input: DamageCalcInput):
 
 	// Ability BP boosts.
 	switch (ability) {
-		case "technician": if (bp <= 60) bp *= 1.5; break;
-		case "ironfist": if (move.flags?.punch) bp *= 1.2; break;
-		case "strongjaw": if (move.flags?.bite) bp *= 1.5; break;
-		case "megalauncher": if (move.flags?.pulse) bp *= 1.5; break;
-		case "toughclaws": if (move.flags?.contact) bp *= 1.3; break;
-		case "rivalry": /* depends on gender; ignored */ break;
-		case "swarm": if (moveType === "Bug" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
-		case "blaze": if (moveType === "Fire" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
-		case "torrent": if (moveType === "Water" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
-		case "overgrow": if (moveType === "Grass" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
-		case "sandforce":
-			if (input.field.weather === "sandstorm" && (moveType === "Rock" || moveType === "Ground" || moveType === "Steel")) {
-				bp *= 1.3;
-			}
-			break;
-		case "punkrock": if (move.flags?.sound) bp *= 1.3; break;
-		case "aerilate":
-		case "pixilate":
-		case "refrigerate":
-		case "galvanize":
-			if (move.type === "Normal" && moveType !== "Normal") bp *= 1.2;
-			break;
-		case "normalize":
-			if (moveType === "Normal" && (move.type !== "Normal" || true)) bp *= 1.2;
-			break;
-		case "stakeout": /* needs "switched in this turn" tracking; skipped */ break;
-		case "sheerforce":
-			if (move.secondaries?.length || (move as { hasSheerForce?: boolean }).hasSheerForce) bp *= 1.3;
-			break;
-		case "analytic": /* needs move-order; skipped */ break;
-		case "darkaura": if (moveType === "Dark") bp *= 4 / 3; break;
-		case "fairyaura": if (moveType === "Fairy") bp *= 4 / 3; break;
+	case "technician": if (bp <= 60) bp *= 1.5; break;
+	case "ironfist": if (move.flags?.punch) bp *= 1.2; break;
+	case "strongjaw": if (move.flags?.bite) bp *= 1.5; break;
+	case "megalauncher": if (move.flags?.pulse) bp *= 1.5; break;
+	case "toughclaws": if (move.flags?.contact) bp *= 1.3; break;
+	case "rivalry": /* depends on gender; ignored */ break;
+	case "swarm": if (moveType === "Bug" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
+	case "blaze": if (moveType === "Fire" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
+	case "torrent": if (moveType === "Water" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
+	case "overgrow": if (moveType === "Grass" && (input.attacker.hpFraction ?? 1) <= 1 / 3) bp *= 1.5; break;
+	case "sandforce":
+		if (input.field.weather === "sandstorm" && (moveType === "Rock" || moveType === "Ground" || moveType === "Steel")) {
+			bp *= 1.3;
+		}
+		break;
+	case "punkrock": if (move.flags?.sound) bp *= 1.3; break;
+	case "aerilate":
+	case "pixilate":
+	case "refrigerate":
+	case "galvanize":
+		if (move.type === "Normal" && moveType !== "Normal") bp *= 1.2;
+		break;
+	case "normalize":
+		if (moveType === "Normal" && (move.type !== "Normal" || true)) bp *= 1.2;
+		break;
+	case "stakeout": /* needs "switched in this turn" tracking; skipped */ break;
+	case "sheerforce":
+		if (move.secondaries?.length || (move as { hasSheerForce?: boolean }).hasSheerForce) bp *= 1.3;
+		break;
+	case "analytic": /* needs move-order; skipped */ break;
+	case "darkaura": if (moveType === "Dark") bp *= 4 / 3; break;
+	case "fairyaura": if (moveType === "Fairy") bp *= 4 / 3; break;
 	}
 
 	// Item BP boosts. (Choice Band is an Atk multiplier, not BP, so it's
@@ -1009,29 +1026,29 @@ function computeHitChance(move: Move, input: DamageCalcInput): number {
 
 function typeBoostingItem(itemId: string, moveType: string): boolean {
 	switch (itemId) {
-		case "blackbelt": return moveType === "Fighting";
-		case "blackglasses": return moveType === "Dark";
-		case "charcoal": return moveType === "Fire";
-		case "dragonfang": return moveType === "Dragon";
-		case "hardstone": return moveType === "Rock";
-		case "magnet": return moveType === "Electric";
-		case "metalcoat": return moveType === "Steel";
-		case "miracleseed": return moveType === "Grass";
-		case "mysticwater": return moveType === "Water";
-		case "neverMeltIce":
-		case "nevermelltice":
-		case "nevermelitice":
-		case "nevermellice":
-		case "nevermeltice":
-			return moveType === "Ice";
-		case "poisonbarb": return moveType === "Poison";
-		case "sharpbeak": return moveType === "Flying";
-		case "silkscarf": return moveType === "Normal";
-		case "silverpowder": return moveType === "Bug";
-		case "softsand": return moveType === "Ground";
-		case "spelltag": return moveType === "Ghost";
-		case "twistedspoon": return moveType === "Psychic";
-		case "fairyfeather": return moveType === "Fairy";
+	case "blackbelt": return moveType === "Fighting";
+	case "blackglasses": return moveType === "Dark";
+	case "charcoal": return moveType === "Fire";
+	case "dragonfang": return moveType === "Dragon";
+	case "hardstone": return moveType === "Rock";
+	case "magnet": return moveType === "Electric";
+	case "metalcoat": return moveType === "Steel";
+	case "miracleseed": return moveType === "Grass";
+	case "mysticwater": return moveType === "Water";
+	case "neverMeltIce":
+	case "nevermelltice":
+	case "nevermelitice":
+	case "nevermellice":
+	case "nevermeltice":
+		return moveType === "Ice";
+	case "poisonbarb": return moveType === "Poison";
+	case "sharpbeak": return moveType === "Flying";
+	case "silkscarf": return moveType === "Normal";
+	case "silverpowder": return moveType === "Bug";
+	case "softsand": return moveType === "Ground";
+	case "spelltag": return moveType === "Ghost";
+	case "twistedspoon": return moveType === "Psychic";
+	case "fairyfeather": return moveType === "Fairy";
 	}
 	if (itemId.endsWith("plate")) {
 		const t = platedItemType(itemId);
@@ -1047,24 +1064,24 @@ function typeBoostingItem(itemId: string, moveType: string): boolean {
 function typeResistBerry(itemId: string, moveType: string, eff: number): boolean {
 	if (eff <= 0 && itemId !== "chilanberry") return false;
 	switch (itemId) {
-		case "occaberry": return moveType === "Fire";
-		case "passhoberry": return moveType === "Water";
-		case "wacanberry": return moveType === "Electric";
-		case "rindoberry": return moveType === "Grass";
-		case "yacheberry": return moveType === "Ice";
-		case "chopleberry": return moveType === "Fighting";
-		case "kebiaberry": return moveType === "Poison";
-		case "shucaberry": return moveType === "Ground";
-		case "cobaberry": return moveType === "Flying";
-		case "payapaberry": return moveType === "Psychic";
-		case "tangaberry": return moveType === "Bug";
-		case "chartiberry": return moveType === "Rock";
-		case "kasibberry": return moveType === "Ghost";
-		case "habanberry": return moveType === "Dragon";
-		case "colburberry": return moveType === "Dark";
-		case "babiriberry": return moveType === "Steel";
-		case "roseliberry": return moveType === "Fairy";
-		case "chilanberry": return moveType === "Normal";
+	case "occaberry": return moveType === "Fire";
+	case "passhoberry": return moveType === "Water";
+	case "wacanberry": return moveType === "Electric";
+	case "rindoberry": return moveType === "Grass";
+	case "yacheberry": return moveType === "Ice";
+	case "chopleberry": return moveType === "Fighting";
+	case "kebiaberry": return moveType === "Poison";
+	case "shucaberry": return moveType === "Ground";
+	case "cobaberry": return moveType === "Flying";
+	case "payapaberry": return moveType === "Psychic";
+	case "tangaberry": return moveType === "Bug";
+	case "chartiberry": return moveType === "Rock";
+	case "kasibberry": return moveType === "Ghost";
+	case "habanberry": return moveType === "Dragon";
+	case "colburberry": return moveType === "Dark";
+	case "babiriberry": return moveType === "Steel";
+	case "roseliberry": return moveType === "Fairy";
+	case "chilanberry": return moveType === "Normal";
 	}
 	return false;
 }
@@ -1107,6 +1124,20 @@ function memoryItemType(itemId: string): string | null {
 	const t = itemId.slice(0, -"memory".length);
 	const cap = t.charAt(0).toUpperCase() + t.slice(1);
 	return cap || null;
+}
+
+/**
+ * Species weight in hectograms, for weight-based BP moves (Low Kick,
+ * Grass Knot, Heavy Slam, Heat Crash). Falls back to 100 hg (10 kg)
+ * when the species is unknown.
+ *
+ * @param mon The Pokemon whose weight to look up.
+ * @returns Weight in hectograms.
+ */
+function speciesWeightHg(mon: CalcPokemon): number {
+	const species = Dex.species.get(mon.species);
+	if (!species?.exists) return 100;
+	return species.weighthg || 100;
 }
 
 function isNFE(speciesId: string): boolean {

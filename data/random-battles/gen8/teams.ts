@@ -2151,7 +2151,13 @@ export class RandomGen8Teams {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;
 		}
-		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
+		if (species.cosmeticFormes) {
+			// PokeBedrock event skins are registered as cosmetic formes but
+			// have no dex entries/aliases — only sample formes the dex can
+			// resolve (see gen9 getForme).
+			const formes = [species.name, ...species.cosmeticFormes.filter(forme => this.dex.species.get(forme).exists)];
+			return this.sample(formes);
+		}
 		if (species.name.endsWith('-Gmax')) return species.name.slice(0, -5);
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles

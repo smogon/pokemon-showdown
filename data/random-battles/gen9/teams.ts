@@ -1442,7 +1442,14 @@ export class RandomTeams {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;
 		}
-		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
+		if (species.cosmeticFormes) {
+			// PokeBedrock event skins are registered as cosmetic formes but
+			// have no dex entries/aliases, so sampling them crashes battle
+			// creation ("Unidentified species") — only sample formes the
+			// dex can resolve.
+			const formes = [species.name, ...species.cosmeticFormes.filter(forme => this.dex.species.get(forme).exists)];
+			return this.sample(formes);
+		}
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
 		if (['Dudunsparce', 'Magearna', 'Maushold', 'Polteageist', 'Sinistcha', 'Zarude'].includes(species.baseSpecies)) {

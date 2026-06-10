@@ -53,6 +53,12 @@ export interface MoveEvalContext {
 	 * Stomping Tantrum can be scored at their boosted value.
 	 */
 	attackerLastMoveFailed?: boolean;
+	/**
+	 * True when the defender is expected to have already taken damage
+	 * this turn — in doubles, an earlier-deciding partner committed to
+	 * a damaging move. Powers Assurance's 2× BP.
+	 */
+	defenderTookDamageThisTurn?: boolean;
 }
 
 /** Result of a move evaluation. */
@@ -116,10 +122,10 @@ export function evaluateMove(
 		// tracking would be expensive. Both have low false-positive
 		// cost — at worst a slightly over-scored Lash Out / Assurance.
 		attackerLostStatThisTurn: hasActiveNegativeBoost(attacker),
-		// In singles we don't track per-turn hits on the foe; leaving
-		// this `false` keeps Assurance honest (base BP) unless a future
-		// caller threads it in for doubles partner combos.
-		defenderTookDamageThisTurn: false,
+		// Singles callers leave this unset (Assurance stays at base
+		// BP); the doubles engine threads in "a partner already
+		// committed to attacking this turn".
+		defenderTookDamageThisTurn: ctx.defenderTookDamageThisTurn ?? false,
 	});
 	const maxHp = calc.defenderMaxHp || estimateMaxHp(fromTracked(defender));
 	const damageScore = (calc.avgDamage / Math.max(1, maxHp)) * 100; // 0..100ish
