@@ -2413,7 +2413,6 @@ export class Battle {
 		if (targetLoc === 0) return true;
 		const numSlots = this.activePerHalf;
 		const sourceLoc = source.getLocOf(source);
-
 		if (Math.abs(targetLoc) > numSlots) return false;
 		const isSelf = (sourceLoc === targetLoc);
 		const isFoe = (this.gameType === 'freeforall' ? !isSelf : targetLoc > 0);
