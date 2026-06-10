@@ -2413,6 +2413,12 @@ export class Battle {
 		if (targetLoc === 0) return true;
 		const numSlots = this.activePerHalf;
 		const sourceLoc = source.getLocOf(source);
+
+		// Get the targeted Pokemon to check if it's fainted/empty
+		const targetSide = targetLoc > 0 ? source.side.foe : source.side;
+		const targetIndex = targetLoc > 0 ? targetLoc - 1 : -targetLoc - 1;
+		const targetPokemon = targetSide.active[targetIndex];
+
 		if (Math.abs(targetLoc) > numSlots) return false;
 		const isSelf = (sourceLoc === targetLoc);
 		const isFoe = (this.gameType === 'freeforall' ? !isSelf : targetLoc > 0);
@@ -2424,6 +2430,12 @@ export class Battle {
 		if (this.gameType === 'freeforall' && targetType === 'adjacentAlly') {
 			// moves targeting one ally can instead target foes in Battle Royal
 			return isAdjacent;
+		}
+
+		// Gen 3/4 specific block: strictly prevent selecting empty/fainted ALLY slots for ANY move.
+		// We check !isFoe because Showdown natively handles empty foe slots via auto-redirection.
+		if (this.gen <= 4 && !isFoe && (!targetPokemon || targetPokemon.fainted || targetPokemon.hp === 0)) {
+			return false;
 		}
 
 		switch (targetType) {

@@ -176,6 +176,23 @@ describe('Choices', () => {
 			assert.false.holdsItem(p2active[1]);
 			assert.equal(p2active[0].status, 'par');
 		});
+		for (const gen of [3, 4]) {
+			it(`should disallow targeting an empty ally slot in Gen ${gen}`, () => {
+				battle = common.gen(gen).createBattle({ gameType: 'doubles' }, [[
+					{ species: 'Mew', moves: ['tackle'] },
+					{ species: 'Abra', moves: ['memento'] },
+				], [
+					{ species: 'Snorlax', moves: ['rest'] },
+					{ species: 'Blissey', moves: ['softboiled'] },
+				]]);
+
+				// Turn 1: Abra faints itself, leaving P1's slot 2 empty
+				battle.makeChoices('move tackle 1, move memento 1', 'auto');
+
+				// Turn 2: Engine should reject Mew trying to target its empty ally slot (-2)
+				assert.cantTarget(() => battle.choose('p1', 'move tackle -2, pass'), 'tackle');
+			});
+		}
 
 		it('should disallow specifying move targets for targetless moves (randomNormal)', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
