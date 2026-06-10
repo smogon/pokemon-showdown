@@ -192,7 +192,25 @@ describe('Choices', () => {
 				// Turn 2: Engine should reject Mew trying to target its empty ally slot (-2)
 				assert.cantTarget(() => battle.choose('p1', 'move tackle -2, pass'), 'tackle');
 			});
+			it(`should allow targetless moves in Gen ${gen} if only one foe is left active`, () => {
+				battle = common.gen(gen).createBattle({ gameType: 'doubles' }, [[
+					{ species: 'Mew', moves: ['tackle'] },
+					{ species: 'Abra', moves: ['splash'] },
+				], [
+					{ species: 'Snorlax', moves: ['memento'] }, // Faints instantly
+					{ species: 'Blissey', moves: ['splash'] },  // Sole remaining opponent
+				]]);
+
+				// Turn 1: Snorlax faints itself via Memento, leaving Blissey completely alone on its side.
+				battle.makeChoices('move tackle 1, move splash', 'move memento 1, move splash');
+
+				// Turn 2: Mew uses Tackle without assigning an explicit target number.
+				// Since livingFoes is exactly 1, needsTarget evaluates to false, allowing
+				// the engine to automatically lock onto Blissey.
+				assert(battle.choose('p1', 'move tackle, move splash'));
+			});
 		}
+
 
 		it('should disallow specifying move targets for targetless moves (randomNormal)', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
