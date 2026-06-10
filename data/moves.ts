@@ -3508,7 +3508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					source.faint();
 				}
 			},
-			onBeforeMovePriority: 100,
+			onBeforeMovePriority: -1,
 			onBeforeMove(pokemon, target, move) {
 				if (move.id === 'destinybond') return;
 				this.debug('removing Destiny Bond before attack');

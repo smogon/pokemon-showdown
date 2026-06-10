@@ -17,7 +17,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				 * Even though the Infatuation check happens before the Disable check
 				 * the Disable duration tick happens before both
 				 */
-				if (pokemon.volatiles['disable'] && pokemon.volatiles['disable'].time === 1) {
+				if (pokemon.volatiles['disable']?.time === 1) {
 					pokemon.removeVolatile('disable');
 				}
 

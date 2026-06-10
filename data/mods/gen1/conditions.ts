@@ -145,7 +145,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			 * Even though the Confusion check happens before the Disable check
 			 * the Disable duration tick happens before both
 			 */
-			if (pokemon.volatiles['disable'] && pokemon.volatiles['disable'].time === 1) {
+			if (pokemon.volatiles['disable']?.time === 1) {
 				pokemon.removeVolatile('disable');
 			}
 
