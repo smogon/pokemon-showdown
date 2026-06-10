@@ -50,11 +50,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			this.add('cant', pokemon, 'slp');
+			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 			pokemon.lastMove = null;
 			return false;
-		},
-		onAfterMoveSelf(pokemon) {
-			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
 	},
 	frz: {
