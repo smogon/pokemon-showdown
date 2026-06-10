@@ -121,6 +121,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return 2 * this.lastDamage;
 		},
 	},
+	disable: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onBeforeMovePriority: 3,
+		},
+	},
 	firespin: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},

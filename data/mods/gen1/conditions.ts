@@ -33,7 +33,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target) {
 			this.add('-status', target, 'par');
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
@@ -67,18 +67,16 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onBeforeMovePriority: 10,
+		onBeforeMovePriority: 13,
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time > 0) {
 				this.add('cant', pokemon, 'slp');
+			} else {
+				pokemon.cureStatus();
 			}
 			pokemon.lastMove = null;
 			return false;
-		},
-		onAfterMoveSelfPriority: 3,
-		onAfterMoveSelf(pokemon) {
-			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
 		onDisableMove(target) {
 			target.maybeLocked = false; // the player knows it is locked
@@ -141,8 +139,16 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
 		},
-		onBeforeMovePriority: 3,
+		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon, target) {
+			/**
+			 * Even though the Confusion check happens before the Disable check
+			 * the Disable duration tick happens before both
+			 */
+			if (pokemon.volatiles['disable'] && pokemon.volatiles['disable'].time === 1) {
+				pokemon.removeVolatile('disable');
+			}
+
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
@@ -169,7 +175,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target) {
 			target.removeVolatile('mustrecharge');
 		},
-		onBeforeMovePriority: 8,
+		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
@@ -197,7 +203,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 2,
 		// defender still takes PSN damage, etc
 		// TODO: research exact mechanics
-		onBeforeMovePriority: 9,
+		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
@@ -276,7 +282,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	mustrecharge: {
 		inherit: true,
 		duration: 0,
-		onBeforeMovePriority: 7,
+		onBeforeMovePriority: 8,
 		onStart: undefined, // no inherit
 		onAfterMove(pokemon, target, move) {
 			if (target && target.hp <= 0) {

@@ -739,7 +739,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					pokemon.removeVolatile('attract');
 				}
 			},
-			onBeforeMovePriority: 2,
+			onBeforeMovePriority: 1,
 			onBeforeMove(pokemon, target, move) {
 				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
 				if (this.randomChance(1, 2)) {
@@ -3508,7 +3508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					source.faint();
 				}
 			},
-			onBeforeMovePriority: -1,
+			onBeforeMovePriority: 100,
 			onBeforeMove(pokemon, target, move) {
 				if (move.id === 'destinybond') return;
 				this.debug('removing Destiny Bond before attack');

@@ -16,7 +16,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	par: {
 		name: 'par',
 		inherit: true,
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
@@ -40,7 +40,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onBeforeMovePriority: 10,
+		onBeforeMovePriority: 13,
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {
@@ -127,7 +127,16 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.effectState.time = this.random(2, 6);
 			}
 		},
+		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon, target, move) {
+			/**
+			 * Even though the Confusion check happens before the Disable check
+			 * the Disable duration tick happens before both
+			 */
+			if (pokemon.volatiles['disable'] && pokemon.volatiles['disable'].time === 1) {
+				pokemon.removeVolatile('disable');
+			}
+
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
@@ -200,6 +209,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
 			}
 		},
+	},
+	mustrecharge: {
+		inherit: true,
+		onBeforeMovePriority: 14,
 	},
 	futuremove: {
 		inherit: true,

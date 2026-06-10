@@ -36,7 +36,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			return spe;
 		},
-		onBeforeMovePriority: 1,
+		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
