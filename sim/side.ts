@@ -643,64 +643,23 @@ export class Side {
 		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {
-			// 1. Count how many opponents are actually alive on the field
-			let livingFoes = 0;
-			if (this.battle.gameType === 'freeforall') {
-				for (const side of this.battle.sides) {
-					for (const active of side.active) {
-						if (active && !active.fainted && active.hp > 0 && active !== pokemon) {
-							livingFoes++;
-						}
-					}
-				}
-			} else {
-				for (const side of this.battle.sides) {
-					if (side === this) continue;
-					for (const active of side.active) {
-						if (active && !active.fainted && active.hp > 0) {
-							livingFoes++;
-						}
-					}
-				}
-			}
-
-			// 2. Use livingFoes to safely skip targeting if only 1 foe remains
-			const needsTarget = this.battle.gen <= 4 ? livingFoes >= 2 : this.active.length >= 2;
-			if (!targetLoc && needsTarget) {
+			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}
 
-			// --- AUTO-ASSIGN TARGET FOR GEN 1-4 ---
-			// If the user didn't pick a target, and only 1 foe remains, lock onto them!
-			if (!targetLoc && livingFoes === 1 && this.battle.gen <= 4) {
-				for (const side of this.battle.sides) {
-					if (side === this) continue;
-					for (const active of side.active) {
-						if (active && !active.fainted && active.hp > 0) {
-							targetLoc = pokemon.getLocOf(active);
-							break;
-						}
-					}
-				}
-			}
-
-			// Now validTargetLoc will succeed because targetLoc is no longer 0!
 			if (!this.battle.validTargetLoc(targetLoc, pokemon, targetType)) {
 				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 			}
 
-			// 3. Ally & Free-For-All validation logic
-			// Gen 1-4: targeting an empty or fainted ally slot is not allowed.
-			// Free-for-all is excluded: in that mode opponents can occupy negative locations.
+			// --- GEN 1-4 ALLY VALIDATION ---
+			// Targeting an empty or completely fainted ally slot is illegal in Gen 1-4.
+			// Free-For-All is excluded because opponents sit at negative coordinates.
 			if (targetLoc && this.battle.gen <= 4 && this.battle.gameType !== 'freeforall') {
-				// Negative targetLoc = own side. Exclude self (position 0 → loc -1, position 1 → loc -2, …).
+				// Negative targetLoc = own side. Exclude self (position 0 -> loc -1, position 1 -> loc -2, etc.)
 				const selfLoc = -(pokemon.position + 1);
 				if (targetLoc < 0 && targetLoc !== selfLoc) {
 					const target = pokemon.getAtLoc(targetLoc);
-
-					// ONLY block the move if the target slot is explicitly empty or completely fainted,
-					// AND the player manually chose a move requiring a selectable choice target type.
-					if (!target?.isActive && this.battle.actions.targetTypeChoices(targetType)) {
+					if (!target?.isActive) {
 						return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 					}
 				}
