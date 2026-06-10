@@ -4693,7 +4693,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-start', pokemon, 'Embargo');
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 			},
-			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			// Item suppression implemented in sim/pokemon.ts#ignoringItem
 			onResidualOrder: 21,
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Embargo');
@@ -5180,7 +5180,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 2,
 		flags: { mirror: 1, noassist: 1, failcopycat: 1 },
 		breaksProtect: true,
-		// Breaking protection implemented in scripts.js
+		// Breaking protection implemented in sim/battle-actions.ts#hitStepBreakProtect
 		target: "normal",
 		type: "Normal",
 		contestType: "Clever",
@@ -6443,7 +6443,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		condition: {
-			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
+			// Ability suppression implemented in sim/pokemon.ts#ignoringAbility
 			onStart(pokemon) {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
@@ -7815,7 +7815,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
-			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+			// groundedness implemented in sim/pokemon.ts#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
 				if (move.flags['gravity'] && !move.isZ) {
@@ -9629,7 +9629,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
 			},
-			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+			// groundedness implemented in sim/pokemon.ts#isGrounded
 			onDragOut(pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
 				return null;
@@ -10784,7 +10784,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('magicroom');
 			},
-			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			// Item suppression implemented in sim/pokemon.ts#ignoringItem
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 6,
 			onFieldEnd() {
@@ -16996,7 +16996,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
-			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+			// groundedness implemented in sim/pokemon.ts#isGrounded
 		},
 		target: "normal",
 		type: "Rock",
@@ -17427,7 +17427,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, bypasssub: 1 },
 		stealsBoosts: true,
-		// Boost stealing implemented in scripts.js
+		// Boost stealing implemented in sim/battle-actions.ts#hitStepStealBoosts
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cool",
@@ -19976,7 +19976,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('trickroom');
 			},
-			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
+			// Speed modification is implemented in sim/pokemon.ts#getActionSpeed
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 1,
 			onFieldEnd() {
@@ -21013,7 +21013,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
 			},
-			// Swapping defenses partially implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
+			// Swapping defenses implemented in sim/pokemon.ts#calculateStat and sim/pokemon.ts#getStat
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 5,
 			onFieldEnd() {
