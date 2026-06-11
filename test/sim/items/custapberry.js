@@ -18,7 +18,6 @@ describe('Custap Berry', () => {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move tackle', 'move growl');
-		console.log(battle.log);
 		assert.equal(battle.p1.active[0].boosts.atk, -1);
 		assert.fainted(battle.p2.active[0]);
 	});
