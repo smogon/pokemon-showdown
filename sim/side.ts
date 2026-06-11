@@ -643,7 +643,7 @@ export class Side {
 		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {
-			if (!targetLoc && this.active.length >= 2) {
+			if (!targetLoc && this.battle.activePerHalf >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}
 
@@ -651,17 +651,11 @@ export class Side {
 				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 			}
 
-			// --- GEN 1-4 ALLY VALIDATION ---
-			// Targeting an empty or completely fainted ally slot is illegal in Gen 1-4.
-			// Free-For-All is excluded because opponents sit at negative coordinates.
-			if (targetLoc && this.battle.gen <= 4 && this.battle.gameType !== 'freeforall') {
-				// Negative targetLoc = own side. Exclude self (position 0 -> loc -1, position 1 -> loc -2, etc.)
-				const selfLoc = -(pokemon.position + 1);
-				if (targetLoc < 0 && targetLoc !== selfLoc) {
-					const target = pokemon.getAtLoc(targetLoc);
-					if (!target?.isActive) {
-						return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
-					}
+			// Gen 1-4: You cannot manually select an empty or fainted slot (ally or foe).
+			if (this.battle.gen <= 4 && targetLoc) {
+				const target = pokemon.getAtLoc(targetLoc);
+				if (!target?.isActive) {
+					return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 				}
 			}
 		} else {

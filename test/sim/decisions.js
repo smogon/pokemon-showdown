@@ -185,11 +185,7 @@ describe('Choices', () => {
 					{ species: 'Snorlax', moves: ['rest'] },
 					{ species: 'Blissey', moves: ['softboiled'] },
 				]]);
-
-				// Turn 1: Abra faints itself, leaving P1's slot 2 empty
 				battle.makeChoices('move tackle 1, move memento 1', 'auto');
-
-				// Turn 2: Engine should reject Mew trying to target its empty ally slot (-2)
 				assert.cantTarget(() => battle.choose('p1', 'move tackle -2, pass'), 'tackle');
 			});
 		}
