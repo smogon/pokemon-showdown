@@ -547,9 +547,9 @@ stat boosts are minor actions.
 
 > The Pokémon `POKEMON` has used the z-move version of its move.
 
-`|-zbroken|POKEMON`
+`|-brokeprotect|POKEMON`
 
-> A z-move has broken through protect and hit the `POKEMON`.
+> A move has broken through a protecting move and hit the `POKEMON`.
 
 `|-activate|EFFECT`
 
