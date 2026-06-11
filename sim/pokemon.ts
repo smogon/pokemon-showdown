@@ -1038,6 +1038,10 @@ export class Pokemon {
 			if (disabled === 'hidden') {
 				disabled = !restrictData;
 			}
+			if (disabled && encoredMove && this.battle.gen <= 2) {
+				// in Gen 2, Encore has priority over Struggle
+				disabled = false;
+			}
 			if (!disabled) {
 				hasValidMove = true;
 			}

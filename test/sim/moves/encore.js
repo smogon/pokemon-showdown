@@ -184,6 +184,23 @@ describe('Encore', () => {
 		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
 	});
 
+	it(`should cause the Pokemon to Struggle if the move gets Disabled`, () => {
+		battle = common.createBattle([[
+			{ species: 'Mew', moves: ['growl', 'leer'] },
+		], [
+			{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+		]]);
+		battle.makeChoices('move growl', 'move encore');
+		battle.makeChoices('move growl', 'move disable');
+		assert.equal(battle.p2.active[0].boosts.atk, -2);
+		assert.equal(battle.p2.active[0].boosts.def, 0);
+		battle.makeChoices('move struggle', 'move sleeptalk');
+		assert.equal(battle.p2.active[0].boosts.atk, -2);
+		assert.equal(battle.p2.active[0].boosts.def, 0);
+		assert.false.fullHP(battle.p1.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+
 	describe('[Gen 4]', () => {
 		it(`should not require selecting a target in doubles`, () => {
 			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
@@ -227,6 +244,24 @@ describe('Encore', () => {
 			battle.makeChoices();
 			battle.makeChoices('move growl', 'move encore');
 			assert.false(battle.p1.active[0].volatiles['encore']);
+		});
+
+		it(`should cause the Pokemon to Struggle if the move gets Disabled`, () => {
+			// same test
+			battle = common.gen(4).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'leer'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move growl', 'move encore');
+			battle.makeChoices('move growl', 'move disable');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			battle.makeChoices('move struggle', 'move sleeptalk');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			assert.false.fullHP(battle.p1.active[0]);
+			assert.false.fullHP(battle.p2.active[0]);
 		});
 	});
 
@@ -296,6 +331,23 @@ describe('Encore', () => {
 			battle.makeChoices();
 			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 1);
 			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+		});
+
+		it(`should cause the Pokemon the move execution to fail if the move gets Disabled, but not Struggle`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'leer'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move growl', 'move encore');
+			battle.makeChoices('move growl', 'move disable');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			battle.makeChoices('move growl', 'move sleeptalk');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			assert.fullHP(battle.p1.active[0]);
+			assert.fullHP(battle.p2.active[0]);
 		});
 	});
 });

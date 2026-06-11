@@ -661,7 +661,8 @@ export class Side {
 		}
 
 		const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
-		const encored = this.battle.gen <= 4 && pokemon.volatiles['encore']?.move;
+		const struggle = !moves.length;
+		const encored = !lockedMove && !struggle && this.battle.gen <= 4 && pokemon.volatiles['encore']?.move;
 		if (lockedMove || encored) {
 			let lockedMoveTargetLoc: number | undefined = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove || encored);
@@ -690,7 +691,7 @@ export class Side {
 				moveid: 'fight',
 			});
 			return true;
-		} else if (!moves.length) {
+		} else if (struggle) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
