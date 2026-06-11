@@ -652,10 +652,10 @@ export class Side {
 			}
 
 			// Gen 1-4: You cannot manually select an empty or fainted slot (ally or foe).
-			if (this.battle.gen <= 4 && targetLoc) {
+			if (this.battle.gen <= 4 && targetLoc && !pokemon.getLockedMove()) {
 				const target = pokemon.getAtLoc(targetLoc);
 				if (!target?.isActive) {
-					return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
+					return this.emitChoiceError(`Can't move: Invalid target for ${move.name} (inactive)`);
 				}
 			}
 		} else {
