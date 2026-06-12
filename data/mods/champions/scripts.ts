@@ -11,10 +11,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		const tr = this.trunc;
 		let stat = baseStats[statName];
 		const evs = set.evs[statName];
-		if (statName === 'hp') {
-			return stat + evs + 75;
+		if (this.ruleTable.has('levelclausemod')) {
+			// Stat calculation is modified to depend on level
+			// We use the formula from main line formats
+			// The first stat point gives 4 EVs and the others give 8 EVs.
+			const level = set.level;
+			if (statName === 'hp') {
+				return tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + level + 10;
+			}
+			stat = tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + 5;
+		} else {
+			if (statName === 'hp') {
+				return stat + evs + 75;
+			}
+			stat = stat + evs + 20;
 		}
-		stat = stat + evs + 20;
 		const nature = this.dex.natures.get(set.nature);
 		// Natures are calculated with 16-bit truncation.
 		// This only affects Eternatus-Eternamax in Pure Hackmons.

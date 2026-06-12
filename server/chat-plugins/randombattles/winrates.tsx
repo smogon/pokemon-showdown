@@ -50,6 +50,7 @@ function getDefaultStats(): Stats {
 			gen9chatbats: { mons: {} },
 			gen9ccapm2025randombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
+			gen9championsrandombattle: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },
 			gen6randombattle: { mons: {} },
@@ -175,8 +176,10 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod === 'gen2') {
+	if (format.mod === 'champions') {
 		// ladder is inactive, so use a lower threshold
+		eloFloor = 1200;
+	} else if (format.mod === 'gen2') {
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {
 		// ladder is even more inactive, so an even lower threshold
