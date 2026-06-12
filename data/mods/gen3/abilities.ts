@@ -212,12 +212,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.removeVolatile('truant');
 			}
 		},
-		onBeforeMove(pokemon) {
-			if (pokemon.truantTurn) {
-				this.add('cant', pokemon, 'ability: Truant');
-				return false;
-			}
-		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
 			pokemon.truantTurn = !pokemon.truantTurn;
