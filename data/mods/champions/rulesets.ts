@@ -52,4 +52,13 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			this.makeRequest('teampreview');
 		},
 	},
+	levelclausemod: {
+		effectType: 'Rule',
+		name: 'Level Clause Mod',
+		desc: "Changes stat calculation to depend on the Pok&eacute;mon's level, which need not be 50.",
+		onBegin() {
+			this.add('rule', "Level Clause Mod: Pok&eacute;mon levels are not fixed at 50, with stats calculated accordingly.");
+		},
+		// Implemented in mods/champions/scripts.ts
+	},
 };
