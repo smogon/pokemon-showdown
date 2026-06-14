@@ -55,21 +55,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 91,
 	},
 	aerilate: {
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Flying';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
-		},
+		...ateAbilityTemplate("Flying"),
 		flags: {},
 		name: "Aerilate",
 		rating: 4,
@@ -213,19 +199,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 71,
 	},
 	armortail: {
-		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
-
-			const armorTailHolder = this.effectState.target;
-			if ((source.isAlly(armorTailHolder) || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', armorTailHolder, 'ability: Armor Tail', move, `[of] ${target}`);
-				return false;
-			}
-		},
+		...priorityBlockAbilityTemplate("Armor Tail"),
 		flags: { breakable: 1 },
 		name: "Armor Tail",
 		rating: 2.5,
@@ -852,19 +826,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 235,
 	},
 	dazzling: {
-		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
-
-			const dazzlingHolder = this.effectState.target;
-			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, `[of] ${target}`);
-				return false;
-			}
-		},
+		...priorityBlockAbilityTemplate("Dazzling"),
 		flags: { breakable: 1 },
 		name: "Dazzling",
 		rating: 2.5,
@@ -1025,21 +987,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	dragonize: {
 		isNonstandard: "Future",
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Dragon';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
-		},
+		...ateAbilityTemplate("Dragon"),
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
@@ -1550,21 +1498,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 177,
 	},
 	galvanize: {
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Electric';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
-		},
+		...ateAbilityTemplate("Electric"),
 		flags: {},
 		name: "Galvanize",
 		rating: 4,
@@ -3249,21 +3183,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 311,
 	},
 	pixilate: {
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Fairy';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
-		},
+		...ateAbilityTemplate("Fairy"),
 		flags: {},
 		name: "Pixilate",
 		rating: 4,
@@ -3669,19 +3589,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 282,
 	},
 	queenlymajesty: {
-		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
-
-			const dazzlingHolder = this.effectState.target;
-			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, `[of] ${target}`);
-				return false;
-			}
-		},
+		...priorityBlockAbilityTemplate("Queenly Majesty"),
 		flags: { breakable: 1 },
 		name: "Queenly Majesty",
 		rating: 2.5,
@@ -3765,21 +3673,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 120,
 	},
 	refrigerate: {
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
-				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Ice';
-				move.typeChangerBoosted = this.effect;
-			}
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
-		},
+		...ateAbilityTemplate("Ice"),
 		flags: {},
 		name: "Refrigerate",
 		rating: 4,
@@ -5660,4 +5554,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -3,
 	},
+};
+
+function ateAbilityTemplate(targetType: string): Partial<import("../sim/dex-abilities").AbilityData> {
+	return {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = targetType;
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+	}
+};
+
+function priorityBlockAbilityTemplate(abilityName: string): Partial<import("../sim/dex-abilities").AbilityData> {
+	return {
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const abilityHolder = this.effectState.target;
+			if ((source.isAlly(abilityHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', abilityHolder, `ability: ${abilityName}`, move, `[of] ${target}`);
+				return false;
+			}
+		},
+	}
 };
