@@ -110,7 +110,12 @@ export const Replays = new class {
 				});
 			}
 		} catch (e: any) {
-			if (e?.routine !== 'NewUniquenessConstraintViolationError') throw e;
+			// CockroachDB (upstream) reports a duplicate id via routine
+			// 'NewUniquenessConstraintViolationError'; vanilla PostgreSQL (our
+			// self-hosted replays DB) reports it as SQLSTATE 23505. Treat both as
+			// "already exists -> update" so re-saving a replay (privacy change,
+			// /savereplay forpunishment, autosave) works on both.
+			if (e?.routine !== 'NewUniquenessConstraintViolationError' && e?.code !== '23505') throw e;
 			await replays.update(replay.id, {
 				log: replayData.log,
 				inputlog: replayData.inputlog,
