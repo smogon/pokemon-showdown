@@ -441,7 +441,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	aerodactyl: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	snorlax: {
 		tier: "OU",
@@ -465,10 +465,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	mewtwo: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	mew: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	crobat: {
 		tier: "OU",
