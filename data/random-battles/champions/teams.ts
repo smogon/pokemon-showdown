@@ -714,7 +714,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		// Treat Charizard-Mega-X like Charizard-Mega-Y for bluffing purposes
 		if (species.id === 'charizardmegax') srWeakness = 2;
 		while (evs.hp > 0) {
-			const hp = Math.floor((2 * species.baseStats.hp + ivs.hp + evs.hp * 2 + 100) * level / 100 + 10);
+			const hp = Math.floor((2 * species.baseStats.hp + ivs.hp + Math.max(2 * evs.hp - 1, 0) + 100) * level / 100) + 10;
 			if (moves.has('substitute') && item !== 'Leftovers') {
 				if (item === 'Sitrus Berry' || item === 'Salac Berry') {
 					// Two Substitutes should activate Sitrus Berry or Power Construct
