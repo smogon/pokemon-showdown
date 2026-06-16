@@ -876,18 +876,17 @@ export class TeamValidator {
 			}
 		}
 		let isUnderleveled;
-		let isUnderleveledWild = false;
+		let underleveledEvoSpecies;
 		let requiredLevel;
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
 				if (set.level < (evoSpecies.evoLevel || 0)) {
+					underleveledEvoSpecies = evoSpecies.name;
+					requiredLevel = evoSpecies.evoLevel;
 					if (encounterMinLevelFlag || encounterMinLevel > (evoSpecies.evoLevel || 0)) {
 						isUnderleveled = evoSpecies.name;
-						requiredLevel = evoSpecies.evoLevel;
-					} else {
-						isUnderleveledWild = true;
 					}
 					break;
 				}
@@ -899,32 +898,9 @@ export class TeamValidator {
 		if (ruleTable.has('obtainablemoves')) {
 			moveProblems = this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist);
 			problems.push(...moveProblems);
-			if (isUnderleveledWild && minEncounterGen !== Infinity) {
-				let hasValidSource = false;
-
-				if (setSources.sourcesBefore >= minEncounterGen) {
-					hasValidSource = true;
-				} else {
-					setSources.sourcesBefore = 0;
-				}
-				const validSources = [];
-				for (const source of setSources.sources) {
-					const sourceGen = parseInt(source.charAt(0));
-					const isEgg = source.charAt(1) === 'E';
-					const isEvent = source.charAt(1) === 'S';
-
-					if (isEgg && sourceGen < 8) continue;
-					if (!isEvent && sourceGen < minEncounterGen) continue;
-
-					validSources.push(source);
-					hasValidSource = true;
-				}
-				setSources.sources = validSources;
-
-				if (!hasValidSource) {
-					const moveList = setSources.restrictiveMoves?.length ? ` (${setSources.restrictiveMoves.join(', ')})` : '';
-
-					problems.push(`${name} was encountered underleveled in the wild and cannot have pre-Gen 8 Egg moves or moves from older generations${moveList}.`);
+			if (!isUnderleveled && underleveledEvoSpecies && minEncounterGen !== Infinity) {
+				if (setSources.sourcesBefore < minEncounterGen) {
+					isUnderleveled = underleveledEvoSpecies;
 				}
 			}
 
