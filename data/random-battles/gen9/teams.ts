@@ -1425,7 +1425,7 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// Temporarily modified for Mega Invasion randomized spotlight
-		if (this.gen === 9 && (species.id in this.randomMegaSets)) return this.randomMegaSets[species.id]["level"]!;
+		if (this.format.mod === 'gen9' && (species.id in this.randomMegaSets)) return this.randomMegaSets[species.id]["level"]!;
 		// doubles levelling
 		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
@@ -1464,7 +1464,7 @@ export class RandomTeams {
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
-		if (species.baseSpecies === 'Pikachu' && this.gen >= 8) {
+		if (species.baseSpecies === 'Pikachu' && this.gen >= 8 && this.format.mod !== 'champions') {
 			return 'Pikachu' + this.sample(
 				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
 			);
