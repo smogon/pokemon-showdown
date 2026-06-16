@@ -579,6 +579,11 @@ declare namespace RandomTeamsTypes {
 		level?: number;
 		sets: RandomSetData[];
 	}
+	export interface RentalData {
+		flagshipMove?: string;
+		secondaryMove?: string;
+		otherMoves?: string[];
+	}
 	export type Role = '' | 'Fast Attacker' | 'Setup Sweeper' | 'Wallbreaker' | 'Tera Blast user' |
 		'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
 		'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
