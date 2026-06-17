@@ -35,14 +35,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
-	eelevate: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	firemane: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	healer: {
 		inherit: true,
 		onResidual(pokemon) {
