@@ -176,7 +176,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod === 'champions') {
+	if (format.mod.startsWith('champions')) {
 		// ladder is inactive, so use a lower threshold
 		eloFloor = 1200;
 	} else if (format.mod === 'gen2') {
