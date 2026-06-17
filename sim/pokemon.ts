@@ -1188,7 +1188,7 @@ export class Pokemon {
 			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
 			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
 		}
-		if (this.battle.gen === 9 && this.battle.dex.currentMod !== 'champions') {
+		if (this.battle.gen === 9 && !this.battle.dex.currentMod.startsWith('champions')) {
 			entry.teraType = this.teraType;
 			entry.terastallized = this.terastallized || '';
 		}
@@ -2068,7 +2068,7 @@ export class Pokemon {
 		let shared;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.dex.currentMod === 'champions') {
+		} else if (this.battle.dex.currentMod.startsWith('champions')) {
 			// Pokemon Champions mechanics
 			const percentage = Math.floor(100 * this.hp / this.maxhp) || 1;
 			shared = `${percentage}/100`;
@@ -2158,7 +2158,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'eelevate']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

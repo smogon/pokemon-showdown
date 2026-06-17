@@ -744,7 +744,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod === 'champions')}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod.startsWith('champions'))}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),

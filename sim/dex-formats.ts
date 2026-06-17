@@ -281,7 +281,7 @@ export class RuleTable extends Map<string, string> {
 			if (format.mod === 'gen7letsgo') {
 				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
 			}
-			if (format.mod === 'champions') {
+			if (format.mod.startsWith('champions')) {
 				this.evLimit = 66;
 			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
