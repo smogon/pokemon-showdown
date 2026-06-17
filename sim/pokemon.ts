@@ -1188,7 +1188,7 @@ export class Pokemon {
 			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
 			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
 		}
-		if (this.battle.gen === 9 && this.battle.dex.currentMod !== 'champions') {
+		if (this.battle.gen === 9 && !this.battle.dex.currentMod.startsWith('champions')) {
 			entry.teraType = this.teraType;
 			entry.terastallized = this.terastallized || '';
 		}
@@ -2068,7 +2068,7 @@ export class Pokemon {
 		let shared;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.dex.currentMod === 'champions') {
+		} else if (this.battle.dex.currentMod.startsWith('champions')) {
 			// Pokemon Champions mechanics
 			const percentage = Math.floor(100 * this.hp / this.maxhp) || 1;
 			shared = `${percentage}/100`;
