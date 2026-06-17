@@ -787,7 +787,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	ragefist: {
 		inherit: true,
 		// Hit counter reset is implemented in Pokemon#clearVolatile
-		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted. X resets to 0 when the user leaves the field.",
+		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and resets to 0 when the user leaves the field. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
 		shortDesc: "+50 BP/hit on user. Max 6 hits. Resets on switch-out.",
 	},
 	razorleaf: {
