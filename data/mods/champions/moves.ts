@@ -605,7 +605,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				spa: -2,
 			},
 		},
-		desc: "Lowers the user's Special Attack by 2 stage.",
+		desc: "Lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2. Hits foe(s).",
 	},
 	malignantchain: {
