@@ -3856,7 +3856,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Lowers the user's Special Attack by 1 stage.",
 		shortDesc: "Lowers the user's Sp. Atk by 1. Hits foe(s).",
 		champions: {
-			desc: "Lowers the user's Special Attack by 2 stages.",  
+			desc: "Lowers the user's Special Attack by 2 stages.", 
 			shortDesc: "Lowers the user's Sp. Atk by 2. Hits foe(s).",
 		},
 
