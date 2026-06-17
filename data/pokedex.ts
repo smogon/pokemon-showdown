@@ -12966,7 +12966,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dragalge",
 		types: ["Poison", "Dragon"],
 		baseStats: { hp: 65, atk: 75, def: 90, spa: 97, spd: 123, spe: 44 },
-      abilities: { 0: "Poison Point", 1: "Poison Touch", H: "Adaptability" },
+		abilities: { 0: "Poison Point", 1: "Poison Touch", H: "Adaptability" },
 		heightm: 1.8,
 		weightkg: 81.5,
 		color: "Brown",
