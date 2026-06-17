@@ -642,7 +642,7 @@ export const Teams = new class Teams {
 		} else if (formatID.includes('gen9freeforallrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${mod.startsWith('champions') ? 'champions' : mod}/teams`).default;
+			TeamGenerator = require(`../data/random-battles/${mod}).default;
 		}
 
 		return new TeamGenerator(format, seed);
