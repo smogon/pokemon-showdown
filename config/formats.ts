@@ -747,7 +747,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9 Champions] 4v4 Doubles UU",
 		desc: "VGC rules, but only Pok&eacute;mon that get less than 4.52% usage on the [Gen 9 Champions] VGC 2026 Reg M-A ladder are legal, as well as a few other guidelines.",
-		mod: 'champions',
+		mod: 'championsregma',
 		gameType: 'doubles',
 		// searchShow: false,
 		bestOfDefault: true,
