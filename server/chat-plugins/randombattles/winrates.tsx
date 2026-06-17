@@ -136,6 +136,7 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 	} else if (species === "Groudon" && item.name === "Red Orb") {
 		return "Groudon-Primal";
 	} else if (item.megaStone) {
+		if (species === 'Meowstic-F') return "Meowstic-F-Mega";
 		return Object.values(item.megaStone)[0];
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
