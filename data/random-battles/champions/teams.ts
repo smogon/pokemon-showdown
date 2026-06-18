@@ -538,6 +538,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			['Cheek Pouch', 'Cud Chew', 'Harvest'].some(m => ability === m) || moves.has('bellydrum')
 		) return 'Sitrus Berry';
 		if (species.id === 'alakazam' && this.randomChance(1, 2)) return 'Focus Sash';
+		if (species.id === 'glimmora') return 'Focus Sash';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) return 'Choice Scarf';
