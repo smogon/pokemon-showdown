@@ -59,7 +59,7 @@ export abstract class BasicEffect implements EffectData {
 	 * condition would be "confusion", etc.
 	 */
 	fullname: string;
-	/** Effect type. */
+	/** Whether it's a move, item, ability, etc. */
 	effectType: EffectType;
 	/**
 	 * Does it exist? For historical reasons, when you use an accessor

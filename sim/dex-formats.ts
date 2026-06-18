@@ -88,13 +88,15 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid as ID];
 			if (this.has(`-pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
+				const tagFilter = tag.speciesFilter || tag.genericFilter;
+				if (tagFilter?.(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
 			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
+				const tagFilter = tag.speciesFilter || tag.genericFilter;
+				if (tagFilter?.(species)) return false;
 			}
 		}
 		return this.has(`-pokemontag:allpokemon`);
@@ -113,13 +115,15 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid as ID];
 			if (this.has(`*pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
+				const tagFilter = tag.speciesFilter || tag.genericFilter;
+				if (tagFilter?.(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
 			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
+				const tagFilter = tag.speciesFilter || tag.genericFilter;
+				if (tagFilter?.(species)) return false;
 			}
 		}
 		return this.has(`*pokemontag:allpokemon`);
@@ -1039,7 +1043,7 @@ export class DexFormats {
 	validPokemonTag(tagid: ID) {
 		const tag = Tags.hasOwnProperty(tagid) && Tags[tagid];
 		if (!tag) return false;
-		return !!(tag.speciesFilter || tag.genericFilter);
+		return !!(tag.speciesFilter || tag.moveFilter || tag.genericFilter);
 	}
 
 	validateBanRule(rule: string) {

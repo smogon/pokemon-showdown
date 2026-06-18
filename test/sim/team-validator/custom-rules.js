@@ -128,6 +128,36 @@ describe("Custom Rules", () => {
 			{ species: 'Moltres-Galar', ability: 'Berserk', moves: ['protect'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8customgame@@@-sublegendary');
+
+		team = [
+			{ species: 'Shaymin', moves: ['Swords Dance'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen1ou@@@+mythical',
+			"Nonexistent should override +Mythical for Pokemon that do not exist in Gen 1");
+	});
+
+	it('should support banning generic tags from items and moves', () => {
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', item: 'Berserk Gene', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes@@@+Past,-True Past');
+
+		team = [
+			{ species: 'Eternatus-Eternamax', ability: 'Pressure', moves: ['Light of Ruin'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@+Past,+Eternatus-Eternamax,-Past Unobtainable');
+	});
+
+	it('should support banning move tags', () => {
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Tackle'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-Contact');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9customgame@@@-Contact');
 	});
 
 	it('should support restrictions', () => {
