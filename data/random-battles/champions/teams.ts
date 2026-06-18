@@ -803,7 +803,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			if (baseFormes[species.baseSpecies]) continue;
 
 			// Illusion shouldn't be on the last slot
-			if (species.name === 'Zoroark' && pokemon.length < 1) continue;
+			if (species.baseSpecies === 'Zoroark' && pokemon.length < 1) continue;
 
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
