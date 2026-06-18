@@ -586,7 +586,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			if (this.dex.getEffectiveness('Rock', species) < 2) return 'Life Orb';
 		}
 
-		// Fast Support defaults to Life Orb if >= 3 attacks and Leftovers otherwise. It can generate Focus Sash in the lead slot with hazar
+		// Fast Support defaults to Life Orb if >= 3 attacks and Leftovers otherwise. It can generate Focus Sash in the lead slot with hazards
 		if (role === 'Fast Support') {
 			if (isLead && !counter.get('recovery') && !counter.get('recoil') && counter.get('hazards')) return 'Focus Sash';
 			return (
