@@ -575,7 +575,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			['fakeout', 'trailblaze'].every(m => !moves.has(m)) &&
 			(!counter.get('Status') || counter.get('Status') === 1 && moves.has('partingshot'))
 		) return 'Choice Scarf';
-		if (['kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['flamecharge', 'kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 
 		// Default to Leftovers for Bulky roles
