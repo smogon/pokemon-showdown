@@ -59,16 +59,28 @@ describe('Fork customs', () => {
 		assert.equal(Dex.mod('gen4nopss').moves.get('earthquake').category, 'Physical');
 	});
 
-	it('gen3su: SU/IU tiers resolve and an SU team is legal (guards the tier reclassification)', () => {
-		// Mod-relative: reads tiers off whichever mod the format declares, so this
-		// survives moving the SU/IU reclassification into a dedicated mod.
+	it('gen3su: SU/IU/ZU tiers resolve and the ZU reclassification is enforced', () => {
+		// Mod-relative: reads tiers off whichever mod the format declares (gen3subzu),
+		// so this survives the SU/IU/ZU reclassification living in a dedicated mod.
 		const su = Dex.formats.get('gen3su', true);
 		const dex = Dex.mod(su.mod);
-		assert.equal(dex.species.get('ivysaur').tier, 'SU');
+		// Ivysaur + Grovyle were bumped SU -> ZU; ZU is banned from [Gen 3] SU, so the
+		// reclassification removes them from the format. Parasect stays SU, Butterfree IU.
+		assert.equal(dex.species.get('ivysaur').tier, 'ZU');
+		assert.equal(dex.species.get('grovyle').tier, 'ZU');
+		assert.equal(dex.species.get('parasect').tier, 'SU');
 		assert.equal(dex.species.get('butterfree').tier, 'IU');
 
-		assert.legalTeam([
+		// Behavioral consequence of the reclassification: a now-ZU Ivysaur is illegal in SU...
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const ivyErrors = TeamValidator.get('gen3su').validateTeam([
 			{ species: 'Ivysaur', ability: 'Overgrow', moves: ['sludgebomb', 'gigadrain', 'leechseed', 'sleeppowder'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(ivyErrors && ivyErrors.some(e => /ZU/.test(e)), `expected now-ZU Ivysaur banned from SU, got: ${JSON.stringify(ivyErrors)}`);
+
+		// ...while an all-SU team is legal (Ivysaur swapped for the SU-tier Weepinbell).
+		assert.legalTeam([
+			{ species: 'Weepinbell', ability: 'Chlorophyll', moves: ['sludgebomb', 'gigadrain', 'sleeppowder', 'growth'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Parasect', ability: 'Effect Spore', moves: ['spore', 'gigadrain', 'bodyslam', 'swordsdance'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Sunflora', ability: 'Chlorophyll', moves: ['gigadrain', 'sludgebomb', 'growth', 'return'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Nosepass', ability: 'Sturdy', moves: ['rockslide', 'thunderbolt', 'thunderwave', 'explosion'], evs: { hp: 4 }, level: 100 },
