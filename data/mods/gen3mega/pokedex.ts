@@ -45,8 +45,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	clefablemega: {
 		inherit: true,
 		gen: 3,
-		// Fairy/Flying → Clefable is Normal monotype in Gen 3, stays Normal
-		types: ["Normal"],
+		// Official Mega Clefable is Fairy/Flying. Gen 3 has no Fairy type, so the
+		// Fairy half maps to Normal (Clefable's pre-Fairy typing) and the Flying
+		// half is retained → Normal/Flying.
+		types: ["Normal", "Flying"],
 		// Magic Bounce re-legalized (abilities.ts)
 	},
 	alakazammega: {

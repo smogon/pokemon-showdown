@@ -14,7 +14,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	noguard: { inherit: true, gen: 3, isNonstandard: null },
 	magicbounce: { inherit: true, gen: 3, isNonstandard: null },
 	innardsout: { inherit: true, gen: 3, isNonstandard: null },
-	parentalbond: { inherit: true, gen: 3, isNonstandard: null },
+	parentalbond: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		// Pokémon Champions nerf: the second strike deals only ~10% of normal
+		// damage (vs. 25% in Gen 7+ / 50% in Gen 6). The stock reducer lives in
+		// BattleActions#modifyDamage, but Gen 3's modifyDamage override drops that
+		// parentalbond branch — so instead we hook the ModifyDamage event the Gen 3
+		// engine still fires (gen3/scripts.ts), which dispatches onModifyDamage to
+		// the attacker (same channel Neuroforce/Sniper/Tinted Lens use).
+		//   410/4096 ≈ 0.1001 — the engine-idiomatic 4096-fixed-point form of 10%.
+		// Fixed-damage moves (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom,
+		// OHKOs) return before modifyDamage runs, so this never fires for them and
+		// both their hits stay at full damage — matching the modern engine.
+		onModifyDamage(damage, source, target, move) {
+			if (move.multihitType === 'parentalbond' && move.hit > 1) {
+				return this.chainModify([410, 4096]);
+			}
+		},
+	},
 	aerilate: { inherit: true, gen: 3, isNonstandard: null },
 	moldbreaker: { inherit: true, gen: 3, isNonstandard: null },
 	multiscale: { inherit: true, gen: 3, isNonstandard: null },
