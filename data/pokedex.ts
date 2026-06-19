@@ -12569,7 +12569,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.2,
 		weightkg: 0.9,
 		color: "White",
-		tags: ["Past Unobtainable"],
 		eggGroups: ["Undiscovered"],
 	},
 	floettemega: {
