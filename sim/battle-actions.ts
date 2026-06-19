@@ -106,6 +106,17 @@ export class BattleActions {
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
 
+			if (this.battle.gen === 1 && oldActive.volatiles['partiallytrapped']) {
+				const trapper = oldActive.volatiles['partiallytrapped'].source;
+				if (trapper.moveSlots[trapper.side.lastSelectedMoveSlot].id === 'metronome') {
+					// this is not done for Mirror Move, potentially resulting in a desync
+					trapper.side.lastSelectedMove = 'metronome' as ID;
+					if (this.battle.queue.willMove(trapper)) {
+						this.battle.queue.changeAction(trapper, { choice: 'move', poke: trapper, moveid: 'metronome' });
+					}
+				}
+			}
+
 			let newMove = null;
 			if (this.battle.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
@@ -139,6 +150,11 @@ export class BattleActions {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
+		if (this.battle.gen <= 2) {
+			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+			for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+			if (this.battle.gen === 1) pokemon.side.lastSelectedMoveSlot = 0;
+		}
 		pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 		pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
@@ -147,17 +163,28 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if (isDrag && this.battle.gen >= 5) {
-			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+		if (this.battle.gen <= 4) {
+			// Gen 4 Healing Wish and Lunar Dance activate here
+			this.battle.runEvent('EntryHazard', pokemon);
+			if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && !isDrag) {
+				this.battle.runEvent('AfterSwitchInSelf', pokemon);
+			}
+			if (!pokemon.hp) return false;
+			if (this.battle.turn > 0) {
+				// Gen 3 Weather-related abilities activate before other Pokemon switch in
+				this.battle.runEvent('AfterEntryHazard', pokemon);
+			}
+		}
+
+		if (isDrag) {
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
 
-		return true;
+		return !!pokemon.hp;
 	}
 	dragIn(side: Side, pos: number) {
 		const pokemon = this.battle.getRandomSwitchable(side);
@@ -186,7 +213,11 @@ export class BattleActions {
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
-			poke.draggedIn = null;
+			if (this.battle.gen === 4) {
+				for (const foeActive of poke.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
 		}
 		return true;
 	}

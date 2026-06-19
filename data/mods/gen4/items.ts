@@ -424,6 +424,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onTakeItem: true,
 	},
+	whiteherb: {
+		inherit: true,
+		onAnySwitchInPriority: undefined, // no inherit
+	},
 	widelens: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 4,

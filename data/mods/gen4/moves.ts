@@ -631,8 +631,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onSwitchInPriority: -1,
-			onSwitchIn(target) {
+			onEntryHazardPriority: -1,
+			onEntryHazard(target) {
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
 					target.clearStatus();
@@ -758,11 +758,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onSideStart(side) {
-				this.debug('Lunar Dance started on ' + side.name);
+			onStart(target) {
+				this.debug('Lunar Dance started on ' + target.getSlot());
 			},
-			onSwitchInPriority: -1,
-			onSwitchIn(target) {
+			onEntryHazardPriority: -1,
+			onEntryHazard(target) {
 				if (target.getSlot() !== this.effectState.sourceSlot) {
 					return;
 				}
@@ -1246,6 +1246,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onSwitchIn: undefined, // no inherit
+			onEntryHazardPriority: 2,
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
@@ -1263,6 +1264,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onSwitchIn: undefined, // no inherit
+			onEntryHazardPriority: 1,
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
@@ -1425,6 +1427,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onSwitchIn: undefined, // no inherit
+			onEntryHazardPriority: 3,
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
