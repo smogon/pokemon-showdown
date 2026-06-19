@@ -2789,8 +2789,9 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Knock Off", "Rest", "Superpower", "Zen Headbutt"],
-                "abilities": ["Contrary"]
+                "movepool": ["Knock Off", "Poison Jab", "Rest", "Superpower", "Zen Headbutt"],
+                "abilities": ["Contrary"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
@@ -2800,6 +2801,11 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Knock Off", "Rest", "Sleep Talk", "Superpower"],
+                "abilities": ["Contrary"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Knock Off", "Poison Jab", "Superpower", "Zen Headbutt"],
                 "abilities": ["Contrary"]
             }
         ]

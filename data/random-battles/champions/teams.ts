@@ -83,7 +83,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => {
-				if (['Ice', 'Steel', 'Water'].some(m => types.has(m))) return false;
+				if (['Dark', 'Ice', 'Steel', 'Water'].some(m => types.has(m))) return false;
 				return !counter.get('Psychic');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
