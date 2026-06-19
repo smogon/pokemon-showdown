@@ -3475,7 +3475,7 @@
         "level": 55,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["Body Slam", "Earthquake", "Megahorn", "Psychic Noise", "Thunder Wave"],
                 "abilities": ["Intimidate"],
                 "preferredTypes": ["Ground"]
