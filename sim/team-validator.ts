@@ -541,7 +541,7 @@ export class TeamValidator {
 		}
 
 		if (ruleTable.has('obtainableformes')) {
-			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+tag:past');
 			if (item.megaStone?.[species.name]) {
 				tierSpecies = dex.species.get(item.megaStone[species.name]);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
@@ -1765,7 +1765,7 @@ export class TeamValidator {
 		if (tierSpecies !== species) {
 			setHas['pokemon:' + tierSpecies.id] = true;
 			if (tierSpecies.isMega || tierSpecies.isPrimal) {
-				setHas['pokemontag:mega'] = true;
+				setHas['tag:mega'] = true;
 				isMega = true;
 			}
 		}
@@ -1783,15 +1783,15 @@ export class TeamValidator {
 		}
 
 		const tier = tierSpecies.tier;
-		const tierTag = 'pokemontag:' + toID(tier);
+		const tierTag = 'tag:' + toID(tier);
 		setHas[tierTag] = true;
 
 		const doublesTier = tierSpecies.doublesTier === '(DUU)' ? 'DNU' : tierSpecies.doublesTier;
-		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
+		const doublesTierTag = 'tag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
 		const ndTier = tierSpecies.natDexTier;
-		const ndTierTag = 'pokemontag:nd' + toID(ndTier);
+		const ndTierTag = 'tag:nd' + toID(ndTier);
 		setHas[ndTierTag] = true;
 
 		// Only pokemon that can gigantamax should have the Gmax flag
@@ -1814,7 +1814,7 @@ export class TeamValidator {
 		}
 
 		if (isMega) {
-			banReason = ruleTable.check('pokemontag:mega', setHas);
+			banReason = ruleTable.check('tag:mega', setHas);
 			if (banReason) {
 				return `Mega evolutions are ${banReason}.`;
 			}
@@ -1845,14 +1845,14 @@ export class TeamValidator {
 
 		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
 		if (tierSpecies.gmaxUnreleased && set.gigantamax) {
-			banReason = ruleTable.check('pokemontag:unobtainable');
+			banReason = ruleTable.check('tag:unobtainable');
 			if (banReason) {
 				return `${tierSpecies.name} is flagged as gigantamax, but it cannot gigantamax without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allpokemon');
+		banReason = ruleTable.check('tag:allpokemon');
 		if (banReason) {
 			return `${species.name} is not in the list of allowed pokemon.`;
 		}
@@ -1875,7 +1875,7 @@ export class TeamValidator {
 
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
-			const tagid = ruleid.slice(12) as ID;
+			const tagid = ruleid.slice(5) as ID;
 			const tag = Tags[tagid];
 			const tagFilter =
 				(thing.effectType === 'Pokemon' && tag.speciesFilter) ||
@@ -1945,7 +1945,7 @@ export class TeamValidator {
 
 		if (!item.id) return null;
 
-		banReason = ruleTable.check('pokemontag:allitems');
+		banReason = ruleTable.check('tag:allitems');
 		if (banReason) {
 			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
 		}
@@ -1967,7 +1967,7 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
-		banReason = ruleTable.check('pokemontag:allmoves');
+		banReason = ruleTable.check('tag:allmoves');
 		if (banReason) {
 			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
 		}
@@ -2003,14 +2003,14 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
-		banReason = ruleTable.check('pokemontag:allabilities');
+		banReason = ruleTable.check('tag:allabilities');
 		if (banReason) {
 			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
 		}
 
 		// obtainability
 		if (ability.isNonstandard) {
-			banReason = ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
+			banReason = ruleTable.check('tag:' + toID(ability.isNonstandard));
 			if (banReason) {
 				return `${set.name}'s ability ${ability.name} is tagged ${ability.isNonstandard}, which is ${banReason}.`;
 			}
@@ -2048,7 +2048,7 @@ export class TeamValidator {
 
 		// obtainability
 		if (nature.isNonstandard) {
-			banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+			banReason = ruleTable.check('tag:' + toID(nature.isNonstandard));
 			if (banReason) {
 				return `${set.name}'s nature ${nature.name} is tagged ${nature.isNonstandard}, which is ${banReason}.`;
 			}
