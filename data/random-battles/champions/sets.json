@@ -3532,7 +3532,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Crunch", "Gunk Shot", "Liquidation", "Swords Dance"],
+                "movepool": ["Agility", "Crunch", "Gunk Shot", "Liquidation", "Swords Dance"],
                 "abilities": ["Intimidate"]
             },
             {
