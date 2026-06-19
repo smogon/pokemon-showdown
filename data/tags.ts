@@ -274,38 +274,47 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// Legality tags
 	past: {
 		name: "Past",
+		desc: "Obtainable in a past game, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'Past',
 	},
 	truepast: {
 		name: "True Past",
+		desc: "Obtainable in a past game, but is not in this game's data at all, not even in Dexit placeholder form.",
 		genericFilter: thing => !!thing.tags?.includes("True Past"),
 	},
 	pastunobtainable: {
 		name: "Past Unobtainable",
+		desc: "Existed in game data in a past game, but was never obtainable.",
 		genericFilter: thing => !!thing.tags?.includes("Past Unobtainable"),
 	},
 	future: {
 		name: "Future",
+		desc: "Obtainable in a future game, but is not in this game's data at all.",
 		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
 	lgpe: {
 		name: "LGPE",
+		desc: "Obtainable in Pokémon: Let's Go, Pikachu! or Let's Go, Eevee!, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'LGPE',
 	},
 	unobtainable: {
 		name: "Unobtainable",
+		desc: "Exists in game data but not obtainable without hacking.",
 		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
 	},
 	cap: {
 		name: "CAP",
+		desc: "Made up for the Smogon Create-A-Pokemon project.",
 		speciesFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
+		desc: "Made up for... something or other. I don't recommend using this, it's not tagged very consistently.",
 		genericFilter: thing => thing.isNonstandard === 'Custom',
 	},
 	nonexistent: {
 		name: "Nonexistent",
+		desc: "Does not exist in game data. Includes Past, Future, LGPE, CAP, and Custom.",
 		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
 	},
 

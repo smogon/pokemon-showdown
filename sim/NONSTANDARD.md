@@ -35,6 +35,10 @@ Examples include:
 
 These have `thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future' || thing.isNonstandard === 'LGPE'`.
 
+Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. These are tagged `Past` and `True Past`.
+
+Things that existed in Gen 6 or later and then stopped existing are "Dexited". They partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
+
 
 Pokéstar Pokémon
 ----------------
@@ -52,14 +56,15 @@ These have `species.isNonstandard === 'Pokestar'`.
 Unobtainable things
 -------------------
 
-Sometimes, Game Freak adds game data, clearly planning for something to be released later, but then never releases it. They can still be obtained by hacking, or by trading with someone who's hacked their game.
+Sometimes, Game Freak adds game data, perhaps planning for something to be released later, but then never releases it. They can still be obtained by hacking, or by trading with someone who's hacked their game.
 
 Examples include:
 
-- Floette-Eternal
+- Floette-Eternal (in Gen 6)
+- Eternatus-Eternamax
 - Fire Gem (in Gen 6)
 
-These have `thing.isNonstandard === 'Unobtainable'` in the game whose code they appear in. They're marked as `Past` or `Future` as appropriate, in other games.
+These have `thing.isNonstandard === 'Unobtainable'` in the game whose code they appear in. They're marked as `Past` or `Future` as appropriate, in other games. If never obtainable in any game and introduced in a past generation, they're marked `Past Unobtainable`.
 
 
 Unobtainable Hidden Abilities
