@@ -89,6 +89,33 @@ describe('Fork customs', () => {
 		], 'gen3su');
 	});
 
+	it('gen3uubl: [Gen 3] UUBL is ladderable and enforces its OU ban (guards the searchShow flip)', () => {
+		// [Gen 3] UUBL lives in the upstream "Past Generations" block, NOT the
+		// surfnWOB Customs section the broad net above covers. We deliberately
+		// unhid it (dropped `searchShow: false`) to put it on the ladder; a rebase
+		// re-pulling the upstream block would silently re-hide it, so pin it here.
+		const uubl = Dex.formats.get('gen3uubl', true);
+		assert(uubl.searchShow !== false, '[Gen 3] UUBL must stay ladderable (searchShow !== false)');
+		Dex.formats.getRuleTable(uubl); // throws if a ruleset/banlist reference breaks
+
+		// Behavioral: the format bans the OU tag...
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const ouErrors = TeamValidator.get('gen3uubl').validateTeam([
+			{ species: 'Tyranitar', ability: 'Sand Stream', moves: ['rockslide', 'earthquake', 'crunch', 'dragondance'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(ouErrors && ouErrors.some(e => /OU/.test(e)), `expected OU-tagged Tyranitar banned from UUBL, got: ${JSON.stringify(ouErrors)}`);
+
+		// ...while an all-UUBL team is legal.
+		assert.legalTeam([
+			{ species: 'Slowbro', ability: 'Own Tempo', moves: ['surf', 'psychic', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Steelix', ability: 'Sturdy', moves: ['earthquake', 'rockslide', 'explosion', 'roar'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Blaziken', ability: 'Blaze', moves: ['flamethrower', 'skyuppercut', 'rockslide', 'swordsdance'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Kingdra', ability: 'Swift Swim', moves: ['surf', 'icebeam', 'hiddenpowergrass', 'raindance'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Venusaur', ability: 'Overgrow', moves: ['sludgebomb', 'gigadrain', 'sleeppowder', 'leechseed'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Hariyama', ability: 'Thick Fat', moves: ['brickbreak', 'rockslide', 'knockoff', 'bodyslam'], evs: { hp: 4 }, level: 100 },
+		], 'gen3uubl');
+	});
+
 	it('gen3adv200: the ADV 200 ladder lives in gen3adv200, leaving gen3rs upstream-pristine', () => {
 		// The custom UU/LC formats re-tier off the isolated gen3adv200 mod...
 		assert.equal(Dex.formats.get('gen3adv200uu', true).mod, 'gen3adv200');
