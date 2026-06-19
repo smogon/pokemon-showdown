@@ -22,6 +22,14 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
+			// Native-gen fidelity: Mega Evolution is a Gen 6 mechanic, and from Gen 5 on, gaining
+			// an ability mid-battle fires its switch-in effect (Drought, Intimidate, etc.). Mainline
+			// relies on formeChange -> setAbility for this, but that Start is gated behind `gen > 3`
+			// (sim/pokemon.ts), which is off in this gen: 3 mod, so we fire it explicitly at the Mega
+			// site. Trace/Skill Swap deliberately keep their inert Gen 3 acquisition behavior (they do
+			// not pass through here), preserving the cartridge-accurate Gen 3 quirk.
+			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = false;
 			}

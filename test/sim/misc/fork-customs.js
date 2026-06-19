@@ -139,4 +139,42 @@ describe('Fork customs', () => {
 		]);
 		assert(errors && errors.some(e => /Light Ball/.test(e)), `expected Light Ball banned from ADV 200 UU, got: ${JSON.stringify(errors)}`);
 	});
+	// gen3mega backports Gen 6 Mega Evolution onto a gen: 3 engine. From Gen 5 on,
+	// gaining an ability mid-battle fires its switch-in effect; mainline does this via
+	// formeChange -> setAbility, but that Start is gated `gen > 3` (off here), so the mod
+	// re-fires it at the runMegaEvo site. Trace/Skill Swap intentionally stay inert (the
+	// Gen 3 quirk). These pin that seam against rebase.
+	it('gen3mega: Mega Evolution fires the new ability onStart (Charizard-Y -> Drought)', () => {
+		const battle = common.createBattle({ formatid: 'gen3megas' }, [
+			[{ species: 'Charizard', ability: 'blaze', item: 'charizarditey', moves: ['flamethrower'] }],
+			[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
+		]);
+		assert.equal(battle.field.weather, '', 'no weather before mega');
+		battle.makeChoices('move flamethrower mega', 'move tackle');
+		assert.equal(battle.p1.active[0].ability, 'drought');
+		assert.equal(battle.field.weather, 'sunnyday', 'sun set on mega evolution');
+	});
+
+	it('gen3mega: Mega Evolution fires Intimidate when base ability differs (Manectric)', () => {
+		const battle = common.createBattle({ formatid: 'gen3megas' }, [
+			[{ species: 'Manectric', ability: 'static', item: 'manectite', moves: ['thunderbolt'] }],
+			[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
+		]);
+		assert.equal(battle.p2.active[0].boosts.atk, 0, 'no Atk drop before mega (base is Static)');
+		battle.makeChoices('move thunderbolt mega', 'move tackle');
+		assert.equal(battle.p1.active[0].ability, 'intimidate');
+		assert.equal(battle.p2.active[0].boosts.atk, -1, 'Intimidate drops foe Atk on mega evolution');
+	});
+
+	it('gen3mega: Primal Reversion weather still fires on switch-in (Groudon-Primal)', () => {
+		// Regression guard: Primal rides the orb onSwitchIn on the gen-4 old-system switch
+		// path, which already re-fires the ability Start. The Mega fix must not disturb it.
+		const battle = common.createBattle({ formatid: 'gen3megaubers' }, [
+			[{ species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['earthquake'] }],
+			[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
+		]);
+		assert.equal(battle.p1.active[0].species.name, 'Groudon-Primal');
+		assert.equal(battle.p1.active[0].ability, 'desolateland');
+		assert.equal(battle.field.weather, 'desolateland', 'Desolate Land set on Primal Reversion');
+	});
 });
