@@ -694,7 +694,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(pokemon) {
 				if (pokemon.volatiles['trapped']) {
 					this.add('-start', pokemon, 'move: No Retreat', '[silent]');
-				} else  {
+				} else {
 					this.add('-start', pokemon, 'move: No Retreat');
 				}
 			},
