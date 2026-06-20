@@ -8,6 +8,16 @@ Especially if you want to use the lists in `Dex.moves.all()`, `Dex.items.all()`,
 Filtering out `effect.isNonstandard` will filter out most of what you don't want, but there are a lot of subtleties, so please read on for sure.
 
 
+Tagging
+-------
+
+The tags `Past`, `Future`, `Unobtainable`, `CAP`, `LGPE`, `Custom`, and `Gigantamax` can be checked with something like `thing.isNonstandard === 'Past'`.
+
+The tags `Pokestar`, `Past Unobtainable`, and `True Past` can be checked with something like `thing.tags?.includes('Past Unobtainable')`.
+
+At some future point we'll probably roll out a simpler way to check tags.
+
+
 CAP
 ---
 
@@ -19,7 +29,7 @@ Examples include:
 - move: Paleo Wave
 - ability: Mountaineer
 
-These have `thing.isNonstandard === 'CAP'`.
+These are tagged `CAP`.
 
 
 Things from other games
@@ -33,11 +43,11 @@ Examples include:
 - item: Berserk Gene (only exists in Gen 2 games)
 - move: Hidden Power (only exists in Gen 2-7 games)
 
-These have `thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future' || thing.isNonstandard === 'LGPE'`.
+These are tagged `Past`, `Future`, or `LGPE`, depending on the game.
 
-Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. These are tagged `Past` and `True Past`.
+Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. In those future gens, these are tagged `Past` and `True Past`.
 
-Things that existed in Gen 6 or later and then stopped existing are "Dexited". They partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
+Things that existed in Gen 6 or later and then stopped existing are "Dexited". In those future gens, they partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
 
 
 Pokéstar Pokémon
@@ -50,7 +60,7 @@ Examples include:
 - Pokestar Giant
 - Pokestar Smeargle (NOT considered the same species as a real Smeargle)
 
-These have `species.isNonstandard === 'Pokestar'`.
+These are tagged `Pokestar`.
 
 
 Unobtainable things
@@ -64,7 +74,7 @@ Examples include:
 - Eternatus-Eternamax
 - Fire Gem (in Gen 6)
 
-These have `thing.isNonstandard === 'Unobtainable'` in the game whose code they appear in. They're marked as `Past` or `Future` as appropriate, in other games. If never obtainable in any game and introduced in a past generation, they're marked `Past Unobtainable`.
+These are tagged `Unobtainable` in the game whose code they appear in. In other games, they're tagged as `Past` or `Future` as appropriate. If they were never obtainable in any game and were introduced in a past generation, they're also tagged `Past Unobtainable`.
 
 
 Unobtainable Hidden Abilities
@@ -96,7 +106,7 @@ G-Max moves
 
 Unlike Max moves, G-Max moves aren't "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all.
 
-They are matched with `move.isNonstandard === 'Gigantamax'`.
+They are tagged `Gigantamax`.
 
 
 Z-moves
@@ -140,7 +150,7 @@ There is an Ability named "-" in Gen 8, and "No Ability" in some older games, wh
 
 Pokémon Showdown always calls it "No Ability".
 
-No Ability has `ability.isNonstandard === 'Past'` in Gen 3+. In Gen 1-2, No Ability is considered the only legal ability, and will have `ability.isNonstandard === null`.
+No Ability is tagged `Past` in Gen 3+. In Gen 1-2, No Ability is considered the only legal ability, and will have `ability.isNonstandard === null`.
 
 
 Items with no competitive effect
