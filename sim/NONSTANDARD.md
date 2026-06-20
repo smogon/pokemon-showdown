@@ -11,11 +11,7 @@ Filtering out `effect.isNonstandard` will filter out most of what you don't want
 Tagging
 -------
 
-The tags `Past`, `Future`, `Unobtainable`, `CAP`, `LGPE`, `Custom`, and `Gigantamax` can be checked with something like `thing.isNonstandard === 'Past'`.
-
-The tags `Pokestar`, `Past Unobtainable`, and `True Past` can be checked with something like `thing.tags?.includes('Past Unobtainable')`.
-
-At some future point we'll probably roll out a simpler way to check tags.
+When this says "Pichu-Spiky-Eared" is tagged True Past, it means `Dex.isTagged(species, 'True Past')` is true.
 
 
 CAP
@@ -43,7 +39,7 @@ Examples include:
 - item: Berserk Gene (only exists in Gen 2 games)
 - move: Hidden Power (only exists in Gen 2-7 games)
 
-These are tagged `Past`, `Future`, or `LGPE`, depending on the game.
+These are tagged `Nonexistent`, and also `Past`, `Future`, or `LGPE`, depending on the game.
 
 Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. In those future gens, these are tagged `Past` and `True Past`.
 
@@ -60,7 +56,7 @@ Examples include:
 - Pokestar Giant
 - Pokestar Smeargle (NOT considered the same species as a real Smeargle)
 
-These are tagged `Pokestar`.
+These are tagged `Pokestar` and `Unobtainable`. Outside of Gen 5, they're also tagged `Nonexistent`, `Past Unobtainable`, and `Future`, as appropriate.
 
 
 Unobtainable things
@@ -120,7 +116,7 @@ Damaging and Pokémon-specific Z moves are matched with `move.isZ`. `move.isNons
 Z-status moves
 --------------
 
-Unlike regular Z-moves, Z-status moves aren't considered "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all.
+Unlike regular Z-moves, Z-status moves aren't considered "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all. (Extreme Evoboost is an exception, and works like damaging Z-moves.)
 
 They do not appear in `Dex.moves.all()`. Information about them is available in `move.zMove` for the underlying status move.
 

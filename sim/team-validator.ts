@@ -1877,11 +1877,7 @@ export class TeamValidator {
 			if (ruleid.startsWith('*')) continue;
 			const tagid = ruleid.slice(5) as ID;
 			const tag = Tags[tagid];
-			const tagFilter =
-				(thing.effectType === 'Pokemon' && tag.speciesFilter) ||
-				(thing.effectType === 'Move' && tag.moveFilter) ||
-				tag.genericFilter;
-			const tagMatches = !!tagFilter?.(thing as any) || tagid === toID(thing.isNonstandard);
+			const tagMatches = dex.isTagged(thing, tagid);
 			if (!tagMatches) continue;
 			const existenceTag = EXISTENCE_TAGS.includes(tagid);
 			if (ruleid.startsWith('+')) {

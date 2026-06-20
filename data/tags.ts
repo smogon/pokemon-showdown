@@ -305,7 +305,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	cap: {
 		name: "CAP",
 		desc: "Made up for the Smogon Create-A-Pokemon project.",
-		speciesFilter: thing => thing.isNonstandard === 'CAP',
+		genericFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
