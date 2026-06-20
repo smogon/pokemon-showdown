@@ -1328,7 +1328,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Crunch", "Ice Fang", "Protect", "Psychic Fangs", "Waterfall"],
+                "movepool": ["Close Combat", "Crunch", "Ice Fang", "Protect", "Psychic Fangs", "Waterfall"],
                 "abilities": ["Speed Boost"]
             }
         ]
