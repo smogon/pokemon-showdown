@@ -204,4 +204,30 @@ describe('Fork customs', () => {
 		assert.equal(battle.p1.active[0].ability, 'desolateland');
 		assert.equal(battle.field.weather, 'desolateland', 'Desolate Land set on Primal Reversion');
 	});
+
+	it('gen3mega: Mega Kangaskhan and Mega Medicham are Uber-banned from [Gen 3] Megas but legal in Mega Ubers', () => {
+		// Both Megas are tiered Uber in gen3mega/formats-data.ts. The validator swaps in the
+		// stone-induced Mega forme (team-validator `tierSpecies`), so [Gen 3] Megas' `banlist: ['Uber']`
+		// catches them while [Gen 3] Mega Ubers (no Uber ban) keeps them legal. Guards the tier flip.
+		const dex = Dex.mod('gen3mega');
+		assert.equal(dex.species.get('kangaskhanmega').tier, 'Uber');
+		assert.equal(dex.species.get('medichammega').tier, 'Uber');
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const khanErrors = TeamValidator.get('gen3megas').validateTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(khanErrors && khanErrors.some(e => /Uber/.test(e)), `expected Mega Kangaskhan Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(khanErrors)}`);
+
+		const medichamErrors = TeamValidator.get('gen3megas').validateTeam([
+			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(medichamErrors && medichamErrors.some(e => /Uber/.test(e)), `expected Mega Medicham Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(medichamErrors)}`);
+
+		// Both stay legal in [Gen 3] Mega Ubers (Ubers unbanned).
+		assert.legalTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megaubers');
+	});
 });
