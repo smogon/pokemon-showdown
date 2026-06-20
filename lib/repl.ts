@@ -149,7 +149,11 @@ export const Repl = new class {
 						return callback(e, undefined);
 					}
 				},
-			}).on('exit', () => socket.end());
+			}).on('exit', () => socket.end())
+				// An abortive client close (RST) makes the REPLServer instance re-emit
+				// 'error'; left unhandled that crashes the process. The socket.on('error')
+				// below guards the raw socket, NOT the REPLServer's own 'error'.
+				.on('error', () => socket.destroy());
 			socket.on('error', () => socket.destroy());
 		});
 
