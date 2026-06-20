@@ -684,6 +684,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
+	noretreat: {
+		inherit: true,
+		onTry(source, target, move) {
+			if (source.volatiles['noretreat']) return false;
+		},
+	},
 	noxioustorque: {
 		inherit: true,
 		isNonstandard: "Past",
