@@ -48,9 +48,10 @@ describe('No Retreat', () => {
 		]]);
 
 		battle.makeChoices();
+		battle.makeChoices();
 
 		const wynaut = battle.p1.active[0];
-		assert.statStage(wynaut, 'atk', 1);
+		assert.statStage(wynaut, 'atk', 2);
 
 		// Should not be trapped after caterpie switches out
 		battle.makeChoices('move splash', 'switch 2');
