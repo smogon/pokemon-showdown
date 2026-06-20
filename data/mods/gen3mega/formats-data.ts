@@ -10,6 +10,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	blastoisemega: { tier: "OU" },
 	beedrillmega: { tier: "OU" },
 	pidgeotmega: { tier: "OU" },
+	raichumegax: { tier: "OU" },
+	raichumegay: { tier: "OU" },
 	clefablemega: { tier: "OU" },
 	alakazammega: { tier: "OU" },
 	victreebelmega: { tier: "OU" },

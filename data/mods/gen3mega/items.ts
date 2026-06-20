@@ -9,6 +9,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	blastoisinite: { inherit: true, gen: 3, isNonstandard: null },
 	beedrillite: { inherit: true, gen: 3, isNonstandard: null },
 	pidgeotite: { inherit: true, gen: 3, isNonstandard: null },
+	raichunitex: { inherit: true, gen: 3, isNonstandard: null },
+	raichunitey: { inherit: true, gen: 3, isNonstandard: null },
 	clefablite: { inherit: true, gen: 3, isNonstandard: null },
 	alakazite: { inherit: true, gen: 3, isNonstandard: null },
 	victreebelite: { inherit: true, gen: 3, isNonstandard: null },

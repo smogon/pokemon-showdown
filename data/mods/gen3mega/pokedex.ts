@@ -42,6 +42,21 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		gen: 3,
 		// No Guard re-legalized (abilities.ts)
 	},
+	raichumegax: {
+		inherit: true,
+		gen: 3,
+		// Champions Mega. Its real ability is Electric Surge, but Electric Terrain
+		// is a net-new Gen-6 subsystem rather than a tweak to an existing Gen-3
+		// mechanic, so (per the Pixilate convention) it falls back to a pre-mega
+		// ability of base Raichu — slot-0 Static (cf. Gardevoir/Altaria below).
+		abilities: { 0: "Static" },
+	},
+	raichumegay: {
+		inherit: true,
+		gen: 3,
+		// Champions Mega. No Guard re-legalized (abilities.ts) — it modifies
+		// accuracy, an existing Gen-3 mechanic, so it's kept as-is.
+	},
 	clefablemega: {
 		inherit: true,
 		gen: 3,
