@@ -9970,15 +9970,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onBasePower(basePower, source, target, move) {
 			const item = target.getItem();
 			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (!this.singleEvent('TakeItem', item, target.itemState, source, target, move, item)) return;
 			if (item.id) {
 				return this.chainModify(1.5);
 			}
 		},
-		onAfterHit(target, source) {
+		onAfterHit(target, source, move) {
 			const item = target.takeItem();
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
+			if (!item) {
+				return;
 			}
+			if (!this.singleEvent('TakeItem', item, target.itemState, source, target, move, item)) {
+				target.item = item.id; // bypass setItem so we don't break choicelock or anything
+				return;
+			}
+			this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
 		},
 		target: "normal",
 		type: "Dark",
