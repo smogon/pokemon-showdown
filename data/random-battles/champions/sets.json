@@ -708,7 +708,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Dazzling Gleam", "Solar Beam", "Synthesis", "Weather Ball"],
-                "abilities": ["Overgrow"]
+                "abilities": ["Leaf Guard"]
             }
         ]
     },
@@ -1737,7 +1737,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Swords Dance"],
-                "abilities": ["Justified"]
+                "abilities": ["Inner Focus"]
             },
             {
                 "role": "Bulky Setup",
@@ -2378,7 +2378,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Calm Mind", "Energy Ball", "Fire Blast", "Flame Charge", "Pain Split", "Shadow Ball", "Will-O-Wisp"],
-                "abilities": ["Flame Body", "Flash Fire"]
+                "abilities": ["Flash Fire"]
             }
         ]
     },
@@ -2841,7 +2841,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Flip Turn", "Focus Blast", "Sludge Bomb", "Toxic Spikes"],
-                "abilities": ["Adaptability"]
+                "abilities": ["Poison Point"]
             }
         ]
     },
@@ -3162,7 +3162,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Bulk Up", "Drain Punch", "Ice Hammer", "Mach Punch"],
-                "abilities": ["Iron Fist"]
+                "abilities": ["Hyper Cutter"]
             }
         ]
     },
