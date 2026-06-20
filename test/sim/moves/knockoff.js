@@ -70,7 +70,7 @@ describe('Knock Off', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should not remove mega stones if the user can mega evolve with it', () => {
+	it('should not remove mega stones if the user can mega evolve with them', () => {
 		battle = common.createBattle([[
 			{ species: "Scizor", ability: 'technician', moves: ['knockoff'] },
 		], [
