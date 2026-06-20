@@ -2161,7 +2161,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Bulk Up", "Defog", "Drain Punch", "Knock Off", "Mach Punch"],
-                "abilities": ["Iron Fist"]
+                "abilities": ["Guts", "Iron Fist"]
             }
         ]
     },
