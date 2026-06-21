@@ -2255,7 +2255,7 @@ export class RandomTeams {
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
 				pool = this.dex.moves.all()
-					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
+					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.placeholderFor))
 					.map(m => m.id);
 			} else {
 				pool = [...this.dex.species.getMovePool(species.id)];

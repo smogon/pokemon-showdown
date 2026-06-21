@@ -1900,7 +1900,7 @@ export class TeamValidator {
 				}
 				return `${displayName} is not obtainable without hacking or glitches.`;
 			}
-			if (thing.effectType === 'Pokemon' && thing.forme === 'Gmax') {
+			if (thing.effectType === 'Pokemon' && thing.placeholderFor) {
 				// The validator is supposed to interpret the placeholder as the
 				// base species with the G-max Factor, so `thing` should not be the
 				// placeholder at this step of validation. It's not impossible for

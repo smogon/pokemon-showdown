@@ -86,7 +86,7 @@ Typed Hidden Powers
 
 The data contains information for moves named "Hidden Power Fire", "Hidden Power Ice", etc. These are provided for convenience: when building teams (to set the move to "Hidden Power" and change IVs), when running damage calculations, and when exporting or sending movesets.
 
-These are matched with `move.realMove === "Hidden Power"`. Since no other move has this feature, you can also check `move.realMove` for existence.
+These are matched with `move.placeholderFor === "Hidden Power"`. Since no other move has this feature, you can also check `move.placeholderFor` for existence.
 
 
 Max moves and G-Max moves
@@ -126,7 +126,7 @@ Gigantamax and other "questionable" formes
 
 Gigantamax sprites are not considered actual Pokémon formes by the game data. For ease of selection and sprite viewing, we treat them as formes.
 
-Filter them out with `species.forme === 'Gmax'`.
+Filter them out with `species.placeholderFor`.
 
 For more information on formes whose status as "real" is controversial, see [data/FORMES.md](./../data/FORMES.md)
 

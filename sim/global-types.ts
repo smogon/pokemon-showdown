@@ -108,6 +108,7 @@ interface EffectData {
 	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	effectType?: string;
 	infiltrates?: boolean;
+	placeholderFor?: string;
 	isNonstandard?: Nonstandard | null;
 	/** "Are you or are you not on this list" data. */
 	tags?: TableTag[];

@@ -1565,7 +1565,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			mon.battleOnly! : null : null;
 		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
 			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
-		if (mon.forme === 'Gmax' && !allowGmax) continue;
+		if (mon.forme.endsWith('Gmax') && !allowGmax) continue;
 		results.push(mon);
 	}
 
