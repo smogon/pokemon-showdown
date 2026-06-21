@@ -314,7 +314,7 @@ describe('Dex data', () => {
 		const count = { species: 0, formes: 0 };
 		for (const pkmn of dex.species.all()) {
 			if (!existenceFunction(pkmn)) continue;
-			if (pkmn.isCosmeticForme) continue;
+			if (pkmn.isCosmeticForme || pkmn.forme.endsWith('Gmax')) continue;
 			if (pkmn.name !== pkmn.baseSpecies) {
 				count.formes++;
 			} else {

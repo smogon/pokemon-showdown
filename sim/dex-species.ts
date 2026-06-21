@@ -575,7 +575,7 @@ export class DexSpecies {
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
 			if (this.dex.currentMod === 'gen8bdsp' &&
-				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
+				(!species.isNonstandard || species.isNonstandard === 'CAP')) {
 				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
 					species.id === 'pichuspikyeared') {
 					species.isNonstandard = 'Future';

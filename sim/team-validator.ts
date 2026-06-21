@@ -1900,15 +1900,12 @@ export class TeamValidator {
 				}
 				return `${displayName} is not obtainable without hacking or glitches.`;
 			}
-			if (thing.effectType === 'Pokemon' && thing.isNonstandard === 'Gigantamax') {
+			if (thing.effectType === 'Pokemon' && thing.forme === 'Gmax') {
 				// The validator is supposed to interpret the placeholder as the
 				// base species with the G-max Factor, so `thing` should not be the
 				// placeholder at this step of validation. It's not impossible for
 				// this to happen with an unusual ruleset, though, so we won't throw.
 				return `${displayName} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely a validator bug.)`;
-			}
-			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gigantamax') {
-				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax}. It can't actually exist on a normal moveset.`;
 			}
 			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;

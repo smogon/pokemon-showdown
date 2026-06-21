@@ -85,7 +85,7 @@ describe('Dex#getMove', () => {
 	it(`should correctly handle G-Max moves`, () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
-		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isMax, "Butterfree");
 	});
 });
 
