@@ -35,6 +35,27 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			this.battle.runEvent('AfterMega', pokemon);
+
+			// Post-Mega Speed applies on the turn of Mega Evolution (Gen 7+ behavior).
+			// The base engine only recalculates the mega-evolver's move order for
+			// `gen === 7` (sim/battle.ts) — and pairs it with a `deferPriority` skip in
+			// sim/battle-queue.ts — neither of which fires in this gen: 3 mod, so a fast
+			// Mega (e.g. a base-form-slow Pokemon that outspeeds once Mega'd) would
+			// otherwise still move at its pre-Mega Speed this turn. Replicate the Gen 7
+			// fix locally: pull this Pokemon's pending move action and re-insert it so
+			// its speed is recomputed from the new (Mega) stats. `insertChoice` calls
+			// `pokemon.updateSpeed()` and re-resolves the action in sorted position
+			// (with proper speed-tie randomization), without re-sorting the rest of the
+			// mid-turn queue. The megaEvo action itself is already off the queue here
+			// (go() shifts before runAction), so the splice only touches the move.
+			for (const [i, queuedAction] of this.battle.queue.list.entries()) {
+				if (queuedAction.pokemon === pokemon && queuedAction.choice === 'move') {
+					this.battle.queue.list.splice(i, 1);
+					queuedAction.mega = 'done';
+					this.battle.queue.insertChoice(queuedAction, true);
+					break;
+				}
+			}
 			return true;
 		},
 	},
