@@ -228,7 +228,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	doubleshock: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	dragonascent: {
 		inherit: true,
@@ -809,7 +809,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	revivalblessing: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	roaroftime: {
 		inherit: true,
