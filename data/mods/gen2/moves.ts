@@ -753,12 +753,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (source.item || source.volatiles['gem']) {
 					return;
 				}
+				const yourItemState = target.itemState;
 				const yourItem = target.takeItem(source);
 				if (!yourItem) {
 					return;
 				}
 				if (!source.setItem(yourItem)) {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+					target.itemState = yourItemState;
 					return;
 				}
 				this.add('-item', source, yourItem, '[from] move: Thief', `[of] ${target}`);
