@@ -1773,6 +1773,7 @@ export class TeamValidator {
 		let isGmax = false;
 		if (tierSpecies.canGigantamax && set.gigantamax) {
 			setHas['pokemon:' + tierSpecies.id + 'gmax'] = true;
+			setHas['tag:gigantamax'] = true;
 			isGmax = true;
 		}
 		if (tierSpecies.baseSpecies === 'Greninja' && toID(set.ability) === 'battlebond') {
@@ -1821,7 +1822,8 @@ export class TeamValidator {
 		}
 
 		if (isGmax) {
-			banReason = ruleTable.check('pokemon:' + tierSpecies.id + 'gmax');
+			banReason = ruleTable.check('pokemon:' + tierSpecies.id + 'gmax') ||
+				ruleTable.check('tag:gigantamax', setHas);
 			if (banReason) {
 				return `Gigantamaxing ${species.name} is ${banReason}.`;
 			}

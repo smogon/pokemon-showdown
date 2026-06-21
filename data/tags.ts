@@ -34,6 +34,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
 	},
+	gigantamax: {
+		name: "Gigantamax",
+		speciesFilter: species => !!species.placeholderFor,
+	},
 	mythical: {
 		name: "Mythical",
 		speciesFilter: species => species.tags.includes("Mythical"),

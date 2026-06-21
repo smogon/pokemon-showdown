@@ -148,6 +148,20 @@ describe("Custom Rules", () => {
 		assert.false.legalTeam(team, 'gen9customgame@@@+Past,+Eternatus-Eternamax,-Past Unobtainable');
 	});
 
+	it('should support banning Gigantamax tags', () => {
+		let team = [
+			{ species: 'Charizard', ability: 'Blaze', moves: ['Ember'], evs: { hp: 1 }, gigantamax: true },
+		];
+		assert.legalTeam(team, 'gen8customgame');
+		assert.false.legalTeam(team, 'gen8customgame@@@-Gigantamax');
+
+		team = [
+			{ species: 'Charizard-Gmax', ability: 'Blaze', moves: ['Ember'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen8customgame');
+		assert.false.legalTeam(team, 'gen8customgame@@@-Gigantamax');
+	});
+
 	it('should support banning move tags', () => {
 		let team = [
 			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Tackle'], evs: { hp: 1 } },
