@@ -49,7 +49,8 @@ export class RuleTable extends Map<string, string> {
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
-	/** Sorted by precedence, in reverse order from a format's ban/unbanlist */
+	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
+	 *  DO NOT search this; just use ruleTable.has(...). This is purely for tag rule precedence. */
 	tagRules: string[];
 	valueRules: Map<string, string>;
 

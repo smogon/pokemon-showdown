@@ -3507,7 +3507,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
 		},
 		onValidateSet(set) {
-			if (this.ruleTable.tagRules.includes("+tag:cap")) {
+			if (this.ruleTable.has("+tag:cap")) {
 				const { tierSpecies } = this.getValidationSpecies(set);
 				if (tierSpecies.isNonstandard !== "CAP")
 					return [`${set.name || set.species} does not exist in Pet Mods Advent.`];
