@@ -1868,7 +1868,9 @@ export class GlobalRoomState {
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
 		} else {
-			Rooms.lobby?.add(crashMessage).update();
+			// Never fall back to a public room (e.g. lobby): a crash report can carry
+			// sensitive data (battle inputLog / team imports). Post only to the private
+			// staff room; with no dev/staff room, the crash goes to logs only. (surfnWOB)
 			Rooms.get('staff')?.add(crashMessage).update();
 		}
 		if (privateCrashMessage) {

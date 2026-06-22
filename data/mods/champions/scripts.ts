@@ -189,7 +189,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+tag:past') ||
 				this.battle.ruleTable.has('+tag:future')) &&
 				altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(this.dex.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
 			return item.megaStone?.[species.name] || null;

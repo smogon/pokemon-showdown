@@ -82,12 +82,19 @@ export const Monitor = new class {
 	 *********************************************************/
 	crashlog(err: any, source = 'The main process', details: AnyObject | null = null) {
 		const error = (err || {}) as Error;
-		if ((error.stack || '').startsWith('@!!@')) {
+		// A child-process crash arrives with its stack prefixed by an `@!!@`-tagged JSON
+		// payload [name, message, source, details]. `details` can contain a battle's
+		// inputLog — i.e. both players' full teams. We MUST strip that payload here so it
+		// never reaches reportCrash (which broadcasts to a room). The parent re-throw in
+		// lib/process-manager prepends "[pid] ", so the marker is NOT at index 0 — locate
+		// `@!!@` instead of assuming startsWith, or the team data leaks. (surfnWOB)
+		const rawStack = error.stack || '';
+		const marker = rawStack.indexOf('@!!@');
+		const nlIndex = rawStack.indexOf('\n');
+		if (marker !== -1 && nlIndex > marker) {
 			try {
-				const stack = (error.stack || '');
-				const nlIndex = stack.indexOf('\n');
-				[error.name, error.message, source, details] = JSON.parse(stack.slice(4, nlIndex));
-				error.stack = stack.slice(nlIndex + 1);
+				[error.name, error.message, source, details] = JSON.parse(rawStack.slice(marker + 4, nlIndex));
+				error.stack = rawStack.slice(nlIndex + 1);
 			} catch {}
 		}
 		const crashType = crashlogger(error, source, details);

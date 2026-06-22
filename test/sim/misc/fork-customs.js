@@ -230,4 +230,33 @@ describe('Fork customs', () => {
 			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megasubers');
 	});
+
+	it('gen3mega: a Rayquaza team loads in the forked-worker condition where global.toID is undefined', () => {
+		// Production regression (2026-06-22): canMegaEvo runs for EVERY Pokemon at construction.
+		// For any base Rayquaza (otherFormes[0] = Rayquaza-Mega, isMega + requiredMove "Dragon
+		// Ascent"), the override reaches `toID(altForme.requiredMove)` regardless of the set's
+		// moves. The battle sim runs in a forked worker subprocess where `global.toID` is undefined,
+		// so a bare `toID` threw `ReferenceError: toID is not defined`, crashing the battle on team
+		// load — and the crash report carried both players' inputLog (full teams) into the lobby.
+		// The fix scopes it to `this.dex.toID`. Reproduce the worker by removing global.toID so the
+		// bare-global form would throw here; this.dex.toID must not.
+		const savedToID = global.toID;
+		try {
+			delete global.toID;
+			const battle = common.createBattle({ formatid: 'gen3megasubers' }, [
+				// Crashing real-world shape: a base Rayquaza WITHOUT Dragon Ascent still triggers the toID call.
+				[{ species: 'Rayquaza', ability: 'airlock', item: 'leftovers', moves: ['rest'] }],
+				[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
+			]);
+			assert.equal(battle.p1.active[0].species.name, 'Rayquaza', 'Rayquaza loaded with no toID ReferenceError');
+			// A Rayquaza that DOES carry Dragon Ascent must still mega-evolve through the requiredMove branch.
+			const ascent = common.createBattle({ formatid: 'gen3megasubers' }, [
+				[{ species: 'Rayquaza', ability: 'airlock', item: 'leftovers', moves: ['dragonascent'] }],
+				[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
+			]);
+			assert.equal(ascent.p1.active[0].canMegaEvo, 'Rayquaza-Mega', 'requiredMove branch still resolves the Mega forme');
+		} finally {
+			global.toID = savedToID;
+		}
+	});
 });

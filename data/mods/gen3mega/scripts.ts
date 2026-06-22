@@ -9,7 +9,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const item = pokemon.getItem();
 
 			if (altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(this.dex.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
 			if (!item.megaStone) return null;
