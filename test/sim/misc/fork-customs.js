@@ -196,7 +196,7 @@ describe('Fork customs', () => {
 	it('gen3mega: Primal Reversion weather still fires on switch-in (Groudon-Primal)', () => {
 		// Regression guard: Primal rides the orb onSwitchIn on the gen-4 old-system switch
 		// path, which already re-fires the ability Start. The Mega fix must not disturb it.
-		const battle = common.createBattle({ formatid: 'gen3megaubers' }, [
+		const battle = common.createBattle({ formatid: 'gen3megasubers' }, [
 			[{ species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['earthquake'] }],
 			[{ species: 'Snorlax', ability: 'thickfat', moves: ['tackle'] }],
 		]);
@@ -205,10 +205,10 @@ describe('Fork customs', () => {
 		assert.equal(battle.field.weather, 'desolateland', 'Desolate Land set on Primal Reversion');
 	});
 
-	it('gen3mega: Mega Kangaskhan and Mega Medicham are Uber-banned from [Gen 3] Megas but legal in Mega Ubers', () => {
+	it('gen3mega: Mega Kangaskhan and Mega Medicham are Uber-banned from [Gen 3] Megas but legal in Megas Ubers', () => {
 		// Both Megas are tiered Uber in gen3mega/formats-data.ts. The validator swaps in the
 		// stone-induced Mega forme (team-validator `tierSpecies`), so [Gen 3] Megas' `banlist: ['Uber']`
-		// catches them while [Gen 3] Mega Ubers (no Uber ban) keeps them legal. Guards the tier flip.
+		// catches them while [Gen 3] Megas Ubers (no Uber ban) keeps them legal. Guards the tier flip.
 		const dex = Dex.mod('gen3mega');
 		assert.equal(dex.species.get('kangaskhanmega').tier, 'Uber');
 		assert.equal(dex.species.get('medichammega').tier, 'Uber');
@@ -224,10 +224,10 @@ describe('Fork customs', () => {
 		]);
 		assert(medichamErrors && medichamErrors.some(e => /Uber/.test(e)), `expected Mega Medicham Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(medichamErrors)}`);
 
-		// Both stay legal in [Gen 3] Mega Ubers (Ubers unbanned).
+		// Both stay legal in [Gen 3] Megas Ubers (Ubers unbanned).
 		assert.legalTeam([
 			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
-		], 'gen3megaubers');
+		], 'gen3megasubers');
 	});
 });
