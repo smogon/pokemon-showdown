@@ -29,7 +29,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			pokemon.knownType = true;
 			pokemon.apparentType = type;
 			if (pokemon.species.baseSpecies === 'Ogerpon') {
-				let ogerponSpecies = toID(pokemon.species.battleOnly || pokemon.species.id);
+				let ogerponSpecies = this.dex.toID(pokemon.species.battleOnly || pokemon.species.id);
 				ogerponSpecies += ogerponSpecies === 'ogerpon' ? 'tealtera' : 'tera';
 				pokemon.formeChange(ogerponSpecies, null, true);
 			}

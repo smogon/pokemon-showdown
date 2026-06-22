@@ -1374,6 +1374,12 @@ if (!PM.isParentProcess) {
 		require('source-map-support').install();
 	} catch {}
 	global.Dex = require('../sim/dex').Dex;
+	// The forked sim worker, unlike the main process (server/index.ts), does not
+	// otherwise define global.toID. Mod/sim code that reaches a bare `toID(...)`
+	// (an ambient global in global-variables.d.ts) would throw ReferenceError at
+	// runtime here — which crashed the server on 2026-06-22 via gen3mega canMegaEvo.
+	// Define it so the whole bare-global class is disarmed in the worker. (surfnWOB)
+	global.toID = global.Dex.toID;
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
