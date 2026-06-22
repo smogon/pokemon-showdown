@@ -2,7 +2,6 @@ import { Dex, toID } from '../../../sim/dex';
 import { Utils } from '../../../lib';
 import { PRNG, type PRNGSeed } from '../../../sim/prng';
 import { type RuleTable } from '../../../sim/dex-formats';
-import { Tags } from './../../tags';
 import { Teams } from '../../../sim/teams';
 
 export interface TeamData {
@@ -2382,43 +2381,10 @@ export class RandomTeams {
 			this.cachedPool = pool.slice();
 			this.cachedSpeciesPool = speciesPool.slice();
 		} else {
-			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
-			const nonexistentBanReason = ruleTable.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
 				if (requiredType && !species.types.includes(requiredType)) continue;
-
-				let banReason = ruleTable.check('pokemon:' + species.id);
-				if (banReason) continue;
-				if (banReason !== '') {
-					if (species.isMega && ruleTable.check('tag:mega')) continue;
-
-					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
-					if (banReason) continue;
-					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard !== species.isNonstandard) {
-						const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && nonexistentBanReason;
-						let tagWhitelisted = false;
-						let tagBlacklisted = false;
-						for (const ruleid of ruleTable.tagRules) {
-							if (ruleid.startsWith('*')) continue;
-							if (ruleTable.matchesTagRule(ruleid, species)) {
-								const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
-								const existenceTag = EXISTENCE_TAG.includes(tagid);
-								if (ruleid.startsWith('+')) {
-									if (!existenceTag && nonexistentCheck) continue;
-									tagWhitelisted = true;
-									break;
-								}
-								tagBlacklisted = true;
-								break;
-							}
-						}
-						if (tagBlacklisted) continue;
-						if (!tagWhitelisted) {
-							if (ruleTable.check('tag:allpokemon')) continue;
-						}
-					}
-				}
+				if (ruleTable.isBannedSpecies(species, this.dex.species.get(species.baseSpecies))) continue;
 				speciesPool.push(species);
 				const num = species.num;
 				if (pool.includes(num)) continue;

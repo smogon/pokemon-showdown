@@ -5,6 +5,7 @@ import type { SpeciesData } from './dex-species';
 import { Tags } from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
+const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
@@ -83,25 +84,28 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`-${thing}`);
 	}
 
-	isBannedSpecies(species: Species) {
+	isBannedSpecies(species: Species, baseSpecies?: Species) {
 		if (this.has(`+pokemon:${species.id}`)) return false;
 		if (this.has(`-pokemon:${species.id}`)) return true;
-		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
-		for (const tagid in Tags) {
-			const tag = Tags[tagid as ID];
-			if (this.has(`-tag:${tagid}`)) {
-				const tagFilter = tag.speciesFilter || tag.genericFilter;
-				if (tagFilter?.(species)) return true;
-			}
+
+		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) {
+			if (!baseSpecies || baseSpecies.isNonstandard === species.isNonstandard) return false;
 		}
-		for (const tagid in Tags) {
-			const tag = Tags[tagid as ID];
-			if (this.has(`+tag:${tagid}`)) {
-				const tagFilter = tag.speciesFilter || tag.genericFilter;
-				if (tagFilter?.(species)) return false;
+
+		const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && this.check('nonexistent');
+		for (const ruleid of this.tagRules.length ? this.tagRules : this.getTagRules()) {
+			if (ruleid.startsWith('*')) continue;
+			if (!this.matchesTagRule(ruleid, species)) continue;
+			const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
+			const existenceTag = EXISTENCE_TAGS.includes(tagid);
+			if (ruleid.startsWith('+')) {
+				if (!existenceTag && nonexistentCheck) continue;
+				return false;
 			}
+			return true;
 		}
+		if (nonexistentCheck) return true;
 		return this.has(`-tag:allpokemon`);
 	}
 
@@ -115,19 +119,10 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`*pokemon:${species.id}`)) return true;
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
-		for (const tagid in Tags) {
-			const tag = Tags[tagid as ID];
-			if (this.has(`*tag:${tagid}`)) {
-				const tagFilter = tag.speciesFilter || tag.genericFilter;
-				if (tagFilter?.(species)) return true;
-			}
-		}
-		for (const tagid in Tags) {
-			const tag = Tags[tagid as ID];
-			if (this.has(`+tag:${tagid}`)) {
-				const tagFilter = tag.speciesFilter || tag.genericFilter;
-				if (tagFilter?.(species)) return false;
-			}
+		for (const ruleid of this.tagRules.length ? this.tagRules : this.getTagRules()) {
+			if (!ruleid.startsWith('*') && !ruleid.startsWith('+')) continue;
+			if (!this.matchesTagRule(ruleid, species)) continue;
+			return ruleid.startsWith('*');
 		}
 		return this.has(`*tag:allpokemon`);
 	}
@@ -1039,7 +1034,8 @@ export class DexFormats {
 
 		ruleTable.resolveNumbers(format, this.dex);
 
-		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+tag:past');
+		const canMegaEvo = (this.dex.gen >= 6 || ruleTable.has('+tag:future')) &&
+			(this.dex.gen <= 7 || ruleTable.has('+tag:past'));
 		if (ruleTable.has('obtainableformes') && canMegaEvo &&
 			ruleTable.isBannedSpecies(this.dex.species.get('rayquazamega')) &&
 			!ruleTable.isBannedSpecies(this.dex.species.get('rayquaza'))
