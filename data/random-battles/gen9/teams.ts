@@ -2401,9 +2401,8 @@ export class RandomTeams {
 						let tagBlacklisted = false;
 						for (const ruleid of ruleTable.tagRules) {
 							if (ruleid.startsWith('*')) continue;
-							const tagid = ruleid.slice(5) as ID;
-							const tag = Tags[tagid];
-							if ((tag.speciesFilter || tag.genericFilter)!(species)) {
+							if (ruleTable.matchesTagRule(ruleid, species)) {
+								const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
 								const existenceTag = EXISTENCE_TAG.includes(tagid);
 								if (ruleid.startsWith('+')) {
 									if (!existenceTag && nonexistentCheck) continue;

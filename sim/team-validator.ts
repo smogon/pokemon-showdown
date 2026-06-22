@@ -1877,10 +1877,9 @@ export class TeamValidator {
 
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
-			const tagid = ruleid.slice(5) as ID;
-			const tag = Tags[tagid];
-			const tagMatches = dex.isTagged(thing, tagid);
+			const tagMatches = ruleTable.matchesTagRule(ruleid, thing);
 			if (!tagMatches) continue;
+			const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
 			const existenceTag = EXISTENCE_TAGS.includes(tagid);
 			if (ruleid.startsWith('+')) {
 				// We want rules like +CAP or +Past to trump -Nonexistent, but most tags shouldn't.
@@ -1892,7 +1891,7 @@ export class TeamValidator {
 				nonexistentCheck = 'banned';
 				break;
 			}
-			return `${displayName} is tagged ${tag.name}, which is ${ruleTable.check(ruleid.slice(1)) || "banned"}.`;
+			return `${displayName} ${ruleTable.describeTagRule(ruleid)}, which is ${ruleTable.check(ruleid.slice(1)) || "banned"}.`;
 		}
 
 		if (nonexistentCheck) {

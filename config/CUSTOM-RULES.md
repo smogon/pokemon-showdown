@@ -75,6 +75,12 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- Bypass Substitute` - ban moves that bypass Substitute
 
+### Numeric bans
+
+`- BST > 600` - ban all pokemon with BST above 600
+
+`- Base Power > 100` - ban all moves with
+
 ### Generic group bans
 
 `- LGPE` - ban things only available Let's Go Pikachu/Eevee

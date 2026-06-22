@@ -20,6 +20,7 @@ type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
+type NumericTagRule = [ID, '<' | '<=' | '=' | '>=' | '>', number];
 
 export interface GameTimerSettings {
 	dcTimer: boolean;
@@ -48,6 +49,7 @@ export class RuleTable extends Map<string, string> {
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
+	/** Sorted by precedence, in reverse order from a format's ban/unbanlist */
 	tagRules: string[];
 	valueRules: Map<string, string>;
 
@@ -132,8 +134,8 @@ export class RuleTable extends Map<string, string> {
 	getTagRules() {
 		const tagRules = [];
 		for (const ruleid of this.keys()) {
-			if (/^[+*-]tag:/.test(ruleid)) {
-				const banid = ruleid.slice(5);
+			const banid = /^[+*-]tag:(.+)/.exec(ruleid)?.[1];
+			if (banid || /^[+*-]numtag:/.test(ruleid)) {
 				if (
 					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
 					banid === 'allabilities' || banid === 'allnatures'
@@ -148,6 +150,66 @@ export class RuleTable extends Map<string, string> {
 		}
 		this.tagRules = tagRules.reverse();
 		return this.tagRules;
+	}
+
+	getNumericTagValue(rule: NumericTagRule, thing: Species | Move | Item | Ability) {
+		const tag = Tags[rule[0]];
+		switch (thing.effectType) {
+		case 'Pokemon':
+			return (tag.speciesNumCol || tag.genericNumCol)?.(thing);
+		case 'Move':
+			return (tag.moveNumCol || tag.genericNumCol)?.(thing);
+		case 'Item':
+		case 'Ability':
+			return tag.genericNumCol?.(thing);
+		default:
+			return undefined;
+		}
+	}
+
+	matchesTagRule(ruleid: string, thing: Species | Move | Item | Ability) {
+		const id = ruleid.slice(1);
+		if (id.startsWith('tag:')) {
+			const tag = Tags[id.slice(4) as ID];
+			if (!tag) return false;
+			switch (thing.effectType) {
+			case 'Pokemon':
+				return !!(tag.speciesFilter || tag.genericFilter)?.(thing);
+			case 'Move':
+				return !!(tag.moveFilter || tag.genericFilter)?.(thing);
+			case 'Item':
+			case 'Ability':
+				return !!tag.genericFilter?.(thing);
+			default:
+				return false;
+			}
+		}
+		const rule = RuleTable.parseNumericTagRule(id);
+		if (!rule) return false;
+		const value = this.getNumericTagValue(rule, thing);
+		if (value === undefined) return false;
+		switch (rule[1]) {
+		case '<': return value < rule[2];
+		case '<=': return value <= rule[2];
+		case '=': return value === rule[2];
+		case '>=': return value >= rule[2];
+		case '>': return value > rule[2];
+		}
+	}
+
+	describeTagRule(ruleid: string) {
+		const id = ruleid.slice(1);
+		if (id.startsWith('tag:')) {
+			return `is tagged ${Tags[id.slice(4) as ID].name}`;
+		}
+		const rule = RuleTable.parseNumericTagRule(id)!;
+		return `has ${Tags[rule[0]].name} ${rule[1]} ${rule[2]}`;
+	}
+
+	static parseNumericTagRule(id: string): NumericTagRule | null {
+		const match = /^numtag:([a-z0-9]+)(<=|>=|=|<|>)(-?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(id);
+		if (!match) return null;
+		return [match[1] as ID, match[2] as NumericTagRule[1], Number(match[3])];
 	}
 
 	/**
@@ -734,6 +796,12 @@ export class DexFormats {
 	}
 
 	isPokemonRule(ruleSpec: string) {
+		if (ruleSpec.slice(1).startsWith('numtag:')) {
+			const rule = RuleTable.parseNumericTagRule(ruleSpec.slice(1));
+			if (!rule) return false;
+			const tag = Tags[rule[0]];
+			return !!(tag.speciesNumCol || tag.genericNumCol);
+		}
 		return (
 			ruleSpec.slice(1).startsWith('tag:') || ruleSpec.slice(1).startsWith('pokemon:') ||
 			ruleSpec.slice(1).startsWith('basepokemon:')
@@ -1001,6 +1069,8 @@ export class DexFormats {
 		case '-':
 		case '*':
 		case '+':
+			const numericRule = this.validateNumericRule(rule);
+			if (numericRule) return numericRule;
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
@@ -1046,7 +1116,25 @@ export class DexFormats {
 		return !!(tag.speciesFilter || tag.moveFilter || tag.genericFilter);
 	}
 
+	validateNumericRule(rule: string) {
+		const sign = rule.charAt(0);
+		const match = /^(.*?)(<=|>=|=|<|>)\s*(-?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(rule.slice(1).trim());
+		if (!match) return null;
+		let tagName = match[1].trim();
+		if (tagName.startsWith('tag:')) tagName = tagName.slice(4);
+		if (tagName.includes(':')) return null;
+
+		const tagid = toID(tagName);
+		const tag = Tags.hasOwnProperty(tagid) && Tags[tagid];
+		if (!tag || !(tag.speciesNumCol || tag.moveNumCol || tag.genericNumCol)) return null;
+
+		return `${sign}numtag:${tagid}${match[2]}${Number(match[3])}`;
+	}
+
 	validateBanRule(rule: string) {
+		const numericRule = this.validateNumericRule('-' + rule);
+		if (numericRule) return numericRule.slice(1);
+
 		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
 		if (id === 'nonexistent') return 'nonexistent';

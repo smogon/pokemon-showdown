@@ -174,6 +174,33 @@ describe("Custom Rules", () => {
 		assert.legalTeam(team, 'gen9customgame@@@-Contact');
 	});
 
+	it('should support numeric tag filters', () => {
+		Dex.formats.validate('gen9customgame@@@-BST > 600');
+		Dex.formats.validate('gen9customgame@@@-Base Power > 100');
+
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-BST > 600');
+		assert.legalTeam(team, 'gen9customgame@@@-BST > 700');
+		assert.legalTeam(team, 'gen9customgame@@@-allpokemon,+BST > 600');
+
+		team = [
+			{ species: 'Pikachu', ability: 'Static', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-allpokemon,+BST > 600');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Hyper Beam'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-Base Power > 100');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Tackle'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9customgame@@@-Base Power > 100');
+	});
+
 	it('should support restrictions', () => {
 		let team = [
 			{ species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: { hp: 1 } },
