@@ -435,6 +435,14 @@ stat boosts are minor actions.
 
 > Indicates that the field condition `CONDITION` has ended.
 
+`|-fieldactivate|CONDITION`
+
+> A field-wide effect `CONDITION` has activated for a single moment, without
+> creating a persistent field condition. Used for one-shot triggers like Perish
+> Song, Fairy Lock, Ion Deluge, or Teatime, and for ability activation messages
+> like Delta Stream. Any actual changes (perish counters set, types converted,
+> berries eaten, etc.) are reported by separate messages.
+
 `|-sidestart|SIDE|CONDITION`
 
 > A side condition `CONDITION` has started on `SIDE`. Side conditions are all
