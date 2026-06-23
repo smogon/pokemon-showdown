@@ -13887,6 +13887,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.4,
 		weightkg: 60,
 		color: "Brown",
+		tags: ["True Past"],
 		eggGroups: ["Field"],
 	},
 	grubbin: {
@@ -13942,6 +13943,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2.6,
 		weightkg: 147.5,
 		color: "Blue",
+		tags: ["True Past"],
 		eggGroups: ["Bug"],
 	},
 	crabrawler: {
@@ -14085,6 +14087,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.4,
 		weightkg: 2,
 		color: "Yellow",
+		tags: ["True Past"],
 		eggGroups: ["Bug", "Fairy"],
 	},
 	rockruff: {
@@ -14282,6 +14285,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 3.1,
 		weightkg: 217.5,
 		color: "Green",
+		tags: ["True Past"],
 		eggGroups: ["Water 1", "Bug"],
 	},
 	fomantis: {
@@ -14323,6 +14327,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.5,
 		weightkg: 58,
 		color: "Pink",
+		tags: ["True Past"],
 		eggGroups: ["Grass"],
 	},
 	morelull: {
@@ -14390,6 +14395,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Corrosion" },
 		heightm: 2.1,
 		weightkg: 81,
+		tags: ["True Past"],
 		color: "Black",
 		eggGroups: ["Monster", "Dragon"],
 	},
@@ -15004,6 +15010,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.6,
 		weightkg: 13,
 		color: "Gray",
+		tags: ["True Past"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	mimikyu: {
@@ -15046,6 +15053,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.4,
 		weightkg: 2.8,
 		color: "Yellow",
+		tags: ["True Past"],
 		eggGroups: ["Amorphous"],
 	},
 	mimikyubustedtotem: {
@@ -15166,6 +15174,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2.4,
 		weightkg: 207.5,
 		color: "Gray",
+		tags: ["True Past"],
 		eggGroups: ["Dragon"],
 	},
 	tapukoko: {
