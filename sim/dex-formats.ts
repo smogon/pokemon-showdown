@@ -21,7 +21,8 @@ type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
-type NumericTagRule = [ID, '<' | '<=' | '=' | '>=' | '>', number];
+type NumericTagRule = [tagid: ID, operator: '<' | '<=' | '=' | '>=' | '>', number: number];
+type TagRule = [type: '+' | '*' | '-', match: ID | NumericTagRule];
 
 export interface GameTimerSettings {
 	dcTimer: boolean;
@@ -40,7 +41,7 @@ export interface GameTimerSettings {
  * - '[ruleid]' the ID of a rule in effect
  * - '-[thing]' or '-[category]:[thing]' ban a thing
  * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
- * [category] is one of: item, move, ability, species, basespecies
+ * [category] is one of: item, move, ability, species, basespecies, tag
  *
  * The value is the name of the parent rule (blank for the active format).
  */
@@ -52,7 +53,7 @@ export class RuleTable extends Map<string, string> {
 	timer: [Partial<GameTimerSettings>, string] | null;
 	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
 	 *  DO NOT search this; just use ruleTable.has(...). This is purely for tag rule precedence. */
-	tagRules: string[];
+	tagRules: TagRule[];
 	valueRules: Map<string, string>;
 
 	minTeamSize!: number;
@@ -94,12 +95,11 @@ export class RuleTable extends Map<string, string> {
 		}
 
 		const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && this.check('nonexistent');
-		for (const ruleid of this.tagRules.length ? this.tagRules : this.getTagRules()) {
-			if (ruleid.startsWith('*')) continue;
-			if (!this.matchesTagRule(ruleid, species)) continue;
-			const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
-			const existenceTag = EXISTENCE_TAGS.includes(tagid);
-			if (ruleid.startsWith('+')) {
+		for (const [type, match] of this.tagRules) {
+			if (type === '*') continue;
+			if (!this.matchesTagRule(match, species)) continue;
+			const existenceTag = typeof match === 'string' && EXISTENCE_TAGS.includes(match as string);
+			if (type === '+') {
 				if (!existenceTag && nonexistentCheck) continue;
 				return false;
 			}
@@ -119,37 +119,26 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`*pokemon:${species.id}`)) return true;
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
-		for (const ruleid of this.tagRules.length ? this.tagRules : this.getTagRules()) {
-			if (!ruleid.startsWith('*') && !ruleid.startsWith('+')) continue;
-			if (!this.matchesTagRule(ruleid, species)) continue;
-			return ruleid.startsWith('*');
+		for (const [type, match] of this.tagRules) {
+			if (type !== '*' && type !== '+') continue;
+			if (!this.matchesTagRule(match, species)) continue;
+			return type === '*';
 		}
 		return this.has(`*tag:allpokemon`);
 	}
 
 	getTagRules() {
-		const tagRules = [];
+		const tagRules: TagRule[] = [];
 		for (const ruleid of this.keys()) {
-			const banid = /^[+*-]tag:(.+)/.exec(ruleid)?.[1];
-			if (banid || /^[+*-]numtag:/.test(ruleid)) {
-				if (
-					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
-					banid === 'allabilities' || banid === 'allnatures'
-				) {
-					// hardcoded and not a part of the ban rule system
-				} else {
-					tagRules.push(ruleid);
-				}
-			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
-				tagRules.push(ruleid.charAt(0) + 'tag:nonexistent');
-			}
+			const tagRule = RuleTable.parseTagRule(ruleid);
+			if (tagRule) tagRules.push(tagRule);
 		}
 		this.tagRules = tagRules.reverse();
 		return this.tagRules;
 	}
 
-	getNumericTagValue(rule: NumericTagRule, thing: Species | Move | Item | Ability) {
-		const tag = Tags[rule[0]];
+	getNumericTagValue([tagid]: NumericTagRule, thing: Species | Move | Item | Ability) {
+		const tag = Tags[tagid];
 		switch (thing.effectType) {
 		case 'Pokemon':
 			return (tag.speciesNumCol || tag.genericNumCol)?.(thing);
@@ -163,10 +152,9 @@ export class RuleTable extends Map<string, string> {
 		}
 	}
 
-	matchesTagRule(ruleid: string, thing: Species | Move | Item | Ability) {
-		const id = ruleid.slice(1);
-		if (id.startsWith('tag:')) {
-			const tag = Tags[id.slice(4) as ID];
+	matchesTagRule(match: ID | NumericTagRule, thing: Species | Move | Item | Ability) {
+		if (typeof match === 'string') {
+			const tag = Tags[match];
 			if (!tag) return false;
 			switch (thing.effectType) {
 			case 'Pokemon':
@@ -180,32 +168,46 @@ export class RuleTable extends Map<string, string> {
 				return false;
 			}
 		}
-		const rule = RuleTable.parseNumericTagRule(id);
-		if (!rule) return false;
-		const value = this.getNumericTagValue(rule, thing);
+		const value = this.getNumericTagValue(match, thing);
 		if (value === undefined) return false;
-		switch (rule[1]) {
-		case '<': return value < rule[2];
-		case '<=': return value <= rule[2];
-		case '=': return value === rule[2];
-		case '>=': return value >= rule[2];
-		case '>': return value > rule[2];
+		switch (match[1]) {
+		case '<': return value < match[2];
+		case '<=': return value <= match[2];
+		case '=': return value === match[2];
+		case '>=': return value >= match[2];
+		case '>': return value > match[2];
 		}
 	}
 
-	describeTagRule(ruleid: string) {
+	describeTagRule(match: ID | NumericTagRule) {
+		if (typeof match === 'string') {
+			return `is tagged ${Tags[match].name}`;
+		}
+		return `has ${Tags[match[0]].name} ${match[1]} ${match[2]}`;
+	}
+
+	static parseTagRule(ruleid: string): TagRule | null {
+		const type = ruleid.charAt(0);
+		if (type !== '+' && type !== '*' && type !== '-') return null;
 		const id = ruleid.slice(1);
-		if (id.startsWith('tag:')) {
-			return `is tagged ${Tags[id.slice(4) as ID].name}`;
-		}
-		const rule = RuleTable.parseNumericTagRule(id)!;
-		return `has ${Tags[rule[0]].name} ${rule[1]} ${rule[2]}`;
-	}
+		if (id === 'nonexistent') return [type, 'nonexistent' as ID];
 
-	static parseNumericTagRule(id: string): NumericTagRule | null {
-		const match = /^numtag:([a-z0-9]+)(<=|>=|=|<|>)(-?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(id);
-		if (!match) return null;
-		return [match[1] as ID, match[2] as NumericTagRule[1], Number(match[3])];
+		const tagMatch = /^tag:(.+)/.exec(id);
+		if (tagMatch) {
+			const tagid = tagMatch[1] as ID;
+			if (
+				tagid === 'allpokemon' || tagid === 'allitems' || tagid === 'allmoves' ||
+				tagid === 'allabilities' || tagid === 'allnatures'
+			) {
+				// hardcoded and not a part of the ban rule system
+				return null;
+			}
+			return [type, tagid];
+		}
+
+		const numTagMatch = /^numtag:([a-z0-9]+)(<=|>=|=|<|>)(-?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(id);
+		if (!numTagMatch) return null;
+		return [type, [numTagMatch[1] as ID, numTagMatch[2] as NumericTagRule[1], Number(numTagMatch[3])]];
 	}
 
 	/**
@@ -793,9 +795,10 @@ export class DexFormats {
 
 	isPokemonRule(ruleSpec: string) {
 		if (ruleSpec.slice(1).startsWith('numtag:')) {
-			const rule = RuleTable.parseNumericTagRule(ruleSpec.slice(1));
-			if (!rule) return false;
-			const tag = Tags[rule[0]];
+			const tagid = /([a-z0-9]+)/i.exec(ruleSpec)?.[1] as ID | undefined;
+			if (!tagid) return false;
+			const tag = Tags[tagid];
+			if (!tag) return false;
 			return !!(tag.speciesNumCol || tag.genericNumCol);
 		}
 		return (

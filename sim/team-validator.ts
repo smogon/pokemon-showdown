@@ -1875,13 +1875,12 @@ export class TeamValidator {
 		// +Mythical to unban Shaymin in Gen 1, for instance.
 		let nonexistentCheck = Tags.nonexistent.genericFilter!(thing) && ruleTable.check('nonexistent', setHas);
 
-		for (const ruleid of ruleTable.tagRules) {
-			if (ruleid.startsWith('*')) continue;
-			const tagMatches = ruleTable.matchesTagRule(ruleid, thing);
+		for (const [type, match] of ruleTable.tagRules) {
+			if (type === '*') continue;
+			const tagMatches = ruleTable.matchesTagRule(match, thing);
 			if (!tagMatches) continue;
-			const tagid = ruleid.slice(1).startsWith('tag:') ? ruleid.slice(5) as ID : '' as ID;
-			const existenceTag = EXISTENCE_TAGS.includes(tagid);
-			if (ruleid.startsWith('+')) {
+			const existenceTag = typeof match === 'string' && EXISTENCE_TAGS.includes(match as string);
+			if (type === '+') {
 				// We want rules like +CAP or +Past to trump -Nonexistent, but most tags shouldn't.
 				if (!existenceTag && nonexistentCheck) continue;
 				return null;
@@ -1891,7 +1890,10 @@ export class TeamValidator {
 				nonexistentCheck = 'banned';
 				break;
 			}
-			return `${displayName} ${ruleTable.describeTagRule(ruleid)}, which is ${ruleTable.check(ruleid.slice(1)) || "banned"}.`;
+			const banReason = typeof match === 'string' ?
+				ruleTable.check(`tag:${match}`) :
+				ruleTable.check(`numtag:${match[0]}${match[1]}${match[2]}`);
+			return `${displayName} ${ruleTable.describeTagRule(match)}, which is ${banReason || "banned"}.`;
 		}
 
 		if (nonexistentCheck) {
