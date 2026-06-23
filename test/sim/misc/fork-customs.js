@@ -259,4 +259,41 @@ describe('Fork customs', () => {
 			global.toID = savedToID;
 		}
 	});
+
+	it('gen3mega: -ate abilities retype Normal moves AND re-derive Gen 3 category by type', () => {
+		// Regression (2026-06-23): gen3's useMoveInner override replaced base
+		// battle-actions and never fired the ModifyType event base fires (battle-actions.ts:430/438).
+		// Ability `onModifyType` handlers therefore never ran, so EVERY -ate ability re-legalized
+		// for [Gen 3] Megas was inert — the move stayed Normal, and the 1.2x boost (gated on the
+		// same handler's `move.typeChangerBoosted`) never applied either. Decisive proof of the
+		// retype: a Normal move into a Ghost. Normal is IMMUNE vs Ghost (0 damage); Flying (Aerilate)
+		// and Ice (Refrigerate) are both NEUTRAL vs Ghost, so a working -ate lands a hit. If the
+		// Ghost takes 0, ModifyType never fired and the ability is dead again.
+		//
+		// Second axis: Gen 3 derives Physical/Special from a move's TYPE, so the retype must drag
+		// the category with it. Double-Edge is Normal (Physical); Refrigerate makes it Ice, which in
+		// Gen 3 is a SPECIAL type, so it must become Special; Aerilate's Flying stays Physical.
+		for (const [mon, item, ability, type, category] of [
+			['Salamence', 'salamencite', 'aerilate', 'Flying', 'Physical'],
+			['Glalie', 'glalitite', 'refrigerate', 'Ice', 'Special'],
+			['Feraligatr', 'feraligite', 'dragonize', 'Dragon', 'Special'],
+		]) {
+			const battle = common.createBattle({ formatid: 'gen3megas' }, [
+				[{ species: mon, item, moves: ['doubleedge'] }],
+				[{ species: 'Dusclops', ability: 'pressure', moves: ['nightshade'] }],
+			]);
+			battle.makeChoices('move doubleedge mega', 'auto');
+			const attacker = battle.p1.active[0];
+			const ghost = battle.p2.active[0];
+			assert.equal(attacker.ability, ability, `${mon} should have ${ability} after mega evolving`);
+			assert.equal(attacker.lastMoveUsed.type, type,
+				`${ability} should retype Double-Edge to ${type} (got ${attacker.lastMoveUsed.type})`);
+			assert.equal(attacker.lastMoveUsed.category, category,
+				`Gen 3 derives category from type: ${type} Double-Edge must be ${category} ` +
+				`(got ${attacker.lastMoveUsed.category})`);
+			assert(ghost.hp < ghost.maxhp,
+				`${ability} must retype Double-Edge off Normal so it hits the Ghost; 0 damage means ` +
+				`ModifyType never fired (Dusclops ${ghost.hp}/${ghost.maxhp})`);
+		}
+	});
 });

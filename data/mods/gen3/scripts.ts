@@ -142,6 +142,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.setActiveMove(move, pokemon, target);
 
+			// Gen 3's useMoveInner predates type-changing effects and never fired the
+			// ModifyType event that base useMoveInner does (sim/battle-actions.ts:430/438).
+			// Without it, ability `onModifyType` handlers never run, so every -ate ability
+			// re-legalized for [Gen 3] Megas (Aerilate/Refrigerate/Dragonize) was inert: the
+			// move stayed Normal and `typeChangerBoosted` was never set, so the 1.2x onBasePower
+			// boost was also gated off. Fire it here in the same order as base — ModifyType
+			// before ModifyMove, singleEvent then runEvent. Safe: the only gen3-legal moves with
+			// `onModifyType` are Hidden Power and Weather Ball, both of which also set their type
+			// via the `onModifyMove` that already fires, so the result is unchanged. (surfnWOB)
+			this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			if (baseTarget !== move.target) {
 				// Target changed in ModifyMove, so we must adjust it here
@@ -149,6 +159,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// event
 				target = this.battle.getRandomTarget(pokemon, move);
 			}
+			move = this.battle.runEvent('ModifyType', pokemon, target, move, move);
 			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
 			if (baseTarget !== move.target) {
 				// Adjust again
@@ -156,6 +167,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (!move || pokemon.fainted) {
 				return false;
+			}
+
+			// Gen 3 classifies every damaging move Physical/Special by its TYPE, not the
+			// move itself (the split applied to the whole dex in init(), above). A runtime
+			// retype must therefore re-derive the category or the new type's class is wrong:
+			// Refrigerate turns Normal Double-Edge into an Ice move, which in Gen 3 is
+			// Special; Aerilate's Flying and Dragonize's Dragon classify likewise. The Gen 3
+			// Hidden Power / Weather Ball overrides already do this by hand in onModifyMove;
+			// generalize it here so any onModifyType source (the -ate abilities) is covered.
+			// Idempotent for untouched moves — same list, same type → same category. (surfnWOB)
+			if (move.category !== 'Status') {
+				const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+				move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
 			}
 
 			let attrs = '';
