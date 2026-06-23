@@ -45,12 +45,12 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	sublegendary: {
 		name: "Sub-Legendary",
-		desc: "Legendaries that aren't Restricted or Mythical. Other than Regigigas, they have BST 570 to 580.",
+		desc: "Legendaries that aren't Restricted or Mythical. Usually BST 570 to 580.",
 		speciesFilter: species => species.tags.includes("Sub-Legendary"),
 	},
 	restrictedlegendary: {
 		name: "Restricted Legendary",
-		desc: "Also called restricted special Pokémon. Legendaries with BST at least 660.",
+		desc: "Officially called Special Pokémon. Legendaries restricted from most in-game formats. Usually BST at least 660.",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
 	ultrabeast: {

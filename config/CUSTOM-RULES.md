@@ -79,7 +79,13 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- BST > 600` - ban all pokemon with BST above 600
 
-`- Base Power > 100` - ban all moves with
+`- HP > 250` - ban species with base HP (not actual max HP) above 250, i.e. Blissey
+
+`- Base Power = 100` - ban all moves with base power exactly 100
+
+`- Height >= 2` - ban all pokemon with height at least 2 meters
+
+`- Weight < 5` - ban all pokemon with weight under 5 kg
 
 ### Generic group bans
 

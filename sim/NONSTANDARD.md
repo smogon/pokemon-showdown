@@ -36,6 +36,7 @@ All of our data for specific games also contains Pokémon, items, etc from every
 Examples include:
 
 - pokemon: Pichu-Spiky-eared (only exists in Gen 4 games)
+- Totem pokemon (only exist in Gen 7 games)
 - item: Berserk Gene (only exists in Gen 2 games)
 - move: Hidden Power (only exists in Gen 2-7 games)
 
@@ -43,7 +44,7 @@ These are tagged `Nonexistent`, and also `Past`, `Future`, or `LGPE`, depending 
 
 Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. In those future gens, these are tagged `Past` and `True Past`.
 
-Things that existed in Gen 6 or later and then stopped existing are "Dexited". In those future gens, they partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
+Things that existed in Gen 7 (other than Totems) and then stopped existing in Gen 8 or later are "Dexited". In those future gens, they partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
 
 
 Pokéstar Pokémon
@@ -92,7 +93,7 @@ These are matched with `move.placeholderFor === "Hidden Power"`. Since no other 
 Max moves and G-Max moves
 -------------------------
 
-Max moves cannot be learned normally, and behave weirdly (have 0 base power, dealing exactly 2 damage) if hacked into a Pokémon's moveset. G-Max moves are similar, but have normal base power.
+Max and G-Max moves cannot be learned normally, and behave weirdly (sometimes have 0 base power, dealing exactly 2 damage) if hacked into a Pokémon's moveset.
 
 They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves. `isMax` will be `true` for Max moves and a string for G-Max moves.
 
