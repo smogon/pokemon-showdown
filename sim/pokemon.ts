@@ -2258,8 +2258,8 @@ export class Pokemon {
 			negateImmunity || this.battle.dex.getImmunity(type, this);
 		if (notImmune) return true;
 		if (!message) return false;
-		if (notImmune === null) {
-			this.battle.add('-immune', this, '[from] ability: Levitate');
+		if (notImmune === null && this.hasAbility(['levitate','eelevate'])) {
+			this.battle.add('-immune', this, `[from] ability: ${this.ability}`);
 		} else {
 			this.battle.add('-immune', this);
 		}
