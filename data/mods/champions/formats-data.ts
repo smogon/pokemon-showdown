@@ -1495,7 +1495,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	blazikenmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	mudkip: {
 		isNonstandard: "Past",
