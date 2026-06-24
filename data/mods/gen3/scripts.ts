@@ -172,12 +172,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Gen 3 classifies every damaging move Physical/Special by its TYPE, not the
 			// move itself (the split applied to the whole dex in init(), above). A runtime
 			// retype must therefore re-derive the category or the new type's class is wrong:
-			// Refrigerate turns Normal Double-Edge into an Ice move, which in Gen 3 is
-			// Special; Aerilate's Flying and Dragonize's Dragon classify likewise. The Gen 3
-			// Hidden Power / Weather Ball overrides already do this by hand in onModifyMove;
-			// generalize it here so any onModifyType source (the -ate abilities) is covered.
-			// Idempotent for untouched moves — same list, same type → same category. (surfnWOB)
-			if (move.category !== 'Status') {
+			// Refrigerate turns Normal Double-Edge into an Ice move, which in Gen 3 is Special,
+			// and Dragonize's Dragon likewise; Aerilate's Flying stays Physical (Flying is a
+			// physical type in Gen 3) — the recompute below gets all three right because it keys
+			// off the type, not the ability. The Gen 3 Hidden Power / Weather Ball overrides
+			// already do this by hand in onModifyMove; generalize it here so any onModifyType
+			// source (the -ate abilities) is covered. Idempotent for untouched moves — same
+			// list, same type → same category.
+			//
+			// Skip typeless (???) moves: their physical/special class is move-specific and
+			// deliberately set by their own onModifyMove, not derivable from the type. Beat Up
+			// retypes itself to ??? and sets category Special so its base-stat substitution
+			// runs through the SpA/SpD pipeline (onModifySpA -> ally base Atk, onFoeModifySpD
+			// -> target base Def); Struggle stays Physical. ??? is not a "special type", so
+			// without this guard the recompute would force every such move to Physical — which
+			// silently broke Beat Up, collapsing it to a flat-BP, user-Attack-vs-target-Defense
+			// hit (the onModifySpA/onFoeModifySpD handlers never fired). -ate abilities only ever
+			// produce real types, so excluding ??? leaves their reclassification untouched. (surfnWOB)
+			if (move.category !== 'Status' && move.type !== '???') {
 				const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 				move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
 			}
