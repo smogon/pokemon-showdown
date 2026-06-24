@@ -1,5 +1,3 @@
-import { toID } from '../../../sim/dex';
-
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	init() {
