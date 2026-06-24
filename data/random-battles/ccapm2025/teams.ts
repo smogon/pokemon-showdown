@@ -957,7 +957,7 @@ export class RandomC25Teams extends RandomTeams {
 		let pokemonList = Object.keys(this.randomSets);
 		const CAPTiers = ["CAP", "CAP NFE", "CAP LC"];
 		if (pokemonList.filter(mon => CAPTiers.includes(this.dex.species.get(mon).tier)).length >= 6) {
-			if (ruleTable.tagRules.includes("+pokemontag:cap"))
+			if (ruleTable.has("+tag:cap"))
 				pokemonList = pokemonList.filter(mon => CAPTiers.includes(this.dex.species.get(mon).tier));
 			else
 				pokemonList = pokemonList.filter(mon => !CAPTiers.includes(this.dex.species.get(mon).tier));

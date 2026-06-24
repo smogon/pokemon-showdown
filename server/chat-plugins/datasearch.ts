@@ -1565,7 +1565,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			mon.battleOnly! : null : null;
 		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
 			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
-		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
+		if (mon.forme.endsWith('Gmax') && !allowGmax) continue;
 		results.push(mon);
 	}
 
@@ -2075,8 +2075,8 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		const move = mod.moves.get(moveid);
 		if (move.gen <= mod.gen) {
 			if (
-				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard)) ||
+				(!nationalSearch && move.isNonstandard) ||
+				(nationalSearch && move.isNonstandard && !["Past", "Unobtainable"].includes(move.isNonstandard)) ||
 				(move.isMax && mod.gen !== 8)
 			) {
 				continue;

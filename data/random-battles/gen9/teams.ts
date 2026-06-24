@@ -2,7 +2,6 @@ import { Dex, toID } from '../../../sim/dex';
 import { Utils } from '../../../lib';
 import { PRNG, type PRNGSeed } from '../../../sim/prng';
 import { type RuleTable } from '../../../sim/dex-formats';
-import { Tags } from './../../tags';
 import { Teams } from '../../../sim/teams';
 
 export interface TeamData {
@@ -336,7 +335,7 @@ export class RandomTeams {
 	 * Doesn't count bans nested inside other formats/rules.
 	 */
 	private hasDirectCustomBanlistChanges() {
-		if (this.format.ruleTable?.has('+pokemontag:cap')) return false;
+		if (this.format.ruleTable?.has('+tag:cap')) return false;
 		if (this.format.banlist.length) {
 			if (this.format.banlist[0] !== 'Nonexistent' || this.format.banlist.length > 1) return true;
 		}
@@ -2255,7 +2254,7 @@ export class RandomTeams {
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
 				pool = this.dex.moves.all()
-					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
+					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.placeholderFor))
 					.map(m => m.id);
 			} else {
 				pool = [...this.dex.species.getMovePool(species.id)];
@@ -2382,44 +2381,10 @@ export class RandomTeams {
 			this.cachedPool = pool.slice();
 			this.cachedSpeciesPool = speciesPool.slice();
 		} else {
-			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
-			const nonexistentBanReason = ruleTable.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
 				if (requiredType && !species.types.includes(requiredType)) continue;
-
-				let banReason = ruleTable.check('pokemon:' + species.id);
-				if (banReason) continue;
-				if (banReason !== '') {
-					if (species.isMega && ruleTable.check('pokemontag:mega')) continue;
-
-					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
-					if (banReason) continue;
-					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard !== species.isNonstandard) {
-						const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && nonexistentBanReason;
-						let tagWhitelisted = false;
-						let tagBlacklisted = false;
-						for (const ruleid of ruleTable.tagRules) {
-							if (ruleid.startsWith('*')) continue;
-							const tagid = ruleid.slice(12) as ID;
-							const tag = Tags[tagid];
-							if ((tag.speciesFilter || tag.genericFilter)!(species)) {
-								const existenceTag = EXISTENCE_TAG.includes(tagid);
-								if (ruleid.startsWith('+')) {
-									if (!existenceTag && nonexistentCheck) continue;
-									tagWhitelisted = true;
-									break;
-								}
-								tagBlacklisted = true;
-								break;
-							}
-						}
-						if (tagBlacklisted) continue;
-						if (!tagWhitelisted) {
-							if (ruleTable.check('pokemontag:allpokemon')) continue;
-						}
-					}
-				}
+				if (ruleTable.isBannedSpecies(species, this.dex.species.get(species.baseSpecies))) continue;
 				speciesPool.push(species);
 				const num = species.num;
 				if (pool.includes(num)) continue;
@@ -2490,14 +2455,14 @@ export class RandomTeams {
 			if (!hasCustomBans) {
 				itemPool = [...this.dex.items.all()].filter(item => (item.gen <= this.gen && !item.isNonstandard));
 			} else {
-				const hasAllItemsBan = ruleTable.check('pokemontag:allitems');
+				const hasAllItemsBan = ruleTable.check('tag:allitems');
 				for (const item of this.dex.items.all()) {
 					let banReason = ruleTable.check('item:' + item.id);
 					if (banReason) continue;
 					if (banReason !== '' && item.id) {
 						if (hasAllItemsBan) continue;
 						if (item.isNonstandard) {
-							banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
+							banReason = ruleTable.check('tag:' + toID(item.isNonstandard));
 							if (banReason) continue;
 							if (banReason !== '' && item.isNonstandard !== 'Unobtainable') {
 								if (hasNonexistentBan) continue;
@@ -2520,14 +2485,14 @@ export class RandomTeams {
 			if (!hasCustomBans) {
 				abilityPool = [...this.dex.abilities.all()].filter(ability => (ability.gen <= this.gen && !ability.isNonstandard));
 			} else {
-				const hasAllAbilitiesBan = ruleTable.check('pokemontag:allabilities');
+				const hasAllAbilitiesBan = ruleTable.check('tag:allabilities');
 				for (const ability of this.dex.abilities.all()) {
 					let banReason = ruleTable.check('ability:' + ability.id);
 					if (banReason) continue;
 					if (banReason !== '') {
 						if (hasAllAbilitiesBan) continue;
 						if (ability.isNonstandard) {
-							banReason = ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
+							banReason = ruleTable.check('tag:' + toID(ability.isNonstandard));
 							if (banReason) continue;
 							if (banReason !== '') {
 								if (hasNonexistentBan) continue;
@@ -2550,7 +2515,7 @@ export class RandomTeams {
 			movePool = [...this.dex.moves.all()].filter(move =>
 				(move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
 		} else {
-			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
+			const hasAllMovesBan = ruleTable.check('tag:allmoves');
 			for (const move of this.dex.moves.all()) {
 				// Legality of specific HP types can't be altered in built formats anyway
 				if (move.name.startsWith('Hidden Power ')) continue;
@@ -2559,7 +2524,7 @@ export class RandomTeams {
 				if (banReason !== '') {
 					if (hasAllMovesBan) continue;
 					if (move.isNonstandard) {
-						banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
+						banReason = ruleTable.check('tag:' + toID(move.isNonstandard));
 						if (banReason) continue;
 						if (banReason !== '' && move.isNonstandard !== 'Unobtainable') {
 							if (hasNonexistentBan) continue;
@@ -2579,14 +2544,14 @@ export class RandomTeams {
 			if (!hasCustomBans) {
 				naturePool = [...this.dex.natures.all()];
 			} else {
-				const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+				const hasAllNaturesBan = ruleTable.check('tag:allnatures');
 				for (const nature of this.dex.natures.all()) {
 					let banReason = ruleTable.check('nature:' + nature.id);
 					if (banReason) continue;
 					if (banReason !== '' && nature.id) {
 						if (hasAllNaturesBan) continue;
 						if (nature.isNonstandard) {
-							banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+							banReason = ruleTable.check('tag:' + toID(nature.isNonstandard));
 							if (banReason) continue;
 							if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
 								if (hasNonexistentBan) continue;
