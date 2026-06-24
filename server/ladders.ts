@@ -371,6 +371,21 @@ class Ladder extends LadderStore {
 	}
 
 	/**
+	 * Whether `userid` belongs to one of our ladder bots (`Config.ladderbots`).
+	 *
+	 * Used to bias matchmaking so a searching human is paired with a bot only when no
+	 * human opponent is available — the bot is a pure backfill and can never crowd out a
+	 * human-vs-human match. Accepts a list of names/ids or a comma-separated string in
+	 * config; normalizes via `toID`. Unset/empty => no bots => upstream behavior.
+	 */
+	static isLadderBot(userid: string) {
+		const bots = Config.ladderbots;
+		if (!bots) return false;
+		const list: string[] = Array.isArray(bots) ? bots : (typeof bots === 'string' ? bots.split(',') : []);
+		return list.some(name => toID(name) === userid);
+	}
+
+	/**
 	 * Starts a search for a battle for a user under the given format.
 	 */
 	addSearch(newSearch: BattleReady, user: User) {
@@ -389,8 +404,15 @@ class Ladder extends LadderStore {
 		}
 
 		const matches = [newSearch];
-		// In order from longest waiting to shortest waiting
+		const newIsBot = Ladder.isLadderBot(newSearch.userid);
+		// In order from longest waiting to shortest waiting.
+		// Human-vs-human bias: when a human searches, ladder bots are deferred here and only
+		// used to fill the remaining slot(s) in the fallback pass below — so a human is matched
+		// to a bot only when no human opponent is available. A bot searcher matches normally
+		// (it backfills whoever has been waiting). We skip bots *before* calling matchmakingOK,
+		// which mutates `lastMatch` on success and would corrupt a bot we end up not using.
 		for (const search of formatTable.searches.values()) {
+			if (!newIsBot && Ladder.isLadderBot(search.userid)) continue;
 			const searcher = this.getSearcher(search);
 			if (!searcher) continue;
 			const matched = this.matchmakingOK([[search, searcher], [newSearch, user]]);
@@ -401,6 +423,25 @@ class Ladder extends LadderStore {
 				for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
 				Ladder.match(matches);
 				return;
+			}
+		}
+
+		// Fallback (human searcher only): not enough human opponents to fill the battle — let
+		// waiting ladder bots take the remaining slot(s) so a lone human still gets an instant game.
+		if (!newIsBot && matches.length < formatTable.playerCount) {
+			for (const search of formatTable.searches.values()) {
+				if (!Ladder.isLadderBot(search.userid)) continue;
+				const searcher = this.getSearcher(search);
+				if (!searcher) continue;
+				const matched = this.matchmakingOK([[search, searcher], [newSearch, user]]);
+				if (matched) {
+					matches.push(search);
+				}
+				if (matches.length >= formatTable.playerCount) {
+					for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
+					Ladder.match(matches);
+					return;
+				}
 			}
 		}
 
@@ -419,6 +460,10 @@ class Ladder extends LadderStore {
 			if (formatTable.playerCount > 2) continue; // TODO: implement
 			const matchmaker = Ladders(formatid);
 			let longest: [BattleReady, User] | null = null;
+			// A ladder bot partner deferred for a human anchor; used only if no human partner
+			// matches (see addSearch for the same human-vs-human bias). Not validated with
+			// matchmakingOK until we actually use it, to avoid its `lastMatch` side effect.
+			let botFallback: [BattleReady, User] | null = null;
 			for (const search of formatTable.searches.values()) {
 				if (!longest) {
 					const longestSearcher = matchmaker.getSearcher(search);
@@ -426,15 +471,36 @@ class Ladder extends LadderStore {
 					longest = [search, longestSearcher];
 					continue;
 				}
+				const [longestSearch, longestSearcher] = longest;
+
+				// If the longest-waiting (anchor) searcher is a human, defer ladder-bot partners
+				// and prefer a human; fall back to the bot after the loop only if no human matches.
+				if (!Ladder.isLadderBot(longestSearch.userid) && Ladder.isLadderBot(search.userid)) {
+					if (!botFallback) {
+						const botSearcher = matchmaker.getSearcher(search);
+						if (botSearcher) botFallback = [search, botSearcher];
+					}
+					continue;
+				}
+
 				const searcher = matchmaker.getSearcher(search);
 				if (!searcher) continue;
-
-				const [longestSearch, longestSearcher] = longest;
 				const matched = matchmaker.matchmakingOK([[search, searcher], [longestSearch, longestSearcher]]);
 				if (matched) {
 					formatTable.searches.delete(search.userid);
 					formatTable.searches.delete(longestSearch.userid);
 					Ladder.match([longestSearch, search]);
+					return;
+				}
+			}
+			// No human partner for the (human) anchor — fall back to a waiting bot.
+			if (longest && botFallback) {
+				const [longestSearch, longestSearcher] = longest;
+				const [botSearch, botSearcher] = botFallback;
+				if (matchmaker.matchmakingOK([[botSearch, botSearcher], [longestSearch, longestSearcher]])) {
+					formatTable.searches.delete(botSearch.userid);
+					formatTable.searches.delete(longestSearch.userid);
+					Ladder.match([longestSearch, botSearch]);
 					return;
 				}
 			}
