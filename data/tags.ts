@@ -34,16 +34,23 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
 	},
+	gigantamax: {
+		name: "Gigantamax",
+		speciesFilter: species => !!species.placeholderFor,
+	},
 	mythical: {
 		name: "Mythical",
+		desc: "Legendaries usually only obtainable from events. Usually BST 600",
 		speciesFilter: species => species.tags.includes("Mythical"),
 	},
 	sublegendary: {
 		name: "Sub-Legendary",
+		desc: "Legendaries that aren't Restricted or Mythical. Usually BST 570 to 580.",
 		speciesFilter: species => species.tags.includes("Sub-Legendary"),
 	},
 	restrictedlegendary: {
 		name: "Restricted Legendary",
+		desc: "Officially called Special Pokémon. Legendaries restricted from most in-game formats. Usually BST at least 660.",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
 	ultrabeast: {
@@ -53,6 +60,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	paradox: {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
+	},
+	pokestar: {
+		name: "Pokestar",
+		speciesFilter: species => species.tags.includes("Pokestar"),
 	},
 
 	// Move tags
@@ -270,30 +281,47 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// Legality tags
 	past: {
 		name: "Past",
+		desc: "Obtainable in a past game, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'Past',
+	},
+	truepast: {
+		name: "True Past",
+		desc: "Obtainable in a past game, but is not in this game's data at all, not even in Dexit placeholder form.",
+		genericFilter: thing => !!thing.tags?.includes("True Past"),
+	},
+	pastunobtainable: {
+		name: "Past Unobtainable",
+		desc: "Existed in game data in a past game, but was never obtainable.",
+		genericFilter: thing => !!thing.tags?.includes("Past Unobtainable"),
 	},
 	future: {
 		name: "Future",
+		desc: "Obtainable in a future game, but is not in this game's data at all.",
 		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
 	lgpe: {
 		name: "LGPE",
+		desc: "Obtainable in Pokémon: Let's Go, Pikachu! or Let's Go, Eevee!, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'LGPE',
 	},
 	unobtainable: {
 		name: "Unobtainable",
+		desc: "Exists in game data but not obtainable without hacking.",
 		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
 	},
 	cap: {
 		name: "CAP",
-		speciesFilter: thing => thing.isNonstandard === 'CAP',
+		desc: "Made up for the Smogon Create-A-Pokemon project.",
+		genericFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
+		desc: "Made up for... something or other. I don't recommend using this, it's not tagged very consistently.",
 		genericFilter: thing => thing.isNonstandard === 'Custom',
 	},
 	nonexistent: {
 		name: "Nonexistent",
+		desc: "Does not exist in game data. Includes Past, Future, LGPE, CAP, and Custom.",
 		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
 	},
 

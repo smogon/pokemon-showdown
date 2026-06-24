@@ -37,6 +37,7 @@ import { Ability, DexAbilities } from './dex-abilities';
 import { Species, DexSpecies } from './dex-species';
 import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
+import { Tags } from '../data/tags';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
@@ -273,6 +274,18 @@ export class ModdedDex {
 		// in case of weird situations like Gravity, immunity is handled elsewhere
 		default: return 0;
 		}
+	}
+
+	isTagged(thing: Species | Move | Item | Ability, tagName: string) {
+		const tag = Tags[toID(tagName)];
+		if (!tag) return undefined;
+		if (thing.effectType === 'Pokemon') {
+			return !!(tag.speciesFilter || tag.genericFilter)?.(thing);
+		}
+		if (thing.effectType === 'Move') {
+			return !!(tag.moveFilter || tag.genericFilter)?.(thing);
+		}
+		return !!tag.genericFilter?.(thing);
 	}
 
 	getDescs(table: keyof TextTableData, id: ID, dataEntry: AnyObject) {

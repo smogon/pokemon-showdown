@@ -242,9 +242,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!poke.hp) continue;
 				poke.isStarted = true;
 				poke.draggedIn = null;
-				if (poke.species.name === 'Iron Valiant' && !pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap"))
+				if (poke.species.name === 'Iron Valiant' && !pokemon.battle.ruleTable.has("+tag:cap"))
 					pokemon.m.usedMoves = [];
-				if (poke.species.name === 'Sudowoodo' && !pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap"))
+				if (poke.species.name === 'Sudowoodo' && !pokemon.battle.ruleTable.has("+tag:cap"))
 					poke.m.grassMoves = 0;
 			}
 			return true;
@@ -261,28 +261,28 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = success;
 
 			if (success && pokemon.species.name === 'Iron Valiant' &&
-				!pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				!pokemon.battle.ruleTable.has("+tag:cap")) {
 				if (!pokemon.m.usedMoves) pokemon.m.usedMoves = [];
 				if (!pokemon.m.usedMoves.includes(move.id)) pokemon.m.usedMoves.push(move.id);
 				if (pokemon.moves.filter(name => pokemon.m.usedMoves.includes(name)).toString() === pokemon.moves.toString())
 					pokemon.formeChange('Iron Valiant-High-Judge', null, true);
 			}
 			if (success && pokemon.species.name === 'Mewtwo' &&
-				!pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				!pokemon.battle.ruleTable.has("+tag:cap")) {
 				if (!pokemon.m.darkMoves) pokemon.m.darkMoves = 0;
 				if (move.type === 'Dark') pokemon.m.darkMoves++;
 				if (pokemon.m.darkMoves >= 3)
 					pokemon.formeChange('Mewtwo-Evil-Scary', null, true);
 			}
 			if (success && pokemon.species.name === 'Volcanion' &&
-				!pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				!pokemon.battle.ruleTable.has("+tag:cap")) {
 				if (!pokemon.m.steamMoves) pokemon.m.steamMoves = 0;
 				if ((move.type === 'Water' || move.type === 'Fire')) pokemon.m.steamMoves++;
 				if (pokemon.m.steamMoves >= 3)
 					pokemon.formeChange('Volcanion-Surge', null, true);
 			}
 			if (success && move.type === 'Grass' &&
-				!pokemon.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				!pokemon.battle.ruleTable.has("+tag:cap")) {
 				for (const mon of pokemon.foes()) {
 					if (mon.species.name !== 'Sudowoodo') continue;
 					if (!mon.m.grassMoves) mon.m.grassMoves = 0;
@@ -358,7 +358,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			faintData = this.faintQueue.shift()!;
 			const pokemon: Pokemon = faintData.target;
 			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
-				if (pokemon.species.name === 'Kecleon' && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				if (pokemon.species.name === 'Kecleon' && !this.ruleTable.has("+tag:cap")) {
 					let forme = 'None';
 					switch (pokemon.types[0]) {
 					case 'Fire':
@@ -519,7 +519,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.weather = prevWeather;
 				this.weatherState = prevWeatherState;
 				return false;
-			} else if (prevWeather === 'snowscape' && !this.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			} else if (prevWeather === 'snowscape' && !this.battle.ruleTable.has("+tag:cap")) {
 				for (const pokemon of this.battle.getAllActive()) {
 					if (pokemon.species.id === 'wyrdeer') {
 						pokemon.formeChange('Wyrdeer-Snowblind', this.battle.effect, true);
@@ -579,7 +579,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-end', this, 'Nightmare', '[silent]');
 			}
 
-			if (source?.species.name === 'Zarude' && !source.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (source?.species.name === 'Zarude' && !source.battle.ruleTable.has("+tag:cap")) {
 				source.formeChange('Zarude-Alchemist', null, true);
 			}
 
@@ -622,7 +622,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.clearEffectState(this.itemState);
 				this.usedItemThisTurn = true;
 				this.ateBerry = true;
-				if (this.species.baseSpecies === 'Alcremie' && !this.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				if (this.species.baseSpecies === 'Alcremie' && !this.battle.ruleTable.has("+tag:cap")) {
 					switch (this.species.id) {
 					case "alcremierubycream":
 						this.formeChange('Alcremie-Sweetened-Ruby-Cream', null, true);
@@ -703,7 +703,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let stat = this.storedStats[statName];
 
 			// Implement Trying My Best!
-			if (!this.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.battle.ruleTable.has("+tag:cap")) {
 				const mon = this as any;
 				// Make sure it has changed abilities since
 				if (mon.timesSwitchedIn && mon.ability !== 'tryingmybest') {
@@ -748,7 +748,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let stat = this.storedStats[statName];
 
 			// Implement Trying My Best!
-			if (!this.battle.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.battle.ruleTable.has("+tag:cap")) {
 				const mon = this as any;
 				// Make sure it has changed abilities since
 				if (mon.timesSwitchedIn && mon.ability !== 'tryingmybest') {

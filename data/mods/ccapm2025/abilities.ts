@@ -97,7 +97,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (effect.id === 'psn' || effect.id === 'tox') {
 				const toHeal = Math.min(target.baseMaxhp / 8, target.baseMaxhp - target.hp);
 				this.heal(toHeal);
-				if (target.species.name === "Gliscor" && !this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				if (target.species.name === "Gliscor" && !this.ruleTable.has("+tag:cap")) {
 					if (!this.effectState.phCounter) this.effectState.phCounter = 0;
 					this.effectState.phCounter += toHeal;
 					if (this.effectState.phCounter >= target.baseMaxhp)
@@ -126,12 +126,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				for (const secondary of move.secondaries) {
 					if (secondary.volatileStatus === 'flinch') return;
 				}
-				if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+				if (!this.ruleTable.has("+tag:cap")) {
 					move.secondaries.push({
 						chance: 20,
 						volatileStatus: 'flinch',
 						onHit(target, source, activeMove) {
-							if (this.ruleTable.tagRules.includes("+pokemontag:cap")) return;
+							if (this.ruleTable.has("+tag:cap")) return;
 							if (source.species.name === 'Trubbish') {
 								source.formeChange('Trubbish-Mega-Dragon', this.effect, true);
 							}
@@ -188,7 +188,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					move.smartTarget = false;
 				} else {
 					this.add('-immune', target, '[from] ability: Wonder Guard');
-					if (!this.ruleTable.tagRules.includes("+pokemontag:cap") && target.baseSpecies.name === 'Shedinja') {
+					if (!this.ruleTable.has("+tag:cap") && target.baseSpecies.name === 'Shedinja') {
 						target.formeChange('Shedinja-Escaped', null, true);
 						this.add('-activate', target, 'ability: Wonder Guard');
 					}

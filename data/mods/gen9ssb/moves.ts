@@ -6917,7 +6917,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const move of this.dex.moves.all()) {
-				if (move.realMove || move.id.includes('metronome')) continue;
+				if (move.placeholderFor || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
