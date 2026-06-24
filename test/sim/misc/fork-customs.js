@@ -296,4 +296,49 @@ describe('Fork customs', () => {
 				`ModifyType never fired (Dusclops ${ghost.hp}/${ghost.maxhp})`);
 		}
 	});
+
+	it('gen3mega: Beat Up stays typeless/Special so per-participant base-Atk substitution fires', () => {
+		// Regression (2026-06-24, replay gen3megas-544 t7): the type->category recompute added to
+		// gen3 useMoveInner (so -ate abilities reclassify their retyped moves) ran for EVERY
+		// non-Status move, including typeless (???) ones. Beat Up retypes itself to ??? + Special on
+		// purpose so its base-stat substitution rides the special pipeline (onModifySpA -> each
+		// participant's base Atk, onFoeModifySpD -> the target's base Def). ??? is not a "special
+		// type", so the recompute forced Beat Up to Physical -> the SpA/SpD handlers never fired ->
+		// it collapsed to the USER's own Atk vs the target's own Def at a flat BP 10 (a uniform
+		// ~15/hit). The fix skips ??? in the recompute. Guard both axes:
+		//   (1) the active move stays ??? / Special, and
+		//   (2) damage tracks each PARTICIPANT's base Attack (not the lead's), so two party members
+		//       with wildly different base Atk land wildly different per-hit damage.
+		const battle = common.createBattle({ formatid: 'gen3megas' }, [
+			[
+				{ species: 'Slaking', moves: ['beatup'] }, // base Atk 160 -> hit 1
+				{ species: 'Chansey', moves: ['softboiled'] }, // base Atk 5 -> hit 2
+			],
+			[{ species: 'Blissey', moves: ['softboiled'] }], // base Def 10, bulky enough to survive
+		]);
+		battle.makeChoices('move beatup', 'move softboiled');
+		const attacker = battle.p1.active[0];
+		assert.equal(attacker.lastMoveUsed.type, '???',
+			`Beat Up must stay typeless (got ${attacker.lastMoveUsed.type})`);
+		assert.equal(attacker.lastMoveUsed.category, 'Special',
+			`Beat Up must stay Special so its onModifySpA/onFoeModifySpD substitution fires ` +
+			`(got ${attacker.lastMoveUsed.category} — the ??? recompute regression)`);
+		// Per-hit damage straight from the protocol (attacker is faster, so these precede any heal).
+		// battle.log carries two views of each hit: the exact-HP view (`X/651`) and the observer
+		// percentage view (`X/100`). Keep only the exact view (max denominator) or the percentage
+		// rows corrupt the running HP diff.
+		const parsed = battle.log
+			.filter(l => l.startsWith('|-damage|p2a: '))
+			.map(l => l.split('|')[3].split('/').map(Number)); // [currentHP, maxHP]
+		const maxhp = Math.max(...parsed.map(p => p[1]));
+		const hp = parsed.filter(p => p[1] === maxhp).map(p => p[0]); // exact-view HP after each hit
+		assert(hp.length >= 2,
+			`Beat Up should hit once per eligible party member (got ${hp.length} hit(s))`);
+		const slakingHit = maxhp - hp[0]; // participant base Atk 160
+		const chanseyHit = hp[0] - hp[1]; // participant base Atk 5
+		assert(slakingHit > chanseyHit,
+			`Beat Up must use each participant's base Attack: Slaking (160) must out-hit Chansey (5), ` +
+			`got Slaking ${slakingHit} vs Chansey ${chanseyHit} — equal damage means it used the ` +
+			`user's own Attack (the regression)`);
+	});
 });
