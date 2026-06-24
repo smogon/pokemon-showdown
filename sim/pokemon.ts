@@ -2263,6 +2263,8 @@ export class Pokemon {
 				this.battle.add('-immune', this, '[from] ability: Levitate');
 			} else if (this.hasAbility('eelevate')) {
 				this.battle.add('-immune', this, '[from] ability: Eelevate');
+			} else {
+				this.battle.add('-immune', this);
 			}
 		} else {
 			this.battle.add('-immune', this);
