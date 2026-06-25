@@ -480,7 +480,20 @@ export const IPTools = new class {
 			}
 
 			const ipNumber = IPTools.ipToNumber(ip);
-			if (ipNumber === null) throw new Error(`Bad IP address: '${ip}'`);
+			if (ipNumber === null) {
+				// IPTools.ipToNumber() returns null for IPv6 (PS represents IPs as 32-bit IPv4
+				// numbers and "does not support" IPv6). getHost is documented never to reject, so
+				// we must NOT throw here: throwing made this an unhandled promise rejection (lookup
+				// -> getHost has no .catch in checkIp), which under crashguard auto-locked the whole
+				// server. This surfaced once Caddy began forwarding real client IPs (incl. IPv6) via
+				// X-Forwarded-For = {Cf-Connecting-Ip}. Resolve to an unknown host instead — same
+				// "?/unknown" shape as the no-RDNS fallback below, so getHostType() treats it as a
+				// normal unknown (non-proxy) host and IPv6 users aren't falsely host-locked. The IP
+				// range / RDNS lookups below need a numeric IP, so they're skipped for IPv6.
+				// [custom fork — keep-ours on upstream rebase]
+				resolve('unknown?/unknown');
+				return;
+			}
 			for (const range of IPTools.ranges) {
 				if (ipNumber >= range.minIP && ipNumber <= range.maxIP) {
 					resolve(range.host);
