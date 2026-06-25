@@ -116,6 +116,47 @@ describe('Fork customs', () => {
 		], 'gen3uubl');
 	});
 
+	it('gen3stabmons: type-grant lets in off-learnset STAB, but the `*` restrictions and off-type stay blocked', () => {
+		// [Gen 3] STABmons = gen3ou + 'STABmons Move Legality', faithful to the
+		// challenge code `gen3ou @@@ stabmons move legality, *acupressure,
+		// *bellydrum, *extremespeed, *lovelykiss, *spore`. The 5 restricted moves
+		// come in via `restricted:` (-> '*move' in the rule table), which the
+		// STABmons checkCanLearn must honor over the type grant. Pin all four seams.
+		const stab = Dex.formats.get('gen3stabmons', true);
+		Dex.formats.getRuleTable(stab); // throws if the '[Gen 3] OU' / 'STABmons Move Legality' refs break
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+
+		// Grant: Skarmory (Steel/Flying) does not learn Meteor Mash (Steel), so it's
+		// illegal in plain [Gen 3] OU...
+		const ouErrors = TeamValidator.get('gen3ou').validateTeam([
+			{ species: 'Skarmory', ability: 'Keen Eye', moves: ['meteormash', 'spikes', 'roar', 'protect'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(ouErrors && ouErrors.length > 0, 'sanity: Skarmory + Meteor Mash must be illegal in [Gen 3] OU');
+		// ...but legal here, because it shares the Steel type with Meteor Mash.
+		assert.legalTeam([
+			{ species: 'Skarmory', ability: 'Keen Eye', moves: ['meteormash', 'spikes', 'roar', 'protect'], evs: { hp: 4 }, level: 100 },
+		], 'gen3stabmons');
+
+		// Off-type stays blocked: Surf (Water) shares no type with Steel/Flying Skarmory.
+		const offType = TeamValidator.get('gen3stabmons').validateTeam([
+			{ species: 'Skarmory', ability: 'Keen Eye', moves: ['surf', 'spikes', 'roar', 'protect'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(offType && offType.length > 0, `expected off-type Surf blocked on Skarmory, got: ${JSON.stringify(offType)}`);
+
+		// Restriction beats the grant: Extreme Speed is Normal (Blissey's type) but is a
+		// `*` restricted move, so a non-learner like Blissey still cannot have it.
+		const restricted = TeamValidator.get('gen3stabmons').validateTeam([
+			{ species: 'Blissey', ability: 'Natural Cure', moves: ['extremespeed', 'softboiled', 'thunderbolt', 'seismictoss'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(restricted && restricted.length > 0, `expected restricted Extreme Speed blocked on Blissey, got: ${JSON.stringify(restricted)}`);
+
+		// ...while a natural learner of a restricted move is unaffected: Breloom learns Spore.
+		assert.legalTeam([
+			{ species: 'Breloom', ability: 'Effect Spore', moves: ['spore', 'machpunch', 'gigadrain', 'swordsdance'], evs: { hp: 4 }, level: 100 },
+		], 'gen3stabmons');
+	});
+
 	it('gen3adv200: the ADV 200 ladder lives in gen3adv200, leaving gen3rs upstream-pristine', () => {
 		// The custom UU/LC formats re-tier off the isolated gen3adv200 mod...
 		assert.equal(Dex.formats.get('gen3adv200uu', true).mod, 'gen3adv200');

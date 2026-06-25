@@ -158,6 +158,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
+		name: "[Gen 3] STABmons",
+		desc: "Pok&eacute;mon can use any move of a type they (or a previous evolution) share, in addition to the moves they normally learn.",
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU', 'STABmons Move Legality'],
+		restricted: ['Acupressure', 'Belly Drum', 'Extreme Speed', 'Lovely Kiss', 'Spore'],
+	},
+	{
 		name: "[Gen 3] Monotype",
 		desc: "All Pok&eacute;mon on a team must share a type.",
 		mod: 'gen3',
