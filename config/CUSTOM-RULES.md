@@ -232,6 +232,8 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Species Clause` - limit one Pokémon per dex number
 
+`Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
+
 `Nickname Clause` - limit one Pokémon per nickname
 
 `Item Clause` - no two Pokémon can have the same item
@@ -258,11 +260,13 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Accuracy Moves Clause` - ban moves that have a chance to lower the target's accuracy when used
 
+`Same Color Clause` - force all Pokémon on a team to share a Pokédex color with one another
+
+`Same Letter Clause` - force all Pokémon on a team to have their species names start with the same English letter
+
 `Same Type Clause` - force all Pokémon on a team to share a type with one another
 
 `NFE Clause` - ban all Pokémon that are not fully evolved (Pokémon can be re-added manually by simply unbanning them)
-
-`Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
 
 ### Miscellaneous
 
@@ -335,6 +339,8 @@ In-battle rules
 `Gen 7 Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is
 
 `Dynamax Clause` - prevent Pokémon from Dynamaxing during battle. Cannot be used to allow Dynamaxing in old gens
+
+`Terastal Clause` - prevent Pokémon from Terastalizing during battle. Cannot be used to allow Terastalizing in old gens
 
 `Endless Battle Clause` - prevent battles from proceeding endlessly
 
