@@ -187,6 +187,138 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 130,
 	},
+	gmaxbefuddle: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxcannonade: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxcentiferno: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxchistrike: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxcuddle: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxdepletion: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxdrumsolo: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxfinale: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxfireball: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxfoamburst: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxgoldrush: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxgravitas: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxhydrosnipe: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxmalodor: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxmeltdown: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxoneblow: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxrapidflow: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxreplenish: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxresonance: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxsandblast: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxsmite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxsnooze: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxsteelsurge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxstonesurge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxstunshock: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxsweetness: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxtartness: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxterror: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxvinelash: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxvolcalith: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxvoltcrash: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxwildfire: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gmaxwindrage: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	grassyglide: {
 		inherit: true,
 		basePower: 70,
