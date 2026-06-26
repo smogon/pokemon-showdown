@@ -185,7 +185,8 @@ export const commands: Chat.ChatCommands = {
 		try {
 			gitVersion = (await ProcessManager.exec(['git', 'rev-parse', '--short', 'HEAD'])).stdout.trim();
 		} catch {}
-		this.sendReplyBox(this.tr`Server version: <b>${version}${gitVersion ? ` (commit ${gitVersion})` : ''}</b>`);
+		this.sendReplyBox(this.tr`Server version: <b>${version}` +
+			`${gitVersion ? ` (commit <a href="https://github.com/smogon/pokemon-showdown/commits/${gitVersion}">${gitVersion}</a>)` : ''}</b>`);
 	},
 	versionhelp: [
 		`/version - Get the current server version.`,
