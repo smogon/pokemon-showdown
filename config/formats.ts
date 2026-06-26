@@ -122,7 +122,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] SU",
 		desc: "Sub-Zero Used &mdash; the tier below ADV ZU. Pokemon ranked B or higher on the ZU viability rankings are banned.",
 		mod: 'gen3subzu',
-		ruleset: ['Standard', 'Baton Pass Stat Trap Clause'],
+		ruleset: ['Standard', 'Sleep Moves Clause', 'Baton Pass Stat Trap Clause'],
 		banlist: [
 			'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU',
 			'Wartortle', 'Clamperl', 'Magby',
@@ -133,7 +133,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] IU",
 		desc: "Incredibly Used &mdash; the tier below ADV SU. Only the lowest-ranked SU Pokemon are legal.",
 		mod: 'gen3subzu',
-		ruleset: ['Standard', 'Baton Pass Stat Trap Clause'],
+		ruleset: ['Standard', 'Sleep Moves Clause', 'Baton Pass Stat Trap Clause'],
 		banlist: [
 			'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'SU',
 			'Wartortle', 'Clamperl', 'Magby',
