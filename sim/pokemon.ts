@@ -2259,7 +2259,13 @@ export class Pokemon {
 		if (notImmune) return true;
 		if (!message) return false;
 		if (notImmune === null) {
-			this.battle.add('-immune', this, '[from] ability: Levitate');
+			if (this.hasAbility('levitate')) {
+				this.battle.add('-immune', this, '[from] ability: Levitate');
+			} else if (this.hasAbility('eelevate')) {
+				this.battle.add('-immune', this, '[from] ability: Eelevate');
+			} else {
+				this.battle.add('-immune', this);
+			}
 		} else {
 			this.battle.add('-immune', this);
 		}
