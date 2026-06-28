@@ -34,7 +34,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
-	aerilate: { inherit: true, gen: 3, isNonstandard: null },
+	// -ate type-changing abilities: gen3mega inherits gen6's 1.3x (5325/4096) boost
+	// via the mod chain (gen3mega -> gen3 -> ... -> gen6), but we want the Gen 7+
+	// 1.2x (4915/4096) behavior. Re-pin onBasePower to the 1.2x modifier; everything
+	// else (onModifyType, priorities) keeps inheriting. (Dragonize is a custom,
+	// base-only ability with no gen6 override, so it already resolves to 1.2x.)
+	aerilate: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+	},
 	moldbreaker: { inherit: true, gen: 3, isNonstandard: null },
 	multiscale: { inherit: true, gen: 3, isNonstandard: null },
 	steadfast: { inherit: true, gen: 3, isNonstandard: null },
@@ -47,7 +59,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	strongjaw: { inherit: true, gen: 3, isNonstandard: null },
 	sheerforce: { inherit: true, gen: 3, isNonstandard: null },
 	prankster: { inherit: true, gen: 3, isNonstandard: null },
-	refrigerate: { inherit: true, gen: 3, isNonstandard: null },
+	refrigerate: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+	},
 	primordialsea: { inherit: true, gen: 3, isNonstandard: null },
 	desolateland: { inherit: true, gen: 3, isNonstandard: null },
 
