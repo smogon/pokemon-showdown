@@ -38,6 +38,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3mega',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		// Complex ban: No Guard + Dynamic Punch (No Guard makes the 50%-accuracy,
+		// always-confuse Dynamic Punch a guaranteed hit). No Guard is only obtainable
+		// here on Mega formes (Pidgeot-Mega, Raichu-Mega-Y), and the team validator
+		// rewrites a stone-holder's set ability back to its base ability — so the
+		// in-battle No Guard never lands on the set, and a plain 'No Guard + Dynamic
+		// Punch' banlist entry can't see it. Check the resolved (Mega) forme instead.
+		onValidateSet(set) {
+			const { tierSpecies } = this.getValidationSpecies(set);
+			const hasNoGuard = Object.values(tierSpecies.abilities).includes('No Guard');
+			const hasDynamicPunch = (set.moves || []).some(move => this.dex.toID(move) === 'dynamicpunch');
+			if (hasNoGuard && hasDynamicPunch) {
+				return [`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`];
+			}
+		},
 	},
 	{
 		name: "[Gen 3] Megas Ubers",

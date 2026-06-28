@@ -272,6 +272,37 @@ describe('Fork customs', () => {
 		], 'gen3megasubers');
 	});
 
+	it('gen3mega: [Gen 3] Megas complex-bans No Guard + Dynamic Punch', () => {
+		// No Guard turns Dynamic Punch (50% accuracy, always-confuse) into a guaranteed
+		// hit. In gen3mega No Guard is obtainable only on Mega formes (Pidgeot-Mega,
+		// Raichu-Mega-Y), and the team validator rewrites a stone-holder's set ability
+		// back to its base ability — so a plain `'No Guard + Dynamic Punch'` banlist
+		// entry (which keys on `ability:noguard`) can never fire. The format's
+		// onValidateSet instead checks the resolved Mega forme's ability. Raichu-Mega-Y
+		// has No Guard and Raichu learns Dynamic Punch (Gen 3 tutor), so it's the one
+		// constructible offender; the ban must catch it.
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const banned = TeamValidator.get('gen3megas').validateTeam([
+			{ species: 'Raichu', ability: 'No Guard', item: 'Raichunite Y', moves: ['dynamicpunch', 'thunderbolt'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(banned && banned.some(e => /No Guard.*Dynamic Punch/.test(e)),
+			`expected No Guard + Dynamic Punch banned from [Gen 3] Megas, got: ${JSON.stringify(banned)}`);
+
+		// Either half alone stays legal: Raichu-Mega-Y (No Guard) without Dynamic Punch...
+		assert.legalTeam([
+			{ species: 'Raichu', ability: 'No Guard', item: 'Raichunite Y', moves: ['thunderbolt', 'surf'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
+		// ...and base Raichu (Static, no Mega stone) WITH Dynamic Punch.
+		assert.legalTeam([
+			{ species: 'Raichu', ability: 'Static', item: 'Leftovers', moves: ['dynamicpunch', 'thunderbolt'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
+
+		// [Gen 3] Megas Ubers ("everything is legal") deliberately does NOT ban the combo.
+		assert.legalTeam([
+			{ species: 'Raichu', ability: 'No Guard', item: 'Raichunite Y', moves: ['dynamicpunch', 'thunderbolt'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megasubers');
+	});
+
 	it('gen3mega: a Rayquaza team loads in the forked-worker condition where global.toID is undefined', () => {
 		// Production regression (2026-06-22): canMegaEvo runs for EVERY Pokemon at construction.
 		// For any base Rayquaza (otherFormes[0] = Rayquaza-Mega, isMega + requiredMove "Dragon
