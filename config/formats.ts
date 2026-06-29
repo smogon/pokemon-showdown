@@ -38,27 +38,46 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3mega',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
-		// Complex ban: No Guard + Dynamic Punch (No Guard makes the 50%-accuracy,
-		// always-confuse Dynamic Punch a guaranteed hit). No Guard is only obtainable
-		// here on Mega formes (Pidgeot-Mega, Raichu-Mega-Y), and the team validator
-		// rewrites a stone-holder's set ability back to its base ability — so the
-		// in-battle No Guard never lands on the set, and a plain 'No Guard + Dynamic
-		// Punch' banlist entry can't see it. Check the resolved (Mega) forme instead.
+		// Ability-based complex bans, enforced on the resolved (Mega) forme. The team
+		// validator rewrites a stone-holder's set ability back to its base ability
+		// (No Guard -> Static, Parental Bond -> Scrappy) before banlist matching, so a
+		// plain 'No Guard + Dynamic Punch' / 'Parental Bond + ...' banlist entry can't
+		// see the Mega ability. Check tierSpecies.abilities (the in-battle forme) instead.
 		onValidateSet(set) {
 			const { tierSpecies } = this.getValidationSpecies(set);
-			const hasNoGuard = Object.values(tierSpecies.abilities).includes('No Guard');
-			const hasDynamicPunch = (set.moves || []).some(move => this.dex.toID(move) === 'dynamicpunch');
-			if (hasNoGuard && hasDynamicPunch) {
-				return [`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`];
+			const megaAbilities = Object.values(tierSpecies.abilities);
+			const moves = set.moves || [];
+			const problems = [];
+
+			// No Guard makes the 50%-accuracy, always-confuse Dynamic Punch a guaranteed
+			// hit. No Guard is only obtainable here on Mega formes (Pidgeot-Mega, Raichu-Mega-Y).
+			if (megaAbilities.includes('No Guard') &&
+				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
+				problems.push(`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`);
 			}
+
+			// Parental Bond (Kangaskhan-Mega only) strikes twice; fixed-damage moves deal
+			// their full fixed amount on BOTH hits (the engine returns before the damage
+			// reducer runs), e.g. Seismic Toss for 200 guaranteed per turn.
+			if (megaAbilities.includes('Parental Bond')) {
+				const fixedDamageMove = moves.find(move => {
+					const dmg = this.dex.moves.get(move).damage;
+					return typeof dmg === 'number' || dmg === 'level';
+				});
+				if (fixedDamageMove) {
+					problems.push(`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`);
+				}
+			}
+
+			return problems;
 		},
 	},
 	{
 		name: "[Gen 3] Megas Ubers",
-		desc: "Gen 3 Megas with Ubers unbanned &mdash; everything is legal.",
+		desc: "Gen 3 Megas with Ubers unbanned. Only AG-tier Megas (Mega Salamence) stay banned.",
 		mod: 'gen3mega',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		banlist: ['AG', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] PSS",

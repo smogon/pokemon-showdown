@@ -17,7 +17,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	victreebelmega: { tier: "OU" },
 	slowbromega: { tier: "OU" },
 	gengarmega: { tier: "Uber" },
-	kangaskhanmega: { tier: "Uber" },
+	// Dropped Uber -> OU. The broken Parental Bond + fixed-damage-move combo is
+	// complex-banned from [Gen 3] Megas instead (config/formats.ts onValidateSet).
+	kangaskhanmega: { tier: "OU" },
 	starmiemega: { tier: "OU" },
 	pinsirmega: { tier: "OU" },
 	gyaradosmega: { tier: "OU" },
@@ -54,7 +56,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	chimechomega: { tier: "OU" },
 	absolmega: { tier: "OU" },
 	glaliemega: { tier: "OU" },
-	salamencemega: { tier: "Uber" },
+	// Banned to AG (above Ubers): the 'Uber' tag covers AG so it's out of [Gen 3]
+	// Megas, and [Gen 3] Megas Ubers bans the 'AG' tag so it's out of there too.
+	salamencemega: { tier: "AG" },
 	metagrossmega: { tier: "Uber" },
 	latiasmega: { tier: "Uber" },
 	latiosmega: { tier: "Uber" },

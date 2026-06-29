@@ -246,29 +246,65 @@ describe('Fork customs', () => {
 		assert.equal(battle.field.weather, 'desolateland', 'Desolate Land set on Primal Reversion');
 	});
 
-	it('gen3mega: Mega Kangaskhan and Mega Medicham are Uber-banned from [Gen 3] Megas but legal in Megas Ubers', () => {
-		// Both Megas are tiered Uber in gen3mega/formats-data.ts. The validator swaps in the
-		// stone-induced Mega forme (team-validator `tierSpecies`), so [Gen 3] Megas' `banlist: ['Uber']`
-		// catches them while [Gen 3] Megas Ubers (no Uber ban) keeps them legal. Guards the tier flip.
+	it('gen3mega: tier flips — M-Salamence banned to AG, M-Kangaskhan dropped to OU (M-Medicham stays Uber)', () => {
+		// formats-data.ts tiers drive the [Gen 3] Megas `banlist: ['Uber']` (the 'Uber' tag
+		// also covers AG) and the [Gen 3] Megas Ubers `banlist: ['AG']`. The validator swaps
+		// in the stone-induced Mega forme (`tierSpecies`) before tier-matching.
 		const dex = Dex.mod('gen3mega');
-		assert.equal(dex.species.get('kangaskhanmega').tier, 'Uber');
+		assert.equal(dex.species.get('salamencemega').tier, 'AG');
+		assert.equal(dex.species.get('kangaskhanmega').tier, 'OU');
 		assert.equal(dex.species.get('medichammega').tier, 'Uber');
 
 		const { TeamValidator } = require('./../../../dist/sim/team-validator');
-		const khanErrors = TeamValidator.get('gen3megas').validateTeam([
-			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
-		]);
-		assert(khanErrors && khanErrors.some(e => /Uber/.test(e)), `expected Mega Kangaskhan Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(khanErrors)}`);
 
+		// M-Salamence is AG: banned from BOTH [Gen 3] Megas and [Gen 3] Megas Ubers.
+		const salSet = { species: 'Salamence', ability: 'Intimidate', item: 'salamencite', moves: ['dragondance', 'earthquake', 'rockslide', 'doubleedge'], evs: { hp: 4 }, level: 100 };
+		const salOu = TeamValidator.get('gen3megas').validateTeam([salSet]);
+		assert(salOu && salOu.some(e => /Salamence/.test(e)), `expected M-Salamence banned from [Gen 3] Megas, got: ${JSON.stringify(salOu)}`);
+		const salUbers = TeamValidator.get('gen3megasubers').validateTeam([salSet]);
+		assert(salUbers && salUbers.some(e => /Salamence/.test(e)), `expected M-Salamence (AG) banned from [Gen 3] Megas Ubers too, got: ${JSON.stringify(salUbers)}`);
+
+		// M-Medicham stays Uber-banned from [Gen 3] Megas, legal in Ubers.
 		const medichamErrors = TeamValidator.get('gen3megas').validateTeam([
 			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
 		]);
-		assert(medichamErrors && medichamErrors.some(e => /Uber/.test(e)), `expected Mega Medicham Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(medichamErrors)}`);
+		assert(medichamErrors && medichamErrors.some(e => /Uber/.test(e)), `expected M-Medicham Uber-banned from [Gen 3] Megas, got: ${JSON.stringify(medichamErrors)}`);
+		assert.legalTeam([
+			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megasubers');
 
-		// Both stay legal in [Gen 3] Megas Ubers (Ubers unbanned).
+		// M-Kangaskhan dropped Uber -> OU: now legal in [Gen 3] Megas (set with no fixed-damage move).
 		assert.legalTeam([
 			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
-			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
+	});
+
+	it('gen3mega: [Gen 3] Megas complex-bans Parental Bond + fixed-damage moves', () => {
+		// Parental Bond (Kangaskhan-Mega only here) makes a fixed-damage move strike twice for
+		// its full fixed amount — Seismic Toss = 200 guaranteed per turn. As with No Guard, the
+		// validator resets the stone-holder's ability to its base, so the format's onValidateSet
+		// checks the resolved Mega forme's ability. Kangaskhan learns Seismic Toss (Gen 3 tutor),
+		// so M-Kangaskhan + Seismic Toss is the one constructible offender; the ban must catch it.
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const banned = TeamValidator.get('gen3megas').validateTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['seismictoss', 'earthquake', 'return', 'rest'], evs: { hp: 4 }, level: 100 },
+		]);
+		assert(banned && banned.some(e => /Parental Bond.*Seismic Toss/.test(e)),
+			`expected Parental Bond + Seismic Toss banned from [Gen 3] Megas, got: ${JSON.stringify(banned)}`);
+
+		// Either half alone stays legal in [Gen 3] Megas: M-Kangaskhan (Parental Bond) without a
+		// fixed-damage move...
+		assert.legalTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['earthquake', 'return', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
+		// ...and base Kangaskhan (no Mega stone, Early Bird) WITH Seismic Toss.
+		assert.legalTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'Leftovers', moves: ['seismictoss', 'earthquake', 'return', 'rest'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
+
+		// [Gen 3] Megas Ubers ("everything is legal" bar AG) deliberately does NOT ban the combo.
+		assert.legalTeam([
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['seismictoss', 'earthquake', 'return', 'rest'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megasubers');
 	});
 
