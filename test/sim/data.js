@@ -247,7 +247,7 @@ describe('Dex data', () => {
 				for (const moveid in entry.learnset) {
 					const move = Dex.moves.get(moveid);
 					assert.equal(moveid, move.id, `Move key "${moveid}" of Learnsets entry ${species.name} should be a Move ID`);
-					assert(move.exists && !move.realMove, `Move key "${moveid}" of Learnsets entry ${species.name} should be a real move`);
+					assert(move.exists && !move.placeholderFor, `Move key "${moveid}" of Learnsets entry ${species.name} should be a real move`);
 
 					let prevLearnedGen = 10;
 					let prevLearnedTypeIndex = -1;
@@ -314,7 +314,7 @@ describe('Dex data', () => {
 		const count = { species: 0, formes: 0 };
 		for (const pkmn of dex.species.all()) {
 			if (!existenceFunction(pkmn)) continue;
-			if (pkmn.isCosmeticForme) continue;
+			if (pkmn.isCosmeticForme || pkmn.placeholderFor) continue;
 			if (pkmn.name !== pkmn.baseSpecies) {
 				count.formes++;
 			} else {
