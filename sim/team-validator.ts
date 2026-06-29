@@ -844,16 +844,14 @@ export class TeamValidator {
 						minEncounterGen = encounter.generation;
 					}
 				}
-
-				if (encounter.generation !== this.gen) continue;
 				if (!encounter.level) continue;
 
 				if (encounter.level < encounterMinLevel) {
 					encounterMinLevel = encounter.level;
-					if (set.level < encounterMinLevel || encounterMinLevel === Infinity) {
-						encounterMinLevelFlag = true;
-					}
 				}
+			}
+			if (set.level < encounterMinLevel || encounterMinLevel === Infinity) {
+				encounterMinLevelFlag = true;
 			}
 		}
 
