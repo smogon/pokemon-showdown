@@ -431,6 +431,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', pokemon, 'Light Screen');
 			},
 		},
+		secondary: null,
 		target: "self",
 	},
 	metronome: {
