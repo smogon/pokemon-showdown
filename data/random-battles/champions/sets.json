@@ -25,7 +25,7 @@
         ]
     },
     "charizard": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -152,7 +152,7 @@
         ]
     },
     "pikachu": {
-        "level": 58,
+        "level": 59,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -271,13 +271,12 @@
         ]
     },
     "arcanine": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Morning Sun", "Roar", "Will-O-Wisp"],
-                "abilities": ["Intimidate"],
-                "preferredTypes": ["Fighting"]
+                "abilities": ["Intimidate"]
             }
         ]
     },
@@ -789,7 +788,7 @@
         ]
     },
     "ampharosmega": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1037,7 +1036,7 @@
         ]
     },
     "houndoommega": {
-        "level": 49,
+        "level": 50,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2621,7 +2620,7 @@
         ]
     },
     "floetteeternal": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3057,7 +3056,7 @@
         ]
     },
     "noivern": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3300,7 +3299,7 @@
         ]
     },
     "drampamega": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3310,7 +3309,7 @@
         ]
     },
     "kommoo": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Bulky Setup",
