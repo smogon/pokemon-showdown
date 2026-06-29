@@ -18,19 +18,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		gen: 3,
 		isNonstandard: null,
-		// Pokémon Champions nerf: the second strike deals only ~10% of normal
-		// damage (vs. 25% in Gen 7+ / 50% in Gen 6). The stock reducer lives in
-		// BattleActions#modifyDamage, but Gen 3's modifyDamage override drops that
-		// parentalbond branch — so instead we hook the ModifyDamage event the Gen 3
-		// engine still fires (gen3/scripts.ts), which dispatches onModifyDamage to
-		// the attacker (same channel Neuroforce/Sniper/Tinted Lens use).
-		//   410/4096 ≈ 0.1001 — the engine-idiomatic 4096-fixed-point form of 10%.
+		// The second strike deals 25% of normal damage, matching Pokémon Champions
+		// (champions/scripts.ts applies bondModifier 0.25 for gen > 6) and Gen 7+.
+		// Champions does NOT nerf Parental Bond below the modern value; an earlier
+		// comment here claiming a Champions-specific ~10% nerf was incorrect.
+		// The stock reducer lives in BattleActions#modifyDamage, but Gen 3's
+		// modifyDamage override drops that parentalbond branch — so instead we hook
+		// the ModifyDamage event the Gen 3 engine still fires (gen3/scripts.ts),
+		// which dispatches onModifyDamage to the attacker (same channel
+		// Neuroforce/Sniper/Tinted Lens use).
+		//   1024/4096 = 0.25 — the engine-idiomatic 4096-fixed-point form of 25%.
 		// Fixed-damage moves (Seismic Toss, Night Shade, Dragon Rage, Sonic Boom,
 		// OHKOs) return before modifyDamage runs, so this never fires for them and
 		// both their hits stay at full damage — matching the modern engine.
 		onModifyDamage(damage, source, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) {
-				return this.chainModify([410, 4096]);
+				return this.chainModify([1024, 4096]);
 			}
 		},
 	},
