@@ -80,7 +80,7 @@
         ]
     },
     "blastoisemega": {
-        "level": 45,
+        "level": 46,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -319,7 +319,7 @@
         ]
     },
     "machamp": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -652,7 +652,7 @@
         ]
     },
     "snorlax": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1208,7 +1208,7 @@
         ]
     },
     "sableyemega": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1471,7 +1471,7 @@
         ]
     },
     "absolmega": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1637,7 +1637,7 @@
         ]
     },
     "bastiodon": {
-        "level": 56,
+        "level": 57,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1782,7 +1782,7 @@
         ]
     },
     "abomasnowmega": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1802,7 +1802,7 @@
         ]
     },
     "rhyperior": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2121,7 +2121,7 @@
         ]
     },
     "excadrillmega": {
-        "level": 45,
+        "level": 46,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2191,7 +2191,7 @@
         ]
     },
     "whimsicott": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3842,7 +3842,7 @@
         ]
     },
     "hydrapple": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Bulky Attacker",
