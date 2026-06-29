@@ -840,8 +840,9 @@ export class TeamValidator {
 		let encounterMinLevelFlag = false;
 		let minEncounterGen = Infinity;
 		if (ruleTable.has('obtainablemisc')) {
+			const maxEncounterGen = (this.gen === 1 && ruleTable.has('allowtradeback')) ? 2 : this.gen;
 			for (const encounter of learnsetSpecies.encounters || []) {
-				if (encounter.generation <= this.gen && encounter.level && set.level >= encounter.level) {
+				if (encounter.generation <= maxEncounterGen && encounter.level && set.level >= encounter.level) {
 					if (encounter.generation < minEncounterGen) {
 						minEncounterGen = encounter.generation;
 					}
@@ -852,7 +853,7 @@ export class TeamValidator {
 					encounterMinLevel = encounter.level;
 				}
 			}
-			if (set.level < encounterMinLevel || encounterMinLevel === Infinity) {
+			if (set.level < encounterMinLevel) {
 				encounterMinLevelFlag = true;
 			}
 		}
