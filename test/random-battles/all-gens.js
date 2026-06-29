@@ -168,7 +168,7 @@ describe("New set format (slow)", () => {
 		},
 		"gen9championsrandombattle": {
 			filename: "champions/sets",
-			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
 	};
 	for (const format of Object.keys(formatInfo)) {

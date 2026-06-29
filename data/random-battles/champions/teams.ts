@@ -12,13 +12,13 @@ const PHYSICAL_SETUP = [
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze',
+	'agility', 'autotomize', 'flamecharge', 'raindance', 'rockpolish', 'snowscape', 'sunnyday', 'trailblaze',
 ];
 // Conglomerate for ease of access
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
-	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'raindance',
+	'rockpolish', 'shellsmash', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
@@ -42,34 +42,13 @@ const MOVE_PAIRS = [
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
 	['leechseed', 'substitute'],
+	['reflect', 'lightscreen'],
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'palafin', 'scizor', 'scizormega',
+	'mimikyu', 'palafin', 'scizor', 'scizormega',
 ];
-
-// 1.2x type boosting items
-const TYPE_BOOSTING_ITEMS: { [k: string]: string } = {
-	'Bug': 'Silver Powder',
-	'Dark': 'Black Glasses',
-	'Dragon': 'Dragon Fang',
-	'Electric': 'Magnet',
-	'Fairy': 'Fairy Feather',
-	'Fighting': 'Black Belt',
-	'Fire': 'Charcoal',
-	'Flying': 'Sharp Beak',
-	'Ghost': 'Spell Tag',
-	'Grass': 'Miracle Seed',
-	'Ground': 'Soft Sand',
-	'Ice': 'Never-Melt Ice',
-	'Normal': 'Silk Scarf',
-	'Poison': 'Poison Barb',
-	'Psychic': 'Twisted Spoon',
-	'Rock': 'Hard Stone',
-	'Steel': 'Metal Coat',
-	'Water': 'Mystic Water',
-};
 
 export class RandomChampionsTeams extends RandomTeams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
@@ -100,15 +79,17 @@ export class RandomChampionsTeams extends RandomTeams {
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter) => (
-				movePool.includes('boomburst') || ['Electric', 'Ghost', 'Ground'].some(t => types.has(t))
+				!counter.get('Normal') && (
+					movePool.includes('boomburst') || ['Electric', 'Fire', 'Ghost', 'Ground'].some(t => types.has(t))
+				)
 			),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => {
-				if (['Ice', 'Water'].some(m => types.has(m))) return false;
+				if (['Dark', 'Ice', 'Steel', 'Water'].some(m => types.has(m))) return false;
 				return !counter.get('Psychic');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
-			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 75),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 60),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 		this.cachedStatusMoves = this.dex.moves.all().filter(move => move.category === 'Status').map(move => move.id);
@@ -202,9 +183,11 @@ export class RandomChampionsTeams extends RandomTeams {
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			['dragonpulse', 'dracometeor'],
+			['risingvoltage', 'volttackle'],
 
 			// Status move incompatibilities
 			['taunt', 'encore'],
+			['roar', 'yawn'],
 			[statusInflictingMoves, 'toxicspikes'],
 			[statusInflictingMoves, statusInflictingMoves],
 		];
@@ -219,8 +202,6 @@ export class RandomChampionsTeams extends RandomTeams {
 		// To force Stealth Rock on Camerupt
 		if (species.id === 'camerupt') this.incompatibleMoves(moves, movePool, 'roar', 'willowisp');
 		if (species.id === 'cameruptmega') this.incompatibleMoves(moves, movePool, 'ancientpower', 'willowisp');
-		// To force Ice Shard on Mamoswine
-		if (species.id === 'mamoswine') this.incompatibleMoves(moves, movePool, 'knockoff', 'stealthrock');
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
@@ -318,7 +299,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (this.priorityPokemon.includes(species.id)) {
+		if (role === 'Wallbreaker' || this.priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -432,7 +413,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		}
 
 		// Enforce coverage move
-		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker'].includes(role)) {
+		if (['Fast Attacker', 'Wallbreaker', 'Setup Sweeper', 'Bulky Attacker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value!.type;
@@ -558,17 +539,25 @@ export class RandomChampionsTeams extends RandomTeams {
 		if (
 			['Cheek Pouch', 'Cud Chew', 'Harvest'].some(m => ability === m) || moves.has('bellydrum')
 		) return 'Sitrus Berry';
-		if (species.id === 'alakazam') return 'Focus Sash';
+		if (species.id === 'alakazam' && this.randomChance(1, 2)) return 'Focus Sash';
+		if (species.id === 'glimmora') return 'Focus Sash';
+		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) return 'Choice Scarf';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('shellsmash')) return 'White Herb';
+		if ((ability === 'Magic Guard' || ability === 'Sheer Force') && species.id !== 'toucannon') return 'Life Orb';
 		if (moves.has('acrobatics')) return '';
+		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (
 			moves.has('rest') && !moves.has('sleeptalk') &&
 			ability !== 'Natural Cure' && ability !== 'Shed Skin'
 		) return 'Chesto Berry';
 		if (types.has('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
+		if (
+			(species.id === 'froslass' && moves.has('tripleaxel')) || moves.has('populationbomb') ||
+			(ability === 'Hustle' && counter.get('setup') && this.randomChance(1, 2))
+		) return 'Wide Lens';
 	}
 
 	override getItem(
@@ -588,55 +577,24 @@ export class RandomChampionsTeams extends RandomTeams {
 			['fakeout', 'trailblaze'].every(m => !moves.has(m)) &&
 			(!counter.get('Status') || counter.get('Status') === 1 && moves.has('partingshot'))
 		) return 'Choice Scarf';
-		if (moves.has('substitute') || moves.has('kingsshield')) return 'Leftovers';
+		if (['flamecharge', 'kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 
 		// Default to Leftovers for Bulky roles
 		if (role.includes('Bulky')) return 'Leftovers';
-		// Default to Focus Sash for Fast Support. Bulk threshold is unnecessary for the time being
-		if (role === 'Fast Support' && !counter.get('recovery')) return 'Focus Sash';
 
-		// Pokes with high crit rate STABs
-		if (
-			['aerodactyl', 'gallade', 'leafeon', 'lycanroc', 'lycanrocmidnight'].includes(species.id) && !moves.has('accelerock')
-		) return 'Scope Lens';
-
-		// Hard-code type-boosting items here
-		if (species.id === 'hydreigon') return 'Dragon Fang';
-		if (['heliolisk', 'raichualola'].includes(species.id)) return 'Magnet';
-		if (species.id === 'gardevoir') return 'Fairy Feather';
-		if (
-			['armarouge', 'chandelure', 'delphox', 'scovillain', 'typhlosionhisui', 'volcarona'].includes(species.id)
-		) return 'Charcoal';
-		if (species.id === 'vivillon') return 'Sharp Beak';
-		if (species.id === 'victreebel') return 'Miracle Seed';
-		if (species.id === 'weavile') return 'Never-Melt Ice';
-		if (species.id === 'quaquaval') return 'Mystic Water';
-
-		// Randomly choose between their STABs
-		if (
-			['heracross', 'houndoom', 'infernape', 'kleavor', 'toxicroak', 'zoroarkhisui'].includes(species.id)
-		) return TYPE_BOOSTING_ITEMS[this.sample([...types])];
-
-		// Give type-boosting items if it only has one STAB attack
-		const stabTypes: string[] = [];
-		for (const type of types) {
-			if (counter.get(type)) stabTypes.push(type);
-		}
-		if (stabTypes.length === 1) {
-			return TYPE_BOOSTING_ITEMS[stabTypes[0]];
+		// Default to Life Orb for offensive roles
+		if (['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].includes(role)) {
+			if (['basculegion', 'palafin'].includes(species.id)) return 'Mystic Water';
+			if (this.dex.getEffectiveness('Rock', species) < 2) return 'Life Orb';
 		}
 
-		// Give type-boosting items if it has a STAB regular and priority attack of the same type
-		for (const type of types) {
-			if (!counter.get(type)) continue;
-			for (const moveid of moves) {
-				const move = this.dex.moves.get(moveid);
-				const moveType = this.getMoveType(move, species, [ability], preferredType);
-				if (type === moveType && move.priority > 0 && (move.basePower || move.basePowerCallback)) {
-					return TYPE_BOOSTING_ITEMS[type];
-				}
-			}
+		// Fast Support defaults to Life Orb if >= 3 attacks and Leftovers otherwise. It can generate Focus Sash in the lead slot with hazards
+		if (role === 'Fast Support') {
+			if (isLead && !counter.get('recovery') && !counter.get('recoil') && counter.get('hazards')) return 'Focus Sash';
+			return (
+				counter.get('Physical') + counter.get('Special') >= 3 && this.dex.getEffectiveness('Rock', species) < 2
+			) ? 'Life Orb' : 'Leftovers';
 		}
 
 		// Default to Leftovers
@@ -767,7 +725,9 @@ export class RandomChampionsTeams extends RandomTeams {
 		pokemon: RandomTeamsTypes.RandomSet[],
 	): boolean {
 		const webSetters = ['ariados', 'slurpuff', 'araquanid'];
-		const screenSetters = ['ninetalesalola', 'abomasnow', 'abomasnowmega', 'froslassmega', 'vanilluxe', 'aurorus'];
+		const screenSetters = [
+			'ninetalesalola', 'abomasnow', 'abomasnowmega', 'froslassmega', 'vanilluxe', 'aurorus', 'grimmsnarl', 'meowstic',
+		];
 
 		const sunSetters = ['charizardmegay', 'ninetales', 'torkoal'];
 
@@ -845,7 +805,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			if (baseFormes[species.baseSpecies]) continue;
 
 			// Illusion shouldn't be on the last slot
-			if (species.name === 'Zoroark' && pokemon.length < 1) continue;
+			if (species.baseSpecies === 'Zoroark' && pokemon.length < 1) continue;
 
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
@@ -910,7 +870,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+			const set = this.randomSet(species, teamDetails, pokemon.length === this.maxTeamSize - 1);
 			pokemon.unshift(set);
 
 			// Don't bother tracking details for the last Pokemon
