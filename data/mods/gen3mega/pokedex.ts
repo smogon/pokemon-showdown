@@ -200,8 +200,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		gen: 3,
 		// Psychic/Fairy → Gardevoir is Psychic monotype in Gen 3, stays Psychic
 		types: ["Psychic"],
-		// Pixilate can't be legalized (Normal→Fairy, no Fairy type in Gen 3) → Synchronize
-		abilities: { 0: "Synchronize" },
+		// Pixilate can't be legalized (Normal→Fairy, no Fairy type in Gen 3).
+		// Use Trace instead — native to Gen 3 and the Gardevoir line's signature
+		// ability; mirrors Mega Alakazam's Trace in this mod (same inert Gen 3
+		// mega-acquisition quirk, cf. scripts.ts).
+		abilities: { 0: "Trace" },
 	},
 	sableyemega: {
 		inherit: true,
