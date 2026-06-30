@@ -9,22 +9,24 @@ let battle;
 // One representative species per Gen 3 tier, paired with the boost [Gen 3] Tier
 // Shift should apply to every stat except HP. OU/Uber stay unboosted; UUBL — and
 // "(OU)" by technicality, which the mod treats as UUBL — get +5; then the base
-// ladder +15/+20/+25/+30. Mirrors data/mods/gen3/rulesets.ts `tiershiftmod`.
+// ladder UU +10 / RU +15 / NU +20 / PU +30 / ZU +35 / SU-LC-NFE +40. Mirrors
+// data/mods/gen3/rulesets.ts `tiershiftmod`.
 const CASES = [
 	{ species: 'Mewtwo', tier: 'Uber', boost: 0 },
 	{ species: 'Milotic', tier: 'OU', boost: 0 },
 	{ species: 'Regice', tier: '(OU)', boost: 5 },
 	{ species: 'Venusaur', tier: 'UUBL', boost: 5 },
-	{ species: 'Blastoise', tier: 'UU', boost: 15 },
-	{ species: 'Jumpluff', tier: 'RUBL', boost: 15 },
-	{ species: 'Raichu', tier: 'RU', boost: 20 },
-	{ species: 'Glalie', tier: 'NUBL', boost: 20 },
-	{ species: 'Pidgeot', tier: 'NU', boost: 25 },
-	{ species: 'Machoke', tier: 'PUBL', boost: 25 },
+	{ species: 'Blastoise', tier: 'UU', boost: 10 },
+	{ species: 'Jumpluff', tier: 'RUBL', boost: 10 },
+	{ species: 'Raichu', tier: 'RU', boost: 15 },
+	{ species: 'Glalie', tier: 'NUBL', boost: 15 },
+	{ species: 'Pidgeot', tier: 'NU', boost: 20 },
+	{ species: 'Machoke', tier: 'PUBL', boost: 20 },
 	{ species: 'Charmeleon', tier: 'PU', boost: 30 },
-	{ species: 'Ivysaur', tier: 'ZU', boost: 30 },
-	{ species: 'Clefairy', tier: 'NFE', boost: 30 },
-	{ species: 'Bulbasaur', tier: 'LC', boost: 30 },
+	{ species: 'Yanma', tier: 'ZUBL', boost: 30 },
+	{ species: 'Ivysaur', tier: 'ZU', boost: 35 },
+	{ species: 'Clefairy', tier: 'NFE', boost: 40 },
+	{ species: 'Bulbasaur', tier: 'LC', boost: 40 },
 ];
 
 describe('[Gen 3] Tier Shift', () => {

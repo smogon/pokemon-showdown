@@ -109,7 +109,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 3] Tier Shift",
-		desc: "Gen 3 with Tier Shift: Ubers/OU are legal but unboosted; lower-tier Pokémon get stat boosts excluding HP (UUBL and OU-by-technicality +5, UU/RUBL +15, RU/NUBL +20, NU/PUBL +25, PU and below +30).",
+		desc: "Gen 3 with Tier Shift: Ubers/OU are legal but unboosted; lower-tier Pokémon get stat boosts excluding HP (UUBL and OU-by-technicality +5, UU/RUBL +10, RU/NUBL +15, NU/PUBL +20, PU/ZUBL +30, ZU +35, SU/LC/NFE +40).",
 		mod: 'gen3',
 		ruleset: ['Standard', 'Tier Shift Mod', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],

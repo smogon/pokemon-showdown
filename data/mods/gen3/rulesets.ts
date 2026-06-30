@@ -23,28 +23,30 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	},
 	tiershiftmod: {
 		// Without this override gen3 would inherit gen8's Tier Shift table (UU +10 …
-		// PU +40). We pin the base +15/+20/+25/+30 ladder and additionally boost UUBL
-		// — and "(OU)" by technicality, which we treat as UUBL — by +5. OU and Uber
-		// stay unboosted. HP is never boosted.
+		// PU +40). We pin a UUBL +5 / UU +10 / RU +15 / NU +20 / PU +30 / ZU +35 /
+		// SU-LC-NFE +40 ladder and additionally treat "(OU)" by technicality
+		// (Regice, Raikou, Porygon2) as UUBL. OU and Uber stay unboosted. HP is
+		// never boosted.
 		inherit: true,
-		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UUBL (and OU by technicality) get +5, UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UUBL (and OU by technicality) get +5, UU/RUBL get +10, RU/NUBL get +15, NU/PUBL get +20, PU/ZUBL get +30, ZU gets +35, and SU/LC/NFE get +40.`,
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: { [tier: string]: number } = {
 				uubl: 5,
-				uu: 15,
-				rubl: 15,
-				ru: 20,
-				nubl: 20,
-				nu: 25,
-				publ: 25,
+				uu: 10,
+				rubl: 10,
+				ru: 15,
+				nubl: 15,
+				nu: 20,
+				publ: 20,
 				pu: 30,
 				zubl: 30,
-				zu: 30,
-				nfe: 30,
-				lc: 30,
+				zu: 35,
+				su: 40,
+				nfe: 40,
+				lc: 40,
 			};
-			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'nfe', 'lc'];
+			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'su', 'nfe', 'lc'];
 			// "(OU)" (OU by technicality) ids to "ou" exactly like real OU, so detect
 			// the raw tier string and treat it as UUBL (+5) before falling back to toID.
 			let tier: string = species.tier === '(OU)' ? 'uubl' : this.toID(species.tier);
