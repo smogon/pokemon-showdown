@@ -62,4 +62,24 @@ describe('[Gen 3] Tier Shift', () => {
 		assert.equal(battle.p1.active[0].species.baseStats.spa, regiceSpa + 5, 'Regice "(OU)" should get +5');
 		assert.equal(battle.p2.active[0].species.baseStats.spa, miloticSpa, 'Milotic real OU should get +0');
 	});
+
+	// SU is a fork-only tier (gen3subzu mod); these mons rank ZU in the standard
+	// gen3 tier list this format reads, but should get the SU +40, not ZU +35.
+	for (const species of ['Sunflora', 'Parasect', 'Ditto']) {
+		it(`should boost SU ${species} by +40 (not its gen3 ZU +35)`, () => {
+			assert.equal(Dex.mod('gen3subzu').species.get(species).tier, 'SU', `${species} should be SU in gen3subzu`);
+			assert.equal(Dex.mod('gen3').species.get(species).tier, 'ZU', `${species} ranks ZU in standard gen3`);
+			battle = common.createBattle({ formatid: 'gen3tiershift' }, [
+				[{ species, moves: ['tackle'] }, { species: 'Snorlax', moves: ['tackle'] }],
+				[{ species: 'Snorlax', moves: ['tackle'] }, { species: 'Zapdos', moves: ['tackle'] }],
+			]);
+			const base = Dex.mod('gen3').species.get(species).baseStats;
+			const active = battle.p1.active[0];
+			assert.equal(active.species.baseStats.hp, base.hp, `${species} HP must never be boosted`);
+			for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
+				assert.equal(active.species.baseStats[stat], Math.min(255, base[stat] + 40),
+					`${species} ${stat} should be boosted by +40 (SU), not +35 (ZU)`);
+			}
+		});
+	}
 });

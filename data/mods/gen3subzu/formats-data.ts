@@ -20,13 +20,12 @@
 // so NFE mons (Aron, Bagon, Larvitar, Geodude, …) now sort under the "SU"
 // header instead of "NFEs not in a higher tier".
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
-	// Grovyle and Ivysaur are "NEW" (unranked) on the SU VR, but the [Gen 3] SU
-	// reference challenge (gen3zu @@@ -<33 mons>) leaves them legal, so they belong
-	// in the SU pool. Tagged "SU" (not "New") so they're treated exactly like the
-	// ranked SU mons: legal in SU, excluded from IU (IU = the lowest-ranked SU mons,
-	// which an unranked mon is not). Re-derive if a future IU challenge spec differs.
-	grovyle: { inherit: true, tier: "SU" }, // NEW (unranked)
-	ivysaur: { inherit: true, tier: "SU" }, // NEW (unranked)
+	// Grovyle and Ivysaur are "NEW" (unranked) on the SU VR and are held OUT of the
+	// SU pool: they are tagged "ZU" so the [Gen 3] SU / IU banlists (which ban the
+	// ZU tag) exclude them, and Tier Shift gives them the ZU +35 rather than the SU
+	// +40. Tagging "ZU" (not "New") also keeps the teambuilder bucketing sane.
+	grovyle: { inherit: true, tier: "ZU" }, // NEW (unranked) -> held at ZU, banned from SU
+	ivysaur: { inherit: true, tier: "ZU" }, // NEW (unranked) -> held at ZU, banned from SU
 
 	// --- S Ranks ---
 	illumise: { inherit: true, tier: "SU" }, // S

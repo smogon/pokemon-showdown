@@ -80,8 +80,8 @@ describe('Fork customs', () => {
 
 		// ...while an all-SU team is legal (Ivysaur swapped for the SU-tier Weepinbell).
 		assert.legalTeam([
-			{ species: 'Weepinbell', ability: 'Chlorophyll', moves: ['sludgebomb', 'gigadrain', 'sleeppowder', 'growth'], evs: { hp: 4 }, level: 100 },
-			{ species: 'Parasect', ability: 'Effect Spore', moves: ['spore', 'gigadrain', 'bodyslam', 'swordsdance'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Weepinbell', ability: 'Chlorophyll', moves: ['sludgebomb', 'gigadrain', 'sunnyday', 'growth'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Parasect', ability: 'Effect Spore', moves: ['stunspore', 'gigadrain', 'bodyslam', 'swordsdance'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Sunflora', ability: 'Chlorophyll', moves: ['gigadrain', 'sludgebomb', 'growth', 'return'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Nosepass', ability: 'Sturdy', moves: ['rockslide', 'thunderbolt', 'thunderwave', 'explosion'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Delibird', ability: 'Hustle', moves: ['icebeam', 'aerialace', 'quickattack', 'rapidspin'], evs: { hp: 4 }, level: 100 },
