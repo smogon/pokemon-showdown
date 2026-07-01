@@ -1398,7 +1398,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	skarmorymega: {
 		tier: "UU",
 	},
-	hUUndUUr: {
+	houndour: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
