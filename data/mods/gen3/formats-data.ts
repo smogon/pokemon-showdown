@@ -930,7 +930,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	manectric: {
-		tier: "RU",
+		tier: "RUBL",
 	},
 	plusle: {
 		tier: "NU",

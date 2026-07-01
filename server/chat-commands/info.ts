@@ -744,15 +744,14 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod === 'champions')}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod.startsWith('champions'))}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
-						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
 					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details["&#10003; Boosted by Sheer Force"] = "";

@@ -580,7 +580,7 @@
         ]
     },
     "gengar": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -630,7 +630,7 @@
         ]
     },
     "electrode": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1478,7 +1478,7 @@
         ]
     },
     "steelixmega": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1508,7 +1508,7 @@
         ]
     },
     "scizor": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1579,7 +1579,7 @@
         ]
     },
     "ursaring": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1949,7 +1949,7 @@
         ]
     },
     "swampert": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2399,7 +2399,7 @@
         ]
     },
     "sharpedo": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2449,7 +2449,7 @@
         ]
     },
     "cameruptmega": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2459,7 +2459,7 @@
         ]
     },
     "torkoal": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2669,7 +2669,7 @@
         ]
     },
     "castform": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2696,7 +2696,7 @@
         ]
     },
     "banette": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3111,7 +3111,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3278,7 +3278,7 @@
         ]
     },
     "bastiodon": {
-        "level": 95,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3482,7 +3482,7 @@
         ]
     },
     "skuntank": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3569,7 +3569,7 @@
         ]
     },
     "lucario": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3797,7 +3797,7 @@
         ]
     },
     "yanmega": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3858,7 +3858,7 @@
         ]
     },
     "mamoswine": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3878,7 +3878,7 @@
         ]
     },
     "gallade": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3997,7 +3997,7 @@
         ]
     },
     "rotommow": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4848,7 +4848,7 @@
         ]
     },
     "scrafty": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5188,7 +5188,7 @@
         ]
     },
     "stunfisk": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -6085,7 +6085,7 @@
         ]
     },
     "zygarde": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6105,7 +6105,7 @@
         ]
     },
     "dianciemega": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Fast Attacker",

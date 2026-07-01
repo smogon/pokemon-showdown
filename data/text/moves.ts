@@ -454,13 +454,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bestow: {
 		name: "Bestow",
-		desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail or Z-Crystal, if the target is already holding an item, if the user is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, a Silvally holding a Memory, a Pokemon that can Mega Evolve holding the Mega Stone for its species, or if the target is one of those Pokemon and the user is holding the respective item.",
+		desc: "The target receives the user's held item. Fails if the user has no item or is holding a Z-Crystal, if the target is already holding an item, if the item is a Mega Stone and either the user or the target is the species that can Mega Evolve with it, or if the item is a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory and either the user or the target is a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively.",
 		shortDesc: "User passes its held item to the target.",
 		gen6: {
-			desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, if the user is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, a Pokemon that can Mega Evolve holding the Mega Stone for its species, or if the target is one of those Pokemon and the user is holding the respective item.",
+			desc: "The target receives the user's held item. Fails if the user has no item, if the target is already holding an item, if the item is a Mega Stone and either the user or the target is the species that can Mega Evolve with it, or if the item is a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive and either the user or the target is a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively.",
 		},
 		gen5: {
-			desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, if the user is a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or if the target is one of those Pokemon and the user is holding the respective item.",
+			desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, or if the item is a Griseous Orb, Plate, or Drive and either the user or the target is a Giratina, Arceus, or Genesect, respectively.",
 		},
 
 		takeItem: "  [SOURCE] gave [POKEMON] its [ITEM]!",
@@ -1128,8 +1128,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	corrosivegas: {
 		name: "Corrosive Gas",
-		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon to lose their Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask, respectively. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "Removes adjacent Pokemon's held items.",
+		gen8: {
+			desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield, respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
 
 		fail: "#healblock",
 		removeItem: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
@@ -1179,19 +1182,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	covet: {
 		name: "Covet",
-		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Z-Crystal, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, a Silvally holding a Memory, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask held by a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively, or if the user is one of those species and the target is holding the respective item. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "If the user has no item, it steals the target's.",
+		champions: {
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mega Stone and either the user or the target is the species that can Mega Evolve with it. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
+		gen8: {
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield held by a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
+		gen7: {
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Z-Crystal, a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory held by a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
 		gen6: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive held by a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen5: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Giratina holding a Griseous Orb, an Arceus holding a Plate, or a Genesect holding a Drive. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mail, or if it is a Griseous Orb, Plate, or Drive held by a Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen4: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Griseous Orb, or if the target has the Multitype Ability. Items lost to this move cannot be regained with Recycle.",
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. The target's item is not stolen if it is a Mail or Griseous Orb, or if the target has the Multitype or Sticky Hold Abilities. Items lost to this move cannot be regained with Recycle.",
 		},
 		gen3: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Enigma Berry. Items lost to this move cannot be regained with Recycle.",
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. The target's item is not stolen if it is a Mail or Enigma Berry, or if the target has the Sticky Hold Ability. Items lost to this move cannot be regained with Recycle.",
 		},
 	},
 	crabhammer: {
@@ -3510,16 +3522,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	knockoff: {
 		name: "Knock Off",
-		desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability, this move's power is multiplied by 1.5. If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item if the user has not fainted. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask held by a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively, or if the user is one of those species and the target is holding the respective item. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "1.5x damage if foe holds an item. Removes item.",
+		champions: {
+			desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Mega Stone held by the species that can Mega Evolve with it. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
+		gen8: {
+			desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item if the user has not fainted. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield held by a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
 		gen7: {
-			desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability, this move's power is multiplied by 1.5. If the user has not fainted, the target loses its held item. This move cannot remove Z-Crystals, cause Pokemon with the Sticky Hold Ability to lose their held item, cause Pokemon that can Mega Evolve to lose the Mega Stone for their species, or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, or a Silvally to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item if the user has not fainted. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Z-Crystal, a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory held by a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen6: {
-			desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability, this move's power is multiplied by 1.5. If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item, cause Pokemon that can Mega Evolve to lose the Mega Stone for their species, or cause a Kyogre, a Groudon, a Giratina, an Arceus, or a Genesect to lose their Blue Orb, Red Orb, Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item if the user has not fainted. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive held by a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen5: {
-			desc: "If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "If the user has not fainted, the target loses its held item. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not remove the target's item if it is a Griseous Orb, Plate, or Drive held by a Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 			shortDesc: "Removes the target's held item.",
 		},
 		gen4: {
@@ -3855,6 +3873,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Make It Rain",
 		desc: "Lowers the user's Special Attack by 1 stage.",
 		shortDesc: "Lowers the user's Sp. Atk by 1. Hits foe(s).",
+		champions: {
+			desc: "Lowers the user's Special Attack by 2 stages.",
+			shortDesc: "Lowers the user's Sp. Atk by 2. Hits foe(s).",
+		},
 
 		activate: "#payday",
 	},
@@ -5118,6 +5140,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Rage Fist",
 		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
 		shortDesc: "+50 power for each time user was hit. Max 6 hits.",
+		champions: {
+			desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and resets to 0 when the user leaves the field. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+			shortDesc: "+50 BP/hit on user. Max 6 hits. Resets on switch-out.",
+		},
 	},
 	ragepowder: {
 		name: "Rage Powder",
@@ -6685,16 +6711,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	switcheroo: {
 		name: "Switcheroo",
-		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail or Z-Crystal, if neither is holding an item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, a Red Orb, a Griseous Orb, a Plate, a Drive, or a Memory to or from a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, or a Silvally, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask to or from a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. The target is immune to this move if it has the Sticky Hold Ability.",
 		shortDesc: "User switches its held item with the target's.",
+		champions: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
+		gen8: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield to or from a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
+		gen7: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Z-Crystal, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory to or from a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
 		gen6: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, a Red Orb, a Griseous Orb, a Plate, or a Drive to or from a Kyogre, a Groudon, a Giratina, an Arceus, or a Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive to or from a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
 		},
 		gen5: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail, or if the user is trying to give or take a Griseous Orb, Plate, or Drive to or from a Giratina, Arceus, or Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
 		},
 		gen4: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail or Griseous Orb, if neither is holding an item, if either has the Multitype Ability, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail or Griseous Orb, if either has the Multitype Ability, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
 		},
 
 		activate: "#trick",
@@ -6906,19 +6941,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thief: {
 		name: "Thief",
-		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Z-Crystal, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, a Silvally holding a Memory, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask held by a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively, or if the user is one of those species and the target is holding the respective item. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "If the user has no item, it steals the target's.",
+		champions: {
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mega Stone and either the user or the target is the species that can Mega Evolve with it. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
+		gen8: {
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield held by a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
+		gen7: {
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Z-Crystal, a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory held by a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		},
 		gen6: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mega Stone held by the species that can Mega Evolve with it, or a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive held by a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen5: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Giratina holding a Griseous Orb, an Arceus holding a Plate, or a Genesect holding a Drive. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. The target's item is not stolen if it is a Mail, or if it is a Griseous Orb, Plate, or Drive held by a Giratina, Arceus, or Genesect, respectively, or if the user is one of those species and the target is holding the respective item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
 		gen4: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Griseous Orb, or if the target has the Multitype Ability. Items lost to this move cannot be regained with Recycle.",
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. The target's item is not stolen if it is a Mail or Griseous Orb, or if the target has the Multitype or Sticky Hold Abilities. Items lost to this move cannot be regained with Recycle.",
 		},
 		gen3: {
-			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Enigma Berry. Items lost to this move cannot be regained with Recycle.",
+			desc: "If this attack was successful and the user is not holding an item, it steals the target's held item. The target's item is not stolen if it is a Mail or Enigma Berry, or if the target has the Sticky Hold Ability. Items lost to this move cannot be regained with Recycle.",
 		},
 		gen2: {
 			desc: "Has a 100% chance to steal the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail.",
@@ -7135,19 +7179,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trick: {
 		name: "Trick",
-		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail or Z-Crystal, if neither is holding an item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, a Red Orb, a Griseous Orb, a Plate, a Drive, or a Memory to or from a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, or a Silvally, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask to or from a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. The target is immune to this move if it has the Sticky Hold Ability.",
 		shortDesc: "User switches its held item with the target's.",
+		champions: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
+		gen8: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield to or from a Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, or Zamazenta, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
+		gen7: {
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Z-Crystal, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, Drive, or Memory to or from a Kyogre, Groudon, Giratina, Arceus, Genesect, or Silvally, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+		},
 		gen6: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, a Red Orb, a Griseous Orb, a Plate, or a Drive to or from a Kyogre, a Groudon, a Giratina, an Arceus, or a Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if the user is trying to give or take a Mega Stone to or from the species that can Mega Evolve with it, or if the user is trying to give or take a Blue Orb, Red Orb, Griseous Orb, Plate, or Drive to or from a Kyogre, Groudon, Giratina, Arceus, or Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
 		},
 		gen5: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail, or if the user is trying to give or take a Griseous Orb, Plate, or Drive to or from a Giratina, Arceus, or Genesect, respectively. The target is immune to this move if it has the Sticky Hold Ability.",
 		},
 		gen4: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail or Griseous Orb, if neither is holding an item, if either has the Multitype Ability, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail or Griseous Orb, if either has the Multitype Ability, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
 		},
 		gen3: {
-			desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
+			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
 		},
 
 		activate: "  [POKEMON] switched items with its target!",
@@ -7246,8 +7299,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	upperhand: {
 		name: "Upper Hand",
-		desc: "Has a 100% chance to make the target flinch. Fails if the target did not select a priority move for use this turn, or if the target moves before the user.",
-		shortDesc: "100% flinch. Fails unless target using priority.",
+		desc: "Has a 100% chance to make the target flinch. Fails if the target did not select a physical or special attack for use this turn with altered priority greater than 0, or if the target moves before the user.",
+		shortDesc: "100% flinch. Fails unless target using priority attack.",
 	},
 	uproar: {
 		name: "Uproar",
