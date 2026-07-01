@@ -121,7 +121,7 @@
         ]
     },
     "arbok": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -634,7 +634,7 @@
         ]
     },
     "hitmonchan": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -787,7 +787,7 @@
         ]
     },
     "gyarados": {
-        "level": 75,
+        "level": 76,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -999,7 +999,7 @@
         ]
     },
     "mew": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1056,7 +1056,7 @@
         ]
     },
     "furret": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1518,7 +1518,7 @@
         ]
     },
     "skarmory": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1594,7 +1594,7 @@
         ]
     },
     "smeargle": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1696,7 +1696,7 @@
         ]
     },
     "tyranitar": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2088,7 +2088,7 @@
         ]
     },
     "plusle": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2196,7 +2196,7 @@
         ]
     },
     "torkoal": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2266,7 +2266,7 @@
         ]
     },
     "altaria": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2319,7 +2319,7 @@
         ]
     },
     "solrock": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2329,7 +2329,7 @@
         ]
     },
     "whiscash": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2417,7 +2417,7 @@
         ]
     },
     "kecleon": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2488,7 +2488,7 @@
         ]
     },
     "glalie": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2535,7 +2535,7 @@
         ]
     },
     "relicanth": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2630,7 +2630,7 @@
         ]
     },
     "registeel": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2756,7 +2756,7 @@
         ]
     },
     "deoxysdefense": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2903,7 +2903,7 @@
         ]
     },
     "bastiodon": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2945,7 +2945,7 @@
                 "movepool": ["earthquake", "rest", "sleeptalk", "toxic"],
                 "abilities": ["Anticipation"]
             },
-                        {
+            {
                 "role": "Staller",
                 "movepool": ["earthquake", "protect", "rockblast", "toxic"],
                 "abilities": ["Anticipation"]
@@ -3155,7 +3155,7 @@
         ]
     },
     "spiritomb": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3385,7 +3385,7 @@
         ]
     },
     "yanmega": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3400,7 +3400,7 @@
         ]
     },
     "leafeon": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3532,7 +3532,7 @@
         ]
     },
     "rotomwash": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3710,7 +3710,7 @@
         ]
     },
     "manaphy": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4251,7 +4251,7 @@
         ]
     },
     "leavanny": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4826,7 +4826,7 @@
         ]
     },
     "durant": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4904,7 +4904,7 @@
         ]
     },
     "tornadustherian": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Fast Attacker",

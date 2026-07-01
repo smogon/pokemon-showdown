@@ -590,7 +590,7 @@
         ]
     },
     "gengar": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -805,7 +805,7 @@
         ]
     },
     "mrmime": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1339,7 +1339,7 @@
         ]
     },
     "politoed": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1360,7 +1360,7 @@
         ]
     },
     "jumpluff": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Generalist",
@@ -1543,7 +1543,7 @@
         ]
     },
     "girafarig": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1803,7 +1803,7 @@
         ]
     },
     "skarmory": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1911,7 +1911,7 @@
         ]
     },
     "blissey": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Staller",
@@ -2472,7 +2472,7 @@
         ]
     },
     "volbeat": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2762,7 +2762,7 @@
         ]
     },
     "milotic": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Staller",
