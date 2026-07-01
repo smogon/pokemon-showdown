@@ -96,6 +96,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		hasMons: true,
 	},
 	excadrill: {
-		hasMons: true
+		hasMons: true,
 	},
 };
