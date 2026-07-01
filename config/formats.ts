@@ -5077,8 +5077,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 4] ZU",
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['[Gen 4] PU'],
+		ruleset: ['[Gen 4] PU', 'Baton Pass Clause'],
 		banlist: ['PU', 'ZUBL', 'Damp Rock'],
+		unbanlist: ['Baton Pass'],
 	},
 	{
 		name: "[Gen 4] Custom Game",
