@@ -774,6 +774,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG', 'Shadow Tag', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 4] Platinum OU",
+		mod: 'gen4pt',
+		ruleset: ['Standard'],
+		banlist: ['AG', 'Uber', 'Soul Dew'],
+		unbanlist: ['Acupressure', 'King\'s Rock', 'Lax Incense'],
+	},
+	{
 		name: "[Gen 6] VGC 2015",
 		mod: 'gen6',
 		gameType: 'doubles',
