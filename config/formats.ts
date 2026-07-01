@@ -729,16 +729,38 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
 		mod: 'randomtandem',
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'RandTand'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Species Clause'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		onValidateTeam(team, format, teamHas) {
+			if (team.length > 3) return [`You must bring at most 3 Pokemon.`];
+			let randomCount = 0;
+			for (const set of team) {
+				let species = this.dex.species.get(set.species);
+				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				if (species.mons) randomCount++;
+			}
+			if (randomCount < 2) {
+				return [`You must have at least 2 Head Pokemon.`];
+			}
+			// Species Clause rules here to prevent client bugging
+			// with Pokemon being both in team and generated as Tandems.
+			const speciesTable = new Set<number>();
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (speciesTable.has(species.num)) {
+					return [`You are limited to one of each Pokémon by Species Clause.`, `(You have more than one ${species.baseSpecies})`];
+				}
+				speciesTable.add(species.num);
+			}
+		},
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
 			this.add('-message', `Welcome to Random Tandem!`);
 			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
-					// @ts-expect-error reference to custom pokedex data
-					if (!pokemon.baseSpecies.mons || pokemon.random) continue;
+					// @ts-expect-error hasMons is defined in external scripts
+					if (!pokemon.baseSpecies.mons || pokemon.hasMons) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
 						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
@@ -791,7 +813,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					poke2.level = 100;
 					poke2.shiny = true;
 					if (Array.isArray(poke2.teraType)) poke2.teraType = this.sample(poke2.teraType);
-					// data not for gen 9, but save it anyway
+					// extra info
 					poke2.happiness = 255;
 					poke2.hpType = '';
 					poke2.pokeball = '';
@@ -799,11 +821,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					poke2.dynamaxLevel = 10;
 
 					const newPoke1 = side.addPokemon(poke1);
-					// @ts-expect-error is never null and reference to custom pokedex data
-					newPoke1.random = true;
+					// @ts-expect-error see last error comment
+					newPoke1.hasMons = true;
 					const newPoke2 = side.addPokemon(poke2);
-					// @ts-expect-error is never null and reference to custom pokedex data
-					newPoke2.random = true;
+					// @ts-expect-error ^
+					newPoke2.hasMons = true;
 				}
 			}
 			this.ruleTable.pickedTeamSize = 6;

@@ -1,97 +1,95 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck custom validation tier
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	garchomp: {
-		tier: "Random",
+		hasMons: true,
 	},
 	slitherwing: {
-		tier: "Random",
+		hasMons: true,
 	},
 	slowking: {
-		tier: "Random",
+		hasMons: true,
 	},
 	cobalion: {
-		tier: "Random",
+		hasMons: true,
 	},
 	keldeo: {
-		tier: "Random",
+		hasMons: true,
 	},
 	tsareena: {
-		tier: "Random",
+		hasMons: true,
 	},
 	zapdos: {
-		tier: "Random",
+		hasMons: true,
 	},
 	landorustherian: {
-		tier: "Random",
+		hasMons: true,
 	},
 	ironjugulis: {
-		tier: "Random",
+		hasMons: true,
 	},
 	sinistcha: {
-		tier: "Random",
+		hasMons: true,
 	},
 	azumarill: {
-		tier: "Random",
+		hasMons: true,
 	},
 	revavroom: {
-		tier: "Random",
+		hasMons: true,
 	},
 	heatran: {
-		tier: "Random",
+		hasMons: true,
 	},
 	indeedee: {
-		tier: "Random",
+		hasMons: true,
 	},
 	weavile: {
-		tier: "Random",
+		hasMons: true,
 	},
 	fezandipiti: {
-		tier: "Random",
+		hasMons: true,
 	},
 	skarmory: {
-		tier: "Random",
+		hasMons: true,
 	},
 	clefable: {
-		tier: "Random",
+		hasMons: true,
 	},
 	ogerpon: {
-		tier: "Random",
+		hasMons: true,
 	},
 	pecharunt: {
-		tier: "Random",
+		hasMons: true,
 	},
 	moltres: {
-		tier: "Random",
+		hasMons: true,
 	},
 	arcaninehisui: {
-		tier: "Random",
+		hasMons: true,
 	},
 	ironboulder: {
-		tier: "Random",
+		hasMons: true,
 	},
 	tinglu: {
-		tier: "Random",
+		hasMons: true,
 	},
 	dondozo: {
-		tier: "Random",
+		hasMons: true,
 	},
 	hoopaunbound: {
-		tier: "Random",
+		hasMons: true,
 	},
 	kingambit: {
-		tier: "Random",
+		hasMons: true,
 	},
 	quaquaval: {
-		tier: "Random",
+		hasMons: true,
 	},
 	corviknight: {
-		tier: "Random",
+		hasMons: true,
 	},
 	brambleghast: {
-		tier: "Random",
+		hasMons: true,
 	},
 	hatterene: {
-		tier: "Random",
+		hasMons: true,
 	},
 };
