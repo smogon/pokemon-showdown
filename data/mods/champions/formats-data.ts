@@ -830,7 +830,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	scizormega: {
-		tier: "OU",
+		tier: "(OU)",
 	},
 	kleavor: {
 		tier: "UU",
@@ -4839,7 +4839,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	glimmoramega: {
-		tier: "OU",
+		tier: "(OU)",
 	},
 	shroodle: {
 		isNonstandard: "Past",
