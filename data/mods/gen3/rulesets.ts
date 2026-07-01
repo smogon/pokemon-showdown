@@ -47,6 +47,12 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				lc: 40,
 			};
 			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'su', 'nfe', 'lc'];
+			// Per-species tier overrides that apply only to this metagame's boost
+			// ladder (the standard gen3 tier is mis-tiered for Tier Shift purposes).
+			// Glalie sits at UU (+10) here, not its standard-gen3 NUBL (+15).
+			const tierOverrides: { [id: string]: string } = {
+				glalie: 'uu',
+			};
 			// SU is a fork-only bottom tier that lives in the gen3subzu mod, NOT the
 			// standard gen3 tier list this format (mod: 'gen3') reads. Without this
 			// lookup an SU mon (e.g. Sunflora) falls through to its coarser gen3 tier
@@ -55,8 +61,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			const subzuTier = this.dex.mod('gen3subzu')?.species.get(species.id)?.tier;
 			// "(OU)" (OU by technicality) ids to "ou" exactly like real OU, so detect
 			// the raw tier string and treat it as UUBL (+5) before falling back to toID.
-			let tier: string = subzuTier === 'SU' ? 'su' :
-				(species.tier === '(OU)' ? 'uubl' : this.toID(species.tier));
+			let tier: string = tierOverrides[species.id] ??
+				(subzuTier === 'SU' ? 'su' :
+				(species.tier === '(OU)' ? 'uubl' : this.toID(species.tier)));
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans cap the boost in lower tiers (mirrors data/rulesets.ts).
 			if (target) {
