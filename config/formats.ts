@@ -773,7 +773,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['AG', 'Shadow Tag', 'Baton Pass'],
 	},
-  {
+	{
 		name: "[Gen 4] Platinum OU",
 		mod: 'gen4pt',
 		ruleset: ['Standard'],
