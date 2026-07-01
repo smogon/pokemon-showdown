@@ -774,7 +774,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG', 'Shadow Tag', 'Baton Pass'],
 	},
   {
-    name: "[Gen 4] Platinum OU",
+		name: "[Gen 4] Platinum OU",
 		mod: 'gen4pt',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'Uber', 'Soul Dew'],
