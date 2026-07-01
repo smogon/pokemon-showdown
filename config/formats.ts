@@ -3342,10 +3342,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Ampharos-Base', 'Arbok', 'Beheeyem', 'Bombirdier', 'Claydol', 'Cramorant-Base', 'Cursola', 'Dubwool', 'Flygon', 'Gastrodon', 'Hitmontop', 'Houndstone',
-			'Jumpluff', 'Ledian', 'Magmortar', 'Mesprit', 'Milotic', 'Okidogi', 'Pachirisu', 'Pincurchin', 'Probopass', 'Regice', 'Scrafty-Base', 'Seviper',
-			'Sharpedo-Base', 'Shiftry', 'Shiinotic', 'Sigilyph', 'Slowbro-Galar', 'Slurpuff', 'Swampert-Base', 'Torterra', 'Toxicroak', 'Virizion', 'Weezing-Base',
-			'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Accelgor', 'Aggron-Base', 'Carbink', 'Carracosta', 'Clodsire', 'Cloyster', 'Emboar-Base', 'Florges', 'Heatmor', 'Heliolisk', 'Heracross-Base',
+			'Hydreigon', 'Illumise', 'Klinklang', 'Kricketune', 'Lanturn', 'Linoone-Base', 'Lucario-Base', 'Malamar-Base', 'Mawile-Base', 'Mismagius', 'Mothim',
+			'Purugly', 'Rampardos', 'Raticate-Base', 'Samurott-Base', 'Seaking', 'Seismitoad', 'Slowbro-Base', 'Sudowoodo', 'Tyrantrum', 'Vaporeon', 'Vileplume',
+			'Zangoose', 'Zebstrika', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
