@@ -293,9 +293,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 			],
 			[
 				{
-					species: 'Gyarados',
+					species: 'gyarados',
 					item: 'lumberry',
-					ability: ['Moxie', 'Motor Drive'],
+					ability: ['Moxie', 'Intimidate'],
 					teraType: ['Flying', 'Grass', 'Ice'],
 				},
 				['dragondance', 'dragonascent'], ['earthquake', 'stoneedge', 'waterfall'],
@@ -946,7 +946,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 				{
 					species: 'calyrexice',
 					item: 'weaknesspolicy',
-					ability: 'asoneice',
+					ability: 'asoneglastrier',
 					teraType: ['water', 'Steel'],
 				},
 				['iciclecrash', 'agility', 'highhorsepower', 'closecombat'],
@@ -1340,6 +1340,88 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 			],
 		],
 	},
+	cyclizar: {
+		inherit: true,
+		mons: [
+			[
+				{
+					species: 'slowbrogalar',
+					item: 'assaultvest',
+					ability: 'regenerator',
+					teraType: ['water'],
+				},
+				['psyshock', 'sludgebomb', 'flamethrower', 'flipturn'],
+			],
+			[
+				{
+					species: 'infernape',
+					item: 'lifeorb',
+					ability: 'protean',
+					teraType: 'stellar',
+				},
+				['flareblitz', 'closecombat'], ['uturn', 'grassknot', 'heatwave', 'vacuumwave'],
+			],
+			[
+				{
+					species: 'feraligatr',
+					item: 'feraligite',
+					ability: 'sheerforce',
+					teraType: 'water',
+				},
+				['liquidation', 'bodyslam', 'swordsdance', 'aquajet'],
+			],
+			[
+				{
+					species: 'aerodactyl',
+					item: 'aerodactylite',
+					ability: 'unnervse',
+					teraType: 'rock',
+				},
+				['dualwingbeat', 'stoneaxe'], ['crunch', 'earthquake', 'firefang'],
+			],
+		],
+	},
+	excadrill: {
+		inherit: true,
+		mons: [
+			[
+				{
+					species: 'ludicolo',
+					item: 'leftovers',
+					ability: 'furcoat',
+					teraType: ['poison', 'steel'],
+				},
+				['surf', 'synthesis'], ['knockoff', 'encore', 'leafstorm'],
+			],
+			[
+				{
+					species: 'pyroar',
+					item: 'pyroarite',
+					ability: 'unnerve',
+					teraType: 'fire',
+				},
+				['torchsong', 'hypervoice', 'flamecharge', 'taunt'],
+			],
+			[
+				{
+					species: 'flapple',
+					item: 'choicescarf',
+					ability: 'parentalbond',
+					teraType: ['grass', 'dragon'],
+				},
+				['gravapple', 'outrage', 'dragonrush', 'uturn'],
+			],
+			[
+				{
+					species: 'roaringmoon',
+					item: 'assaultvest',
+					ability: 'regenerator',
+					teraType: 'ghost',
+				},
+				['knockoff', 'dragontail', 'ironhead', 'uturn'],
+			],
+		],
+	},
 
 	// za
 	floetteeternal: {
@@ -1349,5 +1431,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	floettemega: {
 		inherit: true,
 		baseSpecies: 'Floette-Eternal',
+		isNonstandard: null,
 	},
 };

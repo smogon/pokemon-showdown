@@ -729,8 +729,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
 		mod: 'randomtandem',
+		bestOfDefault: true,
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Species Clause'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt'],
 		onValidateTeam(team, format, teamHas) {
 			if (team.length > 3) return [`You must bring at most 3 Pokemon.`];
 			let randomCount = 0;

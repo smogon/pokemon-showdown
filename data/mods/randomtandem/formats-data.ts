@@ -92,4 +92,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	hatterene: {
 		hasMons: true,
 	},
+	cyclizar: {
+		hasMons: true,
+	},
+	excadrill: {
+		hasMons: true
+	},
 };
