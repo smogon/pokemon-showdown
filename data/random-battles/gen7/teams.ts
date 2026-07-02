@@ -1173,7 +1173,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				const set = this.randomSet(
 					species,
 					teamDetails,
-					pokemon.length === this.maxTeamSize - 1
+					pokemon.length === this.maxTeamSize - 1 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
 				);
 
 				const item = this.dex.items.get(set.item);
