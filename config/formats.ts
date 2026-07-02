@@ -419,8 +419,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Chinchou', 'Diglett-Alola', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Impidimp', 'Mareanie', 'Mienfoo', 'Mudbray', 'Larvesta',
-			'Sandshrew-Alola', 'Shellos', 'Stunky', 'Tinkatink', 'Toedscool', 'Trapinch', 'Vullaby', 'Wingull', 'Zorua-Hisui',
+			'Chinchou', 'Diglett-Alola', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Growlithe-Hisui', 'Impidimp', 'Mareanie', 'Mienfoo', 'Mudbray',
+			'Sandshrew-Alola', 'Shellos', 'Stunky', 'Tinkatink', 'Toedscool', 'Vullaby', 'Zorua-Hisui',
 			// LC UUBL
 			'Deerling', 'Minccino', 'Light Clay',
 		],
