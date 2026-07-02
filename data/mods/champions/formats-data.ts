@@ -4882,7 +4882,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	gholdengo: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	greattusk: {
 		isNonstandard: "Past",
