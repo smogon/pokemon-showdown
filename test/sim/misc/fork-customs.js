@@ -303,6 +303,8 @@ describe('Fork customs', () => {
 		assert.equal(dex.species.get('alakazammega').tier, 'OU');
 		assert.equal(dex.species.get('kangaskhanmega').tier, 'OU');
 		assert.equal(dex.species.get('scizormega').tier, 'UU');
+		// First UU ban: Mega Heracross is UUBL — out of UU but still OU-legal.
+		assert.equal(dex.species.get('heracrossmega').tier, 'UUBL');
 
 		const { TeamValidator } = require('./../../../dist/sim/team-validator');
 		const uu = TeamValidator.get('gen3megasuu');
@@ -315,16 +317,23 @@ describe('Fork customs', () => {
 			{ species: 'Gyarados', ability: 'Intimidate', item: 'gyaradosite', moves: ['waterfall', 'earthquake', 'dragondance', 'rest'] },
 			{ species: 'Alakazam', ability: 'Synchronize', item: 'alakazite', moves: ['psychic', 'icebeam', 'calmmind', 'recover'] },
 			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'] },
+			// UUBL (first UU ban): Mega Heracross is banned from UU by the 'UUBL' tag.
+			{ species: 'Heracross', ability: 'Swarm', item: 'heracronite', moves: ['megahorn', 'rockslide', 'earthquake', 'swordsdance'] },
 		]) {
 			const errors = uu.validateTeam([{ ...set, evs: { hp: 4 }, level: 100 }]);
 			assert(errors && errors.length > 0, `expected ${set.species} banned from [Gen 3] Megas UU, got: ${JSON.stringify(errors)}`);
 		}
 
-		// UU base forms + genuinely-UU Megas legal.
+		// UU base forms + genuinely-UU Megas legal (base Heracross with no stone stays UU-legal).
 		assert.legalTeam([
 			{ species: 'Heracross', ability: 'Swarm', moves: ['megahorn', 'brickbreak', 'rockslide', 'substitute'], evs: { hp: 4 }, level: 100 },
 			{ species: 'Scizor', ability: 'Swarm', item: 'scizorite', moves: ['silverwind', 'steelwing', 'swordsdance', 'agility'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megasuu');
+
+		// The UUBL ban only removes Mega Heracross from UU — it's still legal in [Gen 3] Megas (OU).
+		assert.legalTeam([
+			{ species: 'Heracross', ability: 'Swarm', item: 'heracronite', moves: ['megahorn', 'rockslide', 'earthquake', 'swordsdance'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megas');
 
 		// The UU format still carries the same onValidateSet complex bans (defensive), but
 		// they're unreachable here now: the only Parental Bond user (Kangaskhan-Mega) is OU,

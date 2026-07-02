@@ -7,6 +7,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	//   * usage >= 4.52%           -> OU   (banned from [Gen 3] Megas UU)
 	//   * usage <  4.52%           -> UU
 	//   * old UUBL is reset        -> UU   (unless usage promotes it to OU)
+//   * banned from UU by council -> "UUBL" (out of UU, still OU-legal; e.g. Mega Heracross)
 	//   * a Mega whose BASE form is real OU -> "(OU)" = OU by technicality
 	//     (banned from UU even with ~0 Mega usage, e.g. Mega Swampert)
 	//   * Mega Alakazam            -> OU   (explicit exception)
@@ -52,7 +53,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	ampharosmega: { tier: "UU" },
 	steelixmega: { tier: "OU" }, // usage
 	scizormega: { tier: "UU" },
-	heracrossmega: { tier: "UU" },
+	heracrossmega: { tier: "UUBL" }, // first UU ban: too strong for UU -> UUBL (stays OU-legal)
 	skarmorymega: { tier: "(OU)" }, // technicality: base Skarmory is OU
 	houndoommega: { tier: "UU" },
 	tyranitarmega: { tier: "Uber" },
