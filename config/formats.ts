@@ -80,6 +80,40 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
+		name: "[Gen 3] Megas UU",
+		desc: "Gen 3 Megas below OU. Usage-based tiering: everything under 4.52% ladder usage is UU. OU is banned &mdash; including Mega Alakazam and any Mega whose base form is OU (e.g. Mega Swampert, Mega Skarmory, Mega Gyarados).",
+		mod: 'gen3mega',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		// Same ability-based complex bans as [Gen 3] Megas: the affected Megas
+		// (Pidgeot/Raichu-Y = No Guard, Kangaskhan = Parental Bond) are UU-legal here,
+		// so the bans must carry over. See the [Gen 3] Megas comment above for the
+		// tierSpecies/validation rationale.
+		onValidateSet(set) {
+			const { tierSpecies } = this.getValidationSpecies(set);
+			const megaAbilities = Object.values(tierSpecies.abilities);
+			const moves = set.moves || [];
+			const problems = [];
+
+			if (megaAbilities.includes('No Guard') &&
+				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
+				problems.push(`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`);
+			}
+
+			if (megaAbilities.includes('Parental Bond')) {
+				const fixedDamageMove = moves.find(move => {
+					const dmg = this.dex.moves.get(move).damage;
+					return typeof dmg === 'number' || dmg === 'level';
+				});
+				if (fixedDamageMove) {
+					problems.push(`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`);
+				}
+			}
+
+			return problems;
+		},
+	},
+	{
 		name: "[Gen 3] PSS",
 		desc: "Gen 3 OU with the Gen 4 Physical/Special split.",
 		mod: 'gen3pss',
