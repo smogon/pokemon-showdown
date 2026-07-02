@@ -4809,13 +4809,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["bravebird", "foulplay", "roost", "taunt", "toxic", "whirlwind"],
-                "abilities": ["Overcoat"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["foulplay", "roost", "taunt", "toxic", "whirlwind"],
                 "abilities": ["Overcoat"]
             }
         ]
@@ -4957,7 +4952,7 @@
         "level": 74,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Staller",
                 "movepool": ["boltstrike", "dracometeor", "outrage", "roost", "voltswitch"],
                 "abilities": ["Teravolt"]
             },
