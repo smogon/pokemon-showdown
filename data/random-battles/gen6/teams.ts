@@ -819,11 +819,13 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			if (move.startsWith('hiddenpower')) hasHiddenPower = true;
 		}
 
-		if (hasHiddenPower) {
+		if (hasHiddenPower || species.id === 'ditto') {
 			let hpType;
 			for (const move of moves) {
 				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
 			}
+			// Ditto gets IVs to copy Hidden Power Ice
+			if (species.id === 'ditto') hpType = 'ice';
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
 			const HPivs = ivs.atk === 0 ? ZeroAttackHPIVs[hpType] : this.dex.types.get(hpType).HPivs;
 			let iv: StatID;

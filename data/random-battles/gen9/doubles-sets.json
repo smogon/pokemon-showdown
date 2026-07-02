@@ -2485,7 +2485,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Earth Power", "Helping Hand", "Icy Wind", "Muddy Water", "Recover", "Yawn"],
+                "movepool": ["Earth Power", "Helping Hand", "Icy Wind", "Muddy Water", "Recover"],
                 "abilities": ["Storm Drain"],
                 "teraTypes": ["Fire"]
             },
@@ -2771,7 +2771,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Air Slash", "Bug Buzz", "Giga Drain", "U-turn"],
+                "movepool": ["Air Slash", "Bug Buzz", "Struggle Bug", "U-turn"],
                 "abilities": ["Tinted Lens"],
                 "teraTypes": ["Bug"]
             },
@@ -3848,7 +3848,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Close Combat", "Electroweb", "Flamethrower", "Giga Drain", "Knock Off", "Thunderbolt", "U-turn"],
                 "abilities": ["Levitate"],
-                "teraTypes": ["Electric", "Poison"]
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
@@ -6472,6 +6472,12 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Aqua Cutter", "Aqua Jet", "Night Slash", "Psycho Cut"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Dark", "Psychic", "Water"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Aqua Cutter", "Final Gambit", "Night Slash", "Psycho Cut"],
                 "abilities": ["Sharpness"],
                 "teraTypes": ["Dark", "Psychic", "Water"]
             }
