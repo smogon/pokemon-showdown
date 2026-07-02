@@ -1348,7 +1348,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 					species: 'slowbrogalar',
 					item: 'assaultvest',
 					ability: 'regenerator',
-					teraType: ['water'],
+					teraType: 'water',
 				},
 				['psyshock', 'sludgebomb', 'flamethrower', 'flipturn'],
 			],
@@ -1374,7 +1374,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 				{
 					species: 'aerodactyl',
 					item: 'aerodactylite',
-					ability: 'unnervse',
+					ability: 'unnerve',
 					teraType: 'rock',
 				},
 				['dualwingbeat', 'stoneaxe'], ['crunch', 'earthquake', 'firefang'],
