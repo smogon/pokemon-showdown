@@ -238,6 +238,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Same Type Clause'],
 		banlist: [
 			'Uber',
+			'Suicune', 'Jirachi', // OU in gen3 but too strong for Monotype (Water / Steel + Psychic)
 			'Shadow Tag',
 			'Focus Band', 'King\'s Rock', 'Quick Claw',
 			'Baton Pass',
