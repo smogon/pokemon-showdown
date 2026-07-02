@@ -1787,7 +1787,7 @@
                 "teraTypes": ["Electric", "Water"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Fast Support",
                 "movepool": ["Calm Mind", "Scald", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Electric", "Flying", "Water"]
