@@ -246,14 +246,15 @@ describe('Fork customs', () => {
 		assert.equal(battle.field.weather, 'desolateland', 'Desolate Land set on Primal Reversion');
 	});
 
-	it('gen3mega: tier flips — M-Salamence banned to AG, M-Kangaskhan dropped to UU (M-Medicham stays Uber)', () => {
+	it('gen3mega: tier flips — M-Salamence banned to AG, M-Kangaskhan kept OU (M-Medicham stays Uber)', () => {
 		// formats-data.ts tiers drive the [Gen 3] Megas `banlist: ['Uber']` (the 'Uber' tag
 		// also covers AG) and the [Gen 3] Megas Ubers `banlist: ['AG']`. The validator swaps
 		// in the stone-induced Mega forme (`tierSpecies`) before tier-matching.
 		const dex = Dex.mod('gen3mega');
 		assert.equal(dex.species.get('salamencemega').tier, 'AG');
-		// Usage-based retiering dropped M-Kangaskhan (Parental Bond) from OU to UU.
-		assert.equal(dex.species.get('kangaskhanmega').tier, 'UU');
+		// M-Kangaskhan (Parental Bond) is kept OU by exception (new to the format) despite
+		// sub-4.52% usage — the fixed-damage combo is complex-banned rather than tier-banned.
+		assert.equal(dex.species.get('kangaskhanmega').tier, 'OU');
 		assert.equal(dex.species.get('medichammega').tier, 'Uber');
 
 		const { TeamValidator } = require('./../../../dist/sim/team-validator');
@@ -274,8 +275,7 @@ describe('Fork customs', () => {
 			{ species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megasubers');
 
-		// M-Kangaskhan dropped Uber -> UU: still legal in [Gen 3] Megas (OU bans only 'Uber';
-		// set has no fixed-damage move).
+		// M-Kangaskhan is OU: legal in [Gen 3] Megas (set with no fixed-damage move).
 		assert.legalTeam([
 			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megas');
@@ -299,20 +299,22 @@ describe('Fork customs', () => {
 		assert.equal(dex.species.get('swampertmega').tier, '(OU)');
 		assert.equal(dex.species.get('skarmorymega').tier, '(OU)');
 		assert.equal(dex.species.get('gyaradosmega').tier, '(OU)');
-		// Mega Alakazam explicit OU exception; a genuinely-UU Mega for contrast
+		// Mega Alakazam and Mega Kangaskhan are explicit OU exceptions; a genuinely-UU Mega for contrast
 		assert.equal(dex.species.get('alakazammega').tier, 'OU');
+		assert.equal(dex.species.get('kangaskhanmega').tier, 'OU');
 		assert.equal(dex.species.get('scizormega').tier, 'UU');
 
 		const { TeamValidator } = require('./../../../dist/sim/team-validator');
 		const uu = TeamValidator.get('gen3megasuu');
 
-		// OU + (OU) + Mega Alakazam banned from UU.
+		// OU + (OU) + the Mega Alakazam / Mega Kangaskhan OU exceptions banned from UU.
 		for (const set of [
 			{ species: 'Skarmory', ability: 'Keen Eye', moves: ['spikes', 'toxic', 'protect', 'rest'] },
 			{ species: 'Vaporeon', ability: 'Water Absorb', moves: ['surf', 'icebeam', 'wish', 'protect'] },
 			{ species: 'Swampert', ability: 'Torrent', item: 'swampertite', moves: ['earthquake', 'surf', 'icebeam', 'protect'] },
 			{ species: 'Gyarados', ability: 'Intimidate', item: 'gyaradosite', moves: ['waterfall', 'earthquake', 'dragondance', 'rest'] },
 			{ species: 'Alakazam', ability: 'Synchronize', item: 'alakazite', moves: ['psychic', 'icebeam', 'calmmind', 'recover'] },
+			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['return', 'earthquake', 'shadowball', 'rest'] },
 		]) {
 			const errors = uu.validateTeam([{ ...set, evs: { hp: 4 }, level: 100 }]);
 			assert(errors && errors.length > 0, `expected ${set.species} banned from [Gen 3] Megas UU, got: ${JSON.stringify(errors)}`);
@@ -324,12 +326,10 @@ describe('Fork customs', () => {
 			{ species: 'Scizor', ability: 'Swarm', item: 'scizorite', moves: ['silverwind', 'steelwing', 'swordsdance', 'agility'], evs: { hp: 4 }, level: 100 },
 		], 'gen3megasuu');
 
-		// Complex bans carry over: Kangaskhan-Mega (UU) + Seismic Toss stays banned.
-		const pbond = uu.validateTeam([
-			{ species: 'Kangaskhan', ability: 'Early Bird', item: 'kangaskhanite', moves: ['seismictoss', 'earthquake', 'return', 'rest'], evs: { hp: 4 }, level: 100 },
-		]);
-		assert(pbond && pbond.some(e => /Parental Bond.*Seismic Toss/.test(e)),
-			`expected Parental Bond + Seismic Toss banned from [Gen 3] Megas UU, got: ${JSON.stringify(pbond)}`);
+		// The UU format still carries the same onValidateSet complex bans (defensive), but
+		// they're unreachable here now: the only Parental Bond user (Kangaskhan-Mega) is OU,
+		// so it's tier-banned from UU (asserted in the loop above). The complex ban itself is
+		// exercised against [Gen 3] Megas in the test below.
 	});
 
 	it('gen3mega: [Gen 3] Megas complex-bans Parental Bond + fixed-damage moves', () => {

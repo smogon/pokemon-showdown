@@ -33,10 +33,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	victreebelmega: { tier: "UU" },
 	slowbromega: { tier: "UU" },
 	gengarmega: { tier: "Uber" },
-	// Kangaskhan-Mega: previously dropped Uber -> OU with the broken Parental Bond +
-	// fixed-damage-move combo complex-banned in config/formats.ts (onValidateSet).
-	// Now UU by usage; the complex ban is mirrored on the UU format too.
-	kangaskhanmega: { tier: "UU" },
+	// Kangaskhan-Mega: dropped from Uber, with the broken Parental Bond + fixed-damage-move
+	// combo complex-banned in config/formats.ts (onValidateSet) instead. Kept OU (like Mega
+	// Alakazam) despite sub-4.52% usage — it's new to the format, so it starts in OU rather
+	// than being seeded into UU by low early usage.
+	kangaskhanmega: { tier: "OU" },
 	starmiemega: { tier: "UU" },
 	pinsirmega: { tier: "UU" },
 	gyaradosmega: { tier: "(OU)" }, // technicality: base Gyarados is OU
