@@ -116,6 +116,42 @@ describe('Fork customs', () => {
 		], 'gen3uubl');
 	});
 
+	it('gen3nfe: [Gen 3] NFE is ladderable/challengeable and matches the reference challenge', () => {
+		// Named form of the reference challenge:
+		//   gen3nu @@@ Not Fully Evolved, -Chansey, -Diglett, -Dragonair, -Haunter,
+		//   -Kadabra, -Scyther, -Vigoroth, -Wynaut, -Deep Sea Tooth, -Light Ball
+		// It descends from [Gen 3] NU (searchShow:false); NFE must stay on the ladder,
+		// so pin the flags — a rebase touching NU must not re-hide this.
+		const nfe = Dex.formats.get('gen3nfe', true);
+		assert(nfe.searchShow !== false, '[Gen 3] NFE must be ladderable (searchShow !== false)');
+		assert(nfe.challengeShow !== false, '[Gen 3] NFE must be challengeable (challengeShow !== false)');
+		Dex.formats.getRuleTable(nfe); // throws if the '[Gen 3] NU' / 'Not Fully Evolved' refs break
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const V = TeamValidator.get('gen3nfe');
+		const reject = (set, re, why) => {
+			const errs = V.validateTeam([set]);
+			assert(errs && errs.some(e => re.test(e)), `${why}, got: ${JSON.stringify(errs)}`);
+		};
+		// Fully-evolved Pokemon are barred by 'Not Fully Evolved'...
+		reject({ species: 'Snorlax', ability: 'Thick Fat', moves: ['bodyslam'], evs: { hp: 4 }, level: 100 }, /cannot evolve/, 'expected fully-evolved Snorlax barred');
+		// ...the strong NFEs are explicitly banned...
+		reject({ species: 'Chansey', ability: 'Natural Cure', moves: ['seismictoss'], evs: { hp: 4 }, level: 100 }, /Chansey is banned/, 'expected banned NFE Chansey rejected');
+		// ...and the item bans hold on their NFE holders (only NFE mons are legal here).
+		reject({ species: 'Pikachu', ability: 'Static', item: 'Light Ball', moves: ['thunderbolt'], evs: { hp: 4 }, level: 100 }, /Light Ball is banned/, 'expected Light Ball banned');
+		reject({ species: 'Clamperl', ability: 'Shell Armor', item: 'Deep Sea Tooth', moves: ['surf'], evs: { hp: 4 }, level: 100 }, /Deep Sea Tooth is banned/, 'expected Deep Sea Tooth banned');
+
+		// A legal all-NFE team validates.
+		assert.legalTeam([
+			{ species: 'Machoke', ability: 'Guts', item: 'Leftovers', moves: ['crosschop', 'earthquake', 'rockslide', 'hiddenpower'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Graveler', ability: 'Rock Head', item: 'Leftovers', moves: ['earthquake', 'rockslide', 'explosion', 'hiddenpower'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Onix', ability: 'Rock Head', item: 'Leftovers', moves: ['earthquake', 'rockslide', 'explosion', 'toxic'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Vibrava', ability: 'Levitate', item: 'Leftovers', moves: ['earthquake', 'rockslide', 'hiddenpower', 'substitute'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Seadra', ability: 'Poison Point', item: 'Leftovers', moves: ['surf', 'icebeam', 'hiddenpower', 'substitute'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Porygon', ability: 'Trace', item: 'Leftovers', moves: ['triattack', 'icebeam', 'thunderbolt', 'recover'], evs: { hp: 4 }, level: 100 },
+		], 'gen3nfe');
+	});
+
 	it('gen3stabmons: type-grant lets in off-learnset STAB, but the `*` restrictions and off-type stay blocked', () => {
 		// [Gen 3] STABmons = gen3ou + 'STABmons Move Legality', faithful to the
 		// challenge code `gen3ou @@@ stabmons move legality, *acupressure,

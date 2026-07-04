@@ -208,6 +208,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
+		name: "[Gen 3] NFE",
+		desc: "Not Fully Evolved &mdash; only Pok&eacute;mon that can still evolve are allowed. Uses the ADV NU pool; the strongest NFEs (Chansey, Kadabra, Scyther, etc.) plus Deep Sea Tooth and Light Ball are banned.",
+		mod: 'gen3',
+		ruleset: ['[Gen 3] NU', 'Not Fully Evolved'],
+		banlist: ['Chansey', 'Diglett', 'Dragonair', 'Haunter', 'Kadabra', 'Scyther', 'Vigoroth', 'Wynaut', 'Deep Sea Tooth', 'Light Ball'],
+	},
+	{
 		name: "[Gen 3] Anything Goes",
 		mod: 'gen3',
 		ruleset: ['Standard AG'],
