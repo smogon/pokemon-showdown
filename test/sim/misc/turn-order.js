@@ -185,6 +185,48 @@ describe('Switching out', () => {
 		battle.makeChoices('switch 2', 'switch 2');
 		assert.equal(battle.p2.pokemon[0].boosts.atk, 0);
 	});
+
+	describe(`Switch Priority Clause Mod [Gen 3]`, () => {
+		it('should follow speed priority if Switch Priority Clause Mod is included', () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 0 } },
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 4 } },
+				{ species: 'Pelipper', ability: 'drizzle', moves: ['sleeptalk'] },
+				{ species: 'Gyarados', ability: 'intimidate', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 8 } },
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 12 } },
+				{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+				{ species: 'Salamence', ability: 'intimidate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4');
+			assert.equal(battle.field.weather, 'raindance');
+			assert.equal(battle.p1.active[0].boosts.atk, 0);
+			assert.equal(battle.p1.active[1].boosts.atk, 0);
+			assert.equal(battle.p2.active[0].boosts.atk, -1);
+			assert.equal(battle.p2.active[1].boosts.atk, -1);
+		});
+
+		it('should follow port priority if Switch Priority Clause Mod is excluded', () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles', portPriority: true }, [[
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 0 } },
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 4 } },
+				{ species: 'Pelipper', ability: 'drizzle', moves: ['sleeptalk'] },
+				{ species: 'Gyarados', ability: 'intimidate', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 8 } },
+				{ species: 'Wynaut', moves: ['sleeptalk'], evs: { spe: 12 } },
+				{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+				{ species: 'Salamence', ability: 'intimidate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4');
+			assert.equal(battle.field.weather, 'sunnyday');
+			assert.equal(battle.p1.active[0].boosts.atk, -1);
+			assert.equal(battle.p1.active[1].boosts.atk, -1);
+			assert.equal(battle.p2.active[0].boosts.atk, -1);
+			assert.equal(battle.p2.active[1].boosts.atk, 0);
+		});
+	});
 });
 
 describe('Switching in', () => {

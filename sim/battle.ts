@@ -1938,6 +1938,22 @@ export class Battle {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
+		if (this.gen === 1 && this.dex.currentMod !== 'gen1stadium') {
+			// If a desync would happen, the move fails instead. This rule currently covers Bide, Counter, and Psywave.
+			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
+		}
+		if (this.gen === 3) {
+			// Reveals the Deoxys forme when it is sent in battle.
+			const deoxys = ['Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed'];
+			for (const forme of deoxys) {
+				const species = this.dex.species.get(forme);
+				if (!this.ruleTable.isBannedSpecies(species)) {
+					this.add('rule', `Deoxys Camouflage Clause${this.dex.currentMod === 'gen3colosseum' ? '' : ' Mod'}: Reveals the Deoxys forme when it is sent in battle.`);
+					break;
+				}
+			}
+		}
+
 		format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;

@@ -159,7 +159,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', 'Nickname Clause', 'Beat Up Nicknames Mod', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Nickname Clause', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -1424,28 +1424,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
-		desc: "Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first",
+		desc: "Makes a faster Pokémon switch first when double-switching, unlike in link battles, where player 1's Pokémon would switch first",
+		// Implemented in battle-queue.ts
 		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
-		},
-	},
-	desyncclausemod: {
-		effectType: 'Rule',
-		name: 'Desync Clause Mod',
-		desc: 'If a desync would happen, the move fails instead. This rule currently covers Bide, Counter, and Psywave.',
-		onBegin() {
-			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
-		},
-		// Hardcoded in gen1/moves.ts
-		// Can't be disabled (no precedent for how else to handle desyncs)
-	},
-	deoxyscamouflageclausemod: {
-		effectType: 'Rule',
-		name: 'Deoxys Camouflage Clause Mod',
-		desc: "Reveals the Deoxys forme when it is sent in battle.",
-		// Hardcoded into effect, cannot be disabled.
-		onBegin() {
-			this.add('rule', 'Deoxys Camouflage Clause Mod: Reveals the Deoxys forme when it is sent in battle.');
 		},
 	},
 	freezeclausemod: {

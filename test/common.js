@@ -56,6 +56,7 @@ class TestTools {
 			options.preview ? '^Team Preview' : '^!Team Preview',
 			options.sleepClause && 'Sleep Clause Mod',
 			!options.cancel && '!Cancel Mod',
+			!options.portPriority && '^Switch Priority Clause Mod',
 			options.endlessBattleClause ? '^Endless Battle Clause' : '^!Endless Battle Clause',
 			options.inverseMod && 'Inverse Mod',
 			options.overflowStatMod && 'Overflow Stat Mod',

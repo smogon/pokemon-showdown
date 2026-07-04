@@ -2,7 +2,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	standardag: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Exact HP Mod', 'Cancel Mod',
+			'Obtainable', 'Switch Priority Clause Mod', 'Exact HP Mod', 'Cancel Mod',
 		],
 	},
 	standard: {
