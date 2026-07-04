@@ -1526,8 +1526,8 @@
         "level": 46,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["Body Press", "Iron Defense", "Meteor Mash", "Psychic Fangs", "Trailblaze"],
+                "role": "Fast Attacker",
+                "movepool": ["Body Press", "Bullet Punch", "Iron Defense", "Meteor Mash", "Psychic Fangs", "Trailblaze"],
                 "abilities": ["Clear Body"],
                 "preferredTypes": ["Psychic"]
             }
