@@ -40,10 +40,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// than being seeded into UU by low early usage.
 	kangaskhanmega: { tier: "OU" },
 	starmiemega: { tier: "UU" },
-	pinsirmega: { tier: "UU" },
+	pinsirmega: { tier: "UUBL" }, // UU ban: too strong for UU -> UUBL (stays OU-legal)
 	gyaradosmega: { tier: "(OU)" }, // technicality: base Gyarados is OU
 	aerodactylmega: { tier: "OU" }, // usage (base Aerodactyl also OU)
-	dragonitemega: { tier: "UU" },
+	dragonitemega: { tier: "UUBL" }, // UU ban: too strong for UU -> UUBL (stays OU-legal)
 	mewtwomegax: { tier: "Uber" },
 	mewtwomegay: { tier: "Uber" },
 
@@ -72,7 +72,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	cameruptmega: { tier: "UU" },
 	altariamega: { tier: "UU" },
 	banettemega: { tier: "UU" },
-	chimechomega: { tier: "UU" },
+	chimechomega: { tier: "UUBL" }, // UU ban: too strong for UU -> UUBL (stays OU-legal)
 	absolmega: { tier: "UU" },
 	glaliemega: { tier: "UU" },
 	// Banned to AG (above Ubers): the 'Uber' tag covers AG so it's out of [Gen 3]
