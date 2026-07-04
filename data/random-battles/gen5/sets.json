@@ -1285,6 +1285,16 @@
             }
         ]
     },
+    "unown": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["hiddenpowerfighting", "hiddenpowerpsychic"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
     "wobbuffet": {
         "level": 91,
         "sets": [
