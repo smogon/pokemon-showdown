@@ -906,12 +906,12 @@
         "level": 80,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["bodyslam", "crunch", "earthquake", "rest", "sleeptalk"],
-                "abilities": ["Thick Fat"]
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "crunch", "curse", "earthquake"],
+                "abilities": ["Immunity", "Thick Fat"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["bodyslam", "curse", "rest", "sleeptalk"],
                 "abilities": ["Thick Fat"]
             },
@@ -1526,7 +1526,7 @@
                 "abilities": ["Sturdy"]
             },
             {
-                "role": "Staller",
+                "role": "Bulky Attacker",
                 "movepool": ["bravebird", "roost", "spikes", "toxic"],
                 "abilities": ["Sturdy"]
             }
@@ -3489,14 +3489,19 @@
         "level": 86,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "toxic", "trick", "willowisp"],
+                "role": "Bulky Support",
+                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "toxic", "willowisp"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Staller",
                 "movepool": ["earthquake", "protect", "shadowsneak", "toxic"],
+                "abilities": ["Pressure"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["focuspunch", "painsplit", "shadowsneak", "substitute"],
                 "abilities": ["Pressure"]
             }
         ]
@@ -4804,13 +4809,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["bravebird", "foulplay", "roost", "taunt", "toxic", "whirlwind"],
-                "abilities": ["Overcoat"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["foulplay", "roost", "taunt", "toxic", "whirlwind"],
                 "abilities": ["Overcoat"]
             }
         ]
@@ -4952,7 +4952,7 @@
         "level": 74,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Staller",
                 "movepool": ["boltstrike", "dracometeor", "outrage", "roost", "voltswitch"],
                 "abilities": ["Teravolt"]
             },

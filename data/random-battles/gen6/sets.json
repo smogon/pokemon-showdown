@@ -2305,7 +2305,12 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "highjumpkick", "icepunch", "thunderpunch", "zenheadbutt"],
+                "movepool": ["fakeout", "highjumpkick", "thunderpunch", "zenheadbutt"],
+                "abilities": ["Pure Power"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["fakeout", "highjumpkick", "icepunch", "zenheadbutt"],
                 "abilities": ["Pure Power"]
             }
         ]
@@ -2402,7 +2407,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Staller",
                 "movepool": ["crunch", "destinybond", "earthquake", "icebeam", "protect", "waterfall"],
                 "abilities": ["Speed Boost"]
             }

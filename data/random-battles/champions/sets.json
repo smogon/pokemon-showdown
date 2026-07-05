@@ -230,12 +230,12 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Fire Blast", "Focus Blast", "Moonblast", "Moonlight"],
+                "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
                 "abilities": ["Magic Guard"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Air Slash", "Focus Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
                 "abilities": ["Magic Guard"]
             }
         ]
@@ -558,7 +558,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Dragon Dance", "Earthquake", "Power Whip", "Temper Flare", "Waterfall"],
-                "abilities": ["Intimidate"],
+                "abilities": ["Intimidate", "Moxie"],
                 "preferredTypes": ["Fire"]
             }
         ]
@@ -1526,8 +1526,8 @@
         "level": 46,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["Body Press", "Iron Defense", "Meteor Mash", "Psychic Fangs", "Trailblaze"],
+                "role": "Fast Attacker",
+                "movepool": ["Body Press", "Bullet Punch", "Iron Defense", "Meteor Mash", "Psychic Fangs", "Trailblaze"],
                 "abilities": ["Clear Body"],
                 "preferredTypes": ["Psychic"]
             }
