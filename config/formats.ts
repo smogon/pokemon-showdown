@@ -775,10 +775,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 4] Platinum OU",
+		desc: "A time capsule metagame that reflects the state of [Gen 4] OU before the release of HeartGold and SoulSilver.",
 		mod: 'gen4pt',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'Uber', 'Soul Dew'],
-		unbanlist: ['Acupressure', 'King\'s Rock', 'Lax Incense'],
+		unbanlist: ['Acupressure', 'King\'s Rock', 'Razor Fang', 'Bright Powder', 'Lax Incense'],
 	},
 	{
 		name: "[Gen 6] VGC 2015",
