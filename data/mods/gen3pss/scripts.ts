@@ -121,10 +121,20 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.setActiveMove(move, pokemon, target);
 
+			// This useMoveInner predates type-changing effects and never fired the ModifyType
+			// event that base useMoveInner does (sim/battle-actions.ts:430/438). Without it,
+			// `onModifyType` handlers never run — Hidden Power stayed Normal instead of taking its
+			// hpType, so e.g. HP Fighting read as Normal and was resisted by Rock. Fire it here in
+			// the same order as base — ModifyType before ModifyMove, singleEvent then runEvent.
+			// Unlike the base [Gen 3] mod, PSS uses the Gen 4 physical/special split: categories
+			// come from the move data and must NOT be re-derived from the (possibly changed) type,
+			// so there is no category recompute after this — Hidden Power stays Special. (surfnWOB)
+			this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			if (baseTarget !== move.target) {
 				target = this.battle.getRandomTarget(pokemon, move);
 			}
+			move = this.battle.runEvent('ModifyType', pokemon, target, move, move);
 			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
 			if (baseTarget !== move.target) {
 				target = this.battle.getRandomTarget(pokemon, move);
