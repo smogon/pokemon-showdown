@@ -632,13 +632,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Mega Invasion Random Battle",
-		desc: `Each Pok&eacute;mon that could mega evolve in gen 7 using a mega stone can do so here, too. Terastallizing is banned for all Pok&eacute;mon.`,
-		team: 'randomMegaInvasion',
-		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>Pok&eacute;mon that could undergo mega evolution or primal reversion in Gen 7 can do so here, too. Their sets are based on Gen 9 movepools, and can be viewed using the /randbats command.</b></div>`);
-		},
+		name: "[Gen 6] Random Battle (B12P6, No Team Preview)",
+		mod: 'gen6',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['[Gen 6] Random Battle', 'Max Team Size = 12', 'Picked Team Size = 6'],
 	},
 	{
 		name: "[Gen 9] Convergence",

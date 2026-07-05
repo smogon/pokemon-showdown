@@ -927,7 +927,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+			const set = this.randomSet(species, teamDetails,
+				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+			);
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

@@ -1660,7 +1660,9 @@ export class RandomBDSPTeams {
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+			const set = this.randomSet(species, teamDetails,
+				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+			);
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
