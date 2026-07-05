@@ -281,6 +281,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber'],
 	},
 
+	// Gen 8 National Dex
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Gen 8 National Dex",
+	},
+	{
+		name: "[Gen 8 DLC 1] National Dex AG",
+		desc: "National Dex Anything Goes played on the Gen 8 Isle of Armor (DLC1) game version &mdash; pre&ndash;Crown Tundra mechanics and movesets.",
+		mod: 'gen8dlc1',
+		ruleset: ['Standard AG', 'NatDex Mod'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -3664,12 +3677,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Urshifu-Single-Strike', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-50%', 'Zygarde-Complete', 'Battle Bond',
 			'Power Construct', 'Moody', 'Shadow Tag', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Smooth Rock', 'Terrain Extender', 'Baton Pass',
 		],
-	},
-	{
-		name: "[Gen 8 DLC 1] National Dex AG",
-		mod: 'gen8dlc1',
-		searchShow: false,
-		ruleset: ['Standard AG', 'NatDex Mod'],
 	},
 
 	// Pet Mods

@@ -18,7 +18,7 @@ const { Dex } = require('./../../../dist/sim');
 // body — including the per-format it()s generated below — before any hook runs,
 // so the format list has to exist now.
 Dex.includeFormats();
-const CUSTOM_SECTIONS = ['surfnWOB Customs', 'Yak Attack'];
+const CUSTOM_SECTIONS = ['surfnWOB Customs', 'Yak Attack', 'Gen 8 National Dex'];
 const customFormats = Dex.formats.all().filter(f => CUSTOM_SECTIONS.includes(f.section));
 
 describe('Fork customs', () => {
