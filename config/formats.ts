@@ -775,7 +775,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 4] Platinum OU",
-		desc: "A time capsule metagame that reflects the state of [Gen 4] OU before the release of HeartGold and SoulSilver.",
+		desc: "A time capsule metagame that reflects the state of [Gen 4] OU before the release of Pok&eacute;mon HeartGold and SoulSilver.",
 		mod: 'gen4pt',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'Uber', 'Soul Dew'],
