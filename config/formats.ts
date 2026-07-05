@@ -281,17 +281,25 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber'],
 	},
 
-	// Gen 8 National Dex
+	// Other
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "Gen 8 National Dex",
+		section: "Other",
 	},
 	{
 		name: "[Gen 8 DLC 1] National Dex AG",
 		desc: "National Dex Anything Goes played on the Gen 8 Isle of Armor (DLC1) game version &mdash; pre&ndash;Crown Tundra mechanics and movesets.",
 		mod: 'gen8dlc1',
 		ruleset: ['Standard AG', 'NatDex Mod'],
+	},
+	{
+		name: "[Gen 8] National Dex AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
+		],
+		mod: 'gen8',
+		ruleset: ['Standard NatDex'],
 	},
 
 	// S/V Singles
