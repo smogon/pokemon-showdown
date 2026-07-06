@@ -322,13 +322,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance', 'Smeargle + Ingrain'],
 	},
-
-	// Yoshiblaze
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Yoshiblaze",
-	},
 	{
 		name: "[Gen 3] Shadow Colosseum",
 		mod: 'gen3shadowcolosseum',
