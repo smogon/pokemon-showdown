@@ -320,7 +320,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Tradebacks",
 		mod: 'gen3tradebacks',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance','Smeargle + Ingrain'],
+		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance','Smeargle + Ingrain'],
 	},
 
 	// Yoshiblaze
