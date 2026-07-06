@@ -1,6 +1,15 @@
 export const Scripts: ModdedBattleScriptsData = {
-	inherit: 'gen4',
+	inherit: 'gen3',
 	gen: 3,
+	// [Gen 3] PSS is "Gen 3 plus the physical/special split": inherit Gen 3's actual move
+	// data (base powers, secondaries, accuracy, flags), base stats, learnsets, abilities and
+	// items, and change ONLY each move's category to its Gen 4 per-move value (via moves.ts).
+	// Base Gen 3's init() re-derives every move's category from its TYPE (special types ->
+	// Special, else Physical), which would clobber the split back to type-based — so override
+	// it to a no-op here. The runtime type->category recompute in Gen 3's useMoveInner is
+	// likewise skipped by this mod's own useMoveInner override below (categories are fixed per
+	// move and must not follow a mid-battle retype). (surfnWOB)
+	init() {},
 	pokemon: {
 		inherit: true,
 		getActionSpeed() {
