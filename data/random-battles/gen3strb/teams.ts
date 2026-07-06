@@ -1,10 +1,9 @@
-/* eslint max-len: ["error", 240] */
+/* eslint @stylistic/max-len: ["error", 240] */
 
 import RandomGen4Teams from '../gen4/teams';
-import { Teams } from '@pkmn/sets';
+import { Teams } from '../../../sim/teams';
 
-const sampleTeamsData = Teams.importTeams(
-	`
+const sampleTeamsRawText = `
 		=== [gen3ou] Milotic SD Pass ===
 
 		Metagross @ Leftovers
@@ -3044,21 +3043,35 @@ const sampleTeamsData = Teams.importTeams(
 		- Earthquake
 		- Hidden Power [Bug]
 
-	`
-, undefined, false);
+	`.trim();
 
-function randomIntFromInterval(max) {
+// Split the multi-team sample blob on its "=== [format] name ===" headers and parse
+// each chunk with PS's native team importer. Parsed lazily (memoized) so the Dex is
+// fully loaded by the time a battle first requests a team.
+let sampleTeamsData: PokemonSet[][] | null = null;
+function getSampleTeams(): PokemonSet[][] {
+	if (!sampleTeamsData) {
+		sampleTeamsData = sampleTeamsRawText
+			.split(/^\s*===[^\n]*===\s*$/m)
+			.map(chunk => Teams.import(chunk.trim()))
+			.filter((team): team is PokemonSet[] => !!team && team.length > 0);
+	}
+	return sampleTeamsData;
+}
+
+function randomIntFromInterval(max: number) {
 	return Math.floor(Math.random() * (max));
 }
 
 export class RandomGen3Teams extends RandomGen4Teams {
-	randomTeam() {
-		const selectedTeam = sampleTeamsData[randomIntFromInterval(sampleTeamsData.length)];
+	override randomTeam() {
+		const teams = getSampleTeams();
+		const selectedTeam = teams[randomIntFromInterval(teams.length)];
 		const members = [];
-		for (const member of selectedTeam.team) {
+		for (const member of selectedTeam) {
 			members.push({
 				...member,
-				name: member['species'],
+				name: member.species,
 				level: 100,
 				shiny: this.randomChance(1, 8192),
 			});

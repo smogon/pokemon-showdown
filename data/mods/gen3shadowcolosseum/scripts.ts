@@ -715,13 +715,14 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	pokemon: {
 		inherit: true,
-		runImmunity(type: string, message?: string | boolean) {
+		runImmunity(source: ActiveMove | string, message?: string | boolean) {
+			const type: string = typeof source !== 'string' ? source.type : source;
 			if (!type || type === '???' || type === 'Shadow') return true;
 			if (!this.battle.dex.types.isName(type)) {
 				throw new Error("Use runStatusImmunity for " + type);
 			}
 			if (this.fainted) return false;
-	
+
 			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
 			const notImmune = type === 'Ground' ?
 				this.isGrounded(negateImmunity) :
@@ -743,7 +744,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 			}
 			if (this.volatiles['shadow'] && this.battle.dex.getEffectiveness(move, 'Shadow') < 0) totalTypeMod--;
-			if (this.hasAbility('exoskeleton') && !this.hasType('Bug') && this.battle.dex.getEffectiveness(move, 'Bug') < 0) totalTypeMod--;
+			if (
+				this.hasAbility('exoskeleton') && !this.hasType('Bug') &&
+				this.battle.dex.getEffectiveness(move, 'Bug') < 0
+			) totalTypeMod--;
 			if (this.volatiles['bluntforce'] && totalTypeMod >= 1) return 1;
 			return totalTypeMod;
 		}, */

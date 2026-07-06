@@ -280,19 +280,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 		banlist: ['Uber'],
 	},
-    {
+	{
 		name: "[Gen 3] ADV Plus",
 		mod: 'gen3advplus',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass', 'Smeargle + Ingrain', 'Drizzle', 'Drought', 'Starf Berry', 'Speed Boost + Blaziken', 'Soul Dew'],
 	},
-    {
+	{
 		name: "[Gen 3] FRLG Indigo OU",
 		mod: 'gen3frlgindigo',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Uber', 'Sand Veil'],
 	},
-    {
+	{
 		name: "[Gen 3] FRLG Ubers",
 		mod: 'gen3frlg',
 		ruleset: ['Standard', 'Deoxys Camouflage Clause Mod', 'One Boost Passer Clause', 'Freeze Clause Mod'],
@@ -320,7 +320,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Tradebacks",
 		mod: 'gen3tradebacks',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance','Smeargle + Ingrain'],
+		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance', 'Smeargle + Ingrain'],
 	},
 
 	// Yoshiblaze
@@ -329,13 +329,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "Yoshiblaze",
 	},
-    {
+	{
 		name: "[Gen 3] Shadow Colosseum",
 		mod: 'gen3shadowcolosseum',
 		gameType: 'doubles',
-		desc: [
-			`<b>[Gen 3] Shadow Colosseum</b>: A Gen 3 Orre Colosseum (Gen 3 VGC) metagame that adds Shadow Pokemon and moves to the game.`,
-		],
+		desc: `<b>[Gen 3] Shadow Colosseum</b>: A Gen 3 Orre Colosseum (Gen 3 VGC) metagame that adds Shadow Pokemon and moves to the game.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3774822/">Shadow Colosseum on the Smogon Forums</a>`,
 		],

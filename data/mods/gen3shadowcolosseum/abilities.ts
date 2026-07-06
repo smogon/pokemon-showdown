@@ -26,7 +26,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.8);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Shadow Domain",
 		rating: 2,
 		shortDesc: "If Shadow Sky is active, this Pokemon's Shadow moves deal 1.3x damage and it takes 0.8x damage from non-Shadow moves.",

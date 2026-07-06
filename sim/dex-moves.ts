@@ -101,7 +101,7 @@ export interface MoveEventMethods {
 	/** Return true to stop the move from being used */
 	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
 	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
-	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
+	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false | undefined;
 	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
 
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
@@ -319,6 +319,7 @@ export interface ActiveMove extends MutableMove {
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
+	negateSecondary?: boolean;
 	forceStatus?: ID;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;

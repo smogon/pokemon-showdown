@@ -1,36 +1,37 @@
-export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
+// Loose annotation: entries are serialized Species dumps incl. runtime-only fields (id, fullname, bst, etc.).
+export const Pokedex: { [k: string]: AnyObject } = {
 	bulbasaur: {
 		"exists": true,
 		"tags": [],
 		"num": 1,
 		"name": "Bulbasaur",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 49,
-				"def": 49,
-				"spa": 65,
-				"spd": 65,
-				"spe": 45
+			"hp": 45,
+			"atk": 49,
+			"def": 49,
+			"spa": 65,
+			"spd": 65,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Overgrow",
-				"1": "Chlorophyll"
+			"0": "Overgrow",
+			"1": "Chlorophyll",
 		},
 		"weightkg": 6.9,
 		"evos": [
-				"Ivysaur"
+			"Ivysaur",
 		],
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "bulbasaur",
@@ -53,7 +54,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ivysaur: {
 		"exists": true,
@@ -61,34 +62,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 2,
 		"name": "Ivysaur",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 60,
-				"atk": 62,
-				"def": 63,
-				"spa": 80,
-				"spd": 80,
-				"spe": 60
+			"hp": 60,
+			"atk": 62,
+			"def": 63,
+			"spa": 80,
+			"spd": 80,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Overgrow",
-				"1": "Chlorophyll"
+			"0": "Overgrow",
+			"1": "Chlorophyll",
 		},
 		"weightkg": 13,
 		"prevo": "Bulbasaur",
 		"evoLevel": 16,
 		"evos": [
-				"Venusaur"
+			"Venusaur",
 		],
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "ivysaur",
@@ -110,7 +111,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	venusaur: {
 		"exists": true,
@@ -118,38 +119,38 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 3,
 		"name": "Venusaur",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 80,
-				"atk": 82,
-				"def": 83,
-				"spa": 100,
-				"spd": 100,
-				"spe": 80
+			"hp": 80,
+			"atk": 82,
+			"def": 83,
+			"spa": 100,
+			"spd": 100,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Overgrow",
-				"1": "Chlorophyll"
+			"0": "Overgrow",
+			"1": "Chlorophyll",
 		},
 		"weightkg": 100,
 		"prevo": "Ivysaur",
 		"evoLevel": 32,
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"otherFormes": [
-				"Venusaur-Mega"
+			"Venusaur-Mega",
 		],
 		"formeOrder": [
-				"Venusaur",
-				"Venusaur-Mega"
+			"Venusaur",
+			"Venusaur-Mega",
 		],
 		"canGigantamax": "G-Max Vine Lash",
 		"tier": "PU",
@@ -173,7 +174,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	charmander: {
 		"exists": true,
@@ -181,30 +182,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 4,
 		"name": "Charmander",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 39,
-				"atk": 52,
-				"def": 43,
-				"spa": 60,
-				"spd": 50,
-				"spe": 65
+			"hp": 39,
+			"atk": 52,
+			"def": 43,
+			"spa": 60,
+			"spd": 50,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Blaze"
+			"0": "Blaze",
 		},
 		"weightkg": 8.5,
 		"evos": [
-				"Charmeleon"
+			"Charmeleon",
 		],
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "charmander",
@@ -227,7 +228,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	charmeleon: {
 		"exists": true,
@@ -235,32 +236,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 5,
 		"name": "Charmeleon",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 58,
-				"atk": 64,
-				"def": 58,
-				"spa": 80,
-				"spd": 65,
-				"spe": 80
+			"hp": 58,
+			"atk": 64,
+			"def": 58,
+			"spa": 80,
+			"spd": 65,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Blaze"
+			"0": "Blaze",
 		},
 		"weightkg": 19,
 		"prevo": "Charmander",
 		"evoLevel": 16,
 		"evos": [
-				"Charizard"
+			"Charizard",
 		],
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "charmeleon",
@@ -282,7 +283,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	charizard: {
 		"exists": true,
@@ -290,39 +291,39 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 6,
 		"name": "Charizard",
 		"types": [
-				"Fire",
-				"Flying"
+			"Fire",
+			"Flying",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 78,
-				"atk": 84,
-				"def": 78,
-				"spa": 109,
-				"spd": 85,
-				"spe": 100
+			"hp": 78,
+			"atk": 84,
+			"def": 78,
+			"spa": 109,
+			"spd": 85,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Blaze"
+			"0": "Blaze",
 		},
 		"weightkg": 90.5,
 		"prevo": "Charmeleon",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"otherFormes": [
-				"Charizard-Mega-X",
-				"Charizard-Mega-Y"
+			"Charizard-Mega-X",
+			"Charizard-Mega-Y",
 		],
 		"formeOrder": [
-				"Charizard",
-				"Charizard-Mega-X",
-				"Charizard-Mega-Y"
+			"Charizard",
+			"Charizard-Mega-X",
+			"Charizard-Mega-Y",
 		],
 		"canGigantamax": "G-Max Wildfire",
 		"tier": "ZU",
@@ -346,7 +347,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	squirtle: {
 		"exists": true,
@@ -354,31 +355,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 7,
 		"name": "Squirtle",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 44,
-				"atk": 48,
-				"def": 65,
-				"spa": 50,
-				"spd": 64,
-				"spe": 43
+			"hp": 44,
+			"atk": 48,
+			"def": 65,
+			"spa": 50,
+			"spd": 64,
+			"spe": 43,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Rain Dish"
+			"0": "Torrent",
+			"1": "Rain Dish",
 		},
 		"weightkg": 9,
 		"evos": [
-				"Wartortle"
+			"Wartortle",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "LC",
 		"id": "squirtle",
@@ -401,7 +402,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wartortle: {
 		"exists": true,
@@ -409,33 +410,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 8,
 		"name": "Wartortle",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 59,
-				"atk": 63,
-				"def": 80,
-				"spa": 65,
-				"spd": 80,
-				"spe": 58
+			"hp": 59,
+			"atk": 63,
+			"def": 80,
+			"spa": 65,
+			"spd": 80,
+			"spe": 58,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Rain Dish"
+			"0": "Torrent",
+			"1": "Rain Dish",
 		},
 		"weightkg": 22.5,
 		"prevo": "Squirtle",
 		"evoLevel": 16,
 		"evos": [
-				"Blastoise"
+			"Blastoise",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "NFE",
 		"id": "wartortle",
@@ -457,7 +458,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	blastoise: {
 		"exists": true,
@@ -465,37 +466,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 9,
 		"name": "Blastoise",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 79,
-				"atk": 83,
-				"def": 100,
-				"spa": 85,
-				"spd": 105,
-				"spe": 78
+			"hp": 79,
+			"atk": 83,
+			"def": 100,
+			"spa": 85,
+			"spd": 105,
+			"spe": 78,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Rain Dish"
+			"0": "Torrent",
+			"1": "Rain Dish",
 		},
 		"weightkg": 85.5,
 		"prevo": "Wartortle",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"otherFormes": [
-				"Blastoise-Mega"
+			"Blastoise-Mega",
 		],
 		"formeOrder": [
-				"Blastoise",
-				"Blastoise-Mega"
+			"Blastoise",
+			"Blastoise-Mega",
 		],
 		"canGigantamax": "G-Max Cannonade",
 		"tier": "RUBL",
@@ -519,7 +520,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	caterpie: {
 		"exists": true,
@@ -527,26 +528,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 10,
 		"name": "Caterpie",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 30,
-				"def": 35,
-				"spa": 20,
-				"spd": 20,
-				"spe": 45
+			"hp": 45,
+			"atk": 30,
+			"def": 35,
+			"spa": 20,
+			"spd": 20,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Shield Dust",
-				"1": "Run Away"
+			"0": "Shield Dust",
+			"1": "Run Away",
 		},
 		"weightkg": 2.9,
 		"evos": [
-				"Metapod"
+			"Metapod",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -565,15 +566,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 195,
 		"weighthg": 29,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	metapod: {
 		"exists": true,
@@ -581,27 +582,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 11,
 		"name": "Metapod",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 20,
-				"def": 55,
-				"spa": 25,
-				"spd": 25,
-				"spe": 30
+			"hp": 50,
+			"atk": 20,
+			"def": 55,
+			"spa": 25,
+			"spd": 25,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 9.9,
 		"prevo": "Caterpie",
 		"evoLevel": 7,
 		"evos": [
-				"Butterfree"
+			"Butterfree",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -619,15 +620,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 205,
 		"weighthg": 99,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	butterfree: {
 		"exists": true,
@@ -635,25 +636,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 12,
 		"name": "Butterfree",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 45,
-				"def": 50,
-				"spa": 80,
-				"spd": 80,
-				"spe": 70
+			"hp": 60,
+			"atk": 45,
+			"def": 50,
+			"spa": 80,
+			"spd": 80,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Compound Eyes"
+			"0": "Compound Eyes",
 		},
 		"weightkg": 32,
 		"prevo": "Metapod",
 		"evoLevel": 10,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"canGigantamax": "G-Max Befuddle",
 		"isNonstandard": null,
@@ -673,15 +674,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 395,
 		"weighthg": 320,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	weedle: {
 		"exists": true,
@@ -689,27 +690,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 13,
 		"name": "Weedle",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 35,
-				"def": 30,
-				"spa": 20,
-				"spd": 20,
-				"spe": 50
+			"hp": 40,
+			"atk": 35,
+			"def": 30,
+			"spa": 20,
+			"spd": 20,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Shield Dust",
-				"1": "Run Away"
+			"0": "Shield Dust",
+			"1": "Run Away",
 		},
 		"weightkg": 3.2,
 		"evos": [
-				"Kakuna"
+			"Kakuna",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -728,15 +729,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 195,
 		"weighthg": 32,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kakuna: {
 		"exists": true,
@@ -744,28 +745,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 14,
 		"name": "Kakuna",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 25,
-				"def": 50,
-				"spa": 25,
-				"spd": 25,
-				"spe": 35
+			"hp": 45,
+			"atk": 25,
+			"def": 50,
+			"spa": 25,
+			"spd": 25,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 10,
 		"prevo": "Weedle",
 		"evoLevel": 7,
 		"evos": [
-				"Beedrill"
+			"Beedrill",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -783,15 +784,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 205,
 		"weighthg": 100,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	beedrill: {
 		"exists": true,
@@ -799,32 +800,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 15,
 		"name": "Beedrill",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 80,
-				"def": 40,
-				"spa": 45,
-				"spd": 80,
-				"spe": 75
+			"hp": 65,
+			"atk": 80,
+			"def": 40,
+			"spa": 45,
+			"spd": 80,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Swarm"
+			"0": "Swarm",
 		},
 		"weightkg": 29.5,
 		"prevo": "Kakuna",
 		"evoLevel": 10,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"otherFormes": [
-				"Beedrill-Mega"
+			"Beedrill-Mega",
 		],
 		"formeOrder": [
-				"Beedrill",
-				"Beedrill-Mega"
+			"Beedrill",
+			"Beedrill-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -843,15 +844,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 395,
 		"weighthg": 295,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pidgey: {
 		"exists": true,
@@ -859,26 +860,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 16,
 		"name": "Pidgey",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 40,
-				"spa": 35,
-				"spd": 35,
-				"spe": 56
+			"hp": 40,
+			"atk": 45,
+			"def": 40,
+			"spa": 35,
+			"spd": 35,
+			"spe": 56,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 1.8,
 		"evos": [
-				"Pidgeotto"
+			"Pidgeotto",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -897,15 +898,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 251,
 		"weighthg": 18,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pidgeotto: {
 		"exists": true,
@@ -913,28 +914,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 17,
 		"name": "Pidgeotto",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 63,
-				"atk": 60,
-				"def": 55,
-				"spa": 50,
-				"spd": 50,
-				"spe": 71
+			"hp": 63,
+			"atk": 60,
+			"def": 55,
+			"spa": 50,
+			"spd": 50,
+			"spe": 71,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 30,
 		"prevo": "Pidgey",
 		"evoLevel": 18,
 		"evos": [
-				"Pidgeot"
+			"Pidgeot",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -952,15 +953,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 349,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pidgeot: {
 		"exists": true,
@@ -968,32 +969,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 18,
 		"name": "Pidgeot",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 83,
-				"atk": 80,
-				"def": 75,
-				"spa": 70,
-				"spd": 70,
-				"spe": 91
+			"hp": 83,
+			"atk": 80,
+			"def": 75,
+			"spa": 70,
+			"spd": 70,
+			"spe": 91,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 39.5,
 		"prevo": "Pidgeotto",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"otherFormes": [
-				"Pidgeot-Mega"
+			"Pidgeot-Mega",
 		],
 		"formeOrder": [
-				"Pidgeot",
-				"Pidgeot-Mega"
+			"Pidgeot",
+			"Pidgeot-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1012,15 +1013,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 479,
 		"weighthg": 395,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	rattata: {
 		"exists": true,
@@ -1028,34 +1029,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 19,
 		"name": "Rattata",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 56,
-				"def": 35,
-				"spa": 25,
-				"spd": 35,
-				"spe": 72
+			"hp": 30,
+			"atk": 56,
+			"def": 35,
+			"spa": 25,
+			"spd": 35,
+			"spe": 72,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Guts",
-				"H": "Hustle"
+			"0": "Run Away",
+			"1": "Guts",
+			"H": "Hustle",
 		},
 		"weightkg": 3.5,
 		"evos": [
-				"Raticate"
+			"Raticate",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Rattata-Alola"
+			"Rattata-Alola",
 		],
 		"formeOrder": [
-				"Rattata",
-				"Rattata-Alola"
+			"Rattata",
+			"Rattata-Alola",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1074,15 +1075,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 253,
 		"weighthg": 35,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	raticate: {
 		"exists": true,
@@ -1090,35 +1091,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 20,
 		"name": "Raticate",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 81,
-				"def": 60,
-				"spa": 50,
-				"spd": 70,
-				"spe": 97
+			"hp": 55,
+			"atk": 81,
+			"def": 60,
+			"spa": 50,
+			"spd": 70,
+			"spe": 97,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Guts",
-				"H": "Hustle"
+			"0": "Run Away",
+			"1": "Guts",
+			"H": "Hustle",
 		},
 		"weightkg": 18.5,
 		"prevo": "Rattata",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Raticate-Alola",
-				"Raticate-Alola-Totem"
+			"Raticate-Alola",
+			"Raticate-Alola-Totem",
 		],
 		"formeOrder": [
-				"Raticate",
-				"Raticate-Alola",
-				"Raticate-Alola-Totem"
+			"Raticate",
+			"Raticate-Alola",
+			"Raticate-Alola-Totem",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1137,15 +1138,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 413,
 		"weighthg": 185,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	spearow: {
 		"exists": true,
@@ -1153,26 +1154,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 21,
 		"name": "Spearow",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 60,
-				"def": 30,
-				"spa": 31,
-				"spd": 31,
-				"spe": 70
+			"hp": 40,
+			"atk": 60,
+			"def": 30,
+			"spa": 31,
+			"spd": 31,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 2,
 		"evos": [
-				"Fearow"
+			"Fearow",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1191,15 +1192,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 262,
 		"weighthg": 20,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	fearow: {
 		"exists": true,
@@ -1207,25 +1208,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 22,
 		"name": "Fearow",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 90,
-				"def": 65,
-				"spa": 61,
-				"spd": 61,
-				"spe": 100
+			"hp": 65,
+			"atk": 90,
+			"def": 65,
+			"spa": 61,
+			"spd": 61,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 38,
 		"prevo": "Spearow",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1244,15 +1245,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 442,
 		"weighthg": 380,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ekans: {
 		"exists": true,
@@ -1260,27 +1261,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 23,
 		"name": "Ekans",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 60,
-				"def": 44,
-				"spa": 40,
-				"spd": 54,
-				"spe": 55
+			"hp": 35,
+			"atk": 60,
+			"def": 44,
+			"spa": 40,
+			"spd": 54,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Intimidate",
-				"1": "Shed Skin"
+			"0": "Intimidate",
+			"1": "Shed Skin",
 		},
 		"weightkg": 6.9,
 		"evos": [
-				"Arbok"
+			"Arbok",
 		],
 		"eggGroups": [
-				"Field",
-				"Dragon"
+			"Field",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "ekans",
@@ -1299,15 +1300,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 288,
 		"weighthg": 69,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	arbok: {
 		"exists": true,
@@ -1315,26 +1316,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 24,
 		"name": "Arbok",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 85,
-				"def": 69,
-				"spa": 65,
-				"spd": 79,
-				"spe": 80
+			"hp": 60,
+			"atk": 85,
+			"def": 69,
+			"spa": 65,
+			"spd": 79,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Intimidate",
-				"1": "Shed Skin"
+			"0": "Intimidate",
+			"1": "Shed Skin",
 		},
 		"weightkg": 65,
 		"prevo": "Ekans",
 		"evoLevel": 22,
 		"eggGroups": [
-				"Field",
-				"Dragon"
+			"Field",
+			"Dragon",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -1353,15 +1354,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 448,
 		"weighthg": 650,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pikachu: {
 		"exists": true,
@@ -1369,65 +1370,65 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 25,
 		"name": "Pikachu",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 55,
-				"def": 30,
-				"spa": 50,
-				"spd": 40,
-				"spe": 90
+			"hp": 35,
+			"atk": 55,
+			"def": 30,
+			"spa": 50,
+			"spd": 40,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Lightning Rod"
+			"0": "Static",
+			"1": "Lightning Rod",
 		},
 		"weightkg": 6,
 		"prevo": "Pichu",
 		"evoType": "levelFriendship",
 		"evos": [
-				"Raichu",
-				"Raichu-Alola"
+			"Raichu",
+			"Raichu-Alola",
 		],
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"otherFormes": [
-				"Pikachu-Cosplay",
-				"Pikachu-Rock-Star",
-				"Pikachu-Belle",
-				"Pikachu-Pop-Star",
-				"Pikachu-PhD",
-				"Pikachu-Libre",
-				"Pikachu-Original",
-				"Pikachu-Hoenn",
-				"Pikachu-Sinnoh",
-				"Pikachu-Unova",
-				"Pikachu-Kalos",
-				"Pikachu-Alola",
-				"Pikachu-Partner",
-				"Pikachu-Starter",
-				"Pikachu-World"
+			"Pikachu-Cosplay",
+			"Pikachu-Rock-Star",
+			"Pikachu-Belle",
+			"Pikachu-Pop-Star",
+			"Pikachu-PhD",
+			"Pikachu-Libre",
+			"Pikachu-Original",
+			"Pikachu-Hoenn",
+			"Pikachu-Sinnoh",
+			"Pikachu-Unova",
+			"Pikachu-Kalos",
+			"Pikachu-Alola",
+			"Pikachu-Partner",
+			"Pikachu-Starter",
+			"Pikachu-World",
 		],
 		"formeOrder": [
-				"Pikachu",
-				"Pikachu-Original",
-				"Pikachu-Hoenn",
-				"Pikachu-Sinnoh",
-				"Pikachu-Unova",
-				"Pikachu-Kalos",
-				"Pikachu-Alola",
-				"Pikachu-Partner",
-				"Pikachu-Starter",
-				"Pikachu-World",
-				"Pikachu-Rock-Star",
-				"Pikachu-Belle",
-				"Pikachu-Pop-Star",
-				"Pikachu-PhD",
-				"Pikachu-Libre",
-				"Pikachu-Cosplay"
+			"Pikachu",
+			"Pikachu-Original",
+			"Pikachu-Hoenn",
+			"Pikachu-Sinnoh",
+			"Pikachu-Unova",
+			"Pikachu-Kalos",
+			"Pikachu-Alola",
+			"Pikachu-Partner",
+			"Pikachu-Starter",
+			"Pikachu-World",
+			"Pikachu-Rock-Star",
+			"Pikachu-Belle",
+			"Pikachu-Pop-Star",
+			"Pikachu-PhD",
+			"Pikachu-Libre",
+			"Pikachu-Cosplay",
 		],
 		"canGigantamax": "G-Max Volt Crash",
 		"tier": "ZU",
@@ -1446,15 +1447,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 60,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	raichu: {
 		"exists": true,
@@ -1462,34 +1463,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 26,
 		"name": "Raichu",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 90,
-				"def": 55,
-				"spa": 90,
-				"spd": 80,
-				"spe": 100
+			"hp": 60,
+			"atk": 90,
+			"def": 55,
+			"spa": 90,
+			"spd": 80,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Lightning Rod"
+			"0": "Static",
+			"1": "Lightning Rod",
 		},
 		"weightkg": 30,
 		"prevo": "Pikachu",
 		"evoType": "useItem",
 		"evoItem": "Thunder Stone",
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"otherFormes": [
-				"Raichu-Alola"
+			"Raichu-Alola",
 		],
 		"formeOrder": [
-				"Raichu",
-				"Raichu-Alola"
+			"Raichu",
+			"Raichu-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -1508,15 +1509,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 485,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sandshrew: {
 		"exists": true,
@@ -1524,32 +1525,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 27,
 		"name": "Sandshrew",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 75,
-				"def": 85,
-				"spa": 20,
-				"spd": 30,
-				"spe": 40
+			"hp": 50,
+			"atk": 75,
+			"def": 85,
+			"spa": 20,
+			"spd": 30,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Sand Veil"
+			"0": "Sand Veil",
 		},
 		"weightkg": 12,
 		"evos": [
-				"Sandslash"
+			"Sandslash",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Sandshrew-Alola"
+			"Sandshrew-Alola",
 		],
 		"formeOrder": [
-				"Sandshrew",
-				"Sandshrew-Alola"
+			"Sandshrew",
+			"Sandshrew-Alola",
 		],
 		"tier": "LC",
 		"id": "sandshrew",
@@ -1568,15 +1569,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 120,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sandslash: {
 		"exists": true,
@@ -1584,31 +1585,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 28,
 		"name": "Sandslash",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 100,
-				"def": 110,
-				"spa": 45,
-				"spd": 55,
-				"spe": 65
+			"hp": 75,
+			"atk": 100,
+			"def": 110,
+			"spa": 45,
+			"spd": 55,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Sand Veil"
+			"0": "Sand Veil",
 		},
 		"weightkg": 29.5,
 		"prevo": "Sandshrew",
 		"evoLevel": 22,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Sandslash-Alola"
+			"Sandslash-Alola",
 		],
 		"formeOrder": [
-				"Sandslash",
-				"Sandslash-Alola"
+			"Sandslash",
+			"Sandslash-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -1627,15 +1628,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 450,
 		"weighthg": 295,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidoranf: {
 		"exists": true,
@@ -1643,28 +1644,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 29,
 		"name": "Nidoran-F",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 55,
-				"atk": 47,
-				"def": 52,
-				"spa": 40,
-				"spd": 40,
-				"spe": 41
+			"hp": 55,
+			"atk": 47,
+			"def": 52,
+			"spa": 40,
+			"spd": 40,
+			"spe": 41,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Hustle"
+			"0": "Poison Point",
+			"1": "Hustle",
 		},
 		"weightkg": 7,
 		"evos": [
-				"Nidorina"
+			"Nidorina",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1683,15 +1684,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 275,
 		"weighthg": 70,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidorina: {
 		"exists": true,
@@ -1699,29 +1700,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 30,
 		"name": "Nidorina",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 70,
-				"atk": 62,
-				"def": 67,
-				"spa": 55,
-				"spd": 55,
-				"spe": 56
+			"hp": 70,
+			"atk": 62,
+			"def": 67,
+			"spa": 55,
+			"spd": 55,
+			"spe": 56,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Hustle"
+			"0": "Poison Point",
+			"1": "Hustle",
 		},
 		"weightkg": 20,
 		"prevo": "Nidoran-F",
 		"evoLevel": 16,
 		"evos": [
-				"Nidoqueen"
+			"Nidoqueen",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1739,15 +1740,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 365,
 		"weighthg": 200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidoqueen: {
 		"exists": true,
@@ -1755,27 +1756,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 31,
 		"name": "Nidoqueen",
 		"types": [
-				"Poison",
-				"Ground"
+			"Poison",
+			"Ground",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 90,
-				"atk": 82,
-				"def": 87,
-				"spa": 75,
-				"spd": 85,
-				"spe": 76
+			"hp": 90,
+			"atk": 82,
+			"def": 87,
+			"spa": 75,
+			"spd": 85,
+			"spe": 76,
 		},
 		"abilities": {
-				"0": "Poison Point"
+			"0": "Poison Point",
 		},
 		"weightkg": 60,
 		"prevo": "Nidorina",
 		"evoType": "useItem",
 		"evoItem": "Moon Stone",
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1794,15 +1795,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 505,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidoranm: {
 		"exists": true,
@@ -1810,28 +1811,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 32,
 		"name": "Nidoran-M",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 46,
-				"atk": 57,
-				"def": 40,
-				"spa": 40,
-				"spd": 40,
-				"spe": 50
+			"hp": 46,
+			"atk": 57,
+			"def": 40,
+			"spa": 40,
+			"spd": 40,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Hustle"
+			"0": "Poison Point",
+			"1": "Hustle",
 		},
 		"weightkg": 9,
 		"evos": [
-				"Nidorino"
+			"Nidorino",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"mother": "nidoranf",
 		"isNonstandard": null,
@@ -1851,15 +1852,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 273,
 		"weighthg": 90,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidorino: {
 		"exists": true,
@@ -1867,30 +1868,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 33,
 		"name": "Nidorino",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 61,
-				"atk": 72,
-				"def": 57,
-				"spa": 55,
-				"spd": 55,
-				"spe": 65
+			"hp": 61,
+			"atk": 72,
+			"def": 57,
+			"spa": 55,
+			"spd": 55,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Hustle"
+			"0": "Poison Point",
+			"1": "Hustle",
 		},
 		"weightkg": 19.5,
 		"prevo": "Nidoran-M",
 		"evoLevel": 16,
 		"evos": [
-				"Nidoking"
+			"Nidoking",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1908,15 +1909,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 365,
 		"weighthg": 195,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nidoking: {
 		"exists": true,
@@ -1924,28 +1925,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 34,
 		"name": "Nidoking",
 		"types": [
-				"Poison",
-				"Ground"
+			"Poison",
+			"Ground",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 81,
-				"atk": 92,
-				"def": 77,
-				"spa": 85,
-				"spd": 75,
-				"spe": 85
+			"hp": 81,
+			"atk": 92,
+			"def": 77,
+			"spa": 85,
+			"spd": 75,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Poison Point"
+			"0": "Poison Point",
 		},
 		"weightkg": 62,
 		"prevo": "Nidorino",
 		"evoType": "useItem",
 		"evoItem": "Moon Stone",
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -1964,15 +1965,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 505,
 		"weighthg": 620,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	clefairy: {
 		"exists": true,
@@ -1980,31 +1981,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 35,
 		"name": "Clefairy",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 45,
-				"def": 48,
-				"spa": 60,
-				"spd": 65,
-				"spe": 35
+			"hp": 70,
+			"atk": 45,
+			"def": 48,
+			"spa": 60,
+			"spd": 65,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 7.5,
 		"prevo": "Cleffa",
 		"evoType": "levelFriendship",
 		"evos": [
-				"Clefable"
+			"Clefable",
 		],
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "NFE",
 		"doublesTier": "DUU",
@@ -2026,7 +2027,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	clefable: {
 		"exists": true,
@@ -2034,29 +2035,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 36,
 		"name": "Clefable",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 95,
-				"atk": 70,
-				"def": 73,
-				"spa": 85,
-				"spd": 90,
-				"spe": 60
+			"hp": 95,
+			"atk": 70,
+			"def": 73,
+			"spa": 85,
+			"spd": 90,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 40,
 		"prevo": "Clefairy",
 		"evoType": "useItem",
 		"evoItem": "Moon Stone",
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "OU",
 		"doublesTier": "(DUU)",
@@ -2079,7 +2080,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	vulpix: {
 		"exists": true,
@@ -2087,37 +2088,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 37,
 		"name": "Vulpix",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 38,
-				"atk": 41,
-				"def": 40,
-				"spa": 50,
-				"spd": 65,
-				"spe": 65
+			"hp": 38,
+			"atk": 41,
+			"def": 40,
+			"spa": 50,
+			"spd": 65,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Flash Fire",
-				"1": "Drought"
+			"0": "Flash Fire",
+			"1": "Drought",
 		},
 		"weightkg": 9.9,
 		"evos": [
-				"Ninetales"
+			"Ninetales",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Vulpix-Alola"
+			"Vulpix-Alola",
 		],
 		"formeOrder": [
-				"Vulpix",
-				"Vulpix-Alola"
+			"Vulpix",
+			"Vulpix-Alola",
 		],
 		"tier": "NFE",
 		"doublesTier": "NFE",
@@ -2140,7 +2141,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ninetales: {
 		"exists": true,
@@ -2148,37 +2149,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 38,
 		"name": "Ninetales",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 73,
-				"atk": 76,
-				"def": 75,
-				"spa": 81,
-				"spd": 100,
-				"spe": 100
+			"hp": 73,
+			"atk": 76,
+			"def": 75,
+			"spa": 81,
+			"spd": 100,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Flash Fire",
-				"1": "Drought"
+			"0": "Flash Fire",
+			"1": "Drought",
 		},
 		"weightkg": 19.9,
 		"prevo": "Vulpix",
 		"evoType": "useItem",
 		"evoItem": "Fire Stone",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Ninetales-Alola"
+			"Ninetales-Alola",
 		],
 		"formeOrder": [
-				"Ninetales",
-				"Ninetales-Alola"
+			"Ninetales",
+			"Ninetales-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "DUU",
@@ -2201,7 +2202,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	jigglypuff: {
 		"exists": true,
@@ -2209,31 +2210,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 39,
 		"name": "Jigglypuff",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 115,
-				"atk": 45,
-				"def": 20,
-				"spa": 45,
-				"spd": 25,
-				"spe": 20
+			"hp": 115,
+			"atk": 45,
+			"def": 20,
+			"spa": 45,
+			"spd": 25,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 5.5,
 		"prevo": "Igglybuff",
 		"evoType": "levelFriendship",
 		"evos": [
-				"Wigglytuff"
+			"Wigglytuff",
 		],
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "NFE",
 		"id": "jigglypuff",
@@ -2255,7 +2256,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wigglytuff: {
 		"exists": true,
@@ -2263,29 +2264,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 40,
 		"name": "Wigglytuff",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 140,
-				"atk": 70,
-				"def": 45,
-				"spa": 75,
-				"spd": 50,
-				"spe": 45
+			"hp": 140,
+			"atk": 70,
+			"def": 45,
+			"spa": 75,
+			"spd": 50,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 12,
 		"prevo": "Jigglypuff",
 		"evoType": "useItem",
 		"evoItem": "Moon Stone",
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -2308,7 +2309,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	zubat: {
 		"exists": true,
@@ -2316,26 +2317,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 41,
 		"name": "Zubat",
 		"types": [
-				"Poison",
-				"Flying"
+			"Poison",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 35,
-				"spa": 30,
-				"spd": 40,
-				"spe": 55
+			"hp": 40,
+			"atk": 45,
+			"def": 35,
+			"spa": 30,
+			"spd": 40,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 7.5,
 		"evos": [
-				"Golbat"
+			"Golbat",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -2354,15 +2355,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 245,
 		"weighthg": 75,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	golbat: {
 		"exists": true,
@@ -2370,28 +2371,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 42,
 		"name": "Golbat",
 		"types": [
-				"Poison",
-				"Flying"
+			"Poison",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 80,
-				"def": 70,
-				"spa": 65,
-				"spd": 75,
-				"spe": 90
+			"hp": 75,
+			"atk": 80,
+			"def": 70,
+			"spa": 65,
+			"spd": 75,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 55,
 		"prevo": "Zubat",
 		"evoLevel": 22,
 		"evos": [
-				"Crobat"
+			"Crobat",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -2409,15 +2410,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 550,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	oddish: {
 		"exists": true,
@@ -2425,27 +2426,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 43,
 		"name": "Oddish",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 50,
-				"def": 55,
-				"spa": 75,
-				"spd": 65,
-				"spe": 30
+			"hp": 45,
+			"atk": 50,
+			"def": 55,
+			"spa": 75,
+			"spd": 65,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Run Away"
+			"0": "Chlorophyll",
+			"1": "Run Away",
 		},
 		"weightkg": 5.4,
 		"evos": [
-				"Gloom"
+			"Gloom",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "oddish",
@@ -2464,15 +2465,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 54,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gloom: {
 		"exists": true,
@@ -2480,30 +2481,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 44,
 		"name": "Gloom",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 65,
-				"def": 70,
-				"spa": 85,
-				"spd": 75,
-				"spe": 40
+			"hp": 60,
+			"atk": 65,
+			"def": 70,
+			"spa": 85,
+			"spd": 75,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Stench"
+			"0": "Chlorophyll",
+			"1": "Stench",
 		},
 		"weightkg": 8.6,
 		"prevo": "Oddish",
 		"evoLevel": 21,
 		"evos": [
-				"Vileplume",
-				"Bellossom"
+			"Vileplume",
+			"Bellossom",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "gloom",
@@ -2521,15 +2522,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 395,
 		"weighthg": 86,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	vileplume: {
 		"exists": true,
@@ -2537,27 +2538,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 45,
 		"name": "Vileplume",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 80,
-				"def": 85,
-				"spa": 100,
-				"spd": 90,
-				"spe": 50
+			"hp": 75,
+			"atk": 80,
+			"def": 85,
+			"spa": 100,
+			"spd": 90,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Effect Spore"
+			"0": "Chlorophyll",
+			"1": "Effect Spore",
 		},
 		"weightkg": 18.6,
 		"prevo": "Gloom",
 		"evoType": "useItem",
 		"evoItem": "Leaf Stone",
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -2576,15 +2577,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 186,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	paras: {
 		"exists": true,
@@ -2592,28 +2593,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 46,
 		"name": "Paras",
 		"types": [
-				"Bug",
-				"Grass"
+			"Bug",
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 70,
-				"def": 55,
-				"spa": 45,
-				"spd": 55,
-				"spe": 25
+			"hp": 35,
+			"atk": 70,
+			"def": 55,
+			"spa": 45,
+			"spd": 55,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Effect Spore",
-				"1": "Damp"
+			"0": "Effect Spore",
+			"1": "Damp",
 		},
 		"weightkg": 5.4,
 		"evos": [
-				"Parasect"
+			"Parasect",
 		],
 		"eggGroups": [
-				"Bug",
-				"Grass"
+			"Bug",
+			"Grass",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -2632,15 +2633,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 285,
 		"weighthg": 54,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	parasect: {
 		"exists": true,
@@ -2648,27 +2649,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 47,
 		"name": "Parasect",
 		"types": [
-				"Bug",
-				"Grass"
+			"Bug",
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 95,
-				"def": 80,
-				"spa": 60,
-				"spd": 80,
-				"spe": 30
+			"hp": 60,
+			"atk": 95,
+			"def": 80,
+			"spa": 60,
+			"spd": 80,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Effect Spore",
-				"1": "Damp"
+			"0": "Effect Spore",
+			"1": "Damp",
 		},
 		"weightkg": 29.5,
 		"prevo": "Paras",
 		"evoLevel": 24,
 		"eggGroups": [
-				"Bug",
-				"Grass"
+			"Bug",
+			"Grass",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -2687,15 +2688,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 295,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	venonat: {
 		"exists": true,
@@ -2703,27 +2704,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 48,
 		"name": "Venonat",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 55,
-				"def": 50,
-				"spa": 40,
-				"spd": 55,
-				"spe": 45
+			"hp": 60,
+			"atk": 55,
+			"def": 50,
+			"spa": 40,
+			"spd": 55,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Compound Eyes",
-				"1": "Run Away"
+			"0": "Compound Eyes",
+			"1": "Run Away",
 		},
 		"weightkg": 30,
 		"evos": [
-				"Venomoth"
+			"Venomoth",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "LC",
 		"id": "venonat",
@@ -2742,15 +2743,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 305,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	venomoth: {
 		"exists": true,
@@ -2758,25 +2759,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 49,
 		"name": "Venomoth",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 65,
-				"def": 60,
-				"spa": 90,
-				"spd": 75,
-				"spe": 90
+			"hp": 70,
+			"atk": 65,
+			"def": 60,
+			"spa": 90,
+			"spd": 75,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Shield Dust"
+			"0": "Shield Dust",
 		},
 		"weightkg": 12.5,
 		"prevo": "Venonat",
 		"evoLevel": 31,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -2795,15 +2796,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 450,
 		"weighthg": 125,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	diglett: {
 		"exists": true,
@@ -2811,33 +2812,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 50,
 		"name": "Diglett",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 10,
-				"atk": 55,
-				"def": 25,
-				"spa": 35,
-				"spd": 45,
-				"spe": 95
+			"hp": 10,
+			"atk": 55,
+			"def": 25,
+			"spa": 35,
+			"spd": 45,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Sand Veil",
-				"1": "Arena Trap"
+			"0": "Sand Veil",
+			"1": "Arena Trap",
 		},
 		"weightkg": 0.8,
 		"evos": [
-				"Dugtrio"
+			"Dugtrio",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Diglett-Alola"
+			"Diglett-Alola",
 		],
 		"formeOrder": [
-				"Diglett",
-				"Diglett-Alola"
+			"Diglett",
+			"Diglett-Alola",
 		],
 		"tier": "NFE",
 		"id": "diglett",
@@ -2856,15 +2857,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 265,
 		"weighthg": 8,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dugtrio: {
 		"exists": true,
@@ -2872,32 +2873,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 51,
 		"name": "Dugtrio",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 80,
-				"def": 50,
-				"spa": 50,
-				"spd": 70,
-				"spe": 120
+			"hp": 35,
+			"atk": 80,
+			"def": 50,
+			"spa": 50,
+			"spd": 70,
+			"spe": 120,
 		},
 		"abilities": {
-				"0": "Sand Veil",
-				"1": "Arena Trap"
+			"0": "Sand Veil",
+			"1": "Arena Trap",
 		},
 		"weightkg": 33.3,
 		"prevo": "Diglett",
 		"evoLevel": 26,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Dugtrio-Alola"
+			"Dugtrio-Alola",
 		],
 		"formeOrder": [
-				"Dugtrio",
-				"Dugtrio-Alola"
+			"Dugtrio",
+			"Dugtrio-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -2916,15 +2917,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 425,
 		"weighthg": 333,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	meowth: {
 		"exists": true,
@@ -2932,34 +2933,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 52,
 		"name": "Meowth",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 35,
-				"spa": 40,
-				"spd": 40,
-				"spe": 90
+			"hp": 40,
+			"atk": 45,
+			"def": 35,
+			"spa": 40,
+			"spd": 40,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Pickup"
+			"0": "Pickup",
 		},
 		"weightkg": 4.2,
 		"evos": [
-				"Persian"
+			"Persian",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Meowth-Alola",
-				"Meowth-Galar"
+			"Meowth-Alola",
+			"Meowth-Galar",
 		],
 		"formeOrder": [
-				"Meowth",
-				"Meowth-Alola",
-				"Meowth-Galar"
+			"Meowth",
+			"Meowth-Alola",
+			"Meowth-Galar",
 		],
 		"canGigantamax": "G-Max Gold Rush",
 		"tier": "LC",
@@ -2979,15 +2980,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 290,
 		"weighthg": 42,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	persian: {
 		"exists": true,
@@ -2995,31 +2996,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 53,
 		"name": "Persian",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 70,
-				"def": 60,
-				"spa": 65,
-				"spd": 65,
-				"spe": 115
+			"hp": 65,
+			"atk": 70,
+			"def": 60,
+			"spa": 65,
+			"spd": 65,
+			"spe": 115,
 		},
 		"abilities": {
-				"0": "Limber"
+			"0": "Limber",
 		},
 		"weightkg": 32,
 		"prevo": "Meowth",
 		"evoLevel": 28,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Persian-Alola"
+			"Persian-Alola",
 		],
 		"formeOrder": [
-				"Persian",
-				"Persian-Alola"
+			"Persian",
+			"Persian-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -3038,15 +3039,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 320,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	psyduck: {
 		"exists": true,
@@ -3054,28 +3055,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 54,
 		"name": "Psyduck",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 52,
-				"def": 48,
-				"spa": 65,
-				"spd": 50,
-				"spe": 55
+			"hp": 50,
+			"atk": 52,
+			"def": 48,
+			"spa": 65,
+			"spd": 50,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Damp",
-				"1": "Cloud Nine",
-				"H": "Swift Swim"
+			"0": "Damp",
+			"1": "Cloud Nine",
+			"H": "Swift Swim",
 		},
 		"weightkg": 19.6,
 		"evos": [
-				"Golduck"
+			"Golduck",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "LC",
 		"id": "psyduck",
@@ -3094,15 +3095,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 196,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	golduck: {
 		"exists": true,
@@ -3110,27 +3111,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 55,
 		"name": "Golduck",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 82,
-				"def": 78,
-				"spa": 95,
-				"spd": 80,
-				"spe": 85
+			"hp": 80,
+			"atk": 82,
+			"def": 78,
+			"spa": 95,
+			"spd": 80,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Damp",
-				"1": "Cloud Nine",
-				"H": "Swift Swim"
+			"0": "Damp",
+			"1": "Cloud Nine",
+			"H": "Swift Swim",
 		},
 		"weightkg": 76.6,
 		"prevo": "Psyduck",
 		"evoLevel": 33,
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -3149,15 +3150,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 766,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mankey: {
 		"exists": true,
@@ -3165,25 +3166,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 56,
 		"name": "Mankey",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 80,
-				"def": 35,
-				"spa": 35,
-				"spd": 45,
-				"spe": 70
+			"hp": 40,
+			"atk": 80,
+			"def": 35,
+			"spa": 35,
+			"spd": 45,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Vital Spirit"
+			"0": "Vital Spirit",
 		},
 		"weightkg": 28,
 		"evos": [
-				"Primeape"
+			"Primeape",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "mankey",
@@ -3202,15 +3203,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 305,
 		"weighthg": 280,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	primeape: {
 		"exists": true,
@@ -3218,27 +3219,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 57,
 		"name": "Primeape",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 105,
-				"def": 60,
-				"spa": 60,
-				"spd": 70,
-				"spe": 95
+			"hp": 65,
+			"atk": 105,
+			"def": 60,
+			"spa": 60,
+			"spd": 70,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Vital Spirit"
+			"0": "Vital Spirit",
 		},
 		"weightkg": 32,
 		"prevo": "Mankey",
 		"evoLevel": 28,
 		"evos": [
-				"Annihilape"
+			"Annihilape",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -3256,15 +3257,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 320,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	growlithe: {
 		"exists": true,
@@ -3272,37 +3273,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 58,
 		"name": "Growlithe",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 55,
-				"atk": 70,
-				"def": 45,
-				"spa": 70,
-				"spd": 50,
-				"spe": 60
+			"hp": 55,
+			"atk": 70,
+			"def": 45,
+			"spa": 70,
+			"spd": 50,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Intimidate",
-				"1": "Flash Fire"
+			"0": "Intimidate",
+			"1": "Flash Fire",
 		},
 		"weightkg": 19,
 		"evos": [
-				"Arcanine"
+			"Arcanine",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Growlithe-Hisui"
+			"Growlithe-Hisui",
 		],
 		"formeOrder": [
-				"Growlithe",
-				"Growlithe-Hisui"
+			"Growlithe",
+			"Growlithe-Hisui",
 		],
 		"tier": "LC",
 		"id": "growlithe",
@@ -3325,7 +3326,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	arcanine: {
 		"exists": true,
@@ -3333,37 +3334,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 59,
 		"name": "Arcanine",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 90,
-				"atk": 110,
-				"def": 80,
-				"spa": 100,
-				"spd": 80,
-				"spe": 95
+			"hp": 90,
+			"atk": 110,
+			"def": 80,
+			"spa": 100,
+			"spd": 80,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Intimidate",
-				"1": "Flash Fire"
+			"0": "Intimidate",
+			"1": "Flash Fire",
 		},
 		"weightkg": 155,
 		"prevo": "Growlithe",
 		"evoType": "useItem",
 		"evoItem": "Fire Stone",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Arcanine-Hisui"
+			"Arcanine-Hisui",
 		],
 		"formeOrder": [
-				"Arcanine",
-				"Arcanine-Hisui"
+			"Arcanine",
+			"Arcanine-Hisui",
 		],
 		"tier": "PU",
 		"doublesTier": "DUU",
@@ -3386,7 +3387,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	poliwag: {
 		"exists": true,
@@ -3394,27 +3395,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 60,
 		"name": "Poliwag",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 50,
-				"def": 40,
-				"spa": 40,
-				"spd": 40,
-				"spe": 90
+			"hp": 40,
+			"atk": 50,
+			"def": 40,
+			"spa": 40,
+			"spd": 40,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Water Absorb",
-				"1": "Damp",
-				"H": "Swift Swim"
+			"0": "Water Absorb",
+			"1": "Damp",
+			"H": "Swift Swim",
 		},
 		"weightkg": 12.4,
 		"evos": [
-				"Poliwhirl"
+			"Poliwhirl",
 		],
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"tier": "LC",
 		"id": "poliwag",
@@ -3433,15 +3434,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 124,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	poliwhirl: {
 		"exists": true,
@@ -3449,30 +3450,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 61,
 		"name": "Poliwhirl",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 65,
-				"def": 65,
-				"spa": 50,
-				"spd": 50,
-				"spe": 90
+			"hp": 65,
+			"atk": 65,
+			"def": 65,
+			"spa": 50,
+			"spd": 50,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Water Absorb",
-				"1": "Damp",
-				"H": "Swift Swim"
+			"0": "Water Absorb",
+			"1": "Damp",
+			"H": "Swift Swim",
 		},
 		"weightkg": 20,
 		"prevo": "Poliwag",
 		"evoLevel": 25,
 		"evos": [
-				"Poliwrath",
-				"Politoed"
+			"Poliwrath",
+			"Politoed",
 		],
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"tier": "NFE",
 		"id": "poliwhirl",
@@ -3490,15 +3491,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 385,
 		"weighthg": 200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	poliwrath: {
 		"exists": true,
@@ -3506,28 +3507,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 62,
 		"name": "Poliwrath",
 		"types": [
-				"Water",
-				"Fighting"
+			"Water",
+			"Fighting",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 85,
-				"def": 95,
-				"spa": 70,
-				"spd": 90,
-				"spe": 70
+			"hp": 90,
+			"atk": 85,
+			"def": 95,
+			"spa": 70,
+			"spd": 90,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Water Absorb",
-				"1": "Damp",
-				"H": "Swift Swim"
+			"0": "Water Absorb",
+			"1": "Damp",
+			"H": "Swift Swim",
 		},
 		"weightkg": 54,
 		"prevo": "Poliwhirl",
 		"evoType": "useItem",
 		"evoItem": "Water Stone",
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -3546,15 +3547,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 510,
 		"weighthg": 540,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	abra: {
 		"exists": true,
@@ -3562,30 +3563,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 63,
 		"name": "Abra",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 25,
-				"atk": 20,
-				"def": 15,
-				"spa": 105,
-				"spd": 55,
-				"spe": 90
+			"hp": 25,
+			"atk": 20,
+			"def": 15,
+			"spa": 105,
+			"spd": 55,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Inner Focus"
+			"0": "Synchronize",
+			"1": "Inner Focus",
 		},
 		"weightkg": 19.5,
 		"evos": [
-				"Kadabra"
+			"Kadabra",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -3608,7 +3609,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kadabra: {
 		"exists": true,
@@ -3616,32 +3617,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 64,
 		"name": "Kadabra",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 40,
-				"atk": 35,
-				"def": 30,
-				"spa": 120,
-				"spd": 70,
-				"spe": 105
+			"hp": 40,
+			"atk": 35,
+			"def": 30,
+			"spa": 120,
+			"spd": 70,
+			"spe": 105,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Inner Focus"
+			"0": "Synchronize",
+			"1": "Inner Focus",
 		},
 		"weightkg": 56.5,
 		"prevo": "Abra",
 		"evoLevel": 16,
 		"evos": [
-				"Alakazam"
+			"Alakazam",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -3663,7 +3664,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	alakazam: {
 		"exists": true,
@@ -3671,36 +3672,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 65,
 		"name": "Alakazam",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 55,
-				"atk": 50,
-				"def": 45,
-				"spa": 135,
-				"spd": 85,
-				"spe": 120
+			"hp": 55,
+			"atk": 50,
+			"def": 45,
+			"spa": 135,
+			"spd": 85,
+			"spe": 120,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Inner Focus"
+			"0": "Synchronize",
+			"1": "Inner Focus",
 		},
 		"weightkg": 48,
 		"prevo": "Kadabra",
 		"evoType": "trade",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"otherFormes": [
-				"Alakazam-Mega"
+			"Alakazam-Mega",
 		],
 		"formeOrder": [
-				"Alakazam",
-				"Alakazam-Mega"
+			"Alakazam",
+			"Alakazam-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -3723,7 +3724,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	machop: {
 		"exists": true,
@@ -3731,29 +3732,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 66,
 		"name": "Machop",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 80,
-				"def": 50,
-				"spa": 35,
-				"spd": 35,
-				"spe": 35
+			"hp": 70,
+			"atk": 80,
+			"def": 50,
+			"spa": 35,
+			"spd": 35,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 19.5,
 		"evos": [
-				"Machoke"
+			"Machoke",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -3776,7 +3777,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	machoke: {
 		"exists": true,
@@ -3784,31 +3785,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 67,
 		"name": "Machoke",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 80,
-				"atk": 100,
-				"def": 70,
-				"spa": 50,
-				"spd": 60,
-				"spe": 45
+			"hp": 80,
+			"atk": 100,
+			"def": 70,
+			"spa": 50,
+			"spd": 60,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 70.5,
 		"prevo": "Machop",
 		"evoLevel": 28,
 		"evos": [
-				"Machamp"
+			"Machamp",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -3830,7 +3831,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	machamp: {
 		"exists": true,
@@ -3838,28 +3839,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 68,
 		"name": "Machamp",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 90,
-				"atk": 130,
-				"def": 80,
-				"spa": 65,
-				"spd": 85,
-				"spe": 55
+			"hp": 90,
+			"atk": 130,
+			"def": 80,
+			"spa": 65,
+			"spd": 85,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 130,
 		"prevo": "Machoke",
 		"evoType": "trade",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"canGigantamax": "G-Max Chi Strike",
 		"isNonstandard": null,
@@ -3883,7 +3884,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	bellsprout: {
 		"exists": true,
@@ -3891,26 +3892,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 69,
 		"name": "Bellsprout",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 75,
-				"def": 35,
-				"spa": 70,
-				"spd": 30,
-				"spe": 40
+			"hp": 50,
+			"atk": 75,
+			"def": 35,
+			"spa": 70,
+			"spd": 30,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 4,
 		"evos": [
-				"Weepinbell"
+			"Weepinbell",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "bellsprout",
@@ -3929,15 +3930,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 40,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	weepinbell: {
 		"exists": true,
@@ -3945,28 +3946,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 70,
 		"name": "Weepinbell",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 90,
-				"def": 50,
-				"spa": 85,
-				"spd": 45,
-				"spe": 55
+			"hp": 65,
+			"atk": 90,
+			"def": 50,
+			"spa": 85,
+			"spd": 45,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 6.4,
 		"prevo": "Bellsprout",
 		"evoLevel": 21,
 		"evos": [
-				"Victreebel"
+			"Victreebel",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "weepinbell",
@@ -3984,15 +3985,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 390,
 		"weighthg": 64,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	victreebel: {
 		"exists": true,
@@ -4000,26 +4001,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 71,
 		"name": "Victreebel",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 105,
-				"def": 65,
-				"spa": 100,
-				"spd": 60,
-				"spe": 70
+			"hp": 80,
+			"atk": 105,
+			"def": 65,
+			"spa": 100,
+			"spd": 60,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 15.5,
 		"prevo": "Weepinbell",
 		"evoType": "useItem",
 		"evoItem": "Leaf Stone",
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -4038,15 +4039,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 155,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tentacool: {
 		"exists": true,
@@ -4054,28 +4055,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 72,
 		"name": "Tentacool",
 		"types": [
-				"Water",
-				"Poison"
+			"Water",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 40,
-				"def": 35,
-				"spa": 50,
-				"spd": 100,
-				"spe": 70
+			"hp": 40,
+			"atk": 40,
+			"def": 35,
+			"spa": 50,
+			"spd": 100,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Clear Body",
-				"1": "Liquid Ooze",
-				"H": "Rain Dish"
+			"0": "Clear Body",
+			"1": "Liquid Ooze",
+			"H": "Rain Dish",
 		},
 		"weightkg": 45.5,
 		"evos": [
-				"Tentacruel"
+			"Tentacruel",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"tier": "LC",
 		"id": "tentacool",
@@ -4094,15 +4095,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 335,
 		"weighthg": 455,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tentacruel: {
 		"exists": true,
@@ -4110,27 +4111,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 73,
 		"name": "Tentacruel",
 		"types": [
-				"Water",
-				"Poison"
+			"Water",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 70,
-				"def": 65,
-				"spa": 80,
-				"spd": 120,
-				"spe": 100
+			"hp": 80,
+			"atk": 70,
+			"def": 65,
+			"spa": 80,
+			"spd": 120,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Clear Body",
-				"1": "Liquid Ooze",
-				"H": "Rain Dish"
+			"0": "Clear Body",
+			"1": "Liquid Ooze",
+			"H": "Rain Dish",
 		},
 		"weightkg": 55,
 		"prevo": "Tentacool",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -4149,15 +4150,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 515,
 		"weighthg": 550,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	geodude: {
 		"exists": true,
@@ -4165,35 +4166,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 74,
 		"name": "Geodude",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 80,
-				"def": 100,
-				"spa": 30,
-				"spd": 30,
-				"spe": 20
+			"hp": 40,
+			"atk": 80,
+			"def": 100,
+			"spa": 30,
+			"spd": 30,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Sturdy",
-				"H": "Sand Veil"
+			"0": "Rock Head",
+			"1": "Sturdy",
+			"H": "Sand Veil",
 		},
 		"weightkg": 20,
 		"evos": [
-				"Graveler"
+			"Graveler",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Geodude-Alola"
+			"Geodude-Alola",
 		],
 		"formeOrder": [
-				"Geodude",
-				"Geodude-Alola"
+			"Geodude",
+			"Geodude-Alola",
 		],
 		"tier": "LC",
 		"id": "geodude",
@@ -4212,15 +4213,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	graveler: {
 		"exists": true,
@@ -4228,37 +4229,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 75,
 		"name": "Graveler",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 95,
-				"def": 115,
-				"spa": 45,
-				"spd": 45,
-				"spe": 35
+			"hp": 55,
+			"atk": 95,
+			"def": 115,
+			"spa": 45,
+			"spd": 45,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Sturdy",
-				"H": "Sand Veil"
+			"0": "Rock Head",
+			"1": "Sturdy",
+			"H": "Sand Veil",
 		},
 		"weightkg": 105,
 		"prevo": "Geodude",
 		"evoLevel": 25,
 		"evos": [
-				"Golem"
+			"Golem",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Graveler-Alola"
+			"Graveler-Alola",
 		],
 		"formeOrder": [
-				"Graveler",
-				"Graveler-Alola"
+			"Graveler",
+			"Graveler-Alola",
 		],
 		"tier": "NFE",
 		"id": "graveler",
@@ -4276,15 +4277,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 390,
 		"weighthg": 1050,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	golem: {
 		"exists": true,
@@ -4292,34 +4293,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 76,
 		"name": "Golem",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 110,
-				"def": 130,
-				"spa": 55,
-				"spd": 65,
-				"spe": 45
+			"hp": 80,
+			"atk": 110,
+			"def": 130,
+			"spa": 55,
+			"spd": 65,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Sturdy",
-				"H": "Sand Veil"
+			"0": "Rock Head",
+			"1": "Sturdy",
+			"H": "Sand Veil",
 		},
 		"weightkg": 300,
 		"prevo": "Graveler",
 		"evoType": "trade",
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Golem-Alola"
+			"Golem-Alola",
 		],
 		"formeOrder": [
-				"Golem",
-				"Golem-Alola"
+			"Golem",
+			"Golem-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -4338,15 +4339,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 495,
 		"weighthg": 3000,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ponyta: {
 		"exists": true,
@@ -4354,34 +4355,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 77,
 		"name": "Ponyta",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 85,
-				"def": 55,
-				"spa": 65,
-				"spd": 65,
-				"spe": 90
+			"hp": 50,
+			"atk": 85,
+			"def": 55,
+			"spa": 65,
+			"spd": 65,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Flash Fire",
-				"H": "Flame Body"
+			"0": "Run Away",
+			"1": "Flash Fire",
+			"H": "Flame Body",
 		},
 		"weightkg": 30,
 		"evos": [
-				"Rapidash"
+			"Rapidash",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Ponyta-Galar"
+			"Ponyta-Galar",
 		],
 		"formeOrder": [
-				"Ponyta",
-				"Ponyta-Galar"
+			"Ponyta",
+			"Ponyta-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -4400,15 +4401,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 410,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	rapidash: {
 		"exists": true,
@@ -4416,33 +4417,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 78,
 		"name": "Rapidash",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 100,
-				"def": 70,
-				"spa": 80,
-				"spd": 80,
-				"spe": 105
+			"hp": 65,
+			"atk": 100,
+			"def": 70,
+			"spa": 80,
+			"spd": 80,
+			"spe": 105,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Flash Fire",
-				"H": "Flame Body"
+			"0": "Run Away",
+			"1": "Flash Fire",
+			"H": "Flame Body",
 		},
 		"weightkg": 95,
 		"prevo": "Ponyta",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Rapidash-Galar"
+			"Rapidash-Galar",
 		],
 		"formeOrder": [
-				"Rapidash",
-				"Rapidash-Galar"
+			"Rapidash",
+			"Rapidash-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -4461,15 +4462,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 950,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slowpoke: {
 		"exists": true,
@@ -4477,36 +4478,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 79,
 		"name": "Slowpoke",
 		"types": [
-				"Water",
-				"Psychic"
+			"Water",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 65,
-				"def": 65,
-				"spa": 40,
-				"spd": 40,
-				"spe": 15
+			"hp": 90,
+			"atk": 65,
+			"def": 65,
+			"spa": 40,
+			"spd": 40,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Own Tempo"
+			"0": "Oblivious",
+			"1": "Own Tempo",
 		},
 		"weightkg": 36,
 		"evos": [
-				"Slowbro",
-				"Slowking"
+			"Slowbro",
+			"Slowking",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"otherFormes": [
-				"Slowpoke-Galar"
+			"Slowpoke-Galar",
 		],
 		"formeOrder": [
-				"Slowpoke",
-				"Slowpoke-Galar"
+			"Slowpoke",
+			"Slowpoke-Galar",
 		],
 		"tier": "LC",
 		"id": "slowpoke",
@@ -4525,15 +4526,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 315,
 		"weighthg": 360,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slowbro: {
 		"exists": true,
@@ -4541,36 +4542,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 80,
 		"name": "Slowbro",
 		"types": [
-				"Water",
-				"Psychic"
+			"Water",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 75,
-				"def": 110,
-				"spa": 100,
-				"spd": 80,
-				"spe": 30
+			"hp": 95,
+			"atk": 75,
+			"def": 110,
+			"spa": 100,
+			"spd": 80,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Own Tempo"
+			"0": "Oblivious",
+			"1": "Own Tempo",
 		},
 		"weightkg": 78.5,
 		"prevo": "Slowpoke",
 		"evoLevel": 37,
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"otherFormes": [
-				"Slowbro-Mega",
-				"Slowbro-Galar"
+			"Slowbro-Mega",
+			"Slowbro-Galar",
 		],
 		"formeOrder": [
-				"Slowbro",
-				"Slowbro-Mega",
-				"Slowbro-Galar"
+			"Slowbro",
+			"Slowbro-Mega",
+			"Slowbro-Galar",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -4589,15 +4590,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 785,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magnemite: {
 		"exists": true,
@@ -4605,28 +4606,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 81,
 		"name": "Magnemite",
 		"types": [
-				"Electric",
-				"Steel"
+			"Electric",
+			"Steel",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 25,
-				"atk": 35,
-				"def": 70,
-				"spa": 95,
-				"spd": 55,
-				"spe": 45
+			"hp": 25,
+			"atk": 35,
+			"def": 70,
+			"spa": 95,
+			"spd": 55,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Magnet Pull",
-				"1": "Sturdy"
+			"0": "Magnet Pull",
+			"1": "Sturdy",
 		},
 		"weightkg": 6,
 		"evos": [
-				"Magneton"
+			"Magneton",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "LC",
 		"id": "magnemite",
@@ -4645,15 +4646,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 325,
 		"weighthg": 60,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magneton: {
 		"exists": true,
@@ -4661,30 +4662,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 82,
 		"name": "Magneton",
 		"types": [
-				"Electric",
-				"Steel"
+			"Electric",
+			"Steel",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 50,
-				"atk": 60,
-				"def": 95,
-				"spa": 120,
-				"spd": 70,
-				"spe": 70
+			"hp": 50,
+			"atk": 60,
+			"def": 95,
+			"spa": 120,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Magnet Pull",
-				"1": "Sturdy"
+			"0": "Magnet Pull",
+			"1": "Sturdy",
 		},
 		"weightkg": 60,
 		"prevo": "Magnemite",
 		"evoLevel": 30,
 		"evos": [
-				"Magnezone"
+			"Magnezone",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -4702,15 +4703,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 465,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	farfetchd: {
 		"exists": true,
@@ -4718,32 +4719,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 83,
 		"name": "Farfetch’d",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 52,
-				"atk": 65,
-				"def": 55,
-				"spa": 58,
-				"spd": 62,
-				"spe": 60
+			"hp": 52,
+			"atk": 65,
+			"def": 55,
+			"spa": 58,
+			"spd": 62,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Keen Eye",
-				"1": "Inner Focus"
+			"0": "Keen Eye",
+			"1": "Inner Focus",
 		},
 		"weightkg": 15,
 		"eggGroups": [
-				"Flying",
-				"Field"
+			"Flying",
+			"Field",
 		],
 		"otherFormes": [
-				"Farfetch’d-Galar"
+			"Farfetch’d-Galar",
 		],
 		"formeOrder": [
-				"Farfetch’d",
-				"Farfetch’d-Galar"
+			"Farfetch’d",
+			"Farfetch’d-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -4763,15 +4764,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 377,
 		"weighthg": 150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	doduo: {
 		"exists": true,
@@ -4779,27 +4780,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 84,
 		"name": "Doduo",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 85,
-				"def": 45,
-				"spa": 35,
-				"spd": 35,
-				"spe": 75
+			"hp": 35,
+			"atk": 85,
+			"def": 45,
+			"spa": 35,
+			"spd": 35,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Early Bird"
+			"0": "Run Away",
+			"1": "Early Bird",
 		},
 		"weightkg": 39.2,
 		"evos": [
-				"Dodrio"
+			"Dodrio",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "LC",
 		"id": "doduo",
@@ -4818,15 +4819,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 310,
 		"weighthg": 392,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dodrio: {
 		"exists": true,
@@ -4834,26 +4835,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 85,
 		"name": "Dodrio",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 110,
-				"def": 70,
-				"spa": 60,
-				"spd": 60,
-				"spe": 100
+			"hp": 60,
+			"atk": 110,
+			"def": 70,
+			"spa": 60,
+			"spd": 60,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Early Bird"
+			"0": "Run Away",
+			"1": "Early Bird",
 		},
 		"weightkg": 85.2,
 		"prevo": "Doduo",
 		"evoLevel": 31,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -4872,15 +4873,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 470,
 		"weighthg": 852,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	seel: {
 		"exists": true,
@@ -4888,26 +4889,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 86,
 		"name": "Seel",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 45,
-				"def": 55,
-				"spa": 45,
-				"spd": 70,
-				"spe": 45
+			"hp": 65,
+			"atk": 45,
+			"def": 55,
+			"spa": 45,
+			"spd": 70,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Thick Fat"
+			"0": "Thick Fat",
 		},
 		"weightkg": 90,
 		"evos": [
-				"Dewgong"
+			"Dewgong",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "LC",
 		"id": "seel",
@@ -4926,15 +4927,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 325,
 		"weighthg": 900,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dewgong: {
 		"exists": true,
@@ -4942,26 +4943,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 87,
 		"name": "Dewgong",
 		"types": [
-				"Water",
-				"Ice"
+			"Water",
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 70,
-				"def": 80,
-				"spa": 70,
-				"spd": 95,
-				"spe": 70
+			"hp": 90,
+			"atk": 70,
+			"def": 80,
+			"spa": 70,
+			"spd": 95,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Thick Fat"
+			"0": "Thick Fat",
 		},
 		"weightkg": 120,
 		"prevo": "Seel",
 		"evoLevel": 34,
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -4980,15 +4981,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 475,
 		"weighthg": 1200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	grimer: {
 		"exists": true,
@@ -4996,33 +4997,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 88,
 		"name": "Grimer",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 80,
-				"def": 50,
-				"spa": 40,
-				"spd": 50,
-				"spe": 25
+			"hp": 80,
+			"atk": 80,
+			"def": 50,
+			"spa": 40,
+			"spd": 50,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Stench",
-				"1": "Sticky Hold"
+			"0": "Stench",
+			"1": "Sticky Hold",
 		},
 		"weightkg": 30,
 		"evos": [
-				"Muk"
+			"Muk",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Grimer-Alola"
+			"Grimer-Alola",
 		],
 		"formeOrder": [
-				"Grimer",
-				"Grimer-Alola"
+			"Grimer",
+			"Grimer-Alola",
 		],
 		"tier": "LC",
 		"id": "grimer",
@@ -5041,15 +5042,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 325,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	muk: {
 		"exists": true,
@@ -5057,32 +5058,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 89,
 		"name": "Muk",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 105,
-				"atk": 105,
-				"def": 75,
-				"spa": 65,
-				"spd": 100,
-				"spe": 50
+			"hp": 105,
+			"atk": 105,
+			"def": 75,
+			"spa": 65,
+			"spd": 100,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Stench",
-				"1": "Sticky Hold"
+			"0": "Stench",
+			"1": "Sticky Hold",
 		},
 		"weightkg": 30,
 		"prevo": "Grimer",
 		"evoLevel": 38,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Muk-Alola"
+			"Muk-Alola",
 		],
 		"formeOrder": [
-				"Muk",
-				"Muk-Alola"
+			"Muk",
+			"Muk-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -5101,15 +5102,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shellder: {
 		"exists": true,
@@ -5117,25 +5118,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 90,
 		"name": "Shellder",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 65,
-				"def": 100,
-				"spa": 45,
-				"spd": 25,
-				"spe": 40
+			"hp": 30,
+			"atk": 65,
+			"def": 100,
+			"spa": 45,
+			"spd": 25,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Shell Armor"
+			"0": "Shell Armor",
 		},
 		"weightkg": 4,
 		"evos": [
-				"Cloyster"
+			"Cloyster",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"tier": "LC",
 		"id": "shellder",
@@ -5154,15 +5155,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 305,
 		"weighthg": 40,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cloyster: {
 		"exists": true,
@@ -5170,26 +5171,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 91,
 		"name": "Cloyster",
 		"types": [
-				"Water",
-				"Ice"
+			"Water",
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 95,
-				"def": 180,
-				"spa": 85,
-				"spd": 45,
-				"spe": 70
+			"hp": 50,
+			"atk": 95,
+			"def": 180,
+			"spa": 85,
+			"spd": 45,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Shell Armor"
+			"0": "Shell Armor",
 		},
 		"weightkg": 132.5,
 		"prevo": "Shellder",
 		"evoType": "useItem",
 		"evoItem": "Water Stone",
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"tier": "NUBL",
 		"doublesTier": "(DUU)",
@@ -5208,15 +5209,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 525,
 		"weighthg": 1325,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gastly: {
 		"exists": true,
@@ -5224,26 +5225,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 92,
 		"name": "Gastly",
 		"types": [
-				"Ghost",
-				"Poison"
+			"Ghost",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 35,
-				"def": 30,
-				"spa": 100,
-				"spd": 35,
-				"spe": 80
+			"hp": 30,
+			"atk": 35,
+			"def": 30,
+			"spa": 100,
+			"spd": 35,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 0.1,
 		"evos": [
-				"Haunter"
+			"Haunter",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "NFE",
 		"id": "gastly",
@@ -5262,15 +5263,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 310,
 		"weighthg": 1,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	haunter: {
 		"exists": true,
@@ -5278,28 +5279,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 93,
 		"name": "Haunter",
 		"types": [
-				"Ghost",
-				"Poison"
+			"Ghost",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 50,
-				"def": 45,
-				"spa": 115,
-				"spd": 55,
-				"spe": 95
+			"hp": 45,
+			"atk": 50,
+			"def": 45,
+			"spa": 115,
+			"spd": 55,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 0.1,
 		"prevo": "Gastly",
 		"evoLevel": 25,
 		"evos": [
-				"Gengar"
+			"Gengar",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -5317,15 +5318,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 1,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gengar: {
 		"exists": true,
@@ -5333,32 +5334,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 94,
 		"name": "Gengar",
 		"types": [
-				"Ghost",
-				"Poison"
+			"Ghost",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 65,
-				"def": 60,
-				"spa": 130,
-				"spd": 75,
-				"spe": 110
+			"hp": 60,
+			"atk": 65,
+			"def": 60,
+			"spa": 130,
+			"spd": 75,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 40.5,
 		"prevo": "Haunter",
 		"evoType": "trade",
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Gengar-Mega"
+			"Gengar-Mega",
 		],
 		"formeOrder": [
-				"Gengar",
-				"Gengar-Mega"
+			"Gengar",
+			"Gengar-Mega",
 		],
 		"canGigantamax": "G-Max Terror",
 		"tier": "RU",
@@ -5378,15 +5379,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 405,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	onix: {
 		"exists": true,
@@ -5394,27 +5395,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 95,
 		"name": "Onix",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 45,
-				"def": 160,
-				"spa": 30,
-				"spd": 45,
-				"spe": 70
+			"hp": 35,
+			"atk": 45,
+			"def": 160,
+			"spa": 30,
+			"spd": 45,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Sturdy"
+			"0": "Rock Head",
+			"1": "Sturdy",
 		},
 		"weightkg": 210,
 		"evos": [
-				"Steelix"
+			"Steelix",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -5433,15 +5434,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 385,
 		"weighthg": 2100,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	drowzee: {
 		"exists": true,
@@ -5449,26 +5450,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 96,
 		"name": "Drowzee",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 48,
-				"def": 45,
-				"spa": 43,
-				"spd": 90,
-				"spe": 42
+			"hp": 60,
+			"atk": 48,
+			"def": 45,
+			"spa": 43,
+			"spd": 90,
+			"spe": 42,
 		},
 		"abilities": {
-				"0": "Insomnia",
-				"1": "Inner Focus"
+			"0": "Insomnia",
+			"1": "Inner Focus",
 		},
 		"weightkg": 32.4,
 		"evos": [
-				"Hypno"
+			"Hypno",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "LC",
 		"id": "drowzee",
@@ -5487,15 +5488,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 328,
 		"weighthg": 324,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hypno: {
 		"exists": true,
@@ -5503,25 +5504,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 97,
 		"name": "Hypno",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 85,
-				"atk": 73,
-				"def": 70,
-				"spa": 73,
-				"spd": 115,
-				"spe": 67
+			"hp": 85,
+			"atk": 73,
+			"def": 70,
+			"spa": 73,
+			"spd": 115,
+			"spe": 67,
 		},
 		"abilities": {
-				"0": "Insomnia",
-				"1": "Inner Focus"
+			"0": "Insomnia",
+			"1": "Inner Focus",
 		},
 		"weightkg": 75.6,
 		"prevo": "Drowzee",
 		"evoLevel": 26,
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -5540,15 +5541,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 483,
 		"weighthg": 756,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	krabby: {
 		"exists": true,
@@ -5556,26 +5557,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 98,
 		"name": "Krabby",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 105,
-				"def": 90,
-				"spa": 25,
-				"spd": 25,
-				"spe": 50
+			"hp": 30,
+			"atk": 105,
+			"def": 90,
+			"spa": 25,
+			"spd": 25,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Shell Armor"
+			"0": "Hyper Cutter",
+			"1": "Shell Armor",
 		},
 		"weightkg": 6.5,
 		"evos": [
-				"Kingler"
+			"Kingler",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -5594,15 +5595,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 325,
 		"weighthg": 65,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kingler: {
 		"exists": true,
@@ -5610,25 +5611,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 99,
 		"name": "Kingler",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 130,
-				"def": 115,
-				"spa": 50,
-				"spd": 50,
-				"spe": 75
+			"hp": 55,
+			"atk": 130,
+			"def": 115,
+			"spa": 50,
+			"spd": 50,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Shell Armor"
+			"0": "Hyper Cutter",
+			"1": "Shell Armor",
 		},
 		"weightkg": 60,
 		"prevo": "Krabby",
 		"evoLevel": 28,
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"canGigantamax": "G-Max Foam Burst",
 		"isNonstandard": null,
@@ -5648,15 +5649,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 475,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	voltorb: {
 		"exists": true,
@@ -5664,34 +5665,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 100,
 		"name": "Voltorb",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 40,
-				"atk": 30,
-				"def": 50,
-				"spa": 55,
-				"spd": 55,
-				"spe": 100
+			"hp": 40,
+			"atk": 30,
+			"def": 50,
+			"spa": 55,
+			"spd": 55,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Soundproof",
-				"1": "Static"
+			"0": "Soundproof",
+			"1": "Static",
 		},
 		"weightkg": 10.4,
 		"evos": [
-				"Electrode"
+			"Electrode",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Voltorb-Hisui"
+			"Voltorb-Hisui",
 		],
 		"formeOrder": [
-				"Voltorb",
-				"Voltorb-Hisui"
+			"Voltorb",
+			"Voltorb-Hisui",
 		],
 		"tier": "LC",
 		"id": "voltorb",
@@ -5710,15 +5711,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 330,
 		"weighthg": 104,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	electrode: {
 		"exists": true,
@@ -5726,33 +5727,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 101,
 		"name": "Electrode",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 60,
-				"atk": 50,
-				"def": 70,
-				"spa": 80,
-				"spd": 80,
-				"spe": 140
+			"hp": 60,
+			"atk": 50,
+			"def": 70,
+			"spa": 80,
+			"spd": 80,
+			"spe": 140,
 		},
 		"abilities": {
-				"0": "Soundproof",
-				"1": "Static"
+			"0": "Soundproof",
+			"1": "Static",
 		},
 		"weightkg": 66.6,
 		"prevo": "Voltorb",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Electrode-Hisui"
+			"Electrode-Hisui",
 		],
 		"formeOrder": [
-				"Electrode",
-				"Electrode-Hisui"
+			"Electrode",
+			"Electrode-Hisui",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -5771,15 +5772,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 490,
 		"weighthg": 666,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	exeggcute: {
 		"exists": true,
@@ -5787,27 +5788,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 102,
 		"name": "Exeggcute",
 		"types": [
-				"Grass",
-				"Psychic"
+			"Grass",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 40,
-				"def": 80,
-				"spa": 60,
-				"spd": 45,
-				"spe": 40
+			"hp": 60,
+			"atk": 40,
+			"def": 80,
+			"spa": 60,
+			"spd": 45,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 2.5,
 		"evos": [
-				"Exeggutor",
-				"Exeggutor-Alola"
+			"Exeggutor",
+			"Exeggutor-Alola",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "exeggcute",
@@ -5826,15 +5827,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 325,
 		"weighthg": 25,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	exeggutor: {
 		"exists": true,
@@ -5842,33 +5843,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 103,
 		"name": "Exeggutor",
 		"types": [
-				"Grass",
-				"Psychic"
+			"Grass",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 95,
-				"def": 85,
-				"spa": 125,
-				"spd": 65,
-				"spe": 55
+			"hp": 95,
+			"atk": 95,
+			"def": 85,
+			"spa": 125,
+			"spd": 65,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 120,
 		"prevo": "Exeggcute",
 		"evoType": "useItem",
 		"evoItem": "Leaf Stone",
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"otherFormes": [
-				"Exeggutor-Alola"
+			"Exeggutor-Alola",
 		],
 		"formeOrder": [
-				"Exeggutor",
-				"Exeggutor-Alola"
+			"Exeggutor",
+			"Exeggutor-Alola",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -5887,15 +5888,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 530,
 		"weighthg": 1200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cubone: {
 		"exists": true,
@@ -5903,28 +5904,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 104,
 		"name": "Cubone",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 50,
-				"def": 95,
-				"spa": 40,
-				"spd": 50,
-				"spe": 35
+			"hp": 50,
+			"atk": 50,
+			"def": 95,
+			"spa": 40,
+			"spd": 50,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Lightning Rod",
-				"H": "Battle Armor"
+			"0": "Rock Head",
+			"1": "Lightning Rod",
+			"H": "Battle Armor",
 		},
 		"weightkg": 6.5,
 		"evos": [
-				"Marowak",
-				"Marowak-Alola"
+			"Marowak",
+			"Marowak-Alola",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -5943,15 +5944,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 65,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	marowak: {
 		"exists": true,
@@ -5959,35 +5960,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 105,
 		"name": "Marowak",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 80,
-				"def": 110,
-				"spa": 50,
-				"spd": 80,
-				"spe": 45
+			"hp": 60,
+			"atk": 80,
+			"def": 110,
+			"spa": 50,
+			"spd": 80,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Lightning Rod",
-				"H": "Battle Armor"
+			"0": "Rock Head",
+			"1": "Lightning Rod",
+			"H": "Battle Armor",
 		},
 		"weightkg": 45,
 		"prevo": "Cubone",
 		"evoLevel": 28,
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"otherFormes": [
-				"Marowak-Alola",
-				"Marowak-Alola-Totem"
+			"Marowak-Alola",
+			"Marowak-Alola-Totem",
 		],
 		"formeOrder": [
-				"Marowak",
-				"Marowak-Alola",
-				"Marowak-Alola-Totem"
+			"Marowak",
+			"Marowak-Alola",
+			"Marowak-Alola-Totem",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6006,15 +6007,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 425,
 		"weighthg": 450,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hitmonlee: {
 		"exists": true,
@@ -6022,26 +6023,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 106,
 		"name": "Hitmonlee",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 50,
-				"atk": 120,
-				"def": 53,
-				"spa": 35,
-				"spd": 110,
-				"spe": 87
+			"hp": 50,
+			"atk": 120,
+			"def": 53,
+			"spa": 35,
+			"spd": 110,
+			"spe": 87,
 		},
 		"abilities": {
-				"0": "Limber"
+			"0": "Limber",
 		},
 		"weightkg": 49.8,
 		"prevo": "Tyrogue",
 		"evoLevel": 20,
 		"evoCondition": "with an Atk stat > its Def stat",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -6060,15 +6061,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 455,
 		"weighthg": 498,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hitmonchan: {
 		"exists": true,
@@ -6076,27 +6077,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 107,
 		"name": "Hitmonchan",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 50,
-				"atk": 105,
-				"def": 79,
-				"spa": 35,
-				"spd": 110,
-				"spe": 76
+			"hp": 50,
+			"atk": 105,
+			"def": 79,
+			"spa": 35,
+			"spd": 110,
+			"spe": 76,
 		},
 		"abilities": {
-				"0": "Keen Eye",
-				"1": "Inner Focus"
+			"0": "Keen Eye",
+			"1": "Inner Focus",
 		},
 		"weightkg": 50.2,
 		"prevo": "Tyrogue",
 		"evoLevel": 20,
 		"evoCondition": "with an Atk stat < its Def stat",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -6115,15 +6116,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 455,
 		"weighthg": 502,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lickitung: {
 		"exists": true,
@@ -6131,27 +6132,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 108,
 		"name": "Lickitung",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 55,
-				"def": 75,
-				"spa": 60,
-				"spd": 75,
-				"spe": 30
+			"hp": 90,
+			"atk": 55,
+			"def": 75,
+			"spa": 60,
+			"spd": 75,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Own Tempo",
-				"1": "Oblivious",
-				"H": "Cloud Nine"
+			"0": "Own Tempo",
+			"1": "Oblivious",
+			"H": "Cloud Nine",
 		},
 		"weightkg": 65.5,
 		"evos": [
-				"Lickilicky"
+			"Lickilicky",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6170,15 +6171,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 385,
 		"weighthg": 655,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	koffing: {
 		"exists": true,
@@ -6186,27 +6187,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 109,
 		"name": "Koffing",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 65,
-				"def": 95,
-				"spa": 60,
-				"spd": 45,
-				"spe": 35
+			"hp": 40,
+			"atk": 65,
+			"def": 95,
+			"spa": 60,
+			"spd": 45,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Levitate",
-				"1": "Stench"
+			"0": "Levitate",
+			"1": "Stench",
 		},
 		"weightkg": 1,
 		"evos": [
-				"Weezing",
-				"Weezing-Galar"
+			"Weezing",
+			"Weezing-Galar",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "koffing",
@@ -6225,15 +6226,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 340,
 		"weighthg": 10,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	weezing: {
 		"exists": true,
@@ -6241,32 +6242,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 110,
 		"name": "Weezing",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 90,
-				"def": 120,
-				"spa": 85,
-				"spd": 70,
-				"spe": 60
+			"hp": 65,
+			"atk": 90,
+			"def": 120,
+			"spa": 85,
+			"spd": 70,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Levitate",
-				"1": "Stench"
+			"0": "Levitate",
+			"1": "Stench",
 		},
 		"weightkg": 9.5,
 		"prevo": "Koffing",
 		"evoLevel": 35,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Weezing-Galar"
+			"Weezing-Galar",
 		],
 		"formeOrder": [
-				"Weezing",
-				"Weezing-Galar"
+			"Weezing",
+			"Weezing-Galar",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -6285,15 +6286,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 95,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	rhyhorn: {
 		"exists": true,
@@ -6301,28 +6302,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 111,
 		"name": "Rhyhorn",
 		"types": [
-				"Ground",
-				"Rock"
+			"Ground",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 85,
-				"def": 95,
-				"spa": 30,
-				"spd": 30,
-				"spe": 25
+			"hp": 80,
+			"atk": 85,
+			"def": 95,
+			"spa": 30,
+			"spd": 30,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Lightning Rod",
-				"1": "Rock Head"
+			"0": "Lightning Rod",
+			"1": "Rock Head",
 		},
 		"weightkg": 115,
 		"evos": [
-				"Rhydon"
+			"Rhydon",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"tier": "LC",
 		"id": "rhyhorn",
@@ -6341,15 +6342,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 345,
 		"weighthg": 1150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	rhydon: {
 		"exists": true,
@@ -6357,30 +6358,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 112,
 		"name": "Rhydon",
 		"types": [
-				"Ground",
-				"Rock"
+			"Ground",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 105,
-				"atk": 130,
-				"def": 120,
-				"spa": 45,
-				"spd": 45,
-				"spe": 40
+			"hp": 105,
+			"atk": 130,
+			"def": 120,
+			"spa": 45,
+			"spd": 45,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Lightning Rod",
-				"1": "Rock Head"
+			"0": "Lightning Rod",
+			"1": "Rock Head",
 		},
 		"weightkg": 120,
 		"prevo": "Rhyhorn",
 		"evoLevel": 42,
 		"evos": [
-				"Rhyperior"
+			"Rhyperior",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -6398,15 +6399,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 485,
 		"weighthg": 1200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	chansey: {
 		"exists": true,
@@ -6414,20 +6415,20 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 113,
 		"name": "Chansey",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 250,
-				"atk": 5,
-				"def": 5,
-				"spa": 35,
-				"spd": 105,
-				"spe": 50
+			"hp": 250,
+			"atk": 5,
+			"def": 5,
+			"spa": 35,
+			"spd": 105,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Natural Cure",
-				"1": "Serene Grace"
+			"0": "Natural Cure",
+			"1": "Serene Grace",
 		},
 		"weightkg": 34.6,
 		"prevo": "Happiny",
@@ -6435,10 +6436,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evoItem": "Oval Stone",
 		"evoCondition": "during the day",
 		"evos": [
-				"Blissey"
+			"Blissey",
 		],
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"canHatch": true,
 		"tier": "RU",
@@ -6456,15 +6457,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"baseForme": "",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 450,
 		"weighthg": 346,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tangela: {
 		"exists": true,
@@ -6472,25 +6473,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 114,
 		"name": "Tangela",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 55,
-				"def": 115,
-				"spa": 100,
-				"spd": 40,
-				"spe": 60
+			"hp": 65,
+			"atk": 55,
+			"def": 115,
+			"spa": 100,
+			"spd": 40,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 35,
 		"evos": [
-				"Tangrowth"
+			"Tangrowth",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6509,15 +6510,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 435,
 		"weighthg": 350,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kangaskhan: {
 		"exists": true,
@@ -6525,31 +6526,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 115,
 		"name": "Kangaskhan",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 105,
-				"atk": 95,
-				"def": 80,
-				"spa": 40,
-				"spd": 80,
-				"spe": 90
+			"hp": 105,
+			"atk": 95,
+			"def": 80,
+			"spa": 40,
+			"spd": 80,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Early Bird",
-				"1": "Inner Focus"
+			"0": "Early Bird",
+			"1": "Inner Focus",
 		},
 		"weightkg": 80,
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"otherFormes": [
-				"Kangaskhan-Mega"
+			"Kangaskhan-Mega",
 		],
 		"formeOrder": [
-				"Kangaskhan",
-				"Kangaskhan-Mega"
+			"Kangaskhan",
+			"Kangaskhan-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6569,15 +6570,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 490,
 		"weighthg": 800,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	horsea: {
 		"exists": true,
@@ -6585,27 +6586,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 116,
 		"name": "Horsea",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 40,
-				"def": 70,
-				"spa": 70,
-				"spd": 25,
-				"spe": 60
+			"hp": 30,
+			"atk": 40,
+			"def": 70,
+			"spa": 70,
+			"spd": 25,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Damp"
+			"0": "Swift Swim",
+			"1": "Damp",
 		},
 		"weightkg": 8,
 		"evos": [
-				"Seadra"
+			"Seadra",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "horsea",
@@ -6624,15 +6625,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 295,
 		"weighthg": 80,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	seadra: {
 		"exists": true,
@@ -6640,29 +6641,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 117,
 		"name": "Seadra",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 65,
-				"def": 95,
-				"spa": 95,
-				"spd": 45,
-				"spe": 85
+			"hp": 55,
+			"atk": 65,
+			"def": 95,
+			"spa": 95,
+			"spd": 45,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Damp"
+			"0": "Poison Point",
+			"1": "Damp",
 		},
 		"weightkg": 25,
 		"prevo": "Horsea",
 		"evoLevel": 32,
 		"evos": [
-				"Kingdra"
+			"Kingdra",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "seadra",
@@ -6680,15 +6681,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 250,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	goldeen: {
 		"exists": true,
@@ -6696,27 +6697,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 118,
 		"name": "Goldeen",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 67,
-				"def": 60,
-				"spa": 35,
-				"spd": 50,
-				"spe": 63
+			"hp": 45,
+			"atk": 67,
+			"def": 60,
+			"spa": 35,
+			"spd": 50,
+			"spe": 63,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Water Veil",
-				"H": "Lightning Rod"
+			"0": "Swift Swim",
+			"1": "Water Veil",
+			"H": "Lightning Rod",
 		},
 		"weightkg": 15,
 		"evos": [
-				"Seaking"
+			"Seaking",
 		],
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6735,15 +6736,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	seaking: {
 		"exists": true,
@@ -6751,26 +6752,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 119,
 		"name": "Seaking",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 92,
-				"def": 65,
-				"spa": 65,
-				"spd": 80,
-				"spe": 68
+			"hp": 80,
+			"atk": 92,
+			"def": 65,
+			"spa": 65,
+			"spd": 80,
+			"spe": 68,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Water Veil",
-				"H": "Lightning Rod"
+			"0": "Swift Swim",
+			"1": "Water Veil",
+			"H": "Lightning Rod",
 		},
 		"weightkg": 39,
 		"prevo": "Goldeen",
 		"evoLevel": 33,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6789,15 +6790,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 450,
 		"weighthg": 390,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	staryu: {
 		"exists": true,
@@ -6805,27 +6806,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 120,
 		"name": "Staryu",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 30,
-				"atk": 45,
-				"def": 55,
-				"spa": 70,
-				"spd": 55,
-				"spe": 85
+			"hp": 30,
+			"atk": 45,
+			"def": 55,
+			"spa": 70,
+			"spd": 55,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Illuminate",
-				"1": "Natural Cure"
+			"0": "Illuminate",
+			"1": "Natural Cure",
 		},
 		"weightkg": 34.5,
 		"evos": [
-				"Starmie"
+			"Starmie",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6844,15 +6845,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 340,
 		"weighthg": 345,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	starmie: {
 		"exists": true,
@@ -6860,28 +6861,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 121,
 		"name": "Starmie",
 		"types": [
-				"Water",
-				"Psychic"
+			"Water",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 60,
-				"atk": 75,
-				"def": 85,
-				"spa": 100,
-				"spd": 85,
-				"spe": 115
+			"hp": 60,
+			"atk": 75,
+			"def": 85,
+			"spa": 100,
+			"spd": 85,
+			"spe": 115,
 		},
 		"abilities": {
-				"0": "Illuminate",
-				"1": "Natural Cure"
+			"0": "Illuminate",
+			"1": "Natural Cure",
 		},
 		"weightkg": 80,
 		"prevo": "Staryu",
 		"evoType": "useItem",
 		"evoItem": "Water Stone",
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6900,15 +6901,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 520,
 		"weighthg": 800,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mrmime: {
 		"exists": true,
@@ -6916,33 +6917,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 122,
 		"name": "Mr. Mime",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 65,
-				"spa": 100,
-				"spd": 120,
-				"spe": 90
+			"hp": 40,
+			"atk": 45,
+			"def": 65,
+			"spa": 100,
+			"spd": 120,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Soundproof"
+			"0": "Soundproof",
 		},
 		"weightkg": 54.5,
 		"prevo": "Mime Jr.",
 		"evoType": "levelMove",
 		"evoMove": "Mimic",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"canHatch": true,
 		"otherFormes": [
-				"Mr. Mime-Galar"
+			"Mr. Mime-Galar",
 		],
 		"formeOrder": [
-				"Mr. Mime",
-				"Mr. Mime-Galar"
+			"Mr. Mime",
+			"Mr. Mime-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -6960,15 +6961,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evos": [],
 		"nfe": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 545,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	scyther: {
 		"exists": true,
@@ -6976,27 +6977,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 123,
 		"name": "Scyther",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 110,
-				"def": 80,
-				"spa": 55,
-				"spd": 80,
-				"spe": 105
+			"hp": 70,
+			"atk": 110,
+			"def": 80,
+			"spa": 55,
+			"spd": 80,
+			"spe": 105,
 		},
 		"abilities": {
-				"0": "Swarm"
+			"0": "Swarm",
 		},
 		"weightkg": 56,
 		"evos": [
-				"Scizor",
-				"Kleavor"
+			"Scizor",
+			"Kleavor",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "PU",
 		"doublesTier": "NFE",
@@ -7015,15 +7016,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 560,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	jynx: {
 		"exists": true,
@@ -7031,26 +7032,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 124,
 		"name": "Jynx",
 		"types": [
-				"Ice",
-				"Psychic"
+			"Ice",
+			"Psychic",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 65,
-				"atk": 50,
-				"def": 35,
-				"spa": 115,
-				"spd": 95,
-				"spe": 95
+			"hp": 65,
+			"atk": 50,
+			"def": 35,
+			"spa": 115,
+			"spd": 95,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Oblivious"
+			"0": "Oblivious",
 		},
 		"weightkg": 40.6,
 		"prevo": "Smoochum",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -7069,15 +7070,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 455,
 		"weighthg": 406,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	electabuzz: {
 		"exists": true,
@@ -7085,32 +7086,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 125,
 		"name": "Electabuzz",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 83,
-				"def": 57,
-				"spa": 95,
-				"spd": 85,
-				"spe": 105
+			"hp": 65,
+			"atk": 83,
+			"def": 57,
+			"spa": 95,
+			"spd": 85,
+			"spe": 105,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Vital Spirit"
+			"0": "Static",
+			"1": "Vital Spirit",
 		},
 		"weightkg": 30,
 		"prevo": "Elekid",
 		"evoLevel": 30,
 		"evos": [
-				"Electivire"
+			"Electivire",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "NFE",
 		"id": "electabuzz",
@@ -7132,7 +7133,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magmar: {
 		"exists": true,
@@ -7140,32 +7141,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 126,
 		"name": "Magmar",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 95,
-				"def": 57,
-				"spa": 100,
-				"spd": 85,
-				"spe": 93
+			"hp": 65,
+			"atk": 95,
+			"def": 57,
+			"spa": 100,
+			"spd": 85,
+			"spe": 93,
 		},
 		"abilities": {
-				"0": "Flame Body",
-				"1": "Vital Spirit"
+			"0": "Flame Body",
+			"1": "Vital Spirit",
 		},
 		"weightkg": 44.5,
 		"prevo": "Magby",
 		"evoLevel": 30,
 		"evos": [
-				"Magmortar"
+			"Magmortar",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "NFE",
 		"id": "magmar",
@@ -7187,7 +7188,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pinsir: {
 		"exists": true,
@@ -7195,29 +7196,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 127,
 		"name": "Pinsir",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 125,
-				"def": 100,
-				"spa": 55,
-				"spd": 70,
-				"spe": 85
+			"hp": 65,
+			"atk": 125,
+			"def": 100,
+			"spa": 55,
+			"spd": 70,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Hyper Cutter"
+			"0": "Hyper Cutter",
 		},
 		"weightkg": 55,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"otherFormes": [
-				"Pinsir-Mega"
+			"Pinsir-Mega",
 		],
 		"formeOrder": [
-				"Pinsir",
-				"Pinsir-Mega"
+			"Pinsir",
+			"Pinsir-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -7237,15 +7238,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 550,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tauros: {
 		"exists": true,
@@ -7253,34 +7254,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 128,
 		"name": "Tauros",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 75,
-				"atk": 100,
-				"def": 95,
-				"spa": 40,
-				"spd": 70,
-				"spe": 110
+			"hp": 75,
+			"atk": 100,
+			"def": 95,
+			"spa": 40,
+			"spd": 70,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 88.4,
 		"otherFormes": [
-				"Tauros-Paldea-Combat",
-				"Tauros-Paldea-Blaze",
-				"Tauros-Paldea-Aqua"
+			"Tauros-Paldea-Combat",
+			"Tauros-Paldea-Blaze",
+			"Tauros-Paldea-Aqua",
 		],
 		"formeOrder": [
-				"Tauros",
-				"Tauros-Paldea-Combat",
-				"Tauros-Paldea-Blaze",
-				"Tauros-Paldea-Aqua"
+			"Tauros",
+			"Tauros-Paldea-Combat",
+			"Tauros-Paldea-Blaze",
+			"Tauros-Paldea-Aqua",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -7300,15 +7301,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 490,
 		"weighthg": 884,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magikarp: {
 		"exists": true,
@@ -7316,26 +7317,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 129,
 		"name": "Magikarp",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 20,
-				"atk": 10,
-				"def": 55,
-				"spa": 15,
-				"spd": 20,
-				"spe": 80
+			"hp": 20,
+			"atk": 10,
+			"def": 55,
+			"spa": 15,
+			"spd": 20,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Swift Swim"
+			"0": "Swift Swim",
 		},
 		"weightkg": 10,
 		"evos": [
-				"Gyarados"
+			"Gyarados",
 		],
 		"eggGroups": [
-				"Water 2",
-				"Dragon"
+			"Water 2",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "magikarp",
@@ -7354,15 +7355,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 200,
 		"weighthg": 100,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gyarados: {
 		"exists": true,
@@ -7370,33 +7371,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 130,
 		"name": "Gyarados",
 		"types": [
-				"Water",
-				"Flying"
+			"Water",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 125,
-				"def": 79,
-				"spa": 60,
-				"spd": 100,
-				"spe": 81
+			"hp": 95,
+			"atk": 125,
+			"def": 79,
+			"spa": 60,
+			"spd": 100,
+			"spe": 81,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 235,
 		"prevo": "Magikarp",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Water 2",
-				"Dragon"
+			"Water 2",
+			"Dragon",
 		],
 		"otherFormes": [
-				"Gyarados-Mega"
+			"Gyarados-Mega",
 		],
 		"formeOrder": [
-				"Gyarados",
-				"Gyarados-Mega"
+			"Gyarados",
+			"Gyarados-Mega",
 		],
 		"tier": "NUBL",
 		"doublesTier": "DUU",
@@ -7415,15 +7416,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 540,
 		"weighthg": 2350,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lapras: {
 		"exists": true,
@@ -7431,25 +7432,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 131,
 		"name": "Lapras",
 		"types": [
-				"Water",
-				"Ice"
+			"Water",
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 130,
-				"atk": 85,
-				"def": 80,
-				"spa": 85,
-				"spd": 95,
-				"spe": 60
+			"hp": 130,
+			"atk": 85,
+			"def": 80,
+			"spa": 85,
+			"spd": 95,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Water Absorb",
-				"1": "Shell Armor"
+			"0": "Water Absorb",
+			"1": "Shell Armor",
 		},
 		"weightkg": 220,
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"canGigantamax": "G-Max Resonance",
 		"tier": "ZU",
@@ -7470,15 +7471,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 535,
 		"weighthg": 2200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ditto: {
 		"exists": true,
@@ -7486,23 +7487,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 132,
 		"name": "Ditto",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 48,
-				"atk": 48,
-				"def": 48,
-				"spa": 48,
-				"spd": 48,
-				"spe": 48
+			"hp": 48,
+			"atk": 48,
+			"def": 48,
+			"spa": 48,
+			"spd": 48,
+			"spe": 48,
 		},
 		"abilities": {
-				"0": "Limber"
+			"0": "Limber",
 		},
 		"weightkg": 4,
 		"eggGroups": [
-				"Ditto"
+			"Ditto",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -7522,15 +7523,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 288,
 		"weighthg": 40,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	eevee: {
 		"exists": true,
@@ -7538,43 +7539,43 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 133,
 		"name": "Eevee",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 55,
-				"atk": 55,
-				"def": 50,
-				"spa": 45,
-				"spd": 65,
-				"spe": 55
+			"hp": 55,
+			"atk": 55,
+			"def": 50,
+			"spa": 45,
+			"spd": 65,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Run Away"
+			"0": "Run Away",
 		},
 		"weightkg": 6.5,
 		"evos": [
-				"Vaporeon",
-				"Jolteon",
-				"Flareon",
-				"Espeon",
-				"Umbreon",
-				"Leafeon",
-				"Glaceon",
-				"Sylveon"
+			"Vaporeon",
+			"Jolteon",
+			"Flareon",
+			"Espeon",
+			"Umbreon",
+			"Leafeon",
+			"Glaceon",
+			"Sylveon",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Eevee-Starter"
+			"Eevee-Starter",
 		],
 		"formeOrder": [
-				"Eevee",
-				"Eevee-Starter"
+			"Eevee",
+			"Eevee-Starter",
 		],
 		"canGigantamax": "G-Max Cuddle",
 		"tier": "LC",
@@ -7598,7 +7599,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	vaporeon: {
 		"exists": true,
@@ -7606,29 +7607,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 134,
 		"name": "Vaporeon",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 130,
-				"atk": 65,
-				"def": 60,
-				"spa": 110,
-				"spd": 95,
-				"spe": 65
+			"hp": 130,
+			"atk": 65,
+			"def": 60,
+			"spa": 110,
+			"spd": 95,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Water Absorb"
+			"0": "Water Absorb",
 		},
 		"weightkg": 29,
 		"prevo": "Eevee",
 		"evoType": "useItem",
 		"evoItem": "Water Stone",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -7651,7 +7652,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	jolteon: {
 		"exists": true,
@@ -7659,29 +7660,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 135,
 		"name": "Jolteon",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 65,
-				"def": 60,
-				"spa": 110,
-				"spd": 95,
-				"spe": 130
+			"hp": 65,
+			"atk": 65,
+			"def": 60,
+			"spa": 110,
+			"spd": 95,
+			"spe": 130,
 		},
 		"abilities": {
-				"0": "Volt Absorb"
+			"0": "Volt Absorb",
 		},
 		"weightkg": 24.5,
 		"prevo": "Eevee",
 		"evoType": "useItem",
 		"evoItem": "Thunder Stone",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -7704,7 +7705,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	flareon: {
 		"exists": true,
@@ -7712,30 +7713,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 136,
 		"name": "Flareon",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 130,
-				"def": 60,
-				"spa": 95,
-				"spd": 110,
-				"spe": 65
+			"hp": 65,
+			"atk": 130,
+			"def": 60,
+			"spa": 95,
+			"spd": 110,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Flash Fire",
-				"1": "Guts"
+			"0": "Flash Fire",
+			"1": "Guts",
 		},
 		"weightkg": 25,
 		"prevo": "Eevee",
 		"evoType": "useItem",
 		"evoItem": "Fire Stone",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -7758,7 +7759,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	porygon: {
 		"exists": true,
@@ -7766,26 +7767,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 137,
 		"name": "Porygon",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 65,
-				"atk": 60,
-				"def": 70,
-				"spa": 85,
-				"spd": 75,
-				"spe": 40
+			"hp": 65,
+			"atk": 60,
+			"def": 70,
+			"spa": 85,
+			"spd": 75,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Trace"
+			"0": "Trace",
 		},
 		"weightkg": 36.5,
 		"evos": [
-				"Porygon2"
+			"Porygon2",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "NFE",
 		"id": "porygon",
@@ -7804,15 +7805,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 395,
 		"weighthg": 365,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	omanyte: {
 		"exists": true,
@@ -7820,32 +7821,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 138,
 		"name": "Omanyte",
 		"types": [
-				"Rock",
-				"Water"
+			"Rock",
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 35,
-				"atk": 40,
-				"def": 100,
-				"spa": 90,
-				"spd": 55,
-				"spe": 35
+			"hp": 35,
+			"atk": 40,
+			"def": 100,
+			"spa": 90,
+			"spd": 55,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Shell Armor"
+			"0": "Swift Swim",
+			"1": "Shell Armor",
 		},
 		"weightkg": 7.5,
 		"evos": [
-				"Omastar"
+			"Omastar",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -7868,7 +7869,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	omastar: {
 		"exists": true,
@@ -7876,31 +7877,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 139,
 		"name": "Omastar",
 		"types": [
-				"Rock",
-				"Water"
+			"Rock",
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 60,
-				"def": 125,
-				"spa": 115,
-				"spd": 70,
-				"spe": 55
+			"hp": 70,
+			"atk": 60,
+			"def": 125,
+			"spa": 115,
+			"spd": 70,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Shell Armor"
+			"0": "Swift Swim",
+			"1": "Shell Armor",
 		},
 		"weightkg": 35,
 		"prevo": "Omanyte",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -7923,7 +7924,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kabuto: {
 		"exists": true,
@@ -7931,32 +7932,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 140,
 		"name": "Kabuto",
 		"types": [
-				"Rock",
-				"Water"
+			"Rock",
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 30,
-				"atk": 80,
-				"def": 90,
-				"spa": 55,
-				"spd": 45,
-				"spe": 55
+			"hp": 30,
+			"atk": 80,
+			"def": 90,
+			"spa": 55,
+			"spd": 45,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Battle Armor"
+			"0": "Swift Swim",
+			"1": "Battle Armor",
 		},
 		"weightkg": 11.5,
 		"evos": [
-				"Kabutops"
+			"Kabutops",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -7979,7 +7980,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kabutops: {
 		"exists": true,
@@ -7987,31 +7988,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 141,
 		"name": "Kabutops",
 		"types": [
-				"Rock",
-				"Water"
+			"Rock",
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 60,
-				"atk": 115,
-				"def": 105,
-				"spa": 65,
-				"spd": 70,
-				"spe": 80
+			"hp": 60,
+			"atk": 115,
+			"def": 105,
+			"spa": 65,
+			"spd": 70,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Battle Armor"
+			"0": "Swift Swim",
+			"1": "Battle Armor",
 		},
 		"weightkg": 40.5,
 		"prevo": "Kabuto",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -8034,7 +8035,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	aerodactyl: {
 		"exists": true,
@@ -8042,35 +8043,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 142,
 		"name": "Aerodactyl",
 		"types": [
-				"Rock",
-				"Flying"
+			"Rock",
+			"Flying",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 80,
-				"atk": 105,
-				"def": 65,
-				"spa": 60,
-				"spd": 75,
-				"spe": 130
+			"hp": 80,
+			"atk": 105,
+			"def": 65,
+			"spa": 60,
+			"spd": 75,
+			"spe": 130,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Pressure"
+			"0": "Rock Head",
+			"1": "Pressure",
 		},
 		"weightkg": 59,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"otherFormes": [
-				"Aerodactyl-Mega"
+			"Aerodactyl-Mega",
 		],
 		"formeOrder": [
-				"Aerodactyl",
-				"Aerodactyl-Mega"
+			"Aerodactyl",
+			"Aerodactyl-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -8094,7 +8095,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	snorlax: {
 		"exists": true,
@@ -8102,29 +8103,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 143,
 		"name": "Snorlax",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 160,
-				"atk": 110,
-				"def": 65,
-				"spa": 65,
-				"spd": 110,
-				"spe": 30
+			"hp": 160,
+			"atk": 110,
+			"def": 65,
+			"spa": 65,
+			"spd": 110,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Immunity",
-				"1": "Thick Fat"
+			"0": "Immunity",
+			"1": "Thick Fat",
 		},
 		"weightkg": 460,
 		"prevo": "Munchlax",
 		"evoType": "levelFriendship",
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"canHatch": true,
 		"canGigantamax": "G-Max Replenish",
@@ -8148,41 +8149,41 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	articuno: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 144,
 		"name": "Articuno",
 		"types": [
-				"Ice",
-				"Flying"
+			"Ice",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 90,
-				"atk": 85,
-				"def": 100,
-				"spa": 95,
-				"spd": 125,
-				"spe": 85
+			"hp": 90,
+			"atk": 85,
+			"def": 100,
+			"spa": 95,
+			"spd": 125,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 55.4,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Articuno-Galar"
+			"Articuno-Galar",
 		],
 		"formeOrder": [
-				"Articuno",
-				"Articuno-Galar"
+			"Articuno",
+			"Articuno-Galar",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -8202,50 +8203,50 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 554,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	zapdos: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 145,
 		"name": "Zapdos",
 		"types": [
-				"Electric",
-				"Flying"
+			"Electric",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 90,
-				"atk": 90,
-				"def": 85,
-				"spa": 125,
-				"spd": 90,
-				"spe": 100
+			"hp": 90,
+			"atk": 90,
+			"def": 85,
+			"spa": 125,
+			"spd": 90,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Pressure",
-				"1": "Static"
+			"0": "Pressure",
+			"1": "Static",
 		},
 		"weightkg": 52.6,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Zapdos-Galar"
+			"Zapdos-Galar",
 		],
 		"formeOrder": [
-				"Zapdos",
-				"Zapdos-Galar"
+			"Zapdos",
+			"Zapdos-Galar",
 		],
 		"tier": "UU",
 		"doublesTier": "(DUU)",
@@ -8265,50 +8266,50 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 526,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	moltres: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 146,
 		"name": "Moltres",
 		"types": [
-				"Fire",
-				"Flying"
+			"Fire",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 90,
-				"atk": 100,
-				"def": 90,
-				"spa": 125,
-				"spd": 85,
-				"spe": 90
+			"hp": 90,
+			"atk": 100,
+			"def": 90,
+			"spa": 125,
+			"spd": 85,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Pressure",
-				"1": "Flame Body"
+			"0": "Pressure",
+			"1": "Flame Body",
 		},
 		"weightkg": 60,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Moltres-Galar"
+			"Moltres-Galar",
 		],
 		"formeOrder": [
-				"Moltres",
-				"Moltres-Galar"
+			"Moltres",
+			"Moltres-Galar",
 		],
 		"tier": "OU",
 		"doublesTier": "(DUU)",
@@ -8328,15 +8329,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dratini: {
 		"exists": true,
@@ -8344,27 +8345,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 147,
 		"name": "Dratini",
 		"types": [
-				"Dragon"
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 41,
-				"atk": 64,
-				"def": 45,
-				"spa": 50,
-				"spd": 50,
-				"spe": 50
+			"hp": 41,
+			"atk": 64,
+			"def": 45,
+			"spa": 50,
+			"spd": 50,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Shed Skin",
-				"1": "Marvel Scale"
+			"0": "Shed Skin",
+			"1": "Marvel Scale",
 		},
 		"weightkg": 3.3,
 		"evos": [
-				"Dragonair"
+			"Dragonair",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "dratini",
@@ -8383,15 +8384,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 33,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dragonair: {
 		"exists": true,
@@ -8399,29 +8400,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 148,
 		"name": "Dragonair",
 		"types": [
-				"Dragon"
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 61,
-				"atk": 84,
-				"def": 65,
-				"spa": 70,
-				"spd": 70,
-				"spe": 70
+			"hp": 61,
+			"atk": 84,
+			"def": 65,
+			"spa": 70,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Shed Skin",
-				"1": "Marvel Scale"
+			"0": "Shed Skin",
+			"1": "Marvel Scale",
 		},
 		"weightkg": 16.5,
 		"prevo": "Dratini",
 		"evoLevel": 30,
 		"evos": [
-				"Dragonite"
+			"Dragonite",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "dragonair",
@@ -8439,15 +8440,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 165,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dragonite: {
 		"exists": true,
@@ -8455,26 +8456,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 149,
 		"name": "Dragonite",
 		"types": [
-				"Dragon",
-				"Flying"
+			"Dragon",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 91,
-				"atk": 134,
-				"def": 95,
-				"spa": 100,
-				"spd": 100,
-				"spe": 80
+			"hp": 91,
+			"atk": 134,
+			"def": 95,
+			"spa": 100,
+			"spd": 100,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 210,
 		"prevo": "Dragonair",
 		"evoLevel": 55,
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "OU",
 		"doublesTier": "DOU",
@@ -8493,50 +8494,50 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 600,
 		"weighthg": 2100,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mewtwo: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 150,
 		"name": "Mewtwo",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 106,
-				"atk": 110,
-				"def": 90,
-				"spa": 154,
-				"spd": 90,
-				"spe": 130
+			"hp": 106,
+			"atk": 110,
+			"def": 90,
+			"spa": 154,
+			"spd": 90,
+			"spe": 130,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 122,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Mewtwo-Mega-X",
-				"Mewtwo-Mega-Y"
+			"Mewtwo-Mega-X",
+			"Mewtwo-Mega-Y",
 		],
 		"formeOrder": [
-				"Mewtwo",
-				"Mewtwo-Mega-X",
-				"Mewtwo-Mega-Y"
+			"Mewtwo",
+			"Mewtwo-Mega-X",
+			"Mewtwo-Mega-Y",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -8556,41 +8557,41 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 680,
 		"weighthg": 1220,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mew: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 151,
 		"name": "Mew",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 100,
-				"def": 100,
-				"spa": 100,
-				"spd": 100,
-				"spe": 100
+			"hp": 100,
+			"atk": 100,
+			"def": 100,
+			"spa": 100,
+			"spd": 100,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Synchronize"
+			"0": "Synchronize",
 		},
 		"weightkg": 4,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "NUBL",
 		"doublesTier": "(DUU)",
@@ -8610,15 +8611,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 40,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	chikorita: {
 		"exists": true,
@@ -8626,30 +8627,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 152,
 		"name": "Chikorita",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 49,
-				"def": 65,
-				"spa": 49,
-				"spd": 65,
-				"spe": 45
+			"hp": 45,
+			"atk": 49,
+			"def": 65,
+			"spa": 49,
+			"spd": 65,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 6.4,
 		"evos": [
-				"Bayleef"
+			"Bayleef",
 		],
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "chikorita",
@@ -8672,7 +8673,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	bayleef: {
 		"exists": true,
@@ -8680,32 +8681,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 153,
 		"name": "Bayleef",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 60,
-				"atk": 62,
-				"def": 80,
-				"spa": 63,
-				"spd": 80,
-				"spe": 60
+			"hp": 60,
+			"atk": 62,
+			"def": 80,
+			"spa": 63,
+			"spd": 80,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 15.8,
 		"prevo": "Chikorita",
 		"evoLevel": 16,
 		"evos": [
-				"Meganium"
+			"Meganium",
 		],
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "bayleef",
@@ -8727,7 +8728,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	meganium: {
 		"exists": true,
@@ -8735,29 +8736,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 154,
 		"name": "Meganium",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 80,
-				"atk": 82,
-				"def": 100,
-				"spa": 83,
-				"spd": 100,
-				"spe": 80
+			"hp": 80,
+			"atk": 82,
+			"def": 100,
+			"spa": 83,
+			"spd": 100,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 100.5,
 		"prevo": "Bayleef",
 		"evoLevel": 32,
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -8780,7 +8781,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cyndaquil: {
 		"exists": true,
@@ -8788,30 +8789,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 155,
 		"name": "Cyndaquil",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 39,
-				"atk": 52,
-				"def": 43,
-				"spa": 60,
-				"spd": 50,
-				"spe": 65
+			"hp": 39,
+			"atk": 52,
+			"def": 43,
+			"spa": 60,
+			"spd": 50,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Flash Fire"
+			"0": "Blaze",
+			"1": "Flash Fire",
 		},
 		"weightkg": 7.9,
 		"evos": [
-				"Quilava"
+			"Quilava",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "cyndaquil",
@@ -8834,7 +8835,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	quilava: {
 		"exists": true,
@@ -8842,33 +8843,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 156,
 		"name": "Quilava",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 58,
-				"atk": 64,
-				"def": 58,
-				"spa": 80,
-				"spd": 65,
-				"spe": 80
+			"hp": 58,
+			"atk": 64,
+			"def": 58,
+			"spa": 80,
+			"spd": 65,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Flash Fire"
+			"0": "Blaze",
+			"1": "Flash Fire",
 		},
 		"weightkg": 19,
 		"prevo": "Cyndaquil",
 		"evoLevel": 14,
 		"evos": [
-				"Typhlosion",
-				"Typhlosion-Hisui"
+			"Typhlosion",
+			"Typhlosion-Hisui",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "quilava",
@@ -8890,7 +8891,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	typhlosion: {
 		"exists": true,
@@ -8898,36 +8899,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 157,
 		"name": "Typhlosion",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 78,
-				"atk": 84,
-				"def": 78,
-				"spa": 109,
-				"spd": 85,
-				"spe": 100
+			"hp": 78,
+			"atk": 84,
+			"def": 78,
+			"spa": 109,
+			"spd": 85,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Flash Fire"
+			"0": "Blaze",
+			"1": "Flash Fire",
 		},
 		"weightkg": 79.5,
 		"prevo": "Quilava",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Typhlosion-Hisui"
+			"Typhlosion-Hisui",
 		],
 		"formeOrder": [
-				"Typhlosion",
-				"Typhlosion-Hisui"
+			"Typhlosion",
+			"Typhlosion-Hisui",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -8950,7 +8951,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	totodile: {
 		"exists": true,
@@ -8958,30 +8959,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 158,
 		"name": "Totodile",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 65,
-				"def": 64,
-				"spa": 44,
-				"spd": 48,
-				"spe": 43
+			"hp": 50,
+			"atk": 65,
+			"def": 64,
+			"spa": 44,
+			"spd": 48,
+			"spe": 43,
 		},
 		"abilities": {
-				"0": "Torrent"
+			"0": "Torrent",
 		},
 		"weightkg": 9.5,
 		"evos": [
-				"Croconaw"
+			"Croconaw",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "LC",
 		"id": "totodile",
@@ -9004,7 +9005,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	croconaw: {
 		"exists": true,
@@ -9012,32 +9013,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 159,
 		"name": "Croconaw",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 80,
-				"def": 80,
-				"spa": 59,
-				"spd": 63,
-				"spe": 58
+			"hp": 65,
+			"atk": 80,
+			"def": 80,
+			"spa": 59,
+			"spd": 63,
+			"spe": 58,
 		},
 		"abilities": {
-				"0": "Torrent"
+			"0": "Torrent",
 		},
 		"weightkg": 25,
 		"prevo": "Totodile",
 		"evoLevel": 18,
 		"evos": [
-				"Feraligatr"
+			"Feraligatr",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "NFE",
 		"id": "croconaw",
@@ -9059,7 +9060,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	feraligatr: {
 		"exists": true,
@@ -9067,29 +9068,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 160,
 		"name": "Feraligatr",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 85,
-				"atk": 105,
-				"def": 100,
-				"spa": 79,
-				"spd": 83,
-				"spe": 78
+			"hp": 85,
+			"atk": 105,
+			"def": 100,
+			"spa": 79,
+			"spd": 83,
+			"spe": 78,
 		},
 		"abilities": {
-				"0": "Torrent"
+			"0": "Torrent",
 		},
 		"weightkg": 88.8,
 		"prevo": "Croconaw",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "NUBL",
 		"doublesTier": "(DUU)",
@@ -9112,7 +9113,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sentret: {
 		"exists": true,
@@ -9120,26 +9121,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 161,
 		"name": "Sentret",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 46,
-				"def": 34,
-				"spa": 35,
-				"spd": 45,
-				"spe": 20
+			"hp": 35,
+			"atk": 46,
+			"def": 34,
+			"spa": 35,
+			"spd": 45,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Keen Eye"
+			"0": "Run Away",
+			"1": "Keen Eye",
 		},
 		"weightkg": 6,
 		"evos": [
-				"Furret"
+			"Furret",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "sentret",
@@ -9158,15 +9159,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 215,
 		"weighthg": 60,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	furret: {
 		"exists": true,
@@ -9174,25 +9175,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 162,
 		"name": "Furret",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 85,
-				"atk": 76,
-				"def": 64,
-				"spa": 45,
-				"spd": 55,
-				"spe": 90
+			"hp": 85,
+			"atk": 76,
+			"def": 64,
+			"spa": 45,
+			"spd": 55,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Keen Eye"
+			"0": "Run Away",
+			"1": "Keen Eye",
 		},
 		"weightkg": 32.5,
 		"prevo": "Sentret",
 		"evoLevel": 15,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -9211,15 +9212,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 415,
 		"weighthg": 325,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hoothoot: {
 		"exists": true,
@@ -9227,27 +9228,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 163,
 		"name": "Hoothoot",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 30,
-				"def": 30,
-				"spa": 36,
-				"spd": 56,
-				"spe": 50
+			"hp": 60,
+			"atk": 30,
+			"def": 30,
+			"spa": 36,
+			"spd": 56,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Insomnia",
-				"1": "Keen Eye"
+			"0": "Insomnia",
+			"1": "Keen Eye",
 		},
 		"weightkg": 21.2,
 		"evos": [
-				"Noctowl"
+			"Noctowl",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "LC",
 		"id": "hoothoot",
@@ -9266,15 +9267,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 262,
 		"weighthg": 212,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	noctowl: {
 		"exists": true,
@@ -9282,26 +9283,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 164,
 		"name": "Noctowl",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 50,
-				"def": 50,
-				"spa": 76,
-				"spd": 96,
-				"spe": 70
+			"hp": 100,
+			"atk": 50,
+			"def": 50,
+			"spa": 76,
+			"spd": 96,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Insomnia",
-				"1": "Keen Eye"
+			"0": "Insomnia",
+			"1": "Keen Eye",
 		},
 		"weightkg": 40.8,
 		"prevo": "Hoothoot",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -9320,15 +9321,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 452,
 		"weighthg": 408,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ledyba: {
 		"exists": true,
@@ -9336,27 +9337,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 165,
 		"name": "Ledyba",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 20,
-				"def": 30,
-				"spa": 40,
-				"spd": 80,
-				"spe": 55
+			"hp": 40,
+			"atk": 20,
+			"def": 30,
+			"spa": 40,
+			"spd": 80,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Swarm",
-				"1": "Early Bird"
+			"0": "Swarm",
+			"1": "Early Bird",
 		},
 		"weightkg": 10.8,
 		"evos": [
-				"Ledian"
+			"Ledian",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -9375,15 +9376,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 265,
 		"weighthg": 108,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ledian: {
 		"exists": true,
@@ -9391,26 +9392,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 166,
 		"name": "Ledian",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 35,
-				"def": 50,
-				"spa": 55,
-				"spd": 110,
-				"spe": 85
+			"hp": 55,
+			"atk": 35,
+			"def": 50,
+			"spa": 55,
+			"spd": 110,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Swarm",
-				"1": "Early Bird"
+			"0": "Swarm",
+			"1": "Early Bird",
 		},
 		"weightkg": 35.6,
 		"prevo": "Ledyba",
 		"evoLevel": 18,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -9429,15 +9430,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 390,
 		"weighthg": 356,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	spinarak: {
 		"exists": true,
@@ -9445,27 +9446,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 167,
 		"name": "Spinarak",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 60,
-				"def": 40,
-				"spa": 40,
-				"spd": 40,
-				"spe": 30
+			"hp": 40,
+			"atk": 60,
+			"def": 40,
+			"spa": 40,
+			"spd": 40,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Swarm",
-				"1": "Insomnia"
+			"0": "Swarm",
+			"1": "Insomnia",
 		},
 		"weightkg": 8.5,
 		"evos": [
-				"Ariados"
+			"Ariados",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "LC",
 		"id": "spinarak",
@@ -9484,15 +9485,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 85,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ariados: {
 		"exists": true,
@@ -9500,26 +9501,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 168,
 		"name": "Ariados",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 90,
-				"def": 70,
-				"spa": 60,
-				"spd": 60,
-				"spe": 40
+			"hp": 70,
+			"atk": 90,
+			"def": 70,
+			"spa": 60,
+			"spd": 60,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Swarm",
-				"1": "Insomnia"
+			"0": "Swarm",
+			"1": "Insomnia",
 		},
 		"weightkg": 33.5,
 		"prevo": "Spinarak",
 		"evoLevel": 22,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -9538,15 +9539,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 400,
 		"weighthg": 335,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	crobat: {
 		"exists": true,
@@ -9554,25 +9555,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 169,
 		"name": "Crobat",
 		"types": [
-				"Poison",
-				"Flying"
+			"Poison",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 85,
-				"atk": 90,
-				"def": 80,
-				"spa": 70,
-				"spd": 80,
-				"spe": 130
+			"hp": 85,
+			"atk": 90,
+			"def": 80,
+			"spa": 70,
+			"spd": 80,
+			"spe": 130,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 75,
 		"prevo": "Golbat",
 		"evoType": "levelFriendship",
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -9591,15 +9592,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 535,
 		"weighthg": 750,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	chinchou: {
 		"exists": true,
@@ -9607,28 +9608,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 170,
 		"name": "Chinchou",
 		"types": [
-				"Water",
-				"Electric"
+			"Water",
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 38,
-				"def": 38,
-				"spa": 56,
-				"spd": 56,
-				"spe": 67
+			"hp": 75,
+			"atk": 38,
+			"def": 38,
+			"spa": 56,
+			"spd": 56,
+			"spe": 67,
 		},
 		"abilities": {
-				"0": "Volt Absorb",
-				"1": "Illuminate",
-				"H": "Water Absorb"
+			"0": "Volt Absorb",
+			"1": "Illuminate",
+			"H": "Water Absorb",
 		},
 		"weightkg": 12,
 		"evos": [
-				"Lanturn"
+			"Lanturn",
 		],
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"tier": "LC",
 		"id": "chinchou",
@@ -9647,15 +9648,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 120,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lanturn: {
 		"exists": true,
@@ -9663,27 +9664,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 171,
 		"name": "Lanturn",
 		"types": [
-				"Water",
-				"Electric"
+			"Water",
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 125,
-				"atk": 58,
-				"def": 58,
-				"spa": 76,
-				"spd": 76,
-				"spe": 67
+			"hp": 125,
+			"atk": 58,
+			"def": 58,
+			"spa": 76,
+			"spd": 76,
+			"spe": 67,
 		},
 		"abilities": {
-				"0": "Volt Absorb",
-				"1": "Illuminate",
-				"H": "Water Absorb"
+			"0": "Volt Absorb",
+			"1": "Illuminate",
+			"H": "Water Absorb",
 		},
 		"weightkg": 22.5,
 		"prevo": "Chinchou",
 		"evoLevel": 27,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -9702,15 +9703,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 225,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pichu: {
 		"exists": true,
@@ -9718,34 +9719,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 172,
 		"name": "Pichu",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 20,
-				"atk": 40,
-				"def": 15,
-				"spa": 35,
-				"spd": 35,
-				"spe": 60
+			"hp": 20,
+			"atk": 40,
+			"def": 15,
+			"spa": 35,
+			"spd": 35,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Lightning Rod"
+			"0": "Static",
+			"1": "Lightning Rod",
 		},
 		"weightkg": 2,
 		"evos": [
-				"Pikachu"
+			"Pikachu",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"otherFormes": [
-				"Pichu-Spiky-eared"
+			"Pichu-Spiky-eared",
 		],
 		"formeOrder": [
-				"Pichu",
-				"Pichu-Spiky-eared"
+			"Pichu",
+			"Pichu-Spiky-eared",
 		],
 		"tier": "LC",
 		"id": "pichu",
@@ -9763,15 +9764,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "LC",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 205,
 		"weighthg": 20,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cleffa: {
 		"exists": true,
@@ -9779,29 +9780,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 173,
 		"name": "Cleffa",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 25,
-				"def": 28,
-				"spa": 45,
-				"spd": 55,
-				"spe": 15
+			"hp": 50,
+			"atk": 25,
+			"def": 28,
+			"spa": 45,
+			"spd": 55,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 3,
 		"evos": [
-				"Clefairy"
+			"Clefairy",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -9824,7 +9825,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	igglybuff: {
 		"exists": true,
@@ -9832,29 +9833,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 174,
 		"name": "Igglybuff",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 90,
-				"atk": 30,
-				"def": 15,
-				"spa": 40,
-				"spd": 20,
-				"spe": 15
+			"hp": 90,
+			"atk": 30,
+			"def": 15,
+			"spa": 40,
+			"spd": 20,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 1,
 		"evos": [
-				"Jigglypuff"
+			"Jigglypuff",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -9877,7 +9878,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	togepi: {
 		"exists": true,
@@ -9885,30 +9886,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 175,
 		"name": "Togepi",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 35,
-				"atk": 20,
-				"def": 65,
-				"spa": 40,
-				"spd": 65,
-				"spe": 20
+			"hp": 35,
+			"atk": 20,
+			"def": 65,
+			"spa": 40,
+			"spd": 65,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Hustle",
-				"1": "Serene Grace"
+			"0": "Hustle",
+			"1": "Serene Grace",
 		},
 		"weightkg": 1.5,
 		"evos": [
-				"Togetic"
+			"Togetic",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -9931,7 +9932,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	togetic: {
 		"exists": true,
@@ -9939,34 +9940,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 176,
 		"name": "Togetic",
 		"types": [
-				null,
-				"Flying"
+			null,
+			"Flying",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 55,
-				"atk": 40,
-				"def": 85,
-				"spa": 80,
-				"spd": 105,
-				"spe": 40
+			"hp": 55,
+			"atk": 40,
+			"def": 85,
+			"spa": 80,
+			"spd": 105,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Hustle",
-				"1": "Serene Grace"
+			"0": "Hustle",
+			"1": "Serene Grace",
 		},
 		"weightkg": 3.2,
 		"prevo": "Togepi",
 		"evoType": "levelFriendship",
 		"evos": [
-				"Togekiss"
+			"Togekiss",
 		],
 		"eggGroups": [
-				"Flying",
-				"Fairy"
+			"Flying",
+			"Fairy",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -9988,7 +9989,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	natu: {
 		"exists": true,
@@ -9996,27 +9997,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 177,
 		"name": "Natu",
 		"types": [
-				"Psychic",
-				"Flying"
+			"Psychic",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 50,
-				"def": 45,
-				"spa": 70,
-				"spd": 45,
-				"spe": 70
+			"hp": 40,
+			"atk": 50,
+			"def": 45,
+			"spa": 70,
+			"spd": 45,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Early Bird"
+			"0": "Synchronize",
+			"1": "Early Bird",
 		},
 		"weightkg": 2,
 		"evos": [
-				"Xatu"
+			"Xatu",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -10035,15 +10036,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 320,
 		"weighthg": 20,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	xatu: {
 		"exists": true,
@@ -10051,26 +10052,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 178,
 		"name": "Xatu",
 		"types": [
-				"Psychic",
-				"Flying"
+			"Psychic",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 75,
-				"def": 70,
-				"spa": 95,
-				"spd": 70,
-				"spe": 95
+			"hp": 65,
+			"atk": 75,
+			"def": 70,
+			"spa": 95,
+			"spd": 70,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Early Bird"
+			"0": "Synchronize",
+			"1": "Early Bird",
 		},
 		"weightkg": 15,
 		"prevo": "Natu",
 		"evoLevel": 25,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -10089,15 +10090,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 470,
 		"weighthg": 150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mareep: {
 		"exists": true,
@@ -10105,27 +10106,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 179,
 		"name": "Mareep",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 40,
-				"def": 40,
-				"spa": 65,
-				"spd": 45,
-				"spe": 35
+			"hp": 55,
+			"atk": 40,
+			"def": 40,
+			"spa": 65,
+			"spd": 45,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Plus"
+			"0": "Static",
+			"1": "Plus",
 		},
 		"weightkg": 7.8,
 		"evos": [
-				"Flaaffy"
+			"Flaaffy",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"tier": "LC",
 		"id": "mareep",
@@ -10144,15 +10145,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 280,
 		"weighthg": 78,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	flaaffy: {
 		"exists": true,
@@ -10160,29 +10161,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 180,
 		"name": "Flaaffy",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 55,
-				"def": 55,
-				"spa": 80,
-				"spd": 60,
-				"spe": 45
+			"hp": 70,
+			"atk": 55,
+			"def": 55,
+			"spa": 80,
+			"spd": 60,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Plus"
+			"0": "Static",
+			"1": "Plus",
 		},
 		"weightkg": 13.3,
 		"prevo": "Mareep",
 		"evoLevel": 15,
 		"evos": [
-				"Ampharos"
+			"Ampharos",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "flaaffy",
@@ -10200,15 +10201,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 365,
 		"weighthg": 133,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ampharos: {
 		"exists": true,
@@ -10216,33 +10217,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 181,
 		"name": "Ampharos",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 75,
-				"def": 75,
-				"spa": 115,
-				"spd": 90,
-				"spe": 55
+			"hp": 90,
+			"atk": 75,
+			"def": 75,
+			"spa": 115,
+			"spd": 90,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Plus"
+			"0": "Static",
+			"1": "Plus",
 		},
 		"weightkg": 61.5,
 		"prevo": "Flaaffy",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"otherFormes": [
-				"Ampharos-Mega"
+			"Ampharos-Mega",
 		],
 		"formeOrder": [
-				"Ampharos",
-				"Ampharos-Mega"
+			"Ampharos",
+			"Ampharos-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -10261,15 +10262,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 510,
 		"weighthg": 615,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	bellossom: {
 		"exists": true,
@@ -10277,25 +10278,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 182,
 		"name": "Bellossom",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 80,
-				"def": 85,
-				"spa": 90,
-				"spd": 100,
-				"spe": 50
+			"hp": 75,
+			"atk": 80,
+			"def": 85,
+			"spa": 90,
+			"spd": 100,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 5.8,
 		"prevo": "Gloom",
 		"evoType": "useItem",
 		"evoItem": "Sun Stone",
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -10314,15 +10315,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 58,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	marill: {
 		"exists": true,
@@ -10330,29 +10331,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 183,
 		"name": "Marill",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 20,
-				"def": 50,
-				"spa": 20,
-				"spd": 50,
-				"spe": 40
+			"hp": 70,
+			"atk": 20,
+			"def": 50,
+			"spa": 20,
+			"spd": 50,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Huge Power"
+			"0": "Thick Fat",
+			"1": "Huge Power",
 		},
 		"weightkg": 8.5,
 		"prevo": "Azurill",
 		"evoType": "levelFriendship",
 		"evos": [
-				"Azumarill"
+			"Azumarill",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Fairy"
+			"Water 1",
+			"Fairy",
 		],
 		"canHatch": true,
 		"tier": "NFE",
@@ -10370,15 +10371,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "NFE",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 85,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	azumarill: {
 		"exists": true,
@@ -10386,26 +10387,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 184,
 		"name": "Azumarill",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 50,
-				"def": 80,
-				"spa": 50,
-				"spd": 80,
-				"spe": 50
+			"hp": 100,
+			"atk": 50,
+			"def": 80,
+			"spa": 50,
+			"spd": 80,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Huge Power"
+			"0": "Thick Fat",
+			"1": "Huge Power",
 		},
 		"weightkg": 28.5,
 		"prevo": "Marill",
 		"evoLevel": 18,
 		"eggGroups": [
-				"Water 1",
-				"Fairy"
+			"Water 1",
+			"Fairy",
 		],
 		"tier": "UU",
 		"doublesTier": "(DUU)",
@@ -10424,15 +10425,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 285,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sudowoodo: {
 		"exists": true,
@@ -10440,26 +10441,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 185,
 		"name": "Sudowoodo",
 		"types": [
-				"Rock"
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 100,
-				"def": 115,
-				"spa": 30,
-				"spd": 65,
-				"spe": 30
+			"hp": 70,
+			"atk": 100,
+			"def": 115,
+			"spa": 30,
+			"spd": 65,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Rock Head"
+			"0": "Sturdy",
+			"1": "Rock Head",
 		},
 		"weightkg": 38,
 		"prevo": "Bonsly",
 		"evoType": "levelMove",
 		"evoMove": "Mimic",
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"canHatch": true,
 		"tier": "ZU",
@@ -10478,15 +10479,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evos": [],
 		"nfe": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 410,
 		"weighthg": 380,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	politoed: {
 		"exists": true,
@@ -10494,27 +10495,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 186,
 		"name": "Politoed",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 75,
-				"def": 75,
-				"spa": 90,
-				"spd": 100,
-				"spe": 70
+			"hp": 90,
+			"atk": 75,
+			"def": 75,
+			"spa": 90,
+			"spd": 100,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Water Absorb",
-				"1": "Damp",
-				"H": "Drizzle"
+			"0": "Water Absorb",
+			"1": "Damp",
+			"H": "Drizzle",
 		},
 		"weightkg": 33.9,
 		"prevo": "Poliwhirl",
 		"evoType": "trade",
 		"evoItem": "King's Rock",
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"tier": "RU",
 		"doublesTier": "DUU",
@@ -10533,15 +10534,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 339,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hoppip: {
 		"exists": true,
@@ -10549,27 +10550,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 187,
 		"name": "Hoppip",
 		"types": [
-				"Grass",
-				"Flying"
+			"Grass",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 35,
-				"def": 40,
-				"spa": 35,
-				"spd": 55,
-				"spe": 50
+			"hp": 35,
+			"atk": 35,
+			"def": 40,
+			"spa": 35,
+			"spd": 55,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 0.5,
 		"evos": [
-				"Skiploom"
+			"Skiploom",
 		],
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "hoppip",
@@ -10588,15 +10589,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 5,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	skiploom: {
 		"exists": true,
@@ -10604,29 +10605,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 188,
 		"name": "Skiploom",
 		"types": [
-				"Grass",
-				"Flying"
+			"Grass",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 45,
-				"def": 50,
-				"spa": 45,
-				"spd": 65,
-				"spe": 80
+			"hp": 55,
+			"atk": 45,
+			"def": 50,
+			"spa": 45,
+			"spd": 65,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 1,
 		"prevo": "Hoppip",
 		"evoLevel": 18,
 		"evos": [
-				"Jumpluff"
+			"Jumpluff",
 		],
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "skiploom",
@@ -10644,15 +10645,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 340,
 		"weighthg": 10,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	jumpluff: {
 		"exists": true,
@@ -10660,26 +10661,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 189,
 		"name": "Jumpluff",
 		"types": [
-				"Grass",
-				"Flying"
+			"Grass",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 55,
-				"def": 70,
-				"spa": 55,
-				"spd": 85,
-				"spe": 110
+			"hp": 75,
+			"atk": 55,
+			"def": 70,
+			"spa": 55,
+			"spd": 85,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 3,
 		"prevo": "Skiploom",
 		"evoLevel": 27,
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -10698,15 +10699,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 30,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	aipom: {
 		"exists": true,
@@ -10714,26 +10715,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 190,
 		"name": "Aipom",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 70,
-				"def": 55,
-				"spa": 40,
-				"spd": 55,
-				"spe": 85
+			"hp": 55,
+			"atk": 70,
+			"def": 55,
+			"spa": 40,
+			"spd": 55,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Run Away",
-				"1": "Pickup"
+			"0": "Run Away",
+			"1": "Pickup",
 		},
 		"weightkg": 11.5,
 		"evos": [
-				"Ambipom"
+			"Ambipom",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "aipom",
@@ -10752,15 +10753,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 360,
 		"weighthg": 115,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sunkern: {
 		"exists": true,
@@ -10768,26 +10769,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 191,
 		"name": "Sunkern",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 30,
-				"def": 30,
-				"spa": 30,
-				"spd": 30,
-				"spe": 30
+			"hp": 30,
+			"atk": 30,
+			"def": 30,
+			"spa": 30,
+			"spd": 30,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Early Bird"
+			"0": "Chlorophyll",
+			"1": "Early Bird",
 		},
 		"weightkg": 1.8,
 		"evos": [
-				"Sunflora"
+			"Sunflora",
 		],
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "sunkern",
@@ -10806,15 +10807,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 180,
 		"weighthg": 18,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sunflora: {
 		"exists": true,
@@ -10822,26 +10823,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 192,
 		"name": "Sunflora",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 75,
-				"def": 55,
-				"spa": 105,
-				"spd": 85,
-				"spe": 30
+			"hp": 75,
+			"atk": 75,
+			"def": 55,
+			"spa": 105,
+			"spd": 85,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Early Bird"
+			"0": "Chlorophyll",
+			"1": "Early Bird",
 		},
 		"weightkg": 8.5,
 		"prevo": "Sunkern",
 		"evoType": "useItem",
 		"evoItem": "Sun Stone",
 		"eggGroups": [
-				"Grass"
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -10860,15 +10861,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 425,
 		"weighthg": 85,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	yanma: {
 		"exists": true,
@@ -10876,27 +10877,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 193,
 		"name": "Yanma",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 65,
-				"def": 45,
-				"spa": 75,
-				"spd": 45,
-				"spe": 95
+			"hp": 65,
+			"atk": 65,
+			"def": 45,
+			"spa": 75,
+			"spd": 45,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Speed Boost",
-				"1": "Compound Eyes"
+			"0": "Speed Boost",
+			"1": "Compound Eyes",
 		},
 		"weightkg": 38,
 		"evos": [
-				"Yanmega"
+			"Yanmega",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "NFE",
 		"id": "yanma",
@@ -10915,15 +10916,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 390,
 		"weighthg": 380,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wooper: {
 		"exists": true,
@@ -10931,35 +10932,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 194,
 		"name": "Wooper",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 45,
-				"def": 45,
-				"spa": 25,
-				"spd": 25,
-				"spe": 15
+			"hp": 55,
+			"atk": 45,
+			"def": 45,
+			"spa": 25,
+			"spd": 25,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Damp",
-				"1": "Water Absorb"
+			"0": "Damp",
+			"1": "Water Absorb",
 		},
 		"weightkg": 8.5,
 		"evos": [
-				"Quagsire"
+			"Quagsire",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"otherFormes": [
-				"Wooper-Paldea"
+			"Wooper-Paldea",
 		],
 		"formeOrder": [
-				"Wooper",
-				"Wooper-Paldea"
+			"Wooper",
+			"Wooper-Paldea",
 		],
 		"tier": "LC",
 		"id": "wooper",
@@ -10978,15 +10979,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 210,
 		"weighthg": 85,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	quagsire: {
 		"exists": true,
@@ -10994,27 +10995,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 195,
 		"name": "Quagsire",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 85,
-				"def": 85,
-				"spa": 65,
-				"spd": 65,
-				"spe": 35
+			"hp": 95,
+			"atk": 85,
+			"def": 85,
+			"spa": 65,
+			"spd": 65,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Damp",
-				"1": "Water Absorb"
+			"0": "Damp",
+			"1": "Water Absorb",
 		},
 		"weightkg": 75,
 		"prevo": "Wooper",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -11033,15 +11034,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 430,
 		"weighthg": 750,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	espeon: {
 		"exists": true,
@@ -11049,29 +11050,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 196,
 		"name": "Espeon",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 65,
-				"atk": 65,
-				"def": 60,
-				"spa": 130,
-				"spd": 95,
-				"spe": 110
+			"hp": 65,
+			"atk": 65,
+			"def": 60,
+			"spa": 130,
+			"spd": 95,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Synchronize"
+			"0": "Synchronize",
 		},
 		"weightkg": 26.5,
 		"prevo": "Eevee",
 		"evoType": "levelFriendship",
 		"evoCondition": "during the day",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -11094,7 +11095,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	umbreon: {
 		"exists": true,
@@ -11102,30 +11103,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 197,
 		"name": "Umbreon",
 		"types": [
-				"Dark"
+			"Dark",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 95,
-				"atk": 65,
-				"def": 110,
-				"spa": 60,
-				"spd": 130,
-				"spe": 65
+			"hp": 95,
+			"atk": 65,
+			"def": 110,
+			"spa": 60,
+			"spd": 130,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Inner Focus"
+			"0": "Synchronize",
+			"1": "Inner Focus",
 		},
 		"weightkg": 27,
 		"prevo": "Eevee",
 		"evoType": "levelFriendship",
 		"evoCondition": "at night",
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -11148,7 +11149,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	murkrow: {
 		"exists": true,
@@ -11156,26 +11157,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 198,
 		"name": "Murkrow",
 		"types": [
-				"Dark",
-				"Flying"
+			"Dark",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 85,
-				"def": 42,
-				"spa": 85,
-				"spd": 42,
-				"spe": 91
+			"hp": 60,
+			"atk": 85,
+			"def": 42,
+			"spa": 85,
+			"spd": 42,
+			"spe": 91,
 		},
 		"abilities": {
-				"0": "Insomnia"
+			"0": "Insomnia",
 		},
 		"weightkg": 2.1,
 		"evos": [
-				"Honchkrow"
+			"Honchkrow",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "NFE",
 		"doublesTier": "DUU",
@@ -11194,15 +11195,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 21,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slowking: {
 		"exists": true,
@@ -11210,35 +11211,35 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 199,
 		"name": "Slowking",
 		"types": [
-				"Water",
-				"Psychic"
+			"Water",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 75,
-				"def": 80,
-				"spa": 100,
-				"spd": 110,
-				"spe": 30
+			"hp": 95,
+			"atk": 75,
+			"def": 80,
+			"spa": 100,
+			"spd": 110,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Own Tempo"
+			"0": "Oblivious",
+			"1": "Own Tempo",
 		},
 		"weightkg": 79.5,
 		"prevo": "Slowpoke",
 		"evoType": "trade",
 		"evoItem": "King's Rock",
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"otherFormes": [
-				"Slowking-Galar"
+			"Slowking-Galar",
 		],
 		"formeOrder": [
-				"Slowking",
-				"Slowking-Galar"
+			"Slowking",
+			"Slowking-Galar",
 		],
 		"tier": "UU",
 		"doublesTier": "(DUU)",
@@ -11257,15 +11258,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 795,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	misdreavus: {
 		"exists": true,
@@ -11273,25 +11274,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 200,
 		"name": "Misdreavus",
 		"types": [
-				"Ghost"
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 60,
-				"def": 60,
-				"spa": 85,
-				"spd": 85,
-				"spe": 85
+			"hp": 60,
+			"atk": 60,
+			"def": 60,
+			"spa": 85,
+			"spd": 85,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 1,
 		"evos": [
-				"Mismagius"
+			"Mismagius",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "NFE",
 		"id": "misdreavus",
@@ -11310,15 +11311,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 435,
 		"weighthg": 10,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	unown: {
 		"exists": true,
@@ -11327,82 +11328,82 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"name": "Unown",
 		"baseForme": "A",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 48,
-				"atk": 72,
-				"def": 48,
-				"spa": 72,
-				"spd": 48,
-				"spe": 48
+			"hp": 48,
+			"atk": 72,
+			"def": 48,
+			"spa": 72,
+			"spd": 48,
+			"spe": 48,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 5,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"cosmeticFormes": [
-				"Unown-B",
-				"Unown-C",
-				"Unown-D",
-				"Unown-E",
-				"Unown-F",
-				"Unown-G",
-				"Unown-H",
-				"Unown-I",
-				"Unown-J",
-				"Unown-K",
-				"Unown-L",
-				"Unown-M",
-				"Unown-N",
-				"Unown-O",
-				"Unown-P",
-				"Unown-Q",
-				"Unown-R",
-				"Unown-S",
-				"Unown-T",
-				"Unown-U",
-				"Unown-V",
-				"Unown-W",
-				"Unown-X",
-				"Unown-Y",
-				"Unown-Z",
-				"Unown-Exclamation",
-				"Unown-Question"
+			"Unown-B",
+			"Unown-C",
+			"Unown-D",
+			"Unown-E",
+			"Unown-F",
+			"Unown-G",
+			"Unown-H",
+			"Unown-I",
+			"Unown-J",
+			"Unown-K",
+			"Unown-L",
+			"Unown-M",
+			"Unown-N",
+			"Unown-O",
+			"Unown-P",
+			"Unown-Q",
+			"Unown-R",
+			"Unown-S",
+			"Unown-T",
+			"Unown-U",
+			"Unown-V",
+			"Unown-W",
+			"Unown-X",
+			"Unown-Y",
+			"Unown-Z",
+			"Unown-Exclamation",
+			"Unown-Question",
 		],
 		"formeOrder": [
-				"Unown",
-				"Unown-B",
-				"Unown-C",
-				"Unown-D",
-				"Unown-E",
-				"Unown-F",
-				"Unown-G",
-				"Unown-H",
-				"Unown-I",
-				"Unown-J",
-				"Unown-K",
-				"Unown-L",
-				"Unown-M",
-				"Unown-N",
-				"Unown-O",
-				"Unown-P",
-				"Unown-Q",
-				"Unown-R",
-				"Unown-S",
-				"Unown-T",
-				"Unown-U",
-				"Unown-V",
-				"Unown-W",
-				"Unown-X",
-				"Unown-Y",
-				"Unown-Z",
-				"Unown-Exclamation",
-				"Unown-Question"
+			"Unown",
+			"Unown-B",
+			"Unown-C",
+			"Unown-D",
+			"Unown-E",
+			"Unown-F",
+			"Unown-G",
+			"Unown-H",
+			"Unown-I",
+			"Unown-J",
+			"Unown-K",
+			"Unown-L",
+			"Unown-M",
+			"Unown-N",
+			"Unown-O",
+			"Unown-P",
+			"Unown-Q",
+			"Unown-R",
+			"Unown-S",
+			"Unown-T",
+			"Unown-U",
+			"Unown-V",
+			"Unown-W",
+			"Unown-X",
+			"Unown-Y",
+			"Unown-Z",
+			"Unown-Exclamation",
+			"Unown-Question",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -11421,15 +11422,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 336,
 		"weighthg": 50,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wobbuffet: {
 		"exists": true,
@@ -11437,24 +11438,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 202,
 		"name": "Wobbuffet",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 190,
-				"atk": 33,
-				"def": 58,
-				"spa": 33,
-				"spd": 58,
-				"spe": 33
+			"hp": 190,
+			"atk": 33,
+			"def": 58,
+			"spa": 33,
+			"spd": 58,
+			"spe": 33,
 		},
 		"abilities": {
-				"0": "Shadow Tag"
+			"0": "Shadow Tag",
 		},
 		"weightkg": 28.5,
 		"prevo": "Wynaut",
 		"evoLevel": 15,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -11473,15 +11474,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evos": [],
 		"nfe": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 285,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	girafarig: {
 		"exists": true,
@@ -11489,27 +11490,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 203,
 		"name": "Girafarig",
 		"types": [
-				"Normal",
-				"Psychic"
+			"Normal",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 80,
-				"def": 65,
-				"spa": 90,
-				"spd": 65,
-				"spe": 85
+			"hp": 70,
+			"atk": 80,
+			"def": 65,
+			"spa": 90,
+			"spd": 65,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Inner Focus",
-				"1": "Early Bird"
+			"0": "Inner Focus",
+			"1": "Early Bird",
 		},
 		"weightkg": 41.5,
 		"evos": [
-				"Farigiraf"
+			"Farigiraf",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "girafarig",
@@ -11528,15 +11529,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 415,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pineco: {
 		"exists": true,
@@ -11544,25 +11545,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 204,
 		"name": "Pineco",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 65,
-				"def": 90,
-				"spa": 35,
-				"spd": 35,
-				"spe": 15
+			"hp": 50,
+			"atk": 65,
+			"def": 90,
+			"spa": 35,
+			"spd": 35,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Sturdy"
+			"0": "Sturdy",
 		},
 		"weightkg": 7.2,
 		"evos": [
-				"Forretress"
+			"Forretress",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "LC",
 		"id": "pineco",
@@ -11581,15 +11582,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 290,
 		"weighthg": 72,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	forretress: {
 		"exists": true,
@@ -11597,25 +11598,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 205,
 		"name": "Forretress",
 		"types": [
-				"Bug",
-				"Steel"
+			"Bug",
+			"Steel",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 90,
-				"def": 140,
-				"spa": 60,
-				"spd": 60,
-				"spe": 40
+			"hp": 75,
+			"atk": 90,
+			"def": 140,
+			"spa": 60,
+			"spd": 60,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Sturdy"
+			"0": "Sturdy",
 		},
 		"weightkg": 125.8,
 		"prevo": "Pineco",
 		"evoLevel": 31,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -11634,15 +11635,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 465,
 		"weighthg": 1258,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dunsparce: {
 		"exists": true,
@@ -11650,27 +11651,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 206,
 		"name": "Dunsparce",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 70,
-				"def": 70,
-				"spa": 65,
-				"spd": 65,
-				"spe": 45
+			"hp": 100,
+			"atk": 70,
+			"def": 70,
+			"spa": 65,
+			"spd": 65,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Serene Grace",
-				"1": "Run Away"
+			"0": "Serene Grace",
+			"1": "Run Away",
 		},
 		"weightkg": 14,
 		"evos": [
-				"Dudunsparce",
-				"Dudunsparce-Three-Segment"
+			"Dudunsparce",
+			"Dudunsparce-Three-Segment",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "dunsparce",
@@ -11689,15 +11690,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 415,
 		"weighthg": 140,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gligar: {
 		"exists": true,
@@ -11705,28 +11706,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 207,
 		"name": "Gligar",
 		"types": [
-				"Ground",
-				"Flying"
+			"Ground",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 75,
-				"def": 105,
-				"spa": 35,
-				"spd": 65,
-				"spe": 85
+			"hp": 65,
+			"atk": 75,
+			"def": 105,
+			"spa": 35,
+			"spd": 65,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Sand Veil",
-				"H": "Immunity"
+			"0": "Hyper Cutter",
+			"1": "Sand Veil",
+			"H": "Immunity",
 		},
 		"weightkg": 64.8,
 		"evos": [
-				"Gliscor"
+			"Gliscor",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"tier": "PU",
 		"doublesTier": "NFE",
@@ -11745,15 +11746,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 430,
 		"weighthg": 648,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	steelix: {
 		"exists": true,
@@ -11761,34 +11762,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 208,
 		"name": "Steelix",
 		"types": [
-				"Steel",
-				"Ground"
+			"Steel",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 85,
-				"def": 200,
-				"spa": 55,
-				"spd": 65,
-				"spe": 30
+			"hp": 75,
+			"atk": 85,
+			"def": 200,
+			"spa": 55,
+			"spd": 65,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Rock Head",
-				"1": "Sturdy"
+			"0": "Rock Head",
+			"1": "Sturdy",
 		},
 		"weightkg": 400,
 		"prevo": "Onix",
 		"evoType": "trade",
 		"evoItem": "Metal Coat",
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Steelix-Mega"
+			"Steelix-Mega",
 		],
 		"formeOrder": [
-				"Steelix",
-				"Steelix-Mega"
+			"Steelix",
+			"Steelix-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -11807,15 +11808,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 510,
 		"weighthg": 4000,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	snubbull: {
 		"exists": true,
@@ -11823,31 +11824,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 209,
 		"name": "Snubbull",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 60,
-				"atk": 80,
-				"def": 50,
-				"spa": 40,
-				"spd": 40,
-				"spe": 30
+			"hp": 60,
+			"atk": 80,
+			"def": 50,
+			"spa": 40,
+			"spd": 40,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Intimidate",
-				"1": "Run Away"
+			"0": "Intimidate",
+			"1": "Run Away",
 		},
 		"weightkg": 7.8,
 		"evos": [
-				"Granbull"
+			"Granbull",
 		],
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"tier": "LC",
 		"id": "snubbull",
@@ -11870,7 +11871,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	granbull: {
 		"exists": true,
@@ -11878,29 +11879,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 210,
 		"name": "Granbull",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 90,
-				"atk": 120,
-				"def": 75,
-				"spa": 60,
-				"spd": 60,
-				"spe": 45
+			"hp": 90,
+			"atk": 120,
+			"def": 75,
+			"spa": 60,
+			"spd": 60,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 48.7,
 		"prevo": "Snubbull",
 		"evoLevel": 23,
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -11923,7 +11924,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	qwilfish: {
 		"exists": true,
@@ -11931,32 +11932,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 211,
 		"name": "Qwilfish",
 		"types": [
-				"Water",
-				"Poison"
+			"Water",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 95,
-				"def": 75,
-				"spa": 55,
-				"spd": 55,
-				"spe": 85
+			"hp": 65,
+			"atk": 95,
+			"def": 75,
+			"spa": 55,
+			"spd": 55,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Poison Point",
-				"1": "Swift Swim",
-				"H": "Intimidate"
+			"0": "Poison Point",
+			"1": "Swift Swim",
+			"H": "Intimidate",
 		},
 		"weightkg": 3.9,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"otherFormes": [
-				"Qwilfish-Hisui"
+			"Qwilfish-Hisui",
 		],
 		"formeOrder": [
-				"Qwilfish",
-				"Qwilfish-Hisui"
+			"Qwilfish",
+			"Qwilfish-Hisui",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -11976,15 +11977,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 39,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	scizor: {
 		"exists": true,
@@ -11992,33 +11993,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 212,
 		"name": "Scizor",
 		"types": [
-				"Bug",
-				"Steel"
+			"Bug",
+			"Steel",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 130,
-				"def": 100,
-				"spa": 55,
-				"spd": 80,
-				"spe": 65
+			"hp": 70,
+			"atk": 130,
+			"def": 100,
+			"spa": 55,
+			"spd": 80,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Swarm"
+			"0": "Swarm",
 		},
 		"weightkg": 118,
 		"prevo": "Scyther",
 		"evoType": "trade",
 		"evoItem": "Metal Coat",
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"otherFormes": [
-				"Scizor-Mega"
+			"Scizor-Mega",
 		],
 		"formeOrder": [
-				"Scizor",
-				"Scizor-Mega"
+			"Scizor",
+			"Scizor-Mega",
 		],
 		"tier": "UU",
 		"doublesTier": "DUU",
@@ -12037,15 +12038,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 1180,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shuckle: {
 		"exists": true,
@@ -12053,23 +12054,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 213,
 		"name": "Shuckle",
 		"types": [
-				"Bug",
-				"Rock"
+			"Bug",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 20,
-				"atk": 10,
-				"def": 230,
-				"spa": 10,
-				"spd": 230,
-				"spe": 5
+			"hp": 20,
+			"atk": 10,
+			"def": 230,
+			"spa": 10,
+			"spd": 230,
+			"spe": 5,
 		},
 		"abilities": {
-				"0": "Sturdy"
+			"0": "Sturdy",
 		},
 		"weightkg": 20.5,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -12089,15 +12090,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 505,
 		"weighthg": 205,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	heracross: {
 		"exists": true,
@@ -12105,31 +12106,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 214,
 		"name": "Heracross",
 		"types": [
-				"Bug",
-				"Fighting"
+			"Bug",
+			"Fighting",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 125,
-				"def": 75,
-				"spa": 40,
-				"spd": 95,
-				"spe": 85
+			"hp": 80,
+			"atk": 125,
+			"def": 75,
+			"spa": 40,
+			"spd": 95,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Swarm",
-				"1": "Guts"
+			"0": "Swarm",
+			"1": "Guts",
 		},
 		"weightkg": 54,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"otherFormes": [
-				"Heracross-Mega"
+			"Heracross-Mega",
 		],
 		"formeOrder": [
-				"Heracross",
-				"Heracross-Mega"
+			"Heracross",
+			"Heracross-Mega",
 		],
 		"tier": "PU",
 		"doublesTier": "(DUU)",
@@ -12149,15 +12150,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 540,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sneasel: {
 		"exists": true,
@@ -12165,34 +12166,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 215,
 		"name": "Sneasel",
 		"types": [
-				"Dark",
-				"Ice"
+			"Dark",
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 95,
-				"def": 55,
-				"spa": 35,
-				"spd": 75,
-				"spe": 115
+			"hp": 55,
+			"atk": 95,
+			"def": 55,
+			"spa": 35,
+			"spd": 75,
+			"spe": 115,
 		},
 		"abilities": {
-				"0": "Inner Focus",
-				"1": "Keen Eye"
+			"0": "Inner Focus",
+			"1": "Keen Eye",
 		},
 		"weightkg": 28,
 		"evos": [
-				"Weavile"
+			"Weavile",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Sneasel-Hisui"
+			"Sneasel-Hisui",
 		],
 		"formeOrder": [
-				"Sneasel",
-				"Sneasel-Hisui"
+			"Sneasel",
+			"Sneasel-Hisui",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -12211,15 +12212,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 430,
 		"weighthg": 280,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	teddiursa: {
 		"exists": true,
@@ -12227,25 +12228,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 216,
 		"name": "Teddiursa",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 80,
-				"def": 50,
-				"spa": 50,
-				"spd": 50,
-				"spe": 40
+			"hp": 60,
+			"atk": 80,
+			"def": 50,
+			"spa": 50,
+			"spd": 50,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Pickup"
+			"0": "Pickup",
 		},
 		"weightkg": 8.8,
 		"evos": [
-				"Ursaring"
+			"Ursaring",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "teddiursa",
@@ -12264,15 +12265,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 88,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ursaring: {
 		"exists": true,
@@ -12280,27 +12281,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 217,
 		"name": "Ursaring",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 130,
-				"def": 75,
-				"spa": 75,
-				"spd": 75,
-				"spe": 55
+			"hp": 90,
+			"atk": 130,
+			"def": 75,
+			"spa": 75,
+			"spd": 75,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 125.8,
 		"prevo": "Teddiursa",
 		"evoLevel": 30,
 		"evos": [
-				"Ursaluna"
+			"Ursaluna",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "ursaring",
@@ -12318,15 +12319,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 1258,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slugma: {
 		"exists": true,
@@ -12334,26 +12335,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 218,
 		"name": "Slugma",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 40,
-				"def": 40,
-				"spa": 70,
-				"spd": 40,
-				"spe": 20
+			"hp": 40,
+			"atk": 40,
+			"def": 40,
+			"spa": 70,
+			"spd": 40,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Magma Armor",
-				"1": "Flame Body"
+			"0": "Magma Armor",
+			"1": "Flame Body",
 		},
 		"weightkg": 35,
 		"evos": [
-				"Magcargo"
+			"Magcargo",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "slugma",
@@ -12372,15 +12373,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 350,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magcargo: {
 		"exists": true,
@@ -12388,26 +12389,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 219,
 		"name": "Magcargo",
 		"types": [
-				"Fire",
-				"Rock"
+			"Fire",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 50,
-				"def": 120,
-				"spa": 80,
-				"spd": 80,
-				"spe": 30
+			"hp": 50,
+			"atk": 50,
+			"def": 120,
+			"spa": 80,
+			"spd": 80,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Magma Armor",
-				"1": "Flame Body"
+			"0": "Magma Armor",
+			"1": "Flame Body",
 		},
 		"weightkg": 55,
 		"prevo": "Slugma",
 		"evoLevel": 38,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -12426,15 +12427,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 430,
 		"weighthg": 550,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	swinub: {
 		"exists": true,
@@ -12442,27 +12443,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 220,
 		"name": "Swinub",
 		"types": [
-				"Ice",
-				"Ground"
+			"Ice",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 50,
-				"def": 40,
-				"spa": 30,
-				"spd": 30,
-				"spe": 50
+			"hp": 50,
+			"atk": 50,
+			"def": 40,
+			"spa": 30,
+			"spd": 30,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Thick Fat"
+			"0": "Oblivious",
+			"1": "Thick Fat",
 		},
 		"weightkg": 6.5,
 		"evos": [
-				"Piloswine"
+			"Piloswine",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "swinub",
@@ -12481,15 +12482,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 65,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	piloswine: {
 		"exists": true,
@@ -12497,29 +12498,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 221,
 		"name": "Piloswine",
 		"types": [
-				"Ice",
-				"Ground"
+			"Ice",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 100,
-				"def": 80,
-				"spa": 60,
-				"spd": 60,
-				"spe": 50
+			"hp": 100,
+			"atk": 100,
+			"def": 80,
+			"spa": 60,
+			"spd": 60,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Thick Fat"
+			"0": "Oblivious",
+			"1": "Thick Fat",
 		},
 		"weightkg": 55.8,
 		"prevo": "Swinub",
 		"evoLevel": 33,
 		"evos": [
-				"Mamoswine"
+			"Mamoswine",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -12537,15 +12538,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 450,
 		"weighthg": 558,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	corsola: {
 		"exists": true,
@@ -12553,36 +12554,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 222,
 		"name": "Corsola",
 		"types": [
-				"Water",
-				"Rock"
+			"Water",
+			"Rock",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 55,
-				"atk": 55,
-				"def": 85,
-				"spa": 65,
-				"spd": 85,
-				"spe": 35
+			"hp": 55,
+			"atk": 55,
+			"def": 85,
+			"spa": 65,
+			"spd": 85,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Hustle",
-				"1": "Natural Cure"
+			"0": "Hustle",
+			"1": "Natural Cure",
 		},
 		"weightkg": 5,
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"otherFormes": [
-				"Corsola-Galar"
+			"Corsola-Galar",
 		],
 		"formeOrder": [
-				"Corsola",
-				"Corsola-Galar"
+			"Corsola",
+			"Corsola-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -12606,7 +12607,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	remoraid: {
 		"exists": true,
@@ -12614,26 +12615,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 223,
 		"name": "Remoraid",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 65,
-				"def": 35,
-				"spa": 65,
-				"spd": 35,
-				"spe": 65
+			"hp": 35,
+			"atk": 65,
+			"def": 35,
+			"spa": 65,
+			"spd": 35,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Hustle"
+			"0": "Hustle",
 		},
 		"weightkg": 12,
 		"evos": [
-				"Octillery"
+			"Octillery",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Water 2"
+			"Water 1",
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -12652,15 +12653,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 120,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	octillery: {
 		"exists": true,
@@ -12668,25 +12669,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 224,
 		"name": "Octillery",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 105,
-				"def": 75,
-				"spa": 105,
-				"spd": 75,
-				"spe": 45
+			"hp": 75,
+			"atk": 105,
+			"def": 75,
+			"spa": 105,
+			"spd": 75,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Suction Cups"
+			"0": "Suction Cups",
 		},
 		"weightkg": 28.5,
 		"prevo": "Remoraid",
 		"evoLevel": 25,
 		"eggGroups": [
-				"Water 1",
-				"Water 2"
+			"Water 1",
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -12705,15 +12706,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 480,
 		"weighthg": 285,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	delibird: {
 		"exists": true,
@@ -12721,26 +12722,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 225,
 		"name": "Delibird",
 		"types": [
-				"Ice",
-				"Flying"
+			"Ice",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 55,
-				"def": 45,
-				"spa": 65,
-				"spd": 45,
-				"spe": 75
+			"hp": 45,
+			"atk": 55,
+			"def": 45,
+			"spa": 65,
+			"spd": 45,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Vital Spirit",
-				"1": "Hustle",
-				"H": "Insomnia"
+			"0": "Vital Spirit",
+			"1": "Hustle",
+			"H": "Insomnia",
 		},
 		"weightkg": 16,
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -12760,15 +12761,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 160,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mantine: {
 		"exists": true,
@@ -12776,28 +12777,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 226,
 		"name": "Mantine",
 		"types": [
-				"Water",
-				"Flying"
+			"Water",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 40,
-				"def": 70,
-				"spa": 80,
-				"spd": 140,
-				"spe": 70
+			"hp": 65,
+			"atk": 40,
+			"def": 70,
+			"spa": 80,
+			"spd": 140,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Water Absorb",
-				"H": "Water Veil"
+			"0": "Swift Swim",
+			"1": "Water Absorb",
+			"H": "Water Veil",
 		},
 		"weightkg": 220,
 		"prevo": "Mantyke",
 		"evoType": "levelExtra",
 		"evoCondition": "with a Remoraid in party",
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -12816,15 +12817,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evos": [],
 		"nfe": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 485,
 		"weighthg": 2200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	skarmory: {
 		"exists": true,
@@ -12832,24 +12833,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 227,
 		"name": "Skarmory",
 		"types": [
-				"Steel",
-				"Flying"
+			"Steel",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 80,
-				"def": 140,
-				"spa": 40,
-				"spd": 70,
-				"spe": 70
+			"hp": 65,
+			"atk": 80,
+			"def": 140,
+			"spa": 40,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Keen Eye",
-				"1": "Sturdy"
+			"0": "Keen Eye",
+			"1": "Sturdy",
 		},
 		"weightkg": 50.5,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"tier": "OU",
 		"doublesTier": "(DUU)",
@@ -12869,15 +12870,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 465,
 		"weighthg": 505,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	houndour: {
 		"exists": true,
@@ -12885,27 +12886,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 228,
 		"name": "Houndour",
 		"types": [
-				"Dark",
-				"Fire"
+			"Dark",
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 60,
-				"def": 30,
-				"spa": 80,
-				"spd": 50,
-				"spe": 65
+			"hp": 45,
+			"atk": 60,
+			"def": 30,
+			"spa": 80,
+			"spd": 50,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Early Bird",
-				"1": "Flash Fire"
+			"0": "Early Bird",
+			"1": "Flash Fire",
 		},
 		"weightkg": 10.8,
 		"evos": [
-				"Houndoom"
+			"Houndoom",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "houndour",
@@ -12924,15 +12925,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 108,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	houndoom: {
 		"exists": true,
@@ -12940,33 +12941,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 229,
 		"name": "Houndoom",
 		"types": [
-				"Dark",
-				"Fire"
+			"Dark",
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 90,
-				"def": 50,
-				"spa": 110,
-				"spd": 80,
-				"spe": 95
+			"hp": 75,
+			"atk": 90,
+			"def": 50,
+			"spa": 110,
+			"spd": 80,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Early Bird",
-				"1": "Flash Fire"
+			"0": "Early Bird",
+			"1": "Flash Fire",
 		},
 		"weightkg": 35,
 		"prevo": "Houndour",
 		"evoLevel": 24,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Houndoom-Mega"
+			"Houndoom-Mega",
 		],
 		"formeOrder": [
-				"Houndoom",
-				"Houndoom-Mega"
+			"Houndoom",
+			"Houndoom-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -12985,15 +12986,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 350,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kingdra: {
 		"exists": true,
@@ -13001,28 +13002,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 230,
 		"name": "Kingdra",
 		"types": [
-				"Water",
-				"Dragon"
+			"Water",
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 95,
-				"def": 95,
-				"spa": 95,
-				"spd": 95,
-				"spe": 85
+			"hp": 75,
+			"atk": 95,
+			"def": 95,
+			"spa": 95,
+			"spd": 95,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Damp"
+			"0": "Swift Swim",
+			"1": "Damp",
 		},
 		"weightkg": 152,
 		"prevo": "Seadra",
 		"evoType": "trade",
 		"evoItem": "Dragon Scale",
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "ZUBL",
 		"doublesTier": "(DUU)",
@@ -13041,15 +13042,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 540,
 		"weighthg": 1520,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	phanpy: {
 		"exists": true,
@@ -13057,26 +13058,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 231,
 		"name": "Phanpy",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 60,
-				"def": 60,
-				"spa": 40,
-				"spd": 40,
-				"spe": 40
+			"hp": 90,
+			"atk": 60,
+			"def": 60,
+			"spa": 40,
+			"spd": 40,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Pickup",
-				"1": "Sand Veil"
+			"0": "Pickup",
+			"1": "Sand Veil",
 		},
 		"weightkg": 33.5,
 		"evos": [
-				"Donphan"
+			"Donphan",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "phanpy",
@@ -13095,15 +13096,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 335,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	donphan: {
 		"exists": true,
@@ -13111,25 +13112,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 232,
 		"name": "Donphan",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 120,
-				"def": 120,
-				"spa": 60,
-				"spd": 60,
-				"spe": 50
+			"hp": 90,
+			"atk": 120,
+			"def": 120,
+			"spa": 60,
+			"spd": 60,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Sand Veil"
+			"0": "Sturdy",
+			"1": "Sand Veil",
 		},
 		"weightkg": 120,
 		"prevo": "Phanpy",
 		"evoLevel": 25,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "UU",
 		"doublesTier": "(DUU)",
@@ -13148,15 +13149,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 1200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	porygon2: {
 		"exists": true,
@@ -13164,29 +13165,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 233,
 		"name": "Porygon2",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 85,
-				"atk": 80,
-				"def": 90,
-				"spa": 105,
-				"spd": 95,
-				"spe": 60
+			"hp": 85,
+			"atk": 80,
+			"def": 90,
+			"spa": 105,
+			"spd": 95,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Trace"
+			"0": "Trace",
 		},
 		"weightkg": 32.5,
 		"prevo": "Porygon",
 		"evoType": "trade",
 		"evoItem": "Up-Grade",
 		"evos": [
-				"Porygon-Z"
+			"Porygon-Z",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "ZU",
 		"doublesTier": "DUU",
@@ -13204,15 +13205,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 515,
 		"weighthg": 325,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	stantler: {
 		"exists": true,
@@ -13220,25 +13221,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 234,
 		"name": "Stantler",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 73,
-				"atk": 95,
-				"def": 62,
-				"spa": 85,
-				"spd": 65,
-				"spe": 85
+			"hp": 73,
+			"atk": 95,
+			"def": 62,
+			"spa": 85,
+			"spd": 65,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 71.2,
 		"evos": [
-				"Wyrdeer"
+			"Wyrdeer",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "stantler",
@@ -13257,15 +13258,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 465,
 		"weighthg": 712,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	smeargle: {
 		"exists": true,
@@ -13273,22 +13274,22 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 235,
 		"name": "Smeargle",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 20,
-				"def": 35,
-				"spa": 20,
-				"spd": 45,
-				"spe": 75
+			"hp": 55,
+			"atk": 20,
+			"def": 35,
+			"spa": 20,
+			"spd": 45,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Own Tempo"
+			"0": "Own Tempo",
 		},
 		"weightkg": 58,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -13308,15 +13309,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 250,
 		"weighthg": 580,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tyrogue: {
 		"exists": true,
@@ -13324,29 +13325,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 236,
 		"name": "Tyrogue",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 35,
-				"atk": 35,
-				"def": 35,
-				"spa": 35,
-				"spd": 35,
-				"spe": 35
+			"hp": 35,
+			"atk": 35,
+			"def": 35,
+			"spa": 35,
+			"spd": 35,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Guts",
-				"1": "Vital Spirit"
+			"0": "Guts",
+			"1": "Vital Spirit",
 		},
 		"weightkg": 21,
 		"evos": [
-				"Hitmonlee",
-				"Hitmonchan",
-				"Hitmontop"
+			"Hitmonlee",
+			"Hitmonchan",
+			"Hitmontop",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -13365,15 +13366,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "LC",
 		"nfe": true,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 210,
 		"weighthg": 210,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hitmontop: {
 		"exists": true,
@@ -13381,26 +13382,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 237,
 		"name": "Hitmontop",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 50,
-				"atk": 95,
-				"def": 95,
-				"spa": 35,
-				"spd": 110,
-				"spe": 70
+			"hp": 50,
+			"atk": 95,
+			"def": 95,
+			"spa": 35,
+			"spd": 110,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 48,
 		"prevo": "Tyrogue",
 		"evoLevel": 20,
 		"evoCondition": "with an Atk stat equal to its Def stat",
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "PU",
 		"doublesTier": "(DUU)",
@@ -13419,15 +13420,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 455,
 		"weighthg": 480,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	smoochum: {
 		"exists": true,
@@ -13435,27 +13436,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 238,
 		"name": "Smoochum",
 		"types": [
-				"Ice",
-				"Psychic"
+			"Ice",
+			"Psychic",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 45,
-				"atk": 30,
-				"def": 15,
-				"spa": 85,
-				"spd": 65,
-				"spe": 65
+			"hp": 45,
+			"atk": 30,
+			"def": 15,
+			"spa": 85,
+			"spd": 65,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Oblivious"
+			"0": "Oblivious",
 		},
 		"weightkg": 6,
 		"evos": [
-				"Jynx"
+			"Jynx",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -13474,15 +13475,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "Illegal",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 305,
 		"weighthg": 60,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	elekid: {
 		"exists": true,
@@ -13490,30 +13491,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 239,
 		"name": "Elekid",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 63,
-				"def": 37,
-				"spa": 65,
-				"spd": 55,
-				"spe": 95
+			"hp": 45,
+			"atk": 63,
+			"def": 37,
+			"spa": 65,
+			"spd": 55,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Vital Spirit"
+			"0": "Static",
+			"1": "Vital Spirit",
 		},
 		"weightkg": 23.5,
 		"evos": [
-				"Electabuzz"
+			"Electabuzz",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -13536,7 +13537,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	magby: {
 		"exists": true,
@@ -13544,30 +13545,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 240,
 		"name": "Magby",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 75,
-				"def": 37,
-				"spa": 70,
-				"spd": 55,
-				"spe": 83
+			"hp": 45,
+			"atk": 75,
+			"def": 37,
+			"spa": 70,
+			"spd": 55,
+			"spe": 83,
 		},
 		"abilities": {
-				"0": "Flame Body",
-				"1": "Vital Spirit"
+			"0": "Flame Body",
+			"1": "Vital Spirit",
 		},
 		"weightkg": 21.4,
 		"evos": [
-				"Magmar"
+			"Magmar",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -13590,7 +13591,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	miltank: {
 		"exists": true,
@@ -13598,23 +13599,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 241,
 		"name": "Miltank",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 95,
-				"atk": 80,
-				"def": 105,
-				"spa": 40,
-				"spd": 70,
-				"spe": 100
+			"hp": 95,
+			"atk": 80,
+			"def": 105,
+			"spa": 40,
+			"spd": 70,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Thick Fat"
+			"0": "Thick Fat",
 		},
 		"weightkg": 75.5,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -13634,15 +13635,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 490,
 		"weighthg": 755,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	blissey: {
 		"exists": true,
@@ -13650,26 +13651,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 242,
 		"name": "Blissey",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 255,
-				"atk": 10,
-				"def": 10,
-				"spa": 75,
-				"spd": 135,
-				"spe": 55
+			"hp": 255,
+			"atk": 10,
+			"def": 10,
+			"spa": 75,
+			"spd": 135,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Natural Cure",
-				"1": "Serene Grace"
+			"0": "Natural Cure",
+			"1": "Serene Grace",
 		},
 		"weightkg": 46.8,
 		"prevo": "Chansey",
 		"evoType": "levelFriendship",
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "OU",
 		"doublesTier": "(DUU)",
@@ -13688,42 +13689,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 540,
 		"weighthg": 468,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	raikou: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 243,
 		"name": "Raikou",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 90,
-				"atk": 85,
-				"def": 75,
-				"spa": 115,
-				"spd": 100,
-				"spe": 115
+			"hp": 90,
+			"atk": 85,
+			"def": 75,
+			"spa": 115,
+			"spd": 100,
+			"spe": 115,
 		},
 		"abilities": {
-				"0": "Pressure",
-				"1": "Inner Focus"
+			"0": "Pressure",
+			"1": "Inner Focus",
 		},
 		"weightkg": 178,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "PUBL",
 		"doublesTier": "(DUU)",
@@ -13743,42 +13744,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 1780,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	entei: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 244,
 		"name": "Entei",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 115,
-				"atk": 115,
-				"def": 85,
-				"spa": 90,
-				"spd": 75,
-				"spe": 100
+			"hp": 115,
+			"atk": 115,
+			"def": 85,
+			"spa": 90,
+			"spd": 75,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Pressure",
-				"1": "Inner Focus"
+			"0": "Pressure",
+			"1": "Inner Focus",
 		},
 		"weightkg": 198,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -13798,42 +13799,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 1980,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	suicune: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 245,
 		"name": "Suicune",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 75,
-				"def": 115,
-				"spa": 90,
-				"spd": 115,
-				"spe": 85
+			"hp": 100,
+			"atk": 75,
+			"def": 115,
+			"spa": 90,
+			"spd": 115,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Pressure",
-				"1": "Inner Focus"
+			"0": "Pressure",
+			"1": "Inner Focus",
 		},
 		"weightkg": 187,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "NUBL",
 		"doublesTier": "(DUU)",
@@ -13853,15 +13854,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 1870,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	larvitar: {
 		"exists": true,
@@ -13869,27 +13870,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 246,
 		"name": "Larvitar",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 64,
-				"def": 50,
-				"spa": 45,
-				"spd": 50,
-				"spe": 41
+			"hp": 50,
+			"atk": 64,
+			"def": 50,
+			"spa": 45,
+			"spd": 50,
+			"spe": 41,
 		},
 		"abilities": {
-				"0": "Guts",
-				"1": "Sand Veil"
+			"0": "Guts",
+			"1": "Sand Veil",
 		},
 		"weightkg": 72,
 		"evos": [
-				"Pupitar"
+			"Pupitar",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"tier": "LC",
 		"id": "larvitar",
@@ -13908,15 +13909,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 720,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pupitar: {
 		"exists": true,
@@ -13924,28 +13925,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 247,
 		"name": "Pupitar",
 		"types": [
-				"Rock",
-				"Ground"
+			"Rock",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 84,
-				"def": 70,
-				"spa": 65,
-				"spd": 70,
-				"spe": 51
+			"hp": 70,
+			"atk": 84,
+			"def": 70,
+			"spa": 65,
+			"spd": 70,
+			"spe": 51,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 152,
 		"prevo": "Larvitar",
 		"evoLevel": 30,
 		"evos": [
-				"Tyranitar"
+			"Tyranitar",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"tier": "NFE",
 		"id": "pupitar",
@@ -13963,15 +13964,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 410,
 		"weighthg": 1520,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tyranitar: {
 		"exists": true,
@@ -13979,32 +13980,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 248,
 		"name": "Tyranitar",
 		"types": [
-				"Rock",
-				"Dark"
+			"Rock",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 134,
-				"def": 110,
-				"spa": 95,
-				"spd": 100,
-				"spe": 61
+			"hp": 100,
+			"atk": 134,
+			"def": 110,
+			"spa": 95,
+			"spd": 100,
+			"spe": 61,
 		},
 		"abilities": {
-				"0": "Sand Stream"
+			"0": "Sand Stream",
 		},
 		"weightkg": 202,
 		"prevo": "Pupitar",
 		"evoLevel": 55,
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"otherFormes": [
-				"Tyranitar-Mega"
+			"Tyranitar-Mega",
 		],
 		"formeOrder": [
-				"Tyranitar",
-				"Tyranitar-Mega"
+			"Tyranitar",
+			"Tyranitar-Mega",
 		],
 		"tier": "UU",
 		"doublesTier": "DOU",
@@ -14023,42 +14024,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 600,
 		"weighthg": 2020,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lugia: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 249,
 		"name": "Lugia",
 		"types": [
-				"Psychic",
-				"Flying"
+			"Psychic",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 106,
-				"atk": 90,
-				"def": 130,
-				"spa": 90,
-				"spd": 154,
-				"spe": 110
+			"hp": 106,
+			"atk": 90,
+			"def": 130,
+			"spa": 90,
+			"spd": 154,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 216,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -14078,42 +14079,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 680,
 		"weighthg": 2160,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hooh: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 250,
 		"name": "Ho-Oh",
 		"types": [
-				"Fire",
-				"Flying"
+			"Fire",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 106,
-				"atk": 130,
-				"def": 90,
-				"spa": 110,
-				"spd": 154,
-				"spe": 90
+			"hp": 106,
+			"atk": 130,
+			"def": 90,
+			"spa": 110,
+			"spd": 154,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 199,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -14133,42 +14134,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 680,
 		"weighthg": 1990,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	celebi: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 251,
 		"name": "Celebi",
 		"types": [
-				"Psychic",
-				"Grass"
+			"Psychic",
+			"Grass",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 100,
-				"def": 100,
-				"spa": 100,
-				"spd": 100,
-				"spe": 100
+			"hp": 100,
+			"atk": 100,
+			"def": 100,
+			"spa": 100,
+			"spd": 100,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Natural Cure"
+			"0": "Natural Cure",
 		},
 		"weightkg": 5,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -14188,15 +14189,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 50,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	treecko: {
 		"exists": true,
@@ -14204,30 +14205,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 252,
 		"name": "Treecko",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 35,
-				"spa": 65,
-				"spd": 55,
-				"spe": 70
+			"hp": 40,
+			"atk": 45,
+			"def": 35,
+			"spa": 65,
+			"spd": 55,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 5,
 		"evos": [
-				"Grovyle"
+			"Grovyle",
 		],
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "treecko",
@@ -14250,7 +14251,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	grovyle: {
 		"exists": true,
@@ -14258,32 +14259,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 253,
 		"name": "Grovyle",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 65,
-				"def": 45,
-				"spa": 85,
-				"spd": 65,
-				"spe": 95
+			"hp": 50,
+			"atk": 65,
+			"def": 45,
+			"spa": 85,
+			"spd": 65,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 21.6,
 		"prevo": "Treecko",
 		"evoLevel": 16,
 		"evos": [
-				"Sceptile"
+			"Sceptile",
 		],
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "grovyle",
@@ -14305,7 +14306,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sceptile: {
 		"exists": true,
@@ -14313,36 +14314,36 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 254,
 		"name": "Sceptile",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 85,
-				"def": 65,
-				"spa": 105,
-				"spd": 85,
-				"spe": 120
+			"hp": 70,
+			"atk": 85,
+			"def": 65,
+			"spa": 105,
+			"spd": 85,
+			"spe": 120,
 		},
 		"abilities": {
-				"0": "Overgrow"
+			"0": "Overgrow",
 		},
 		"weightkg": 52.2,
 		"prevo": "Grovyle",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Monster",
-				"Dragon"
+			"Monster",
+			"Dragon",
 		],
 		"otherFormes": [
-				"Sceptile-Mega"
+			"Sceptile-Mega",
 		],
 		"formeOrder": [
-				"Sceptile",
-				"Sceptile-Mega"
+			"Sceptile",
+			"Sceptile-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -14365,7 +14366,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	torchic: {
 		"exists": true,
@@ -14373,30 +14374,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 255,
 		"name": "Torchic",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 60,
-				"def": 40,
-				"spa": 70,
-				"spd": 50,
-				"spe": 45
+			"hp": 45,
+			"atk": 60,
+			"def": 40,
+			"spa": 70,
+			"spd": 50,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Speed Boost"
+			"0": "Blaze",
+			"1": "Speed Boost",
 		},
 		"weightkg": 2.5,
 		"evos": [
-				"Combusken"
+			"Combusken",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "torchic",
@@ -14419,7 +14420,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	combusken: {
 		"exists": true,
@@ -14427,33 +14428,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 256,
 		"name": "Combusken",
 		"types": [
-				"Fire",
-				"Fighting"
+			"Fire",
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 60,
-				"atk": 85,
-				"def": 60,
-				"spa": 85,
-				"spd": 60,
-				"spe": 55
+			"hp": 60,
+			"atk": 85,
+			"def": 60,
+			"spa": 85,
+			"spd": 60,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Speed Boost"
+			"0": "Blaze",
+			"1": "Speed Boost",
 		},
 		"weightkg": 19.5,
 		"prevo": "Torchic",
 		"evoLevel": 16,
 		"evos": [
-				"Blaziken"
+			"Blaziken",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "NFE",
@@ -14475,7 +14476,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	blaziken: {
 		"exists": true,
@@ -14483,37 +14484,37 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 257,
 		"name": "Blaziken",
 		"types": [
-				"Fire",
-				"Fighting"
+			"Fire",
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 80,
-				"atk": 120,
-				"def": 70,
-				"spa": 110,
-				"spd": 70,
-				"spe": 80
+			"hp": 80,
+			"atk": 120,
+			"def": 70,
+			"spa": 110,
+			"spd": 70,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Blaze",
-				"1": "Speed Boost"
+			"0": "Blaze",
+			"1": "Speed Boost",
 		},
 		"weightkg": 52,
 		"prevo": "Combusken",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Blaziken-Mega"
+			"Blaziken-Mega",
 		],
 		"formeOrder": [
-				"Blaziken",
-				"Blaziken-Mega"
+			"Blaziken",
+			"Blaziken-Mega",
 		],
 		"tier": "UUBL",
 		"doublesTier": "(DUU)",
@@ -14536,7 +14537,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mudkip: {
 		"exists": true,
@@ -14544,31 +14545,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 258,
 		"name": "Mudkip",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 70,
-				"def": 50,
-				"spa": 50,
-				"spd": 50,
-				"spe": 40
+			"hp": 50,
+			"atk": 70,
+			"def": 50,
+			"spa": 50,
+			"spd": 50,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Damp"
+			"0": "Torrent",
+			"1": "Damp",
 		},
 		"weightkg": 7.6,
 		"evos": [
-				"Marshtomp"
+			"Marshtomp",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "LC",
 		"id": "mudkip",
@@ -14591,7 +14592,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	marshtomp: {
 		"exists": true,
@@ -14599,34 +14600,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 259,
 		"name": "Marshtomp",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 85,
-				"def": 70,
-				"spa": 60,
-				"spd": 70,
-				"spe": 50
+			"hp": 70,
+			"atk": 85,
+			"def": 70,
+			"spa": 60,
+			"spd": 70,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Damp"
+			"0": "Torrent",
+			"1": "Damp",
 		},
 		"weightkg": 28,
 		"prevo": "Mudkip",
 		"evoLevel": 16,
 		"evos": [
-				"Swampert"
+			"Swampert",
 		],
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"tier": "NFE",
 		"id": "marshtomp",
@@ -14648,7 +14649,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	swampert: {
 		"exists": true,
@@ -14656,38 +14657,38 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 260,
 		"name": "Swampert",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 100,
-				"atk": 110,
-				"def": 90,
-				"spa": 85,
-				"spd": 90,
-				"spe": 60
+			"hp": 100,
+			"atk": 110,
+			"def": 90,
+			"spa": 85,
+			"spd": 90,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Torrent",
-				"1": "Damp"
+			"0": "Torrent",
+			"1": "Damp",
 		},
 		"weightkg": 81.9,
 		"prevo": "Marshtomp",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Monster",
-				"Water 1"
+			"Monster",
+			"Water 1",
 		],
 		"otherFormes": [
-				"Swampert-Mega"
+			"Swampert-Mega",
 		],
 		"formeOrder": [
-				"Swampert",
-				"Swampert-Mega"
+			"Swampert",
+			"Swampert-Mega",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -14710,7 +14711,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	poochyena: {
 		"exists": true,
@@ -14718,25 +14719,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 261,
 		"name": "Poochyena",
 		"types": [
-				"Dark"
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 55,
-				"def": 35,
-				"spa": 30,
-				"spd": 30,
-				"spe": 35
+			"hp": 35,
+			"atk": 55,
+			"def": 35,
+			"spa": 30,
+			"spd": 30,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Run Away"
+			"0": "Run Away",
 		},
 		"weightkg": 13.6,
 		"evos": [
-				"Mightyena"
+			"Mightyena",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "poochyena",
@@ -14755,15 +14756,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 220,
 		"weighthg": 136,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mightyena: {
 		"exists": true,
@@ -14771,24 +14772,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 262,
 		"name": "Mightyena",
 		"types": [
-				"Dark"
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 90,
-				"def": 70,
-				"spa": 60,
-				"spd": 60,
-				"spe": 70
+			"hp": 70,
+			"atk": 90,
+			"def": 70,
+			"spa": 60,
+			"spd": 60,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 37,
 		"prevo": "Poochyena",
 		"evoLevel": 18,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -14807,15 +14808,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 370,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	zigzagoon: {
 		"exists": true,
@@ -14823,32 +14824,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 263,
 		"name": "Zigzagoon",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 38,
-				"atk": 30,
-				"def": 41,
-				"spa": 30,
-				"spd": 41,
-				"spe": 60
+			"hp": 38,
+			"atk": 30,
+			"def": 41,
+			"spa": 30,
+			"spd": 41,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Pickup"
+			"0": "Pickup",
 		},
 		"weightkg": 17.5,
 		"evos": [
-				"Linoone"
+			"Linoone",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Zigzagoon-Galar"
+			"Zigzagoon-Galar",
 		],
 		"formeOrder": [
-				"Zigzagoon",
-				"Zigzagoon-Galar"
+			"Zigzagoon",
+			"Zigzagoon-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -14867,15 +14868,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 240,
 		"weighthg": 175,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	linoone: {
 		"exists": true,
@@ -14883,31 +14884,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 264,
 		"name": "Linoone",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 78,
-				"atk": 70,
-				"def": 61,
-				"spa": 50,
-				"spd": 61,
-				"spe": 100
+			"hp": 78,
+			"atk": 70,
+			"def": 61,
+			"spa": 50,
+			"spd": 61,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Pickup"
+			"0": "Pickup",
 		},
 		"weightkg": 32.5,
 		"prevo": "Zigzagoon",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Linoone-Galar"
+			"Linoone-Galar",
 		],
 		"formeOrder": [
-				"Linoone",
-				"Linoone-Galar"
+			"Linoone",
+			"Linoone-Galar",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -14926,15 +14927,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 325,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wurmple: {
 		"exists": true,
@@ -14942,27 +14943,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 265,
 		"name": "Wurmple",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 45,
-				"def": 35,
-				"spa": 20,
-				"spd": 30,
-				"spe": 20
+			"hp": 45,
+			"atk": 45,
+			"def": 35,
+			"spa": 20,
+			"spd": 30,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Shield Dust",
-				"1": "Run Away"
+			"0": "Shield Dust",
+			"1": "Run Away",
 		},
 		"weightkg": 3.6,
 		"evos": [
-				"Silcoon",
-				"Cascoon"
+			"Silcoon",
+			"Cascoon",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -14981,15 +14982,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 195,
 		"weighthg": 36,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	silcoon: {
 		"exists": true,
@@ -14997,27 +14998,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 266,
 		"name": "Silcoon",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 35,
-				"def": 55,
-				"spa": 25,
-				"spd": 25,
-				"spe": 15
+			"hp": 50,
+			"atk": 35,
+			"def": 55,
+			"spa": 25,
+			"spd": 25,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 10,
 		"prevo": "Wurmple",
 		"evoLevel": 7,
 		"evos": [
-				"Beautifly"
+			"Beautifly",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15035,15 +15036,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 205,
 		"weighthg": 100,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	beautifly: {
 		"exists": true,
@@ -15051,25 +15052,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 267,
 		"name": "Beautifly",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 70,
-				"def": 50,
-				"spa": 90,
-				"spd": 50,
-				"spe": 65
+			"hp": 60,
+			"atk": 70,
+			"def": 50,
+			"spa": 90,
+			"spd": 50,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Swarm"
+			"0": "Swarm",
 		},
 		"weightkg": 28.4,
 		"prevo": "Silcoon",
 		"evoLevel": 10,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15088,15 +15089,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 395,
 		"weighthg": 284,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cascoon: {
 		"exists": true,
@@ -15104,27 +15105,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 268,
 		"name": "Cascoon",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 35,
-				"def": 55,
-				"spa": 25,
-				"spd": 25,
-				"spe": 15
+			"hp": 50,
+			"atk": 35,
+			"def": 55,
+			"spa": 25,
+			"spd": 25,
+			"spe": 15,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 11.5,
 		"prevo": "Wurmple",
 		"evoLevel": 7,
 		"evos": [
-				"Dustox"
+			"Dustox",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15142,15 +15143,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 205,
 		"weighthg": 115,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dustox: {
 		"exists": true,
@@ -15158,26 +15159,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 269,
 		"name": "Dustox",
 		"types": [
-				"Bug",
-				"Poison"
+			"Bug",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 50,
-				"def": 70,
-				"spa": 50,
-				"spd": 90,
-				"spe": 65
+			"hp": 60,
+			"atk": 50,
+			"def": 70,
+			"spa": 50,
+			"spd": 90,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Shield Dust",
-				"1": "Compound Eyes"
+			"0": "Shield Dust",
+			"1": "Compound Eyes",
 		},
 		"weightkg": 31.6,
 		"prevo": "Cascoon",
 		"evoLevel": 10,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15196,15 +15197,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 385,
 		"weighthg": 316,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lotad: {
 		"exists": true,
@@ -15212,29 +15213,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 270,
 		"name": "Lotad",
 		"types": [
-				"Water",
-				"Grass"
+			"Water",
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 30,
-				"def": 30,
-				"spa": 40,
-				"spd": 50,
-				"spe": 30
+			"hp": 40,
+			"atk": 30,
+			"def": 30,
+			"spa": 40,
+			"spd": 50,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Rain Dish",
-				"H": "Own Tempo"
+			"0": "Swift Swim",
+			"1": "Rain Dish",
+			"H": "Own Tempo",
 		},
 		"weightkg": 2.6,
 		"evos": [
-				"Lombre"
+			"Lombre",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Grass"
+			"Water 1",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "lotad",
@@ -15253,15 +15254,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 220,
 		"weighthg": 26,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lombre: {
 		"exists": true,
@@ -15269,31 +15270,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 271,
 		"name": "Lombre",
 		"types": [
-				"Water",
-				"Grass"
+			"Water",
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 50,
-				"def": 50,
-				"spa": 60,
-				"spd": 70,
-				"spe": 50
+			"hp": 60,
+			"atk": 50,
+			"def": 50,
+			"spa": 60,
+			"spd": 70,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Rain Dish",
-				"H": "Own Tempo"
+			"0": "Swift Swim",
+			"1": "Rain Dish",
+			"H": "Own Tempo",
 		},
 		"weightkg": 32.5,
 		"prevo": "Lotad",
 		"evoLevel": 14,
 		"evos": [
-				"Ludicolo"
+			"Ludicolo",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Grass"
+			"Water 1",
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "lombre",
@@ -15311,15 +15312,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 340,
 		"weighthg": 325,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ludicolo: {
 		"exists": true,
@@ -15327,29 +15328,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 272,
 		"name": "Ludicolo",
 		"types": [
-				"Water",
-				"Grass"
+			"Water",
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 70,
-				"def": 70,
-				"spa": 90,
-				"spd": 100,
-				"spe": 70
+			"hp": 80,
+			"atk": 70,
+			"def": 70,
+			"spa": 90,
+			"spd": 100,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Rain Dish",
-				"H": "Own Tempo"
+			"0": "Swift Swim",
+			"1": "Rain Dish",
+			"H": "Own Tempo",
 		},
 		"weightkg": 55,
 		"prevo": "Lombre",
 		"evoType": "useItem",
 		"evoItem": "Water Stone",
 		"eggGroups": [
-				"Water 1",
-				"Grass"
+			"Water 1",
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -15368,15 +15369,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 480,
 		"weighthg": 550,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	seedot: {
 		"exists": true,
@@ -15384,27 +15385,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 273,
 		"name": "Seedot",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 40,
-				"def": 50,
-				"spa": 30,
-				"spd": 30,
-				"spe": 30
+			"hp": 40,
+			"atk": 40,
+			"def": 50,
+			"spa": 30,
+			"spd": 30,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Early Bird"
+			"0": "Chlorophyll",
+			"1": "Early Bird",
 		},
 		"weightkg": 4,
 		"evos": [
-				"Nuzleaf"
+			"Nuzleaf",
 		],
 		"eggGroups": [
-				"Field",
-				"Grass"
+			"Field",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "seedot",
@@ -15423,15 +15424,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 220,
 		"weighthg": 40,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nuzleaf: {
 		"exists": true,
@@ -15439,30 +15440,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 274,
 		"name": "Nuzleaf",
 		"types": [
-				"Grass",
-				"Dark"
+			"Grass",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 70,
-				"def": 40,
-				"spa": 60,
-				"spd": 40,
-				"spe": 60
+			"hp": 70,
+			"atk": 70,
+			"def": 40,
+			"spa": 60,
+			"spd": 40,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Chlorophyll",
-				"1": "Early Bird"
+			"0": "Chlorophyll",
+			"1": "Early Bird",
 		},
 		"weightkg": 28,
 		"prevo": "Seedot",
 		"evoLevel": 14,
 		"evos": [
-				"Shiftry"
+			"Shiftry",
 		],
 		"eggGroups": [
-				"Field",
-				"Grass"
+			"Field",
+			"Grass",
 		],
 		"tier": "NFE",
 		"id": "nuzleaf",
@@ -15480,15 +15481,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 340,
 		"weighthg": 280,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shiftry: {
 		"exists": true,
@@ -15496,27 +15497,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 275,
 		"name": "Shiftry",
 		"types": [
-				"Grass",
-				"Dark"
+			"Grass",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 100,
-				"def": 60,
-				"spa": 90,
-				"spd": 60,
-				"spe": 80
+			"hp": 90,
+			"atk": 100,
+			"def": 60,
+			"spa": 90,
+			"spd": 60,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 59.6,
 		"prevo": "Nuzleaf",
 		"evoType": "useItem",
 		"evoItem": "Leaf Stone",
 		"eggGroups": [
-				"Field",
-				"Grass"
+			"Field",
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -15535,15 +15536,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 480,
 		"weighthg": 596,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	taillow: {
 		"exists": true,
@@ -15551,26 +15552,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 276,
 		"name": "Taillow",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 55,
-				"def": 30,
-				"spa": 30,
-				"spd": 30,
-				"spe": 85
+			"hp": 40,
+			"atk": 55,
+			"def": 30,
+			"spa": 30,
+			"spd": 30,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 2.3,
 		"evos": [
-				"Swellow"
+			"Swellow",
 		],
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15589,15 +15590,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 270,
 		"weighthg": 23,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	swellow: {
 		"exists": true,
@@ -15605,25 +15606,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 277,
 		"name": "Swellow",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 85,
-				"def": 60,
-				"spa": 50,
-				"spd": 50,
-				"spe": 125
+			"hp": 60,
+			"atk": 85,
+			"def": 60,
+			"spa": 50,
+			"spd": 50,
+			"spe": 125,
 		},
 		"abilities": {
-				"0": "Guts"
+			"0": "Guts",
 		},
 		"weightkg": 19.8,
 		"prevo": "Taillow",
 		"evoLevel": 22,
 		"eggGroups": [
-				"Flying"
+			"Flying",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -15642,15 +15643,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 198,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wingull: {
 		"exists": true,
@@ -15658,28 +15659,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 278,
 		"name": "Wingull",
 		"types": [
-				"Water",
-				"Flying"
+			"Water",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 30,
-				"def": 30,
-				"spa": 55,
-				"spd": 30,
-				"spe": 85
+			"hp": 40,
+			"atk": 30,
+			"def": 30,
+			"spa": 55,
+			"spd": 30,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Keen Eye",
-				"1": "Rain Dish"
+			"0": "Keen Eye",
+			"1": "Rain Dish",
 		},
 		"weightkg": 9.5,
 		"evos": [
-				"Pelipper"
+			"Pelipper",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Flying"
+			"Water 1",
+			"Flying",
 		],
 		"tier": "LC",
 		"id": "wingull",
@@ -15698,15 +15699,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 270,
 		"weighthg": 95,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	pelipper: {
 		"exists": true,
@@ -15714,28 +15715,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 279,
 		"name": "Pelipper",
 		"types": [
-				"Water",
-				"Flying"
+			"Water",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 50,
-				"def": 100,
-				"spa": 85,
-				"spd": 70,
-				"spe": 65
+			"hp": 60,
+			"atk": 50,
+			"def": 100,
+			"spa": 85,
+			"spd": 70,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Keen Eye",
-				"1": "Drizzle",
-				"H": "Rain Dish"
+			"0": "Keen Eye",
+			"1": "Drizzle",
+			"H": "Rain Dish",
 		},
 		"weightkg": 28,
 		"prevo": "Wingull",
 		"evoLevel": 25,
 		"eggGroups": [
-				"Water 1",
-				"Flying"
+			"Water 1",
+			"Flying",
 		],
 		"tier": "UUBL",
 		"doublesTier": "DOU",
@@ -15754,15 +15755,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 280,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ralts: {
 		"exists": true,
@@ -15770,27 +15771,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 280,
 		"name": "Ralts",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 28,
-				"atk": 25,
-				"def": 25,
-				"spa": 45,
-				"spd": 35,
-				"spe": 40
+			"hp": 28,
+			"atk": 25,
+			"def": 25,
+			"spa": 45,
+			"spd": 35,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Trace"
+			"0": "Synchronize",
+			"1": "Trace",
 		},
 		"weightkg": 6.6,
 		"evos": [
-				"Kirlia"
+			"Kirlia",
 		],
 		"eggGroups": [
-				"Human-Like",
-				"Amorphous"
+			"Human-Like",
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "ralts",
@@ -15809,15 +15810,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 198,
 		"weighthg": 66,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kirlia: {
 		"exists": true,
@@ -15825,30 +15826,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 281,
 		"name": "Kirlia",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 38,
-				"atk": 35,
-				"def": 35,
-				"spa": 65,
-				"spd": 55,
-				"spe": 50
+			"hp": 38,
+			"atk": 35,
+			"def": 35,
+			"spa": 65,
+			"spd": 55,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Trace"
+			"0": "Synchronize",
+			"1": "Trace",
 		},
 		"weightkg": 20.2,
 		"prevo": "Ralts",
 		"evoLevel": 20,
 		"evos": [
-				"Gardevoir",
-				"Gallade"
+			"Gardevoir",
+			"Gallade",
 		],
 		"eggGroups": [
-				"Human-Like",
-				"Amorphous"
+			"Human-Like",
+			"Amorphous",
 		],
 		"tier": "NFE",
 		"id": "kirlia",
@@ -15866,15 +15867,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 278,
 		"weighthg": 202,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gardevoir: {
 		"exists": true,
@@ -15882,33 +15883,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 282,
 		"name": "Gardevoir",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 68,
-				"atk": 65,
-				"def": 65,
-				"spa": 125,
-				"spd": 115,
-				"spe": 80
+			"hp": 68,
+			"atk": 65,
+			"def": 65,
+			"spa": 125,
+			"spd": 115,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Synchronize",
-				"1": "Trace"
+			"0": "Synchronize",
+			"1": "Trace",
 		},
 		"weightkg": 48.4,
 		"prevo": "Kirlia",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Human-Like",
-				"Amorphous"
+			"Human-Like",
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Gardevoir-Mega"
+			"Gardevoir-Mega",
 		],
 		"formeOrder": [
-				"Gardevoir",
-				"Gardevoir-Mega"
+			"Gardevoir",
+			"Gardevoir-Mega",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -15927,15 +15928,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 518,
 		"weighthg": 484,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	surskit: {
 		"exists": true,
@@ -15943,28 +15944,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 283,
 		"name": "Surskit",
 		"types": [
-				"Bug",
-				"Water"
+			"Bug",
+			"Water",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 30,
-				"def": 32,
-				"spa": 50,
-				"spd": 52,
-				"spe": 65
+			"hp": 40,
+			"atk": 30,
+			"def": 32,
+			"spa": 50,
+			"spd": 52,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Rain Dish"
+			"0": "Swift Swim",
+			"1": "Rain Dish",
 		},
 		"weightkg": 1.7,
 		"evos": [
-				"Masquerain"
+			"Masquerain",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Bug"
+			"Water 1",
+			"Bug",
 		],
 		"tier": "LC",
 		"id": "surskit",
@@ -15983,15 +15984,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 269,
 		"weighthg": 17,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	masquerain: {
 		"exists": true,
@@ -15999,26 +16000,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 284,
 		"name": "Masquerain",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 60,
-				"def": 62,
-				"spa": 80,
-				"spd": 82,
-				"spe": 60
+			"hp": 70,
+			"atk": 60,
+			"def": 62,
+			"spa": 80,
+			"spd": 82,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 3.6,
 		"prevo": "Surskit",
 		"evoLevel": 22,
 		"eggGroups": [
-				"Water 1",
-				"Bug"
+			"Water 1",
+			"Bug",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -16037,15 +16038,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 454,
 		"weighthg": 36,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shroomish: {
 		"exists": true,
@@ -16053,26 +16054,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 285,
 		"name": "Shroomish",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 40,
-				"def": 60,
-				"spa": 40,
-				"spd": 60,
-				"spe": 35
+			"hp": 60,
+			"atk": 40,
+			"def": 60,
+			"spa": 40,
+			"spd": 60,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Effect Spore"
+			"0": "Effect Spore",
 		},
 		"weightkg": 4.5,
 		"evos": [
-				"Breloom"
+			"Breloom",
 		],
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"tier": "LC",
 		"id": "shroomish",
@@ -16091,15 +16092,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 295,
 		"weighthg": 45,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	breloom: {
 		"exists": true,
@@ -16107,26 +16108,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 286,
 		"name": "Breloom",
 		"types": [
-				"Grass",
-				"Fighting"
+			"Grass",
+			"Fighting",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 130,
-				"def": 80,
-				"spa": 60,
-				"spd": 60,
-				"spe": 70
+			"hp": 60,
+			"atk": 130,
+			"def": 80,
+			"spa": 60,
+			"spd": 60,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Effect Spore"
+			"0": "Effect Spore",
 		},
 		"weightkg": 39.2,
 		"prevo": "Shroomish",
 		"evoLevel": 23,
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -16145,15 +16146,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 392,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slakoth: {
 		"exists": true,
@@ -16161,25 +16162,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 287,
 		"name": "Slakoth",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 60,
-				"def": 60,
-				"spa": 35,
-				"spd": 35,
-				"spe": 30
+			"hp": 60,
+			"atk": 60,
+			"def": 60,
+			"spa": 35,
+			"spd": 35,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Truant"
+			"0": "Truant",
 		},
 		"weightkg": 24,
 		"evos": [
-				"Vigoroth"
+			"Vigoroth",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "slakoth",
@@ -16198,15 +16199,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 280,
 		"weighthg": 240,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	vigoroth: {
 		"exists": true,
@@ -16214,27 +16215,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 288,
 		"name": "Vigoroth",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 80,
-				"def": 80,
-				"spa": 55,
-				"spd": 55,
-				"spe": 90
+			"hp": 80,
+			"atk": 80,
+			"def": 80,
+			"spa": 55,
+			"spd": 55,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Vital Spirit"
+			"0": "Vital Spirit",
 		},
 		"weightkg": 46.5,
 		"prevo": "Slakoth",
 		"evoLevel": 18,
 		"evos": [
-				"Slaking"
+			"Slaking",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "NFE",
 		"id": "vigoroth",
@@ -16252,15 +16253,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 465,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	slaking: {
 		"exists": true,
@@ -16268,24 +16269,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 289,
 		"name": "Slaking",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 150,
-				"atk": 160,
-				"def": 100,
-				"spa": 95,
-				"spd": 65,
-				"spe": 100
+			"hp": 150,
+			"atk": 160,
+			"def": 100,
+			"spa": 95,
+			"spd": 65,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Truant"
+			"0": "Truant",
 		},
 		"weightkg": 130.5,
 		"prevo": "Vigoroth",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -16304,15 +16305,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 670,
 		"weighthg": 1305,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nincada: {
 		"exists": true,
@@ -16320,28 +16321,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 290,
 		"name": "Nincada",
 		"types": [
-				"Bug",
-				"Ground"
+			"Bug",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 31,
-				"atk": 45,
-				"def": 90,
-				"spa": 30,
-				"spd": 30,
-				"spe": 40
+			"hp": 31,
+			"atk": 45,
+			"def": 90,
+			"spa": 30,
+			"spd": 30,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Compound Eyes",
-				"1": "Run Away"
+			"0": "Compound Eyes",
+			"1": "Run Away",
 		},
 		"weightkg": 5.5,
 		"evos": [
-				"Ninjask",
-				"Shedinja"
+			"Ninjask",
+			"Shedinja",
 		],
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16360,15 +16361,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 266,
 		"weighthg": 55,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	ninjask: {
 		"exists": true,
@@ -16376,25 +16377,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 291,
 		"name": "Ninjask",
 		"types": [
-				"Bug",
-				"Flying"
+			"Bug",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 61,
-				"atk": 90,
-				"def": 45,
-				"spa": 50,
-				"spd": 50,
-				"spe": 160
+			"hp": 61,
+			"atk": 90,
+			"def": 45,
+			"spa": 50,
+			"spd": 50,
+			"spe": 160,
 		},
 		"abilities": {
-				"0": "Speed Boost"
+			"0": "Speed Boost",
 		},
 		"weightkg": 12,
 		"prevo": "Nincada",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Bug"
+			"Bug",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16413,15 +16414,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 456,
 		"weighthg": 120,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shedinja: {
 		"exists": true,
@@ -16429,27 +16430,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 292,
 		"name": "Shedinja",
 		"types": [
-				"Bug",
-				"Ghost"
+			"Bug",
+			"Ghost",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 1,
-				"atk": 90,
-				"def": 45,
-				"spa": 30,
-				"spd": 30,
-				"spe": 40
+			"hp": 1,
+			"atk": 90,
+			"def": 45,
+			"spa": 30,
+			"spd": 30,
+			"spe": 40,
 		},
 		"maxHP": 1,
 		"abilities": {
-				"0": "Wonder Guard"
+			"0": "Wonder Guard",
 		},
 		"weightkg": 1.2,
 		"prevo": "Nincada",
 		"evoLevel": 20,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16468,15 +16469,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 236,
 		"weighthg": 12,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	whismur: {
 		"exists": true,
@@ -16484,26 +16485,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 293,
 		"name": "Whismur",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 64,
-				"atk": 51,
-				"def": 23,
-				"spa": 51,
-				"spd": 23,
-				"spe": 28
+			"hp": 64,
+			"atk": 51,
+			"def": 23,
+			"spa": 51,
+			"spd": 23,
+			"spe": 28,
 		},
 		"abilities": {
-				"0": "Soundproof"
+			"0": "Soundproof",
 		},
 		"weightkg": 16.3,
 		"evos": [
-				"Loudred"
+			"Loudred",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16522,15 +16523,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 240,
 		"weighthg": 163,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	loudred: {
 		"exists": true,
@@ -16538,28 +16539,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 294,
 		"name": "Loudred",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 84,
-				"atk": 71,
-				"def": 43,
-				"spa": 71,
-				"spd": 43,
-				"spe": 48
+			"hp": 84,
+			"atk": 71,
+			"def": 43,
+			"spa": 71,
+			"spd": 43,
+			"spe": 48,
 		},
 		"abilities": {
-				"0": "Soundproof"
+			"0": "Soundproof",
 		},
 		"weightkg": 40.5,
 		"prevo": "Whismur",
 		"evoLevel": 20,
 		"evos": [
-				"Exploud"
+			"Exploud",
 		],
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16577,15 +16578,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 360,
 		"weighthg": 405,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	exploud: {
 		"exists": true,
@@ -16593,25 +16594,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 295,
 		"name": "Exploud",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 104,
-				"atk": 91,
-				"def": 63,
-				"spa": 91,
-				"spd": 63,
-				"spe": 68
+			"hp": 104,
+			"atk": 91,
+			"def": 63,
+			"spa": 91,
+			"spd": 63,
+			"spe": 68,
 		},
 		"abilities": {
-				"0": "Soundproof"
+			"0": "Soundproof",
 		},
 		"weightkg": 84,
 		"prevo": "Loudred",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Monster",
-				"Field"
+			"Monster",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16630,15 +16631,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 840,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	makuhita: {
 		"exists": true,
@@ -16646,30 +16647,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 296,
 		"name": "Makuhita",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 72,
-				"atk": 60,
-				"def": 30,
-				"spa": 20,
-				"spd": 30,
-				"spe": 25
+			"hp": 72,
+			"atk": 60,
+			"def": 30,
+			"spa": 20,
+			"spd": 30,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Guts"
+			"0": "Thick Fat",
+			"1": "Guts",
 		},
 		"weightkg": 86.4,
 		"evos": [
-				"Hariyama"
+			"Hariyama",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "LC",
 		"id": "makuhita",
@@ -16692,7 +16693,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	hariyama: {
 		"exists": true,
@@ -16700,29 +16701,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 297,
 		"name": "Hariyama",
 		"types": [
-				"Fighting"
+			"Fighting",
 		],
 		"genderRatio": {
-				"M": 0.75,
-				"F": 0.25
+			"M": 0.75,
+			"F": 0.25,
 		},
 		"baseStats": {
-				"hp": 144,
-				"atk": 120,
-				"def": 60,
-				"spa": 40,
-				"spd": 60,
-				"spe": 50
+			"hp": 144,
+			"atk": 120,
+			"def": 60,
+			"spa": 40,
+			"spd": 60,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Guts"
+			"0": "Thick Fat",
+			"1": "Guts",
 		},
 		"weightkg": 253.8,
 		"prevo": "Makuhita",
 		"evoLevel": 24,
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "PU",
 		"doublesTier": "(DUU)",
@@ -16745,7 +16746,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	azurill: {
 		"exists": true,
@@ -16753,30 +16754,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 298,
 		"name": "Azurill",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 20,
-				"def": 40,
-				"spa": 20,
-				"spd": 40,
-				"spe": 20
+			"hp": 50,
+			"atk": 20,
+			"def": 40,
+			"spa": 20,
+			"spd": 40,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Huge Power"
+			"0": "Thick Fat",
+			"1": "Huge Power",
 		},
 		"weightkg": 2,
 		"evos": [
-				"Marill"
+			"Marill",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"tier": "LC",
@@ -16799,7 +16800,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	nosepass: {
 		"exists": true,
@@ -16807,26 +16808,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 299,
 		"name": "Nosepass",
 		"types": [
-				"Rock"
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 45,
-				"def": 135,
-				"spa": 45,
-				"spd": 90,
-				"spe": 30
+			"hp": 30,
+			"atk": 45,
+			"def": 135,
+			"spa": 45,
+			"spd": 90,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Magnet Pull"
+			"0": "Sturdy",
+			"1": "Magnet Pull",
 		},
 		"weightkg": 97,
 		"evos": [
-				"Probopass"
+			"Probopass",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "LC",
 		"id": "nosepass",
@@ -16845,15 +16846,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 375,
 		"weighthg": 970,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	skitty: {
 		"exists": true,
@@ -16861,30 +16862,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 300,
 		"name": "Skitty",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 50,
-				"atk": 45,
-				"def": 45,
-				"spa": 35,
-				"spd": 35,
-				"spe": 50
+			"hp": 50,
+			"atk": 45,
+			"def": 45,
+			"spa": 35,
+			"spd": 35,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 11,
 		"evos": [
-				"Delcatty"
+			"Delcatty",
 		],
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16907,7 +16908,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	delcatty: {
 		"exists": true,
@@ -16915,30 +16916,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 301,
 		"name": "Delcatty",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 70,
-				"atk": 65,
-				"def": 65,
-				"spa": 55,
-				"spd": 55,
-				"spe": 70
+			"hp": 70,
+			"atk": 65,
+			"def": 65,
+			"spa": 55,
+			"spd": 55,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Cute Charm"
+			"0": "Cute Charm",
 		},
 		"weightkg": 32.6,
 		"prevo": "Skitty",
 		"evoType": "useItem",
 		"evoItem": "Moon Stone",
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -16961,7 +16962,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sableye: {
 		"exists": true,
@@ -16969,30 +16970,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 302,
 		"name": "Sableye",
 		"types": [
-				"Dark",
-				"Ghost"
+			"Dark",
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 75,
-				"def": 75,
-				"spa": 65,
-				"spd": 65,
-				"spe": 50
+			"hp": 50,
+			"atk": 75,
+			"def": 75,
+			"spa": 65,
+			"spd": 65,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Keen Eye"
+			"0": "Keen Eye",
 		},
 		"weightkg": 11,
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"otherFormes": [
-				"Sableye-Mega"
+			"Sableye-Mega",
 		],
 		"formeOrder": [
-				"Sableye",
-				"Sableye-Mega"
+			"Sableye",
+			"Sableye-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "DUU",
@@ -17012,15 +17013,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 380,
 		"weighthg": 110,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	mawile: {
 		"exists": true,
@@ -17028,31 +17029,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 303,
 		"name": "Mawile",
 		"types": [
-				"Steel"
+			"Steel",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 85,
-				"def": 85,
-				"spa": 55,
-				"spd": 55,
-				"spe": 50
+			"hp": 50,
+			"atk": 85,
+			"def": 85,
+			"spa": 55,
+			"spd": 55,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Intimidate"
+			"0": "Hyper Cutter",
+			"1": "Intimidate",
 		},
 		"weightkg": 11.5,
 		"eggGroups": [
-				"Field",
-				"Fairy"
+			"Field",
+			"Fairy",
 		],
 		"otherFormes": [
-				"Mawile-Mega"
+			"Mawile-Mega",
 		],
 		"formeOrder": [
-				"Mawile",
-				"Mawile-Mega"
+			"Mawile",
+			"Mawile-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17072,15 +17073,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 380,
 		"weighthg": 115,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	aron: {
 		"exists": true,
@@ -17088,27 +17089,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 304,
 		"name": "Aron",
 		"types": [
-				"Steel",
-				"Rock"
+			"Steel",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 70,
-				"def": 100,
-				"spa": 40,
-				"spd": 40,
-				"spe": 30
+			"hp": 50,
+			"atk": 70,
+			"def": 100,
+			"spa": 40,
+			"spd": 40,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Rock Head"
+			"0": "Sturdy",
+			"1": "Rock Head",
 		},
 		"weightkg": 60,
 		"evos": [
-				"Lairon"
+			"Lairon",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17127,15 +17128,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lairon: {
 		"exists": true,
@@ -17143,29 +17144,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 305,
 		"name": "Lairon",
 		"types": [
-				"Steel",
-				"Rock"
+			"Steel",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 90,
-				"def": 140,
-				"spa": 50,
-				"spd": 50,
-				"spe": 40
+			"hp": 60,
+			"atk": 90,
+			"def": 140,
+			"spa": 50,
+			"spd": 50,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Rock Head"
+			"0": "Sturdy",
+			"1": "Rock Head",
 		},
 		"weightkg": 120,
 		"prevo": "Aron",
 		"evoLevel": 32,
 		"evos": [
-				"Aggron"
+			"Aggron",
 		],
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17183,15 +17184,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 430,
 		"weighthg": 1200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	aggron: {
 		"exists": true,
@@ -17199,33 +17200,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 306,
 		"name": "Aggron",
 		"types": [
-				"Steel",
-				"Rock"
+			"Steel",
+			"Rock",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 110,
-				"def": 180,
-				"spa": 60,
-				"spd": 60,
-				"spe": 50
+			"hp": 70,
+			"atk": 110,
+			"def": 180,
+			"spa": 60,
+			"spd": 60,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Sturdy",
-				"1": "Rock Head"
+			"0": "Sturdy",
+			"1": "Rock Head",
 		},
 		"weightkg": 360,
 		"prevo": "Lairon",
 		"evoLevel": 42,
 		"eggGroups": [
-				"Monster"
+			"Monster",
 		],
 		"otherFormes": [
-				"Aggron-Mega"
+			"Aggron-Mega",
 		],
 		"formeOrder": [
-				"Aggron",
-				"Aggron-Mega"
+			"Aggron",
+			"Aggron-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17244,15 +17245,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 530,
 		"weighthg": 3600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	meditite: {
 		"exists": true,
@@ -17260,26 +17261,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 307,
 		"name": "Meditite",
 		"types": [
-				"Fighting",
-				"Psychic"
+			"Fighting",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 30,
-				"atk": 40,
-				"def": 55,
-				"spa": 40,
-				"spd": 55,
-				"spe": 60
+			"hp": 30,
+			"atk": 40,
+			"def": 55,
+			"spa": 40,
+			"spd": 55,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Pure Power"
+			"0": "Pure Power",
 		},
 		"weightkg": 11.2,
 		"evos": [
-				"Medicham"
+			"Medicham",
 		],
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"tier": "NFE",
 		"id": "meditite",
@@ -17298,15 +17299,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 280,
 		"weighthg": 112,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	medicham: {
 		"exists": true,
@@ -17314,32 +17315,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 308,
 		"name": "Medicham",
 		"types": [
-				"Fighting",
-				"Psychic"
+			"Fighting",
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 60,
-				"def": 75,
-				"spa": 60,
-				"spd": 75,
-				"spe": 80
+			"hp": 60,
+			"atk": 60,
+			"def": 75,
+			"spa": 60,
+			"spd": 75,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Pure Power"
+			"0": "Pure Power",
 		},
 		"weightkg": 31.5,
 		"prevo": "Meditite",
 		"evoLevel": 37,
 		"eggGroups": [
-				"Human-Like"
+			"Human-Like",
 		],
 		"otherFormes": [
-				"Medicham-Mega"
+			"Medicham-Mega",
 		],
 		"formeOrder": [
-				"Medicham",
-				"Medicham-Mega"
+			"Medicham",
+			"Medicham-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -17358,15 +17359,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 410,
 		"weighthg": 315,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	electrike: {
 		"exists": true,
@@ -17374,27 +17375,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 309,
 		"name": "Electrike",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 45,
-				"def": 40,
-				"spa": 65,
-				"spd": 40,
-				"spe": 65
+			"hp": 40,
+			"atk": 45,
+			"def": 40,
+			"spa": 65,
+			"spd": 40,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Lightning Rod",
-				"H": "Minus"
+			"0": "Static",
+			"1": "Lightning Rod",
+			"H": "Minus",
 		},
 		"weightkg": 15.2,
 		"evos": [
-				"Manectric"
+			"Manectric",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17413,15 +17414,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 295,
 		"weighthg": 152,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	manectric: {
 		"exists": true,
@@ -17429,33 +17430,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 310,
 		"name": "Manectric",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 75,
-				"def": 60,
-				"spa": 105,
-				"spd": 60,
-				"spe": 105
+			"hp": 70,
+			"atk": 75,
+			"def": 60,
+			"spa": 105,
+			"spd": 60,
+			"spe": 105,
 		},
 		"abilities": {
-				"0": "Static",
-				"1": "Lightning Rod",
-				"H": "Minus"
+			"0": "Static",
+			"1": "Lightning Rod",
+			"H": "Minus",
 		},
 		"weightkg": 40.2,
 		"prevo": "Electrike",
 		"evoLevel": 26,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Manectric-Mega"
+			"Manectric-Mega",
 		],
 		"formeOrder": [
-				"Manectric",
-				"Manectric-Mega"
+			"Manectric",
+			"Manectric-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17474,15 +17475,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 475,
 		"weighthg": 402,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	plusle: {
 		"exists": true,
@@ -17490,23 +17491,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 311,
 		"name": "Plusle",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 50,
-				"def": 40,
-				"spa": 85,
-				"spd": 75,
-				"spe": 95
+			"hp": 60,
+			"atk": 50,
+			"def": 40,
+			"spa": 85,
+			"spd": 75,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Plus",
-				"1": "Lightning Rod"
+			"0": "Plus",
+			"1": "Lightning Rod",
 		},
 		"weightkg": 4.2,
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -17526,15 +17527,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 42,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	minun: {
 		"exists": true,
@@ -17542,23 +17543,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 312,
 		"name": "Minun",
 		"types": [
-				"Electric"
+			"Electric",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 40,
-				"def": 50,
-				"spa": 75,
-				"spd": 85,
-				"spe": 95
+			"hp": 60,
+			"atk": 40,
+			"def": 50,
+			"spa": 75,
+			"spd": 85,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Minus",
-				"1": "Volt Absorb"
+			"0": "Minus",
+			"1": "Volt Absorb",
 		},
 		"weightkg": 4.2,
 		"eggGroups": [
-				"Fairy"
+			"Fairy",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -17578,15 +17579,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 405,
 		"weighthg": 42,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	volbeat: {
 		"exists": true,
@@ -17594,25 +17595,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 313,
 		"name": "Volbeat",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 65,
-				"atk": 73,
-				"def": 55,
-				"spa": 47,
-				"spd": 75,
-				"spe": 85
+			"hp": 65,
+			"atk": 73,
+			"def": 55,
+			"spa": 47,
+			"spd": 75,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Illuminate",
-				"1": "Swarm"
+			"0": "Illuminate",
+			"1": "Swarm",
 		},
 		"weightkg": 17.7,
 		"eggGroups": [
-				"Bug",
-				"Human-Like"
+			"Bug",
+			"Human-Like",
 		],
 		"mother": "illumise",
 		"tier": "ZU",
@@ -17633,15 +17634,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 430,
 		"weighthg": 177,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	illumise: {
 		"exists": true,
@@ -17649,24 +17650,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 314,
 		"name": "Illumise",
 		"types": [
-				"Bug"
+			"Bug",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 65,
-				"atk": 47,
-				"def": 55,
-				"spa": 73,
-				"spd": 75,
-				"spe": 85
+			"hp": 65,
+			"atk": 47,
+			"def": 55,
+			"spa": 73,
+			"spd": 75,
+			"spe": 85,
 		},
 		"abilities": {
-				"0": "Oblivious"
+			"0": "Oblivious",
 		},
 		"weightkg": 17.7,
 		"eggGroups": [
-				"Bug",
-				"Human-Like"
+			"Bug",
+			"Human-Like",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -17686,15 +17687,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 430,
 		"weighthg": 177,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	roselia: {
 		"exists": true,
@@ -17702,31 +17703,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 315,
 		"name": "Roselia",
 		"types": [
-				"Grass",
-				"Poison"
+			"Grass",
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 60,
-				"def": 45,
-				"spa": 100,
-				"spd": 80,
-				"spe": 65
+			"hp": 50,
+			"atk": 60,
+			"def": 45,
+			"spa": 100,
+			"spd": 80,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Natural Cure",
-				"1": "Poison Point"
+			"0": "Natural Cure",
+			"1": "Poison Point",
 		},
 		"weightkg": 2,
 		"prevo": "Budew",
 		"evoType": "levelFriendship",
 		"evoCondition": "during the day",
 		"evos": [
-				"Roserade"
+			"Roserade",
 		],
 		"eggGroups": [
-				"Fairy",
-				"Grass"
+			"Fairy",
+			"Grass",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -17744,15 +17745,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "Illegal",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 400,
 		"weighthg": 20,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gulpin: {
 		"exists": true,
@@ -17760,26 +17761,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 316,
 		"name": "Gulpin",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 43,
-				"def": 53,
-				"spa": 43,
-				"spd": 53,
-				"spe": 40
+			"hp": 70,
+			"atk": 43,
+			"def": 53,
+			"spa": 43,
+			"spd": 53,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Liquid Ooze",
-				"1": "Sticky Hold"
+			"0": "Liquid Ooze",
+			"1": "Sticky Hold",
 		},
 		"weightkg": 10.3,
 		"evos": [
-				"Swalot"
+			"Swalot",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "gulpin",
@@ -17798,15 +17799,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 302,
 		"weighthg": 103,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	swalot: {
 		"exists": true,
@@ -17814,25 +17815,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 317,
 		"name": "Swalot",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 100,
-				"atk": 73,
-				"def": 83,
-				"spa": 73,
-				"spd": 83,
-				"spe": 55
+			"hp": 100,
+			"atk": 73,
+			"def": 83,
+			"spa": 73,
+			"spd": 83,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Liquid Ooze",
-				"1": "Sticky Hold"
+			"0": "Liquid Ooze",
+			"1": "Sticky Hold",
 		},
 		"weightkg": 80,
 		"prevo": "Gulpin",
 		"evoLevel": 26,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -17851,15 +17852,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 467,
 		"weighthg": 800,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	carvanha: {
 		"exists": true,
@@ -17867,27 +17868,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 318,
 		"name": "Carvanha",
 		"types": [
-				"Water",
-				"Dark"
+			"Water",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 90,
-				"def": 20,
-				"spa": 65,
-				"spd": 20,
-				"spe": 65
+			"hp": 45,
+			"atk": 90,
+			"def": 20,
+			"spa": 65,
+			"spd": 20,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Rough Skin",
-				"1": "Speed Boost"
+			"0": "Rough Skin",
+			"1": "Speed Boost",
 		},
 		"weightkg": 20.8,
 		"evos": [
-				"Sharpedo"
+			"Sharpedo",
 		],
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17906,15 +17907,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 305,
 		"weighthg": 208,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sharpedo: {
 		"exists": true,
@@ -17922,33 +17923,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 319,
 		"name": "Sharpedo",
 		"types": [
-				"Water",
-				"Dark"
+			"Water",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 120,
-				"def": 40,
-				"spa": 95,
-				"spd": 40,
-				"spe": 95
+			"hp": 70,
+			"atk": 120,
+			"def": 40,
+			"spa": 95,
+			"spd": 40,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Rough Skin",
-				"1": "Speed Boost"
+			"0": "Rough Skin",
+			"1": "Speed Boost",
 		},
 		"weightkg": 88.8,
 		"prevo": "Carvanha",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"otherFormes": [
-				"Sharpedo-Mega"
+			"Sharpedo-Mega",
 		],
 		"formeOrder": [
-				"Sharpedo",
-				"Sharpedo-Mega"
+			"Sharpedo",
+			"Sharpedo-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -17967,15 +17968,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 888,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wailmer: {
 		"exists": true,
@@ -17983,28 +17984,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 320,
 		"name": "Wailmer",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 130,
-				"atk": 70,
-				"def": 35,
-				"spa": 70,
-				"spd": 35,
-				"spe": 60
+			"hp": 130,
+			"atk": 70,
+			"def": 35,
+			"spa": 70,
+			"spd": 35,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Water Veil",
-				"1": "Oblivious",
-				"H": "Pressure"
+			"0": "Water Veil",
+			"1": "Oblivious",
+			"H": "Pressure",
 		},
 		"weightkg": 130,
 		"evos": [
-				"Wailord"
+			"Wailord",
 		],
 		"eggGroups": [
-				"Field",
-				"Water 2"
+			"Field",
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -18023,15 +18024,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 400,
 		"weighthg": 1300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wailord: {
 		"exists": true,
@@ -18039,27 +18040,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 321,
 		"name": "Wailord",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 170,
-				"atk": 90,
-				"def": 45,
-				"spa": 90,
-				"spd": 45,
-				"spe": 60
+			"hp": 170,
+			"atk": 90,
+			"def": 45,
+			"spa": 90,
+			"spd": 45,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Water Veil",
-				"1": "Oblivious",
-				"H": "Pressure"
+			"0": "Water Veil",
+			"1": "Oblivious",
+			"H": "Pressure",
 		},
 		"weightkg": 398,
 		"prevo": "Wailmer",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Field",
-				"Water 2"
+			"Field",
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -18078,15 +18079,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 500,
 		"weighthg": 3980,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	numel: {
 		"exists": true,
@@ -18094,27 +18095,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 322,
 		"name": "Numel",
 		"types": [
-				"Fire",
-				"Ground"
+			"Fire",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 60,
-				"def": 40,
-				"spa": 65,
-				"spd": 45,
-				"spe": 35
+			"hp": 60,
+			"atk": 60,
+			"def": 40,
+			"spa": 65,
+			"spd": 45,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Oblivious",
-				"1": "Own Tempo"
+			"0": "Oblivious",
+			"1": "Own Tempo",
 		},
 		"weightkg": 24,
 		"evos": [
-				"Camerupt"
+			"Camerupt",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "numel",
@@ -18133,15 +18134,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 305,
 		"weighthg": 240,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	camerupt: {
 		"exists": true,
@@ -18149,32 +18150,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 323,
 		"name": "Camerupt",
 		"types": [
-				"Fire",
-				"Ground"
+			"Fire",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 100,
-				"def": 70,
-				"spa": 105,
-				"spd": 75,
-				"spe": 40
+			"hp": 70,
+			"atk": 100,
+			"def": 70,
+			"spa": 105,
+			"spd": 75,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Magma Armor"
+			"0": "Magma Armor",
 		},
 		"weightkg": 220,
 		"prevo": "Numel",
 		"evoLevel": 33,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Camerupt-Mega"
+			"Camerupt-Mega",
 		],
 		"formeOrder": [
-				"Camerupt",
-				"Camerupt-Mega"
+			"Camerupt",
+			"Camerupt-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -18193,15 +18194,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 2200,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	torkoal: {
 		"exists": true,
@@ -18209,24 +18210,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 324,
 		"name": "Torkoal",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 85,
-				"def": 140,
-				"spa": 85,
-				"spd": 70,
-				"spe": 20
+			"hp": 70,
+			"atk": 85,
+			"def": 140,
+			"spa": 85,
+			"spd": 70,
+			"spe": 20,
 		},
 		"abilities": {
-				"0": "White Smoke",
-				"1": "Drought",
-				"H": "Shell Armor"
+			"0": "White Smoke",
+			"1": "Drought",
+			"H": "Shell Armor",
 		},
 		"weightkg": 80.4,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "UU",
 		"doublesTier": "DOU",
@@ -18246,15 +18247,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 470,
 		"weighthg": 804,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	spoink: {
 		"exists": true,
@@ -18262,26 +18263,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 325,
 		"name": "Spoink",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 25,
-				"def": 35,
-				"spa": 70,
-				"spd": 80,
-				"spe": 60
+			"hp": 60,
+			"atk": 25,
+			"def": 35,
+			"spa": 70,
+			"spd": 80,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Own Tempo"
+			"0": "Thick Fat",
+			"1": "Own Tempo",
 		},
 		"weightkg": 30.6,
 		"evos": [
-				"Grumpig"
+			"Grumpig",
 		],
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "LC",
 		"id": "spoink",
@@ -18300,15 +18301,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 330,
 		"weighthg": 306,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	grumpig: {
 		"exists": true,
@@ -18316,25 +18317,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 326,
 		"name": "Grumpig",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 45,
-				"def": 65,
-				"spa": 90,
-				"spd": 110,
-				"spe": 80
+			"hp": 80,
+			"atk": 45,
+			"def": 65,
+			"spa": 90,
+			"spd": 110,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Own Tempo"
+			"0": "Thick Fat",
+			"1": "Own Tempo",
 		},
 		"weightkg": 71.5,
 		"prevo": "Spoink",
 		"evoLevel": 32,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -18353,15 +18354,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 470,
 		"weighthg": 715,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	spinda: {
 		"exists": true,
@@ -18369,23 +18370,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 327,
 		"name": "Spinda",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 60,
-				"def": 60,
-				"spa": 60,
-				"spd": 60,
-				"spe": 60
+			"hp": 60,
+			"atk": 60,
+			"def": 60,
+			"spa": 60,
+			"spd": 60,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Own Tempo"
+			"0": "Own Tempo",
 		},
 		"weightkg": 5,
 		"eggGroups": [
-				"Field",
-				"Human-Like"
+			"Field",
+			"Human-Like",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -18405,15 +18406,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 360,
 		"weighthg": 50,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	trapinch: {
 		"exists": true,
@@ -18421,27 +18422,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 328,
 		"name": "Trapinch",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 100,
-				"def": 45,
-				"spa": 45,
-				"spd": 45,
-				"spe": 10
+			"hp": 45,
+			"atk": 100,
+			"def": 45,
+			"spa": 45,
+			"spd": 45,
+			"spe": 10,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Arena Trap"
+			"0": "Hyper Cutter",
+			"1": "Arena Trap",
 		},
 		"weightkg": 15,
 		"evos": [
-				"Vibrava"
+			"Vibrava",
 		],
 		"eggGroups": [
-				"Bug",
-				"Dragon"
+			"Bug",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "trapinch",
@@ -18460,15 +18461,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 290,
 		"weighthg": 150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	vibrava: {
 		"exists": true,
@@ -18476,29 +18477,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 329,
 		"name": "Vibrava",
 		"types": [
-				"Ground",
-				"Dragon"
+			"Ground",
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 70,
-				"def": 50,
-				"spa": 50,
-				"spd": 50,
-				"spe": 70
+			"hp": 50,
+			"atk": 70,
+			"def": 50,
+			"spa": 50,
+			"spd": 50,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 15.3,
 		"prevo": "Trapinch",
 		"evoLevel": 35,
 		"evos": [
-				"Flygon"
+			"Flygon",
 		],
 		"eggGroups": [
-				"Bug",
-				"Dragon"
+			"Bug",
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "vibrava",
@@ -18516,15 +18517,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 340,
 		"weighthg": 153,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	flygon: {
 		"exists": true,
@@ -18532,26 +18533,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 330,
 		"name": "Flygon",
 		"types": [
-				"Ground",
-				"Dragon"
+			"Ground",
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 100,
-				"def": 80,
-				"spa": 80,
-				"spd": 80,
-				"spe": 100
+			"hp": 80,
+			"atk": 100,
+			"def": 80,
+			"spa": 80,
+			"spd": 80,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 82,
 		"prevo": "Vibrava",
 		"evoLevel": 45,
 		"eggGroups": [
-				"Bug",
-				"Dragon"
+			"Bug",
+			"Dragon",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -18570,15 +18571,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 520,
 		"weighthg": 820,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cacnea: {
 		"exists": true,
@@ -18586,27 +18587,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 331,
 		"name": "Cacnea",
 		"types": [
-				"Grass"
+			"Grass",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 85,
-				"def": 40,
-				"spa": 85,
-				"spd": 40,
-				"spe": 35
+			"hp": 50,
+			"atk": 85,
+			"def": 40,
+			"spa": 85,
+			"spd": 40,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Sand Veil",
-				"1": "Water Absorb"
+			"0": "Sand Veil",
+			"1": "Water Absorb",
 		},
 		"weightkg": 51.3,
 		"evos": [
-				"Cacturne"
+			"Cacturne",
 		],
 		"eggGroups": [
-				"Grass",
-				"Human-Like"
+			"Grass",
+			"Human-Like",
 		],
 		"tier": "LC",
 		"id": "cacnea",
@@ -18625,15 +18626,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 335,
 		"weighthg": 513,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cacturne: {
 		"exists": true,
@@ -18641,27 +18642,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 332,
 		"name": "Cacturne",
 		"types": [
-				"Grass",
-				"Dark"
+			"Grass",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 115,
-				"def": 60,
-				"spa": 115,
-				"spd": 60,
-				"spe": 55
+			"hp": 70,
+			"atk": 115,
+			"def": 60,
+			"spa": 115,
+			"spd": 60,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Sand Veil",
-				"1": "Water Absorb"
+			"0": "Sand Veil",
+			"1": "Water Absorb",
 		},
 		"weightkg": 77.4,
 		"prevo": "Cacnea",
 		"evoLevel": 32,
 		"eggGroups": [
-				"Grass",
-				"Human-Like"
+			"Grass",
+			"Human-Like",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -18680,15 +18681,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 475,
 		"weighthg": 774,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	swablu: {
 		"exists": true,
@@ -18696,28 +18697,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 333,
 		"name": "Swablu",
 		"types": [
-				"Normal",
-				"Flying"
+			"Normal",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 40,
-				"def": 60,
-				"spa": 40,
-				"spd": 75,
-				"spe": 50
+			"hp": 45,
+			"atk": 40,
+			"def": 60,
+			"spa": 40,
+			"spd": 75,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Natural Cure",
-				"1": "Cloud Nine"
+			"0": "Natural Cure",
+			"1": "Cloud Nine",
 		},
 		"weightkg": 1.2,
 		"evos": [
-				"Altaria"
+			"Altaria",
 		],
 		"eggGroups": [
-				"Flying",
-				"Dragon"
+			"Flying",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "swablu",
@@ -18736,15 +18737,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 310,
 		"weighthg": 12,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	altaria: {
 		"exists": true,
@@ -18752,34 +18753,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 334,
 		"name": "Altaria",
 		"types": [
-				"Dragon",
-				"Flying"
+			"Dragon",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 75,
-				"atk": 70,
-				"def": 90,
-				"spa": 70,
-				"spd": 105,
-				"spe": 80
+			"hp": 75,
+			"atk": 70,
+			"def": 90,
+			"spa": 70,
+			"spd": 105,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Natural Cure",
-				"1": "Cloud Nine"
+			"0": "Natural Cure",
+			"1": "Cloud Nine",
 		},
 		"weightkg": 20.6,
 		"prevo": "Swablu",
 		"evoLevel": 35,
 		"eggGroups": [
-				"Flying",
-				"Dragon"
+			"Flying",
+			"Dragon",
 		],
 		"otherFormes": [
-				"Altaria-Mega"
+			"Altaria-Mega",
 		],
 		"formeOrder": [
-				"Altaria",
-				"Altaria-Mega"
+			"Altaria",
+			"Altaria-Mega",
 		],
 		"tier": "PU",
 		"doublesTier": "(DUU)",
@@ -18798,15 +18799,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 490,
 		"weighthg": 206,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	zangoose: {
 		"exists": true,
@@ -18814,22 +18815,22 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 335,
 		"name": "Zangoose",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 73,
-				"atk": 115,
-				"def": 60,
-				"spa": 60,
-				"spd": 60,
-				"spe": 90
+			"hp": 73,
+			"atk": 115,
+			"def": 60,
+			"spa": 60,
+			"spd": 60,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Immunity"
+			"0": "Immunity",
 		},
 		"weightkg": 40.3,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -18849,15 +18850,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 458,
 		"weighthg": 403,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	seviper: {
 		"exists": true,
@@ -18865,23 +18866,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 336,
 		"name": "Seviper",
 		"types": [
-				"Poison"
+			"Poison",
 		],
 		"baseStats": {
-				"hp": 73,
-				"atk": 100,
-				"def": 60,
-				"spa": 100,
-				"spd": 60,
-				"spe": 65
+			"hp": 73,
+			"atk": 100,
+			"def": 60,
+			"spa": 100,
+			"spd": 60,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Shed Skin"
+			"0": "Shed Skin",
 		},
 		"weightkg": 52.5,
 		"eggGroups": [
-				"Field",
-				"Dragon"
+			"Field",
+			"Dragon",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -18901,15 +18902,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 458,
 		"weighthg": 525,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lunatone: {
 		"exists": true,
@@ -18917,24 +18918,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 337,
 		"name": "Lunatone",
 		"types": [
-				"Rock",
-				"Psychic"
+			"Rock",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 70,
-				"atk": 55,
-				"def": 65,
-				"spa": 95,
-				"spd": 85,
-				"spe": 70
+			"hp": 70,
+			"atk": 55,
+			"def": 65,
+			"spa": 95,
+			"spd": 85,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 168,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -18954,15 +18955,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 460,
 		"weighthg": 1680,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	solrock: {
 		"exists": true,
@@ -18970,24 +18971,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 338,
 		"name": "Solrock",
 		"types": [
-				"Rock",
-				"Psychic"
+			"Rock",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 70,
-				"atk": 95,
-				"def": 85,
-				"spa": 55,
-				"spd": 65,
-				"spe": 70
+			"hp": 70,
+			"atk": 95,
+			"def": 85,
+			"spa": 55,
+			"spd": 65,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 154,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19007,15 +19008,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 460,
 		"weighthg": 1540,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	barboach: {
 		"exists": true,
@@ -19023,26 +19024,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 339,
 		"name": "Barboach",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 48,
-				"def": 43,
-				"spa": 46,
-				"spd": 41,
-				"spe": 60
+			"hp": 50,
+			"atk": 48,
+			"def": 43,
+			"spa": 46,
+			"spd": 41,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Oblivious"
+			"0": "Oblivious",
 		},
 		"weightkg": 1.9,
 		"evos": [
-				"Whiscash"
+			"Whiscash",
 		],
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"tier": "LC",
 		"id": "barboach",
@@ -19061,15 +19062,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 288,
 		"weighthg": 19,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	whiscash: {
 		"exists": true,
@@ -19077,25 +19078,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 340,
 		"name": "Whiscash",
 		"types": [
-				"Water",
-				"Ground"
+			"Water",
+			"Ground",
 		],
 		"baseStats": {
-				"hp": 110,
-				"atk": 78,
-				"def": 73,
-				"spa": 76,
-				"spd": 71,
-				"spe": 60
+			"hp": 110,
+			"atk": 78,
+			"def": 73,
+			"spa": 76,
+			"spd": 71,
+			"spe": 60,
 		},
 		"abilities": {
-				"0": "Oblivious"
+			"0": "Oblivious",
 		},
 		"weightkg": 23.6,
 		"prevo": "Barboach",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -19114,15 +19115,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 468,
 		"weighthg": 236,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	corphish: {
 		"exists": true,
@@ -19130,27 +19131,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 341,
 		"name": "Corphish",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 43,
-				"atk": 80,
-				"def": 65,
-				"spa": 50,
-				"spd": 35,
-				"spe": 35
+			"hp": 43,
+			"atk": 80,
+			"def": 65,
+			"spa": 50,
+			"spd": 35,
+			"spe": 35,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Shell Armor"
+			"0": "Hyper Cutter",
+			"1": "Shell Armor",
 		},
 		"weightkg": 11.5,
 		"evos": [
-				"Crawdaunt"
+			"Crawdaunt",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"tier": "LC",
 		"id": "corphish",
@@ -19169,15 +19170,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 308,
 		"weighthg": 115,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	crawdaunt: {
 		"exists": true,
@@ -19185,27 +19186,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 342,
 		"name": "Crawdaunt",
 		"types": [
-				"Water",
-				"Dark"
+			"Water",
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 63,
-				"atk": 120,
-				"def": 85,
-				"spa": 90,
-				"spd": 55,
-				"spe": 55
+			"hp": 63,
+			"atk": 120,
+			"def": 85,
+			"spa": 90,
+			"spd": 55,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Hyper Cutter",
-				"1": "Shell Armor"
+			"0": "Hyper Cutter",
+			"1": "Shell Armor",
 		},
 		"weightkg": 32.8,
 		"prevo": "Corphish",
 		"evoLevel": 30,
 		"eggGroups": [
-				"Water 1",
-				"Water 3"
+			"Water 1",
+			"Water 3",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -19224,15 +19225,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 468,
 		"weighthg": 328,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	baltoy: {
 		"exists": true,
@@ -19240,27 +19241,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 343,
 		"name": "Baltoy",
 		"types": [
-				"Ground",
-				"Psychic"
+			"Ground",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 40,
-				"atk": 40,
-				"def": 55,
-				"spa": 40,
-				"spd": 70,
-				"spe": 55
+			"hp": 40,
+			"atk": 40,
+			"def": 55,
+			"spa": 40,
+			"spd": 70,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 21.5,
 		"evos": [
-				"Claydol"
+			"Claydol",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19279,15 +19280,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 300,
 		"weighthg": 215,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	claydol: {
 		"exists": true,
@@ -19295,26 +19296,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 344,
 		"name": "Claydol",
 		"types": [
-				"Ground",
-				"Psychic"
+			"Ground",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 60,
-				"atk": 70,
-				"def": 105,
-				"spa": 70,
-				"spd": 120,
-				"spe": 75
+			"hp": 60,
+			"atk": 70,
+			"def": 105,
+			"spa": 70,
+			"spd": 120,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 108,
 		"prevo": "Baltoy",
 		"evoLevel": 36,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19333,15 +19334,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 500,
 		"weighthg": 1080,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	lileep: {
 		"exists": true,
@@ -19349,30 +19350,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 345,
 		"name": "Lileep",
 		"types": [
-				"Rock",
-				"Grass"
+			"Rock",
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 66,
-				"atk": 41,
-				"def": 77,
-				"spa": 61,
-				"spd": 87,
-				"spe": 23
+			"hp": 66,
+			"atk": 41,
+			"def": 77,
+			"spa": 61,
+			"spd": 87,
+			"spe": 23,
 		},
 		"abilities": {
-				"0": "Suction Cups"
+			"0": "Suction Cups",
 		},
 		"weightkg": 23.8,
 		"evos": [
-				"Cradily"
+			"Cradily",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19395,7 +19396,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	cradily: {
 		"exists": true,
@@ -19403,29 +19404,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 346,
 		"name": "Cradily",
 		"types": [
-				"Rock",
-				"Grass"
+			"Rock",
+			"Grass",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 86,
-				"atk": 81,
-				"def": 97,
-				"spa": 81,
-				"spd": 107,
-				"spe": 43
+			"hp": 86,
+			"atk": 81,
+			"def": 97,
+			"spa": 81,
+			"spd": 107,
+			"spe": 43,
 		},
 		"abilities": {
-				"0": "Suction Cups"
+			"0": "Suction Cups",
 		},
 		"weightkg": 60.4,
 		"prevo": "Lileep",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19448,7 +19449,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	anorith: {
 		"exists": true,
@@ -19456,31 +19457,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 347,
 		"name": "Anorith",
 		"types": [
-				"Rock",
-				"Bug"
+			"Rock",
+			"Bug",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 45,
-				"atk": 95,
-				"def": 50,
-				"spa": 40,
-				"spd": 50,
-				"spe": 75
+			"hp": 45,
+			"atk": 95,
+			"def": 50,
+			"spa": 40,
+			"spd": 50,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Battle Armor",
-				"1": "Swift Swim"
+			"0": "Battle Armor",
+			"1": "Swift Swim",
 		},
 		"weightkg": 12.5,
 		"evos": [
-				"Armaldo"
+			"Armaldo",
 		],
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19503,7 +19504,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	armaldo: {
 		"exists": true,
@@ -19511,30 +19512,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 348,
 		"name": "Armaldo",
 		"types": [
-				"Rock",
-				"Bug"
+			"Rock",
+			"Bug",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 75,
-				"atk": 125,
-				"def": 100,
-				"spa": 70,
-				"spd": 80,
-				"spe": 45
+			"hp": 75,
+			"atk": 125,
+			"def": 100,
+			"spa": 70,
+			"spd": 80,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Battle Armor",
-				"1": "Swift Swim"
+			"0": "Battle Armor",
+			"1": "Swift Swim",
 		},
 		"weightkg": 68.2,
 		"prevo": "Anorith",
 		"evoLevel": 40,
 		"eggGroups": [
-				"Water 3"
+			"Water 3",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19557,7 +19558,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	feebas: {
 		"exists": true,
@@ -19565,27 +19566,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 349,
 		"name": "Feebas",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 20,
-				"atk": 15,
-				"def": 20,
-				"spa": 10,
-				"spd": 55,
-				"spe": 80
+			"hp": 20,
+			"atk": 15,
+			"def": 20,
+			"spa": 10,
+			"spd": 55,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Oblivious"
+			"0": "Swift Swim",
+			"1": "Oblivious",
 		},
 		"weightkg": 7.4,
 		"evos": [
-				"Milotic"
+			"Milotic",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "feebas",
@@ -19604,15 +19605,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 200,
 		"weighthg": 74,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	milotic: {
 		"exists": true,
@@ -19620,27 +19621,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 350,
 		"name": "Milotic",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 60,
-				"def": 79,
-				"spa": 100,
-				"spd": 125,
-				"spe": 81
+			"hp": 95,
+			"atk": 60,
+			"def": 79,
+			"spa": 100,
+			"spd": 125,
+			"spe": 81,
 		},
 		"abilities": {
-				"0": "Marvel Scale",
-				"1": "Cute Charm"
+			"0": "Marvel Scale",
+			"1": "Cute Charm",
 		},
 		"weightkg": 162,
 		"prevo": "Feebas",
 		"evoType": "trade",
 		"evoItem": "Prism Scale",
 		"eggGroups": [
-				"Water 1",
-				"Dragon"
+			"Water 1",
+			"Dragon",
 		],
 		"tier": "PU",
 		"doublesTier": "(DUU)",
@@ -19659,15 +19660,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 540,
 		"weighthg": 1620,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	castform: {
 		"exists": true,
@@ -19675,34 +19676,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 351,
 		"name": "Castform",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 70,
-				"def": 70,
-				"spa": 70,
-				"spd": 70,
-				"spe": 70
+			"hp": 70,
+			"atk": 70,
+			"def": 70,
+			"spa": 70,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Forecast"
+			"0": "Forecast",
 		},
 		"weightkg": 0.8,
 		"eggGroups": [
-				"Fairy",
-				"Amorphous"
+			"Fairy",
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Castform-Sunny",
-				"Castform-Rainy",
-				"Castform-Snowy"
+			"Castform-Sunny",
+			"Castform-Rainy",
+			"Castform-Snowy",
 		],
 		"formeOrder": [
-				"Castform",
-				"Castform-Sunny",
-				"Castform-Rainy",
-				"Castform-Snowy"
+			"Castform",
+			"Castform-Sunny",
+			"Castform-Rainy",
+			"Castform-Snowy",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19722,15 +19723,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 8,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	castformsunny: {
 		"exists": true,
@@ -19740,23 +19741,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"baseSpecies": "Castform",
 		"forme": "Sunny",
 		"types": [
-				"Fire"
+			"Fire",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 70,
-				"def": 70,
-				"spa": 70,
-				"spd": 70,
-				"spe": 70
+			"hp": 70,
+			"atk": 70,
+			"def": 70,
+			"spa": 70,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Forecast"
+			"0": "Forecast",
 		},
 		"weightkg": 0.8,
 		"eggGroups": [
-				"Fairy",
-				"Amorphous"
+			"Fairy",
+			"Amorphous",
 		],
 		"requiredAbility": "Forecast",
 		"battleOnly": "Castform",
@@ -19776,8 +19777,8 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 8,
@@ -19785,7 +19786,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
 		"cannotDynamax": false,
-		"changesFrom": "Castform"
+		"changesFrom": "Castform",
 	},
 	castformrainy: {
 		"exists": true,
@@ -19795,23 +19796,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"baseSpecies": "Castform",
 		"forme": "Rainy",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 70,
-				"def": 70,
-				"spa": 70,
-				"spd": 70,
-				"spe": 70
+			"hp": 70,
+			"atk": 70,
+			"def": 70,
+			"spa": 70,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Forecast"
+			"0": "Forecast",
 		},
 		"weightkg": 0.8,
 		"eggGroups": [
-				"Fairy",
-				"Amorphous"
+			"Fairy",
+			"Amorphous",
 		],
 		"requiredAbility": "Forecast",
 		"battleOnly": "Castform",
@@ -19831,8 +19832,8 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 8,
@@ -19840,7 +19841,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
 		"cannotDynamax": false,
-		"changesFrom": "Castform"
+		"changesFrom": "Castform",
 	},
 	castformsnowy: {
 		"exists": true,
@@ -19850,23 +19851,23 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"baseSpecies": "Castform",
 		"forme": "Snowy",
 		"types": [
-				"Ice"
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 70,
-				"def": 70,
-				"spa": 70,
-				"spd": 70,
-				"spe": 70
+			"hp": 70,
+			"atk": 70,
+			"def": 70,
+			"spa": 70,
+			"spd": 70,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Forecast"
+			"0": "Forecast",
 		},
 		"weightkg": 0.8,
 		"eggGroups": [
-				"Fairy",
-				"Amorphous"
+			"Fairy",
+			"Amorphous",
 		],
 		"requiredAbility": "Forecast",
 		"battleOnly": "Castform",
@@ -19886,8 +19887,8 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 8,
@@ -19895,7 +19896,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
 		"cannotDynamax": false,
-		"changesFrom": "Castform"
+		"changesFrom": "Castform",
 	},
 	kecleon: {
 		"exists": true,
@@ -19903,22 +19904,22 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 352,
 		"name": "Kecleon",
 		"types": [
-				"Normal"
+			"Normal",
 		],
 		"baseStats": {
-				"hp": 60,
-				"atk": 90,
-				"def": 70,
-				"spa": 60,
-				"spd": 120,
-				"spe": 40
+			"hp": 60,
+			"atk": 90,
+			"def": 70,
+			"spa": 60,
+			"spd": 120,
+			"spe": 40,
 		},
 		"abilities": {
-				"0": "Color Change"
+			"0": "Color Change",
 		},
 		"weightkg": 22,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -19938,15 +19939,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 440,
 		"weighthg": 220,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shuppet: {
 		"exists": true,
@@ -19954,25 +19955,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 353,
 		"name": "Shuppet",
 		"types": [
-				"Ghost"
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 44,
-				"atk": 75,
-				"def": 35,
-				"spa": 63,
-				"spd": 33,
-				"spe": 45
+			"hp": 44,
+			"atk": 75,
+			"def": 35,
+			"spa": 63,
+			"spd": 33,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Insomnia"
+			"0": "Insomnia",
 		},
 		"weightkg": 2.3,
 		"evos": [
-				"Banette"
+			"Banette",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "shuppet",
@@ -19991,15 +19992,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 295,
 		"weighthg": 23,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	banette: {
 		"exists": true,
@@ -20007,31 +20008,31 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 354,
 		"name": "Banette",
 		"types": [
-				"Ghost"
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 64,
-				"atk": 115,
-				"def": 65,
-				"spa": 83,
-				"spd": 63,
-				"spe": 65
+			"hp": 64,
+			"atk": 115,
+			"def": 65,
+			"spa": 83,
+			"spd": 63,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Insomnia"
+			"0": "Insomnia",
 		},
 		"weightkg": 12.5,
 		"prevo": "Shuppet",
 		"evoLevel": 37,
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"otherFormes": [
-				"Banette-Mega"
+			"Banette-Mega",
 		],
 		"formeOrder": [
-				"Banette",
-				"Banette-Mega"
+			"Banette",
+			"Banette-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -20050,15 +20051,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 125,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	duskull: {
 		"exists": true,
@@ -20066,25 +20067,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 355,
 		"name": "Duskull",
 		"types": [
-				"Ghost"
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 20,
-				"atk": 40,
-				"def": 90,
-				"spa": 30,
-				"spd": 90,
-				"spe": 25
+			"hp": 20,
+			"atk": 40,
+			"def": 90,
+			"spa": 30,
+			"spd": 90,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 15,
 		"evos": [
-				"Dusclops"
+			"Dusclops",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "LC",
 		"id": "duskull",
@@ -20103,15 +20104,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 295,
 		"weighthg": 150,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	dusclops: {
 		"exists": true,
@@ -20119,27 +20120,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 356,
 		"name": "Dusclops",
 		"types": [
-				"Ghost"
+			"Ghost",
 		],
 		"baseStats": {
-				"hp": 40,
-				"atk": 70,
-				"def": 130,
-				"spa": 60,
-				"spd": 130,
-				"spe": 25
+			"hp": 40,
+			"atk": 70,
+			"def": 130,
+			"spa": 60,
+			"spd": 130,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 30.6,
 		"prevo": "Duskull",
 		"evoLevel": 37,
 		"evos": [
-				"Dusknoir"
+			"Dusknoir",
 		],
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"tier": "NFE",
 		"id": "dusclops",
@@ -20157,15 +20158,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 306,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	tropius: {
 		"exists": true,
@@ -20173,24 +20174,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 357,
 		"name": "Tropius",
 		"types": [
-				"Grass",
-				"Flying"
+			"Grass",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 99,
-				"atk": 68,
-				"def": 83,
-				"spa": 72,
-				"spd": 87,
-				"spe": 51
+			"hp": 99,
+			"atk": 68,
+			"def": 83,
+			"spa": 72,
+			"spd": 87,
+			"spe": 51,
 		},
 		"abilities": {
-				"0": "Chlorophyll"
+			"0": "Chlorophyll",
 		},
 		"weightkg": 100,
 		"eggGroups": [
-				"Monster",
-				"Grass"
+			"Monster",
+			"Grass",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -20210,15 +20211,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 460,
 		"weighthg": 1000,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	chimecho: {
 		"exists": true,
@@ -20226,25 +20227,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 358,
 		"name": "Chimecho",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 50,
-				"def": 70,
-				"spa": 95,
-				"spd": 80,
-				"spe": 65
+			"hp": 65,
+			"atk": 50,
+			"def": 70,
+			"spa": 95,
+			"spd": 80,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 1,
 		"prevo": "Chingling",
 		"evoType": "levelFriendship",
 		"evoCondition": "at night",
 		"eggGroups": [
-				"Amorphous"
+			"Amorphous",
 		],
 		"canHatch": true,
 		"tier": "ZU",
@@ -20263,15 +20264,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"evos": [],
 		"nfe": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 455,
 		"weighthg": 10,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	absol: {
 		"exists": true,
@@ -20279,29 +20280,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 359,
 		"name": "Absol",
 		"types": [
-				"Dark"
+			"Dark",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 130,
-				"def": 60,
-				"spa": 75,
-				"spd": 60,
-				"spe": 75
+			"hp": 65,
+			"atk": 130,
+			"def": 60,
+			"spa": 75,
+			"spd": 60,
+			"spe": 75,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 47,
 		"eggGroups": [
-				"Field"
+			"Field",
 		],
 		"otherFormes": [
-				"Absol-Mega"
+			"Absol-Mega",
 		],
 		"formeOrder": [
-				"Absol",
-				"Absol-Mega"
+			"Absol",
+			"Absol-Mega",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20321,15 +20322,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 465,
 		"weighthg": 470,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	wynaut: {
 		"exists": true,
@@ -20337,25 +20338,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 360,
 		"name": "Wynaut",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 23,
-				"def": 48,
-				"spa": 23,
-				"spd": 48,
-				"spe": 23
+			"hp": 95,
+			"atk": 23,
+			"def": 48,
+			"spa": 23,
+			"spd": 48,
+			"spe": 23,
 		},
 		"abilities": {
-				"0": "Shadow Tag"
+			"0": "Shadow Tag",
 		},
 		"weightkg": 14,
 		"evos": [
-				"Wobbuffet"
+			"Wobbuffet",
 		],
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"canHatch": true,
 		"isNonstandard": null,
@@ -20374,15 +20375,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"doublesTier": "Illegal",
 		"nfe": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 260,
 		"weighthg": 140,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	snorunt: {
 		"exists": true,
@@ -20390,27 +20391,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 361,
 		"name": "Snorunt",
 		"types": [
-				"Ice"
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 50,
-				"atk": 50,
-				"def": 50,
-				"spa": 50,
-				"spd": 50,
-				"spe": 50
+			"hp": 50,
+			"atk": 50,
+			"def": 50,
+			"spa": 50,
+			"spd": 50,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 16.8,
 		"evos": [
-				"Glalie",
-				"Froslass"
+			"Glalie",
+			"Froslass",
 		],
 		"eggGroups": [
-				"Fairy",
-				"Mineral"
+			"Fairy",
+			"Mineral",
 		],
 		"tier": "LC",
 		"id": "snorunt",
@@ -20429,15 +20430,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 168,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	glalie: {
 		"exists": true,
@@ -20445,32 +20446,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 362,
 		"name": "Glalie",
 		"types": [
-				"Ice"
+			"Ice",
 		],
 		"baseStats": {
-				"hp": 80,
-				"atk": 80,
-				"def": 80,
-				"spa": 80,
-				"spd": 80,
-				"spe": 80
+			"hp": 80,
+			"atk": 80,
+			"def": 80,
+			"spa": 80,
+			"spd": 80,
+			"spe": 80,
 		},
 		"abilities": {
-				"0": "Inner Focus"
+			"0": "Inner Focus",
 		},
 		"weightkg": 256.5,
 		"prevo": "Snorunt",
 		"evoLevel": 42,
 		"eggGroups": [
-				"Fairy",
-				"Mineral"
+			"Fairy",
+			"Mineral",
 		],
 		"otherFormes": [
-				"Glalie-Mega"
+			"Glalie-Mega",
 		],
 		"formeOrder": [
-				"Glalie",
-				"Glalie-Mega"
+			"Glalie",
+			"Glalie-Mega",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -20489,15 +20490,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 480,
 		"weighthg": 2565,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	spheal: {
 		"exists": true,
@@ -20505,28 +20506,28 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 363,
 		"name": "Spheal",
 		"types": [
-				"Ice",
-				"Water"
+			"Ice",
+			"Water",
 		],
 		"baseStats": {
-				"hp": 70,
-				"atk": 40,
-				"def": 50,
-				"spa": 55,
-				"spd": 50,
-				"spe": 25
+			"hp": 70,
+			"atk": 40,
+			"def": 50,
+			"spa": 55,
+			"spd": 50,
+			"spe": 25,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Oblivious"
+			"0": "Thick Fat",
+			"1": "Oblivious",
 		},
 		"weightkg": 39.5,
 		"evos": [
-				"Sealeo"
+			"Sealeo",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20545,15 +20546,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 290,
 		"weighthg": 395,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	sealeo: {
 		"exists": true,
@@ -20561,30 +20562,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 364,
 		"name": "Sealeo",
 		"types": [
-				"Ice",
-				"Water"
+			"Ice",
+			"Water",
 		],
 		"baseStats": {
-				"hp": 90,
-				"atk": 60,
-				"def": 70,
-				"spa": 75,
-				"spd": 70,
-				"spe": 45
+			"hp": 90,
+			"atk": 60,
+			"def": 70,
+			"spa": 75,
+			"spd": 70,
+			"spe": 45,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Oblivious"
+			"0": "Thick Fat",
+			"1": "Oblivious",
 		},
 		"weightkg": 87.6,
 		"prevo": "Spheal",
 		"evoLevel": 32,
 		"evos": [
-				"Walrein"
+			"Walrein",
 		],
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20602,15 +20603,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 410,
 		"weighthg": 876,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	walrein: {
 		"exists": true,
@@ -20618,27 +20619,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 365,
 		"name": "Walrein",
 		"types": [
-				"Ice",
-				"Water"
+			"Ice",
+			"Water",
 		],
 		"baseStats": {
-				"hp": 110,
-				"atk": 80,
-				"def": 90,
-				"spa": 95,
-				"spd": 90,
-				"spe": 65
+			"hp": 110,
+			"atk": 80,
+			"def": 90,
+			"spa": 95,
+			"spd": 90,
+			"spe": 65,
 		},
 		"abilities": {
-				"0": "Thick Fat",
-				"1": "Oblivious"
+			"0": "Thick Fat",
+			"1": "Oblivious",
 		},
 		"weightkg": 150.6,
 		"prevo": "Sealeo",
 		"evoLevel": 44,
 		"eggGroups": [
-				"Water 1",
-				"Field"
+			"Water 1",
+			"Field",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20657,15 +20658,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 530,
 		"weighthg": 1506,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	clamperl: {
 		"exists": true,
@@ -20673,26 +20674,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 366,
 		"name": "Clamperl",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 35,
-				"atk": 64,
-				"def": 85,
-				"spa": 74,
-				"spd": 55,
-				"spe": 32
+			"hp": 35,
+			"atk": 64,
+			"def": 85,
+			"spa": 74,
+			"spd": 55,
+			"spe": 32,
 		},
 		"abilities": {
-				"0": "Shell Armor"
+			"0": "Shell Armor",
 		},
 		"weightkg": 52.5,
 		"evos": [
-				"Huntail",
-				"Gorebyss"
+			"Huntail",
+			"Gorebyss",
 		],
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20711,15 +20712,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 345,
 		"weighthg": 525,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	huntail: {
 		"exists": true,
@@ -20727,26 +20728,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 367,
 		"name": "Huntail",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 104,
-				"def": 105,
-				"spa": 94,
-				"spd": 75,
-				"spe": 52
+			"hp": 55,
+			"atk": 104,
+			"def": 105,
+			"spa": 94,
+			"spd": 75,
+			"spe": 52,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Water Veil"
+			"0": "Swift Swim",
+			"1": "Water Veil",
 		},
 		"weightkg": 27,
 		"prevo": "Clamperl",
 		"evoType": "trade",
 		"evoItem": "Deep Sea Tooth",
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20765,15 +20766,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 485,
 		"weighthg": 270,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	gorebyss: {
 		"exists": true,
@@ -20781,25 +20782,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 368,
 		"name": "Gorebyss",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"baseStats": {
-				"hp": 55,
-				"atk": 84,
-				"def": 105,
-				"spa": 114,
-				"spd": 75,
-				"spe": 52
+			"hp": 55,
+			"atk": 84,
+			"def": 105,
+			"spa": 114,
+			"spd": 75,
+			"spe": 52,
 		},
 		"abilities": {
-				"0": "Swift Swim"
+			"0": "Swift Swim",
 		},
 		"weightkg": 22.6,
 		"prevo": "Clamperl",
 		"evoType": "trade",
 		"evoItem": "Deep Sea Scale",
 		"eggGroups": [
-				"Water 1"
+			"Water 1",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20818,15 +20819,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 485,
 		"weighthg": 226,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	relicanth: {
 		"exists": true,
@@ -20834,30 +20835,30 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 369,
 		"name": "Relicanth",
 		"types": [
-				"Water",
-				"Rock"
+			"Water",
+			"Rock",
 		],
 		"genderRatio": {
-				"M": 0.875,
-				"F": 0.125
+			"M": 0.875,
+			"F": 0.125,
 		},
 		"baseStats": {
-				"hp": 100,
-				"atk": 90,
-				"def": 130,
-				"spa": 45,
-				"spd": 65,
-				"spe": 55
+			"hp": 100,
+			"atk": 90,
+			"def": 130,
+			"spa": 45,
+			"spd": 65,
+			"spe": 55,
 		},
 		"abilities": {
-				"0": "Swift Swim",
-				"1": "Rock Head",
-				"H": "Sturdy"
+			"0": "Swift Swim",
+			"1": "Rock Head",
+			"H": "Sturdy",
 		},
 		"weightkg": 23.4,
 		"eggGroups": [
-				"Water 1",
-				"Water 2"
+			"Water 1",
+			"Water 2",
 		],
 		"isNonstandard": null,
 		"tier": "Illegal",
@@ -20881,7 +20882,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	luvdisc: {
 		"exists": true,
@@ -20889,26 +20890,26 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 370,
 		"name": "Luvdisc",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"genderRatio": {
-				"M": 0.25,
-				"F": 0.75
+			"M": 0.25,
+			"F": 0.75,
 		},
 		"baseStats": {
-				"hp": 43,
-				"atk": 30,
-				"def": 55,
-				"spa": 40,
-				"spd": 65,
-				"spe": 97
+			"hp": 43,
+			"atk": 30,
+			"def": 55,
+			"spa": 40,
+			"spd": 65,
+			"spe": 97,
 		},
 		"abilities": {
-				"0": "Swift Swim"
+			"0": "Swift Swim",
 		},
 		"weightkg": 8.7,
 		"eggGroups": [
-				"Water 2"
+			"Water 2",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -20932,7 +20933,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	bagon: {
 		"exists": true,
@@ -20940,25 +20941,25 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 371,
 		"name": "Bagon",
 		"types": [
-				"Dragon"
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 45,
-				"atk": 75,
-				"def": 60,
-				"spa": 40,
-				"spd": 30,
-				"spe": 50
+			"hp": 45,
+			"atk": 75,
+			"def": 60,
+			"spa": 40,
+			"spd": 30,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Rock Head"
+			"0": "Rock Head",
 		},
 		"weightkg": 42.1,
 		"evos": [
-				"Shelgon"
+			"Shelgon",
 		],
 		"eggGroups": [
-				"Dragon"
+			"Dragon",
 		],
 		"tier": "LC",
 		"id": "bagon",
@@ -20977,15 +20978,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 300,
 		"weighthg": 421,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	shelgon: {
 		"exists": true,
@@ -20993,27 +20994,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 372,
 		"name": "Shelgon",
 		"types": [
-				"Dragon"
+			"Dragon",
 		],
 		"baseStats": {
-				"hp": 65,
-				"atk": 95,
-				"def": 100,
-				"spa": 60,
-				"spd": 50,
-				"spe": 50
+			"hp": 65,
+			"atk": 95,
+			"def": 100,
+			"spa": 60,
+			"spd": 50,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Rock Head"
+			"0": "Rock Head",
 		},
 		"weightkg": 110.5,
 		"prevo": "Bagon",
 		"evoLevel": 30,
 		"evos": [
-				"Salamence"
+			"Salamence",
 		],
 		"eggGroups": [
-				"Dragon"
+			"Dragon",
 		],
 		"tier": "NFE",
 		"id": "shelgon",
@@ -21031,15 +21032,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 420,
 		"weighthg": 1105,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	salamence: {
 		"exists": true,
@@ -21047,32 +21048,32 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 373,
 		"name": "Salamence",
 		"types": [
-				"Dragon",
-				"Flying"
+			"Dragon",
+			"Flying",
 		],
 		"baseStats": {
-				"hp": 95,
-				"atk": 135,
-				"def": 80,
-				"spa": 110,
-				"spd": 80,
-				"spe": 100
+			"hp": 95,
+			"atk": 135,
+			"def": 80,
+			"spa": 110,
+			"spd": 80,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Intimidate"
+			"0": "Intimidate",
 		},
 		"weightkg": 102.6,
 		"prevo": "Shelgon",
 		"evoLevel": 50,
 		"eggGroups": [
-				"Dragon"
+			"Dragon",
 		],
 		"otherFormes": [
-				"Salamence-Mega"
+			"Salamence-Mega",
 		],
 		"formeOrder": [
-				"Salamence",
-				"Salamence-Mega"
+			"Salamence",
+			"Salamence-Mega",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -21091,15 +21092,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0.5,
-				"F": 0.5
+			"M": 0.5,
+			"F": 0.5,
 		},
 		"bst": 600,
 		"weighthg": 1026,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	beldum: {
 		"exists": true,
@@ -21107,27 +21108,27 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 374,
 		"name": "Beldum",
 		"types": [
-				"Steel",
-				"Psychic"
+			"Steel",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 40,
-				"atk": 55,
-				"def": 80,
-				"spa": 35,
-				"spd": 60,
-				"spe": 30
+			"hp": 40,
+			"atk": 55,
+			"def": 80,
+			"spa": 35,
+			"spd": 60,
+			"spe": 30,
 		},
 		"abilities": {
-				"0": "Clear Body"
+			"0": "Clear Body",
 		},
 		"weightkg": 95.2,
 		"evos": [
-				"Metang"
+			"Metang",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "LC",
 		"id": "beldum",
@@ -21146,15 +21147,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": true,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 300,
 		"weighthg": 952,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	metang: {
 		"exists": true,
@@ -21162,29 +21163,29 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 375,
 		"name": "Metang",
 		"types": [
-				"Steel",
-				"Psychic"
+			"Steel",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 60,
-				"atk": 75,
-				"def": 100,
-				"spa": 55,
-				"spd": 80,
-				"spe": 50
+			"hp": 60,
+			"atk": 75,
+			"def": 100,
+			"spa": 55,
+			"spd": 80,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Clear Body"
+			"0": "Clear Body",
 		},
 		"weightkg": 202.5,
 		"prevo": "Beldum",
 		"evoLevel": 20,
 		"evos": [
-				"Metagross"
+			"Metagross",
 		],
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"tier": "NFE",
 		"id": "metang",
@@ -21202,15 +21203,15 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": true,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 420,
 		"weighthg": 2025,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	metagross: {
 		"exists": true,
@@ -21218,33 +21219,33 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"num": 376,
 		"name": "Metagross",
 		"types": [
-				"Steel",
-				"Psychic"
+			"Steel",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 80,
-				"atk": 135,
-				"def": 130,
-				"spa": 95,
-				"spd": 90,
-				"spe": 70
+			"hp": 80,
+			"atk": 135,
+			"def": 130,
+			"spa": 95,
+			"spd": 90,
+			"spe": 70,
 		},
 		"abilities": {
-				"0": "Clear Body"
+			"0": "Clear Body",
 		},
 		"weightkg": 550,
 		"prevo": "Metang",
 		"evoLevel": 45,
 		"eggGroups": [
-				"Mineral"
+			"Mineral",
 		],
 		"otherFormes": [
-				"Metagross-Mega"
+			"Metagross-Mega",
 		],
 		"formeOrder": [
-				"Metagross",
-				"Metagross-Mega"
+			"Metagross",
+			"Metagross-Mega",
 		],
 		"tier": "UU",
 		"doublesTier": "DUU",
@@ -21263,42 +21264,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 5500,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	regirock: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 377,
 		"name": "Regirock",
 		"types": [
-				"Rock"
+			"Rock",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 80,
-				"atk": 100,
-				"def": 200,
-				"spa": 50,
-				"spd": 100,
-				"spe": 50
+			"hp": 80,
+			"atk": 100,
+			"def": 200,
+			"spa": 50,
+			"spd": 100,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Clear Body",
-				"1": "Sturdy"
+			"0": "Clear Body",
+			"1": "Sturdy",
 		},
 		"weightkg": 230,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -21318,41 +21319,41 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 2300,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	regice: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 378,
 		"name": "Regice",
 		"types": [
-				"Ice"
+			"Ice",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 80,
-				"atk": 50,
-				"def": 100,
-				"spa": 100,
-				"spd": 200,
-				"spe": 50
+			"hp": 80,
+			"atk": 50,
+			"def": 100,
+			"spa": 100,
+			"spd": 200,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Clear Body"
+			"0": "Clear Body",
 		},
 		"weightkg": 175,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "ZU",
 		"doublesTier": "(DUU)",
@@ -21372,41 +21373,41 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 1750,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	registeel: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 379,
 		"name": "Registeel",
 		"types": [
-				"Steel"
+			"Steel",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 80,
-				"atk": 75,
-				"def": 150,
-				"spa": 75,
-				"spd": 150,
-				"spe": 50
+			"hp": 80,
+			"atk": 75,
+			"def": 150,
+			"spa": 75,
+			"spd": 150,
+			"spe": 50,
 		},
 		"abilities": {
-				"0": "Clear Body"
+			"0": "Clear Body",
 		},
 		"weightkg": 205,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "NU",
 		"doublesTier": "(DUU)",
@@ -21426,49 +21427,49 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 580,
 		"weighthg": 2050,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	latias: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 380,
 		"name": "Latias",
 		"types": [
-				"Dragon",
-				"Psychic"
+			"Dragon",
+			"Psychic",
 		],
 		"gender": "F",
 		"baseStats": {
-				"hp": 80,
-				"atk": 80,
-				"def": 90,
-				"spa": 110,
-				"spd": 130,
-				"spe": 110
+			"hp": 80,
+			"atk": 80,
+			"def": 90,
+			"spa": 110,
+			"spd": 130,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 40,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Latias-Mega"
+			"Latias-Mega",
 		],
 		"formeOrder": [
-				"Latias",
-				"Latias-Mega"
+			"Latias",
+			"Latias-Mega",
 		],
 		"tier": "UUBL",
 		"doublesTier": "(DUU)",
@@ -21488,49 +21489,49 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 1
+			"M": 0,
+			"F": 1,
 		},
 		"bst": 600,
 		"weighthg": 400,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	latios: {
 		"exists": true,
 		"tags": [
-				"Sub-Legendary"
+			"Sub-Legendary",
 		],
 		"num": 381,
 		"name": "Latios",
 		"types": [
-				"Dragon",
-				"Psychic"
+			"Dragon",
+			"Psychic",
 		],
 		"gender": "M",
 		"baseStats": {
-				"hp": 80,
-				"atk": 90,
-				"def": 80,
-				"spa": 130,
-				"spd": 110,
-				"spe": 110
+			"hp": 80,
+			"atk": 90,
+			"def": 80,
+			"spa": 130,
+			"spd": 110,
+			"spe": 110,
 		},
 		"abilities": {
-				"0": "Levitate"
+			"0": "Levitate",
 		},
 		"weightkg": 60,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Latios-Mega"
+			"Latios-Mega",
 		],
 		"formeOrder": [
-				"Latios",
-				"Latios-Mega"
+			"Latios",
+			"Latios-Mega",
 		],
 		"tier": "UU",
 		"doublesTier": "(DUU)",
@@ -21550,48 +21551,48 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 1,
-				"F": 0
+			"M": 1,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 600,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	kyogre: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 382,
 		"name": "Kyogre",
 		"types": [
-				"Water"
+			"Water",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 100,
-				"def": 90,
-				"spa": 150,
-				"spd": 140,
-				"spe": 90
+			"hp": 100,
+			"atk": 100,
+			"def": 90,
+			"spa": 150,
+			"spd": 140,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Drizzle"
+			"0": "Drizzle",
 		},
 		"weightkg": 352,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Kyogre-Primal"
+			"Kyogre-Primal",
 		],
 		"formeOrder": [
-				"Kyogre",
-				"Kyogre-Primal"
+			"Kyogre",
+			"Kyogre-Primal",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -21611,48 +21612,48 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 670,
 		"weighthg": 3520,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	groudon: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 383,
 		"name": "Groudon",
 		"types": [
-				"Ground"
+			"Ground",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 150,
-				"def": 140,
-				"spa": 100,
-				"spd": 90,
-				"spe": 90
+			"hp": 100,
+			"atk": 150,
+			"def": 140,
+			"spa": 100,
+			"spd": 90,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Drought"
+			"0": "Drought",
 		},
 		"weightkg": 950,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Groudon-Primal"
+			"Groudon-Primal",
 		],
 		"formeOrder": [
-				"Groudon",
-				"Groudon-Primal"
+			"Groudon",
+			"Groudon-Primal",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -21672,49 +21673,49 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 670,
 		"weighthg": 9500,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	rayquaza: {
 		"exists": true,
 		"tags": [
-				"Restricted Legendary"
+			"Restricted Legendary",
 		],
 		"num": 384,
 		"name": "Rayquaza",
 		"types": [
-				"Dragon",
-				"Flying"
+			"Dragon",
+			"Flying",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 105,
-				"atk": 150,
-				"def": 90,
-				"spa": 150,
-				"spd": 90,
-				"spe": 95
+			"hp": 105,
+			"atk": 150,
+			"def": 90,
+			"spa": 150,
+			"spd": 90,
+			"spe": 95,
 		},
 		"abilities": {
-				"0": "Air Lock"
+			"0": "Air Lock",
 		},
 		"weightkg": 206.5,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Rayquaza-Mega"
+			"Rayquaza-Mega",
 		],
 		"formeOrder": [
-				"Rayquaza",
-				"Rayquaza-Mega"
+			"Rayquaza",
+			"Rayquaza-Mega",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUber",
@@ -21734,42 +21735,42 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 680,
 		"weighthg": 2065,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	jirachi: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 385,
 		"name": "Jirachi",
 		"types": [
-				"Steel",
-				"Psychic"
+			"Steel",
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 100,
-				"atk": 100,
-				"def": 100,
-				"spa": 100,
-				"spd": 100,
-				"spe": 100
+			"hp": 100,
+			"atk": 100,
+			"def": 100,
+			"spa": 100,
+			"spd": 100,
+			"spe": 100,
 		},
 		"abilities": {
-				"0": "Serene Grace"
+			"0": "Serene Grace",
 		},
 		"weightkg": 1.1,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"tier": "RU",
 		"doublesTier": "(DUU)",
@@ -21789,53 +21790,53 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 11,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	deoxys: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 386,
 		"name": "Deoxys",
 		"baseForme": "Normal",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 50,
-				"atk": 150,
-				"def": 50,
-				"spa": 150,
-				"spd": 50,
-				"spe": 150
+			"hp": 50,
+			"atk": 150,
+			"def": 50,
+			"spa": 150,
+			"spd": 50,
+			"spe": 150,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 60.8,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"otherFormes": [
-				"Deoxys-Attack",
-				"Deoxys-Defense",
-				"Deoxys-Speed"
+			"Deoxys-Attack",
+			"Deoxys-Defense",
+			"Deoxys-Speed",
 		],
 		"formeOrder": [
-				"Deoxys",
-				"Deoxys-Attack",
-				"Deoxys-Defense",
-				"Deoxys-Speed"
+			"Deoxys",
+			"Deoxys-Attack",
+			"Deoxys-Defense",
+			"Deoxys-Speed",
 		],
 		"tier": "Uber",
 		"doublesTier": "DUU",
@@ -21854,43 +21855,43 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 608,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	deoxysattack: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 386,
 		"name": "Deoxys-Attack",
 		"baseSpecies": "Deoxys",
 		"forme": "Attack",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 50,
-				"atk": 180,
-				"def": 20,
-				"spa": 180,
-				"spd": 20,
-				"spe": 150
+			"hp": 50,
+			"atk": 180,
+			"def": 20,
+			"spa": 180,
+			"spd": 20,
+			"spe": 150,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 60.8,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"changesFrom": "Deoxys",
 		"tier": "Uber",
@@ -21909,43 +21910,43 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 608,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	deoxysdefense: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 386,
 		"name": "Deoxys-Defense",
 		"baseSpecies": "Deoxys",
 		"forme": "Defense",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 50,
-				"atk": 70,
-				"def": 160,
-				"spa": 70,
-				"spd": 160,
-				"spe": 90
+			"hp": 50,
+			"atk": 70,
+			"def": 160,
+			"spa": 70,
+			"spd": 160,
+			"spe": 90,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 60.8,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"changesFrom": "Deoxys",
 		"tier": "NUBL",
@@ -21964,43 +21965,43 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 608,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 	deoxysspeed: {
 		"exists": true,
 		"tags": [
-				"Mythical"
+			"Mythical",
 		],
 		"num": 386,
 		"name": "Deoxys-Speed",
 		"baseSpecies": "Deoxys",
 		"forme": "Speed",
 		"types": [
-				"Psychic"
+			"Psychic",
 		],
 		"gender": "N",
 		"baseStats": {
-				"hp": 50,
-				"atk": 95,
-				"def": 90,
-				"spa": 95,
-				"spd": 90,
-				"spe": 180
+			"hp": 50,
+			"atk": 95,
+			"def": 90,
+			"spa": 95,
+			"spd": 90,
+			"spe": 180,
 		},
 		"abilities": {
-				"0": "Pressure"
+			"0": "Pressure",
 		},
 		"weightkg": 60.8,
 		"eggGroups": [
-				"Undiscovered"
+			"Undiscovered",
 		],
 		"changesFrom": "Deoxys",
 		"tier": "OU",
@@ -22019,14 +22020,14 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		"nfe": false,
 		"canHatch": false,
 		"genderRatio": {
-				"M": 0,
-				"F": 0
+			"M": 0,
+			"F": 0,
 		},
 		"bst": 600,
 		"weighthg": 608,
 		"unreleasedHidden": false,
 		"maleOnlyHidden": false,
 		"gmaxUnreleased": false,
-		"cannotDynamax": false
+		"cannotDynamax": false,
 	},
 };

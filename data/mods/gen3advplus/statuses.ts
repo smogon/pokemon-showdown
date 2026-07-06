@@ -1,4 +1,4 @@
-export const Statuses: {[k: string]: ModdedPureEffectData} = {
+export const Statuses: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
@@ -20,10 +20,10 @@ export const Statuses: {[k: string]: ModdedPureEffectData} = {
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
 			if (pokemon.hasAbility('earlybird')) {
-				pokemon.statusData.time--;
+				pokemon.statusState.time--;
 			}
-			pokemon.statusData.time--;
-			if (pokemon.statusData.time <= 0) {
+			pokemon.statusState.time--;
+			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}

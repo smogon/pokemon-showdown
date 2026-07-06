@@ -6,7 +6,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onValidateTeam(team, format) {
 			const nameTable = new Set<string>();
 			for (const set of team) {
-				var name = set.name;
+				const name = set.name;
 				if (name) {
 					if (name === this.dex.species.get(set.species).baseSpecies || name === 'shadow') continue;
 					if (nameTable.has(name)) {
@@ -33,7 +33,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			for (const moveid of shadowMoves) {
 				const move = this.dex.moves.get(moveid);
 				for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-					for (const {learnset} of this.dex.species.getFullLearnset(pokemon.species.id)) {
+					for (const { learnset } of this.dex.species.getFullLearnset(pokemon.species.id)) {
 						if (moveid in learnset && pokemon?.pokeball === 'shadow') {
 							pokemon.baseMoveSlots.push({
 								move: move.name,
@@ -53,7 +53,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onValidateSet(set) {
-			var shadowCount = 0;
+			let shadowCount = 0;
 			const shadowMoves = [
 				'shadowrush', 'shadowblitz', 'shadowwave', 'shadowbreak', 'shadowrave', 'shadowsky', 'shadowend', 'shadowstorm',
 				'shadowpanic', 'shadowmist', 'shadowdown', 'shadowhold', 'shadowshed', 'shadowhalf', 'shadowsights', 'shadowbolt',
@@ -63,7 +63,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				set.pokeball = 'shadow';
 				set.name = set.species;
 				for (const moveid of shadowMoves) {
-					for (const {learnset} of this.dex.species.getFullLearnset(this.toID(set.species))) {
+					for (const { learnset } of this.dex.species.getFullLearnset(this.toID(set.species))) {
 						if (moveid in learnset) {
 							shadowCount++;
 							break;
@@ -71,13 +71,21 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					}
 				}
 				if (shadowCount === 1) {
-					if (set.moves.length === 4) return [`${set.name || set.species} has one Shadow move, meaning it can only run 3 normal moves.`];
+					if (set.moves.length === 4) {
+						return [`${set.name || set.species} has one Shadow move, meaning it can only run 3 normal moves.`];
+					}
 				} else if (shadowCount === 2) {
-					if (set.moves.length >= 3) return [`${set.name || set.species} has two Shadow moves, meaning it can only run 2 normal moves.`];
+					if (set.moves.length >= 3) {
+						return [`${set.name || set.species} has two Shadow moves, meaning it can only run 2 normal moves.`];
+					}
 				} else if (shadowCount === 3) {
-					if (set.moves.length >= 2) return [`${set.name || set.species} has three Shadow moves, meaning it can only run 1 normal move.`];
+					if (set.moves.length >= 2) {
+						return [`${set.name || set.species} has three Shadow moves, meaning it can only run 1 normal move.`];
+					}
 				} else if (shadowCount === 4) {
-					if (set.moves.length >= 1) return [`${set.name || set.species} has four Shadow moves, meaning it can't run any normal moves.`];
+					if (set.moves.length >= 1) {
+						return [`${set.name || set.species} has four Shadow moves, meaning it can't run any normal moves.`];
+					}
 				}
 			}
 		},
@@ -117,7 +125,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			for (const moveSlot of pokemon.moveSlots) {
 				const moveid = moveSlot.id;
 				const move = this.dex.moves.get(moveid);
-				if (move.type === 'Shadow' || pokemon.hasMove(shadowMoves)) {
+				if (move.type === 'Shadow' || shadowMoves.some(m => pokemon.hasMove(m))) {
 					shadowCount++;
 					// pokemon.addVolatile('shadow');
 				}

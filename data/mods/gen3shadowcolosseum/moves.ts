@@ -9,7 +9,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Rush",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -29,7 +29,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return 1;
 			}
 		}, */
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
@@ -43,14 +43,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Blitz",
 		pp: 5,
 		priority: 1,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
 			this.add('-anim', source, "Quick Attack", target);
 		},
 		recoil: [1, 2],
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
@@ -64,7 +64,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Wave",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -89,13 +89,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Break",
 		pp: 10,
 		priority: -6,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
 			this.add('-anim', source, "Brick Break", target);
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
@@ -109,7 +109,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Rave",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -141,10 +141,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, "Dragon Dance", target);
 		},
 		weather: 'Shadow Sky',
-		secondary: null,
+		secondary: undefined,
 		target: "all",
 		type: "Shadow",
-		zMove: {boost: {spe: 1}},
+		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
 	},
 	shadowend: {
@@ -156,7 +156,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow End",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -168,7 +168,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				def: -1,
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
@@ -182,7 +182,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Storm",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, wind: 1},
+		flags: { protect: 1, mirror: 1, wind: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -212,12 +212,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Panic",
 		pp: 5,
 		priority: 4,
-		flags: {noassist: 1, failcopycat: 1},
+		flags: { noassist: 1, failcopycat: 1 },
 		stallingMove: true,
 		volatileStatus: 'shadowpanic',
 		onPrepareHit(pokemon) {
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-			this.add('-anim', pokemon, "Hex", pokemon);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -235,7 +234,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
 					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).bypassProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -253,10 +252,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.NOT_FAIL;
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "self",
 		type: "Shadow",
-		zMove: {effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
 	},
 	shadowmist: {
@@ -268,7 +267,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Mist",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -284,7 +283,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.target = 'allAdjacentFoes';
 			}
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Beautiful",
@@ -298,7 +297,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Down",
 		pp: 30,
 		priority: 1,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -307,10 +306,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		boosts: {
 			def: -1,
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "allAdjacentFoes",
 		type: "Shadow",
-		zMove: {boost: {def: 1}},
+		zMove: { boost: { def: 1 } },
 		contestType: "Cute",
 	},
 	shadowhold: {
@@ -322,7 +321,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Hold",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -348,7 +347,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Shed",
 		pp: 15,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: { snatch: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -362,10 +361,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			spa: 1,
 			spe: 1,
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "self",
 		type: "Shadow",
-		zMove: {effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cool",
 	},
 	shadowhalf: {
@@ -381,7 +380,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Half",
 		pp: 5,
 		priority: 0,
-		flags: {bypasssub: 1},
+		flags: { bypasssub: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -402,10 +401,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "allAdjacent",
 		type: "Shadow",
-		zMove: {effect: 'heal'},
+		zMove: { effect: 'heal' },
 		contestType: "Beautiful",
 	},
 	/* shadowhalfself: {
@@ -426,7 +425,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Haze", source);
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "self",
 		type: "Shadow",
 		zMove: {effect: 'heal'},
@@ -441,7 +440,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Sights",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: { snatch: 1 },
 		volatileStatus: 'shadowsights',
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -452,7 +451,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(target, source, effect) {
 				this.add('-start', target, 'move: Shadow Sights');
 				this.add('-message', `${target.name} is hyperfocusing on the foe's shadows!`);
-			},			
+			},
 			onModifyMovePriority: -5,
 			onModifyMove(move) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
@@ -462,10 +461,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.ignoreAbility = true;
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "adjacentAllyOrSelf",
 		type: "Shadow",
-		zMove: {boost: {accuracy: 1}},
+		zMove: { boost: { accuracy: 1 } },
 		contestType: "Cool",
 	},
 	shadowbolt: {
@@ -477,7 +476,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Bolt",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		volatileStatus: 'embargo',
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -501,7 +500,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Chill",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -512,7 +511,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
@@ -530,7 +529,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Fire",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
@@ -583,7 +582,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				if (move.isZ || move.isMax) {
 					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					target.getMoveHitData(move).zBrokeProtect = true;
+					target.getMoveHitData(move).bypassProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Shadow Guard');
@@ -597,10 +596,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.NOT_FAIL;
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "allySide",
 		type: "Shadow",
-		zMove: {boost: {def: 1}},
+		zMove: { boost: { def: 1 } },
 		contestType: "Tough",
 	},
 	shadowarmor: {
@@ -612,11 +611,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Armor",
 		pp: 5,
 		priority: 4,
-		flags: {noassist: 1, failcopycat: 1, cantusetwice: 1, failmimic: 1},
+		flags: { noassist: 1, failcopycat: 1, cantusetwice: 1, failmimic: 1 },
 		volatileStatus: 'shadowarmor',
 		onPrepareHit(pokemon) {
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-			this.add('-anim', pokemon, "Hex", pokemon);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -650,14 +648,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (['Shadow'].includes(move.type)) {
-					this.boost({spe: 1});
+					this.boost({ spe: 1 });
 				}
 			},
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "self",
 		type: "Shadow",
-		zMove: {effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
 	},
 	shadowsiphon: {
@@ -669,16 +667,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Siphon",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
- 		onPrepareHit(target, source, move) {
-		  this.attrLastMove('[still]');
+		flags: { snatch: 1, heal: 1 },
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hex", source);
-		  this.add('-anim', source, "Shore Up", target);
+			this.add('-anim', source, "Shore Up", target);
 		},
 		self: {
 			onHit(pokemon, source, move) {
 				this.heal(source.baseMaxhp / 3, source, pokemon);
-				this.boost({def: 1}, source);
+				this.boost({ def: 1 }, source);
 			},
 		},
 		onHitField(target, source) {
@@ -691,7 +689,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.damage(source.baseMaxhp / 4, source, target);
 			}
 		},
-		secondary: null,
+		secondary: undefined,
 		target: "all",
 		type: "Shadow",
 	},
@@ -704,14 +702,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shadow Blast",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
 		onHit(target, source) {
 			if (target.hp) {
 				source.addVolatile('mustrecharge');
 			}
 		},
-		self: null,
-		secondary: null,
+		self: undefined,
+		secondary: undefined,
 		target: "normal",
 		type: "Shadow",
 		contestType: "Cool",
