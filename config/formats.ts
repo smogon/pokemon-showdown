@@ -281,7 +281,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber'],
 	},
     {
-		name: "[Gen 3] ADV+",
+		name: "[Gen 3] ADV Plus",
 		mod: 'gen3advplus',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass', 'Smeargle + Ingrain', 'Drizzle', 'Drought', 'Starf Berry', 'Speed Boost + Blaziken', 'Soul Dew'],
