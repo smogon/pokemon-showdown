@@ -2455,7 +2455,7 @@ export const Chat = new class {
 				buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
 			}
 			if (species.abilities['H'] && species.abilities['S']) {
-				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br />(${species.abilities['S']})</em></span>`;
+				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br /><span style="display: inline-block;">(${species.abilities['S']})</span></em></span>`;
 			} else if (species.abilities['H']) {
 				buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
 			} else if (species.abilities['S']) {
