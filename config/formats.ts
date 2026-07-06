@@ -280,6 +280,76 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 		banlist: ['Uber'],
 	},
+	{
+		name: "[Gen 3] ADV Plus",
+		mod: 'gen3advplus',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass', 'Smeargle + Ingrain', 'Drizzle', 'Drought', 'Starf Berry', 'Speed Boost + Blaziken', 'Soul Dew'],
+	},
+	{
+		name: "[Gen 3] FRLG Indigo OU",
+		mod: 'gen3frlgindigo',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Sand Veil'],
+	},
+	{
+		name: "[Gen 3] FRLG Ubers",
+		mod: 'gen3frlg',
+		ruleset: ['Standard', 'Deoxys Camouflage Clause Mod', 'One Boost Passer Clause', 'Freeze Clause Mod'],
+		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
+	},
+	{
+		name: "[Gen 3] Hoennification OU",
+		mod: 'gen3hoennification',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+		banlist: ['Uber', 'Soundproof', 'Assist', 'Baton Pass', 'Smeargle + Ingrain', 'Starf Berry', 'Speed Boost + Blaziken', 'Drizzle', 'Drought'],
+	},
+	{
+		name: "[Gen 3] Hoennification Ubers",
+		mod: 'gen3hoennification',
+		ruleset: ['Standard', 'Deoxys Camouflage Clause Mod', 'One Boost Passer Clause', 'Freeze Clause Mod'],
+		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
+	},
+	{
+		name: "[Gen 3] OU Sample Team Randbats",
+		team: 'random',
+		mod: 'gen3strb',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+	},
+	{
+		name: "[Gen 3] Tradebacks",
+		mod: 'gen3tradebacks',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance', 'Smeargle + Ingrain'],
+	},
+
+	// Yoshiblaze
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Yoshiblaze",
+	},
+	{
+		name: "[Gen 3] Shadow Colosseum",
+		mod: 'gen3shadowcolosseum',
+		gameType: 'doubles',
+		desc: `<b>[Gen 3] Shadow Colosseum</b>: A Gen 3 Orre Colosseum (Gen 3 VGC) metagame that adds Shadow Pokemon and moves to the game.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3774822/">Shadow Colosseum on the Smogon Forums</a>`,
+		],
+		itemClauseDefault: true,
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
+			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Open Team Sheets',
+			'Shadow Mechanic',
+		],
+		banlist: ['Soul Dew', 'Deoxys-Defense', 'Deoxys-Attack', 'Deoxys-Speed', 'Restricted Legendary', 'Mythical'],
+		unbanlist: ['Latios', 'Latias', 'Wobbuffet', 'Wynaut'],
+		bestOfDefault: true,
+		onBegin() {
+			this.add('rule', 'Self-KO Clause: If your last Pok\u00e9mon faints to a self-KO move or effect, you will lose the battle');
+		},
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
