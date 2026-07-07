@@ -518,9 +518,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!this.ruleTable.has('natdexmod')) return this.checkCanLearn(move, species, setSources, set);
 			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
 				require('../sim/team-validator').TeamValidator;
-			const natDex = TeamValidator.get(`gen${this.gen}nationaldexag`).checkCanLearn(move, species, setSources, set);
-			if (!natDex) return natDex;
-			return this.checkCanLearn(move, species, setSources, set);
+			const natDex = TeamValidator.get(`gen${this.gen}nationaldexag`)
+				.checkCanLearn(move, species, this.allSources(species), set);
+			if (typeof natDex === 'string') return this.checkCanLearn(move, species, setSources, set);
+			return natDex;
 		},
 		onValidateSet(set) {
 			if (!this.ruleTable.has('natdexmod')) return;
