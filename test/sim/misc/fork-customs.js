@@ -59,13 +59,14 @@ describe('Fork customs', () => {
 		assert.equal(Dex.mod('gen4nopss').moves.get('earthquake').category, 'Physical');
 	});
 
-	it('gen3pssubers: [Gen 3] PSS Ubers is buildable/challengeable and unbans the Uber tier (keeping the split)', () => {
+	it('gen3pssubers: [Gen 3] PSS Ubers is ladderable/challengeable and unbans the Uber tier (keeping the split)', () => {
 		// [Gen 3] PSS Ubers is [Gen 3] PSS (gen3pss mod, so the Gen 4 physical/special split) with
-		// the Uber tier unbanned. Like base [Gen 3] Ubers it is searchShow:false — challenge/build
-		// only, not laddered — but must stay challengeable and buildable; pin those against a rebase.
+		// the Uber tier unbanned. Like its sibling [Gen 3] PSS it sits on the ladder (searchShow !== false)
+		// as well as being challengeable and buildable; pin all three against a rebase re-hiding it.
 		const ubers = Dex.formats.get('gen3pssubers', true);
 		assert(ubers.exists && ubers.mod === 'gen3pss', 'gen3pssubers must exist on the gen3pss mod');
 		assert.equal(ubers.section, 'surfnWOB Customs', 'must sit in the buildable surfnWOB Customs section');
+		assert(ubers.searchShow !== false, '[Gen 3] PSS Ubers must be ladderable (searchShow !== false)');
 		assert(ubers.challengeShow !== false, '[Gen 3] PSS Ubers must be challengeable (challengeShow !== false)');
 		Dex.formats.getRuleTable(ubers); // throws if a ruleset/banlist reference breaks
 

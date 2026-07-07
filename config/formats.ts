@@ -124,7 +124,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] PSS Ubers",
 		desc: "Gen 3 Ubers with the Gen 4 Physical/Special split.",
 		mod: 'gen3pss',
-		searchShow: false,
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
