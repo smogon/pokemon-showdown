@@ -3901,15 +3901,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
-		name: "[Gen 8] Random Doubles Battle",
-		mod: 'gen8',
-		gameType: 'doubles',
-		team: 'random',
-		searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod'],
-	},
-	{
 		name: "[Gen 8] Free-For-All Random Battle",
 		mod: 'gen8',
 		team: 'random',
