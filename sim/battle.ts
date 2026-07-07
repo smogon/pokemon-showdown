@@ -2816,7 +2816,7 @@ export class Battle {
 		}
 
 		if (this.gen <= 2) {
-			if (action.choice === 'move' && !action.pokemon.switchFlag) {
+			if (action.choice === 'move' && !action.pokemon.switchFlag && action.target && action.target.hp > 0) {
 				this.runEvent('AfterMoveSelf', action.pokemon);
 			} else if (action.choice === 'switch' || (action.choice === 'instaswitch' && action.sourceEffect)) {
 				this.runEvent('AfterMoveSelf', action.target);
