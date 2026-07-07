@@ -4203,7 +4203,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "UUBL",
 	},
 	volcanion: {
-		tier: "RUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
