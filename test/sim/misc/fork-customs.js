@@ -175,6 +175,51 @@ describe('Fork customs', () => {
 		], 'gen3nfe');
 	});
 
+	it('gen3puretradebacks: [Gen 3] Pure Tradebacks is ladderable, grants only gen-3-legal tradebacks, and bans Blaziken to Ubers', () => {
+		// [Gen 3] Pure Tradebacks (gen3puretradebacks mod) gives every Gen 1-3 species ALL
+		// abilities/moves it ever gains in later gens, filtered to those that already existed
+		// in Gen 3 — programmatic, no curation (unlike the curated [Gen 3] Tradebacks). It's an
+		// OU-based ladder format: Uber-banned, Blaziken retagged Uber for Speed Boost. Pin the
+		// ladder flags, the gen<=3 filter, the 'S'-slot ability mechanism, and the Blaziken ban.
+		const format = Dex.formats.get('gen3puretradebacks', true);
+		assert(format.exists && format.mod === 'gen3puretradebacks', 'must exist on the gen3puretradebacks mod');
+		assert.equal(format.section, 'surfnWOB Customs', 'must sit in the buildable surfnWOB Customs section');
+		assert(format.searchShow !== false, '[Gen 3] Pure Tradebacks must be ladderable (searchShow !== false)');
+		assert(format.challengeShow !== false, '[Gen 3] Pure Tradebacks must be challengeable (challengeShow !== false)');
+		Dex.formats.getRuleTable(format); // throws if a ruleset/banlist reference breaks
+
+		// Inherits gen3: category is derived from a move's TYPE (the classic Gen 1-3 split),
+		// NOT gen4's per-move split. Dark is Special, Flying is Physical in Gen 3.
+		const dex = Dex.mod('gen3puretradebacks');
+		assert.equal(dex.moves.get('knockoff').category, 'Special', 'Dark is Special in gen3 (type-based split inherited)');
+		assert.equal(dex.moves.get('gust').category, 'Physical', 'Flying is Physical in gen3');
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const V = TeamValidator.get('gen3puretradebacks');
+		const reject = (set, re, why) => {
+			const errs = V.validateTeam([{ ...set, evs: { hp: 4 }, level: 100 }]);
+			assert(errs && errs.some(e => re.test(e)), `${why}, got: ${JSON.stringify(errs)}`);
+		};
+
+		// The grant: a later-gen ability that already existed in Gen 3 is legal on a Gen-3 mon
+		// that gains it later (Drizzle Politoed), as is a tradeback move (Growth) — both illegal
+		// in plain [Gen 3] OU.
+		assert.legalTeam([
+			{ species: 'Politoed', ability: 'Drizzle', moves: ['surf', 'icebeam', 'growth', 'toxic'], evs: { hp: 4 }, level: 100 },
+		], 'gen3puretradebacks');
+		// The pool-3 case rides the 'S' ability slot — guards against the hidden-ability
+		// validator rejection returning: Zapdos gains Static as a third ability.
+		assert.legalTeam([
+			{ species: 'Zapdos', ability: 'Static', moves: ['thunderbolt', 'hiddenpower', 'thunderwave', 'agility'], evs: { hp: 4 }, level: 100 },
+		], 'gen3puretradebacks');
+
+		// Blaziken is tiered Uber (Speed Boost) and caught by banlist ['Uber'].
+		reject({ species: 'Blaziken', ability: 'Speed Boost', moves: ['skyuppercut', 'fireblast', 'swordsdance', 'batonpass'] }, /Uber/, 'expected Blaziken (Uber) banned');
+		// The gen<=3 filter holds both ways: a Gen 5 ability (Moxie) and a Gen 4 move (Roost) are rejected.
+		reject({ species: 'Politoed', ability: 'Moxie', moves: ['surf', 'icebeam', 'toxic', 'protect'] }, /Moxie/, 'expected gen5 ability Moxie rejected');
+		reject({ species: 'Tyranitar', ability: 'Sand Stream', moves: ['rockslide', 'earthquake', 'roost', 'dragondance'] }, /Roost/, 'expected gen4 move Roost rejected');
+	});
+
 	it('gen3stabmons: type-grant lets in off-learnset STAB, but the `*` restrictions and off-type stay blocked', () => {
 		// [Gen 3] STABmons = gen3ou + 'STABmons Move Legality', faithful to the
 		// challenge code `gen3ou @@@ stabmons move legality, *acupressure,

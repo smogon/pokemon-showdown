@@ -273,6 +273,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'King\'s Rock',
 		],
 	},
+	{
+		name: "[Gen 3] Pure Tradebacks",
+		desc: "Every Gen 1-3 Pok&eacute;mon can use any ability or move it gains in a later generation, as long as that ability/move already existed in Gen 3. Programmatically complete &mdash; no curation. Blaziken is Ubers (Speed Boost).",
+		mod: 'gen3puretradebacks',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+		banlist: ['Uber'],
+	},
 
 	// Yak Attack
 	///////////////////////////////////////////////////////////////////
