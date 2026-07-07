@@ -121,6 +121,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
+		name: "[Gen 3] PSS Ubers",
+		desc: "Gen 3 Ubers with the Gen 4 Physical/Special split.",
+		mod: 'gen3pss',
+		searchShow: false,
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+	},
+	{
 		name: "[Gen 3] ZangOuSe",
 		desc: `A curated ADV singles format with a slim Pok&eacute;mon pool. Zangoose sits in its own ZangOuSe tier; everything else is OU or NFE.`,
 		mod: 'gen3zangouse',

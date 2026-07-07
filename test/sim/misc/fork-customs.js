@@ -59,6 +59,28 @@ describe('Fork customs', () => {
 		assert.equal(Dex.mod('gen4nopss').moves.get('earthquake').category, 'Physical');
 	});
 
+	it('gen3pssubers: [Gen 3] PSS Ubers is buildable/challengeable and unbans the Uber tier (keeping the split)', () => {
+		// [Gen 3] PSS Ubers is [Gen 3] PSS (gen3pss mod, so the Gen 4 physical/special split) with
+		// the Uber tier unbanned. Like base [Gen 3] Ubers it is searchShow:false — challenge/build
+		// only, not laddered — but must stay challengeable and buildable; pin those against a rebase.
+		const ubers = Dex.formats.get('gen3pssubers', true);
+		assert(ubers.exists && ubers.mod === 'gen3pss', 'gen3pssubers must exist on the gen3pss mod');
+		assert.equal(ubers.section, 'surfnWOB Customs', 'must sit in the buildable surfnWOB Customs section');
+		assert(ubers.challengeShow !== false, '[Gen 3] PSS Ubers must be challengeable (challengeShow !== false)');
+		Dex.formats.getRuleTable(ubers); // throws if a ruleset/banlist reference breaks
+
+		// Shares the split with [Gen 3] PSS (same mod): category stays per-move, not by type.
+		assert.equal(Dex.mod('gen3pss').moves.get('waterfall').category, 'Physical');
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const uberSet = [{ species: 'Mewtwo', ability: 'Pressure', moves: ['psychic', 'calmmind', 'icebeam', 'recover'], evs: { hp: 4 }, level: 100 }];
+		// The Uber tier is unbanned here...
+		assert.legalTeam(uberSet, 'gen3pssubers');
+		// ...while the same Uber stays banned from the OU-based [Gen 3] PSS (the one format difference).
+		const pssErrors = TeamValidator.get('gen3pss').validateTeam(uberSet);
+		assert(pssErrors && pssErrors.some(e => /Uber/.test(e)), `expected Mewtwo (Uber) banned from [Gen 3] PSS, got: ${JSON.stringify(pssErrors)}`);
+	});
+
 	it('gen3su: SU/IU/ZU tiers resolve and the ZU reclassification is enforced', () => {
 		// Mod-relative: reads tiers off whichever mod the format declares (gen3subzu),
 		// so this survives the SU/IU/ZU reclassification living in a dedicated mod.
