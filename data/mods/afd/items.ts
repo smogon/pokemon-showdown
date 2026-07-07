@@ -46,7 +46,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (target.m.onikaBurger) return;
 			target.m.onikaBurger = true;
 			for (const moveSlot of target.moveSlots) {
-				const deductPP = target.deductPP(moveSlot.id, moveSlot.maxpp / 2, target);
+				const deductPP = target.deductPP(moveSlot.id, moveSlot.maxpp / 2);
 				if (!deductPP) continue;
 				this.add('-activate', target, 'item: Onika Burger', moveSlot.move, deductPP);
 			}

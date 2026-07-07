@@ -45,19 +45,38 @@ describe('Disable', () => {
 		assert(battle.log.indexOf('|-fail|p1a: Wynaut') > 0, `Disable should have failed vs Struggle`);
 	});
 
-	describe(`[Gen 1] Disable`, () => {
-		it(`should fail if the opponent already has a move disabled`, () => {
-			battle = common.createBattle({ forceRandomChance: true }, [[
-				{ species: 'Mew', moves: ['disable'] },
-			], [
-				{ species: 'Muk', moves: ['splash', 'tackle'] },
-			]]);
-			battle.makeChoices('auto', 'move tackle');
-			battle.makeChoices('auto', 'move splash');
-			battle.makeChoices('auto', 'move splash');
-			assert(battle.log.includes('|-fail|p1a: Mew'), `Disable should fail if a move is already disabled`);
-		});
+	it(`should fail if the opponent already has a move disabled`, () => {
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: 'Mew', moves: ['disable'] },
+		], [
+			{ species: 'Muk', moves: ['splash', 'tackle'] },
+		]]);
+		battle.makeChoices('auto', 'move tackle');
+		battle.makeChoices('auto', 'move splash');
+		battle.makeChoices('auto', 'move splash');
+		assert(battle.log.includes('|-fail|p1a: Mew'), `Disable should fail if a move is already disabled`);
+	});
 
+	describe(`[Gen 2]`, () => {
+		it(`should only disable the first duplicate move in the menu, but still fail the other copy on execution`, () => {
+			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Drowzee', moves: ['disable', 'sleeptalk'] },
+			], [
+				{ species: 'Abra', moves: ['tackle', 'tackle'] },
+			]]);
+			battle.makeChoices('move disable', 'move 2');
+			const request = battle.p2.activeRequest.active[0];
+			assert(request.moves[0].disabled);
+			assert.false(request.moves[1].disabled);
+
+			const hp = battle.p1.active[0].hp;
+			assert.cantMove(() => battle.p2.choose('move 1'));
+			battle.makeChoices('move sleeptalk', 'move 2');
+			assert.equal(battle.p1.active[0].hp, hp);
+		});
+	});
+
+	describe(`[Gen 1]`, () => {
 		it(`should work on the first turn so long as the opponent has move with PP`, () => {
 			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Mew', moves: ['disable'] },

@@ -185,84 +185,94 @@ describe(`Pressure`, () => {
 		move = battle.p2.active[0].getMoveData(Dex.moves.get('confuseray'));
 		assert.equal(move.pp, move.maxpp - 1);
 	});
-});
 
-describe('Pressure [Gen 4]', () => {
-	afterEach(() => {
-		battle.destroy();
+	describe('[Gen 4]', () => {
+		it(`should deduct 1 extra PP from any moves targeting the user`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Giratina', ability: 'pressure', moves: ['sleeptalk'] },
+				{ species: 'Togepi', moves: ['peck'] },
+			], [
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+				{ species: 'Ho-Oh', moves: ['peck'] },
+			]]);
+			battle.makeChoices('move sleeptalk, move peck -1', 'move sleeptalk, move peck 1');
+			const togepi = battle.p1.active[1];
+			const hooh = battle.p2.active[1];
+			const move = Dex.moves.get('peck');
+			assert.equal(togepi.getMoveData(move).pp, togepi.getMoveData(move).maxpp - 2);
+			assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
+		});
+
+		it(`should deduct 1 extra PP if moves are redirected to the user`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Giratina', ability: 'pressure', moves: ['followme'] },
+				{ species: 'Togepi', moves: ['peck'] },
+			], [
+				{ species: 'Clefable', moves: ['followme'] },
+				{ species: 'Ho-Oh', ability: 'pressure', moves: ['peck'] },
+			]]);
+			battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
+			const togepi = battle.p1.active[1];
+			const hooh = battle.p2.active[1];
+			const move = Dex.moves.get('peck');
+			assert.equal(togepi.getMoveData(move).pp, togepi.getMoveData(move).maxpp - 1);
+			assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
+		});
+
+		it(`should deduct PP even if the move fails or misses`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Dusknoir', ability: 'pressure', moves: ['shadowforce'] },
+			], [
+				{ species: 'Smeargle', moves: ['doubleedge', 'dragonpulse'] },
+			]]);
+			const smeargle = battle.p2.active[0];
+			battle.makeChoices();
+			let move = smeargle.getMoveData(Dex.moves.get('doubleedge'));
+			assert.equal(move.pp, move.maxpp - 2, `Double-Edge should lose 1 additional PP from Pressure`);
+
+			battle.makeChoices('auto', 'move dragonpulse');
+			move = smeargle.getMoveData(Dex.moves.get('dragonpulse'));
+			assert.equal(move.pp, move.maxpp - 2, `Dragon Pulse should lose 1 additional PP from Pressure`);
+		});
+
+		it(`should deduct PP for each Pressure Pokemon targeted`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Palkia', ability: 'pressure', moves: ['rest'] },
+				{ species: 'Dialga', ability: 'pressure', moves: ['rest'] },
+			], [
+				{ species: 'Lugia', ability: 'pressure', moves: ['hail'] },
+				{ species: 'Ho-Oh', ability: 'pressure', moves: ['earthquake'] },
+			]]);
+			battle.makeChoices();
+			let move = battle.p2.active[0].getMoveData(Dex.moves.get('hail'));
+			assert.equal(move.pp, move.maxpp - 4, `Hail should lose 3 additional PP from Pressure`);
+			move = battle.p2.active[1].getMoveData(Dex.moves.get('earthquake'));
+			assert.equal(move.pp, move.maxpp - 4, `Earthquake should lose 3 additional PP from Pressure`);
+		});
+
+		it(`should not deduct PP from self-targeting moves`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Palkia', ability: 'pressure', moves: ['calmmind'] },
+			], [
+				{ species: 'Dialga', ability: 'pressure', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			const move = battle.p1.active[0].getMoveData(Dex.moves.get('calmmind'));
+			assert.equal(move.pp, move.maxpp - 1);
+		});
 	});
 
-	it(`should deduct 1 extra PP from any moves targeting the user`, () => {
-		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Giratina', ability: 'pressure', moves: ['sleeptalk'] },
-			{ species: 'Togepi', moves: ['peck'] },
-		], [
-			{ species: 'Wynaut', moves: ['sleeptalk'] },
-			{ species: 'Ho-Oh', moves: ['peck'] },
-		]]);
-		battle.makeChoices('move sleeptalk, move peck -1', 'move sleeptalk, move peck 1');
-		const togepi = battle.p1.active[1];
-		const hooh = battle.p2.active[1];
-		const move = Dex.moves.get('peck');
-		assert.equal(togepi.getMoveData(move).pp, togepi.getMoveData(move).maxpp - 2);
-		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
-	});
-
-	it(`should deduct 1 extra PP if moves are redirected to the user`, () => {
-		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Giratina', ability: 'pressure', moves: ['followme'] },
-			{ species: 'Togepi', moves: ['peck'] },
-		], [
-			{ species: 'Clefable', moves: ['followme'] },
-			{ species: 'Ho-Oh', ability: 'pressure', moves: ['peck'] },
-		]]);
-		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
-		const togepi = battle.p1.active[1];
-		const hooh = battle.p2.active[1];
-		const move = Dex.moves.get('peck');
-		assert.equal(togepi.getMoveData(move).pp, togepi.getMoveData(move).maxpp - 1);
-		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
-	});
-
-	it(`should deduct PP even if the move fails or misses`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Dusknoir', ability: 'pressure', moves: ['shadowforce'] },
-		], [
-			{ species: 'Smeargle', moves: ['doubleedge', 'dragonpulse'] },
-		]]);
-		const smeargle = battle.p2.active[0];
-		battle.makeChoices();
-		let move = smeargle.getMoveData(Dex.moves.get('doubleedge'));
-		assert.equal(move.pp, move.maxpp - 2, `Double-Edge should lose 1 additional PP from Pressure`);
-
-		battle.makeChoices('auto', 'move dragonpulse');
-		move = smeargle.getMoveData(Dex.moves.get('dragonpulse'));
-		assert.equal(move.pp, move.maxpp - 2, `Dragon Pulse should lose 1 additional PP from Pressure`);
-	});
-
-	it(`should deduct PP for each Pressure Pokemon targeted`, () => {
-		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Palkia', ability: 'pressure', moves: ['rest'] },
-			{ species: 'Dialga', ability: 'pressure', moves: ['rest'] },
-		], [
-			{ species: 'Lugia', ability: 'pressure', moves: ['hail'] },
-			{ species: 'Ho-Oh', ability: 'pressure', moves: ['earthquake'] },
-		]]);
-		battle.makeChoices();
-		let move = battle.p2.active[0].getMoveData(Dex.moves.get('hail'));
-		assert.equal(move.pp, move.maxpp - 4, `Hail should lose 3 additional PP from Pressure`);
-		move = battle.p2.active[1].getMoveData(Dex.moves.get('earthquake'));
-		assert.equal(move.pp, move.maxpp - 4, `Earthquake should lose 3 additional PP from Pressure`);
-	});
-
-	it(`should not deduct PP from self-targeting moves`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Palkia', ability: 'pressure', moves: ['calmmind'] },
-		], [
-			{ species: 'Dialga', ability: 'pressure', moves: ['sleeptalk'] },
-		]]);
-		battle.makeChoices();
-		const move = battle.p1.active[0].getMoveData(Dex.moves.get('calmmind'));
-		assert.equal(move.pp, move.maxpp - 1);
+	describe('[Gen 3]', () => {
+		it(`should deduct PP from the selected slot`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'Gengar', moves: ['icebeam', 'icebeam'] },
+			], [
+				{ species: 'Snorlax', ability: 'pressure', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move 2', 'move sleeptalk');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert.equal(moveSlots[0].pp, 16);
+			assert.equal(moveSlots[1].pp, 14);
+		});
 	});
 });

@@ -198,7 +198,7 @@ describe('Sky Drop', () => {
 			{ species: 'Aggron', moves: ['sleeptalk', 'allyswitch'] },
 		]]);
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
-		battle.makeChoices('move skydrop 1, move sleeptalk', 'move sleeptalk, move allyswitch');
+		battle.makeChoices('move skydrop, move sleeptalk', 'move sleeptalk, move allyswitch');
 		const lairon = battle.p2.active[1];
 		assert.species(lairon, 'Lairon');
 		assert.false.fullHP(lairon);
@@ -229,7 +229,7 @@ describe('Sky Drop', () => {
 		]]);
 
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
-		battle.makeChoices('move skydrop 1, move aquajet 1', 'move sleeptalk, move aquajet 1');
+		battle.makeChoices('move skydrop, move aquajet 1', 'move sleeptalk, move aquajet 1');
 		assert.fullHP(battle.p1.active[0]);
 		assert.fullHP(battle.p2.active[0]);
 	});

@@ -282,6 +282,19 @@ describe(`Pursuit`, () => {
 			const furret = battle.p1.pokemon[1];
 			assert.bounded(furret.maxhp - furret.hp, [25, 30]);
 		});
+
+		it(`should deduct PP from the chosen Pursuit slot`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'Mew', moves: ['pursuit', 'pursuit'] },
+			], [
+				{ species: 'Alakazam', moves: ['sleeptalk'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move 2', 'switch 2');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+		});
 	});
 
 	describe(`[Gen 2]`, () => {

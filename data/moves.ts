@@ -3274,7 +3274,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'curse',
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			} else if (source.isAlly(target)) {
 				move.target = 'randomNormal';
 			}
@@ -3301,7 +3301,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "normal",
-		nonGhostTarget: "self",
 		type: "Ghost",
 		zMove: { effect: 'curse' },
 		contestType: "Tough",
@@ -11868,7 +11867,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				used: false,
 				virtual: true,
 			};
-			this.add('-start', source, 'Mimic', move.name);
+			this.add('-activate', source, 'move: Mimic', move.name);
 		},
 		target: "normal",
 		type: "Normal",
@@ -14411,7 +14410,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let alreadyAdded = false;
 				pokemon.removeVolatile('destinybond');
 				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
+					const move = this.queue.willMove(source)?.move || null;
+					if (!move || !source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;
@@ -14434,7 +14434,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+					this.actions.runMove(move, source, source.getLocOf(pokemon));
 				}
 			},
 		},

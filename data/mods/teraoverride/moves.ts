@@ -57,7 +57,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onModifyMove(move, source, target) {
 			if (!source.hasType(source.teraType)) {
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			} else if (source.isAlly(target)) {
 				move.target = 'randomNormal';
 			}

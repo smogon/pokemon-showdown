@@ -256,6 +256,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(3, 7);
 			},
+			onOverrideAction(pokemon) {
+				pokemon.lastMoveSlot = pokemon.moves.indexOf(this.effectState.move);
+				return this.effectState.move;
+			},
 		},
 	},
 	extrasensory: {
@@ -402,7 +406,27 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mimic: {
 		inherit: true,
-		flags: { protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1 },
+		onHit(target, source) {
+			const move = target.lastMove;
+			if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
+				return false;
+			}
+			if (move.isZ || move.isMax) return false;
+			const mimicIndex = source.lastMoveSlot;
+			if (mimicIndex < 0) return false;
+
+			source.moveSlots[mimicIndex] = {
+				move: move.name,
+				id: move.id,
+				pp: Math.min(5, move.pp),
+				maxpp: this.calculatePP(move, source.ppUps[mimicIndex] || 0),
+				target: move.target,
+				disabled: false,
+				used: false,
+				virtual: true,
+			};
+			this.add('-activate', source, 'move: Mimic', move.name);
+		},
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -521,7 +545,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1, nosketch: 1 },
+		onHit(target, source) {
+			const move = target.lastMove;
+			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
+			const sketchIndex = source.lastMoveSlot;
+			if (sketchIndex < 0) return false;
+			const sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: this.calculatePP(move, source.ppUps[sketchIndex] || 0),
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[sketchIndex] = sketchedMove;
+			source.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-activate', source, 'move: Sketch', move.name);
+		},
 	},
 	sleeptalk: {
 		inherit: true,
@@ -549,9 +591,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	spite: {
 		inherit: true,
 		onHit(target) {
+			const move = target.lastMove;
+			if (!move) return false;
+
 			const roll = this.random(2, 6);
-			if (target.lastMove && target.deductPP(target.lastMove.id, roll)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove.id, roll);
+			if (target.deductPP(move, roll)) {
+				this.add("-activate", target, 'move: Spite', move.id, roll);
 				return;
 			}
 			return false;

@@ -377,6 +377,8 @@ export class Battle {
 		if (this.activeMove) {
 			if (!failed) {
 				this.lastMove = this.activeMove;
+			} else if ((this.gen === 3 || this.gen === 4) && this.activePokemon) {
+				this.activePokemon.lastMove = null;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;
@@ -2512,7 +2514,9 @@ export class Battle {
 		// when used without an explicit target.
 
 		move = this.dex.moves.get(move);
-		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
+		if (move.target === 'adjacentAllyOrSelf' && this.gen <= 4) {
+			return this.sample([pokemon, ...pokemon.adjacentAllies()]);
+		} else if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
 			return pokemon;
 		} else if (move.target === 'adjacentAlly') {
 			if (this.gameType === 'singles') return null;

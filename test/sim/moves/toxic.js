@@ -28,7 +28,7 @@ describe('Toxic [Gen 7]', () => {
 		]]);
 		battle.makeChoices('move toxic 1, move trickroom', 'move dig 2, move splash');
 		assert.equal(battle.p2.active[0].status, 'tox');
-		battle.makeChoices('move horndrill 2, move instruct -1', 'move dig 2, move splash');
+		battle.makeChoices('move horndrill 2, move instruct -1', 'move dig, move splash');
 		assert.fainted(battle.p2.active[1]);
 	});
 });

@@ -439,7 +439,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				lockedMove = this.battle.runEvent('LockMove', pokemon);
 				if (lockedMove === true) lockedMove = false;
 				if (!lockedMove) {
-					if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
+					if (!pokemon.deductPP(baseMove) && move.id !== 'struggle') {
 						this.battle.add('cant', pokemon, 'nopp', move);
 						this.battle.clearActiveMove(true);
 						pokemon.moveThisTurnResult = false;

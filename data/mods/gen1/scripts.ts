@@ -204,7 +204,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Two-turn moves like Sky Attack deduct PP on their second turn.
 				if ((!lockedMove && !TWO_TURN_MOVES.includes(move.id)) || pokemon.volatiles['twoturnmove']) {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
-					if (moveSlot) pokemon.deductPP(moveSlot.id, null, target);
+					if (moveSlot) pokemon.deductPP(moveSlot.id);
 				}
 
 				if (!lockedMove && move.id !== pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot)?.id) {
@@ -236,7 +236,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') {
 				if (TWO_TURN_MOVES.includes(move.id)) {
 					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
-					if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
+					if (moveSlot) pokemon.deductPP(moveSlot.id, -1);
 				}
 				// FIXME: this should happen even if the slot was empty before Transform
 				// https://bulbapedia.bulbagarden.net/wiki/List_of_Transform_glitches#Transform_.2B_Mirror_Move.2FMetronome_PP_error

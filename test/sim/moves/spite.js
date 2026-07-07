@@ -38,4 +38,18 @@ describe('Spite', () => {
 		const shadowBallIndex = log.indexOf('Shadow Ball');
 		assert.notEqual(shadowBallIndex, -1, 'Shadow Ball should have been revealed when Spite deducted PP.');
 	});
+
+	describe('[Gen 3]', () => {
+		it(`should deduct PP from the first slot with the move`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'Gengar', moves: ['icebeam', 'icebeam'] },
+			], [
+				{ species: 'Snorlax', moves: ['spite'] },
+			]]);
+			battle.makeChoices('move 2', 'move spite');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert(moveSlots[0].pp <= 14);
+			assert.equal(moveSlots[1].pp, 15);
+		});
+	});
 });

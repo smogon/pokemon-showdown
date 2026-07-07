@@ -353,7 +353,7 @@ describe('Target Resolution', () => {
 		]]);
 
 		battle.makeChoices('auto', 'move phantomforce 1, move sleeptalk');
-		battle.makeChoices('auto', 'move phantomforce 1, move sheercold 1');
+		battle.makeChoices('auto', 'move phantomforce, move sheercold 1');
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 

@@ -99,7 +99,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			}
 		},
 		target: "randomNormal",

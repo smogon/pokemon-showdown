@@ -184,6 +184,87 @@ describe('Encore', () => {
 		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
 	});
 
+	it(`should cause the Pokemon to Struggle if the move gets Disabled`, () => {
+		battle = common.createBattle([[
+			{ species: 'Mew', moves: ['growl', 'leer'] },
+		], [
+			{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+		]]);
+		battle.makeChoices('move growl', 'move encore');
+		battle.makeChoices('move growl', 'move disable');
+		assert.equal(battle.p2.active[0].boosts.atk, -2);
+		assert.equal(battle.p2.active[0].boosts.def, 0);
+		battle.makeChoices('move struggle', 'move sleeptalk');
+		assert.equal(battle.p2.active[0].boosts.atk, -2);
+		assert.equal(battle.p2.active[0].boosts.def, 0);
+		assert.false.fullHP(battle.p1.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+
+	describe('[Gen 4]', () => {
+		it(`should not require selecting a target in doubles`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Mew', moves: ['tackle', 'sleeptalk'] },
+				{ species: 'Magikarp', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'sleeptalk'] },
+				{ species: 'Magikarp', moves: ['sleeptalk'] },
+			]]);
+			assert.cantMove(() => battle.p1.choose('move tackle, move sleeptalk'));
+			battle.makeChoices('move tackle 1, move sleeptalk', 'move encore 1, move sleeptalk');
+
+			const request = battle.p1.activeRequest.active[0];
+			assert.equal(request.moves.length, 1);
+			assert.equal(request.moves[0].target, undefined);
+			assert.cantMove(() => battle.p1.choose('move tackle 1, move sleeptalk'));
+			assert.doesNotThrow(() => battle.makeChoices('move tackle, move sleeptalk', 'move sleeptalk, move sleeptalk'));
+		});
+
+		it(`deduct PP from the first duplicate slot of an Encored move`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'growl', 'tackle', 'sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move 2', 'move encore');
+			assert.equal(battle.p1.activeRequest.active[0].moves.length, 1);
+
+			battle.makeChoices('move 1', 'move sleeptalk');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 2);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp);
+		});
+
+		it('should fail after the target is paralyzed', () => {
+			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Deoxys', moves: ['growl'] },
+			], [
+				{ species: 'Wynaut', moves: ['thunderwave', 'encore'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('move growl', 'move encore');
+			assert.false(battle.p1.active[0].volatiles['encore']);
+		});
+
+		it(`should cause the Pokemon to Struggle if the move gets Disabled`, () => {
+			// same test
+			battle = common.gen(4).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'leer'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move growl', 'move encore');
+			battle.makeChoices('move growl', 'move disable');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			battle.makeChoices('move struggle', 'move sleeptalk');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			assert.false.fullHP(battle.p1.active[0]);
+			assert.false.fullHP(battle.p2.active[0]);
+		});
+	});
+
 	describe('[Gen 2]', () => {
 		it(`Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
@@ -199,6 +280,74 @@ describe('Encore', () => {
 			assert.fullHP(battle.p1.active[0]);
 			battle.makeChoices();
 			assert.equal(chansey.volatiles['encore'].move, 'seismictoss');
+		});
+
+		it(`deduct PP from the first duplicate slot of an Encored move if the Encore user is faster`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Wynaut', moves: ['growl', 'growl', 'tackle', 'sleeptalk'] },
+			], [
+				{ species: 'Mew', moves: ['encore', 'sleeptalk'] },
+			]]);
+			const moveSlots = battle.p1.active[0].moveSlots;
+			battle.makeChoices('move 2', 'move sleeptalk');
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+			battle.makeChoices('move 1', 'move encore');
+			assert.equal(battle.p1.activeRequest.active[0].moves.length, 1);
+
+			battle.makeChoices('move 1', 'move sleeptalk');
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 2);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+		});
+
+		it(`deduct PP from the exact duplicate slot that was originally used if the Encore user is slower`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'growl', 'tackle', 'sleeptalk'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move 2', 'move encore');
+			assert.equal(battle.p1.activeRequest.active[0].moves.length, 1);
+
+			battle.makeChoices('move 1', 'move sleeptalk');
+			const moveSlots = battle.p1.active[0].moveSlots;
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 2);
+		});
+
+		it('deduct PP from the last selected move if the target was paralyzed', () => {
+			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Deoxys', moves: ['growl', 'leer'] },
+			], [
+				{ species: 'Wynaut', moves: ['thunderwave', 'encore'] },
+			]]);
+			const moveSlots = battle.p1.active[0].moveSlots;
+			battle.makeChoices();
+			battle.makeChoices('move leer', 'move encore');
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 1);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp);
+			assert(battle.p1.active[0].volatiles['encore'].move, 'growl');
+			battle.forceRandomChance = false;
+			battle.makeChoices();
+			assert.equal(moveSlots[0].pp, moveSlots[0].maxpp - 1);
+			assert.equal(moveSlots[1].pp, moveSlots[1].maxpp - 1);
+		});
+
+		it(`should cause the Pokemon the move execution to fail if the move gets Disabled, but not Struggle`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Mew', moves: ['growl', 'leer'] },
+			], [
+				{ species: 'Wynaut', moves: ['encore', 'disable', 'sleeptalk'] },
+			]]);
+			battle.makeChoices('move growl', 'move encore');
+			battle.makeChoices('move growl', 'move disable');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			battle.makeChoices('move growl', 'move sleeptalk');
+			assert.equal(battle.p2.active[0].boosts.atk, -2);
+			assert.equal(battle.p2.active[0].boosts.def, 0);
+			assert.fullHP(battle.p1.active[0]);
+			assert.fullHP(battle.p2.active[0]);
 		});
 	});
 });

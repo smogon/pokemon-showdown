@@ -205,11 +205,14 @@ export class Side {
 	 */
 	lastMove: Move | null;
 	/**
-	 * The move and the slot are chosen during move selection
-	 * lastSelectedMove never resets
-	 * lastSelectedMoveSlot resets on every switch
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMove (wPlayerSelectedMove) never resets
 	 */
 	lastSelectedMove: ID = '00' as ID;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMoveSlot (wPlayerMoveListIndex) resets on every switch
+	 */
 	lastSelectedMoveSlot = 0;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
@@ -551,11 +554,13 @@ export class Side {
 		// If the move is not found, the action is invalid without requiring further inspection.
 
 		const request = pokemon.getMoveRequestData();
+		let chosenBySlot = false;
 		let moveSlot: number | undefined = undefined;
 		let moveid = '';
-		let targetType = '';
+		let targetType: string | undefined = undefined;
 		if (autoChoose) moveText = 1;
 		if (typeof moveText === 'number' || (moveText && /^[0-9]+$/.test(moveText))) {
+			chosenBySlot = this.battle.gen <= 3; // after Gen 3, the slot doesnt matter because it always uses the first available
 			// Parse a one-based move index.
 			const moveIndex = Number(moveText) - 1;
 			if (moveIndex < 0 || moveIndex >= request.moves.length || !request.moves[moveIndex]) {
@@ -563,7 +568,7 @@ export class Side {
 			}
 			moveSlot = moveIndex;
 			moveid = request.moves[moveIndex].id;
-			targetType = request.moves[moveIndex].target!;
+			targetType = request.moves[moveIndex].target;
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
@@ -574,7 +579,7 @@ export class Side {
 			for (const [i, move] of request.moves.entries()) {
 				if (move.id !== moveid) continue;
 				moveSlot = i;
-				targetType = move.target || 'normal';
+				targetType = move.target;
 				break;
 			}
 			if (!targetType && ['', 'dynamax'].includes(event) && request.maxMoves) {
@@ -600,7 +605,7 @@ export class Side {
 					}
 				}
 			}
-			if (!targetType) {
+			if (moveSlot === undefined) {
 				if (moveid !== 'testfight') {
 					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 				}
@@ -614,7 +619,7 @@ export class Side {
 				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
 				moveid = move.id;
 				moveSlot = i;
-				targetType = move.target!;
+				targetType = move.target;
 				break;
 			}
 		}
@@ -642,7 +647,7 @@ export class Side {
 		// Validate targeting
 		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
-		} else if (this.battle.actions.targetTypeChoices(targetType)) {
+		} else if (targetType && this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}
@@ -656,11 +661,18 @@ export class Side {
 		}
 
 		const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
-		if (lockedMove) {
-			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
-			const lockedMoveID = toID(lockedMove);
+		const struggle = !moves.length;
+		const encored = !lockedMove && !struggle && this.battle.gen <= 4 && pokemon.volatiles['encore']?.move;
+		if (lockedMove || encored) {
+			let lockedMoveTargetLoc: number | undefined = pokemon.lastMoveTargetLoc || 0;
+			const lockedMoveID = toID(lockedMove || encored);
 			if (pokemon.volatiles[lockedMoveID]?.targetLoc) {
 				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
+			}
+			if (encored && (!lockedMove || this.battle.gen === 4)) {
+				// Encore always targets a random Pokemon
+				// In Gen 4, randomize the target even if during a two-turn move
+				lockedMoveTargetLoc = undefined;
 			}
 			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			this.choice.actions.push({
@@ -679,7 +691,7 @@ export class Side {
 				moveid: 'fight',
 			});
 			return true;
-		} else if (!moves.length) {
+		} else if (struggle) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
@@ -704,22 +716,24 @@ export class Side {
 			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
-		} else if (this.battle.gen === 1) {
-			// In Gen 1, disabled moves are tracked by slot rather than by move ID
-			if (moves[moveSlot!].disabled) {
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
-			}
 		} else if (!zMove) {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
-			for (const m of moves) {
-				if (m.id !== moveid) continue;
-				if (!m.disabled) {
-					isEnabled = true;
-					break;
-				} else if (m.disabledSource) {
-					disabledSource = m.disabledSource;
+			if (chosenBySlot) {
+				isEnabled = !moves[moveSlot!].disabled;
+				if (!isEnabled) {
+					disabledSource = moves[moveSlot!].disabledSource || '';
+				}
+			} else {
+				for (const m of moves) {
+					if (m.id !== moveid) continue;
+					if (!m.disabled) {
+						isEnabled = true;
+						break;
+					} else if (m.disabledSource) {
+						disabledSource = m.disabledSource;
+					}
 				}
 			}
 			if (!isEnabled) {
@@ -727,17 +741,29 @@ export class Side {
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
 					let updated = this.updateDisabledRequest(pokemon, req);
-					for (const m of req.moves) {
-						if (m.id === moveid) {
-							if (!m.disabled) {
-								m.disabled = true;
-								updated = true;
+					if (chosenBySlot) {
+						const m = req.moves[moveSlot!];
+						if (!m.disabled) {
+							m.disabled = true;
+							updated = true;
+						}
+						if (m.disabledSource !== disabledSource) {
+							m.disabledSource = disabledSource;
+							updated = true;
+						}
+					} else {
+						for (const m of req.moves) {
+							if (m.id === moveid) {
+								if (!m.disabled) {
+									m.disabled = true;
+									updated = true;
+								}
+								if (m.disabledSource !== disabledSource) {
+									m.disabledSource = disabledSource;
+									updated = true;
+								}
+								break;
 							}
-							if (m.disabledSource !== disabledSource) {
-								m.disabledSource = disabledSource;
-								updated = true;
-							}
-							break;
 						}
 					}
 					return updated;
@@ -817,7 +843,7 @@ export class Side {
 		});
 
 		if (pokemon.maybeDisabled && (this.battle.gameType === 'singles' || (
-			this.battle.gen <= 3 && !this.battle.actions.targetTypeChoices(targetType)
+			this.battle.gen <= 3 && (!targetType || !this.battle.actions.targetTypeChoices(targetType))
 		))) {
 			this.choice.cantUndo = true;
 		}
@@ -846,7 +872,7 @@ export class Side {
 			}
 			for (const m of req.moves) {
 				const disabled = pokemon.getMoveData(m.id)?.disabled;
-				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+				if (disabled && (this.battle.gen >= 4 || (m.target && this.battle.actions.targetTypeChoices(m.target)))) {
 					m.disabled = true;
 					updated = true;
 				}
@@ -1112,12 +1138,12 @@ export class Side {
 	}
 
 	commitChoices() {
-		if (this.battle.gen === 1) {
-			for (const choice of this.choice.actions) {
-				if (choice.choice !== 'move' || !choice.pokemon) continue;
+		for (const choice of this.choice.actions) {
+			if (choice.choice !== 'move' || !choice.pokemon) continue;
+			const pokemon = choice.pokemon;
+			if (this.battle.gen === 1) {
 				const move = choice.moveid;
 				if (move === 'fight') {
-					const pokemon = choice.pokemon;
 					if (['frz', 'slp'].includes(pokemon.status)) {
 						// do nothing
 					} else if (pokemon.volatiles['partiallytrapped']) {
@@ -1127,7 +1153,7 @@ export class Side {
 				} else if (move === 'struggle') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
-				} else if (typeof choice.moveSlot === 'number') {
+				} else if (choice.moveSlot !== undefined) {
 					// not locked
 					this.lastSelectedMove = move as ID;
 					this.lastSelectedMoveSlot = choice.moveSlot;
@@ -1138,6 +1164,11 @@ export class Side {
 				 * if a Pokémon is recharging, this ensures it tries to use Hyper Beam again
 				 */
 				choice.moveid = this.lastSelectedMove;
+			} else if (this.battle.gen <= 3) {
+				// deduct PP from the original slot
+				if (typeof choice.moveSlot === 'number') {
+					pokemon.lastMoveSlot = choice.moveSlot;
+				}
 			}
 		}
 		this.battle.queue.addChoice(this.choice.actions);

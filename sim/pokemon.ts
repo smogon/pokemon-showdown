@@ -15,7 +15,7 @@ interface MoveSlot {
 	move: string;
 	pp: number;
 	maxpp: number;
-	target?: string;
+	target: string;
 	disabled: boolean | 'hidden';
 	disabledSource?: string;
 	used: boolean;
@@ -171,6 +171,8 @@ export class Pokemon {
 	lastMoveEncore?: ActiveMove | null;
 	lastMoveUsed: ActiveMove | null;
 	lastMoveTargetLoc?: number;
+	// Gen 2 and 3 only, Gen 1 is tracked on Side
+	lastMoveSlot: number;
 	moveThisTurn: string | boolean;
 	statsRaisedThisTurn: boolean;
 	statsLoweredThisTurn: boolean;
@@ -462,6 +464,7 @@ export class Pokemon {
 		// This is used in gen 2 only
 		this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
+		this.lastMoveSlot = 0;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
 		this.statsLoweredThisTurn = false;
@@ -891,7 +894,7 @@ export class Pokemon {
 		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
-	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
+	deductPP(move: string | Move, amount?: number | null, sourceEffect?: Effect | null) {
 		move = this.battle.dex.moves.get(move);
 		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
@@ -899,11 +902,8 @@ export class Pokemon {
 		if (!ppData.pp) return 0;
 
 		if (!amount) amount = 1;
+		amount = Math.min(amount, ppData.pp);
 		ppData.pp -= amount;
-		if (ppData.pp < 0) {
-			amount += ppData.pp;
-			ppData.pp = 0;
-		}
 		return amount;
 	}
 
@@ -989,9 +989,16 @@ export class Pokemon {
 				id: lockedMove,
 			}];
 		}
+		let moveSlots = this.moveSlots;
+		let encoredMove = false;
+		if (this.battle.gen <= 4 && this.volatiles['encore']) {
+			const slotIndex = this.battle.gen <= 2 ? this.lastMoveSlot : this.moves.indexOf(this.volatiles['encore'].move);
+			moveSlots = [this.moveSlots[slotIndex]];
+			encoredMove = true;
+		}
 		const moves = [];
 		let hasValidMove = false;
-		for (const moveSlot of this.moveSlots) {
+		for (const moveSlot of moveSlots) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = `Hidden Power ${this.hpType}`;
@@ -1004,7 +1011,7 @@ export class Pokemon {
 			switch (moveSlot.id) {
 			case 'curse':
 				if (!this.hasType('Ghost')) {
-					target = this.battle.dex.moves.get('curse').nonGhostTarget;
+					target = 'self';
 				}
 				break;
 			case 'pollenpuff':
@@ -1031,6 +1038,10 @@ export class Pokemon {
 			if (disabled === 'hidden') {
 				disabled = !restrictData;
 			}
+			if (disabled && encoredMove && this.battle.gen <= 2) {
+				// in Gen 2, Encore has priority over Struggle
+				disabled = false;
+			}
 			if (!disabled) {
 				hasValidMove = true;
 			}
@@ -1040,7 +1051,7 @@ export class Pokemon {
 				id: moveSlot.id,
 				pp: moveSlot.pp,
 				maxpp: moveSlot.maxpp,
-				target,
+				target: encoredMove ? undefined : target,
 				disabled,
 			});
 		}
@@ -1547,6 +1558,7 @@ export class Pokemon {
 		this.lastMove = null;
 		this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
+		this.lastMoveSlot = 0;
 		this.moveThisTurn = '';
 		this.moveLastTurnResult = undefined;
 		this.moveThisTurnResult = undefined;
@@ -1639,6 +1651,18 @@ export class Pokemon {
 				moveSlot.disabled = isHidden ? 'hidden' : true;
 				moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 			}
+		}
+	}
+
+	disableSlot(slotIndex: number, isHidden?: boolean, sourceEffect?: Effect) {
+		if (!sourceEffect && this.battle.event) {
+			sourceEffect = this.battle.effect;
+		}
+		if (slotIndex < 0 || slotIndex >= this.moveSlots.length) return;
+		const moveSlot = this.moveSlots[slotIndex];
+		if (moveSlot && moveSlot.disabled !== true) {
+			moveSlot.disabled = isHidden ? 'hidden' : true;
+			moveSlot.disabledSource = sourceEffect?.name || moveSlot.move;
 		}
 	}
 

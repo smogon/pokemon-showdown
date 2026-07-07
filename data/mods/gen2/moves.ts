@@ -151,6 +151,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
+	disable: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onDisableMove(pokemon) {
+				const moveSlot = pokemon.moves.indexOf(this.effectState.move);
+				if (moveSlot >= 0 && moveSlot < pokemon.moveSlots.length) {
+					pokemon.disableSlot(moveSlot, false, this.effect);
+				}
+			},
+		},
+	},
 	doubleedge: {
 		inherit: true,
 		recoil: [25, 100],
@@ -160,17 +172,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onStart(target) {
-				const lockedMove = target.lastMoveEncore?.id || '';
-				const moveSlot = lockedMove ? target.getMoveData(lockedMove) : null;
-				if (!moveSlot || target.lastMoveEncore?.flags['failencore'] || moveSlot.pp <= 0) {
+				const move = target.lastMoveEncore;
+				if (!move) return false;
+				const moveIndex = target.activeTurns && !this.queue.willMove(target) ? target.lastMoveSlot :
+					target.moves.indexOf(move.id);
+				target.lastMoveSlot = moveIndex;
+				if (target.lastMoveEncore?.flags['failencore'] || moveIndex < 0 || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
 				}
-				this.effectState.move = lockedMove;
+				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
+			},
+			onOverrideAction() {
+				return this.effectState.move;
 			},
 			onResidualOrder: 13,
 			onResidualSubOrder: undefined, // no inherit
+			onResidual(target) {
+				const moveSlot = target.moveSlots[target.lastMoveSlot];
+				if (!moveSlot || moveSlot.pp <= 0) {
+					// early termination if you run out of PP
+					target.removeVolatile('encore');
+				}
+			},
 		},
 	},
 	endure: {
@@ -504,7 +529,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						// Destiny Bond ends if the switch action "outspeeds" the attacker, regardless of host
 						pokemon.removeVolatile('destinybond');
 					}
-					if (!this.queue.cancelMove(source) || !source.hp) continue;
+					const move = this.queue.willMove(source)?.move || null;
+					if (!move || !this.queue.cancelMove(source) || !source.hp) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;
@@ -520,7 +546,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+					this.actions.runMove(move, source, source.getLocOf(pokemon));
 				}
 			},
 		},
@@ -604,7 +630,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, nosketch: 1 },
+		flags: { failencore: 1, noassist: 1, nosketch: 1 },
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');

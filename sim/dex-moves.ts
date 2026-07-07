@@ -250,7 +250,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
-	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
@@ -450,8 +449,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
-	/** Move target used if the user is not a Ghost type (for Curse). */
-	readonly nonGhostTarget: MoveTarget;
 	/** Whether or not the move ignores abilities. */
 	readonly ignoreAbility: boolean;
 	/**
@@ -504,7 +501,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
-		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
