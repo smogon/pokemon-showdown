@@ -2222,6 +2222,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: `Enforces Stadium Pok&eacute; Cup Rentals legality`,
 		// Implemented in mods/gen1stadium/rulesets.ts
 	},
+	permanentabilityweathermod: {
+		effectType: 'Rule',
+		name: "Permanent Ability Weather Mod",
+		desc: "Weather effects caused by Abilities are semi-permanent, like in past generations.",
+		onBegin() {
+			this.add('rule', "Permanent Ability Weather Mod: Ability-based weathers won't expire");
+		},
+		// hardcoded in data/conditions.ts
+	},
 	noswitching: {
 		effectType: 'Rule',
 		name: 'No Switching',
