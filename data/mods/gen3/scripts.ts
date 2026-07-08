@@ -8,11 +8,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.data.Moves[i].category === 'Status') continue;
 			const type = this.data.Moves[i].type;
 			const typeIndex = this.modData('TypeChart', this.toID(type)).num;
-			if (typeIndex < 9) {
-				newCategory = 'Physical';
-			} else if (typeIndex > 9) {
-				newCategory = 'Special';
-			}
+			if (typeIndex === 9) continue;
+			newCategory = typeIndex < 9 ? 'Physical' : 'Special';
 			if (newCategory !== this.data.Moves[i].category) {
 				this.modData('Moves', i).category = newCategory;
 			}
