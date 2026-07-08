@@ -25,11 +25,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "surfnWOB Customs",
 	},
-	// Preserves the UUBL metagame from before Raikou and Registeel were raised to
-	// OU by tiering decision on 2026-07-08. Both are kept legal here via unbanlist.
+	// [Gen 3] UUBL Classic 26 — preserves the UUBL metagame as it stood in 2026, before
+	// Raikou and Registeel were raised to OU by tiering decision on 2026-07-08. Both are
+	// kept legal here via unbanlist. ("26" leaves room to preserve other UUBL eras later.)
 	{
-		name: "[Gen 3] UUBL Classic",
-		desc: "Gen 3 UUBL as it stood before Raikou and Registeel were raised to OU on July 8, 2026. Both remain legal here, preserving the classic UUBL metagame.",
+		name: "[Gen 3] UUBL Classic 26",
+		desc: "Gen 3 UUBL as it stood in 2026, before Raikou and Registeel were raised to OU on July 8, 2026. Both remain legal here, preserving that era's UUBL metagame.",
 		mod: 'gen3',
 		ruleset: ['[Gen 3] OU', '!Accuracy Trap Clause'],
 		banlist: [
