@@ -150,7 +150,11 @@ export class BattleActions {
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if (isDrag && this.battle.gen >= 5) {
+		if (this.battle.gen <= 4) {
+			this.battle.runEvent('EntryHazard', pokemon);
+			this.battle.runEvent('SwitchIn', pokemon);
+		}
+		if (isDrag) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
 			this.runSwitch(pokemon);
 		} else {

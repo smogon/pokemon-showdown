@@ -157,11 +157,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			const abortMove = () => {
-				this.battle.clearActiveMove(true);
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-			};
-
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
@@ -179,7 +174,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						"the move execution will never resolve."
 					);
 				}
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 
@@ -188,11 +183,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 
@@ -212,7 +207,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.hint(
 						"In Gen 1, a Pokémon might default to using a move that doesn't match the move of the slot it last selected.",
 					);
-					abortMove();
+					this.battle.clearActiveMove(true);
 					return;
 				}
 			}
@@ -268,9 +263,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.side.lastMove = move;
 
 					this.battle.runEvent('AfterMove', pokemon, target, move);
-					if (!target || target.hp > 0) {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-					}
 				}
 			}
 			return moveResult;

@@ -2839,6 +2839,17 @@ export class Battle {
 			break;
 		}
 
+		if (this.gen <= 2) {
+			if (action.choice === 'move' && !action.pokemon.switchFlag && action.pokemon.side.foe.active[0].hp) {
+				this.runEvent('AfterMoveSelf', action.pokemon);
+			} else if (action.choice === 'switch' || (action.choice === 'instaswitch' && action.sourceEffect)) {
+				this.runEvent('AfterMoveSelf', action.target);
+			}
+		}
+
+		// Gen 4 and earlier: clear active move so Mold Breaker doesn't allow hazards to bypass Clear Body and Levitate
+		if (this.gen <= 4) this.clearActiveMove();
+
 		// phazing (Roar, etc)
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
@@ -2849,7 +2860,7 @@ export class Battle {
 			}
 		}
 
-		this.clearActiveMove();
+		if (this.gen > 4) this.clearActiveMove();
 
 		// fainting
 

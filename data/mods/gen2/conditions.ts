@@ -9,9 +9,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			residualdmg(this, pokemon);
 		},
-		onAfterSwitchInSelf(pokemon) {
-			residualdmg(this, pokemon);
-		},
 	},
 	par: {
 		name: 'par',
@@ -87,9 +84,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			residualdmg(this, pokemon);
 		},
-		onAfterSwitchInSelf(pokemon) {
-			residualdmg(this, pokemon);
-		},
 	},
 	tox: {
 		name: 'tox',
@@ -108,9 +102,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.status = 'psn' as ID;
 			this.add('-status', pokemon, 'psn', '[silent]');
-		},
-		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	confusion: {
@@ -243,9 +234,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAfterMoveSelfPriority: 100,
 		onAfterMoveSelf(pokemon) {
-			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
-		},
-		onAfterSwitchInSelf(pokemon) {
 			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
 		},
 	},

@@ -83,8 +83,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
 				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn}`);
 				this.battle.clearActiveMove(true);
-				// This is only run for sleep
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 				return;
 			}
 			if (move.beforeMoveCallback) {
@@ -142,8 +140,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					// If target fainted
 					if (target && target.hp <= 0) {
 						delete pokemon.volatiles['partialtrappinglock'];
-					} else {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
 					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
 
