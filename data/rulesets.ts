@@ -1432,9 +1432,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	desyncclausemod: {
 		effectType: 'Rule',
 		name: 'Desync Clause Mod',
-		desc: 'If a desync would happen, the move fails instead. This rule currently covers Bide, Counter, and Psywave.',
+		desc: 'If a desync would happen, the move resolves to link battle behavior from the acting player\'s perspective. This rule covers online desyncs related to move selection, and offline disparities related to Bide and Psywave.',
 		onBegin() {
-			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
+			this.add('rule', 'Desync Clause Mod: Desyncs resolve to link battle behavior from the acting player\'s perspective.');
 		},
 		// Hardcoded in gen1/moves.ts
 		// Can't be disabled (no precedent for how else to handle desyncs)

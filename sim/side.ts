@@ -24,6 +24,7 @@ import type { RequestState } from './battle';
 import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
+import { type Move } from './dex-moves';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
@@ -199,18 +200,31 @@ export class Side {
 	choice: Choice;
 
 	/**
-	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
-	 * (this is for Counter and Mirror Move)
+	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon (this is for Counter)
 	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
 	/**
-	 * The move and the slot are chosen during move selection
-	 * lastSelectedMove never resets
-	 * lastSelectedMoveSlot resets on every switch
+	 * Same as lastMove but from the opponent's POV.
+	 */
+	lastEnemyMove: Move | null;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMove (wPlayerSelectedMove) never resets
 	 */
 	lastSelectedMove: ID = '00' as ID;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMoveSlot (wPlayerMoveListIndex) resets on every switch
+	 */
 	lastSelectedMoveSlot = 0;
+	/**
+	 * Same as lastSelectedMove but from the opponent's POV (wEnemySelectedMove).
+	 * There can be discrepancies between this and lastSelectedMove:
+	 * if the opponent switches to a Pokemon that is frozen or asleep, lastSelectedMove will not be updated,
+	 * but lastEnemySelectedMove will be updated to the move on the opponent's first slot during the next move selection.
+	 */
+	lastEnemySelectedMove: ID = '00' as ID;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		const sideScripts = battle.dex.data.Scripts.side;
@@ -270,7 +284,8 @@ export class Side {
 		};
 
 		// old-gens
-		this.lastMove = null;
+		this.lastMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
+		this.lastEnemyMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
 	}
 
 	toJSON(): AnyObject {
@@ -1114,23 +1129,34 @@ export class Side {
 	commitChoices() {
 		if (this.battle.gen === 1) {
 			for (const choice of this.choice.actions) {
-				if (choice.choice !== 'move' || !choice.pokemon) continue;
+				const pokemon = choice.pokemon;
+				if (choice.choice !== 'move' || !pokemon) continue;
 				const move = choice.moveid;
 				if (move === 'fight') {
-					const pokemon = choice.pokemon;
 					if (['frz', 'slp'].includes(pokemon.status)) {
-						// do nothing
+						// do nothing to lastSelectedMove
+						const moveSlot = pokemon.getMoveSlot(this.lastSelectedMoveSlot);
+						if (moveSlot === null) throw new Error(`moveSlot is null which shouldn't happen`);
+						this.lastEnemySelectedMove = moveSlot.id;
 					} else if (pokemon.volatiles['partiallytrapped']) {
 						// 'cannotmove' is what is set in the cartridge
 						this.lastSelectedMove = 'cannotmove' as ID;
+						this.lastEnemySelectedMove = 'cannotmove' as ID;
 					}
 				} else if (move === 'struggle') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
-				} else if (typeof choice.moveSlot === 'number') {
-					// not locked
-					this.lastSelectedMove = move as ID;
-					this.lastSelectedMoveSlot = choice.moveSlot;
+					this.lastEnemySelectedMove = move as ID;
+				} else {
+					if (typeof choice.moveSlot === 'number') {
+						// not locked
+						this.lastSelectedMove = move as ID;
+						this.lastSelectedMoveSlot = choice.moveSlot;
+						this.lastMove = this.battle.dex.moves.get(move);
+					}
+					const moveSlot = pokemon.getMoveSlot(this.lastSelectedMoveSlot);
+					if (moveSlot === null) throw new Error(`moveSlot is null which shouldn't happen`);
+					this.lastEnemySelectedMove = moveSlot.id;
 				}
 				/**
 				 * choice.moveid should be synced with lastSelectedMove
