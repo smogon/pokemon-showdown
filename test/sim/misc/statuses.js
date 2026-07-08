@@ -392,7 +392,7 @@ describe('Freeze', () => {
 			// With the new Desync Clause Mod, the game will not desync, and the lastSelectedMove will be used
 			// even if the Pokemon doesnt have the move
 
-			// lastSelectedMove = '00', lastSelectedMoveSlot = 0 (tackle)
+			// lastSelectedMove = 'nomove', lastSelectedMoveSlot = 0 (tackle)
 			battle = common.gen(1).createBattle({
 				customRules: 'guaranteedsecondarymod', seed: [0, 0, 0, 0],
 			}, [[

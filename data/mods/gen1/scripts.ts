@@ -216,7 +216,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (move.id === '00') {
+			if (move.id === 'nomove') {
 				this.battle.hint(
 					"In Gen 1, if a Pokémon is thawed from freeze and no move has been selected yet, " +
 					"the Pokémon will use a move with Fissure's animation, 102 base power, ??? type, Special category, and around 31.6% accuracy."

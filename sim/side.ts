@@ -212,7 +212,7 @@ export class Side {
 	 * In gen 1, the move and the slot are chosen during move selection
 	 * lastSelectedMove (wPlayerSelectedMove) never resets
 	 */
-	lastSelectedMove: ID = '00' as ID;
+	lastSelectedMove: ID = 'nomove' as ID;
 	/**
 	 * In gen 1, the move and the slot are chosen during move selection
 	 * lastSelectedMoveSlot (wPlayerMoveListIndex) resets on every switch
@@ -224,7 +224,7 @@ export class Side {
 	 * if the opponent switches to a Pokemon that is frozen or asleep, lastSelectedMove will not be updated,
 	 * but lastEnemySelectedMove will be updated to the move on the opponent's first slot during the next move selection.
 	 */
-	lastEnemySelectedMove: ID = '00' as ID;
+	lastEnemySelectedMove: ID = 'nomove' as ID;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		const sideScripts = battle.dex.data.Scripts.side;
