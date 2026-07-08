@@ -2493,8 +2493,12 @@ export class TeamValidator {
 		const baseCheckCanLearn = this.checkCanLearn;
 		// tell the custom move legality check that the move is illegal by default
 		this.checkCanLearn = () => problem;
-		const omVerdict = this.ruleTable.checkCanLearn[0].call(this, move, s, setSources, set);
-		this.checkCanLearn = baseCheckCanLearn;
+		let omVerdict;
+		try {
+			omVerdict = this.ruleTable.checkCanLearn[0].call(this, move, s, setSources, set);
+		} finally {
+			this.checkCanLearn = baseCheckCanLearn;
+		}
 		return omVerdict;
 	}
 
