@@ -412,7 +412,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidual: undefined, // no inherit
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
-				if (this.effectState.source.hp) this.damage(pokemon.baseMaxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 	},
