@@ -554,6 +554,7 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'oleana', 'opal', 'peony', 'pesselle', 'phoebe-gen6', 'piers', 'raihan', 'rei', 'rose', 'sabi', 'sada-ai',
 	'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert', 'tateandliza-gen6',
 	'turo-ai', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu', 'miku-flying', 'miku-ground',
+	'jacinthe', 'rainbowrocketgrunt', 'rainbowrocketgruntf',
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
@@ -644,6 +645,8 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace', 'az-lza', 'brendan-masters2', 'bugsy-masters',
 	'cynthia-masters4', 'elesa-masters3', 'elio-masters', 'erika-masters3', 'iono-masters', 'iono-masters2',
 	'lance-masters2', 'marley-masters', 'may-masters4', 'morty-masters3', 'selene-masters2', 'shauntal-masters',
+	'ansha', 'ansha-cook', 'canari', 'corbeau', 'grisham', 'gwynn', 'ivor', 'lebanne', 'phillipe', 'sbcmember',
+	'tarragon', 'taunie', 'urbain',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -737,7 +740,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
 			}
 			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/537330/">Fifty Shades of Rez</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);
@@ -769,12 +772,11 @@ export const commands: Chat.ChatCommands = {
 		const targetUser = this.broadcasting && !target ? null : this.getUserOrSelf(target);
 		const targetUserids = targetUser ? new Set([targetUser.id, ...targetUser.previousIDs]) :
 			target ? new Set([toID(target)]) : null;
-		if (targetUserids && targetUser !== user && !user.can('alts')) {
-			throw new Chat.ErrorMessage("You don't have permission to look at another user's avatars!");
-		}
 
 		const out = [];
-		if (targetUserids) {
+		if (targetUserids && (targetUser === user || user.can('alts'))) {
+			// If the user lacks permission to view avatars, the argument is ignored silently,
+			// so that it can highlight the target user.
 			const hasButton = !this.broadcasting && targetUser === user;
 			for (const id of targetUserids) {
 				const allowed = customAvatars[id]?.allowed;

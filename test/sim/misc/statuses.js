@@ -11,10 +11,11 @@ describe('Burn', () => {
 	});
 
 	it('should inflict 1/16 of max HP at the end of the turn, rounded down', () => {
-		battle = common.createBattle([
-			[{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] }],
-			[{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] },
+		], [
+			{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
+		]]);
 		const target = battle.p1.active[0];
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
@@ -45,21 +46,35 @@ describe('Burn', () => {
 	it('should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
-		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [
-			[{ species: 'Vaporeon', moves: ['growl'] }],
-			[{ species: 'Jolteon', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [[
+			{ species: 'Vaporeon', moves: ['growl'] },
+		], [
+			{ species: 'Jolteon', moves: ['willowisp'] },
+		]]);
 		const attack = battle.p1.active[0].getStat('atk');
 		battle.makeChoices('move growl', 'move willowisp');
 		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(attack * 0.5));
 	});
 
 	it('should not halve damage from moves with set damage', () => {
-		battle = common.createBattle([
-			[{ species: 'Machamp', ability: 'noguard', moves: ['seismictoss'] }],
-			[{ species: 'Talonflame', ability: 'galewings', moves: ['willowisp'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Machamp', ability: 'noguard', moves: ['seismictoss'] },
+		], [
+			{ species: 'Talonflame', ability: 'galewings', moves: ['willowisp'] },
+		]]);
 		assert.hurtsBy(battle.p2.active[0], 100, () => battle.makeChoices('move seismictoss', 'move willowisp'));
+	});
+
+	describe(`[Gen 6]`, () => {
+		it('should inflict 1/8 of max HP at the end of the turn, rounded down', () => {
+			battle = common.gen(6).createBattle([[
+				{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] },
+			], [
+				{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
+			]]);
+			const target = battle.p1.active[0];
+			assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
+		});
 	});
 });
 
@@ -102,38 +117,44 @@ describe('Paralysis', () => {
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 6', () => {
-		battle = common.gen(6).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] }] });
+		battle = common.gen(6).createBattle([[
+			{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] },
+		], [
+			{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 2', () => {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] }] });
+		battle = common.gen(2).createBattle([[
+			{ species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring'] },
+		], [
+			{ species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Stadium', () => {
-		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [
-			[{ species: 'Vaporeon', moves: ['growl'] }],
-			[{ species: 'Jolteon', moves: ['thunderwave'] }],
-		]);
+		battle = common.createBattle({ formatid: 'gen1stadiumou@@@!teampreview' }, [[
+			{ species: 'Vaporeon', moves: ['growl'] },
+		], [
+			{ species: 'Jolteon', moves: ['thunderwave'] },
+		]]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', () => {
-		battle = common.gen(1).createBattle([
-			[{ species: 'Electrode', moves: ['rest'] }],
-			[{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] }],
-		]);
+		battle = common.gen(1).createBattle([[
+			{ species: 'Electrode', moves: ['rest'] },
+		], [
+			{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] },
+		]]);
 		battle.makeChoices('move rest', 'move thunderwave');
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
@@ -141,10 +162,11 @@ describe('Paralysis', () => {
 	});
 
 	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', () => {
-		battle = common.gen(1).createBattle([
-			[{ species: 'Electrode', moves: ['rest'] }],
-			[{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] }],
-		]);
+		battle = common.gen(1).createBattle([[
+			{ species: 'Electrode', moves: ['rest'] },
+		], [
+			{ species: 'Slowpoke', moves: ['amnesia', 'thunderwave'] },
+		]]);
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move amnesia');
@@ -161,10 +183,11 @@ describe('Toxic Poison', () => {
 	});
 
 	it('should inflict 1/16 of max HP rounded down, times the number of active turns with the status, at the end of the turn', () => {
-		battle = common.createBattle([
-			[{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] }],
-			[{ species: 'Gengar', ability: 'levitate', moves: ['toxic'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] },
+		], [
+			{ species: 'Gengar', ability: 'levitate', moves: ['toxic'] },
+		]]);
 		const target = battle.p1.active[0];
 		for (let i = 1; i <= 8; i++) {
 			battle.makeChoices('move softboiled', 'move toxic');
@@ -173,10 +196,12 @@ describe('Toxic Poison', () => {
 	});
 
 	it('should reset the damage counter when the Pokemon switches out', () => {
-		battle = common.createBattle([
-			[{ species: 'Chansey', ability: 'serenegrace', moves: ['counter'] }, { species: 'Snorlax', ability: 'immunity', moves: ['curse'] }],
-			[{ species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Chansey', ability: 'serenegrace', moves: ['counter'] },
+			{ species: 'Snorlax', ability: 'immunity', moves: ['curse'] },
+		], [
+			{ species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind'] },
+		]]);
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices('move counter', 'move toxic');
 		}
@@ -184,6 +209,115 @@ describe('Toxic Poison', () => {
 		pokemon.hp = pokemon.maxhp;
 		battle.makeChoices('switch 2', 'move whirlwind');
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+	});
+
+	describe(`[Gen 2]`, () => {
+		it(`should not affect Leech Seed damage counter`, () => {
+			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Venusaur', moves: ['toxic', 'leechseed'] },
+			], [
+				{ species: 'Chansey', moves: ['splash'] },
+			]]);
+			battle.makeChoices('move toxic', 'move splash');
+			const pokemon = battle.p2.active[0];
+			assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+			battle.makeChoices('move leechseed', 'move splash');
+			// (1/16) + (2/16) + (1/8) = (5/16)
+			assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
+		});
+
+		it(`should pass the damage counter to Pokemon with Baton Pass`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash'] },
+			], [
+				{ species: 'Chansey', moves: ['splash'] },
+				{ species: 'Celebi', moves: ['batonpass', 'splash'] },
+			]]);
+
+			// Modding accuracy so the status moves always hit
+			battle.onEvent('Accuracy', battle.format, true);
+
+			battle.makeChoices('move willowisp', 'move splash');
+			const chansey = battle.p2.active[0];
+			battle.makeChoices('move toxic', 'switch 2');
+			battle.makeChoices('move splash', 'move splash');
+			battle.makeChoices('move splash', 'move splash');
+			battle.makeChoices('move splash', 'move batonpass');
+			battle.makeChoices('', 'switch 2');
+			let hp = chansey.hp;
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 4, `Chansey should have taken a lot more damage from burn`);
+
+			// Only hint about this once per battle, not every turn.
+			assert.equal(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
+
+			// Damage counter should be removed on regular switch out
+			battle.makeChoices('move splash', 'switch 2');
+			hp = chansey.hp;
+			battle.makeChoices('move splash', 'switch 2');
+			assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 8), `Chansey should have taken normal damage from burn`);
+		});
+
+		it('should revert to regular poison on switch in, even for Poison types', () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Smeargle', moves: ['toxic', 'splash'] },
+			], [
+				{ species: 'Qwilfish', moves: ['transform', 'splash'] },
+				{ species: 'Gengar', moves: ['nightshade'] },
+			]]);
+			battle.makeChoices('move toxic', 'move transform');
+			battle.makeChoices('move splash', 'switch 2');
+			battle.makeChoices('move splash', 'switch 2');
+			// We could check 'psn' at this point, but the following line caused crashes
+			// before #5463 was fixed so its useful to execute for regression testing purposes.
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(battle.p2.active[0].status, 'psn');
+		});
+
+		it('should not have its damage counter affected by Heal Bell', () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash'] },
+			], [
+				{ species: 'Chansey', moves: ['splash', 'healbell'] },
+			]]);
+
+			// Modding accuracy so the status moves always hit
+			battle.onEvent('Accuracy', battle.format, true);
+
+			battle.makeChoices('move toxic', 'move splash');
+			const chansey = battle.p2.active[0];
+			battle.makeChoices('move splash', 'move healbell');
+			battle.makeChoices('move willowisp', 'move splash');
+			let hp = chansey.hp;
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 3);
+			hp = chansey.hp;
+
+			battle.makeChoices('move splash', 'move healbell');
+			battle.makeChoices('move toxic', 'move splash');
+			// Toxic counter should be reset by a successful Toxic
+			assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16));
+		});
+	});
+
+	describe(`[Gen 1]`, () => {
+		it(`should affect Leech Seed damage counter`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Venusaur', moves: ['toxic', 'leechseed'] },
+			], [
+				{ species: 'Chansey', moves: ['splash'] },
+			]]);
+
+			// Modding accuracy so the status moves always hit
+			battle.onEvent('Accuracy', battle.format, true);
+
+			battle.makeChoices('move toxic', 'move splash');
+			const chansey = battle.p2.active[0];
+			assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16));
+			battle.makeChoices('move leechseed', 'move splash');
+			// (1/16) + (2/16) + (3/16) = (6/16)
+			assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16) * 6);
+		});
 	});
 });
 
@@ -195,10 +329,11 @@ describe('Freeze', () => {
 	it('should cause an afflicted Shaymin-Sky to revert to its base forme', () => {
 		battle = common.createBattle({
 			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Chansey', ability: 'serenegrace', moves: ['icebeam'] }],
-			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk'] }],
-		]);
+		}, [[
+			{ species: 'Chansey', ability: 'serenegrace', moves: ['icebeam'] },
+		], [
+			{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk'] },
+		]]);
 		battle.makeChoices('move icebeam', 'move sleeptalk');
 		assert.equal(battle.p2.active[0].status, 'frz');
 		assert.equal(battle.p2.active[0].species.name, 'Shaymin');
@@ -207,10 +342,11 @@ describe('Freeze', () => {
 	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', () => {
 		battle = common.createBattle({
 			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Ditto', ability: 'imposter', moves: ['transform'] }],
-			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk'] }],
-		]);
+		}, [[
+			{ species: 'Ditto', ability: 'imposter', moves: ['transform'] },
+		], [
+			{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
@@ -245,137 +381,81 @@ describe('Freeze', () => {
 		battle.makeChoices('move sacredfire', 'auto');
 		assert.equal(frozenMon.status, '');
 	});
-});
 
-describe('Burn [Gen 6]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
+	describe(`[Gen 1]`, () => {
+		it(`should cause a desync if a Pokémon attacks immediately after thawing without having attacked since its last switch`, () => {
+			// https://www.youtube.com/watch?v=iSSf4XaqGAU
+			// The game will desync if side.lastSelectedMove and the move in slot side.lastSelectedMoveSlot do not match
+			// side.lastSelectedMove never resets, while side.lastSelectedMoveSlot resets on every switch
+			// PP should be deducted from lastSelectedMoveSlot even if Desync Clause Mod is activated
 
-	it('should inflict 1/8 of max HP at the end of the turn, rounded down', () => {
-		battle = common.gen(6).createBattle([
-			[{ species: 'Machamp', ability: 'noguard', moves: ['bulkup'] }],
-			[{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] }],
-		]);
-		const target = battle.p1.active[0];
-		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
-	});
-});
+			// lastSelectedMove = '', lastSelectedMoveSlot = 0 (tackle)
+			battle = common.gen(1).createBattle({
+				customRules: 'guaranteedsecondarymod',
+			}, [[
+				{ species: 'jynx', moves: ['icepunch', 'firepunch'] },
+			], [
+				{ species: 'bulbasaur', moves: ['tackle'] },
+				{ species: 'poliwhirl', moves: ['tackle'] },
+			]]);
+			battle.makeChoices('move icepunch', 'switch 2');
+			assert.equal(battle.p2.active[0].status, 'frz');
+			assert.cantMove(() => battle.p2.choose('move tackle'));
+			battle.makeChoices('move firepunch', 'move fight');
+			assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
 
-describe('Toxic Poison [Gen 1]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
+			// lastSelectedMove = 'toxic', lastSelectedMoveSlot = 1 (toxic)
+			battle = common.gen(1).createBattle({
+				customRules: 'guaranteedsecondarymod',
+			}, [[
+				{ species: 'jynx', moves: ['tackle', 'icepunch', 'firepunch'] },
+			], [
+				{ species: 'poliwhirl', moves: ['tackle', 'toxic'] },
+			]]);
+			battle.makeChoices('move tackle', 'move tackle');
+			battle.makeChoices('move icepunch', 'move toxic');
+			assert.equal(battle.p2.active[0].status, 'frz');
+			assert.cantMove(() => battle.p2.choose('move tackle'));
+			assert.cantMove(() => battle.p2.choose('move toxic'));
+			battle.makeChoices('move firepunch', 'move fight');
+			assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
+			assert.equal(battle.p2.active[0].moveSlots[1].pp, 15);
 
-	it(`should affect Leech Seed damage counter`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Venusaur', moves: ['toxic', 'leechseed'] },
-		], [
-			{ species: 'Chansey', moves: ['splash'] },
-		]]);
+			// Player 2 lastSelectedMove = 'tackle', lastSelectedMoveSlot = 0 (tackle)
+			battle = common.gen(1).createBattle({
+				customRules: 'guaranteedsecondarymod',
+			}, [[
+				{ species: 'jynx', moves: ['tackle', 'icepunch', 'firepunch'] },
+			], [
+				{ species: 'bulbasaur', moves: ['toxic'] },
+				{ species: 'poliwhirl', moves: ['tackle'] },
+			]]);
+			battle.makeChoices('move tackle', 'move toxic');
+			battle.makeChoices('move icepunch', 'switch 2');
+			assert.equal(battle.p2.active[0].status, 'frz');
+			assert.cantMove(() => battle.p2.choose('move tackle'));
+			battle.makeChoices('move firepunch', 'move fight');
+			assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
 
-		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
-
-		battle.makeChoices('move toxic', 'move splash');
-		const chansey = battle.p2.active[0];
-		assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16));
-		battle.makeChoices('move leechseed', 'move splash');
-		// (1/16) + (2/16) + (3/16) = (6/16)
-		assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16) * 6);
-	});
-});
-
-describe('Toxic Poison [Gen 2]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
-
-	it(`should not affect Leech Seed damage counter`, () => {
-		battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
-			{ species: 'Venusaur', moves: ['toxic', 'leechseed'] },
-		], [
-			{ species: 'Chansey', moves: ['splash'] },
-		]]);
-		battle.makeChoices('move toxic', 'move splash');
-		const pokemon = battle.p2.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
-		battle.makeChoices('move leechseed', 'move splash');
-		// (1/16) + (2/16) + (1/8) = (5/16)
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
-	});
-
-	it(`should pass the damage counter to Pokemon with Baton Pass`, () => {
-		battle = common.gen(2).createBattle([[
-			{ species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash'] },
-		], [
-			{ species: 'Chansey', moves: ['splash'] },
-			{ species: 'Celebi', moves: ['batonpass', 'splash'] },
-		]]);
-
-		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
-
-		battle.makeChoices('move willowisp', 'move splash');
-		const chansey = battle.p2.active[0];
-		battle.makeChoices('move toxic', 'switch 2');
-		battle.makeChoices('move splash', 'move splash');
-		battle.makeChoices('move splash', 'move splash');
-		battle.makeChoices('move splash', 'move batonpass');
-		battle.makeChoices('', 'switch 2');
-		let hp = chansey.hp;
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 4, `Chansey should have taken a lot more damage from burn`);
-
-		// Only hint about this once per battle, not every turn.
-		assert.equal(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
-
-		// Damage counter should be removed on regular switch out
-		battle.makeChoices('move splash', 'switch 2');
-		hp = chansey.hp;
-		battle.makeChoices('move splash', 'switch 2');
-		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 8), `Chansey should have taken normal damage from burn`);
-	});
-
-	it('should revert to regular poison on switch in, even for Poison types', () => {
-		battle = common.gen(2).createBattle([
-			[{ species: 'Smeargle', moves: ['toxic', 'splash'] }],
-			[
-				{ species: 'Qwilfish', moves: ['transform', 'splash'] },
-				{ species: 'Gengar', moves: ['nightshade'] },
-			],
-		]);
-		battle.makeChoices('move toxic', 'move transform');
-		battle.makeChoices('move splash', 'switch 2');
-		battle.makeChoices('move splash', 'switch 2');
-		// We could check 'psn' at this point, but the following line caused crashes
-		// before #5463 was fixed so its useful to execute for regression testing purposes.
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(battle.p2.active[0].status, 'psn');
-	});
-
-	it('should not have its damage counter affected by Heal Bell', () => {
-		battle = common.gen(2).createBattle([[
-			{ species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash'] },
-		], [
-			{ species: 'Chansey', moves: ['splash', 'healbell'] },
-		]]);
-
-		// Modding accuracy so the status moves always hit
-		battle.onEvent('Accuracy', battle.format, true);
-
-		battle.makeChoices('move toxic', 'move splash');
-		const chansey = battle.p2.active[0];
-		battle.makeChoices('move splash', 'move healbell');
-		battle.makeChoices('move willowisp', 'move splash');
-		let hp = chansey.hp;
-		battle.makeChoices('move splash', 'move splash');
-		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 3);
-		hp = chansey.hp;
-
-		battle.makeChoices('move splash', 'move healbell');
-		battle.makeChoices('move toxic', 'move splash');
-		// Toxic counter should be reset by a successful Toxic
-		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16));
+			// Player 2 lastSelectedMove = 'tackle', lastSelectedMoveSlot = 0 (tackle)
+			battle = common.gen(1).createBattle({
+				customRules: 'guaranteedsecondarymod',
+			}, [[
+				{ species: 'jynx', moves: ['tackle', 'icepunch', 'firepunch'] },
+			], [
+				{ species: 'bulbasaur', moves: ['splash', 'splash', 'tackle'] },
+				{ species: 'poliwhirl', moves: ['tackle'] },
+			]]);
+			battle.makeChoices('move tackle', 'move tackle');
+			battle.makeChoices('move icepunch', 'switch 2');
+			assert.equal(battle.p2.active[0].status, 'frz');
+			assert.cantMove(() => battle.p2.choose('move tackle'));
+			battle.makeChoices('move firepunch', 'move fight');
+			assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
+		});
 	});
 });

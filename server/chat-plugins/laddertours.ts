@@ -87,13 +87,17 @@ export class LadderTracker {
 
 		this.deadline = date;
 		if (this.final) clearTimeout(this.final);
+		const timeDiff = (+this.deadline - Date.now()) - 500;
+		if (timeDiff >= Number.MAX_SAFE_INTEGER) {
+			throw new Chat.ErrorMessage("Deadline is too far away. Please wait and set it later.");
+		}
 		// We set the timer to fire slightly before the deadline and then
 		// repeatedly do process.nextTick checks for accuracy
 		this.final = setTimeout(() => {
 			this.stop();
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			this.captureFinalLeaderboard();
-		}, (+this.deadline - Date.now()) - 500);
+		}, timeDiff);
 
 		if (save) LadderTracker.save();
 	}

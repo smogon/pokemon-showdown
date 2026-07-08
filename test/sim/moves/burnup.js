@@ -14,10 +14,11 @@ describe('Burn Up', () => {
 		battle = common.createBattle({
 			seed: [0, 0, 0, 0],
 			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Moltres', moves: ['burnup'] }],
-			[{ species: 'Piplup', moves: ['icebeam', 'sleeptalk'] }],
-		]);
+		}, [[
+			{ species: 'Moltres', moves: ['burnup'] },
+		], [
+			{ species: 'Piplup', moves: ['icebeam', 'sleeptalk'] },
+		]]);
 		const moltres = battle.p1.active[0];
 		battle.makeChoices('move burnup', 'move icebeam');
 		assert.equal(moltres.status, 'frz');

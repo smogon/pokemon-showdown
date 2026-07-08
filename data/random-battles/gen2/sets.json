@@ -450,7 +450,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
+                "movepool": ["explosion", "icebeam", "spikes", "surf"]
             },
             {
                 "role": "Generalist",
@@ -1360,11 +1360,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },
@@ -1584,7 +1580,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["counter", "flamethrower", "healbell", "icebeam", "lightscreen", "present", "softboiled", "thunderwave", "toxic"]
+                "movepool": ["counter", "flamethrower", "healbell", "icebeam", "present", "softboiled", "thunderwave", "toxic"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1665,6 +1661,10 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "recover", "sacredfire", "thunder"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["flamethrower", "recover", "toxic", "whirlwind"]
             }
         ]
     },

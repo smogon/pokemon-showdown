@@ -185,7 +185,8 @@ export const commands: Chat.ChatCommands = {
 		try {
 			gitVersion = (await ProcessManager.exec(['git', 'rev-parse', '--short', 'HEAD'])).stdout.trim();
 		} catch {}
-		this.sendReplyBox(this.tr`Server version: <b>${version}${gitVersion ? ` (commit ${gitVersion})` : ''}</b>`);
+		this.sendReplyBox(this.tr`Server version: <b>${version}` +
+			`${gitVersion ? ` (commit <a href="https://github.com/smogon/pokemon-showdown/commits/${gitVersion}">${gitVersion}</a>)` : ''}</b>`);
 	},
 	versionhelp: [
 		`/version - Get the current server version.`,
@@ -485,6 +486,11 @@ export const commands: Chat.ChatCommands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockofflinepms: 'blockpms',
+	blockdms: 'blockpms',
+	blockdm: 'blockpms',
+	ignoredms: 'blockpms',
+	ignoredm: 'blockpms',
+	blockofflinedms: 'blockpms',
 	async blockpms(target, room, user, connection, cmd) {
 		target = target.toLowerCase().trim();
 		if (target === 'ac') target = 'autoconfirmed';
@@ -500,7 +506,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			if (!isOffline) user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff, friends, and ${target} users.`);
 		} else if (target === 'friends') {
 			if (!isOffline) user.settings.blockPMs = target;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
@@ -522,7 +528,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	blockpmshelp: [
 		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
-		`/blockpms [unlocked/ac/trusted/+/friends] - Blocks private messages except from staff and the specified group.`,
+		`/blockpms [unlocked, ac, trusted, friends, +] - Blocks PMs, except for staff, friends, and the specified group(s).`,
 	],
 
 	unblockpm: 'unblockpms',
@@ -868,7 +874,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`Battle input log re-requested.`);
 		}
 	},
-	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: ~`],
+	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: +`],
 
 	importinputlog(target, room, user, connection) {
 		this.checkCan('importinputlog');
@@ -924,7 +930,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		let resultString = Utils.escapeHTML(Teams.export(team, { hideStats }));
+		let resultString = Utils.escapeHTML(Teams.export(team, {
+			hideStats, useStatPoints: toID(battle.format).includes('champions'),
+		}));
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}

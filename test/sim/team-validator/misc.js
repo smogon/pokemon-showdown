@@ -223,7 +223,7 @@ describe('Team Validator', () => {
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 
-		// not using Dex.formats.isPokemonRule here because that includes '+pokemontag:unobtainable' and '+pokemontag:past'
+		// not using Dex.formats.isPokemonRule here because that includes '+tag:unobtainable' and '+tag:past'
 		const allowed = Array.from(ruleTable)
 			.map(([rule, source]) => (
 				// For basepokemon unbans, count all non-cosmetic formes including base forme

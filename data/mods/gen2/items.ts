@@ -5,7 +5,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackbelt: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Fighting') {
 				return damage * 1.1;
@@ -14,7 +14,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackglasses: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Dark') {
 				return damage * 1.1;
@@ -31,7 +31,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	charcoal: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Fire') {
 				return damage * 1.1;
@@ -40,7 +40,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragonfang: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 	},
 	dragonscale: {
 		inherit: true,
@@ -65,7 +65,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	hardstone: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Rock') {
 				return damage * 1.1;
@@ -106,7 +106,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 	},
 	loveball: {
 		inherit: true,
@@ -127,7 +127,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	magnet: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Electric') {
 				return damage * 1.1;
@@ -136,7 +136,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	metalcoat: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Steel') {
 				return damage * 1.1;
@@ -146,12 +146,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	metalpowder: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
-		onModifyDef() {},
-		onModifySpD() {},
+		onModifyDef: undefined, // no inherit
+		onModifySpD: undefined, // no inherit
 	},
 	miracleseed: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Grass') {
 				return damage * 1.1;
@@ -164,7 +164,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	mysticwater: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Water') {
 				return damage * 1.1;
@@ -173,7 +173,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	nevermeltice: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ice') {
 				return damage * 1.1;
@@ -182,7 +182,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Poison') {
 				return damage * 1.1;
@@ -191,7 +191,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sharpbeak: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Flying') {
 				return damage * 1.1;
@@ -200,7 +200,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silverpowder: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Bug') {
 				return damage * 1.1;
@@ -209,7 +209,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	softsand: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ground') {
 				return damage * 1.1;
@@ -218,7 +218,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spelltag: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ghost') {
 				return damage * 1.1;
@@ -241,11 +241,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	thickclub: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
-		onModifyAtk() {},
+		onModifyAtk: undefined, // no inherit
 	},
 	twistedspoon: {
 		inherit: true,
-		onModifySpA() {},
+		onModifySpA: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Psychic') {
 				return damage * 1.1;
@@ -290,7 +290,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	pinkbow: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Normal') {
 				return damage * 1.1;
@@ -300,7 +300,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	polkadotbow: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Normal') {
 				return damage * 1.1;

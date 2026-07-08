@@ -180,7 +180,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map(a => a.side.n * a.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
@@ -276,10 +276,8 @@ export class BattleActions {
 			}
 		}
 		pokemon.lastDamage = 0;
-		let lockedMove;
 		if (!externalMove) {
-			lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove();
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);
@@ -485,10 +483,13 @@ export class BattleActions {
 			}
 		}
 
-		if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-			!this.battle.runEvent('TryMove', pokemon, target, move)) {
+		let tryMoveResult = this.battle.singleEvent('TryMove', move, null, pokemon, target, move);
+		if (tryMoveResult) {
+			tryMoveResult = this.battle.runEvent('TryMove', pokemon, target, move);
+		}
+		if (!tryMoveResult) {
 			move.mindBlownRecoil = false;
-			return false;
+			return tryMoveResult;
 		}
 
 		this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
@@ -886,6 +887,7 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
+			move.lastHit = move.hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
 				damage = [damage[hit - 1]];
@@ -1136,11 +1138,16 @@ export class BattleActions {
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
-			this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			if (moveData.onAfterHit) {
+			if (this.battle.gen >= 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
+			}
+			if (moveData.onAfterHit && pokemon.hp) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
+			}
+			if (this.battle.gen < 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
@@ -1740,7 +1747,7 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;
@@ -1822,8 +1829,12 @@ export class BattleActions {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+		const bypassProtect = target.getMoveHitData(move).bypassProtect;
+		if (bypassProtect) {
 			baseDamage = this.battle.modify(baseDamage, 0.25);
+			if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+				this.battle.add('-ability', pokemon, bypassProtect.name);
+			}
 			this.battle.add('-zbroken', target);
 		}
 
@@ -1864,20 +1875,19 @@ export class BattleActions {
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
-			this.battle.ruleTable.has('+pokemontag:future')) &&
+		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+tag:past') ||
+			this.battle.ruleTable.has('+tag:future')) &&
 			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
 		if (!item.megaStone) return null;
-		// Temporary hardcode until generation shift
-		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaStone[species.name]) {
-			return item.megaStone[species.name];
-		}
+		// TODO confirm with generation shift
+		let megaEvolution = item.megaStone[species.name];
+		if (megaEvolution && this.dex.species.get(megaEvolution).gen >= 9) return megaEvolution;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
-		const megaEvolution = item.megaStone[species.baseSpecies];
+		megaEvolution = item.megaStone[species.baseSpecies];
 		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 	}
 
@@ -1925,7 +1935,7 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
-			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
 			return;
 		}
 
