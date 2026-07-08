@@ -479,7 +479,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
 			if (['frz', 'slp'].includes(pokemon.status) ||
-				(pokemon.hasAbility('truant') && pokemon.truantTurn)) return;
+				(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
 			if (pokemon.isAlly(target)) return;
 			target.addVolatile('pursuit');
 			const data = target.volatiles['pursuit'];
