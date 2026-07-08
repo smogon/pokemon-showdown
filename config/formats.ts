@@ -25,6 +25,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "surfnWOB Customs",
 	},
+	// Preserves the UUBL metagame from before Raikou and Registeel were raised to
+	// OU by tiering decision on 2026-07-08. Both are kept legal here via unbanlist.
+	{
+		name: "[Gen 3] UUBL Classic",
+		desc: "Gen 3 UUBL as it stood before Raikou and Registeel were raised to OU on July 8, 2026. Both remain legal here, preserving the classic UUBL metagame.",
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU', '!Accuracy Trap Clause'],
+		banlist: [
+			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
+			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
+		],
+		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Raikou', 'Registeel', 'Porygon2', 'Quick Claw'],
+	},
 	{
 		name: "[Gen 3] Tera",
 		desc: "Gen 3 OU with Terastallization (no Fairy type). Once per battle, per player.",
@@ -5586,7 +5599,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
 			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
 		],
-		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Raikou', 'Porygon2', 'Quick Claw'],
+		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Porygon2', 'Quick Claw'],
 	},
 	{
 		name: "[Gen 3] ZU",
