@@ -2,12 +2,17 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen4',
 	gen: 3,
 	init() {
-		const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 		let newCategory = '';
 		for (const i in this.data.Moves) {
 			if (!this.data.Moves[i]) console.log(i);
 			if (this.data.Moves[i].category === 'Status') continue;
-			newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
+			const type = this.data.Moves[i].type;
+			const typeIndex = this.modData('TypeChart', this.toID(type)).num;
+			if (typeIndex < 9) {
+				newCategory = 'Physical';
+			} else if (typeIndex > 9) {
+				newCategory = 'Special';
+			}
 			if (newCategory !== this.data.Moves[i].category) {
 				this.modData('Moves', i).category = newCategory;
 			}
