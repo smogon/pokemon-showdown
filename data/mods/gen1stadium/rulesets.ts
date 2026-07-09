@@ -2,7 +2,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	standardag: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Exact HP Mod', 'Cancel Mod',
+			'Obtainable', 'Exact HP Mod', 'Cancel Mod', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Team Preview',
 		],
 	},
 	standard: {
@@ -10,7 +10,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		name: 'Standard',
 		ruleset: [
 			'Standard AG',
-			'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause',
 		],
 	},
 	stadiumpokecuprentals: {
