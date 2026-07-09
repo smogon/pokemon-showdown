@@ -3425,6 +3425,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			aquajet: ["9M"],
 			aquatail: ["9M"],
 			assurance: ["9M"],
+			barbbarrage: ["9M"],
 			blizzard: ["9M"],
 			chillingwater: ["9M"],
 			crunch: ["9M"],
