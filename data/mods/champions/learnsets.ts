@@ -9857,6 +9857,10 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			trick: ["9M"],
 			wish: ["9M"],
 		},
+		eventData: [
+			{generation: 9, level: 72, nature: "Modest", moves: ["lightofruin", "energyball", "gigadrain", "synthesis"], pokeball: "pokeball", source: "gen9legends"},
+		],
+		eventOnly: true,
 	},
 	florges: {
 		learnset: {
