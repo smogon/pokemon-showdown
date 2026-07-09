@@ -2,9 +2,6 @@
 'use strict';
 
 const fs = require('fs');
-const child_process = require('child_process');
-
-child_process.execFileSync(process.execPath, ['build'], { stdio: 'inherit' });
 
 global.Config = { allowrequestingties: false };
 const { Battle, Dex } = require('../dist/sim');
