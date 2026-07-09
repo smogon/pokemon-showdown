@@ -122,7 +122,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return true;
 		},
-		clearVolatile(includeSwitchFlags) {
+		clearVolatile(includeSwitchFlags = true) {
 			this.boosts = {
 				atk: 0,
 				def: 0,
