@@ -4,7 +4,7 @@
 const fs = require('fs');
 
 global.Config = { allowrequestingties: false };
-const { Battle, Dex } = require('../dist/sim');
+const { Battle, Dex } = require('../../dist/sim');
 Dex.includeModData();
 
 const sides = new Set(['p1', 'p2', 'p3', 'p4']);
