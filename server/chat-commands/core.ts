@@ -874,7 +874,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`Battle input log re-requested.`);
 		}
 	},
-	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: +`],
+	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: + % @ ~`],
 
 	importinputlog(target, room, user, connection) {
 		this.checkCan('importinputlog');
