@@ -3,7 +3,7 @@
 import type { Learnset } from "../sim/dex-species";
 
 // The list of formats is stored in config/formats.js
-export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
+export const Rulesets: import('../sim/dex-formats').RulesetTable = {
 
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
@@ -564,7 +564,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 	},
 	forceselect: {
-		effectType: 'ValidatorRule',
+		effectType: 'Rule',
 		name: 'Force Select',
 		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
 		hasValue: true,
@@ -3253,8 +3253,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (this.ruleTable.adjustLevel) {
 				throw new Error(`This format's rules force Pokemon to be level ${this.ruleTable.adjustLevel}, so they can't be rebalanced.`);
 			}
-			const speciesMods = [...this.ruleTable.keys()].map(r => this.dex.data.Rulesets[r]).filter(r => r?.onModifySpecies);
-			if (!speciesMods.length) throw new Error('This format has no rules that modify base stats.');
+			const anySpeciesMods = [...this.ruleTable.keys()].some(ruleName => {
+				const rule = this.dex.data.Rulesets[ruleName];
+				return rule && rule.effectType !== 'ValidatorRule' && rule.onModifySpecies;
+			});
+			if (!anySpeciesMods) throw new Error('This format has no rules that modify base stats.');
 		},
 	},
 };

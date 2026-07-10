@@ -74,7 +74,7 @@ export interface AliasesTable { [id: IDEntry]: string }
 
 interface DexTableData {
 	Abilities: DexTable<import('./dex-abilities').AbilityData>;
-	Rulesets: DexTable<import('./dex-formats').FormatData>;
+	Rulesets: DexTable<import('./dex-formats').RulesetData>;
 	Items: DexTable<import('./dex-items').ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<import('./dex-moves').MoveData>;

@@ -125,6 +125,9 @@ export interface EventMethods {
 	onWeatherModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
+	onModifySpecies?: (
+		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
+	) => Species | void;
 	onFoeDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onFoeAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
 	onFoeAfterHit?: MoveEventMethods['onAfterHit'];
@@ -472,6 +475,7 @@ export interface EventMethods {
 	onModifySpAPriority?: number;
 	onModifySpDPriority?: number;
 	onModifySpePriority?: number;
+	onModifySpeciesPriority?: number;
 	onModifySTABPriority?: number;
 	onModifyTypePriority?: number;
 	onModifyWeightPriority?: number;
@@ -615,6 +619,14 @@ export interface FieldEventMethods extends EventMethods {
 	onFieldResidualOrder?: number;
 	onFieldResidualPriority?: number;
 	onFieldResidualSubOrder?: number;
+}
+export interface RuleEventMethods extends EventMethods {
+	onBegin?: (this: Battle) => void;
+	onBattleStart?: (this: Battle) => void;
+	onTeamPreview?: (this: Battle) => void;
+	onChooseTeam?: (
+		this: Battle, positions: number[], pokemon: Pokemon[], autoChoose?: boolean
+	) => number[] | string | void;
 }
 export interface PokemonConditionData extends Partial<Condition>, PokemonEventMethods {}
 export interface SideConditionData extends

@@ -10,7 +10,7 @@
 
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
-import type { FormatData } from '../../sim/dex-formats';
+import type { RulesetData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
 
@@ -635,8 +635,12 @@ function getRule(target: string) {
 		x => x.toLowerCase().replace(/[^a-z0-9=]+/g, '').split('rule=')[1]), count };
 }
 
-function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatData[], nationalSearch: boolean | null) {
-	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+function prepareDexsearchValidator(
+	usedMod: string | undefined,
+	rules: RulesetData[],
+	nationalSearch: boolean | null
+) {
+	const format = Dex.formats.find(f => f.mod === usedMod)?.name || 'gen9ou';
 	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 	const additionalRules = [];
 	for (const rule of rules) {
@@ -661,7 +665,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		}
 	}
 	const mod = Dex.mod(usedMod || 'base');
-	const rules: FormatData[] = [];
+	const rules: RulesetData[] = [];
 	for (const rule of usedRules) {
 		if (!dexsearchHelpRules.includes(rule))
 			return { error: `${rule} is an unsupported rule, see /dexsearchhelp` };
@@ -1316,7 +1320,8 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		) {
 			let newSpecies = species;
 			for (const rule of rules) {
-				newSpecies = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+				if (!rule || rule.effectType === 'ValidatorRule') continue;
+				newSpecies = rule.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
 					newSpecies) || newSpecies;
 			}
 			dex[newSpecies.id] = newSpecies;

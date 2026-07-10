@@ -1583,7 +1583,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky',
 			'Solgaleo', 'Terapagos', 'Urshifu-Single-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom',
 		],
-		// Implemented the mechanics as a Rule because I'm too lazy to make battles read base format for `onResidual` at the moment
 	},
 	{
 		name: "[Gen 9] Flipped",
