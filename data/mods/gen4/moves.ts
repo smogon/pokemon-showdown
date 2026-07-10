@@ -324,6 +324,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				return false;
 			},
+			onBeforeMovePriority: 8,
 			onResidualOrder: 10,
 			onResidualSubOrder: 13,
 		},
@@ -574,6 +575,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
+			onBeforeMovePriority: 5,
 			onFieldResidualOrder: 9,
 			onFieldResidualSubOrder: undefined, // no inherit
 		},
@@ -614,6 +616,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		condition: {
 			inherit: true,
+			onBeforeMovePriority: 4,
 			onResidualOrder: 10,
 			onResidualSubOrder: 17,
 			onTryHeal(damage, pokemon, source, effect) {
@@ -670,6 +673,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 			return false;
+		},
+		condition: {
+			inherit: true,
+			onFoeBeforeMovePriority: 6,
 		},
 	},
 	ingrain: {
@@ -1397,7 +1404,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 				}
 			},
-			onBeforeMovePriority: 5,
+			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
 				if (move.category === 'Status') {
 					this.add('cant', attacker, 'move: Taunt', move);

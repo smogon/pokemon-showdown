@@ -523,6 +523,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { notrace: 1 },
 	},
+	truant: {
+		inherit: true,
+		onBeforeMovePriority: 11,
+	},
 	vitalspirit: {
 		inherit: true,
 		rating: 2.5,

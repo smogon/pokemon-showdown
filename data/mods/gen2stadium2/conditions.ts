@@ -30,7 +30,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-status', target, 'par');
 			target.addVolatile('parspeeddrop');
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
@@ -57,7 +57,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onBeforeMovePriority: 10,
+		onBeforeMovePriority: 13,
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {

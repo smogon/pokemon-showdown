@@ -7,6 +7,28 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		critRatio: 3,
 	},
+	attract: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onBeforeMovePriority: 3,
+			onBeforeMove(pokemon, target, move) {
+				/**
+				 * Even though the Infatuation check happens before the Disable check
+				 * the Disable duration tick happens before both
+				 */
+				if (pokemon.volatiles['disable']?.time === 1) {
+					pokemon.removeVolatile('disable');
+				}
+
+				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
+				if (this.randomChance(1, 2)) {
+					this.add('cant', pokemon, 'Attract');
+					return false;
+				}
+			},
+		},
+	},
 	beatup: {
 		inherit: true,
 		onModifyMove(move, pokemon) {
@@ -147,6 +169,46 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSourceBasePower(basePower, target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					return this.chainModify(2);
+				}
+			},
+		},
+	},
+	disable: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback: undefined, // no inherit
+			onStart(pokemon) {
+				this.effectState.time = this.random(2, 6);
+				if (!this.queue.willMove(pokemon)) {
+					this.effectState.time!++;
+				}
+				if (!pokemon.lastMove) {
+					return false;
+				}
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === pokemon.lastMove.id) {
+						if (!moveSlot.pp) {
+							return false;
+						} else {
+							this.add('-start', pokemon, 'Disable', moveSlot.move);
+							this.effectState.move = pokemon.lastMove.id;
+							return;
+						}
+					}
+				}
+				return false;
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove(pokemon, defender, move) {
+				pokemon.volatiles['disable'].time--;
+				if (!pokemon.volatiles['disable'].time) {
+					pokemon.removeVolatile('disable');
+					return;
+				}
+				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move) {
+					this.add('cant', pokemon, 'Disable', move);
+					return false;
 				}
 			},
 		},

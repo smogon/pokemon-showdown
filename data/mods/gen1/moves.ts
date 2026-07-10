@@ -256,7 +256,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			inherit: true,
-			durationCallback: undefined, // no inherit
 			onStart(pokemon) {
 				// disable can only select moves that have pp > 0, hence the onTryHit modification
 				const [slotIndex, moveSlot] = this.sample(Array.from(pokemon.moveSlots.entries()).filter(([i, ms]) => ms.pp > 0));
@@ -267,7 +266,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// 1-8 turns (which will in effect translate to 0-7 missed turns for the target)
 				this.effectState.time = this.random(1, 9);
 			},
-			onBeforeMovePriority: 6,
+			onBeforeMovePriority: 2,
 			onBeforeMove(pokemon, target, move) {
 				pokemon.volatiles['disable'].time--;
 				if (!pokemon.volatiles['disable'].time) {

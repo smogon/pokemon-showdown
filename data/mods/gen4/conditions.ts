@@ -20,8 +20,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 	},
 	slp: {
-		name: 'slp',
-		effectType: 'Status',
+		inherit: true,
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
@@ -35,22 +34,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
-			if (pokemon.hasAbility('earlybird')) {
-				pokemon.statusState.time--;
-			}
-			pokemon.statusState.time--;
-			if (pokemon.statusState.time <= 0) {
-				pokemon.cureStatus();
-				return;
-			}
-			this.add('cant', pokemon, 'slp');
-			if (move.sleepUsable) {
-				return;
-			}
-			return false;
-		},
+		onBeforeMovePriority: 13,
 	},
 	psn: {
 		inherit: true,
@@ -61,6 +45,19 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onResidualOrder: 10,
 		onResidualSubOrder: 6,
+	},
+	frz: {
+		inherit: true,
+		onBeforeMovePriority: 12,
+		onBeforeMove(pokemon, target, move) {
+			if (this.randomChance(1, 5)) {
+				pokemon.cureStatus();
+				return;
+			}
+			if (move.flags['defrost']) return;
+			this.add('cant', pokemon, 'frz');
+			return false;
+		},
 	},
 	confusion: {
 		inherit: true,
@@ -84,17 +81,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 	},
-	frz: {
+	flinch: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
-			if (this.randomChance(1, 5)) {
-				pokemon.cureStatus();
-				return;
-			}
-			if (move.flags['defrost']) return;
-			this.add('cant', pokemon, 'frz');
-			return false;
-		},
+		onBeforeMovePriority: 9,
 	},
 	substitutebroken: {
 		noCopy: true,
@@ -126,6 +115,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (!pokemon.lastMove) return false;
 			this.effectState.move = pokemon.lastMove.id;
 		},
+	},
+	mustrecharge: {
+		inherit: true,
+		onBeforeMovePriority: 10,
 	},
 	futuremove: {
 		inherit: true,
