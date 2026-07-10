@@ -395,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		if (!user.can('alts') && !atLeastOne) {
 			const hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
 			if (!hasJurisdiction) {
-				throw new Chat.ErrorMessage("/checkpunishment - User not found.");
+				throw new Chat.ErrorMessage("/checkpunishment - You have no jurisdiction over this user.");
 			}
 		}
 
