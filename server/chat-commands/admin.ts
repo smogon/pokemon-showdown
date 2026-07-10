@@ -60,8 +60,12 @@ function keysToCopy(obj: object) {
 	);
 }
 
+function assertUnreachable(j: never): never {
+	throw new Error(`Unreachable case: ${JSON.stringify(j)}`);
+}
+
 /**
- * @returns {boolean} Whether or not the rebase failed
+ * @returns {boolean | null} Whether or not the rebase failed
  */
 async function updateserver(context: Chat.CommandContext, codePath: string) {
 	const exec = (command: string) => bash(command, context, codePath);
@@ -69,7 +73,7 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
 
 	let [code, stdout, stderr] = await exec(`git fetch`);
-	if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
+	if (code) return null;
 	if (!stdout && !stderr) {
 		context.sendReply(`There were no updates.`);
 		Monitor.updateServerLock = false;
@@ -605,17 +609,21 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("Wait for /updateserver to finish before hotpatching.");
 		}
 
-		await this.parse(`/rebuild`);
+		const [component, modifier] = this.splitOne(target).map(toID);
+
+		if (Config.rebuildcommands?.['hotpatch'] && modifier !== 'nobuild') {
+			await this.parse('/rebuild');
+		}
+
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
 			'processmanager', 'roomsp', 'usersp',
 		];
 
-		target = toID(target);
 		try {
 			Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
-			if (target === 'all') {
+			if (component === 'all') {
 				if (lock['all']) {
 					throw new Chat.ErrorMessage(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
 				}
@@ -623,10 +631,10 @@ export const commands: Chat.ChatCommands = {
 					throw new Chat.ErrorMessage("This server does not allow for the use of /hotpatch all");
 				}
 
-				for (const hotpatch of hotpatches) {
-					await this.parse(`/hotpatch ${hotpatch}`);
+				for (const comp of hotpatches) {
+					await this.parse(`/hotpatch ${comp}, ${modifier}`);
 				}
-			} else if (target === 'chat' || target === 'commands') {
+			} else if (component === 'chat' || component === 'commands') {
 				if (lock['tournaments']) {
 					throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
@@ -655,7 +663,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Reloading chat plugins...");
 				Chat.loadPlugins(oldPlugins);
 				this.sendReply("DONE");
-			} else if (target === 'processmanager') {
+			} else if (component === 'processmanager') {
 				if (lock['processmanager']) {
 					throw new Chat.ErrorMessage(
 						`Hot-patching formats has been disabled by ${lock['processmanager'].by} ` +
@@ -693,12 +701,12 @@ export const commands: Chat.ChatCommands = {
 					}
 				}
 				this.sendReply('DONE');
-			} else if (target === 'usersp' || target === 'roomsp') {
-				if (lock[target]) {
-					throw new Chat.ErrorMessage(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
+			} else if (component === 'usersp' || component === 'roomsp') {
+				if (lock[component]) {
+					throw new Chat.ErrorMessage(`Hot-patching ${component} has been disabled by ${lock[component].by} (${lock[component].reason})`);
 				}
 				let newProto: any, oldProto: any, message: string;
-				switch (target) {
+				switch (component) {
 				case 'usersp':
 					newProto = require('../users').User.prototype;
 					oldProto = Users.User.prototype;
@@ -709,6 +717,8 @@ export const commands: Chat.ChatCommands = {
 					oldProto = Rooms.BasicRoom.prototype;
 					message = 'rooms prototypes';
 					break;
+				default:
+					assertUnreachable(component as unknown as never);
 				}
 
 				this.sendReply(`Hotpatching ${message}...`);
@@ -745,7 +755,7 @@ export const commands: Chat.ChatCommands = {
 					(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
 					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
 				);
-			} else if (target === 'tournaments') {
+			} else if (component === 'tournaments') {
 				if (lock['tournaments']) {
 					throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
@@ -754,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 				global.Tournaments = require('../tournaments').Tournaments;
 				Chat.loadPlugin(Tournaments, 'tournaments');
 				this.sendReply("DONE");
-			} else if (target === 'formats' || target === 'battles') {
+			} else if (component === 'formats' || component === 'battles') {
 				if (lock['formats']) {
 					throw new Chat.ErrorMessage(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				}
@@ -781,12 +791,12 @@ export const commands: Chat.ChatCommands = {
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
-			} else if (target === 'loginserver') {
+			} else if (component === 'loginserver') {
 				this.sendReply("Hotpatching loginserver...");
 				FS('config/custom.css').unwatch();
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("DONE. New login server requests will use the new code.");
-			} else if (target === 'learnsets' || target === 'validator') {
+			} else if (component === 'learnsets' || component === 'validator') {
 				if (lock['validator']) {
 					throw new Chat.ErrorMessage(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				}
@@ -799,7 +809,7 @@ export const commands: Chat.ChatCommands = {
 				// update teams global too while we're at it
 				global.Teams = require('../../sim/teams').Teams;
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
-			} else if (target === 'punishments') {
+			} else if (component === 'punishments') {
 				if (lock['punishments']) {
 					throw new Chat.ErrorMessage(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				}
@@ -807,13 +817,13 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching punishments...");
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("DONE");
-			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
+			} else if (component === 'dnsbl' || component === 'datacenters' || component === 'iptools') {
 				this.sendReply("Hotpatching ip-tools...");
 
 				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
-			} else if (target === 'modlog') {
+			} else if (component === 'modlog') {
 				if (!Config.usesqlite) {
 					throw new Chat.ErrorMessage(`The moderator log is not available because SQLite is disabled.`);
 				}
@@ -832,7 +842,7 @@ export const commands: Chat.ChatCommands = {
 				// eslint-disable-next-line @typescript-eslint/await-thenable
 				await Rooms.Modlog.readyPromise;
 				this.sendReply("DONE");
-			} else if (target.startsWith('disable')) {
+			} else if (component.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
 				return this.parse('/help nohotpatch');
 			} else {
@@ -841,13 +851,13 @@ export const commands: Chat.ChatCommands = {
 		} catch (e: any) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
-				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${component} - but something failed while trying to hot-patch.`
 			);
-			throw new Chat.ErrorMessage([`Something failed while trying to hot-patch ${target}:`, e.stack]);
+			throw new Chat.ErrorMessage([`Something failed while trying to hot-patch ${component}:`, e.stack]);
 		}
 		Rooms.global.notifyRooms(
 			['development', 'staff'] as RoomID[],
-			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
+			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${component}`
 		);
 	},
 	hotpatchhelp: [
@@ -863,7 +873,8 @@ export const commands: Chat.ChatCommands = {
 		`/hotpatch tournaments - reloads new tournaments code`,
 		`/hotpatch modlog - reloads new modlog code`,
 		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, modlog, and dnsbl`,
-		`/forcehotpatch [target] - as above, but performs the update regardless of whether the history has changed in git`,
+		`/hotpatch [component], nobuild - as above, but does not trigger rebuild`,
+		`/forcehotpatch [component] - as above, but performs the update regardless of whether the history has changed in git`,
 	],
 
 	hotpatchlock: 'nohotpatch',
@@ -1363,7 +1374,7 @@ export const commands: Chat.ChatCommands = {
 		target = toID(target);
 		Monitor.updateServerLock = true;
 
-		let success = true;
+		let success: boolean | null = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
 				Monitor.updateServerLock = false;
@@ -1379,7 +1390,14 @@ export const commands: Chat.ChatCommands = {
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
+		if (success !== null) {
+			this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
+		}
+		if (Config.rebuildcommands?.['updateserver']) {
+			await this.parse('/rebuild');
+		} else if (success === null) {
+			this.sendReply(`FAILED, this is not a Git repository`);
+		}
 
 		Monitor.updateServerLock = false;
 	},
@@ -1455,7 +1473,12 @@ export const commands: Chat.ChatCommands = {
 
 	async rebuild() {
 		this.canUseConsole();
+		if (Monitor.rebuildLock) {
+			throw new Chat.ErrorMessage(`Wait for the current rebuild to finish before rebuilding.`);
+		}
+		Monitor.rebuildLock = true;
 		const [, , stderr] = await bash('node ./build', this);
+		Monitor.rebuildLock = false;
 		if (stderr) {
 			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 		}
