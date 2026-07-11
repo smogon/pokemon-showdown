@@ -1572,6 +1572,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	magcargomega: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	swinub: {
 		tier: "LC",
 	},

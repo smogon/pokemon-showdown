@@ -8,18 +8,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	mewtwonitey: { inherit: true, gen: 3, isNonstandard: null },
 
 	// Gen 2
-	magcargoite: {
-		name: "Magcargoite",
-		spritenum: 762,
-		megaStone: { "Magcargo": "Magcargo-Mega" },
-		itemUser: ["Magcargo"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
-		},
-		num: 2651,
-		gen: 3,
-		isNonstandard: null,
-	},
+	magcargoite: { inherit: true, gen: 3, isNonstandard: null },
 
 	// Gen 3
 	blazikenite: { inherit: true, gen: 3, isNonstandard: null },

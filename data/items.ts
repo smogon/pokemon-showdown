@@ -3682,6 +3682,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 323,
 		gen: 4,
 	},
+	magcargoite: {
+		name: "Magcargoite",
+		spritenum: 762,
+		megaStone: { "Magcargo": "Magcargo-Mega" },
+		itemUser: ["Magcargo"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2651,
+		gen: 9,
+		isNonstandard: "Future",
+	},
 	magnet: {
 		name: "Magnet",
 		spritenum: 273,

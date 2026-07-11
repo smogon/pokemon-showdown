@@ -28,19 +28,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 
 	// === GENERATION 2 ===
 	magcargomega: {
-		num: 219,
+		inherit: true,
 		gen: 3,
-		name: "Magcargo-Mega",
-		baseSpecies: "Magcargo",
-		forme: "Mega",
-		types: ["Fire", "Rock"],
-		baseStats: { hp: 80, atk: 90, def: 125, spa: 90, spd: 125, spe: 30 },
-		abilities: { 0: "Drought" },
-		heightm: 0.8,
-		weightkg: 55,
-		color: "Red",
-		eggGroups: ["Amorphous"],
-		requiredItem: "Magcargoite",
+		isNonstandard: null,
 	},
 
 	// === GENERATION 3 ===

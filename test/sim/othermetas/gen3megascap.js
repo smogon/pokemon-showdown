@@ -14,8 +14,10 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.equal(capDex.species.get('magcargomega').tier, 'OU');
 		assert.equal(capDex.items.get('magcargoite').megaStone.Magcargo, 'Magcargo-Mega');
 		assert.equal(capDex.species.get('zangoose').tier, 'OU');
-		assert(!megaDex.species.get('magcargomega').exists, 'Mega Magcargo must not be added to [Gen 3] Megas');
-		assert(!megaDex.items.get('magcargoite').exists, 'Magcargoite must not be added to [Gen 3] Megas');
+		assert.equal(megaDex.species.get('magcargomega').isNonstandard, 'Future',
+			'Mega Magcargo must remain unavailable in [Gen 3] Megas');
+		assert.equal(megaDex.items.get('magcargoite').isNonstandard, 'Future',
+			'Magcargoite must remain unavailable in [Gen 3] Megas');
 		assert.equal(megaDex.species.get('zangoose').tier, 'UU');
 	});
 
