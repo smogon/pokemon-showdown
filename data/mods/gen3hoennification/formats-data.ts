@@ -1450,13 +1450,13 @@ export const FormatsData: { [k: string]: AnyObject } = {
 		tier: "OU",
 	},
 	latias: {
-		tier: "Uber",
+		tier: "OU",
 	},
 	latiasmega: {
 		tier: "Uber",
 	},
 	latios: {
-		tier: "Uber",
+		tier: "OU",
 	},
 	latiosmega: {
 		tier: "Uber",
@@ -3070,7 +3070,7 @@ export const FormatsData: { [k: string]: AnyObject } = {
 		tier: "Uber",
 	},
 	xurkitree: {
-		tier: "Uber",
+		tier: "OU",
 	},
 	celesteela: {
 		tier: "OU",
