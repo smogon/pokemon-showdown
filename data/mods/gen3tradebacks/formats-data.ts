@@ -165,7 +165,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	dugtrio: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	meowth: {
 		tier: "LC",
