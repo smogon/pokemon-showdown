@@ -87,13 +87,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 3] Megas CAP",
-		desc: "Gen 3 OU with the CAP Mega Evolution and Primal Reversion roster (no Fairy type, no Mega Rayquaza).",
-		mod: 'gen3megascap',
-		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
-	},
-	{
 		name: "[Gen 3] Megas Ubers",
 		desc: "Gen 3 Megas with Ubers unbanned. Only AG-tier Megas (Mega Salamence) stay banned.",
 		mod: 'gen3mega',
@@ -383,6 +376,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			this.add('rule', 'Self-KO Clause: If your last Pok\u00e9mon faints to a self-KO move or effect, you will lose the battle');
 		},
+	},
+
+	// Archie Madness
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Archie Madness",
+	},
+	{
+		name: "[Gen 3] Megas CAP",
+		desc: "Gen 3 OU with the CAP Mega Evolution and Primal Reversion roster (no Fairy type, no Mega Rayquaza).",
+		mod: 'gen3megascap',
+		searchShow: true,
+		rated: true,
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 
 	// Other
