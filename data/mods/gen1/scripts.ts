@@ -864,6 +864,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
 
+			if (move.damageCallback && move.id === 'counter') {
+				return move.damageCallback.call(this.battle, source, target);
+			}
+
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
 				attack = attacker.getStat(atkType, true);
