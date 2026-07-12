@@ -615,4 +615,51 @@ describe('Fork customs', () => {
 			`got Slaking ${slakingHit} vs Chansey ${chanseyHit} — equal damage means it used the ` +
 			`user's own Attack (the regression)`);
 	});
+
+	it('gen3 doubles Ubers: the doubles/AG Megas cluster + non-Mega [Gen 3] Ubers Doubles register and enforce their tiers', () => {
+		// The doubles/AG Megas formats (gen3mega) and the non-Mega [Gen 3] Ubers Doubles (gen3)
+		// live in the surfnWOB Customs section. Pin registration, mod, gameType, and the tier
+		// seams: Megas Doubles bans Ubers; Megas Ubers Doubles unbans them (only AG stays); the
+		// AG formats allow AG-tier M-Salamence. Both Ubers Doubles formats leave Explosion and
+		// Self-Destruct legal (the doubles-OU self-KO ban was deliberately lifted here).
+		const formats = {
+			megasdoubles: { mod: 'gen3mega', gameType: 'doubles' },
+			megasubersdoubles: { mod: 'gen3mega', gameType: 'doubles' },
+			megasag: { mod: 'gen3mega', gameType: 'singles' },
+			megasagdoubles: { mod: 'gen3mega', gameType: 'doubles' },
+			ubersdoubles: { mod: 'gen3', gameType: 'doubles' },
+		};
+		for (const [id, { mod, gameType }] of Object.entries(formats)) {
+			const format = Dex.formats.get(`gen3${id}`, true);
+			assert(format.exists, `${id} must be registered`);
+			assert.equal(format.section, 'surfnWOB Customs', `${format.name} must sit in the buildable surfnWOB Customs section`);
+			assert.equal(format.mod, mod, `${format.name} must run on the ${mod} mod`);
+			assert.equal(format.gameType, gameType, `${format.name} must use ${gameType}`);
+			Dex.formats.getRuleTable(format); // throws if a ruleset/banlist reference breaks
+		}
+
+		const { TeamValidator } = require('./../../../dist/sim/team-validator');
+		const medicham = { species: 'Medicham', ability: 'Pure Power', item: 'medichamite', moves: ['brickbreak', 'shadowball', 'calmmind', 'rest'], evs: { hp: 4 }, level: 100 };
+		const salamence = { species: 'Salamence', ability: 'Intimidate', item: 'salamencite', moves: ['dragondance', 'earthquake', 'rockslide', 'doubleedge'], evs: { hp: 4 }, level: 100 };
+		const partner = { species: 'Snorlax', ability: 'Thick Fat', moves: ['bodyslam'], evs: { hp: 4 }, level: 100 };
+
+		// Megas Doubles bans the Uber tier (M-Medicham is Uber)...
+		const doublesErrors = TeamValidator.get('gen3megasdoubles').validateTeam([medicham, partner]);
+		assert(doublesErrors && doublesErrors.some(e => /Uber/.test(e)), `expected M-Medicham (Uber) banned from Megas Doubles, got: ${JSON.stringify(doublesErrors)}`);
+		// ...Megas Ubers Doubles unbans it (only AG stays banned).
+		assert.legalTeam([medicham, partner], 'gen3megasubersdoubles');
+		// The AG formats allow AG-tier M-Salamence in both singles and doubles.
+		assert.legalTeam([salamence], 'gen3megasag');
+		assert.legalTeam([salamence, partner], 'gen3megasagdoubles');
+
+		// The Explosion/Self-Destruct unban holds in BOTH Ubers Doubles formats.
+		assert.legalTeam([
+			{ species: 'Metagross', ability: 'Clear Body', moves: ['meteormash', 'earthquake', 'explosion', 'protect'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Snorlax', ability: 'Thick Fat', moves: ['selfdestruct', 'bodyslam', 'curse', 'protect'], evs: { hp: 4 }, level: 100 },
+		], 'gen3megasubersdoubles');
+		assert.legalTeam([
+			{ species: 'Kyogre', ability: 'Drizzle', moves: ['waterspout', 'thunder', 'icebeam', 'protect'], evs: { hp: 4 }, level: 100 },
+			{ species: 'Metagross', ability: 'Clear Body', moves: ['meteormash', 'earthquake', 'explosion', 'protect'], evs: { hp: 4 }, level: 100 },
+		], 'gen3ubersdoubles');
+	});
 });
