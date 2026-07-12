@@ -20,11 +20,18 @@ not expose hidden item, ability, Tera type, or moves in player mode. The binary
 values. `encodeOmniscientBattleState` is only for simulator diagnostics and
 determinized search; it must not be used as a player's policy/value observation.
 
-Player mode currently encodes a privacy-safe snapshot. Inactive opponent details
-that cannot be reconstructed safely from the live simulator object are marked
-unknown, even if they were revealed earlier. A protocol-backed observation
-tracker must be added before treating this snapshot as a complete information
-state for policy training.
+Player mode's direct `Battle` encoder is a privacy-safe snapshot. Inactive
+opponent details that cannot be reconstructed safely from the live simulator
+object are marked unknown, even if they were revealed earlier.
+
+For a complete player information state, construct a
+`Gen9RandomBattleObservationTracker` for `p1` or `p2` and pass it every chunk
+from the matching stream returned by `getPlayerStreams`. `receive` returns an
+observation when the chunk contains a new choice request; `encode` returns the
+latest observation at any later point. The tracker only consumes public battle
+messages and that player's private request, retaining revealed opponent facts
+across switches without reading the simulator's hidden state. Its
+`decodeAction` method maps a legal policy index back to a simulator command.
 
 ## Updating the schema
 

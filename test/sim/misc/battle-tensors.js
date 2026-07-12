@@ -11,9 +11,11 @@ const {
 	decodeGen9RandomBattleAction,
 	encodeBattleState,
 	encodeOmniscientBattleState,
+	Gen9RandomBattleObservationTracker,
 	GEN9_RANDOM_BATTLE_ACTION_LABELS,
 	GEN9_RANDOM_BATTLE_TENSOR_MANIFEST,
 } = Sim;
+const { extractChannelMessages } = require('./../../../dist/sim/battle');
 
 const TEAMS = [[
 	{
@@ -174,5 +176,96 @@ describe('Gen 9 Random Battle tensors', () => {
 		const unsupported = common.createBattle({ preview: false }, TEAMS);
 		assert.throws(() => encodeBattleState(unsupported, 'p1'), /does not support format/);
 		unsupported.destroy();
+	});
+});
+
+describe('Gen 9 Random Battle protocol observations', () => {
+	let battle;
+	let tracker;
+	let logPosition;
+
+	function flush(request = true) {
+		const log = battle.log.slice(logPosition).join('\n');
+		logPosition = battle.log.length;
+		if (log) tracker.receive(extractChannelMessages(log, [1])[1].join('\n'));
+		return request ? tracker.receive(`|request|${JSON.stringify(battle.p1.activeRequest)}`) : null;
+	}
+
+	beforeEach(() => {
+		battle = common.createBattle({ formatid: 'gen9randombattle' }, TEAMS);
+		tracker = new Gen9RandomBattleObservationTracker('p1');
+		logPosition = 0;
+	});
+	afterEach(() => {
+		battle.destroy();
+		battle = null;
+	});
+
+	it('should build the stable tensor contract and decode actions from player protocol', () => {
+		const encoded = flush();
+		assert(encoded);
+		assert.deepEqual(encoded.continuous.shape, [186]);
+		assert.deepEqual(encoded.categorical.shape, [147]);
+		assert.deepEqual(encoded.binary.shape, [301]);
+		assert.deepEqual([...encoded.actionMask.data], [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0]);
+		assert.equal(tracker.decodeAction(0), 'move softboiled');
+		assert.equal(tracker.decodeAction(4), 'move softboiled terastallize');
+		assert.equal(tracker.decodeAction(9), 'switch 2');
+		assert.throws(() => tracker.decodeAction(8), /Illegal/);
+	});
+
+	it('should retain opponent knowledge after switches', () => {
+		flush();
+		battle.makeChoices('move protect', 'move bodyslam');
+		flush();
+		battle.makeChoices('move protect', 'switch 2');
+		const encoded = flush();
+
+		const snorlaxActive = indexOf(encoded.binary, 'foe.slot1.active');
+		const snorlaxMove = indexOf(encoded.categorical, 'foe.slot1.move1.id');
+		const snorlaxMoveRevealed = indexOf(encoded.binary, 'foe.slot1.move1.revealed');
+		const mewActive = indexOf(encoded.binary, 'foe.slot2.active');
+		assert.equal(encoded.binary.data[snorlaxActive], 0);
+		assert.equal(encoded.categorical.data[snorlaxMove],
+			GEN9_RANDOM_BATTLE_TENSOR_MANIFEST.vocabularies.moves.indexOf('bodyslam'));
+		assert.equal(encoded.binary.data[snorlaxMoveRevealed], 1);
+		assert.equal(encoded.binary.data[mewActive], 1);
+	});
+
+	it('should track public reveals and lower-bound durations without private state', () => {
+		flush();
+		tracker.receive([
+			'|-ability|p2a: Snorlax|Thick Fat',
+			'|-item|p2a: Snorlax|Leftovers',
+			'|-weather|RainDance|[from] move: Rain Dance',
+		].join('\n'));
+		let encoded = tracker.encode();
+		assert(encoded.categorical.data[indexOf(encoded.categorical, 'foe.slot1.ability')] > 1);
+		assert(encoded.categorical.data[indexOf(encoded.categorical, 'foe.slot1.item')] > 1);
+		assert.equal(encoded.continuous.data[indexOf(encoded.continuous, 'battle.weatherDuration')], 5 / 8);
+
+		tracker.receive('|upkeep\n|upkeep\n|upkeep\n|upkeep\n|upkeep');
+		encoded = tracker.encode();
+		assert.equal(encoded.continuous.data[indexOf(encoded.continuous, 'battle.weatherDuration')], 3 / 8);
+	});
+
+	it('should correct an apparent known switch-in when Illusion is revealed', () => {
+		flush();
+		tracker.receive('|switch|p2a: Snorlax|Snorlax, L80|100/100');
+		tracker.receive('|move|p2a: Snorlax|Knock Off|p1a: Blissey');
+		tracker.receive('|replace|p2a: Zoroark|Zoroark, L80|100/100');
+		const encoded = tracker.encode();
+
+		assert.equal(encoded.binary.data[indexOf(encoded.binary, 'foe.slot1.active')], 0);
+		assert.equal(encoded.binary.data[indexOf(encoded.binary, 'foe.slot2.active')], 1);
+		const zoroark = GEN9_RANDOM_BATTLE_TENSOR_MANIFEST.vocabularies.species.indexOf('zoroark');
+		assert.equal(encoded.categorical.data[indexOf(encoded.categorical, 'foe.slot2.species')], zoroark);
+		assert.equal(encoded.binary.data[indexOf(encoded.binary, 'foe.slot2.move1.revealed')], 1);
+	});
+
+	it('should reject unsupported metadata and encoding before initialization', () => {
+		assert.throws(() => tracker.encode(), /before receiving a choice request/);
+		assert.throws(() => tracker.receive('|gen|8'), /unsupported generation/);
+		assert.throws(() => tracker.receive('|gametype|doubles'), /unsupported game type/);
 	});
 });

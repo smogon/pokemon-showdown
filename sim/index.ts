@@ -24,6 +24,7 @@ export {
 	type Gen9RandomBattleTensorManifest,
 } from './battle-tensors';
 export { BattleStream, getPlayerStreams } from './battle-stream';
+export { Gen9RandomBattleObservationTracker } from './battle-observation';
 export { Pokemon } from './pokemon';
 export { PRNG } from './prng';
 export { Side } from './side';
