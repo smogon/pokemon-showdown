@@ -32,10 +32,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		banlist: ['Mythical', 'Restricted Legendary'],
 	},
 	standardcustomgame: {
-		effectType: 'ValidatorRule',
-		name: 'Standard Custom Game',
-		desc: "The standard ruleset for all Custom Game formats",
-		// no restrictions, for serious (other than team preview)
+		inherit: true,
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
 	},
 	teampreview: {
