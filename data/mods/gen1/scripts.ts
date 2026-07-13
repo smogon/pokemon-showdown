@@ -874,7 +874,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (isCrit) {
 				move.ignoreOffensive = true;
 				move.ignoreDefensive = true;
-				level *= 2;
+				level = ((level * 2) % 256 + 256) % 256;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
 
