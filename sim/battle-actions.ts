@@ -259,6 +259,10 @@ export class BattleActions {
 		if (!willTryMove) {
 			this.battle.runEvent('MoveAborted', pokemon, target, move);
 			this.battle.clearActiveMove(true);
+			if (this.battle.gen <= 4) {
+				// clear Copycat's flag
+				this.battle.lastMove = null;
+			}
 			// The event 'BeforeMove' could have returned false or null
 			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
 			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
