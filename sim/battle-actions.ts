@@ -108,7 +108,7 @@ export class BattleActions {
 
 			let lastMove = null;
 			let lastMoveSketch = null;
-			if (sourceEffect && !isDrag) {
+			if (sourceEffect) {
 				if (this.battle.gen === 3) lastMoveSketch = oldActive.lastMoveSketch;
 				if (this.battle.gen === 4) lastMove = oldActive.lastMove;
 			}
