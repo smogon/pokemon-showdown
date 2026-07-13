@@ -173,7 +173,7 @@ const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
-const PM = SQL('chat-db', module, {
+const database = SQL('chat-db', module, {
 	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
 });
 
@@ -1561,7 +1561,12 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
+	readonly destroyHandlers: (() => void)[] = [
+		Artemis.destroy,
+		Friends.destroy,
+		() => void database.destroy(),
+		() => Chat.PrivateMessages.destroy(),
+	];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1821,7 +1826,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = PM;
+	database = database;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -1857,11 +1862,6 @@ export const Chat = new class {
 		for (const { file } of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
-
-		Chat.destroyHandlers.push(
-			() => void Chat.database?.destroy(),
-			() => Chat.PrivateMessages.destroy(),
-		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -2721,7 +2721,7 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-if (!PM.isParentProcess) {
+if (!database.isParentProcess) {
 	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
@@ -2736,12 +2736,12 @@ if (!PM.isParentProcess) {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
 	// eslint-disable-next-line no-eval
-	PM.startRepl(cmd => eval(cmd));
+	database.startRepl(cmd => eval(cmd));
 }
 
 function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (Config.usesqlite) {
-		PM.spawn(processCount['chatdb'] ?? 1);
+		database.spawn(processCount['chatdb'] ?? 1);
 		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
 	Chat.PrivateMessages.start(processCount);
