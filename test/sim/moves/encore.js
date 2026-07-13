@@ -199,9 +199,9 @@ describe('Encore', () => {
 		it(`should fail against a Pokemon that spent turns asleep after its last move`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'Persian', moves: ['tackle'] },
-		], [
-			{ species: 'Parasect', moves: ['spore', 'encore'] },
-		]]);
+			], [
+				{ species: 'Parasect', moves: ['spore', 'encore'] },
+			]]);
 			battle.makeChoices('move tackle', 'move spore');
 			battle.makeChoices('move tackle', 'move encore');
 			assert.false(battle.p1.active[0].volatiles['encore']);
