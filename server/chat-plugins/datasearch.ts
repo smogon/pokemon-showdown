@@ -11,7 +11,6 @@
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
-import { TeamValidator } from '../../sim/team-validator';
 
 interface DexOrGroup {
 	abilities: { [k: string]: boolean };
@@ -3111,6 +3110,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../sim/dex').Dex;
+	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 	global.toID = Dex.toID;
 	Dex.includeData();
 

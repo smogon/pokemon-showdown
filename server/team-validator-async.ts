@@ -103,6 +103,8 @@ if (!PM.isParentProcess) {
 	PM.startRepl((cmd: string) => eval(cmd));
 }
 
+export { TeamValidator };
+
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['validator'] ?? 1);
 }

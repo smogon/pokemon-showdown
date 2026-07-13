@@ -609,13 +609,17 @@ export const commands: Chat.ChatCommands = {
 		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
-			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
+			'formats', 'chat', 'loginserver', 'punishments', 'dnsbl', 'modlog',
 			'processmanager', 'roomsp', 'usersp',
 		];
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
+			const exclude = ['/lib/process-manager'];
+			if (!['all', 'formats', 'battles', 'validator', 'learnsets'].includes(target)) {
+				exclude.push('/sim/');
+			}
+			Utils.clearRequireCache({ exclude });
 			// Node retains `module.parent`, which means each hotpatch refers to the `admin.ts`
 			// from the hotpatch before it in an unbroken chain through every hotpatch,
 			// preventing any of them from being GC'd. There's no way to break this reference,
@@ -686,7 +690,7 @@ export const commands: Chat.ChatCommands = {
 					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
 					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
 					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
-					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
+					[ProcessManager.RawProcessWrapper, newPM.RawProcessWrapper],
 				].map(part => part.map(constructor => constructor.prototype));
 
 				for (const [oldProto, newProto] of protos) {
@@ -777,6 +781,7 @@ export const commands: Chat.ChatCommands = {
 
 				// reload .sim-dist/dex.js
 				global.Dex = reRequire('../../sim/dex').Dex;
+				global.TeamValidator = reRequire('../../sim/team-validator').TeamValidator;
 				// rebuild the formats list
 				Rooms.global.formatList = '';
 				// respawn validator processes
@@ -805,6 +810,7 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReply("Hotpatching validator...");
 				void TeamValidatorAsync.PM.respawn();
+				// don't update the same-process TeamValidator; that one gets hotpatched with Dex
 				// update teams global too while we're at it
 				global.Teams = reRequire('../../sim/teams').Teams;
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
