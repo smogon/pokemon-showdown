@@ -169,6 +169,7 @@ export class Pokemon {
 	lastMove: ActiveMove | null;
 	// Gen 2 only
 	lastMoveEncore?: ActiveMove | null;
+	lastMoveSketch?: ActiveMove | null;
 	lastMoveUsed: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
@@ -461,6 +462,8 @@ export class Pokemon {
 		this.lastMove = null;
 		// This is used in gen 2 only
 		this.lastMoveEncore = null;
+		// This is used in gens 3 and 4 only
+		this.lastMoveSketch = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
@@ -914,6 +917,7 @@ export class Pokemon {
 			this.lastMoveEncore = null;
 		} else {
 			this.lastMove = move;
+			this.lastMoveSketch = move;
 			if (this.battle.gen === 2) this.lastMoveEncore = move;
 		}
 		this.lastMoveTargetLoc = targetLoc;
@@ -1546,6 +1550,7 @@ export class Pokemon {
 
 		this.lastMove = null;
 		this.lastMoveEncore = null;
+		this.lastMoveSketch = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.moveLastTurnResult = undefined;

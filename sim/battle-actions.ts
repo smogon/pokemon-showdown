@@ -106,14 +106,17 @@ export class BattleActions {
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
 
-			let newMove = null;
-			if (this.battle.gen === 4 && sourceEffect) {
-				newMove = oldActive.lastMove;
+			let lastMove = null;
+			let lastMoveSketch = null;
+			if (sourceEffect && !isDrag) {
+				if (this.battle.gen === 3) lastMoveSketch = oldActive.lastMoveSketch;
+				if (this.battle.gen === 4) lastMove = oldActive.lastMove;
 			}
 			if (switchCopyFlag) {
 				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 			}
-			if (newMove) pokemon.lastMove = newMove;
+			if (lastMove) pokemon.lastMove = this.battle.lastMove;
+			if (lastMoveSketch) pokemon.lastMoveSketch = this.battle.lastMove;
 			oldActive.clearVolatile();
 		}
 		if (oldActive) {

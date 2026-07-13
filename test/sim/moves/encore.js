@@ -184,6 +184,30 @@ describe('Encore', () => {
 		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
 	});
 
+	it(`should affect a Pokemon that spent turns asleep after its last move`, () => {
+		battle = common.createBattle([[
+			{ species: 'Persian', moves: ['tackle'] },
+		], [
+			{ species: 'Parasect', moves: ['spore', 'encore'] },
+		]]);
+		battle.makeChoices('move tackle', 'move spore');
+		battle.makeChoices('move tackle', 'move encore');
+		assert.equal(battle.p1.active[0].volatiles['encore'].move, 'tackle');
+	});
+
+	describe('[Gen 4]', () => {
+		it(`should fail against a Pokemon that spent turns asleep after its last move`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Persian', moves: ['tackle'] },
+		], [
+			{ species: 'Parasect', moves: ['spore', 'encore'] },
+		]]);
+			battle.makeChoices('move tackle', 'move spore');
+			battle.makeChoices('move tackle', 'move encore');
+			assert.false(battle.p1.active[0].volatiles['encore']);
+		});
+	});
+
 	describe('[Gen 2]', () => {
 		it(`Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
@@ -199,6 +223,17 @@ describe('Encore', () => {
 			assert.fullHP(battle.p1.active[0]);
 			battle.makeChoices();
 			assert.equal(chansey.volatiles['encore'].move, 'seismictoss');
+		});
+
+		it(`should affect a Pokemon that spent turns asleep after its last move`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Persian', moves: ['tackle'] },
+			], [
+				{ species: 'Parasect', moves: ['spore', 'encore'] },
+			]]);
+			battle.makeChoices('move tackle', 'move spore');
+			battle.makeChoices('move tackle', 'move encore');
+			assert.equal(battle.p1.active[0].volatiles['encore'].move, 'tackle');
 		});
 	});
 });
