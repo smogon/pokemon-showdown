@@ -64,6 +64,19 @@ export function stripHTML(htmlContent: string) {
 }
 
 /**
+ * Normalize a message for the purposes of searching.
+ */
+export function normalize(message: string) {
+	message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
+	if (!/[A-Za-z][A-Za-z]/.test(message)) {
+		message = message.replace(/ */g, '');
+	} else if (!message.includes(' ')) {
+		message = message.replace(/([A-Z])/g, ' $1').trim();
+	}
+	return ' ' + message.toLowerCase() + ' ';
+}
+
+/**
  * Maps numbers to their ordinal string.
  */
 export function formatOrder(place: number) {

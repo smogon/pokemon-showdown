@@ -30,7 +30,6 @@ import * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
 import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
-import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
@@ -1740,8 +1739,7 @@ export const Chat = new class {
 			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
 
-			// For some reason, toID() isn't available as a global when this executes.
-			const languageID = Dex.toID(dirname);
+			const languageID = toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
 				if (!filename.endsWith('.js')) continue;
@@ -2548,21 +2546,6 @@ export const Chat = new class {
 	}
 
 	/**
-	 * Normalize a message for the purposes of applying chat filters.
-	 *
-	 * Not used by PS itself, but feel free to use it in your own chat filters.
-	 */
-	normalize(message: string) {
-		message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
-		if (!/[A-Za-z][A-Za-z]/.test(message)) {
-			message = message.replace(/ */g, '');
-		} else if (!message.includes(' ')) {
-			message = message.replace(/([A-Z])/g, ' $1').trim();
-		}
-		return ' ' + message.toLowerCase() + ' ';
-	}
-
-	/**
 	 * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
 	 * preserving aspect ratio.
 	 *
@@ -2668,6 +2651,7 @@ export const Chat = new class {
 // backwards compatibility; don't actually use these
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
+(Chat as any).normalize = Utils.normalize;
 (Chat as any).splitFirst = Utils.splitFirst;
 (Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
