@@ -877,7 +877,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				level *= 2;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
-			level = (level % 256 + 256) % 256
+			level = (level % 256 + 256) % 256;
 
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
