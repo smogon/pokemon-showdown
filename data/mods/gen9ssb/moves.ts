@@ -2674,7 +2674,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				break;
 			}
 			let team = [] as PokemonSet[];
-			const unModdedDex = Dex.mod('base');
+			const unModdedDex = this.dex.mod('gen9');
 			let depth = 0;
 			while (!team.length) {
 				team = Teams.generate(randFormat, { name: target.side.name });

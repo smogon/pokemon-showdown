@@ -108,4 +108,24 @@ export default configure([
 			"no-useless-return": "off",
 		},
 	},
+	{
+		name: "Sim standalone",
+		files: [
+			"sim/**",
+			"data/**",
+		],
+		rules: {
+			// we do still allow `global.Config?.` but DON'T forget the `?.`
+			"no-restricted-globals": ["error",
+				...[
+					"Config", "Chat", "Dex", "Teams", "IPTools", "Ladders", "LoginServer", "Monitor",
+					"nodeOomHeapdump", "Punishments", "Rooms", "Sockets", "TeamValidatorAsync",
+					"Tournaments", "Users", "Verifier", "toID", "__version",
+				].map(name => ({
+					name,
+					message: `sim/ and data/ must not use globals; import what you need instead of using the ${name} global.`,
+				})),
+			],
+		},
+	},
 ]);
