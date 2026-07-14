@@ -677,11 +677,18 @@ export const commands: Chat.ChatCommands = {
 				}
 				this.sendReply('Hotpatching processmanager prototypes...');
 
-				// keep references
-				const cache = { ...require.cache };
-				Utils.clearRequireCache();
+				// grab new prototypes and graft them onto old PM instances.
+				// restore the old require.cache afterwards because it has all
+				// the references to the modules actually being used
+				const pmPath = require.resolve('../../lib/process-manager');
+				const oldPMModule = require.cache[pmPath];
+				delete require.cache[pmPath];
 				const newPM = reRequire('../../lib/process-manager');
-				require.cache = cache;
+				if (oldPMModule) {
+					require.cache[pmPath] = oldPMModule;
+				} else {
+					delete require.cache[pmPath];
+				}
 
 				const protos = [
 					[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
