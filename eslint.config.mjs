@@ -109,10 +109,11 @@ export default configure([
 		},
 	},
 	{
-		name: "Sim standalone",
+		name: "Globals only allowed in server/",
 		files: [
 			"sim/**",
 			"data/**",
+			"lib/**",
 		],
 		rules: {
 			// we do still allow `global.Config?.` but DON'T forget the `?.`
