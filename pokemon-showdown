@@ -83,13 +83,10 @@ function showHelp() {
 	console.log('  Displays this reference');
 }
 
-try {
-	fetch;
-} catch (e) {
-	// fetch was introduced in Node 18, which is EOL,
-	// so we'll ask for the most recent "Active LTS" with it to be safe
-	// https://nodejs.org/en/about/previous-releases
-	console.error("We require Node.js version 22 or later; you're using " + process.version);
+if (!Set.prototype.intersection) {
+	// Set#intersection was introduced in Node 22, which is currently in maintenance
+	// Might as well ask for the most recent Active LTS to be safe (https://nodejs.org/en/about/previous-releases)
+	console.error("We require Node.js version 24 or later; you're using " + process.version);
 	process.exit(1);
 }
 
