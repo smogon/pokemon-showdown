@@ -912,6 +912,10 @@ export class DexFormats {
 			let [formatid, value] = ruleSpec.split('=');
 			const subformat = this.get(formatid);
 			const repealAndReplace = ruleSpec.startsWith('!!');
+			// Formats can only be used as Rules for other formats if the subformat uses the same or an ancestor mod.
+			if (subformat.effectType === 'Format' && !this.dex.isAncestorModOrSelf(subformat.mod, format.mod)) {
+				throw new Error(`Rule "${ruleSpec}" cannot be applied because ${subformat.name} is a ${subformat.mod} format.`);
+			}
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
