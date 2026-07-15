@@ -21,4 +21,20 @@ describe('Recoil', () => {
 			assert.hurtsBy(battle.p1.active[0], Math.round((battle.p2.active[0].maxhp - 1) * recoilFactors[i]), () => battle.makeChoices(`move ${i + 1}`, `move strengthsap`));
 		}
 	});
+
+	it('[Gen 1] should deal recoil damage based on the damage dealt', () => {
+		battle = common.gen(1).createBattle({ forceRandomChance: false }, [[
+			{ species: "Snorlax", moves: ['doubleedge'] },
+		], [
+			{ species: "Chansey", moves: ['softboiled'] },
+		]]);
+		const snorlax = battle.p1.active[0];
+		const chansey = battle.p2.active[0];
+		const hp = snorlax.hp;
+
+		battle.makeChoices();
+
+		const damage = chansey.maxhp - chansey.hp;
+		assert.equal(hp - snorlax.hp, Math.floor(damage * 33 / 100));
+	});
 });

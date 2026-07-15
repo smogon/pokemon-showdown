@@ -205,6 +205,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
 			let recoilDamage = 0;
 			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
+			else if (move.mindBlownRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
 			else if (move.recoil) {
 				recoilDamage = this.battle.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 			} else return null;
