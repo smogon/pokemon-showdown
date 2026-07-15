@@ -26,13 +26,14 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
-import * as ConfigLoader from './config-loader';
+import type * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
-import { SQL, FS, Utils } from '../lib';
+import { FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
+import { pluginDatabase } from './chat-db';
 // needed for Chat subprocesses
 import { toID } from '../sim/dex-data';
 
@@ -159,7 +160,6 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
@@ -173,10 +173,6 @@ try {
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
-
-const database = SQL('chat-db', module, {
-	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-});
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1565,7 +1561,7 @@ export const Chat = new class {
 	readonly destroyHandlers: (() => void)[] = [
 		Artemis.destroy,
 		Friends.destroy,
-		() => void database.destroy(),
+		() => void pluginDatabase.destroy(),
 		() => Chat.PrivateMessages.destroy(),
 	];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
@@ -1826,7 +1822,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = database;
+	database = pluginDatabase;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -2707,30 +2703,14 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-if (!database.isParentProcess) {
-	ConfigLoader.ensureLoaded();
-	global.Monitor = {
-		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-	} as any;
-	process.on('uncaughtException', err => {
-		Monitor.crashlog(err, 'A chat database process');
-	});
-	process.on('unhandledRejection', err => {
-		Monitor.crashlog(err as Error, 'A chat database process');
-	});
-	// eslint-disable-next-line no-eval
-	database.startRepl(cmd => eval(cmd));
-}
-
 function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (Config.usesqlite) {
-		database.spawn(processCount['chatdb'] ?? 1);
+		pluginDatabase.spawn(processCount['chatdb'] ?? 1);
 		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
 	Chat.PrivateMessages.start(processCount);
 	Friends.start(processCount);
 	Artemis.start(processCount);
 }
+
+setTimeout(() => Chat.loadPlugins(), 5000);
