@@ -14424,7 +14424,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		beforeTurnCallback(pokemon, target) {
-			pokemon.addVolatile('pursuit');
+			pokemon.addVolatile('pursuit', pokemon, this.dex.moves.get('pursuit') as ActiveMove);
 		},
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) {
@@ -14459,7 +14459,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 				pokemon.removeVolatile('destinybond');
-				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effect });
+				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effectState.sourceEffect });
 			},
 		},
 		target: "normal",

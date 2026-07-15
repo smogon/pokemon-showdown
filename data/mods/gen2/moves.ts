@@ -140,7 +140,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				this.effectState.move = lockedMove;
 				this.add('-start', target, 'Encore');
-				if (this.effectState.move === 'pursuit') target.addVolatile('pursuit', target);
+				if (this.effectState.move === 'pursuit') {
+					target.addVolatile('pursuit', target, this.dex.moves.get('pursuit') as ActiveMove);
+				}
 			},
 			onResidualOrder: 13,
 			onResidualSubOrder: undefined, // no inherit
@@ -483,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// Destiny Bond ends if the switch action "outspeeds" the attacker, regardless of host
 					pokemon.removeVolatile('destinybond');
 				}
-				this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effectState.sourceEffect });
 			},
 		},
 	},

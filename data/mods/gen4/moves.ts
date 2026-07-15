@@ -410,7 +410,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				this.effectState.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (this.effectState.move === 'pursuit') target.addVolatile('pursuit', target);
+				if (this.effectState.move === 'pursuit') {
+					target.addVolatile('pursuit', target, this.dex.moves.get('pursuit') as ActiveMove);
+				}
 			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
