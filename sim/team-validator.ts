@@ -868,15 +868,28 @@ export class TeamValidator {
 		let isUnderleveled;
 		let requiredLevel;
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
-			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-			let evoSpecies = species;
-			while (evoSpecies.prevo) {
-				if (set.level < (evoSpecies.evoLevel || 0)) {
-					isUnderleveled = evoSpecies.name;
-					requiredLevel = evoSpecies.evoLevel;
+			let minEncounterGen = this.minSourceGen;
+			if (dex.gen >= 3 && minEncounterGen < 3) minEncounterGen = 3;
+			let isWildObtainable = false;
+			for (const encounter of learnsetSpecies.encounters || []) {
+				if (!encounter.level) continue;
+				if (encounter.generation < minEncounterGen || encounter.generation > dex.gen) continue;
+				if (set.level >= encounter.level) {
+					isWildObtainable = true;
 					break;
 				}
-				evoSpecies = dex.species.get(evoSpecies.prevo);
+			}
+			if (!isWildObtainable) {
+				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
+				let evoSpecies = species;
+				while (evoSpecies.prevo) {
+					if (set.level < (evoSpecies.evoLevel || 0)) {
+						isUnderleveled = evoSpecies.name;
+						requiredLevel = evoSpecies.evoLevel;
+						break;
+					}
+					evoSpecies = dex.species.get(evoSpecies.prevo);
+				}
 			}
 		}
 
