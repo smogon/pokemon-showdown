@@ -35,6 +35,7 @@ export interface RunnerOptions {
 	output?: boolean;
 	error?: boolean;
 	dual?: boolean | 'debug';
+	timeoutMs?: number;
 }
 
 export class Runner {
@@ -54,6 +55,7 @@ export class Runner {
 	private readonly output: boolean;
 	private readonly error: boolean;
 	private readonly dual: boolean | 'debug';
+	private readonly timeoutMs: number;
 
 	constructor(options: RunnerOptions) {
 		this.format = options.format;
@@ -68,13 +70,29 @@ export class Runner {
 		this.output = !!options.output;
 		this.error = !!options.error;
 		this.dual = options.dual || false;
+		this.timeoutMs = options.timeoutMs || 0;
 	}
 
 	async run() {
 		const battleStream = this.dual ?
 			new DualStream(this.input, this.dual === 'debug') :
 			new RawBattleStream(this.input);
-		const game = this.runGame(this.format, battleStream);
+		let game: Promise<unknown> = this.runGame(this.format, battleStream);
+		if (this.timeoutMs) {
+			let timer: NodeJS.Timeout | null = null;
+			const timeout = new Promise<never>((_, reject) => {
+				timer = setTimeout(() => {
+					console.error(
+						`\n\nBattle timed out after ${this.timeoutMs}ms (format=${this.format}):\n` +
+						`${battleStream.rawInputLog.join('\n')}\n`
+					);
+					reject(new Error(`Battle timed out after ${this.timeoutMs}ms`));
+				}, this.timeoutMs);
+			});
+			game = Promise.race([game, timeout]).finally(() => {
+				if (timer) clearTimeout(timer);
+			});
+		}
 		if (!this.error) return game;
 		return game.catch(err => {
 			console.log(`\n${battleStream.rawInputLog.join('\n')}\n`);
