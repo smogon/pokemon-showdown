@@ -284,8 +284,8 @@ export class Side {
 		};
 
 		// old-gens
-		this.lastMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
-		this.lastEnemyMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
+		this.lastMove = null;
+		this.lastEnemyMove = null;
 	}
 
 	toJSON(): AnyObject {
