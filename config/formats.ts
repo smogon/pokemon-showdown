@@ -269,7 +269,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9 Champions] UU",
 		mod: 'champions',
-		searchShow: false,
 		ruleset: ['[Gen 9 Champions] OU'],
 		banlist: ['OU', 'UUBL'],
 	},
