@@ -843,9 +843,9 @@
         "level": 77,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "crunch", "earthquake", "pursuit", "return", "selfdestruct"],
-                "abilities": ["Thick Fat"],
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "crunch", "curse", "earthquake", "selfdestruct"],
+                "abilities": ["Immunity", "Thick Fat"],
                 "preferredTypes": ["Ground"]
             },
             {
@@ -854,7 +854,7 @@
                 "abilities": ["Thick Fat"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Attacker",
                 "movepool": ["bodyslam", "curse", "earthquake", "rest"],
                 "abilities": ["Thick Fat"]
             }
@@ -3373,7 +3373,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "toxic", "trick", "willowisp"],
+                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "toxic", "willowisp"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Ground"]
             },

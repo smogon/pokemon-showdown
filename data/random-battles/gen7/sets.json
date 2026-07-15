@@ -2642,7 +2642,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Staller",
                 "movepool": ["crunch", "destinybond", "earthquake", "icebeam", "protect", "waterfall"],
                 "abilities": ["Speed Boost"]
             }
@@ -2652,7 +2652,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Staller",
                 "movepool": ["crunch", "icefang", "protect", "psychicfangs", "waterfall"],
                 "abilities": ["Speed Boost"]
             }

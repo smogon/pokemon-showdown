@@ -68,7 +68,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && !['aerodactyl', 'mantine', 'murkrow'].includes(species.id) &&
+				!counter.get('Flying') && !['aerodactyl', 'mandibuzz', 'mantine', 'murkrow'].includes(species.id) &&
 				!movePool.includes('hiddenpowerflying')
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
@@ -648,8 +648,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
-			(ability === 'Rough Skin') || (species.id !== 'hooh' && role !== 'Wallbreaker' &&
-				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
+			(ability === 'Rough Skin') || (
+				species.id !== 'hooh' &&
+				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2)
+			) || (
+				ability !== 'Regenerator' && !counter.get('setup') && counter.get('recovery') &&
+				this.dex.getEffectiveness('Fighting', species) < 1 &&
+				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
+			)
 		) return 'Rocky Helmet';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
@@ -732,11 +738,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			if (move.startsWith('hiddenpower')) hasHiddenPower = true;
 		}
 
-		if (hasHiddenPower) {
+		if (hasHiddenPower || species.id === 'ditto') {
 			let hpType;
 			for (const move of moves) {
 				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
 			}
+			// Ditto gets IVs to copy Hidden Power Ice
+			if (species.id === 'ditto') hpType = 'ice';
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
 			const HPivs = this.dex.types.get(hpType).HPivs;
 			let iv: StatID;
@@ -919,7 +927,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+			const set = this.randomSet(species, teamDetails,
+				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+			);
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

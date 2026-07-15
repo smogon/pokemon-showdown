@@ -1047,7 +1047,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["hiddenpowerfire", "icebeam", "rest", "sleeptalk"],
+                "movepool": ["icebeam", "rest", "sleeptalk", "toxic"],
                 "abilities": ["Pressure"]
             }
         ]
@@ -1316,9 +1316,18 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "doubleedge", "hiddenpowerghost", "hydropump", "rest", "return", "sleeptalk"],
-                "abilities": ["Huge Power"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["brickbreak", "doubleedge", "hiddenpowerghost", "hydropump", "return"],
+                "abilities": ["Huge Power"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bodyslam", "focuspunch", "hiddenpowerghost", "return", "substitute"],
+                "abilities": ["Huge Power"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["bodyslam", "hydropump", "rest", "return", "sleeptalk"],
+                "abilities": ["Huge Power"]
             }
         ]
     },
@@ -2551,8 +2560,8 @@
         "level": 89,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["earthquake", "explosion", "fireblast", "rest", "rockslide", "sleeptalk", "toxic"],
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "explosion", "fireblast", "rest", "sleeptalk", "toxic"],
                 "abilities": ["Magma Armor"]
             }
         ]
