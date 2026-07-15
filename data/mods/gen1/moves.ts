@@ -161,7 +161,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// - the last used move by the opponent is Counterable
 
 			const isCounterable = (move: { basePower: number, type: string } | null) => {
-				if (!move) move = { basePower: 0, type: 'Normal' };
+				move ??= { basePower: 0, type: 'Normal' };
 				return ['Normal', 'Fighting'].includes(move.type) && move.basePower > 0;
 			};
 
