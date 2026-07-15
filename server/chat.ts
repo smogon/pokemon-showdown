@@ -30,7 +30,6 @@ import * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
 import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
-import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
@@ -173,7 +172,7 @@ const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
-const PM = SQL('chat-db', module, {
+const database = SQL('chat-db', module, {
 	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
 });
 
@@ -1561,7 +1560,12 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
+	readonly destroyHandlers: (() => void)[] = [
+		Artemis.destroy,
+		Friends.destroy,
+		() => void database.destroy(),
+		() => Chat.PrivateMessages.destroy(),
+	];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1735,8 +1739,7 @@ export const Chat = new class {
 			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
 
-			// For some reason, toID() isn't available as a global when this executes.
-			const languageID = Dex.toID(dirname);
+			const languageID = toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
 				if (!filename.endsWith('.js')) continue;
@@ -1821,7 +1824,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = PM;
+	database = database;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -1857,11 +1860,6 @@ export const Chat = new class {
 		for (const { file } of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
-
-		Chat.destroyHandlers.push(
-			() => void Chat.database?.destroy(),
-			() => Chat.PrivateMessages.destroy(),
-		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -2548,21 +2546,6 @@ export const Chat = new class {
 	}
 
 	/**
-	 * Normalize a message for the purposes of applying chat filters.
-	 *
-	 * Not used by PS itself, but feel free to use it in your own chat filters.
-	 */
-	normalize(message: string) {
-		message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
-		if (!/[A-Za-z][A-Za-z]/.test(message)) {
-			message = message.replace(/ */g, '');
-		} else if (!message.includes(' ')) {
-			message = message.replace(/([A-Z])/g, ' $1').trim();
-		}
-		return ' ' + message.toLowerCase() + ' ';
-	}
-
-	/**
 	 * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
 	 * preserving aspect ratio.
 	 *
@@ -2668,6 +2651,7 @@ export const Chat = new class {
 // backwards compatibility; don't actually use these
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
+(Chat as any).normalize = Utils.normalize;
 (Chat as any).splitFirst = Utils.splitFirst;
 (Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
@@ -2721,7 +2705,7 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-if (!PM.isParentProcess) {
+if (!database.isParentProcess) {
 	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
@@ -2736,12 +2720,12 @@ if (!PM.isParentProcess) {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
 	// eslint-disable-next-line no-eval
-	PM.startRepl(cmd => eval(cmd));
+	database.startRepl(cmd => eval(cmd));
 }
 
 function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (Config.usesqlite) {
-		PM.spawn(processCount['chatdb'] ?? 1);
+		database.spawn(processCount['chatdb'] ?? 1);
 		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
 	Chat.PrivateMessages.start(processCount);

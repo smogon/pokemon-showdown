@@ -125,6 +125,7 @@ function setupGlobals() {
 
 	const TeamValidatorAsync = require('./team-validator-async');
 	global.TeamValidatorAsync = TeamValidatorAsync;
+	global.TeamValidator = TeamValidatorAsync.TeamValidator;
 
 	global.Sockets = Sockets;
 	if (!Config.lazysockets) {
