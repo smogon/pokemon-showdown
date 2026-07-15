@@ -7,7 +7,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (linkedMoves.length) {
 				if (linkedMoves[0].id !== 'pursuit' && linkedMoves[1].id === 'pursuit') return;
 			}
-			pokemon.addVolatile('pursuit', pokemon, this.dex.moves.get('pursuit') as ActiveMove);
+			pokemon.addVolatile('pursuit', pokemon, this.dex.getActiveMove('pursuit'));
 		},
 	},
 	mefirst: {

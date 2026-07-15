@@ -1159,7 +1159,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile(
-				'sixtongueemojis', pokemon, this.dex.moves.get('sixtongueemojis') as ActiveMove
+				'sixtongueemojis', pokemon, this.dex.getActiveMove('sixtongueemojis')
 			);
 		},
 		onModifyMove(move, source, target) {

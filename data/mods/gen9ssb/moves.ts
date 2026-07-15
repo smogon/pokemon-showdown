@@ -1900,7 +1900,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile(
-				'trivialpursuit', pokemon, this.dex.moves.get('trivialpursuit') as ActiveMove
+				'trivialpursuit', pokemon, this.dex.getActiveMove('trivialpursuit')
 			);
 		},
 		onModifyMove(move, source, target) {
@@ -3219,7 +3219,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile(
-				'attackofopportunity', pokemon, this.dex.moves.get('attackofopportunity') as ActiveMove
+				'attackofopportunity', pokemon, this.dex.getActiveMove('attackofopportunity')
 			);
 		},
 		onModifyMove(move, source, target) {
