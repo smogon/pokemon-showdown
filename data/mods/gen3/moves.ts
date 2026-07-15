@@ -478,7 +478,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
-			pokemon.addVolatile('pursuit', pokemon, this.dex.moves.get('pursuit') as ActiveMove);
+			pokemon.addVolatile('pursuit', pokemon, this.dex.getActiveMove('pursuit'));
 			pokemon.volatiles['pursuit'].targetLoc = pokemon.getLocOf(target);
 		},
 		condition: {

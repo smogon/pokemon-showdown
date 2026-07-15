@@ -411,7 +411,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (this.effectState.move === 'pursuit') {
-					target.addVolatile('pursuit', target, this.dex.moves.get('pursuit') as ActiveMove);
+					target.addVolatile('pursuit', target, this.dex.getActiveMove('pursuit'));
 				}
 			},
 			onResidualOrder: 10,

@@ -14392,7 +14392,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		beforeTurnCallback(pokemon, target) {
-			pokemon.addVolatile('pursuit', pokemon, this.dex.moves.get('pursuit') as ActiveMove);
+			pokemon.addVolatile('pursuit', pokemon, this.dex.getActiveMove('pursuit'));
 		},
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) {
