@@ -759,8 +759,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
-					// @ts-expect-error hasMons is defined in external scripts
-					if (!pokemon.baseSpecies.mons || pokemon.hasMons) continue;
+					if (!pokemon.baseSpecies.mons || pokemon.tandem) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
 						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
@@ -821,11 +820,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					poke2.dynamaxLevel = 10;
 
 					const newPoke1 = side.addPokemon(poke1);
-					// @ts-expect-error see last error comment
-					newPoke1.hasMons = true;
+					// @ts-expect-error newPoke is always set
+					newPoke1.tandem = true;
 					const newPoke2 = side.addPokemon(poke2);
-					// @ts-expect-error ^
-					newPoke2.hasMons = true;
+					// @ts-expect-error newPoke is always set
+					newPoke2.tandem = true;
 				}
 			}
 			this.ruleTable.pickedTeamSize = 6;

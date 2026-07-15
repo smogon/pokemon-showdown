@@ -1,11 +1,11 @@
-import '../../../sim/dex-species';
-
 declare module '../../../sim/dex-species' {
 	interface Species {
 		mons?: [any, string[], string[]?][] | null;
 	}
-	interface SpeciesFormatsData {
-		hasMons?: true | null;
+};
+declare module '../../../sim/pokemon' {
+	interface Pokemon {
+		tandem?: true | null;
 	}
 };
 
