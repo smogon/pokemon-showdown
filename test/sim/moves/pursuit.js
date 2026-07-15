@@ -249,7 +249,8 @@ describe(`Pursuit`, () => {
 			]]);
 			battle.makeChoices('move pursuit', 'move spore');
 			assert.equal(battle.p1.active[0].status, 'slp');
-			while (battle.p1.active[0].status === 'slp') {
+			for (let i = 0; i < 5; i++) {
+				if (battle.p1.active[0].status !== 'slp') break;
 				battle.makeChoices('move pursuit', 'switch 2');
 			}
 			// Tyranitar woke up and used Pursuit
@@ -380,7 +381,8 @@ describe(`Pursuit`, () => {
 			]]);
 			battle.makeChoices('move pursuit', 'move spore');
 			assert.equal(battle.p1.active[0].status, 'slp');
-			while (battle.p1.active[0].status === 'slp') {
+			for (let i = 0; i < 5; i++) {
+				if (battle.p1.active[0].status !== 'slp') break;
 				battle.makeChoices('move pursuit', 'switch 2');
 			}
 			// Paras woke up and used Pursuit
