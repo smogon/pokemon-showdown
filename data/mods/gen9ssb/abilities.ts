@@ -2068,15 +2068,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "This Pokemon's damaging moves have the Pursuit effect.",
 		name: "Hot Pursuit",
 		onBeforeTurn(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('hotpursuit', pokemon);
-				const data = side.getSideConditionData('hotpursuit');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+			const action = this.queue.willMove(pokemon);
+			if (!action) return;
+			const move = this.dex.getActiveMove(action.move);
+			if (move.category === 'Status') return;
+			pokemon.addVolatile('hotpursuit', pokemon, move);
 		},
 		onBasePower(relayVar, source, target, move) {
 			// You can't get here unless the pursuit succeeds
@@ -2087,39 +2083,40 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			return move.basePower;
 		},
 		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
-		},
-		onTryHit(source, target) {
-			target.side.removeSideCondition('hotpursuit');
+			if (target?.beingCalledBack || target?.switchFlag) {
+				move.accuracy = true;
+				move.tracksTarget = true;
+			}
 		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
-				const foe = pokemon.foes()[0];
-				const move = foe ? this.queue.willMove(foe) : null;
-				const moveName = move && move.moveid ? move.moveid.toString() : "";
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
+				const move = this.effectState.sourceEffect as ActiveMove;
 				this.debug('Pursuit start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded && foe) {
-						this.add('-activate', foe, 'ability: Hot Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
+				if (!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== move.id) ||
+					!this.queue.cancelMove(source)) return;
+				this.add('-activate', source, 'ability: Hot Pursuit');
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
 							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					this.actions.runMove(moveName, source, source.getLocOf(pokemon));
 				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove(move.id, source, source.getLocOf(pokemon), { sourceEffect: move });
 			},
 		},
 		flags: {},
