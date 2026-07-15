@@ -1772,10 +1772,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
 				const VALID_PROPERTIES = [
-					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage', 'hasSheerForce',
-					'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil', 'noDamageVariance',
-					'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather',
-					'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
+					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'chloroblastRecoil', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage',
+					'hasSheerForce', 'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil',
+					'noDamageVariance', 'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat',
+					'pseudoWeather', 'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus',
+					'willCrit',
 				] as const;
 				for (const property of VALID_PROPERTIES) {
 					if (forte[property]) {
