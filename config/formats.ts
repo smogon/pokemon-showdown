@@ -732,7 +732,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
 			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt'],
 		onValidateTeam(team, format, teamHas) {
-			if (team.length > 3) return [`You must bring at most 3 Pokemon.`];
+			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
 			let randomCount = 0;
 			for (const set of team) {
 				let species = this.dex.species.get(set.species);
