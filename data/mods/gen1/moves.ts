@@ -866,7 +866,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (uncappedDamage) {
-						this.actions.calcRecoilDamage(uncappedDamage, move, source);
+						this.actions.applyRecoilDamage(uncappedDamage, move, source);
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);

@@ -457,7 +457,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.totalDamage) {
-				this.calcRecoilDamage(move.totalDamage, move, pokemon);
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
 			if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);

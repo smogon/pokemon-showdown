@@ -979,7 +979,7 @@ export class BattleActions {
 		}
 
 		if (move.totalDamage) {
-			this.calcRecoilDamage(move.totalDamage, move, pokemon);
+			this.applyRecoilDamage(move.totalDamage, move, pokemon);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -1376,7 +1376,7 @@ export class BattleActions {
 		return retVal === true ? undefined : retVal;
 	}
 
-	calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+	applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
 		let recoilDamage = null;
 		if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
 		else if (move.mindBlownRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);

@@ -296,7 +296,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			if (move.totalDamage) {
-				this.calcRecoilDamage(move.totalDamage, move, pokemon);
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 			return damage;
 		},

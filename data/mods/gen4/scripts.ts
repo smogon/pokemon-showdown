@@ -202,7 +202,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+		applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
 			let recoilDamage = 0;
 			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
 			else if (move.recoil) {

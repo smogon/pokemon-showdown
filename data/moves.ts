@@ -18354,7 +18354,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
 				if (damage) {
-					this.actions.calcRecoilDamage(damage, move, source);
+					this.actions.applyRecoilDamage(damage, move, source);
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');

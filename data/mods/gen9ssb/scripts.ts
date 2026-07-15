@@ -1322,7 +1322,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.totalDamage) {
-				this.calcRecoilDamage(move.totalDamage, move, pokemon);
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
 			// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway

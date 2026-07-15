@@ -234,7 +234,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
 			if (move.totalDamage && (pokemon.side.pokemonLeft > 1 || target.side.pokemonLeft > 1 || target.hp)) {
-				this.calcRecoilDamage(move.totalDamage, move, pokemon);
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 			return damage;
 		},
