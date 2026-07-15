@@ -35,7 +35,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			ppData.pp -= amount;
 
 			if (ppData.pp < 0) {
-				this.battle.hint("In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+				this.battle.hint(
+					"In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.",
+					undefined, this.side,
+				);
 			}
 			ppData.pp = this.battle.trunc(ppData.pp, 6);
 
