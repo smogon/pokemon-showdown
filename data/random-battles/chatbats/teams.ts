@@ -881,8 +881,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		// const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		// const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		// const potdName = (ruleTable.has('potd') && global.Config?.potd) || null;
+		// const potd = potdName ? this.dex.species.get(potdName) : null;
 
 		const baseFormes: { [k: string]: number } = {};
 		let hasMega = false;

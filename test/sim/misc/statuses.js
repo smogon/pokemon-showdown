@@ -389,9 +389,12 @@ describe('Freeze', () => {
 			// side.lastSelectedMove never resets, while side.lastSelectedMoveSlot resets on every switch
 			// PP should be deducted from lastSelectedMoveSlot even if Desync Clause Mod is activated
 
-			// lastSelectedMove = '', lastSelectedMoveSlot = 0 (tackle)
+			// With the new Desync Clause Mod, the game will not desync, and the lastSelectedMove will be used
+			// even if the Pokemon doesnt have the move
+
+			// lastSelectedMove = 'nomove', lastSelectedMoveSlot = 0 (tackle)
 			battle = common.gen(1).createBattle({
-				customRules: 'guaranteedsecondarymod',
+				customRules: 'guaranteedsecondarymod', seed: [0, 0, 0, 0],
 			}, [[
 				{ species: 'jynx', moves: ['icepunch', 'firepunch'] },
 			], [
@@ -403,6 +406,8 @@ describe('Freeze', () => {
 			assert.cantMove(() => battle.p2.choose('move tackle'));
 			battle.makeChoices('move firepunch', 'move fight');
 			assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert(battle.log.some(line => line === '|move|p2a: Poliwhirl|Fissure|p1a: Jynx'));
+			assert.bounded(battle.p1.active[0].maxhp - battle.p1.active[0].hp, [51, 60]);
 			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
 
 			// lastSelectedMove = 'toxic', lastSelectedMoveSlot = 1 (toxic)
@@ -423,7 +428,7 @@ describe('Freeze', () => {
 			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
 			assert.equal(battle.p2.active[0].moveSlots[1].pp, 15);
 
-			// Player 2 lastSelectedMove = 'tackle', lastSelectedMoveSlot = 0 (tackle)
+			// Player 2 lastSelectedMove = 'toxic', lastSelectedMoveSlot = 0 (tackle)
 			battle = common.gen(1).createBattle({
 				customRules: 'guaranteedsecondarymod',
 			}, [[
@@ -438,6 +443,7 @@ describe('Freeze', () => {
 			assert.cantMove(() => battle.p2.choose('move tackle'));
 			battle.makeChoices('move firepunch', 'move fight');
 			assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert(battle.log.some(line => line.includes('|move|p2a: Poliwhirl|Toxic|p1a: Jynx'))); // Poliwhirl uses Bulbasaur's Toxic
 			assert.equal(battle.p2.active[0].moveSlots[0].pp, 55);
 
 			// Player 2 lastSelectedMove = 'tackle', lastSelectedMoveSlot = 0 (tackle)

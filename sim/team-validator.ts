@@ -736,6 +736,7 @@ export class TeamValidator {
 			}
 		}
 
+		let rockHeadBasculin = false;
 		if (!set.ability) set.ability = 'No Ability';
 		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 2 || dex.currentMod === 'gen7letsgo') {
@@ -775,6 +776,16 @@ export class TeamValidator {
 					}
 				} else {
 					setSources.isHidden = false;
+				}
+				if (dex.currentMod === 'gen5bw1' && species.id === 'basculinbluestriped' && set.ability === 'Rock Head') {
+					const eventData: EventInfo = {
+						generation: 5, level: 25, gender: "M", ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 }, nature: "Adamant",
+					};
+					const eventProblems = this.validateEvent(
+						set, setSources, eventData, species, ` to have Rock Head`, `from an in-game trade`
+					);
+					if (eventProblems) problems.push(...eventProblems);
+					rockHeadBasculin = true;
 				}
 			}
 		}
@@ -1056,7 +1067,7 @@ export class TeamValidator {
 				problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
 			}
 			if (
-				species.maleOnlyHidden && setSources.isHidden && setSources.sourcesBefore < 5 &&
+				((species.maleOnlyHidden && setSources.isHidden) || rockHeadBasculin) && setSources.sourcesBefore < 5 &&
 				setSources.sources.every(source => source.charAt(1) === 'E')
 			) {
 				problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);

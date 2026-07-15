@@ -35,7 +35,7 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
 
-const PM = SQL('modlog', module, {
+const database = SQL('modlog', module, {
 	file: MODLOG_DB_PATH,
 	extension: 'server/modlog/transactions.js',
 	sqliteOptions: Config.modlogsqliteoptions,
@@ -109,7 +109,7 @@ export class Modlog {
 	constructor() {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		this.database = PM;
+		this.database = database;
 		this.readyPromise = null;
 	}
 
@@ -468,7 +468,7 @@ export class Modlog {
 
 export const mainModlog = new Modlog();
 
-if (!PM.isParentProcess) {
+if (!database.isParentProcess) {
 	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
@@ -488,17 +488,17 @@ export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (!Config.usesqlite || !Config.usesqlitemodlog) {
 		return;
 	}
-	PM.spawn(processCount['modlog'] ?? 1);
+	database.spawn(processCount['modlog'] ?? 1);
 	mainModlog.setup();
 }
 
 export function restart() {
-	void PM.respawn();
+	void database.respawn();
 	mainModlog.setup();
 }
 
 export function destroy() {
 	// No need to destroy the PM under normal circumstances, since
 	// hotpatching uses PM.respawn()
-	void PM.destroy();
+	void database.destroy();
 }

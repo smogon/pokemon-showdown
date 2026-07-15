@@ -33,6 +33,7 @@ declare global {
 			Rooms: any;
 			Sockets: any
 			TeamValidatorAsync: any;
+			TeamValidator: any;
 			Tournaments: any;
 			Users: any;
 			Verifier: any;
@@ -52,6 +53,7 @@ declare global {
 	var Rooms: typeof RoomsType.Rooms;
 	var Sockets: typeof SocketsType.Sockets;
 	var TeamValidatorAsync: typeof TeamValidatorAsyncType;
+	var TeamValidator: typeof TeamValidatorAsyncType.TeamValidator;
 	var Tournaments: typeof TournamentsType;
 	var Users: typeof UsersType.Users;
 	var Verifier: typeof VerifierType;

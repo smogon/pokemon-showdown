@@ -627,7 +627,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Talonflame') return 'Sharp Beak';
 		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
-		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
 		if (species.name === 'Honchkrow') return 'Life Orb';
