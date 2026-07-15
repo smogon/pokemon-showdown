@@ -95,8 +95,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				if (move.target === 'all') {
+			if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
+				if (move.target === 'field') {
 					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
 				} else {
 					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
