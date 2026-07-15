@@ -10,7 +10,7 @@ There were only 151 Pokémon plus MissingNo, just a handful of moves, no abiliti
 EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in
 a similar fashion, Pokes used to have 30 IVs on each stat.
 
-The following sources have been used and extremely useful when developing this mod:
+These sources have been used and extremely useful when developing this mod:
 https://raw.github.com/po-devs/pokemon-online/master/bin/database/rby-stuff.txt
 https://www.smogon.com/rb/articles/differences
 https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/#post-5878612
@@ -60,7 +60,7 @@ These are the mechanics for the Desync Clause Mod:
 5. If Mirror Move copies a trapping move and the opponent switches out, the player would reuse the trapping move from turn zero. Metronome would still fall back to using Metronome.
 6. Counter has 2 parts:
     - Counter reacts based on the last move used by the opponent's team. A move counts as used as soon as the message "<Pokémon> used <move>!" appears, even if it fails. So if a Pokémon gets full paralyzed, it doesn't count. For example, if a Chansey gets Ice Beamed by a paralyzed Snorlax, then the next turn it clicks Counter as the Snorlax clicks Body Slam and gets full para'd, Counter will fail.
-    - Counter fails if the opponent switches to a sleeping Pokemon that spends a turn sleeping and has Counter as its first move. For example—assume the Cloyster in the back is asleep and has Counter as its first move—if Chansey uses Counter as Snorlax switches into Cloyster, Counter might not fail. But if Snorlax switches into Cloyster, and in the following turn, Chansey clicks Counter as Cloyster spends a turn sleeping, Counter will always fail. This makes it optimal to put Counter in the first slot (we could probably code this into PS).
+    - Counter fails if the opponent switches to a sleeping Pokemon that spends a turn sleeping and has Counter as its first move. For example—assume the Cloyster in the back is asleep and has Counter as its first move—if Chansey uses Counter as Snorlax switches into Cloyster, Counter might not fail. But if Snorlax switches into Cloyster, and in the next turn, Chansey clicks Counter as Cloyster spends a turn sleeping, Counter will always fail. This makes it optimal to put Counter in the first slot (we could probably code this into PS).
 
 TODO. Glitches not implemented
 ------------------------------

@@ -3188,7 +3188,7 @@ export const pages: Chat.PageTable = {
 		];
 		const rulesets = [
 			`<h2><u>Rules, mods, and clauses</u></h2>`,
-			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
+			`<p>These rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
 			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`,
 		];
@@ -3261,7 +3261,7 @@ export const pages: Chat.PageTable = {
 		buf += `Bans/Unbans: <small>(separated by commas)</small><br /><br />`;
 		buf += `<textarea style="width: 100%" name="bans"></textarea><br />`;
 		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
-		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
+		buf += `<p>These rules can be added to challenges/tournaments to modify the style of play. `;
 		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;
 		buf += `<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`;
 		buf += `<p>Note that if you do not explicitly check a mod to include it, it will not be included in the final output.</p>`;

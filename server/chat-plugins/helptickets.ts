@@ -1612,7 +1612,7 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'mobileip':
 					buf += `<p>If you are not the user who was punished, the lock should expire on its own within a few hours.</p>`;
-					buf += `<p>If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.</p>`;
+					buf += `<p>If you are in a hurry to communicate with another user, you can click on the button below to open a ticket.</p>`;
 					buf += `<p>A staff member will look at your case as soon as possible.</p>`;
 					if (!isLast) break;
 					buf += `<button name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;

@@ -233,7 +233,7 @@ export const TeamsHandler = new class {
 			const filtered = Chat.nicknamefilter(unownWord, user);
 			if (!filtered || filtered !== unownWord) {
 				connection.popup(
-					`Your team was rejected for the following reason:\n\n` +
+					`Your team was rejected because:\n\n` +
 					`- Your Unowns spell out a banned word: ${unownWord.toUpperCase()}`
 				);
 				return null;

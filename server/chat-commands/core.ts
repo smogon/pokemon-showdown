@@ -1642,7 +1642,7 @@ export const commands: Chat.ChatCommands = {
 			if (result.startsWith('1')) {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);
 			} else {
-				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team was rejected for the following reasons:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
+				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team was rejected because:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
 			}
 		});
 	},

@@ -753,7 +753,7 @@ export const otdCommands: Chat.ChatCommands = {
 		if (keys.length) {
 			void handler.setWinnerProperty(changelist);
 			this.modlog(handler.id.toUpperCase(), null, `changed ${keys.join(', ')}`);
-			return this.privateModAction(`${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the ${handler.name} of the ${handler.timeLabel}: ${keys.join(', ')}`);
+			return this.privateModAction(`${user.name} changed ${Chat.plural(keys, 'these properties', 'this property')} of the ${handler.name} of the ${handler.timeLabel}: ${keys.join(', ')}`);
 		}
 	},
 	sethelp: [

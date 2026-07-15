@@ -190,7 +190,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	announcementhelp: [
 		`/announcement allows rooms to run their own announcements. These announcements are limited to one announcement at a time per room.`,
-		`Accepts the following commands:`,
+		`Accepts these commands:`,
 		`/announcement create [announcement] - Creates a announcement. Requires: % @ # ~`,
 		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # ~`,
 		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`,

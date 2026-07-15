@@ -13,7 +13,7 @@ export const translations: Translations = {
 		"Invalid time given.": "所定的時間無效",
 		"The announcement timer is off.": "廣播定時器已關閉",
 		"The announcement was ended by ${user.name}.": "廣播已被${user.name}終結",
-		"Accepts the following commands:": "隻接受下列的指令",
+		"Accepts these commands:": "隻接受下列的指令",
 
 		"That option is not selected.": "沒有選擇",
 		"You have already voted for this poll.": "你有已經投票了",

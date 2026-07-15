@@ -83,7 +83,7 @@ class Ladder extends LadderStore {
 				const filtered = Chat.nicknamefilter(nickname, user);
 				if (typeof filtered === 'string' && (!filtered || filtered !== match[1])) {
 					connection.popup(
-						`Your team was rejected for the following reason:\n\n` +
+						`Your team was rejected because:\n\n` +
 						`- Your Pokémon has a banned nickname: ${match[1]}`
 					);
 					return null;
@@ -97,7 +97,7 @@ class Ladder extends LadderStore {
 			const filtered = Chat.nicknamefilter(unownWord, user);
 			if (!filtered || filtered !== unownWord) {
 				connection.popup(
-					`Your team was rejected for the following reason:\n\n` +
+					`Your team was rejected because:\n\n` +
 					`- Your Unowns spell out a banned word: ${unownWord.toUpperCase()}`
 				);
 				return null;
@@ -126,7 +126,7 @@ class Ladder extends LadderStore {
 
 		if (!valResult.startsWith('1')) {
 			connection.popup(
-				`Your team was rejected for the following reasons:\n\n` +
+				`Your team was rejected because:\n\n` +
 				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
 			);
 			return null;

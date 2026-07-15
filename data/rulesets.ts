@@ -2832,7 +2832,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			const ability = this.dex.abilities.get(set.ability);
 			if (!abilityPool.has(ability.name)) {
-				return [`${species.name} only has access to the following abilities: ${Array.from(abilityPool).join(', ')}.`];
+				return [`${species.name} can only use these abilities: ${Array.from(abilityPool).join(', ')}.`];
 			}
 		},
 		onValidateTeam(team, format) {
