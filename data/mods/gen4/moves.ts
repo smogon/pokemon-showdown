@@ -402,6 +402,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(4, 9);
 			},
+			onStart(target, source) {
+				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
+				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+					// it failed
+					return false;
+				}
+				this.effectState.move = target.lastMove.id;
+				this.add('-start', target, 'Encore');
+				if (this.effectState.move === 'pursuit') {
+					target.addVolatile('pursuit', target, this.dex.getActiveMove('pursuit'));
+				}
+			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
 		},
@@ -468,7 +480,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem(true)) return false;
-			if (source.hasAbility('multitype')) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
 			if (!item.fling) return false;
@@ -696,7 +707,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onAfterHit(target, source, move) {
 			if (!target.item) return;
-			if (target.ability === 'multitype') return;
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
 				target.item = '';
@@ -870,8 +880,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
-				pp: 5,
-				maxpp: move.pp * 8 / 5,
+				pp: Math.min(5, move.pp),
+				maxpp: this.calculatePP(move, source.ppUps[mimicIndex] || 0),
 				disabled: false,
 				used: false,
 				virtual: true,
@@ -1019,7 +1029,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) return;
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				this.add('-activate', target, 'Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -1038,46 +1048,31 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pursuit: {
 		inherit: true,
-		beforeTurnCallback(pokemon) {
-			if (['frz', 'slp'].includes(pokemon.status) ||
-				(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
-			for (const target of pokemon.foes()) {
-				target.addVolatile('pursuit');
-				const data = target.volatiles['pursuit'];
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
-		},
 		condition: {
 			inherit: true,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Pursuit start');
-				let alreadyAdded = false;
-				for (const source of this.effectState.sources) {
-					if (!this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
-							}
+				if (['frz', 'slp'].includes(source.status) || (source.hasAbility('truant') && source.volatiles['truant']) ||
+					!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') ||
+					!this.queue.cancelMove(source)) return;
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (source.canMegaEvo || source.canUltraBurst) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source && action.choice === 'megaEvo') {
+							this.actions.runMegaEvo(source);
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					const move = this.dex.getActiveMove('pursuit');
-					source.deductPP(move.id);
-					source.moveUsed(move, pokemon.position);
-					if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
-						source.addVolatile('choicelock');
-					}
+				}
+				const move = this.dex.getActiveMove('pursuit');
+				source.deductPP(move.id);
+				source.moveUsed(move, pokemon.position);
+				if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
+					source.addVolatile('choicelock');
 				}
 			},
 		},
@@ -1153,15 +1148,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 80,
 	},
-	roleplay: {
-		inherit: true,
-		onTryHit(target, source) {
-			if (target.ability === source.ability || source.hasItem('griseousorb')) return false;
-			if (target.getAbility().flags['failroleplay'] || source.ability === 'multitype') {
-				return false;
-			}
-		},
-	},
 	safeguard: {
 		inherit: true,
 		condition: {
@@ -1206,7 +1192,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
-				maxpp: move.pp,
+				maxpp: this.calculatePP(move, source.ppUps[sketchIndex] || 0),
 				disabled: false,
 				used: false,
 			};
@@ -1234,9 +1220,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				if (this.actions.useMove(move.id, snatchUser)) {
-					snatchUser.deductPP('snatch');
+
+				// check Pressure
+				const ppDrop = this.runEvent('DeductPP', source, snatchUser, this.effectState.sourceEffect);
+				const extraPP = ppDrop !== true ? ppDrop : 0;
+				if (extraPP > 0) {
+					snatchUser.deductPP(this.effectState.sourceEffect.id, extraPP);
 				}
+
+				this.actions.useMove(move.id, snatchUser);
 				return null;
 			},
 		},
@@ -1337,13 +1329,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source) {
 			return !!source.volatiles['stockpile'];
-		},
-	},
-	switcheroo: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (target.itemKnockedOff || source.itemKnockedOff) return false;
-			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},
 	synthesis: {
@@ -1456,13 +1441,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { bypasssub: 1, metronome: 1, failencore: 1 },
 	},
-	trick: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (target.itemKnockedOff || source.itemKnockedOff) return false;
-			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
-		},
-	},
 	trickroom: {
 		inherit: true,
 		condition: {
@@ -1530,15 +1508,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	woodhammer: {
 		inherit: true,
 		recoil: [1, 3],
-	},
-	worryseed: {
-		inherit: true,
-		onTryHit(pokemon) {
-			const bannedAbilities = ['multitype', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability) || pokemon.hasItem('griseousorb')) {
-				return false;
-			}
-		},
 	},
 	wrap: {
 		inherit: true,

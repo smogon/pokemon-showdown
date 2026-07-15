@@ -77,6 +77,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				const action = this.queue.willMove(pokemon);
 				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
 				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
@@ -92,7 +94,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			this.debug(`custap action: ${action?.moveid}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
-				this.add('-message', "Custap Berry activated.");
+				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 				this.runAction(action);
 			}
 		},
@@ -164,6 +166,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			},
 		},
 	},
+	fullincense: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
+	},
 	griseousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -171,6 +178,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1.2);
 			}
 		},
+		onTakeItem: false,
+		onSetAbility: false,
 	},
 	heavyball: {
 		inherit: true,
@@ -206,6 +215,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				});
 			}
 		},
+	},
+	laggingtail: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
 	},
 	laxincense: {
 		inherit: true,
@@ -346,6 +360,34 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	moonball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	quickclaw: {
+		inherit: true,
+		onFractionalPriority: undefined, // no inherit
+		onBeforeTurn(pokemon) {
+			if (this.randomChance(1, 5)) {
+				const action = this.queue.willMove(pokemon);
+				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
+				this.queue.insertChoice({
+					choice: 'event',
+					event: 'Custap',
+					priority: action.priority + 0.1,
+					pokemon: action.pokemon,
+					move: action.move,
+					targetLoc: action.targetLoc,
+				});
+			}
+		},
+		onCustap(pokemon) {
+			const action = this.queue.willMove(pokemon);
+			if (action) {
+				this.queue.cancelAction(pokemon);
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				this.runAction(action);
+			}
+		},
 	},
 	razorfang: {
 		inherit: true,

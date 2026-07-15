@@ -43,7 +43,7 @@ class TestTools {
 
 	getFormat(options) {
 		if (options.formatid) {
-			const format = Dex.formats.get(options.formatid);
+			const format = Dex.formats.get(options.formatid, true);
 			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
 			return format;
 		}

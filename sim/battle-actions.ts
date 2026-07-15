@@ -470,7 +470,7 @@ export class BattleActions {
 		}
 
 		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
-		if (!sourceEffect || callerMoveForPressure || sourceEffect.id === 'pursuit') {
+		if (!sourceEffect || callerMoveForPressure) {
 			let extraPP = 0;
 			for (const source of pressureTargets) {
 				const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
@@ -892,6 +892,7 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
+			move.lastHit = move.hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
 				damage = [damage[hit - 1]];
@@ -1116,11 +1117,16 @@ export class BattleActions {
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
-			this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			if (moveData.onAfterHit) {
+			if (this.battle.gen >= 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
+			}
+			if (moveData.onAfterHit && pokemon.hp) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
+			}
+			if (this.battle.gen < 5) {
+				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
@@ -1736,7 +1742,7 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;
@@ -1818,8 +1824,12 @@ export class BattleActions {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+		const bypassProtect = target.getMoveHitData(move).bypassProtect;
+		if (bypassProtect) {
 			baseDamage = this.battle.modify(baseDamage, 0.25);
+			if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
+				this.battle.add('-ability', pokemon, bypassProtect.name);
+			}
 			this.battle.add('-zbroken', target);
 		}
 
@@ -1860,20 +1870,19 @@ export class BattleActions {
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
-			this.battle.ruleTable.has('+pokemontag:future')) &&
+		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+tag:past') ||
+			this.battle.ruleTable.has('+tag:future')) &&
 			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
 		if (!item.megaStone) return null;
-		// Temporary hardcode until generation shift
-		if ((species.baseSpecies === "Floette" || species.baseSpecies === "Zygarde") && item.megaStone[species.name]) {
-			return item.megaStone[species.name];
-		}
+		// TODO confirm with generation shift
+		let megaEvolution = item.megaStone[species.name];
+		if (megaEvolution && this.dex.species.get(megaEvolution).gen >= 9) return megaEvolution;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
-		const megaEvolution = item.megaStone[species.baseSpecies];
+		megaEvolution = item.megaStone[species.baseSpecies];
 		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
 	}
 
@@ -1921,7 +1930,7 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
-			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.", false, pokemon.side);
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
 			return;
 		}
 

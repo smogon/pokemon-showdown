@@ -17,7 +17,7 @@ export const MAX_PENDING = 20;
 // this would be in database.ts, but for some weird reason, if the extension and the pm are the same
 // it doesn't work. all the keys in the require() result are there, but they're also set to undefined.
 // no idea why.
-export const PM = SQL('private-messages', module, {
+export const database = SQL('private-messages', module, {
 	file: 'databases/offline-pms.db',
 	extension: 'server/private-messages/database.js',
 });
@@ -31,12 +31,12 @@ export interface ReceivedPM {
 }
 
 export const PrivateMessages = new class {
-	database = PM;
+	database = database;
 	clearInterval = this.nextClear();
 	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
 	async sendOffline(to: string, from: User | string, message: string, context?: Chat.CommandContext) {
 		await this.checkCanSend(to, from);
-		const result = await PM.transaction('send', [toID(from), toID(to), message]);
+		const result = await database.transaction('send', [toID(from), toID(to), message]);
 		if (result.error) throw new Chat.ErrorMessage(result.error);
 		if (typeof from === 'object') {
 			from.send(`|pm|${this.getIdentity(from)}|${this.getIdentity(to)}|${message} __[sent offline]__`);
@@ -48,10 +48,10 @@ export const PrivateMessages = new class {
 		return changed;
 	}
 	getSettings(userid: string) {
-		return PM.get(statements.getSettings, [toID(userid)]);
+		return database.get(statements.getSettings, [toID(userid)]);
 	}
 	deleteSettings(userid: string) {
-		return PM.run(statements.deleteSettings, [toID(userid)]);
+		return database.run(statements.deleteSettings, [toID(userid)]);
 	}
 	async checkCanSend(to: string, from: User | string) {
 		from = toID(from);
@@ -91,9 +91,9 @@ export const PrivateMessages = new class {
 	setViewOnly(user: User | string, val: string | null) {
 		const id = toID(user);
 		if (!val) { // if null, no need to save
-			return PM.run(statements.deleteSettings, [id]);
+			return database.run(statements.deleteSettings, [id]);
 		}
-		return PM.run(statements.setBlock, [id, val]);
+		return database.run(statements.setBlock, [id, val]);
 	}
 	checkCanUse(user: User, options = { forceBool: false, isLogin: false }) {
 		if (!this.offlineIsEnabled) {
@@ -137,7 +137,7 @@ export const PrivateMessages = new class {
 		return `${Users.globalAuth.get(toID(user))}${user}`;
 	}
 	nextClear(): NodeJS.Timeout {
-		if (!PM.isParentProcess) return null!;
+		if (!database.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day
 		const nextMidnight = new Date();
@@ -151,7 +151,7 @@ export const PrivateMessages = new class {
 		return this.clearInterval;
 	}
 	clearSeen() {
-		return PM.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
+		return database.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
 	}
 	send(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -163,10 +163,10 @@ export const PrivateMessages = new class {
 	}
 	async fetchUnseen(user: User | string): Promise<ReceivedPM[]> {
 		const userid = toID(user);
-		return (await PM.transaction('listNew', [userid])) || [];
+		return (await database.transaction('listNew', [userid])) || [];
 	}
 	async fetchAll(user: User | string): Promise<ReceivedPM[]> {
-		return (await PM.all(statements.fetch, [toID(user)])) || [];
+		return (await database.all(statements.fetch, [toID(user)])) || [];
 	}
 	async renderReceived(user: User) {
 		const all = await this.fetchAll(user);
@@ -203,17 +203,19 @@ export const PrivateMessages = new class {
 		return buf;
 	}
 	clearOffline() {
-		return PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
+		return database.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	}
 	destroy() {
-		void PM.destroy();
+		if (this.clearInterval) clearTimeout(this.clearInterval);
+		this.clearInterval = null!;
+		void database.destroy();
 	}
 	start(processCount: ConfigLoader.SubProcessesConfig) {
 		start(processCount);
 	}
 };
 
-if (!PM.isParentProcess) {
+if (!database.isParentProcess) {
 	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
@@ -233,7 +235,7 @@ function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (!Config.usesqlite) {
 		return;
 	}
-	PM.spawn(processCount['pm'] ?? 1);
+	database.spawn(processCount['pm'] ?? 1);
 	// clear super old pms on startup
-	void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
+	void database.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 }

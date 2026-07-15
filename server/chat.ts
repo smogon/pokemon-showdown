@@ -26,14 +26,14 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
-import * as ConfigLoader from './config-loader';
+import type * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
-import { SQL, FS, Utils } from '../lib';
+import { FS, Utils } from '../lib';
 import * as Artemis from './artemis';
-import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
+import { pluginDatabase } from './chat-db';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
@@ -158,7 +158,6 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
@@ -172,10 +171,6 @@ try {
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
-
-const PM = SQL('chat-db', module, {
-	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-});
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1303,20 +1298,13 @@ export class CommandContext extends MessageContext {
 		if (setting === true && !user.can('lock')) return false; // this is to appease TS
 		const friends = targetUser.friends || new Set();
 		if (setting === 'friends') return friends.has(user.id);
-		return Users.globalAuth.atLeast(user, setting as AuthLevel);
+		return Users.globalAuth.atLeast(user, setting as AuthLevel) || friends.has(user.id);
 	}
 	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
-		const friends = targetUser.friends || new Set();
-		if (
-			targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true ||
-				(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
-				!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
-				!this.user.can('lock')
-		) {
+		if (!this.checkCanPM(targetUser)) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
 			throw new Chat.ErrorMessage("This user is currently blocking PMs.");
 		}
@@ -1436,6 +1424,8 @@ export class CommandContext extends MessageContext {
 							}
 						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
 							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
+						} else if (buttonName === 'copyText') {
+							// copy buttons don't do anything on click except copy to clipboard
 						} else if (buttonName) {
 							throw new Chat.ErrorMessage([
 								`This button is not allowed: <${tagContent}>`,
@@ -1566,7 +1556,12 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
+	readonly destroyHandlers: (() => void)[] = [
+		Artemis.destroy,
+		Friends.destroy,
+		() => void pluginDatabase.destroy(),
+		() => Chat.PrivateMessages.destroy(),
+	];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1740,8 +1735,7 @@ export const Chat = new class {
 			if (/[^a-z0-9]/.test(dirname)) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
 
-			// For some reason, toID() isn't available as a global when this executes.
-			const languageID = Dex.toID(dirname);
+			const languageID = toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
 				if (!filename.endsWith('.js')) continue;
@@ -1826,7 +1820,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = PM;
+	database = pluginDatabase;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -1862,11 +1856,6 @@ export const Chat = new class {
 		for (const { file } of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
-
-		Chat.destroyHandlers.push(
-			() => void Chat.database?.destroy(),
-			() => Chat.PrivateMessages.destroy(),
-		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -2460,7 +2449,7 @@ export const Chat = new class {
 				buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
 			}
 			if (species.abilities['H'] && species.abilities['S']) {
-				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br />(${species.abilities['S']})</em></span>`;
+				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br /><span style="display: inline-block;">(${species.abilities['S']})</span></em></span>`;
 			} else if (species.abilities['H']) {
 				buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
 			} else if (species.abilities['S']) {
@@ -2487,7 +2476,7 @@ export const Chat = new class {
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
-	getDataMoveHTML(move: Move) {
+	getDataMoveHTML(move: Move, isChampions = false) {
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
 		// encoding is important for the ??? type icon
@@ -2499,7 +2488,8 @@ export const Chat = new class {
 		}
 		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (`${move.accuracy}%`) : '—'}</span> `;
 		const basePP = move.pp || 1;
-		const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
+		let pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
+		if (isChampions) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
 		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
 		buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
@@ -2549,21 +2539,6 @@ export const Chat = new class {
 			result[key].push(val);
 		}
 		return result;
-	}
-
-	/**
-	 * Normalize a message for the purposes of applying chat filters.
-	 *
-	 * Not used by PS itself, but feel free to use it in your own chat filters.
-	 */
-	normalize(message: string) {
-		message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
-		if (!/[A-Za-z][A-Za-z]/.test(message)) {
-			message = message.replace(/ */g, '');
-		} else if (!message.includes(' ')) {
-			message = message.replace(/([A-Z])/g, ' $1').trim();
-		}
-		return ' ' + message.toLowerCase() + ' ';
 	}
 
 	/**
@@ -2672,6 +2647,7 @@ export const Chat = new class {
 // backwards compatibility; don't actually use these
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
+(Chat as any).normalize = Utils.normalize;
 (Chat as any).splitFirst = Utils.splitFirst;
 (Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
@@ -2725,30 +2701,14 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-if (!PM.isParentProcess) {
-	ConfigLoader.ensureLoaded();
-	global.Monitor = {
-		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-	} as any;
-	process.on('uncaughtException', err => {
-		Monitor.crashlog(err, 'A chat database process');
-	});
-	process.on('unhandledRejection', err => {
-		Monitor.crashlog(err as Error, 'A chat database process');
-	});
-	// eslint-disable-next-line no-eval
-	PM.startRepl(cmd => eval(cmd));
-}
-
 function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (Config.usesqlite) {
-		PM.spawn(processCount['chatdb'] ?? 1);
+		pluginDatabase.spawn(processCount['chatdb'] ?? 1);
 		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
 	Chat.PrivateMessages.start(processCount);
 	Friends.start(processCount);
 	Artemis.start(processCount);
 }
+
+setTimeout(() => Chat.loadPlugins(), 5000);

@@ -1580,7 +1580,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["counter", "flamethrower", "healbell", "icebeam", "lightscreen", "present", "softboiled", "thunderwave", "toxic"]
+                "movepool": ["counter", "flamethrower", "healbell", "icebeam", "present", "softboiled", "thunderwave", "toxic"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1661,6 +1661,10 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "recover", "sacredfire", "thunder"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["flamethrower", "recover", "toxic", "whirlwind"]
             }
         ]
     },

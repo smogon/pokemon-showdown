@@ -1,3 +1,5 @@
+import { toID } from '../../../sim/dex-data';
+
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
@@ -11,7 +13,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 				(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
-				this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
+				this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
 				return;
 			}
 
@@ -87,16 +89,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			this.timesAttacked = pokemon.timesAttacked;
-			for (const moveSlot of pokemon.moveSlots) {
+			for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 				let moveName = moveSlot.move;
 				if (moveSlot.id === 'hiddenpower') {
 					moveName = 'Hidden Power ' + this.hpType;
 				}
+				const move = this.battle.dex.moves.get(moveSlot.id);
+				const pp = Math.min(5, move.pp);
 				this.moveSlots.push({
 					move: moveName,
 					id: moveSlot.id,
-					pp: moveSlot.maxpp === 1 ? 1 : 5,
-					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+					pp,
+					maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
 					target: moveSlot.target,
 					disabled: false,
 					used: false,
