@@ -469,8 +469,12 @@ export class BattleActions {
 			target = targets[targets.length - 1]; // in case of redirection
 		}
 
-		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
-		if (!sourceEffect || callerMoveForPressure || sourceEffect.id === 'pursuit') {
+		const callerMoveForPressure = sourceEffect && (
+			(sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : // Metronome etc
+			sourceEffect.effectType === 'Condition' && sourceEffect.id === move.id ? move : // Pursuit
+			null
+		);
+		if (!sourceEffect || callerMoveForPressure) {
 			let extraPP = 0;
 			for (const source of pressureTargets) {
 				const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);

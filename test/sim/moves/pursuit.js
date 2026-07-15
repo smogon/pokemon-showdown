@@ -28,11 +28,13 @@ describe(`Pursuit`, () => {
 			{ species: "Clefable", ability: 'unaware', moves: ['calmmind'] },
 		]]);
 		const giratina = battle.p2.pokemon[0];
+		const pursuit = battle.p1.active[0].getMoveData(Dex.moves.get('Pursuit'));
 		const hpBeforeSwitch = giratina.hp;
 		battle.makeChoices('move Pursuit terastallize', 'switch 2');
 		const damage = hpBeforeSwitch - giratina.hp;
 		// 0 Atk Tera Dark Kingambit switching boosted Pursuit (80 BP) vs. 0 HP / 0 Def Giratina: 256-304
 		assert.bounded(damage, [256, 304], 'Actual damage: ' + damage);
+		assert.equal(pursuit.pp, pursuit.maxpp - 2, `Pursuit should lose 1 additional PP from Pressure`);
 	});
 
 	it(`should not repeat`, () => {
