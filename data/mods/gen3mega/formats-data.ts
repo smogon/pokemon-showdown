@@ -23,7 +23,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// Gen 1
 	venusaurmega: { tier: "UU" },
 	charizardmegax: { tier: "OU" }, // usage
-	charizardmegay: { tier: "OU" }, // usage
+	charizardmegay: { tier: "Uber" }, // banned from [Gen 3] Megas (Uber); legal in Megas Ubers
 	blastoisemega: { tier: "UU" },
 	beedrillmega: { tier: "OU" }, // usage
 	pidgeotmega: { tier: "UU" },

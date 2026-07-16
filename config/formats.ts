@@ -51,7 +51,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: "Gen 3 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza, no Mega Charizard Y).",
 		mod: 'gen3mega',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Uber', 'Charizard-Mega-Y', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 		// Ability-based complex bans, enforced on the resolved (Mega) forme. The team
 		// validator rewrites a stone-holder's set ability back to its base ability
 		// (No Guard -> Static, Parental Bond -> Scrappy) before banlist matching, so a
