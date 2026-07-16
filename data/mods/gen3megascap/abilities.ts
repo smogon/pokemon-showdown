@@ -72,6 +72,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	primordialsea: { inherit: true, gen: 3, isNonstandard: null },
 	desolateland: { inherit: true, gen: 3, isNonstandard: null },
+	beautifulshine: { inherit: true, gen: 3, isNonstandard: null },
+	cursedbody: { inherit: true, gen: 3, isNonstandard: null },
+	ironfist: { inherit: true, gen: 3, isNonstandard: null },
+	shady: { inherit: true, gen: 3, isNonstandard: null },
+	snowwarning: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		onStart(source) {
+			this.field.setWeather('hail');
+		},
+	},
+	soulheart: { inherit: true, gen: 3, isNonstandard: null },
+	stormdrain: { inherit: true, gen: 3, isNonstandard: null },
+	imposter: { inherit: true, gen: 3, isNonstandard: null },
 
 	// Custom fork abilities (originally isNonstandard: "Future")
 	megasol: { inherit: true, gen: 3, isNonstandard: null },

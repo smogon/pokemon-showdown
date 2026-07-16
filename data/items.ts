@@ -3694,6 +3694,126 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
+	parasectite: {
+		name: "Parasectite",
+		spritenum: 763,
+		megaStone: { "Parasect": "Parasect-Mega" },
+		itemUser: ["Parasect"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2652,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	hitmonchanite: {
+		name: "Hitmonchanite",
+		spritenum: 764,
+		megaStone: { "Hitmonchan": "Hitmonchan-Mega" },
+		itemUser: ["Hitmonchan"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2653,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	noctite: {
+		name: "Noctite",
+		spritenum: 765,
+		megaStone: { "Noctowl": "Noctowl-Mega" },
+		itemUser: ["Noctowl"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2654,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	beautiflite: {
+		name: "Beautiflite",
+		spritenum: 766,
+		megaStone: { "Beautifly": "Beautifly-Mega" },
+		itemUser: ["Beautifly"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2655,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	walrite: {
+		name: "Walrite",
+		spritenum: 767,
+		megaStone: { "Walrein": "Walrein-Mega" },
+		itemUser: ["Walrein"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2656,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	luvdite: {
+		name: "Luvdite",
+		spritenum: 768,
+		megaStone: { "Luvdisc": "Luvdisc-Mega" },
+		itemUser: ["Luvdisc"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2657,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	mantite: {
+		name: "Mantite",
+		spritenum: 769,
+		megaStone: { "Mantine": "Mantine-Mega" },
+		itemUser: ["Mantine"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2658,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	dittite: {
+		name: "Dittite",
+		spritenum: 770,
+		megaStone: { "Ditto": "Ditto-Mega" },
+		itemUser: ["Ditto"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2659,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	mightyenitex: {
+		name: "Mightyenite X",
+		spritenum: 771,
+		megaStone: { "Mightyena": "Mightyena-Mega-X" },
+		itemUser: ["Mightyena"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2670,
+		gen: 9,
+		isNonstandard: "Past",
+	},
+	mightyenitey: {
+		name: "Mightyenite Y",
+		spritenum: 772,
+		megaStone: { "Mightyena": "Mightyena-Mega-Y" },
+		itemUser: ["Mightyena"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2671,
+		gen: 9,
+		isNonstandard: "Past",
+	},
 	magnet: {
 		name: "Magnet",
 		spritenum: 273,

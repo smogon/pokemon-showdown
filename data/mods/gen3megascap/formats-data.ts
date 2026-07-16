@@ -21,15 +21,25 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// both OU and UU already).
 
 	// Gen 1
+	parasectmega: { tier: "OU" },
+	hitmonchanmega: { tier: "OU" },
+	dittomega: { tier: "OU" },
 	gengarmega: { tier: "Uber" },
 	mewtwomegax: { tier: "Uber" },
 	mewtwomegay: { tier: "Uber" },
 
 	// Gen 2
+	noctowlmega: { tier: "OU" },
 	magcargomega: { tier: "OU" },
+	mantinemega: { tier: "OU" },
 
 	// Gen 3
 	blazikenmega: { tier: "Uber" },
+	mightyenamegax: { tier: "OU" },
+	mightyenamegay: { tier: "OU" },
+	beautiflymega: { tier: "OU" },
+	walreinmega: { tier: "OU" },
+	luvdiscmega: { tier: "OU" },
 	medichammega: { tier: "Uber" },
 	// Banned to AG (above Ubers): the 'Uber' tag covers AG so it's out of [Gen 3]
 	// Megas, and [Gen 3] Megas Ubers bans the 'AG' tag so it's out of there too.
@@ -41,6 +51,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// Primals
 	kyogreprimal: { tier: "Uber" },
 	groudonprimal: { tier: "Uber" },
+
+	// Prevent trapping from ruining the format.
+	dugtrio: { tier: "Uber" },
 
 	// --- Base forms: usage-based OU/UU overrides ------------------------------
 	// Overrides the inherited Gen 3 (ADV) tier for base species in this metagame.
@@ -54,49 +67,5 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	vaporeon: { tier: "OU" },
 	zangoose: { tier: "OU" },
 
-	// Dropped to UU: usage < 4.52% (former OU/(OU)) or UUBL reset.
-	alakazam: { tier: "UU" },
-	armaldo: { tier: "UU" },
-	articuno: { tier: "UU" },
-	blaziken: { tier: "UU" },
-	breloom: { tier: "UU" },
-	chansey: { tier: "UU" },
-	charizard: { tier: "UU" },
-	crobat: { tier: "UU" },
-	dodrio: { tier: "UU" },
-	donphan: { tier: "UU" },
-	dragonite: { tier: "UU" },
-	dusclops: { tier: "UU" },
-	entei: { tier: "UU" },
-	espeon: { tier: "UU" },
-	gardevoir: { tier: "UU" },
-	hariyama: { tier: "UU" },
-	heracross: { tier: "UU" },
-	houndoom: { tier: "UU" },
-	jolteon: { tier: "UU" },
-	jynx: { tier: "UU" },
-	kadabra: { tier: "UU" },
-	kingdra: { tier: "UU" },
-	linoone: { tier: "UU" },
-	ludicolo: { tier: "UU" },
-	machamp: { tier: "UU" },
-	marowak: { tier: "UU" },
-	medicham: { tier: "UU" },
-	porygon2: { tier: "UU" },
-	regice: { tier: "UU" },
-	rhydon: { tier: "UU" },
-	sceptile: { tier: "UU" },
-	scizor: { tier: "UU" },
-	slaking: { tier: "UU" },
-	slowbro: { tier: "UU" },
-	smeargle: { tier: "UU" },
-	starmie: { tier: "UU" },
-	steelix: { tier: "UU" },
-	swellow: { tier: "UU" },
-	tauros: { tier: "UU" },
-	typhlosion: { tier: "UU" },
-	umbreon: { tier: "UU" },
-	ursaring: { tier: "UU" },
-	venusaur: { tier: "UU" },
-	weezing: { tier: "UU" },
+	// No usage means UU is unchanged for now.
 };

@@ -21,6 +21,102 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.equal(megaDex.species.get('zangoose').tier, 'UU');
 	});
 
+	it('loads Archie\'s expanded CAP Mega roster, stones, and abilities', () => {
+		const dex = Dex.mod('gen3megascap');
+		const megas = {
+			parasectmega: ['Parasectite', 'Cursed Body'],
+			hitmonchanmega: ['Hitmonchanite', 'Iron Fist'],
+			dittomega: ['Dittite', 'Imposter'],
+			noctowlmega: ['Noctite', 'Shady'],
+			mantinemega: ['Mantite', 'Dragonize'],
+			mightyenamegax: ['Mightyenite X', 'Tough Claws'],
+			mightyenamegay: ['Mightyenite Y', 'Intimidate'],
+			beautiflymega: ['Beautiflite', 'Beautiful Shine'],
+			walreinmega: ['Walrite', 'Snow Warning'],
+			luvdiscmega: ['Luvdite', 'Soul Heart'],
+		};
+
+		for (const [id, [itemName, abilityName]] of Object.entries(megas)) {
+			const species = dex.species.get(id);
+			const item = dex.items.get(itemName);
+			assert.equal(species.exists, true, `${id} should exist`);
+			assert.equal(species.requiredItem, itemName);
+			assert.equal(species.abilities[0], abilityName);
+			assert.equal(species.tier, 'OU');
+			assert.equal(item.exists, true, `${itemName} should exist`);
+			assert.equal(item.gen, 3);
+			assert.equal(item.isNonstandard, null);
+		}
+
+		assert.equal(dex.abilities.get('beautifulshine').isNonstandard, null);
+		assert.equal(dex.abilities.get('shady').isNonstandard, null);
+		assert.deepEqual(dex.species.get('hitmonchan').abilities, { 0: 'Keen Eye' });
+		assert.deepEqual(dex.species.get('beautiflymega').baseStats,
+			{ hp: 90, atk: 35, def: 90, spa: 80, spd: 90, spe: 100 });
+		assert.equal(Dex.mod('gen3mega').species.get('parasectmega').isNonstandard, 'Future');
+	});
+
+	it('applies the updated tiering and banlist', () => {
+		const dex = Dex.mod('gen3megascap');
+		const format = Dex.formats.get('gen3megascap');
+
+		assert.equal(dex.species.get('dugtrio').tier, 'Uber');
+		assert.equal(dex.species.get('alakazam').tier, 'UUBL');
+		assert.equal(dex.species.get('starmie').tier, 'OU');
+		for (const ban of [
+			'Soundproof + Baton Pass', 'Sand Veil + Sand Stream', 'Quick Claw',
+			'Confuse Ray', 'Dynamic Punch', 'Focus Band', 'Mud Slap',
+		]) {
+			assert(format.banlist.includes(ban), `${ban} should be banned`);
+		}
+	});
+
+	it('allows the new CAP Mega Stones in the format', () => {
+		const cases = [
+			['Parasect', 'Parasectite', 'Effect Spore', 'spore'],
+			['Hitmonchan', 'Hitmonchanite', 'Keen Eye', 'machpunch'],
+			['Ditto', 'Dittite', 'Limber', 'transform'],
+			['Noctowl', 'Noctite', 'Insomnia', 'hypnosis'],
+			['Mantine', 'Mantite', 'Swift Swim', 'surf'],
+			['Mightyena', 'Mightyenite X', 'Intimidate', 'crunch'],
+			['Beautifly', 'Beautiflite', 'Swarm', 'gust'],
+			['Walrein', 'Walrite', 'Thick Fat', 'icebeam'],
+			['Luvdisc', 'Luvdite', 'Swift Swim', 'surf'],
+		];
+		for (const [species, item, ability, move] of cases) {
+			const errors = TeamValidator.get('gen3megascap').validateTeam([
+				{ species, item, ability, moves: [move], evs: { hp: 1 } },
+			]);
+			assert(!errors, `expected ${item} to be legal, got: ${JSON.stringify(errors)}`);
+		}
+	});
+
+	it('runs the new CAP Mega abilities in Gen 3 battles', () => {
+		const hailBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Walrein', item: 'Walrite', ability: 'Thick Fat', moves: ['surf'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['tackle'] }],
+		]);
+		hailBattle.makeChoices('move surf mega', 'move tackle');
+		assert.equal(hailBattle.p1.active[0].species.name, 'Walrein-Mega');
+		assert.equal(hailBattle.field.weather, 'hail');
+
+		const shadyBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Noctowl', item: 'Noctite', ability: 'Insomnia', moves: ['shadowball'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
+		]);
+		shadyBattle.makeChoices('move shadowball mega', 'move splash');
+		assert(shadyBattle.p2.active[0].hp < shadyBattle.p2.active[0].maxhp,
+			'Shady should let Ghost moves hit Normal-types');
+
+		const shineBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Beautifly', item: 'Beautiflite', ability: 'Swarm', moves: ['protect'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['protect'] }],
+		]);
+		shineBattle.makeChoices('move protect mega', 'move protect');
+		assert.equal(shineBattle.p1.active[0].boosts.spa, 1);
+		assert.equal(shineBattle.p1.active[0].boosts.spd, 1);
+	});
+
 	it('allows Magcargo to Mega Evolve in the CAP format', () => {
 		const errors = TeamValidator.get('gen3megascap').validateTeam([
 			{

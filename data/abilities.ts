@@ -401,6 +401,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 224,
 	},
+	beautifulshine: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({ spa: 1, spd: 1 });
+			}
+		},
+		flags: {},
+		name: "Beautiful Shine",
+		rating: 4.5,
+		num: 314,
+	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
 			this.effectState.checkedBerserk = !(
@@ -4173,6 +4186,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Sharpness",
 		rating: 3.5,
 		num: 292,
+	},
+	shady: {
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Ghost'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Shady', `[of] ${target}`);
+			}
+		},
+		flags: {},
+		name: "Shady",
+		rating: 3,
+		num: 315,
 	},
 	shedskin: {
 		onResidualOrder: 5,

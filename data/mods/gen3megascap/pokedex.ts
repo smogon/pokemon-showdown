@@ -10,6 +10,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// Gardevoir/Altaria formes fall back to a Gen-3 ability below.
 
 	// === GENERATION 1 ===
+	parasectmega: { inherit: true, gen: 3, isNonstandard: null },
+	hitmonchanmega: { inherit: true, gen: 3, isNonstandard: null },
+	dittomega: { inherit: true, gen: 3, isNonstandard: null },
 	gengarmega: {
 		inherit: true,
 		gen: 3,
@@ -27,13 +30,21 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 
 	// === GENERATION 2 ===
+	yanmega: { inherit: true, gen: 3 },
+	noctowlmega: { inherit: true, gen: 3, isNonstandard: null },
 	magcargomega: {
 		inherit: true,
 		gen: 3,
 		isNonstandard: null,
 	},
+	mantinemega: { inherit: true, gen: 3, isNonstandard: null },
 
 	// === GENERATION 3 ===
+	mightyenamegax: { inherit: true, gen: 3, isNonstandard: null },
+	mightyenamegay: { inherit: true, gen: 3, isNonstandard: null },
+	beautiflymega: { inherit: true, gen: 3, isNonstandard: null },
+	walreinmega: { inherit: true, gen: 3, isNonstandard: null },
+	luvdiscmega: { inherit: true, gen: 3, isNonstandard: null },
 	blazikenmega: {
 		inherit: true,
 		gen: 3,
@@ -83,6 +94,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// and re-legalizing rewrites that gen to 3. Pin these base formes back to their
 	// real Gen-3 ability so e.g. Cloyster can't run Skill Link, Machamp No Guard.
 	// (The Mega formes are separate species and keep their re-legalized ability.)
+	hitmonchan: { inherit: true, abilities: { 0: "Keen Eye" } },
 	mrmime: { inherit: true, abilities: { 0: "Soundproof" } },
 	tyrogue: { inherit: true, abilities: { 0: "Guts" } },
 	hitmontop: { inherit: true, abilities: { 0: "Intimidate" } },

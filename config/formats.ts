@@ -391,7 +391,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: true,
 		rated: true,
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		banlist: ['Uber', 'Soundproof + Baton Pass', 'Smeargle + Ingrain', 'Sand Veil + Sand Stream', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger', 'Quick Claw', 'Confuse Ray', 'Teeter Dance', 'Dynamic Punch', 'Sand-Attack', 'Focus Band', 'Flash', 'Mud Slap', 'Smokescreen', 'Kinesis'],
 	},
 
 	// Other
