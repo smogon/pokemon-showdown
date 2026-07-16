@@ -351,7 +351,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Tail Glow', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance', 'Smeargle + Ingrain', 'Drought', 'Drizzle'],
 	},
 	{
-		name: "[Gen 3] Tradebacks Weather Wars",
+		name: "[Gen 3] Tradebacks Experimental",
 		mod: 'gen3tradebacks',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Tail Glow', 'Baton Pass + Agility', 'Baton Pass + Calm Mind', 'Baton Pass + Swords Dance', 'Baton Pass + Dragon Dance', 'Smeargle + Ingrain'],
