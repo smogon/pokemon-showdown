@@ -10,6 +10,7 @@ import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
 const MAX_TEAMS = 200;
+const MAX_SETS = 300; // 50 teams, 6 sets each
 /** Max teams that can be viewed in a search */
 const MAX_SEARCH = 3000;
 const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
@@ -171,8 +172,8 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + team.packedTeam);
 			return null;
 		}
-		if (sets.length > 50) {
-			connection.popup("Your team has too many Pokemon (max 50).");
+		if (sets.length > MAX_SETS) {
+			connection.popup(`Your team has too many Pokemon (max ${MAX_SETS}).`);
 		}
 		let unownWord = '';
 		for (const set of sets) {
