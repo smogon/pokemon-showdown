@@ -62,6 +62,7 @@ export const Monitor = new class {
 	battlePreps = new TimedCounter();
 	groupChats = new TimedCounter();
 	tickets = new TimedCounter();
+	deprecationsWarned = new Set();
 
 	activeIp: string | null = null;
 	networkUse: { [k: string]: number } = {};
@@ -158,6 +159,12 @@ export const Monitor = new class {
 		case 'error':
 			return this.error(text);
 		}
+	}
+
+	warnDeprecated(text: string, details = '') {
+		if (this.deprecationsWarned.has(text)) return;
+		this.deprecationsWarned.add(text);
+		return this.warn(`${text}${details}`);
 	}
 
 	slow(text: string) {
