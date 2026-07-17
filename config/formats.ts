@@ -3121,12 +3121,88 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 
-	/* / Temporary Tour Metas
+	// Temporary Tour Metas
 	///////////////////////////////////////////////////////////////////
 
 	{
 		section: "Temporary Tour Metas",
-	}, */
+	},
+	{
+		name: "[Gen 9] Camove Chaos",
+		desc: `National Dex-based format where Pokemon can use almost any move in the game, and their first two move types determine their type.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: [
+			'Standard NatDex', 'Terastal Clause', '!Obtainable Moves', '!Team Preview', 'Camomons Mod', 'CFZ Clause',
+			'Sleep Moves Clause', 'Team Type Preview',
+		],
+		banlist: [
+			'Aerodactyl-Mega', 'Alakazam', 'Arceus', 'Beedrill-Mega', 'Blaziken-Mega', 'Calyrex-Ice', 'Calyrex-Shadow', 'Charizard-Mega-Y', 'Chi-Yu', 'Chien-Pao', 'Comfey',
+			'Darmanitan', 'Darmanitan-Galar', 'Darmanitan-Galar-Zen', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dhelmise', 'Dondozo', 'Enamorus', 'Eternatus', 'Flutter Mane',
+			'Genesect', 'Gengar-Mega', 'Giratina', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kartana', 'Komala', 'Koraidon', 'Kyogre', 'Kyurem',
+			'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lucario-Mega', 'Lugia', 'Lunala', 'Marshadow', 'Mawile-Mega', 'Medicham-Mega', 'Metagross-Mega', 'Mewtwo',
+			'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Palafin', 'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza', 'Regieleki', 'Reshiram',
+			'Roserade', 'Salamence-Mega', 'Sceptile-Mega', 'Serperior', 'Shedinja', 'Sneasler', 'Solgaleo', 'Spectrier', 'Tapu Koko', 'Ting-Lu', 'Ursaluna', 'Ursaluna-Bloodmoon',
+			'Xerneas', 'Xurkitree', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zoroark', 'Magnet Pull', 'Regenerator > 2', 'Power Construct',
+			'Damp Rock', 'Heat Rock', 'Smooth Rock', 'Astral Barrage', 'Baneful Bunker', 'Belly Drum', 'Bolt Beak', 'Boomburst', 'Burning Bulwark', 'Ceaseless Edge', 'Chatter',
+			'Clangorous Soul', 'Dire Claw', 'Double Iron Bash', 'Dragon Energy', 'Eruption', 'Extreme Speed', 'Electrify', 'Electro Shot', 'Final Gambit', 'Fillet Away', 'Fishious Rend',
+			'Geomancy', 'Heal Order', 'Jet Punch', 'Lumina Crash', 'No Retreat', 'Octolock', 'Population Bomb', 'Power Trip', 'Quiver Dance', 'Rage Fist', 'Revival Blessing',
+			'Rising Voltage', 'Salt Cure', 'Shell Smash', 'Shift Gear', 'Stored Power', 'Substitute', 'Surging Strikes', 'Tail Glow', 'Take Heart', 'Thousand Arrows', 'Transform',
+			'Triple Arrows', 'V-Create', 'Victory Dance', 'Water Spout', 'Wicked Blow',
+		],
+		unbanlist: ['Blazing Torque', 'Combat Torque', 'Light of Ruin', 'Magical Torque', 'Noxious Torque', 'Wicked Torque'],
+	},
+	{
+		name: "[Gen 9] Chimera 1v1 Random Battle (Bo5)",
+		desc: `Randomized teams of 24 Pok&eacute;mon with sets that are generated to be competitively viable. Merges a chosen team of 6 into a single Pokémon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.`,
+		mod: 'gen9',
+		searchShow: false,
+		bestOfDefault: true,
+		team: 'random',
+		ruleset: ['Obtainable', 'Chimera 1v1 Rule', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 24', 'Adjust Level = 100', 'Best of = 5'],
+	},
+	{
+		name: "[Gen 9] Mix and Mega LC",
+		desc: `Little Cup-based. Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Terastal Clause'],
+		banlist: [
+			'Basculin-White-Striped', 'Diglett', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler',
+			'Moody', 'Baton Pass', 'Sticky Web',
+			'Absolite Z', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Glimmoranite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite',
+			'Raichunite Y', 'Scovillainite', 'Starminite', 'Victreebelite', 'Zygardite',
+		],
+		restricted: [
+			'Aipom', 'Buizel', 'Cutiefly', 'Dratini', 'Elekid', 'Gastly', 'Girafarig', 'Gligar', 'Mienfoo', 'Misdreavus', 'Murkrow', 'Pawniard', 'Qwilfish-Hisui', 'Voltorb-Hisui',
+			'Wattrel', 'Yanma',
+		],
+	},
+	{
+		name: "[Gen 9] Mix and Mega Doubles",
+		desc: `Doubles-based. Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['Standard OMs', 'Gravity Sleep Clause', 'Terastal Clause'],
+		banlist: [
+			'Calyrex-Shadow', 'Miraidon', 'Moody', 'Shadow Tag',
+			'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite',
+			'Raichunite Y', 'Red Orb', 'Scovillainite', 'Starminite',
+		],
+		restricted: [
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyurem-Black',
+			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking',
+			'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Rapid-Strike', 'Zacian', 'Zamazenta', 'Zekrom',
+		],
+	},
+	{
+		name: "[Gen 9] National Dex Ubers (!Unobtainable Formes)",
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard NatDex', '!Obtainable Formes', '!Evasion Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Terastal Clause'],
+		banlist: ['Gengar-Mega', 'Miraidon', 'Assist', 'Baton Pass'],
+	},
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////
