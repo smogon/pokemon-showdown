@@ -14423,6 +14423,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 				pokemon.removeVolatile('destinybond');
+				this.add('-activate', pokemon, 'move: Pursuit');
 				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effectState.sourceEffect });
 			},
 		},

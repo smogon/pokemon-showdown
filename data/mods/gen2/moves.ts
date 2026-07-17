@@ -512,6 +512,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// Destiny Bond ends if the switch action "outspeeds" the attacker, regardless of host
 					pokemon.removeVolatile('destinybond');
 				}
+				this.add('-activate', pokemon, 'move: Pursuit');
 				this.actions.runMove('pursuit', source, source.getLocOf(pokemon), { sourceEffect: this.effectState.sourceEffect });
 			},
 		},
