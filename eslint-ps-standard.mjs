@@ -32,6 +32,10 @@ export const configure = (...args) => [
 	...tseslint.config(...args),
 ];
 
+export const ciRules = globalThis.process?.env?.['CI'] ? {
+	"@stylistic/linebreak-style": ["error", "unix"],
+} : {};
+
 /** @type {NonNullable<Config['rules']>} */
 export const defaultRules = {
 	...stylistic.configs.customize({
@@ -189,6 +193,8 @@ export const defaultRules = {
 	"@stylistic/multiline-ternary": "off",
 	"@stylistic/object-curly-spacing": ["error", "always"],
 	"@stylistic/indent": ["error", "tab", { "flatTernaryExpressions": true }],
+
+	...ciRules,
 };
 
 /** @type {NonNullable<Config['rules']>} */
