@@ -83,10 +83,38 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(source) {
 			this.field.setWeather('hail');
 		},
+		onWeather(target, source, effect) {
+			if (effect.id === 'hail' || effect.id === 'snowscape') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 	},
 	soulheart: { inherit: true, gen: 3, isNonstandard: null },
 	stormdrain: { inherit: true, gen: 3, isNonstandard: null },
 	imposter: { inherit: true, gen: 3, isNonstandard: null },
+	perishbody: { inherit: true, gen: 3, isNonstandard: null },
+	eartheater: { inherit: true, gen: 3, isNonstandard: null },
+	unaware: { inherit: true, gen: 3, isNonstandard: null },
+	opportunist: { inherit: true, gen: 3, isNonstandard: null },
+	waterbubble: { inherit: true, gen: 3, isNonstandard: null },
+	protean: { inherit: true, gen: 3, isNonstandard: null },
+	teravolt: { inherit: true, gen: 3, isNonstandard: null },
+	infiltrator: { inherit: true, gen: 3, isNonstandard: null },
+	merciless: { inherit: true, gen: 3, isNonstandard: null },
+	highnoon: {
+		onStart(source) {
+			this.field.setWeather('sunnyday');
+		},
+		flags: { breakable: 1 },
+		name: "High Noon",
+		rating: 3.5,
+		num: 320,
+		gen: 3,
+		isNonstandard: null,
+	},
 
 	// Custom fork abilities (originally isNonstandard: "Future")
 	megasol: { inherit: true, gen: 3, isNonstandard: null },

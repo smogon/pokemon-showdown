@@ -24,9 +24,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	parasectmega: { tier: "OU" },
 	hitmonchanmega: { tier: "OU" },
 	dittomega: { tier: "OU" },
-	gengarmega: { tier: "Uber" },
-	mewtwomegax: { tier: "Uber" },
-	mewtwomegay: { tier: "Uber" },
 
 	// Gen 2
 	noctowlmega: { tier: "OU" },
@@ -34,26 +31,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	mantinemega: { tier: "OU" },
 
 	// Gen 3
-	blazikenmega: { tier: "Uber" },
 	mightyenamegax: { tier: "OU" },
 	mightyenamegay: { tier: "OU" },
 	beautiflymega: { tier: "OU" },
 	walreinmega: { tier: "OU" },
 	luvdiscmega: { tier: "OU" },
-	medichammega: { tier: "Uber" },
-	// Banned to AG (above Ubers): the 'Uber' tag covers AG so it's out of [Gen 3]
-	// Megas, and [Gen 3] Megas Ubers bans the 'AG' tag so it's out of there too.
-	salamencemega: { tier: "AG" },
-	metagrossmega: { tier: "Uber" },
-	latiasmega: { tier: "Uber" },
-	latiosmega: { tier: "Uber" },
-
-	// Primals
-	kyogreprimal: { tier: "Uber" },
-	groudonprimal: { tier: "Uber" },
-
-	// Prevent trapping from ruining the format.
-	dugtrio: { tier: "Uber" },
 
 	// --- Base forms: usage-based OU/UU overrides ------------------------------
 	// Overrides the inherited Gen 3 (ADV) tier for base species in this metagame.
