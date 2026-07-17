@@ -14,16 +14,27 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// === GENERATION 1 ===
 	hitmonchanmega: { inherit: true, gen: 3, isNonstandard: null },
 	dittomega: { inherit: true, gen: 3, isNonstandard: null },
+	venomoth: { inherit: true, otherFormes: ["Venomoth-Mega"] },
 
 	// === GENERATION 2 ===
 	yanmega: { inherit: true, gen: 3 },
 	noctowlmega: { inherit: true, gen: 3, isNonstandard: null },
 	mantinemega: { inherit: true, gen: 3, isNonstandard: null },
+	quagsire: { inherit: true, otherFormes: ["Quagsire-Mega"] },
+	corsola: { inherit: true, otherFormes: ["Corsola-Galar", "Corsola-Mega"] },
 
 	// === GENERATION 3 ===
 	mightyenamegax: { inherit: true, gen: 3, isNonstandard: null },
 	mightyenamegay: { inherit: true, gen: 3, isNonstandard: null },
 	walreinmega: { inherit: true, gen: 3, isNonstandard: null },
+	masquerain: { inherit: true, otherFormes: ["Masquerain-Mega"] },
+	shedinja: { inherit: true, otherFormes: ["Shedinja-Mega"] },
+	volbeat: { inherit: true, otherFormes: ["Volbeat-Mega"] },
+	illumise: { inherit: true, otherFormes: ["Illumise-Mega"] },
+	grumpig: { inherit: true, otherFormes: ["Grumpig-Mega"] },
+	flygon: { inherit: true, otherFormes: ["Flygon-Mega"] },
+	solrock: { inherit: true, otherFormes: ["Solrock-Mega"] },
+	kecleon: { inherit: true, otherFormes: ["Kecleon-Mega-X", "Kecleon-Mega-Y"] },
 	// Rayquaza-Mega excluded: requires Dragon Ascent which doesn't exist in Gen 3
 
 	// === Base-forme ability corrections ===
@@ -66,8 +77,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	solrockmega: { num: 338, name: "Solrock-Mega", baseSpecies: "Solrock", forme: "Mega", types: ["Rock", "Psychic"], baseStats: { hp: 90, atk: 115, def: 110, spa: 90, spd: 85, spe: 70 }, abilities: { 0: "High Noon" }, heightm: 1.2, weightkg: 154, color: "Red", eggGroups: ["Mineral"], requiredItem: "Sole Rock", gen: 3, isNonstandard: null },
 	kecleonmegax: { num: 352, name: "Kecleon-Mega-X", baseSpecies: "Kecleon", forme: "Mega", types: ["Normal"], baseStats: { hp: 70, atk: 80, def: 70, spa: 110, spd: 120, spe: 90 }, abilities: { 0: "Color Change" }, heightm: 1, weightkg: 22, color: "Green", eggGroups: ["Field"], requiredItem: "Kecleite X", gen: 3, isNonstandard: null },
 	kecleonmegay: { num: 352, name: "Kecleon-Mega-Y", baseSpecies: "Kecleon", forme: "Mega", types: ["Normal"], baseStats: { hp: 60, atk: 90, def: 120, spa: 100, spd: 130, spe: 40 }, abilities: { 0: "Protean" }, heightm: 1, weightkg: 22, color: "Green", eggGroups: ["Field"], requiredItem: "Kecleite Y", gen: 3, isNonstandard: null },
-	parasectmega: { inherit: true, baseStats: { hp: 90, atk: 125, def: 100, spa: 60, spd: 100, spe: 30 }, abilities: { 0: "Perish Body" } },
-	magcargomega: { inherit: true, baseStats: { hp: 80, atk: 100, def: 125, spa: 100, spd: 125, spe: 30 }, abilities: { 0: "Earth Eater" } },
-	beautiflymega: { inherit: true, baseStats: { hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 }, abilities: { 0: "Mega Sol" } },
-	luvdiscmega: { inherit: true, baseStats: { hp: 45, atk: 70, def: 25, spa: 160, spd: 25, spe: 125 }, abilities: { 0: "Soul-Heart" } },
+	parasectmega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 90, atk: 125, def: 100, spa: 60, spd: 100, spe: 30 }, abilities: { 0: "Perish Body" } },
+	magcargomega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 80, atk: 100, def: 125, spa: 100, spd: 125, spe: 30 }, abilities: { 0: "Earth Eater" } },
+	beautiflymega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 }, abilities: { 0: "Mega Sol" } },
+	luvdiscmega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 45, atk: 70, def: 25, spa: 160, spd: 25, spe: 125 }, abilities: { 0: "Soul-Heart" } },
 };

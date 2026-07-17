@@ -22,18 +22,30 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 
 	// Gen 1
 	parasectmega: { tier: "OU" },
+	venomothmega: { tier: "OU" },
 	hitmonchanmega: { tier: "OU" },
 	dittomega: { tier: "OU" },
 
 	// Gen 2
 	noctowlmega: { tier: "OU" },
+	quagsiremega: { tier: "OU" },
 	magcargomega: { tier: "OU" },
+	corsolamega: { tier: "OU" },
 	mantinemega: { tier: "OU" },
 
 	// Gen 3
 	mightyenamegax: { tier: "OU" },
 	mightyenamegay: { tier: "OU" },
 	beautiflymega: { tier: "OU" },
+	masquerainmega: { tier: "OU" },
+	shedinjamega: { tier: "OU" },
+	volbeatmega: { tier: "OU" },
+	illumisemega: { tier: "OU" },
+	grumpigmega: { tier: "OU" },
+	flygonmega: { tier: "OU" },
+	solrockmega: { tier: "OU" },
+	kecleonmegax: { tier: "OU" },
+	kecleonmegay: { tier: "OU" },
 	walreinmega: { tier: "OU" },
 	luvdiscmega: { tier: "OU" },
 
