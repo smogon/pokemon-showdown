@@ -501,7 +501,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 							break;
 						}
 					}
-				}		
+				}
 				const move = this.dex.getActiveMove('pursuit');
 				source.deductPP(move.id);
 				source.moveUsed(move, pokemon.position);
