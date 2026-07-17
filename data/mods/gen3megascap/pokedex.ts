@@ -79,6 +79,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	kecleonmegay: { num: 352, name: "Kecleon-Mega-Y", baseSpecies: "Kecleon", forme: "Mega", types: ["Normal"], baseStats: { hp: 60, atk: 90, def: 120, spa: 100, spd: 130, spe: 40 }, abilities: { 0: "Protean" }, heightm: 1, weightkg: 22, color: "Green", eggGroups: ["Field"], requiredItem: "Kecleite Y", gen: 3, isNonstandard: null },
 	parasectmega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 90, atk: 125, def: 100, spa: 60, spd: 100, spe: 30 }, abilities: { 0: "Perish Body" } },
 	magcargomega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 80, atk: 100, def: 125, spa: 100, spd: 125, spe: 30 }, abilities: { 0: "Earth Eater" } },
-	beautiflymega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 }, abilities: { 0: "Mega Sol" } },
+	beautiflymega: { inherit: true, gen: 3, isNonstandard: null, types: ["Grass", "Flying"], baseStats: { hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 }, abilities: { 0: "Mega Sol" } },
 	luvdiscmega: { inherit: true, gen: 3, isNonstandard: null, baseStats: { hp: 45, atk: 70, def: 25, spa: 160, spd: 25, spe: 125 }, abilities: { 0: "Soul-Heart" } },
 };

@@ -72,6 +72,9 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.deepEqual(dex.species.get('hitmonchan').abilities, { 0: 'Keen Eye', 1: 'Iron Fist' });
 		assert.deepEqual(dex.species.get('beautiflymega').baseStats,
 			{ hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 });
+		assert.deepEqual(dex.species.get('beautiflymega').types, ['Grass', 'Flying']);
+		assert.deepEqual(Dex.mod('gen3mega').species.get('beautiflymega').types, ['Bug', 'Psychic'],
+			'the global future placeholder must retain its original typing');
 		assert.equal(Dex.mod('gen3mega').species.get('parasectmega').isNonstandard, 'Future');
 	});
 
@@ -165,6 +168,7 @@ describe('[Gen 3] Megas CAP', () => {
 		]);
 		shineBattle.makeChoices('move protect mega', 'move protect');
 		assert.equal(shineBattle.p1.active[0].ability, 'megasol');
+		assert.deepEqual(shineBattle.p1.active[0].getTypes(), ['Grass', 'Flying']);
 	});
 
 	it('activates Mega Ditto\'s Imposter immediately after Mega Evolution', () => {
