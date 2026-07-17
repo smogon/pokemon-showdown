@@ -19,32 +19,9 @@ The column value will be ignored for repeat sections.
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
-	// surfnWOB Customs
-	///////////////////////////////////////////////////////////////////
-
 	{
-		section: "surfnWOB Customs",
-	},
-	// [Gen 3] UUBL Classic 26 — preserves the UUBL metagame as it stood in 2026, before
-	// Raikou and Registeel were raised to OU by tiering decision on 2026-07-08. Both are
-	// kept legal here via unbanlist. ("26" leaves room to preserve other UUBL eras later.)
-	{
-		name: "[Gen 3] UUBL Classic 26",
-		desc: "Gen 3 UUBL as it stood in 2026, before Raikou and Registeel were raised to OU on July 8, 2026. Both remain legal here, preserving that era's UUBL metagame.",
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU', '!Accuracy Trap Clause'],
-		banlist: [
-			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
-			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
-		],
-		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Raikou', 'Registeel', 'Porygon2', 'Quick Claw'],
-	},
-	{
-		name: "[Gen 3] Tera",
-		desc: "Gen 3 OU with Terastallization (no Fairy type). Once per battle, per player.",
-		mod: 'gen3tera',
-		ruleset: ['Standard', 'Bonus Type Mod', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		section: "Gen 3 Megas",
+		column: 1,
 	},
 	{
 		name: "[Gen 3] Megas",
@@ -160,6 +137,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard AG'],
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers'],
 	},
+	// surfnWOB Customs
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "surfnWOB Customs",
+		column: 1,
+	},
 	{
 		name: "[Gen 3] Ubers Doubles",
 		desc: "Gen 3 Doubles with Ubers unbanned. Explosion and Self-Destruct are legal.",
@@ -167,6 +151,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
 		banlist: ['Quick Claw', 'Soul Dew', 'Swagger'],
+	},
+	// [Gen 3] UUBL Classic 26 — preserves the UUBL metagame as it stood in 2026, before
+	// Raikou and Registeel were raised to OU by tiering decision on 2026-07-08. Both are
+	// kept legal here via unbanlist. ("26" leaves room to preserve other UUBL eras later.)
+	{
+		name: "[Gen 3] UUBL Classic 26",
+		desc: "Gen 3 UUBL as it stood in 2026, before Raikou and Registeel were raised to OU on July 8, 2026. Both remain legal here, preserving that era's UUBL metagame.",
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU', '!Accuracy Trap Clause'],
+		banlist: [
+			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
+			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
+		],
+		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Raikou', 'Registeel', 'Porygon2', 'Quick Claw'],
+	},
+	{
+		name: "[Gen 3] Tera",
+		desc: "Gen 3 OU with Terastallization (no Fairy type). Once per battle, per player.",
+		mod: 'gen3tera',
+		ruleset: ['Standard', 'Bonus Type Mod', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] PSS",
@@ -181,13 +186,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3pss',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
-	},
-	{
-		name: "[Gen 3] ZangOuSe",
-		desc: `A curated ADV singles format with a slim Pok&eacute;mon pool. Zangoose sits in its own ZangOuSe tier; everything else is OU or NFE.`,
-		mod: 'gen3zangouse',
-		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
-		banlist: ['Sand Veil', 'Soundproof', 'King\'s Rock', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] ADV 200 UU",
@@ -340,6 +338,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Yak Attack",
+		column: 1,
 	},
 	{
 		name: "[Gen 1] RBY Plus",
@@ -423,6 +422,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Archie Madness",
+		column: 1,
+	},
+	{
+		name: "[Gen 3] ZangOuSe",
+		desc: `A curated ADV singles format with a slim Pok&eacute;mon pool. Zangoose sits in its own ZangOuSe tier; everything else is OU or NFE.`,
+		mod: 'gen3zangouse',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
+		banlist: ['Sand Veil', 'Soundproof', 'King\'s Rock', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] Megas CAP",
@@ -433,12 +440,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: ['Uber', 'Soundproof + Baton Pass', 'Smeargle + Ingrain', 'Sand Veil + Sand Stream', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger', 'Quick Claw', 'Confuse Ray', 'Teeter Dance', 'Dynamic Punch', 'Sand-Attack', 'Focus Band', 'Flash', 'Mud Slap', 'Smokescreen', 'Kinesis'],
 	},
-
 	// Other
 	///////////////////////////////////////////////////////////////////
 
 	{
 		section: "Other",
+		column: 1,
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -454,6 +461,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "S/V Singles",
+		column: 2,
 	},
 	{
 		name: "[Gen 9] Random Battle",
@@ -590,6 +598,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "S/V Doubles",
+		column: 2,
 	},
 	{
 		name: "[Gen 9] Random Doubles Battle",
@@ -681,6 +690,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Champions",
+		column: 2,
 	},
 	{
 		name: "[Gen 9 Champions] Random Battle",
@@ -767,6 +777,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Unofficial Metagames",
+		column: 2,
 	},
 	{
 		name: "[Gen 9] 1v1",
@@ -1059,7 +1070,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Ladder Spotlight",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 9] Mega Invasion Random Battle",
@@ -1225,7 +1236,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Other Metagames",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 9] Almost Any Ability",
@@ -3566,6 +3577,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "National Dex",
+		column: 3,
 	},
 	{
 		name: "[Gen 9] National Dex",
@@ -3588,6 +3600,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "National Dex Other Tiers",
+		column: 3,
 	},
 	{
 		name: "[Gen 9] National Dex Ubers",
@@ -3929,7 +3942,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Randomized Metas",
-		column: 3,
+		column: 4,
 	},
 	{
 		name: "[Gen 9] Random Roulette",

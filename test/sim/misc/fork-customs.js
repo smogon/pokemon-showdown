@@ -2,7 +2,7 @@
 
 // Smoke + behavior coverage for this fork's custom formats and mods.
 //
-// The fork adds custom formats (data/mods/* + the surfnWOB section in
+// The fork adds custom formats (data/mods/* + locally maintained sections in
 // config/formats.ts) on top of upstream. Nothing upstream tests them, so a
 // rebase onto smogon/pokemon-showdown can silently break a clause reference,
 // a tier, or an engine seam and we'd only find out in battle. This file is the
@@ -13,12 +13,13 @@ const assert = require('./../../assert');
 const common = require('./../../common');
 
 const { Dex } = require('./../../../dist/sim');
+const { Formats } = require('./../../../dist/config/formats');
 
 // Loaded at module scope, not in a before() hook: mocha collects this describe
 // body — including the per-format it()s generated below — before any hook runs,
 // so the format list has to exist now.
 Dex.includeFormats();
-const CUSTOM_SECTIONS = ['surfnWOB Customs', 'Yak Attack', 'Other'];
+const CUSTOM_SECTIONS = ['Gen 3 Megas', 'surfnWOB Customs', 'Yak Attack', 'Archie Madness', 'Other'];
 const customFormats = Dex.formats.all().filter(f => CUSTOM_SECTIONS.includes(f.section));
 
 describe('Fork customs', () => {
@@ -39,6 +40,41 @@ describe('Fork customs', () => {
 	});
 
 	// --- Targeted behavior: pins the seams the refactors will move. ---
+
+	it('keeps the deployed custom selector layout and Pure Tradebacks OU inheritance', () => {
+		const expectedColumns = {
+			'Gen 3 Megas': 1,
+			'surfnWOB Customs': 1,
+			'Yak Attack': 1,
+			'Archie Madness': 1,
+			'Other': 1,
+			'S/V Singles': 2,
+			'S/V Doubles': 2,
+			'Champions': 2,
+			'Unofficial Metagames': 2,
+			'Ladder Spotlight': 3,
+			'Other Metagames': 3,
+			'National Dex': 3,
+			'National Dex Other Tiers': 3,
+			'Randomized Metas': 4,
+		};
+		for (const [section, column] of Object.entries(expectedColumns)) {
+			const heading = Formats.find(format => format.section === section);
+			assert(heading, `missing ${section} selector section`);
+			assert.equal(heading.column, column, `${section} must remain in selector column ${column}`);
+		}
+
+		assert.equal(Dex.formats.get('gen3zangouse', true).section, 'Archie Madness');
+		assert.deepEqual(Dex.formats.get('gen3puretradebacks', true).ruleset, ['[Gen 3] OU']);
+	});
+
+	it('retains the synchronized PR16 Hoennification and Tradebacks tiering', () => {
+		const hoennification = Dex.mod('gen3hoennification');
+		assert.equal(hoennification.species.get('latias').tier, 'OU');
+		assert.equal(hoennification.species.get('latios').tier, 'OU');
+		assert.equal(hoennification.species.get('xurkitree').tier, 'OU');
+		assert.equal(Dex.mod('gen3tradebacks').species.get('dugtrio').tier, 'Uber');
+	});
 
 	it('gen3tera: a Pokemon can Terastallize (guards the bonustypemod seam)', () => {
 		const battle = common.createBattle({ formatid: 'gen3tera' }, [
@@ -617,22 +653,22 @@ describe('Fork customs', () => {
 	});
 
 	it('gen3 doubles Ubers: the doubles/AG Megas cluster + non-Mega [Gen 3] Ubers Doubles register and enforce their tiers', () => {
-		// The doubles/AG Megas formats (gen3mega) and the non-Mega [Gen 3] Ubers Doubles (gen3)
-		// live in the surfnWOB Customs section. Pin registration, mod, gameType, and the tier
+		// The doubles/AG Megas formats (gen3mega) live in Gen 3 Megas while the non-Mega
+		// [Gen 3] Ubers Doubles (gen3) remains in surfnWOB Customs. Pin section, mod, gameType, and the tier
 		// seams: Megas Doubles bans Ubers; Megas Ubers Doubles unbans them (only AG stays); the
 		// AG formats allow AG-tier M-Salamence. Both Ubers Doubles formats leave Explosion and
 		// Self-Destruct legal (the doubles-OU self-KO ban was deliberately lifted here).
 		const formats = {
-			megasdoubles: { mod: 'gen3mega', gameType: 'doubles' },
-			megasubersdoubles: { mod: 'gen3mega', gameType: 'doubles' },
-			megasag: { mod: 'gen3mega', gameType: 'singles' },
-			megasagdoubles: { mod: 'gen3mega', gameType: 'doubles' },
-			ubersdoubles: { mod: 'gen3', gameType: 'doubles' },
+			megasdoubles: { mod: 'gen3mega', gameType: 'doubles', section: 'Gen 3 Megas' },
+			megasubersdoubles: { mod: 'gen3mega', gameType: 'doubles', section: 'Gen 3 Megas' },
+			megasag: { mod: 'gen3mega', gameType: 'singles', section: 'Gen 3 Megas' },
+			megasagdoubles: { mod: 'gen3mega', gameType: 'doubles', section: 'Gen 3 Megas' },
+			ubersdoubles: { mod: 'gen3', gameType: 'doubles', section: 'surfnWOB Customs' },
 		};
-		for (const [id, { mod, gameType }] of Object.entries(formats)) {
+		for (const [id, { mod, gameType, section }] of Object.entries(formats)) {
 			const format = Dex.formats.get(`gen3${id}`, true);
 			assert(format.exists, `${id} must be registered`);
-			assert.equal(format.section, 'surfnWOB Customs', `${format.name} must sit in the buildable surfnWOB Customs section`);
+			assert.equal(format.section, section, `${format.name} must sit in the ${section} section`);
 			assert.equal(format.mod, mod, `${format.name} must run on the ${mod} mod`);
 			assert.equal(format.gameType, gameType, `${format.name} must use ${gameType}`);
 			Dex.formats.getRuleTable(format); // throws if a ruleset/banlist reference breaks
