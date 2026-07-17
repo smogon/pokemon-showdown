@@ -9,7 +9,8 @@ import { FS, Utils } from '../../lib';
 import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
-const MAX_TEAMS = 200;
+const MAX_TEAMS = 2000;
+const MAX_TEAMS_VIEW = 200;
 const MAX_SETS = 300; // 50 teams, 6 sets each
 /** Max teams that can be viewed in a search */
 const MAX_SEARCH = 3000;
@@ -557,7 +558,7 @@ export const pages: Chat.PageTable = {
 			TeamsHandler.validateAccess(connection);
 			const targetUserid = toID(query.shift()) || user.id;
 			let count = Number(query.shift()) || 10;
-			if (count > MAX_TEAMS) count = MAX_TEAMS;
+			if (count > MAX_TEAMS_VIEW) count = MAX_TEAMS_VIEW;
 			this.title = `[Teams] ${targetUserid}`;
 			const teams = await TeamsHandler.list(targetUserid, count, user.id !== targetUserid);
 			let buf = `<div class="ladder pad"><h2>${targetUserid}'s last ${Chat.count(count, "teams")}</h2>`;
@@ -585,7 +586,7 @@ export const pages: Chat.PageTable = {
 			const type = query.shift() || "";
 			TeamsHandler.validateAccess(connection);
 			let count = Number(query.shift()) || 50;
-			if (count > MAX_TEAMS) count = MAX_TEAMS;
+			if (count > MAX_TEAMS_VIEW) count = MAX_TEAMS_VIEW;
 			let teams: StoredTeam[] = [], title = '';
 			const buttons: { [k: string]: string } = {
 				views: `<button class="button" name="send" value="/teams mostviews">Sort by most views</button>`,
