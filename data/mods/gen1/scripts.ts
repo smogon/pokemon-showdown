@@ -35,9 +35,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			ppData.pp -= amount;
 
 			if (ppData.pp < 0) {
-				this.battle.hint("In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+				this.battle.hint(
+					"In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.",
+					undefined, this.side,
+				);
 			}
-			ppData.pp = ((ppData.pp % 64) + 64) % 64;
+			ppData.pp = this.battle.trunc(ppData.pp, 6);
 
 			if (ppData.virtual && !this.transformed) {
 				// sync PP from Mimic's slot, or Metronome/Mirror Move that called Mimic
@@ -878,6 +881,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				level *= 2;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
+			level = this.battle.trunc(level, 8);
 
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
@@ -896,9 +900,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (attack >= 1024 || defense >= 1024) {
 					this.battle.hint("In Gen 1, a stat will roll over to a small number if it is larger than 1024.");
 				}
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = Math.floor(defense / 4) % 256;
+				defense = this.battle.trunc(Math.floor(defense / 4), 8);
 				if (defense === 0) {
 					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1. ' +
 						'In game, the battle would have crashed.');

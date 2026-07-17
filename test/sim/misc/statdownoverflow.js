@@ -31,7 +31,8 @@ describe('[Gen 1] Stat Drop Overflow', () => {
 	});
 
 	it(`Not SafeTwo`, () => {
-		battle = common.gen(1).createBattle([[
+		// set format to avoid truncation changes
+		battle = common.gen(1).createBattle({ formatid: 'gen1ou' }, [[
 			{ species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: { 'spa': 255, 'spd': 255 } },
 		], [
 			{ species: 'Slowbro', moves: ['amnesia', 'surf'], evs: { 'spa': 255, 'spd': 255 } },

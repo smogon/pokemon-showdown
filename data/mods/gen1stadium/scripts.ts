@@ -695,9 +695,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 			// This is what causes the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				defense = this.battle.clampIntRange(this.battle.trunc(Math.floor(defense / 4), 8), 1);
 			}
 
 			// Self destruct moves halve defense at this point.

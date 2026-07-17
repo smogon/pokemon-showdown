@@ -3313,7 +3313,7 @@ export class Battle {
 	 * https://www.smogon.com/forums/threads/10352797
 	 */
 	getOverflowedTurnCount(): number {
-		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
+		return this.gen >= 8 ? this.trunc(this.turn - 1, 8) : this.turn - 1;
 	}
 
 	initEffectState(obj: Partial<EffectState>, effectOrder?: number): EffectState {

@@ -638,8 +638,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (attack >= 1024 || defense >= 1024) {
 					this.battle.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
 				}
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
+				defense = this.battle.clampIntRange(this.battle.trunc(Math.floor(defense / 4), 8), 1);
 			}
 
 			// Self destruct moves halve defense at this point.
