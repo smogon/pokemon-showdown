@@ -117,6 +117,20 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.equal(shineBattle.p1.active[0].boosts.spd, 1);
 	});
 
+	it('activates Mega Ditto\'s Imposter immediately after Mega Evolution', () => {
+		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Ditto', item: 'Dittite', ability: 'Limber', moves: ['transform'] }],
+			[{ species: 'Celebi', ability: 'Natural Cure', moves: ['recover'] }],
+		]);
+		battle.makeChoices('move transform mega', 'move recover');
+		const imposterTransform = battle.log.findIndex(line =>
+			line.startsWith('|-transform|p1a: Ditto|p2a: Celebi|[from] ability: Imposter'));
+		const dittoAction = battle.log.findIndex(line =>
+			line.startsWith('|move|p1a: Ditto|') || line.startsWith('|cant|p1a: Ditto|'));
+		assert(imposterTransform >= 0 && imposterTransform < dittoAction,
+			'Mega Ditto should transform through Imposter before taking its move');
+	});
+
 	it('allows Magcargo to Mega Evolve in the CAP format', () => {
 		const errors = TeamValidator.get('gen3megascap').validateTeam([
 			{
