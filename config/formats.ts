@@ -455,6 +455,31 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard AG', 'NatDex Mod'],
 	},
+	// [Gen 1] 7U ("Seven Used") &mdash; the RBY tier below ZU. Built on gen1 PU, the roster is
+	// wiped (-All Pokemon) and rebuilt as the LC tier plus a curated set of NFEs, minus the banned
+	// LC Pok&eacute;mon, so only early-stage/unevolved mons at their highest legal evolution play.
+	// The roster is pinned to the Smogon 7U hub's official legality list (49 mons), which the
+	// hub's original challenge code no longer matches: Bellsprout/Caterpie are LC mons the list
+	// bans, Metapod is dropped (whole Caterpie line is out), and Tentacool is added.
+	{
+		name: "[Gen 1] 7U",
+		desc: "RBY 7U &mdash; the tier below ZU. Only the 7U legality list plays: early-stage/unevolved Pok&eacute;mon (the LC tier plus a curated set of NFEs &mdash; Charmeleon, Ivysaur, Golbat, Hitmonchan, Tentacool&hellip;), minus the banned LC mons. Confuse Ray is banned.",
+		mod: 'gen1',
+		ruleset: ['[Gen 1] PU'],
+		// Confuse Ray (in the hub's challenge code) is intentionally omitted: it is already
+		// banned by the inherited [Gen 1] UU ruleset, and repeating it here throws a
+		// "rule already exists" error on load. It stays banned all the same.
+		banlist: [
+			'All Pokemon',
+			'Abra', 'Bellsprout', 'Caterpie', 'Diglett', 'Dratini', 'Drowzee', 'Exeggcute', 'Gastly',
+			'Horsea', 'Omanyte', 'Pikachu', 'Poliwag', 'Ponyta', 'Sandshrew', 'Seel', 'Slowpoke', 'Staryu',
+		],
+		unbanlist: [
+			'LC',
+			'Beedrill', 'Charmeleon', 'Clefairy', 'Ditto', 'Farfetch\'d', 'Gloom', 'Golbat', 'Hitmonchan',
+			'Ivysaur', 'Kakuna', 'Nidorina', 'Nidorino', 'Pidgeotto', 'Tentacool',
+		],
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
