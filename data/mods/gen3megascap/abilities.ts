@@ -62,6 +62,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	strongjaw: { inherit: true, gen: 3, isNonstandard: null },
 	sheerforce: { inherit: true, gen: 3, isNonstandard: null },
 	prankster: { inherit: true, gen: 3, isNonstandard: null },
+	furcoat: { inherit: true, gen: 3, isNonstandard: null },
 	refrigerate: {
 		inherit: true,
 		gen: 3,
@@ -75,21 +76,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	beautifulshine: { inherit: true, gen: 3, isNonstandard: null },
 	cursedbody: { inherit: true, gen: 3, isNonstandard: null },
 	ironfist: { inherit: true, gen: 3, isNonstandard: null },
-	shady: { inherit: true, gen: 3, isNonstandard: null },
+	shady: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		onTryBoost: undefined,
+		desc: "This Pokemon's Ghost-type moves can hit Normal-type Pokemon.",
+		shortDesc: "This Pokemon's Ghost-type moves can hit Normal-type Pokemon.",
+	},
 	snowwarning: {
 		inherit: true,
 		gen: 3,
 		isNonstandard: null,
 		onStart(source) {
 			this.field.setWeather('hail');
-		},
-		onWeather(target, source, effect) {
-			if (effect.id === 'hail' || effect.id === 'snowscape') {
-				this.heal(target.baseMaxhp / 16);
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
 		},
 	},
 	soulheart: { inherit: true, gen: 3, isNonstandard: null },
@@ -110,8 +110,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { breakable: 1 },
 		name: "High Noon",
+		desc: "On switch-in, this Pokemon summons Sunny Day indefinitely and is immune to Ground-type moves.",
+		shortDesc: "On switch-in, this Pokemon summons Sunny Day indefinitely and is immune to Ground-type moves.",
 		rating: 3.5,
 		num: 320,
+		gen: 3,
+		isNonstandard: null,
+	},
+	sandy: {
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (move.type === 'Ground') move.sandyBoosted = true;
+		},
+		flags: {},
+		name: "Sandy",
+		desc: "This Pokemon's Ground-type moves can hit Flying-type Pokemon.",
+		shortDesc: "This Pokemon's Ground-type moves can hit Flying-type Pokemon.",
+		rating: 3,
+		num: 321,
 		gen: 3,
 		isNonstandard: null,
 	},

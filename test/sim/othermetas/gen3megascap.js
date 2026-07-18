@@ -2,10 +2,11 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const Dex = require('./../../../dist/sim').Dex;
+const { Battle, Dex } = require('./../../../dist/sim');
+const { Format } = require('./../../../dist/sim/dex-formats');
 const { TeamValidator } = require('./../../../dist/sim/team-validator');
 
-const v8Megas = {
+const capAddedMegas = {
 	parasectmega: ['Parasect', 'Parasectite'],
 	venomothmega: ['Venomoth', 'Venomite'],
 	quagsiremega: ['Quagsire', 'Quagsite'],
@@ -22,6 +23,32 @@ const v8Megas = {
 	kecleonmegax: ['Kecleon', 'Kecleite X'],
 	kecleonmegay: ['Kecleon', 'Kecleite Y'],
 	luvdiscmega: ['Luvdisc', 'Luvdite'],
+};
+
+const authoritativeMegaData = {
+	parasectmega: [[90, 125, 100, 60, 100, 30], ['Bug', 'Ghost'], 'Perish Body'],
+	venomothmega: [[85, 100, 60, 100, 80, 120], ['Bug', 'Poison'], 'Merciless'],
+	hitmonchanmega: [[50, 105, 79, 110, 110, 101], ['Fighting'], 'Iron Fist'],
+	dittomega: [[90, 50, 50, 50, 50, 50], ['Normal'], 'Imposter'],
+	noctowlmega: [[80, 125, 61, 91, 96, 99], ['Ghost', 'Flying'], 'Shady'],
+	quagsiremega: [[110, 95, 110, 90, 90, 35], ['Water', 'Ground'], 'Unaware'],
+	magcargomega: [[80, 100, 125, 100, 125, 30], ['Fire', 'Rock'], 'Earth Eater'],
+	corsolamega: [[90, 100, 120, 100, 95, 35], ['Water', 'Psychic'], 'Natural Cure'],
+	mantinemega: [[90, 65, 100, 120, 110, 100], ['Water', 'Dragon'], 'Dragonize'],
+	mightyenamegax: [[61, 110, 60, 119, 60, 110], ['Dark'], 'Serene Grace'],
+	mightyenamegay: [[100, 100, 100, 35, 110, 95], ['Dark', 'Poison'], 'Fur Coat'],
+	beautiflymega: [[90, 10, 90, 130, 90, 116], ['Grass', 'Flying'], 'Mega Sol'],
+	masquerainmega: [[91, 80, 84, 90, 110, 95], ['Bug', 'Water'], 'Water Bubble'],
+	shedinjamega: [[4, 110, 45, 51, 30, 96], ['Bug', 'Ghost'], 'Wonder Guard'],
+	volbeatmega: [[85, 65, 75, 90, 90, 125], ['Bug', 'Electric'], 'Teravolt'],
+	illumisemega: [[70, 70, 90, 125, 90, 85], ['Bug', 'Electric'], 'Prankster'],
+	grumpigmega: [[100, 60, 80, 125, 125, 80], ['Psychic'], 'Opportunist'],
+	flygonmega: [[80, 100, 120, 100, 80, 110], ['Ground', 'Dragon'], 'Sandy'],
+	solrockmega: [[90, 115, 110, 90, 85, 90], ['Rock', 'Psychic'], 'High Noon'],
+	kecleonmegax: [[60, 120, 60, 110, 120, 105], ['Normal'], 'Color Change'],
+	kecleonmegay: [[100, 100, 120, 100, 100, 40], ['Normal'], 'Protean'],
+	walreinmega: [[125, 80, 100, 100, 115, 80], ['Water', 'Ice'], 'Snow Warning'],
+	luvdiscmega: [[45, 70, 25, 160, 25, 125], ['Water'], 'Soul-Heart'],
 };
 
 describe('[Gen 3] Megas CAP', () => {
@@ -48,8 +75,8 @@ describe('[Gen 3] Megas CAP', () => {
 			dittomega: ['Dittite', 'Imposter'],
 			noctowlmega: ['Noctite', 'Shady'],
 			mantinemega: ['Mantite', 'Dragonize'],
-			mightyenamegax: ['Mightyenite X', 'Tough Claws'],
-			mightyenamegay: ['Mightyenite Y', 'Intimidate'],
+			mightyenamegax: ['Mightyenite X', 'Serene Grace'],
+			mightyenamegay: ['Mightyenite Y', 'Fur Coat'],
 			beautiflymega: ['Beautiflite', 'Mega Sol'],
 			walreinmega: ['Walrite', 'Snow Warning'],
 			luvdiscmega: ['Luvdite', 'Soul-Heart'],
@@ -71,16 +98,36 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.equal(dex.abilities.get('shady').isNonstandard, null);
 		assert.deepEqual(dex.species.get('hitmonchan').abilities, { 0: 'Keen Eye', 1: 'Iron Fist' });
 		assert.deepEqual(dex.species.get('beautiflymega').baseStats,
-			{ hp: 90, atk: 10, def: 90, spa: 110, spd: 90, spe: 110 });
+			{ hp: 90, atk: 10, def: 90, spa: 130, spd: 90, spe: 116 });
 		assert.deepEqual(dex.species.get('beautiflymega').types, ['Grass', 'Flying']);
 		assert.deepEqual(Dex.mod('gen3mega').species.get('beautiflymega').types, ['Bug', 'Psychic'],
 			'the global future placeholder must retain its original typing');
 		assert.equal(Dex.mod('gen3mega').species.get('parasectmega').isNonstandard, 'Future');
 	});
 
-	it('marks every v8 CAP-added Mega OU and links it to its base species and stone', () => {
+	it('matches the authoritative ADV Megas CAP stats, typings, and abilities', () => {
 		const dex = Dex.mod('gen3megascap');
-		for (const [id, [baseName, itemName]] of Object.entries(v8Megas)) {
+		const actualMegaData = {};
+		for (const id of Object.keys(authoritativeMegaData)) {
+			const species = dex.species.get(id);
+			const ability = dex.abilities.get(species.abilities[0]);
+			assert.equal(ability.exists, true, `${species.abilities[0]} should exist`);
+			assert.equal(ability.isNonstandard, null, `${species.abilities[0]} should be legal in Gen 3`);
+			actualMegaData[id] = [
+				['hp', 'atk', 'def', 'spa', 'spd', 'spe'].map(stat => species.baseStats[stat]),
+				species.types,
+				species.abilities[0],
+			];
+		}
+		assert.deepEqual(actualMegaData, authoritativeMegaData);
+		assert.equal(dex.abilities.get('sandy').name, 'Sandy');
+		assert.equal(dex.species.get('sandy').name, 'Sandy Shocks',
+			'the Sandy Shocks species alias should remain available outside ability lookups');
+	});
+
+	it('marks every CAP-added Mega OU and links it to its base species and stone', () => {
+		const dex = Dex.mod('gen3megascap');
+		for (const [id, [baseName, itemName]] of Object.entries(capAddedMegas)) {
 			const species = dex.species.get(id);
 			const base = dex.species.get(baseName);
 			const item = dex.items.get(itemName);
@@ -99,9 +146,9 @@ describe('[Gen 3] Megas CAP', () => {
 			'adding Mega Corsola must preserve Corsola-Galar');
 	});
 
-	it('allows every v8 CAP-added Mega in the format', () => {
+	it('allows every CAP-added Mega in the format', () => {
 		const dex = Dex.mod('gen3megascap');
-		for (const [id, [baseName, itemName]] of Object.entries(v8Megas)) {
+		for (const [id, [baseName, itemName]] of Object.entries(capAddedMegas)) {
 			const base = dex.species.get(baseName);
 			const errors = TeamValidator.get('gen3megascap').validateTeam([
 				{ species: baseName, item: itemName, ability: base.abilities[0], moves: ['hiddenpower'], evs: { hp: 1 } },
@@ -169,6 +216,120 @@ describe('[Gen 3] Megas CAP', () => {
 		shineBattle.makeChoices('move protect mega', 'move protect');
 		assert.equal(shineBattle.p1.active[0].ability, 'megasol');
 		assert.deepEqual(shineBattle.p1.active[0].getTypes(), ['Grass', 'Flying']);
+	});
+
+	it('lets Sandy hit Flying-types while preserving Levitate for non-Flying targets', () => {
+		const flyingBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Flygon', item: 'Flygonite', ability: 'Levitate', moves: ['earthquake'] }],
+			[{ species: 'Skarmory', ability: 'Keen Eye', moves: ['splash'] }],
+		]);
+		flyingBattle.makeChoices('move earthquake mega', 'move splash');
+		assert.equal(flyingBattle.p1.active[0].ability, 'sandy');
+		assert(flyingBattle.p2.active[0].hp < flyingBattle.p2.active[0].maxhp,
+			'Sandy should let Ground moves hit Flying-types');
+
+		const levitateBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Flygon', item: 'Flygonite', ability: 'Levitate', moves: ['earthquake'] }],
+			[{ species: 'Weezing', ability: 'Levitate', moves: ['splash'] }],
+		]);
+		levitateBattle.makeChoices('move earthquake mega', 'move splash');
+		assert.equal(levitateBattle.p2.active[0].hp, levitateBattle.p2.active[0].maxhp,
+			'Sandy should not bypass Levitate on a non-Flying target');
+
+		const flyingLevitateBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Flygon-Mega', ability: 'Sandy', moves: ['earthquake'] }],
+			[{ species: 'Charizard', ability: 'Levitate', moves: ['splash'] }],
+		]);
+		flyingLevitateBattle.makeChoices('move earthquake', 'move splash');
+		assert(flyingLevitateBattle.p2.active[0].hp < flyingLevitateBattle.p2.active[0].maxhp,
+			'Sandy should hit any Flying-type Pokemon, including one that also has Levitate');
+	});
+
+	it('applies Sandy separately to each target of a spread Ground move', () => {
+		const format = new Format({ ...Dex.formats.get('gen3megascap'), gameType: 'doubles' });
+		const p1Team = [
+			{ species: 'Flygon', item: 'Flygonite', ability: 'Levitate', moves: ['earthquake'] },
+			{ species: 'Charizard', ability: 'Blaze', moves: ['splash'] },
+		];
+		const p2Team = [
+			{ species: 'Skarmory', ability: 'Keen Eye', moves: ['splash'] },
+			{ species: 'Weezing', ability: 'Levitate', moves: ['splash'] },
+		];
+		const battle = new Battle({
+			format, debug: true, strictChoices: true,
+			p1: { team: p1Team }, p2: { team: p2Team },
+		});
+		battle.makeChoices('move earthquake mega, move splash', 'move splash, move splash');
+		assert(battle.p2.active[0].hp < battle.p2.active[0].maxhp,
+			'Sandy should let a spread Ground move hit its Flying-type target');
+		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp,
+			'Sandy should preserve Levitate for a non-Flying target of the same spread move');
+	});
+
+	it('keeps Mega Shedinja at its declared fixed maximum HP', () => {
+		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Shedinja', item: 'Shedinjite', ability: 'Wonder Guard', moves: ['splash'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
+		]);
+		battle.makeChoices('move splash mega', 'move splash');
+		const shedinja = battle.p1.active[0];
+		assert.equal(shedinja.species.name, 'Shedinja-Mega');
+		assert.equal(shedinja.maxhp, 4);
+		assert.equal(shedinja.hp, 4);
+	});
+
+	it('keeps Shady limited to bypassing the Normal immunity to Ghost', () => {
+		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Noctowl-Mega', ability: 'Shady', moves: ['splash'] }],
+			[{ species: 'Salamence', ability: 'Intimidate', moves: ['splash'] }],
+		]);
+		assert.equal(battle.p1.active[0].boosts.atk, -1,
+			'Shady should not provide an undocumented Intimidate immunity');
+	});
+
+	it('keeps Snow Warning limited to summoning hail', () => {
+		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Walrein-Mega', ability: 'Snow Warning', moves: ['splash'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
+		]);
+		const walrein = battle.p1.active[0];
+		walrein.sethp(walrein.maxhp - 64);
+		const hpBeforeTurn = walrein.hp;
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(battle.field.weather, 'hail');
+		assert.equal(battle.field.weatherState.duration, 0, 'ability-summoned Gen 3 hail should be indefinite');
+		assert.equal(walrein.hp, hpBeforeTurn,
+			'Snow Warning should not provide an undocumented hail recovery effect');
+		for (let turn = 0; turn < 5; turn++) {
+			battle.makeChoices('move splash', 'move splash');
+		}
+		assert.equal(battle.field.weather, 'hail', 'Snow Warning hail should remain after five turns');
+
+		const nonIceBattle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Snorlax', ability: 'Snow Warning', moves: ['splash'] }],
+			[{ species: 'Walrein', ability: 'Thick Fat', moves: ['splash'] }],
+		]);
+		const nonIceUser = nonIceBattle.p1.active[0];
+		const nonIceHP = nonIceUser.hp;
+		nonIceBattle.makeChoices('move splash', 'move splash');
+		assert(nonIceUser.hp < nonIceHP, 'Snow Warning should not grant its user a separate hail immunity');
+	});
+
+	it('keeps High Noon sun indefinite and grants Ground immunity', () => {
+		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
+			[{ species: 'Solrock', item: 'Sole Rock', ability: 'Levitate', moves: ['splash'] }],
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['earthquake'] }],
+		]);
+		battle.makeChoices('move splash mega', 'move earthquake');
+		const solrock = battle.p1.active[0];
+		assert.equal(solrock.ability, 'highnoon');
+		assert.equal(solrock.hp, solrock.maxhp, 'High Noon should make its user immune to Ground');
+		assert.equal(battle.field.weather, 'sunnyday');
+		assert.equal(battle.field.weatherState.duration, 0, 'High Noon sun should be indefinite');
+		for (let turn = 0; turn < 5; turn++) {
+			battle.makeChoices('move splash', 'move earthquake');
+		}
+		assert.equal(battle.field.weather, 'sunnyday', 'High Noon sun should remain after five turns');
 	});
 
 	it('activates Mega Ditto\'s Imposter immediately after Mega Evolution', () => {

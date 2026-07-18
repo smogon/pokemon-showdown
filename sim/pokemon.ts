@@ -1502,7 +1502,7 @@ export class Pokemon {
 	}
 
 	updateMaxHp() {
-		const newBaseMaxHp = this.battle.statModify(this.species.baseStats, this.set, 'hp');
+		const newBaseMaxHp = this.species.maxHP || this.battle.statModify(this.species.baseStats, this.set, 'hp');
 		if (newBaseMaxHp === this.baseMaxhp) return;
 		this.baseMaxhp = newBaseMaxHp;
 		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
@@ -2243,6 +2243,7 @@ export class Pokemon {
 		if (!source) return true;
 		const type: string = typeof source !== 'string' ? source.type : source;
 		if (typeof source !== 'string') {
+			if (source.sandyBoosted && type === 'Ground' && this.hasType('Flying')) return true;
 			if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
 				return true;
 			}
