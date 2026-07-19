@@ -1,0 +1,26 @@
+{
+  "name": "Pokemon Showdown + Foul Play",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "forwardPorts": [3000, 8000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Open Showdown AI",
+      "onAutoForward": "openBrowser",
+      "protocol": "http"
+    },
+    "8000": {
+      "label": "Pokemon Showdown server",
+      "onAutoForward": "silent",
+      "protocol": "http"
+    }
+  },
+  "postCreateCommand": "bash scripts/codespaces-setup.sh",
+  "postStartCommand": "bash scripts/showdown-ai.sh start",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
+}
