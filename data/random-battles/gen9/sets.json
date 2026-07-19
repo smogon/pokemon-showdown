@@ -914,6 +914,12 @@
                 "teraTypes": ["Electric", "Fairy"]
             },
             {
+                "role": "Fast Support",
+                "movepool": ["Alluring Voice", "Calm Mind", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Volt Absorb"],
+                "teraTypes": ["Electric", "Fairy", "Flying"]
+            },
+            {
                 "role": "Tera Blast user",
                 "movepool": ["Calm Mind", "Substitute", "Tera Blast", "Thunderbolt"],
                 "abilities": ["Volt Absorb"],
@@ -1692,6 +1698,23 @@
             }
         ]
     },
+    "stantler": {
+        "level": 92,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Earthquake", "Throat Chop", "Thunder Wave"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Fairy", "Ghost", "Ground", "Poison"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Calm Mind", "Earth Power", "Shadow Ball", "Tera Blast"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Fairy"]
+            }
+        ]
+    },
     "smeargle": {
         "level": 95,
         "sets": [
@@ -1762,6 +1785,12 @@
                 "movepool": ["Calm Mind", "Scald", "Shadow Ball", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Electric", "Water"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Calm Mind", "Scald", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Pressure"],
+                "teraTypes": ["Electric", "Flying", "Water"]
             }
         ]
     },
@@ -3103,7 +3132,7 @@
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Flamethrower", "Ice Punch", "Knock Off", "Supercell Slam", "Volt Switch"],
                 "abilities": ["Motor Drive"],
-                "teraTypes": ["Dark", "Flying", "Ground", "Ice"]
+                "teraTypes": ["Dark", "Flying", "Ground"]
             },
             {
                 "role": "Setup Sweeper",

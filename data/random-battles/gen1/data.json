@@ -539,7 +539,7 @@
     "kangaskhan": {
         "level": 73,
         "moves": ["bodyslam", "earthquake", "hyperbeam"],
-        "exclusiveMoves": ["blizzard", "counter", "rockslide", "rockslide", "surf"]
+        "exclusiveMoves": ["blizzard", "counter", "rockslide", "rockslide"]
     },
     "horsea": {
         "level": 88,
@@ -653,8 +653,8 @@
     },
     "omastar": {
         "level": 74,
-        "moves": ["bodyslam", "rest", "seismictoss"],
-        "essentialMoves": ["blizzard"],
+        "moves": ["rest", "rest", "seismictoss"],
+        "essentialMoves": ["blizzard", "bodyslam"],
         "exclusiveMoves": ["hydropump", "surf"]
     },
     "kabuto": {

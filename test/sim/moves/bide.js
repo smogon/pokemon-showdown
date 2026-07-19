@@ -84,7 +84,8 @@ describe('[Gen 1] Bide', () => {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
 	});
 
-	it(`should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, () => {
+	// old Desync Clause Mod it(`should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, () => {
+	it(`should not zero out accumulated damage when an enemy faints (Desync Clause Mod)`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'Aerodactyl', moves: ['bide'] },
 		], [
@@ -106,8 +107,8 @@ describe('[Gen 1] Bide', () => {
 		assert.equal(aerodactyl.volatiles['bide'].time, 1);
 		battle.makeChoices();
 		assert.false(aerodactyl.volatiles['bide']);
-		assert.fullHP(battle.p2.active[0]);
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.false(battle.log.some(line => line.includes('Desync Clause Mod activated')));
 	});
 
 	it(`should pause Bide's duration when asleep or frozen`, () => {

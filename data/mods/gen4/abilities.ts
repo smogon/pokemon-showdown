@@ -523,6 +523,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { notrace: 1 },
 	},
+	truant: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			if (pokemon.volatiles['truant']) {
+				this.add('cant', pokemon, 'ability: Truant');
+				return false;
+			}
+		},
+		onResidual(pokemon) {
+			if (!pokemon.removeVolatile('truant')) {
+				pokemon.addVolatile('truant');
+			}
+		},
+	},
 	vitalspirit: {
 		inherit: true,
 		rating: 2.5,

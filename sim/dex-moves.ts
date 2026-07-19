@@ -203,6 +203,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	recoil?: [number, number];
 	drain?: [number, number];
 	mindBlownRecoil?: boolean;
+	chloroblastRecoil?: boolean;
 	stealsBoosts?: boolean;
 	struggleRecoil?: boolean;
 	secondary?: SecondaryEffect;

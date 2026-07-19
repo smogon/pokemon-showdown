@@ -1081,7 +1081,9 @@ export class RandomGen8Teams extends RandomTeams {
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
+			const set = this.randomSet(species, teamDetails,
+				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+			);
 			pokemon.push(set);
 
 			// Don't bother tracking details for the last Pokemon

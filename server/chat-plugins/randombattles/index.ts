@@ -167,19 +167,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
-	// Temporarily modified for Mega Invasion randomized spotlight
-	if (!data?.sets?.length) {
-		if (format.mod === 'gen9' && !isDoubles) {
-			const megaSetsFile = JSON.parse(
-				FS(`data/random-battles/${folderName}/sets-megainvasion.json`)
-					.readIfExistsSync() || '{}'
-			);
-			const megaData = megaSetsFile[species.id];
-			if (!megaData?.sets?.length) return null;
-			return megaData;
-		}
-		return null;
-	}
+	if (!data?.sets?.length) return null;
 	return data;
 }
 
@@ -522,13 +510,11 @@ export const commands: Chat.ChatCommands = {
 		let isBaby = cmd === 'babyrandombattle' || cmd === 'babyrands';
 		let isFFA = cmd === 'freeforallrandombattle' || cmd === 'ffarands' || cmd === 'randffats' || cmd === 'randffa';
 		let isNoDMax = cmd.includes('nodmax');
-		let isMegaInvasion = false;
 		if (battle) {
 			if (battle.format.includes('nodmax')) isNoDMax = true;
 			if (battle.gameType === 'doubles') isDoubles = true;
 			if (battle.format.includes('baby')) isBaby = true;
 			if (battle.gameType === 'freeforall') isFFA = true;
-			if (battle.format.includes('megainvasion')) isMegaInvasion = true;
 		}
 
 		const args = target.split(',');
@@ -550,7 +536,6 @@ export const commands: Chat.ChatCommands = {
 			inexactMsg = `No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`;
 		}
 		const species = dex.species.get(searchResults[0].name);
-		if (species.isMega || species.forme === 'Primal') isMegaInvasion = true;
 		const babyModifier = isBaby ? 'baby' : '';
 		// Gen 8 Random Doubles is temporarily using singles sets
 		const doublesModifier = (isDoubles && mod === 'gen9') ? 'doubles' : '';
@@ -600,8 +585,6 @@ export const commands: Chat.ChatCommands = {
 			if (mod === 'gen8' && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 			for (const pokemon of setsToCheck) {
-				// For Gen 9, only show megas/primals if they were the argument or the command was used in a mega invasion battle room
-				if (mod === 'gen9' && (pokemon.isMega || pokemon.forme === 'Primal') && !isMegaInvasion) continue;
 				const data = getSets(pokemon, format.id);
 				if (!data) continue;
 				const sets = data.sets;
