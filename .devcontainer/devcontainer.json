@@ -1,6 +1,9 @@
 {
   "name": "Pokemon Showdown + Foul Play",
   "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/rust:1": {}
+  },
   "forwardPorts": [3000, 8000],
   "portsAttributes": {
     "3000": {
