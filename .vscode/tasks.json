@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Showdown AI: Start",
+      "type": "shell",
+      "command": "bash scripts/showdown-ai.sh start",
+      "problemMatcher": []
+    },
+    {
+      "label": "Showdown AI: Stop",
+      "type": "shell",
+      "command": "bash scripts/showdown-ai.sh stop",
+      "problemMatcher": []
+    },
+    {
+      "label": "Showdown AI: Restart",
+      "type": "shell",
+      "command": "bash scripts/showdown-ai.sh restart",
+      "problemMatcher": []
+    },
+    {
+      "label": "Showdown AI: Status",
+      "type": "shell",
+      "command": "bash scripts/showdown-ai.sh status",
+      "problemMatcher": []
+    },
+    {
+      "label": "Showdown AI: Logs",
+      "type": "shell",
+      "command": "bash scripts/showdown-ai.sh logs",
+      "problemMatcher": []
+    }
+  ]
+}
