@@ -460,7 +460,7 @@ exports.autolockdown = true;
  * Logging in this way will make you considered an unregistered user and grant
  * no authority. You cannot log into a trusted (g+/r%) user account this way.
  */
-exports.noguestsecurity = false;
+exports.noguestsecurity = true;
 
 /**
  * tourroom - specify a room to receive tournament announcements (defaults to
