@@ -4,6 +4,8 @@
 /test/modlogs
 /test/replays/*.html
 /node_modules
+/.venv
+/.runtime
 /eslint-cache
 /server/chat-plugins/private
 /server/chat-plugins/private.js
