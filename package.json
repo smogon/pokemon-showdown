@@ -4,6 +4,30 @@
   "version": "0.11.10",
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
+  "dependencies": {
+    "esbuild": "^0.25.0",
+    "mysql2": "^3.14.2",
+    "preact": "^10.5.15",
+    "preact-render-to-string": "^6.5.13",
+    "sockjs": "^0.3.21",
+    "ts-chacha20": "^1.2.0"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.10.0",
+    "cloud-env": "^0.2.3",
+    "githubhook": "^1.9.3",
+    "nodemailer": "^7.0.5",
+    "permessage-deflate": "^0.1.7",
+    "pg": "^8.16.3",
+    "probe-image-size": "^7.2.3",
+    "source-map-support": "^0.5.21",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "secretDependencies": {
+    "node-oom-heapdump": "^1.2.0"
+  },
   "engines": {
     "node": ">=22.0.0"
   },
@@ -21,8 +45,7 @@
     "posttest": "npm run tsc",
     "full-test": "eslint --max-warnings 0 && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
     "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
-  }
-}
+  },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
   "repository": {
@@ -32,7 +55,7 @@
   "author": {
     "name": "Guangcong Luo",
     "email": "guangcongluo@gmail.com",
-    "url": "http://guangcongluo.com"
+    "url": "http://www.smogon.com"
   },
   "contributors": [
     {
