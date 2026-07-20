@@ -104,6 +104,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	teravolt: { inherit: true, gen: 3, isNonstandard: null },
 	infiltrator: { inherit: true, gen: 3, isNonstandard: null },
 	merciless: { inherit: true, gen: 3, isNonstandard: null },
+	// Arena Trap is unchanged except that it no longer traps a foe that has Mega
+	// Evolved (or, defensively, Primal-reverted) — that new forme is flagged on the
+	// species, so such a Pokemon can pivot out freely. A base (non-Mega) Pokemon is
+	// still trapped as normal. Requested for Gen3MegasCAP so e.g. Mega Magcargo can
+	// escape Dugtrio.
+	arenatrap: {
+		inherit: true,
+		onFoeTrapPokemon(pokemon) {
+			if (pokemon.species.isMega || pokemon.species.isPrimal) return;
+			if (!pokemon.isAdjacent(this.effectState.target)) return;
+			if (pokemon.isGrounded()) pokemon.tryTrap(true);
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (pokemon.species.isMega || pokemon.species.isPrimal) return;
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
+			if (pokemon.isGrounded(!pokemon.knownType)) pokemon.maybeTrapped = true;
+		},
+	},
 	highnoon: {
 		onStart(source) {
 			this.field.setWeather('sunnyday');
