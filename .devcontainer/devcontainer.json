@@ -18,7 +18,7 @@
     }
   },
   "postCreateCommand": "bash scripts/codespaces-setup.sh",
-  "postStartCommand": "bash scripts/showdown-ai.sh start",
+  "postStartCommand": "bash scripts/ensure-codespaces-config.sh && bash scripts/showdown-ai.sh start",
   "customizations": {
     "vscode": {
       "extensions": [
