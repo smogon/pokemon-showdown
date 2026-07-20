@@ -1,16 +1,22 @@
 # iPad + GitHub Codespacesでfoul-playと対戦する
 
-このリポジトリは、Pokemon Showdownサーバーとfoul-play Botを同じCodespace内で起動する構成です。通常はコマンド入力を必要としません。
+このリポジトリは、Pokemon Showdownサーバー、foul-play Bot、ブラウザ用クライアント中継を同じCodespace内で起動する構成です。通常はコマンド入力を必要としません。
 
 ## 初回起動
 
 1. このリポジトリからCodespaceを作成します。
-2. 既存のCodespaceでこの設定を取り込んだ場合は、コマンドパレットから **Codespaces: Rebuild Container** を実行します。
+2. 既存のCodespaceでこの設定を取り込んだ場合は、`git pull` のあと `bash scripts/showdown-ai.sh restart` を実行します。
 3. 初回だけNode.jsとPythonの依存関係、およびRust製の探索エンジンをインストールします。
-4. セットアップ後、Showdownサーバー、foul-play、入口ページが自動起動します。
+4. セットアップ後、Showdownサーバー、foul-play、入口ページ兼クライアント中継が自動起動します。
 5. ブラウザで入口ページが開かなければ、VS Codeの **PORTS** タブからポート `3000` の地球アイコンを押します。
 6. 入口ページの **Showdownを開く** を押します。
 7. 入口ページに表示されたBot名へ `gen9randombattle` で対戦を申し込みます。
+
+## 通信構成
+
+ブラウザはPrivateの3000番ポートだけへ接続します。3000番のNode.jsプロキシが、公式Showdownクライアントの静的ファイルと、Codespace内部の8000番ShowdownサーバーへのHTTP/WebSocket通信を中継します。
+
+そのため、8000番ポートをPublicにする必要はありません。8000番はPrivateのまま利用します。
 
 ## VS Codeのタスク
 
@@ -39,7 +45,7 @@ Codespacesの環境変数またはSecretsで次を設定し、`Showdown AI: Rest
 
 ## セキュリティ
 
-外部のShowdown WebクライアントからWebSocket接続するため、実行中はCodespacesのポート `8000` をPublicへ変更します。URLを知る人は接続できるため、利用後は `Showdown AI: Stop` を実行してください。停止処理はポートをPrivateへ戻します。
+入口とクライアントはCodespacesのPrivateな3000番ポートで提供されます。Showdown本体の8000番ポートは外部公開しません。Codespaceを他人へ共有していない限り、従来のPublicポート構成より安全です。
 
 ## トラブル時
 
