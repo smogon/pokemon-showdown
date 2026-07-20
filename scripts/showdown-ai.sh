@@ -60,86 +60,19 @@ normalized_bot_username() {
     printf 'FP%s%s' "$base" "$digest"
 }
 
-codespaces_host() {
-    if [[ -n "${CODESPACE_NAME:-}" ]]; then
-        printf '%s-%s.app.github.dev' "$CODESPACE_NAME" "$PORT"
-    else
-        printf 'localhost:%s' "$PORT"
-    fi
-}
-
 client_url() {
-    local host
-    host="$(codespaces_host)"
     if [[ -n "${CODESPACE_NAME:-}" ]]; then
-        printf 'https://play.pokemonshowdown.com/testclient-new.html?~~%s:443' "$host"
+        printf 'https://%s-%s.app.github.dev/client.html' "$CODESPACE_NAME" "$LAUNCHER_PORT"
     else
-        printf 'https://play.pokemonshowdown.com/testclient-new.html?~~%s' "$host"
+        printf 'http://localhost:%s/client.html' "$LAUNCHER_PORT"
     fi
 }
 
-make_server_port_public() {
-    [[ -n "${CODESPACE_NAME:-}" ]] || return 0
-    command -v gh >/dev/null 2>&1 || return 0
-
-    for _ in {1..15}; do
-        if gh codespace ports visibility "$PORT:public" -c "$CODESPACE_NAME" >/dev/null 2>&1; then
-            echo "Codespaces port $PORT is public while the server is running."
-            return 0
-        fi
-        sleep 2
-    done
-
-    echo "Warning: could not make port $PORT public automatically." >&2
-    echo "Open the PORTS tab and change port $PORT visibility to Public." >&2
-}
-
-make_server_port_private() {
+keep_showdown_port_private() {
     [[ -n "${CODESPACE_NAME:-}" ]] || return 0
     command -v gh >/dev/null 2>&1 || return 0
     gh codespace ports visibility "$PORT:private" -c "$CODESPACE_NAME" >/dev/null 2>&1 || true
-}
-
-render_launcher() {
-    local bot_username format url escaped_url
-    bot_username="$(normalized_bot_username)"
-    format="${FOUL_PLAY_FORMAT:-gen9randombattle}"
-    url="$(client_url)"
-    escaped_url="${url//&/&amp;}"
-
-    mkdir -p "$RUNTIME_DIR/launcher"
-    cat > "$RUNTIME_DIR/launcher/index.html" <<HTML
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pokemon Showdown AI</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 0 auto; padding: 32px 20px; line-height: 1.65; }
-    .card { border: 1px solid #d0d7de; border-radius: 14px; padding: 22px; }
-    .button { display: inline-block; padding: 12px 18px; border-radius: 10px; background: #0969da; color: white; text-decoration: none; font-weight: 700; }
-    code { background: #f6f8fa; padding: 2px 6px; border-radius: 6px; word-break: break-all; }
-    .note { color: #57606a; }
-  </style>
-</head>
-<body>
-  <h1>Pokemon Showdown AI</h1>
-  <div class="card">
-    <p>Showdownサーバーとfoul-play Botは起動済みです。</p>
-    <p><strong>Bot名:</strong> <code>$bot_username</code><br>
-       <strong>対戦形式:</strong> <code>$format</code></p>
-    <p><a class="button" href="$escaped_url">Showdownを開く</a></p>
-    <ol>
-      <li>Showdownで自分の名前を設定します。</li>
-      <li><code>$bot_username</code> を検索して、<code>$format</code> で対戦を申し込みます。</li>
-      <li>Botが自動で受諾します。</li>
-    </ol>
-    <p class="note">利用中はCodespacesの8000番ポートを公開しています。停止タスクを実行すると非公開へ戻します。</p>
-  </div>
-</body>
-</html>
-HTML
+    echo "Codespaces port $PORT is kept private; browser traffic is proxied through port $LAUNCHER_PORT."
 }
 
 start_showdown() {
@@ -149,27 +82,26 @@ start_showdown() {
     fi
 
     cd "$ROOT_DIR"
-    if [[ ! -f config/config.js ]]; then
-        cp config/config-example.js config/config.js
-    fi
+    bash scripts/ensure-codespaces-config.sh
 
     echo "Starting Pokemon Showdown..."
     nohup node pokemon-showdown start --no-security >"$SHOWDOWN_LOG" 2>&1 &
     echo $! > "$SHOWDOWN_PID_FILE"
 
-    for _ in {1..60}; do
-        if curl -sS -o /dev/null "http://127.0.0.1:$PORT/"; then
+    for _ in {1..180}; do
+        if curl -fs -o /dev/null "http://127.0.0.1:$PORT/" 2>/dev/null; then
             return 0
         fi
         if ! pid_is_running "$SHOWDOWN_PID_FILE"; then
             echo "Pokemon Showdown exited during startup." >&2
-            tail -n 80 "$SHOWDOWN_LOG" >&2 || true
+            tail -n 100 "$SHOWDOWN_LOG" >&2 || true
             return 1
         fi
         sleep 1
     done
 
     echo "Pokemon Showdown did not become ready on port $PORT." >&2
+    tail -n 100 "$SHOWDOWN_LOG" >&2 || true
     return 1
 }
 
@@ -179,7 +111,7 @@ start_bot() {
         return
     fi
 
-    if [[ ! -d "$ROOT_DIR/.venv" ]]; then
+    if [[ ! -x "$ROOT_DIR/.venv/bin/python" ]]; then
         echo "Python environment is missing. Run: bash scripts/codespaces-setup.sh" >&2
         return 1
     fi
@@ -213,20 +145,46 @@ start_bot() {
 
     if ! pid_is_running "$BOT_PID_FILE"; then
         echo "foul-play exited during startup." >&2
-        tail -n 100 "$BOT_LOG" >&2 || true
+        tail -n 120 "$BOT_LOG" >&2 || true
         return 1
     fi
 }
 
 start_launcher() {
-    render_launcher
     if pid_is_running "$LAUNCHER_PID_FILE"; then
+        echo "Launcher is already running."
         return
     fi
 
-    echo "Starting launcher page..."
-    nohup python3 -m http.server "$LAUNCHER_PORT" --bind 0.0.0.0 --directory "$RUNTIME_DIR/launcher" >"$LAUNCHER_LOG" 2>&1 &
+    local bot_username format
+    bot_username="$(normalized_bot_username)"
+    format="${FOUL_PLAY_FORMAT:-gen9randombattle}"
+
+    echo "Starting launcher and same-origin Showdown client proxy..."
+    cd "$ROOT_DIR"
+    nohup env \
+        "BOT_USERNAME=$bot_username" \
+        "BOT_FORMAT=$format" \
+        "LAUNCHER_PORT=$LAUNCHER_PORT" \
+        "SHOWDOWN_PORT=$PORT" \
+        node scripts/launcher-server.js >"$LAUNCHER_LOG" 2>&1 &
     echo $! > "$LAUNCHER_PID_FILE"
+
+    for _ in {1..30}; do
+        if curl -fs -o /dev/null "http://127.0.0.1:$LAUNCHER_PORT/health" 2>/dev/null; then
+            return 0
+        fi
+        if ! pid_is_running "$LAUNCHER_PID_FILE"; then
+            echo "Launcher exited during startup." >&2
+            tail -n 100 "$LAUNCHER_LOG" >&2 || true
+            return 1
+        fi
+        sleep 1
+    done
+
+    echo "Launcher did not become ready on port $LAUNCHER_PORT." >&2
+    tail -n 100 "$LAUNCHER_LOG" >&2 || true
+    return 1
 }
 
 show_status() {
@@ -245,9 +203,9 @@ show_status() {
         echo "foul-play: stopped"
     fi
     if pid_is_running "$LAUNCHER_PID_FILE"; then
-        echo "Launcher: running (PID $(cat "$LAUNCHER_PID_FILE"))"
+        echo "Launcher/proxy: running (PID $(cat "$LAUNCHER_PID_FILE"))"
     else
-        echo "Launcher: stopped"
+        echo "Launcher/proxy: stopped"
     fi
     echo "Bot username: $bot_username"
     echo "Format: $format"
@@ -256,7 +214,7 @@ show_status() {
 
 start_all() {
     start_showdown
-    make_server_port_public
+    keep_showdown_port_private
     start_bot
     start_launcher
     echo
@@ -265,21 +223,21 @@ start_all() {
 
 stop_all() {
     stop_pid "$BOT_PID_FILE" "foul-play"
+    stop_pid "$LAUNCHER_PID_FILE" "launcher/proxy"
     stop_pid "$SHOWDOWN_PID_FILE" "Pokemon Showdown"
-    stop_pid "$LAUNCHER_PID_FILE" "launcher"
-    make_server_port_private
-    echo "Stopped. Codespaces port $PORT has been returned to private when possible."
+    keep_showdown_port_private
+    echo "Stopped. The Showdown server port remains private."
 }
 
 show_logs() {
     echo "===== Pokemon Showdown ====="
-    tail -n 80 "$SHOWDOWN_LOG" 2>/dev/null || echo "No Showdown log yet."
+    tail -n 100 "$SHOWDOWN_LOG" 2>/dev/null || echo "No Showdown log yet."
     echo
     echo "===== foul-play ====="
-    tail -n 120 "$BOT_LOG" 2>/dev/null || echo "No foul-play log yet."
+    tail -n 140 "$BOT_LOG" 2>/dev/null || echo "No foul-play log yet."
     echo
-    echo "===== launcher ====="
-    tail -n 40 "$LAUNCHER_LOG" 2>/dev/null || echo "No launcher log yet."
+    echo "===== launcher/proxy ====="
+    tail -n 100 "$LAUNCHER_LOG" 2>/dev/null || echo "No launcher log yet."
 }
 
 case "${1:-start}" in
