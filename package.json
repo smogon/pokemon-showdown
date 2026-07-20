@@ -30,7 +30,8 @@
   },
   "engines": {
     "node": ">=22.0.0"
-  }
+  },
+"scripts": {
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
