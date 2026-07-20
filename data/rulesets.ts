@@ -2,7 +2,7 @@
 
 import type { Learnset } from "../sim/dex-species";
 
-// The list of formats is stored in config/formats.js
+// The list of formats is stored in config/formats.ts
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 	// Rulesets
@@ -820,7 +820,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 			// Illegality of impersonation of other species is
-			// hardcoded in team-validator.js, so we are done.
+			// hardcoded in team-validator.ts, so we are done.
 		},
 	},
 	beatupnicknamesmod: {
@@ -1061,7 +1061,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
 		desc: "Prevents players from forcing a battle which their opponent cannot end except by forfeit",
-		// implemented in sim/battle.js, see https://dex.pokemonshowdown.com/articles/battlerules#endlessbattleclause for the specification.
+		// implemented in sim/battle.ts#maybeTriggerEndlessBattleClause, see
+		// https://dex.pokemonshowdown.com/articles/battlerules#endlessbattleclause for the specification.
 		onBegin() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
@@ -1799,14 +1800,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Allow Tradeback',
 		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
-		// Implemented in team-validator.js
+		// Implemented in sim/team-validator.ts #validateSet, #validateEvent, #allSources, and #checkCanLearn
 	},
 	lgpenormalrules: {
 		effectType: 'ValidatorRule',
 		name: 'LGPE Normal Rules',
 		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50 and all Awakening Values to 0",
 		ruleset: ['Adjust Level = 50'],
-		// AVs implemented in TeamValidator#validateStats
+		// AVs implemented in sim/team-validator#validateStats
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',

@@ -193,7 +193,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
-		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
+		// airborneness implemented in sim/pokemon.ts#isGrounded
 		onDamagingHit(damage, target, source, move) {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
@@ -615,7 +615,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		// Item activation located in scripts.js
+		// Item activation located in sim/battle-actions.ts#hitStepAccuracy
 		num: 1121,
 		gen: 8,
 	},
@@ -3054,7 +3054,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
-		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
+		// airborneness negation implemented in sim/pokemon.ts#isGrounded
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
