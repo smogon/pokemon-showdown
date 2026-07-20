@@ -40,6 +40,20 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.runEvent('AfterMega', pokemon);
 
+			// Ditto viability aid: Mega Ditto's only job on its Mega turn is to
+			// Transform (via Imposter, fired by the SwitchIn above), so that turn is
+			// always a setup turn with no attack. Shield it by granting the Protect
+			// effect for the turn it Mega Evolves, so the opponent can't freely punish
+			// the transformation. Mega Evolution resolves before any move this turn, so
+			// the guard is up before incoming attacks. Ditto-only, and only here (Mega
+			// Evolution happens once per battle), so it can't be repeated/stalled.
+			// Key off the captured mega-forme id, not `pokemon.species`: Imposter has
+			// already Transformed the mon into the foe by this point, so its live
+			// species is the copied target, not Ditto-Mega.
+			if (this.dex.toID(speciesid) === 'dittomega') {
+				pokemon.addVolatile('protect');
+			}
+
 			// Post-Mega Speed applies on the turn of Mega Evolution (Gen 7+ behavior).
 			// The base engine only recalculates the mega-evolver's move order for
 			// `gen === 7` (sim/battle.ts) — and pairs it with a `deferPriority` skip in
