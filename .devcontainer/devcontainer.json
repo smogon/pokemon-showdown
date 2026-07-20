@@ -4,16 +4,11 @@
   "features": {
     "ghcr.io/devcontainers/features/rust:1": {}
   },
-  "forwardPorts": [3000, 8000],
+  "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
       "label": "Open Showdown AI",
       "onAutoForward": "openBrowser",
-      "protocol": "http"
-    },
-    "8000": {
-      "label": "Pokemon Showdown server",
-      "onAutoForward": "silent",
       "protocol": "http"
     }
   },
