@@ -38,9 +38,7 @@ else
     npm install
 fi
 
-if [[ ! -f config/config.js ]]; then
-    cp config/config-example.js config/config.js
-fi
+bash scripts/ensure-codespaces-config.sh
 
 echo "[4/5] Installing foul-play dependencies..."
 python3 -m venv .venv
