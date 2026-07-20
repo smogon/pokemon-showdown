@@ -107,7 +107,6 @@ describe('Truant', () => {
 			assert.equal(slaking.status, '');
 		});
 
-
 		it('should allow the user to act the turn it wakes up, if an odd number of turns have passed', () => {
 			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 2] }, [[
 				{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
