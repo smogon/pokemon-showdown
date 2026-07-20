@@ -29,8 +29,8 @@
     "node-oom-heapdump": "^1.2.0"
   },
   "engines": {
-    "node": ">=16.0.0"
-  },
+    "node": ">=22.0.0"
+  }
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
