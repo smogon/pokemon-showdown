@@ -480,6 +480,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Ivysaur', 'Kakuna', 'Nidorina', 'Nidorino', 'Pidgeotto', 'Tentacool',
 		],
 	},
+	// [Gen 1] 10U ("Ten Used") &mdash; a meme tier at the bottom of RBY's descending
+	// "Used" ladder (7U, 8U, 9U, 10U). Built on gen1 PU with the roster wiped
+	// (-All Pokemon) and rebuilt to just the six weakest Pok&eacute;mon in the game.
+	// Unlike 7U there is no pinned Smogon legality list, so the pool is set explicitly.
+	{
+		name: "[Gen 1] 10U",
+		desc: "RBY 10U &mdash; the bottom of the &lsquo;Used&rsquo; ladder. Only six Pok&eacute;mon are legal: Caterpie, Metapod, Weedle, Kakuna, Magikarp, and Ditto.",
+		mod: 'gen1',
+		ruleset: ['[Gen 1] PU'],
+		banlist: ['All Pokemon'],
+		unbanlist: ['Caterpie', 'Metapod', 'Weedle', 'Kakuna', 'Magikarp', 'Ditto'],
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
