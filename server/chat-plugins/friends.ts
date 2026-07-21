@@ -273,7 +273,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 			await Friends.request(user, target as ID);
 			this.refreshPage('friends-sent');
-			if (this.pmTarget?.id !== target) {
+			if (toID(this.pmTargetName) !== target) {
 				this.sendReply(`You sent a friend request to '${target}'.`);
 			}
 		},

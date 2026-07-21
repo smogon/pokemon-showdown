@@ -340,11 +340,15 @@ export const commands: Chat.ChatCommands = {
 		this.checkRecursion();
 
 		const { targetUser, targetUsername, rest: message } = this.splitUser(target);
+		const isCommand = !!Chat.parseCommand(message);
 		if (targetUsername === '~') {
 			this.pmTarget = null;
 			this.room = null;
 		} else if (!targetUser) {
 			if (Chat.PrivateMessages.offlineIsEnabled) {
+				if (isCommand) {
+					return this.parse(`/offlinemsg ${targetUsername},${message}`);
+				}
 				if (user.lastCommand === 'pm') {
 					// don't delete lastCommand so they can just keep sending pms
 					return this.parse(`/offlinemsg ${targetUsername},${message}`);
@@ -360,11 +364,15 @@ export const commands: Chat.ChatCommands = {
 			return;
 		} else {
 			this.pmTarget = targetUser;
+			this.pmTargetName = targetUser.name;
 			this.room = null;
 		}
 
 		if (targetUser && !targetUser.connected) {
 			if (Chat.PrivateMessages.offlineIsEnabled) {
+				if (isCommand) {
+					return this.parse(`/offlinemsg ${targetUser.getLastId()},${message}`);
+				}
 				if (user.lastCommand === 'pm') {
 					// don't delete lastCommand so they can just keep sending pms
 					return this.parse(`/offlinemsg ${targetUser.getLastId()},${message}`);
@@ -379,7 +387,10 @@ export const commands: Chat.ChatCommands = {
 
 		return this.parse(message);
 	},
-	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
+	msghelp: [
+		`/msg OR /whisper OR /w [username], [message] - Send a private message.`,
+		`Commands sent to offline users run immediately, with replies displayed in that user's PM window.`,
+	],
 
 	offlinepm: 'offlinemsg',
 	opm: 'offlinemsg',
@@ -397,9 +408,6 @@ export const commands: Chat.ChatCommands = {
 		if (!userid || !message) {
 			return this.parse('/help offlinemsg');
 		}
-		if (Chat.parseCommand(message)) {
-			throw new Chat.ErrorMessage(`You cannot send commands in offline PMs.`);
-		}
 		if (userid === user.id) {
 			throw new Chat.ErrorMessage(`You cannot send offline PMs to yourself.`);
 		} else if (userid.startsWith('guest')) {
@@ -411,6 +419,12 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (userid.length > 18) {
 			throw new Chat.ErrorMessage(`Invalid userid. Must be <=18 characters in length.`);
+		}
+		if (Chat.parseCommand(message)) {
+			this.room = null;
+			this.pmTarget = null;
+			this.pmTargetName = username;
+			return this.parse(message);
 		}
 		message = this.checkChat(message);
 		if (!message) return;
@@ -1273,6 +1287,7 @@ export const commands: Chat.ChatCommands = {
 		const fromUser = Ladders.challenges.accept(this);
 
 		this.pmTarget = fromUser;
+		this.pmTargetName = fromUser.name;
 		this.sendChatMessage(`/text You accepted the battle invite`);
 		this.parse(`/join ${targetRoom.roomid}`);
 		battle.joinGame(user, slot, playerOpts);
@@ -1566,7 +1581,8 @@ export const commands: Chat.ChatCommands = {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+		this.pmTargetName = targetUsername || this.pmTargetName;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.from !== user.id) {
@@ -1585,7 +1601,8 @@ export const commands: Chat.ChatCommands = {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+		this.pmTargetName = targetUsername || this.pmTargetName;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.to !== user.id) {
@@ -1607,7 +1624,8 @@ export const commands: Chat.ChatCommands = {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+		this.pmTargetName = targetUsername || this.pmTargetName;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.to !== user.id) {
