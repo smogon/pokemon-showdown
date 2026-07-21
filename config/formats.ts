@@ -492,6 +492,33 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['All Pokemon'],
 		unbanlist: ['Caterpie', 'Metapod', 'Weedle', 'Kakuna', 'Magikarp', 'Ditto'],
 	},
+	// [Gen 1] SU ("Sub-Zero Used") &mdash; Smogon's RBY tier below ZU. Built on [Gen 1] ZU with
+	// its strongest Pok&eacute;mon banned out, matching the Smogon SU challenge code
+	// (gen1zu @@@ -&lt;19 mons&gt;, -Flash, -Sand Attack, -Smokescreen). None of the 19 are already
+	// tier-banned by ZU (they are all ZU-legal), so no bans are redundant.
+	{
+		name: "[Gen 1] SU",
+		desc: "RBY SU (Sub-Zero Used) &mdash; the Smogon tier below ZU: [Gen 1] ZU minus its strongest Pok&eacute;mon (Butterfree, Dragonair, Machamp, Muk, Nidoqueen, Vileplume, Weezing, Wigglytuff&hellip;). Flash, Sand Attack, and Smokescreen are banned.",
+		mod: 'gen1',
+		ruleset: ['[Gen 1] ZU'],
+		banlist: [
+			'Butterfree', 'Dragonair', 'Drowzee', 'Flareon', 'Kingler', 'Machamp', 'Muk', 'Nidoqueen',
+			'Omanyte', 'Onix', 'Parasect', 'Pinsir', 'Poliwag', 'Sandslash', 'Slowpoke', 'Tentacool',
+			'Vileplume', 'Weezing', 'Wigglytuff',
+			'Flash', 'Sand Attack', 'Smokescreen',
+		],
+	},
+	// [Gen 1] STABmons &mdash; RBY OU where every Pok&eacute;mon can also use any move of a type it
+	// (or a prevo) shares. Sleep moves except Sleep Powder (Hypnosis, Lovely Kiss, Sing, Spore) and
+	// partial-trapping moves except Fire Spin (Bind, Clamp, Wrap) stay restricted to their natural
+	// learners; Mew and Mewtwo are already Uber-banned via the [Gen 1] OU base.
+	{
+		name: "[Gen 1] STABmons",
+		desc: "RBY STABmons &mdash; Pok&eacute;mon can use any move of a type they (or a previous evolution) share, on top of their normal movepool. Sleep and partial-trapping moves are limited to their natural learners.",
+		mod: 'gen1',
+		ruleset: ['[Gen 1] OU', 'STABmons Move Legality'],
+		restricted: ['Bind', 'Clamp', 'Hypnosis', 'Lovely Kiss', 'Sing', 'Spore', 'Wrap'],
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
