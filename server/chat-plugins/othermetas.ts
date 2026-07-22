@@ -211,10 +211,10 @@ export const commands: Chat.ChatCommands = {
 			"Dex Colour": mixedSpecies.color,
 		};
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
-		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		details['<span class="gray">Does Not Evolve</span>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
 		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
-			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+			value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
@@ -368,7 +368,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `</span>`;
 			buf += `</li>`;
 			this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
-			this.sendReply(`|raw|<font size="1">${Object.entries(details).map(([detail, value]) => `<font color="#686868">${detail}:</font> ${value}`).join("&nbsp;|&ThickSpace;")}</font>`);
+			this.sendReply(`|raw|<font size="1">${Object.entries(details).map(([detail, value]) => `<span class="gray">${detail}:</span> ${value}`).join("&nbsp;|&ThickSpace;")}</font>`);
 		}
 	},
 	stonehelp: [`/stone <mega stone or other>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
@@ -837,10 +837,10 @@ export const commands: Chat.ChatCommands = {
 			"Dex Colour": mixedSpecies.color,
 		};
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
-		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		details['<span class="gray">Does Not Evolve</span>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
 		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
-			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+			value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	crossevolvehelp: [
@@ -915,7 +915,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 			if (!isReEvo) {
-				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+				this.sendReply(`|raw|<font size="1"><span class="gray">Gen:</span> ${details["Gen"]}&nbsp;|&ThickSpace;<span class="gray">Weight:</span> ${details["Weight"]}&nbsp;|&ThickSpace;<span class="gray">Stage:</span> ${details["Stage"]}</font>`);
 			}
 		} else {
 			const prevoSpecies = dex.species.get(evo.prevo);
@@ -955,7 +955,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 			if (!isReEvo) {
-				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+				this.sendReply(`|raw|<font size="1"><span class="gray">Gen:</span> ${details["Gen"]}&nbsp;|&ThickSpace;<span class="gray">Weight:</span> ${details["Weight"]}&nbsp;|&ThickSpace;<span class="gray">Stage:</span> ${details["Stage"]}</font>`);
 			}
 		}
 	},
