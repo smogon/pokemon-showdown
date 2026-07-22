@@ -720,22 +720,114 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] woomod Random Battle",
-		desc: 'A Solomod by <username>woo</username> featuring custom Pokemon, moves, Abilities, and more!',
-		mod: `woomod`,
-		team: 'random',
+		name: "[Gen 9] Random Tandem",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/10645868">woomod on Smogon Forums</a>`,
-			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">woomod on Google Sheets</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695289/">Random Tandem Thread</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing">Resource Compendium</a>`,
+			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
-		ruleset: ['Obtainable', 'Terastal Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Data Preview', 'Mega Data Mod'],
+		mod: 'gen9randomtandem',
+		bestOfDefault: true,
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Species Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt'],
+		onValidateTeam(team, format, teamHas) {
+			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
+			let randomCount = 0;
+			for (const set of team) {
+				let species = this.dex.species.get(set.species);
+				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				if (species.mons) randomCount++;
+			}
+			if (randomCount < 2) {
+				return [`You must have at least 2 Head Pokemon.`];
+			}
+			// Species Clause rules here to prevent client bugging
+			// with Pokemon being both in team and generated as Tandems.
+			const speciesTable = new Set<number>();
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (speciesTable.has(species.num)) {
+					return [`You are limited to one of each Pokémon by Species Clause.`, `(You have more than one ${species.baseSpecies})`];
+				}
+				speciesTable.add(species.num);
+			}
+		},
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1mxSj-XvWzBk8RgAZ7_Th61Saczc89xwffBLLJsOlYTc/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `woo mod.`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3711007/page-13#post-10645868`);
-			this.add('-message', `Be sure to swing by the Pet Mods room to discuss the metagame and participate in roomtours:`);
-			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
+			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
+			this.add('-message', `Welcome to Random Tandem!`);
+			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					if (!pokemon.baseSpecies.mons || pokemon.tandem) continue;
+					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
+					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
+						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
+					const mon1 = this.sample(mons);
+					mons = mons.filter(mon => mon !== mon1);
+					const mon2 = this.sample(mons);
+
+					const poke1 = this.dex.deepClone(mon1[0]);
+					poke1.name = poke1.species;
+					if (Array.isArray(poke1.item)) poke1.item = this.sample(poke1.item);
+					if (Array.isArray(poke1.ability)) poke1.ability = this.sample(poke1.ability);
+					if (mon1[1].length === 2 && mon1[2]) {
+						const moveset = [...mon1[1]];
+						const move1 = this.sample(mon1[2]);
+						moveset.push(move1);
+						const move2 = this.sample(mon1[2].filter(move => move !== move1));
+						moveset.push(move2);
+						poke1.moves = moveset;
+					} else poke1.moves = mon1[1];
+					poke1.nature = 'Serious';
+					if (!poke1.gender) poke1.gender = this.sample(['M', 'F']);
+					poke1.evs = { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 };
+					poke1.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+					poke1.level = 100;
+					poke1.shiny = true;
+					if (Array.isArray(poke1.teraType)) poke1.teraType = this.sample(poke1.teraType);
+					// extra info
+					poke1.happiness = 255;
+					poke1.hpType = '';
+					poke1.pokeball = '';
+					poke1.gigantamax = false;
+					poke1.dynamaxLevel = 10;
+
+					const poke2 = this.dex.deepClone(mon2[0]);
+					poke2.name = poke2.species;
+					if (Array.isArray(poke2.item)) poke2.item = this.sample(poke2.item);
+					if (Array.isArray(poke2.ability)) poke2.ability = this.sample(poke2.ability);
+					if (mon2[1].length === 2 && mon2[2]) {
+						const moveset = [...mon2[1]];
+						const move1 = this.sample(mon2[2]);
+						moveset.push(move1);
+						const move2 = this.sample(mon2[2].filter(move => move !== move1));
+						moveset.push(move2);
+						poke2.moves = moveset;
+					} else poke2.moves = mon2[1];
+					poke2.nature = 'Serious';
+					if (!poke2.gender) poke2.gender = this.sample(['M', 'F']);
+					poke2.evs = { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 };
+					poke2.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+					poke2.level = 100;
+					poke2.shiny = true;
+					if (Array.isArray(poke2.teraType)) poke2.teraType = this.sample(poke2.teraType);
+					// extra info
+					poke2.happiness = 255;
+					poke2.hpType = '';
+					poke2.pokeball = '';
+					poke2.gigantamax = false;
+					poke2.dynamaxLevel = 10;
+
+					const newPoke1 = side.addPokemon(poke1);
+					// @ts-expect-error newPoke is always set
+					newPoke1.tandem = true;
+					const newPoke2 = side.addPokemon(poke2);
+					// @ts-expect-error newPoke is always set
+					newPoke2.tandem = true;
+				}
+			}
+			this.ruleTable.pickedTeamSize = 6;
 		},
 	},
 	{
@@ -3591,33 +3683,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Pet Mods",
-	},
-	{
-		name: "[Gen 9] woomod", // roomtours
-		desc: 'A Solomod by <username>woo</username> featuring custom Pokemon, moves, Abilities, and more!',
-		mod: 'woomod',
-		searchShow: false,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/10645868">woomod on Smogon Forums</a>`,
-			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/edit?usp=sharing">woomod on Google Sheets</a>`,
-		],
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Mega Data Mod', 'Z-Move Clause'],
-		banlist: ['All Pokemon', 'Eviolite', 'Light Ball', 'Baton Pass'],
-		unbanlist: [
-			'Krokorok', 'Qwilfish-Hisui', 'Snivy', 'Dragonair', 'Wimpod', 'Toxel-Hisui', 'Tadbulb', 'Pikipek',
-			'Chingling', 'Baltoy-Gear Rider', 'Baltoy-Water Rider', 'Charmander', 'Nymble', 'Vanillite', 'Spheal', 'Anorith',
-			'Jigglypuff', 'Bronzor', 'Wiglett', 'Gible', 'Vulpix', 'Shuppet', 'Golett', 'Elgyem', 'Farfetch\'d', 'Piplup',
-			'Amaura', 'Wailmer', 'Pikachu', 'Morelull', 'Houndour', 'Koffing-Hoenn', 'Tandemaus', 'Hakamo-o', 'Kartana',
-			'Ledyba', 'Wooper-Paldea', 'Hoothoot', 'Raboot-Sinnoh', 'Honedge', 'Roselia', 'Skiploom', 'Spritzee', 'Helioptile',
-		],
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new custom elements?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1YJXE8wUNJijWSfNKIUqgObN5uEVgTliewTluGe0w4Y4/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `woo mod.`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3711007/page-13#post-10645868`);
-			this.add('-message', `Be sure to swing by the Pet Mods room to discuss the metagame and participate in roomtours:`);
-			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
-		},
 	},
 	{
 		name: "[Gen 9] CCAPM2025", // roomtours
