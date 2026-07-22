@@ -26,6 +26,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "S/V Singles",
 	},
 	{
+		name: "Torneo",
+		section: "Custom",
+		mod: 'gen9',
+		ruleset: ['Team Preview', 'Cancel Mod'], // Activa el Team Preview tradicional sin el filtro de Nintendo
+		onValidateTeam(team) {
+			// Esto aprueba el equipo entero ignorando legalidad, movimientos, habilidades u objetos
+			return [];
+		},
+	},
+	{
 		name: "[Gen 9] Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		mod: 'gen9',
