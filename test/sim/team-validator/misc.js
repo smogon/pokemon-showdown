@@ -252,4 +252,11 @@ describe('Team Validator', () => {
 		];
 		assert.legalTeam(team, 'gen9ubers');
 	});
+
+	it('should reject non-held items as held items', () => {
+		const team = [
+			{ species: 'kubfu', item: 'Scroll of Darkness' },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+	});
 });

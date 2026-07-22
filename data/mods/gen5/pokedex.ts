@@ -194,6 +194,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 75, atk: 55, def: 70, spa: 55, spd: 85, spe: 110 },
 	},
+	espeon: {
+		inherit: true,
+		evoCondition: "during the day and not near a Moss or Ice Rock",
+	},
+	umbreon: {
+		inherit: true,
+		evoCondition: "during the night and not near a Moss or Ice Rock",
+	},
 	snubbull: {
 		inherit: true,
 		types: ["Normal"],
