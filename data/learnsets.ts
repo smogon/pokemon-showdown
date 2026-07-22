@@ -54109,6 +54109,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	arceuswater: {
 		eventOnly: true,
 	},
+	arceusunknown: {
+		eventOnly: true,
+	},
 	victini: {
 		learnset: {
 			batonpass: ["8M"],
