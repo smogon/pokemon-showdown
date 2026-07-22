@@ -208,7 +208,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
 					this.battle.add('-ability', pokemon, bypassProtect.name);
 				}
-				this.battle.add('-zbroken', target);
+				this.battle.add('-brokeprotect', target);
 			}
 
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...

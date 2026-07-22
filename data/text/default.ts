@@ -35,7 +35,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		transformMega: "[POKEMON] has Mega Evolved into Mega [SPECIES]!",
 		primal: "[POKEMON]'s Primal Reversion! It reverted to its primal state!",
 		zPower: "  [POKEMON] surrounded itself with its Z-Power!",
-		zBroken: "  [POKEMON] couldn't fully protect itself and got hurt!",
+		brokeProtect: "  [POKEMON] couldn't fully protect itself and got hurt!",
 		terastallize: "  [POKEMON] has Terastallized into the [TYPE]-type!", // filler
 
 		// in case the different default messages didn't make it obvious, the difference
