@@ -306,7 +306,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
-			sendPM(`You accepted a friend request from "${target}".`, user.id, target);
+			sendPM(`/text You accepted a friend request from "${target}".`, user.id, target);
 			sendPM(`/uhtmlchange sent-${target},`, user.id, target);
 			this.refreshPage('friends-received');
 			if (targetUser) {
@@ -327,7 +327,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const targetUser = Users.get(target);
 			this.refreshPage('friends-received');
-			sendPM(`You denied a friend request from '${target}'.`, user.id, target);
+			sendPM(`/text You denied a friend request from '${target}'.`, user.id, target);
 			sendPM(`/uhtmlchange sent-${target},`, user.id, target);
 			if (targetUser) sendPM(`/uhtmlchange undo-${user.id},`, targetUser.id, user.id);
 		},
@@ -358,7 +358,7 @@ export const commands: Chat.ChatCommands = {
 			await Friends.removeRequest(target as ID, user.id);
 			const targetUser = Users.get(target);
 			this.refreshPage('friends-sent');
-			sendPM(`You removed your friend request to '${target}'.`, user.id, target);
+			sendPM(`/text You removed your friend request to '${target}'.`, user.id, target);
 			sendPM(`/uhtmlchange undo-${target},`, user.id, target);
 			if (targetUser) sendPM(`/uhtmlchange sent-${user.id},`, targetUser.id, user.id);
 		},
