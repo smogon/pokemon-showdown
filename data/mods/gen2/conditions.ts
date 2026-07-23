@@ -122,13 +122,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-start', target, 'confusion');
 			}
 			if (sourceEffect && sourceEffect.id === 'berserkgene') {
-				this.effectState.time = 256;
+				this.effectState.time = target.side.confusionCounter || 256;
 			} else {
 				this.effectState.time = this.random(2, 6);
 			}
+			target.side.confusionCounter = this.effectState.time;
 		},
 		onBeforeMove(pokemon, target, move) {
 			pokemon.volatiles['confusion'].time--;
+			target.side.confusionCounter = pokemon.volatiles['confusion'].time;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
 				return;
