@@ -2116,7 +2116,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
-					if (!(move.secondary || move.secondaries || move.hasSheerForceBoost) === !alts.flags[flag]) {
+					if (!(move.secondary || move.secondaries) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}

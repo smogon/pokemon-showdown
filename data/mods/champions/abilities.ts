@@ -70,6 +70,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.clearStatus();
 		},
 	},
+	pickpocket: {
+		inherit: true,
+		onAfterMoveSecondaryLast(target, source, move) {
+			if (source && source !== target && move?.flags['contact']) {
+				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
+					return;
+				}
+				const yourItem = source.takeItem(target);
+				if (!yourItem) {
+					return;
+				}
+				if (!target.setItem(yourItem)) {
+					source.item = yourItem.id;
+					return;
+				}
+				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${source}`);
+				this.add('-item', target, yourItem, '[from] ability: Pickpocket', `[of] ${source}`);
+			}
+		},
+	},
 	piercingdrill: {
 		inherit: true,
 		isNonstandard: null,

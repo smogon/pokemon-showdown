@@ -543,6 +543,10 @@ export class BattleActions {
 				}
 			}
 		}
+		for (const curTarget of targets) {
+			this.battle.singleEvent('AfterMoveSecondaryLast', move, null, curTarget, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondaryLast', curTarget, pokemon, move);
+		}
 
 		return true;
 	}

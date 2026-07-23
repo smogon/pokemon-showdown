@@ -24,6 +24,7 @@ export interface EventMethods {
 	onAfterTakeItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAfterMoveSecondaryLast?: MoveEventMethods['onAfterMoveSecondaryLast'];
 	onAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onAfterMove?: MoveEventMethods['onAfterMove'];
@@ -430,6 +431,7 @@ export interface EventMethods {
 	onAccuracyPriority?: number;
 	onDamagingHitOrder?: number;
 	onAfterMoveSecondaryPriority?: number;
+	onAfterMoveSecondaryLastPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
 	onAfterSetStatusPriority?: number;

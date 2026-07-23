@@ -108,6 +108,7 @@ export interface MoveEventMethods {
 
 	onAfterHit?: CommonHandlers['VoidSourceMove'];
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onAfterMoveSecondaryLast?: CommonHandlers['VoidMove'];
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
@@ -209,10 +210,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect;
 	secondaries?: SecondaryEffect[];
 	self?: SecondaryEffect;
-	/**
-	 * Boosted by Sheer Force without suppressing secondary effects.
-	 */
-	hasSheerForceBoost?: boolean;
 
 	// Hit effect modifiers
 	// --------------------
@@ -385,11 +382,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 */
 	readonly secondaries?: SecondaryEffect[];
 	/**
-	 * Moves manually boosted by Sheer Force.
-	 * e.g. Electro Shot and Order Up.
-	 */
-	readonly hasSheerForceBoost: boolean;
-	/**
 	 * Move priority. Higher priorities go before lower priorities,
 	 * trumping the Speed stat.
 	 */
@@ -487,7 +479,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || undefined;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || undefined;
-		this.hasSheerForceBoost = data.hasSheerForceBoost || false;
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
 		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;
