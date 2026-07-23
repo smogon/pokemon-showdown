@@ -519,6 +519,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['[Gen 1] OU', 'STABmons Move Legality'],
 		restricted: ['Bind', 'Clamp', 'Hypnosis', 'Lovely Kiss', 'Sing', 'Spore', 'Wrap'],
 	},
+	// [Gen 2] Spaceworld '97 &mdash; GSC mechanics on the 1997 Gold/Silver demo dex (pret/pokegold-spaceworld):
+	// beta stats/typings, the demo's unfinished type chart, beta evolution chains, the 1997 move table, cut
+	// 'mon added as new species, and the beta-only moves. Ladderable alongside the other oddball tiers here.
+	{
+		name: "[Gen 2] Spaceworld '97",
+		desc: `GSC mechanics running on the 1997 Gold/Silver Spaceworld demo dex, transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly: beta base stats and typings, the demo's unfinished type chart (Steel and Dark are incomplete), beta evolution chains, the 1997 move table (types, power, accuracy and PP), and the beta-only moves. Cut 'mon designs (placeholder art stats) are added as new species and wired into their beta evolutions. Learnsets are level-up + TM/HM only &mdash; there are no egg moves &mdash; but Gen 1 Time Capsule tradeforwards are allowed. The roster is limited to the demo's own dex, so GSC 'mon absent from the 1997 build are unavailable.`,
+		mod: 'gen2sw97',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
@@ -4833,13 +4843,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 2] OU",
 		mod: 'gen2',
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
-	},
-	{
-		name: "[Gen 2] Spaceworld '97",
-		desc: `GSC mechanics running on the 1997 Gold/Silver Spaceworld demo dex, transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly: beta base stats and typings, the demo's unfinished type chart (Steel and Dark are incomplete), beta evolution chains, the 1997 move table (types, power, accuracy and PP), and the beta-only moves. Cut 'mon designs (placeholder art stats) are added as new species and wired into their beta evolutions. Learnsets are level-up + TM/HM only &mdash; there are no egg moves &mdash; but Gen 1 Time Capsule tradeforwards are allowed. The roster is limited to the demo's own dex, so GSC 'mon absent from the 1997 build are unavailable.`,
-		mod: 'gen2sw97',
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
