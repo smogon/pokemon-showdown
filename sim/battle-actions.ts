@@ -119,6 +119,7 @@ export class BattleActions {
 		if (oldActive) {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.draggedIn = null;
 			oldActive.usedItemThisTurn = false;
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
@@ -147,7 +148,7 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
+		if (isDrag) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
 		if (isDrag && this.battle.gen >= 5) {
