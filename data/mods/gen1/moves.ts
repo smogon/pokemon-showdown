@@ -137,6 +137,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	conversion: {
 		inherit: true,
+		flags: { bypasssub: 1, metronome: 1 },
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
