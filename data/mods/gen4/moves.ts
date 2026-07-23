@@ -1179,15 +1179,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
 		},
 		onHit(target, source) {
-			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+			if (source.transformed || !target.lastMoveSketch || target.volatiles['substitute']) {
 				return false;
 			}
-			if (target.lastMove.flags['nosketch'] || source.moves.includes(target.lastMove.id)) {
+			if (target.lastMoveSketch.flags['nosketch'] || source.moves.includes(target.lastMoveSketch.id)) {
 				return false;
 			}
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			const move = this.dex.moves.get(target.lastMove.id);
+			const move = this.dex.moves.get(target.lastMoveSketch.id);
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
