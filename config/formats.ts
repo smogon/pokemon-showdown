@@ -4838,7 +4838,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 2] Spaceworld '97",
-		desc: `Proof-of-concept: GSC OU running with base stats and typings from the leaked 1997 Gold/Silver Spaceworld demo. Data is transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly. Currently a slice &mdash; six recognizable 'mons use their beta stats; the rest fall back to final GSC.`,
+		desc: `GSC mechanics running on the full 1997 Gold/Silver Spaceworld demo dex: beta base stats, typings, evolutions, level-up + TM/HM learnsets, and the demo's beta-only moves &mdash; plus the cut 'mon designs as new species. All data is transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly, kept pure (placeholder stats and disabled beta evolutions included).`,
 		mod: 'gen2sw97',
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
