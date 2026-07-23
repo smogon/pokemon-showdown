@@ -337,6 +337,7 @@ export class TeamValidator {
 	readonly gen: number;
 	readonly ruleTable: RuleTable;
 	readonly minSourceGen: number;
+	readonly maxSourceGen: number;
 
 	readonly toID: (str: any) => ID;
 	constructor(format: string | Format, dex = Dex) {
@@ -349,6 +350,13 @@ export class TeamValidator {
 		this.ruleTable = this.dex.formats.getRuleTable(this.format);
 
 		this.minSourceGen = this.ruleTable.minSourceGen;
+
+		let maxSourceGen = this.dex.gen;
+		if (this.ruleTable.has('allowtradeback')) {
+			if (this.dex.gen === 1) maxSourceGen = 2;
+			else if (this.dex.gen === 8) maxSourceGen = 9;
+		}
+		this.maxSourceGen = maxSourceGen;
 
 		this.toID = toID;
 	}
@@ -848,7 +856,7 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && this.maxSourceGen === 1) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
@@ -2092,7 +2100,6 @@ export class TeamValidator {
 		const dex = this.dex;
 		let name = set.species;
 		const species = dex.species.get(set.species);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(dex.gen + 1, 1, 8) : dex.gen;
 		if (!eventSpecies) eventSpecies = species;
 		if (set.name && set.species !== set.name && species.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
@@ -2106,7 +2113,7 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen ${this.minSourceGen} or later and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
-		if (maxSourceGen < eventData.generation) {
+		if (this.maxSourceGen < eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
@@ -2250,7 +2257,10 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				if (!isHidden && eventData.isHidden && dex.gen <= 8) {
+				const canUseAbilityPatchReverse = dex.gen >= 9 || (
+					dex.gen === 8 && this.maxSourceGen >= 9 && !Dex.mod('gen9').species.get(species.name).isNonstandard
+				);
+				if (!isHidden && eventData.isHidden && !canUseAbilityPatchReverse) {
 					if (fastReturn) return true;
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
@@ -2270,8 +2280,7 @@ export class TeamValidator {
 		let minSourceGen = this.minSourceGen;
 		if (this.dex.gen >= 3 && minSourceGen < 3) minSourceGen = 3;
 		if (species) minSourceGen = Math.max(minSourceGen, species.gen);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, 8) : this.dex.gen;
-		return new PokemonSources(maxSourceGen, minSourceGen);
+		return new PokemonSources(this.maxSourceGen, minSourceGen);
 	}
 
 	validateMoves(
@@ -2537,11 +2546,6 @@ export class TeamValidator {
 		const moveSources = new PokemonSources();
 
 		/**
-		 * The format doesn't allow Pokemon traded from the future
-		 * (This is everything except in Gen 1 Tradeback)
-		 */
-		const noFutureGen = !ruleTable.has('allowtradeback');
-		/**
 		 * The format allows Sketch to copy moves in Gen 8
 		 */
 		const canSketchPostGen7Moves = ruleTable.has('sketchpostgen7moves') || this.dex.currentMod === 'gen8bdsp';
@@ -2618,7 +2622,7 @@ export class TeamValidator {
 					}
 					continue;
 				}
-				if (noFutureGen && learnedGen > dex.gen) {
+				if (learnedGen > this.maxSourceGen) {
 					if (!cantLearnReason) {
 						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
 					}
