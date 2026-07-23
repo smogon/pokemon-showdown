@@ -3,6 +3,7 @@
 const fs = require("fs");
 const child_process = require("child_process");
 const esbuild = require('esbuild');
+const path = require('path');
 
 const copyOverDataJSON = (file = 'data') => {
 	const files = fs.readdirSync(file);
@@ -10,7 +11,9 @@ const copyOverDataJSON = (file = 'data') => {
 		if (fs.statSync(`${file}/${f}`).isDirectory()) {
 			copyOverDataJSON(`${file}/${f}`);
 		} else if (f.endsWith('.json')) {
-			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
+			const destination = path.resolve('dist', `${file}/${f}`);
+			fs.mkdirSync(path.dirname(destination), { recursive: true });
+			fs.copyFileSync(`${file}/${f}`, destination);
 		}
 	}
 };
