@@ -66,6 +66,7 @@ export interface EventMethods {
 	onModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onModifyDef?: CommonHandlers['ModifierMove'];
 	onModifyMove?: MoveEventMethods['onModifyMove'];
+	onModifyMovePhase2?: MoveEventMethods['onModifyMove'];
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove
@@ -171,6 +172,7 @@ export interface EventMethods {
 	onFoeModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onFoeModifyDef?: CommonHandlers['ModifierMove'];
 	onFoeModifyMove?: MoveEventMethods['onModifyMove'];
+	onFoeModifyMovePhase2?: MoveEventMethods['onModifyMove'];
 	onFoeModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onFoeModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove
@@ -269,6 +271,7 @@ export interface EventMethods {
 	onSourceModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifyDef?: CommonHandlers['ModifierMove'];
 	onSourceModifyMove?: MoveEventMethods['onModifyMove'];
+	onSourceModifyMovePhase2?: MoveEventMethods['onModifyMove'];
 	onSourceModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove
@@ -371,6 +374,7 @@ export interface EventMethods {
 	onAnyModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onAnyModifyDef?: CommonHandlers['ModifierMove'];
 	onAnyModifyMove?: MoveEventMethods['onModifyMove'];
+	onAnyModifyMovePhase2?: MoveEventMethods['onModifyMove'];
 	onAnyModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onAnyModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove
@@ -545,6 +549,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onAllyModifyDef?: CommonHandlers['ModifierMove'];
 	onAllyModifyMove?: MoveEventMethods['onModifyMove'];
+	onAllyModifyMovePhase2?: MoveEventMethods['onModifyMove'];
 	onAllyModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onAllyModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove

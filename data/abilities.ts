@@ -4204,6 +4204,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.hasSheerForce || move.hasSheerForceBoost) return this.chainModify([5325, 4096]);
 		},
+		onModifyMovePhase2(move, source, target) {
+			((this.effect as any).onModifyMove as (m: ActiveMove, p: Pokemon, p2: Pokemon) => void)
+				.call(this, move, source, target!);
+		},
 		flags: {},
 		name: "Sheer Force",
 		rating: 3.5,
@@ -4220,6 +4224,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
 			return secondaries.filter(effect => !!effect.self);
+		},
+		onSourceModifyMovePhase2(move) {
+			if (move.numberTargets === 1) move.dustproof = false;
 		},
 		flags: { breakable: 1 },
 		name: "Shield Dust",
