@@ -146,7 +146,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	counter: {
 		inherit: true,
 		ignoreImmunity: true,
-		willCrit: false,
 		basePower: 1,
 		damageCallback(pokemon, target) {
 			// Counter mechanics in gen 1:
