@@ -56,6 +56,7 @@ function getDefaultStats(): Stats {
 			gen6randombattle: { mons: {} },
 			gen5randombattle: { mons: {} },
 			gen4randombattle: { mons: {} },
+			gen3megarandombattle: { mons: {} },
 			gen3randombattle: { mons: {} },
 			gen2randombattle: { mons: {} },
 			gen1randombattle: { mons: {} },
