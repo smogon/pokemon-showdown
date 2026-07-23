@@ -104,6 +104,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 3] Mega Random Battle",
+		desc: "Randomized Gen 3 teams with exactly one Mega Evolution or Primal Reversion per side.",
+		mod: 'gen3mega',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+	},
+	{
 		name: "[Gen 3] Megas Ubers",
 		desc: "Gen 3 Megas with Ubers unbanned. Only AG-tier Megas (Mega Salamence) stay banned.",
 		mod: 'gen3mega',

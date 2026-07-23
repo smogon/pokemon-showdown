@@ -453,6 +453,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		// First, the high-priority items
+		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'linoone' && role === 'Setup Sweeper') return 'Silk Scarf';
 		if (species.id === 'marowak') return 'Thick Club';
@@ -532,7 +533,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = new Set(species.types);
-		const abilities = set.abilities!;
+		const baseAbilities = set.abilities!;
+		// Battle-only formes generate around their transformed ability, but the
+		// emitted base forme must keep its ordinary ability until transformation.
+		const abilities = (species.battleOnly && !species.requiredAbility) ?
+			Object.values(species.abilities) : baseAbilities;
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
@@ -540,7 +545,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const counter = this.queryMoves(moves, species, preferredType, abilities);
 
 		// Get ability
-		ability = this.getAbility(new Set(types), moves, abilities, counter, teamDetails, species);
+		ability = this.getAbility(new Set(types), moves, baseAbilities, counter, teamDetails, species);
 
 		// Get items
 		item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
@@ -640,19 +645,40 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Prevent Reversal/Flail users + Tyranitar
 			[[...flailUsers, ...reversalUsers], 'tyranitar'],
 		];
+		const speciesId = this.dex.toID(species.baseSpecies);
+		const pokemonIds = pokemon.map(set => {
+			const setSpecies = this.dex.species.get(set.speciesId || set.species);
+			return this.dex.toID(setSpecies.baseSpecies);
+		});
 
 		for (const pair of incompatibilityList) {
 			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
 			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
-			if (monsArrayB.includes(species.id)) {
-				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			if (monsArrayB.includes(speciesId)) {
+				if (pokemonIds.some(id => monsArrayA.includes(id))) return false;
 			}
-			if (monsArrayA.includes(species.id)) {
-				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			if (monsArrayA.includes(speciesId)) {
+				if (pokemonIds.some(id => monsArrayB.includes(id))) return false;
 			}
 		}
 
 		return true;
+	}
+
+	/**
+	 * Subformats can force one species through the ordinary construction loop.
+	 * The default preserves vanilla Gen 3 Random Battle behavior.
+	 */
+	protected getRequiredRandomSpecies(): Species | null {
+		return null;
+	}
+
+	/**
+	 * Subformats can keep auxiliary set data out of the ordinary random pool.
+	 * Forced species are supplied separately by getRequiredRandomSpecies().
+	 */
+	protected getRandomSpeciesList(): string[] {
+		return Object.keys(this.randomSets);
 	}
 
 	override randomTeam() {
@@ -674,11 +700,27 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonList = Object.keys(this.randomSets);
+		const pokemonList = this.getRandomSpeciesList();
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+		let requiredSpecies = this.getRequiredRandomSpecies();
+		if (requiredSpecies) {
+			// Its family will be represented by the forced forme, so remove every
+			// weighted occurrence of the base family from the ordinary pool.
+			let baseIndex = baseSpeciesPool.indexOf(requiredSpecies.baseSpecies);
+			while (baseIndex >= 0) {
+				this.fastPop(baseSpeciesPool, baseIndex);
+				baseIndex = baseSpeciesPool.indexOf(requiredSpecies.baseSpecies);
+			}
+		}
+		while ((requiredSpecies || baseSpeciesPool.length) && pokemon.length < this.maxTeamSize) {
+			let species: Species;
+			if (requiredSpecies) {
+				species = requiredSpecies;
+				requiredSpecies = null;
+			} else {
+				const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+				species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+			}
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -768,9 +810,15 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Update team details
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
-			if (set.ability === 'Drought' || set.moves.includes('sunnyday')) teamDetails.sun = 1;
-			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
+			const activeAbility = (species.battleOnly && !species.requiredAbility) ?
+				Object.values(species.abilities)[0] : set.ability;
+			if (['Drizzle', 'Primordial Sea'].includes(activeAbility) || set.moves.includes('raindance')) {
+				teamDetails.rain = 1;
+			}
+			if (['Desolate Land', 'Drought'].includes(activeAbility) || set.moves.includes('sunnyday')) {
+				teamDetails.sun = 1;
+			}
+			if (activeAbility === 'Sand Stream') teamDetails.sand = 1;
 			if (set.moves.includes('aromatherapy') || set.moves.includes('healbell')) teamDetails.statusCure = 1;
 			if (set.moves.includes('spikes')) teamDetails.spikes = 1;
 			if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
