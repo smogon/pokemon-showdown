@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <script>
-var host = document.location.hostname.replace(/-/g, '=').replace(/\./g, '-').replace(/:/g, '--').replace(/=/g, '---');
 var currentPort = document.location.port || (document.location.protocol === 'https:' ? '443' : '80');
-var defaultPort = document.location.protocol === 'https:' ? '443' : '8000';
-var suffix = (currentPort !== defaultPort ? '--' + currentPort : '');
-var protocol = 'https:';
-if (document.location.protocol !== 'https:' && host !== 'localhost') {
-	protocol = 'http:';
-	suffix += '.insecure';
+var hostname = document.location.hostname;
+if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') {
+	// Keep local development independent from the official server registry.
+	document.location.replace('http://localhost:8080/testclient-new.html?~~localhost:' + currentPort);
+} else {
+	var host = hostname.replace(/-/g, '=').replace(/\./g, '-').replace(/:/g, '--').replace(/=/g, '---');
+	var defaultPort = document.location.protocol === 'https:' ? '443' : '8000';
+	var suffix = (currentPort !== defaultPort ? '--' + currentPort : '');
+	var protocol = 'https:';
+	if (document.location.protocol !== 'https:') {
+		protocol = 'http:';
+		suffix += '.insecure';
+	}
+	document.location.replace(protocol + '//' + host + suffix + '.psim.us' + document.location.pathname);
 }
-document.location.replace(protocol + '//' + host + suffix + '.psim.us' + document.location.pathname);
 </script>
 <p>This is a <a href="http://www.pokemonshowdown.com">Pok&eacute;mon Showdown</a> server!</p>
 <noscript><p>You'll need to <a href="http://enable-javascript.com/en/">enable JavaScript</a> to play.</p></noscript>

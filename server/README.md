@@ -11,7 +11,7 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js v16+)
+(Requires Node.js v22+)
 
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 
@@ -22,7 +22,7 @@ If your distro package manager has an old Node.js version, the simplest way to u
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][6] installed, v14.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, v22 or later.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone or download" button near the top right (it's green). I recommend the "Open in Desktop" method - you need to install GitHub Desktop which is more work than "Download ZIP", but it makes it much easier to update in the long run (it lets you use the `/updateserver` command).
 
@@ -64,6 +64,65 @@ If the URL is a big deal for you, our `psim.us` site may be embedded in an `ifra
 
   [6]: https://nodejs.org/
   [7]: https://github.com/smogon/pokemon-showdown-client
+
+
+Running the server and client locally on Windows
+------------------------------------------------------------------------
+
+Use a current Node.js 22 or newer installation for both repositories. These
+instructions use PowerShell and assume the server and client repositories are
+in separate directories.
+
+In the first PowerShell window, install and start the server:
+
+```powershell
+Set-Location 'C:\path\to\pokemon-showdown'
+npm.cmd install
+if (-not (Test-Path 'config\config.js')) {
+    Copy-Item 'config\config-example.js' 'config\config.js'
+}
+node pokemon-showdown start 8000
+```
+
+In a second PowerShell window, clone the client once, then install, build, and
+serve it:
+
+```powershell
+Set-Location 'C:\path\to'
+git clone https://github.com/smogon/pokemon-showdown-client.git
+Set-Location 'C:\path\to\pokemon-showdown-client'
+npm.cmd install
+node build
+Set-Location 'play.pokemonshowdown.com'
+npx.cmd http-server . -p 8080
+```
+
+If the client is already cloned, skip the `git clone` command. The first
+`npx.cmd http-server` invocation may ask to install the `http-server` package.
+Re-run `node build` after changing or updating client source files.
+
+Open either of these URLs:
+
+```text
+http://localhost:8000
+http://localhost:8080/testclient-new.html?~~localhost:8000
+```
+
+The server's loopback landing page redirects the first URL to the second. This
+uses the locally built test client and does not contact the official server
+registry to resolve the side server.
+
+Local avatar files belong in the server repository's `config/avatars/`
+directory. Give a user access with a filename-based avatar ID:
+
+```text
+/personalavatar UserName, custom-trainer-01-a.png
+/avatar custom-trainer-01-a.png
+```
+
+The server exposes that file as
+`http://localhost:8000/avatars/custom-trainer-01-a.png`, and the current client
+loads it from the connected server even though the server is not registered.
 
 
 Setting up an Administrator account

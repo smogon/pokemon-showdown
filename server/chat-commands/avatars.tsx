@@ -19,7 +19,7 @@ const AVATARS_FILE = 'config/avatars.json';
 type AvatarID = string;
 const AVATAR_FORMATS_MESSAGE = Config.serverid === 'showdown' ?
 	"Custom avatars start with '#', like '#splxraiders'." :
-	"Custom avatars look like 'example.png'. Custom avatars should be put in `config/avatars/`. Your server must be registered for custom avatars to work.";
+	"Custom avatars look like 'example.png'. Put them in `config/avatars/`; side-server avatars are served directly and do not require server registration.";
 
 interface AvatarEntry {
 	timeReceived?: number;
