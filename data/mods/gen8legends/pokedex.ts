@@ -39,4 +39,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		evos: ["Decidueye-Hisui"],
 	},
+	wyrdeer: {
+		inherit: true,
+		evoType: "levelMove",
+		evoMove: "Psyshield Bash",
+	},
 };
