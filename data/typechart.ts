@@ -1,5 +1,6 @@
 export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 	bug: {
+		num: 6,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -25,6 +26,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 13, def: 13 },
 	},
 	dark: {
+		num: 16,
 		damageTaken: {
 			prankster: 3,
 			Bug: 1,
@@ -50,6 +52,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPivs: {},
 	},
 	dragon: {
+		num: 15,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -75,6 +78,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { def: 14 },
 	},
 	electric: {
+		num: 12,
 		damageTaken: {
 			par: 3,
 			Bug: 0,
@@ -101,6 +105,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 14 },
 	},
 	fairy: {
+		num: 17,
 		damageTaken: {
 			Bug: 2,
 			Dark: 2,
@@ -124,6 +129,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		},
 	},
 	fighting: {
+		num: 1,
 		damageTaken: {
 			Bug: 2,
 			Dark: 2,
@@ -149,6 +155,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 12, def: 12 },
 	},
 	fire: {
+		num: 9,
 		damageTaken: {
 			brn: 3,
 			Bug: 2,
@@ -175,6 +182,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 14, def: 12 },
 	},
 	flying: {
+		num: 2,
 		damageTaken: {
 			Bug: 2,
 			Dark: 0,
@@ -200,6 +208,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 12, def: 13 },
 	},
 	ghost: {
+		num: 7,
 		damageTaken: {
 			trapped: 3,
 			Bug: 2,
@@ -226,6 +235,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 13, def: 14 },
 	},
 	grass: {
+		num: 11,
 		damageTaken: {
 			powder: 3,
 			Bug: 1,
@@ -252,6 +262,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 14, def: 14 },
 	},
 	ground: {
+		num: 4,
 		damageTaken: {
 			sandstorm: 3,
 			Bug: 0,
@@ -278,6 +289,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 12 },
 	},
 	ice: {
+		num: 14,
 		damageTaken: {
 			hail: 3,
 			frz: 3,
@@ -305,6 +317,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { def: 13 },
 	},
 	normal: {
+		num: 0,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -328,6 +341,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		},
 	},
 	poison: {
+		num: 3,
 		damageTaken: {
 			psn: 3,
 			tox: 3,
@@ -355,6 +369,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 12, def: 14 },
 	},
 	psychic: {
+		num: 13,
 		damageTaken: {
 			Bug: 1,
 			Dark: 1,
@@ -380,6 +395,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { def: 12 },
 	},
 	rock: {
+		num: 5,
 		damageTaken: {
 			sandstorm: 3,
 			Bug: 0,
@@ -406,6 +422,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 13, def: 12 },
 	},
 	steel: {
+		num: 8,
 		damageTaken: {
 			psn: 3,
 			tox: 3,
@@ -434,6 +451,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		HPdvs: { atk: 13 },
 	},
 	stellar: {
+		num: 99,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -457,6 +475,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 		},
 	},
 	water: {
+		num: 10,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
