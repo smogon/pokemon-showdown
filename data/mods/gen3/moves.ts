@@ -545,6 +545,31 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1, nosketch: 1 },
 	},
+	snatch: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onAnyPrepareHit(source, target, move) {
+				const snatchUser = this.effectState.source as Pokemon;
+				if (snatchUser.isSkyDropped()) return;
+				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
+					return;
+				}
+				snatchUser.removeVolatile('snatch');
+				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
+
+				// check Pressure
+				const ppDrop = this.runEvent('DeductPP', source, snatchUser, this.effectState.sourceEffect);
+				const extraPP = ppDrop !== true ? ppDrop : 0;
+				if (extraPP > 0) {
+					snatchUser.deductPP(this.effectState.sourceEffect.id, extraPP);
+				}
+
+				this.actions.useMove(move.id, snatchUser);
+				return null;
+			},
+		},
+	},
 	sleeptalk: {
 		inherit: true,
 		onHit(pokemon) {
