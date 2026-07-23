@@ -14,6 +14,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		],
 		banlist: ['Dig', 'Fly'],
 	},
+	standardcustomgame: {
+		inherit: true,
+		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100', 'Desync Clause Mod'],
+	},
 	'350cupmod': {
 		effectType: 'Rule',
 		name: '350 Cup Mod',
