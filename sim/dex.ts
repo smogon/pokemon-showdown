@@ -681,13 +681,15 @@ export class ModdedDex {
 						// instead of overwriting entirely
 						delete childTypedData[entryId].inherit;
 
-						// {inherit: true} can also be used to inherit parts of conditions
-						if (childTypedData[entryId].condition?.inherit) {
-							delete childTypedData[entryId].condition.inherit;
-							childTypedData[entryId].condition = {
-								...parentTypedData[entryId].condition,
-								...childTypedData[entryId].condition,
-							};
+						// {inherit: true} can also be used to inherit parts of nested objects
+						for (const key of ['condition', 'flags']) {
+							if (childTypedData[entryId][key]?.inherit) {
+								delete childTypedData[entryId][key].inherit;
+								childTypedData[entryId][key] = {
+									...parentTypedData[entryId][key],
+									...childTypedData[entryId][key],
+								};
+							}
 						}
 
 						// Merge parent and child's entry, with child overwriting parent.

@@ -47,7 +47,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
-		flags: {},
+		flags: { inherit: true, notrace: 0 },
 	},
 	hustle: {
 		inherit: true,
@@ -192,7 +192,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const ability = target.getAbility();
 			pokemon.setAbility(ability, target);
 		},
-		flags: {},
+		flags: { inherit: true, notrace: 0 },
 	},
 	truant: {
 		inherit: true,

@@ -18,15 +18,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	ancientpower: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, contact: 1 },
 	},
 	assist: {
 		inherit: true,
-		flags: { metronome: 1, noassist: 1, nosleeptalk: 1 },
+		flags: { inherit: true, metronome: 1 },
 	},
 	astonish: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, minimize: 1 },
+		flags: { inherit: true, minimize: 1 },
 	},
 	beatup: {
 		inherit: true,
@@ -183,7 +183,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	covet: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, noassist: 1 },
+		flags: { inherit: true, contact: 0 },
 	},
 	crunch: {
 		inherit: true,
@@ -201,7 +201,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
-		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		condition: {
 			inherit: true,
 			durationCallback() {
@@ -260,15 +259,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	extrasensory: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1, minimize: 1 },
+		flags: { inherit: true, minimize: 1 },
 	},
 	fakeout: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, contact: 0 },
 	},
 	feintattack: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, contact: 0 },
 	},
 	flail: {
 		inherit: true,
@@ -402,7 +401,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mimic: {
 		inherit: true,
-		flags: { protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1 },
+		flags: { inherit: true, bypasssub: 1 },
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -427,7 +426,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mirrormove: {
 		inherit: true,
-		flags: { metronome: 1, failencore: 1, nosleeptalk: 1, noassist: 1 },
+		flags: { inherit: true, metronome: 1 },
 		onTryHit: undefined, // no inherit
 		onHit(pokemon) {
 			const noMirror = [
@@ -453,7 +452,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	needlearm: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, minimize: 1 },
+		flags: { inherit: true, minimize: 1 },
 	},
 	nightmare: {
 		inherit: true,
@@ -469,7 +468,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	overheat: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, contact: 1 },
 	},
 	petaldance: {
 		inherit: true,
@@ -543,7 +542,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1, nosketch: 1 },
+		flags: { inherit: true, allyanim: 0 },
 	},
 	sleeptalk: {
 		inherit: true,
@@ -601,7 +600,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	struggle: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, noassist: 1, failencore: 1, failmimic: 1, nosketch: 1 },
 		accuracy: 100,
 		recoil: [1, 4],
 		struggleRecoil: false,
@@ -612,7 +610,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	taunt: {
 		inherit: true,
-		flags: { protect: 1, bypasssub: 1, metronome: 1 },
+		flags: { inherit: true, mirror: 0 },
 		condition: {
 			inherit: true,
 			duration: 2,
@@ -625,11 +623,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	teeterdance: {
 		inherit: true,
-		flags: { protect: 1, metronome: 1 },
+		flags: { inherit: true, mirror: 0 },
 	},
 	tickle: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
+		flags: { inherit: true, allyanim: 0, bypasssub: 1 },
 	},
 	uproar: {
 		inherit: true,

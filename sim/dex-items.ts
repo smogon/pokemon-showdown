@@ -13,7 +13,7 @@ export interface ItemData extends Partial<Item>, PokemonEventMethods {
 	name: string;
 }
 
-export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
+export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'condition' | 'name'>> & {
 	inherit: true,
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 	onWhiteHerb?: (this: Battle, pokemon: Pokemon) => void,

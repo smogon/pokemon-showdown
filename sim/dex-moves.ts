@@ -274,14 +274,15 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: ID;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+type ModdedMoveFlags = MoveFlags | ({
+	[K in keyof MoveFlags]?: 0 | 1;
+} & { inherit: true });
+
+export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'condition' | 'flags' | 'name'>> & {
 	inherit: true,
-	igniteBoosted?: boolean,
-	settleBoosted?: boolean,
-	bodyofwaterBoosted?: boolean,
-	longWhipBoost?: boolean,
 	gen?: number,
 	condition?: ModdedConditionData,
+	flags?: ModdedMoveFlags,
 };
 
 export interface MoveDataTable { [moveid: IDEntry]: MoveData }
@@ -503,7 +504,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.noPPBoosts = !!(data.noPPBoosts ?? data.isZ);
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
-		this.flags = data.flags || {};
+		this.flags = Object.fromEntries(Object.entries(data.flags || {}).filter(([, v]) => v).map(([f]) => [f, 1]));
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;

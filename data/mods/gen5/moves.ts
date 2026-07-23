@@ -1,7 +1,7 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	absorb: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	acidarmor: {
 		inherit: true,
@@ -67,7 +67,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	bestow: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, noassist: 1, failcopycat: 1 },
+		flags: { inherit: true, allyanim: 0, bypasssub: 0, protect: 1 },
 	},
 	blizzard: {
 		inherit: true,
@@ -75,15 +75,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	block: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, protect: 1 },
 	},
 	bodyslam: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { inherit: true, minimize: 0 },
 	},
 	bounce: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, noassist: 0 },
 	},
 	bubble: {
 		inherit: true,
@@ -91,7 +91,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	bugbuzz: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	camouflage: {
 		inherit: true,
@@ -117,10 +117,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {
-			protect: 1, sound: 1, distance: 1, noassist: 1, failcopycat: 1,
-			failmefirst: 1, nosleeptalk: 1, failmimic: 1, nosketch: 1,
-		},
+		flags: { inherit: true, bypasssub: 0, mirror: 0 },
 	},
 	conversion: {
 		inherit: true,
@@ -177,11 +174,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	dig: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, noassist: 0 },
 	},
 	dive: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, noassist: 0 },
 	},
 	dracometeor: {
 		inherit: true,
@@ -193,19 +190,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	drainpunch: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	dragonrush: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, minimize: 0 },
 	},
 	dreameater: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	echoedvoice: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	electroball: {
 		inherit: true,
@@ -226,11 +223,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	feint: {
 		inherit: true,
-		flags: { noassist: 1, failcopycat: 1 },
+		flags: { inherit: true, mirror: 0 },
 	},
 	finalgambit: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, metronome: 1 },
+		flags: { inherit: true, contact: 1 },
 	},
 	fireblast: {
 		inherit: true,
@@ -253,7 +250,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	fly: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1 },
+		flags: { inherit: true, noassist: 0, nosleeptalk: 0 },
 	},
 	followme: {
 		inherit: true,
@@ -304,7 +301,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	gigadrain: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	glare: {
 		inherit: true,
@@ -312,7 +309,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	grasswhistle: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	grasspledge: {
 		inherit: true,
@@ -327,7 +324,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	growl: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	growth: {
 		inherit: true,
@@ -348,7 +345,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healbell: {
 		inherit: true,
-		flags: { snatch: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0, distance: 0 },
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
@@ -369,7 +366,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	heatcrash: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { inherit: true, minimize: 0 },
 	},
 	heatwave: {
 		inherit: true,
@@ -454,7 +451,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	hornleech: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	hurricane: {
 		inherit: true,
@@ -466,7 +463,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	hypervoice: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	icebeam: {
 		inherit: true,
@@ -493,7 +490,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	leechlife: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	lick: {
 		inherit: true,
@@ -545,15 +542,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	meanlook: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, protect: 1 },
 	},
 	megadrain: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, heal: 0 },
 	},
 	metalsound: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, allyanim: 0, bypasssub: 0 },
 	},
 	meteormash: {
 		inherit: true,
@@ -608,7 +605,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	perishsong: {
 		inherit: true,
-		flags: { sound: 1, distance: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	pinmissile: {
 		inherit: true,
@@ -685,7 +682,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	ragepowder: {
 		inherit: true,
 		priority: 3,
-		flags: { noassist: 1, failcopycat: 1 },
 		condition: {
 			inherit: true,
 			onFoeRedirectTarget(target, source, source2, move) {
@@ -717,12 +713,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	relicsong: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	roar: {
 		inherit: true,
 		accuracy: 100,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		flags: { inherit: true, allyanim: 0, failcopycat: 0, noassist: 0, protect: 1 },
 	},
 	rocktomb: {
 		inherit: true,
@@ -732,7 +728,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	round: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	sacredsword: {
 		inherit: true,
@@ -744,7 +740,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	screech: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, allyanim: 0, bypasssub: 0 },
 	},
 	secretpower: {
 		inherit: true,
@@ -757,11 +753,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	shadowforce: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, minimize: 0, noassist: 0 },
 	},
 	sing: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	skullbash: {
 		inherit: true,
@@ -770,7 +766,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	skydrop: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, noassist: 0 },
 		onTryHit(target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
@@ -806,12 +802,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	snarl: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	snore: {
 		inherit: true,
 		basePower: 40,
-		flags: { protect: 1, mirror: 1, sound: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	soak: {
 		inherit: true,
@@ -890,7 +886,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	supersonic: {
 		inherit: true,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, metronome: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	surf: {
 		inherit: true,
@@ -942,7 +938,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	uproar: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1, nosleeptalk: 1 },
+		flags: { inherit: true, bypasssub: 0 },
 	},
 	vinewhip: {
 		inherit: true,
@@ -985,7 +981,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	whirlwind: {
 		inherit: true,
 		accuracy: 100,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
+		flags: { inherit: true, allyanim: 0, failcopycat: 0, noassist: 0, protect: 1 },
 	},
 	wideguard: {
 		inherit: true,

@@ -122,6 +122,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	zenmode: {
 		inherit: true,
-		flags: { failroleplay: 1, noentrain: 1, notrace: 1 },
+		flags: { inherit: true, cantsuppress: 0, failskillswap: 0 },
 	},
 };

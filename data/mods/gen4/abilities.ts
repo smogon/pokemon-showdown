@@ -145,11 +145,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { inherit: true, failroleplay: 0, notrace: 0 },
 	},
 	forecast: {
 		inherit: true,
-		flags: { notrace: 1 },
+		flags: { inherit: true, failroleplay: 0 },
 	},
 	forewarn: {
 		inherit: true,
@@ -521,7 +521,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (ability.flags['notrace']) return;
 			pokemon.setAbility(ability, target);
 		},
-		flags: { notrace: 1 },
+		flags: { inherit: true, failroleplay: 0 },
 	},
 	truant: {
 		inherit: true,

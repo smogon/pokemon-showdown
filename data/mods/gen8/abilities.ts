@@ -411,7 +411,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	gulpmissile: {
 		inherit: true,
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
+		flags: { inherit: true, failroleplay: 1, failskillswap: 1, noentrain: 1, noreceiver: 1, notrace: 1 },
 		rating: 2.5,
 	},
 	guts: {
@@ -483,7 +483,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onTryBoost: undefined, // no inherit
 		onModifyMove: undefined, // no inherit
-		flags: {},
+		flags: { inherit: true, breakable: 0 },
 		rating: 0,
 	},
 	illusion: {
@@ -1202,7 +1202,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	wonderguard: {
 		inherit: true,
-		flags: { failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1 },
+		flags: { inherit: true, noentrain: 0 },
 		rating: 5,
 	},
 	wonderskin: {
