@@ -1375,8 +1375,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (!pokemon.hp) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				pokemon.transformed) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
@@ -1385,6 +1385,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id === 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 				}
+			}
+		},
+		onEnd(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				pokemon.transformed || pokemon.beingCalledBack) return;
+			if (pokemon.species.id !== 'cherrim') {
+				pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 			}
 		},
 		onAllyModifyAtkPriority: 3,
@@ -1463,7 +1470,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -1482,8 +1490,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
 			}
-			if (pokemon.isActive && forme) {
+			if (forme) {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+			}
+		},
+		onEnd(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				pokemon.transformed || pokemon.beingCalledBack) return;
+			if (pokemon.species.id !== 'castform') {
+				pokemon.formeChange('Castform', this.effect, false, '0', '[msg]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
@@ -2898,7 +2913,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream', 'flowergift', 'forecast'];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
