@@ -1,0 +1,72 @@
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
+	// Re-legalize Mega Stones for base species introduced through Gen 4.
+
+	// Gen 1
+	venusaurite: { inherit: true, gen: 4, isNonstandard: null },
+	charizarditex: { inherit: true, gen: 4, isNonstandard: null },
+	charizarditey: { inherit: true, gen: 4, isNonstandard: null },
+	blastoisinite: { inherit: true, gen: 4, isNonstandard: null },
+	beedrillite: { inherit: true, gen: 4, isNonstandard: null },
+	pidgeotite: { inherit: true, gen: 4, isNonstandard: null },
+	raichunitex: { inherit: true, gen: 4, isNonstandard: null },
+	raichunitey: { inherit: true, gen: 4, isNonstandard: null },
+	clefablite: { inherit: true, gen: 4, isNonstandard: null },
+	alakazite: { inherit: true, gen: 4, isNonstandard: null },
+	victreebelite: { inherit: true, gen: 4, isNonstandard: null },
+	slowbronite: { inherit: true, gen: 4, isNonstandard: null },
+	gengarite: { inherit: true, gen: 4, isNonstandard: null },
+	kangaskhanite: { inherit: true, gen: 4, isNonstandard: null },
+	starminite: { inherit: true, gen: 4, isNonstandard: null },
+	pinsirite: { inherit: true, gen: 4, isNonstandard: null },
+	gyaradosite: { inherit: true, gen: 4, isNonstandard: null },
+	aerodactylite: { inherit: true, gen: 4, isNonstandard: null },
+	dragoninite: { inherit: true, gen: 4, isNonstandard: null },
+	mewtwonitex: { inherit: true, gen: 4, isNonstandard: null },
+	mewtwonitey: { inherit: true, gen: 4, isNonstandard: null },
+
+	// Gen 2
+	meganiumite: { inherit: true, gen: 4, isNonstandard: null },
+	feraligite: { inherit: true, gen: 4, isNonstandard: null },
+	ampharosite: { inherit: true, gen: 4, isNonstandard: null },
+	steelixite: { inherit: true, gen: 4, isNonstandard: null },
+	scizorite: { inherit: true, gen: 4, isNonstandard: null },
+	heracronite: { inherit: true, gen: 4, isNonstandard: null },
+	skarmorite: { inherit: true, gen: 4, isNonstandard: null },
+	houndoominite: { inherit: true, gen: 4, isNonstandard: null },
+	tyranitarite: { inherit: true, gen: 4, isNonstandard: null },
+
+	// Gen 3
+	sceptilite: { inherit: true, gen: 4, isNonstandard: null },
+	blazikenite: { inherit: true, gen: 4, isNonstandard: null },
+	swampertite: { inherit: true, gen: 4, isNonstandard: null },
+	gardevoirite: { inherit: true, gen: 4, isNonstandard: null },
+	sablenite: { inherit: true, gen: 4, isNonstandard: null },
+	mawilite: { inherit: true, gen: 4, isNonstandard: null },
+	aggronite: { inherit: true, gen: 4, isNonstandard: null },
+	medichamite: { inherit: true, gen: 4, isNonstandard: null },
+	manectite: { inherit: true, gen: 4, isNonstandard: null },
+	sharpedonite: { inherit: true, gen: 4, isNonstandard: null },
+	cameruptite: { inherit: true, gen: 4, isNonstandard: null },
+	altarianite: { inherit: true, gen: 4, isNonstandard: null },
+	banettite: { inherit: true, gen: 4, isNonstandard: null },
+	chimechite: { inherit: true, gen: 4, isNonstandard: null },
+	absolite: { inherit: true, gen: 4, isNonstandard: null },
+	glalitite: { inherit: true, gen: 4, isNonstandard: null },
+	salamencite: { inherit: true, gen: 4, isNonstandard: null },
+	metagrossite: { inherit: true, gen: 4, isNonstandard: null },
+	latiasite: { inherit: true, gen: 4, isNonstandard: null },
+	latiosite: { inherit: true, gen: 4, isNonstandard: null },
+
+	// Gen 4
+	staraptite: { inherit: true, gen: 4, isNonstandard: null },
+	lopunnite: { inherit: true, gen: 4, isNonstandard: null },
+	garchompite: { inherit: true, gen: 4, isNonstandard: null },
+	lucarionite: { inherit: true, gen: 4, isNonstandard: null },
+	abomasite: { inherit: true, gen: 4, isNonstandard: null },
+	galladite: { inherit: true, gen: 4, isNonstandard: null },
+	froslassite: { inherit: true, gen: 4, isNonstandard: null },
+
+	// Primal Orbs
+	blueorb: { inherit: true, gen: 4, isNonstandard: null },
+	redorb: { inherit: true, gen: 4, isNonstandard: null },
+};

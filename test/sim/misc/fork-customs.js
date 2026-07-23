@@ -19,7 +19,7 @@ const { Formats } = require('./../../../dist/config/formats');
 // body — including the per-format it()s generated below — before any hook runs,
 // so the format list has to exist now.
 Dex.includeFormats();
-const CUSTOM_SECTIONS = ['Gen 3 Megas', 'surfnWOB Customs', 'Yak Attack', 'Archie Madness', 'Other'];
+const CUSTOM_SECTIONS = ['Gen 4 Megas', 'Gen 3 Megas', 'surfnWOB Customs', 'Yak Attack', 'Archie Madness', 'Other'];
 const customFormats = Dex.formats.all().filter(f => CUSTOM_SECTIONS.includes(f.section));
 
 describe('Fork customs', () => {
@@ -43,6 +43,7 @@ describe('Fork customs', () => {
 
 	it('keeps the deployed custom selector layout and Pure Tradebacks OU inheritance', () => {
 		const expectedColumns = {
+			'Gen 4 Megas': 1,
 			'Gen 3 Megas': 1,
 			'surfnWOB Customs': 1,
 			'Yak Attack': 1,
