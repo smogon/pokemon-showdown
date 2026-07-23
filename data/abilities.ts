@@ -254,8 +254,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			const sortedFoes = pokemon.foes();
+			this.speedSort(sortedFoes);
+			for (const foe of sortedFoes) {
+				const item = foe.getItem();
+				if (!item.isBerry) continue;
+				this.singleEvent('Update', item, foe.itemState, foe);
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -278,8 +285,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			const sortedFoes = pokemon.foes();
+			this.speedSort(sortedFoes);
+			for (const foe of sortedFoes) {
+				const item = foe.getItem();
+				if (!item.isBerry) continue;
+				this.singleEvent('Update', item, foe.itemState, foe);
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -5254,8 +5268,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			const sortedFoes = pokemon.foes();
+			this.speedSort(sortedFoes);
+			for (const foe of sortedFoes) {
+				const item = foe.getItem();
+				if (!item.isBerry) continue;
+				this.singleEvent('Update', item, foe.itemState, foe);
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
