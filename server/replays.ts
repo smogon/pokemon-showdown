@@ -91,11 +91,27 @@ export const Replays = new class {
 		return replayData;
 	}
 
+	async retry<T>(fn: () => Promise<T>, retries = 3, delayMs = 1000): Promise<T> {
+	  let lastError: any;
+	  for (let attempt = 1; attempt <= retries; attempt++) {
+	    try {
+	      return await fn();
+	    } catch (error) {
+	      lastError = error;
+	      if (attempt < retries) {
+	        await new Promise(res => setTimeout(res, delayMs));
+	      }
+	    }
+	  }
+	  throw lastError;
+	}
+
 	async add(replay: Replay) {
 		// obviously upsert exists but this is the easiest way when multiple things need to be changed
 		const replayData = this.toReplayRow(replay);
 		try {
-			await replays.insert(replayData);
+			// Retry the insert operation up to 3 times with a 1-second delay between attempts
+			await this.retry(() => replays.insert(replayData), 3, 1000);
 			for (const playerName of replay.players) {
 				await replayPlayers.insert({
 					playerid: toID(playerName),
