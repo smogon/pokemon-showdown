@@ -775,9 +775,8 @@ describe('Choice extensions', () => {
 
 				battle.choose('p1', 'move tackle');
 				battle.choose('p2', 'move growl');
-				// NOTE: the next turn has already started at this point, so undoChoice is a noop
-				// and the subsequent battle chocie is a choice for turn 2, not an override.
-				if (mode === 'revoke') battle.undoChoice('p1');
+				// NOTE: the next turn has already started at this point, so there is no choice to undo
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				battle.choose('p1', 'move growl');
 
 				assert.equal(battle.turn, 2);
@@ -1100,7 +1099,7 @@ describe('Choice extensions', () => {
 
 				battle.choose('p1', 'switch 3, switch 4');
 				assert(!battle.p1.activeRequest.noCancel);
-				if (mode === 'revoke') battle.undoChoice('p1');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.throws(
 					() => battle.makeChoices('switch 4, switch 3', 'pass'),
 					/\[Invalid choice\] Can't switch: You can't switch to a fainted Pokémon/,
