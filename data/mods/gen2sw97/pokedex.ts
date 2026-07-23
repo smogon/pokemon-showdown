@@ -54,6 +54,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Normal"],
 		baseStats: { hp: 90, atk: 55, def: 75, spa: 60, spd: 90, spe: 30 },
+		evos: ["Nameil"],
 	},
 	exeggcute: {
 		inherit: true,
@@ -64,6 +65,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Poison"],
 		baseStats: { hp: 80, atk: 80, def: 50, spa: 55, spd: 40, spe: 25 },
+		prevo: "Betbaby",
+		evoLevel: 19,
 	},
 	gengar: {
 		inherit: true,
@@ -144,11 +147,15 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Bug"],
 		baseStats: { hp: 65, atk: 125, def: 100, spa: 55, spd: 75, spe: 85 },
+		evos: ["Purakkusu"],
 	},
 	tangela: {
 		inherit: true,
 		types: ["Grass"],
 		baseStats: { hp: 65, atk: 55, def: 115, spa: 55, spd: 100, spe: 60 },
+		evos: ["Jaranra"],
+		prevo: "Monja",
+		evoLevel: 22,
 	},
 	hitmontop: {
 		inherit: true,
@@ -167,11 +174,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Growlithe"],
 	},
 	growlithe: {
 		inherit: true,
 		types: ["Fire"],
 		baseStats: { hp: 55, atk: 70, def: 45, spa: 50, spd: 70, spe: 60 },
+		prevo: "Pudie",
+		evoLevel: 13,
 	},
 	onix: {
 		inherit: true,
@@ -217,6 +227,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Psychic"],
 		baseStats: { hp: 40, atk: 45, def: 65, spa: 100, spd: 120, spe: 90 },
+		prevo: "Baririna",
+		evoLevel: 15,
 	},
 	hitmonlee: {
 		inherit: true,
@@ -325,6 +337,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Mr. Mime"],
 	},
 	smoochum: {
 		inherit: true,
@@ -335,6 +348,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Normal", "Flying"],
 		baseStats: { hp: 52, atk: 65, def: 55, spa: 58, spd: 58, spe: 60 },
+		evos: ["Madame"],
 	},
 	venonat: {
 		inherit: true,
@@ -365,6 +379,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Normal", "Flying"],
 		baseStats: { hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75 },
+		prevo: "Hinazu",
+		evoLevel: 16,
 	},
 	poliwag: {
 		inherit: true,
@@ -395,11 +411,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Normal"],
 		baseStats: { hp: 48, atk: 48, def: 48, spa: 48, spd: 48, spe: 48 },
+		evos: ["Animon"],
 	},
 	meowth: {
 		inherit: true,
 		types: ["Normal"],
 		baseStats: { hp: 40, atk: 45, def: 35, spa: 40, spd: 50, spe: 90 },
+		prevo: "Kounya",
+		evoLevel: 14,
 	},
 	krabby: {
 		inherit: true,
@@ -418,6 +437,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Weepinbell",
+		evoType: "useItem",
+		evoItem: "Poison Stone",
 	},
 	miltank: {
 		inherit: true,
@@ -441,6 +463,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Fire"],
 		baseStats: { hp: 38, atk: 41, def: 40, spa: 65, spd: 45, spe: 65 },
+		prevo: "Mikon",
+		evoLevel: 13,
 	},
 	ninetales: {
 		inherit: true,
@@ -533,6 +557,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Farfetch’d",
+		evoLevel: 24,
 	},
 	sandshrew: {
 		inherit: true,
@@ -568,6 +594,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Normal"],
 		baseStats: { hp: 55, atk: 55, def: 50, spa: 45, spd: 65, spe: 55 },
+		evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafy"],
 	},
 	flareon: {
 		inherit: true,
@@ -603,6 +630,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Bug", "Grass"],
 		baseStats: { hp: 35, atk: 70, def: 55, spa: 45, spd: 55, spe: 25 },
+		prevo: "Para",
+		evoLevel: 12,
 	},
 	poliwhirl: {
 		inherit: true,
@@ -760,6 +789,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Pinsir",
+		evoLevel: 42,
 	},
 	muk: {
 		inherit: true,
@@ -889,6 +920,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Water"],
 		baseStats: { hp: 45, atk: 67, def: 60, spa: 50, spd: 50, spe: 63 },
+		prevo: "Gyopin",
+		evoLevel: 16,
 	},
 	seaking: {
 		inherit: true,
@@ -912,6 +945,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Lickitung",
+		evoLevel: 32,
 	},
 	steelix: {
 		inherit: true,
@@ -927,6 +962,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Fire"],
 		baseStats: { hp: 50, atk: 85, def: 55, spa: 65, spd: 55, spe: 90 },
+		prevo: "Puchicorn",
+		evoLevel: 20,
 	},
 	rapidash: {
 		inherit: true,
@@ -1057,6 +1094,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Grass", "Poison"],
 		baseStats: { hp: 65, atk: 90, def: 50, spa: 55, spd: 85, spe: 55 },
+		evos: ["Victreebel", "Tsubomitto"],
 	},
 	victreebel: {
 		inherit: true,
@@ -1199,6 +1237,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Vulpix"],
 	},
 	monja: {
 		num: 5021,
@@ -1212,6 +1251,22 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Tangela"],
+	},
+	jaranra: {
+		num: 5022,
+		name: "Jaranra",
+		gen: 2,
+		types: ["Grass"],
+		genderRatio: { M: 0.5, F: 0.5 },
+		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
+		abilities: { 0: "No Ability" },
+		heightm: 1,
+		weightkg: 10,
+		color: "Gray",
+		eggGroups: ["Undiscovered"],
+		prevo: "Tangela",
+		evoLevel: 44,
 	},
 	mantine: {
 		inherit: true,
@@ -1222,9 +1277,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Water"],
 		baseStats: { hp: 55, atk: 80, def: 50, spa: 60, spd: 50, spe: 45 },
+		evos: ["Shibirefugu"],
 	},
 	shibirefugu: {
-		num: 5022,
+		num: 5023,
 		name: "Shibirefugu",
 		gen: 2,
 		types: ["Water"],
@@ -1235,6 +1291,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Qwilfish",
+		evoLevel: 18,
 	},
 	pichu: {
 		inherit: true,
@@ -1267,7 +1325,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 55, atk: 50, def: 50, spa: 70, spd: 50, spe: 80 },
 	},
 	gyopin: {
-		num: 5023,
+		num: 5024,
 		name: "Gyopin",
 		gen: 2,
 		types: ["Water"],
@@ -1278,6 +1336,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Goldeen"],
 	},
 	marill: {
 		inherit: true,
@@ -1285,7 +1344,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 45, atk: 50, def: 55, spa: 55, spd: 50, spe: 40 },
 	},
 	manbo1: {
-		num: 5024,
+		num: 5025,
 		name: "Manbo1",
 		gen: 2,
 		types: ["Water"],
@@ -1299,7 +1358,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		evos: ["Ikari"],
 	},
 	ikari: {
-		num: 5025,
+		num: 5026,
 		name: "Ikari",
 		gen: 2,
 		types: ["Water", "Steel"],
@@ -1315,7 +1374,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		evoLevel: 19,
 	},
 	grotess: {
-		num: 5026,
+		num: 5027,
 		name: "Grotess",
 		gen: 2,
 		types: ["Water", "Steel"],
@@ -1335,7 +1394,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 60, atk: 65, def: 50, spa: 45, spd: 50, spe: 85 },
 	},
 	para: {
-		num: 5027,
+		num: 5028,
 		name: "Para",
 		gen: 2,
 		types: ["Bug", "Grass"],
@@ -1346,6 +1405,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Paras"],
 	},
 	spinarak: {
 		inherit: true,
@@ -1363,7 +1423,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
 	},
 	animon: {
-		num: 5028,
+		num: 5029,
 		name: "Animon",
 		gen: 2,
 		types: ["Normal"],
@@ -1374,9 +1434,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		prevo: "Ditto",
+		evoType: "trade",
+		evoItem: "Metal Coat",
 	},
 	hinazu: {
-		num: 5029,
+		num: 5030,
 		name: "Hinazu",
 		gen: 2,
 		types: ["Normal", "Flying"],
@@ -1387,6 +1450,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Doduo"],
 	},
 	sunflora: {
 		inherit: true,
@@ -1404,7 +1468,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 70, atk: 70, def: 70, spa: 50, spd: 50, spe: 50 },
 	},
 	twinz: {
-		num: 5030,
+		num: 5031,
 		name: "Twinz",
 		gen: 2,
 		types: ["Dark", "Normal"],
@@ -1415,11 +1479,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Girafarig"],
 	},
 	girafarig: {
 		inherit: true,
 		types: ["Dark", "Normal"],
 		baseStats: { hp: 70, atk: 50, def: 50, spa: 45, spd: 50, spe: 45 },
+		prevo: "Twinz",
+		evoLevel: 29,
 	},
 	smeargle: {
 		inherit: true,
@@ -1427,7 +1494,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
 	},
 	kounya: {
-		num: 5031,
+		num: 5032,
 		name: "Kounya",
 		gen: 2,
 		types: ["Normal"],
@@ -1438,9 +1505,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Meowth"],
 	},
 	rinrin: {
-		num: 5032,
+		num: 5033,
 		name: "Rinrin",
 		gen: 2,
 		types: ["Dark"],
@@ -1454,7 +1522,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		evos: ["Berurun"],
 	},
 	berurun: {
-		num: 5033,
+		num: 5034,
 		name: "Berurun",
 		gen: 2,
 		types: ["Dark"],
@@ -1494,7 +1562,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
 	},
 	puchicorn: {
-		num: 5034,
+		num: 5035,
 		name: "Puchicorn",
 		gen: 2,
 		types: ["Normal"],
@@ -1505,6 +1573,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Ponyta"],
 	},
 	espeon: {
 		inherit: true,
@@ -1517,7 +1586,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
 	},
 	turban: {
-		num: 5035,
+		num: 5036,
 		name: "Turban",
 		gen: 2,
 		types: ["Water"],
@@ -1530,7 +1599,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	betbaby: {
-		num: 5036,
+		num: 5037,
 		name: "Betbaby",
 		gen: 2,
 		types: ["Poison"],
@@ -1541,6 +1610,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 10,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Grimer"],
 	},
 	remoraid: {
 		inherit: true,
@@ -1556,5 +1626,173 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Fighting"],
 		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
+	},
+	leafy: {
+		num: 5038,
+		name: "Leafy",
+		gen: 2,
+		types: ["Grass"],
+		genderRatio: { M: 0.5, F: 0.5 },
+		baseStats: { hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 },
+		abilities: { 0: "No Ability" },
+		heightm: 1,
+		weightkg: 10,
+		color: "Gray",
+		eggGroups: ["Undiscovered"],
+		prevo: "Eevee",
+		evoType: "useItem",
+		evoItem: "Leaf Stone",
+	},
+	cyndaquil: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	quilava: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	typhlosion: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	totodile: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	croconaw: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	feraligatr: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	togetic: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	azumarill: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	granbull: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	magcargo: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	corsola: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	sentret: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	furret: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	chinchou: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	lanturn: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	sudowoodo: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	sunkern: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	yanma: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	wooper: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	misdreavus: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	wobbuffet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	pineco: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	forretress: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	dunsparce: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	gligar: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	shuckle: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	heracross: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	teddiursa: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	ursaring: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	slugma: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	swinub: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	piloswine: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	stantler: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	larvitar: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	pupitar: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	tyranitar: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	lugia: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	celebi: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 };

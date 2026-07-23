@@ -4838,7 +4838,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 2] Spaceworld '97",
-		desc: `GSC mechanics running on the full 1997 Gold/Silver Spaceworld demo dex: beta base stats, typings, evolutions, level-up + TM/HM learnsets, and the demo's beta-only moves &mdash; plus the cut 'mon designs as new species. All data is transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly, kept pure (placeholder stats and disabled beta evolutions included).`,
+		desc: `GSC mechanics running on the 1997 Gold/Silver Spaceworld demo dex, transcribed from the <a href="https://github.com/pret/pokegold-spaceworld">pret/pokegold-spaceworld</a> disassembly: beta base stats and typings, the demo's unfinished type chart (Steel and Dark are incomplete), beta evolution chains, the 1997 move table (types, power, accuracy and PP), and the beta-only moves. Cut 'mon designs (placeholder art stats) are added as new species and wired into their beta evolutions. Learnsets are level-up + TM/HM only &mdash; there are no egg moves &mdash; but Gen 1 Time Capsule tradeforwards are allowed. The roster is limited to the demo's own dex, so GSC 'mon absent from the 1997 build are unavailable.`,
 		mod: 'gen2sw97',
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],

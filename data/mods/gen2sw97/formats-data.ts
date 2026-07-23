@@ -63,6 +63,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	monja: {
 		tier: "OU",
 	},
+	jaranra: {
+		tier: "OU",
+	},
 	shibirefugu: {
 		tier: "OU",
 	},
@@ -106,6 +109,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	betbaby: {
+		tier: "OU",
+	},
+	leafy: {
 		tier: "OU",
 	},
 };
