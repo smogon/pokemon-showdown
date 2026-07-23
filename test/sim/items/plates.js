@@ -59,7 +59,7 @@ describe('Plates', () => {
 
 			it('should be removed if not held by an Arceus', () => {
 				battle = common.createBattle([[
-					{ species: 'Arceus', ability: 'multitype', moves: ['knockoff'] },
+					{ species: 'Politoed', ability: 'multitype', moves: ['knockoff'] },
 				], [
 					{ species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup'] },
 				]]);
