@@ -108,7 +108,7 @@ describe(`Pursuit`, () => {
 			{ species: "Clefable", moves: ['calmmind'] },
 			{ species: "Furret", moves: ['calmmind'] },
 		], [
-			{ species: "Clefable", moves: ['calmmind'] },
+			{ species: "Clefable", ability: 'shellarmor', moves: ['calmmind'] },
 			{ species: "Alakazam", moves: ['calmmind'] },
 			{ species: "Roserade", moves: ['calmmind'] },
 		]]);

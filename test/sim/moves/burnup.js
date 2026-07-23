@@ -12,7 +12,7 @@ describe('Burn Up', () => {
 
 	it('should not thaw the user if it is not a Fire type', () => {
 		battle = common.createBattle({
-			seed: [0, 0, 0, 0],
+			seed: [0, 0, 38, 40643],
 			customRules: 'guaranteedsecondarymod',
 		}, [[
 			{ species: 'Moltres', moves: ['burnup'] },

@@ -524,7 +524,7 @@ declare namespace RandomTeamsTypes {
 		name: string;
 		species: string;
 		speciesId?: string;
-		gender: string | boolean;
+		gender: Exclude<GenderName, ''> | false;
 		moves: string[];
 		ability: string;
 		evs: SparseStatsTable;
