@@ -119,7 +119,7 @@ export const translations: Translations = {
 		"Please provide a valid format.": "Précise un format valide s'il te plaît.",
 		"The format '${originalFormat.name}' was not found.": "Le format '${originalFormat.name}' n'a pas été trouvé.",
 		"Your team is valid for ${format.name}.": "Ton équipe est valide pour du ${format.name}",
-		"Your team was rejected for the following reasons:": "Ton équipe a été rejetée pour les raisons suivantes :",
+		"Your team was rejected because:": "Ton équipe a été rejetée pour les raisons suivantes :",
 		"Battles are now hidden (except to staff) in your trainer card.": "Les combats sont maintenant invisibles (excepté au staff) dans ta carte de Dresseur.",
 		"Battles are now visible in your trainer card.": "Les combats sont maintenant visibles dans ta carte de Dresseur.",
 		"'${command}' is a help command.": "${command}' est une commande d'aide.",

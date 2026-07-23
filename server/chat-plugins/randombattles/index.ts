@@ -878,7 +878,7 @@ export const commands: Chat.ChatCommands = {
 	randombattlesetprobabilitieshelp() {
 		return this.sendReplyBox(
 			`<code>/randombattlesetprobabilities [optional format], [species], [conditions]</code>: Gives the probability of a set matching the conditions appearing for the given species.<br />` +
-			`<code>[conditions]</code> is a comma-separated list of conditions of the form <code>[component]=[matching value]</code>, where <code>[component]</code> can be any of the following: ` +
+			`<code>[conditions]</code> is a comma-separated list of conditions of the form <code>[component]=[matching value]</code>, where <code>[component]</code> can be any of these: ` +
 			`<ul>` +
 			`<li><code>moves</code>: matches all generated sets that contain every move specified. <code>[matching value]</code> should be a list of moves separated with <code>&amp;</code>.` +
 			`<li><code>item</code>: matches all generated sets that have the specified item. <code>[matching value]</code> should be an item name.` +

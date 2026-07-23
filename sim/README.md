@@ -7,7 +7,7 @@ You can install it with the usual:
 
     npm install pokemon-showdown
 
-And you can use it to do the following things:
+And you can use it to do these things:
 
 
 Simulating battles

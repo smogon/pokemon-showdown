@@ -2206,7 +2206,7 @@ export const pages: Chat.PageTable = {
 			buf += `<h3>Setting the roles</h3>`;
 			buf += `<p>To set the roles, use /mafia setroles [comma separated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
 			buf += `<p>If you set the roles from a theme, the role parser will get all the correct roles for you. (Not all themes are supported).</p>`;
-			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
+			buf += `<p>These key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
 			buf += `<p style="font-weight:bold">${Object.values(MafiaData.alignments).map(a => `<span style="color:${a.color || '#FFF'}">${a.name}</span>`).join(', ')}</p>`;
 			buf += `<p>Please note that anything inside (parentheses) is ignored by the role parser.</p>`;
 			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma separated list of roles] to forcibly set the roles.</p>`;
@@ -2918,7 +2918,7 @@ export const commands: Chat.ChatCommands = {
 					} catch {
 						throw new Chat.ErrorMessage(`Your action submission contained a word banned by this room.`);
 					}
-					user.sendTo(room, `You have decided to use an action, with the following details: ${target}`);
+					user.sendTo(room, `You have decided to use an action, with these details: ${target}`);
 				} else {
 					user.sendTo(room, `You have decided to use an action. Please submit details about your action.`);
 				}

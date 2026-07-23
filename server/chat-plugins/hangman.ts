@@ -552,7 +552,7 @@ export const commands: Chat.ChatCommands = {
 
 	hangmanhelp: [
 		`/hangman allows users to play the popular game hangman in PS rooms.`,
-		`Accepts the following commands:`,
+		`Accepts these commands:`,
 		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # ~`,
 		`/hangman guess [letter] - Makes a guess for the letter entered.`,
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,

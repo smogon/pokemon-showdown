@@ -106,7 +106,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 							const levels = new Set(moveSources[moveid].filter(x => x.includes(legalityList[moveid])).map(x => x.slice(2)));
 							problems.push(
 								`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
-								`(It learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal at the following levels: ${[...levels].join(', ')})`
+								`(It learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal at these levels: ${[...levels].join(', ')})`
 							);
 							break;
 						case 'S':
