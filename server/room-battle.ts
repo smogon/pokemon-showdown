@@ -411,7 +411,7 @@ export class RoomBattleTimer {
 					let msg = `!`;
 
 					if (this.settings.dcTimer) {
-						msg = ` and has a minute to reconnect!`;
+						msg = ` and has 60 seconds to reconnect!`;
 					}
 					if (this.settings.dcTimerBank) {
 						if (player.dcSecondsLeft > 0) {
