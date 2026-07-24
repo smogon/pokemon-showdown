@@ -91,6 +91,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(source) {
 			this.field.setWeather('hail');
 		},
+		// The Snow Warning holder heals 1/16 max HP each turn under hail and takes
+		// no hail chip, mirroring Ice Body + hail immunity on one ability.
+		onWeather(target, source, effect) {
+			if (effect.id === 'hail' || effect.id === 'snowscape') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 	},
 	soulheart: { inherit: true, gen: 3, isNonstandard: null },
 	stormdrain: { inherit: true, gen: 3, isNonstandard: null },
@@ -104,6 +114,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	teravolt: { inherit: true, gen: 3, isNonstandard: null },
 	infiltrator: { inherit: true, gen: 3, isNonstandard: null },
 	merciless: { inherit: true, gen: 3, isNonstandard: null },
+	regenerator: { inherit: true, gen: 3, isNonstandard: null },
+	polarswitch: { inherit: true, gen: 3, isNonstandard: null },
 	// Arena Trap is unchanged except that it no longer traps a foe that has Mega
 	// Evolved (or, defensively, Primal-reverted) — that new forme is flagged on the
 	// species, so such a Pokemon can pivot out freely. A base (non-Mega) Pokemon is
