@@ -42,12 +42,13 @@ describe('[Gen 4] Megas', () => {
 	const dex = Dex.mod('gen4mega');
 
 	it('registers only the OU format', () => {
-		const sectionFormats = Dex.formats.all()
-			.filter(format => format.section === 'Gen 4 Megas')
+		const modFormats = Dex.formats.all()
+			.filter(format => format.mod === 'gen4mega')
 			.map(format => format.id);
-		assert.deepEqual(sectionFormats, ['gen4megas']);
+		assert.deepEqual(modFormats, ['gen4megas']);
 
 		const format = Dex.formats.get('gen4megas', true);
+		assert.equal(format.section, 'Other');
 		assert.equal(format.mod, 'gen4mega');
 		assert.equal(format.gameType, 'singles');
 		const ruleTable = Dex.formats.getRuleTable(format);
