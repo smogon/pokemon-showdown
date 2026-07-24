@@ -569,7 +569,6 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.errorReply(`You're using a custom client that doesn't support the ignore command.`);
 	},
-	ignorehelp: [`/ignore [user] - Ignore the given [user].`],
 
 	/*********************************************************
 	 * Data Search Dex
