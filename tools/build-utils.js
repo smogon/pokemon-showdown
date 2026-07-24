@@ -44,6 +44,15 @@ const findFilesForPath = path => {
 	return out;
 };
 
+// esbuild only writes outputs for sources it finds, and never removes anything, so
+// a renamed or deleted .ts leaves its compiled .js in dist indefinitely. Stale mods
+// under dist/data/mods are still enumerated by Dex, so local runs and local tests can
+// exercise code that no longer exists in source. Deploys are unaffected (Dockerfile
+// builds dist fresh); this is for local trees.
+exports.clean = () => {
+	fs.rmSync('./dist', { recursive: true, force: true });
+};
+
 exports.transpile = decl => {
 	esbuild.buildSync({
 		entryPoints: findFilesForPath('./'),

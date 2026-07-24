@@ -15,6 +15,7 @@ var child_process = require('child_process');
 var fs = require('fs');
 var decl = ['--decl', 'decl'].includes(process.argv[2]);
 var force = decl || ['--force', 'force', '--full', 'full'].includes(process.argv[2]);
+var clean = ['--clean', 'clean'].includes(process.argv[2]);
 
 process.chdir(__dirname);
 
@@ -47,5 +48,10 @@ try {
 // for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
-	require('./tools/build-utils').transpile(force, decl);
+	var buildUtils = require('./tools/build-utils');
+	if (clean) {
+		buildUtils.clean();
+		return;
+	}
+	buildUtils.transpile(force, decl);
 });
