@@ -1742,7 +1742,7 @@ export class Battle {
 							if ((ruleTable.has('+hackmons') || !ruleTable.has('obtainableabilities')) && !this.format.team) {
 								// hackmons format
 								continue;
-							} else if (abilitySlot === 'H' && species.unreleasedHidden) {
+							} else if (abilitySlot === 'H' && species.unreleasedHidden && ruleTable.has('-unreleased')) {
 								// unreleased hidden ability
 								continue;
 							}

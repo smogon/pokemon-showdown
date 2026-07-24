@@ -577,6 +577,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
+	{
+		name: "[Gen 5] Dream World OU",
+		desc: "BW1 OU with all Hidden Abilities and event Pok&eacute;mon assumed released.",
+		mod: 'gen5dw',
+		searchShow: true,
+		ruleset: ['Standard', '+Unreleased'],
+		banlist: [
+			'Soul Dew', 'Drizzle ++ Swift Swim',
+			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom',
+		],
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////

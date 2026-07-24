@@ -215,4 +215,30 @@ describe('Team Validator', () => {
 		];
 		assert.false.legalTeam(team, 'gen5bw1ou');
 	});
+
+	it(`should validate the BW1 Dream World OU availability assumptions`, () => {
+		let team = [
+			{ species: 'snorlax', ability: 'gluttony', moves: ['bodyslam'], evs: { hp: 1 } },
+			{ species: 'keldeo', ability: 'justified', moves: ['secretsword'], evs: { hp: 1 } },
+			{ species: 'meloetta', ability: 'serenegrace', moves: ['relicsong'], evs: { hp: 1 } },
+			{ species: 'genesect', ability: 'download', moves: ['technoblast'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen5dreamworldou');
+
+		team = [
+			{ species: 'keldeoresolute', ability: 'justified', moves: ['secretsword'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen5dreamworldou');
+
+		team = [
+			{ species: 'blaziken', ability: 'blaze', moves: ['flareblitz'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen5dreamworldou');
+
+		team = [
+			{ species: 'politoed', ability: 'drizzle', moves: ['surf'], evs: { hp: 1 } },
+			{ species: 'kabutops', ability: 'swiftswim', moves: ['waterfall'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen5dreamworldou');
+	});
 });
