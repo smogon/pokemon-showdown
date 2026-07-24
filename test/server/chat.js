@@ -115,6 +115,14 @@ describe('Chat', () => {
 			Chat.formatText(`a\nb\nc`, false, true),
 			`a<br />b<br />c`
 		);
+		assert.equal(
+			Chat.formatText(`check out example.dev and example.cx`),
+			`check out <a href="http://example.dev" rel="noopener" target="_blank">example.dev</a> and <a href="http://example.cx" rel="noopener" target="_blank">example.cx</a>`
+		);
+		assert.equal(
+			Chat.formatText(`visit example.id or example.at for info`),
+			`visit <a href="http://example.id" rel="noopener" target="_blank">example.id</a> or <a href="http://example.at" rel="noopener" target="_blank">example.at</a> for info`
+		);
 	});
 
 	it('should run toDurationString correctly', () => {
