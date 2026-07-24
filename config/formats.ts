@@ -20,46 +20,6 @@ The column value will be ignored for repeat sections.
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
-		section: "Gen 4 Megas",
-		column: 1,
-	},
-	{
-		name: "[Gen 4] Megas",
-		desc: "Gen 4 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza).",
-		mod: 'gen4mega',
-		ruleset: ['[Gen 4] OU', 'Mega Rayquaza Clause', 'Modern Mega Speed Mod'],
-		// The validator resets a stone-holder to its base ability before ban
-		// matching, so inspect the resolved Mega forme for ability combinations.
-		onValidateSet(set) {
-			const { tierSpecies } = this.getValidationSpecies(set);
-			const megaAbilities = Object.values(tierSpecies.abilities);
-			const moves = set.moves || [];
-			const problems = [];
-
-			if (megaAbilities.includes('No Guard') &&
-				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
-				problems.push(
-					`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`
-				);
-			}
-
-			if (megaAbilities.includes('Parental Bond')) {
-				const fixedDamageMove = moves.find(move => {
-					const damage = this.dex.moves.get(move).damage;
-					return typeof damage === 'number' || damage === 'level';
-				});
-				if (fixedDamageMove) {
-					problems.push(
-						`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) ` +
-						`with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`
-					);
-				}
-			}
-
-			return problems;
-		},
-	},
-	{
 		section: "Gen 3 Megas",
 		column: 1,
 	},
@@ -494,6 +454,42 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "Other",
 		column: 1,
+	},
+	{
+		name: "[Gen 4] Megas",
+		desc: "Gen 4 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza).",
+		mod: 'gen4mega',
+		ruleset: ['[Gen 4] OU', 'Mega Rayquaza Clause', 'Modern Mega Speed Mod'],
+		// The validator resets a stone-holder to its base ability before ban
+		// matching, so inspect the resolved Mega forme for ability combinations.
+		onValidateSet(set) {
+			const { tierSpecies } = this.getValidationSpecies(set);
+			const megaAbilities = Object.values(tierSpecies.abilities);
+			const moves = set.moves || [];
+			const problems = [];
+
+			if (megaAbilities.includes('No Guard') &&
+				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
+				problems.push(
+					`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`
+				);
+			}
+
+			if (megaAbilities.includes('Parental Bond')) {
+				const fixedDamageMove = moves.find(move => {
+					const damage = this.dex.moves.get(move).damage;
+					return typeof damage === 'number' || damage === 'level';
+				});
+				if (fixedDamageMove) {
+					problems.push(
+						`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) ` +
+						`with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`
+					);
+				}
+			}
+
+			return problems;
+		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",
