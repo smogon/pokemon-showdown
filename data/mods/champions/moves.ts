@@ -684,6 +684,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
+	noretreat: {
+		inherit: true,
+		condition: {
+			onStart(pokemon) {
+				if (!pokemon.addVolatile('trapped')) return;
+				this.add('-start', pokemon, 'move: No Retreat');
+			},
+		},
+	},
 	noxioustorque: {
 		inherit: true,
 		isNonstandard: "Past",

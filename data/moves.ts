@@ -12799,16 +12799,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'noretreat',
 		onTry(source, target, move) {
 			if (source.volatiles['noretreat']) return false;
-			if (source.volatiles['trapped']) {
-				delete move.volatileStatus;
-			}
 		},
 		condition: {
 			onStart(pokemon) {
+				if (!pokemon.addVolatile('trapped')) return false;
 				this.add('-start', pokemon, 'move: No Retreat');
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
 			},
 		},
 		boosts: {
