@@ -455,50 +455,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Other",
 		column: 1,
 	},
-	{
-		name: "[Gen 4] Megas",
-		desc: "Gen 4 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza).",
-		mod: 'gen4mega',
-		ruleset: ['[Gen 4] OU', 'Mega Rayquaza Clause', 'Modern Mega Speed Mod'],
-		// The validator resets a stone-holder to its base ability before ban
-		// matching, so inspect the resolved Mega forme for ability combinations.
-		onValidateSet(set) {
-			const { tierSpecies } = this.getValidationSpecies(set);
-			const megaAbilities = Object.values(tierSpecies.abilities);
-			const moves = set.moves || [];
-			const problems = [];
-
-			if (megaAbilities.includes('No Guard') &&
-				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
-				problems.push(
-					`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`
-				);
-			}
-
-			if (megaAbilities.includes('Parental Bond')) {
-				const fixedDamageMove = moves.find(move => {
-					const damage = this.dex.moves.get(move).damage;
-					return typeof damage === 'number' || damage === 'level';
-				});
-				if (fixedDamageMove) {
-					problems.push(
-						`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) ` +
-						`with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`
-					);
-				}
-			}
-
-			return problems;
-		},
-	},
-	{
-		name: "[Gen 8] National Dex AG",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
-		],
-		mod: 'gen8',
-		ruleset: ['Standard AG', 'NatDex Mod'],
-	},
 	// [Gen 1] 7U ("Seven Used") &mdash; the RBY tier below ZU. Built on gen1 PU, the roster is
 	// wiped (-All Pokemon) and rebuilt as the LC tier plus a curated set of NFEs, minus the banned
 	// LC Pok&eacute;mon, so only early-stage/unevolved mons at their highest legal evolution play.
@@ -574,6 +530,42 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
 	{
+		name: "[Gen 4] Megas",
+		desc: "Gen 4 OU with Mega Evolution and Primal Reversion (no Fairy type, no Mega Rayquaza).",
+		mod: 'gen4mega',
+		ruleset: ['[Gen 4] OU', 'Mega Rayquaza Clause', 'Modern Mega Speed Mod'],
+		// The validator resets a stone-holder to its base ability before ban
+		// matching, so inspect the resolved Mega forme for ability combinations.
+		onValidateSet(set) {
+			const { tierSpecies } = this.getValidationSpecies(set);
+			const megaAbilities = Object.values(tierSpecies.abilities);
+			const moves = set.moves || [];
+			const problems = [];
+
+			if (megaAbilities.includes('No Guard') &&
+				moves.some(move => this.dex.toID(move) === 'dynamicpunch')) {
+				problems.push(
+					`${set.name || set.species} can't combine No Guard (from ${tierSpecies.name}) with Dynamic Punch.`
+				);
+			}
+
+			if (megaAbilities.includes('Parental Bond')) {
+				const fixedDamageMove = moves.find(move => {
+					const damage = this.dex.moves.get(move).damage;
+					return typeof damage === 'number' || damage === 'level';
+				});
+				if (fixedDamageMove) {
+					problems.push(
+						`${set.name || set.species} can't combine Parental Bond (from ${tierSpecies.name}) ` +
+						`with the fixed-damage move ${this.dex.moves.get(fixedDamageMove).name}.`
+					);
+				}
+			}
+
+			return problems;
+		},
+	},
+	{
 		name: "[Gen 5] Dream World OU",
 		desc: "BW1 OU with all Hidden Abilities and event Pok&eacute;mon assumed released.",
 		mod: 'gen5dw',
@@ -584,6 +576,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom',
 		],
+	},
+	{
+		name: "[Gen 8] National Dex AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
+		],
+		mod: 'gen8',
+		ruleset: ['Standard AG', 'NatDex Mod'],
 	},
 
 	// S/V Singles
