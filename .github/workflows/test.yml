@@ -70,6 +70,7 @@ jobs:
       with:
         files: |
           config/formats.ts
+          config/custom-formats.ts
           data/**
           sim/**
 

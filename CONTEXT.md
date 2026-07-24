@@ -7,9 +7,16 @@ stays legible.
 
 ## Where our changes live
 
-- **`config/formats.ts`** — the custom-format list. Our formats sit in the
-  `surfnWOB Customs` and `Yak Attack` sections; each declares a `mod` that points
-  at a directory under `data/mods/`.
+- **`config/custom-formats.ts`** — the **format seam**. Every fork format body lives
+  here, across five sections (`Gen 3 Megas`, `surfnWOB Customs`, `Yak Attack`,
+  `Archie Madness`, `Other`); each declares a `mod` pointing at a directory under
+  `data/mods/`. `sim/dex-formats.ts` merges this file into `config/formats.ts` at
+  load, so upstream's list stays near-pristine and rebases cleanly.
+- **`config/formats.ts`** — upstream's list, plus only what the seam can't absorb:
+  five *bodyless* section headers (they pin each section's slot and column — the
+  merge keys sections by name and appends into the existing bucket) and the `column:`
+  renumbering our leading sections force downstream. Missing `custom-formats.ts`
+  fails **silently**; `test/sim/misc/fork-customs.js` asserts each section survived.
 - **`data/mods/<modid>/`** — a **mod**: `scripts.ts` (`inherit: '<parent>'`, `gen: N`)
   plus optional `formats-data.ts` (per-species `tier`) and other data tables. A mod
   inherits its parent's data and overrides selectively. A `formats-data.ts` entry

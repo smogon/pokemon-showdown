@@ -27,6 +27,23 @@ describe('Fork customs', () => {
 		assert(customFormats.length > 0, `expected formats in: ${CUSTOM_SECTIONS.join(', ')}`);
 	});
 
+	// These formats live in config/custom-formats.ts and are merged in at load
+	// (sim/dex-formats.ts:649). That file is un-gitignored, but if it ever goes
+	// missing the loader swallows MODULE_NOT_FOUND (:640-643), skips the merge,
+	// and then silently drops the now-bodyless section headers (:657) — you get
+	// 332 formats instead of 381 with no error. Worse, the per-format it()s below
+	// are generated from `customFormats` at module scope, so they wouldn't fail,
+	// they'd cease to exist. Assert per section so a partial loss is loud too.
+	it('every fork section survived the merge with config/custom-formats.ts', () => {
+		for (const section of CUSTOM_SECTIONS) {
+			const inSection = customFormats.filter(f => f.section === section);
+			assert(
+				inSection.length > 0,
+				`section '${section}' has no formats — is config/custom-formats.ts present and built?`
+			);
+		}
+	});
+
 	// Broad net: every custom format must build its ruleTable (catches a
 	// renamed/removed clause or a dangling banlist reference) and load mod data.
 	describe('every custom format builds', () => {
