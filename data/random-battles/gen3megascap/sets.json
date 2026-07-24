@@ -1,0 +1,394 @@
+{
+    "parasectmega": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": [
+                    "swordsdance",
+                    "spore",
+                    "hiddenpowerbug",
+                    "return"
+                ],
+                "abilities": [
+                    "Regenerator"
+                ]
+            }
+        ]
+    },
+    "venomothmega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": [
+                    "sludgebomb",
+                    "signalbeam",
+                    "hiddenpowerground",
+                    "return"
+                ],
+                "abilities": [
+                    "Merciless"
+                ]
+            }
+        ]
+    },
+    "hitmonchanmega": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": [
+                    "skyuppercut",
+                    "icepunch",
+                    "firepunch",
+                    "thunderpunch"
+                ],
+                "abilities": [
+                    "Iron Fist"
+                ]
+            }
+        ]
+    },
+    "dittomega": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": [
+                    "transform"
+                ],
+                "abilities": [
+                    "Imposter"
+                ]
+            }
+        ]
+    },
+    "noctowlmega": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": [
+                    "shadowball",
+                    "wingattack",
+                    "hiddenpowerground",
+                    "doubleedge"
+                ],
+                "abilities": [
+                    "Shady"
+                ]
+            }
+        ]
+    },
+    "quagsiremega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Staller",
+                "movepool": [
+                    "earthquake",
+                    "icebeam",
+                    "toxic",
+                    "rest"
+                ],
+                "abilities": [
+                    "Unaware"
+                ]
+            }
+        ]
+    },
+    "magcargomega": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": [
+                    "fireblast",
+                    "rockslide",
+                    "earthquake",
+                    "toxic"
+                ],
+                "abilities": [
+                    "Earth Eater"
+                ]
+            }
+        ]
+    },
+    "corsolamega": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": [
+                    "calmmind",
+                    "surf",
+                    "psychic",
+                    "recover"
+                ],
+                "abilities": [
+                    "Natural Cure"
+                ]
+            }
+        ]
+    },
+    "mantinemega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": [
+                    "return",
+                    "surf",
+                    "icebeam",
+                    "hiddenpowerfire"
+                ],
+                "abilities": [
+                    "Dragonize"
+                ],
+                "preferredTypes": [
+                    "Water",
+                    "Dragon"
+                ]
+            }
+        ]
+    },
+    "mightyenamegax": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": [
+                    "crunch",
+                    "bodyslam",
+                    "hiddenpowerfire",
+                    "substitute"
+                ],
+                "abilities": [
+                    "Serene Grace"
+                ]
+            }
+        ]
+    },
+    "mightyenamegay": {
+        "level": 78,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": [
+                    "bodyslam",
+                    "shadowball",
+                    "toxic",
+                    "rest"
+                ],
+                "abilities": [
+                    "Fur Coat"
+                ]
+            }
+        ]
+    },
+    "beautiflymega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": [
+                    "solarbeam",
+                    "hiddenpowerfire",
+                    "psychic",
+                    "morningsun"
+                ],
+                "abilities": [
+                    "Mega Sol"
+                ]
+            }
+        ]
+    },
+    "masquerainmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": [
+                    "hydropump",
+                    "icebeam",
+                    "gigadrain",
+                    "substitute"
+                ],
+                "abilities": [
+                    "Water Bubble"
+                ]
+            }
+        ]
+    },
+    "shedinjamega": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": [
+                    "swordsdance",
+                    "shadowball",
+                    "hiddenpowerfighting",
+                    "protect"
+                ],
+                "abilities": [
+                    "Wonder Guard"
+                ]
+            }
+        ]
+    },
+    "volbeatmega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": [
+                    "tailglow",
+                    "thunderbolt",
+                    "icepunch",
+                    "gigadrain"
+                ],
+                "abilities": [
+                    "Polar Switch"
+                ]
+            }
+        ]
+    },
+    "illumisemega": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": [
+                    "thunderbolt",
+                    "gigadrain",
+                    "icepunch",
+                    "thunderwave"
+                ],
+                "abilities": [
+                    "Prankster"
+                ]
+            }
+        ]
+    },
+    "grumpigmega": {
+        "level": 76,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": [
+                    "calmmind",
+                    "psychic",
+                    "hiddenpowergrass",
+                    "rest"
+                ],
+                "abilities": [
+                    "Opportunist"
+                ]
+            }
+        ]
+    },
+    "flygonmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": [
+                    "earthquake",
+                    "rockslide",
+                    "fireblast",
+                    "dragonclaw"
+                ],
+                "abilities": [
+                    "Sandy"
+                ]
+            }
+        ]
+    },
+    "solrockmega": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": [
+                    "rockslide",
+                    "earthquake",
+                    "fireblast",
+                    "explosion"
+                ],
+                "abilities": [
+                    "High Noon"
+                ]
+            }
+        ]
+    },
+    "kecleonmegax": {
+        "level": 76,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": [
+                    "return",
+                    "brickbreak",
+                    "fireblast",
+                    "shadowball"
+                ],
+                "abilities": [
+                    "Color Change"
+                ]
+            }
+        ]
+    },
+    "kecleonmegay": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": [
+                    "fireblast",
+                    "thunderbolt",
+                    "icebeam",
+                    "brickbreak"
+                ],
+                "abilities": [
+                    "Protean"
+                ]
+            }
+        ]
+    },
+    "walreinmega": {
+        "level": 74,
+        "sets": [
+            {
+                "role": "Staller",
+                "movepool": [
+                    "substitute",
+                    "protect",
+                    "toxic",
+                    "surf"
+                ],
+                "abilities": [
+                    "Snow Warning"
+                ]
+            }
+        ]
+    },
+    "luvdiscmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": [
+                    "surf",
+                    "icebeam",
+                    "hiddenpowerelectric",
+                    "substitute"
+                ],
+                "abilities": [
+                    "Soul-Heart"
+                ]
+            }
+        ]
+    }
+}

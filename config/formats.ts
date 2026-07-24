@@ -448,6 +448,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Soundproof + Baton Pass', 'Smeargle + Ingrain', 'Sand Veil + Sand Stream', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger', 'Quick Claw', 'Confuse Ray', 'Teeter Dance', 'Dynamic Punch', 'Sand-Attack', 'Focus Band', 'Flash', 'Mud Slap', 'Smokescreen', 'Kinesis', 'Agility + Baton Pass', 'Speed Boost + Baton Pass', 'Dragon Dance + Baton Pass', 'Silver Wind + Baton Pass', 'Ancientpower + Baton Pass'],
 	},
+	{
+		name: "[Gen 3] Megas CAP Random Battle",
+		desc: "Randomized Gen 3 teams built from the CAP Mega roster, with exactly one CAP Mega Evolution per side.",
+		mod: 'gen3megascap',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+	},
 	// Other
 	///////////////////////////////////////////////////////////////////
 
