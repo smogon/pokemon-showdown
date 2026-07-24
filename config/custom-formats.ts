@@ -15,7 +15,7 @@
 //
 // This file MUST exist at build time. If it is missing the loader silently skips
 // the merge (dex-formats.ts:640-649) and then drops the bodyless headers (:657):
-// 332 formats instead of 381, with no error and no log line. It is un-gitignored
+// 333 formats instead of 382, with no error and no log line. It is un-gitignored
 // on purpose (.gitignore) and test/sim/misc/fork-customs.js asserts every section
 // is non-empty so that failure is loud.
 

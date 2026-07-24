@@ -31,7 +31,7 @@ describe('Fork customs', () => {
 	// (sim/dex-formats.ts:649). That file is un-gitignored, but if it ever goes
 	// missing the loader swallows MODULE_NOT_FOUND (:640-643), skips the merge,
 	// and then silently drops the now-bodyless section headers (:657) — you get
-	// 332 formats instead of 381 with no error. Worse, the per-format it()s below
+	// 333 formats instead of 382 with no error. Worse, the per-format it()s below
 	// are generated from `customFormats` at module scope, so they wouldn't fail,
 	// they'd cease to exist. Assert per section so a partial loss is loud too.
 	it('every fork section survived the merge with config/custom-formats.ts', () => {
