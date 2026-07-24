@@ -26,21 +26,21 @@ const capAddedMegas = {
 };
 
 const authoritativeMegaData = {
-	parasectmega: [[90, 125, 100, 60, 100, 30], ['Bug', 'Ghost'], 'Perish Body'],
-	venomothmega: [[85, 100, 60, 100, 80, 120], ['Bug', 'Poison'], 'Merciless'],
+	parasectmega: [[90, 135, 100, 50, 100, 30], ['Bug', 'Ghost'], 'Regenerator'],
+	venomothmega: [[85, 110, 80, 70, 80, 120], ['Bug', 'Poison'], 'Merciless'],
 	hitmonchanmega: [[50, 105, 79, 110, 110, 101], ['Fighting'], 'Iron Fist'],
 	dittomega: [[90, 50, 50, 50, 50, 50], ['Normal'], 'Imposter'],
 	noctowlmega: [[80, 125, 61, 91, 96, 99], ['Ghost', 'Flying'], 'Shady'],
 	quagsiremega: [[110, 95, 110, 90, 90, 35], ['Water', 'Ground'], 'Unaware'],
 	magcargomega: [[80, 100, 125, 100, 125, 30], ['Fire', 'Rock'], 'Earth Eater'],
-	corsolamega: [[90, 100, 120, 100, 95, 35], ['Water', 'Psychic'], 'Natural Cure'],
+	corsolamega: [[90, 70, 115, 120, 115, 30], ['Water', 'Psychic'], 'Natural Cure'],
 	mantinemega: [[90, 65, 100, 120, 110, 100], ['Water', 'Dragon'], 'Dragonize'],
 	mightyenamegax: [[61, 110, 60, 119, 60, 110], ['Dark'], 'Serene Grace'],
 	mightyenamegay: [[100, 100, 100, 35, 110, 95], ['Dark', 'Poison'], 'Fur Coat'],
 	beautiflymega: [[90, 10, 90, 130, 90, 116], ['Grass', 'Flying'], 'Mega Sol'],
 	masquerainmega: [[91, 80, 84, 90, 110, 95], ['Bug', 'Water'], 'Water Bubble'],
 	shedinjamega: [[4, 110, 45, 51, 30, 96], ['Bug', 'Ghost'], 'Wonder Guard'],
-	volbeatmega: [[85, 65, 75, 90, 90, 125], ['Bug', 'Electric'], 'Teravolt'],
+	volbeatmega: [[85, 65, 75, 90, 90, 125], ['Bug', 'Electric'], 'Polar Switch'],
 	illumisemega: [[70, 70, 90, 125, 90, 85], ['Bug', 'Electric'], 'Prankster'],
 	grumpigmega: [[100, 60, 80, 125, 125, 80], ['Psychic'], 'Opportunist'],
 	flygonmega: [[80, 100, 120, 100, 80, 110], ['Ground', 'Dragon'], 'Sandy'],
@@ -70,7 +70,7 @@ describe('[Gen 3] Megas CAP', () => {
 	it('loads Archie\'s expanded CAP Mega roster, stones, and abilities', () => {
 		const dex = Dex.mod('gen3megascap');
 		const megas = {
-			parasectmega: ['Parasectite', 'Perish Body'],
+			parasectmega: ['Parasectite', 'Regenerator'],
 			hitmonchanmega: ['Hitmonchanite', 'Iron Fist'],
 			dittomega: ['Dittite', 'Imposter'],
 			noctowlmega: ['Noctite', 'Shady'],
@@ -287,7 +287,10 @@ describe('[Gen 3] Megas CAP', () => {
 			'Shady should not provide an undocumented Intimidate immunity');
 	});
 
-	it('keeps Snow Warning limited to summoning hail', () => {
+	it('gives the CAP Snow Warning hail recovery and hail immunity on top of summoning hail', () => {
+		// gen3megascap buff (authorized for this mod only): the Snow Warning holder
+		// heals 1/16 max HP per hail turn and takes no hail chip, in addition to
+		// summoning indefinite Gen 3 hail on switch-in.
 		const battle = common.createBattle({ formatid: 'gen3megascap' }, [
 			[{ species: 'Walrein-Mega', ability: 'Snow Warning', moves: ['splash'] }],
 			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
@@ -298,21 +301,26 @@ describe('[Gen 3] Megas CAP', () => {
 		battle.makeChoices('move splash', 'move splash');
 		assert.equal(battle.field.weather, 'hail');
 		assert.equal(battle.field.weatherState.duration, 0, 'ability-summoned Gen 3 hail should be indefinite');
-		assert.equal(walrein.hp, hpBeforeTurn,
-			'Snow Warning should not provide an undocumented hail recovery effect');
+		// A net HP gain proves both effects at once: the +1/16 heal landed and no
+		// -1/16 hail chip was taken (otherwise the two would cancel to no change).
+		assert(walrein.hp > hpBeforeTurn,
+			'CAP Snow Warning should heal its holder under hail and grant hail immunity');
+		assert(walrein.hp <= walrein.maxhp, 'Snow Warning recovery should not overheal past max HP');
 		for (let turn = 0; turn < 5; turn++) {
 			battle.makeChoices('move splash', 'move splash');
 		}
 		assert.equal(battle.field.weather, 'hail', 'Snow Warning hail should remain after five turns');
 
+		// The hail immunity is tied to the ability, so any holder benefits (not just Ice-types).
 		const nonIceBattle = common.createBattle({ formatid: 'gen3megascap' }, [
 			[{ species: 'Snorlax', ability: 'Snow Warning', moves: ['splash'] }],
 			[{ species: 'Walrein', ability: 'Thick Fat', moves: ['splash'] }],
 		]);
 		const nonIceUser = nonIceBattle.p1.active[0];
+		nonIceUser.sethp(nonIceUser.maxhp - 64);
 		const nonIceHP = nonIceUser.hp;
 		nonIceBattle.makeChoices('move splash', 'move splash');
-		assert(nonIceUser.hp < nonIceHP, 'Snow Warning should not grant its user a separate hail immunity');
+		assert(nonIceUser.hp > nonIceHP, 'CAP Snow Warning should heal any holder and shield it from hail chip');
 	});
 
 	it('keeps High Noon sun indefinite and grants Ground immunity', () => {

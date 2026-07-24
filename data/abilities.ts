@@ -1058,6 +1058,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 312,
 	},
+	polarswitch: {
+		// Custom fork ability. Absorbs incoming Electric-type attacks (except status
+		// moves like Thunder Wave) and raises the holder's Sp. Atk by one stage;
+		// re-legalized into Gen 3 by the gen3megascap mod. num is a fork-local id
+		// (322) chosen to avoid colliding with Lightning Rod (num 31).
+		isNonstandard: "Future",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
+				if (!this.boost({ spa: 1 })) {
+					this.add('-immune', target, '[from] ability: Polar Switch');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Polar Switch",
+		rating: 3,
+		num: 322,
+	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
