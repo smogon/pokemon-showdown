@@ -6,9 +6,11 @@ export const Scripts: ModdedBattleScriptsData = {
 	// items, and change ONLY each move's category to its Gen 4 per-move value (via moves.ts).
 	// Base Gen 3's init() re-derives every move's category from its TYPE (special types ->
 	// Special, else Physical), which would clobber the split back to type-based — so override
-	// it to a no-op here. The runtime type->category recompute in Gen 3's useMoveInner is
-	// likewise skipped by this mod's own useMoveInner override below (categories are fixed per
-	// move and must not follow a mid-battle retype). (surfnWOB)
+	// it to a no-op here. Nothing else has to be overridden for the split to survive: Gen 3's
+	// useMoveInner does not re-derive category at runtime, and the two moves that retype
+	// mid-battle carry their own onModifyMove — Hidden Power's is re-stated in this mod's
+	// moves.ts so it sets type without touching category, and Weather Ball sets both by hand.
+	// (surfnWOB)
 	init() {},
 	pokemon: {
 		inherit: true,
@@ -104,157 +106,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return Math.floor(baseDamage);
-		},
-		useMoveInner(moveOrMoveName, pokemon, options) {
-			let sourceEffect = options?.sourceEffect;
-			let target = options?.target;
-			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
-			if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
-
-			let move = this.dex.getActiveMove(moveOrMoveName);
-			pokemon.lastMoveUsed = move;
-
-			if (this.battle.activeMove) {
-				move.priority = this.battle.activeMove.priority;
-			}
-			const baseTarget = move.target;
-			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
-			if (move.target === 'self' || move.target === 'allies') {
-				target = pokemon;
-			}
-			if (sourceEffect) {
-				move.sourceEffect = sourceEffect.id;
-				move.ignoreAbility = false;
-			}
-			let moveResult = false;
-
-			this.battle.setActiveMove(move, pokemon, target);
-
-			// This useMoveInner predates type-changing effects and never fired the ModifyType
-			// event that base useMoveInner does (sim/battle-actions.ts:430/438). Without it,
-			// `onModifyType` handlers never run — Hidden Power stayed Normal instead of taking its
-			// hpType, so e.g. HP Fighting read as Normal and was resisted by Rock. Fire it here in
-			// the same order as base — ModifyType before ModifyMove, singleEvent then runEvent.
-			// Unlike the base [Gen 3] mod, PSS uses the Gen 4 physical/special split: categories
-			// come from the move data and must NOT be re-derived from the (possibly changed) type,
-			// so there is no category recompute after this — Hidden Power stays Special. (surfnWOB)
-			this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseTarget !== move.target) {
-				target = this.battle.getRandomTarget(pokemon, move);
-			}
-			move = this.battle.runEvent('ModifyType', pokemon, target, move, move);
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseTarget !== move.target) {
-				target = this.battle.getRandomTarget(pokemon, move);
-			}
-			if (!move || pokemon.fainted) {
-				return false;
-			}
-
-			let attrs = '';
-
-			let movename = move.name;
-			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from] ${this.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
-
-			if (!target) {
-				this.battle.attrLastMove('[notarget]');
-				this.battle.add('-notarget', pokemon);
-				return false;
-			}
-
-			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
-
-			if (!sourceEffect || sourceEffect.id === 'pursuit') {
-				let extraPP = 0;
-				for (const source of pressureTargets) {
-					const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
-					if (ppDrop !== true) {
-						extraPP += ppDrop || 0;
-					}
-				}
-				if (extraPP > 0) {
-					pokemon.deductPP(move, extraPP);
-				}
-			}
-
-			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-				!this.battle.runEvent('TryMove', pokemon, target, move)) {
-				move.mindBlownRecoil = false;
-				return false;
-			}
-
-			this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
-
-			if (move.ignoreImmunity === undefined) {
-				move.ignoreImmunity = (move.category === 'Status');
-			}
-
-			if (move.selfdestruct === 'always') {
-				this.battle.faint(pokemon, pokemon, move);
-			}
-
-			let damage: number | false | undefined | '' = false;
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				damage = this.tryMoveHit(target, pokemon, move);
-				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
-				if (damage || damage === 0 || damage === undefined) moveResult = true;
-			} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
-				if (!targets.length) {
-					this.battle.attrLastMove('[notarget]');
-					this.battle.add('-notarget', pokemon);
-					return false;
-				}
-				if (targets.length > 1) move.spreadHit = true;
-				const hitSlots = [];
-				for (const source of targets) {
-					const hitResult = this.tryMoveHit(source, pokemon, move);
-					if (hitResult || hitResult === 0 || hitResult === undefined) {
-						moveResult = true;
-						hitSlots.push(source.getSlot());
-					}
-					if (damage) {
-						damage += hitResult || 0;
-					} else {
-						if (damage !== false || hitResult !== this.battle.NOT_FAIL) damage = hitResult;
-					}
-					if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
-				}
-				if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlots.join(','));
-			} else {
-				target = targets[0];
-				let lacksTarget = !target || target.fainted;
-				if (!lacksTarget) {
-					if (['adjacentFoe', 'adjacentAlly', 'normal', 'randomNormal'].includes(move.target)) {
-						lacksTarget = !target.isAdjacent(pokemon);
-					}
-				}
-				if (lacksTarget && !move.flags['futuremove']) {
-					this.battle.attrLastMove('[notarget]');
-					this.battle.add('-notarget', pokemon);
-					return false;
-				}
-				damage = this.tryMoveHit(target, pokemon, move);
-				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
-				if (damage || damage === 0 || damage === undefined) moveResult = true;
-			}
-			if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
-			if (!pokemon.hp) {
-				this.battle.faint(pokemon, pokemon, move);
-			}
-
-			if (!moveResult) {
-				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
-				return false;
-			}
-
-			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
-			return true;
 		},
 		tryMoveHit(target, pokemon, move) {
 			this.battle.setActiveMove(move, pokemon, target);

@@ -37,15 +37,48 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
-	// -ate type-changing abilities: gen3mega inherits gen6's 1.3x (5325/4096) boost
-	// via the mod chain (gen3mega -> gen3 -> ... -> gen6), but we want the Gen 7+
-	// 1.2x (4915/4096) behavior. Re-pin onBasePower to the 1.2x modifier; everything
-	// else (onModifyType, priorities) keeps inheriting. (Dragonize is a custom,
-	// base-only ability with no gen6 override, so it already resolves to 1.2x.)
+	// -ate type-changing abilities. Each needs two Gen 3 adjustments, and both are
+	// deliberately kept here rather than in data/mods/gen3, which 26 stock ADV
+	// formats declare and every GSC format inherits:
+	//
+	// 1. Dispatch. Gen 3's useMoveInner never fires the `ModifyType` event that base
+	//    useMoveInner does (sim/battle-actions.ts), so the inherited `onModifyType`
+	//    handler is dead code in this mod. It does fire `ModifyMove` at the same
+	//    point in the pipeline, so the retype is written as `onModifyMove` instead.
+	//    The guard is base's, minus the Z-move/Dynamax/Tera clauses that cannot
+	//    occur in Gen 3.
+	// 2. Category. Gen 3 has no physical/special split: a damaging move's class is
+	//    derived from its TYPE (gen3/scripts.ts init()). A runtime retype therefore
+	//    has to re-derive it, or Refrigerate's Ice Return would still resolve as
+	//    Physical. Gen 3's own Hidden Power and Weather Ball overrides do the same
+	//    thing by hand in their onModifyMove. Aerilate is the quiet case: Flying is
+	//    a physical type in Gen 3, so its moves keep the class they already had.
+	//
+	// The onBasePower re-pin is a third, separate adjustment: gen3mega would inherit
+	// Gen 6's 1.3x (5325/4096) through the chain (gen3mega -> gen3 -> ... -> gen6),
+	// and we want Gen 7+'s 1.2x (4915/4096). Dragonize is a custom, base-only ability
+	// with no gen6 override, so it already resolves to 1.2x — it is re-pinned anyway
+	// so all three read the same and a later gen6 edit cannot silently split them.
+	//
+	// noModifyType is copied verbatim from base rather than trimmed to the moves
+	// that exist in Gen 3, so it stays diffable against upstream's -ate abilities.
+	// (surfnWOB)
 	aerilate: {
 		inherit: true,
 		gen: 3,
 		isNonstandard: null,
+		onModifyMove(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal' || noModifyType.includes(move.id)) return;
+			move.type = 'Flying';
+			move.typeChangerBoosted = this.effect;
+			if (move.category !== 'Status') {
+				const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+				move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
+			}
+		},
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
@@ -66,6 +99,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		gen: 3,
 		isNonstandard: null,
+		// See the -ate note above aerilate.
+		onModifyMove(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal' || noModifyType.includes(move.id)) return;
+			move.type = 'Ice';
+			move.typeChangerBoosted = this.effect;
+			if (move.category !== 'Status') {
+				const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+				move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
+			}
+		},
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
@@ -75,5 +121,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Custom fork abilities (originally isNonstandard: "Future")
 	megasol: { inherit: true, gen: 3, isNonstandard: null },
-	dragonize: { inherit: true, gen: 3, isNonstandard: null },
+	dragonize: {
+		inherit: true,
+		gen: 3,
+		isNonstandard: null,
+		// See the -ate note above aerilate.
+		onModifyMove(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal' || noModifyType.includes(move.id)) return;
+			move.type = 'Dragon';
+			move.typeChangerBoosted = this.effect;
+			if (move.category !== 'Status') {
+				const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+				move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
+			}
+		},
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+	},
 };
