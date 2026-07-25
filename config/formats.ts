@@ -508,6 +508,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft'],
 	},
 	{
+		name: "[Gen 9 Champions] 4v4 Doubles Draft",
+		mod: 'champions',
+		gameType: 'doubles',
+		searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9 Champions] NatDex Draft",
 		mod: 'champions',
 		searchShow: false,
