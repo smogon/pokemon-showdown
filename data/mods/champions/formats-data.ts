@@ -1728,7 +1728,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	medichammega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	electrike: {
 		isNonstandard: "Past",
@@ -1984,7 +1984,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	froslassmega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	spheal: {
 		isNonstandard: "Past",
@@ -4358,7 +4358,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 	},
 	polteageist: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	hatenna: {
 		isNonstandard: "Past",
