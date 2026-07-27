@@ -328,7 +328,9 @@ export class Side {
 			switch (action.choice) {
 			case 'move':
 				let details = ``;
-				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				if (action.targetLoc && this.battle.activePerHalf > 1) {
+					details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				}
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.megax) details += ` megax`;
 				if (action.megay) details += ` megay`;
