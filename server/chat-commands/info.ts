@@ -1531,7 +1531,7 @@ export const commands: Chat.ChatCommands = {
 		if (realSet) {
 			if (!baseSet) {
 				if (calcHP) {
-					baseStat = Math.ceil((100 * realStat - 10 - level * (Math.floor(ev / 4) + iv + 100)) / (2 * level));
+					baseStat = Math.ceil((100 * (realStat - 10) - level * (Math.floor(ev / 4) + iv + 100)) / (2 * level));
 				} else {
 					if (!positiveMod) {
 						realStat *= (2 + modifier) / 2;
