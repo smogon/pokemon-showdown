@@ -138,15 +138,35 @@ export class FSPath {
 	 * the process crashes while writing, the old file won't be lost.
 	 * Does not protect against simultaneous writing; use writeUpdate
 	 * for that.
+	 *
+	 * Falls back to in-place write on EBUSY/EXDEV: Docker single-file bind
+	 * mounts (e.g. config/chatrooms.json, config/usergroups.csv) cannot be
+	 * replaced via rename — the mount point inode is busy — so the atomic
+	 * rename throws and the update would otherwise be lost (and crash the
+	 * promise). Content writes to the mounted file still work.
 	 */
 	async safeWrite(data: string | Buffer, options: AnyObject = {}) {
-		await FS(this.path + '.NEW').write(data, options);
-		await FS(this.path + '.NEW').rename(this.path);
+		const tmp = FS(this.path + '.NEW');
+		await tmp.write(data, options);
+		try {
+			await tmp.rename(this.path);
+		} catch (err: any) {
+			if (err?.code !== 'EBUSY' && err?.code !== 'EXDEV') throw err;
+			await this.write(data, options);
+			await tmp.unlinkIfExists();
+		}
 	}
 
 	safeWriteSync(data: string | Buffer, options: AnyObject = {}) {
-		FS(this.path + '.NEW').writeSync(data, options);
-		FS(this.path + '.NEW').renameSync(this.path);
+		const tmp = FS(this.path + '.NEW');
+		tmp.writeSync(data, options);
+		try {
+			tmp.renameSync(this.path);
+		} catch (err: any) {
+			if (err?.code !== 'EBUSY' && err?.code !== 'EXDEV') throw err;
+			this.writeSync(data, options);
+			tmp.unlinkIfExistsSync();
+		}
 	}
 
 	/**
