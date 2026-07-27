@@ -62,6 +62,26 @@ describe('[Gen 3] Tier Shift', () => {
 		assert.equal(battle.p2.active[0].species.baseStats.spa, miloticSpa, 'Milotic real OU should get +0');
 	});
 
+	// 2026-07-08 tiering: Raikou ((OU) → OU) and Registeel (UUBL → OU). Both used to
+	// sit on the +5 rung; as plain OU they must stay unboosted.
+	for (const species of ['Raikou', 'Registeel']) {
+		it(`should leave OU ${species} unboosted (post-2026-07-08 OU raise)`, () => {
+			assert.equal(Dex.mod('gen3').species.get(species).tier, 'OU', `${species} must be ranked OU in gen3`);
+			battle = common.createBattle({ formatid: 'gen3tiershift' }, [
+				[{ species, moves: ['tackle'] }, { species: 'Snorlax', moves: ['tackle'] }],
+				[{ species: 'Snorlax', moves: ['tackle'] }, { species: 'Zapdos', moves: ['tackle'] }],
+			]);
+			const base = Dex.mod('gen3').species.get(species).baseStats;
+			const active = battle.p1.active[0];
+			assert.equal(active.species.tier, 'OU', `${species} should remain OU in battle`);
+			assert.equal(active.species.baseStats.hp, base.hp, `${species} HP must never be boosted`);
+			for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
+				assert.equal(active.species.baseStats[stat], base[stat],
+					`${species} ${stat} must stay unboosted (+0), not the old UUBL/(OU) +5`);
+			}
+		});
+	}
+
 	// SU is a fork-only tier (gen3subzu mod); these mons rank ZU in the standard
 	// gen3 tier list this format reads, but should get the SU +40, not ZU +35.
 	for (const species of ['Sunflora', 'Parasect', 'Ditto']) {
