@@ -25,7 +25,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		// Without this override gen3 would inherit gen8's Tier Shift table (UU +10 …
 		// PU +40). We pin a UUBL +5 / UU +10 / RU +15 / NU +20 / PU +30 / ZU +35 /
 		// SU-LC-NFE +40 ladder and additionally treat "(OU)" by technicality
-		// (Regice, Raikou, Porygon2) as UUBL. OU and Uber stay unboosted. HP is
+		// (Regice, Porygon2) as UUBL. OU and Uber stay unboosted. HP is
 		// never boosted.
 		inherit: true,
 		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UUBL (and OU by technicality) get +5, UU/RUBL get +10, RU/NUBL get +15, NU/PUBL get +20, PU/ZUBL get +30, ZU gets +35, and SU/LC/NFE get +40.`,
