@@ -1,4 +1,4 @@
-import RandomTeams, { MoveCounter } from '../gen9/teams';
+import { RandomTeams, type MoveCounter } from '../gen9/teams';
 
 export class RandomMNMLS extends RandomTeams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
@@ -35,10 +35,10 @@ export class RandomMNMLS extends RandomTeams {
 		}
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
-		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
+		// const leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -107,7 +107,8 @@ export class RandomMNMLS extends RandomTeams {
 				}
 
 				// Check Magic Bounce
-				if ((species.id === 'fezandipiti' || species.id === 'jirachi' || species.id === 'ursalunabloodmoon') && magicBouncers >= 1) {
+				if ((species.id === 'fezandipiti' || species.id === 'jirachi' ||
+					species.id === 'ursalunabloodmoon') && magicBouncers >= 1) {
 					continue;
 				}
 
@@ -118,10 +119,8 @@ export class RandomMNMLS extends RandomTeams {
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-			let set: RandomTeamsTypes.RandomSet;
-
-				set = this.randomSet(species, teamDetails, false, isDoubles);
-				pokemon.push(set);
+			const set = this.randomSet(species, teamDetails, false, isDoubles);
+			pokemon.push(set);
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;
@@ -195,7 +194,10 @@ export class RandomMNMLS extends RandomTeams {
 	};
 
 	/* All items are generated in getItem, so we shouldn't override anything */
-	override getPriorityItem(ability: string, types: Set<string>, moves: Set<string>, counter: MoveCounter, teamDetails: RandomTeamsTypes.TeamDetails, species: Species, isLead: boolean, teraType: string, role: RandomTeamsTypes.Role, isDoubles: boolean): string | undefined {
+	override getPriorityItem(ability: string, types: Set<string>, moves: Set<string>,
+		counter: MoveCounter, teamDetails: RandomTeamsTypes.TeamDetails, species: Species,
+		isLead: boolean, teraType: string, role: RandomTeamsTypes.Role, isDoubles: boolean):
+		string | undefined {
 		return;
 	};
 
