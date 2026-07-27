@@ -401,19 +401,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 224,
 	},
-	beautifulshine: {
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			if (pokemon.activeTurns) {
-				this.boost({ spa: 1, spd: 1 });
-			}
-		},
-		flags: {},
-		name: "Beautiful Shine",
-		rating: 4.5,
-		num: 314,
-	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
 			this.effectState.checkedBerserk = !(
@@ -1057,25 +1044,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dragonize",
 		rating: 4,
 		num: 312,
-	},
-	polarswitch: {
-		// Custom fork ability. Absorbs incoming Electric-type attacks (except status
-		// moves like Thunder Wave) and raises the holder's Sp. Atk by one stage;
-		// re-legalized into Gen 3 by the gen3megascap mod. num is a fork-local id
-		// (322) chosen to avoid colliding with Lightning Rod (num 31).
-		isNonstandard: "Future",
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
-				if (!this.boost({ spa: 1 })) {
-					this.add('-immune', target, '[from] ability: Polar Switch');
-				}
-				return null;
-			}
-		},
-		flags: { breakable: 1 },
-		name: "Polar Switch",
-		rating: 3,
-		num: 322,
 	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
@@ -4205,25 +4173,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Sharpness",
 		rating: 3.5,
 		num: 292,
-	},
-	shady: {
-		onModifyMovePriority: -5,
-		onModifyMove(move) {
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Ghost'] = true;
-			}
-		},
-		onTryBoost(boost, target, source, effect) {
-			if (effect.name === 'Intimidate' && boost.atk) {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Shady', `[of] ${target}`);
-			}
-		},
-		flags: {},
-		name: "Shady",
-		rating: 3,
-		num: 315,
 	},
 	shedskin: {
 		onResidualOrder: 5,

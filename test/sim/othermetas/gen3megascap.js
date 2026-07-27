@@ -60,9 +60,9 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.equal(capDex.species.get('magcargomega').tier, 'OU');
 		assert.equal(capDex.items.get('magcargoite').megaStone.Magcargo, 'Magcargo-Mega');
 		assert.equal(capDex.species.get('zangoose').tier, 'OU');
-		assert.equal(megaDex.species.get('magcargomega').isNonstandard, 'Future',
+		assert.equal(megaDex.species.get('magcargomega').exists, false,
 			'Mega Magcargo must remain unavailable in [Gen 3] Megas');
-		assert.equal(megaDex.items.get('magcargoite').isNonstandard, 'Future',
+		assert.equal(megaDex.items.get('magcargoite').exists, false,
 			'Magcargoite must remain unavailable in [Gen 3] Megas');
 		assert.equal(megaDex.species.get('zangoose').tier, 'UU');
 	});
@@ -100,9 +100,10 @@ describe('[Gen 3] Megas CAP', () => {
 		assert.deepEqual(dex.species.get('beautiflymega').baseStats,
 			{ hp: 90, atk: 10, def: 90, spa: 130, spd: 90, spe: 116 });
 		assert.deepEqual(dex.species.get('beautiflymega').types, ['Grass', 'Flying']);
-		assert.deepEqual(Dex.mod('gen3mega').species.get('beautiflymega').types, ['Bug', 'Psychic'],
-			'the global future placeholder must retain its original typing');
-		assert.equal(Dex.mod('gen3mega').species.get('parasectmega').isNonstandard, 'Future');
+		assert.equal(Dex.mod('gen3mega').species.get('beautiflymega').exists, false,
+			'Beautifly-Mega must not leak into [Gen 3] Megas via base data');
+		assert.equal(Dex.mod('gen3mega').species.get('parasectmega').exists, false,
+			'Parasect-Mega must not leak into [Gen 3] Megas via base data');
 	});
 
 	it('matches the authoritative ADV Megas CAP stats, typings, and abilities', () => {

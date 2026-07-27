@@ -1,7 +1,8 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	// Re-legalize the abilities used by the custom Mega/Primal formes so they
-	// validate in Gen 3. Each Mega's intended ability lives in the base data
-	// (inherited via pokedex.ts); here we just clear the gen gate / Future flag.
+	// validate in Gen 3. Canonical later-gen abilities inherit from base data;
+	// CAP-only abilities (Beautiful Shine, Shady, Polar Switch, High Noon,
+	// Sandy) are defined fully here so they do not leak via data/abilities.ts.
 	//
 	// NOT re-legalized: Pixilate (Gardevoir-Mega, Altaria-Mega) — it converts
 	// Normal-type moves to Fairy, which doesn't exist in Gen 3, so those formes
@@ -120,16 +121,42 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	primordialsea: { inherit: true, gen: 3, isNonstandard: null },
 	desolateland: { inherit: true, gen: 3, isNonstandard: null },
-	beautifulshine: { inherit: true, gen: 3, isNonstandard: null },
+	// CAP-only abilities defined fully here (not in data/abilities.ts).
+	beautifulshine: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({ spa: 1, spd: 1 });
+			}
+		},
+		flags: {},
+		name: "Beautiful Shine",
+		rating: 4.5,
+		num: 314,
+		gen: 3,
+		isNonstandard: null,
+	},
 	cursedbody: { inherit: true, gen: 3, isNonstandard: null },
 	ironfist: { inherit: true, gen: 3, isNonstandard: null },
 	shady: {
-		inherit: true,
-		gen: 3,
-		isNonstandard: null,
-		onTryBoost: undefined,
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Ghost'] = true;
+			}
+		},
+		// Intentionally no onTryBoost: CAP Shady only bypasses Normal's Ghost
+		// immunity; it does not block Intimidate.
+		flags: {},
+		name: "Shady",
 		desc: "This Pokemon's Ghost-type moves can hit Normal-type Pokemon.",
 		shortDesc: "This Pokemon's Ghost-type moves can hit Normal-type Pokemon.",
+		rating: 3,
+		num: 315,
+		gen: 3,
+		isNonstandard: null,
 	},
 	snowwarning: {
 		inherit: true,
@@ -162,7 +189,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	infiltrator: { inherit: true, gen: 3, isNonstandard: null },
 	merciless: { inherit: true, gen: 3, isNonstandard: null },
 	regenerator: { inherit: true, gen: 3, isNonstandard: null },
-	polarswitch: { inherit: true, gen: 3, isNonstandard: null },
+	polarswitch: {
+		// Absorbs incoming Electric-type attacks (except status moves like
+		// Thunder Wave) and raises the holder's Sp. Atk by one stage.
+		// num 322 avoids colliding with Lightning Rod (num 31).
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
+				if (!this.boost({ spa: 1 })) {
+					this.add('-immune', target, '[from] ability: Polar Switch');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Polar Switch",
+		rating: 3,
+		num: 322,
+		gen: 3,
+		isNonstandard: null,
+	},
 	// Arena Trap is unchanged except that it no longer traps a foe that has Mega
 	// Evolved (or, defensively, Primal-reverted) — that new forme is flagged on the
 	// species, so such a Pokemon can pivot out freely. A base (non-Mega) Pokemon is
