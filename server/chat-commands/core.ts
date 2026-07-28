@@ -776,6 +776,7 @@ export const commands: Chat.ChatCommands = {
 			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
 				this.errorReply(this.tr`/updatesettings expects JSON encoded object.`);
 			}
+			if (typeof raw.avatar === 'string') this.parse(`/noreply /avatar ${raw.avatar}`);
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
 			for (const setting in user.settings) {
 				if (setting in raw) {
