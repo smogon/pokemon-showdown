@@ -78,7 +78,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	lifeorb: {
 		inherit: true,
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+			if (source && source !== target && move && move.category !== 'Status' && !move.ohko && !source.forceSwitchFlag) {
 				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
