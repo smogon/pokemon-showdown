@@ -1213,7 +1213,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (species.requiredItems) requiredItems = species.requiredItems;
 			if (species.requiredMove) requiredMove = species.requiredMove;
 			if (species.requiredAbility) requiredAbility = species.requiredAbility;
-			if (species.battleOnly) species = dex.species.get(species.battleOnly as string);
+			if (species.battleOnly) {
+				if (typeof species.battleOnly !== 'string') {
+					return this.validateForme(set) || [`${species.name} does not start the battle in that forme.`];
+				}
+				species = dex.species.get(species.battleOnly);
+			}
 
 			const effectFunctions = [dex.abilities, dex.items, dex.moves];
 			if (

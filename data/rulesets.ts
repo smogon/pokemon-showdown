@@ -2786,8 +2786,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
 					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
 				}
-				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
-					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
+				set.species = (
+					species.id === 'xerneas' ? 'Xerneas-Neutral' :
+					typeof species.battleOnly === 'string' ? species.battleOnly :
+					species.battleOnly ? species.battleOnly[0] :
+					// should never happen?
+					set.species
+				);
 				species = this.dex.species.get(set.species);
 			}
 			for (const moveid of set.moves) {
