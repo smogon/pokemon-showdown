@@ -1,22 +1,175 @@
 import { Utils } from '../lib/utils';
 import { assignMissingFields, toID, BasicEffect } from './dex-data';
-import type { EventMethods } from './dex-conditions';
+import type { RuleEventMethods } from './dex-conditions';
 import type { SpeciesData } from './dex-species';
 import { Tags } from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
 const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
-export interface FormatData extends Partial<Format>, EventMethods {
-	name: string;
+export type RuleValueType = boolean | 'integer' | 'positive-integer';
+
+/** Used for onValidateRule handlers */
+export interface RuleTableBuildContext {
+	format: Format;
+	ruleTable: RuleTable;
+	dex: ModdedDex;
 }
 
-export type FormatList = (FormatData | { section: string, column?: number })[];
-export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & { inherit: true };
-export interface FormatDataTable { [id: IDEntry]: FormatData }
-export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
+type NamedBasicEffectFragment = Omit<WithRequired<Readonly<BasicEffect>, 'name'>, 'effectType'>;
 
-type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
+interface ValidatorRuleFields {
+	/** List of rule names. */
+	ruleset?: string[];
+	/** List of banned effects. */
+	banlist?: string[];
+	/** List of effects that aren't completely banned. */
+	restricted?: string[];
+	/** List of inherited banned effects to override. */
+	unbanlist?: string[];
+
+	/** Needed in order to print clauses */
+	onBegin?: RuleEventMethods['onBegin'];
+	checkCanLearn?: (
+		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
+	) => string | null;
+	onChangeSet?: (
+		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
+	) => string[] | void;
+	onValidateSet?: (
+		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
+	) => string[] | void;
+	onValidateTeam?: (
+		this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject
+	) => string[] | void;
+
+	/** ID of rule that can't be combined with this rule */
+	mutuallyExclusiveWith?: string;
+}
+
+interface RuleFields extends ValidatorRuleFields, RuleEventMethods {}
+
+interface FormatFields extends RuleFields {
+	mod?: string;
+	/**
+	 * Name of the team generator algorithm, if this format uses
+	 * random/fixed teams. null if players can bring teams.
+	 */
+	team?: string;
+	debug?: boolean;
+	noLog?: boolean;
+
+	/**
+	 * Whether or not a format will update ladder points if searched
+	 * for using the "Battle!" button.
+	 * (Challenge and tournament games will never update ladder points.)
+	 * (Defaults to `true`.)
+	 */
+	rated?: boolean | string;
+	/** Game type. */
+	gameType?: GameType;
+
+	threads?: string[];
+
+	/** Overrides for battle scripts */
+	battle?: ModdedBattleScriptsData;
+	pokemon?: ModdedBattlePokemon;
+	queue?: ModdedBattleQueue;
+	field?: ModdedField;
+	actions?: ModdedBattleActions;
+	side?: ModdedBattleSide;
+
+	/** Flags for the formats list */
+	challengeShow?: boolean;
+	searchShow?: boolean;
+	tournamentShow?: boolean;
+	bestOfDefault?: boolean;
+	teraPreviewDefault?: boolean;
+	itemClauseDefault?: boolean;
+
+	/** Validator overrides */
+	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
+	validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
+		removeNicknames?: boolean,
+		skipSets?: { [name: string]: { [key: string]: boolean } },
+	}) => string[] | void;
+
+	// OMs
+	getEvoFamily?: (this: Format, speciesid: string) => ID;
+	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
+	getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
+}
+
+interface TaggedValidatorRuleFields extends ValidatorRuleFields {
+	effectType: 'ValidatorRule';
+
+	/**
+	 * Only applies to rules, not formats
+	 */
+	hasValue?: RuleValueType;
+	onValidateRule?: (this: RuleTableBuildContext, value: string) => string | void;
+}
+
+interface TaggedRuleFields extends RuleFields {
+	effectType: 'Rule';
+
+	/**
+	 * Only applies to rules, not formats
+	 */
+	hasValue?: RuleValueType;
+	onValidateRule?: (this: RuleTableBuildContext, value: string) => string | void;
+}
+
+interface TaggedFormatFields extends FormatFields {
+	/**
+	 * A format can be used as a rule, but without an associated value.
+	 */
+	onValidateRule?: (this: RuleTableBuildContext) => string | void;
+}
+
+export interface ValidatorRuleData extends NamedBasicEffectFragment, Readonly<TaggedValidatorRuleFields> {}
+export interface RuleData extends NamedBasicEffectFragment, Readonly<TaggedRuleFields> {}
+export interface FormatData extends NamedBasicEffectFragment, Readonly<TaggedFormatFields> {}
+
+/** Distinguishes types for formats in `config/formats.ts` vs in `Dex.data.Rulesets` */
+export interface LoadedFormatData extends FormatData {
+	effectType: 'Format';
+	section: string;
+	column: number;
+	ruleTable: RuleTable | null;
+}
+
+type FormatDataVariantMap = {
+	Format: FormatData,
+	Rule: RuleData,
+	ValidatorRule: ValidatorRuleData,
+};
+
+export type FormatEffectType = keyof FormatDataVariantMap;
+export type RulesetEffectType = Exclude<FormatEffectType, 'Format'>;
+type FormatDataVariant<K extends FormatEffectType> = FormatDataVariantMap[K];
+export type GeneralizedFormatData = FormatDataVariant<FormatEffectType>;
+type GeneralizedRuleData = FormatDataVariant<RulesetEffectType>;
+
+export type ModdedRuleData = RuleData | (Omit<
+	Omit<RuleData, 'name'>,
+	'effectType'
+> & { inherit: true });
+export type ModdedValidatorRuleData = ValidatorRuleData | (Omit<
+	Omit<ValidatorRuleData, 'name'>,
+	'effectType'
+> & { inherit: true });
+export type ModdedGeneralizedRuleData = GeneralizedRuleData | (Omit<
+	Omit<GeneralizedRuleData, 'name'>,
+	'effectType'
+> & { inherit: true });
+
+export type FormatList = (FormatData | { section: string, column?: number })[];
+export interface RulesetTable { [id: IDEntry]: GeneralizedRuleData }
+export interface ModdedRulesetTable { [id: IDEntry]: ModdedGeneralizedRuleData }
+
+/** Union type for formats OR rules in `Dex.data.Rulesets` */
+export type RulesetData = (LoadedFormatData | GeneralizedRuleData);
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -49,7 +202,7 @@ export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
-	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
+	onChooseTeam: [NonNullable<RuleEventMethods['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
 	 *  DO NOT search this; just use ruleTable.has(...). This is purely for tag rule precedence. */
@@ -439,7 +592,7 @@ export class RuleTable extends Map<string, string> {
 	}
 }
 
-export class Format extends BasicEffect implements Readonly<BasicEffect> {
+export class Format extends BasicEffect implements Readonly<BasicEffect>, RuleEventMethods {
 	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
@@ -448,6 +601,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly team?: string;
 	override readonly effectType: FormatEffectType;
 	readonly debug: boolean;
+	readonly noLog: boolean;
 	/**
 	 * Whether or not a format will update ladder points if searched
 	 * for using the "Battle!" button.
@@ -476,16 +630,13 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly customRules: string[] | null;
 	/** Table of rule names and banned effects. */
 	ruleTable: RuleTable | null;
-	/** An optional function that runs at the start of a battle. */
-	readonly onBegin?: (this: Battle) => void;
-	readonly noLog: boolean;
 
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
+	declare readonly hasValue?: RuleValueType;
 	declare readonly onValidateRule?: (
-		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
+		this: RuleTableBuildContext, value: string
 	) => string | void;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
@@ -496,49 +647,54 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly field?: ModdedField;
 	declare readonly actions?: ModdedBattleActions;
 	declare readonly side?: ModdedBattleSide;
+
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
+	declare readonly tournamentShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
 	declare readonly teraPreviewDefault?: boolean;
 	declare readonly itemClauseDefault?: boolean;
 	declare readonly threads?: string[];
-	declare readonly tournamentShow?: boolean;
+
 	declare readonly checkCanLearn?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => string | null;
-	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
-	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
-	declare readonly getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
 	declare readonly onChangeSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
 	) => string[] | void;
-	declare readonly onModifySpeciesPriority?: number;
-	declare readonly onModifySpecies?: (
-		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
-	) => Species | void;
-	declare readonly onBattleStart?: (this: Battle) => void;
-	declare readonly onTeamPreview?: (this: Battle) => void;
-	declare readonly onChooseTeam?: (
-		this: Battle, positions: number[], pokemon: Pokemon[], autoChoose?: boolean
-	) => number[] | string | void;
 	declare readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
 	declare readonly onValidateTeam?: (
 		this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject
 	) => string[] | void;
+
 	declare readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
 	declare readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
 		removeNicknames?: boolean,
 		skipSets?: { [name: string]: { [key: string]: boolean } },
 	}) => string[] | void;
+
+	declare readonly onBegin?: RuleEventMethods['onBegin'];
+	declare readonly onBattleStart?: RuleEventMethods['onBattleStart'];
+	declare readonly onTeamPreview?: RuleEventMethods['onTeamPreview'];
+	declare readonly onChooseTeam?: RuleEventMethods['onChooseTeam'];
+
+	declare readonly onModifySpeciesPriority?: RuleEventMethods['onModifySpeciesPriority'];
+	declare readonly onModifySpecies?: RuleEventMethods['onModifySpecies'];
+
 	declare readonly section?: string;
 	declare readonly column?: number;
+
+	// OMs
+	getEvoFamily?: (this: Format, speciesid: string) => ID;
+	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
+	getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
 
 	constructor(data: AnyObject) {
 		super(data);
 
-		this.mod = Utils.getString(data.mod) || 'gen9';
+		this.mod = Utils.getString(data.mod) || DEFAULT_MOD;
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Condition';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
@@ -578,11 +734,11 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	// populates the original sections and formats easily
 	// there should be no repeat sections at this point.
 	for (const element of main) {
-		if (element.section) {
+		if ('section' in element) {
 			current = { section: element.section, column: element.column, formats: [] };
 			build.push(current);
-		} else if ((element as FormatData).name) {
-			current.formats.push((element as FormatData));
+		} else if (element.name) {
+			current.formats.push(element);
 		}
 	}
 
@@ -590,7 +746,7 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	if (custom !== undefined) {
 		for (const element of custom) {
 			// finds the section and makes it if it doesn't exist.
-			if (element.section) {
+			if ('section' in element) {
 				current = build.find(e => e.section === element.section);
 
 				// if it's new it makes a new entry.
@@ -598,8 +754,8 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 					current = { section: element.section, column: element.column, formats: [] };
 					build.push(current);
 				}
-			} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
-				current.formats.push(element as FormatData);
+			} else if (element.name) { // otherwise, adds the element to its section.
+				current.formats.push(element);
 			}
 		}
 	}
@@ -669,7 +825,7 @@ export class DexFormats {
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
 			if (format.itemClauseDefault === undefined) format.itemClauseDefault = false;
-			if (format.mod === undefined) format.mod = 'gen9';
+			if (format.mod === undefined) format.mod = DEFAULT_MOD;
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
 			this.checkDeprecated(format);
@@ -791,6 +947,19 @@ export class DexFormats {
 	all() {
 		this.load();
 		return this.formatsListCache!;
+	}
+
+	find(filterFn: (format: Format) => boolean): Format | null {
+		this.load();
+		for (const format of this.formatsListCache!) {
+			if (filterFn(format)) return format;
+		}
+		return null;
+	}
+
+	filter(filterFn: (format: Format) => boolean): Format[] {
+		this.load();
+		return this.formatsListCache!.filter(filterFn);
 	}
 
 	isPokemonRule(ruleSpec: string) {
