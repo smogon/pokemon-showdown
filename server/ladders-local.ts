@@ -154,7 +154,7 @@ export class LadderStore {
 		}
 		const ladder = await this.getLadder();
 		const index = this.indexOfUser(userid);
-		const ratings = {elo: 1000};
+		const ratings = { elo: 1000 };
 		if (index >= 0) {
 			ratings.elo = ladder[index][1];
 		}
@@ -287,7 +287,7 @@ export class LadderStore {
 			room.update();
 		}
 
-		return [p1score, {elo: p1newElo}, {elo: p2newElo}];
+		return [p1score, { elo: p1newElo }, { elo: p2newElo }];
 	}
 
 	/**

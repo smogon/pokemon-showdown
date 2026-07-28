@@ -1417,7 +1417,7 @@ export class User extends Chat.MessageContext {
 	updateRatingCache(formatid: string, data: any) {
 		if (!data || !('elo' in data)) return;
 		if (!('rpr' in data)) {
-			this.mmrCache[formatid] = {elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000)};
+			this.mmrCache[formatid] = { elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000) };
 		} else {
 			const ratings = {
 				elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000),
@@ -1429,7 +1429,7 @@ export class User extends Chat.MessageContext {
 	}
 	updateEloCache(formatid: string, elo: number) {
 		if (!this.mmrCache[formatid]) {
-			this.mmrCache[formatid] = {elo} as CachedMMR;
+			this.mmrCache[formatid] = { elo } as CachedMMR;
 			return;
 		} else {
 			this.mmrCache[formatid].elo = elo;

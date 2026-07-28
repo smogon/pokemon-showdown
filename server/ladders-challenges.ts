@@ -21,7 +21,7 @@ export class BattleReady {
 		userid: ID,
 		formatid: string,
 		settings: User['battleSettings'],
-		rating: CachedMMR = {elo: 0},
+		rating: CachedMMR = { elo: 0 },
 		challengeType: ChallengeType = 'challenge'
 	) {
 		this.userid = userid;

@@ -67,7 +67,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		let rating = {elo: 0} as CachedMMR;
+		let rating = { elo: 0 } as CachedMMR;
 		let valResult;
 		let removeNicknames = !!(user.locked || user.namelocked);
 
@@ -118,11 +118,11 @@ class Ladder extends LadderStore {
 			}
 			// Elo has a hard-floor of 1000.
 			// (Ab)-use this fact to use 1 as an unknown Elo sentinel value.
-			rating = ratingResult ?? {elo: 1};
+			rating = ratingResult ?? { elo: 1 };
 		} else {
 			if (Ladders.disabled) {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
-				rating = {elo: 1};
+				rating = { elo: 1 };
 			}
 			const validator = TeamValidatorAsync.get(this.formatid);
 			valResult = await validator.validateTeam(team, { removeNicknames, user: user.id });

@@ -8,7 +8,7 @@ const { makeUser } = require('../users-utils');
 describe('Matchmaker', () => {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
-		const search = new Ladders.BattleReady(player.id, formatid, player.battleSettings, {elo: rating});
+		const search = new Ladders.BattleReady(player.id, formatid, player.battleSettings, { elo: rating });
 		Ladders(formatid).addSearch(search, player);
 		return search;
 	};
