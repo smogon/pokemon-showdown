@@ -203,6 +203,18 @@ export class ModdedDex {
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));
 	}
 
+	isAncestorModOrSelf(ancestorName: string, descendantName: string) {
+		const ancestorDex = dexes[ancestorName];
+		if (!ancestorDex) return false;
+		let descendantDex = null;
+		while (descendantName) {
+			descendantDex = dexes[descendantName];
+			if (descendantDex === ancestorDex) return true;
+			descendantName = descendantDex.parentMod;
+		}
+		return false;
+	}
+
 	effectToString() {
 		return this.name;
 	}
