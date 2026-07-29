@@ -722,7 +722,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Random Tandem",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3695289/">Random Tandem Thread</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3775975/">Random Tandem Thread</a>`,
 			`&bullet; <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing">Resource Compendium</a>`,
 			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
 		],
@@ -755,11 +755,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/11SHPVWZDfx0AW4ZEm-2IgZ_rlH2i14fiWtfSdzUjk8E/edit?usp=sharing" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b></div>`);
-			this.add('-message', `Welcome to Random Tandem!`);
+			this.add(`raw|Welcome to Random Tandem!`);
 			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
-					if (!pokemon.baseSpecies.mons || pokemon.tandem) continue;
+					if (!pokemon.baseSpecies.mons || pokemon.m.tandem) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
 					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
 						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
@@ -820,11 +820,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					poke2.dynamaxLevel = 10;
 
 					const newPoke1 = side.addPokemon(poke1);
-					// @ts-expect-error newPoke is always set
-					newPoke1.tandem = true;
+					if (newPoke1) newPoke1.m.tandem = true;
 					const newPoke2 = side.addPokemon(poke2);
-					// @ts-expect-error newPoke is always set
-					newPoke2.tandem = true;
+					if (newPoke2) newPoke2.m.tandem = true;
 				}
 			}
 			this.ruleTable.pickedTeamSize = 6;
