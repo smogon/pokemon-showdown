@@ -1,5 +1,5 @@
 diff --git a/server/chat-commands/core.ts b/server/chat-commands/core.ts
-index 83aba4618..9fd229dc5 100644
+index 83aba4618..1fc12ff05 100644
 --- a/server/chat-commands/core.ts
 +++ b/server/chat-commands/core.ts
 @@ -14,7 +14,7 @@
@@ -11,7 +11,7 @@ index 83aba4618..9fd229dc5 100644
  import type { UserSettings } from '../users';
  import type { GlobalPermission, RoomPermission } from '../user-groups';
  
-@@ -1695,6 +1695,52 @@ export const commands: Chat.ChatCommands = {
+@@ -1695,6 +1695,53 @@ export const commands: Chat.ChatCommands = {
  
  		return user.rename(name, token || '', registered, connection);
  	},
@@ -58,6 +58,7 @@ index 83aba4618..9fd229dc5 100644
 +		}
 +		return false;
 +	},
++	'ticomon-auth': 'ticomonauth',
 +	ticomonauthhelp: [
 +		`/ticomon-auth [ticket] - Authenticates an assigned TicoMon Activity connection.`,
 +	],

@@ -1738,6 +1738,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		return false;
 	},
+	'ticomon-auth': 'ticomonauth',
 	ticomonauthhelp: [
 		`/ticomon-auth [ticket] - Authenticates an assigned TicoMon Activity connection.`,
 	],

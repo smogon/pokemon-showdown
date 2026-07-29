@@ -31,6 +31,10 @@ describe('TicoMon pvptest2 visual connections', () => {
 		({ commands } = require('../../dist/server/chat-commands/core'));
 	});
 
+	it('accepts the documented hyphenated ticket command', () => {
+		assert.equal(commands['ticomon-auth'], commands.ticomonauth);
+	});
+
 	afterEach(() => {
 		if (visualConnection?.user) visualConnection.destroy();
 		if (replacementConnection?.user) replacementConnection.destroy();
