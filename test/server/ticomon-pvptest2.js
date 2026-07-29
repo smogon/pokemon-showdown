@@ -32,7 +32,9 @@ describe('TicoMon pvptest2 visual connections', () => {
 	});
 
 	it('accepts the documented hyphenated ticket command', () => {
-		assert.equal(commands['ticomon-auth'], commands.ticomonauth);
+		assert.equal(commands['ticomon-auth'], 'ticomonauth');
+		assert.equal(typeof commands.ticomonauth, 'function');
+		assert.equal(commands[commands['ticomon-auth']], commands.ticomonauth);
 	});
 
 	afterEach(() => {
