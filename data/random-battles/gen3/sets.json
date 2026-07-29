@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Staller",
@@ -205,7 +205,7 @@
         ]
     },
     "nidoking": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -769,7 +769,7 @@
         ]
     },
     "kangaskhan": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1348,7 +1348,7 @@
         ]
     },
     "politoed": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1420,7 +1420,7 @@
         ]
     },
     "yanma": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -1812,7 +1812,7 @@
         ]
     },
     "skarmory": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1899,7 +1899,7 @@
         ]
     },
     "hitmontop": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1951,7 +1951,7 @@
         ]
     },
     "entei": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2271,7 +2271,7 @@
         ]
     },
     "ninjask": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
