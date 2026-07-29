@@ -509,14 +509,17 @@ export class PageContext extends MessageContext {
 /**
  * This is a message sent in a PM or to a chat/battle room.
  *
- * There are three cases to be aware of:
- * - PM to user: `context.pmTarget` will exist and `context.room` will be `null`
+ * There are four cases to be aware of:
  * - message to room: `context.room` will exist and `context.pmTarget` will be `null`
+ * - PM to online user: `context.pmTarget` will exist and `context.room` will be `null`
  * - console command (PM to `~`): `context.pmTarget` and `context.room` will both be `null`
+ * - PM to offline user: `context.pmTargetName` will exist, while
+ *   `context.pmTarget` and `context.room` will be `null`
  */
 export class CommandContext extends MessageContext {
 	message: string;
 	pmTarget: User | null;
+	pmTargetName: string | null;
 	room: Room | null;
 	connection: Connection;
 
@@ -535,7 +538,8 @@ export class CommandContext extends MessageContext {
 	broadcastMessage: string;
 	constructor(options: {
 		message: string, user: User, connection: Connection,
-		room?: Room | null, pmTarget?: User | null, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
+		room?: Room | null, pmTarget?: User | null, pmTargetName?: string | null,
+		cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
 		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string, bypassRoomCheck?: boolean,
 	}) {
 		super(
@@ -548,6 +552,7 @@ export class CommandContext extends MessageContext {
 
 		// message context
 		this.pmTarget = options.pmTarget || null;
+		this.pmTargetName = options.pmTargetName || options.pmTarget?.name || null;
 		this.room = options.room || null;
 		this.connection = options.connection;
 
@@ -580,6 +585,7 @@ export class CommandContext extends MessageContext {
 				connection: this.connection,
 				room: this.room,
 				pmTarget: this.pmTarget,
+				pmTargetName: this.pmTargetName,
 				recursionDepth: this.recursionDepth + 1,
 				bypassRoomCheck: this.bypassRoomCheck,
 				...options,
@@ -708,6 +714,8 @@ export class CommandContext extends MessageContext {
 				}
 			}
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
+		} else if (this.pmTargetName) {
+			this.errorReply(`Your message could not be sent:\n${message}\nSending command messages to offline users is not supported.`);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
 			this.room.game?.onLogMessage?.(message, this.user);
@@ -804,7 +812,7 @@ export class CommandContext extends MessageContext {
 		if (!sender) {
 			if (this.room) throw new Error(`Not a PM`);
 			sender = this.user;
-			receiver = this.pmTarget;
+			receiver = this.pmTarget || this.pmTargetName;
 		}
 		const targetIdentity = typeof receiver === 'string' ? ` ${receiver}` : receiver ? receiver.getIdentity() : '~';
 		const prefix = `|pm|${sender.getIdentity()}|${targetIdentity}|`;
@@ -1046,6 +1054,9 @@ export class CommandContext extends MessageContext {
 	checkBroadcast(overrideCooldown?: boolean | string, suppressMessage?: string | null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			return true;
+		}
+		if (this.pmTargetName && !this.pmTarget) {
+			throw new Chat.ErrorMessage(`You cannot broadcast commands in offline PMs.`);
 		}
 
 		if (this.user.locked && !(this.room?.roomid.startsWith('help-') || this.pmTarget?.can('lock'))) {

@@ -161,9 +161,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// - the last used move by the opponent is Counterable
 
 			const isCounterable = (move: { basePower: number, type: string } | null) => {
-				if (!move) {
-					throw new Error(`Gen 1 Counter: move is null. It should have been initialized to {basePower: 0, type: 'Normal'}.`);
-				}
+				move ??= { basePower: 0, type: 'Normal' };
 				return ['Normal', 'Fighting'].includes(move.type) && move.basePower > 0;
 			};
 
@@ -865,9 +863,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
-					if (move.recoil) {
-						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1),
-							source, target, 'recoil');
+					if (uncappedDamage) {
+						this.actions.applyRecoilDamage(uncappedDamage, move, source);
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);

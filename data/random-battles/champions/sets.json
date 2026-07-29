@@ -110,8 +110,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Drill Run", "Knock Off", "Lunge", "Poison Jab", "Swords Dance"],
-                "abilities": ["Swarm"],
-                "preferredTypes": ["Bug"]
+                "abilities": ["Swarm"]
             }
         ]
     },

@@ -284,8 +284,8 @@ export class Side {
 		};
 
 		// old-gens
-		this.lastMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
-		this.lastEnemyMove = this.battle.gen === 1 ? { basePower: 0, type: 'Normal' } as Move : null;
+		this.lastMove = null;
+		this.lastEnemyMove = null;
 	}
 
 	toJSON(): AnyObject {
@@ -328,7 +328,9 @@ export class Side {
 			switch (action.choice) {
 			case 'move':
 				let details = ``;
-				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				if (action.targetLoc && this.battle.activePerHalf > 1) {
+					details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				}
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.megax) details += ` megax`;
 				if (action.megay) details += ` megay`;

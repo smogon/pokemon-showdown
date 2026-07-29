@@ -2651,6 +2651,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	godlygiftmod: {
 		effectType: 'Rule',
 		name: "Godly Gift Mod",
+		desc: "Each Pok&eacute;mon receives one base stat from a God (Restricted Pok&eacute;mon) depending on its position in the team. If there is no restricted Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.",
 		onValidateTeam(team) {
 			const gods = new Set<string>();
 			for (const set of team) {
@@ -2786,8 +2787,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
 					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
 				}
-				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
-					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
+				set.species = (
+					species.id === 'xerneas' ? 'Xerneas-Neutral' :
+					typeof species.battleOnly === 'string' ? species.battleOnly :
+					species.battleOnly ? species.battleOnly[0] :
+					// should never happen?
+					set.species
+				);
 				species = this.dex.species.get(set.species);
 			}
 			for (const moveid of set.moves) {

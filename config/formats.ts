@@ -264,7 +264,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 Champions] OU",
 		mod: 'champions',
 		ruleset: ['Standard'],
-		banlist: ['AG', 'Uber', 'Moody', 'Light Clay', 'Quick Claw', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		banlist: ['AG', 'Uber', 'Moody', 'Damp Rock', 'Light Clay', 'Quick Claw', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
 	{
 		name: "[Gen 9 Champions] UU",
@@ -284,6 +284,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'champions',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 9 Champions] Random Doubles Battle",
+		mod: 'champions',
+		gameType: 'doubles',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['Obtainable', 'Species Clause', 'Cancel Mod', 'Illusion Level Mod', 'Level Clause Mod'],
 	},
 	{
 		name: "[Gen 9 Champions] VGC 2026 Reg M-A",
@@ -393,7 +401,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] ZU",
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU', 'ZUBL', 'Unburden', 'Heat Rock'],
+		banlist: ['PU', 'ZUBL', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 9] Free-For-All",
@@ -506,6 +514,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		itemClauseDefault: true,
 		ruleset: ['Standard Draft'],
+	},
+	{
+		name: "[Gen 9 Champions] 4v4 Doubles Draft",
+		mod: 'champions',
+		gameType: 'doubles',
+		searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 9 Champions] NatDex Draft",
@@ -946,9 +962,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Raichunite Y', 'Red Orb', 'Scovillainite', 'Starminite', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
-			'Arceus', 'Calyrex-Ice', 'Ceruledge', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Flutter Mane', 'Gengar', 'Gholdengo', 'Giratina', 'Gouging Fire',
-			'Groudon', 'Ho-Oh', 'Iron Bundle', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Manaphy', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
-			'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Walking Wake', 'Zacian', 'Zekrom',
+			'Arceus', 'Calyrex-Ice', 'Ceruledge', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Flutter Mane', 'Gholdengo', 'Giratina', 'Gouging Fire',
+			'Groudon', 'Ho-Oh', 'Iron Bundle', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Manaphy', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
+			'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Single-Strike', 'Walking Wake', 'Zacian',
+			'Zekrom',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
@@ -1294,7 +1311,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (species.requiredItems) requiredItems = species.requiredItems;
 			if (species.requiredMove) requiredMove = species.requiredMove;
 			if (species.requiredAbility) requiredAbility = species.requiredAbility;
-			if (species.battleOnly) species = dex.species.get(species.battleOnly as string);
+			if (species.battleOnly) {
+				if (typeof species.battleOnly !== 'string') {
+					return this.validateForme(set) || [`${species.name} does not start the battle in that forme.`];
+				}
+				species = dex.species.get(species.battleOnly);
+			}
 
 			const effectFunctions = [dex.abilities, dex.items, dex.moves];
 			if (
@@ -1862,10 +1884,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
 				const VALID_PROPERTIES = [
-					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage', 'hasSheerForce',
-					'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil', 'noDamageVariance',
-					'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather',
-					'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
+					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'chloroblastRecoil', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage',
+					'hasSheerForce', 'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil',
+					'noDamageVariance', 'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat',
+					'pseudoWeather', 'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus',
+					'willCrit',
 				] as const;
 				for (const property of VALID_PROPERTIES) {
 					if (forte[property]) {
@@ -3210,12 +3233,190 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 
-	/* / Temporary Tour Metas
+	// Temporary Tour Metas
 	///////////////////////////////////////////////////////////////////
 
 	{
 		section: "Temporary Tour Metas",
-	}, */
+	},
+	{
+		name: "[Gen 9] Camove Chaos",
+		desc: `National Dex-based format where Pokemon can use almost any move in the game, and their first two move types determine their type.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: [
+			'Standard NatDex', 'Terastal Clause', '!Obtainable Moves', '!Team Preview', 'Camomons Mod', 'CFZ Clause',
+			'Sleep Moves Clause', 'Team Type Preview',
+		],
+		banlist: [
+			'Aerodactyl-Mega', 'Alakazam', 'Arceus', 'Beedrill-Mega', 'Blaziken-Mega', 'Calyrex-Ice', 'Calyrex-Shadow', 'Charizard-Mega-Y', 'Chi-Yu', 'Chien-Pao', 'Comfey',
+			'Darmanitan', 'Darmanitan-Galar', 'Darmanitan-Galar-Zen', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dhelmise', 'Dondozo', 'Enamorus', 'Eternatus', 'Flutter Mane',
+			'Genesect', 'Gengar-Mega', 'Giratina', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kartana', 'Komala', 'Koraidon', 'Kyogre', 'Kyurem',
+			'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lucario-Mega', 'Lugia', 'Lunala', 'Marshadow', 'Mawile-Mega', 'Medicham-Mega', 'Metagross-Mega', 'Mewtwo',
+			'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Palafin', 'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza', 'Regieleki', 'Reshiram',
+			'Roserade', 'Salamence-Mega', 'Sceptile-Mega', 'Serperior', 'Shedinja', 'Sneasler', 'Solgaleo', 'Spectrier', 'Tapu Koko', 'Ting-Lu', 'Ursaluna', 'Ursaluna-Bloodmoon',
+			'Xerneas', 'Xurkitree', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zoroark', 'Magnet Pull', 'Regenerator > 2', 'Power Construct',
+			'Damp Rock', 'Heat Rock', 'Smooth Rock', 'Astral Barrage', 'Baneful Bunker', 'Belly Drum', 'Bolt Beak', 'Boomburst', 'Burning Bulwark', 'Ceaseless Edge', 'Chatter',
+			'Clangorous Soul', 'Dire Claw', 'Double Iron Bash', 'Dragon Energy', 'Eruption', 'Extreme Speed', 'Electrify', 'Electro Shot', 'Final Gambit', 'Fillet Away', 'Fishious Rend',
+			'Geomancy', 'Heal Order', 'Jet Punch', 'Lumina Crash', 'No Retreat', 'Octolock', 'Population Bomb', 'Power Trip', 'Quiver Dance', 'Rage Fist', 'Revival Blessing',
+			'Rising Voltage', 'Salt Cure', 'Shell Smash', 'Shift Gear', 'Stored Power', 'Substitute', 'Surging Strikes', 'Tail Glow', 'Take Heart', 'Thousand Arrows', 'Transform',
+			'Triple Arrows', 'V-Create', 'Victory Dance', 'Water Spout', 'Wicked Blow',
+		],
+		unbanlist: ['Blazing Torque', 'Combat Torque', 'Light of Ruin', 'Magical Torque', 'Noxious Torque', 'Wicked Torque'],
+	},
+	{
+		name: "[Gen 9] Chimera 1v1 Random Battle (Bo5)",
+		desc: `Randomized teams of 24 Pok&eacute;mon with sets that are generated to be competitively viable. Merges a chosen team of 6 into a single Pokémon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.`,
+		mod: 'gen9',
+		searchShow: false,
+		bestOfDefault: true,
+		team: 'random',
+		ruleset: ['Obtainable', 'Chimera 1v1 Rule', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 24', 'Adjust Level = 100', 'Best of = 5'],
+	},
+	{
+		name: "[Gen 9] Mix and Mega LC",
+		desc: `Little Cup-based. Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
+		banlist: [
+			'Basculin-White-Striped', 'Diglett', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler',
+			'Moody', 'Baton Pass', 'Sticky Web',
+			'Absolite Z', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Glimmoranite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite',
+			'Raichunite Y', 'Scovillainite', 'Staraptite', 'Starminite', 'Victreebelite', 'Zygardite',
+		],
+		restricted: [
+			'Aipom', 'Buizel', 'Cutiefly', 'Dratini', 'Elekid', 'Gastly', 'Girafarig', 'Gligar', 'Mienfoo', 'Misdreavus', 'Murkrow', 'Pawniard', 'Qwilfish-Hisui', 'Voltorb-Hisui',
+			'Wattrel', 'Yanma',
+		],
+		onValidateTeam(team) {
+			const itemTable = new Set<ID>();
+			for (const set of team) {
+				const item = this.dex.items.get(set.item);
+				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+					!item.isPrimalOrb && !item.name.startsWith('Rusted')) continue;
+				const natdex = this.ruleTable.has('natdexmod');
+				if (natdex && item.id !== 'ultranecroziumz') continue;
+				const species = this.dex.species.get(set.species);
+				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
+					return [`${species.baseSpecies} does not exist in gen 9.`];
+				}
+				if (((item.itemUser?.includes(species.name) || item.forcedForme === species.name) &&
+					!item.megaStone && !item.isPrimalOrb) || (natdex && species.name.startsWith('Necrozma-') &&
+						item.id === 'ultranecroziumz')) {
+					continue;
+				}
+				if (this.ruleTable.isRestrictedSpecies(species) || this.toID(set.ability) === 'powerconstruct') {
+					return [`${species.name} is not allowed to hold ${item.name}.`];
+				}
+				if (itemTable.has(item.id)) {
+					return [
+						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
+						`(You have more than one ${item.name})`,
+					];
+				}
+				itemTable.add(item.id);
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
+		},
+		onSwitchIn(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega');
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Mix and Mega Doubles",
+		desc: `Doubles-based. Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Calyrex-Shadow', 'Miraidon', 'Moody', 'Shadow Tag',
+			'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z', 'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite',
+			'Raichunite Y', 'Red Orb', 'Scovillainite', 'Staraptite', 'Starminite',
+		],
+		restricted: [
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Koraidon',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza',
+			'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Rapid-Strike', 'Zacian-Base', 'Zamazenta-Base', 'Zekrom',
+		],
+		onValidateTeam(team) {
+			const itemTable = new Set<ID>();
+			for (const set of team) {
+				const item = this.dex.items.get(set.item);
+				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+					!item.isPrimalOrb && !item.name.startsWith('Rusted')) continue;
+				const natdex = this.ruleTable.has('natdexmod');
+				if (natdex && item.id !== 'ultranecroziumz') continue;
+				const species = this.dex.species.get(set.species);
+				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
+					return [`${species.baseSpecies} does not exist in gen 9.`];
+				}
+				if (((item.itemUser?.includes(species.name) || item.forcedForme === species.name) &&
+					!item.megaStone && !item.isPrimalOrb) || (natdex && species.name.startsWith('Necrozma-') &&
+						item.id === 'ultranecroziumz')) {
+					continue;
+				}
+				if (this.ruleTable.isRestrictedSpecies(species) || this.toID(set.ability) === 'powerconstruct') {
+					return [`${species.name} is not allowed to hold ${item.name}.`];
+				}
+				if (itemTable.has(item.id)) {
+					return [
+						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
+						`(You have more than one ${item.name})`,
+					];
+				}
+				itemTable.add(item.id);
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
+		},
+		onSwitchIn(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega');
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] National Dex Ubers (!Unobtainable Formes)",
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard NatDex', '!Obtainable Formes', '!Evasion Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Terastal Clause'],
+		banlist: ['Gengar-Mega', 'Miraidon', 'Assist', 'Baton Pass'],
+	},
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////
@@ -3922,12 +4123,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['Max Team Size = 2', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
-			'Pokestar Spirit', 'Pecharunt', 'Terapagos', 'Shedinja + Sturdy', 'Cheek Pouch', 'Commander', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat',
+			'Chandelure-Mega', 'Pokestar Spirit', 'Pecharunt', 'Terapagos', 'Shedinja + Sturdy', 'Cheek Pouch', 'Commander', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat',
 			'Gorilla Tactics', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Neutralizing Gas', 'Opportunist', 'Parental Bond', 'Perish Body',
 			'Poison Heal', 'Power Construct', 'Pressure', 'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Spit', 'Sand Stream', 'Seed Sower', 'Spicy Spray', 'Stamina',
 			'Toxic Chain', 'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Harvest + Jaboca Berry', 'Harvest + Rowap Berry', 'Aguav Berry', 'Assault Vest', 'Berry',
-			'Berry Juice', 'Berserk Gene', 'Black Sludge', 'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Mawilite',
-			'Medichamite', 'Scovillainite', 'Starminite', 'Steel Memory', 'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Tatsugirinite', 'Wiki Berry',
+			'Berry Juice', 'Berserk Gene', 'Black Sludge', 'Chandelurite', 'Chimechite', 'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite',
+			'Leftovers', 'Mago Berry', 'Mawilite',	'Medichamite', 'Scovillainite', 'Starminite', 'Steel Memory', 'Oran Berry', 'Rocky Helmet', 'Shell Bell',
+			'Sitrus Berry', 'Tatsugirinite', 'Wiki Berry',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -5290,7 +5492,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
 			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
 		],
-		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Raikou', 'Porygon2', 'Quick Claw'],
+		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Porygon2', 'Quick Claw'],
 	},
 	{
 		name: "[Gen 3] ZU",
