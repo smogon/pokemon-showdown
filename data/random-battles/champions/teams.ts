@@ -18,7 +18,8 @@ const SPEED_SETUP = [
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
 	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'raindance',
-	'rockpolish', 'shellsmash', 'shelter', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'rockpolish', 'shellsmash', 'shelter', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup',
+	'victorydance',
 ];
 // Speed control moves (for doubles)
 const SPEED_CONTROL = [
