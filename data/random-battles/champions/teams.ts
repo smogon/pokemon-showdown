@@ -207,7 +207,7 @@ export class RandomChampionsTeams extends RandomTeams {
 
 			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-			if (role.includes('Protect')) this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
+			if (!role.includes('Protect')) this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
 		}
 
 		// General incompatibilities
