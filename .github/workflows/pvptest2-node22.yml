@@ -13,6 +13,7 @@ on:
 jobs:
   pvptest2-ticket-auth:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -22,4 +23,4 @@ jobs:
       - run: npm ci --include=dev
       - run: npm run tsc
       - run: npm run lint -- --no-cache server/chat-commands/core.ts server/users.ts test/server/ticomon-pvptest2.js
-      - run: npx mocha --no-config --timeout 8000 --forbid-only -g ".*" test/main.js test/server/ticomon-pvptest2.js
+      - run: npx mocha --no-config --exit --timeout 8000 --forbid-only -g ".*" test/main.js test/server/ticomon-pvptest2.js
