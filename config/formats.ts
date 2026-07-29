@@ -286,6 +286,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', 'VGC Timer'],
 	},
 	{
+		name: "[Gen 9 Champions] Random Doubles Battle",
+		mod: 'champions',
+		gameType: 'doubles',
+		team: 'random',
+		bestOfDefault: true,
+		ruleset: ['Obtainable', 'Species Clause', 'Cancel Mod', 'Illusion Level Mod', 'Level Clause Mod'],
+	},
+	{
 		name: "[Gen 9 Champions] VGC 2026 Reg M-A",
 		mod: 'championsregma',
 		gameType: 'doubles',

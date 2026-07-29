@@ -51,6 +51,7 @@ function getDefaultStats(): Stats {
 			gen9ccapm2025randombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen9championsrandombattle: { mons: {} },
+			gen9championsrandomdoublesbattle: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },
 			gen6randombattle: { mons: {} },
@@ -178,7 +179,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const format = Dex.formats.get(battle.format);
 	if (format.mod.startsWith('champions')) {
 		// ladder is inactive, so use a lower threshold
-		eloFloor = 1200;
+		eloFloor = (format.gameType === 'doubles') ? 1150 : 1250;
 	} else if (format.mod === 'gen2') {
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {

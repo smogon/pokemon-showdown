@@ -96,7 +96,7 @@ const SPEED_SETUP = [
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
 	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'rockpolish', 'shellsmash', 'shelter', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom',
@@ -1700,8 +1700,8 @@ export class RandomTeams {
 			[sandSetters, snowSetters],
 
 			// Prevent conflicting terrain abilities from generating together
-			[['pincurchin', 'miraidon'], ['indeedee', 'indeedeef', 'rillaboom']],
-			['rillaboom', ['indeedee', 'indeedeef']],
+			[['pincurchin', 'miraidon'], ['indeedee', 'indeedeef', 'rillaboom', 'arboliva']],
+			[['rillaboom', 'arboliva'], ['indeedee', 'indeedeef']],
 		];
 
 		const incompatibilityList = isDoubles ? doublesIncompatiblePokemon : incompatiblePokemon;
