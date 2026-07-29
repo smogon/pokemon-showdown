@@ -1341,7 +1341,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Roost", "Tailwind", "Will-O-Wisp"],
+                "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Tailwind", "Will-O-Wisp"],
                 "abilities": ["Natural Cure"]
             }
         ]
