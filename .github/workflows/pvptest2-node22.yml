@@ -1,0 +1,25 @@
+name: Pvptest2 ticket auth (Node 22)
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - server/chat-commands/core.ts
+      - server/users.ts
+      - test/server/ticomon-pvptest2.js
+      - .github/workflows/pvptest2-node22.yml
+  workflow_dispatch:
+
+jobs:
+  pvptest2-ticket-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --include=dev
+      - run: npm run tsc
+      - run: npm run lint -- --no-cache server/chat-commands/core.ts server/users.ts test/server/ticomon-pvptest2.js
+      - run: npx mocha --no-config --timeout 8000 --forbid-only -g ".*" test/main.js test/server/ticomon-pvptest2.js

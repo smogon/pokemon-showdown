@@ -1,0 +1,122 @@
+diff --git a/server/chat-commands/core.ts b/server/chat-commands/core.ts
+index 83aba4618..9fd229dc5 100644
+--- a/server/chat-commands/core.ts
++++ b/server/chat-commands/core.ts
+@@ -14,7 +14,7 @@
+  */
+ 
+ /* eslint no-else-return: "error" */
+-import { Utils, ProcessManager } from '../../lib';
++import { Net, Utils, ProcessManager } from '../../lib';
+ import type { UserSettings } from '../users';
+ import type { GlobalPermission, RoomPermission } from '../user-groups';
+ 
+@@ -1695,6 +1695,52 @@ export const commands: Chat.ChatCommands = {
+ 
+ 		return user.rename(name, token || '', registered, connection);
+ 	},
++	async ticomonauth(target, room, user, connection) {
++		const ticket = target.trim();
++		const endpoint = process.env.TICOMON_PVPTEST2_TICKET_CONSUME_URL;
++		const serviceToken = process.env.TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN;
++		if (!ticket || !endpoint || !serviceToken || !/^[A-Za-z0-9_-]{43,}$/.test(ticket)) {
++			connection.send(`|popup|Unable to connect this battle client.`);
++			return false;
++		}
++
++		let ticketData: { valid?: boolean, userid?: string, roomId?: string };
++		try {
++			const response = await Net(endpoint).post({
++				headers: {
++					'Content-Type': 'application/json',
++					'X-TicoMon-Service-Token': serviceToken,
++				},
++			}, JSON.stringify({ ticket }));
++			ticketData = JSON.parse(response);
++		} catch {
++			connection.send(`|popup|Unable to connect this battle client.`);
++			return false;
++		}
++		if (
++			ticketData.valid !== true ||
++			typeof ticketData.userid !== 'string' ||
++			typeof ticketData.roomId !== 'string' ||
++			toID(ticketData.userid) !== ticketData.userid ||
++			!ticketData.roomId.startsWith('battle-')
++		) {
++			connection.send(`|popup|Unable to connect this battle client.`);
++			return false;
++		}
++		const targetUser = Users.get(ticketData.userid);
++		const battleRoom = Rooms.get(ticketData.roomId as RoomID);
++		if (!targetUser || !battleRoom?.battle?.playerTable[targetUser.id]) {
++			connection.send(`|popup|Unable to connect this battle client.`);
++			return false;
++		}
++		if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
++			connection.send(`|popup|Unable to connect this battle client.`);
++		}
++		return false;
++	},
++	ticomonauthhelp: [
++		`/ticomon-auth [ticket] - Authenticates an assigned TicoMon Activity connection.`,
++	],
+ 	trnhelp: [
+ 		`/trn [username], [registered], [token] - Finishes a rename to the [username] with a given [token].`,
+ 	],
+diff --git a/server/users.ts b/server/users.ts
+index 45bbb1ef3..75b1e5ad5 100644
+--- a/server/users.ts
++++ b/server/users.ts
+@@ -235,6 +235,7 @@ export class Connection {
+ 	user: User;
+ 	challenge: string;
+ 	autojoins: string;
++	ticomonPvptest2Room: RoomID | null;
+ 	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
+ 	lastRequestedPage: string | null;
+ 	lastActiveTime: number;
+@@ -270,6 +271,7 @@ export class Connection {
+ 
+ 		this.challenge = '';
+ 		this.autojoins = '';
++		this.ticomonPvptest2Room = null;
+ 		this.lastRequestedPage = null;
+ 		this.lastActiveTime = now;
+ 		this.openPages = null;
+@@ -1091,6 +1093,21 @@ export class User extends Chat.MessageContext {
+ 		}
+ 		this.updateReady(connection);
+ 	}
++	attachTicoMonPvptest2Connection(connection: Connection, roomid: RoomID) {
++		const previousUser = connection.user;
++		if (!previousUser || previousUser === this || !Rooms.get(roomid)) return false;
++		const previousIndex = previousUser.connections.indexOf(connection);
++		if (previousIndex >= 0) previousUser.connections.splice(previousIndex, 1);
++		if (!previousUser.connections.length) previousUser.markDisconnected();
++
++		for (const existing of [...this.connections]) {
++			if (existing.ticomonPvptest2Room === roomid) existing.destroy();
++		}
++		connection.ticomonPvptest2Room = roomid;
++		this.mergeConnection(connection);
++		this.joinRoom(roomid, connection);
++		return true;
++	}
+ 	debugData() {
+ 		let str = `${this.tempGroup}${this.name} (${this.id})`;
+ 		for (const [i, connection] of this.connections.entries()) {
+@@ -1305,6 +1322,13 @@ export class User extends Chat.MessageContext {
+ 			connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+ 			return false;
+ 		}
++		if (
++			connection.ticomonPvptest2Room && room.battle &&
++			room.roomid !== connection.ticomonPvptest2Room
++		) {
++			connection.sendTo(roomid, `|noinit|joinfailed|This battle client is assigned to another room.`);
++			return false;
++		}
+ 		if (!room.checkModjoin(this)) {
+ 			if (!this.named) return Rooms.RETRY_AFTER_LOGIN;
+ 			connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);

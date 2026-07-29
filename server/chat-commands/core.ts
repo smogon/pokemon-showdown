@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import { Utils, ProcessManager } from '../../lib';
+import { Net, Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
 
@@ -1695,6 +1695,52 @@ export const commands: Chat.ChatCommands = {
 
 		return user.rename(name, token || '', registered, connection);
 	},
+	async ticomonauth(target, room, user, connection) {
+		const ticket = target.trim();
+		const endpoint = process.env.TICOMON_PVPTEST2_TICKET_CONSUME_URL;
+		const serviceToken = process.env.TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN;
+		if (!ticket || !endpoint || !serviceToken || !/^[A-Za-z0-9_-]{43,}$/.test(ticket)) {
+			connection.send(`|popup|Unable to connect this battle client.`);
+			return false;
+		}
+
+		let ticketData: { valid?: boolean, userid?: string, roomId?: string };
+		try {
+			const response = await Net(endpoint).post({
+				headers: {
+					'Content-Type': 'application/json',
+					'X-TicoMon-Service-Token': serviceToken,
+				},
+			}, JSON.stringify({ ticket }));
+			ticketData = JSON.parse(response);
+		} catch {
+			connection.send(`|popup|Unable to connect this battle client.`);
+			return false;
+		}
+		if (
+			ticketData.valid !== true ||
+			typeof ticketData.userid !== 'string' ||
+			typeof ticketData.roomId !== 'string' ||
+			toID(ticketData.userid) !== ticketData.userid ||
+			!ticketData.roomId.startsWith('battle-')
+		) {
+			connection.send(`|popup|Unable to connect this battle client.`);
+			return false;
+		}
+		const targetUser = Users.get(ticketData.userid);
+		const battleRoom = Rooms.get(ticketData.roomId as RoomID);
+		if (!targetUser || !battleRoom?.battle?.playerTable[targetUser.id]) {
+			connection.send(`|popup|Unable to connect this battle client.`);
+			return false;
+		}
+		if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
+			connection.send(`|popup|Unable to connect this battle client.`);
+		}
+		return false;
+	},
+	ticomonauthhelp: [
+		`/ticomon-auth [ticket] - Authenticates an assigned TicoMon Activity connection.`,
+	],
 	trnhelp: [
 		`/trn [username], [registered], [token] - Finishes a rename to the [username] with a given [token].`,
 	],

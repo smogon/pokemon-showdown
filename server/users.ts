@@ -235,6 +235,7 @@ export class Connection {
 	user: User;
 	challenge: string;
 	autojoins: string;
+	ticomonPvptest2Room: RoomID | null;
 	/** The last bot html page this connection requested, formatted as `${bot.id}-${pageid}` */
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
@@ -270,6 +271,7 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
+		this.ticomonPvptest2Room = null;
 		this.lastRequestedPage = null;
 		this.lastActiveTime = now;
 		this.openPages = null;
@@ -1091,6 +1093,21 @@ export class User extends Chat.MessageContext {
 		}
 		this.updateReady(connection);
 	}
+	attachTicoMonPvptest2Connection(connection: Connection, roomid: RoomID) {
+		const previousUser = connection.user;
+		if (!previousUser || previousUser === this || !Rooms.get(roomid)) return false;
+		const previousIndex = previousUser.connections.indexOf(connection);
+		if (previousIndex >= 0) previousUser.connections.splice(previousIndex, 1);
+		if (!previousUser.connections.length) previousUser.markDisconnected();
+
+		for (const existing of [...this.connections]) {
+			if (existing.ticomonPvptest2Room === roomid) existing.destroy();
+		}
+		connection.ticomonPvptest2Room = roomid;
+		this.mergeConnection(connection);
+		this.joinRoom(roomid, connection);
+		return true;
+	}
 	debugData() {
 		let str = `${this.tempGroup}${this.name} (${this.id})`;
 		for (const [i, connection] of this.connections.entries()) {
@@ -1303,6 +1320,13 @@ export class User extends Chat.MessageContext {
 				return Chat.resolvePage(roomid, this, connection);
 			}
 			connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+			return false;
+		}
+		if (
+			connection.ticomonPvptest2Room && room.battle &&
+			room.roomid !== connection.ticomonPvptest2Room
+		) {
+			connection.sendTo(roomid, `|noinit|joinfailed|This battle client is assigned to another room.`);
 			return false;
 		}
 		if (!room.checkModjoin(this)) {
