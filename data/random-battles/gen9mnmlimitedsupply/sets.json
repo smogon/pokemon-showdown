@@ -84,7 +84,7 @@
 			"sets": [
 				{
 					"role": "Fast Attacker",
-					"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Swords Dance"],
+					"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
 					"abilities": ["Weak Armor"]
 				}
 			]
@@ -110,7 +110,7 @@
 			]
 		},
 	"magearna": {
-			"level": 87,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -450,7 +450,7 @@
 			]
 		},
 	"ursalunabloodmoon": {
-			"level": 85,
+			"level": 82,
 			"sets": [
 				{
 					"role": "Fast Attacker",
