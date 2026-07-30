@@ -33,6 +33,12 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- item: Metronome` - ban an item with an ambiguous name
 
+### Type bans
+
+`- type: Fire` - ban all Pokémon of a specific type
+
+`- teratype: Fire` - ban all Pokémon from using a specific Tera type
+
 ### Species group bans
 
 `- OU` or `- DUU` - ban a tier
