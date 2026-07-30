@@ -64,7 +64,7 @@ describe('TicoMon pvptest2 visual connections', () => {
 
 		await commands.ticomonauth('', null, guest, visualConnection);
 
-		assert.deepEqual(sent, ['|popup|Unable to connect this battle client.']);
+		assert.deepEqual(sent, ['|ticomonauth|error|config']);
 		assert.equal(visualConnection.user, guest);
 	});
 

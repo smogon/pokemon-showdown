@@ -1696,11 +1696,15 @@ export const commands: Chat.ChatCommands = {
 		return user.rename(name, token || '', registered, connection);
 	},
 	async ticomonauth(target, room, user, connection) {
+		const report = (category: string) => {
+			console.log(`ticomon_auth_result category=${category}`);
+			connection.send(category === 'ok' ? '|ticomonauth|ok' : `|ticomonauth|error|${category}`);
+		};
 		const ticket = target.trim();
 		const endpoint = process.env.TICOMON_PVPTEST2_TICKET_CONSUME_URL;
 		const serviceToken = process.env.TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN;
 		if (!ticket || !endpoint || !serviceToken || !/^[A-Za-z0-9_-]{43,}$/.test(ticket)) {
-			connection.send(`|popup|Unable to connect this battle client.`);
+			report('config');
 			return false;
 		}
 
@@ -1712,9 +1716,15 @@ export const commands: Chat.ChatCommands = {
 					'X-TicoMon-Service-Token': serviceToken,
 				},
 			}, JSON.stringify({ ticket }));
-			ticketData = JSON.parse(response);
-		} catch {
-			connection.send(`|popup|Unable to connect this battle client.`);
+			try {
+				ticketData = JSON.parse(response);
+			} catch {
+				report('consume_invalid_json');
+				return false;
+			}
+		} catch (error) {
+			const statusCode = (error as { statusCode?: number }).statusCode;
+			report(statusCode === 403 ? 'consume_403' : statusCode === 404 ? 'consume_404' : 'consume_network');
 			return false;
 		}
 		if (
@@ -1724,18 +1734,28 @@ export const commands: Chat.ChatCommands = {
 			toID(ticketData.userid) !== ticketData.userid ||
 			!ticketData.roomId.startsWith('battle-')
 		) {
-			connection.send(`|popup|Unable to connect this battle client.`);
+			report('consume_invalid_payload');
 			return false;
 		}
 		const targetUser = Users.get(ticketData.userid);
+		if (!targetUser) {
+			report('user_missing');
+			return false;
+		}
 		const battleRoom = Rooms.get(ticketData.roomId as RoomID);
-		if (!targetUser || !battleRoom?.battle?.playerTable[targetUser.id]) {
-			connection.send(`|popup|Unable to connect this battle client.`);
+		if (!battleRoom?.battle) {
+			report('room_missing');
+			return false;
+		}
+		if (!battleRoom.battle.playerTable[targetUser.id]) {
+			report('not_participant');
 			return false;
 		}
 		if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
-			connection.send(`|popup|Unable to connect this battle client.`);
+			report('attach_failed');
+			return false;
 		}
+		report('ok');
 		return false;
 	},
 	'ticomon-auth': 'ticomonauth',
