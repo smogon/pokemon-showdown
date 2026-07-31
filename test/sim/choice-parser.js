@@ -56,6 +56,42 @@ describe('Choice parser', () => {
 				);
 			}
 		});
+
+		it('should only split unseparated slots for teams with fewer than 10 Pokémon', () => {
+			const team = [
+				'Bulbasaur', 'Ivysaur', 'Venusaur', 'Charmander', 'Charmeleon', 'Charizard',
+				'Squirtle', 'Wartortle', 'Blastoise', 'Caterpie', 'Metapod', 'Butterfree',
+			].map(species => ({ species, ability: 'noability', moves: ['splash'] }));
+			battle = common.createBattle({ preview: true }, [team, team]);
+
+			battle.makeChoices('team 12', 'team 10');
+
+			assert.equal(battle.p1.pokemon.length, 12);
+			assert.equal(battle.p2.pokemon.length, 12);
+			assert.species(battle.p1.active[0], 'Butterfree');
+			assert.species(battle.p2.active[0], 'Caterpie');
+		});
+
+		it('should support bracketed team choices without choosing an undersized team', () => {
+			const team = [
+				{ species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle'] },
+				{ species: 'Ivysaur', ability: 'overgrow', moves: ['tackle'] },
+				{ species: 'Venusaur', ability: 'overgrow', moves: ['tackle'] },
+				{ species: 'Charmander', ability: 'blaze', moves: ['scratch'] },
+			];
+			battle = common.createBattle({ preview: true }, [team, team]);
+
+			battle.makeChoices('team [3, 1]', 'team [2, 4]');
+
+			assert.equal(battle.p1.pokemon.length, 4);
+			assert.equal(battle.p2.pokemon.length, 4);
+			assert.deepEqual(battle.p1.pokemon.map(pokemon => pokemon.species.name), [
+				'Venusaur', 'Bulbasaur', 'Ivysaur', 'Charmander',
+			]);
+			assert.deepEqual(battle.p2.pokemon.map(pokemon => pokemon.species.name), [
+				'Ivysaur', 'Charmander', 'Bulbasaur', 'Venusaur',
+			]);
+		});
 	});
 
 	describe('Switch requests', () => {
