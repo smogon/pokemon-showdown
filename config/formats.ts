@@ -3451,10 +3451,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Accelgor', 'Aggron-Base', 'Carbink', 'Carracosta', 'Clodsire', 'Emboar-Base', 'Florges', 'Heatmor', 'Heliolisk', 'Heracross-Base', 'Hydreigon',
-			'Illumise', 'Klinklang', 'Kricketune', 'Lanturn', 'Linoone-Base', 'Lucario-Base', 'Malamar-Base', 'Mawile-Base', 'Mismagius', 'Mothim', 'Nidoqueen',
-			'Purugly', 'Rampardos', 'Raticate-Base', 'Samurott-Base', 'Seaking', 'Seismitoad', 'Slowbro-Base', 'Sudowoodo', 'Tyrantrum', 'Vaporeon', 'Vileplume',
-			'Zangoose', 'Zebstrika', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Arcanine-Base', 'Arctozolt', 'Ariados', 'Ceruledge', 'Crabominable-Base', 'Crawdaunt', 'Cyclizar', 'Dachsbun', 'Decidueye-Base', 'Donphan',
+			'Dragalge-Base', 'Espeon', 'Exeggutor-Base', 'Feraligatr-Base', 'Gardevoir-Base', 'Garganacl', 'Glalie-Base', 'Grafaiai', 'Kecleon', 'Kingler',
+			'Mabosstiff', 'Mandibuzz', 'Munkidori', 'Obstagoon', 'Omastar', 'Parasect', 'Politoed', 'Swanna', 'Tentacruel', 'Trevenant', 'Ursaring',
+			'Vikavolt-Base', 'Wigglytuff', 'Wormadam-Trash', 'Yanmega', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
