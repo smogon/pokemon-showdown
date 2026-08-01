@@ -164,7 +164,7 @@ interface BattleScriptsData {
 	gen: number;
 }
 
-type ModdedBattleActions = Partial<BattleActions> & {
+type ModdedBattleActions = Partial<MethodsOf<BattleActions>> & {
 	inherit?: true,
 
 	// OM
@@ -173,11 +173,11 @@ type ModdedBattleActions = Partial<BattleActions> & {
 	getMixedSpecies?: (originalName: string, megaName: string, pokemon?: Pokemon) => Species,
 } & ThisType<BattleActions>;
 
-type ModdedBattleSide = Partial<Side> & {
+type ModdedBattleSide = Partial<MethodsOf<Side>> & {
 	inherit?: true,
 } & ThisType<Side>;
 
-type ModdedBattlePokemon = Partial<Pokemon> & {
+type ModdedBattlePokemon = Partial<MethodsOf<Pokemon>> & {
 	inherit?: true,
 
 	// OM
@@ -192,11 +192,11 @@ type ModdedBattlePokemon = Partial<Pokemon> & {
 	) => { linkIndex: number, linkedMoves: [ActiveMove, ActiveMove] },
 } & ThisType<Pokemon>;
 
-type ModdedBattleQueue = Partial<BattleQueue> & {
+type ModdedBattleQueue = Partial<MethodsOf<BattleQueue>> & {
 	inherit?: true,
 } & ThisType<BattleQueue>;
 
-type ModdedField = Partial<Field> & {
+type ModdedField = Partial<MethodsOf<Field>> & {
 	inherit?: true,
 } & ThisType<Field>;
 
