@@ -593,7 +593,7 @@
         ]
     },
     "electrode": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1699,7 +1699,7 @@
         ]
     },
     "stantler": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3086,7 +3086,7 @@
         ]
     },
     "magnezone": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5088,7 +5088,7 @@
         ]
     },
     "avalugghisui": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -6527,7 +6527,7 @@
         ]
     },
     "oinkolognef": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -7677,7 +7677,7 @@
         ]
     },
     "archaludon": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Setup",
