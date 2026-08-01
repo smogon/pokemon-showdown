@@ -13,7 +13,6 @@
  */
 
 import { Utils } from '../lib';
-import type { CachedMMR } from 'users';
 
 export class LadderStore {
 	formatid: string;

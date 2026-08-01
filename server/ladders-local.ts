@@ -14,7 +14,6 @@
  */
 
 import { FS, Utils } from '../lib';
-import type { CachedMMR } from 'users';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
