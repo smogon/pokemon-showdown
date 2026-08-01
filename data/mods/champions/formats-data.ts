@@ -1299,7 +1299,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	overqwil: {
-		tier: "UU",
+		tier: "OU",
 	},
 	shuckle: {
 		isNonstandard: "Past",
@@ -1506,7 +1506,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	swampert: {
-		tier: "UU",
+		tier: "OU",
 	},
 	swampertmega: {
 		tier: "OU",
@@ -1704,7 +1704,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	mawilemega: {
-		tier: "UU",
+		tier: "OU",
 	},
 	aron: {
 		isNonstandard: "Past",
@@ -4384,7 +4384,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	grimmsnarl: {
-		tier: "UU",
+		tier: "OU",
 	},
 	grimmsnarlgmax: {
 		isNonstandard: "Past",
@@ -4646,7 +4646,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	houndstone: {
-		tier: "UU",
+		tier: "OU",
 	},
 	flittle: {
 		isNonstandard: "Past",
