@@ -7,7 +7,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 2,
 	pokemon: {
 		inherit: true,
-		getStat(statName, unboosted, unmodified, fastReturn) {
+		getStat(statName, unboosted, unmodified) {
 			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
@@ -41,7 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Gen 2 caps stats at 999 and min is 1.
 			stat = this.battle.clampIntRange(stat, 1, 999);
-			if (fastReturn) return stat;
+			// if (fastReturn) return stat;
 
 			// Screens
 			if (!unboosted) {
@@ -138,7 +138,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
-		tryMoveHit(target, pokemon, move) {
+		tryMoveHit(target: Pokemon, pokemon, move) {
 			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
 			const negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 			const doSelfDestruct = true;
@@ -300,12 +300,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return damage;
 		},
-		moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
+		moveHit(target: Pokemon | null, pokemon, move, hitEffect, isSecondary, isSelf) {
 			let damage: number | false | null | undefined = undefined;
 			move = this.dex.getActiveMove(move);
 
-			if (!moveData) moveData = move;
 			let hitResult: boolean | number | null = true;
+
+			let moveData = hitEffect as ActiveMove;
+			if (!moveData) moveData = move;
+			if (!moveData.flags) moveData.flags = {};
 
 			if (move.target === 'all' && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
