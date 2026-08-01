@@ -509,7 +509,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	readonly gameType: string | undefined;
 	readonly challengeType: ChallengeType;
 	/**
-	 * The lower player's rating, for searching purposes.
+	 * The lower player's rating, for Elo searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	readonly rated: number;
@@ -885,6 +885,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			p1, p2, p1score, this.room
 		);
 		void this.logBattle(score, p1rating, p2rating);
+		if (Config.remoteladder) {
+			const userOne = Users.getExact(this.p1.name);
+			const userTwo = Users.getExact(this.p2.name);
+			if (userOne) userOne.updateRatingCache(this.format, p1rating);
+			if (userTwo) userTwo.updateRatingCache(this.format, p2rating);
+		}
 		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(
