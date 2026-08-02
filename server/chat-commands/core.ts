@@ -1708,7 +1708,7 @@ export const commands: Chat.ChatCommands = {
 			return false;
 		}
 
-		let ticketData: { valid?: boolean, userid?: string, roomId?: string };
+		let ticketData: any;
 		try {
 			const response = await Net(endpoint).post({
 				headers: {
@@ -1727,32 +1727,56 @@ export const commands: Chat.ChatCommands = {
 			report(statusCode === 403 ? 'consume_403' : statusCode === 404 ? 'consume_404' : 'consume_network');
 			return false;
 		}
+
 		if (
 			ticketData.valid !== true ||
-			typeof ticketData.userid !== 'string' ||
 			typeof ticketData.roomId !== 'string' ||
-			toID(ticketData.userid) !== ticketData.userid ||
 			!ticketData.roomId.startsWith('battle-')
 		) {
 			report('consume_invalid_payload');
 			return false;
 		}
-		const targetUser = Users.get(ticketData.userid);
-		if (!targetUser) {
-			report('user_missing');
-			return false;
-		}
+
 		const battleRoom = Rooms.get(ticketData.roomId as RoomID);
 		if (!battleRoom?.battle) {
 			report('room_missing');
 			return false;
 		}
-		if (!battleRoom.battle.playerTable[targetUser.id]) {
-			report('not_participant');
-			return false;
-		}
-		if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
-			report('attach_failed');
+
+		const role = ticketData.role;
+
+		if (role === 'player') {
+			if (
+				typeof ticketData.showdownUserid !== 'string' ||
+				!ticketData.showdownUserid ||
+				toID(ticketData.showdownUserid) !== ticketData.showdownUserid ||
+				(ticketData.side !== 1 && ticketData.side !== 2)
+			) {
+				report('consume_invalid_payload');
+				return false;
+			}
+			const targetUser = Users.get(ticketData.showdownUserid);
+			if (!targetUser) {
+				report('user_missing');
+				return false;
+			}
+			if (!battleRoom.battle.playerTable[targetUser.id]) {
+				report('not_participant');
+				return false;
+			}
+			if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
+				report('attach_failed');
+				return false;
+			}
+		} else if (role === 'spectator') {
+			if (ticketData.side != null || ticketData.showdownUserid != null) {
+				report('consume_invalid_payload');
+				return false;
+			}
+			connection.ticomonPvptest2Room = battleRoom.roomid;
+			user.joinRoom(battleRoom.roomid, connection);
+		} else {
+			report('consume_invalid_payload');
 			return false;
 		}
 		report('ok');
