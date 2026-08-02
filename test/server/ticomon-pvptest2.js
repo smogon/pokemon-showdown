@@ -5,8 +5,15 @@ const assert = require('assert').strict;
 const { makeConnection, makeUser, destroyUser } = require('../users-utils');
 
 const PACKED_TEAM = 'Pikachu||||thunderbolt||||||';
+const TEST_TICKET_CONSUME_URL = 'https://ticomon-test.invalid/tickets/consume';
+const TEST_INTERNAL_SERVICE_TOKEN = 'test-service-token';
+const TICKET_AUTH_ENV_KEYS = [
+	'TICOMON_PVPTEST2_TICKET_CONSUME_URL',
+	'TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN',
+];
 let commands;
-let mockNet;
+let originalNetPost;
+let originalTicketAuthEnv;
 
 function createBattle(first, second) {
 	return Rooms.createBattle({
@@ -18,24 +25,52 @@ function createBattle(first, second) {
 	});
 }
 
-function setupMockNet(responseData) {
-	const libNet = require('../../dist/lib/net');
-	if (!mockNet) mockNet = libNet.Net;
-	libNet.Net = () => ({
-		post: async () => JSON.stringify(responseData),
-	});
-	// Clear cache so the commands module re-imports the mocked Net
+function loadCommands() {
 	delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
 	({ commands } = require('../../dist/server/chat-commands/core'));
 }
 
-function restoreNet() {
-	if (mockNet) {
-		const libNet = require('../../dist/lib/net');
-		libNet.Net = mockNet;
-		mockNet = null;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
+function setupTicketAuthEnvironment() {
+	if (!originalTicketAuthEnv) {
+		originalTicketAuthEnv = Object.fromEntries(
+			TICKET_AUTH_ENV_KEYS.map(key => [key, process.env[key]])
+		);
 	}
+	process.env.TICOMON_PVPTEST2_TICKET_CONSUME_URL = TEST_TICKET_CONSUME_URL;
+	process.env.TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN = TEST_INTERNAL_SERVICE_TOKEN;
+}
+
+function restoreTicketAuthEnvironment() {
+	if (!originalTicketAuthEnv) return;
+	for (const key of TICKET_AUTH_ENV_KEYS) {
+		if (originalTicketAuthEnv[key] === undefined) {
+			delete process.env[key];
+		} else {
+			process.env[key] = originalTicketAuthEnv[key];
+		}
+	}
+	originalTicketAuthEnv = null;
+}
+
+function setupMockNet(responseData, error) {
+	const { NetRequest } = require('../../dist/lib/net');
+	setupTicketAuthEnvironment();
+	if (!originalNetPost) originalNetPost = NetRequest.prototype.post;
+	NetRequest.prototype.post = async function () {
+		if (error) throw error;
+		return JSON.stringify(responseData);
+	};
+	loadCommands();
+}
+
+function restoreNet() {
+	if (originalNetPost) {
+		const { NetRequest } = require('../../dist/lib/net');
+		NetRequest.prototype.post = originalNetPost;
+		originalNetPost = null;
+		loadCommands();
+	}
+	restoreTicketAuthEnvironment();
 }
 
 describe('TicoMon pvptest2 visual connections', () => {
@@ -189,9 +224,11 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
-		assert.equal(sent.length, 1);
-		assert(sent[0].startsWith('|ticomonauth|ok'));
+		const authMessages = sent.filter(message => message === '|ticomonauth|ok');
+		assert.equal(authMessages.length, 1);
 		assert.equal(conn.user, player1);
+		assert.equal(player1.connections.filter(connection => connection === conn).length, 1);
+		assert(!player2.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
 	});
 
@@ -206,9 +243,11 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
-		assert.equal(sent.length, 1);
-		assert(sent[0].startsWith('|ticomonauth|ok'));
+		const authMessages = sent.filter(message => message === '|ticomonauth|ok');
+		assert.equal(authMessages.length, 1);
 		assert.equal(conn.user, player2);
+		assert.equal(player2.connections.filter(connection => connection === conn).length, 1);
+		assert(!player1.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
 	});
 
@@ -492,25 +531,11 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 	});
 
 	it('rejects already-consumed ticket (HTTP 403)', async () => {
-		const libNet = require('../../dist/lib/net');
-		const origNet = libNet.Net;
-		libNet.Net = () => ({
-			post: async () => {
-				throw Object.assign(new Error('Forbidden'), { statusCode: 403 });
-			},
-		});
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		({ commands } = require('../../dist/server/chat-commands/core'));
-
+		setupMockNet(null, Object.assign(new Error('Forbidden'), { statusCode: 403 }));
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert.deepEqual(sent, ['|ticomonauth|error|consume_403']);
-
-		libNet.Net = origNet;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		// eslint-disable-next-line require-atomic-updates
-		({ commands } = require('../../dist/server/chat-commands/core'));
 	});
 
 	it('rejects ticket for non-existent room', async () => {
@@ -567,31 +592,19 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 		});
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert(!battle.battle.ended);
-		battle.battle.forfeit(player1);
+		assert.equal(battle.battle.forfeit(player1), true);
+		await battle.battle.getInputLog();
 		assert(battle.battle.ended);
+		assert(battle.log.log.some(message => message.startsWith('|win|')));
 	});
 
 	it('error from bridge does not leak details', async () => {
-		const libNet = require('../../dist/lib/net');
-		const origNet = libNet.Net;
-		libNet.Net = () => ({
-			post: async () => {
-				throw Object.assign(new Error('Internal server error'), { statusCode: 500 });
-			},
-		});
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		({ commands } = require('../../dist/server/chat-commands/core'));
-
+		setupMockNet(null, Object.assign(new Error('Internal server error'), { statusCode: 500 }));
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert(sent.length === 1);
 		assert(sent[0].startsWith('|ticomonauth|error|'));
 		assert(!sent[0].includes('Internal server error'), 'must not leak bridge error details');
-
-		libNet.Net = origNet;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		// eslint-disable-next-line require-atomic-updates
-		({ commands } = require('../../dist/server/chat-commands/core'));
 	});
 });
