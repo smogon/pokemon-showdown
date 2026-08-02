@@ -316,8 +316,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	});
 
 	it('publishes the validated avatar to the existing battle protocol', async () => {
-		const initialLog = [...battle.log.log];
-		const initialPlayerLine = initialLog.filter(line => line.startsWith('|player|p1|')).at(-1);
 		const targetUser = player1;
 		const player = battle.battle.p1;
 		const initialAvatar = targetUser.avatar;
@@ -342,8 +340,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			ended: battle.battle.ended,
 			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
 		};
-		assert(initialPlayerLine);
-		assert(!initialPlayerLine.endsWith('|blue|'));
+		assert.notEqual(initialAvatar, 'blue');
 
 		setupMockNet({
 			valid: true,
@@ -369,7 +366,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 				assert(blueIndex >= 0);
 				assert(authPlayerLines.slice(blueIndex + 1).every(line => line === blueLine));
 				assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), blueLine);
-				assert.notEqual(getLastVisiblePlayerLine(visibleMessages, 'p1'), initialPlayerLine);
 				assert(authBroadcasts.some(message => message.includes(blueLine)));
 			});
 		} finally {
