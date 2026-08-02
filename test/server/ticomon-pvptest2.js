@@ -316,7 +316,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		const player = battle.battle.p1;
 		const initialAvatar = targetUser.avatar;
 		const addedLines = [];
-		const room = battle.room;
+		const room = battle;
 		const roomBattle = battle.battle;
 		const originalRoomAdd = room.add;
 		const originalUpdatePlayerAvatar = roomBattle.updatePlayerAvatar;
@@ -391,7 +391,10 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 
 		const participantMessages = captureConnectionMessages(conn);
 		await withBattleBroadcastCapture(async broadcasts => {
+			const p1Baseline = broadcasts.length;
 			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+			const p1Broadcasts = broadcasts.slice(p1Baseline);
+			assert.equal(getLastVisiblePlayerLine(p1Broadcasts, 'p1'), '|player|p1|pvpalpha|blue|');
 
 			conn2 = makeConnection();
 			guest2 = makeUser('', conn2);
@@ -399,9 +402,12 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			response.side = 2;
 			response.trainerAvatar = 'silver';
 			const participant2Messages = captureConnectionMessages(conn2);
+			const p2Baseline = broadcasts.length;
 			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+			const p2Broadcasts = broadcasts.slice(p2Baseline);
+			assert.equal(getLastVisiblePlayerLine(p2Broadcasts, 'p2'), '|player|p2|pvpgamma|silver|');
 
-			const visibleMessages = [...participantMessages, ...participant2Messages, ...broadcasts];
+			const visibleMessages = [...participantMessages, ...participant2Messages, ...p1Broadcasts, ...p2Broadcasts];
 			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
 			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p2'), '|player|p2|pvpgamma|silver|');
 		});
