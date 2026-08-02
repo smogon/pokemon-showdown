@@ -4,11 +4,9 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
-type MethodKeys<T> = {
-	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
-}[keyof T];
-
-type MethodsOf<T> = Pick<T, MethodKeys<T>>;
+type MethodsOf<T> = {
+	[K in keyof T as NonNullable<T[K]> extends (...args: any[]) => any ? K : never]: T[K];
+}
 
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
