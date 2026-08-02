@@ -224,9 +224,11 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
-		assert.equal(sent.length, 1);
-		assert(sent[0].startsWith('|ticomonauth|ok'));
+		const authMessages = sent.filter(message => message === '|ticomonauth|ok');
+		assert.equal(authMessages.length, 1);
 		assert.equal(conn.user, player1);
+		assert.equal(player1.connections.filter(connection => connection === conn).length, 1);
+		assert(!player2.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
 	});
 
@@ -241,9 +243,11 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
-		assert.equal(sent.length, 1);
-		assert(sent[0].startsWith('|ticomonauth|ok'));
+		const authMessages = sent.filter(message => message === '|ticomonauth|ok');
+		assert.equal(authMessages.length, 1);
 		assert.equal(conn.user, player2);
+		assert.equal(player2.connections.filter(connection => connection === conn).length, 1);
+		assert(!player1.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
 	});
 
@@ -588,8 +592,10 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 		});
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert(!battle.battle.ended);
-		battle.battle.forfeit(player1);
+		assert.equal(battle.battle.forfeit(player1), true);
+		await battle.battle.getInputLog();
 		assert(battle.battle.ended);
+		assert(battle.log.log.some(message => message.startsWith('|win|')));
 	});
 
 	it('error from bridge does not leak details', async () => {
