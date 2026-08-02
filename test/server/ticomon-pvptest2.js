@@ -333,13 +333,16 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			updateReturn = originalUpdatePlayerAvatar.call(this, user);
 			return updateReturn;
 		};
-		const initialState = {
+		await battle.battle.getInputLog();
+		const getBattleState = () => ({
 			turn: battle.battle.turn,
 			timerTurn: battle.battle.timer.turn,
 			started: battle.battle.started,
 			ended: battle.battle.ended,
 			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
-		};
+		});
+		const initialState = getBattleState();
+		assert.equal(initialState.timerTurn, 0);
 		assert.notEqual(initialAvatar, 'blue');
 
 		setupMockNet({
@@ -358,6 +361,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 				assert.notEqual(initialAvatar, 'blue');
 				await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 				await battle.battle.getInputLog();
+				assert.deepEqual(getBattleState(), initialState);
 				const authBroadcasts = broadcasts.slice(baseline);
 				const visibleMessages = [...participantMessages, ...authBroadcasts];
 				const blueLine = '|player|p1|pvpalpha|blue|';
@@ -378,13 +382,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(player.getUser().avatar, 'blue');
 		assert.equal(updateReturn, true);
 		assert(addedLines.includes('|player|p1|pvpalpha|blue|'));
-		assert.deepEqual({
-			turn: battle.battle.turn,
-			timerTurn: battle.battle.timer.turn,
-			started: battle.battle.started,
-			ended: battle.battle.ended,
-			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
-		}, initialState);
 	});
 
 	it('keeps distinct validated avatars for p1 and p2', async () => {
