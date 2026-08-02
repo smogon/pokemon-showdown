@@ -6,7 +6,7 @@ const { makeConnection, makeUser, destroyUser } = require('../users-utils');
 
 const PACKED_TEAM = 'Pikachu||||thunderbolt||||||';
 let commands;
-let mockNet;
+let originalNetPost;
 
 function createBattle(first, second) {
 	return Rooms.createBattle({
@@ -18,24 +18,27 @@ function createBattle(first, second) {
 	});
 }
 
-function setupMockNet(responseData) {
-	const libNet = require('../../dist/lib/net');
-	if (!mockNet) mockNet = libNet.Net;
-	libNet.Net = () => ({
-		post: async () => JSON.stringify(responseData),
-	});
-	// Clear cache so the commands module re-imports the mocked Net
+function loadCommands() {
 	delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
 	({ commands } = require('../../dist/server/chat-commands/core'));
 }
 
+function setupMockNet(responseData, error) {
+	const { NetRequest } = require('../../dist/lib/net');
+	if (!originalNetPost) originalNetPost = NetRequest.prototype.post;
+	NetRequest.prototype.post = async function () {
+		if (error) throw error;
+		return JSON.stringify(responseData);
+	};
+	loadCommands();
+}
+
 function restoreNet() {
-	if (mockNet) {
-		const libNet = require('../../dist/lib/net');
-		libNet.Net = mockNet;
-		mockNet = null;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-	}
+	if (!originalNetPost) return;
+	const { NetRequest } = require('../../dist/lib/net');
+	NetRequest.prototype.post = originalNetPost;
+	originalNetPost = null;
+	loadCommands();
 }
 
 describe('TicoMon pvptest2 visual connections', () => {
@@ -492,25 +495,11 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 	});
 
 	it('rejects already-consumed ticket (HTTP 403)', async () => {
-		const libNet = require('../../dist/lib/net');
-		const origNet = libNet.Net;
-		libNet.Net = () => ({
-			post: async () => {
-				throw Object.assign(new Error('Forbidden'), { statusCode: 403 });
-			},
-		});
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		({ commands } = require('../../dist/server/chat-commands/core'));
-
+		setupMockNet(null, Object.assign(new Error('Forbidden'), { statusCode: 403 }));
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert.deepEqual(sent, ['|ticomonauth|error|consume_403']);
-
-		libNet.Net = origNet;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		// eslint-disable-next-line require-atomic-updates
-		({ commands } = require('../../dist/server/chat-commands/core'));
 	});
 
 	it('rejects ticket for non-existent room', async () => {
@@ -572,26 +561,12 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 	});
 
 	it('error from bridge does not leak details', async () => {
-		const libNet = require('../../dist/lib/net');
-		const origNet = libNet.Net;
-		libNet.Net = () => ({
-			post: async () => {
-				throw Object.assign(new Error('Internal server error'), { statusCode: 500 });
-			},
-		});
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		({ commands } = require('../../dist/server/chat-commands/core'));
-
+		setupMockNet(null, Object.assign(new Error('Internal server error'), { statusCode: 500 }));
 		const sent = [];
 		conn.send = msg => sent.push(msg);
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 		assert(sent.length === 1);
 		assert(sent[0].startsWith('|ticomonauth|error|'));
 		assert(!sent[0].includes('Internal server error'), 'must not leak bridge error details');
-
-		libNet.Net = origNet;
-		delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
-		// eslint-disable-next-line require-atomic-updates
-		({ commands } = require('../../dist/server/chat-commands/core'));
 	});
 });
