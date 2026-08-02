@@ -51,6 +51,9 @@ const MAX_TURN_TIME_CHALLENGE = 300;
 const DISCONNECTION_TIME = 60;
 const DISCONNECTION_BANK_TIME = 300;
 
+const TICOMON_DECISION_TIMEOUT_SECONDS = 60;
+const TICOMON_FORCED_SWITCH_TIMEOUT_SECONDS = 30;
+
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
@@ -164,6 +167,7 @@ export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters = new Set<ID>();
 	timer: NodeJS.Timeout | null = null;
+	isTicoMon = false;
 	isFirstRequest = true;
 	turn: number | null = null;
 	/**
@@ -211,9 +215,51 @@ export class RoomBattleTimer {
 			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
 		}
 	}
+	markTicoMon() {
+		if (this.isTicoMon) return;
+		this.isTicoMon = true;
+		this.settings = {
+			...this.settings,
+			dcTimer: true,
+			dcTimerBank: false,
+			starting: TICOMON_DECISION_TIMEOUT_SECONDS,
+			grace: 0,
+			addPerTurn: 0,
+			maxPerTurn: TICOMON_DECISION_TIMEOUT_SECONDS,
+			maxFirstTurn: TICOMON_DECISION_TIMEOUT_SECONDS,
+			timeoutAutoChoose: false,
+			accelerate: false,
+		};
+		for (const player of this.battle.players) {
+			if (player.request.isWait) continue;
+			const timeout = this.getDecisionTimeout(player);
+			player.secondsLeft = Math.min(player.secondsLeft, timeout);
+			player.turnSecondsLeft = Math.min(player.turnSecondsLeft, timeout);
+			player.dcSecondsLeft = Math.min(player.dcSecondsLeft, timeout);
+		}
+		if (this.timerRequesters.size) {
+			for (const player of this.battle.players) this.nextRequest(player);
+		} else {
+			this.start();
+		}
+	}
+	getDecisionTimeout(player: RoomBattlePlayer) {
+		if (!this.isTicoMon) return this.settings.maxPerTurn;
+		if (!player.request.request) return TICOMON_DECISION_TIMEOUT_SECONDS;
+		try {
+			const request = JSON.parse(player.request.request);
+			const forceSwitch = request.forceSwitch;
+			// A request is forced when at least one active slot must be replaced.
+			if (forceSwitch === true || (Array.isArray(forceSwitch) && forceSwitch.some(Boolean))) {
+				return TICOMON_FORCED_SWITCH_TIMEOUT_SECONDS;
+			}
+		} catch {}
+		return TICOMON_DECISION_TIMEOUT_SECONDS;
+	}
 	start(requester?: User) {
 		const userid = requester ? requester.id : 'staff' as ID;
 		if (this.timerRequesters.has(userid)) return false;
+		if (this.isTicoMon && requester) return false;
 		if (this.battle.ended) {
 			requester?.sendTo(this.battle.roomid, `|inactiveoff|The timer can't be enabled after a battle has ended.`);
 			return false;
@@ -241,6 +287,7 @@ export class RoomBattleTimer {
 		return true;
 	}
 	stop(requester?: User) {
+		if (this.isTicoMon) return false;
 		if (requester) {
 			if (!this.timerRequesters.has(requester.id)) return false;
 			this.timerRequesters.delete(requester.id);
@@ -307,10 +354,18 @@ export class RoomBattleTimer {
 		}
 	}
 	nextRequest(player: RoomBattlePlayer) {
-		if (player.secondsLeft <= 0) return;
-		if (player.request.isWait) {
-			player.turnSecondsLeft = this.settings.maxPerTurn;
-			return;
+		if (this.isTicoMon) {
+			if (player.request.isWait || this.battle.ended || !this.timerRequesters.size) return;
+			const timeout = this.getDecisionTimeout(player);
+			player.secondsLeft = timeout;
+			player.turnSecondsLeft = timeout;
+			player.dcSecondsLeft = timeout;
+		} else {
+			if (player.secondsLeft <= 0) return;
+			if (player.request.isWait) {
+				player.turnSecondsLeft = this.settings.maxPerTurn;
+				return;
+			}
 		}
 
 		if (this.timer) {
@@ -399,7 +454,9 @@ export class RoomBattleTimer {
 				player.knownActive = false;
 				if (!this.settings.dcTimerBank) {
 					// don't wait longer than 6 ticks (1 minute)
-					if (this.settings.dcTimer) {
+					if (this.isTicoMon) {
+						player.dcSecondsLeft = player.turnSecondsLeft;
+					} else if (this.settings.dcTimer) {
 						player.dcSecondsLeft = DISCONNECTION_TIME;
 					} else {
 						// arbitrary large number
@@ -410,7 +467,9 @@ export class RoomBattleTimer {
 				if (this.timerRequesters.size) {
 					let msg = `!`;
 
-					if (this.settings.dcTimer) {
+					if (this.isTicoMon) {
+						msg = ` and has ${player.dcSecondsLeft} seconds to reconnect!`;
+					} else if (this.settings.dcTimer) {
 						msg = ` and has a minute to reconnect!`;
 					}
 					if (this.settings.dcTimerBank) {
@@ -940,6 +999,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		// the battle
 		const player = this.playerTable[user.id];
 		if (!player) return;
+		// This marker is set only by the authenticated TicoMon ticket path.
+		if (
+			connection?.ticomonPvptest2Room === this.roomid ||
+			user.connections.some(playerConnection => playerConnection.ticomonPvptest2Room === this.roomid)
+		) {
+			this.timer.markTicoMon();
+		}
 		player.updateChannel(connection || user);
 		const request = player.request;
 		if (request.request) {
@@ -997,6 +1063,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const player = this.playerTable[user.id];
 		if (player && !player.active) {
 			player.active = true;
+			if (user.connections.some(connection => connection.ticomonPvptest2Room === this.roomid)) {
+				this.timer.markTicoMon();
+			}
 			this.timer.checkActivity();
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}|`);
 			Chat.runHandlers('onBattleJoin', player.slot, user, this);

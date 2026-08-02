@@ -1,0 +1,60 @@
+name: TicoMon battle timer (Node 22)
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - server/room-battle.ts
+      - test/server/room-battle-timer.js
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - .github/workflows/ticomon-battle-timer.yml
+  pull_request:
+    branches: [master]
+    paths:
+      - server/room-battle.ts
+      - test/server/room-battle-timer.js
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - .github/workflows/ticomon-battle-timer.yml
+  workflow_dispatch:
+
+jobs:
+  battle-timer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Show runtime versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build focused test artifacts
+        run: npm run build
+
+      - name: Run TicoMon timer tests
+        run: npx mocha --no-config --exit --file ./test/main.js --timeout 8000 --forbid-only test/server/room-battle-timer.js
+
+      - name: Run timer and room battle tests
+        run: |
+          npx mocha --no-config --exit --file ./test/main.js --timeout 8000 --forbid-only \
+            test/server/room-battle-timer.js \
+            test/server/room-battle.js
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Check diff
+        run: git diff --check
