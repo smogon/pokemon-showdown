@@ -19,7 +19,7 @@ import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
 import { isTicoMonTrainerAvatar } from './ticomon-avatar';
 
-const ticomonPvptest2Avatars = new WeakMap<User, Map<string, string>>();
+const ticomonPvptest2Avatars = new WeakMap<User, Map<string, User['avatar']>>();
 
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 	userdetails(target, user, trustable) {
@@ -1784,7 +1784,7 @@ export const commands: Chat.ChatCommands = {
 				targetUser.avatar = initialAvatar;
 			} else {
 				const requestedAvatar = ticketData.trainerAvatar;
-				const avatar = requestedAvatar === undefined ? `${targetUser.avatar}` : requestedAvatar;
+				const avatar = requestedAvatar === undefined ? targetUser.avatar : requestedAvatar;
 				roomAvatars.set(battleRoom.roomid, avatar);
 				targetUser.avatar = avatar;
 			}
