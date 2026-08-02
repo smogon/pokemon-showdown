@@ -17,6 +17,9 @@
 import { Net, Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
+import { isTicoMonTrainerAvatar } from './ticomon-avatar';
+
+const ticomonPvptest2Avatars = new WeakMap<User, Map<string, string>>();
 
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 	userdetails(target, user, trustable) {
@@ -1755,6 +1758,13 @@ export const commands: Chat.ChatCommands = {
 				report('consume_invalid_payload');
 				return false;
 			}
+			if (
+				Object.prototype.hasOwnProperty.call(ticketData, 'trainerAvatar') &&
+				!isTicoMonTrainerAvatar(ticketData.trainerAvatar)
+			) {
+				report('consume_invalid_payload');
+				return false;
+			}
 			const targetUser = Users.get(ticketData.showdownUserid);
 			if (!targetUser) {
 				report('user_missing');
@@ -1764,12 +1774,30 @@ export const commands: Chat.ChatCommands = {
 				report('not_participant');
 				return false;
 			}
+			let roomAvatars = ticomonPvptest2Avatars.get(targetUser);
+			if (!roomAvatars) {
+				roomAvatars = new Map();
+				ticomonPvptest2Avatars.set(targetUser, roomAvatars);
+			}
+			const initialAvatar = roomAvatars.get(battleRoom.roomid);
+			if (initialAvatar) {
+				targetUser.avatar = initialAvatar;
+			} else {
+				const requestedAvatar = ticketData.trainerAvatar;
+				const avatar = requestedAvatar === undefined ? `${targetUser.avatar}` : requestedAvatar;
+				roomAvatars.set(battleRoom.roomid, avatar);
+				targetUser.avatar = avatar;
+			}
 			if (!targetUser.attachTicoMonPvptest2Connection(connection, battleRoom.roomid)) {
 				report('attach_failed');
 				return false;
 			}
 		} else if (role === 'spectator') {
-			if (ticketData.side != null || ticketData.showdownUserid != null) {
+			if (
+				ticketData.side != null ||
+				ticketData.showdownUserid != null ||
+				Object.prototype.hasOwnProperty.call(ticketData, 'trainerAvatar')
+			) {
 				report('consume_invalid_payload');
 				return false;
 			}

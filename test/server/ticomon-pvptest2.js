@@ -189,7 +189,9 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	let player2;
 	let battle;
 	let conn;
+	let conn2;
 	let guest;
+	let guest2;
 
 	beforeEach(() => {
 		player1 = makeUser('pvpalpha');
@@ -201,6 +203,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 
 	afterEach(() => {
 		if (conn?.user) conn.destroy();
+		if (conn2?.user) conn2.destroy();
 		if (battle) battle.destroy();
 		destroyUser(player1);
 		destroyUser(player2);
@@ -209,7 +212,9 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		player2 = null;
 		battle = null;
 		conn = null;
+		conn2 = null;
 		guest = null;
+		guest2 = null;
 		restoreNet();
 	});
 
@@ -249,6 +254,83 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(player2.connections.filter(connection => connection === conn).length, 1);
 		assert(!player1.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
+	});
+
+	it('assigns the validated avatar to the authenticated player', async () => {
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		});
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.equal(player1.avatar, 'blue');
+		assert.equal(battle.battle.p1.avatar, 'blue');
+	});
+
+	it('keeps distinct validated avatars for p1 and p2', async () => {
+		const response = {
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		};
+		setupMockNet(response);
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		conn2 = makeConnection();
+		guest2 = makeUser('', conn2);
+		response.showdownUserid = 'pvpgamma';
+		response.side = 2;
+		response.trainerAvatar = 'dawn-gen4pt';
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+
+		assert.equal(player1.avatar, 'blue');
+		assert.equal(player2.avatar, 'dawn-gen4pt');
+	});
+
+	it('preserves the initial avatar when a later ticket disagrees', async () => {
+		const response = {
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		};
+		setupMockNet(response);
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+		conn2 = makeConnection();
+		guest2 = makeUser('', conn2);
+		response.trainerAvatar = 'red';
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+
+		assert.equal(player1.avatar, 'blue');
+	});
+
+	it('rejects an avatar outside the TicoMon allowlist', async () => {
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'https://example.invalid/avatar.png',
+		});
+		const sent = [];
+		conn.send = msg => sent.push(msg);
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.deepEqual(sent, ['|ticomonauth|error|consume_invalid_payload']);
 	});
 
 	it('rejects player ticket missing side', async () => {
@@ -354,6 +436,21 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 		assert(sent[0].startsWith('|ticomonauth|ok'));
 		assert.equal(conn.user, guest);
 		assert(conn.inRooms.has(battle.roomid));
+	});
+
+	it('rejects a spectator ticket that tries to assign an avatar', async () => {
+		setupMockNet({
+			valid: true,
+			role: 'spectator',
+			roomId: battle.roomid,
+			trainerAvatar: 'red',
+		});
+		const sent = [];
+		conn.send = msg => sent.push(msg);
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.deepEqual(sent, ['|ticomonauth|error|consume_invalid_payload']);
 	});
 
 	it('does not occupy p1 slot', async () => {
