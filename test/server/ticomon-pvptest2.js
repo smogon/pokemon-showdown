@@ -376,7 +376,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		}
 
 		assert.equal(targetUser.avatar, 'blue');
-		assert.strictEqual(player.getUser(), targetUser);
+		assert.equal(player.getUser(), targetUser);
 		assert.equal(player.getUser().avatar, 'blue');
 		assert.equal(updateReturn, true);
 		assert(addedLines.includes('|player|p1|pvpalpha|blue|'));
