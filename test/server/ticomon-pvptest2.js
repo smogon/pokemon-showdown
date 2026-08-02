@@ -336,7 +336,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		await battle.battle.getInputLog();
 		const getBattleState = () => ({
 			turn: battle.battle.turn,
-			timerTurn: battle.battle.timer.turn,
 			started: battle.battle.started,
 			ended: battle.battle.ended,
 			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
@@ -381,6 +380,35 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(player.getUser().avatar, 'blue');
 		assert.equal(updateReturn, true);
 		assert(addedLines.includes('|player|p1|pvpalpha|blue|'));
+	});
+
+	it('updates an avatar without changing timer or battle state', () => {
+		const roomBattle = battle.battle;
+		const playerUser = player1;
+		playerUser.avatar = 'blue';
+		const beforeState = {
+			timerTurn: roomBattle.timer.turn,
+			turn: roomBattle.turn,
+			ended: roomBattle.ended,
+			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
+			decisions: roomBattle.players.map(player => ({ ...player.request })),
+		};
+		const logBaseline = battle.log.log.length;
+
+		assert.equal(roomBattle.updatePlayerAvatar(playerUser), true);
+
+		const afterState = {
+			timerTurn: roomBattle.timer.turn,
+			turn: roomBattle.turn,
+			ended: roomBattle.ended,
+			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
+			decisions: roomBattle.players.map(player => ({ ...player.request })),
+		};
+		assert.deepEqual(afterState, beforeState);
+		assert.deepEqual(
+			battle.log.log.slice(logBaseline).filter(line => line.startsWith('|player|')),
+			['|player|p1|pvpalpha|blue|']
+		);
 	});
 
 	it('keeps distinct validated avatars for p1 and p2', async () => {
