@@ -219,6 +219,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	});
 
 	it('authenticates p1 with valid player ticket', async () => {
+		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
 		setupMockNet({
 			valid: true,
 			role: 'player',
@@ -235,6 +236,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(player1.connections.filter(connection => connection === conn).length, 1);
 		assert(!player2.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
 	});
 
 	it('authenticates p2 with valid player ticket', async () => {
@@ -272,6 +274,42 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(battle.battle.p1.getUser().avatar, 'blue');
 	});
 
+	it('publishes the validated avatar to the existing battle protocol', async () => {
+		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
+		const initialState = {
+			turn: battle.battle.turn,
+			timerTurn: battle.battle.timer.turn,
+			started: battle.battle.started,
+			ended: battle.battle.ended,
+			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
+		};
+		assert(initialPlayerLine);
+		assert(!initialPlayerLine.endsWith('|blue|'));
+
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		});
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.equal(player1.avatar, 'blue');
+		assert.equal(battle.battle.p1.getUser().avatar, 'blue');
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
+		assert.notEqual(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
+		assert.deepEqual({
+			turn: battle.battle.turn,
+			timerTurn: battle.battle.timer.turn,
+			started: battle.battle.started,
+			ended: battle.battle.ended,
+			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
+		}, initialState);
+	});
+
 	it('keeps distinct validated avatars for p1 and p2', async () => {
 		const response = {
 			valid: true,
@@ -289,11 +327,13 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		guest2 = makeUser('', conn2);
 		response.showdownUserid = 'pvpgamma';
 		response.side = 2;
-		response.trainerAvatar = 'dawn-gen4pt';
+		response.trainerAvatar = 'silver';
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
 
 		assert.equal(player1.avatar, 'blue');
-		assert.equal(player2.avatar, 'dawn-gen4pt');
+		assert.equal(player2.avatar, 'silver');
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p2|')).at(-1), '|player|p2|pvpgamma|silver|');
 	});
 
 	it('preserves the initial avatar when a later ticket disagrees', async () => {
@@ -308,12 +348,49 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		setupMockNet(response);
 
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+		const playerLineCount = battle.log.log.filter(line => line.startsWith('|player|p1|')).length;
 		conn2 = makeConnection();
 		guest2 = makeUser('', conn2);
 		response.trainerAvatar = 'red';
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
 
 		assert.equal(player1.avatar, 'blue');
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).length, playerLineCount);
+	});
+
+	it('keeps the existing avatar when trainerAvatar is absent', async () => {
+		const initialAvatar = player1.avatar;
+		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: 'pvpalpha',
+			roomId: battle.roomid,
+			side: 1,
+		});
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.equal(player1.avatar, initialAvatar);
+		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
+	});
+
+	it('does not update the battle for an unrelated authenticated user', async () => {
+		const initialLog = [...battle.log.log];
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: guest.id,
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		});
+
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert.deepEqual(battle.log.log, initialLog);
+		assert.equal(player1.avatar, initialLog.find(line => line.startsWith('|player|p1|')).split('|')[4]);
 	});
 
 	it('rejects an avatar outside the TicoMon allowlist', async () => {
@@ -519,6 +596,34 @@ describe('TicoMon pvptest2 spectator auth (role=spectator)', () => {
 		const title = roomMessages.some(m => m.includes('|title|'));
 		assert(initBattle, 'spectator should receive |init|battle');
 		assert(title, 'spectator should receive |title|');
+	});
+
+	it('receives the updated player avatar in the battle log', async () => {
+		conn2 = makeConnection();
+		guest2 = makeUser('', conn2);
+		setupMockNet({
+			valid: true,
+			role: 'player',
+			showdownUserid: 'spectestp1',
+			roomId: battle.roomid,
+			side: 1,
+			trainerAvatar: 'blue',
+		});
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+
+		setupMockNet({
+			valid: true,
+			role: 'spectator',
+			roomId: battle.roomid,
+		});
+		const sent = [];
+		conn.send = msg => sent.push(msg);
+		conn.sendTo = (roomid, msg) => {
+			sent.push(msg);
+		};
+		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+
+		assert(sent.some(message => message.includes('|player|p1|spectestp1|blue|')));
 	});
 
 	it('cannot /choose (move 1)', async () => {

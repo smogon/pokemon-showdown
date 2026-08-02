@@ -1792,6 +1792,7 @@ export const commands: Chat.ChatCommands = {
 				report('attach_failed');
 				return false;
 			}
+			battleRoom.battle.updatePlayerAvatar(targetUser);
 		} else if (role === 'spectator') {
 			if (
 				ticketData.side != null ||
