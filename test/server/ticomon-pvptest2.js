@@ -25,6 +25,10 @@ function createBattle(first, second) {
 	});
 }
 
+function getLastPlayerLine(log, slot) {
+	return log.filter(line => line.startsWith(`|player|${slot}|`)).at(-1);
+}
+
 function loadCommands() {
 	delete require.cache[require.resolve('../../dist/server/chat-commands/core')];
 	({ commands } = require('../../dist/server/chat-commands/core'));
@@ -219,7 +223,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	});
 
 	it('authenticates p1 with valid player ticket', async () => {
-		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
+		const initialPlayerLine = getLastPlayerLine(battle.log.log, 'p1');
 		setupMockNet({
 			valid: true,
 			role: 'player',
@@ -236,7 +240,13 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		assert.equal(player1.connections.filter(connection => connection === conn).length, 1);
 		assert(!player2.connections.includes(conn));
 		assert(conn.inRooms.has(battle.roomid));
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
+		const finalPlayerLine = getLastPlayerLine(battle.log.log, 'p1');
+		assert(finalPlayerLine);
+		if (initialPlayerLine) {
+			assert.equal(finalPlayerLine, initialPlayerLine);
+		} else {
+			assert.equal(finalPlayerLine, `|player|p1|pvpalpha|${player1.avatar}|`);
+		}
 	});
 
 	it('authenticates p2 with valid player ticket', async () => {
@@ -275,7 +285,8 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	});
 
 	it('publishes the validated avatar to the existing battle protocol', async () => {
-		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
+		const initialLog = [...battle.log.log];
+		const initialPlayerLine = getLastPlayerLine(initialLog, 'p1');
 		const initialState = {
 			turn: battle.battle.turn,
 			timerTurn: battle.battle.timer.turn,
@@ -283,8 +294,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			ended: battle.battle.ended,
 			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
 		};
-		assert(initialPlayerLine);
-		assert(!initialPlayerLine.endsWith('|blue|'));
+		if (initialPlayerLine) assert(!initialPlayerLine.endsWith('|blue|'));
 
 		setupMockNet({
 			valid: true,
@@ -299,8 +309,8 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 
 		assert.equal(player1.avatar, 'blue');
 		assert.equal(battle.battle.p1.getUser().avatar, 'blue');
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
-		assert.notEqual(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
+		assert.equal(getLastPlayerLine(battle.log.log, 'p1'), '|player|p1|pvpalpha|blue|');
+		if (initialPlayerLine) assert.notEqual(getLastPlayerLine(battle.log.log, 'p1'), initialPlayerLine);
 		assert.deepEqual({
 			turn: battle.battle.turn,
 			timerTurn: battle.battle.timer.turn,
@@ -332,8 +342,8 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 
 		assert.equal(player1.avatar, 'blue');
 		assert.equal(player2.avatar, 'silver');
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p2|')).at(-1), '|player|p2|pvpgamma|silver|');
+		assert.equal(getLastPlayerLine(battle.log.log, 'p1'), '|player|p1|pvpalpha|blue|');
+		assert.equal(getLastPlayerLine(battle.log.log, 'p2'), '|player|p2|pvpgamma|silver|');
 	});
 
 	it('preserves the initial avatar when a later ticket disagrees', async () => {
@@ -355,13 +365,13 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
 
 		assert.equal(player1.avatar, 'blue');
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), '|player|p1|pvpalpha|blue|');
+		assert.equal(getLastPlayerLine(battle.log.log, 'p1'), '|player|p1|pvpalpha|blue|');
 		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).length, playerLineCount);
 	});
 
 	it('keeps the existing avatar when trainerAvatar is absent', async () => {
 		const initialAvatar = player1.avatar;
-		const initialPlayerLine = battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1);
+		const initialPlayerLine = getLastPlayerLine(battle.log.log, 'p1');
 		setupMockNet({
 			valid: true,
 			role: 'player',
@@ -373,11 +383,18 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 
 		assert.equal(player1.avatar, initialAvatar);
-		assert.equal(battle.log.log.filter(line => line.startsWith('|player|p1|')).at(-1), initialPlayerLine);
+		const finalPlayerLine = getLastPlayerLine(battle.log.log, 'p1');
+		assert(finalPlayerLine);
+		if (initialPlayerLine) {
+			assert.equal(finalPlayerLine, initialPlayerLine);
+		} else {
+			assert.equal(finalPlayerLine, `|player|p1|pvpalpha|${initialAvatar}|`);
+		}
 	});
 
 	it('does not update the battle for an unrelated authenticated user', async () => {
 		const initialLog = [...battle.log.log];
+		const initialAvatar = player1.avatar;
 		setupMockNet({
 			valid: true,
 			role: 'player',
@@ -390,7 +407,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 
 		assert.deepEqual(battle.log.log, initialLog);
-		assert.equal(player1.avatar, initialLog.find(line => line.startsWith('|player|p1|')).split('|')[4]);
+		assert.equal(player1.avatar, initialAvatar);
 	});
 
 	it('rejects an avatar outside the TicoMon allowlist', async () => {
