@@ -45,11 +45,11 @@ jobs:
         run: npm run build
 
       - name: Run TicoMon timer tests
-        run: npx mocha --no-config --file ./test/main.js --timeout 8000 --forbid-only test/server/room-battle-timer.js
+        run: npx mocha --no-config --exit --file ./test/main.js --timeout 8000 --forbid-only test/server/room-battle-timer.js
 
       - name: Run timer and room battle tests
         run: |
-          npx mocha --no-config --file ./test/main.js --timeout 8000 --forbid-only \
+          npx mocha --no-config --exit --file ./test/main.js --timeout 8000 --forbid-only \
             test/server/room-battle-timer.js \
             test/server/room-battle.js
 
