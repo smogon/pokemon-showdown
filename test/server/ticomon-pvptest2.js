@@ -269,7 +269,7 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 
 		assert.equal(player1.avatar, 'blue');
-		assert.equal(battle.battle.p1.avatar, 'blue');
+		assert.equal(battle.battle.p1.getUser().avatar, 'blue');
 	});
 
 	it('keeps distinct validated avatars for p1 and p2', async () => {
