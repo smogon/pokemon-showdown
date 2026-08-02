@@ -1002,7 +1002,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		// This marker is set only by the authenticated TicoMon ticket path.
 		if (
 			connection?.ticomonPvptest2Room === this.roomid ||
-			user.connections.some(connection => connection.ticomonPvptest2Room === this.roomid)
+			user.connections.some(playerConnection => playerConnection.ticomonPvptest2Room === this.roomid)
 		) {
 			this.timer.markTicoMon();
 		}
