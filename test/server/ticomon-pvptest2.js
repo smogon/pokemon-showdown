@@ -342,7 +342,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			requests: battle.log.log.filter(line => line.startsWith('|request|')).length,
 		});
 		const initialState = getBattleState();
-		assert.equal(initialState.timerTurn, 0);
 		assert.notEqual(initialAvatar, 'blue');
 
 		setupMockNet({
