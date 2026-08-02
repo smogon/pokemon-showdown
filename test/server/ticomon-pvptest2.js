@@ -5,8 +5,15 @@ const assert = require('assert').strict;
 const { makeConnection, makeUser, destroyUser } = require('../users-utils');
 
 const PACKED_TEAM = 'Pikachu||||thunderbolt||||||';
+const TEST_TICKET_CONSUME_URL = 'https://ticomon-test.invalid/tickets/consume';
+const TEST_INTERNAL_SERVICE_TOKEN = 'test-service-token';
+const TICKET_AUTH_ENV_KEYS = [
+	'TICOMON_PVPTEST2_TICKET_CONSUME_URL',
+	'TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN',
+];
 let commands;
 let originalNetPost;
+let originalTicketAuthEnv;
 
 function createBattle(first, second) {
 	return Rooms.createBattle({
@@ -23,8 +30,31 @@ function loadCommands() {
 	({ commands } = require('../../dist/server/chat-commands/core'));
 }
 
+function setupTicketAuthEnvironment() {
+	if (!originalTicketAuthEnv) {
+		originalTicketAuthEnv = Object.fromEntries(
+			TICKET_AUTH_ENV_KEYS.map(key => [key, process.env[key]])
+		);
+	}
+	process.env.TICOMON_PVPTEST2_TICKET_CONSUME_URL = TEST_TICKET_CONSUME_URL;
+	process.env.TICOMON_PVPTEST2_INTERNAL_SERVICE_TOKEN = TEST_INTERNAL_SERVICE_TOKEN;
+}
+
+function restoreTicketAuthEnvironment() {
+	if (!originalTicketAuthEnv) return;
+	for (const key of TICKET_AUTH_ENV_KEYS) {
+		if (originalTicketAuthEnv[key] === undefined) {
+			delete process.env[key];
+		} else {
+			process.env[key] = originalTicketAuthEnv[key];
+		}
+	}
+	originalTicketAuthEnv = null;
+}
+
 function setupMockNet(responseData, error) {
 	const { NetRequest } = require('../../dist/lib/net');
+	setupTicketAuthEnvironment();
 	if (!originalNetPost) originalNetPost = NetRequest.prototype.post;
 	NetRequest.prototype.post = async function () {
 		if (error) throw error;
@@ -34,11 +64,13 @@ function setupMockNet(responseData, error) {
 }
 
 function restoreNet() {
-	if (!originalNetPost) return;
-	const { NetRequest } = require('../../dist/lib/net');
-	NetRequest.prototype.post = originalNetPost;
-	originalNetPost = null;
-	loadCommands();
+	if (originalNetPost) {
+		const { NetRequest } = require('../../dist/lib/net');
+		NetRequest.prototype.post = originalNetPost;
+		originalNetPost = null;
+		loadCommands();
+	}
+	restoreTicketAuthEnvironment();
 }
 
 describe('TicoMon pvptest2 visual connections', () => {
