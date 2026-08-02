@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 
 const { makeConnection, makeUser, destroyUser } = require('../users-utils');
+const { Sockets } = require('../../dist/server/sockets');
 
 const PACKED_TEAM = 'Pikachu||||thunderbolt||||||';
 const TEST_TICKET_CONSUME_URL = 'https://ticomon-test.invalid/tickets/consume';
@@ -37,6 +38,21 @@ function getLastVisiblePlayerLine(messages, slot) {
 		.flatMap(message => message.split('\n'))
 		.filter(line => line.startsWith(`|player|${slot}|`))
 		.at(-1);
+}
+
+async function withBattleBroadcastCapture(callback) {
+	const broadcasts = [];
+	const originalChannelBroadcast = Sockets.channelBroadcast;
+	Sockets.channelBroadcast = (roomid, message) => {
+		broadcasts.push(message);
+		return originalChannelBroadcast.call(Sockets, roomid, message);
+	};
+	try {
+		return await callback(broadcasts);
+	} finally {
+		// eslint-disable-next-line require-atomic-updates
+		Sockets.channelBroadcast = originalChannelBroadcast;
+	}
 }
 
 function loadCommands() {
@@ -204,10 +220,8 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	let battle;
 	let conn;
 	let conn2;
-	let conn3;
 	let guest;
 	let guest2;
-	let guest3;
 
 	beforeEach(() => {
 		player1 = makeUser('pvpalpha');
@@ -220,7 +234,6 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 	afterEach(() => {
 		if (conn?.user) conn.destroy();
 		if (conn2?.user) conn2.destroy();
-		if (conn3?.user) conn3.destroy();
 		if (battle) battle.destroy();
 		destroyUser(player1);
 		destroyUser(player2);
@@ -230,10 +243,8 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		battle = null;
 		conn = null;
 		conn2 = null;
-		conn3 = null;
 		guest = null;
 		guest2 = null;
-		guest3 = null;
 		restoreNet();
 	});
 
@@ -319,19 +330,16 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			trainerAvatar: 'blue',
 		});
 
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+		const participantMessages = captureConnectionMessages(conn);
+		await withBattleBroadcastCapture(async broadcasts => {
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+			const visibleMessages = [...participantMessages, ...broadcasts];
+			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
+			if (initialPlayerLine) assert.notEqual(getLastVisiblePlayerLine(visibleMessages, 'p1'), initialPlayerLine);
+		});
 
 		assert.equal(player1.avatar, 'blue');
 		assert.equal(battle.battle.p1.getUser().avatar, 'blue');
-
-		conn2 = makeConnection();
-		guest2 = makeUser('', conn2);
-		setupMockNet({ valid: true, role: 'spectator', roomId: battle.roomid });
-		const visibleMessages = captureConnectionMessages(conn2);
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
-
-		assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
-		if (initialPlayerLine) assert.notEqual(getLastVisiblePlayerLine(visibleMessages, 'p1'), initialPlayerLine);
 		assert.deepEqual({
 			turn: battle.battle.turn,
 			timerTurn: battle.battle.timer.turn,
@@ -352,26 +360,25 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		};
 		setupMockNet(response);
 
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+		const participantMessages = captureConnectionMessages(conn);
+		await withBattleBroadcastCapture(async broadcasts => {
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
 
-		conn2 = makeConnection();
-		guest2 = makeUser('', conn2);
-		response.showdownUserid = 'pvpgamma';
-		response.side = 2;
-		response.trainerAvatar = 'silver';
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+			conn2 = makeConnection();
+			guest2 = makeUser('', conn2);
+			response.showdownUserid = 'pvpgamma';
+			response.side = 2;
+			response.trainerAvatar = 'silver';
+			const participant2Messages = captureConnectionMessages(conn2);
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+
+			const visibleMessages = [...participantMessages, ...participant2Messages, ...broadcasts];
+			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
+			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p2'), '|player|p2|pvpgamma|silver|');
+		});
 
 		assert.equal(player1.avatar, 'blue');
 		assert.equal(player2.avatar, 'silver');
-
-		conn3 = makeConnection();
-		guest3 = makeUser('', conn3);
-		setupMockNet({ valid: true, role: 'spectator', roomId: battle.roomid });
-		const visibleMessages = captureConnectionMessages(conn3);
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest3, conn3);
-
-		assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
-		assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p2'), '|player|p2|pvpgamma|silver|');
 	});
 
 	it('preserves the initial avatar when a later ticket disagrees', async () => {
@@ -385,22 +392,21 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 		};
 		setupMockNet(response);
 
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
-		conn2 = makeConnection();
-		guest2 = makeUser('', conn2);
-		response.trainerAvatar = 'red';
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+		const participantMessages = captureConnectionMessages(conn);
+		await withBattleBroadcastCapture(async broadcasts => {
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+			conn2 = makeConnection();
+			guest2 = makeUser('', conn2);
+			response.trainerAvatar = 'red';
+			const participant2Messages = captureConnectionMessages(conn2);
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
+
+			const visibleMessages = [...participantMessages, ...participant2Messages, ...broadcasts];
+			assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
+			assert.notEqual(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|red|');
+		});
 
 		assert.equal(player1.avatar, 'blue');
-
-		conn3 = makeConnection();
-		guest3 = makeUser('', conn3);
-		setupMockNet({ valid: true, role: 'spectator', roomId: battle.roomid });
-		const visibleMessages = captureConnectionMessages(conn3);
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest3, conn3);
-
-		assert.equal(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|blue|');
-		assert.notEqual(getLastVisiblePlayerLine(visibleMessages, 'p1'), '|player|p1|pvpalpha|silver|');
 	});
 
 	it('keeps the existing avatar when trainerAvatar is absent', async () => {
@@ -413,19 +419,16 @@ describe('TicoMon pvptest2 player auth (role=player)', () => {
 			side: 1,
 		});
 
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+		const participantMessages = captureConnectionMessages(conn);
+		await withBattleBroadcastCapture(async broadcasts => {
+			await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest, conn);
+			const visibleMessages = [...participantMessages, ...broadcasts];
+			const finalPlayerLine = getLastVisiblePlayerLine(visibleMessages, 'p1');
+			assert(finalPlayerLine);
+			assert.equal(finalPlayerLine.split('|')[4], String(initialAvatar));
+		});
 
 		assert.equal(player1.avatar, initialAvatar);
-
-		conn2 = makeConnection();
-		guest2 = makeUser('', conn2);
-		setupMockNet({ valid: true, role: 'spectator', roomId: battle.roomid });
-		const visibleMessages = captureConnectionMessages(conn2);
-		await commands.ticomonauth('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', null, guest2, conn2);
-
-		const finalPlayerLine = getLastVisiblePlayerLine(visibleMessages, 'p1');
-		assert(finalPlayerLine);
-		assert.equal(finalPlayerLine.split('|')[4], String(initialAvatar));
 	});
 
 	it('does not update the battle for an unrelated authenticated user', async () => {
