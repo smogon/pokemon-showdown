@@ -2738,7 +2738,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	// yeet dab xd
 	treasurebag: {
 		shortDesc: "At the end of the turn and when top kek is used, use one Treasure Bag item in the cycle.",
-		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 50 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
+		desc: "At the end of each turn and when top kek is used, one of these effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 50 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
 		name: "Treasure Bag",
 		onStart(target) {
 			this.add('-ability', target, 'Treasure Bag');

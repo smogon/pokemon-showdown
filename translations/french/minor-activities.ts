@@ -13,7 +13,7 @@ export const translations: Translations = {
 		"Invalid time given.": "Temps donné invalide.",
 		"The announcement timer is off.": "Le minuteur de l'annonce n'est pas actif.",
 		"The announcement was ended by ${user.name}.": "L'annonce a été terminée par ${user.name}.",
-		"Accepts the following commands:": "Accepte les commandes suivantes :",
+		"Accepts these commands:": "Accepte les commandes suivantes :",
 
 		"That option is not selected.": "Cette option n'est pas sélectionnée.",
 		"You have already voted for this poll.": "Tu as déjà voté pour ce sondage.",

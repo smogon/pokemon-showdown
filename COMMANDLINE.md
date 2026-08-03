@@ -11,7 +11,7 @@ Install Node.js, clone this repository and run `./build` from inside it. (Window
 
 Every time you update the code here (such as with `git pull`), run `./build` again. (If you get errors, try running `./build --force`.)
 
-Afterwards, you can use any of the following commands:
+Afterwards, you can use any of these commands:
 
 
 Supported commands
