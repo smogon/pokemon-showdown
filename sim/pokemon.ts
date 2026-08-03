@@ -41,7 +41,7 @@ export interface EffectState {
 // Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
 // there are very few non-malicious competitive reasons to do so
 export const RESTORATIVE_BERRIES = new Set([
-	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
+	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
 ] as ID[]);
 
 export class Pokemon {
@@ -263,6 +263,12 @@ export class Pokemon {
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
+	/**
+	 * Hack: Anger Shell, Berserk and Magician should block healing berries until their effect triggers
+	 * unless it is a multi-hit move
+	 */
+	blockHealingBerries: boolean;
+
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
 	duringMove: boolean;
@@ -481,6 +487,7 @@ export class Pokemon {
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];
+		this.blockHealingBerries = false;
 		this.isStarted = false;
 		this.duringMove = false;
 
@@ -921,7 +928,7 @@ export class Pokemon {
 	}
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
-		const damageNumber = (typeof damage === 'number') ? damage : 0;
+		const damageNumber = damage || 0;
 		move = this.battle.dex.moves.get(move);
 		this.attackedBy.push({
 			source,
@@ -1559,6 +1566,7 @@ export class Pokemon {
 
 		this.volatileStaleness = undefined;
 
+		this.blockHealingBerries = false;
 		delete this.abilityState.started;
 		delete this.itemState.started;
 
@@ -1773,6 +1781,7 @@ export class Pokemon {
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
 		if (!this.item) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
+		if (this.blockHealingBerries && RESTORATIVE_BERRIES.has(this.item) && this.item !== 'leppaberry') return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
