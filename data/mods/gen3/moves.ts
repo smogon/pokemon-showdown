@@ -395,14 +395,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	memento: {
 		inherit: true,
 		accuracy: true,
+		onTryMove(source, target, move) {
+			if (target.boosts.atk <= -6 && target.boosts.spa <= -6) {
+				return false;
+			}
+		},
 	},
 	mindreader: {
 		inherit: true,
 		accuracy: 100,
-	},
-	mimic: {
-		inherit: true,
-		flags: { protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1 },
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -540,10 +541,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	rocksmash: {
 		inherit: true,
 		basePower: 20,
-	},
-	sketch: {
-		inherit: true,
-		flags: { bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1, nosketch: 1 },
 	},
 	sleeptalk: {
 		inherit: true,
