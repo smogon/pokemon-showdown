@@ -1172,6 +1172,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				this.constructor.prototype.endTurn.call(this);
 			},
+			// @ts-expect-error Hack
 			getAllActive(includeFainted, includeCommanding) {
 				const pokemonList: Pokemon[] = [];
 				for (const side of this.sides) {

@@ -42,25 +42,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		},
 		// Stadium's fixed boosting function.
-		boostBy(boost) {
-			let changed = false;
-			let i: BoostID;
-			for (i in boost) {
-				let delta = boost[i];
-				if (delta === undefined) continue;
-				this.boosts[i] += delta;
-				if (this.boosts[i] > 6) {
-					delta -= this.boosts[i] - 6;
-					this.boosts[i] = 6;
-				}
-				if (this.boosts[i] < -6) {
-					delta -= this.boosts[i] - (-6);
-					this.boosts[i] = -6;
-				}
-				if (delta) changed = true;
+		boostBy(boosts) {
+			boosts = this.getCappedBoost(boosts);
+			let delta = 0;
+			let boostName: BoostID;
+			for (boostName in boosts) {
+				delta = boosts[boostName]!;
+				this.boosts[boostName] += delta;
 			}
 			this.recalculateStats!();
-			return changed;
+			return delta;
 		},
 		// Remove stat recalculation logic from gen 1
 		clearBoosts() {
@@ -234,7 +225,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
-		tryMoveHit(target, pokemon, move) {
+		tryMoveHit(target: Pokemon, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
 			// First, check if the target is semi-invulnerable
@@ -370,13 +361,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		moveHit(target, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
+		moveHit(target: Pokemon | null, pokemon, moveOrMoveName, hitEffect, isSecondary, isSelf) {
 			let damage: number | false | null | undefined = 0;
 			const move = this.dex.getActiveMove(moveOrMoveName);
 
 			if (!isSecondary && !isSelf) this.battle.setActiveMove(move, pokemon, target);
 			let hitResult: number | boolean = true;
+
+			let moveData = hitEffect as ActiveMove;
 			if (!moveData) moveData = move;
+			if (!moveData.flags) moveData.flags = {};
 
 			if (move.ignoreImmunity === undefined) {
 				move.ignoreImmunity = (move.category === 'Status');

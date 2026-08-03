@@ -1400,7 +1400,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			const move = this.dex.getActiveMove(moveOrMoveName);
 			let hitResult: boolean | number | null = true;
-			const moveData = hitEffect || move;
+			let moveData = hitEffect as ActiveMove;
+			if (!moveData) moveData = move;
 			if (!moveData.flags) moveData.flags = {};
 			if (move.target === 'all' && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);

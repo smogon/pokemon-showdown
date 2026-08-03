@@ -4,6 +4,10 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
+type MethodsOf<T> = {
+	[K in keyof T as NonNullable<T[K]> extends (...args: any[]) => any ? K : never]: T[K];
+};
+
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type BattleActions = import('./battle-actions').BattleActions;
@@ -158,257 +162,54 @@ interface BattleScriptsData {
 	gen: number;
 }
 
-interface ModdedBattleActions {
-	inherit?: true;
-	afterMoveSecondaryEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	applyRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move, pokemon: Pokemon) => number | null;
-	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
-	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
-	forceSwitch?: (
-		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
-		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	) => SpreadMoveDamage;
-	getActiveMaxMove?: (this: BattleActions, move: Move, pokemon: Pokemon) => ActiveMove;
-	getActiveZMove?: (this: BattleActions, move: Move, pokemon: Pokemon) => ActiveMove;
-	getMaxMove?: (this: BattleActions, move: Move, pokemon: Pokemon) => Move | undefined;
-	getSpreadDamage?: (
-		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
-		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	) => SpreadMoveDamage;
-	getZMove?: (this: BattleActions, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | true | undefined;
-	hitStepAccuracy?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[];
-	hitStepBreakProtect?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	hitStepMoveHitLoop?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => SpreadMoveDamage;
-	hitStepTryImmunity?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[];
-	hitStepStealBoosts?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	hitStepTryHitEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (boolean | '')[];
-	hitStepInvulnerabilityEvent?: (
-		this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove
-	) => boolean[];
-	hitStepTypeImmunity?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[];
-	moveHit?: (
-		this: BattleActions, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	) => number | undefined | false;
-	runAction?: (this: BattleActions, action: Action) => void;
-	runMegaEvo?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMove?: (
-		this: BattleActions, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, options?: {
-			sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
-			maxMove?: string, originalTarget?: Pokemon,
-		}
-	) => void;
-	runMoveEffects?: (
-		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
-		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	) => SpreadMoveDamage;
-	runSwitch?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runZPower?: (this: BattleActions, move: ActiveMove, pokemon: Pokemon) => void;
-	secondaries?: (
-		this: BattleActions, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSelf?: boolean
-	) => void;
-	selfDrops?: (
-		this: BattleActions, targets: SpreadMoveTargets, source: Pokemon,
-		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
-	) => void;
-	spreadMoveHit?: (
-		this: BattleActions, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
-		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	) => [SpreadMoveDamage, SpreadMoveTargets];
-	switchIn?: (
-		this: BattleActions, pokemon: Pokemon, pos: number, sourceEffect: Effect | null, isDrag?: boolean
-	) => boolean | "pursuitfaint";
-	targetTypeChoices?: (this: BattleActions, targetType: string) => boolean;
-	terastallize?: (this: BattleActions, pokemon: Pokemon) => void;
-	tryMoveHit?: (
-		this: BattleActions, target: Pokemon, pokemon: Pokemon, move: ActiveMove
-	) => number | undefined | false | '';
-	tryPrimaryHitEvent?: (
-		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon,
-		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
-	) => SpreadMoveDamage;
-	trySpreadMoveHit?: (
-		this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean
-	) => boolean;
-	useMove?: (
-		this: BattleActions, move: Move, pokemon: Pokemon, options?: {
-			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string,
-		}
-	) => boolean;
-	useMoveInner?: (
-		this: BattleActions, move: Move, pokemon: Pokemon, options?: {
-			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string,
-		}
-	) => boolean;
-	getDamage?: (
-		this: BattleActions, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean
-	) => number | undefined | null | false;
-	modifyDamage?: (
-		this: BattleActions, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean
-	) => void;
-
-	// oms
-	mutateOriginalSpecies?: (this: BattleActions, species: Species, deltas: AnyObject) => Species;
-	getFormeChangeDeltas?: (this: BattleActions, formeChangeSpecies: Species, pokemon?: Pokemon) => AnyObject;
-	getMixedSpecies?: (this: BattleActions, originalName: string, megaName: string, pokemon?: Pokemon) => Species;
-}
-
-interface ModdedBattleSide {
-	inherit?: true;
-	addSideCondition?: (
-		this: Side, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
-	) => boolean;
-	allies?: (this: Side, all?: boolean) => Pokemon[];
-	canDynamaxNow?: (this: Side) => boolean;
-	chooseSwitch?: (this: Side, slotText?: string) => any;
-	getChoice?: (this: Side) => string;
-	getRequestData?: (this: Side, forAlly?: boolean) => { name: string, id: ID, pokemon: AnyObject[] };
-}
-
-interface ModdedBattlePokemon {
-	inherit?: true;
-	lostItemForDelibird?: Item | null;
-	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
-	clearBoosts?: (this: Pokemon) => void;
-	clearVolatile?: (this: Pokemon, includeSwitchFlags?: boolean) => void;
-	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
-	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
-	deductPP?: (
-		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
-	) => number;
-	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
-	formeChange?: (
-		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
-		message?: string,
-	) => boolean;
-	hasType?: (this: Pokemon, type: string | string[]) => boolean;
-	getAbility?: (this: Pokemon) => Ability;
-	getActionSpeed?: (this: Pokemon) => number;
-	getItem?: (this: Pokemon) => Item;
-	getMoveRequestData?: (this: Pokemon) => {
-		moves: { move: string, id: ID, target?: string, disabled?: boolean }[],
-		maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean,
-		canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions,
-	};
-	getMoves?: (this: Pokemon, lockedMove?: string | null, restrictData?: boolean) => {
-		move: string, id: string, disabled?: string | boolean, disabledSource?: string,
-		target?: string, pp?: number, maxpp?: number,
-	}[];
-	getMoveTargets?: (this: Pokemon, move: ActiveMove, target: Pokemon) => {
-		targets: Pokemon[], pressureTargets: Pokemon[],
-	};
-	getStat?: (
-		this: Pokemon, statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
-	) => number;
-	getTypes?: (this: Pokemon, excludeAdded?: boolean, preterastallized?: boolean) => string[];
-	getWeight?: (this: Pokemon) => number;
-	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean;
-	hasItem?: (this: Pokemon, item: string | string[]) => boolean;
-	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null;
-	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
-	moveUsed?: (this: Pokemon, move: ActiveMove, targetLoc?: number) => void;
-	recalculateStats?: (this: Pokemon) => void;
-	runEffectiveness?: (this: Pokemon, move: ActiveMove) => number;
-	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: string | boolean) => boolean;
-	setAbility?: (
-		this: Pokemon, ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
-		isFromFormeChange?: boolean, isTransform?: boolean
-	) => ID | false | null;
-	setItem?: (this: Pokemon, item: string | Item, source?: Pokemon, effect?: Effect) => boolean;
-	setStatus?: (
-		this: Pokemon, status: string | Condition, source: Pokemon | null,
-		sourceEffect: Effect | null, ignoreImmunities: boolean
-	) => boolean;
-	takeItem?: (this: Pokemon, source: Pokemon | undefined) => boolean | Item;
-	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean;
-	useItem?: (this: Pokemon, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	ignoringAbility?: (this: Pokemon) => boolean;
-	ignoringItem?: (this: Pokemon) => boolean;
+type ModdedBattleActions = Partial<MethodsOf<BattleActions>> & {
+	inherit?: true,
 
 	// OM
-	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => [ActiveMove, ActiveMove] | [];
-	hasLinkedMove?: (this: Pokemon, move: ActiveMove) => boolean;
-	getIsMoveLocked?: (this: Pokemon) => boolean;
-	getWillLockMove?: (this: Pokemon) => boolean;
-	getCanLinkMove?: (this: Pokemon, move: ActiveMove) => boolean;
+	mutateOriginalSpecies?: (species: Species, deltas: AnyObject) => Species,
+	getFormeChangeDeltas?: (formeChangeSpecies: Species, pokemon?: Pokemon) => AnyObject,
+	getMixedSpecies?: (originalName: string, megaName: string, pokemon?: Pokemon) => Species,
+} & ThisType<BattleActions>;
+
+type ModdedBattleSide = Partial<MethodsOf<Side>> & {
+	inherit?: true,
+} & ThisType<Side>;
+
+type ModdedBattlePokemon = Partial<MethodsOf<Pokemon>> & {
+	inherit?: true,
+
+	// OM
+	lostItemForDelibird?: Item | null,
+	getLinkedMoves?: (this: Pokemon, ignoreDisabled?: boolean) => [ActiveMove, ActiveMove] | [],
+	hasLinkedMove?: (this: Pokemon, move: ActiveMove) => boolean,
+	getIsMoveLocked?: (this: Pokemon) => boolean,
+	getWillLockMove?: (this: Pokemon) => boolean,
+	getCanLinkMove?: (this: Pokemon, move: ActiveMove) => boolean,
 	queryLinkMove?: (
 		this: Pokemon, move: ActiveMove, ignoreDisabled?: boolean
-	) => { linkIndex: number, linkedMoves: [ActiveMove, ActiveMove] };
-}
+	) => { linkIndex: number, linkedMoves: [ActiveMove, ActiveMove] },
+} & ThisType<Pokemon>;
 
-interface ModdedBattleQueue extends Partial<BattleQueue> {
-	inherit?: true;
-	resolveAction?: (this: BattleQueue, action: ActionChoice, midTurn?: boolean) => Action[];
-}
+type ModdedBattleQueue = Partial<MethodsOf<BattleQueue>> & {
+	inherit?: true,
+} & ThisType<BattleQueue>;
 
-interface ModdedField extends Partial<Field> {
-	inherit?: true;
-	suppressingWeather?: (this: Field) => boolean;
-	addPseudoWeather?: (
-		this: Field, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
-	) => boolean;
-	setWeather?: (
-		this: Field, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
-	) => boolean | null;
-	setTerrain?: (
-		this: Field, status: string | Effect, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
-	) => boolean;
-}
+type ModdedField = Partial<MethodsOf<Field>> & {
+	inherit?: true,
+} & ThisType<Field>;
 
-interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
-	inherit?: string;
-	actions?: ModdedBattleActions;
-	pokemon?: ModdedBattlePokemon;
-	queue?: ModdedBattleQueue;
-	field?: ModdedField;
-	side?: ModdedBattleSide;
-	boost?: (
-		this: Battle, boost: SparseBoostsTable, target: Pokemon, source?: Pokemon | null,
-		effect?: Effect | null, isSecondary?: boolean, isSelf?: boolean
-	) => boolean | null | 0;
-	debug?: (this: Battle, activity: string) => void;
-	getActionSpeed?: (this: Battle, action: AnyObject) => void;
-	init?: (this: ModdedDex) => void;
-	maybeTriggerEndlessBattleClause?: (
-		this: Battle, trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
-	) => boolean | undefined;
-	endTurn?: (this: Battle) => void;
-	runAction?: (this: Battle, action: Action) => void;
-	statModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet, statName: StatID) => number;
-	start?: (this: Battle) => void;
-	runPickTeam?: () => void;
-	suppressingWeather?: (this: Battle) => boolean;
-	trunc?: (n: number) => number;
-	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
-	faintMessages?: (this: Battle, lastFirst?: boolean, forceCheck?: boolean, checkWin?: boolean) => boolean | undefined;
-	tiebreak?: (this: Battle) => boolean;
-	calculatePP?: (this: Battle, move: Move, ppUps?: number) => number;
-	checkMoveMakesContact?: (
-		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
-	) => boolean;
-	checkMoveBypassesProtect?: (
-		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus?: boolean
-	) => boolean;
-	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
-	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
-	getAllActive?: (this: Battle, includeFainted?: boolean, includeCommanding?: boolean) => Pokemon[];
-	getTarget?: (
-		this: Battle, pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon
-	) => Pokemon | null;
+type ModdedBattleScriptsData = Partial<BattleScriptsData> & Partial<MethodsOf<Battle>> & {
+	inherit?: string,
+	init?: (this: ModdedDex) => void,
+	actions?: ModdedBattleActions,
+	pokemon?: ModdedBattlePokemon,
+	queue?: ModdedBattleQueue,
+	field?: ModdedField,
+	side?: ModdedBattleSide,
 
 	// OM
-	resolveTargetLoc?: (this: Battle, targetLoc: number, action: Action, move: ActiveMove) => number;
-}
+	resolveTargetLoc?: (targetLoc: number, action: Action, move: ActiveMove) => number,
+} & ThisType<Battle>;
 
 type TypeInfo = import('./dex-data').TypeInfo;
 
