@@ -4654,7 +4654,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		hasSheerForceBoost: true,
+		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Electric",
 	},
@@ -9426,11 +9426,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onAfterHit(target, source) {
-			this.field.clearTerrain();
-		},
-		onAfterSubDamage(damage, target, source) {
-			if (source.hp) {
+		onAfterMoveSecondaryLast(target, source) {
+			if (source.hp && !source.forceSwitchFlag) {
 				this.field.clearTerrain();
 			}
 		},
@@ -13049,7 +13046,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1 },
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondaryLast(target, pokemon) {
 			if (!pokemon.volatiles['commanded']) return;
 			const tatsugiri = pokemon.volatiles['commanded'].source;
 			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
@@ -13065,7 +13062,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			}
 		},
-		hasSheerForceBoost: true,
+		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Dragon",
 	},
