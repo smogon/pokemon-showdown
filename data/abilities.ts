@@ -2472,10 +2472,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.speedSort(hitTargets);
 			for (const pokemon of hitTargets) {
 				if (pokemon !== source) {
+					const yourItemState = target.itemState;
 					const yourItem = pokemon.takeItem(source);
 					if (!yourItem) continue;
 					if (!source.setItem(yourItem)) {
 						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+						pokemon.itemState = yourItemState;
 						continue;
 					}
 					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
