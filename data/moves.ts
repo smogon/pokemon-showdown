@@ -9509,7 +9509,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (moveSlot.id === 'struggle') continue;
 					pokemon.disableMove(moveSlot.id, true);
 				}
-				pokemon.maybeDisabled = true;
+				pokemon.maybeDisabled = !pokemon.volatiles['dynamax'];
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove(attacker, defender, move) {
