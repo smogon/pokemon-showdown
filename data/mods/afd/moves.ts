@@ -395,7 +395,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	headsmash: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, heal: 1 },
+		flags: { inherit: true, heal: 1 },
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {

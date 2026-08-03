@@ -1023,7 +1023,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	purify: {
 		inherit: true,
 		pp: 10,
-		flags: { reflectable: 1, heal: 1, metronome: 1 },
+		flags: { inherit: true, protect: 0 },
 		onHit(target, source) {
 			const foe = source.side.foe.active[0];
 			if (foe && !foe.fainted && foe.status) {
@@ -1717,6 +1717,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	superfang: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
+		flags: { inherit: true, bite: 1 },
 	},
 };

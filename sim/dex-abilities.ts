@@ -24,9 +24,14 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 	name: string;
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
+type ModdedAbilityFlags = AbilityFlags | ({
+	[K in keyof AbilityFlags]?: 0 | 1;
+} & { inherit: true });
+
+export type ModdedAbilityData = AbilityData | Partial<Omit<AbilityData, 'condition' | 'flags' | 'name'>> & {
 	inherit: true,
 	condition?: ModdedConditionData,
+	flags?: ModdedAbilityFlags,
 };
 export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
 export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
@@ -46,7 +51,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
-		this.flags = data.flags || {};
+		this.flags = Object.fromEntries(Object.entries(data.flags || {}).filter(([, v]) => v).map(([f]) => [f, 1]));
 		this.rating = data.rating || 0;
 
 		if (!this.gen) {

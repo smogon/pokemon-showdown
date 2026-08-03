@@ -5,11 +5,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	assist: {
 		inherit: true,
-		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	copycat: {
 		inherit: true,
-		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	darkvoid: {
 		inherit: true,
@@ -47,7 +47,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	heavyslam: {
 		inherit: true,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { inherit: true, minimize: 0 },
 	},
 	leechlife: {
 		inherit: true,
@@ -56,11 +56,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: { protect: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	metronome: {
 		inherit: true,
-		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	mistyterrain: {
 		inherit: true,
@@ -75,7 +75,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: { nosleeptalk: 1, noassist: 1, failcopycat: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -89,7 +89,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	phantomforce: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1, minimize: 1 },
+		flags: { inherit: true, minimize: 1 },
 	},
 	powder: {
 		inherit: true,
@@ -100,11 +100,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	rockblast: {
 		inherit: true,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { inherit: true, bullet: 0 },
 	},
 	shadowforce: {
 		inherit: true,
-		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1, minimize: 1 },
+		flags: { inherit: true, minimize: 1 },
 	},
 	sheercold: {
 		inherit: true,
@@ -112,7 +112,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: { nosleeptalk: 1, noassist: 1, failcopycat: 1 },
+		flags: { inherit: true, failencore: 0 },
 	},
 	stockpile: {
 		inherit: true,
