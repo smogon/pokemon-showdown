@@ -3439,7 +3439,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	barbaraclemega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	skrelp: {
 		isNonstandard: "Past",
