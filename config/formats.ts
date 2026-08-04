@@ -3498,7 +3498,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Arcanine-Base', 'Arctozolt', 'Ariados', 'Ceruledge', 'Crabominable-Base', 'Crawdaunt', 'Cyclizar', 'Dachsbun', 'Decidueye-Base', 'Donphan',
+			'Arcanine-Base', 'Arctozolt', 'Ariados', 'Bibarel', 'Ceruledge', 'Crabominable-Base', 'Cyclizar', 'Dachsbun', 'Decidueye-Base', 'Donphan',
 			'Dragalge-Base', 'Espeon', 'Exeggutor-Base', 'Feraligatr-Base', 'Gardevoir-Base', 'Garganacl', 'Glalie-Base', 'Grafaiai', 'Kecleon', 'Kingler',
 			'Mabosstiff', 'Mandibuzz', 'Munkidori', 'Obstagoon', 'Omastar', 'Parasect', 'Politoed', 'Swanna', 'Tentacruel', 'Trevenant', 'Ursaring',
 			'Vikavolt-Base', 'Wigglytuff', 'Wormadam-Trash', 'Yanmega', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
