@@ -1557,4 +1557,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	arceuswater: {
 	},
+	arceusunknown: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+	},
 };
