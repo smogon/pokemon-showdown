@@ -11,15 +11,13 @@ describe('Technician', () => {
 	});
 
 	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', () => {
-		battle = common.gen(7).createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Toxtricity', ability: 'technician', moves: ['shockwave'] },
 			{ species: 'Charjabug', ability: 'battery', moves: ['sleeptalk'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Marshadow', ability: 'technician', moves: ['sleeptalk'] },
 			{ species: 'Mew', ability: 'synchronize', moves: ['sleeptalk'] },
-		] });
+		]]);
 		battle.makeChoices('move shockwave 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		const mew = battle.p2.active[1];
 		const damage = mew.maxhp - mew.hp;

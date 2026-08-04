@@ -11,10 +11,11 @@ describe("Accuracy", () => {
 	});
 
 	it(`should round half down when applying a modifier`, () => {
-		battle = common.createBattle([
-			[{ species: 'Butterfree', ability: 'compoundeyes', moves: ['sleeppowder'] }],
-			[{ species: 'Beldum', moves: ['poltergeist'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Butterfree', ability: 'compoundeyes', moves: ['sleeppowder'] },
+		], [
+			{ species: 'Beldum', moves: ['poltergeist'] },
+		]]);
 
 		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 98, 'CompoundEyes Sleep Powder should be 98% accurate');
@@ -22,10 +23,11 @@ describe("Accuracy", () => {
 
 		battle.makeChoices();
 
-		battle = common.createBattle([
-			[{ species: 'Butterfree', ability: 'victorystar', moves: ['fireblast'] }],
-			[{ species: 'Regirock', moves: ['sleeptalk'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Butterfree', ability: 'victorystar', moves: ['fireblast'] },
+		], [
+			{ species: 'Regirock', moves: ['sleeptalk'] },
+		]]);
 
 		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 94, 'Victory Star Fire Blast should be 94% accurate');
@@ -33,10 +35,11 @@ describe("Accuracy", () => {
 
 		battle.makeChoices();
 
-		battle = common.createBattle([
-			[{ species: 'Butterfree', item: 'widelens', moves: ['fireblast'] }],
-			[{ species: 'Regirock', moves: ['sleeptalk'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Butterfree', item: 'widelens', moves: ['fireblast'] },
+		], [
+			{ species: 'Regirock', moves: ['sleeptalk'] },
+		]]);
 
 		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 93, 'Wide Lens Fire Blast should be 93% accurate');

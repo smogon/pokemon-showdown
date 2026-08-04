@@ -87,13 +87,17 @@ export class LadderTracker {
 
 		this.deadline = date;
 		if (this.final) clearTimeout(this.final);
+		const timeDiff = (+this.deadline - Date.now()) - 500;
+		if (timeDiff >= Number.MAX_SAFE_INTEGER) {
+			throw new Chat.ErrorMessage("Deadline is too far away. Please wait and set it later.");
+		}
 		// We set the timer to fire slightly before the deadline and then
 		// repeatedly do process.nextTick checks for accuracy
 		this.final = setTimeout(() => {
 			this.stop();
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			this.captureFinalLeaderboard();
-		}, (+this.deadline - Date.now()) - 500);
+		}, timeDiff);
 
 		if (save) LadderTracker.save();
 	}
@@ -116,8 +120,7 @@ export class LadderTracker {
 		const [rating, rmsg] = this.getRating(battle);
 		if (!this.tracking(battle, rating) || (skipid && skipid >= roomid)) return;
 
-		const style = (p: string) => this.stylePlayer(p);
-		const msg = `Battle started between ${style(battle.p1.name)} and ${style(battle.p2.name)}`;
+		const msg = Utils.html`Battle started between <username>${battle.p1.name}</username> and <username>${battle.p2.name}</username>`;
 		this.addHTML(`<a href="/${roomid}" class="ilink">${msg}. ${rmsg}</a></div>`, true);
 		if (!this.lastid || this.lastid < roomid) this.lastid = roomid;
 	}
@@ -159,10 +162,6 @@ export class LadderTracker {
 	averageRating(a: number, b: number): [number, string] {
 		const rating = Math.round((a + b) / 2);
 		return [rating, `(avg rating: ${rating})`];
-	}
-
-	stylePlayer(player: string) {
-		return `<username>${player}</username>`;
 	}
 
 	tracking(battle: Rooms.RoomBattle, rating: number) {

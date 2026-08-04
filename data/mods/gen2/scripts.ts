@@ -125,8 +125,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.lastDamage = 0;
-			let lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
+			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (!lockedMove) {
 				if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
 					this.battle.add('cant', pokemon, 'nopp', move);
@@ -273,7 +272,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (pokemon.status === 'slp' && !isSleepUsable) break;
 					move.hit = i + 1;
-					if (move.hit === hits) move.lastHit = true;
+					move.lastHit = move.hit === hits;
 					moveDamage = this.moveHit(target, pokemon, move);
 					if (moveDamage === false) break;
 					if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
@@ -296,8 +295,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
-			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
+			if (move.totalDamage) {
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 			return damage;
 		},
@@ -639,8 +638,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (attack >= 1024 || defense >= 1024) {
 					this.battle.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
 				}
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
+				defense = this.battle.clampIntRange(this.battle.trunc(Math.floor(defense / 4), 8), 1);
 			}
 
 			// Self destruct moves halve defense at this point.

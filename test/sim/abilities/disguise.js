@@ -19,7 +19,7 @@ describe('Disguise', () => {
 	});
 
 	it('should only block damage from the first hit of a move', () => {
-		battle = common.gen(7).createBattle([[
+		battle = common.createBattle([[
 			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
 			{ species: 'Beedrill', ability: 'swarm', moves: ['twineedle'] },
@@ -28,7 +28,7 @@ describe('Disguise', () => {
 	});
 
 	it(`should bust Disguise on self-hit confusion`, () => {
-		battle = common.gen(7).createBattle({ forceRandomChance: true }, [[
+		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
 			{ species: 'Sableye', ability: 'prankster', moves: ['confuseray'] },

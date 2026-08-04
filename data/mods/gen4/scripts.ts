@@ -1,7 +1,18 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
-
+	pokemon: {
+		inherit: true,
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
+				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
+			if (trickRoomCheck) {
+				speed = -speed;
+			}
+			return speed;
+		},
+	},
 	actions: {
 		inherit: true,
 		runSwitch(pokemon) {
@@ -12,6 +23,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.gen <= 2) {
 				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (this.battle.gen === 1) {
+					pokemon.side.lastSelectedMoveSlot = 0;
+					for (const poke of pokemon.foes()) {
+						if (poke.volatiles['partialtrappinglock'] && poke.moveSlots[poke.side.lastSelectedMoveSlot].id === 'metronome') {
+							// this is not done for Mirror Move, potentially resulting in a desync
+							poke.side.lastSelectedMove = 'metronome' as ID;
+							poke.side.lastEnemySelectedMove = 'metronome' as ID;
+							if (this.battle.queue.willMove(poke)) {
+								this.battle.queue.changeAction(poke, { choice: 'move', poke, moveid: 'metronome' });
+							}
+						}
+					}
+				}
 				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
 					this.battle.runEvent('AfterSwitchInSelf', pokemon);
 				}
@@ -53,7 +77,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Weather
-			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 			baseDamage += 2;
 
@@ -178,8 +202,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
+		applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+			let recoilDamage = 0;
+			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
+			else if (move.mindBlownRecoil || move.chloroblastRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
+			else if (move.recoil) {
+				recoilDamage = this.battle.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+			} else return null;
+
+			if (move.struggleRecoil) {
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
+			} else {
+				const effect = move.mindBlownRecoil ? this.dex.conditions.get(move.name) : 'recoil';
+				this.battle.damage(recoilDamage, pokemon, pokemon, effect);
+			}
+			return recoilDamage;
 		},
 	},
 };

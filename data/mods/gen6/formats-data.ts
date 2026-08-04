@@ -1646,7 +1646,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "(DUU)",
 	},
 	latiasmega: {
-		tier: "(OU)",
+		tier: "OU",
 		doublesTier: "(DUU)",
 	},
 	latios: {

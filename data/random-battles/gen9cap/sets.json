@@ -60,7 +60,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Earth Power", "Encore", "Rapid Spin", "Sludge Bomb", "Spikes", "Stealth Rock", "Tailwind", "Toxic Spikes", "U-turn"],
                 "abilities": ["Frisk", "Persistent"],
                 "teraTypes": ["Flying", "Steel"]
@@ -431,6 +431,12 @@
                 "movepool": ["Liquidation", "Recover", "Spiky Shield", "Toxic"],
                 "abilities": ["Poison Heal"],
                 "teraTypes": ["Electric", "Ground"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Facade", "Liquidation", "Rapid Spin", "Spiky Shield", "Swords Dance"],
+                "abilities": ["Poison Heal"],
+                "teraTypes": ["Normal"]
             }
         ]
     },
@@ -525,7 +531,7 @@
         ]
     },
     "saharaja": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -548,7 +554,7 @@
         ]
     },
     "hemogoblin": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -617,6 +623,23 @@
                 "movepool": ["Blizzard", "Inferno", "Polar Flare", "Thunder"],
                 "abilities": ["No Guard"],
                 "teraTypes": ["Electric", "Flying", "Water"]
+            }
+        ]
+    },
+    "obliteryx": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Beak Blast", "Darkest Lariat", "Encore", "Roost", "Sucker Punch"],
+                "abilities": ["Opportunist"],
+                "teraTypes": ["Fire", "Steel"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Beak Blast", "Body Press", "Knock Off", "Roost", "Stealth Rock"],
+                "abilities": ["Analytic"],
+                "teraTypes": ["Fire", "Steel"]
             }
         ]
     }

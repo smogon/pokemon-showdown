@@ -704,7 +704,7 @@ export const commands: Chat.ChatCommands = {
 						details["Pre-Evolution"] = pokemon.prevo;
 					}
 					if (!evos.length) {
-						details[`<font color="#686868">Does Not Evolve</font>`] = "";
+						details[`<span class="gray">Does Not Evolve</span>`] = "";
 					} else {
 						details["Evolution"] = evos.join(", ");
 					}
@@ -744,17 +744,18 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataMoveHTML(move)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod.startsWith('champions'))}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
-						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
 					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
-					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
+					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
+						details["&#10003; Boosted by Sheer Force"] = "";
+					}
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
 					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
@@ -857,6 +858,9 @@ export const commands: Chat.ChatCommands = {
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
+					if (ability.isNonstandard) {
+						details[`Unobtainable in Gen ${dex.gen}`] = "";
+					}
 				}
 				break;
 			default:
@@ -865,7 +869,7 @@ export const commands: Chat.ChatCommands = {
 
 			if (showDetails) {
 				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
-					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+					value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
 		}
@@ -2128,7 +2132,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	faq(target, room, user) {
-		target = toID(target);
+		target = toID(this.splitOne(target)[0]);
 		const showAll = target === 'all';
 		if (showAll && this.shouldBroadcast()) {
 			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);

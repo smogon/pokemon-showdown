@@ -1841,7 +1841,7 @@ export const commands: Chat.ChatCommands = {
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(publicReason ? `: ${publicReason}` : ``)}`);
 		} else {
 			forceRenameMessage = `was forced to choose a new name by ${user.name} while offline${(publicReason ? `: ${publicReason}` : ``)}`;
-			this.globalModlog('FORCERENAME OFFLINE', targetUser, privateReason);
+			this.globalModlog('FORCERENAME OFFLINE', targetID, privateReason);
 		}
 		Monitor.forceRenames.set(targetID, false);
 

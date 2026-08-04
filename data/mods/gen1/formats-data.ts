@@ -177,7 +177,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	poliwag: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	poliwhirl: {
 		tier: "NU",
@@ -402,7 +402,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	jolteon: {
-		tier: "OU",
+		tier: "UU",
 	},
 	flareon: {
 		tier: "ZU",

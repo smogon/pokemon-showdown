@@ -10,7 +10,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (item === 'ironball' || (this.volatiles['item:ironball'] && !this.ignoringItem())) return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-			if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
+			if (this.hasAbility(['levitate', 'eelevate']) && !this.battle.suppressingAbility(this)) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
 			if (item === 'airballoon' || (this.volatiles['item:airballoon'] && !this.ignoringItem())) return false;
@@ -166,12 +166,14 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.volatiles[effect].inSlot = 'Ability';
 				} else {
 					this.m.scrambled.moves.push({ thing: ability.id, inSlot: 'Ability' });
-					const move = Dex.moves.get(ability.id);
+					const move = this.battle.dex.moves.get(ability.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.battle.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: move.target,
 						disabled: false,
 						used: false,
@@ -179,6 +181,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (!isTransform) {
 						this.baseMoveSlots.push(newMove);
 						this.moveSlots.push(newMove);
+						this.ppUps.push(ppUps);
 					}
 				}
 			}
@@ -321,18 +324,21 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.volatiles[abileffect].inSlot = 'Item';
 				} else {
 					this.m.scrambled.moves.push({ thing: item.id, inSlot: 'Item' });
-					const move = Dex.moves.get(item.id);
+					const move = this.battle.dex.moves.get(item.id);
+					const ppUps = move.noPPBoosts ? 0 : 3;
+					const basePP = this.battle.calculatePP(move, ppUps);
 					const newMove = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp: basePP,
+						maxpp: basePP,
 						target: move.target,
 						disabled: false,
 						used: false,
 					};
 					this.baseMoveSlots.push(newMove);
 					this.moveSlots.push(newMove);
+					this.ppUps.push(ppUps);
 				}
 			}
 			return true;
@@ -352,13 +358,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			// 	return false;
 			// }
 			if (
-				this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name)) &&
-				(force || this.battle.runEvent('TryEatItem', this, null, null, Dex.items.get(item.name)))
+				this.battle.runEvent('UseItem', this, null, null, this.battle.dex.items.get(item.name)) &&
+				(force || this.battle.runEvent('TryEatItem', this, null, null, this.battle.dex.items.get(item.name)))
 			) {
-				this.battle.add('-enditem', this, Dex.items.get(item.name), '[eat]');
+				this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), '[eat]');
 
-				this.battle.singleEvent('Eat', Dex.items.get(item.name), this.itemState, this, source, sourceEffect);
-				this.battle.runEvent('EatItem', this, source, sourceEffect, Dex.items.get(item.name));
+				this.battle.singleEvent('Eat', this.battle.dex.items.get(item.name), this.itemState, this, source, sourceEffect);
+				this.battle.runEvent('EatItem', this, source, sourceEffect, this.battle.dex.items.get(item.name));
 
 				if (RESTORATIVE_BERRIES.has(item.id)) {
 					switch (this.pendingStaleness) {
@@ -387,7 +393,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.clearEffectState(this.itemState);
 				this.usedItemThisTurn = true;
 				this.ateBerry = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, Dex.items.get(item.name));
+				this.battle.runEvent('AfterUseItem', this, null, null, this.battle.dex.items.get(item.name));
 				return true;
 			}
 			return false;
@@ -406,24 +412,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
 			// 	return false;
 			// }
-			if (this.battle.runEvent('UseItem', this, null, null, Dex.items.get(item.name))) {
+			if (this.battle.runEvent('UseItem', this, null, null, this.battle.dex.items.get(item.name))) {
 				switch (item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, Dex.items.get(item.name), `[of] ${source}`);
+					this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), `[of] ${source}`);
 					break;
 				default:
 					if (item.isGem) {
-						this.battle.add('-enditem', this, Dex.items.get(item.name), '[from] gem');
+						this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), '[from] gem');
 					} else {
-						this.battle.add('-enditem', this, Dex.items.get(item.name));
+						this.battle.add('-enditem', this, this.battle.dex.items.get(item.name));
 					}
 					break;
 				}
 				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, Dex.items.get(item.name));
+					this.battle.boost(item.boosts, this, source, this.battle.dex.items.get(item.name));
 				}
 
-				this.battle.singleEvent('Use', Dex.items.get(item.name), this.itemState, this, source, sourceEffect);
+				this.battle.singleEvent('Use', this.battle.dex.items.get(item.name), this.itemState, this, source, sourceEffect);
 
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
@@ -483,16 +489,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			this.timesAttacked = pokemon.timesAttacked;
-			for (const moveSlot of pokemon.moveSlots) {
+			for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 				let moveName = moveSlot.move;
 				if (moveSlot.id === 'hiddenpower') {
 					moveName = 'Hidden Power ' + this.hpType;
 				}
+				const move = this.battle.dex.moves.get(moveSlot.id);
 				this.moveSlots.push({
 					move: moveName,
 					id: moveSlot.id,
-					pp: moveSlot.maxpp === 1 ? 1 : 5,
-					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+					pp: Math.min(5, move.pp),
+					maxpp: this.battle.gen >= 5 ? Math.min(5, move.pp) : moveSlot.maxpp,
 					target: moveSlot.target,
 					disabled: false,
 					used: false,
