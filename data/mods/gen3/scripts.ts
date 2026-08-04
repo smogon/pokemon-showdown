@@ -173,7 +173,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 
-			if (!sourceEffect || sourceEffect.id === 'pursuit') {
+			const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
+			if (!sourceEffect || callerMoveForPressure) {
 				let extraPP = 0;
 				for (const source of pressureTargets) {
 					const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
@@ -182,7 +183,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (extraPP > 0) {
-					pokemon.deductPP(move, extraPP);
+					pokemon.deductPP(callerMoveForPressure || move, extraPP);
 				}
 			}
 
