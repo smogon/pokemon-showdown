@@ -73,6 +73,7 @@ export class BattleActions {
 		const unfaintedActive = oldActive?.hp ? oldActive : null;
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
+			this.battle.add('preswitch', oldActive, oldActive.getFullDetails);
 			let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
 			if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
