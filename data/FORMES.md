@@ -49,7 +49,7 @@ These include:
 
 Cosmetic formes are not listed in the `otherFormes` array, only in the `cosmeticFormes` array.
 
-`{name: "Gastrodon", baseForme: "West", cosmeticFormes: ["gastodoneast"]}`
+`{name: "Gastrodon", baseForme: "West", cosmeticFormes: ["gastrodoneast"]}`
 
 You will still be able to get a data entry for a cosmetic forme with `Dex.species.get` as normal, though, such as `Dex.species.get('gastrodon-east')`:
 
