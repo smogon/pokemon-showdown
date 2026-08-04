@@ -35,6 +35,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Steadfast", H: "Justified" },
 	},
+	probopass: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "near a special magnetic field",
+	},
 	giratinaorigin: {
 		inherit: true,
 		requiredItem: "Griseous Orb",
@@ -77,6 +82,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Overgrow", H: "Long Reach" },
 	},
+	lycanroc: {
+		inherit: true,
+		evoCondition: "from 8am to 8pm",
+	},
+	lycanrocmidnight: {
+		inherit: true,
+		evoCondition: "from 8pm to 8am",
+	},
+	lycanrocdusk: {
+		inherit: true,
+		evoCondition: "from Rockruff-Dusk from 5pm to 6pm in Ultra Sun or 5am to 6am in Ultra Moon",
+	},
 	zacian: {
 		inherit: true,
 		baseStats: { hp: 92, atk: 130, def: 115, spa: 80, spd: 115, spe: 138 },
@@ -92,6 +109,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	zamazentacrowned: {
 		inherit: true,
 		baseStats: { hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128 },
+	},
+	urshifu: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "interact with the Scroll of Darkness in the Tower of Darkness",
+	},
+	urshifurapidstrike: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "interact with the Scroll of Waters in the Tower of Waters",
 	},
 	kleavor: {
 		inherit: true,
