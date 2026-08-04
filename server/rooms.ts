@@ -1498,6 +1498,7 @@ export class GlobalRoomState {
 			if (format.bestOfDefault) displayCode |= 64;
 			if (format.teraPreviewDefault) displayCode |= 128;
 			if (format.itemClauseDefault) displayCode |= 256;
+			if (ruleTable.has('terastalclause')) displayCode |= 512;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
