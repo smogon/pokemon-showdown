@@ -1354,6 +1354,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'G-Max Move Clause: G-Max moves are banned');
 		},
 	},
+	maxmoveclause: {
+		effectType: 'ValidatorRule',
+		name: "Max Move Clause",
+		desc: "Bans the use of Max moves",
+		banlist: [
+			'Max Airstream', 'Max Darkness', 'Max Flare', 'Max Flutterby', 'Max Geyser', 'Max Guard', 'Max Hailstorm',
+			'Max Knuckle', 'Max Lightning', 'Max Mindstorm', 'Max Ooze', 'Max Overgrowth', 'Max Phantasm', 'Max Quake',
+			'Max Rockfall', 'Max Starfall', 'Max Steelspike', 'Max Strike', 'Max Wyrmwind',
+		],
+		onBegin() {
+			this.add('rule', 'Max Move Clause: Max moves are banned');
+		},
+	},
 	notfullyevolved: {
 		effectType: 'ValidatorRule',
 		name: 'Not Fully Evolved',
