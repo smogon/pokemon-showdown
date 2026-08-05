@@ -66,4 +66,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Transistor" },
 		types: ["Electric", "Dark"],
 	},
+	scolipedemega: {
+		inherit: true,
+		abilities: { 0: "Steely Spirit" },
+	},
 };

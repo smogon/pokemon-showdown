@@ -226,7 +226,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'magearna') return 'Metagrossite';
 		if (species.id === 'roaringmoon') return 'Sharpedonite';
 		if (species.id === 'walkingwake') return 'Charizardite Y';
-		if (species.id === 'darkrai') return 'Pidgeotite';
+		if (species.id === 'darkrai') return 'Hawluchanite';
 		if (species.id === 'dragapult') return 'Red Orb';
 		if (species.id === 'gengar') return 'Dragoninite';
 		if (species.id === 'ironboulder') return 'Aerodactylite';

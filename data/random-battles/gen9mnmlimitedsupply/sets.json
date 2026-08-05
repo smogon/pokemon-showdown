@@ -10,7 +10,7 @@
 			]
 		},
 	"garganacl": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -20,7 +20,7 @@
 			]
 		},
 	"greattusk": {
-			"level": 85,
+			"level": 84,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -40,7 +40,7 @@
 			]
 		},
 	"pecharunt": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -70,7 +70,7 @@
 			]
 		},
 	"archaludon": {
-			"level": 84,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -110,11 +110,11 @@
 			]
 		},
 	"magearna": {
-			"level": 83,
+			"level": 82,
 			"sets": [
 				{
 					"role": "Fast Attacker",
-					"movepool": ["Draining Kiss", "Iron Head", "Calm Mind", "Shift Gear"],
+					"movepool": ["Draining Kiss", "Grass Knot", "Calm Mind", "Flash Cannon"],
 					"abilities": ["Soul Heart"]
 				}
 			]
@@ -140,7 +140,7 @@
 			]
 		},
 	"darkrai": {
-			"level": 81,
+			"level": 85,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -150,7 +150,7 @@
 			]
 		},
 	"dragapult": {
-			"level": 84,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -180,7 +180,7 @@
 			]
 		},
 	"regieleki": {
-			"level": 84,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -230,7 +230,7 @@
 			]
 		},
 	"skarmory": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -280,7 +280,7 @@
 			]
 		},
 	"hippowdon": {
-			"level": 87,
+			"level": 89,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -290,7 +290,7 @@
 			]
 		},
 	"drifblim": {
-			"level": 88,
+			"level": 90,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -310,7 +310,7 @@
 			]
 		},
 	"landorustherian": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -330,7 +330,7 @@
 			]
 		},
 	"lugia": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -350,7 +350,7 @@
 			]
 		},
 	"regigigas": {
-			"level": 88,
+			"level": 90,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -360,7 +360,7 @@
 			]
 		},
 	"palossand": {
-			"level": 81,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -380,7 +380,7 @@
 			]
 		},
 	"vikavolt": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -410,7 +410,7 @@
 			]
 		},
 	"fluttermane": {
-			"level": 84,
+			"level": 86,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -450,7 +450,7 @@
 			]
 		},
 	"ursalunabloodmoon": {
-			"level": 82,
+			"level": 81,
 			"sets": [
 				{
 					"role": "Fast Attacker",
