@@ -97,7 +97,7 @@ export const Friends = new class {
 		if (sorted.length > 0) {
 			buf += `<small> Total (${friends.length}) | ${sorted.join(' | ')}</small></h3> `;
 		} else {
-			buf += `</h3><em>you have no friends added on Showdown lol</em><br /><br /><br />`;
+			buf += `</h3><em>You currently have no friends added on Showdown.</em><br /><br /><br />`;
 			buf += `<strong>To add a friend, use </strong><code>/friend add [username]</code>.<br /><br />`;
 			return buf;
 		}
