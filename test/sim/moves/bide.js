@@ -97,7 +97,9 @@ describe('[Gen 1] Bide', () => {
 		const exeggutor = battle.p2.pokemon[1];
 		// Exeggutor will faint when switched in
 		exeggutor.hp = 1;
+		exeggutor.isActive = true; // to allow status to be set
 		exeggutor.setStatus('psn');
+		exeggutor.isActive = false;
 		battle.makeChoices();
 		aerodactyl.volatiles['bide'].time = 2;
 		// Leer resets battle.lastDamage to 0
