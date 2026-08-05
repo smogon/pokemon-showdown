@@ -14,7 +14,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gastroacid: {
 		inherit: true,
 		condition: {
-			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
+			// Ability suppression implemented in sim/pokemon.ts#ignoringAbility
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
