@@ -21053,4 +21053,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	cheval: {
+		num: 10001,
+		name: "Cheval",
+		types: ["Normal"],
+		gender: "N",
+		baseStats: { hp: 100, atk: 200, def: 200, spa: 100, spd: 100, spe: 100 },
+		abilities: { 0: "Levitate" },
+		heightm: 1.5,
+		weightkg: 61,
+		color: "White",
+		tags: ["Pokestar", "True Past", "Past Unobtainable"],
+		eggGroups: ["Undiscovered"],
+		gen: 5,
+	},
 };
