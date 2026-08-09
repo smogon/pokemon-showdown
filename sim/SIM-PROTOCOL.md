@@ -660,9 +660,12 @@ To be exact, `CHOICE` is one of:
     other pokemon in order.
   - `TEAMSPEC` does not have to be all pokemon: `team 5231` might be a choice
     in VGC.
-  - `TEAMSPEC` does not need separators unless you have over 10 Pokémon, but
-    in custom games, separate slots with `,`. For instance:
+  - If you have more than 10 Pokémon, `TEAMSPEC` must be comma-separated:
     `team 2, 1, 3, 4, 5, 6, 7, 8, 9, 10`
+  - `TEAMSPEC` can be surrounded by brackets to disable auto-adding commas.
+    `team [31]` will be an error while `team 31` will be parsed as
+    `team 3, 1`. This is intended to be used by clients for stricter error
+    messages; end users can always leave them off for convenience.
 
 - `default`, to auto-choose a decision. This will be the first possible legal
   choice. This is what's used in VGC if you run out of Move Time.

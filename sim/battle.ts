@@ -1850,7 +1850,7 @@ export class Battle {
 
 		if (!this.ruleTable.has('endlessbattleclause')) return;
 		// for now, FFA doesn't support Endless Battle Clause
-		if (this.format.gameType === 'freeforall') return;
+		if (this.gameType === 'freeforall') return;
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;

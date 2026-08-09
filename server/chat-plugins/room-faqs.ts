@@ -87,8 +87,7 @@ export const commands: Chat.ChatCommands = {
 		if (!useHTML) {
 			text = text.replace(/^>/, '&gt;');
 		} else {
-			text = text.replace(/\n/ig, '<br />');
-			text = this.checkHTML(text);
+			text = this.checkHTML(Chat.collapseLineBreaksHTML(text));
 		}
 
 		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
