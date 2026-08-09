@@ -1324,6 +1324,9 @@ export class Battle {
 
 		if (this.gen <= 4 || source.isAlly(target)) {
 			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
+			if (this.gen > 4) {
+				this.hint("Skill Swap does not announce the abilities of the Pokémon when used between allies.");
+			}
 		} else {
 			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
