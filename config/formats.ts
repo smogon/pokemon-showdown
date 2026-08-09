@@ -746,14 +746,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Species Clause'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
-			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt'],
+			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit'],
 		onValidateTeam(team, format, teamHas) {
 			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
 			let randomCount = 0;
 			for (const set of team) {
 				let species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
-				if (species.mons) randomCount++;
+				if (species.m.head) randomCount++;
 			}
 			if (randomCount < 2) {
 				return [`You must have at least 2 Head Pokemon.`];
@@ -775,9 +775,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|This is a Gen 9 OU-based "Bring 3, Pick 6" metagame where you build teams of 3 "Heads" who then generate "Tandems" for your other Pokemon.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3695289" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
-					if (!pokemon.baseSpecies.mons || pokemon.m.tandem) continue;
+					if (!pokemon.baseSpecies.m.head || pokemon.m.tandem) continue;
 					const pokemonList = side.pokemon.map(mon => mon.baseSpecies.id);
-					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).mons.filter(
+					let mons: [any, string[], string[]?][] = (pokemon.baseSpecies as any).m.mons.filter(
 						(mon: [any, string[], string[]?]) => !pokemonList.includes(this.toID(mon[0].species)));
 					const mon1 = this.sample(mons);
 					mons = mons.filter(mon => mon !== mon1);

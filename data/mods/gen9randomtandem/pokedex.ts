@@ -2,6 +2,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	garchomp: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -47,6 +48,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	slitherwing: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -92,6 +94,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	slowking: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -136,6 +139,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	cobalion: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -180,6 +184,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	keldeo: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -227,6 +232,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	keldeoresolute: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -274,6 +280,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	tsareena: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -319,6 +326,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	zapdos: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -362,6 +370,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	landorustherian: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -407,6 +416,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ironjugulis: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -452,6 +462,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	sinistcha: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -497,6 +508,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	azumarill: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -540,6 +552,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	revavroom: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -585,6 +598,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	heatran: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -630,6 +644,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	indeedee: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -674,6 +689,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	weavile: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -719,6 +735,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	fezandipiti: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -762,6 +779,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	skarmory: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -805,6 +823,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	clefable: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -848,6 +867,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ogerpon: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -891,6 +911,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	pecharunt: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -934,6 +955,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	moltres: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -977,6 +999,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	arcaninehisui: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1020,6 +1043,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ironboulder: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1063,6 +1087,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	tinglu: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1106,6 +1131,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	dondozo: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1149,6 +1175,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	hoopaunbound: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1192,6 +1219,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	kingambit: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1235,6 +1263,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	quaquaval: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1278,6 +1307,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	corviknight: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1321,6 +1351,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	brambleghast: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1364,6 +1395,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	hatterene: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1407,6 +1439,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	cyclizar: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{
@@ -1450,6 +1483,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	excadrill: {
 		inherit: true,
 		m: {
+			head: true,
 			mons: [
 				[
 					{

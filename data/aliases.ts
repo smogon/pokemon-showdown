@@ -96,6 +96,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	lcotm: "[Gen 9] Revelationmons",
 	ommotm: "[Gen 9] National Dex AAA",
 	ommspotlight: "[Gen 9] National Dex AAA",
+	randtand: "[Gen 9] Random Tandem",
 	pmotm: "[Gen 9] Random Tandem",
 	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 
