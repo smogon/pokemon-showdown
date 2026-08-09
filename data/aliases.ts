@@ -96,8 +96,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	lcotm: "[Gen 9] Pure Hackmons",
 	ommotm: "[Gen 9] NatDex Camove Chaos",
 	ommspotlight: "[Gen 9] NatDex Camove Chaos",
-	pmotm: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
-	mnmls: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
+	randtand: "[Gen 9] Random Tandem",
+	pmotm: "[Gen 9] Random Tandem",
 	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias
