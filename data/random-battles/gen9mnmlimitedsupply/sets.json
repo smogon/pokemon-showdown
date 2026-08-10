@@ -100,7 +100,7 @@
 			]
 		},
 	"gougingfire": {
-			"level": 84,
+			"level": 83,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -140,7 +140,7 @@
 			]
 		},
 	"darkrai": {
-			"level": 85,
+			"level": 87,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -230,7 +230,7 @@
 			]
 		},
 	"skarmory": {
-			"level": 87,
+			"level": 90,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -334,7 +334,7 @@
 			"sets": [
 				{
 					"role": "Fast Attacker",
-					"movepool": ["Surf", "Psychic Noise", "Calm Mind", "Recover"],
+					"movepool": ["Surf", "Psychic Noise", "Whirlwind", "Recover"],
 					"abilities": ["Water Absorb"]
 				}
 			]
@@ -450,7 +450,7 @@
 			]
 		},
 	"ursalunabloodmoon": {
-			"level": 81,
+			"level": 78,
 			"sets": [
 				{
 					"role": "Fast Attacker",
@@ -458,5 +458,135 @@
 					"abilities": ["Mind's Eye"]
 				}
 			]
-		}
+		},
+	"screamtail": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
+                "abilities": ["Protosynthesis"]
+            }
+        ]
+    },
+	"politoed": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Liquidation", "Earthquake", "Ice Punch", "Belly Drum"],
+                "abilities": ["Drizzle"]
+            }
+        ]
+    },
+	"cryogonal": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Blizzard", "Haze", "Aurora Veil", "Recover"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+	"tinglu": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Stealth Rock", "Spikes", "Whirlwind", "Body Press"],
+                "abilities": ["Vessel of Ruin"]
+            }
+        ]
+    },
+	"brutebonnet": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Sucker Punch", "Leaf Storm", "Synthesis"],
+                "abilities": ["Protosynthesis"]
+            }
+        ]
+    },
+	"arcanine": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Extreme Speed", "Will-O-Wisp", "Morning Sun"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+	"zapdos": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Discharge", "Hurricane", "Roost", "U-turn"],
+                "abilities": ["Static"]
+            }
+        ]
+    },
+	"hoopaunbound": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dark Pulse", "Psychic Noise", "Drain Punch", "Thunder Punch"],
+                "abilities": ["Magician"]
+            }
+        ]
+    },
+	"dialga": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Draco Meteor", "Heavy Slam", "Fire Blast", "Thunder Wave"],
+                "abilities": ["Pressure"]
+            }
+        ]
+    },
+	"overqwil": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Barb Barrage", "Crunch", "Spikes", "Chilling Water"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+	"mimikyu": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
+                "abilities": ["Disguise"]
+			}
+        ]
+    },
+	"appletun": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+	"lucario": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Extreme Speed", "Crunch", "Earthquake"],
+                "abilities": ["Inner Focus"]
+            }
+        ]
+    }
 }

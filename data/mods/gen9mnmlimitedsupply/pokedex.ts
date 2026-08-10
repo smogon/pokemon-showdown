@@ -27,7 +27,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 106, atk: 110, def: 135, spa: 154, spd: 135, spe: 140 },
 		abilities: { 0: "Pure Power" },
-		types: ["Psychic", "Fighting"],
 	},
 	mewtwomegay: {
 		inherit: true,
@@ -69,5 +68,51 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	scolipedemega: {
 		inherit: true,
 		abilities: { 0: "Steely Spirit" },
+	},
+	absolmega: {
+		inherit: true,
+		baseStats: { hp: 65, atk: 130, def: 90, spa: 85, spd: 90, spe: 95 },
+		abilities: { 0: "Tablets of Ruin" },
+		types: ["Dark", "Normal"],
+	},
+	absolmegaz: {
+		inherit: true,
+		baseStats: { hp: 65, atk: 155, def: 80, spa: 100, spd: 80, spe: 85 },
+		abilities: { 0: "Moxie" },
+	},
+	skarmorymega: {
+		inherit: true,
+		baseStats: { hp: 65, atk: 125, def: 125, spa: 60, spd: 90, spe: 100 },
+		abilities: { 0: "Good as Gold" },
+	},
+	chandeluremega: {
+		inherit: true,
+		baseStats: { hp: 60, atk: 60, def: 125, spa: 175, spd: 125, spe: 75 },
+		abilities: { 0: "Neutralizing Gas" },
+	},
+	slowbromega: {
+		inherit: true,
+		baseStats: { hp: 95, atk: 85, def: 150, spa: 110, spd: 120, spe: 30 },
+		abilities: { 0: "Unaware" },
+	},
+	alakazammega: {
+		inherit: true,
+		baseStats: { hp: 55, atk: 60, def: 60, spa: 150, spd: 125, spe: 150 },
+		abilities: { 0: "Psychic Surge" },
+	},
+	chesnaughtmega: {
+		inherit: true,
+		baseStats: { hp: 88, atk: 132, def: 167, spa: 104, spd: 108, spe: 31 },
+		abilities: { 0: "Grassy Surge" },
+	},
+	golurkmega: {
+		inherit: true,
+		baseStats: { hp: 89, atk: 148, def: 90, spa: 51, spd: 90, spe: 115 },
+		abilities: { 0: "No Guard" },
+	},
+	drampamega: {
+		inherit: true,
+		baseStats: { hp: 78, atk: 70, def: 120, spa: 155, spd: 121, spe: 46 },
+		abilities: { 0: "Fluffy" },
 	},
 };

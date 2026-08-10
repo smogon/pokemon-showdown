@@ -258,6 +258,19 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'flygon') return 'Altarianite';
 		if (species.id === 'hariyama') return 'Scolipite';
 		if (species.id === 'ursalunabloodmoon') return 'Sablenite';
+		if (species.id === 'screamtail') return 'Gardevoirite';
+		if (species.id === 'politoed') return 'Swampertite';
+		if (species.id === 'cryogonal') return 'Froslassite';
+		if (species.id === 'tinglu') return 'Tyranitarite';
+		if (species.id === 'brutebonnet') return 'Staraptite';
+		if (species.id === 'arcanine') return 'Absolite';
+		if (species.id === 'zapdos') return 'Raichunite X';
+		if (species.id === 'hoopaunbound') return 'Absolite';
+		if (species.id === 'dialga') return 'Griseous Core';
+		if (species.id === 'overqwil') return 'Falinksite';
+		if (species.id === 'mimikyu') return 'Garchompite';
+		if (species.id === 'appletun') return 'Ampharosite';
+		if (species.id === 'lucario') return 'Feraligite';
 		/* Fallback */
 		else return 'Life Orb';
 	}
