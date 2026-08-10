@@ -624,6 +624,11 @@ export const commands: Chat.ChatCommands = {
 				poll.display();
 			} else {
 				poll.displayTo(user, connection);
+				if (user.can('declare', null, room, 'poll')) {
+					const answers = Array.from(poll.answers.values(), answer => answer.name).join(',');
+					const content = Utils.escapeHTML(poll.question + ',' + answers).replace(/\n/g, '<br />');
+					this.sendReply(`|uhtml|pollsource|<div class="infobox"><details><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/poll ${poll.supportHTML ? 'htmlcreate' : 'create'} ${content}</code></details></div>`);
+				}
 			}
 		},
 		displayhelp: [`/poll display - Displays the poll`],
