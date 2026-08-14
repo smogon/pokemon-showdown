@@ -1338,6 +1338,25 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
+	maxmoveclause: {
+		effectType: 'ValidatorRule',
+		name: "Max Move Clause",
+		desc: "Bans the use of Dynamax-free Max moves",
+		banlist: [
+			'G-Max Befuddle', 'G-Max Cannonade', 'G-Max Centiferno', 'G-Max Chi Strike', 'G-Max Cuddle', 'G-Max Depletion',
+			'G-Max Drum Solo', 'G-Max Finale', 'G-Max Fireball', 'G-Max Foam Burst', 'G-Max Gold Rush', 'G-Max Gravitas',
+			'G-Max Hydrosnipe', 'G-Max Malodor', 'G-Max Meltdown', 'G-Max One Blow', 'G-Max Rapid Flow', 'G-Max Replenish',
+			'G-Max Resonance', 'G-Max Sandblast', 'G-Max Smite', 'G-Max Snooze', 'G-Max Steelsurge', 'G-Max Stonesurge',
+			'G-Max Stun Shock', 'G-Max Sweetness', 'G-Max Tartness', 'G-Max Terror', 'G-Max Vine Lash', 'G-Max Volcalith',
+			'G-Max Volt Crash', 'G-Max Wildfire', 'G-Max Wind Rage', 'Max Airstream', 'Max Darkness', 'Max Flare',
+			'Max Flutterby', 'Max Geyser', 'Max Guard', 'Max Hailstorm', 'Max Knuckle', 'Max Lightning', 'Max Mindstorm',
+			'Max Ooze', 'Max Overgrowth', 'Max Phantasm', 'Max Quake', 'Max Rockfall', 'Max Starfall', 'Max Steelspike',
+			'Max Strike', 'Max Wyrmwind',
+		],
+		onBegin() {
+			this.add('rule', 'Max Move Clause: Max moves are banned');
+		},
+	},
 	notfullyevolved: {
 		effectType: 'ValidatorRule',
 		name: 'Not Fully Evolved',
