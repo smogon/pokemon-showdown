@@ -638,7 +638,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Beak Blast", "Body Press", "Knock Off", "Roost", "Stealth Rock"],
-                "abilities": ["Analytic"],
+                "abilities": ["Opportunist"],
                 "teraTypes": ["Fire", "Steel"]
             }
         ]
