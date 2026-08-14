@@ -89,4 +89,66 @@ describe('Truant', () => {
 
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move entrainment', 'move heavyslam mega'));
 	});
+
+	it('should allow the user to act on its first turn after switching in', () => {
+		battle = common.createBattle([[
+			{ species: "Zigzagoon", ability: 'pickup', moves: ['sleeptalk'] },
+			{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+		], [
+			{ species: "Steelix", ability: 'sturdy', moves: ['irondefense'] },
+		]]);
+		const pokemon = battle.p2.active[0];
+
+		battle.makeChoices('switch 2', 'auto');
+		assert.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
+	});
+});
+
+describe('Truant [Gen 4]', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should allow the user to act on its first turn after switching in', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: "Zigzagoon", ability: 'pickup', moves: ['tackle'] },
+			{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+		], [
+			{ species: "Steelix", ability: 'sturdy', moves: ['irondefense'] },
+		]]);
+		const pokemon = battle.p2.active[0];
+
+		battle.makeChoices('switch 2', 'auto');
+		assert.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
+	});
+
+	it('should allow the user to act on its first turn after being sent out as a replacement', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: "Magikarp", level: 1, ability: 'swiftswim', moves: ['splash'] },
+			{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+		], [
+			{ species: "Steelix", ability: 'sturdy', moves: ['earthquake', 'irondefense'] },
+		]]);
+		const pokemon = battle.p2.active[0];
+
+		battle.makeChoices('move splash', 'move earthquake');
+		battle.makeChoices('switch 2', ''); // sent out after end-of-turn effects have run
+		assert.hurts(pokemon, () => battle.makeChoices('move scratch', 'move irondefense'));
+		assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move irondefense'));
+	});
+
+	it('should prevent the user from acting the turn after using a move', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+		], [
+			{ species: "Steelix", ability: 'sturdy', moves: ['irondefense'] },
+		]]);
+		const pokemon = battle.p2.active[0];
+
+		assert.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
+		assert.hurts(pokemon, () => battle.makeChoices());
+	});
 });

@@ -525,6 +525,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	truant: {
 		inherit: true,
+		onStart: undefined, // no inherit
 		onBeforeMove(pokemon) {
 			if (pokemon.volatiles['truant']) {
 				this.add('cant', pokemon, 'ability: Truant');
@@ -532,7 +533,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onResidual(pokemon) {
-			if (!pokemon.removeVolatile('truant')) {
+			if (!pokemon.removeVolatile('truant') && pokemon.activeTurns) {
 				pokemon.addVolatile('truant');
 			}
 		},
