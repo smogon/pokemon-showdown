@@ -321,4 +321,10 @@ describe("Custom Rules", () => {
 		];
 		assert.legalTeam(team, 'gen7customgame@@@Standard');
 	});
+
+	it('should normalize value rules', () => {
+		const format = Dex.formats.get('gen9customgame@@@EV Limit = Auto');
+		const ruleTable = Dex.formats.getRuleTable(format);
+		assert.equal(ruleTable.valueRules.get('evlimit'), 'auto');
+	});
 });
