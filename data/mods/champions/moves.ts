@@ -44,14 +44,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
-	barbbarrage: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	beakblast: {
 		inherit: true,
 		basePower: 120,
 		pp: 5,
+	},
+	belch: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
+		desc: "Fails unless the user has eaten a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
+		shortDesc: "Fails unless the user has eaten a Berry.",
 	},
 	behemothbash: {
 		inherit: true,
@@ -217,7 +219,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	doubleshock: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	dragonascent: {
 		inherit: true,
@@ -293,14 +295,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!action) {
 					this.effectState.duration!++;
 					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
-				} else if (!target.hasItem('mentalherb')) {
+				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
+					const priority = action.priority -
+						this.dex.moves.get(action.moveid).priority +
+						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
-						order: action.order, // TODO: check Quash + Encore interaction
+						order: action.order,
 					});
+					this.queue.willMove(target)!.priority = priority;
 				}
 			},
 		},
@@ -312,6 +318,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fairywind: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	fakeout: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions) {
+				pokemon.disableMove('fakeout');
+			}
+		},
+		desc: "Has a 100% chance to make the target flinch. This move cannot be selected unless it is the user's first turn on the field.",
 	},
 	falsesurrender: {
 		inherit: true,
@@ -340,6 +355,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	firstimpression: {
 		inherit: true,
 		basePower: 100,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions) {
+				pokemon.disableMove('firstimpression');
+			}
+		},
+		desc: "This move cannot be selected unless it is the user's first turn on the field.",
 	},
 	fishiousrend: {
 		inherit: true,
@@ -360,6 +381,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	forcepalm: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	freezedry: {
+		inherit: true,
+		secondary: undefined, // no inherit
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Water.",
 	},
 	freezeshock: {
 		inherit: true,
@@ -457,6 +484,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	hornattack: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	howl: {
+		inherit: true,
+		flags: { snatch: 1, sound: 1, bypasssub: 1, metronome: 1 },
 	},
 	hydrosteam: {
 		inherit: true,
@@ -560,7 +591,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	makeitrain: {
 		inherit: true,
 		accuracy: 95,
-		isNonstandard: "Past",
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2. Hits foe(s).",
 	},
 	malignantchain: {
 		inherit: true,
@@ -584,6 +621,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 	},
 	mightycleave: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	milkdrink: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -633,10 +674,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	nihillight: {
 		inherit: true,
 		pp: 5,
-	},
-	noretreat: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	noxioustorque: {
 		inherit: true,
@@ -740,12 +777,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	ragefist: {
 		inherit: true,
-		isNonstandard: "Past",
+		// Hit counter reset is implemented in Pokemon#clearVolatile
+		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and resets to 0 when the user leaves the field. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+		shortDesc: "+50 BP/hit on user. Max 6 hits. Resets on switch-out.",
 	},
-	// ragepowder: {
-	// 	inherit: true,
-	// 	flags: { noassist: 1, failcopycat: 1 },
-	// },
 	razorleaf: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -765,7 +800,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	revivalblessing: {
 		inherit: true,
-		isNonstandard: "Custom",
+		isNonstandard: "Past",
 	},
 	roaroftime: {
 		inherit: true,
@@ -909,10 +944,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 		pp: 10,
 	},
-	spiritbreak: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	spiritshackle: {
 		inherit: true,
 		basePower: 90,
@@ -944,6 +975,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	strength: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	stuffcheeks: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
+		desc: "Fails if the user is not holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room.",
+		shortDesc: "Fails unless the user has a berry. User eats Berry, Def +2.",
 	},
 	sunsteelstrike: {
 		inherit: true,
@@ -1018,10 +1055,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 	},
 	thundershock: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	topsyturvy: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

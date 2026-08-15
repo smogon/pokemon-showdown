@@ -11,14 +11,12 @@ describe('Nightmare [Gen 2]', () => {
 	});
 
 	it('should not deal damage to the affected if the opponent is KOed', () => {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(2).createBattle([[
 			{ species: "Slugma", moves: ['sleeptalk'] },
 			{ species: "Magcargo", moves: ['sleeptalk', 'flamethrower'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Forretress", moves: ['spore', 'nightmare'] },
-		] });
+		]]);
 		battle.makeChoices('switch 2', 'move spore');
 		battle.makeChoices('move sleeptalk', 'move nightmare');
 		assert(battle.p1.active[0].volatiles['nightmare']);
@@ -26,13 +24,11 @@ describe('Nightmare [Gen 2]', () => {
 	});
 
 	it('should continue dealing damage to the affected if it falls asleep while asleep', () => {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(2).createBattle([[
 			{ species: "Magcargo", moves: ['sleeptalk', 'rest'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Forretress", moves: ['nightmare', 'pound'] },
-		] });
+		]]);
 		battle.makeChoices('move rest', 'move pound');
 		battle.makeChoices('move rest', 'move nightmare');
 		battle.makeChoices('move sleeptalk', 'move pound');

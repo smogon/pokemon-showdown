@@ -11,13 +11,13 @@ describe('Mail', () => {
 	});
 
 	it('should not be stolen by most moves or abilities', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Blissey', ability: 'naturalcure', item: 'mail', moves: ['softboiled'] }] });
-		battle.setPlayer('p2', { team: [
+		battle = common.createBattle([[
+			{ species: 'Blissey', ability: 'naturalcure', item: 'mail', moves: ['softboiled'] },
+		], [
 			{ species: 'Fennekin', ability: 'magician', moves: ['grassknot'] },
 			{ species: 'Abra', ability: 'synchronize', moves: ['trick'] },
 			{ species: 'Lopunny', ability: 'klutz', moves: ['switcheroo'] },
-		] });
+		]]);
 		const holder = battle.p1.active[0];
 		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move grassknot'));
 		battle.makeChoices('move softboiled', 'switch 2');
@@ -27,25 +27,31 @@ describe('Mail', () => {
 	});
 
 	it('should not be removed by Fling', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Pangoro', ability: 'ironfist', moves: ['swordsdance'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Abra', ability: 'synchronize', item: 'mail', moves: ['fling'] }] });
+		battle = common.createBattle([[
+			{ species: 'Pangoro', ability: 'ironfist', moves: ['swordsdance'] },
+		], [
+			{ species: 'Abra', ability: 'synchronize', item: 'mail', moves: ['fling'] },
+		]]);
 		const holder = battle.p2.active[0];
 		assert.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move fling'));
 	});
 
 	it('should be removed by Knock Off', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Abra', ability: 'synchronize', moves: ['knockoff'] }] });
+		battle = common.createBattle([[
+			{ species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance'] },
+		], [
+			{ species: 'Abra', ability: 'synchronize', moves: ['knockoff'] },
+		]]);
 		const holder = battle.p1.active[0];
 		assert.false.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move knockoff'));
 	});
 
 	it('should be stolen by Thief', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Abra', ability: 'synchronize', moves: ['thief'] }] });
+		battle = common.createBattle([[
+			{ species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance'] },
+		], [
+			{ species: 'Abra', ability: 'synchronize', moves: ['thief'] },
+		]]);
 		const holder = battle.p1.active[0];
 		assert.false.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move thief'));
 	});

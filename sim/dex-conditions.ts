@@ -108,6 +108,7 @@ export interface EventMethods {
 	onTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
+	onHitProtect?: MoveEventMethods['onTryHit'];
 	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	onTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void)
@@ -496,6 +497,7 @@ export interface EventMethods {
 	onTryMovePriority?: number;
 	onTryPrimaryHitPriority?: number;
 	onTypePriority?: number;
+	onWeatherModifyDamagePriority?: number;
 }
 
 export interface PokemonEventMethods extends EventMethods {

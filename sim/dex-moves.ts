@@ -155,8 +155,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	priority: number;
 	target: MoveTarget;
 	flags: MoveFlags;
-	/** Hidden Power */
-	realMove?: string;
 
 	damage?: number | 'level' | false | null;
 	contestType?: string;
@@ -208,6 +206,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	recoil?: [number, number];
 	drain?: [number, number];
 	mindBlownRecoil?: boolean;
+	chloroblastRecoil?: boolean;
 	stealsBoosts?: boolean;
 	struggleRecoil?: boolean;
 	secondary?: SecondaryEffect;
@@ -305,7 +304,7 @@ interface MoveHitData {
 		 * Is this move a Z-Move that broke the target's protection?
 		 * (does 0.25x regular damage)
 		 */
-		brokeProtect: boolean,
+		bypassProtect: boolean | Effect,
 	};
 }
 
@@ -341,7 +340,6 @@ export interface ActiveMove extends MutableMove {
 	stellarBoosted?: boolean;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
-	willChangeForme?: boolean;
 	infiltrates?: boolean;
 	ruinedAtk?: Pokemon;
 	ruinedDef?: Pokemon;
@@ -485,6 +483,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	constructor(data: AnyObject) {
 		super(data);
 
+		if (data.placeholderFor) this.id = toID(data.placeholderFor); // Hidden Power hack
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
 		this.type = Utils.getString(data.type);

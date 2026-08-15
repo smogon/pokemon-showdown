@@ -1079,7 +1079,7 @@ export abstract class BasicRoom {
 	runAutoModchat() {
 		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
 		// they are staff and online
-		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%') && u.statusType === 'online');
+		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
 			const { time } = this.settings.autoModchat;
 			if (!time || time < 5) {

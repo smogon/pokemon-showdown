@@ -320,7 +320,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// Because statused/unstatused pokemon are shown after every switch
 			// in gen 3-4, Natural Cure's curing is always known to both players
 
-			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
 			pokemon.clearStatus();
 		},
 	},
@@ -564,6 +564,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.setAbility(ability, target);
 		},
 		flags: { notrace: 1 },
+	},
+	truant: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			if (pokemon.volatiles['truant']) {
+				this.add('cant', pokemon, 'ability: Truant');
+				return false;
+			}
+		},
+		onResidual(pokemon) {
+			if (!pokemon.removeVolatile('truant')) {
+				pokemon.addVolatile('truant');
+			}
+		},
 	},
 	vitalspirit: {
 		inherit: true,

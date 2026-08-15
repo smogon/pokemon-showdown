@@ -85,10 +85,11 @@ describe('Dragon Cheer', () => {
 	});
 
 	it('should fail in singles or if no ally exists', () => {
-		battle = common.createBattle([
-			[{ species: 'gyarados', moves: ['dragoncheer'] }],
-			[{ species: 'dragapult', moves: ['splash'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'gyarados', moves: ['dragoncheer'] },
+		], [
+			{ species: 'dragapult', moves: ['splash'] },
+		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => !line.startsWith('|-fail')));

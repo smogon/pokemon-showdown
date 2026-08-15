@@ -59,7 +59,7 @@ export abstract class BasicEffect implements EffectData {
 	 * condition would be "confusion", etc.
 	 */
 	fullname: string;
-	/** Effect type. */
+	/** Whether it's a move, item, ability, etc. */
 	effectType: EffectType;
 	/**
 	 * Does it exist? For historical reasons, when you use an accessor
@@ -94,18 +94,21 @@ export abstract class BasicEffect implements EffectData {
 	 * glitches (MissingNo etc), Pokestar pokemon, etc.
 	 */
 	isNonstandard: Nonstandard | null;
+	/** For Hidden Power and Gigantamax forms - see NONSTANDARD.md */
+	placeholderFor?: string;
 	/** The duration of the condition - only for pure conditions. */
 	duration?: number;
 	/** Whether or not the condition is ignored by Baton Pass - only for pure conditions. */
 	noCopy: boolean;
 	/** Whether or not the condition affects fainted Pokemon. */
 	affectsFainted: boolean;
+	tags?: TableTag[];
 	/** ??? */
 	sourceEffect: string;
 
 	constructor(data: AnyObject) {
 		this.name = Utils.getString(data.name).trim();
-		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
+		this.id = toID(this.name);
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
 		this.exists = data.exists ?? !!this.id;

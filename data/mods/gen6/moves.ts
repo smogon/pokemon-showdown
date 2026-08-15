@@ -174,7 +174,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (move.category === 'Status' || (move?.target !== 'allAdjacent' && move.target !== 'allAdjacentFoes')) {
 					return;
 				}
-				if (this.checkMoveBreaksProtect(move, source, target, false)) return;
+				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
 				this.add('-activate', target, 'move: Wide Guard');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {

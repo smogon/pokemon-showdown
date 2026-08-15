@@ -78,10 +78,12 @@ describe('Levitate [Gen 4]', () => {
 	});
 
 	it('should not have its airborne property suppressed by Mold Breaker if it is forced out by a move', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] }, { species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] }],
-			[{ species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
+			{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move spikes');
 		assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('move sleeptalk', 'move roar'));
 	});

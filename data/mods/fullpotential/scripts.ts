@@ -6,7 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (typeof move === 'number') {
 				const basePower = move;
-				move = new Dex.Move({
+				move = new this.dex.Move({
 					basePower,
 					type: '???',
 					category: 'Physical',

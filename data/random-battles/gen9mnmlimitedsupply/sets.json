@@ -1,0 +1,592 @@
+{
+	"dragonite": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Dragon Dance", "Breaking Swipe", "Wing Attack", "Earthquake"],
+					"abilities": ["Multiscale"]
+				}
+			]
+		},
+	"garganacl": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Iron Defense", "Body Press", "Salt Cure", "Recover"],
+					"abilities": ["Purifying Salt"]
+				}
+			]
+		},
+	"greattusk": {
+			"level": 84,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Rapid Spin", "Close Combat", "Headlong Rush", "Ice Spinner"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"heatran": {
+			"level": 88,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Magma Storm", "Dragon Pulse", "Earth Power", "Will- O- Wisp"],
+					"abilities": ["Flash Fire"]
+				}
+			]
+		},
+	"pecharunt": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Foul Play", "Malignant Chain", "Recover", "Parting Shot"],
+					"abilities": ["Poison Puppeteer"]
+				}
+			]
+		},
+	"ragingbolt": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Thunderbolt", "Draco Meteor", "Thunderclap", "Volt Switch"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"annihilape": {
+			"level": 81,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Rage Fist", "Bulk Up", "Drain Punch", "Ice Punch"],
+					"abilities": ["Defiant"]
+				}
+			]
+		},
+	"archaludon": {
+			"level": 83,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Flash Cannon", "Dragon Pulse", "Electro Shot", "Stealth Rock"],
+					"abilities": ["Stamina"]
+				}
+			]
+		},
+	"ceruledge": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
+					"abilities": ["Weak Armor"]
+				}
+			]
+		},
+	"gholdengo": {
+			"level": 84,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Focus Blast", "Recover", "Make It Rain", "Shadow Ball"],
+					"abilities": ["Good As Gold"]
+				}
+			]
+		},
+	"gougingfire": {
+			"level": 83,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Flare Blitz", "Double- Edge", "Burning Bulwark", "Dragon Dance"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"magearna": {
+			"level": 82,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Draining Kiss", "Grass Knot", "Calm Mind", "Flash Cannon"],
+					"abilities": ["Soul Heart"]
+				}
+			]
+		},
+	"roaringmoon": {
+			"level": 84,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Jaw Lock", "Fire Fang", "Thunder Fang", "U-turn"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"walkingwake": {
+			"level": 84,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Hydro Steam", "Draco Meteor", "Flamethrower", "Flip Turn"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"darkrai": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Dark Pulse", "Focus Blast", "Blizzard", "Thunder"],
+					"abilities": ["Bad Dreams"]
+				}
+			]
+		},
+	"dragapult": {
+			"level": 83,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Draco Meteor", "Flamethrower", "Thunderbolt", "U-turn"],
+					"abilities": ["Clear Body"]
+				}
+			]
+		},
+	"gengar": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Nasty Plot", "Shadow Ball", "Sludge Wave", "Giga Drain"],
+					"abilities": ["Cursed Body"]
+				}
+			]
+		},
+	"ironboulder": {
+			"level": 81,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Mighty Cleave", "Zen Headbutt", "Close Combat", "Swords Dance"],
+					"abilities": ["Quark Drive"]
+				}
+			]
+		},
+	"regieleki": {
+			"level": 83,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Body Slam", "Volt Switch", "Rapid Spin", "Explosion"],
+					"abilities": ["Transistor"]
+				}
+			]
+		},
+	"shayminsky": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Solar Beam", "Dazzling Gleam", "Earth Power", "Synthesis"],
+					"abilities": ["Serene Grace"]
+				}
+			]
+		},
+	"weavile": {
+			"level": 88,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Dark Pulse", "Ice Beam", "Focus Blast", "Nasty Plot"],
+					"abilities": ["Pressure"]
+				}
+			]
+		},
+	"zamazenta": {
+			"level": 81,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Close Combat", "Fire Fang", "Heavy Slam", "Crunch"],
+					"abilities": ["Dauntless Shield"]
+				}
+			]
+		},
+	"mandibuzz": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Foul Play", "Toxic", "Roost", "Defog"],
+					"abilities": ["Overcoat"]
+				}
+			]
+		},
+	"skarmory": {
+			"level": 90,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Roost", "Brave Bird", "Iron Head", "Drill Run"],
+					"abilities": ["Weak Armor"]
+				}
+			]
+		},
+	"salazzle": {
+			"level": 81,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Fire Lash", "Poison Jab", "Will-O-Wisp", "Encore"],
+					"abilities": ["Oblivious"]
+				}
+			]
+		},
+	"mamoswine": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Ice Beam", "Freeze-Dry", "Earthquake", "Stealth Rock"],
+					"abilities": ["Thick Fat"]
+				}
+			]
+		},
+	"fezandipiti": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Sludge Bomb", "Brave Bird", "U-turn", "Roost"],
+					"abilities": ["Toxic Chain"]
+				}
+			]
+		},
+	"jirachi": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Thunder Wave", "Flash Cannon", "Stealth Rock", "U-turn"],
+					"abilities": ["Serene Grace"]
+				}
+			]
+		},
+	"hippowdon": {
+			"level": 89,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Earthquake", "Stone Edge", "Stealth Rock", "Slack Off"],
+					"abilities": ["Sand Stream"]
+				}
+			]
+		},
+	"drifblim": {
+			"level": 90,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Hex", "Will- O- Wisp", "Strength Sap", "Defog"],
+					"abilities": ["Aftermath"]
+				}
+			]
+		},
+	"tinkaton": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Stealth Rock", "Encore", "Gigaton Hammer", "Thunder Wave"],
+					"abilities": ["Mold Breaker"]
+				}
+			]
+		},
+	"landorustherian": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Stealth Rock", "Sandsear Storm", "U-Turn", "Taunt"],
+					"abilities": ["Intimidate"]
+				}
+			]
+		},
+	"hydreigon": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Dark Pulse", "Flash Cannon", "Fire Blast", "Nasty Plot"],
+					"abilities": ["Levitate"]
+				}
+			]
+		},
+	"lugia": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Surf", "Psychic Noise", "Whirlwind", "Recover"],
+					"abilities": ["Water Absorb"]
+				}
+			]
+		},
+	"kyuremblack": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Fusion Bolt", "Icicle Spear", "Substitute", "Dragon Dance"],
+					"abilities": ["Multitype"]
+				}
+			]
+		},
+	"regigigas": {
+			"level": 90,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Iron Head", "Fire Punch", "Drain Punch", "Substitute"],
+					"abilities": ["Slow Start"]
+				}
+			]
+		},
+	"palossand": {
+			"level": 83,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Night Shade", "Scorching Sands", "Shore Up", "Stealth Rock"],
+					"abilities": ["Water Compaction"]
+				}
+			]
+		},
+	"revavroom": {
+			"level": 84,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Shift Gear", "Iron Head", "Double-Edge", "High Horsepower"],
+					"abilities": ["Overcoat"]
+				}
+			]
+		},
+	"vikavolt": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Sticky Web", "Volt Switch", "Bug Buzz", "Flash Cannon"],
+					"abilities": ["Levitate"]
+				}
+			]
+		},
+	"umbreon": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Alluring Voice", "Weather Ball", "Toxic", "Moonlight"],
+					"abilities": ["Synchronize"]
+				}
+			]
+		},
+	"ironmoth": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Fiery Dance", "Flash Cannon", "Energy Ball", "Dazzling Gleam"],
+					"abilities": ["Quark Drive"]
+				}
+			]
+		},
+	"fluttermane": {
+			"level": 86,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Power Gem", "Shadow Ball", "Moonblast", "Psyshock"],
+					"abilities": ["Protosynthesis"]
+				}
+			]
+		},
+	"rotomwash": {
+			"level": 85,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Will-O-Wisp", "Thunder", "Volt Switch", "Hydro Pump"],
+					"abilities": ["Levitate"]
+				}
+			]
+		},
+	"flygon": {
+			"level": 87,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Boomburst", "Earthquake", "Fire Blast", "Quick Attack"],
+					"abilities": ["Levitate"]
+				}
+			]
+		},
+	"hariyama": {
+			"level": 88,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Bulk Up", "Drain Punch", "Bullet Punch", "Throat Chop"],
+					"abilities": ["Guts"]
+				}
+			]
+		},
+	"ursalunabloodmoon": {
+			"level": 78,
+			"sets": [
+				{
+					"role": "Fast Attacker",
+					"movepool": ["Earth Power", "Blood Moon", "Moonblast", "Moonlight"],
+					"abilities": ["Mind's Eye"]
+				}
+			]
+		},
+	"screamtail": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
+                "abilities": ["Protosynthesis"]
+            }
+        ]
+    },
+	"politoed": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Liquidation", "Earthquake", "Ice Punch", "Belly Drum"],
+                "abilities": ["Drizzle"]
+            }
+        ]
+    },
+	"cryogonal": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Blizzard", "Haze", "Aurora Veil", "Recover"],
+                "abilities": ["Levitate"]
+            }
+        ]
+    },
+	"tinglu": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Stealth Rock", "Spikes", "Whirlwind", "Body Press"],
+                "abilities": ["Vessel of Ruin"]
+            }
+        ]
+    },
+	"brutebonnet": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Sucker Punch", "Leaf Storm", "Synthesis"],
+                "abilities": ["Protosynthesis"]
+            }
+        ]
+    },
+	"arcanine": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Extreme Speed", "Will-O-Wisp", "Morning Sun"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+	"zapdos": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Discharge", "Hurricane", "Roost", "U-turn"],
+                "abilities": ["Static"]
+            }
+        ]
+    },
+	"hoopaunbound": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dark Pulse", "Psychic Noise", "Drain Punch", "Thunder Punch"],
+                "abilities": ["Magician"]
+            }
+        ]
+    },
+	"dialga": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Draco Meteor", "Heavy Slam", "Fire Blast", "Thunder Wave"],
+                "abilities": ["Pressure"]
+            }
+        ]
+    },
+	"overqwil": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Barb Barrage", "Crunch", "Spikes", "Chilling Water"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+	"mimikyu": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
+                "abilities": ["Disguise"]
+			}
+        ]
+    },
+	"appletun": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
+                "abilities": ["Thick Fat"]
+            }
+        ]
+    },
+	"lucario": {
+        "level": 86,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Extreme Speed", "Crunch", "Earthquake"],
+                "abilities": ["Inner Focus"]
+            }
+        ]
+    }
+}
