@@ -5,7 +5,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
 				this.add('-immune', source);
 			}
-			source.trySetStatus('brn', target);
 		},
 	},
 };
