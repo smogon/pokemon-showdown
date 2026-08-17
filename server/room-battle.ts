@@ -654,6 +654,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		request.isWait = false;
+		request.choice = '';
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
