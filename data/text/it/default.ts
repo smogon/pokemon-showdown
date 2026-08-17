@@ -19,13 +19,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		drag: "[FULLNAME] è trascinato nella lotta!",
 		faint: "[POKEMON] non ha più energie!",
 		swap: "[POKEMON] e [TARGET] si scambiano di posto!",
-		swapCenter: "", // NOT CONVERTED: not in Champions
+		swapCenter: "[POKEMON] passa in prima linea!",
 
 		// Multi Battles only
-		canDynamax: "", // NOT CONVERTED: not in Champions
-		canDynamaxOwn: "", // NOT CONVERTED: not in Champions
+		canDynamax: "  [TRAINER] ora può usare il Dynamax!",
+		canDynamaxOwn: "  L’energia Dynamax avvolge [TRAINER]!",
 
-		zEffect: "", // NOT CONVERTED: not in Champions
+		zEffect: "  [POKEMON] usa una mossa Z sprigionando tutta la sua potenza!",
 		move: "[POKEMON] usa **[MOVE]**!",
 		abilityActivation: "[[ABILITY] di [POKEMON]]",
 
@@ -33,8 +33,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		megaNoItem: "", // NOT CONVERTED: not in Champions
 		megaGen6: "", // NOT CONVERTED: not in Champions
 		transformMega: "[POKEMON] si evolve in Mega[SPECIES]!",
-		primal: "", // NOT CONVERTED: not in Champions
-		zPower: "", // NOT CONVERTED: not in Champions
+		primal: "[POKEMON] si è archeorisvegliato! È tornato alla sua forma originaria!",
+		zPower: "  Il Potere Z circonda [POKEMON] come un’aura!",
 		zBroken: "  La protezione fallisce! [POKEMON] subisce dei danni!",
 		terastallize: "", // NOT CONVERTED: not in Champions
 
@@ -73,10 +73,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  ([POKEMON] è ferito!)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
 		damageFromPokemon: "", // NOT CONVERTED: not in Champions
-		damageFromItem: "", // NOT CONVERTED: not in Champions
+		damageFromItem: "", // NOT CONVERTED: runtime grammar
 		damageFromPartialTrapping: "  [POKEMON] subisce i danni della mossa [MOVE]!",
 		heal: "  [POKEMON] ha recuperato dei PS!",
-		healFromZEffect: "", // NOT CONVERTED: not in Champions
+		healFromZEffect: "", // NOT CONVERTED: runtime grammar
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
 		boost: "  [STAT] di [POKEMON] aumenta!",
@@ -89,7 +89,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boostFromZEffect: "", // NOT CONVERTED: not in Champions
 		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
-		boostMultipleFromZEffect: "", // NOT CONVERTED: not in Champions
+		boostMultipleFromZEffect: "  Le statistiche di [POKEMON] aumentano grazie al Potere Z!",
 
 		unboost: "  [STAT] di [POKEMON] diminuisce!",
 		unboost2: "  [STAT] di [POKEMON] diminuisce di molto!",
@@ -99,12 +99,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
 
-		swapBoost: "", // NOT CONVERTED: not in Champions
+		swapBoost: "  [POKEMON] scambia con il bersaglio le modifiche alle statistiche!",
 		swapOffensiveBoost: "  [POKEMON] scambia con il bersaglio le modifiche ad Attacco e Attacco Speciale!",
 		swapDefensiveBoost: "  [POKEMON] scambia con il bersaglio le modifiche a Difesa e Difesa Speciale!",
 		copyBoost: "  [POKEMON] copia le modifiche alle statistiche di [TARGET]!",
 		clearBoost: "  Le statistiche di [POKEMON] tornano alla normalità!",
-		clearBoostFromZEffect: "", // NOT CONVERTED: not in Champions
+		clearBoostFromZEffect: "  Le statistiche di [POKEMON] che erano diminuite tornano alla normalità grazie al Potere Z!",
 		invertBoost: "  Le modifiche alle statistiche di [POKEMON] vengono invertite!",
 		clearAllBoost: "  Tutte le modifiche alle statistiche sono state annullate!",
 
@@ -120,14 +120,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		critSpread: "  [POKEMON] subisce un brutto colpo!",
 		immune: "  Non ha effetto su [POKEMON]...",
 		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
-		immuneOHKO: "", // NOT CONVERTED: not in Champions
+		immuneOHKO: "  [POKEMON] è incolume!",
 		miss: "  [POKEMON] evita l’attacco!",
 		missNoPokemon: "", // NOT CONVERTED: not in Champions
 
-		center: "", // NOT CONVERTED: not in Champions
+		center: "  Centramento!",
 		noTarget: "", // NOT CONVERTED: not in Champions
 		ohko: "  È un colpo da KO!",
-		combine: "", // NOT CONVERTED: not in Champions
+		combine: "  Formidabile! Due mosse che diventano una! È una mossa combinata!",
 		hitCount: "  Colpi inflitti: [NUMBER]!",
 		hitCountSingular: "  Colpi inflitti: 1!",
 	},
@@ -182,7 +182,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	frz: {
 		start: "  [POKEMON] è stato congelato!",
-		alreadyStarted: "", // NOT CONVERTED: not in Champions
+		alreadyStarted: "  [POKEMON] è già congelato.",
 		end: "  [POKEMON] non è più congelato!",
 		endFromItem: "  [POKEMON] si è scongelato grazie [ITEM]!",
 		endFromMove: "  [MOVE] di [POKEMON] scioglie il ghiaccio!",
@@ -199,7 +199,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] è stato avvelenato!",
 		alreadyStarted: "  [POKEMON] è già avvelenato.",
 		end: "  [POKEMON] guarisce dall’avvelenamento!",
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		endFromItem: "", // NOT CONVERTED: runtime grammar
 		damage: "", // NOT CONVERTED: not in Champions
 	},
 	tox: {
@@ -263,8 +263,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	dynamax: {
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		fail: "", // NOT CONVERTED: not in Champions
+		block: "  La mossa è stata vanificata dalla potenza del fenomeno Dynamax!",
+		fail: "  [POKEMON] scuote il capo. Sembra che non riesca a usare questa mossa...",
 	},
 
 	// weather
@@ -272,7 +272,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "Tempesta di sabbia",
 		start: "  Inizia una tempesta di sabbia!",
 		end: "  La tempesta di sabbia cessa!",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (La tempesta di sabbia imperversa!)",
 		damage: "  La tempesta di sabbia infligge danni [POKEMON]!",
 	},
 	sunnyday: {
@@ -288,7 +288,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		upkeep: "", // NOT CONVERTED: not in Champions
 	},
 	hail: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "Grandine",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 		upkeep: "", // NOT CONVERTED: not in Champions
@@ -302,24 +302,24 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	desolateland: {
 		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  La luce solare diventa accecante!",
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  La luce accecante non si attenua!",
 		blockMove: "", // NOT CONVERTED: not in Champions
 	},
 	primordialsea: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		blockMove: "", // NOT CONVERTED: not in Champions
+		weatherName: "Acquazzone",
+		start: "  È scoppiato un acquazzone!",
+		end: "  Smette di piovere!",
+		block: "  L’acquazzone non si placa!",
+		blockMove: "  L’acquazzone neutralizza le mosse di tipo Fuoco!",
 	},
 	deltastream: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		weatherName: "Vento misterioso",
+		start: "  Una corrente d’aria misteriosa protegge i Pokémon di tipo Volante!",
+		end: "  La corrente d’aria misteriosa si placa!",
+		activate: "  La corrente misteriosa indebolisce l’attacco!",
+		block: "  La corrente misteriosa non si placa!",
 	},
 
 	// terrain
@@ -356,16 +356,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  La nuova dimensione svanisce e gli strumenti tornano ad avere effetto!",
 	},
 	mudsport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  La potenza delle mosse di tipo Elettro diminuisce!",
+		end: "  L’effetto di Fangata è svanito!",
 	},
 	trickroom: {
 		start: "  [POKEMON] crea una dimensione distorta!",
 		end: "  La dimensione distorta torna alla normalità!",
 	},
 	watersport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  La potenza delle mosse di tipo Fuoco diminuisce!",
+		end: "  L’effetto di Docciascudo è svanito!",
 	},
 	wonderroom: {
 		start: "  È stata creata una nuova dimensione in cui Difesa e Difesa Speciale vengono scambiate!",

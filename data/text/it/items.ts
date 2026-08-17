@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Palloncino",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] fluttua in aria grazie al Palloncino!",
 		end: "  Il Palloncino di [POKEMON] è scoppiato!",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Smorzaurti",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON] si protegge con lo Smorzaurti!",
 	},
 	protector: {
 		name: "Copertura",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Bitorzolelmo",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] è ferito da un Bitorzolelmo!",
 	},
 	roomservice: {
 		name: "Distorservizio",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "  [POKEMON] emana una luce abbagliante!",
+		activate: "[POKEMON] ha assunto una nuova forma grazie all’Ultraesplosione!",
 	},
 	unremarkableteacup: {
 		name: "", // NOT CONVERTED: not in PokeAPI

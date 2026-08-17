@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	asoneglastrier: {
 		name: "혼연일체",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "오라의 효과를 역전시켜 위력을 떨어뜨린다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	baddreams: {
 		name: "나이트메어",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	ballfetch: {
 		name: "볼줍기",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "", // NOT CONVERTED: runtime grammar
 	},
 	beadsofruin: {
 		name: "재앙의구슬",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "항상 비몽사몽 상태로 절대 깨지 않는다. 잠든 상태로 공격할 수 있다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	commander: {
 		name: "사령탑",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "전원의 악타입 기술이 강해진다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	dauntlessshield: {
 		name: "불굴의방패",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  탈이 대타가 되었다!",
 		transform: "[POKEMON]의 정체가 드러났다!",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  [TARGET]에게 향기가 배어서 가시지 않게 되었다!",
 	},
 	liquidooze: {
 		name: "해감액",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	liquidvoice: {
 		name: "촉촉보이스",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  주위가 화학변화가스로 가득 찼다!",
+		end: "  화학변화가스의 효과가 사라졌다!",
 	},
 	noguard: {
 		name: "노가드",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "접촉하는 기술을 받으면 3턴 후에 양쪽 모두 기절한다. 교체되면 효과가 없어진다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  두 포켓몬 모두 3턴 후에 쓰러져 버린다!",
 	},
 	pickpocket: {
 		name: "나쁜손버릇",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "HP가 절반이 되면 셀들이 응원하러 달려와 퍼펙트폼으로 모습이 변한다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  많은 기척이 느껴진다...!",
+		transform: "", // NOT CONVERTED: runtime grammar
 	},
 	powerofalchemy: {
 		name: "과학의힘",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: runtime grammar
+		activateFromItem: "", // NOT CONVERTED: runtime grammar
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]에게서 고대활성의 효과가 사라졌다!",
 	},
 	psychicsurge: {
 		name: "사이코메이커",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: runtime grammar
+		activateFromItem: "", // NOT CONVERTED: runtime grammar
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]에게서 쿼크차지의 효과가 사라졌다!",
 	},
 	queenlymajesty: {
 		name: "여왕의위엄",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "HP가 많을 때 무리지어 강해진다. HP가 얼마 남지 않으면 무리는 뿔뿔이 흩어진다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON]의 무리가 모였다!",
+		transformEnd: "[POKEMON]의 무리는 뿔뿔이 흩어졌다!",
 	},
 	scrappy: {
 		name: "배짱",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "", // NOT CONVERTED: runtime grammar
 	},
 	slushrush: {
 		name: "눈치우기",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "블레이드폼 체인지!",
+		transformEnd: "실드폼 체인지!",
 	},
 	static: {
 		name: "정전기",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	thermalexchange: {
 		name: "열교환",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "", // NOT CONVERTED: runtime grammar
 	},
 	turboblaze: {
 		name: "터보블레이즈",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	unaware: {
 		name: "천진",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "달마모드 발동!",
+		transformEnd: "달마모드 해제!",
 	},
 	zerotohero: {
 		name: "마이티체인지",

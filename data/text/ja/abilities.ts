@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は ふたつの 特性を あわせ持つ！",
 	},
 	asoneglastrier: {
 		name: "じんばいったい",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "オーラの 効果を 逆転させて 威力を 下げる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は すべての オーラを 制圧する！",
 	},
 	baddreams: {
 		name: "ナイトメア",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は うなされている！",
 	},
 	ballfetch: {
 		name: "たまひろい",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON]は サトシゲッコウガに 変化した！",
 	},
 	beadsofruin: {
 		name: "わざわいのたま",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "つねに 夢うつつの 状態で 絶対に 目覚めない。 眠ったまま 攻撃が できる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 夢うつつの 状態！",
 	},
 	commander: {
 		name: "しれいとう",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "全員の あくタイプの 技が 強くなる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は ダークオーラを 放っている！",
 	},
 	dauntlessshield: {
 		name: "ふくつのたて",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  ばけのかわが みがわりに なった！",
 		transform: "[POKEMON]の ばけのかわが はがれた！",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  [TARGET]は においが うつって とれなくなっちゃった！",
 	},
 	liquidooze: {
 		name: "ヘドロえき",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は ヘドロえきを 吸い取った！",
 	},
 	liquidvoice: {
 		name: "うるおいボイス",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  あたりに かがくへんかガスが 充満した！",
+		end: "  かがくへんかガスの 効果が 切れた！",
 	},
 	noguard: {
 		name: "ノーガード",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "接触する 技を 受けると お互い ３ターン たつと ひんしになる。 交代すると 効果は なくなる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  おたがいは ３ターン後に 滅びてしまう！",
 	},
 	pickpocket: {
 		name: "わるいてぐせ",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ＨＰが 半分に なると セルたちが 応援に 駆けつけ パーフェクトフォルムに 姿を 変える。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  たくさんの 気配を 感じる……！",
+		transform: "[POKEMON]は パーフェクトフォルムに 変わった！",
 	},
 	powerofalchemy: {
 		name: "かがくのちから",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ブーストエナジーを 持たせるか 天気が 晴れのとき いちばん 高い能力が 上がる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は にほんばれで こだいかっせいを 発動した！",
+		activateFromItem: "  [POKEMON]は ブーストエナジーで こだいかっせいを 発動した！",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]は こだいかっせいの 効果が 切れた！",
 	},
 	psychicsurge: {
 		name: "サイコメイカー",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ブーストエナジーを 持たせるか エレキフィールドのとき いちばん 高い能力が 上がる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は エレキフィールドで クォークチャージを 発動した！",
+		activateFromItem: "  [POKEMON]は ブーストエナジーで クォークチャージを 発動した！",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]は クォークチャージの 効果が 切れた！",
 	},
 	queenlymajesty: {
 		name: "じょおうのいげん",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ＨＰが 多いときは 群れて 強くなる。 ＨＰの 残りが 少なくなると 群れは 散り散りに なってしまう。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON]の 群れが 集まった！",
+		transformEnd: "[POKEMON]の 群れは ちりぢりに なった！",
 	},
 	scrappy: {
 		name: "きもったま",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]は 調子を 取り戻した！",
 	},
 	slushrush: {
 		name: "ゆきかき",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "ブレードフォルム チェンジ！",
+		transformEnd: "シールドフォルム チェンジ！",
 	},
 	static: {
 		name: "せいでんき",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 弾ける オーラを 放っている！",
 	},
 	thermalexchange: {
 		name: "ねつこうかん",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON]は なまけている",
 	},
 	turboblaze: {
 		name: "ターボブレイズ",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 燃え盛る オーラを 放っている！",
 	},
 	unaware: {
 		name: "てんねん",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "ダルマモード 発動！",
+		transformEnd: "ダルマモード 解除！",
 	},
 	zerotohero: {
 		name: "マイティチェンジ",

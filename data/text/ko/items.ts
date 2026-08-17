@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "풍선",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 		end: "  [POKEMON]의 풍선이 터졌다!",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "방호패드",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "", // NOT CONVERTED: runtime grammar
 	},
 	protector: {
 		name: "프로텍터",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "울퉁불퉁멧",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	roomservice: {
 		name: "룸서비스",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "", // NOT CONVERTED: runtime grammar
+		activate: "", // NOT CONVERTED: runtime grammar
 	},
 	unremarkableteacup: {
 		name: "", // NOT CONVERTED: not in PokeAPI

@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] tiene dos habilidades!",
 	},
 	asoneglastrier: {
 		name: "Unidad Ecuestre",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Invierte los efectos de las auras, por lo que baja la potencia de ciertos movimientos en vez de subirla.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] ha invertido todas las auras!",
 	},
 	baddreams: {
 		name: "Mal Sueño",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  ¡[POKEMON] está inmerso en un sueño agitado!",
 	},
 	ballfetch: {
 		name: "Recogebolas",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "¡[POKEMON] se ha convertido en Greninja Ash!",
 	},
 	beadsofruin: {
 		name: "Abalorio Debacle",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "No despierta jamás de su profundo letargo e incluso ataca dormido.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] está sumido en un profundo letargo!",
 	},
 	commander: {
 		name: "Comandar",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Aumenta la potencia de todos los movimientos de tipo Siniestro.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] irradia un aura oscura!",
 	},
 	dauntlessshield: {
 		name: "Escudo Recio",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  ¡El disfraz ha actuado como señuelo!",
 		transform: "¡El disfraz de [POKEMON] se ha roto!",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  ¡Un olor persistente impregna a [TARGET]!",
 	},
 	liquidooze: {
 		name: "Lodo Líquido",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  ¡[POKEMON] ha absorbido la secreción viscosa tóxica!",
 	},
 	liquidvoice: {
 		name: "Voz Fluida",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  ¡Un gas reactivo se propaga por toda la zona!",
+		end: "  El gas reactivo se ha disipado.",
 	},
 	noguard: {
 		name: "Indefenso",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Si le alcanza un movimiento de contacto, se debilitará al cabo de 3 turnos, así como su agresor, a menos que abandonen el terreno de combate.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡Ambos Pokémon se debilitarán dentro de tres turnos!",
 	},
 	pickpocket: {
 		name: "Hurto",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Cuando sus PS se ven reducidos a la mitad, las células se reagrupan y adopta su Forma Completa.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  Sientes múltiples presencias...",
+		transform: "¡[POKEMON] ha adoptado la Forma Completa!",
 	},
 	powerofalchemy: {
 		name: "Reacción Química",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  ¡La habilidad Paleosíntesis de [POKEMON] se ha activado gracial al sol!",
+		activateFromItem: "  ¡[POKEMON] ha usado la Energía Potenciadora para activar Paleosíntesis!",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  ¡El efecto de Paleosíntesis de [POKEMON] ha desaparecido!",
 	},
 	psychicsurge: {
 		name: "Psicogénesis",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  ¡La habilidad Carga Cuark de [POKEMON] se ha activado gracias al campo eléctrico!",
+		activateFromItem: "  ¡[POKEMON] ha usado la Energía Potenciadora para activar Carga Cuark!",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  ¡El efecto de Carga Cuark de [POKEMON] ha desaparecido!",
 	},
 	queenlymajesty: {
 		name: "Regia Presencia",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Forma bancos con sus congéneres cuando tiene muchos PS, lo cual le otorga más fuerza. Cuando le quedan pocos PS, el banco se dispersa.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "¡[POKEMON] ha formado un banco!",
+		transformEnd: "¡El banco de [POKEMON] se ha dispersado!",
 	},
 	scrappy: {
 		name: "Intrépido",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  ¡[POKEMON] ahora va a a por todas!",
 	},
 	slushrush: {
 		name: "Quitanieves",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "¡Cambio a Forma Filo!",
+		transformEnd: "¡Cambio a Forma Escudo!",
 	},
 	static: {
 		name: "Electricidad Estática",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] desprende un aura chisporroteante!",
 	},
 	thermalexchange: {
 		name: "Termoconversión",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "¡[POKEMON] está holgazaneando!",
 	},
 	turboblaze: {
 		name: "Turbollama",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] desprende un aura llameante!",
 	},
 	unaware: {
 		name: "Ignorante",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "¡Modo Daruma activado!",
+		transformEnd: "Modo Daruma desactivado.",
 	},
 	zerotohero: {
 		name: "Cambio Heroico",

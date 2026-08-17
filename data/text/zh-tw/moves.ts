@@ -202,7 +202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  怡人的香氣擴散了開來！",
 	},
 	aromaticmist: {
 		name: "芳香薄霧",
@@ -311,7 +311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "削去身體上多餘的部分。 以大幅提高自己的速度， 同時體重也會變輕。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]變得身輕如燕了！",
 	},
 	avalanche: {
 		name: "雪崩",
@@ -483,9 +483,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]正在忍耐。",
+		end: "  [POKEMON]的忍耐被解除了！",
+		activate: "  [POKEMON]正在忍耐。",
 	},
 	bind: {
 		name: "綁緊",
@@ -868,7 +868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "慶祝",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  恭喜恭喜！[TRAINER]！！",
 	},
 	charge: {
 		name: "充電",
@@ -960,7 +960,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]被[SOURCE]的殼夾住了！",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1216,8 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "使用神奇的力量 防禦住攻擊我方的變化招式。 但無法防禦住攻擊招式的攻擊。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: incompatible placeholders
+		block: "  [POKEMON]受到了戲法防守的保護！",
 	},
 	crosschop: {
 		name: "十字劈",
@@ -1288,8 +1288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		fail: "", // NOT CONVERTED: not in Champions
-		failWrongForme: "", // NOT CONVERTED: not in Champions
+		fail: "但是，[POKEMON]無法使用！",
+		failWrongForme: "但是，現在的[POKEMON]無法使用！",
 	},
 	dazzlinggleam: {
 		name: "魔法閃耀",
@@ -1490,7 +1490,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]將破滅之願託付給了未來！",
 		activate: "", // NOT CONVERTED: not in Champions
 	},
 	doubleedge: {
@@ -1780,8 +1780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]無法使用道具了！",
+		end: "  [POKEMON]變得可以使用道具了！",
 	},
 	ember: {
 		name: "火花",
@@ -1947,7 +1947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  下回合無法逃走！",
 	},
 	fairywind: {
 		name: "妖精之風",
@@ -2066,7 +2066,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "#waterpledge",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]受到了火海的傷害！",
 	},
 	firepunch: {
 		name: "火焰拳",
@@ -2148,7 +2148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  火花也飛濺到了[POKEMON]的身上！",
 	},
 	flamecharge: {
 		name: "蓄能焰襲",
@@ -2327,7 +2327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  識破了[POKEMON]的原形！",
 	},
 	forestscurse: {
 		name: "森林詛咒",
@@ -2353,7 +2353,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "製造出帶有電流的冰塊， 在下一回合攻擊對手。 有時會讓對手陷入麻痺狀態。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]被冷光包圍了！",
 	},
 	freezingglare: {
 		name: "冰冷視線",
@@ -2479,7 +2479,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "使用後的第１回合吸收能量， 並於第２回合大幅提高 自己的特攻、特防和速度。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]正在積蓄力量！",
 	},
 	gigadrain: {
 		name: "終極吸取",
@@ -2547,7 +2547,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]被吞沒在超極巨水砲轟滅的水流裡，痛苦難耐！",
 	},
 	gmaxcentiferno: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2660,7 +2660,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  尖銳的鋼刺扎進了[POKEMON]體內！",
 	},
 	gmaxstonesurge: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2693,7 +2693,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]被暴露在超極巨灰飛鞭滅的猛擊下，疼痛不堪！",
 	},
 	gmaxvolcalith: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2714,7 +2714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]被超極巨地獄滅焰的火焰包圍，熾熱難耐！",
 	},
 	gmaxwindrage: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2807,7 +2807,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		activate: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "[POKEMON]想向對手施放怨念！",
 	},
 	guardianofalola: {
 		name: "巨人衛士・阿羅拉",
@@ -2888,7 +2888,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "歡樂時光",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  大家被歡樂的氣氛包圍了！",
 	},
 	harden: {
 		name: "變硬",
@@ -3277,7 +3277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "在使用後的下一回合， 用能夠凍結一切的強烈寒氣包圍對手。 有時會讓對手陷入灼傷狀態。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]被冰凍的空氣包圍了！",
 	},
 	icefang: {
 		name: "冰凍牙",
@@ -3357,7 +3357,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "  [POKEMON]的[ITEM]被燒掉了！",
 	},
 	infernalparade: {
 		name: "群魔乱舞",
@@ -3426,7 +3426,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  等離子雨傾盆而下！",
 	},
 	irondefense: {
 		name: "鐵壁",
@@ -3564,7 +3564,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "集中精神， 下次攻擊必定會擊中要害。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]集中了精神！",
 	},
 	lashout: {
 		name: "洩憤",
@@ -3760,7 +3760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON]被神秘的月光包圍了！",
 	},
 	lunge: {
 		name: "猛撲",
@@ -3800,7 +3800,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]獲得了魔法反射的效果！",
 		move: "", // NOT CONVERTED: not in Champions
 	},
 	magicpowder: {
@@ -3834,7 +3834,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]被困在了熔岩旋渦之中！",
 	},
 	magnetbomb: {
 		name: "磁鐵炸彈",
@@ -3896,7 +3896,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [MOVE]被掀榻榻米防禦住了！",
 	},
 	matchagotcha: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -4076,7 +4076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  因為Ｚ力量，[POKEMON]的體力回復了！",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "月華飛濺落靈霄",
@@ -4150,7 +4150,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "揮動手指後，使出了[MOVE]！",
 	},
 	mightycleave: {
 		name: "強刃攻擊",
@@ -4191,7 +4191,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]學會了[MOVE]！",
 	},
 	mindblown: {
 		name: "驚爆大頭",
@@ -4308,7 +4308,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON]正受到白霧的保護！",
 	},
 	mistball: {
 		name: "薄霧球",
@@ -4473,7 +4473,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "自然之力變成了[MOVE]！",
 	},
 	naturesmadness: {
 		name: "自然之怒",
@@ -4502,8 +4502,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]開始做惡夢了！",
+		damage: "  [POKEMON]正被惡夢纏身！",
 	},
 	nightshade: {
 		name: "黑夜魔影",
@@ -4667,7 +4667,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "往對手身上 投擲金幣進行攻擊。 戰鬥後可以得到錢。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  金幣散落一地！",
 	},
 	peck: {
 		name: "啄",
@@ -4849,8 +4849,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  向[POKEMON]拋灑了粉塵！",
+		activate: "", // NOT CONVERTED: incompatible placeholders
 	},
 	powdersnow: {
 		name: "細雪",
@@ -4881,7 +4881,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]互換了進攻力和防守力！",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5227,7 +5227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]周圍的空氣產生了旋渦！",
 	},
 	recover: {
 		name: "自我再生",
@@ -5789,9 +5789,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "設下甲殼陷阱。 若對手使出物理招式， 就會爆炸並給予傷害。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		prepare: "", // NOT CONVERTED: not in Champions
-		cant: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]設下了陷阱甲殼！",
+		prepare: "  [POKEMON]設下了陷阱甲殼！",
+		cant: "[POKEMON]的陷阱甲殼沒有被觸發！",
 	},
 	shelter: {
 		name: "闭关",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]對[MOVE]進行了寫生！",
 	},
 	skillswap: {
 		name: "特性互換",
@@ -5916,7 +5916,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]把頭縮了進去！",
 	},
 	skyattack: {
 		name: "神鳥猛擊",
@@ -5940,10 +5940,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		failSelect: "", // NOT CONVERTED: not in Champions
-		failTooHeavy: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]將[TARGET]帶上了高空！",
+		end: "  [POKEMON]擺脫了自由落體！",
+		failSelect: "[POKEMON]因自由落體而無法自由行動！",
+		failTooHeavy: "  [POKEMON]太重了，抬不起來！",
 	},
 	skyuppercut: {
 		name: "衝天拳",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]正在觀察對手的動向！",
+		activate: "  [POKEMON]搶奪了[TARGET]的招式！",
 	},
 	snipeshot: {
 		name: "狙擊",
@@ -6198,7 +6198,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "潛入對手的影子， 奪取對手的能力提升進行攻擊。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		clearBoost: "", // NOT CONVERTED: not in Champions
+		clearBoost: "  [SOURCE]奪取了提高的那部分能力！",
 	},
 	speedswap: {
 		name: "速度互換",
@@ -6841,7 +6841,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "射出黏黏的瀝青， 降低對手的速度。 對手的弱點將變為火。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]變得怕火了！",
 	},
 	taunt: {
 		name: "挑釁",
@@ -6907,8 +6907,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  讓[POKEMON]浮在了空中！",
+		end: "  [POKEMON]擺脫了意念移物！",
 	},
 	teleport: {
 		name: "瞬間移動",
@@ -7046,7 +7046,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]被[SOURCE]困住了！",
 	},
 	thunderclap: {
 		name: "迅雷",
@@ -7429,7 +7429,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "用水柱進行攻擊。 和火之誓約同時使用時，威力會提高， 天空會出現彩虹。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]正在等候[TARGET]……",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 	},

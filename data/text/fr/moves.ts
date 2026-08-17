@@ -202,7 +202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  Une odeur apaisante flotte dans l’air !",
 	},
 	aromaticmist: {
 		name: "Brume Capiteuse",
@@ -311,7 +311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur se débarrasse des parties inutiles de son corps. Son poids diminue et sa Vitesse augmente beaucoup.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est devenu très vif !",
 	},
 	avalanche: {
 		name: "Avalanche",
@@ -483,9 +483,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] prend son mal en patience !",
+		end: "  [POKEMON] perd patience et se déchaîne !",
+		activate: "  [POKEMON] prend son mal en patience !",
 	},
 	bind: {
 		name: "Étreinte",
@@ -868,7 +868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Célébration",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  Félicitations, [TRAINER] !",
 	},
 	charge: {
 		name: "Chargeur",
@@ -960,7 +960,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1216,8 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Utilise une force mystérieuse pour protéger l’équipe des capacités de statut. Ne protège pas des autres capacités.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: incompatible placeholders
+		block: "  [POKEMON] est protégé par la capacité Vigilance !",
 	},
 	crosschop: {
 		name: "Coup Croix",
@@ -1288,8 +1288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		fail: "", // NOT CONVERTED: not in Champions
-		failWrongForme: "", // NOT CONVERTED: not in Champions
+		fail: "Mais il en est incapable !",
+		failWrongForme: "Mais il en est incapable sous cette forme !",
 	},
 	dazzlinggleam: {
 		name: "Éclat Magique",
@@ -1490,7 +1490,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] souhaite que la capacité Vœu Destructeur se déclenche !",
 		activate: "", // NOT CONVERTED: not in Champions
 	},
 	doubleedge: {
@@ -1780,8 +1780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] ne peut plus utiliser d’objets !",
+		end: "  [POKEMON] peut de nouveau utiliser des objets !",
 	},
 	ember: {
 		name: "Flammèche",
@@ -1947,7 +1947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  Il sera impossible de fuir au tour suivant !",
 	},
 	fairywind: {
 		name: "Vent Féérique",
@@ -2066,7 +2066,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "#waterpledge",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] est plongé dans un océan de feu !",
 	},
 	firepunch: {
 		name: "Poing Feu",
@@ -2148,7 +2148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] est arrosé d’une gerbe de flammes !",
 	},
 	flamecharge: {
 		name: "Nitrocharge",
@@ -2327,7 +2327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est identifié !",
 	},
 	forestscurse: {
 		name: "Maléfice Sylvain",
@@ -2353,7 +2353,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Projette un bloc de glace électrifié sur l’ennemi au second tour. Peut aussi le paralyser.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON] est baigné d’une lumière blafarde !",
 	},
 	freezingglare: {
 		name: "Regard Glaçant",
@@ -2479,7 +2479,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur absorbe de l’énergie au premier tour et augmente beaucoup son Attaque Spéciale, sa Défense Spéciale et sa Vitesse au second.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON] concentre son énergie !",
 	},
 	gigadrain: {
 		name: "Giga-Sangsue",
@@ -2547,7 +2547,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] subit la violence du tourbillon provoqué par Canonnade G-Max !",
 	},
 	gmaxcentiferno: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2660,7 +2660,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  L’acier pointu transperce [POKEMON] !",
 	},
 	gmaxstonesurge: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2693,7 +2693,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] subit des coups de Fouet G-Max !",
 	},
 	gmaxvolcalith: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2714,7 +2714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] est brûlé par les flammes de Fournaise G-Max !",
 	},
 	gmaxwindrage: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2807,7 +2807,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		activate: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "[POKEMON] veut que sa cible subisse sa rancune !",
 	},
 	guardianofalola: {
 		name: "Colère du Gardien d’Alola",
@@ -2888,7 +2888,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Étrennes",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  L’ambiance est euphorique !",
 	},
 	harden: {
 		name: "Armure",
@@ -3277,7 +3277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Au second tour, le lanceur projette un souffle de vent glacial dévastateur sur l’ennemi. Peut aussi le brûler.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON] est entouré d’un air glacial !",
 	},
 	icefang: {
 		name: "Crocs Givre",
@@ -3357,7 +3357,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "", // NOT CONVERTED: runtime grammar
 	},
 	infernalparade: {
 		name: "Cortège Funèbre",
@@ -3426,7 +3426,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  Un déluge de plasma s’abat sur le terrain !",
 	},
 	irondefense: {
 		name: "Mur de Fer",
@@ -3564,7 +3564,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur se concentre pour être sûr de porter un coup critique au tour suivant.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] aiguise son esprit !",
 	},
 	lashout: {
 		name: "Cent Rancunes",
@@ -3760,7 +3760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON] baigne dans la lumière des rayons de lune !",
 	},
 	lunge: {
 		name: "Furie-Bond",
@@ -3800,7 +3800,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] s’entoure du Reflet Magik !",
 		move: "", // NOT CONVERTED: not in Champions
 	},
 	magicpowder: {
@@ -3834,7 +3834,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est piégé dans un tourbillon de magma !",
 	},
 	magnetbomb: {
 		name: "Bombe Aimant",
@@ -3896,7 +3896,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  La capacité [MOVE] a été bloquée par un tatami !",
 	},
 	matchagotcha: {
 		name: "Mortier Matcha",
@@ -4076,7 +4076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON] utilise la Force Z pour se soigner !",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "Rayons Séléno-Explosifs",
@@ -4150,7 +4150,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "Grâce à Métronome, le Pokémon lance la capacité [MOVE] !",
 	},
 	mightycleave: {
 		name: "Lame Puissante",
@@ -4191,7 +4191,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] apprend [MOVE] !",
 	},
 	mindblown: {
 		name: "Caboche-Kaboum",
@@ -4308,7 +4308,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON] est protégé par la brume !",
 	},
 	mistball: {
 		name: "Ball’Brume",
@@ -4473,7 +4473,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "La capacité Force Nature se transforme en [MOVE] !",
 	},
 	naturesmadness: {
 		name: "Ire de la Nature",
@@ -4502,8 +4502,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] commence à cauchemarder !",
+		damage: "  [POKEMON] est prisonnier d’un cauchemar !",
 	},
 	nightshade: {
 		name: "Ombre Nocturne",
@@ -4667,7 +4667,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Des pièces sont lancées sur l’ennemi. Permet d’obtenir de l’argent à la fin du combat.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  Il pleut des pièces !",
 	},
 	peck: {
 		name: "Picpic",
@@ -4849,8 +4849,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est couvert de poudre !",
+		activate: "", // NOT CONVERTED: incompatible placeholders
 	},
 	powdersnow: {
 		name: "Poudreuse",
@@ -4881,7 +4881,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur échange son Attaque avec sa Défense.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] échange sa puissance offensive et sa puissance défensive !",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5227,7 +5227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON] se prépare à lancer une bourrasque !",
 	},
 	recover: {
 		name: "Soin",
@@ -5789,9 +5789,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Pose une carapace piégée. Si l’adversaire utilise une capacité physique, la carapace explose et lui inflige des dégâts.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		prepare: "", // NOT CONVERTED: not in Champions
-		cant: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] déclenche le Carapiège !",
+		prepare: "  [POKEMON] déclenche le Carapiège !",
+		cant: "", // NOT CONVERTED: runtime grammar
 	},
 	shelter: {
 		name: "Mur Fumigène",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] utilise Gribouille pour copier [MOVE] !",
 	},
 	skillswap: {
 		name: "Échange",
@@ -5916,7 +5916,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON] baisse la tête !",
 	},
 	skyattack: {
 		name: "Piqué",
@@ -5940,10 +5940,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		failSelect: "", // NOT CONVERTED: not in Champions
-		failTooHeavy: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON] emporte [TARGET] haut dans le ciel !",
+		end: "  [POKEMON] est lâché en chute libre !",
+		failSelect: "[POKEMON] est en chute libre ! Cette action est impossible !",
+		failTooHeavy: "  [POKEMON] est trop lourd pour être emporté !",
 	},
 	skyuppercut: {
 		name: "Stratopercut",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] attend qu’une cible agisse !",
+		activate: "", // NOT CONVERTED: runtime grammar
 	},
 	snipeshot: {
 		name: "Tir de Précision",
@@ -6198,7 +6198,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur plonge dans l’ombre de la cible, vole ses augmentations de stats et l’attaque.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		clearBoost: "", // NOT CONVERTED: not in Champions
+		clearBoost: "  [SOURCE] vole les augmentations de stats !",
 	},
 	speedswap: {
 		name: "Permuvitesse",
@@ -6841,7 +6841,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur recouvre sa cible de goudron liquide pour baisser sa Vitesse et la rendre vulnérable au feu.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est maintenant vulnérable au feu !",
 	},
 	taunt: {
 		name: "Provoc",
@@ -6907,8 +6907,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  Ça fait léviter [POKEMON] !",
+		end: "  [POKEMON] est libéré de la capacité Lévikinésie !",
 	},
 	teleport: {
 		name: "Téléport",
@@ -7046,7 +7046,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] se fait emprisonner par [SOURCE] !",
 	},
 	thunderclap: {
 		name: "Vif Éclair",
@@ -7429,7 +7429,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Une masse d’eau s’abat sur l’ennemi. En l’utilisant avec Aire de Feu, l’effet augmente et un arc-en-ciel apparaît.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] attend [TARGET]...",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 	},

@@ -202,7 +202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  心地よい 香りが 広がった！",
 	},
 	aromaticmist: {
 		name: "アロマミスト",
@@ -311,7 +311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "体の ムダな 部分を 削る。 自分の 素早さを ぐーんと あげて 体重も 軽くなる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 身軽になった！",
 	},
 	avalanche: {
 		name: "ゆきなだれ",
@@ -483,9 +483,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は がまんしている",
+		end: "  [POKEMON]の がまんが 解かれた！",
+		activate: "  [POKEMON]は がまんしている",
 	},
 	bind: {
 		name: "しめつける",
@@ -868,7 +868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "おいわい",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  おめでとう！ [TRAINER]！！",
 	},
 	charge: {
 		name: "じゅうでん",
@@ -960,7 +960,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は [SOURCE]の からに 挟まれた！",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1216,8 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "不思議な 力を 使って 味方への 変化技を 防ぐ。 ダメージ技は 受けてしまう。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: incompatible placeholders
+		block: "  [POKEMON]は トリックガードで 守られた！",
 	},
 	crosschop: {
 		name: "クロスチョップ",
@@ -1288,8 +1288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		fail: "", // NOT CONVERTED: not in Champions
-		failWrongForme: "", // NOT CONVERTED: not in Champions
+		fail: "しかし [POKEMON]には 使うことが できなかった！",
+		failWrongForme: "しかし 今の [POKEMON]には 使うことが できなかった！",
 	},
 	dazzlinggleam: {
 		name: "マジカルシャイン",
@@ -1490,7 +1490,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は はめつのねがいを 未来に託した！",
 		activate: "", // NOT CONVERTED: not in Champions
 	},
 	doubleedge: {
@@ -1780,8 +1780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]には 道具が 使えなくなった！",
+		end: "  [POKEMON]に 道具が 使えるようになった！",
 	},
 	ember: {
 		name: "ひのこ",
@@ -1947,7 +1947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  次のターンは 逃げられない！",
 	},
 	fairywind: {
 		name: "ようせいのかぜ",
@@ -2066,7 +2066,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "#waterpledge",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は 火の海の ダメージを受けた！",
 	},
 	firepunch: {
 		name: "ほのおのパンチ",
@@ -2148,7 +2148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]にも 火花が 降りかかった！",
 	},
 	flamecharge: {
 		name: "ニトロチャージ",
@@ -2327,7 +2327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]の 正体を 見破った！",
 	},
 	forestscurse: {
 		name: "もりののろい",
@@ -2353,7 +2353,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "電気を まとった 氷の 塊で ２ターン目に 相手を たたきつける。 まひ状態に することが ある。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]は 冷たい光に 包まれた！",
 	},
 	freezingglare: {
 		name: "いてつくしせん",
@@ -2479,7 +2479,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "１ターン目で エネルギーを 吸収し ２ターン目に 特攻 特防 素早さを ぐーんと あげる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]は パワーを ためこんでいる！",
 	},
 	gigadrain: {
 		name: "ギガドレイン",
@@ -2547,7 +2547,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
 	},
 	gmaxcentiferno: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2660,7 +2660,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]に とがった はがねが 食いこんだ！",
 	},
 	gmaxstonesurge: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2693,7 +2693,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は キョダイベンタツの 猛打に さらされていて 痛い！",
 	},
 	gmaxvolcalith: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2714,7 +2714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は キョダイゴクエンの 炎に 包まれていて 熱い！",
 	},
 	gmaxwindrage: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2807,7 +2807,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		activate: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "[POKEMON]は 相手に おんねんを かけようとしている！",
 	},
 	guardianofalola: {
 		name: "ガーディアン・デ・アローラ",
@@ -2888,7 +2888,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ハッピータイム",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  みんなが ハッピーな気分に 包まれた！",
 	},
 	harden: {
 		name: "かたくなる",
@@ -3277,7 +3277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "すべてを 凍らせる 激しい 冷気で ２ターン目に 相手を 包みこむ。 やけど状態に することが ある。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]は 凍える空気に 包まれた！",
 	},
 	icefang: {
 		name: "こおりのキバ",
@@ -3357,7 +3357,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "  [POKEMON]の [ITEM]は 焼けてなくなった！",
 	},
 	infernalparade: {
 		name: "ひゃっきやこう",
@@ -3426,7 +3426,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  電子のシャワーが 降りそそいだ！",
 	},
 	irondefense: {
 		name: "てっぺき",
@@ -3564,7 +3564,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "精神を 集中して 次の 攻撃を 必ず 急所に 当てる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 精神を 研ぎ澄ました！",
 	},
 	lashout: {
 		name: "うっぷんばらし",
@@ -3760,7 +3760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON]は 神秘的な 月の光に 包まれた！",
 	},
 	lunge: {
 		name: "とびかかる",
@@ -3800,7 +3800,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は マジックコートに 包まれた！",
 		move: "", // NOT CONVERTED: not in Champions
 	},
 	magicpowder: {
@@ -3834,7 +3834,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は マグマの渦に 閉じこめられた！",
 	},
 	magnetbomb: {
 		name: "マグネットボム",
@@ -3896,7 +3896,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [MOVE]は たたみがえしで 防がれた！",
 	},
 	matchagotcha: {
 		name: "シャカシャカほう",
@@ -4076,7 +4076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON]は Ｚパワーで 体力が 回復した！",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "ムーンライトブラスター",
@@ -4150,7 +4150,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "指を振ったら [MOVE] がでた！",
 	},
 	mightycleave: {
 		name: "パワフルエッジ",
@@ -4191,7 +4191,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は [MOVE]を 覚えた！",
 	},
 	mindblown: {
 		name: "ビックリヘッド",
@@ -4308,7 +4308,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON]は 白い霧に 守られている！",
 	},
 	mistball: {
 		name: "ミストボール",
@@ -4473,7 +4473,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "しぜんのちからは [MOVE] になった！",
 	},
 	naturesmadness: {
 		name: "しぜんのいかり",
@@ -4502,8 +4502,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 悪夢を 見始めた！",
+		damage: "  [POKEMON]は 悪夢に うなされている！",
 	},
 	nightshade: {
 		name: "ナイトヘッド",
@@ -4667,7 +4667,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "相手の 体に 小判を 投げつけて 攻撃する。 戦闘の あとで お金が もらえる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  小判が あたりに 散らばった！",
 	},
 	peck: {
 		name: "つつく",
@@ -4849,8 +4849,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]に ふんじんを あびせた！",
+		activate: "", // NOT CONVERTED: incompatible placeholders
 	},
 	powdersnow: {
 		name: "こなゆき",
@@ -4881,7 +4881,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 攻めの力と 守りの力を 入れ替えた！",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5227,7 +5227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]の 周りで 空気が 渦を巻く！",
 	},
 	recover: {
 		name: "じこさいせい",
@@ -5789,9 +5789,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "こうらの トラップを しかける。 相手が 物理技を 出すと 爆発して ダメージを 与える。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		prepare: "", // NOT CONVERTED: not in Champions
-		cant: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は トラップシェルを 仕掛けた！",
+		prepare: "  [POKEMON]は トラップシェルを 仕掛けた！",
+		cant: "[POKEMON]の トラップシェルは 不発に 終わった！",
 	},
 	shelter: {
 		name: "たてこもる",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は [MOVE]を スケッチした！",
 	},
 	skillswap: {
 		name: "スキルスワップ",
@@ -5916,7 +5916,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]は 首を 引っこめた！",
 	},
 	skyattack: {
 		name: "ゴッドバード",
@@ -5940,10 +5940,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		failSelect: "", // NOT CONVERTED: not in Champions
-		failTooHeavy: "", // NOT CONVERTED: not in Champions
+		prepare: "[POKEMON]は [TARGET]を 上空に 連れ去った！",
+		end: "  [POKEMON]は フリーフォールから 解放された！",
+		failSelect: "[POKEMON]は フリーフォールで 自由に ならない！",
+		failTooHeavy: "  [POKEMON]は 重すぎて 持ち上げられない！",
 	},
 	skyuppercut: {
 		name: "スカイアッパー",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は 相手の でかたを うかがっている！",
+		activate: "  [POKEMON]は [TARGET]の 技を 横取りした！",
 	},
 	snipeshot: {
 		name: "ねらいうち",
@@ -6198,7 +6198,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "相手の 影に 潜り込み 相手の 能力アップを 奪って 攻撃する。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		clearBoost: "", // NOT CONVERTED: not in Champions
+		clearBoost: "  [SOURCE]は 上がった 能力を 奪い取った！",
 	},
 	speedswap: {
 		name: "スピードスワップ",
@@ -6841,7 +6841,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "ねばねばの タールを 浴びせて 相手の 素早さを 下げる。 相手は ほのおが 弱点に なる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は ほのおに 弱くなった！",
 	},
 	taunt: {
 		name: "ちょうはつ",
@@ -6907,8 +6907,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]を 宙に 浮かせた！",
+		end: "  [POKEMON]は テレキネシスから 解放された！",
 	},
 	teleport: {
 		name: "テレポート",
@@ -7046,7 +7046,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は [SOURCE]に 閉じこめられた！",
 	},
 	thunderclap: {
 		name: "じんらい",
@@ -7429,7 +7429,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "水の柱で 攻撃する。 ほのおと 組みあわせると 威力が あがって 空に にじが かかる。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は [TARGET]を 待っている…",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 	},

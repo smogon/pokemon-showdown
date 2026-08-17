@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Luftballon",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] gerät durch den Luftballon in die Schwebe!",
 		end: "  Der Luftballon von [POKEMON] ist geplatzt!",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Schutzpolster",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON] wurde durch Schutzpolster geschützt!",
 	},
 	protector: {
 		name: "Schützer",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Beulenhelm",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] erleidet durch den Beulenhelm Schaden!",
 	},
 	roomservice: {
 		name: "Bizarroservice",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "  Ein gleißendes Licht strömt aus [POKEMON]!",
+		activate: "[POKEMON] hat durch den Ultra Burst eine neue Form angenommen!",
 	},
 	unremarkableteacup: {
 		name: "", // NOT CONVERTED: not in PokeAPI

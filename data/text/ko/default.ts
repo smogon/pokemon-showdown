@@ -19,13 +19,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		drag: "[FULLNAME] 배틀에 끌려 나왔다!",
 		faint: "[POKEMON] 쓰러졌다!",
 		swap: "[POKEMON] [TARGET] 자리를 바꿨다!",
-		swapCenter: "", // NOT CONVERTED: not in Champions
+		swapCenter: "", // NOT CONVERTED: runtime grammar
 
 		// Multi Battles only
-		canDynamax: "", // NOT CONVERTED: not in Champions
-		canDynamaxOwn: "", // NOT CONVERTED: not in Champions
+		canDynamax: "", // NOT CONVERTED: runtime grammar
+		canDynamaxOwn: "  [TRAINER]에게 다이맥스 파워가 모였다!",
 
-		zEffect: "", // NOT CONVERTED: not in Champions
+		zEffect: "", // NOT CONVERTED: runtime grammar
 		move: "[POKEMON]의 **[MOVE]**!",
 		abilityActivation: "[[POKEMON]의 [ABILITY]]",
 
@@ -33,8 +33,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		megaNoItem: "", // NOT CONVERTED: not in Champions
 		megaGen6: "", // NOT CONVERTED: not in Champions
 		transformMega: "[POKEMON] 메가[SPECIES]로 메가진화했다!",
-		primal: "", // NOT CONVERTED: not in Champions
-		zPower: "", // NOT CONVERTED: not in Champions
+		primal: "[POKEMON]의 원시회귀! 원시의 모습으로 돌아갔다!",
+		zPower: "", // NOT CONVERTED: runtime grammar
 		zBroken: "  [POKEMON] 공격을 막아 내지 못하고 데미지를 입었다!",
 		terastallize: "", // NOT CONVERTED: not in Champions
 
@@ -73,10 +73,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  ([POKEMON] 데미지를 입었다!)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
 		damageFromPokemon: "", // NOT CONVERTED: not in Champions
-		damageFromItem: "", // NOT CONVERTED: not in Champions
+		damageFromItem: "", // NOT CONVERTED: runtime grammar
 		damageFromPartialTrapping: "  [POKEMON] [MOVE]의 데미지를 입고 있다.",
 		heal: "  [POKEMON]의 체력이 회복되었다!",
-		healFromZEffect: "", // NOT CONVERTED: not in Champions
+		healFromZEffect: "", // NOT CONVERTED: runtime grammar
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
 		boost: "  [POKEMON]의 [STAT] 올라갔다!",
@@ -89,7 +89,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boostFromZEffect: "", // NOT CONVERTED: not in Champions
 		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
-		boostMultipleFromZEffect: "", // NOT CONVERTED: not in Champions
+		boostMultipleFromZEffect: "", // NOT CONVERTED: runtime grammar
 
 		unboost: "  [POKEMON]의 [STAT] 떨어졌다!",
 		unboost2: "  [POKEMON]의 [STAT] 크게 떨어졌다!",
@@ -99,12 +99,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
 
-		swapBoost: "", // NOT CONVERTED: not in Champions
+		swapBoost: "", // NOT CONVERTED: runtime grammar
 		swapOffensiveBoost: "  [POKEMON] 상대와 자신의 공격과 특수공격의 능력 변화를 바꿨다!",
 		swapDefensiveBoost: "  [POKEMON] 상대와 자신의 방어와 특수방어의 능력 변화를 바꿨다!",
 		copyBoost: "  [POKEMON] [TARGET]의 능력 변화를 복사했다!",
 		clearBoost: "  [POKEMON]의 능력 변화가 원래대로 되돌아왔다!",
-		clearBoostFromZEffect: "", // NOT CONVERTED: not in Champions
+		clearBoostFromZEffect: "", // NOT CONVERTED: runtime grammar
 		invertBoost: "  [POKEMON] 능력 변화가 뒤집혔다!",
 		clearAllBoost: "  모든 상태가 원래대로 되돌아왔다!",
 
@@ -120,14 +120,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		critSpread: "  [POKEMON]의 급소에 맞았다!",
 		immune: "  [POKEMON]에게는 효과가 없는 것 같다...",
 		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
-		immuneOHKO: "", // NOT CONVERTED: not in Champions
+		immuneOHKO: "  [POKEMON]에게는 전혀 효과가 없다!",
 		miss: "  [POKEMON]에게는 맞지 않았다!",
 		missNoPokemon: "", // NOT CONVERTED: not in Champions
 
-		center: "", // NOT CONVERTED: not in Champions
+		center: "  리셋무브!!",
 		noTarget: "", // NOT CONVERTED: not in Champions
 		ohko: "  일격필살!",
-		combine: "", // NOT CONVERTED: not in Champions
+		combine: "  2개의 기술이 하나가 되었다! 콤비네이션 기술이다!",
 		hitCount: "  [NUMBER]번 맞았다!",
 		hitCountSingular: "  1번 맞았다!",
 	},
@@ -182,7 +182,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	frz: {
 		start: "  [POKEMON] 얼어붙었다!",
-		alreadyStarted: "", // NOT CONVERTED: not in Champions
+		alreadyStarted: "", // NOT CONVERTED: runtime grammar
 		end: "  [POKEMON]의 얼음이 녹았다!",
 		endFromItem: "  [POKEMON] [ITEM]로 얼음 상태가 나았다!",
 		endFromMove: "  [POKEMON]의 [MOVE] 때문에 얼음이 녹았다!",
@@ -199,7 +199,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]의 몸에 독이 퍼졌다!",
 		alreadyStarted: "  [POKEMON] 이미 몸에 독이 퍼진 상태다.",
 		end: "  [POKEMON]의 독은 말끔하게 해독됐다!",
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		endFromItem: "", // NOT CONVERTED: runtime grammar
 		damage: "", // NOT CONVERTED: not in Champions
 	},
 	tox: {
@@ -263,8 +263,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	dynamax: {
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		fail: "", // NOT CONVERTED: not in Champions
+		block: "  다이맥스의 힘으로 튕겨 냈다!",
+		fail: "", // NOT CONVERTED: runtime grammar
 	},
 
 	// weather
@@ -272,7 +272,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "모래바람 상태",
 		start: "  모래바람이 불기 시작했다!",
 		end: "  모래바람이 가라앉았다!",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (모래바람이 세차게 분다!)",
 		damage: "  모래바람이 [POKEMON] 덮쳤다!",
 	},
 	sunnyday: {
@@ -288,7 +288,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		upkeep: "", // NOT CONVERTED: not in Champions
 	},
 	hail: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "싸라기눈",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 		upkeep: "", // NOT CONVERTED: not in Champions
@@ -302,24 +302,24 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	desolateland: {
 		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  햇살이 아주 강해졌다!",
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  강한 햇살의 기세는 멈추지 않는다!",
 		blockMove: "", // NOT CONVERTED: not in Champions
 	},
 	primordialsea: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		blockMove: "", // NOT CONVERTED: not in Champions
+		weatherName: "폭우",
+		start: "  강한 비가 내리기 시작했다!",
+		end: "  강한 비가 그쳤다!",
+		block: "  강한 비의 기세는 멈추지 않는다!",
+		blockMove: "  강한 비의 영향으로 불꽃타입의 공격이 사라졌다!",
 	},
 	deltastream: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		weatherName: "난기류",
+		start: "  수수께끼의 난기류가 비행포켓몬을 지킨다!",
+		end: "  수수께끼의 난기류가 가라앉았다!",
+		activate: "  수수께끼의 난기류가 공격을 약하게 만들었다!",
+		block: "  수수께끼의 난기류의 기세는 멈추지 않는다!",
 	},
 
 	// terrain
@@ -356,16 +356,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  매직룸이 해제되어 도구의 효과가 원래대로 되돌아왔다!",
 	},
 	mudsport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  전기의 위력이 약해졌다!",
+		end: "  흙놀이의 효과가 없어졌다!",
 	},
 	trickroom: {
 		start: "  [POKEMON] 시공을 뒤틀었다!",
 		end: "  뒤틀린 시공이 원래대로 되돌아왔다!",
 	},
 	watersport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  불꽃의 위력이 약해졌다!",
+		end: "  물놀이의 효과가 없어졌다!",
 	},
 	wonderroom: {
 		start: "  방어와 특수방어가 바뀌는 공간을 만들어 냈다!",

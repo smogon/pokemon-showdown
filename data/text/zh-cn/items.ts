@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "气球",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]靠着气球浮在了空中！",
 		end: "  [POKEMON]的气球破了！",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "部位护具",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON]靠着部位护具防住了！",
 	},
 	protector: {
 		name: "护具",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "凸凸头盔",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]因凸凸头盔受到了伤害！",
 	},
 	roomservice: {
 		name: "客房服务",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "  [POKEMON]的身上开始溢出耀眼的光芒！",
+		activate: "[POKEMON]通过究极爆发现出了新的样子！",
 	},
 	unremarkableteacup: {
 		name: "", // NOT CONVERTED: not in PokeAPI

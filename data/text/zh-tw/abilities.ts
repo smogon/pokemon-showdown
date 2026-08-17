@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]兼具２種特性！",
 	},
 	asoneglastrier: {
 		name: "人馬一體",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "讓氣場的效果逆轉， 並降低威力。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]壓制了所有氣場！",
 	},
 	baddreams: {
 		name: "夢魘",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]正被惡夢纏身！",
 	},
 	ballfetch: {
 		name: "撿球",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON]變身成了小智版甲賀忍蛙！",
 	},
 	beadsofruin: {
 		name: "災禍之玉",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "總是半夢半醒的狀態， 絕對不會醒來。 可在睡著的狀況下進行攻擊。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]處於半夢半醒狀態！",
 	},
 	commander: {
 		name: "發號施令",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "全體的惡屬性招式變強。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]釋放著暗黑氣場！",
 	},
 	dauntlessshield: {
 		name: "不屈之盾",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  畫皮變成了替身！",
 		transform: "[POKEMON]的畫皮脫落了！",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  [TARGET]被染上了甩不掉的氣味！",
 	},
 	liquidooze: {
 		name: "污泥漿",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]吸到了污泥漿！",
 	},
 	liquidvoice: {
 		name: "濕潤之聲",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  周圍充滿了化學變化氣體！",
+		end: "  化學變化氣體的效果消失了！",
 	},
 	noguard: {
 		name: "無防守",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "在受到接觸類招式攻擊時， ３個回合後雙方都會陷入瀕死。 替換寶可夢後效果就會消失。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  雙方將在３回合後滅亡！",
 	},
 	pickpocket: {
 		name: "順手牽羊",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ＨＰ變為一半時， 細胞們會趕來支援， 變為完全體形態。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  感受到大量的氣息存在……！",
+		transform: "[POKEMON]變成了完全體形態！",
 	},
 	powerofalchemy: {
 		name: "化學之力",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]用大晴天發動了古代活性！",
+		activateFromItem: "  [POKEMON]用驅勁能量發動了古代活性！",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]的古代活性效果消失了！",
 	},
 	psychicsurge: {
 		name: "精神製造者",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]透過電氣場地發動了夸克充能！",
+		activateFromItem: "  [POKEMON]用驅勁能量發動了夸克充能！",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]的夸克充能效果消失了！",
 	},
 	queenlymajesty: {
 		name: "女王的威嚴",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "ＨＰ多的時候會聚起來變強。 ＨＰ剩餘量變少時， 群體會分崩離析。",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON]的群體聚集起來了！",
+		transformEnd: "[POKEMON]的群體四散而去了！",
 	},
 	scrappy: {
 		name: "膽量",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]恢復了平時的水準！",
 	},
 	slushrush: {
 		name: "撥雪",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "刀劍形態，變形！",
+		transformEnd: "盾牌形態，變形！",
 	},
 	static: {
 		name: "靜電",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]釋放著濺射氣場！",
 	},
 	thermalexchange: {
 		name: "熱交換",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON]正在偷懶。",
 	},
 	turboblaze: {
 		name: "渦輪火焰",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]釋放著熾焰氣場！",
 	},
 	unaware: {
 		name: "純樸",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "達摩模式，啟動！",
+		transformEnd: "達摩模式，解除！",
 	},
 	zerotohero: {
 		name: "全能變身",

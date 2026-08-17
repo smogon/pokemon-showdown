@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ふうせん",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]は ふうせんで 浮いている！",
 		end: "  [POKEMON]の ふうせんが 割れた！",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ぼうごパット",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON]は ぼうごパットで 防いだ！",
 	},
 	protector: {
 		name: "プロテクター",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ゴツゴツメット",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は ゴツゴツメットで ダメージを受けた！",
 	},
 	roomservice: {
 		name: "ルームサービス",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "  [POKEMON]から まばゆい 光が あふれだす！",
+		activate: "[POKEMON]が ウルトラバーストで 新たな 姿を 現した！",
 	},
 	unremarkableteacup: {
 		name: "ボンサクのちゃわん",

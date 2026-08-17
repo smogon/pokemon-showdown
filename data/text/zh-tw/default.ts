@@ -19,13 +19,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		drag: "[FULLNAME]被拖出來戰鬥了！",
 		faint: "[POKEMON]倒下了！",
 		swap: "[POKEMON]和[TARGET]互換了位置！",
-		swapCenter: "", // NOT CONVERTED: not in Champions
+		swapCenter: "[POKEMON]移動到了中間！",
 
 		// Multi Battles only
-		canDynamax: "", // NOT CONVERTED: not in Champions
-		canDynamaxOwn: "", // NOT CONVERTED: not in Champions
+		canDynamax: "  [TRAINER]能夠極巨化了！",
+		canDynamaxOwn: "  [TRAINER]周圍聚集了極巨力！",
 
-		zEffect: "", // NOT CONVERTED: not in Champions
+		zEffect: "  [POKEMON]釋放了全力的Ｚ招式！",
 		move: "[POKEMON]使出了**[MOVE]**！",
 		abilityActivation: "[[POKEMON]的[ABILITY]]",
 
@@ -33,8 +33,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		megaNoItem: "", // NOT CONVERTED: not in Champions
 		megaGen6: "", // NOT CONVERTED: not in Champions
 		transformMega: "[POKEMON]超級進化成了超級[SPECIES]！",
-		primal: "", // NOT CONVERTED: not in Champions
-		zPower: "", // NOT CONVERTED: not in Champions
+		primal: "[POKEMON]的原始回歸！回到了原始的樣子！",
+		zPower: "  [POKEMON]讓Ｚ力量籠罩了全身！",
 		zBroken: "  [POKEMON]沒能防住攻擊，受到了傷害！",
 		terastallize: "", // NOT CONVERTED: not in Champions
 
@@ -73,10 +73,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  ([POKEMON]受到了傷害！)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
 		damageFromPokemon: "", // NOT CONVERTED: not in Champions
-		damageFromItem: "", // NOT CONVERTED: not in Champions
+		damageFromItem: "  [POKEMON]因[ITEM]而受到了傷害！",
 		damageFromPartialTrapping: "  [POKEMON]受到了[MOVE]的傷害。",
 		heal: "  [POKEMON]的體力回復了！",
-		healFromZEffect: "", // NOT CONVERTED: not in Champions
+		healFromZEffect: "  因為Ｚ力量，[POKEMON]回復了體力！",
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
 		boost: "  [POKEMON]的[STAT]提高了！",
@@ -89,7 +89,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boostFromZEffect: "", // NOT CONVERTED: not in Champions
 		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
-		boostMultipleFromZEffect: "", // NOT CONVERTED: not in Champions
+		boostMultipleFromZEffect: "  因為Ｚ力量，[POKEMON]的能力提高了！",
 
 		unboost: "  [POKEMON]的[STAT]降低了！",
 		unboost2: "  [POKEMON]的[STAT]大幅降低了！",
@@ -99,12 +99,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
 
-		swapBoost: "", // NOT CONVERTED: not in Champions
+		swapBoost: "  [POKEMON]和對手互換了自身的能力變化！",
 		swapOffensiveBoost: "  [POKEMON]和對手互換了自身的攻擊和特攻的能力變化！",
 		swapDefensiveBoost: "  [POKEMON]和對手互換了自身的防禦和特防的能力變化！",
 		copyBoost: "  [POKEMON]複製了[TARGET]的能力變化！",
 		clearBoost: "  [POKEMON]的能力變化解除了！",
-		clearBoostFromZEffect: "", // NOT CONVERTED: not in Champions
+		clearBoostFromZEffect: "  因為Ｚ力量，[POKEMON]降低的能力恢復了！",
 		invertBoost: "  [POKEMON]的能力變化顛倒過來了！",
 		clearAllBoost: "  所有能力都復原了！",
 
@@ -120,14 +120,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		critSpread: "  擊中了[POKEMON]的要害！",
 		immune: "  對於[POKEMON]，好像沒有效果……",
 		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
-		immuneOHKO: "", // NOT CONVERTED: not in Champions
+		immuneOHKO: "  對於[POKEMON]完全沒有效果！",
 		miss: "  沒有擊中[POKEMON]！",
 		missNoPokemon: "", // NOT CONVERTED: not in Champions
 
-		center: "", // NOT CONVERTED: not in Champions
+		center: "  復位移動！！",
 		noTarget: "", // NOT CONVERTED: not in Champions
 		ohko: "  一擊必殺！",
-		combine: "", // NOT CONVERTED: not in Champions
+		combine: "  兩個招式合而為一！這是合體招式！",
 		hitCount: "  擊中了[NUMBER]次！",
 		hitCountSingular: "  擊中了1次！",
 	},
@@ -182,7 +182,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	frz: {
 		start: "  [POKEMON]凍住了！",
-		alreadyStarted: "", // NOT CONVERTED: not in Champions
+		alreadyStarted: "  [POKEMON]已經凍住了。",
 		end: "  [POKEMON]的冰凍融化了！",
 		endFromItem: "  [POKEMON]用[ITEM]治癒了冰凍狀態！",
 		endFromMove: "  [POKEMON]的[MOVE]讓冰凍融化了！",
@@ -199,7 +199,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]中毒了！",
 		alreadyStarted: "  [POKEMON]已經中毒了。",
 		end: "  [POKEMON]中的毒徹底清除了！",
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		endFromItem: "  [POKEMON]用[ITEM]治癒了中毒！",
 		damage: "", // NOT CONVERTED: not in Champions
 	},
 	tox: {
@@ -263,8 +263,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	dynamax: {
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		fail: "", // NOT CONVERTED: not in Champions
+		block: "  被極巨化的力量彈開了！",
+		fail: "  [POKEMON]搖了搖頭，好像無法使出這個招式……",
 	},
 
 	// weather
@@ -272,7 +272,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "沙暴狀態",
 		start: "  開始刮沙暴了！",
 		end: "  沙暴停止了！",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (沙暴肆虐！)",
 		damage: "  沙暴襲擊了[POKEMON]！",
 	},
 	sunnyday: {
@@ -288,7 +288,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		upkeep: "", // NOT CONVERTED: not in Champions
 	},
 	hail: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "冰雹",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 		upkeep: "", // NOT CONVERTED: not in Champions
@@ -302,24 +302,24 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	desolateland: {
 		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  日照變得非常強！",
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  強日照勢頭不減！",
 		blockMove: "", // NOT CONVERTED: not in Champions
 	},
 	primordialsea: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		blockMove: "", // NOT CONVERTED: not in Champions
+		weatherName: "大雨",
+		start: "  開始下起了暴雨！",
+		end: "  暴雨停了！",
+		block: "  暴雨勢頭不減！",
+		blockMove: "  受暴雨的影響，火屬性的攻擊被撲滅了！",
 	},
 	deltastream: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		weatherName: "亂流",
+		start: "  神秘的亂流保護著飛行屬性寶可夢！",
+		end: "  神秘的亂流停止了！",
+		activate: "  神秘的亂流減弱了攻擊！",
+		block: "  神秘的亂流勢頭不減！",
 	},
 
 	// terrain
@@ -356,16 +356,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  魔法空間被解除，道具的效果復原了！",
 	},
 	mudsport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  電氣的威力減弱了！",
+		end: "  玩泥巴的效果消失了！",
 	},
 	trickroom: {
 		start: "  [POKEMON]扭曲了時空！",
 		end: "  扭曲的時空復原了！",
 	},
 	watersport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  火焰的威力減弱了！",
+		end: "  玩水的效果消失了！",
 	},
 	wonderroom: {
 		start: "  憑空製造出了互換防禦和特防的空間！",

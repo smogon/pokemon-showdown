@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] ha due abilità!",
 	},
 	asoneglastrier: {
 		name: "Sintonia Equina",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Inverte gli effetti di tutte le aure riducendone la potenza.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] inverte gli effetti di tutte le aure!",
 	},
 	baddreams: {
 		name: "Sogniamari",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] ha il sonno irrequieto!",
 	},
 	ballfetch: {
 		name: "Raccattapalle",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] si trasforma in Greninja Forma Ash!",
 	},
 	beadsofruin: {
 		name: "Monile Nefasto",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Il Pokémon si trova in un costante stato di dormiveglia che gli impedisce di svegliarsi. Può attaccare anche da addormentato.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] è in uno stato di dormiveglia!",
 	},
 	commander: {
 		name: "Torre di Comando",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Potenzia le mosse di tipo Buio di tutti i Pokémon.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  L’abilità Auratetra di [POKEMON] è attiva.",
 	},
 	dauntlessshield: {
 		name: "Scudo Saldo",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  Il costume ha assorbito l’attacco!",
 		transform: "[POKEMON] è stato smascherato!",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  [TARGET] ha addosso un odore che non riesce a far andar via!",
 	},
 	liquidooze: {
 		name: "Melma",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] ha assorbito la melma!",
 	},
 	liquidvoice: {
 		name: "Idrovoce",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  Il Gas Reagente si diffonde tutt’intorno!",
+		end: "  L’effetto del Gas Reagente svanisce!",
 	},
 	noguard: {
 		name: "Nullodifesa",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Se il Pokémon viene colpito da un attacco diretto, dopo tre turni va KO assieme a chi lo ha attaccato. Se uno dei due viene sostituito, non va KO.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  Entrambi i Pokémon andranno KO dopo 3 turni!",
 	},
 	pickpocket: {
 		name: "Arraffalesto",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Se i PS del Pokémon scendono a metà o meno, le cellule si raggruppano e gli permettono di assumere la Forma Perfetta.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  Avverti la presenza di una moltitudine di esseri!",
+		transform: "[POKEMON] assume la Forma Perfetta!",
 	},
 	powerofalchemy: {
 		name: "Forza Chimica",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] ha messo in moto la Paleoattivazione grazie al sole intenso!",
+		activateFromItem: "  [POKEMON] ha messo in moto la Paleoattivazione grazie alla Capsula energetica!",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  L’effetto della Paleoattivazione di [POKEMON] è finito!",
 	},
 	psychicsurge: {
 		name: "Psicogenesi",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] ha attivato la Carica Quark grazie al Campo Elettrico!",
+		activateFromItem: "  [POKEMON] ha attivato la Carica Quark grazie alla Capsula energetica!",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  L’effetto della Carica Quark di [POKEMON] è finito!",
 	},
 	queenlymajesty: {
 		name: "Regalità",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Quando ha molti PS, il Pokémon forma un banco con i propri simili e si rafforza. Quando ne ha pochi, il banco si disperde.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] ha richiamato un banco!",
+		transformEnd: "Il banco di [POKEMON] si è disperso!",
 	},
 	scrappy: {
 		name: "Nervisaldi",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON] ritrova lo slancio!",
 	},
 	slushrush: {
 		name: "Spalaneve",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Trasformazione in Forma Spada!",
+		transformEnd: "Trasformazione in Forma Scudo!",
 	},
 	static: {
 		name: "Statico",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] emana un’aura repulsiva!",
 	},
 	thermalexchange: {
 		name: "Termoscambio",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON] sta ciondolando!",
 	},
 	turboblaze: {
 		name: "Piroturbina",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] emana un’aura infuocata!",
 	},
 	unaware: {
 		name: "Imprudenza",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Stato Zen attivato!",
+		transformEnd: "Stato Zen disattivato!",
 	},
 	zerotohero: {
 		name: "Supercambio",

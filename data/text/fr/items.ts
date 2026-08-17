@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ballon",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] flotte grâce à son Ballon !",
 		end: "  Le Ballon [POKEMON] a éclaté !",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Pare-Effet",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  [POKEMON] évite l’effet grâce à son Pare-Effet !",
 	},
 	protector: {
 		name: "Protecteur",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Casque Brut",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] est blessé par le Casque Brut !",
 	},
 	roomservice: {
 		name: "Chariot Distordu",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "", // NOT CONVERTED: runtime grammar
+		activate: "[POKEMON] a pris une nouvelle forme grâce à l’Ultra-Explosion !",
 	},
 	unremarkableteacup: {
 		name: "Bol Médiocre",

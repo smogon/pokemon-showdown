@@ -202,7 +202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  기분 좋은 향기가 퍼졌다!",
 	},
 	aromaticmist: {
 		name: "아로마미스트",
@@ -311,7 +311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "몸의 쓸모없는 부분을 깎는다. 자신의 스피드를 크게 올리고 체중도 가벼워진다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]의 몸이 가벼워졌다!",
 	},
 	avalanche: {
 		name: "눈사태",
@@ -483,9 +483,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		end: "  [POKEMON]의 참기가 풀렸다!",
+		activate: "", // NOT CONVERTED: runtime grammar
 	},
 	bind: {
 		name: "조이기",
@@ -868,7 +868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "축하",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  축하해! [TRAINER]!!",
 	},
 	charge: {
 		name: "충전",
@@ -960,7 +960,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1216,8 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "이상한 힘을 사용하여 같은 편을 공격하는 변화 기술을 막는다. 데미지 기술은 받는다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: incompatible placeholders
+		block: "", // NOT CONVERTED: runtime grammar
 	},
 	crosschop: {
 		name: "크로스촙",
@@ -1288,8 +1288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		fail: "", // NOT CONVERTED: not in Champions
-		failWrongForme: "", // NOT CONVERTED: not in Champions
+		fail: "", // NOT CONVERTED: runtime grammar
+		failWrongForme: "", // NOT CONVERTED: runtime grammar
 	},
 	dazzlinggleam: {
 		name: "매지컬샤인",
@@ -1490,7 +1490,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 		activate: "", // NOT CONVERTED: not in Champions
 	},
 	doubleedge: {
@@ -1780,8 +1780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		end: "", // NOT CONVERTED: runtime grammar
 	},
 	ember: {
 		name: "불꽃세례",
@@ -1947,7 +1947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  다음 턴은 도망갈 수 없다!",
 	},
 	fairywind: {
 		name: "요정의바람",
@@ -2066,7 +2066,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "#waterpledge",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	firepunch: {
 		name: "불꽃펀치",
@@ -2148,7 +2148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]에게도 불티가 튀었다!",
 	},
 	flamecharge: {
 		name: "니트로차지",
@@ -2327,7 +2327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]의 정체를 꿰뚫어 보았다!",
 	},
 	forestscurse: {
 		name: "숲의저주",
@@ -2353,7 +2353,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "전기를 두른 얼음덩어리로 2턴째에 상대를 내리친다. 마비 상태로 만들 때가 있다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "", // NOT CONVERTED: runtime grammar
 	},
 	freezingglare: {
 		name: "얼어붙는시선",
@@ -2479,7 +2479,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "1턴째에 에너지를 흡수하여 2턴째에 특수공격, 특수방어, 스피드를 크게 올린다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "", // NOT CONVERTED: runtime grammar
 	},
 	gigadrain: {
 		name: "기가드레인",
@@ -2547,7 +2547,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	gmaxcentiferno: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2660,7 +2660,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]에게 뾰족한 강철이 박혔다!",
 	},
 	gmaxstonesurge: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2693,7 +2693,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	gmaxvolcalith: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2714,7 +2714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	gmaxwindrage: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -2807,7 +2807,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		activate: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	guardianofalola: {
 		name: "알로라의수호자",
@@ -2888,7 +2888,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "해피타임",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  모두 행복한 기분에 휩싸였다!",
 	},
 	harden: {
 		name: "단단해지기",
@@ -3277,7 +3277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "모든 것을 얼려버리는 격렬한 냉기로 2턴째에 상대를 둘러싼다. 화상 상태로 만들 때가 있다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "", // NOT CONVERTED: runtime grammar
 	},
 	icefang: {
 		name: "얼음엄니",
@@ -3357,7 +3357,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "", // NOT CONVERTED: runtime grammar
 	},
 	infernalparade: {
 		name: "백귀야행",
@@ -3426,7 +3426,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  전기 입자가 쏟아졌다!",
 	},
 	irondefense: {
 		name: "철벽",
@@ -3564,7 +3564,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "정신을 집중해서 다음 공격을 반드시 급소에 맞춘다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	lashout: {
 		name: "분풀이",
@@ -3760,7 +3760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "", // NOT CONVERTED: runtime grammar
 	},
 	lunge: {
 		name: "덤벼들기",
@@ -3800,7 +3800,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 		move: "", // NOT CONVERTED: not in Champions
 	},
 	magicpowder: {
@@ -3834,7 +3834,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	magnetbomb: {
 		name: "마그넷봄",
@@ -3896,7 +3896,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "", // NOT CONVERTED: runtime grammar
 	},
 	matchagotcha: {
 		name: "휘적휘적포",
@@ -4076,7 +4076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "", // NOT CONVERTED: runtime grammar
 	},
 	menacingmoonrazemaelstrom: {
 		name: "문라이트블래스터",
@@ -4150,7 +4150,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "", // NOT CONVERTED: runtime grammar
 	},
 	mightycleave: {
 		name: "파워풀에지",
@@ -4191,7 +4191,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	mindblown: {
 		name: "깜짝헤드",
@@ -4308,7 +4308,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "", // NOT CONVERTED: runtime grammar
 	},
 	mistball: {
 		name: "미스트볼",
@@ -4473,7 +4473,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		move: "", // NOT CONVERTED: not in Champions
+		move: "", // NOT CONVERTED: runtime grammar
 	},
 	naturesmadness: {
 		name: "자연의분노",
@@ -4502,8 +4502,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		damage: "", // NOT CONVERTED: runtime grammar
 	},
 	nightshade: {
 		name: "나이트헤드",
@@ -4667,7 +4667,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "상대의 몸에 돈을 세게 던져서 공격한다. 배틀 후에 돈을 받을 수 있다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  돈이 주위에 흩어졌다!",
 	},
 	peck: {
 		name: "쪼기",
@@ -4849,8 +4849,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]에게 분진을 뒤집어씌웠다!",
+		activate: "", // NOT CONVERTED: incompatible placeholders
 	},
 	powdersnow: {
 		name: "눈싸라기",
@@ -4881,7 +4881,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON]의 공격력과 방어력이 바뀌었다!",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5227,7 +5227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "  [POKEMON]의 주위에서 공기가 소용돌이친다!",
 	},
 	recover: {
 		name: "HP회복",
@@ -5789,9 +5789,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "껍질의 트랩을 설치한다. 상대가 물리 기술을 쓰면 폭발해서 데미지를 준다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
-		prepare: "", // NOT CONVERTED: not in Champions
-		cant: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		prepare: "", // NOT CONVERTED: runtime grammar
+		cant: "[POKEMON]의 트랩셸은 불발로 끝났다!",
 	},
 	shelter: {
 		name: "농성",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: runtime grammar
 	},
 	skillswap: {
 		name: "스킬스왑",
@@ -5916,7 +5916,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
+		prepare: "", // NOT CONVERTED: runtime grammar
 	},
 	skyattack: {
 		name: "불새",
@@ -5940,10 +5940,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		prepare: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		failSelect: "", // NOT CONVERTED: not in Champions
-		failTooHeavy: "", // NOT CONVERTED: not in Champions
+		prepare: "", // NOT CONVERTED: runtime grammar
+		end: "", // NOT CONVERTED: runtime grammar
+		failSelect: "", // NOT CONVERTED: runtime grammar
+		failTooHeavy: "", // NOT CONVERTED: runtime grammar
 	},
 	skyuppercut: {
 		name: "스카이어퍼",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		activate: "", // NOT CONVERTED: runtime grammar
 	},
 	snipeshot: {
 		name: "노려맞히기",
@@ -6198,7 +6198,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "상대의 그림자에 숨어들어 상대의 능력이 올라가는 것을 뺏어 공격한다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		clearBoost: "", // NOT CONVERTED: not in Champions
+		clearBoost: "", // NOT CONVERTED: runtime grammar
 	},
 	speedswap: {
 		name: "스피드스왑",
@@ -6841,7 +6841,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "끈적끈적한 타르를 날려서 상대의 스피드를 떨어뜨린다. 상대는 불꽃이 약점이 된다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	taunt: {
 		name: "도발",
@@ -6907,8 +6907,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
+		end: "", // NOT CONVERTED: runtime grammar
 	},
 	teleport: {
 		name: "순간이동",
@@ -7046,7 +7046,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NOT CONVERTED: runtime grammar
 	},
 	thunderclap: {
 		name: "질풍신뢰",
@@ -7429,7 +7429,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "물기둥으로 공격한다. 불꽃과 조합하면 위력이 올라가고 하늘에 무지개가 걸린다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: runtime grammar
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 	},

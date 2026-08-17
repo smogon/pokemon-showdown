@@ -55,7 +55,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Globo Helio",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  ¡[POKEMON] está flotando con un Globo Helio!",
 		end: "  ¡Ha explotado el Globo Helio de [POKEMON]!",
 	},
 	alakazite: {
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Paracontacto",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  ¡[POKEMON] ha neutralizado el efecto gracias al Paracontacto!",
 	},
 	protector: {
 		name: "Protector",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Casco Dentado",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  ¡El Casco Dentado ha dañado a [POKEMON]!",
 	},
 	roomservice: {
 		name: "Servicio Raro",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
+		transform: "  ¡[POKEMON] emite una luz cegadora!",
+		activate: "¡[POKEMON] ha adoptado una nueva forma gracias a la Ultraexplosión!",
 	},
 	unremarkableteacup: {
 		name: "", // NOT CONVERTED: not in PokeAPI

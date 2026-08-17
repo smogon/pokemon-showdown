@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] verfügt über zwei Fähigkeiten!",
 	},
 	asoneglastrier: {
 		name: "Reitgespann",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Kehrt die Wirkung von Auren um und senkt so die Stärke bestimmter Attacken, anstatt sie zu erhöhen.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] kehrt die Wirkung aller Aura-Fähigkeiten um!",
 	},
 	baddreams: {
 		name: "Alptraum",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] ist in einem Alptraum gefangen!",
 	},
 	ballfetch: {
 		name: "Apport",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] hat die Ash-Form angenommen!",
 	},
 	beadsofruin: {
 		name: "Unheilsjuwelen",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Das Pokémon befindet sich ununterbrochen im Halbschlaf und wacht nie vollständig auf. Es kann jedoch im Schlaf angreifen.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] befindet sich im Halbschlaf!",
 	},
 	commander: {
 		name: "Kommandant",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Erhöht die Stärke aller Attacken des Typs Unlicht.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] strahlt eine dunkle Aura aus!",
 	},
 	dauntlessshield: {
 		name: "Wackerer Schild",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  Sein Kostüm hat die Attacke absorbiert!",
 		transform: "Die Tarnung von [POKEMON] ist aufgeflogen!",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  [TARGET] haftet ein penetranter Geruch an!",
 	},
 	liquidooze: {
 		name: "Kloakensoße",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] saugt Kloakensoße auf!",
 	},
 	liquidvoice: {
 		name: "Plätscherstimme",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  Reaktionsgas hat sich in der Umgebung ausgebreitet!",
+		end: "  Das Reaktionsgas hört auf zu wirken!",
 	},
 	noguard: {
 		name: "Schildlos",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Erleidet es einen Treffer von einer direkten Attacke, wird es zusammen mit dem Angreifer nach drei Runden besiegt. Rettung ist durch Austausch möglich.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  Beide Pokémon gehen nach drei Runden K.O.!",
 	},
 	pickpocket: {
 		name: "Langfinger",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Fallen seine KP auf die Hälfte des Maximalwerts oder weniger, eilen ihm weitere Zellen zu Hilfe und es nimmt die Optimumform an.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  Du spürst die Präsenz vieler Zellen...!",
+		transform: "[POKEMON] hat die Optimumform angenommen!",
 	},
 	powerofalchemy: {
 		name: "Chemiekraft",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] leitet dank des Sonnenscheins die Paläosynthese ein!",
+		activateFromItem: "  [POKEMON] nutzt das Item Energiekapsel, um die Paläosynthese einzuleiten.",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  Der Effekt der Paläosynthese von [POKEMON] lässt nach!",
 	},
 	psychicsurge: {
 		name: "Psycho-Erzeuger",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] aktiviert dank des Elektrofelds den Quantenantrieb!",
+		activateFromItem: "  [POKEMON] nutzt das Item Energiekapsel, um den Quantenantrieb zu aktivieren.",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  Der Effekt des Quantenantriebs von [POKEMON] lässt nach!",
 	},
 	queenlymajesty: {
 		name: "Majestät",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Verfügt es über einen hohen KP-Wert, wird es zu einem Schwarm und gewinnt an Stärke. Ist der KP-Wert niedrig, löst sich der Schwarm wieder auf.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] hat einen Schwarm gebildet!",
+		transformEnd: "Der Schwarm von [POKEMON] hat sich zerstreut!",
 	},
 	scrappy: {
 		name: "Rauflust",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON] kriegt schließlich doch noch die Kurve!",
 	},
 	slushrush: {
 		name: "Schneescharrer",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Formwechsel zur Klingenform!",
+		transformEnd: "Formwechsel zur Schildform!",
 	},
 	static: {
 		name: "Statik",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] strahlt eine knisternde Aura aus!",
 	},
 	thermalexchange: {
 		name: "Thermowandel",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON] faulenzt!",
 	},
 	turboblaze: {
 		name: "Turbobrand",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] strahlt eine lodernde Aura aus!",
 	},
 	unaware: {
 		name: "Unkenntnis",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Es verfällt in den Trance-Modus!",
+		transformEnd: "Es verlässt den Trance-Modus!",
 	},
 	zerotohero: {
 		name: "Superwechsel",

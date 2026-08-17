@@ -99,7 +99,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] a deux talents !",
 	},
 	asoneglastrier: {
 		name: "Osmose Équine",
@@ -114,7 +114,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Inverse l’effet des talents « Aura » afin que ceux-ci baissent la puissance des capacités affectées au lieu de l’augmenter.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] inverse toutes les auras !",
 	},
 	baddreams: {
 		name: "Mauvais Rêve",
@@ -129,7 +129,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] a le sommeil agité !",
 	},
 	ballfetch: {
 		name: "Ramasse Ball",
@@ -152,7 +152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] se transforme en Sachanobi !",
 	},
 	beadsofruin: {
 		name: "Perles du Fléau",
@@ -231,7 +231,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Le Pokémon rêve en permanence et ne se réveille jamais. Il est capable d’attaquer normalement tout en dormant.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] est en Hypersommeil !",
 	},
 	commander: {
 		name: "Commandant",
@@ -326,7 +326,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Augmente la puissance des capacités de type Ténèbres de tous les Pokémon.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] dégage une aura ténébreuse !",
 	},
 	dauntlessshield: {
 		name: "Égide Inflexible",
@@ -371,7 +371,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  Le déguisement absorbe l’attaque !",
 		transform: "Le déguisement [POKEMON] tombe !",
 	},
 	download: {
@@ -920,7 +920,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "", // NOT CONVERTED: not in Champions
+		changeAbility: "  Une odeur tenace imprègne [TARGET] !",
 	},
 	liquidooze: {
 		name: "Suintement",
@@ -929,7 +929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON] aspire le suintement !",
 	},
 	liquidvoice: {
 		name: "Hydrata-Son",
@@ -1141,8 +1141,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  Un gaz inhibiteur envahit les lieux !",
+		end: "  Les effets du gaz inhibiteur se sont dissipés.",
 	},
 	noguard: {
 		name: "Annule Garde",
@@ -1240,7 +1240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Lorsque le Pokémon est directement touché par une capacité, l’assaillant et lui tomberont K.O. dans trois tours, à moins qu’ils ne soient remplacés entre temps.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  Les deux Pokémon seront K.O. dans trois tours !",
 	},
 	pickpocket: {
 		name: "Pickpocket",
@@ -1318,8 +1318,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Lorsque le Pokémon perd la moitié de ses PV, ses Cellules se rassemblent pour l’encourager, ce qui lui permet de prendre sa Forme Parfaite.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		transform: "", // NOT CONVERTED: not in Champions
+		activate: "  Vous sentez la présence d’un grand nombre d’individus !",
+		transform: "[POKEMON] prend sa Forme Parfaite !",
 	},
 	powerofalchemy: {
 		name: "Osmose",
@@ -1392,10 +1392,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Quand le soleil brille ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  Le soleil brille, ce qui a permis à [POKEMON] d’activer Paléosynthèse !",
+		activateFromItem: "  [POKEMON] a activé Paléosynthèse grâce à son Énergie Booster !",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "", // NOT CONVERTED: runtime grammar
 	},
 	psychicsurge: {
 		name: "Créa-Psy",
@@ -1420,10 +1420,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Quand un champ électrifié est actif ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "", // NOT CONVERTED: not in Champions
-		activateFromItem: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] a activé Charge Quantique grâce au champ électrifié !",
+		activateFromItem: "  [POKEMON] a activé Charge Quantique grâce à son Énergie Booster !",
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "", // NOT CONVERTED: runtime grammar
 	},
 	queenlymajesty: {
 		name: "Prestance Royale",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Le Pokémon se rassemble avec ses congénères quand ses PV sont élevés. Quand il ne lui reste plus beaucoup de PV, le banc se disperse.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "[POKEMON] forme un banc !",
+		transformEnd: "", // NOT CONVERTED: runtime grammar
 	},
 	scrappy: {
 		name: "Querelleur",
@@ -1718,7 +1718,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON] arrive enfin à s’y mettre sérieusement !",
 	},
 	slushrush: {
 		name: "Chasse-Neige",
@@ -1809,8 +1809,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Passage en Forme Assaut !",
+		transformEnd: "Passage en Forme Parade !",
 	},
 	static: {
 		name: "Statik",
@@ -2031,7 +2031,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] dégage une aura électrique instable !",
 	},
 	thermalexchange: {
 		name: "Thermodynamique",
@@ -2125,7 +2125,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON] paresse !",
 	},
 	turboblaze: {
 		name: "Turbo Brasier",
@@ -2147,7 +2147,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  [POKEMON] dégage une aura de flammes incandescentes !",
 	},
 	unaware: {
 		name: "Inconscient",
@@ -2285,8 +2285,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "", // NOT CONVERTED: not in Champions
-		transformEnd: "", // NOT CONVERTED: not in Champions
+		transform: "Le talent Mode Transe s’active !",
+		transformEnd: "Le talent Mode Transe n’est plus actif !",
 	},
 	zerotohero: {
 		name: "Supermutation",

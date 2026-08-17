@@ -19,13 +19,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		drag: "[FULLNAME]は 戦闘に 引きずりだされた！",
 		faint: "[POKEMON]は たおれた！",
 		swap: "[POKEMON]と [TARGET]は 場所を 入れ替えた！",
-		swapCenter: "", // NOT CONVERTED: not in Champions
+		swapCenter: "[POKEMON]は 真ん中に 移動した！",
 
 		// Multi Battles only
-		canDynamax: "", // NOT CONVERTED: not in Champions
-		canDynamaxOwn: "", // NOT CONVERTED: not in Champions
+		canDynamax: "  [TRAINER]が ダイマックス できるように なった！",
+		canDynamaxOwn: "  [TRAINER]に ダイマックスパワーが 集まった！",
 
-		zEffect: "", // NOT CONVERTED: not in Champions
+		zEffect: "  [POKEMON]が 解き放つ 全力の Ｚワザ！",
 		move: "[POKEMON]の **[MOVE]**！",
 		abilityActivation: "[[POKEMON]の [ABILITY]]",
 
@@ -33,8 +33,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		megaNoItem: "", // NOT CONVERTED: not in Champions
 		megaGen6: "", // NOT CONVERTED: not in Champions
 		transformMega: "[POKEMON]は メガ[SPECIES]に メガシンカした！",
-		primal: "", // NOT CONVERTED: not in Champions
-		zPower: "", // NOT CONVERTED: not in Champions
+		primal: "[POKEMON]の ゲンシカイキ！ 原始の姿を 取り戻した！",
+		zPower: "  [POKEMON]は Ｚパワーを 身体に まとった！",
 		zBroken: "  [POKEMON]は 攻撃を 守りきれずに ダメージを 受けた！",
 		terastallize: "", // NOT CONVERTED: not in Champions
 
@@ -73,10 +73,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  ([POKEMON]は ダメージを 受けた！)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
 		damageFromPokemon: "", // NOT CONVERTED: not in Champions
-		damageFromItem: "", // NOT CONVERTED: not in Champions
+		damageFromItem: "  [POKEMON]は [ITEM]で ダメージを 受けた！",
 		damageFromPartialTrapping: "  [POKEMON]は [MOVE]の ダメージを 受けている",
 		heal: "  [POKEMON]の 体力が 回復した！",
-		healFromZEffect: "", // NOT CONVERTED: not in Champions
+		healFromZEffect: "  [POKEMON]は Ｚパワーで 体力を 回復した！",
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
 		boost: "  [POKEMON]の [STAT]が 上がった！",
@@ -89,7 +89,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boostFromZEffect: "", // NOT CONVERTED: not in Champions
 		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
-		boostMultipleFromZEffect: "", // NOT CONVERTED: not in Champions
+		boostMultipleFromZEffect: "  [POKEMON]は Ｚパワーで 能力が 上がった！",
 
 		unboost: "  [POKEMON]の [STAT]が 下がった！",
 		unboost2: "  [POKEMON]の [STAT]が がくっと下がった！",
@@ -99,12 +99,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
 
-		swapBoost: "", // NOT CONVERTED: not in Champions
+		swapBoost: "  [POKEMON]は 相手と自分の 能力変化を 入れ替えた！",
 		swapOffensiveBoost: "  [POKEMON]は 相手と自分の 攻撃と 特攻の 能力変化を 入れ替えた！",
 		swapDefensiveBoost: "  [POKEMON]は 相手と自分の 防御と 特防の 能力変化を 入れ替えた！",
 		copyBoost: "  [POKEMON]は [TARGET]の 能力変化を コピーした！",
 		clearBoost: "  [POKEMON]の 能力変化が 元に戻った！",
-		clearBoostFromZEffect: "", // NOT CONVERTED: not in Champions
+		clearBoostFromZEffect: "  [POKEMON]は Ｚパワーで 下がった 能力を 元に戻した！",
 		invertBoost: "  [POKEMON]は 能力変化が ひっくりかえった！",
 		clearAllBoost: "  全ての ステータスが 元に 戻った！",
 
@@ -120,14 +120,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		critSpread: "  [POKEMON]の 急所に 当たった！",
 		immune: "  [POKEMON]には 効果が ないようだ…",
 		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
-		immuneOHKO: "", // NOT CONVERTED: not in Champions
+		immuneOHKO: "  [POKEMON]には 全然 効いてない！",
 		miss: "  [POKEMON]には 当たらなかった！",
 		missNoPokemon: "", // NOT CONVERTED: not in Champions
 
-		center: "", // NOT CONVERTED: not in Champions
+		center: "  リセットムーブ！！",
 		noTarget: "", // NOT CONVERTED: not in Champions
 		ohko: "  一撃必殺！",
-		combine: "", // NOT CONVERTED: not in Champions
+		combine: "  2つの技が 1つになった！ コンビネーション技だ！",
 		hitCount: "  [NUMBER]回 当たった！",
 		hitCountSingular: "  1回 当たった！",
 	},
@@ -182,7 +182,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	frz: {
 		start: "  [POKEMON]は 凍りついた！",
-		alreadyStarted: "", // NOT CONVERTED: not in Champions
+		alreadyStarted: "  [POKEMON]は すでに 凍っている",
 		end: "  [POKEMON]の こおりが 溶けた！",
 		endFromItem: "  [POKEMON]は [ITEM]で こおり状態が 治った！",
 		endFromMove: "  [POKEMON]の [MOVE]で こおりが 溶けた！",
@@ -199,7 +199,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]は 毒を あびた！",
 		alreadyStarted: "  [POKEMON]は すでに 毒を あびている",
 		end: "  [POKEMON]の 毒は きれいさっぱり なくなった！",
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		endFromItem: "  [POKEMON]は [ITEM]で 毒が 治った！",
 		damage: "", // NOT CONVERTED: not in Champions
 	},
 	tox: {
@@ -263,8 +263,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	dynamax: {
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		fail: "", // NOT CONVERTED: not in Champions
+		block: "  ダイマックスの ちからで はじかれた！",
+		fail: "  [POKEMON]は 首を 横に振った この技を しかけることが できないようだ……",
 	},
 
 	// weather
@@ -272,7 +272,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "すなあらし状態",
 		start: "  砂あらしが 吹き始めた！",
 		end: "  砂あらしが おさまった！",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (砂あらしが 吹きあれる！)",
 		damage: "  砂あらしが [POKEMON]を 襲う！",
 	},
 	sunnyday: {
@@ -288,7 +288,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		upkeep: "", // NOT CONVERTED: not in Champions
 	},
 	hail: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "あられ",
 		start: "", // NOT CONVERTED: not in Champions
 		end: "", // NOT CONVERTED: not in Champions
 		upkeep: "", // NOT CONVERTED: not in Champions
@@ -302,24 +302,24 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	desolateland: {
 		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
+		start: "  日差しが とても強くなった！",
 		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		block: "  強い日差しの 勢いは 止まらない！",
 		blockMove: "", // NOT CONVERTED: not in Champions
 	},
 	primordialsea: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
-		blockMove: "", // NOT CONVERTED: not in Champions
+		weatherName: "おおあめ",
+		start: "  強い雨が 降り始めた！",
+		end: "  強い雨が 上がった！",
+		block: "  強い雨の 勢いは 止まらない！",
+		blockMove: "  強い雨の 影響で ほのおタイプの 攻撃が かき消された！",
 	},
 	deltastream: {
-		weatherName: "", // NOT CONVERTED: not in Champions
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		activate: "", // NOT CONVERTED: not in Champions
-		block: "", // NOT CONVERTED: not in Champions
+		weatherName: "らんきりゅう",
+		start: "  謎の 乱気流が ひこうポケモンを 護る！",
+		end: "  謎の 乱気流が おさまった！",
+		activate: "  謎の 乱気流が 攻撃を 弱めた！",
+		block: "  謎の 乱気流の 勢いは 止まらない！",
 	},
 
 	// terrain
@@ -356,16 +356,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  マジックルームが 解除され 道具の 効果が 元に戻った！",
 	},
 	mudsport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  電気の 威力が 弱まった！",
+		end: "  どろあそびの 効果が なくなった！",
 	},
 	trickroom: {
 		start: "  [POKEMON]は 時空を ゆがめた！",
 		end: "  ゆがんだ 時空が 元に戻った！",
 	},
 	watersport: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "  炎の 威力が 弱まった！",
+		end: "  みずあそびの 効果が なくなった！",
 	},
 	wonderroom: {
 		start: "  防御と 特防が 入れ替わる 空間を 作りだした！",
