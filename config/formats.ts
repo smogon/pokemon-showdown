@@ -776,7 +776,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		// searchShow: false,
 		ruleset: ['[Gen 9] National Dex', 'Same Letter Clause'],
-		banlist: ['Kommo-o', 'Light Clay'],
+		banlist: ['Light Clay'],
 		unbanlist: ['Ogerpon-Hearthflame', 'Ursaluna-Bloodmoon', 'Walking Wake', 'Yveltal', 'Urshifu', 'Naganadel'],
 	},
 	{
