@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NOT CONVERTED: not in Champions
-		winBattle: "", // NOT CONVERTED: not in Champions
-		tieBattle: "", // NOT CONVERTED: not in Champions
+		startBattle: "[TRAINER]と [TRAINER]の 勝負が 始まった！",
+		winBattle: "**[TRAINER]**が 勝負に 勝った！",
+		tieBattle: "[TRAINER]と [TRAINER]の 勝負は 引き分けだ！",
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "相手の [NICKNAME]",
