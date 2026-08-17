@@ -1,1918 +1,2627 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
 		name: "とくせいガード",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	abomasite: {
 		name: "ユキノオナイト",
-		desc: "ユキノオーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absolite: {
 		name: "アブソルナイト",
-		desc: "アブソルに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	absolitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absorbbulb: {
 		name: "きゅうこん",
-		desc: "使い捨ての　きゅうこん。 持たせて　みずの　技を　受けると 特攻が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantcrystal: {
 		name: "だいこんごうだま",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantorb: {
 		name: "こんごうだま",
-		desc: "ディアルガに　持たせると　ドラゴンと はがねタイプの　技の　威力が あがる　光り　輝く　珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adrenalineorb: {
 		name: "ビビリだま",
-		desc: "ポケモンに　持たせると いかくを　受けた時 すばやさが　上がる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aerodactylite: {
 		name: "プテラナイト",
-		desc: "プテラに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aggronite: {
 		name: "ボスゴドラナイト",
-		desc: "ボスゴドラに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aguavberry: {
 		name: "バンジのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　ＨＰを　回復する。 きらいな味だと　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	airballoon: {
 		name: "ふうせん",
-		desc: "ポケモンに　持たせると ポケモンが　宙に　浮く。 攻撃を　受けると　割れてしまう。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		start: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]の ふうせんが 割れた！",
 	},
 	alakazite: {
 		name: "フーディナイト",
-		desc: "フーディンに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	aloraichiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	altarianite: {
 		name: "チルタリスナイト",
-		desc: "チルタリスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ampharosite: {
 		name: "デンリュウナイト",
-		desc: "デンリュウに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	apicotberry: {
 		name: "ズアのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　自分の 特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	armorfossil: {
 		name: "たてのカセキ",
-		desc: "大昔　地上で　暮らした 古代ポケモンの　カセキ。 襟飾りの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aspearberry: {
 		name: "ナナシのみ",
-		desc: "ポケモンに　持たせると こおりを　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	assaultvest: {
 		name: "とつげきチョッキ",
-		desc: "攻撃的に　なる　チョッキ。 持たせると　特防が　あがるが 変化技を　だせなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	audinite: {
 		name: "タブンネナイト",
-		desc: "タブンネに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	auspiciousarmor: {
 		name: "イワイノヨロイ",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	babiriberry: {
 		name: "リリバのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　はがね技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	banettite: {
 		name: "ジュペッタナイト",
-		desc: "ジュペッタに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	barbaracite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	baxcalibrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beastball: {
 		name: "ウルトラボール",
-		desc: "ポケモンが　捕まえにくい ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beedrillite: {
 		name: "スピアナイト",
-		desc: "スピアーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	belueberry: {
 		name: "ベリブのみ",
-		desc: "うつくしさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berryjuice: {
 		name: "きのみジュース",
-		desc: "きのみ　１００％の　ジュース。 ポケモン　１匹の　ＨＰを ２０だけ　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berrysweet: {
 		name: "ベリーアメざいく",
-		desc: "ベリーの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bignugget: {
 		name: "でかいきんのたま",
-		desc: "キラキラと　金色に　光る 純金製の　おおきな　玉。 ショップで　高く　売れる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bigroot: {
 		name: "おおきなねっこ",
-		desc: "持たせると　ＨＰを　吸いとる　技で いつもより　おおく　自分の　ＨＰを 回復できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	bindingband: {
 		name: "しめつけバンド",
-		desc: "締めつける技を　補助する　バンド。 持たせると　締めつける技の 威力が　強くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blackbelt: {
 		name: "くろおび",
-		desc: "気が　ひきしまる　帯。 持たせると　かくとうタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blacksludge: {
 		name: "くろいヘドロ",
-		desc: "持たせると　どくタイプの　ポケモンは 少しずつ　ＨＰを　回復する。 それ以外は　ＨＰが　減ってしまう。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	blackglasses: {
 		name: "くろいメガネ",
-		desc: "怪しく　みえる　メガネ。 持たせると　あくタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blastoisinite: {
 		name: "カメックスナイト",
-		desc: "カメックスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blazikenite: {
 		name: "バシャーモナイト",
-		desc: "バシャーモに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blueorb: {
 		name: "あいいろのたま",
-		desc: "ホウエン地方の　伝説と 深い　関わりが　あると　いわれる あおく　かがやく　たま。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blukberry: {
 		name: "ブリーのみ",
-		desc: "うつくしさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 青色の実は　食べると　渋い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blunderpolicy: {
 		name: "からぶりほけん",
-		desc: "命中率に　よって 技が　はずれたとき 素早さが　ぐーんと　上がる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	boosterenergy: {
 		name: "ブーストエナジー",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bottlecap: {
 		name: "ぎんのおうかん",
-		desc: "銀色の　きれいな　王冠。 渡すと　よろこぶ　人もいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	brightpowder: {
 		name: "ひかりのこな",
-		desc: "キラキラ　光る粉。　持たせると 光が　相手を　惑わして 技が　命中しにくくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	buggem: {
 		name: "むしのジュエル",
-		desc: "むしの　タイプの　ジュエル。 持たせると　１度だけ　むしの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	buginiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bugmemory: {
 		name: "バグメモリ",
-		desc: "むしタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	burndrive: {
 		name: "ブレイズカセット",
-		desc: "ゲノセクトに　持たせると テクノバスターという　技が ほのおタイプになる　カセット。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cameruptite: {
 		name: "バクーダナイト",
-		desc: "バクーダに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cellbattery: {
 		name: "じゅうでんち",
-		desc: "使い捨ての　じゅうでんち。 持たせて　でんきの　技を　受けると 攻撃が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chandelurite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charcoal: {
 		name: "もくたん",
-		desc: "ものを　燃やす　燃料。 持たせると　ほのおタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	charizarditex: {
 		name: "リザードナイトＸ",
-		desc: "リザードンに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charizarditey: {
 		name: "リザードナイトＹ",
-		desc: "リザードンに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chartiberry: {
 		name: "ヨロギのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　いわ技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cheriberry: {
 		name: "クラボのみ",
-		desc: "ポケモンに　持たせると まひを　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cherishball: {
 		name: "プレシャスボール",
-		desc: "なにかの　記念の　品として 特別に　つくられた かなり　珍しい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chesnaughtite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chestoberry: {
 		name: "カゴのみ",
-		desc: "ポケモンに　持たせると 眠りを　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilanberry: {
 		name: "ホズのみ",
-		desc: "ポケモンに　持たせると ノーマル技を　受けたとき 威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilldrive: {
 		name: "フリーズカセット",
-		desc: "ゲノセクトに　持たせると テクノバスターという　技が こおりタイプになる　カセット。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chimechite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chippedpot: {
 		name: "かけたポット",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　ポット。 欠けているが　お茶は　おいしくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choiceband: {
 		name: "こだわりハチマキ",
-		desc: "ちょっと　こだわった　ハチマキ。 持たせると　攻撃は　あがるが 同じ　技しか　だせなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicescarf: {
 		name: "こだわりスカーフ",
-		desc: "ちょっと　こだわった　スカーフ。 持たせると　素早さは　あがるが 同じ　技しか　だせなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicespecs: {
 		name: "こだわりメガネ",
-		desc: "ちょっと　こだわった　メガネ。 持たせると　特攻は　あがるが 同じ　技しか　だせなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chopleberry: {
 		name: "ヨプのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　かくとう技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clawfossil: {
 		name: "ツメのカセキ",
-		desc: "大昔　海に　すんでいた 古代ポケモンの　カセキ。 ツメの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clearamulet: {
 		name: "クリアチャーム",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
+	clefablite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cloversweet: {
 		name: "よつばアメざいく",
-		desc: "よつばの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cobaberry: {
 		name: "バコウのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　ひこう技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	colburberry: {
 		name: "ナモのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　あく技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornerstonemask: {
 		name: "いしずえのめん",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornnberry: {
 		name: "モコシのみ",
-		desc: "うつくしさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	coverfossil: {
 		name: "ふたのカセキ",
-		desc: "大昔　海に　すんでいた 古代ポケモンの　カセキ。 せなかの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	covertcloak: {
 		name: "おんみつマント",
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	crabominite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	crackedpot: {
 		name: "われたポット",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　ポット。 割れているが　お茶は　おいしくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	custapberry: {
 		name: "イバンのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　１度だけ 行動が　早くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	damprock: {
 		name: "しめったいわ",
-		desc: "持たせた　ポケモンが　あまごいを 使うと　いつもより　あめの 時間が　長くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkgem: {
 		name: "あくのジュエル",
-		desc: "あくの　タイプの　ジュエル。 持たせると　１度だけ　あくの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	darkiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkmemory: {
 		name: "ダークメモリ",
-		desc: "あくタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	darkranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dawnstone: {
 		name: "めざめいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 ひとみのように　まばゆい。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひとみのように まばゆい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	decidiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseascale: {
 		name: "しんかいのウロコ",
-		desc: "パールルに　持たせると 特防が　あがる　ウロコ。 うすい　ピンク色に　光る。",
+		desc: "パールルに 持たせると 特防が あがる ウロコ。 うすい ピンク色に 光る。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "しんかいのキバ",
-		desc: "パールルに　持たせると 特攻が　あがる　キバ。 鋭く　銀色に　光る。",
+		desc: "パールルに 持たせると 特攻が あがる キバ。 鋭く 銀色に 光る。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	delphoxite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	destinyknot: {
 		name: "あかいいと",
-		desc: "細くて　長い　真っ赤な　糸。 持たせると　メロメロに　なったとき 相手も　メロメロに　できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diancite: {
 		name: "ディアンシナイト",
-		desc: "ディアンシーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diveball: {
 		name: "ダイブボール",
-		desc: "水の　世界で　暮らしている ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	domefossil: {
 		name: "こうらのカセキ",
-		desc: "大昔　海に　すんでいた 古代ポケモンの　カセキ。 こうらの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dousedrive: {
 		name: "アクアカセット",
-		desc: "ゲノセクトに　持たせると テクノバスターという　技が みずタイプになる　カセット。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dracoplate: {
 		name: "りゅうのプレート",
-		desc: "ドラゴンの　タイプの　石盤。 持たせると　ドラゴンタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragalgite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonfang: {
 		name: "りゅうのキバ",
-		desc: "硬くて　鋭い　キバ。 持たせると　ドラゴンタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dragongem: {
 		name: "ドラゴンジュエル",
-		desc: "ドラゴンの　タイプの　ジュエル。 持たせると　１度だけ　ドラゴンの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	dragoninite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonmemory: {
 		name: "ドラゴンメモリ",
-		desc: "ドラゴンタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonscale: {
 		name: "りゅうのウロコ",
-		desc: "硬くて　丈夫な　ウロコ。 ドラゴンタイプの　ポケモンが 持っていることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	drampanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreadplate: {
 		name: "こわもてプレート",
-		desc: "あくの　タイプの　石盤。 持たせると　あくタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreamball: {
 		name: "ドリームボール",
-		desc: "ねむり　状態の ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dubiousdisc: {
 		name: "あやしいパッチ",
-		desc: "なかに　怪しい　情報が つまった　透明な　機械。 製作者は　不明。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	durinberry: {
 		name: "ドリのみ",
-		desc: "かしこさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskball: {
 		name: "ダークボール",
-		desc: "夜や　どうくつなど　暗いところで ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskstone: {
 		name: "やみのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 やみのように　暗い。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 やみのように 暗い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	earthplate: {
 		name: "だいちのプレート",
-		desc: "じめんの　タイプの　石盤。 持たせると　じめんタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eelektrossite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eeviumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ejectbutton: {
 		name: "だっしゅつボタン",
-		desc: "持たせて　技を　受けると 戦闘から　脱出して 手持ちと　入れ替わる　ことができる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]は だっしゅつボタンで 戻っていく！",
 	},
 	ejectpack: {
 		name: "だっしゅつパック",
-		desc: "持たせた　ポケモンの 能力が　下がると 手持ちと　入れ替わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]は だっしゅつパックで 戻っていく！",
 	},
 	electirizer: {
 		name: "エレキブースター",
-		desc: "とてつもない　電気の　エネルギーが 蓄えられている　箱。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricgem: {
 		name: "でんきのジュエル",
-		desc: "でんきの　タイプの　ジュエル。 持たせると　１度だけ　でんきの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	electricmemory: {
 		name: "エレクトロメモリ",
-		desc: "でんきタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricseed: {
 		name: "エレキシード",
-		desc: "ポケモンに　持たせると エレキフィールドのときに　使って 防御が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	electriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	emboarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	enigmaberry: {
 		name: "ナゾのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　技を 受けたとき　ＨＰを　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	eviolite: {
 		name: "しんかのきせき",
-		desc: "進化の　不思議な　かたまり。 持たせると　進化前　ポケモンの 防御と　特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	excadrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	expertbelt: {
 		name: "たつじんのおび",
-		desc: "使いこまれた　黒い　帯。 持たせると　効果バツグンの　とき 技の　威力が　少し　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairyfeather: {
 		name: "ようせいのハネ",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairygem: {
 		name: "ようせいジュエル",
-		desc: "フェアリーの　タイプの　ジュエル。 持たせると　１度だけ　フェアリーの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairymemory: {
 		name: "フェアリーメモリ",
-		desc: "フェアリータイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	falinksite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fastball: {
 		name: "スピードボール",
-		desc: "にげあしの　はやい　ポケモンが 捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	feraligite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fightinggem: {
 		name: "かくとうジュエル",
-		desc: "かくとうの　タイプの　ジュエル。 持たせると　１度だけ　かくとうの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	fightingmemory: {
 		name: "ファイトメモリ",
-		desc: "かくとうタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fightiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	figyberry: {
 		name: "フィラのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　ＨＰを　回復する。 きらいな味だと　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firegem: {
 		name: "ほのおのジュエル",
-		desc: "ほのおの　タイプの　ジュエル。 持たせると　１度だけ　ほのおの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firememory: {
 		name: "ファイヤーメモリ",
-		desc: "ほのおタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	firestone: {
 		name: "ほのおのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 だいだい色を　している。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 だいだい色を している。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	firiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fistplate: {
 		name: "こぶしのプレート",
-		desc: "かくとうの　タイプの　石盤。 持たせると　かくとうタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameorb: {
 		name: "かえんだま",
-		desc: "触ると　熱をだす　不思議な玉。 持たせると　戦闘中に やけどの　状態に　なる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameplate: {
 		name: "ひのたまプレート",
-		desc: "ほのおの　タイプの　石盤。 持たせると　ほのおタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	floatstone: {
 		name: "かるいし",
-		desc: "とても　軽い　石。 持たせると　ポケモンの 体重が　軽くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	floettite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flowersweet: {
 		name: "おはなアメざいく",
-		desc: "おはなの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flyinggem: {
 		name: "ひこうのジュエル",
-		desc: "ひこうの　タイプの　ジュエル。 持たせると　１度だけ　ひこうの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	flyingmemory: {
 		name: "フライングメモリ",
-		desc: "ひこうタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	flyiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	focusband: {
 		name: "きあいのハチマキ",
-		desc: "持たせると　ひんしに　なりそうな 技を　受けても　ＨＰを　１だけ 残して　耐えることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	focussash: {
 		name: "きあいのタスキ",
-		desc: "持たせると　ＨＰが　満タンのとき ひんしになりそうな　技を　受けても ＨＰ１で　１度だけ　耐える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	fossilizedbird: {
 		name: "カセキのトリ",
-		desc: "大昔　空を　飛んでいた 古代　ポケモンの　カセキの一部。 どんな　姿　だったのかは　謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddino: {
 		name: "カセキのクビナガ",
-		desc: "大昔　海に　すんでいた 古代　ポケモンの　カセキの一部。 どんな　姿　だったのかは　謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddrake: {
 		name: "カセキのリュウ",
-		desc: "大昔　陸に　すんでいた 古代　ポケモンの　カセキの一部。 どんな　姿　だったのかは　謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizedfish: {
 		name: "カセキのサカナ",
-		desc: "大昔　海に　すんでいた 古代　ポケモンの　カセキの一部。 どんな　姿　だったのかは　謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	friendball: {
 		name: "フレンドボール",
-		desc: "捕まえた　野生ポケモンが すぐに　なついて　くれる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	froslassite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fullincense: {
 		name: "まんぷくおこう",
-		desc: "不思議な　香りの　御香。 持たせた　ポケモンは　いつもより 行動が　遅くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricacuff: {
 		name: "ガラナツブレス",
-		desc: "ガラナツのえだを　編み込んだ　ブレスレット。 ガラル地方の　ヤドンに つけてあげると　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricawreath: {
 		name: "ガラナツリース",
-		desc: "ガラナツのえだを　編み込んだ　冠。 ガラル地方の　ヤドンに かぶせてあげると　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galladite: {
 		name: "エルレイドナイト",
-		desc: "エルレイドに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ganlonberry: {
 		name: "リュガのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　自分の 防御が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	garchompite: {
 		name: "ガブリアスナイト",
-		desc: "ガブリアスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	garchompitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gardevoirite: {
 		name: "サーナイトナイト",
-		desc: "サーナイトに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gengarite: {
 		name: "ゲンガナイト",
-		desc: "ゲンガーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostgem: {
 		name: "ゴーストジュエル",
-		desc: "ゴーストの　タイプの　ジュエル。 持たせると　１度だけ　ゴーストの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	ghostiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostmemory: {
 		name: "ゴーストメモリ",
-		desc: "ゴーストタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	glalitite: {
 		name: "オニゴーリナイト",
-		desc: "オニゴーリに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	glimmoranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	goldbottlecap: {
 		name: "きんのおうかん",
-		desc: "金色の　きれいな　王冠。 ぎんのおうかんより　珍しい。 渡すと　よろこぶ　人もいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golisopite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golurkite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassgem: {
 		name: "くさのジュエル",
-		desc: "くさの　タイプの　ジュエル。 持たせると　１度だけ　くさの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	grassiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassmemory: {
 		name: "グラスメモリ",
-		desc: "くさタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassyseed: {
 		name: "グラスシード",
-		desc: "ポケモンに　持たせると グラスフィールドのときに　使って 防御が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	greatball: {
 		name: "スーパーボール",
-		desc: "モンスターボールよりも　さらに ポケモンを　捕まえやすくなった 少し　性能のいい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	greninjite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grepaberry: {
 		name: "ウブのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが 特防の　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gripclaw: {
 		name: "ねばりのかぎづめ",
-		desc: "持たせると　しめつける　まきつくなど ダメージを　あたえつづける　技の ターン数が　増える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseouscore: {
 		name: "だいはっきんだま",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseousorb: {
 		name: "はっきんだま",
-		desc: "ギラティナに　持たせると　ドラゴンと ゴーストタイプの　技の　威力が あがる　光り　輝く　珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	groundgem: {
 		name: "じめんのジュエル",
-		desc: "じめんの　タイプの　ジュエル。 持たせると　１度だけ　じめんの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	groundiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	groundmemory: {
 		name: "グラウンドメモリ",
-		desc: "じめんタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gyaradosite: {
 		name: "ギャラドスナイト",
-		desc: "ギャラドスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	habanberry: {
 		name: "ハバンのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　ドラゴン技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hardstone: {
 		name: "かたいいし",
-		desc: "絶対に　割れない　石。 持たせると　いわタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	hawluchanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	healball: {
 		name: "ヒールボール",
-		desc: "捕まえた　ポケモンの　ＨＰと 状態異常を　回復する ちょっと　やさしい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hearthflamemask: {
 		name: "かまどのめん",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	heatranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heatrock: {
 		name: "あついいわ",
-		desc: "持たせた　ポケモンが　にほんばれを 使うと　いつもより　はれの 時間が　長くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavyball: {
 		name: "ヘビーボール",
-		desc: "体重の　重い　ポケモンが 捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavydutyboots: {
 		name: "あつぞこブーツ",
-		desc: "足場に　しかけられた 罠などの　影響を　受けなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	helixfossil: {
 		name: "かいのカセキ",
-		desc: "大昔　海に　すんでいた 古代ポケモンの　カセキ。 貝殻の　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heracronite: {
 		name: "ヘラクロスナイト",
-		desc: "ヘラクロスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hondewberry: {
 		name: "ロメのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが 特攻の　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	houndoominite: {
 		name: "ヘルガナイト",
-		desc: "ヘルガーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	iapapaberry: {
 		name: "イアのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　ＨＰを　回復する。 きらいな味だと　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icegem: {
 		name: "こおりのジュエル",
-		desc: "こおりの　タイプの　ジュエル。 持たせると　１度だけ　こおりの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icememory: {
 		name: "アイスメモリ",
-		desc: "こおりタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icestone: {
 		name: "こおりのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 雪の　模様が　ある。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 雪の 模様が ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icicleplate: {
 		name: "つららのプレート",
-		desc: "こおりの　タイプの　石盤。 持たせると　こおりタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iciumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icyrock: {
 		name: "つめたいいわ",
-		desc: "持たせた　ポケモンが　あられを 使うと　いつもより　あられの 時間が　長くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	inciniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	insectplate: {
 		name: "たまむしプレート",
-		desc: "むしの　タイプの　石盤。 持たせると　むしタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ironball: {
 		name: "くろいてっきゅう",
-		desc: "持たせると　素早さが　さがる。 ひこうタイプや　ふゆう　ポケモンは じめん技が　当たってしまう。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	ironplate: {
 		name: "こうてつプレート",
-		desc: "はがねの　タイプの　石盤。 持たせると　はがねタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jabocaberry: {
 		name: "ジャポのみ",
-		desc: "ポケモンに　持たせると 物理技を　受けたとき 相手にも　ダメージを　あたえる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jawfossil: {
 		name: "アゴのカセキ",
-		desc: "大昔　地上で　暮らした 古代ポケモンの　カセキ。 大きな　アゴの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kangaskhanite: {
 		name: "ガルーラナイト",
-		desc: "ガルーラに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kasibberry: {
 		name: "カシブのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　ゴースト技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "ビアーのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　どく技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	keeberry: {
 		name: "アッキのみ",
-		desc: "ポケモンに　持たせると 物理技を　受けたとき 自分の　防御が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kelpsyberry: {
 		name: "ネコブのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが 攻撃の　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kingsrock: {
 		name: "おうじゃのしるし",
-		desc: "持たせると　攻撃して ダメージを　与えたときに 相手を　ひるませることが　ある。",
+		desc: "持たせると 攻撃して ダメージを 与えたときに 相手を ひるませることが ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	kommoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laggingtail: {
 		name: "こうこうのしっぽ",
-		desc: "とても　重たい　なにかの　しっぽ。 持たせると　いつもより　行動が 遅くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lansatberry: {
 		name: "サンのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　攻撃が 急所に　当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiasite: {
 		name: "ラティアスナイト",
-		desc: "ラティアスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiosite: {
 		name: "ラティオスナイト",
-		desc: "ラティオスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laxincense: {
 		name: "のんきのおこう",
-		desc: "持たせると　御香の　不思議な 香りが　相手を　まどわせて 技が　命中　しにくくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	leafstone: {
 		name: "リーフのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 はっぱの　模様が　ある。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 はっぱの 模様が ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	leek: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	leftovers: {
 		name: "たべのこし",
-		desc: "持たせると　ポケモンの　ＨＰが 戦闘の　あいだ　少しずつ 回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	leppaberry: {
 		name: "ヒメリのみ",
-		desc: "ポケモンに　持たせると ＰＰを　１０だけ　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	levelball: {
 		name: "レベルボール",
-		desc: "自分の　ポケモンより　レベルが 低いほど　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	liechiberry: {
 		name: "チイラのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　自分の 攻撃が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lifeorb: {
 		name: "いのちのたま",
-		desc: "持たせると　攻撃する　たびに ＨＰが　少し　減ってしまうが 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "  [POKEMON]は 命が 少し削られた！",
 	},
 	lightball: {
 		name: "でんきだま",
-		desc: "ピカチュウに　持たせると 攻撃と　特攻の　威力が あがる　不思議な　玉。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lightclay: {
 		name: "ひかりのねんど",
-		desc: "持たせた　ポケモンが　ひかりのかべや リフレクターを　使ったとき いつもよりも　長く　残る。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	loadeddice: {
 		name: "いかさまダイス",
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lopunnite: {
 		name: "ミミロップナイト",
-		desc: "ミミロップに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	loveball: {
 		name: "ラブラブボール",
-		desc: "自分の　ポケモンと　性別が 違うと　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lovesweet: {
 		name: "ハートアメざいく",
-		desc: "ハートの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lucarionite: {
 		name: "ルカリオナイト",
-		desc: "ルカリオに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lucarionitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luckypunch: {
 		name: "ラッキーパンチ",
-		desc: "幸運を　よぶ　グローブ。 ラッキーに　持たせると　技が 急所に　当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lumberry: {
 		name: "ラムのみ",
-		desc: "ポケモンに　持たせると すべての　状態異常を 回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luminousmoss: {
 		name: "ひかりごけ",
-		desc: "使い捨ての　ひかりごけ。 持たせて　みずの　技を　受けると 特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lunaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lureball: {
 		name: "ルアーボール",
-		desc: "つりざおで　つりあげた　ポケモンだと 捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousglobe: {
 		name: "だいしらたま",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousorb: {
 		name: "しらたま",
-		desc: "パルキアに　持たせると　ドラゴンと みずタイプの　技の　威力が あがる　美しく　輝く　珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luxuryball: {
 		name: "ゴージャスボール",
-		desc: "捕まえた　野生ポケモンが とても　なかよく　なりやすくなる いごこちの　いい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lycaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	machobrace: {
 		name: "きょうせいギプス",
-		desc: "硬くて　重い　ギプス。 持たせると　素早さは　さがるが ふつうより　強く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	magearnite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magmarizer: {
 		name: "マグマブースター",
-		desc: "とてつもない　マグマの　エネルギーが 蓄えられている　箱。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magnet: {
 		name: "じしゃく",
-		desc: "強力な　磁石。 持たせると　でんきタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magoberry: {
 		name: "マゴのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　ＨＰを　回復する。 きらいな味だと　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magostberry: {
 		name: "ゴスのみ",
-		desc: "かわいさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mail: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	malamarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	maliciousarmor: {
 		name: "ノロイノヨロイ",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	manectite: {
 		name: "ライボルトナイト",
-		desc: "ライボルトに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	marangaberry: {
 		name: "タラプのみ",
-		desc: "ポケモンに　持たせると 特殊技を　受けたとき 自分の　特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	marshadiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterball: {
 		name: "マスターボール",
-		desc: "野生の　ポケモンを　必ず 捕まえることが　できる 最高　性能の　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterpieceteacup: {
 		name: "ボンサクのちゃわん",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mawilite: {
 		name: "クチートナイト",
-		desc: "クチートに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	meadowplate: {
 		name: "みどりのプレート",
-		desc: "くさの　タイプの　石盤。 持たせると　くさタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	medichamite: {
 		name: "チャーレムナイト",
-		desc: "チャーレムに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	meganiumite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mentalherb: {
 		name: "メンタルハーブ",
-		desc: "持たせた　ポケモンが　自由に 技を　だせなくなったときに １度だけ　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	meowsticite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metagrossite: {
 		name: "メタグロスナイト",
-		desc: "メタグロスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	metalalloy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalcoat: {
 		name: "メタルコート",
-		desc: "特殊な　金属の　膜。 持たせると　はがねタイプの 技の　威力が　あがる。",
+		desc: "特殊な 金属の 膜。 持たせると はがねタイプの 技の 威力が あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metalpowder: {
 		name: "メタルパウダー",
-		desc: "メタモンに　持たせると　防御が あがる　不思議な粉。 とても　こまかくて　硬い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metronome: {
 		name: "メトロノーム",
-		desc: "持たせると　同じ技を　連続で 使ったとき　威力が　あがる。 やめると　威力は　もどる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mewniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitex: {
 		name: "ミュウツナイトＸ",
-		desc: "ミュウツーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitey: {
 		name: "ミュウツナイトＹ",
-		desc: "ミュウツーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	micleberry: {
 		name: "ミクルのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　１度だけ 技の　命中率が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mimikiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mindplate: {
 		name: "ふしぎのプレート",
-		desc: "エスパーの　タイプの　石盤。 持たせると　エスパータイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	miracleseed: {
 		name: "きせきのタネ",
-		desc: "生命が　宿る　タネ。 持たせると　くさタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	mirrorherb: {
 		name: "ものまねハーブ",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "  [POKEMON]は ものまねハーブを 使って 相手の 能力変化を まねした！",
 	},
 	mistyseed: {
 		name: "ミストシード",
-		desc: "ポケモンに　持たせると ミストフィールドのときに　使って 特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonball: {
 		name: "ムーンボール",
-		desc: "つきのいしで　進化する　ポケモンが 捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonstone: {
 		name: "つきのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 夜空のように　黒い。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 夜空のように 黒い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	muscleband: {
 		name: "ちからのハチマキ",
-		desc: "ちからが　わいてくる　ハチマキ。 持たせると　物理技の 威力が　少し　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mysticwater: {
 		name: "しんぴのしずく",
-		desc: "しずくの　形の　宝石。 持たせると　みずタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nanabberry: {
 		name: "ナナのみ",
-		desc: "かわいさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 桃色の実は　食べると　甘い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nestball: {
 		name: "ネストボール",
-		desc: "捕まえる　野生の　ポケモンが 弱いほど　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	netball: {
 		name: "ネットボール",
-		desc: "みずタイプと　むしタイプの ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nevermeltice: {
 		name: "とけないこおり",
-		desc: "熱を　よせつけない　氷。 持たせると　こおりタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nomelberry: {
 		name: "ノメルのみ",
-		desc: "たくましさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	normalgem: {
 		name: "ノーマルジュエル",
-		desc: "ノーマルの　タイプの　ジュエル。 持たせると　１度だけ　ノーマルの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	normaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	occaberry: {
 		name: "オッカのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　ほのお技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oddincense: {
 		name: "あやしいおこう",
-		desc: "不思議な　香りの　御香。 持たせると　エスパータイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oldamber: {
 		name: "ひみつのコハク",
-		desc: "古代ポケモンの　遺伝子が 閉じこめられている　コハク。 赤みを　帯びて　透けている。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oranberry: {
 		name: "オレンのみ",
-		desc: "ポケモンに　持たせると ＨＰを　１０だけ　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ovalstone: {
 		name: "まんまるいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 たまのように　まるい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pamtreberry: {
 		name: "シーヤのみ",
-		desc: "うつくしさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	parkball: {
 		name: "パークボール",
-		desc: "パルパークの　なかで 使う　特別な　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	passhoberry: {
 		name: "イトケのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　みず技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	payapaberry: {
 		name: "ウタンのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　エスパー技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pechaberry: {
 		name: "モモンのみ",
-		desc: "ポケモンに　持たせると 毒を　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	persimberry: {
 		name: "キーのみ",
-		desc: "ポケモンに　持たせると 混乱を　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	petayaberry: {
 		name: "ヤタピのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　自分の 特攻が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pidgeotite: {
 		name: "ピジョットナイト",
-		desc: "ピジョットに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikashuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinapberry: {
 		name: "パイルのみ",
-		desc: "たくましさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 黄色の実は　食べると　酸っぱい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinsirite: {
 		name: "カイロスナイト",
-		desc: "カイロスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pixieplate: {
 		name: "せいれいプレート",
-		desc: "フェアリーの　タイプの　石盤。 持たせると　フェアリータイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	plumefossil: {
 		name: "はねのカセキ",
-		desc: "とりポケモンの　祖先と　いわれる 古代ポケモンの　カセキ。 つばさの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonbarb: {
 		name: "どくバリ",
-		desc: "どくのある　ちいさな　ハリ。 持たせると　どくタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	poisongem: {
 		name: "どくのジュエル",
-		desc: "どくの　タイプの　ジュエル。 持たせると　１度だけ　どくの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	poisoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonmemory: {
 		name: "ポイズンメモリ",
-		desc: "どくタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pokeball: {
 		name: "モンスターボール",
-		desc: "野生の　ポケモンに　投げて 捕まえるための　ボール。 カプセル式に　なっている。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pomegberry: {
 		name: "ザロクのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが ＨＰの　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poweranklet: {
 		name: "パワーアンクル",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　素早さが 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerband: {
 		name: "パワーバンド",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　特防が 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbelt: {
 		name: "パワーベルト",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　防御が 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbracer: {
 		name: "パワーリスト",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　攻撃が 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerherb: {
 		name: "パワフルハーブ",
-		desc: "持たせた　ポケモンは　１度だけ １ターン目に　ちからを　ためる技を すぐに　使うことが　できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	powerlens: {
 		name: "パワーレンズ",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　特攻が 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerweight: {
 		name: "パワーウエイト",
-		desc: "持たせると　素早さが　さがるが ふつうよりも　ポケモンの　ＨＰが 高く　育ちやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	premierball: {
 		name: "プレミアボール",
-		desc: "なにかの　記念の　品として 特別に　つくられた ちょっと　珍しい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	prettyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	primariumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	prismscale: {
 		name: "きれいなウロコ",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　ウロコ。 にじ色に　輝いている。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	protectivepads: {
 		name: "ぼうごパット",
-		desc: "攻撃　する　相手に さわって　受ける　効果を 受けないように　する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	protector: {
 		name: "プロテクター",
-		desc: "なにかの　プロテクター。 とても　硬くて　重い。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicgem: {
 		name: "エスパージュエル",
-		desc: "エスパーの　タイプの　ジュエル。 持たせると　１度だけ　エスパーの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	psychicmemory: {
 		name: "サイキックメモリ",
-		desc: "エスパータイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicseed: {
 		name: "サイコシード",
-		desc: "ポケモンに　持たせると サイコフィールドのときに　使って 特防が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psychiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	punchingglove: {
 		name: "パンチグローブ",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pyroarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	qualotberry: {
 		name: "タポルのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが 防御の　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickball: {
 		name: "クイックボール",
-		desc: "戦闘が　はじまって　すぐに 使うと　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickclaw: {
 		name: "せんせいのツメ",
-		desc: "軽くて　鋭い　ツメ。 持たせると　相手より　先に 行動できることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	quickpowder: {
 		name: "スピードパウダー",
-		desc: "メタモンに　持たせると　素早さが あがる　不思議な粉。 とても　こまかくて　硬い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rabutaberry: {
 		name: "ラブタのみ",
-		desc: "かしこさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitex: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitey: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rarebone: {
 		name: "きちょうなホネ",
-		desc: "ポケモン考古学の　うえで とても　貴重な　ホネ。 ショップで　高く　売れる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rawstberry: {
 		name: "チーゴのみ",
-		desc: "ポケモンに　持たせると やけどを　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorclaw: {
 		name: "するどいツメ",
-		desc: "鋭く　とがった　ツメ。 持たせると　技が　急所に 当たりやすくなる。",
+		desc: "鋭く とがった ツメ。 持たせると 技が 急所に 当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorfang: {
 		name: "するどいキバ",
-		desc: "鋭く　とがった　キバ。 持たせると　ダメージを　与えたとき ひるませることが　ある。",
+		desc: "鋭く とがった キバ。 持たせると ダメージを 与えたとき ひるませることが ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razzberry: {
 		name: "ズリのみ",
-		desc: "かっこよさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 赤色の実は　食べると　辛い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	reapercloth: {
 		name: "れいかいのぬの",
-		desc: "おそろしく　強い　霊力が こめられている　布。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	redcard: {
 		name: "レッドカード",
-		desc: "不思議な　ちからのある　カード。 持たせると　技を　使ってきた　相手を 退場させることが　できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	redorb: {
 		name: "べにいろのたま",
-		desc: "ホウエン地方の　伝説と 深い　関わりが　あると　いわれる あかく　かがやく　たま。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	repeatball: {
 		name: "リピートボール",
-		desc: "捕まえたことの　ある ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ribbonsweet: {
 		name: "リボンアメざいく",
-		desc: "リボンの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rindoberry: {
 		name: "リンドのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　くさ技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ringtarget: {
 		name: "ねらいのまと",
-		desc: "ポケモンの　タイプの　相性で 無効だった　技が 当たるように　なってしまう。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockgem: {
 		name: "いわのジュエル",
-		desc: "いわの　タイプの　ジュエル。 持たせると　１度だけ　いわの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	rockincense: {
 		name: "がんせきおこう",
-		desc: "不思議な　香りの　御香。 持たせると　いわタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	rockiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockmemory: {
 		name: "ロックメモリ",
-		desc: "いわタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockyhelmet: {
 		name: "ゴツゴツメット",
-		desc: "ポケモンに　持たせると 打撃技を　受けたとき 相手にも　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "", // NOT CONVERTED: not in Champions
 	},
 	roomservice: {
 		name: "ルームサービス",
-		desc: "ポケモンに　持たせると トリックルームのときに　使って 素早さが　下がる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rootfossil: {
 		name: "ねっこのカセキ",
-		desc: "大昔　海に　すんでいた 古代ポケモンの　カセキ。 ねっこの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseincense: {
 		name: "おはなのおこう",
-		desc: "不思議な　香りの　御香。 持たせると　くさタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseliberry: {
 		name: "ロゼルのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　フェアリー技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rowapberry: {
 		name: "レンブのみ",
-		desc: "ポケモンに　持たせると 特殊技を　受けたとき 相手にも　ダメージを　あたえる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedshield: {
 		name: "くちたたて",
-		desc: "大昔の　英雄が　災厄を 討ち払ったと　伝えられる　盾　だが いまは　さびて　ボロボロに　なっている。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedsword: {
 		name: "くちたけん",
-		desc: "大昔の　英雄が　災厄を 討ち払ったと　伝えられる　剣　だが いまは　さびて　ボロボロに　なっている。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sablenite: {
 		name: "ヤミラミナイト",
-		desc: "ヤミラミに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sachet: {
 		name: "においぶくろ",
-		desc: "ちょっと　きつめの　香りをだす 香料を　詰めた　袋。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safariball: {
 		name: "サファリボール",
-		desc: "カントー地方の　サファリゾーンや シンオウ地方の　大湿原で 使われていた　特別な　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safetygoggles: {
 		name: "ぼうじんゴーグル",
-		desc: "天候の　ダメージだけでなく 粉を　だす　技の 効果も　防げる　ゴーグル。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	sailfossil: {
 		name: "ヒレのカセキ",
-		desc: "大昔　地上で　暮らした 古代ポケモンの　カセキ。 首の　ヒレの　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salacberry: {
 		name: "カムラのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　自分の 素早さが　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salamencite: {
 		name: "ボーマンダナイト",
-		desc: "ボーマンダに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sceptilite: {
 		name: "ジュカインナイト",
-		desc: "ジュカインに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scizorite: {
 		name: "ハッサムナイト",
-		desc: "ハッサムに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scolipite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scopelens: {
 		name: "ピントレンズ",
-		desc: "弱点が　みえる　レンズ。 持たせた　ポケモンの　技が 急所に　当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scovillainite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scraftinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	seaincense: {
 		name: "うしおのおこう",
-		desc: "不思議な　香りの　御香。 持たせると　みずタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpbeak: {
 		name: "するどいくちばし",
-		desc: "長く　とがった　くちばし。 持たせると　ひこうタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpedonite: {
 		name: "サメハダナイト",
-		desc: "サメハダーに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shedshell: {
 		name: "きれいなぬけがら",
-		desc: "丈夫で　硬い　ぬけがら。 持たせた　ポケモンは　控えの ポケモンと　必ず　いれかわれる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shellbell: {
 		name: "かいがらのすず",
-		desc: "持たせた　ポケモンが　攻撃して 相手に　ダメージを　あたえたとき ＨＰを　少し　回復できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	shinystone: {
 		name: "ひかりのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 ひかりのように　まぶしい。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひかりのように まぶしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shockdrive: {
 		name: "イナズマカセット",
-		desc: "ゲノセクトに　持たせると テクノバスターという　技が でんきタイプになる　カセット。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shucaberry: {
 		name: "シュカのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　じめん技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	silkscarf: {
 		name: "シルクのスカーフ",
-		desc: "はだざわりの　よい　スカーフ。 持たせると　ノーマルタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	silverpowder: {
 		name: "ぎんのこな",
-		desc: "銀色に　輝く　粉。 持たせると　むしタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sitrusberry: {
 		name: "オボンのみ",
-		desc: "ポケモンに　持たせると ＨＰを　少しだけ　回復する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	skarmorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skullfossil: {
 		name: "ずがいのカセキ",
-		desc: "大昔　地上で　暮らした 古代ポケモンの　カセキ。 頭の　一部らしい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skyplate: {
 		name: "あおぞらプレート",
-		desc: "ひこうの　タイプの　石盤。 持たせると　ひこうタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	slowbronite: {
 		name: "ヤドランナイト",
-		desc: "ヤドランに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		champions: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	smoothrock: {
 		name: "さらさらいわ",
-		desc: "持たせた　ポケモンが　すなあらしを 使うと　いつもより　すなあらしの 時間が　長くなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	snorliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	snowball: {
 		name: "ゆきだま",
-		desc: "使い捨ての　ゆきだま。 持たせて　こおりの　技を　受けると 攻撃が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	softsand: {
 		name: "やわらかいすな",
-		desc: "さわると　サラサラする　砂。 持たせると　じめんタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	solganiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	souldew: {
 		name: "こころのしずく",
-		desc: "ラティオスや　ラティアスに　持たせると エスパーと　ドラゴンタイプの　技の 威力が　あがる　不思議な　珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelltag: {
 		name: "のろいのおふだ",
-		desc: "怪しくて　不気味な　お札。 持たせると　ゴーストタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelonberry: {
 		name: "ノワキのみ",
-		desc: "かわいさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	splashplate: {
 		name: "しずくプレート",
-		desc: "みずの　タイプの　石盤。 持たせると　みずタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	spookyplate: {
 		name: "もののけプレート",
-		desc: "ゴーストの　タイプの　石盤。 持たせると　ゴーストタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sportball: {
 		name: "コンペボール",
-		desc: "ジョウト地方の　虫捕り大会で 使われていた　特別な　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	staraptite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starfberry: {
 		name: "スターのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　どれか　１つの 能力が　ぐーんと　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	starminite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starsweet: {
 		name: "スターアメざいく",
-		desc: "スターの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelgem: {
 		name: "はがねのジュエル",
-		desc: "はがねの　タイプの　ジュエル。 持たせると　１度だけ　はがねの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	steeliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelixite: {
 		name: "ハガネールナイト",
-		desc: "ハガネールに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelmemory: {
 		name: "スチールメモリ",
-		desc: "はがねタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stick: {
 		name: "ながねぎ",
-		desc: "とても　長くて　硬い　クキ。 カモネギに　持たせると　技が 急所に　当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	stickybarb: {
 		name: "くっつきバリ",
-		desc: "持たせると　毎ターン　ダメージを 受ける。　自分に　ふれてきた 相手に　くっつくことも　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stoneplate: {
 		name: "がんせきプレート",
-		desc: "いわの　タイプの　石盤。 持たせると　いわタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strangeball: {
 		name: "ストレンジボール",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strawberrysweet: {
 		name: "いちごアメざいく",
-		desc: "いちごの　形を　した　アメ細工。 マホミルに　持たせてあげると くるくる　回って　喜ぶ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sunstone: {
 		name: "たいようのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 太陽のように　赤い。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 太陽のように 赤い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	swampertite: {
 		name: "ラグラージナイト",
-		desc: "ラグラージに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sweetapple: {
 		name: "あまーいりんご",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　りんご。 とにかく　甘い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	syrupyapple: {
 		name: "みついりりんご",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tamatoberry: {
 		name: "マトマのみ",
-		desc: "ポケモンに　あげると とても　なかよく　なりやすくなるが 素早さの　基礎ポイントは　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tangaberry: {
 		name: "タンガのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　むし技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tapuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tartapple: {
 		name: "すっぱいりんご",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　りんご。 とにかく　酸っぱい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tatsugirinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	terrainextender: {
 		name: "グランドコート",
-		desc: "持たせた　ポケモンが　技や 特性で　フィールドを　張ったとき いつもよりも　長く　残る。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thickclub: {
 		name: "ふといホネ",
-		desc: "なにかの　硬い　ホネ。 カラカラ　または　ガラガラに 持たせると　攻撃が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	throatspray: {
 		name: "のどスプレー",
-		desc: "音に　関する　技を　使うと 特攻が　上がる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thunderstone: {
 		name: "かみなりのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 稲妻の　模様が　ある。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 稲妻の 模様が ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	timerball: {
 		name: "タイマーボール",
-		desc: "ターン数が　かかれば　かかるほど ポケモンが　捕まえやすくなる ちょっと　変わった　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicorb: {
 		name: "どくどくだま",
-		desc: "触ると　毒をだす　不思議な玉。 持たせると　戦闘中に 猛毒の　状態に　なる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicplate: {
 		name: "もうどくプレート",
-		desc: "どくの　タイプの　石盤。 持たせると　どくタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr00: {
 		name: "わざレコード００",
-		desc: "戦いの舞を　激しく　おどって 気合を　高める。 自分の　攻撃を　ぐーんと　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr01: {
 		name: "わざレコード０１",
-		desc: "全身で 相手に　のしかかり　攻撃する。 まひ状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr02: {
 		name: "わざレコード０２",
-		desc: "激しい　炎を 相手に　発射して　攻撃する。 やけど状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr03: {
 		name: "わざレコード０３",
-		desc: "大量の　水を 激しい　勢いで 相手に　発射して　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr04: {
 		name: "わざレコード０４",
-		desc: "大きな　波で　自分の 周りに　いるものを　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr05: {
 		name: "わざレコード０５",
-		desc: "凍える　ビームを 相手に　発射して　攻撃する。 こおり状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr06: {
 		name: "わざレコード０６",
-		desc: "激しい　吹雪を 相手に　吹きつけて　攻撃する。 こおり状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr07: {
 		name: "わざレコード０７",
-		desc: "足を　強く　けり 相手を　転ばせて　攻撃する。 相手が　重いほど　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr08: {
 		name: "わざレコード０８",
-		desc: "強い　電撃を 相手に　浴びせて　攻撃する。 まひ状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr09: {
 		name: "わざレコード０９",
-		desc: "激しい　雷を 相手に　落として　攻撃する。 まひ状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr10: {
 		name: "わざレコード１０",
-		desc: "地震の　衝撃で　自分の 周りに　いるものを　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr11: {
 		name: "わざレコード１１",
-		desc: "強い　念力を　相手に　送って 攻撃する。　相手の　特防を さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr12: {
 		name: "わざレコード１２",
-		desc: "力を　ぬいて　体を　軽くして 高速で　動く。 自分の　素早さを　ぐーんと　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr13: {
 		name: "わざレコード１３",
-		desc: "深く　息を　吸い　気合を　こめる。 自分の　攻撃が 急所に　当たりやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr14: {
 		name: "わざレコード１４",
-		desc: "指をふり　自分の　脳を　刺激して すべての　技の　なかから どれか　１つを　くりだす。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr15: {
 		name: "わざレコード１５",
-		desc: "大の字の　炎で 相手を　焼きつくす。 やけど状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr16: {
 		name: "わざレコード１６",
-		desc: "すごい　勢いで　相手に　つっこむ。 相手を　ひるませることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr17: {
 		name: "わざレコード１７",
-		desc: "頭を　からにして 一瞬　なにかを　忘れることで 自分の　特防を　ぐーんと　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr18: {
 		name: "わざレコード１８",
-		desc: "血を　吸い取って　相手を 攻撃する。　与えた　ダメージの 半分の　ＨＰを　回復できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr19: {
 		name: "わざレコード１９",
-		desc: "３つの　光線で　攻撃する。 まひか　やけどか　こおり状態の どれかに　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr20: {
 		name: "わざレコード２０",
-		desc: "自分の　ＨＰを　少し　削って 分身を　だす。 分身は　自分の　身代わりに　なる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr21: {
 		name: "わざレコード２１",
-		desc: "力を　ふりしぼり　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr22: {
 		name: "わざレコード２２",
-		desc: "汚い　ヘドロを 相手に　投げつけて　攻撃する。 毒状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr23: {
 		name: "わざレコード２３",
-		desc: "相手の　足下に　まきびしを しかける。交代で　でてきた　相手の ポケモンに　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr24: {
 		name: "わざレコード２４",
-		desc: "２ー３ターンの　間 暴れまくって　攻撃する。 暴れたあとは　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr25: {
 		name: "わざレコード２５",
-		desc: "不思議な　念波を　実体化して 相手を　攻撃する。 物理的な　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr26: {
 		name: "わざレコード２６",
-		desc: "攻撃を　受けても ＨＰを　必ず　１だけ　残せる。 連続で　だすと　失敗しやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr27: {
 		name: "わざレコード２７",
-		desc: "自分が　おぼえている　技の　うち どれか　１つを　くりだす。 自分が　寝ているときだけ　使える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr28: {
 		name: "わざレコード２８",
-		desc: "硬くて　りっぱな　つので　おもいっきり 相手を　突き刺して　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr29: {
 		name: "わざレコード２９",
-		desc: "控えの　ポケモンと　入れ替わる。 能力変化は　替わった ポケモンが　そのまま　受けつぐ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr30: {
 		name: "わざレコード３０",
-		desc: "相手に　アンコールした　技を ３回　続けて　出させる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr31: {
 		name: "わざレコード３１",
-		desc: "硬い　しっぽで 相手を　たたきつけて　攻撃する。 相手の　防御を　さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr32: {
 		name: "わざレコード３２",
-		desc: "鋭い　歯で 相手を　かみくだいて　攻撃する。 相手の　防御を　さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr33: {
 		name: "わざレコード３３",
-		desc: "黒い影の　塊を　投げつけて 攻撃する。　相手の　特防を さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr34: {
 		name: "わざレコード３４",
-		desc: "技を　使った　２ターン後に 相手に　念力の 塊を　送って　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr35: {
 		name: "わざレコード３５",
-		desc: "３ターンの　間 騒いで　相手を　攻撃する。 そのあいだは　だれも　眠れなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr36: {
 		name: "わざレコード３６",
-		desc: "熱い　息を 相手に　吹きつけて　攻撃する。 やけど状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr37: {
 		name: "わざレコード３７",
-		desc: "相手を　怒らせる。　３ターンの 間　相手は　ダメージを 与える　技しか　だせなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr38: {
 		name: "わざレコード３８",
-		desc: "相手の　すきを　ついて 自分と　相手の 持ち物を　交換する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr39: {
 		name: "わざレコード３９",
-		desc: "すごい　力を　発揮して 相手を　攻撃する。自分の 攻撃と　防御が　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr40: {
 		name: "わざレコード４０",
-		desc: "超能力で　自分の　特性と 相手の　特性を　入れ替える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr41: {
 		name: "わざレコード４１",
-		desc: "攻撃した　相手を やけど状態に　することが　ある。 急所にも　当たりやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr42: {
 		name: "わざレコード４２",
-		desc: "うるさく　響く　大きな　振動を 相手に　与えて　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr43: {
 		name: "わざレコード４３",
-		desc: "フルパワーで　相手を　攻撃する。 使うと　反動で 自分の　特攻が　がくっと　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr44: {
 		name: "わざレコード４４",
-		desc: "宇宙から　神秘の　力を とりこむ　ことで 自分の　防御と　特防を　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr45: {
 		name: "わざレコード４５",
-		desc: "濁った　水を 相手に　発射して　攻撃する。 命中率を　さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr46: {
 		name: "わざレコード４６",
-		desc: "皮膚を　鉄のように 硬くする　ことで 自分の　防御を　ぐーんと　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr47: {
 		name: "わざレコード４７",
-		desc: "鋭く　とがった　巨大な　ツメで 相手を　切り裂いて　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr48: {
 		name: "わざレコード４８",
-		desc: "体に　力を　こめて 筋肉を　ぶあつく　することで 自分の　攻撃と　防御を　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr49: {
 		name: "わざレコード４９",
-		desc: "静かに　精神を　統一し 心を　鎮めることで　自分の 特攻と　特防を　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr50: {
 		name: "わざレコード５０",
-		desc: "はっぱを　剣のように　あやつり 相手を　切りつけて　攻撃する。 急所に　当たりやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr51: {
 		name: "わざレコード５１",
-		desc: "神秘的で　力強い　舞を 激しく　おどる。　自分の 攻撃と　素早さを　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr52: {
 		name: "わざレコード５２",
-		desc: "体を　高速に　回転させて 体当たりする。相手より　素早さが 低いほど　強い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr53: {
 		name: "わざレコード５３",
-		desc: "守りを　捨てて　相手の　ふところに 突撃する。　自分の 防御と　特防が　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr54: {
 		name: "わざレコード５４",
-		desc: "相手の　足下に　どくびしを しかける。　交代で　でてきた　相手の ポケモンに　毒を　おわせる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr55: {
 		name: "わざレコード５５",
-		desc: "炎を　まとって　突進する。 自分も　かなり　ダメージを　受ける。 やけど状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr56: {
 		name: "わざレコード５６",
-		desc: "体の　奥から　波導の　力を 相手に　うち放つ。 攻撃は　必ず　命中する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr57: {
 		name: "わざレコード５７",
-		desc: "毒に　そまった　触手や　腕で 相手を　突き刺す。 毒状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr58: {
 		name: "わざレコード５８",
-		desc: "体から　悪意に　みちた 恐ろしい　オーラを　発する。 相手を　ひるませることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr59: {
 		name: "わざレコード５９",
-		desc: "硬い　殻を　もつ　大きな　タネを 上から　たたきつけて 相手を　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr60: {
 		name: "わざレコード６０",
-		desc: "カマや　ツメを　ハサミのように 交差させながら　相手を　切り裂く。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr61: {
 		name: "わざレコード６１",
-		desc: "振動で　音波を　おこして 攻撃する。相手の　特防を さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr62: {
 		name: "わざレコード６２",
-		desc: "大きな　口から　衝撃波を まきおこして　相手を　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr63: {
 		name: "わざレコード６３",
-		desc: "宝石のように　きらめく　光を 発射して　相手を　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr64: {
 		name: "わざレコード６４",
-		desc: "気合を　高めて ありったけの　力を　放出する。 相手の　特防を　さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr65: {
 		name: "わざレコード６５",
-		desc: "自然から　集めた 命の力を　発射する。 相手の　特防を　さげることがある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr66: {
 		name: "わざレコード６６",
-		desc: "はねを　おりたたみ 低空飛行で　突撃する。 自分も　かなり　ダメージを　受ける。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr67: {
 		name: "わざレコード６７",
-		desc: "相手の　足下へ　大地の力を 放出する。相手の　特防を さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr68: {
 		name: "わざレコード６８",
-		desc: "悪いことを　考えて 頭を　活性化させる。 自分の　特攻を　ぐーんと　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr69: {
 		name: "わざレコード６９",
-		desc: "思念の　力を 額に　集めて　攻撃する。 相手を　ひるませることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr70: {
 		name: "わざレコード７０",
-		desc: "体の　光を　一点に　集めて 力を　放つ。 相手の　特防を　さげることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr71: {
 		name: "わざレコード７１",
-		desc: "とがった　はっぱで　相手に　あらしを おこす。使うと　反動で 自分の　特攻が　がくっと　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr72: {
 		name: "わざレコード７２",
-		desc: "ツタや　触手を　激しく　ふるって 相手を　たたきつけ　攻撃する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr73: {
 		name: "わざレコード７３",
-		desc: "汚い　ゴミを 相手に　ぶつけて　攻撃する。 毒状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr74: {
 		name: "わざレコード７４",
-		desc: "鋼の　ような 硬い　頭で　攻撃する。 相手を　ひるませることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr75: {
 		name: "わざレコード７５",
-		desc: "とがった　岩を 相手に　突き刺して　攻撃する。 急所に　当たりやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr76: {
 		name: "わざレコード７６",
-		desc: "相手の　周りに　無数の　岩を 浮かべて　交代で　でてきた　相手の ポケモンに　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr77: {
 		name: "わざレコード７７",
-		desc: "草を　からませて　相手を 転ばせる。相手が　重いほど 威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr78: {
 		name: "わざレコード７８",
-		desc: "ヘドロの　波で　自分の 周りに　いるものを　攻撃する。 毒状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr79: {
 		name: "わざレコード７９",
-		desc: "重たい　体で　相手に　ぶつかって 攻撃する。　自分が　相手より 重いほど　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr80: {
 		name: "わざレコード８０",
-		desc: "電気の　塊を　相手に ぶつける。相手より　素早さが 速いほど　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr81: {
 		name: "わざレコード８１",
-		desc: "相手の　力を　利用する。 戦っている　相手の　攻撃が 高いほど　ダメージが　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr82: {
 		name: "わざレコード８２",
-		desc: "蓄積された　パワーで　相手を 攻撃する。自分の　能力が あがっているほど　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr83: {
 		name: "わざレコード８３",
-		desc: "不思議な　力で　テレポートして 自分と　味方の　居場所を 入れ替える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr84: {
 		name: "わざレコード８４",
-		desc: "熱く　煮えたぎる　水を 相手に　発射して　攻撃する。 やけど状態に　することが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr85: {
 		name: "わざレコード８５",
-		desc: "自分を　奮いたてて 攻撃と　特攻を　あげる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr86: {
 		name: "わざレコード８６",
-		desc: "電気を　まとって 相手に　ぶつかって　攻撃する。 自分も　少し　ダメージを　受ける。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr87: {
 		name: "わざレコード８７",
-		desc: "ドリルのように　体を　回転しながら 相手に　体当たりする。 急所に　当たりやすい。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr88: {
 		name: "わざレコード８８",
-		desc: "燃える　体で　相手に　ぶつかって 攻撃する。　自分が　相手より 重いほど　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr89: {
 		name: "わざレコード８９",
-		desc: "強烈な　風で　相手を 包みこんで　攻撃する。 相手を　混乱させることが　ある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr90: {
 		name: "わざレコード９０",
-		desc: "相手に　じゃれついて 攻撃する。　相手の 攻撃を　さげる　ことがある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr91: {
 		name: "わざレコード９１",
-		desc: "特殊な　毒液を　浴びせかける。 毒状態の　相手は 攻撃　特攻　素早さが　さがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr92: {
 		name: "わざレコード９２",
-		desc: "強力な　光を　放ち 相手に　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr93: {
 		name: "わざレコード９３",
-		desc: "両腕を　回し　相手に　当てる。 相手の　能力変化に 関係なく　ダメージを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr94: {
 		name: "わざレコード９４",
-		desc: "全身を　使って 相手に　猛アタックする。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr95: {
 		name: "わざレコード９５",
-		desc: "この　技を　受けた　相手は 地獄の　苦しみから　２ターンの間 音の　技を　出すことが　できなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr96: {
 		name: "わざレコード９６",
-		desc: "敵には　爆発する　だんごを 使って　攻撃。　味方には 回復する　だんごを　与える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr97: {
 		name: "わざレコード９７",
-		desc: "サイコパワーで　かみついて 相手を　攻撃する。　ひかりのかべや リフレクター　なども　破壊できる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr98: {
 		name: "わざレコード９８",
-		desc: "水の　力で　相手に ぶつかって　攻撃する。 相手の　防御を　さげる　ことがある。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr99: {
 		name: "わざレコード９９",
-		desc: "体を　ぶつけて　攻撃。 防御が　高いほど 与える　ダメージが　増える。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	twistedspoon: {
 		name: "まがったスプーン",
-		desc: "念力を　こめた　スプーン。 持たせると　エスパータイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	tyranitarite: {
 		name: "バンギラスナイト",
-		desc: "バンギラスに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ultraball: {
 		name: "ハイパーボール",
-		desc: "スーパーボールよりも　さらに ポケモンを　捕まえやすくなった すごく　性能のいい　ボール。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	ultranecroziumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		transform: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	unremarkableteacup: {
 		name: "ボンサクのちゃわん",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	upgrade: {
 		name: "アップグレード",
-		desc: "中に　いろんな　情報が つまった　透明な　機械。 シルフ　カンパニー製。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	utilityumbrella: {
 		name: "ばんのうがさ",
-		desc: "持たせた　ポケモンは 雨と　日差しが強いときの 影響を　受けなくなる。",
+		desc: "持たせた ポケモンは 雨と 日差しが強いときの 影響を 受けなくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	venusaurite: {
 		name: "フシギバナイト",
-		desc: "フシギバナに　持たせておくと 戦いのとき　メガシンカが　できる 不思議な　メガストーンの　一種。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	victreebelite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wacanberry: {
 		name: "ソクノのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　でんき技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watergem: {
 		name: "みずのジュエル",
-		desc: "みずの　タイプの　ジュエル。 持たせると　１度だけ　みずの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	wateriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watermemory: {
 		name: "ウオーターメモリ",
-		desc: "みずタイプの　データが　入った メモリ。　特定の　ポケモンが　持つと タイプが　変わる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waterstone: {
 		name: "みずのいし",
-		desc: "ある　特定の　ポケモンを 進化させる　不思議な　石。 澄んだ　水色を　している。",
+		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 澄んだ 水色を している。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watmelberry: {
 		name: "カイスのみ",
-		desc: "かしこさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 ほかの　地方では　めずらしい　きのみ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waveincense: {
 		name: "さざなみのおこう",
-		desc: "不思議な　香りの　御香。 持たせると　みずタイプの 技の　威力が　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	weaknesspolicy: {
 		name: "じゃくてんほけん",
-		desc: "弱点を　つかれたとき 攻撃と　特攻が それぞれ　ぐーんと　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wellspringmask: {
 		name: "いどのめん",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wepearberry: {
 		name: "セシナのみ",
-		desc: "かしこさに　磨きを　かける　ための ポロックを　つくるとき　使われる。 緑色の実は　食べると　苦い。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whippeddream: {
 		name: "ホイップポップ",
-		desc: "ふんわり　ふわふわに　泡立てた ほんのり　甘い　クリーム。 ある　ポケモンが　好んでいる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whiteherb: {
 		name: "しろいハーブ",
-		desc: "持たせた　ポケモンの　能力が さがったとき　１度だけ　もとの 状態に　戻す。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	widelens: {
 		name: "こうかくレンズ",
-		desc: "ものが　大きく　みえる　レンズ。 持たせると　技の　命中率が 少し　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wikiberry: {
 		name: "ウイのみ",
-		desc: "ポケモンに　持たせると ピンチのとき　ＨＰを　回復する。 きらいな味だと　混乱する。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	wiseglasses: {
 		name: "ものしりメガネ",
-		desc: "ぶあつい　レンズの　ついた　メガネ。 持たせると　特殊技の 威力が　少し　あがる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	yacheberry: {
 		name: "ヤチェのみ",
-		desc: "ポケモンに　持たせると 効果バツグンの　こおり技を 受けたとき　威力が　弱まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zapplate: {
 		name: "いかずちプレート",
-		desc: "でんきの　タイプの　石盤。 持たせると　でんきタイプの 技の　威力が　強まる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zeraorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zoomlens: {
 		name: "フォーカスレンズ",
-		desc: "持たせた　ポケモンが　相手よりも 行動するのが　遅いとき 技が　命中しやすくなる。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zygardite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// Gen 2 items
+
+	berserkgene: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	berry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	bitterberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	burntberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	goldberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iceberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mintberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	miracleberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mysteryberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	pinkbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	polkadotbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	przcureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psncureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// CAP items
+
+	crucibellite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	vilevial: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 };

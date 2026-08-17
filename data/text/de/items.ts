@@ -1,1864 +1,2627 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	abilityshield: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
 	abomasite: {
 		name: "Rexblisarnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Rexblisar getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absolite: {
 		name: "Absolnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Absol getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	absolitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absorbbulb: {
 		name: "Knolle",
-		desc: "Eine einmalig einsetzbare Knolle. Erhöht den Spezial-Angriff des Trägers, wenn ihn eine Wasser-Attacke trifft.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	adamantcrystal: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantorb: {
 		name: "Adamant-Orb",
-		desc: "Ein hell leuchtender Orb. Verstärkt Attacken vom Typ Drache und Stahl, wenn Dialga ihn trägt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adrenalineorb: {
 		name: "Zitterorb",
-		desc: "Als getragenes Item erhöht er bei Pokémon, die unter dem Einfluss von Bedroher stehen, die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aerodactylite: {
 		name: "Aerodactylonit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Aerodactyl getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aggronite: {
 		name: "Stollossnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Stolloss getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aguavberry: {
 		name: "Gauvebeere",
-		desc: "Als getragenes Item füllt die Beere im Notfall die KP eines Pokémon auf, doch ihr Aroma verwirrt jene, die es nicht mögen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	airballoon: {
 		name: "Luftballon",
-		desc: "Gibt man ihn einem Pokémon zum Tragen, fängt es an zu schweben. Wird es getroffen, platzt der Luftballon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		start: "", // NOT CONVERTED: not in Champions
+		end: "  Der Luftballon von [POKEMON] ist geplatzt!",
 	},
 	alakazite: {
 		name: "Simsalanit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Simsala getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	aloraichiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	altarianite: {
 		name: "Altarianit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Altaria getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ampharosite: {
 		name: "Ampharosnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Ampharos getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	apicotberry: {
 		name: "Apikobeere",
-		desc: "Als getragenes Item erhöht diese Beere den Spezial-Verteidigungs-Wert eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	armorfossil: {
 		name: "Panzerfossil",
-		desc: "Das Fossil eines uralten Pokémon, das an Land lebte. Es sieht wie ein Teil eines Nackenschildes aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aspearberry: {
 		name: "Wilbirbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, taut diese es auf, wenn es eingefroren wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	assaultvest: {
 		name: "Offensivweste",
-		desc: "Trägt ein Pokémon diese Weste, erhöht sich seine Spezial-Verteidigung, aber es kann keine Status-Attacken mehr einsetzen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	audinite: {
 		name: "Ohrdochnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Ohrdoch getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	auspiciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	babiriberry: {
 		name: "Babiribeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Stahl.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	banettite: {
 		name: "Banetteonit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Banette getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	barbaracite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	baxcalibrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beastball: {
 		name: "Ultraball",
-		desc: "Ein etwas ungewöhnlicher Ball, mit dem sich Pokémon nur schwer fangen lassen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beedrillite: {
 		name: "Bibornit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Bibor getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	belueberry: {
 		name: "Myrtilbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Schönheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berryjuice: {
 		name: "Beerensaft",
-		desc: "Hundertprozentiger Fruchtsaft, aus Beeren gekeltert. Füllt die KP eines Pokémon um 20 Punkte auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berrysweet: {
 		name: "Zucker-Beere",
-		desc: "Zuckerwerk in Form einer Beere. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bignugget: {
 		name: "Riesennugget",
-		desc: "Ein großes Nugget aus purem Gold, das einen schimmernden Glanz besitzt. Es ist von großem Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bigroot: {
 		name: "Großwurzel",
-		desc: "Ein Item zum Tragen. Verstärkt KP-stehlende Attacken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	bindingband: {
 		name: "Klammerband",
-		desc: "Ein Band, das die Stärke aller Klammerattacken des Trägers erhöht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blackbelt: {
 		name: "Schwarzgurt",
-		desc: "Ein Item zum Tragen. Ein Gürtel, der die Entschlossenheit sowie Attacken vom Typ Kampf verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blacksludge: {
 		name: "Giftschleim",
-		desc: "Ein Item zum Tragen, das einem Gift-Pokémon nach und nach KP zurückgibt, anderen Pokémon aber Schaden zufügt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	blackglasses: {
 		name: "Schattenbrille",
-		desc: "Ein Item zum Tragen. Eine dunkle Brille, die Attacken vom Typ Unlicht verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blastoisinite: {
 		name: "Turtoknit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Turtok getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blazikenite: {
 		name: "Lohgocknit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Lohgock getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blueorb: {
 		name: "Blauer Edelstein",
-		desc: "Ein blau schimmernder Stein, von dem in den Legenden der Hoenn-Region berichtet wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blukberry: {
 		name: "Morbbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Schönheit erhöhen. Ihr bläuliches Fruchtfleisch schmeckt herb.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blunderpolicy: {
 		name: "Fehlschlagschutz",
-		desc: "Schlägt eine Attacke des Anwenders mangels Genauigkeit fehl, steigt im Gegenzug dessen Initiative stark an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	boosterenergy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bottlecap: {
 		name: "Silberkronkorken",
-		desc: "Ein hübscher silberner Kronkorken. Es gibt Leute, die sich sehr darüber freuen würden!",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	brightpowder: {
 		name: "Blendpuder",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es senkt die Genauigkeit des Gegners.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	buggem: {
 		name: "Käferjuwel",
-		desc: "Ein Juwel vom Typ Käfer. Es erhöht einmalig die Stärke einer Attacke vom Typ Käfer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	buginiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bugmemory: {
 		name: "Käfer-Disc",
-		desc: "Eine Disc mit Daten zum Typ Käfer. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	burndrive: {
 		name: "Flammenmodul",
-		desc: "Gibt man es Genesect zum Tragen, wandelt es den Typ der Attacke Techblaster in Feuer um.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cameruptite: {
 		name: "Cameruptnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Camerupt getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cellbattery: {
 		name: "Akku",
-		desc: "Ein einmalig aufladbarer Akku. Erhöht den Angriff des Trägers, wenn ihn eine Elektro-Attacke trifft.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chandelurite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charcoal: {
 		name: "Holzkohle",
-		desc: "Ein Item zum Tragen. Ein Brennstoff, der Attacken vom Typ Feuer verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	charizarditex: {
 		name: "Gluraknit X",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Glurak getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charizarditey: {
 		name: "Gluraknit Y",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Glurak getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chartiberry: {
 		name: "Chiaribeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Gestein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cheriberry: {
 		name: "Amrenabeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, heilt diese es von Paralyse.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cherishball: {
 		name: "Jubelball",
-		desc: "Ein seltener Ball, der als Reminiszenz an irgendein Ereignis hergestellt wurde.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chesnaughtite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chestoberry: {
 		name: "Maronbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, erwacht es dadurch aus dem Schlaf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilanberry: {
 		name: "Latchibeere",
-		desc: "Als getragenes Item schwächt diese Beere gegnerische Attacken vom Typ Normal.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilldrive: {
 		name: "Gefriermodul",
-		desc: "Gibt man es Genesect zum Tragen, wandelt es den Typ der Attacke Techblaster in Eis um.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chimechite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chippedpot: {
 		name: "Löchrige Kanne",
-		desc: "Diese spezielle Kanne löst bei einem bestimmten Pokémon die Entwicklung aus. Sie weist zwar Löcher auf, aber das wirkt sich nicht negativ auf den Tee aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choiceband: {
 		name: "Wahlband",
-		desc: "Ein Item, das von einem Pokémon getragen werden kann. Es stärkt den Angriffs-Wert, aber nur eine Attacke ist einsetzbar.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicescarf: {
 		name: "Wahlschal",
-		desc: "Ein Item zum Tragen. Der Schal erhöht den Initiative-Wert, aber nur eine Attacke ist einsetzbar.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicespecs: {
 		name: "Wahlbrille",
-		desc: "Ein Item zum Tragen. Die Brille erhöht den Spezial-Angriff, aber nur eine Attacke ist einsetzbar.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chopleberry: {
 		name: "Rospelbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Kampf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clawfossil: {
 		name: "Klauenfossil",
-		desc: "Das Fossil eines uralten Pokémon, das in der Tiefsee lebte. Es sieht wie eine Klaue aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	clearamulet: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
+	clefablite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cloversweet: {
 		name: "Zucker-Kleeblatt",
-		desc: "Zuckerwerk in Form eines Kleeblattes. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cobaberry: {
 		name: "Kobabeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Flug.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	colburberry: {
 		name: "Burleobeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Unlicht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	cornerstonemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornnberry: {
 		name: "Saimbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Schönheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	coverfossil: {
 		name: "Schildfossil",
-		desc: "Das Fossil eines uralten Pokémon, das in der Tiefsee lebte. Offenbar handelt es sich um einen Teil des Rückens.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	covertcloak: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	crabominite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	crackedpot: {
 		name: "Rissige Kanne",
-		desc: "Diese spezielle Kanne löst bei einem bestimmten Pokémon die Entwicklung aus. Sie weist zwar Risse auf, aber das wirkt sich nicht negativ auf den Tee aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	custapberry: {
 		name: "Eipfelbeere",
-		desc: "Als getragenes Item ermöglicht diese Beere dem Träger in einer Notlage den Erstschlag.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	damprock: {
 		name: "Nassbrocken",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Regentanz, wenn der Träger diese Attacke einsetzt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkgem: {
 		name: "Unlichtjuwel",
-		desc: "Ein Juwel vom Typ Unlicht. Es erhöht einmalig die Stärke einer Attacke vom Typ Unlicht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	darkiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkmemory: {
 		name: "Unlicht-Disc",
-		desc: "Eine Disc mit Daten zum Typ Unlicht. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	darkranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dawnstone: {
 		name: "Funkelstein",
 		desc: "Dieser besondere, glitzernde Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	decidiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseascale: {
 		name: "Abyssplatte",
 		desc: "Ein Item, das von Perlu getragen werden kann. Es schimmert pink und hebt die Spezial-Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "Abysszahn",
 		desc: "Ein Item, das von Perlu getragen werden kann. Es schimmert silbern und hebt den Spezial-Angriff.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	delphoxite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	destinyknot: {
 		name: "Fatumknoten",
-		desc: "Ein Item zum Tragen. Wird der Träger betört, gilt dies auch für den Angreifer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diancite: {
 		name: "Diancienit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Diancie getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diveball: {
 		name: "Tauchball",
-		desc: "Ein Ball, mit dem sich Pokémon, die im Wasser leben, besser fangen lassen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	domefossil: {
 		name: "Domfossil",
-		desc: "Das Fossil eines uralten Pokémon, das in der Tiefsee lebte. Es sieht wie eine Muschelschale oder ein Rückenschild aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dousedrive: {
 		name: "Aquamodul",
-		desc: "Gibt man es Genesect zum Tragen, wandelt es den Typ der Attacke Techblaster in Wasser um.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dracoplate: {
 		name: "Dracotafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Drache.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragalgite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonfang: {
 		name: "Drachenzahn",
-		desc: "Ein Item zum Tragen. Ein harter und scharfer Reißzahn, der Attacken vom Typ Drache verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dragongem: {
 		name: "Drakojuwel",
-		desc: "Ein Juwel vom Typ Drache. Es erhöht einmalig die Stärke einer Attacke vom Typ Drache.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	dragoninite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonmemory: {
 		name: "Drachen-Disc",
-		desc: "Eine Disc mit Daten zum Typ Drache. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonscale: {
 		name: "Drachenhaut",
-		desc: "Eine dicke und starke Haut. Drachen-Pokémon tragen dieses Item gern bei sich.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	drampanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreadplate: {
 		name: "Furchttafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Unlicht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreamball: {
 		name: "Traumball",
-		desc: "Ein Ball, mit dem sich schlafende Pokémon leichter fangen lassen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dubiousdisc: {
 		name: "Dubiosdisc",
-		desc: "Eine Scheibe mit seltsamen Daten. Ihr Ursprung ist unbekannt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	durinberry: {
 		name: "Durinbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Klugheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskball: {
 		name: "Finsterball",
-		desc: "Ein mysteriöser Ball, geeignet für Einsätze in der Nacht oder an dunklen Orten.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskstone: {
 		name: "Finsterstein",
 		desc: "Dieser besondere, düstere Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	earthplate: {
 		name: "Erdtafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Boden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eelektrossite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eeviumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ejectbutton: {
 		name: "Fluchtknopf",
-		desc: "Wird der Träger getroffen, flieht er aus dem Kampf und wird mit einem Team-Pokémon ausgetauscht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON] kommt dank des Fluchtknopfes zurück!",
 	},
 	ejectpack: {
 		name: "Fluchttasche",
-		desc: "Erleidet der Träger eine Senkung seiner Statuswerte, wird er mit einem Team-Mitglied ausgewechselt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON] wird dank Fluchttasche ausgewechselt!",
 	},
 	electirizer: {
 		name: "Stromisierer",
-		desc: "Eine Schachtel mit elektrischer Energie. Das Lieblingsstück eines bestimmten Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricgem: {
 		name: "Elektrojuwel",
-		desc: "Ein Juwel vom Typ Elektro. Es erhöht einmalig die Stärke einer Attacke vom Typ Elektro.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	electricmemory: {
 		name: "Elektro-Disc",
-		desc: "Eine Disc mit Daten zum Typ Elektro. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricseed: {
 		name: "Elektro-Samen",
-		desc: "Gibst du den Samen einem Pokémon zum Tragen, setzt es ihn ein, wenn ein Elektrofeld aktiv ist, und erhöht dadurch seine Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	electriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	emboarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	enigmaberry: {
 		name: "Enigmabeere",
-		desc: "Als getragenes Item füllt diese Beere die KP eines Pokémon auf, wenn es von sehr effektiven Attacken getroffen wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	eviolite: {
 		name: "Evolith",
-		desc: "Ein mysteriöser Klumpen, der die Verteidigung und Spezial-Verteidigung von Pokémon erhöht, die sich noch entwickeln können.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	excadrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	expertbelt: {
 		name: "Expertengurt",
-		desc: "Ein Item zum Tragen. Dieser alte Gürtel verstärkt sehr effektive Attacken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairygem: {
 		name: "Feenjuwel",
-		desc: "Ein Juwel vom Typ Fee. Es erhöht einmalig die Stärke einer Attacke vom Typ Fee.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairymemory: {
 		name: "Feen-Disc",
-		desc: "Eine Disc mit Daten zum Typ Fee. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	falinksite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fastball: {
 		name: "Turboball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Pokémon zu fangen, die schnell weglaufen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	feraligite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fightinggem: {
 		name: "Kampfjuwel",
-		desc: "Ein Juwel vom Typ Kampf. Es erhöht einmalig die Stärke einer Attacke vom Typ Kampf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	fightingmemory: {
 		name: "Kampf-Disc",
-		desc: "Eine Disc mit Daten zum Typ Kampf. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fightiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	figyberry: {
 		name: "Giefebeere",
-		desc: "Als getragenes Item füllt die Beere im Notfall die KP eines Pokémon auf, doch ihr Aroma verwirrt jene, die es nicht mögen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firegem: {
 		name: "Feuerjuwel",
-		desc: "Ein Juwel vom Typ Feuer. Es erhöht einmalig die Stärke einer Attacke vom Typ Feuer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firememory: {
 		name: "Feuer-Disc",
-		desc: "Eine Disc mit Daten zum Typ Feuer. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	firestone: {
 		name: "Feuerstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er schimmert in den Farben Orange und Gelb.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	firiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fistplate: {
 		name: "Fausttafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Kampf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameorb: {
 		name: "Heiß-Orb",
-		desc: "Ein Item zum Tragen. Dieser bizarre Orb fügt seinem Träger Verbrennungen zu.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameplate: {
 		name: "Feuertafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Feuer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	floatstone: {
 		name: "Leichtstein",
-		desc: "Ein federleichter Stein, der das Gewicht des Trägers verringert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	floettite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flowersweet: {
 		name: "Zucker-Blume",
-		desc: "Zuckerwerk in Form einer Blume. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flyinggem: {
 		name: "Flugjuwel",
-		desc: "Ein Juwel vom Typ Flug. Es erhöht einmalig die Stärke einer Attacke vom Typ Flug.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	flyingmemory: {
 		name: "Flug-Disc",
-		desc: "Eine Disc mit Daten zum Typ Flug. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	flyiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	focusband: {
 		name: "Fokusband",
-		desc: "Ein Item, das die Kampfunfähigkeit verhindern kann, da dem Träger 1 KP bleibt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	focussash: {
 		name: "Fokusgurt",
-		desc: "Ein Item zum Tragen. Bei vollen KP bleibt der Träger nach einer K.O.-Attacke einmalig mit 1 KP im Kampf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	fossilizedbird: {
 		name: "Vogelfossil",
-		desc: "Teilstück des Fossils eines urzeitlichen Pokémon, das in grauer Vorzeit durch die Lüfte flog. Wie es zu Lebzeiten aussah, ist ein Rätsel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddino: {
 		name: "Paddelfossil",
-		desc: "Teilstück des Fossils eines urzeitlichen Pokémon, das in grauer Vorzeit im Meer lebte. Wie es zu Lebzeiten aussah, ist ein Rätsel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddrake: {
 		name: "Drachenfossil",
-		desc: "Teilstück des Fossils eines urzeitlichen Pokémon, das in grauer Vorzeit das Land bevölkerte. Wie es zu Lebzeiten aussah, ist ein Rätsel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizedfish: {
 		name: "Fischfossil",
-		desc: "Teilstück des Fossils eines urzeitlichen Pokémon, das in grauer Vorzeit im Meer lebte. Wie es zu Lebzeiten aussah, ist ein Rätsel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	friendball: {
 		name: "Freundesball",
-		desc: "Ein besonderer Ball, der die Sympathie von gefangenen Pokémon sofort ansteigen lässt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	froslassite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fullincense: {
 		name: "Lahmrauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut macht den Träger benommen und langsam.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricacuff: {
 		name: "Galarnuss-Reif",
-		desc: "Ein Armreif, der aus Galarnuss-Zweigen gewoben wird. Galar-Flegmon freuen sich, wenn sie diesen anlegen dürfen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricawreath: {
 		name: "Galarnuss-Kranz",
-		desc: "Ein Kranz, der aus Galarnuss-Zweigen gewoben wurde. Galar-Flegmon freuen sich, wenn sie diesen tragen dürfen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galladite: {
 		name: "Galagladinit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Galagladi getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ganlonberry: {
 		name: "Linganbeere",
-		desc: "Als getragenes Item erhöht diese Beere den Verteidigungs-Wert eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	garchompite: {
 		name: "Knakracknit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Knakrack getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	garchompitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gardevoirite: {
 		name: "Guardevoirnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Guardevoir getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gengarite: {
 		name: "Gengarnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Gengar getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostgem: {
 		name: "Geisterjuwel",
-		desc: "Ein Juwel vom Typ Geist. Es erhöht einmalig die Stärke einer Attacke vom Typ Geist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	ghostiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostmemory: {
 		name: "Geister-Disc",
-		desc: "Eine Disc mit Daten zum Typ Geist. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	glalitite: {
 		name: "Firnontornit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Firnontor getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	glimmoranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	goldbottlecap: {
 		name: "Goldkronkorken",
-		desc: "Ein hübscher goldener Kronkorken. Er ist noch seltener als ein Silberkronkorken. Es gibt Leute, die sich sehr darüber freuen würden!",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golisopite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golurkite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassgem: {
 		name: "Pflanzenjuwel",
-		desc: "Ein Juwel vom Typ Pflanze. Es erhöht einmalig die Stärke einer Attacke vom Typ Pflanze.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	grassiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassmemory: {
 		name: "Pflanzen-Disc",
-		desc: "Eine Disc mit Daten zum Typ Pflanze. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassyseed: {
 		name: "Gras-Samen",
-		desc: "Gibst du den Samen einem Pokémon zum Tragen, setzt es ihn ein, wenn ein Grasfeld aktiv ist, und erhöht dadurch seine Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	greatball: {
 		name: "Superball",
-		desc: "Ein Ball mit guter Erfolgsquote. Dem Pokéball in allen Punkten überlegen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	greninjite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grepaberry: {
 		name: "Labrusbeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen Spezial-Verteidigungs-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gripclaw: {
 		name: "Griffklaue",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Klammergriff, Wickel etc.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	griseouscore: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseousorb: {
 		name: "Platinum-Orb",
-		desc: "Ein glühender Orb. Verstärkt Attacken vom Typ Drache und Geist, wenn Giratina ihn trägt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	groundgem: {
 		name: "Bodenjuwel",
-		desc: "Ein Juwel vom Typ Boden. Es erhöht einmalig die Stärke einer Attacke vom Typ Boden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	groundiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	groundmemory: {
 		name: "Boden-Disc",
-		desc: "Eine Disc mit Daten zum Typ Boden. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gyaradosite: {
 		name: "Garadosnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Garados getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	habanberry: {
 		name: "Terirobeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Drache.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hardstone: {
 		name: "Granitstein",
-		desc: "Ein Item zum Tragen. Ein unzerbrechlicher Stein, der Attacken vom Typ Gestein verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	hawluchanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	healball: {
 		name: "Heilball",
-		desc: "Ein wohltuender Ball. Er füllt alle KP des gefangenen Pokémon auf und behebt alle Statusprobleme.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	hearthflamemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	heatranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heatrock: {
 		name: "Heißbrocken",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Sonnentag, wenn der Träger diese Attacke einsetzt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavyball: {
 		name: "Schwerball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Pokémon mit hohem Körpergewicht zu fangen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavydutyboots: {
 		name: "Plateauschuhe",
-		desc: "Der Träger wird nicht mehr durch Fallen und andere Objekte beeinträchtigt, die auf dem Boden liegen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	helixfossil: {
 		name: "Helixfossil",
-		desc: "Das Fossil eines uralten Pokémon, das in der Tiefsee lebte. Es ähnelt einer Muschelschale.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heracronite: {
 		name: "Skarabornit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Skaraborn getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hondewberry: {
 		name: "Honmelbeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen Spezial-Angriffs-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	houndoominite: {
 		name: "Hundemonit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Hundemon getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	iapapaberry: {
 		name: "Yapabeere",
-		desc: "Als getragenes Item füllt die Beere im Notfall die KP eines Pokémon auf, doch ihr Aroma verwirrt jene, die es nicht mögen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icegem: {
 		name: "Eisjuwel",
-		desc: "Ein Juwel vom Typ Eis. Es erhöht einmalig die Stärke einer Attacke vom Typ Eis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icememory: {
 		name: "Eis-Disc",
-		desc: "Eine Disc mit Daten zum Typ Eis. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icestone: {
 		name: "Eisstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Schneeflockenmuster.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icicleplate: {
 		name: "Frosttafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Eis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iciumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icyrock: {
 		name: "Eisbrocken",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Hagelsturm, wenn der Träger diese Attacke einsetzt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	inciniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	insectplate: {
 		name: "Käfertafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Käfer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ironball: {
 		name: "Eisenkugel",
-		desc: "Ein Item zum Tragen. Macht Pokémon des Typs Flug oder mit der Fähigkeit Schwebe anfällig für Boden-Attacken. Senkt den Initiative-Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	ironplate: {
 		name: "Eisentafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Stahl.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jabocaberry: {
 		name: "Jabocabeere",
-		desc: "Als getragenes Item bewirkt diese Beere Schaden bei jenen, die den Träger mit einer physischen Attacke treffen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jawfossil: {
 		name: "Kieferfossil",
-		desc: "Das Fossil eines uralten Pokémon, das an Land lebte. Es sieht wie ein Kieferknochen aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kangaskhanite: {
 		name: "Kangamanit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Kangama getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kasibberry: {
 		name: "Zitarzbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Geist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "Grarzbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Gift.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	keeberry: {
 		name: "Akibeere",
-		desc: "Als getragenes Item erhöht diese Beere die Verteidigung des Trägers, wenn dieser von physischen Attacken getroffen wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kelpsyberry: {
 		name: "Setangbeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen Angriffs-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kingsrock: {
 		name: "King-Stein",
 		desc: "Gibst du es einem Pokémon zum Tragen, lässt es mit seinem Angriff das Ziel gelegentlich zurückschrecken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	kommoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laggingtail: {
 		name: "Schwerschweif",
-		desc: "Ein Item zum Tragen. Es ist immens schwer und senkt die Geschwindigkeit des Trägers.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lansatberry: {
 		name: "Lansatbeere",
-		desc: "Als getragenes Item erhöht diese Beere die Volltrefferquote eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiasite: {
 		name: "Latiasnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Latias getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiosite: {
 		name: "Latiosnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Latios getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laxincense: {
 		name: "Laxrauch",
-		desc: "Ein Item zum Tragen. Das verwirrende Aroma senkt die Genauigkeit des Gegners.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	leafstone: {
 		name: "Blattstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blattmuster.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	leek: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	leftovers: {
 		name: "Überreste",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es füllt im Kampf stetig KP auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	leppaberry: {
 		name: "Jonagobeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, füllt sie die AP einer Attacke um 10 Punkte auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	levelball: {
 		name: "Levelball",
-		desc: "Ein Ball, mit dem sich Pokémon umso leichter fangen lassen, je niedriger ihr Level im Vergleich zu deinem Team ist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	liechiberry: {
 		name: "Lydzibeere",
-		desc: "Als getragenes Item erhöht diese Beere den Angriffs-Wert eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lifeorb: {
 		name: "Leben-Orb",
-		desc: "Ein Item zum Tragen. Verstärkt Attacken, aber jede Attacke kostet den Träger KP.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "  [POKEMON] verliert einige KP!",
 	},
 	lightball: {
 		name: "Kugelblitz",
-		desc: "Ein Item, das von Pikachu getragen werden kann. Es erhöht den Angriffs-Wert und Spezial-Angriffs-Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lightclay: {
 		name: "Lichtlehm",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Lichtschild, Reflektor etc.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	loadeddice: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lopunnite: {
 		name: "Schlapornit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Schlapor getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	loveball: {
 		name: "Sympaball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Pokémon zu fangen, die ein anderes Geschlecht haben als dein Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lovesweet: {
 		name: "Zucker-Herz",
-		desc: "Zuckerwerk in Form eines Herzchens. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lucarionite: {
 		name: "Lucarionit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Lucario getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lucarionitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luckypunch: {
 		name: "Lucky Punch",
-		desc: "Ein Item, das von Chaneira getragen werden kann. Diese Handschuhe erhöhen die Volltrefferquote des Trägers.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lumberry: {
 		name: "Prunusbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, hebt sie alle seine Statusprobleme auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luminousmoss: {
 		name: "Leuchtmoos",
-		desc: "Wird der Träger von einer Wasser-Attacke getroffen, steigt seine Spezial-Verteidigung und das Item verschwindet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lunaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lureball: {
 		name: "Köderball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Pokémon zu fangen, die an deiner Angel hängen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lustrousglobe: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousorb: {
 		name: "Weiß-Orb",
-		desc: "Ein hell leuchtender Orb. Verstärkt Attacken vom Typ Drache und Wasser, wenn Palkia ihn trägt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luxuryball: {
 		name: "Luxusball",
-		desc: "Ein behaglicher Ball, der Pokémon veranlasst, nach dem Fang dem Trainer gegenüber schneller zutraulich zu werden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lycaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	machobrace: {
 		name: "Machoband",
-		desc: "Ein Item, das ein Pokémon tragen kann. Der Initiative-Wert sinkt zwar, aber es wird dafür umso stärker.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	magearnite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magmarizer: {
 		name: "Magmaisierer",
-		desc: "Eine Schachtel mit Magma-Energie. Das Lieblingsstück eines bestimmten Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magnet: {
 		name: "Magnet",
-		desc: "Ein Item zum Tragen, dessen magnetische Kraft Attacken vom Typ Elektro verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magoberry: {
 		name: "Magobeere",
-		desc: "Als getragenes Item füllt die Beere im Notfall die KP eines Pokémon auf, doch ihr Aroma verwirrt jene, die es nicht mögen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magostberry: {
 		name: "Magostbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Putzigkeit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mail: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	malamarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	maliciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	manectite: {
 		name: "Voltensonit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Voltenso getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	marangaberry: {
 		name: "Tarabeere",
-		desc: "Als getragenes Item erhöht diese Beere die Spezial-Verteidigung des Trägers, wenn dieser von Spezial-Attacken getroffen wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	marshadiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterball: {
 		name: "Meisterball",
-		desc: "Der beste Ball! Damit fängst du garantiert jedes wilde Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	masterpieceteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mawilite: {
 		name: "Flunkifernit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Flunkifer getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	meadowplate: {
 		name: "Wiesentafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Pflanze.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	medichamite: {
 		name: "Meditalisnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Meditalis getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	meganiumite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mentalherb: {
 		name: "Mentalkraut",
-		desc: "Ein Item, das von einem Pokémon getragen werden kann. Befreit den Träger einmalig von Effekten, die ihn vom Einsatz von Attacken abhalten.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	meowsticite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metagrossite: {
 		name: "Metagrossnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Metagross getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalalloy: {
 		name: "Legierungsmetall",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalcoat: {
 		name: "Metallmantel",
 		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es verstärkt Attacken vom Typ Stahl.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metalpowder: {
 		name: "Metallstaub",
-		desc: "Ein Item, das Ditto zum Tragen gegeben werden kann. Fein und doch hart, erhöht es den Verteidigungs-Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metronome: {
 		name: "Metronom",
-		desc: "Ein Item zum Tragen. Verstärkt eine Attacke, je öfter sie in Folge ausgeführt wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mewniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitex: {
 		name: "Mewtunit X",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Mewtu getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitey: {
 		name: "Mewtunit Y",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Mewtu getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	micleberry: {
 		name: "Wunfrubeere",
-		desc: "Als getragenes Item erhöht diese Beere die Genauigkeit eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mimikiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mindplate: {
 		name: "Hirntafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Psycho.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	miracleseed: {
 		name: "Wundersaat",
-		desc: "Ein Item zum Tragen. Ein Samen voller Lebenskraft, der Attacken vom Typ Pflanze verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mirrorherb: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "  [POKEMON] nutzt das Item Kopierkraut, um die gegnerischen Statuswertänderungen zu kopieren.",
 	},
 	mistyseed: {
 		name: "Nebel-Samen",
-		desc: "Gibst du den Samen einem Pokémon zum Tragen, setzt es ihn ein, wenn ein Nebelfeld aktiv ist, und erhöht dadurch seine Spezial-Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonball: {
 		name: "Mondball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Pokémon zu fangen, die sich durch einen Mondstein entwickeln.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonstone: {
 		name: "Mondstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist schwarz wie die Nacht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	muscleband: {
 		name: "Muskelband",
-		desc: "Ein Item zum Tragen. Dieses Stirnband verstärkt physische Attacken etwas.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mysticwater: {
 		name: "Zauberwasser",
-		desc: "Ein Item zum Tragen. Ein tränenförmiger Edelstein, der Attacken vom Typ Wasser verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nanabberry: {
 		name: "Nanabbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Putzigkeit erhöhen. Ihr rosa Fruchtfleisch schmeckt süßlich.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nestball: {
 		name: "Nestball",
-		desc: "Ein Ball, dessen Erfolgsquote besonders bei Pokémon mit niedrigem Level sehr hoch ist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	netball: {
 		name: "Netzball",
-		desc: "Ein Ball, der sich besonders gut eignet, um Wasser- und Käfer-Pokémon zu fangen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nevermeltice: {
 		name: "Ewiges Eis",
-		desc: "Ein Item zum Tragen. Ein Stück Eis, das Hitze fernhält und Attacken vom Typ Eis verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nomelberry: {
 		name: "Tronzibeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Stärke erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	normalgem: {
 		name: "Normaljuwel",
-		desc: "Ein Juwel vom Typ Normal. Es erhöht einmalig die Stärke einer Attacke vom Typ Normal.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	normaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	occaberry: {
 		name: "Koakobeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Feuer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oddincense: {
 		name: "Schrägrauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut verstärkt Attacken vom Typ Psycho.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oldamber: {
 		name: "Altbernstein",
-		desc: "Ein Stück Bernstein, in dem die Gene eines uralten Pokémon enthalten sind. Es ist durchsichtig.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oranberry: {
 		name: "Sinelbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, füllt sie seine KP um 10 Punkte auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ovalstone: {
 		name: "Ovaler Stein",
-		desc: "Dieser besondere, eiförmige Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pamtreberry: {
 		name: "Pallmbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Schönheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	parkball: {
 		name: "Parkball",
-		desc: "Ein Ball, der nur im Park der Freunde eingesetzt wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	passhoberry: {
 		name: "Foepasbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Wasser.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	payapaberry: {
 		name: "Pyapabeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Psycho.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pechaberry: {
 		name: "Pirsifbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, heilt diese es von Vergiftung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	persimberry: {
 		name: "Persimbeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, heilt diese es von Verwirrung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	petayaberry: {
 		name: "Tahaybeere",
-		desc: "Als getragenes Item erhöht diese Beere den Spezial-Angriffs-Wert eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pidgeotite: {
 		name: "Taubossnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Tauboss getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikashuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinapberry: {
 		name: "Sananabeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Stärke erhöhen. Ihr gelbes Fruchtfleisch schmeckt säuerlich.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinsirite: {
 		name: "Pinsirnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Pinsir getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pixieplate: {
 		name: "Feentafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Fee.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	plumefossil: {
 		name: "Federfossil",
-		desc: "Das Fossil eines uralten Pokémon, von dem man annimmt, dass es der Urahn der Vogel-Pokémon sei. Es handelt sich um einen Teil des Flügels.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonbarb: {
 		name: "Giftstich",
-		desc: "Ein Item zum Tragen. Ein schmaler und giftiger Widerhaken, der Attacken vom Typ Gift verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	poisongem: {
 		name: "Giftjuwel",
-		desc: "Ein Juwel vom Typ Gift. Es erhöht einmalig die Stärke einer Attacke vom Typ Gift.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	poisoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonmemory: {
 		name: "Gift-Disc",
-		desc: "Eine Disc mit Daten zum Typ Gift. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pokeball: {
 		name: "Pokéball",
-		desc: "Damit fängst du wilde Pokémon. Du wirfst ihn wie einen normalen Ball. Das Design ähnelt dem einer Kapsel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pomegberry: {
 		name: "Granabeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen KP-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poweranklet: {
 		name: "Machtkette",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf den Initiative-Wert, senkt aber die Initiative allgemein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerband: {
 		name: "Machtband",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf den Spezial-Verteidigungs-Wert, senkt aber die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbelt: {
 		name: "Machtgurt",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf den Verteidigungs-Wert, senkt aber die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbracer: {
 		name: "Machtreif",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf den Angriffs-Wert, senkt aber die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerherb: {
 		name: "Energiekraut",
-		desc: "Ein Item zum einmaligen Tragen. Der Träger kann dadurch eine Attacke sofort einsetzen, die sonst aufgeladen werden muss.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	powerlens: {
 		name: "Machtlinse",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf den Spezial-Angriffs-Wert, senkt aber die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerweight: {
 		name: "Machtgewicht",
-		desc: "Ein Item zum Tragen. Erhöht nach dem Kampf die maximalen KP, senkt aber die Initiative.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	premierball: {
 		name: "Premierball",
-		desc: "Ein eher seltener Ball, der als Reminiszenz an irgendein Ereignis hergestellt wurde.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	prettyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	primariumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	prismscale: {
 		name: "Schönschuppe",
-		desc: "Eine seltsame Schuppe, durch die sich ein bestimmtes Pokémon entwickelt. Sie funkelt in den Farben des Regenbogens.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	protectivepads: {
 		name: "Schutzpolster",
-		desc: "Greift der Träger ein Ziel an, ist er vor Effekten, die durch direkten Kontakt mit diesem ausgelöst werden, geschützt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	protector: {
 		name: "Schützer",
-		desc: "Ein schützendes Item. Steif und schwer. Das Lieblingsstück eines bestimmten Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicgem: {
 		name: "Psychojuwel",
-		desc: "Ein Juwel vom Typ Psycho. Es erhöht einmalig die Stärke einer Attacke vom Typ Psycho.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	psychicmemory: {
 		name: "Psycho-Disc",
-		desc: "Eine Disc mit Daten zum Typ Psycho. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicseed: {
 		name: "Psycho-Samen",
-		desc: "Gibst du den Samen einem Pokémon zum Tragen, setzt es ihn ein, wenn ein Psychofeld aktiv ist, und erhöht dadurch seine Spezial-Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psychiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	punchingglove: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pyroarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	qualotberry: {
 		name: "Qualotbeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen Verteidigungs-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickball: {
 		name: "Flottball",
-		desc: "Ein ungewöhnlicher Ball, der zu Beginn eines Kampfes am wirkungsvollsten ist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickclaw: {
 		name: "Flinkklaue",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es ermöglicht gelegentlich den Erstschlag.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	quickpowder: {
 		name: "Flottstaub",
-		desc: "Ein Item, das Ditto zum Tragen gegeben werden kann. Fein und doch hart, erhöht es den Initiative-Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rabutaberry: {
 		name: "Rabutabeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Klugheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitex: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitey: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rarebone: {
 		name: "Steinknochen",
-		desc: "Dieser Knochen erfreut jeden Pokémon-Archäologen. Er ist von hohem Wert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rawstberry: {
 		name: "Fragiabeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, heilt diese es von Verbrennungen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorclaw: {
 		name: "Scharfklaue",
 		desc: "Ein Item zum Tragen. Die scharfe Klaue erhöht die Volltrefferquote des Trägers.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorfang: {
 		name: "Scharfzahn",
 		desc: "Ein Item zum Tragen. Verursacht der Träger Schaden, schreckt das Ziel eventuell zurück.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razzberry: {
 		name: "Himmihbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Coolness erhöhen. Ihr rötliches Fruchtfleisch schmeckt scharf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	reapercloth: {
 		name: "Düsterumhang",
-		desc: "Ein Stoffumhang mit geistiger Energie. Das Lieblingsstück eines bestimmten Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	redcard: {
 		name: "Rote Karte",
-		desc: "Eine Karte mit mysteriösen Kräften. Wird der Träger getroffen, wird der Angreifer des Platzes verwiesen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	redorb: {
 		name: "Roter Edelstein",
-		desc: "Ein rot schimmernder Stein, von dem in den Legenden der Hoenn-Region berichtet wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	repeatball: {
 		name: "Wiederball",
-		desc: "Ein Ball, der sich besonders dann sehr gut eignet, wenn man ein Pokémon fangen will, dessen Art bereits gefangen wurde.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ribbonsweet: {
 		name: "Zucker-Schleife",
-		desc: "Zuckerwerk in Form einer Schleife. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rindoberry: {
 		name: "Grindobeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Pflanze.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ringtarget: {
 		name: "Zielscheibe",
-		desc: "Attacken, die aufgrund der Wechselwirkungen zwischen den Typen keine Wirkung haben, treffen den Träger.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockgem: {
 		name: "Gesteinsjuwel",
-		desc: "Ein Juwel vom Typ Gestein. Es erhöht einmalig die Stärke einer Attacke vom Typ Gestein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	rockincense: {
 		name: "Steinrauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut verstärkt Attacken vom Typ Gestein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	rockiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockmemory: {
 		name: "Gesteins-Disc",
-		desc: "Eine Disc mit Daten zum Typ Gestein. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockyhelmet: {
 		name: "Beulenhelm",
-		desc: "Wird der Träger von einer physischen Attacke getroffen, erleidet der Angreifer ebenfalls Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "", // NOT CONVERTED: not in Champions
 	},
 	roomservice: {
 		name: "Bizarroservice",
-		desc: "Senkt die Initiative des Trägers, wenn Bizarroraum wirkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rootfossil: {
 		name: "Wurzelfossil",
-		desc: "Das Fossil eines uralten Pokémon, das in der Tiefsee lebte. Es sieht wie eine Pflanzenwurzel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseincense: {
 		name: "Rosenrauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut verstärkt Attacken vom Typ Pflanze.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseliberry: {
 		name: "Hibisbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Fee.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rowapberry: {
 		name: "Roselbeere",
-		desc: "Als getragenes Item bewirkt diese Beere Schaden bei jenen, die den Träger mit einer Spezial-Attacke treffen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedshield: {
 		name: "Rostiger Schild",
-		desc: "Mit diesem Schild soll ein Held einstmals großes Unheil abgewendet haben. Rost sowie der Zahn der Zeit haben jedoch ihre Spuren hinterlassen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedsword: {
 		name: "Rostiges Schwert",
-		desc: "Mit diesem Schwert soll ein Held einstmals großes Unheil abgewendet haben. Rost sowie der Zahn der Zeit haben jedoch ihre Spuren hinterlassen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sablenite: {
 		name: "Zobirisnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Zobiris getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sachet: {
 		name: "Duftbeutel",
-		desc: "Ein mit Parfüm gefüllter Beutel, der einen penetranten Duft verströmt und bei einer bestimmten Pokémon-Art sehr beliebt ist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safariball: {
 		name: "Safariball",
-		desc: "Ein besonderer Ball, der in der Safari-Zone der Kanto-Region und im Großmoor der Sinnoh-Region eingesetzt wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safetygoggles: {
 		name: "Schutzbrille",
-		desc: "Diese Brille schützt ihren Träger nicht nur vor wetterbedingtem Schaden, sondern auch vor vielen Attacken, bei denen Puder eingesetzt wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	sailfossil: {
 		name: "Flossenfossil",
-		desc: "Das Fossil eines uralten Pokémon, das an Land lebte. Es sieht wie eine Flosse aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salacberry: {
 		name: "Salkabeere",
-		desc: "Als getragenes Item erhöht diese Beere den Initiative-Wert eines Pokémon, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salamencite: {
 		name: "Brutalandanit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Brutalanda getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sceptilite: {
 		name: "Gewaldronit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Gewaldro getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scizorite: {
 		name: "Scheroxnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Scherox getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scolipite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scopelens: {
 		name: "Scope-Linse",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es erhöht die Volltrefferquote.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scovillainite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scraftinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	seaincense: {
 		name: "Seerauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut verstärkt Attacken vom Typ Wasser.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpbeak: {
 		name: "Spitzer Schnabel",
-		desc: "Ein Item zum Tragen. Ein langer, scharfer Schnabel verstärkt Attacken vom Typ Flug.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpedonite: {
 		name: "Tohaidonit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Tohaido getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shedshell: {
 		name: "Wechselhülle",
-		desc: "Ein Item zum Tragen. Dieser harte Panzer sorgt dafür, dass sein Träger unter allen Umständen ausgetauscht werden kann.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shellbell: {
 		name: "Muschelglocke",
-		desc: "Ein Item zum Tragen. Es stellt einige KP des Trägers immer dann wieder her, wenn dieser dem Ziel Schaden zufügt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	shinystone: {
 		name: "Leuchtstein",
 		desc: "Dieser besondere, hell leuchtende Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shockdrive: {
 		name: "Blitzmodul",
-		desc: "Gibt man es Genesect zum Tragen, wandelt es den Typ der Attacke Techblaster in Elektro um.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shucaberry: {
 		name: "Schukebeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Boden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	silkscarf: {
 		name: "Seidenschal",
-		desc: "Ein Item zum Tragen. Ein kostbarer Schal, der Attacken vom Typ Normal verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	silverpowder: {
 		name: "Silberstaub",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es verstärkt Attacken vom Typ Käfer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sitrusberry: {
 		name: "Tsitrubeere",
-		desc: "Gibst du die Beere einem Pokémon zum Tragen, füllt diese seine KP ein wenig auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	skarmorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skullfossil: {
 		name: "Kopffossil",
-		desc: "Das Fossil eines uralten Pokémon, das an Land lebte. Es sieht wie ein Schädel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skyplate: {
 		name: "Wolkentafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Flug.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	slowbronite: {
 		name: "Lahmusnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Lahmus getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		champions: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	smoothrock: {
 		name: "Glattbrocken",
-		desc: "Ein Item zum Tragen. Verlängert die Dauer von Sandsturm, wenn der Träger diese Attacke einsetzt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	snorliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	snowball: {
 		name: "Schneeball",
-		desc: "Wird der Träger von einer Eis-Attacke getroffen, steigt sein Angriff und das Item verschwindet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	softsand: {
 		name: "Pudersand",
-		desc: "Ein Item zum Tragen. Samtiger Sand, der Attacken vom Typ Boden verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	solganiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	souldew: {
 		name: "Seelentau",
-		desc: "Ein Item, das von Latios oder Latias getragen werden kann. Es erhöht die Stärke von Psycho- und Drachen- Attacken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelltag: {
 		name: "Bannsticker",
-		desc: "Ein Item zum Tragen. Ein fieser, unheimlicher Sticker, der Attacken vom Typ Geist verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelonberry: {
 		name: "Kiwanbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Putzigkeit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	splashplate: {
 		name: "Wassertafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Wasser.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	spookyplate: {
 		name: "Spuktafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Geist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sportball: {
 		name: "Turnierball",
-		desc: "Ein besonderer Ball, der beim Käferturnier der Johto-Region eingesetzt wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	staraptite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starfberry: {
 		name: "Krambobeere",
-		desc: "Als getragenes Item erhöht diese Beere einen Statuswert des Pokémon stark, sobald es in einer Notlage steckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	starminite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starsweet: {
 		name: "Zucker-Stern",
-		desc: "Zuckerwerk in Form eines Sterns. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelgem: {
 		name: "Stahljuwel",
-		desc: "Ein Juwel vom Typ Stahl. Es erhöht einmalig die Stärke einer Attacke vom Typ Stahl.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	steeliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelixite: {
 		name: "Stahlosnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Stahlos getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelmemory: {
 		name: "Stahl-Disc",
-		desc: "Eine Disc mit Daten zum Typ Stahl. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stick: {
 		name: "Lauchstange",
-		desc: "Ein Item, das von Porenta getragen werden kann. Diese lange Lauchstange erhöht die Volltrefferquote stark.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	stickybarb: {
 		name: "Klettdorn",
-		desc: "Ein Item zum Tragen. Schadet dem Träger in jeder Runde, kann aber an Angreifern haften bleiben, die ihn berühren.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stoneplate: {
 		name: "Steintafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Gestein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	strangeball: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strawberrysweet: {
 		name: "Zucker-Erdbeere",
-		desc: "Zuckerwerk in Form einer Erdbeere. Gibt man es Hokumil zum Tragen, dreht es sich vor Freude im Kreis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sunstone: {
 		name: "Sonnenstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist rot wie die Abendsonne.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	swampertite: {
 		name: "Sumpexnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Sumpex getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sweetapple: {
 		name: "Süßer Apfel",
-		desc: "Dieser sonderbare Apfel löst bei einem bestimmten Pokémon die Entwicklung aus. Er schmeckt sehr süß.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	syrupyapple: {
 		name: "Saftiger Apfel",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tamatoberry: {
 		name: "Tamotbeere",
-		desc: "Isst ein Pokémon diese Beere, stärkt dies seine Zutraulichkeit, verringert aber seinen Initiative-Basiswert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tangaberry: {
 		name: "Tanigabeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Käfer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tapuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tartapple: {
 		name: "Saurer Apfel",
-		desc: "Dieser sonderbare Apfel löst bei einem bestimmten Pokémon die Entwicklung aus. Er schmeckt sehr sauer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tatsugirinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	terrainextender: {
 		name: "Feldbeschichtung",
-		desc: "Ein Item zum Tragen. Hat der Träger durch eine Attacke oder eine Fähigkeit ein Feld erzeugt, verlängert sich dessen Dauer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thickclub: {
 		name: "Kampfknochen",
-		desc: "Ein harter Knochen, der den Angriffs-Wert von Tragosso oder Knogga erhöht, wenn sie ihn tragen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	throatspray: {
 		name: "Halsspray",
-		desc: "Erhöht bei Einsatz einer Lärm-Attacke den Spezial-Angriff.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thunderstone: {
 		name: "Donnerstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blitzmuster.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	timerball: {
 		name: "Timerball",
-		desc: "Ein Ball, der mit zunehmender Kampfdauer effektiver wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicorb: {
 		name: "Toxik-Orb",
-		desc: "Ein Item zum Tragen. Dieser bizarre Orb vergiftet seinen Träger im Kampf schwer.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicplate: {
 		name: "Gifttafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Gift.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr00: {
 		name: "TP00",
-		desc: "Ein wilder Tanz, der den Kampfgeist wecken soll. Der Angriffs-Wert des Anwenders wird stark erhöht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr01: {
 		name: "TP01",
-		desc: "Trifft das Ziel mit vollem Körpereinsatz. Bewirkt eventuell Paralyse.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr02: {
 		name: "TP02",
-		desc: "Starke Feuer-Attacke, durch die das Ziel eventuell Verbrennungen erleidet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr03: {
 		name: "TP03",
-		desc: "Spritzt eine Menge Wasser mit Hochdruck auf das Ziel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr04: {
 		name: "TP04",
-		desc: "Anwender greift mit einer gewaltigen Welle alle Pokémon im Umkreis an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr05: {
 		name: "TP05",
-		desc: "Das Ziel wird von einem Eisstrahl getroffen und friert eventuell ein.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr06: {
 		name: "TP06",
-		desc: "Ein Schneesturm wütet, der gegnerische Pokémon einfrieren kann.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr07: {
 		name: "TP07",
-		desc: "Ein Tritt, der das Ziel umwirft. Je schwerer das Ziel ist, desto mehr Schaden fügt ihm die Attacke zu.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr08: {
 		name: "TP08",
-		desc: "Eine starke Elektro-Attacke, die das Ziel eventuell paralysiert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr09: {
 		name: "TP09",
-		desc: "Eine verheerende Elektro-Attacke, die das Ziel eventuell paralysiert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr10: {
 		name: "TP10",
-		desc: "Ein mächtiges Beben, das alle Pokémon im Umkreis trifft.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr11: {
 		name: "TP11",
-		desc: "Starke Psycho-Attacke, die eventuell die Spezial-Verteidigung des Zieles senkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr12: {
 		name: "TP12",
-		desc: "Entspannt den Körper, um den Initiative-Wert stark zu erhöhen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr13: {
 		name: "TP13",
-		desc: "Anwender atmet ein und bündelt Kraft. Die Volltrefferquote steigt dadurch.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr14: {
 		name: "TP14",
-		desc: "Bewegt Finger, um das Gehirn zu stimulieren. Wählt zufällig eine Attacke aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr15: {
 		name: "TP15",
-		desc: "Feuersbrunst, die das Ziel versengt und ihm eventuell eine Verbrennung zufügt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr16: {
 		name: "TP16",
-		desc: "Eine mächtige Attacke, durch die das Ziel eventuell zurückschreckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr17: {
 		name: "TP17",
-		desc: "Gedächtnisverlust, der die Spezial-Verteidigung stark erhöht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr18: {
 		name: "TP18",
-		desc: "Die Hälfte des zugefügten Schadens wird dem Anwender gutgeschrieben.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr19: {
 		name: "TP19",
-		desc: "Feuert drei Strahlen ab. Verursacht eventuell Paralyse, Verbrennung oder Einfrieren.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr20: {
 		name: "TP20",
-		desc: "Anwender setzt eine kleine Menge an KP ein, um einen Doppelgänger zu erzeugen, der für ihn Schläge einsteckt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr21: {
 		name: "TP21",
-		desc: "Richtet mehr Schaden an, wenn eigene KP niedrig sind.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr22: {
 		name: "TP22",
-		desc: "Wirft Schlamm auf das Ziel. Dieses wird eventuell vergiftet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr23: {
 		name: "TP23",
-		desc: "Der Anwender legt Stacheln aus, die gegnerische Pokémon verletzen, die in den Kampf gerufen werden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr24: {
 		name: "TP24",
-		desc: "Attacke über zwei bis drei Runden, die den Anwender danach verwirrt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr25: {
 		name: "TP25",
-		desc: "Anwender erzeugt eine seltsame Energiewelle, die dem Ziel physischen Schaden zufügt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr26: {
 		name: "TP26",
-		desc: "Nach fatalen Attacken bleibt stets 1 KP übrig. Misserfolg bei Wiederholung möglich.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr27: {
 		name: "TP27",
-		desc: "Anwender setzt per Zufall eine ihm bekannte Attacke ein. Klappt nur, wenn der Anwender gerade schläft.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr28: {
 		name: "TP28",
-		desc: "Brutaler Ramm-Angriff mit spitzem, beeindruckendem Horn.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr29: {
 		name: "TP29",
-		desc: "Tauscht den Anwender aus und überträgt alle Statusveränderungen auf das eingewechselte Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr30: {
 		name: "TP30",
-		desc: "Das Ziel wiederholt die letzte Attacke drei Runden lang.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr31: {
 		name: "TP31",
-		desc: "Attacke mit hartem Eisenschweif. Senkt eventuell den Verteidigungs-Wert des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr32: {
 		name: "TP32",
-		desc: "Beißt mit scharfen Reißzähnen zu und senkt eventuell die Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr33: {
 		name: "TP33",
-		desc: "Bewirft das Ziel mit einem gruseligen Ball und senkt eventuell dessen Spezial-Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr34: {
 		name: "TP34",
-		desc: "Zwei Runden, nachdem Seher eingesetzt wurde, erfolgt ein Angriff mit Psycho-Energie.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr35: {
 		name: "TP35",
-		desc: "Anwender greift an, indem er über drei Runden hinweg einen Aufruhr erzeugt. Verhindert Schlaf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr36: {
 		name: "TP36",
-		desc: "Gegnerische Pokémon werden von einem Sturm aus heißer Luft getroffen und erleiden eventuell Verbrennungen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr37: {
 		name: "TP37",
-		desc: "Bringt das Ziel in Rage. Dieses kann über drei Runden hinweg nur noch angreifen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr38: {
 		name: "TP38",
-		desc: "Der Anwender überrumpelt das Ziel und tauscht mit ihm die getragenen Items.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr39: {
 		name: "TP39",
-		desc: "Starke Attacke, die jedoch auch den Angriff und die Verteidigung des Anwenders senkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr40: {
 		name: "TP40",
-		desc: "Anwender tauscht seine Fähigkeit mit der des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr41: {
 		name: "TP41",
-		desc: "Starker Tritt mit hoher Volltrefferquote. Verursacht eventuell Verbrennungen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr42: {
 		name: "TP42",
-		desc: "Eine laute Attacke, bei der gegnerische Pokémon mit Schallwellen angegriffen werden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr43: {
 		name: "TP43",
-		desc: "Angriff mit voller Kraft, der den Spezial-Angriff des Anwenders durch den Rückstoß stark senkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr44: {
 		name: "TP44",
-		desc: "Erhöht Verteidigung und Spezial-Verteidigung durch eine mystische Kraft.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr45: {
 		name: "TP45",
-		desc: "Greift mit Matsch an und senkt eventuell die Genauigkeit der gegnerischen Pokémon.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr46: {
 		name: "TP46",
-		desc: "Anwender stärkt den Körper, um den Verteidigungs-Wert stark zu erhöhen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr47: {
 		name: "TP47",
-		desc: "Der Anwender greift das Ziel mit riesigen, scharfen Klauen an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr48: {
 		name: "TP48",
-		desc: "Der Anwender spannt seine Muskeln an, um den Angriff und die Verteidigung zu erhöhen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr49: {
 		name: "TP49",
-		desc: "Erhöht Spezial-Angriff und Spezial-Verteidigung durch Konzentration.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr50: {
 		name: "TP50",
-		desc: "Hieb mit scharfkantigem Blatt. Hohe Volltrefferquote.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr51: {
 		name: "TP51",
-		desc: "Ein mystischer Tanz, der den Angriffs- und Initiative-Wert erhöht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr52: {
 		name: "TP52",
-		desc: "Angriff mit hoher Geschwindigkeit. Je niedriger die Initiative des Anwenders im Vergleich zum Ziel ist, desto höher der Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr53: {
 		name: "TP53",
-		desc: "Nahkampf-Attacke ohne Rücksicht auf Verluste. Senkt Verteidigung und Spezial-Verteidigung des Anwenders.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr54: {
 		name: "TP54",
-		desc: "Anwender legt eine Falle mit Giftdornen aus. In den Kampf eingewechselte gegnerische Pokémon werden vergiftet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr55: {
 		name: "TP55",
-		desc: "Anwender hüllt sich in Flammen und stürmt auf das Ziel zu, das dadurch eventuell Verbrennungen erleidet. Anwender nimmt selbst großen Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr56: {
 		name: "TP56",
-		desc: "Tief aus dem Inneren des Anwenders löst sich ein kraftvoller Stoß Aura-Energie. Diese Attacke trifft garantiert.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr57: {
 		name: "TP57",
-		desc: "Der Anwender greift mit giftigen Gliedmaßen wie Tentakeln oder Armen an. Das Ziel wird dabei eventuell vergiftet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr58: {
 		name: "TP58",
-		desc: "Anwender greift mit fürchterlicher Aura schlechter Gedanken an. Ziel schreckt eventuell zurück.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr59: {
 		name: "TP59",
-		desc: "Anwender lässt eine Menge Samen mit harter Schale von oben auf das Ziel fallen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr60: {
 		name: "TP60",
-		desc: "Der Anwender führt eine Attacke aus, die einer Scherenbewegung ähnelt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr61: {
 		name: "TP61",
-		desc: "Anwender erzeugt Schallwellen, die beim Ziel Schaden verursachen und eventuell dessen Spezial-Verteidigung senken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr62: {
 		name: "TP62",
-		desc: "Das Ziel wird mit einer Schockwelle angegriffen, die aus dem offenen Maul des Anwenders kommt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr63: {
 		name: "TP63",
-		desc: "Anwender attackiert mit einem Lichtstrahl, der funkelt, als sei er aus Juwelen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr64: {
 		name: "TP64",
-		desc: "Anwender erhöht seinen mentalen Fokus und greift dann an. Senkt eventuell Spezial-Verteidigung des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr65: {
 		name: "TP65",
-		desc: "Anwender zieht Kraft aus der Natur und feuert sie auf das Ziel. Senkt eventuell Spezial-Verteidigung des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr66: {
 		name: "TP66",
-		desc: "Anwender greift aus niedriger Höhe an. Er erleidet bei dieser Attacke selbst großen Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr67: {
 		name: "TP67",
-		desc: "Der Boden unter dem Ziel erzittert durch die Kraft der Erde. Senkt eventuell Spezial-Verteidigung.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr68: {
 		name: "TP68",
-		desc: "Anwender stimuliert sein Gehirn und hat finstere Gedanken. Erhöht Spezial-Angriff stark.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr69: {
 		name: "TP69",
-		desc: "Anwender konzentriert seinen Willen und rammt das Ziel. Dieses schreckt eventuell zurück.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr70: {
 		name: "TP70",
-		desc: "Anwender sammelt Lichtenergie und feuert sie auf einmal ab. Senkt eventuell Spezial-Verteidigung des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr71: {
 		name: "TP71",
-		desc: "Anwender erzeugt einen Sturm aus scharfen Blättern. Rückstoß senkt Spezial-Angriff des Anwenders stark.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr72: {
 		name: "TP72",
-		desc: "Anwender wirbelt seine Ranken oder Tentakel peitschenartig gegen das Ziel.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr73: {
 		name: "TP73",
-		desc: "Anwender schießt mit Müll auf das Ziel. Vergiftet dieses eventuell.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr74: {
 		name: "TP74",
-		desc: "Ziel wird durch stahlharten Kopf des Anwenders getroffen und schreckt eventuell zurück.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr75: {
 		name: "TP75",
-		desc: "Anwender schleudert scharfe Steine auf das Ziel. Hohe Volltrefferquote.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr76: {
 		name: "TP76",
-		desc: "Der Anwender legt eine Falle aus schwebenden Steinen aus, die gegnerische Pokémon verletzen, die in den Kampf gerufen werden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr77: {
 		name: "TP77",
-		desc: "Ziel wird durch Gras ins Straucheln gebracht. Je schwerer das Ziel, desto mehr Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr78: {
 		name: "TP78",
-		desc: "Greift alle Pokémon im Umkreis mit einer Schlammwelle an. Diese werden eventuell auch vergiftet.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr79: {
 		name: "TP79",
-		desc: "Anwender rammt das Ziel mit massivem Körper. Je schwerer er im Vergleich zum Ziel ist, desto stärker die Attacke.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr80: {
 		name: "TP80",
-		desc: "Je höher die Initiative des Anwenders im Vergleich zum Ziel ist, desto stärker trifft dieses eine geballte Ladung Strom.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr81: {
 		name: "TP81",
-		desc: "Anwender macht sich die Kraft des Zieles zunutze. Je höher dessen Angriff, desto mehr Schaden richtet die Attacke an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr82: {
 		name: "TP82",
-		desc: "Angriff mit angesparter Energie. Je stärker die Statuswerte des Anwenders erhöht wurden, desto mehr Schaden richtet diese Attacke an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr83: {
 		name: "TP83",
-		desc: "Wundersame Kräfte teleportieren den Anwender an den Platz eines Mitstreiters.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr84: {
 		name: "TP84",
-		desc: "Heizt dem Ziel mit einem Schwall siedend heißen Kochwassers ein. Das Ziel erleidet dabei eventuell Verbrennungen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr85: {
 		name: "TP85",
-		desc: "Anwender erhält einen Kraftschub, der seinen Angriff und Spezial-Angriff erhöht.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr86: {
 		name: "TP86",
-		desc: "Anwender erzeugt Spannung und greift an, indem er auf Kollisionskurs geht. Er erleidet selbst leichten Schaden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr87: {
 		name: "TP87",
-		desc: "Anwender rammt das Ziel, während er seinen Körper wie einen Bohrer dreht. Hohe Volltrefferquote.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr88: {
 		name: "TP88",
-		desc: "Rempelattacke mit brennendem Körper. Je schwerer der Anwender im Vergleich zum Ziel ist, desto stärker die Attacke.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr89: {
 		name: "TP89",
-		desc: "Anwender greift das Ziel an, indem er es mit heftigen Windböen umgibt. Ziel wird eventuell verwirrt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr90: {
 		name: "TP90",
-		desc: "Der Anwender knuddelt das Ziel und greift es an. Senkt eventuell den Angriffs-Wert des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr91: {
 		name: "TP91",
-		desc: "Anwender bespritzt das Ziel mit einer speziellen Giftflüssigkeit. Senkt den Angriff, den Spezial-Angriff und die Initiative von vergifteten Zielen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr92: {
 		name: "TP92",
-		desc: "Der Anwender feuert einen mächtigen Lichtblitz ab, der gegnerischen Pokémon Schaden zufügt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr93: {
 		name: "TP93",
-		desc: "Der Anwender wirbelt mit beiden Armen und prallt so auf das Ziel. Richtet unabhängig von den Statusveränderungen des Zieles Schaden an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr94: {
 		name: "TP94",
-		desc: "Der Anwender greift das Ziel mit einer heftigen Ganzkörper-Attacke an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr95: {
 		name: "TP95",
-		desc: "Das Pokémon, das von dieser Attacke getroffen wird, erleidet starke Schmerzen und kann deswegen zwei Runden lang keine Lärm-Attacken mehr einsetzen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr96: {
 		name: "TP96",
-		desc: "Der Anwender greift mit einem Ball aus Pollen an, der beim Ziel explodiert. Mitstreiter werden von einem Ball getroffen, der ihre KP auffüllt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr97: {
 		name: "TP97",
-		desc: "Der Anwender beißt das Ziel mithilfe von Psycho-Kräften. Die Attacke durchbricht auch Barrieren wie Lichtschild und Reflektor.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr98: {
 		name: "TP98",
-		desc: "Der Anwender greift das Ziel mit der Kraft des Wassers an. Senkt eventuell die Verteidigung des Zieles.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr99: {
 		name: "TP99",
-		desc: "Der Anwender greift mit seinem ganzen Körper an. Je höher seine Verteidigung ist, desto mehr Schaden richtet er an.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	twistedspoon: {
 		name: "Krummlöffel",
-		desc: "Ein Item zum Tragen. Ein Löffel voller telekinetischer Energie, der Attacken vom Typ Psycho verstärkt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	tyranitarite: {
 		name: "Despotarnit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Despotar getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ultraball: {
 		name: "Hyperball",
-		desc: "Ein Ball mit hoher Erfolgsquote. Dem Superball in allen Punkten überlegen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	ultranecroziumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		transform: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	unremarkableteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	upgrade: {
 		name: "Up-Grade",
-		desc: "Ein durchsichtiges Gerät. Es enthält alle möglichen Daten. Hergestellt von der Silph Company.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	utilityumbrella: {
 		name: "Allzweckschirm",
 		desc: "Der Träger ist gegen die Effekte von Regen und starkem Sonnenlicht geschützt.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	venusaurite: {
 		name: "Bisaflornit",
-		desc: "Einer der mysteriösen Mega-Steine. Wird er von einem Bisaflor getragen, kann es im Kampf eine Mega-Entwicklung durchführen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	victreebelite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wacanberry: {
 		name: "Kerzalbeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Elektro.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watergem: {
 		name: "Wasserjuwel",
-		desc: "Ein Juwel vom Typ Wasser. Es erhöht einmalig die Stärke einer Attacke vom Typ Wasser.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	wateriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watermemory: {
 		name: "Wasser-Disc",
-		desc: "Eine Disc mit Daten zum Typ Wasser. Sie löst bei einem bestimmten Pokémon einen Typenwechsel aus.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waterstone: {
 		name: "Wasserstein",
 		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist hellblau.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watmelberry: {
 		name: "Wasmelbeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Klugheit erhöhen. In anderen Regionen ist sie eher selten zu finden.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waveincense: {
 		name: "Wellenrauch",
-		desc: "Ein Item zum Tragen. Dieses exotische Duftkraut verstärkt Attacken vom Typ Wasser.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	weaknesspolicy: {
 		name: "Schwächenschutz",
-		desc: "Erhöht den Angriff und den Spezial-Angriff des Trägers stark, wenn er von einer sehr effektiven Attacke getroffen wird.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	wellspringmask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wepearberry: {
 		name: "Nirbebeere",
-		desc: "Eine Beerensorte, die als Zutat für Pokériegel verwendet wird, welche die Klugheit erhöhen. Ihr grünes Fruchtfleisch schmeckt bitter.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whippeddream: {
 		name: "Sahnehäubchen",
-		desc: "Ein lockeres, leicht süßliches Häubchen aus Schlagsahne, das bei einer bestimmten Pokémon-Art sehr beliebt ist.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whiteherb: {
 		name: "Schlohkraut",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es hebt einmalig jede negative Statusveränderung auf.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	widelens: {
 		name: "Großlinse",
-		desc: "Ein Item zum Tragen. Dieses Vergrößerungsglas erhöht die Genauigkeit etwas.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wikiberry: {
 		name: "Wikibeere",
-		desc: "Als getragenes Item füllt die Beere im Notfall die KP eines Pokémon auf, doch ihr Aroma verwirrt jene, die es nicht mögen.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	wiseglasses: {
 		name: "Schlaubrille",
-		desc: "Ein Item zum Tragen. Diese dicke Brille verstärkt auf Spezial-Angriff basierende Attacken.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	yacheberry: {
 		name: "Kiroyabeere",
-		desc: "Als getragenes Item schwächt diese Beere sehr effektive gegnerische Attacken vom Typ Eis.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zapplate: {
 		name: "Blitztafel",
-		desc: "Ein Item zum Tragen. Diese Steintafel verstärkt Attacken vom Typ Elektro.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zeraorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zoomlens: {
 		name: "Zoomlinse",
-		desc: "Ein Item zum Tragen. Agiert das Ziel zuerst, erhöht sich die Genauigkeit des Trägers.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zygardite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// Gen 2 items
+
+	berserkgene: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	berry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	bitterberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	burntberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	goldberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iceberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mintberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	miracleberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mysteryberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	pinkbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	polkadotbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	przcureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psncureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// CAP items
+
+	crucibellite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	vilevial: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 };

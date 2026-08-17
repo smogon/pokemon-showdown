@@ -41,14 +41,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
-		cant: "[POKEMON] can't use [MOVE]!",
+		cant: "[POKEMON] cannot use [MOVE]!",
 		cantNoMove: "[POKEMON] can't move!",
 		fail: "  But it failed!",
 
 		// n.b. this is the default message for in-battle forme changes
 		// for the move Transform and ability Imposter, see the entry for the move Transform
 		transform: "[POKEMON] transformed!",
-		typeChange: "  [POKEMON]'s type changed to [TYPE]!",
+		typeChange: "  [POKEMON] transformed into the [TYPE] type!",
 		typeChangeFromEffect: "  [POKEMON]'s [EFFECT] made it the [TYPE] type!",
 		typeAdd: "  [TYPE] type was added to [POKEMON]!",
 
@@ -61,14 +61,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		endFieldEffect: "  ([EFFECT] ended!)",
 
 		changeAbility: "  [POKEMON] acquired [ABILITY]!",
-		addItem: "  [POKEMON] obtained one [ITEM].", // Trick, Switcheroo
+		addItem: "  [POKEMON] obtained [ITEM].", // Trick, Switcheroo
 		takeItem: "  [POKEMON] stole [SOURCE]'s [ITEM]!", // Thief, Covet, Magician, Pickpocket
 		eatItem: "  ([POKEMON] ate its [ITEM]!)",
-		useGem: "  The [ITEM] strengthened [POKEMON]'s power!",
-		eatItemWeaken: "  The [ITEM] weakened damage to [POKEMON]!",
+		useGem: "  [ITEM] strengthened [MOVE]'s power!",
+		eatItemWeaken: "  [POKEMON]'s [ITEM] lessened the damage it took!",
 		removeItem: "  [POKEMON] lost its [ITEM]!",
 		activateItem: "  ([POKEMON] used its [ITEM]!)",
-		activateWeaken: "  The [ITEM] weakened the damage to [POKEMON]!",
+		activateWeaken: "  [POKEMON]'s [ITEM] lessened the damage it took!",
 
 		damage: "  ([POKEMON] was hurt!)",
 		damagePercentage: "  ([POKEMON] lost [PERCENTAGE] of its health!)",
@@ -92,8 +92,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boostMultipleFromZEffect: "  [POKEMON] boosted its stats using its Z-Power!",
 
 		unboost: "  [POKEMON]'s [STAT] fell!",
-		unboost2: "  [POKEMON]'s [STAT] fell harshly!",
-		unboost3: "  [POKEMON]'s [STAT] fell severely!",
+		unboost2: "  [POKEMON]'s [STAT] harshly fell!",
+		unboost3: "  [POKEMON]'s [STAT] severely fell!",
 		unboost0: "  [POKEMON]'s [STAT] won't go any lower!",
 		unboostFromItem: "  The [ITEM] lowered [POKEMON]'s [STAT]!",
 		unboost2FromItem: "  The [ITEM] harshly lowered [POKEMON]'s [STAT]!",
@@ -105,7 +105,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		copyBoost: "  [POKEMON] copied [TARGET]'s stat changes!",
 		clearBoost: "  [POKEMON]'s stat changes were removed!",
 		clearBoostFromZEffect: "  [POKEMON] returned its decreased stats to normal using its Z-Power!",
-		invertBoost: "  [POKEMON]'s stat changes were inverted!",
+		invertBoost: "  All stat changes on [POKEMON] were inverted!",
 		clearAllBoost: "  All stat changes were eliminated!",
 
 		superEffective: "  It's super effective!",
@@ -189,7 +189,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		cant: "[POKEMON] is frozen solid!",
 	},
 	par: {
-		start: "  [POKEMON] is paralyzed! It may be unable to move!",
+		start: "  [POKEMON] is paralyzed, so it may be unable to move!",
 		alreadyStarted: "  [POKEMON] is already paralyzed!",
 		end: "  [POKEMON] was cured of paralysis!",
 		endFromItem: "  [POKEMON]'s [ITEM] cured its paralysis!",

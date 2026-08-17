@@ -1,1858 +1,2627 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	abilityshield: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
 	abomasite: {
 		name: "눈설왕나이트",
-		desc: "눈설왕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absolite: {
 		name: "앱솔나이트",
-		desc: "앱솔에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	absolitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absorbbulb: {
 		name: "구근",
-		desc: "단 한 번 쓰면 없어지는 구근. 지니게 하고 물 기술을 받으면 특수공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	adamantcrystal: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantorb: {
 		name: "금강옥",
-		desc: "디아루가에게 지니게 하면 드래곤과 강철타입 기술의 위력이 올라가는 반짝반짝 빛나는 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adrenalineorb: {
 		name: "주눅구슬",
-		desc: "포켓몬에게 지니게 하면 위협을 받았을 때 스피드가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aerodactylite: {
 		name: "프테라나이트",
-		desc: "프테라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aggronite: {
 		name: "보스로라나이트",
-		desc: "보스로라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aguavberry: {
 		name: "아바열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 HP를 회복한다. 싫어하는 맛이면 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	airballoon: {
 		name: "풍선",
-		desc: "포켓몬에게 지니게 하면 포켓몬이 허공에 뜬다. 공격을 받으면 터져버린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		start: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]의 풍선이 터졌다!",
 	},
 	alakazite: {
 		name: "후디나이트",
-		desc: "후딘에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	aloraichiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	altarianite: {
 		name: "파비코리나이트",
-		desc: "파비코리에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ampharosite: {
 		name: "전룡나이트",
-		desc: "전룡에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	apicotberry: {
 		name: "규살열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 자신의 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	armorfossil: {
 		name: "방패의화석",
-		desc: "오랜 옛날 지상에서 살았던 고대 포켓몬의 화석. 깃 장식의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aspearberry: {
 		name: "배리열매",
-		desc: "포켓몬에게 지니게 하면 얼음을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	assaultvest: {
 		name: "돌격조끼",
-		desc: "공격적으로 변하는 조끼. 지니게 하면 특수방어가 올라가지만 변화 기술을 쓸 수 없게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	audinite: {
 		name: "다부니나이트",
-		desc: "다부니에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	auspiciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	babiriberry: {
 		name: "바리비열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 강철 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	banettite: {
 		name: "다크펫나이트",
-		desc: "다크펫에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	barbaracite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	baxcalibrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beastball: {
 		name: "울트라볼",
-		desc: "포켓몬을 잡기 어려운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beedrillite: {
 		name: "독침붕나이트",
-		desc: "독침붕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	belueberry: {
 		name: "루베열매",
-		desc: "아름다움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berryjuice: {
 		name: "나무열매쥬스",
-		desc: "나무열매 100% 쥬스. 포켓몬 1마리의 HP를 20만큼 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berrysweet: {
 		name: "베리사탕공예",
-		desc: "베리 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bignugget: {
 		name: "큰금구슬",
-		desc: "금색으로 반짝반짝 빛나는 순금으로 만들어진 큰 구슬. 상점에서 비싸게 팔린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bigroot: {
 		name: "큰뿌리",
-		desc: "지니게 하면 HP 흡수 기술을 썼을 때 여느 때보다 많은 HP를 자신이 회복할 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	bindingband: {
 		name: "조임밴드",
-		desc: "조이기 기술을 보조하는 밴드. 지니게 하면 조이기 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blackbelt: {
 		name: "검은띠",
-		desc: "마음을 긴장시키는 띠. 지니게 하면 격투타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blacksludge: {
 		name: "검은오물",
-		desc: "지니게 하면 독타입의 포켓몬은 조금씩 HP를 회복한다. 그 이외의 타입은 HP가 줄어 버린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	blackglasses: {
 		name: "검은안경",
-		desc: "괴상하게 보이는 안경. 지니게 하면 악타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blastoisinite: {
 		name: "거북왕나이트",
-		desc: "거북왕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blazikenite: {
 		name: "번치코나이트",
-		desc: "번치코에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blueorb: {
 		name: "쪽빛구슬",
-		desc: "호연지방의 전설과 깊은 연관이 있다고 전해지는 파랗게 빛나는 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blukberry: {
 		name: "블리열매",
-		desc: "아름다움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 파란색 열매는 먹으면 떫다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blunderpolicy: {
 		name: "허탕보험",
-		desc: "명중률에 의해 기술이 빗나갔을 때 스피드가 크게 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	boosterenergy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bottlecap: {
 		name: "은색병뚜껑",
-		desc: "은색의 아름다운 왕관. 받으면 좋아하는 사람도 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	brightpowder: {
 		name: "반짝가루",
-		desc: "반짝반짝 빛나는 가루. 지니게 하면 빛이 상대를 혼란시켜 기술이 명중되기 어려워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	buggem: {
 		name: "벌레주얼",
-		desc: "벌레타입의 주얼. 지니게 하면 한 번만 벌레 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	buginiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bugmemory: {
 		name: "버그메모리",
-		desc: "벌레타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	burndrive: {
 		name: "블레이즈카세트",
-		desc: "게노세크트에게 지니게 하면 테크노버스터라는 기술이 불꽃타입으로 바뀌는 카세트.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cameruptite: {
 		name: "폭타나이트",
-		desc: "폭타에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cellbattery: {
 		name: "충전지",
-		desc: "단 한 번 쓰면 없어지는 충전지. 지니게 하고 전기 기술을 받으면 공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chandelurite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charcoal: {
 		name: "목탄",
-		desc: "물건을 태우는 연료. 지니게 하면 불꽃타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	charizarditex: {
 		name: "리자몽나이트X",
-		desc: "리자몽에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charizarditey: {
 		name: "리자몽나이트Y",
-		desc: "리자몽에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chartiberry: {
 		name: "루미열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 바위 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cheriberry: {
 		name: "버치열매",
-		desc: "포켓몬에게 지니게 하면 마비를 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cherishball: {
 		name: "프레셔스볼",
-		desc: "무언가의 기념품으로 특별히 만들어진 상당히 진귀한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chesnaughtite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chestoberry: {
 		name: "유루열매",
-		desc: "포켓몬에게 지니게 하면 잠듦을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilanberry: {
 		name: "카리열매",
-		desc: "포켓몬에게 지니게 하면 노말 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilldrive: {
 		name: "프리즈카세트",
-		desc: "게노세크트에게 지니게 하면 테크노버스터라는 기술이 얼음타입으로 바뀌는 카세트.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chimechite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chippedpot: {
 		name: "이빠진포트",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 포트. 이가 빠졌지만 차는 맛있어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choiceband: {
 		name: "구애머리띠",
-		desc: "기술을 구애받는 머리띠. 지니게 하면 공격은 올라가지만 똑같은 기술밖에 쓰지 못한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicescarf: {
 		name: "구애스카프",
-		desc: "기술을 구애받는 스카프. 지니게 하면 스피드는 올라가지만 같은 기술밖에 쓸 수 없다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicespecs: {
 		name: "구애안경",
-		desc: "기술을 구애받는 안경. 지니게 하면 특수공격이 올라가지만 같은 기술밖에 쓸 수 없다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chopleberry: {
 		name: "로플열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 격투 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clawfossil: {
 		name: "발톱화석",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬의 화석. 발톱의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	clearamulet: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
+	clefablite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cloversweet: {
 		name: "네잎사탕공예",
-		desc: "네잎클로버 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cobaberry: {
 		name: "바코열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 비행 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	colburberry: {
 		name: "마코열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 악 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	cornerstonemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornnberry: {
 		name: "수숙열매",
-		desc: "아름다움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	coverfossil: {
 		name: "덮개화석",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬의 화석. 등의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	covertcloak: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	crabominite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	crackedpot: {
 		name: "깨진포트",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 포트. 깨졌지만 차는 맛있어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	custapberry: {
 		name: "애슈열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 한 번만 행동이 빨라진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	damprock: {
 		name: "축축한바위",
-		desc: "지니게 한 포켓몬이 비바라기를 쓰면 여느 때보다 비 내리는 시간이 길어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkgem: {
 		name: "악주얼",
-		desc: "악타입의 주얼. 지니게 하면 한 번만 악 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	darkiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkmemory: {
 		name: "다크메모리",
-		desc: "악타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	darkranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dawnstone: {
 		name: "각성의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈동자처럼 아름답다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	decidiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseascale: {
 		name: "심해의비늘",
 		desc: "진주몽에게 지니게 하면 특수방어가 올라가는 비늘. 연한 분홍색으로 빛난다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "심해의이빨",
 		desc: "진주몽에게 지니게 하면 특수공격이 올라가는 이빨. 날카로운 은색으로 빛난다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	delphoxite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	destinyknot: {
 		name: "빨간실",
-		desc: "가늘고 긴 새빨간 실. 지니게 하면 자신이 헤롱헤롱해졌을 때 상대도 헤롱헤롱해지게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diancite: {
 		name: "디안시나이트",
-		desc: "디안시에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diveball: {
 		name: "다이브볼",
-		desc: "물의 세계에서 사는 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	domefossil: {
 		name: "껍질화석",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬의 화석. 등껍질의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dousedrive: {
 		name: "아쿠아카세트",
-		desc: "게노세크트에게 지니게 하면 테크노버스터라는 기술이 물타입으로 바뀌는 카세트.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dracoplate: {
 		name: "용의플레이트",
-		desc: "드래곤타입의 석판. 지니게 하면 드래곤타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragalgite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonfang: {
 		name: "용의이빨",
-		desc: "단단하고 날카로운 이빨. 지니게 하면 드래곤타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dragongem: {
 		name: "드래곤주얼",
-		desc: "드래곤타입의 주얼. 지니게 하면 한 번만 드래곤 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	dragoninite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonmemory: {
 		name: "드래곤메모리",
-		desc: "드래곤타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonscale: {
 		name: "용의비늘",
-		desc: "단단하고 튼튼한 비늘. 드래곤타입의 포켓몬이 지니고 있는 경우가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	drampanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreadplate: {
 		name: "공포플레이트",
-		desc: "악타입의 석판. 지니게 하면 악타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreamball: {
 		name: "드림볼",
-		desc: "잠듦 상태의 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dubiousdisc: {
 		name: "괴상한패치",
-		desc: "안에 괴상한 정보가 가득한 투명한 기계다. 제작자 불명.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	durinberry: {
 		name: "두리열매",
-		desc: "슬기로움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskball: {
 		name: "다크볼",
-		desc: "밤이나 동굴 등 어두운 곳에서 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskstone: {
 		name: "어둠의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 칠흑처럼 어둡다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	earthplate: {
 		name: "대지플레이트",
-		desc: "땅타입의 석판. 지니게 하면 땅타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eelektrossite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eeviumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ejectbutton: {
 		name: "탈출버튼",
-		desc: "지니게 하고 기술을 받으면 배틀에서 탈출하여 지닌 포켓몬과 교체할 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON] 탈출버튼 때문에 돌아간다!",
 	},
 	ejectpack: {
 		name: "탈출팩",
-		desc: "지니게 한 포켓몬의 능력이 떨어지면 지닌 포켓몬과 교체한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON] 탈출팩 때문에 돌아간다!",
 	},
 	electirizer: {
 		name: "에레키부스터",
-		desc: "엄청난 전기의 에너지가 비축되어 있는 상자. 어떤 포켓몬이 좋아하는 물건이다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricgem: {
 		name: "전기주얼",
-		desc: "전기타입의 주얼. 지니게 하면 한 번만 전기 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	electricmemory: {
 		name: "일렉트릭메모리",
-		desc: "전기타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricseed: {
 		name: "일렉트릭시드",
-		desc: "포켓몬에게 지니게 하면 일렉트릭필드일 때 사용하여 방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	electriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	emboarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	enigmaberry: {
 		name: "의문열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 공격을 받았을 때 HP를 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	eviolite: {
 		name: "진화의휘석",
-		desc: "진화의 이상한 덩어리. 지니게 하면 진화 전 포켓몬의 방어와 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	excadrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	expertbelt: {
 		name: "달인의띠",
-		desc: "오래 사용한 까만 띠. 지니게 하면 효과가 뛰어날 때 기술의 위력이 조금 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairygem: {
 		name: "페어리주얼",
-		desc: "페어리타입의 주얼. 지니게 하면 한 번만 페어리 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairymemory: {
 		name: "페어리메모리",
-		desc: "페어리타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	falinksite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fastball: {
 		name: "스피드볼",
-		desc: "도주가 빠른 포켓몬이 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	feraligite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fightinggem: {
 		name: "격투주얼",
-		desc: "격투타입의 주얼. 지니게 하면 한 번만 격투 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	fightingmemory: {
 		name: "파이팅메모리",
-		desc: "격투타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fightiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	figyberry: {
 		name: "무화열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 HP를 회복한다. 싫어하는 맛이면 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firegem: {
 		name: "불꽃주얼",
-		desc: "불꽃타입의 주얼. 지니게 하면 한 번만 불꽃 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firememory: {
 		name: "파이어메모리",
-		desc: "불꽃타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	firestone: {
 		name: "불꽃의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 주황색을 띠고 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	firiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fistplate: {
 		name: "주먹플레이트",
-		desc: "격투타입의 석판. 지니게 하면 격투타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameorb: {
 		name: "화염구슬",
-		desc: "만지면 열을 내는 이상한 구슬. 지니게 하면 배틀 중에 화상 상태가 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameplate: {
 		name: "불구슬플레이트",
-		desc: "불꽃타입의 석판. 지니게 하면 불꽃타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	floatstone: {
 		name: "가벼운돌",
-		desc: "매우 가벼운 돌. 지니게 하면 포켓몬의 체중이 가벼워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	floettite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flowersweet: {
 		name: "꽃사탕공예",
-		desc: "꽃 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flyinggem: {
 		name: "비행주얼",
-		desc: "비행타입의 주얼. 지니게 하면 한 번만 비행 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	flyingmemory: {
 		name: "플라잉메모리",
-		desc: "비행타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	flyiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	focusband: {
 		name: "기합의머리띠",
-		desc: "지니게 하면 기절할 듯한 기술을 받아도 HP를 1 남겨서 견디기도 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	focussash: {
 		name: "기합의띠",
-		desc: "지니게 하면 HP가 꽉 찼을 때 기절할 듯한 기술을 당해도 HP 1로 한 번은 버틴다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	fossilizedbird: {
 		name: "화석새",
-		desc: "오랜 옛날 하늘을 날던 고대 포켓몬 화석의 일부. 어떤 모습이었는지는 수수께끼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddino: {
 		name: "화석긴목",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬 화석의 일부. 어떤 모습이었는지는 수수께끼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddrake: {
 		name: "화석용",
-		desc: "오랜 옛날 육지에 살았던 고대 포켓몬 화석의 일부. 어떤 모습이었는지는 수수께끼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizedfish: {
 		name: "화석물고기",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬 화석의 일부. 어떤 모습이었는지는 수수께끼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	friendball: {
 		name: "프렌드볼",
-		desc: "잡은 야생 포켓몬이 바로 친밀해지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	froslassite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fullincense: {
 		name: "만복향로",
-		desc: "이상한 향기의 향로. 지니게 한 포켓몬은 여느 때보다 행동이 느려진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricacuff: {
 		name: "가라두구팔찌",
-		desc: "가라두구가지를 엮어서 만든 팔찌. 가라르지방의 야돈에게 채워주면 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricawreath: {
 		name: "가라두구머리장식",
-		desc: "가라두구가지를 엮어서 만든 머리 장식. 가라르지방의 야돈에게 씌워주면 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galladite: {
 		name: "엘레이드나이트",
-		desc: "엘레이드에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ganlonberry: {
 		name: "용아열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 자신의 방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	garchompite: {
 		name: "한카리아스나이트",
-		desc: "한카리아스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	garchompitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gardevoirite: {
 		name: "가디안나이트",
-		desc: "가디안에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gengarite: {
 		name: "팬텀나이트",
-		desc: "팬텀에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostgem: {
 		name: "고스트주얼",
-		desc: "고스트타입의 주얼. 지니게 하면 한 번만 고스트 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	ghostiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostmemory: {
 		name: "고스트메모리",
-		desc: "고스트타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	glalitite: {
 		name: "얼음귀신나이트",
-		desc: "얼음귀신에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	glimmoranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	goldbottlecap: {
 		name: "금색병뚜껑",
-		desc: "금색의 아름다운 왕관. 은왕관보다 진귀하다. 받으면 좋아하는 사람도 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golisopite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golurkite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassgem: {
 		name: "풀주얼",
-		desc: "풀타입의 주얼. 지니게 하면 한 번만 풀 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	grassiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassmemory: {
 		name: "그래스메모리",
-		desc: "풀타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassyseed: {
 		name: "그래스시드",
-		desc: "포켓몬에게 지니게 하면 그래스필드일 때 사용하여 방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	greatball: {
 		name: "슈퍼볼",
-		desc: "몬스터볼보다도 더욱 포켓몬을 잡기 쉬워진 약간 성능이 좋은 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	greninjite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grepaberry: {
 		name: "또뽀열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 특수방어의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gripclaw: {
 		name: "끈기갈고리손톱",
-		desc: "지니게 하면 조이기나 김밥말이 등 데미지를 계속 주는 기술의 턴 수가 늘어난다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	griseouscore: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseousorb: {
 		name: "백금옥",
-		desc: "기라티나에게 지니게 하면 드래곤과 고스트타입 기술의 위력이 올라가는 반짝반짝 빛나는 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	groundgem: {
 		name: "땅주얼",
-		desc: "땅타입의 주얼. 지니게 하면 한 번만 땅 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	groundiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	groundmemory: {
 		name: "그라운드메모리",
-		desc: "땅타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gyaradosite: {
 		name: "갸라도스나이트",
-		desc: "갸라도스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	habanberry: {
 		name: "하반열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 드래곤 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hardstone: {
 		name: "딱딱한돌",
-		desc: "절대 깨지지 않는 돌. 지니게 하면 바위타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	hawluchanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	healball: {
 		name: "힐볼",
-		desc: "잡은 포켓몬의 HP와 상태 이상을 회복시키는 조금 다정한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	hearthflamemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	heatranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heatrock: {
 		name: "뜨거운바위",
-		desc: "지니게 한 포켓몬이 쾌청을 쓰면 여느 때보다 쾌청의 시간이 길어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavyball: {
 		name: "헤비볼",
-		desc: "체중이 무거운 포켓몬이 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavydutyboots: {
 		name: "통굽부츠",
-		desc: "발밑에 설치된 함정 등의 영향을 받지 않게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	helixfossil: {
 		name: "조개화석",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬의 화석. 조개껍질의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heracronite: {
 		name: "헤라크로스나이트",
-		desc: "헤라크로스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hondewberry: {
 		name: "로매열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 특수공격의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	houndoominite: {
 		name: "헬가나이트",
-		desc: "헬가에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	iapapaberry: {
 		name: "파야열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 HP를 회복한다. 싫어하는 맛이면 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icegem: {
 		name: "얼음주얼",
-		desc: "얼음타입의 주얼. 지니게 하면 한 번만 얼음 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icememory: {
 		name: "아이스메모리",
-		desc: "얼음타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icestone: {
 		name: "얼음의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈송이 무늬가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icicleplate: {
 		name: "고드름플레이트",
-		desc: "얼음타입의 석판. 지니게 하면 얼음타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iciumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icyrock: {
 		name: "차가운바위",
-		desc: "지니게 한 포켓몬이 싸라기눈을 쓰면 여느 때보다 싸라기눈의 시간이 길어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	inciniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	insectplate: {
 		name: "비단벌레플레이트",
-		desc: "벌레타입의 석판. 지니게 하면 벌레타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ironball: {
 		name: "검은철구",
-		desc: "지니게 하면 스피드가 떨어진다. 비행타입이나 부유포켓몬은 땅 기술에 맞아 버린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	ironplate: {
 		name: "강철플레이트",
-		desc: "강철타입의 석판. 지니게 하면 강철타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jabocaberry: {
 		name: "자보열매",
-		desc: "포켓몬에게 지니게 하면 물리 기술을 당했을 때 상대에게도 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jawfossil: {
 		name: "턱화석",
-		desc: "오랜 옛날 지상에서 살았던 고대 포켓몬의 화석. 커다란 턱의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kangaskhanite: {
 		name: "캥카나이트",
-		desc: "캥카에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kasibberry: {
 		name: "수불열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 고스트 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "으름열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 독 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	keeberry: {
 		name: "악키열매",
-		desc: "포켓몬에게 지니게 하면 물리 기술을 당했을 때 자신의 방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kelpsyberry: {
 		name: "시마열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 공격의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kingsrock: {
 		name: "왕의징표석",
 		desc: "지니게 하면 공격해서 데미지를 줄 때 상대를 풀죽이기도 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	kommoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laggingtail: {
 		name: "느림보꼬리",
-		desc: "매우 무거운 무언가의 꼬리. 지니게 하면 여느 때보다 행동이 느려진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lansatberry: {
 		name: "랑사열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 공격이 급소를 맞히기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiasite: {
 		name: "라티아스나이트",
-		desc: "라티아스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiosite: {
 		name: "라티오스나이트",
-		desc: "라티오스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laxincense: {
 		name: "무사태평향로",
-		desc: "지니게 하면 향로의 이상한 향기가 상대를 혼란시켜 기술이 명중하기 어려워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	leafstone: {
 		name: "리프의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 잎사귀 무늬가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	leek: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	leftovers: {
 		name: "먹다남은음식",
-		desc: "지니게 하면 포켓몬의 HP가 배틀을 하는 동안 조금씩 회복된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	leppaberry: {
 		name: "과사열매",
-		desc: "포켓몬에게 지니게 하면 PP를 10만큼 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	levelball: {
 		name: "레벨볼",
-		desc: "자신의 포켓몬보다 레벨이 낮을수록 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	liechiberry: {
 		name: "치리열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 자신의 공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lifeorb: {
 		name: "생명의구슬",
-		desc: "지니게 하면 공격할 때마다 HP가 조금씩 줄지만 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "  [POKEMON]의 생명이 조금 깎였다!",
 	},
 	lightball: {
 		name: "전기구슬",
-		desc: "피카츄에게 지니게 하면 공격과 특수공격의 위력이 올라가는 이상한 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lightclay: {
 		name: "빛의점토",
-		desc: "지니게 한 포켓몬이 빛의장막이나 리플렉터를 사용했을 때 여느 때보다 긴 시간 동안 지속된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	loadeddice: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lopunnite: {
 		name: "이어롭나이트",
-		desc: "이어롭에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	loveball: {
 		name: "러브러브볼",
-		desc: "자신의 포켓몬과 성별이 다르면 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lovesweet: {
 		name: "하트사탕공예",
-		desc: "하트 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lucarionite: {
 		name: "루카리오나이트",
-		desc: "루카리오에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lucarionitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luckypunch: {
 		name: "럭키펀치",
-		desc: "행운을 부르는 글러브다. 럭키에게 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lumberry: {
 		name: "리샘열매",
-		desc: "포켓몬에게 지니게 하면 모든 상태 이상을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luminousmoss: {
 		name: "빛이끼",
-		desc: "단 한 번 쓰면 없어지는 빛이끼. 지니게 하고 물 기술을 받으면 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lunaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lureball: {
 		name: "루어볼",
-		desc: "낚싯대로 낚아 올린 포켓몬이라면 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lustrousglobe: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousorb: {
 		name: "백옥",
-		desc: "펄기아에게 지니게 하면 드래곤과 물타입 기술의 위력이 올라가는 아름답게 반짝이는 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luxuryball: {
 		name: "럭셔리볼",
-		desc: "잡은 야생 포켓몬이 매우 친밀해지기 쉬운 편안한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lycaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	machobrace: {
 		name: "교정깁스",
-		desc: "단단하고 무거운 깁스. 지니게 하면 스피드는 떨어지지만 여느 때보다 강하게 키우기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	magearnite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magmarizer: {
 		name: "마그마부스터",
-		desc: "엄청난 마그마의 에너지가 비축되어 있는 상자. 어떤 포켓몬이 좋아하는 물건이다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magnet: {
 		name: "자석",
-		desc: "강력한 자석. 지니게 하면 전기타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magoberry: {
 		name: "마고열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 HP를 회복한다. 싫어하는 맛이면 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magostberry: {
 		name: "고스티열매",
-		desc: "귀여움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mail: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	malamarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	maliciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	manectite: {
 		name: "썬더볼트나이트",
-		desc: "썬더볼트에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	marangaberry: {
 		name: "타라프열매",
-		desc: "포켓몬에게 지니게 하면 특수 기술을 당했을 때 자신의 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	marshadiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterball: {
 		name: "마스터볼",
-		desc: "야생 포켓몬을 반드시 잡을 수 있는 최고 성능의 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	masterpieceteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mawilite: {
 		name: "입치트나이트",
-		desc: "입치트에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	meadowplate: {
 		name: "초록플레이트",
-		desc: "풀타입의 석판. 지니게 하면 풀타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	medichamite: {
 		name: "요가램나이트",
-		desc: "요가램에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	meganiumite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mentalherb: {
 		name: "멘탈허브",
-		desc: "지니게 한 포켓몬은 헤롱헤롱 상태가 되었을 때 한 번만 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	meowsticite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metagrossite: {
 		name: "메타그로스나이트",
-		desc: "메타그로스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	metalalloy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalcoat: {
 		name: "금속코트",
 		desc: "특수한 금속 장막. 지니게 하면 강철타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metalpowder: {
 		name: "금속파우더",
-		desc: "메타몽에게 지니게 하면 방어가 올라가는 이상한 가루. 매우 잘고 단단하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metronome: {
 		name: "메트로놈",
-		desc: "지니게 하면 똑같은 기술을 연속으로 사용했을 때 위력이 올라간다. 그만두면 위력이 되돌아간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mewniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitex: {
 		name: "뮤츠나이트X",
-		desc: "뮤츠에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitey: {
 		name: "뮤츠나이트Y",
-		desc: "뮤츠에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	micleberry: {
 		name: "미클열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 한 번만 기술의 명중률이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mimikiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mindplate: {
 		name: "이상한플레이트",
-		desc: "에스퍼타입의 석판. 지니게 하면 에스퍼타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	miracleseed: {
 		name: "기적의씨",
-		desc: "생명이 깃든 씨앗. 지니게 하면 풀타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mirrorherb: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "  [POKEMON] 흉내허브를 써서 상대의 능력 변화를 흉내 냈다!",
 	},
 	mistyseed: {
 		name: "미스트시드",
-		desc: "포켓몬에게 지니게 하면 미스트필드일 때 사용하여 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonball: {
 		name: "문볼",
-		desc: "달의돌로 진화하는 포켓몬이 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonstone: {
 		name: "달의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 밤하늘처럼 까맣다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	muscleband: {
 		name: "힘의머리띠",
-		desc: "힘이 끓어오르는 머리띠. 지니게 하면 물리 기술의 위력이 조금 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mysticwater: {
 		name: "신비의물방울",
-		desc: "물방울 모양의 보석. 지니게 하면 물타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nanabberry: {
 		name: "나나열매",
-		desc: "귀여움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 담홍색 열매는 먹으면 달다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nestball: {
 		name: "네스트볼",
-		desc: "잡으려는 야생 포켓몬이 약할수록 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	netball: {
 		name: "네트볼",
-		desc: "물타입과 벌레타입의 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nevermeltice: {
 		name: "녹지않는얼음",
-		desc: "열을 가까이하지 않게 하는 얼음. 지니게 하면 얼음타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nomelberry: {
 		name: "노멜열매",
-		desc: "강인함을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	normalgem: {
 		name: "노말주얼",
-		desc: "노말타입의 주얼. 지니게 하면 한 번만 노말 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	normaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	occaberry: {
 		name: "오카열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 불꽃 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oddincense: {
 		name: "괴상한향로",
-		desc: "이상한 향기의 향로. 지니게 하면 에스퍼타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oldamber: {
 		name: "비밀의호박",
-		desc: "고대 포켓몬의 유전자가 갇혀 있는 호박. 붉은 기가 돌면서 약간 투명하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oranberry: {
 		name: "오랭열매",
-		desc: "포켓몬에게 지니게 하면 HP를 10만큼 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ovalstone: {
 		name: "동글동글돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 구슬처럼 둥글다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pamtreberry: {
 		name: "자야열매",
-		desc: "아름다움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	parkball: {
 		name: "파크볼",
-		desc: "팔파크 내에서 사용하는 특별한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	passhoberry: {
 		name: "꼬시개열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 물 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	payapaberry: {
 		name: "야파열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 에스퍼 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pechaberry: {
 		name: "복슝열매",
-		desc: "포켓몬에게 지니게 하면 독을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	persimberry: {
 		name: "시몬열매",
-		desc: "포켓몬에게 지니게 하면 혼란을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	petayaberry: {
 		name: "야타비열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 자신의 특수공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pidgeotite: {
 		name: "피죤투나이트",
-		desc: "피죤투에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikashuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinapberry: {
 		name: "파인열매",
-		desc: "강인함을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 노란색 열매는 먹으면 시다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinsirite: {
 		name: "쁘사이저나이트",
-		desc: "쁘사이저에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pixieplate: {
 		name: "정령플레이트",
-		desc: "페어리타입의 석판. 지니게 하면 페어리타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	plumefossil: {
 		name: "깃털화석",
-		desc: "새포켓몬의 조상이라 불리는 고대 포켓몬의 화석. 날개의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonbarb: {
 		name: "독바늘",
-		desc: "독이 있는 작은 침. 지니게 하면 독타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	poisongem: {
 		name: "독주얼",
-		desc: "독타입의 주얼. 지니게 하면 한 번만 독 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	poisoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonmemory: {
 		name: "포이즌메모리",
-		desc: "독타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pokeball: {
 		name: "몬스터볼",
-		desc: "야생 포켓몬에게 던져서 잡기 위한 볼. 캡슐식으로 되어 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pomegberry: {
 		name: "유석열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 HP의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poweranklet: {
 		name: "파워앵클릿",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 스피드를 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerband: {
 		name: "파워밴드",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 특수방어를 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbelt: {
 		name: "파워벨트",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 방어를 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbracer: {
 		name: "파워리스트",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 공격을 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerherb: {
 		name: "파워풀허브",
-		desc: "지니게 한 포켓몬은 한 번만 1턴째에 힘을 모으는 기술을 바로 사용할 수가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	powerlens: {
 		name: "파워렌즈",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 특수공격을 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerweight: {
 		name: "파워웨이트",
-		desc: "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 HP를 올리면서 키우기가 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	premierball: {
 		name: "프리미어볼",
-		desc: "무언가의 기념품으로 특별히 만들어진 조금 희귀한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	prettyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	primariumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	prismscale: {
 		name: "고운비늘",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 비늘. 무지갯빛으로 빛나고 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	protectivepads: {
 		name: "방호패드",
-		desc: "공격하는 상대와 접촉해서 받게 되는 효과를 받지 않게 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	protector: {
 		name: "프로텍터",
-		desc: "무언가의 프로텍터. 매우 단단하고 무겁다. 어떤 포켓몬이 좋아하는 물건이다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicgem: {
 		name: "에스퍼주얼",
-		desc: "에스퍼타입의 주얼. 지니게 하면 한 번만 에스퍼 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	psychicmemory: {
 		name: "사이킥메모리",
-		desc: "에스퍼타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicseed: {
 		name: "사이코시드",
-		desc: "포켓몬에게 지니게 하면 사이코필드일 때 사용하여 특수방어가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psychiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	punchingglove: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pyroarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	qualotberry: {
 		name: "파비열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 방어의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickball: {
 		name: "퀵볼",
-		desc: "배틀이 시작되자마자 사용하면 잡기 쉬워지는 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickclaw: {
 		name: "선제공격손톱",
-		desc: "가볍고 날카로운 손톱. 지니게 하면 상대보다 먼저 행동할 수도 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	quickpowder: {
 		name: "스피드파우더",
-		desc: "메타몽에게 지니게 하면 스피드가 올라가는 이상한 가루. 매우 잘고 단단하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rabutaberry: {
 		name: "라부탐열매",
-		desc: "슬기로움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitex: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitey: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rarebone: {
 		name: "귀중한뼈",
-		desc: "포켓몬 고고학에 있어 매우 귀중한 뼈. 상점에서 비싸게 팔린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rawstberry: {
 		name: "복분열매",
-		desc: "포켓몬에게 지니게 하면 화상을 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorclaw: {
 		name: "예리한손톱",
 		desc: "날카롭고 뾰족한 손톱. 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorfang: {
 		name: "예리한이빨",
 		desc: "날카롭고 뾰족한 이빨. 지니게 하면 데미지를 줬을 때 풀죽게 하기도 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razzberry: {
 		name: "라즈열매",
-		desc: "근사함을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 빨간색 열매는 먹으면 맵다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	reapercloth: {
 		name: "영계의천",
-		desc: "무섭고 강한 영력이 담겨 있는 천. 어떤 포켓몬이 좋아하는 물건이다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	redcard: {
 		name: "레드카드",
-		desc: "이상한 힘이 있는 카드. 지니게 하면 기술을 사용한 상대를 퇴장시킬 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	redorb: {
 		name: "주홍구슬",
-		desc: "호연지방의 전설과 깊은 연관이 있다고 전해지는 빨갛게 빛나는 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	repeatball: {
 		name: "리피트볼",
-		desc: "잡은 적이 있는 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ribbonsweet: {
 		name: "리본사탕공예",
-		desc: "리본 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rindoberry: {
 		name: "린드열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 풀 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ringtarget: {
 		name: "겨냥표적",
-		desc: "포켓몬 타입의 상성 때문에 무효였던 기술이 맞게 되어 버린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockgem: {
 		name: "바위주얼",
-		desc: "바위타입의 주얼. 지니게 하면 한 번만 바위 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	rockincense: {
 		name: "암석향로",
-		desc: "이상한 향기의 향로. 지니게 하면 바위타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	rockiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockmemory: {
 		name: "록메모리",
-		desc: "바위타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockyhelmet: {
 		name: "울퉁불퉁멧",
-		desc: "포켓몬에게 지니게 하면 타격 기술을 당했을 때 상대에게도 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "", // NOT CONVERTED: not in Champions
 	},
 	roomservice: {
 		name: "룸서비스",
-		desc: "포켓몬에게 지니게 하면 트릭룸일 때 사용하여 스피드가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rootfossil: {
 		name: "뿌리화석",
-		desc: "오랜 옛날 바다에 살았던 고대 포켓몬의 화석. 뿌리의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseincense: {
 		name: "꽃향로",
-		desc: "이상한 향기의 향로. 지니게 하면 풀타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseliberry: {
 		name: "로셀열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 페어리 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rowapberry: {
 		name: "애터열매",
-		desc: "포켓몬에게 지니게 하면 특수 기술을 당했을 때 상대에게도 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedshield: {
 		name: "녹슨방패",
-		desc: "먼 옛날의 영웅이 재앙을 막는 데 사용했다고 전해지는 방패지만 지금은 녹이 슬고 닳아버렸다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedsword: {
 		name: "녹슨검",
-		desc: "먼 옛날의 영웅이 재앙을 막는 데 사용했다고 전해지는 검이지만 지금은 녹이 슬고 닳아버렸다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sablenite: {
 		name: "깜까미나이트",
-		desc: "깜까미에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sachet: {
 		name: "향기주머니",
-		desc: "살짝 강렬한 향기가 나는 향료를 채운 주머니. 어떤 포켓몬이 좋아하는 물건이다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safariball: {
 		name: "사파리볼",
-		desc: "관동지방의 사파리존과 신오지방의 대습초원에서 사용되었던 특별한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safetygoggles: {
 		name: "방진고글",
-		desc: "날씨로 인한 데미지뿐만 아니라 가루를 내보내는 기술의 효과도 막을 수 있는 고글.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	sailfossil: {
 		name: "지느러미화석",
-		desc: "오랜 옛날 지상에서 살았던 고대 포켓몬의 화석. 목지느러미의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salacberry: {
 		name: "캄라열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 자신의 스피드가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salamencite: {
 		name: "보만다나이트",
-		desc: "보만다에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sceptilite: {
 		name: "나무킹나이트",
-		desc: "나무킹에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scizorite: {
 		name: "핫삼나이트",
-		desc: "핫삼에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scolipite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scopelens: {
 		name: "초점렌즈",
-		desc: "약점이 보이는 렌즈. 지니게 한 포켓몬의 기술이 급소에 맞기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scovillainite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scraftinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	seaincense: {
 		name: "바닷물향로",
-		desc: "이상한 향기의 향로. 지니게 하면 물타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpbeak: {
 		name: "예리한부리",
-		desc: "길고 뾰족한 부리. 지니게 하면 비행타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpedonite: {
 		name: "샤크니아나이트",
-		desc: "샤크니아에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shedshell: {
 		name: "아름다운허물",
-		desc: "튼튼하고 단단한 허물. 지니게 한 포켓몬은 교대 포켓몬과 반드시 교체할 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shellbell: {
 		name: "조개껍질방울",
-		desc: "지니게 한 포켓몬이 공격하여 상대에게 데미지를 줬을 때 HP를 조금 회복할 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	shinystone: {
 		name: "빛의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 빛처럼 눈부시다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shockdrive: {
 		name: "번개카세트",
-		desc: "게노세크트에게 지니게 하면 테크노버스터라는 기술이 전기타입으로 바뀌는 카세트.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shucaberry: {
 		name: "슈캐열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 땅 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	silkscarf: {
 		name: "실크스카프",
-		desc: "감촉이 좋은 스카프. 지니게 하면 노말타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	silverpowder: {
 		name: "은빛가루",
-		desc: "은색으로 반짝이는 가루. 지니게 하면 벌레타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sitrusberry: {
 		name: "자뭉열매",
-		desc: "포켓몬에게 지니게 하면 HP를 조금 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	skarmorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skullfossil: {
 		name: "두개의화석",
-		desc: "오랜 옛날 지상에서 살았던 고대 포켓몬의 화석. 머리의 일부인 듯하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skyplate: {
 		name: "푸른하늘플레이트",
-		desc: "비행타입의 석판. 지니게 하면 비행타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	slowbronite: {
 		name: "야도란나이트",
-		desc: "야도란에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		champions: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	smoothrock: {
 		name: "보송보송바위",
-		desc: "지니게 한 포켓몬이 모래바람을 쓰면 여느 때보다 모래바람의 시간이 길어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	snorliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	snowball: {
 		name: "눈덩이",
-		desc: "단 한 번 쓰면 없어지는 눈덩이. 지니게 하고 얼음 기술을 받으면 공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	softsand: {
 		name: "부드러운모래",
-		desc: "만지면 보슬보슬한 모래. 지니게 하면 땅타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	solganiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	souldew: {
 		name: "마음의물방울",
-		desc: "라티오스나 라티아스에게 지니게 하면 에스퍼와 드래곤타입 기술의 위력이 올라가는 이상한 구슬.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelltag: {
 		name: "저주의부적",
-		desc: "괴상하고 으스스한 부적. 지니게 하면 고스트타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelonberry: {
 		name: "메호키열매",
-		desc: "귀여움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	splashplate: {
 		name: "물방울플레이트",
-		desc: "물타입의 석판. 지니게 하면 물타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	spookyplate: {
 		name: "원령플레이트",
-		desc: "고스트타입의 석판. 지니게 하면 고스트타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sportball: {
 		name: "컴퍼티션볼",
-		desc: "성도지방의 곤충채집 대회에서 사용되었던 특별한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	staraptite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starfberry: {
 		name: "스타열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 능력 중의 하나가 크게 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	starminite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starsweet: {
 		name: "스타사탕공예",
-		desc: "별 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelgem: {
 		name: "강철주얼",
-		desc: "강철타입의 주얼. 지니게 하면 한 번만 강철 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	steeliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelixite: {
 		name: "강철톤나이트",
-		desc: "강철톤에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelmemory: {
 		name: "스틸메모리",
-		desc: "강철타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stick: {
 		name: "대파",
-		desc: "매우 길고 단단한 줄기. 파오리에게 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	stickybarb: {
 		name: "끈적끈적바늘",
-		desc: "지니게 하면 매 턴 데미지를 입는다. 자신에게 접촉해온 상대에게 들러붙기도 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stoneplate: {
 		name: "암석플레이트",
-		desc: "바위타입의 석판. 지니게 하면 바위타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	strangeball: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strawberrysweet: {
 		name: "딸기사탕공예",
-		desc: "딸기 모양의 사탕공예. 마빌크에게 지니게 하면 빙빙 돌며 기뻐한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sunstone: {
 		name: "태양의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 태양처럼 빨갛다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	swampertite: {
 		name: "대짱이나이트",
-		desc: "대짱이에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sweetapple: {
 		name: "달콤한사과",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 사과. 엄청나게 달다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	syrupyapple: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tamatoberry: {
 		name: "토망열매",
-		desc: "포켓몬에게 주면 매우 친밀해지기 쉬워지지만 스피드의 기초 포인트가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tangaberry: {
 		name: "리체열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 벌레 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tapuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tartapple: {
 		name: "새콤한사과",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 사과. 엄청나게 새콤하다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tatsugirinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	terrainextender: {
 		name: "그라운드코트",
-		desc: "지니게 한 포켓몬이 기술이나 특성으로 필드를 사용했을 때 여느 때보다 긴 시간 동안 지속된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thickclub: {
 		name: "굵은뼈",
-		desc: "무언가의 단단한 뼈. 탕구리 혹은 텅구리에게 지니게 하면 공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	throatspray: {
 		name: "목스프레이",
-		desc: "소리 기술을 사용하면 특수공격이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thunderstone: {
 		name: "천둥의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 천둥번개 무늬가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	timerball: {
 		name: "타이머볼",
-		desc: "턴 수가 길어지면 길어질수록 포켓몬을 잡기 쉬운 조금 특이한 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicorb: {
 		name: "맹독구슬",
-		desc: "만지면 독을 발산하는 이상한 구슬. 지니게 하면 배틀 중에 맹독 상태가 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicplate: {
 		name: "맹독플레이트",
-		desc: "독타입의 석판. 지니게 하면 독타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr00: {
 		name: "기술레코드00",
-		desc: "싸움의 춤을 격렬하게 춰서 기세를 높인다. 자신의 공격을 크게 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr01: {
 		name: "기술레코드01",
-		desc: "몸 전체로 상대를 덮쳐눌러 공격한다. 마비 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr02: {
 		name: "기술레코드02",
-		desc: "세찬 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr03: {
 		name: "기술레코드03",
-		desc: "대량의 물을 세찬 기세로 상대에게 발사하여 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr04: {
 		name: "기술레코드04",
-		desc: "큰 파도로 자신의 주위에 있는 포켓몬을 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr05: {
 		name: "기술레코드05",
-		desc: "냉동빔을 상대에게 발사하여 공격한다. 얼음 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr06: {
 		name: "기술레코드06",
-		desc: "세찬 눈보라를 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr07: {
 		name: "기술레코드07",
-		desc: "발을 강하게 걸고 상대를 넘어뜨려 공격한다. 상대가 무거울수록 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr08: {
 		name: "기술레코드08",
-		desc: "강한 전격을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr09: {
 		name: "기술레코드09",
-		desc: "강한 번개를 상대에게 떨어뜨려 공격한다. 마비 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr10: {
 		name: "기술레코드10",
-		desc: "지진의 충격으로 자신의 주위에 있는 포켓몬을 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr11: {
 		name: "기술레코드11",
-		desc: "강한 염동력을 상대에게 보내어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr12: {
 		name: "기술레코드12",
-		desc: "힘을 빼고 몸을 가볍게 해서 고속으로 움직인다. 자신의 스피드를 크게 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr13: {
 		name: "기술레코드13",
-		desc: "깊게 숨을 들이마셔 기합을 넣는다. 자신의 공격이 급소에 맞기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr14: {
 		name: "기술레코드14",
-		desc: "손가락을 흔들어 자신의 뇌를 자극해서 모든 기술 중 어느 하나를 날린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr15: {
 		name: "기술레코드15",
-		desc: "큰 대자의 불꽃으로 상대를 불태운다. 화상 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr16: {
 		name: "기술레코드16",
-		desc: "굉장한 기세로 상대에게 돌진한다. 상대를 풀죽게 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr17: {
 		name: "기술레코드17",
-		desc: "머리를 비워서 순간적으로 무언가를 잊어버림으로써 자신의 특수방어를 크게 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr18: {
 		name: "기술레코드18",
-		desc: "피를 빨아서 상대를 공격한다. 준 데미지의 절반을 HP로 회복한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr19: {
 		name: "기술레코드19",
-		desc: "3개의 광선으로 공격한다. 마비, 화상 또는 얼음 상태 중 어느 하나로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr20: {
 		name: "기술레코드20",
-		desc: "자신의 HP를 조금 깎아서 분신을 만든다. 분신은 자신의 대타가 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr21: {
 		name: "기술레코드21",
-		desc: "힘을 쥐어짜서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr22: {
 		name: "기술레코드22",
-		desc: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr23: {
 		name: "기술레코드23",
-		desc: "상대의 발밑에 압정을 뿌린다. 교체된 상대 포켓몬에게 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr24: {
 		name: "기술레코드24",
-		desc: "2-3턴 동안 마구 난동 부려서 공격한다. 난동 부린 뒤에는 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr25: {
 		name: "기술레코드25",
-		desc: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr26: {
 		name: "기술레코드26",
-		desc: "공격을 받아도 HP를 반드시 1만큼은 남긴다. 연속으로 쓰면 실패하기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr27: {
 		name: "기술레코드27",
-		desc: "자신이 배운 기술 중 하나를 무작위로 날린다. 자신이 잠들어 있을 때만 쓸 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr28: {
 		name: "기술레코드28",
-		desc: "단단하고 훌륭한 뿔로 마음껏 상대를 꿰찔러서 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr29: {
 		name: "기술레코드29",
-		desc: "교대 포켓몬과 바뀐다. 능력 변화는 바뀐 포켓몬이 그대로 이어받는다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr30: {
 		name: "기술레코드30",
-		desc: "상대에게 앵콜시킨 기술을 3번 연속으로 쓰게 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr31: {
 		name: "기술레코드31",
-		desc: "단단한 꼬리로 상대를 힘껏 쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr32: {
 		name: "기술레코드32",
-		desc: "날카로운 이빨로 상대를 깨물어 부숴서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr33: {
 		name: "기술레코드33",
-		desc: "까만 그림자의 덩어리를 내던져서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr34: {
 		name: "기술레코드34",
-		desc: "기술을 사용한 2턴 뒤에 상대에게 염동력의 덩어리를 보내어 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr35: {
 		name: "기술레코드35",
-		desc: "3턴 동안 소란 피워 공격한다. 그동안은 아무도 잠들지 않게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr36: {
 		name: "기술레코드36",
-		desc: "뜨거운 숨결을 상대에게 내뿜어 공격한다. 화상 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr37: {
 		name: "기술레코드37",
-		desc: "상대를 화나게 한다. 3턴 동안 상대는 데미지를 주는 기술밖에 쓸 수 없게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr38: {
 		name: "기술레코드38",
-		desc: "상대의 빈틈을 노려 자신과 상대가 지닌 물건을 바꿔치기한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr39: {
 		name: "기술레코드39",
-		desc: "엄청난 힘을 발휘하여 상대를 공격한다. 자신의 공격과 방어가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr40: {
 		name: "기술레코드40",
-		desc: "초능력으로 자신의 특성과 상대의 특성을 바꾼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr41: {
 		name: "기술레코드41",
-		desc: "공격한 상대를 화상 상태로 만들 때가 있다. 급소에도 맞기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr42: {
 		name: "기술레코드42",
-		desc: "시끄럽게 울리는 큰 진동을 상대에게 전달하여 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr43: {
 		name: "기술레코드43",
-		desc: "풀 파워로 상대를 공격한다. 쓰면 반동으로 자신의 특수공격이 크게 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr44: {
 		name: "기술레코드44",
-		desc: "우주로부터 신비한 힘을 손에 넣음으로써 자신의 방어와 특수방어를 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr45: {
 		name: "기술레코드45",
-		desc: "탁해진 물을 상대에게 발사하여 공격한다. 명중률을 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr46: {
 		name: "기술레코드46",
-		desc: "피부를 쇠처럼 단단하게 만듦으로써 자신의 방어를 크게 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr47: {
 		name: "기술레코드47",
-		desc: "날카롭고 뾰족한 거대한 발톱으로 상대를 베어 갈라서 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr48: {
 		name: "기술레코드48",
-		desc: "몸에 힘을 담아 근육을 두껍게 해서 자신의 공격과 방어를 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr49: {
 		name: "기술레코드49",
-		desc: "조용히 정신을 통일하고 마음을 가라앉혀서 자신의 특수공격과 특수방어를 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr50: {
 		name: "기술레코드50",
-		desc: "잎사귀를 칼처럼 이용해 상대를 베어 공격한다. 급소에 맞기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr51: {
 		name: "기술레코드51",
-		desc: "신비롭고 힘센 춤을 격렬하게 춘다. 자신의 공격과 스피드를 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr52: {
 		name: "기술레코드52",
-		desc: "몸을 고속으로 회전시켜 몸통박치기한다. 상대보다 스피드가 낮을수록 위력은 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr53: {
 		name: "기술레코드53",
-		desc: "방어를 포기하고 상대 쪽으로 깊숙이 돌격한다. 자신의 방어와 특수방어가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr54: {
 		name: "기술레코드54",
-		desc: "상대의 발밑에 독 압정을 뿌린다. 교체로 나온 상대 포켓몬에게 독을 퍼지게 한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr55: {
 		name: "기술레코드55",
-		desc: "불꽃을 두르고 돌진한다. 자신도 상당한 데미지를 입는다. 화상 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr56: {
 		name: "기술레코드56",
-		desc: "몸속에서 파동의 힘을 끌어내 상대에게 쏜다. 공격은 반드시 명중한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr57: {
 		name: "기술레코드57",
-		desc: "독에 물든 촉수나 팔로 상대를 꿰찌른다. 독 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr58: {
 		name: "기술레코드58",
-		desc: "몸에서 악의로 가득한 무서운 오라를 발한다. 상대를 풀죽게 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr59: {
 		name: "기술레코드59",
-		desc: "단단한 껍질을 가지고 있는 큰 씨앗을 위에서 힘껏 내던져 상대를 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr60: {
 		name: "기술레코드60",
-		desc: "낫이나 발톱을 가위처럼 교차시키면서 상대를 베어 가른다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr61: {
 		name: "기술레코드61",
-		desc: "진동으로 음파를 일으켜서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr62: {
 		name: "기술레코드62",
-		desc: "큰 입으로 충격파를 일으켜서 상대를 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr63: {
 		name: "기술레코드63",
-		desc: "보석처럼 반짝이는 빛을 발사하여 상대를 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr64: {
 		name: "기술레코드64",
-		desc: "기합을 높여서 혼신의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr65: {
 		name: "기술레코드65",
-		desc: "자연으로부터 모은 생명의 힘을 발사한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr66: {
 		name: "기술레코드66",
-		desc: "날개를 접어 저공비행으로 돌격한다. 자신도 상당한 데미지를 입는다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr67: {
 		name: "기술레코드67",
-		desc: "상대의 발밑에 대지의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr68: {
 		name: "기술레코드68",
-		desc: "나쁜 일을 생각해서 머리를 활성화시킨다. 자신의 특수공격을 크게 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr69: {
 		name: "기술레코드69",
-		desc: "사념의 힘을 이마에 모아서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr70: {
 		name: "기술레코드70",
-		desc: "몸의 빛을 한곳에 모아서 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr71: {
 		name: "기술레코드71",
-		desc: "뾰족한 잎사귀로 상대에게 돌풍을 일으킨다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr72: {
 		name: "기술레코드72",
-		desc: "덩굴이나 촉수를 세차게 흔들어 상대를 힘껏 쳐서 공격한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr73: {
 		name: "기술레코드73",
-		desc: "더러운 쓰레기를 상대에게 부딪쳐서 공격한다. 독 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr74: {
 		name: "기술레코드74",
-		desc: "강철과 같은 단단한 머리로 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr75: {
 		name: "기술레코드75",
-		desc: "뾰족한 바위를 상대에게 꿰찔러서 공격한다. 급소에 맞기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr76: {
 		name: "기술레코드76",
-		desc: "상대의 주위에 무수한 바위를 띄워 교체해서 나온 상대 포켓몬에게 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr77: {
 		name: "기술레코드77",
-		desc: "풀을 휘감아서 상대를 쓰러뜨린다. 상대가 무거울수록 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr78: {
 		name: "기술레코드78",
-		desc: "오물 파도로 자신의 주위에 있는 포켓몬을 공격한다. 독 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr79: {
 		name: "기술레코드79",
-		desc: "무거운 몸으로 상대에게 부딪쳐 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr80: {
 		name: "기술레코드80",
-		desc: "전기 덩어리를 상대에게 부딪쳐서 공격한다. 상대보다 스피드가 빠를수록 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr81: {
 		name: "기술레코드81",
-		desc: "상대의 힘을 이용한다. 싸우고 있는 상대의 공격이 높을수록 데미지가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr82: {
 		name: "기술레코드82",
-		desc: "축적된 파워로 상대를 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr83: {
 		name: "기술레코드83",
-		desc: "이상한 힘으로 순간이동하여 자신과 같은 편의 위치를 바꾼다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr84: {
 		name: "기술레코드84",
-		desc: "뜨겁게 끓어오르는 물을 상대에게 발사해서 공격한다. 화상 상태로 만들 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr85: {
 		name: "기술레코드85",
-		desc: "스스로 분발해서 공격과 특수공격을 올린다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr86: {
 		name: "기술레코드86",
-		desc: "전기를 두르고 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr87: {
 		name: "기술레코드87",
-		desc: "드릴처럼 몸을 회전시켜서 상대에게 몸통박치기한다. 급소에 맞기 쉽다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr88: {
 		name: "기술레코드88",
-		desc: "불타는 몸으로 상대에게 부딪쳐서 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr89: {
 		name: "기술레코드89",
-		desc: "강렬한 바람으로 상대를 둘러싸서 공격한다. 상대를 혼란시킬 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr90: {
 		name: "기술레코드90",
-		desc: "상대에게 치근거리며 공격한다. 상대의 공격을 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr91: {
 		name: "기술레코드91",
-		desc: "특수한 독액을 끼얹는다. 독 상태인 상대는 공격, 특수공격, 스피드가 떨어진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr92: {
 		name: "기술레코드92",
-		desc: "강력한 빛을 내어 상대에게 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr93: {
 		name: "기술레코드93",
-		desc: "양팔을 돌려 상대에게 부딪친다. 상대의 능력 변화에 상관없이 데미지를 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr94: {
 		name: "기술레코드94",
-		desc: "온몸을 써서 상대에게 맹렬히 어택한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr95: {
 		name: "기술레코드95",
-		desc: "이 기술에 맞은 상대는 지옥의 고통 때문에 2턴 동안 소리 기술을 낼 수 없다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr96: {
 		name: "기술레코드96",
-		desc: "상대에게는 폭발하는 경단을 사용하여 공격한다. 같은 편에게는 회복하는 경단을 준다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr97: {
 		name: "기술레코드97",
-		desc: "사이코 파워로 물어서 상대를 공격한다. 빛의장막이나 리플렉터도 파괴할 수 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr98: {
 		name: "기술레코드98",
-		desc: "물의 힘으로 상대에게 부딪쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr99: {
 		name: "기술레코드99",
-		desc: "몸을 부딪쳐서 공격한다. 방어가 높을수록 주는 데미지가 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	twistedspoon: {
 		name: "휘어진스푼",
-		desc: "염동력을 담은 숟가락. 지니게 하면 에스퍼타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	tyranitarite: {
 		name: "마기라스나이트",
-		desc: "마기라스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ultraball: {
 		name: "하이퍼볼",
-		desc: "수퍼볼보다도 더욱 포켓몬을 잡기 쉬워진 매우 성능이 좋은 볼.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	ultranecroziumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		transform: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	unremarkableteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	upgrade: {
 		name: "업그레이드",
-		desc: "안에 여러 가지 정보가 가득한 투명한 기계다. 실프주식회사 제품.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	utilityumbrella: {
 		name: "만능우산",
 		desc: "지니게 한 포켓몬은 비와 햇살이 강할 때의 영향을 받지 않게 된다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	venusaurite: {
 		name: "이상해꽃나이트",
-		desc: "이상해꽃에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	victreebelite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wacanberry: {
 		name: "초나열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 전기 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watergem: {
 		name: "물주얼",
-		desc: "물타입의 주얼. 지니게 하면 한 번만 물 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	wateriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watermemory: {
 		name: "워터메모리",
-		desc: "물타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waterstone: {
 		name: "물의돌",
 		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 투명한 푸른색을 띠고 있다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watmelberry: {
 		name: "슈박열매",
-		desc: "슬기로움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 다른 지방에서는 희귀한 나무열매.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waveincense: {
 		name: "잔물결향로",
-		desc: "이상한 향기의 향로. 지니게 하면 물타입 기술의 위력이 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	weaknesspolicy: {
 		name: "약점보험",
-		desc: "약점을 공격당했을 때 공격과 특수공격이 각각 크게 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	wellspringmask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wepearberry: {
 		name: "서배열매",
-		desc: "슬기로움을 연마하기 위한 포켓몬스넥을 만들 때 사용된다. 초록색 열매는 먹으면 쓰다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whippeddream: {
 		name: "휘핑팝",
-		desc: "풍성하게 거품을 낸 살짝 달콤한 크림. 어떤 포켓몬이 좋아한다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whiteherb: {
 		name: "하양허브",
-		desc: "지니게 한 포켓몬의 능력이 떨어졌을 때 한 번만 원래 상태로 돌아온다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	widelens: {
 		name: "광각렌즈",
-		desc: "물건이 크게 보이는 렌즈. 지니게 하면 기술의 명중률이 조금 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wikiberry: {
 		name: "위키열매",
-		desc: "포켓몬에게 지니게 하면 위급할 때 HP를 회복한다. 싫어하는 맛이면 혼란에 빠진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	wiseglasses: {
 		name: "박식안경",
-		desc: "두꺼운 렌즈를 붙인 안경. 지니게 하면 특수 기술의 위력이 조금 올라간다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	yacheberry: {
 		name: "플카열매",
-		desc: "포켓몬에게 지니게 하면 효과가 뛰어난 얼음 기술을 당했을 때 위력이 약해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zapplate: {
 		name: "우레플레이트",
-		desc: "전기타입의 석판. 지니게 하면 전기타입 기술의 위력이 강해진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zeraorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zoomlens: {
 		name: "포커스렌즈",
-		desc: "지니게 한 포켓몬이 상대보다도 행동하는 것이 늦을 때 기술이 명중하기 쉬워진다.",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zygardite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// Gen 2 items
+
+	berserkgene: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	berry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	bitterberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	burntberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	goldberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iceberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mintberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	miracleberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mysteryberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	pinkbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	polkadotbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	przcureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psncureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// CAP items
+
+	crucibellite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	vilevial: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 };

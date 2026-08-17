@@ -1,1858 +1,2627 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	abilityshield: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
 	abomasite: {
 		name: "暴雪王进化石",
-		desc: "让暴雪王携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absolite: {
 		name: "阿勃梭鲁进化石",
-		desc: "让阿勃梭鲁携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	absolitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absorbbulb: {
 		name: "球根",
-		desc: "一次性使用的球根。 携带它的宝可梦如果受到水属性 招式的攻击，特攻就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	adamantcrystal: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantorb: {
 		name: "金刚宝珠",
-		desc: "让帝牙卢卡携带的话， 龙和钢属性的招式威力就会提高。 散发着光辉的宝珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adrenalineorb: {
 		name: "胆怯球",
-		desc: "让宝可梦携带后， 在受到威吓时速度会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aerodactylite: {
 		name: "化石翼龙进化石",
-		desc: "让化石翼龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aggronite: {
 		name: "波士可多拉进化石",
-		desc: "让波士可多拉携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aguavberry: {
 		name: "乐芭果",
-		desc: "让宝可梦携带后， 危机时可以回复ＨＰ。 如果讨厌这味道就会混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	airballoon: {
 		name: "气球",
-		desc: "让宝可梦携带后， 宝可梦会浮在空中。 受到攻击就会破裂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		start: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]的气球破了！",
 	},
 	alakazite: {
 		name: "胡地进化石",
-		desc: "让胡地携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	aloraichiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	altarianite: {
 		name: "七夕青鸟进化石",
-		desc: "让七夕青鸟携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ampharosite: {
 		name: "电龙进化石",
-		desc: "让电龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	apicotberry: {
 		name: "杏仔果",
-		desc: "让宝可梦携带后，危机时， 自己的特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	armorfossil: {
 		name: "盾甲化石",
-		desc: "很久以前生活在地上的 古代宝可梦的化石。 好像是领饰的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aspearberry: {
 		name: "利木果",
-		desc: "让宝可梦携带后， 可以治愈冰冻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	assaultvest: {
 		name: "突击背心",
-		desc: "会变得富有攻击性的背心。 虽然携带后特防会提高， 但会无法使出变化招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	audinite: {
 		name: "差不多娃娃进化石",
-		desc: "让差不多娃娃携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	auspiciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	babiriberry: {
 		name: "霹霹果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的钢属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	banettite: {
 		name: "诅咒娃娃进化石",
-		desc: "让诅咒娃娃携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	barbaracite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	baxcalibrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beastball: {
 		name: "究极球",
-		desc: "有些与众不同的精灵球。 很难捕捉一般的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beedrillite: {
 		name: "大针蜂进化石",
-		desc: "大针蜂携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	belueberry: {
 		name: "靛莓果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨美丽。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berryjuice: {
 		name: "树果汁",
-		desc: "１００％树果果汁。 能让１只宝可梦 回复２０ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berrysweet: {
 		name: "野莓糖饰",
-		desc: "浆果形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bignugget: {
 		name: "巨大金珠",
-		desc: "以纯金制成， 闪着金光的大珠子。 可以在商店高价出售。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bigroot: {
 		name: "大根茎",
-		desc: "携带后，吸取ＨＰ的招式 可以比平时更多地回复自己的ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	bindingband: {
 		name: "紧绑束带",
-		desc: "能增强绑紧招式的束带。 携带后，绑紧招式的威力会变强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blackbelt: {
 		name: "黑带",
-		desc: "能振作精神的带子。 携带后，格斗属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blacksludge: {
 		name: "黑色污泥",
-		desc: "携带后，毒属性的宝可梦 会缓缓回复ＨＰ。 其他属性的话，ＨＰ则会减少。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	blackglasses: {
 		name: "黑色眼镜",
-		desc: "看上去很奇怪的眼镜。 携带后，恶属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blastoisinite: {
 		name: "水箭龟进化石",
-		desc: "让水箭龟携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blazikenite: {
 		name: "火焰鸡进化石",
-		desc: "让火焰鸡携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blueorb: {
 		name: "靛蓝色宝珠",
-		desc: "散发着蓝色光辉的宝珠。 据说和丰缘地区的传说渊源颇深。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blukberry: {
 		name: "墨莓果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨美丽。 蓝色的果实尝起来是涩的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blunderpolicy: {
 		name: "打空保险",
-		desc: "招式因命中率影响而落空时， 速度会大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	boosterenergy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bottlecap: {
 		name: "银色王冠",
-		desc: "银色的美丽王冠。 有些人收到它会很高兴。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	brightpowder: {
 		name: "光粉",
-		desc: "闪闪发光的粉末。 携带后，光芒会迷惑对手， 从而使其招式变得不容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	buggem: {
 		name: "虫之宝石",
-		desc: "虫属性的宝石。 携带后，虫属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	buginiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bugmemory: {
 		name: "虫子存储碟",
-		desc: "装有虫属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	burndrive: {
 		name: "火焰卡带",
-		desc: "这是让盖诺赛克特携带的卡带。 携带后，高科技光炮这招式 就会变为火属性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cameruptite: {
 		name: "喷火驼进化石",
-		desc: "喷火驼携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cellbattery: {
 		name: "充电电池",
-		desc: "一次性使用的充电电池。 携带它的宝可梦如果受到电属性 招式的攻击，攻击就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chandelurite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charcoal: {
 		name: "木炭",
-		desc: "焚烧用的燃料。 携带后，火属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	charizarditex: {
 		name: "喷火龙进化石Ｘ",
-		desc: "让喷火龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charizarditey: {
 		name: "喷火龙进化石Ｙ",
-		desc: "让喷火龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chartiberry: {
 		name: "草蚕果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的岩石属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cheriberry: {
 		name: "樱子果",
-		desc: "让宝可梦携带后， 可以治愈麻痹。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cherishball: {
 		name: "贵重球",
-		desc: "相当珍贵的球。 特制出来的某种纪念品。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chesnaughtite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chestoberry: {
 		name: "零余果",
-		desc: "让宝可梦携带后， 可以治愈睡眠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilanberry: {
 		name: "灯浆果",
-		desc: "让宝可梦携带后， 在受到一般属性招式攻击时， 能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilldrive: {
 		name: "冰冻卡带",
-		desc: "这是让盖诺赛克特携带的卡带。 携带后，高科技光炮这招式 就会变为冰属性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chimechite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chippedpot: {
 		name: "缺损的茶壶",
-		desc: "这个神奇的茶壶 可以使特定的宝可梦进化。 虽然有缺陷，但泡出来的茶依旧清香。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choiceband: {
 		name: "讲究头带",
-		desc: "有点讲究的头带。 虽然携带后攻击会提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicescarf: {
 		name: "讲究围巾",
-		desc: "有点讲究的围巾。 虽然携带后速度会提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicespecs: {
 		name: "讲究眼镜",
-		desc: "有点讲究的眼镜。 虽然携带后特攻会提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chopleberry: {
 		name: "莲蒲果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的格斗属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clawfossil: {
 		name: "爪子化石",
-		desc: "很久以前栖息在海里的 古代宝可梦的化石。 好像是爪子的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	clearamulet: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
+	clefablite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cloversweet: {
 		name: "幸运草糖饰",
-		desc: "四叶草形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cobaberry: {
 		name: "棱瓜果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的飞行属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	colburberry: {
 		name: "刺耳果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的恶属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	cornerstonemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornnberry: {
 		name: "玉黍果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨美丽。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	coverfossil: {
 		name: "背盖化石",
-		desc: "很久以前栖息在海里的 古代宝可梦的化石。 好像是后背的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	covertcloak: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	crabominite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	crackedpot: {
 		name: "破裂的茶壶",
-		desc: "这个神奇的茶壶 可以使特定的宝可梦进化。 虽然有破损，但泡出来的茶依旧清香。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	custapberry: {
 		name: "释陀果",
-		desc: "让宝可梦携带后，危机时， 行动仅会变快１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	damprock: {
 		name: "潮湿岩石",
-		desc: "携带它的宝可梦使出求雨的话， 下雨的时间就会比平时更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkgem: {
 		name: "恶之宝石",
-		desc: "恶属性的宝石。 携带后，恶属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	darkiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkmemory: {
 		name: "黑暗存储碟",
-		desc: "装有恶属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	darkranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dawnstone: {
 		name: "觉醒之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 像眼眸一般光彩动人。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	decidiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseascale: {
 		name: "深海鳞片",
 		desc: "让珍珠贝携带后， 特防就会提高的鳞片。 散发着淡淡的粉红色光芒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "深海之牙",
 		desc: "让珍珠贝携带后， 特攻就会提高的牙齿。 散发着闪亮的银光。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	delphoxite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	destinyknot: {
 		name: "红线",
-		desc: "长长的鲜红色细线。 携带后，在自己着迷时 能让对手也着迷。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diancite: {
 		name: "蒂安希进化石",
-		desc: "让蒂安希携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diveball: {
 		name: "潜水球",
-		desc: "有点与众不同的球。 能很容易地捕捉 生活在水世界里的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	domefossil: {
 		name: "甲壳化石",
-		desc: "很久以前栖息在海里的 古代宝可梦的化石。 好像是甲壳的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dousedrive: {
 		name: "水流卡带",
-		desc: "这是让盖诺赛克特携带的卡带。 携带后，高科技光炮这招式 就会变为水属性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dracoplate: {
 		name: "龙之石板",
-		desc: "龙属性的石板。 携带后，龙属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragalgite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonfang: {
 		name: "龙之牙",
-		desc: "坚硬锐利的牙齿。 携带后，龙属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dragongem: {
 		name: "龙之宝石",
-		desc: "龙属性的宝石。 携带后，龙属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	dragoninite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonmemory: {
 		name: "龙存储碟",
-		desc: "装有龙属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonscale: {
 		name: "龙之鳞片",
-		desc: "又硬又坚固的鳞片。 龙属性宝可梦有时会携带它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	drampanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreadplate: {
 		name: "恶颜石板",
-		desc: "恶属性的石板。 携带后，恶属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreamball: {
 		name: "梦境球",
-		desc: "有点与众不同的球。 能很容易地捕捉 睡眠状态的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dubiousdisc: {
 		name: "可疑补丁",
-		desc: "内部储存了奇怪信息的透明机器。 制造者不明。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	durinberry: {
 		name: "金枕果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨聪明。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskball: {
 		name: "黑暗球",
-		desc: "有点与众不同的球。 能很容易地在夜晚或洞窟等 阴暗的地方捕捉宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskstone: {
 		name: "暗之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 像黑夜一般漆黑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	earthplate: {
 		name: "大地石板",
-		desc: "地面属性的石板。 携带后，地面属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eelektrossite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eeviumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ejectbutton: {
 		name: "逃脱按键",
-		desc: "携带它的宝可梦如果受到招式攻击， 就能逃脱战斗，并和同行的 其他宝可梦进行替换。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]要用逃脱按键回去了！",
 	},
 	ejectpack: {
 		name: "避难背包",
-		desc: "当携带它的宝可梦能力下降时， 同行宝可梦就会自动替换上场。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]要用避难背包回去了！",
 	},
 	electirizer: {
 		name: "电力增幅器",
-		desc: "积蓄着庞大电气能量的箱子。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricgem: {
 		name: "电之宝石",
-		desc: "电属性的宝石。 携带后，电属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	electricmemory: {
 		name: "电子存储碟",
-		desc: "装有电属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricseed: {
 		name: "电气种子",
-		desc: "让宝可梦携带后， 在电气场地上使用， 防御就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	electriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	emboarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	enigmaberry: {
 		name: "谜芝果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的招式攻击时， 可以回复ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	eviolite: {
 		name: "进化奇石",
-		desc: "进化的神奇石块。 携带后，还能进化的宝可梦的 防御和特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	excadrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	expertbelt: {
 		name: "达人带",
-		desc: "用惯了的黑色带子。 携带后，效果绝佳时的 招式威力就会少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairygem: {
 		name: "妖精宝石",
-		desc: "妖精属性的宝石。 携带后，妖精属性的 招式威力会仅增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairymemory: {
 		name: "妖精存储碟",
-		desc: "装有妖精属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	falinksite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fastball: {
 		name: "速度球",
-		desc: "有点与众不同的球。 能很容易地捕捉 逃跑速度很快的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	feraligite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fightinggem: {
 		name: "格斗宝石",
-		desc: "格斗属性的宝石。 携带后，格斗属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	fightingmemory: {
 		name: "战斗存储碟",
-		desc: "装有格斗属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fightiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	figyberry: {
 		name: "勿花果",
-		desc: "让宝可梦携带后， 危机时可以回复ＨＰ。 如果讨厌这味道就会混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firegem: {
 		name: "火之宝石",
-		desc: "火属性的宝石。 携带后，火属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firememory: {
 		name: "火焰存储碟",
-		desc: "装有火属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	firestone: {
 		name: "火之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 看上去是橙黄色的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	firiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fistplate: {
 		name: "拳头石板",
-		desc: "格斗属性的石板。 携带后，格斗属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameorb: {
 		name: "火焰宝珠",
-		desc: "触碰后会放出热量的神奇宝珠。 携带后，在战斗时会变成灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameplate: {
 		name: "火球石板",
-		desc: "火属性的石板。 携带后，火属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	floatstone: {
 		name: "轻石",
-		desc: "非常轻的石头。 携带后，宝可梦的体重会变轻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	floettite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flowersweet: {
 		name: "花朵糖饰",
-		desc: "花朵形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flyinggem: {
 		name: "飞行宝石",
-		desc: "飞行属性的宝石。 携带后，飞行属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	flyingmemory: {
 		name: "飞翔存储碟",
-		desc: "装有飞行属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	flyiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	focusband: {
 		name: "气势头带",
-		desc: "携带后，即便受到 可能会导致濒死的招式， 有时也能仅以１ＨＰ撑过去。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	focussash: {
 		name: "气势披带",
-		desc: "携带后，在ＨＰ全满时， 即便受到可能会导致濒死的招式， 也能仅以１ＨＰ撑过去１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	fossilizedbird: {
 		name: "化石鸟",
-		desc: "远古时代的宝可梦化石残片。 它曾翱翔于天空， 本来面目至今仍是未解之谜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddino: {
 		name: "化石海兽",
-		desc: "远古时代的宝可梦化石残片。 它曾栖息于大海， 本来面目至今仍是未解之谜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddrake: {
 		name: "化石龙",
-		desc: "远古时代的宝可梦化石残片。 它曾栖息于陆地， 本来面目至今仍是未解之谜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizedfish: {
 		name: "化石鱼",
-		desc: "远古时代的宝可梦化石残片。 它曾栖息于大海， 本来面目至今仍是未解之谜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	friendball: {
 		name: "友友球",
-		desc: "有点与众不同的球。 捉到的野生宝可梦会立刻 变得和训练家亲密起来。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	froslassite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fullincense: {
 		name: "饱腹薰香",
-		desc: "有着神奇香气的薰香。 携带后，宝可梦的行动 会比平时更加迟缓。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricacuff: {
 		name: "伽勒豆蔻手环",
-		desc: "用伽勒豆蔻枝编织的手环。 给伽勒尔地区的呆呆兽戴上， 它就会很开心。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricawreath: {
 		name: "伽勒豆蔻花圈",
-		desc: "用伽勒豆蔻枝编织的花环头饰。 给伽勒尔地区的呆呆兽戴上这种头饰， 它就会很开心。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galladite: {
 		name: "艾路雷朵进化石",
-		desc: "让艾路雷朵携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ganlonberry: {
 		name: "龙睛果",
-		desc: "让宝可梦携带后，危机时， 自己的防御就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	garchompite: {
 		name: "烈咬陆鲨进化石",
-		desc: "让烈咬陆鲨携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	garchompitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gardevoirite: {
 		name: "沙奈朵进化石",
-		desc: "让沙奈朵携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gengarite: {
 		name: "耿鬼进化石",
-		desc: "让耿鬼携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostgem: {
 		name: "幽灵宝石",
-		desc: "幽灵属性的宝石。 携带后，幽灵属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	ghostiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostmemory: {
 		name: "幽灵存储碟",
-		desc: "装有幽灵属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	glalitite: {
 		name: "冰鬼护进化石",
-		desc: "让冰鬼护携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	glimmoranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	goldbottlecap: {
 		name: "金色王冠",
-		desc: "金色的美丽王冠。 比银色王冠珍贵。 有些人收到它会很高兴。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golisopite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golurkite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassgem: {
 		name: "草之宝石",
-		desc: "草属性的宝石。 携带后，草属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	grassiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassmemory: {
 		name: "青草存储碟",
-		desc: "装有草属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassyseed: {
 		name: "青草种子",
-		desc: "让宝可梦携带后， 在青草场地上使用， 防御就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	greatball: {
 		name: "超级球",
-		desc: "比起精灵球来 更容易捉到宝可梦的， 性能还算不错的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	greninjite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grepaberry: {
 		name: "萄葡果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但特防的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gripclaw: {
 		name: "紧缠钩爪",
-		desc: "携带后，绑紧以及紧束等 会持续造成伤害的招式的 回合数会增加。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	griseouscore: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseousorb: {
 		name: "白金宝珠",
-		desc: "让骑拉帝纳携带的话， 龙和幽灵属性的招式威力就会提高。 散发着光辉的宝珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	groundgem: {
 		name: "地面宝石",
-		desc: "地面属性的宝石。 携带后，地面属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	groundiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	groundmemory: {
 		name: "大地存储碟",
-		desc: "装有地面属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gyaradosite: {
 		name: "暴鲤龙进化石",
-		desc: "让暴鲤龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	habanberry: {
 		name: "莓榴果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的龙属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hardstone: {
 		name: "硬石头",
-		desc: "绝对不会裂开的石头。 携带后，岩石属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	hawluchanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	healball: {
 		name: "治愈球",
-		desc: "有点温柔的球。 能回复捉到的宝可梦的 ＨＰ并治愈异常状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	hearthflamemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	heatranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heatrock: {
 		name: "炽热岩石",
-		desc: "携带它的宝可梦使出大晴天的话， 晴天的时间就会比平时更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavyball: {
 		name: "沉重球",
-		desc: "有点与众不同的球。 能很容易地捕捉 身体沉重的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavydutyboots: {
 		name: "厚底靴",
-		desc: "不受脚下陷阱等的影响。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	helixfossil: {
 		name: "贝壳化石",
-		desc: "很久以前栖息在海里的 古代宝可梦的化石。 好像是贝壳的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heracronite: {
 		name: "赫拉克罗斯进化石",
-		desc: "让赫拉克罗斯携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hondewberry: {
 		name: "哈密果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但特攻的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	houndoominite: {
 		name: "黑鲁加进化石",
-		desc: "让黑鲁加携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	iapapaberry: {
 		name: "芭亚果",
-		desc: "让宝可梦携带后， 危机时可以回复ＨＰ。 如果讨厌这味道就会混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icegem: {
 		name: "冰之宝石",
-		desc: "冰属性的宝石。 携带后，冰属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icememory: {
 		name: "冰雪存储碟",
-		desc: "装有冰属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icestone: {
 		name: "冰之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 有着雪花般的花纹。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icicleplate: {
 		name: "冰柱石板",
-		desc: "冰属性的石板。 携带后，冰属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iciumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icyrock: {
 		name: "冰冷岩石",
-		desc: "携带它的宝可梦使出冰雹的话， 冰雹的时间就会比平时更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	inciniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	insectplate: {
 		name: "玉虫石板",
-		desc: "虫属性的石板。 携带后，虫属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ironball: {
 		name: "黑色铁球",
-		desc: "携带后，速度会降低。 飞行属性以及飘浮宝可梦 会被地面招式击中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	ironplate: {
 		name: "钢铁石板",
-		desc: "钢属性的石板。 携带后，钢属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jabocaberry: {
 		name: "嘉珍果",
-		desc: "让宝可梦携带后， 在受到物理招式攻击时， 能给予对手伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jawfossil: {
 		name: "颚之化石",
-		desc: "很久以前生活在地上的 古代宝可梦的化石。 好像是很大的颚的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kangaskhanite: {
 		name: "袋兽进化石",
-		desc: "让袋兽携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kasibberry: {
 		name: "佛柑果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的幽灵属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "通通果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的毒属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	keeberry: {
 		name: "亚开果",
-		desc: "让宝可梦携带后， 在受到物理招式攻击时， 自己的防御就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kelpsyberry: {
 		name: "藻根果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但攻击的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kingsrock: {
 		name: "王者之证",
 		desc: "携带后进行攻击， 在造成伤害时， 有时会让对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	kommoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laggingtail: {
 		name: "后攻之尾",
-		desc: "非常沉重的某种尾巴。 携带后，行动会比平时更加迟缓。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lansatberry: {
 		name: "兰萨果",
-		desc: "让宝可梦携带后，危机时， 攻击会变得容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiasite: {
 		name: "拉帝亚斯进化石",
-		desc: "让拉帝亚斯携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiosite: {
 		name: "拉帝欧斯进化石",
-		desc: "让拉帝欧斯携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laxincense: {
 		name: "悠闲薰香",
-		desc: "携带后，薰香的 神奇香气会迷惑对手， 其招式会变得不容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	leafstone: {
 		name: "叶之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 有着叶子般的花纹。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	leek: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	leftovers: {
 		name: "吃剩的东西",
-		desc: "携带后，宝可梦的ＨＰ 会在战斗期间缓缓回复。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	leppaberry: {
 		name: "苹野果",
-		desc: "让宝可梦携带后， 可以回复１０ＰＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	levelball: {
 		name: "等级球",
-		desc: "有点与众不同的球。 要捕捉的宝可梦比自己宝可梦的 等级越低，就会越容易捕捉。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	liechiberry: {
 		name: "枝荔果",
-		desc: "让宝可梦携带后，危机时， 自己的攻击就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lifeorb: {
 		name: "生命宝珠",
-		desc: "携带后，虽然每次攻击时 ＨＰ少量减少， 但招式的威力会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "  [POKEMON]的生命被少量削减了！",
 	},
 	lightball: {
 		name: "电气球",
-		desc: "让皮卡丘携带后， 攻击和特攻的威力 就会提高的神奇之球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lightclay: {
 		name: "光之黏土",
-		desc: "当携带它的宝可梦 使出光墙或反射壁时， 效果会比平时持续得更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	loadeddice: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lopunnite: {
 		name: "长耳兔进化石",
-		desc: "长耳兔携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	loveball: {
 		name: "甜蜜球",
-		desc: "有点与众不同的球。 能很容易地捕捉 和自己宝可梦性别不同的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lovesweet: {
 		name: "爱心糖饰",
-		desc: "爱心形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lucarionite: {
 		name: "路卡利欧进化石",
-		desc: "让路卡利欧携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lucarionitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luckypunch: {
 		name: "吉利拳",
-		desc: "能带来幸运的拳套。 让吉利蛋携带后， 招式会变得容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lumberry: {
 		name: "木子果",
-		desc: "让宝可梦携带后， 可以治愈所有异常状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luminousmoss: {
 		name: "光苔",
-		desc: "一次性使用的光苔。 携带它的宝可梦如果受到水属性 招式攻击，特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lunaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lureball: {
 		name: "诱饵球",
-		desc: "有点与众不同的球。 能很容易地捕捉 用钓竿钓上来的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lustrousglobe: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousorb: {
 		name: "白玉宝珠",
-		desc: "让帕路奇亚携带的话， 龙和水属性的招式威力就会提高。 散发着美丽光辉的宝珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luxuryball: {
 		name: "豪华球",
-		desc: "舒适宜居的球。 捉到的野生宝可梦会 变得非常容易和训练家亲密。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lycaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	machobrace: {
 		name: "强制锻炼器",
-		desc: "又硬又重的锻炼器。 虽然携带后速度会降低， 但会比平时更容易茁壮成长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	magearnite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magmarizer: {
 		name: "熔岩增幅器",
-		desc: "积蓄着庞大熔岩能量的箱子。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magnet: {
 		name: "磁铁",
-		desc: "强力的磁铁。 携带后，电属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magoberry: {
 		name: "芒芒果",
-		desc: "让宝可梦携带后， 危机时可以回复ＨＰ。 如果讨厌这味道就会混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magostberry: {
 		name: "岳竹果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨可爱。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mail: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	malamarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	maliciousarmor: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	manectite: {
 		name: "雷电兽进化石",
-		desc: "让雷电兽携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	marangaberry: {
 		name: "香罗果",
-		desc: "让宝可梦携带后， 在受到特殊招式攻击时， 自己的特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	marshadiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterball: {
 		name: "大师球",
-		desc: "必定能捉到野生宝可梦的， 性能最好的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	masterpieceteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mawilite: {
 		name: "大嘴娃进化石",
-		desc: "让大嘴娃携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	meadowplate: {
 		name: "碧绿石板",
-		desc: "草属性的石板。 携带后，草属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	medichamite: {
 		name: "恰雷姆进化石",
-		desc: "让恰雷姆携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	meganiumite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mentalherb: {
 		name: "心灵香草",
-		desc: "当携带它的宝可梦 无法自由使出招式时， 仅会回复１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	meowsticite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metagrossite: {
 		name: "巨金怪进化石",
-		desc: "让巨金怪携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	metalalloy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalcoat: {
 		name: "金属膜",
 		desc: "特殊的金属膜。 携带后，钢属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metalpowder: {
 		name: "金属粉",
-		desc: "让百变怪携带后， 防御就会提高的神奇粉末。 非常细腻坚硬。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metronome: {
 		name: "节拍器",
-		desc: "携带后，连续使出相同招式时， 威力就会提高。不再使出 相同招式时，威力就会复原。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mewniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitex: {
 		name: "超梦进化石Ｘ",
-		desc: "让超梦携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitey: {
 		name: "超梦进化石Ｙ",
-		desc: "让超梦携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	micleberry: {
 		name: "奇秘果",
-		desc: "让宝可梦携带后，危机时， 招式的命中率仅会提高１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mimikiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mindplate: {
 		name: "神奇石板",
-		desc: "超能力属性的石板。 携带后，超能力属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	miracleseed: {
 		name: "奇迹种子",
-		desc: "孕育生命的种子。 携带后，草属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mirrorherb: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "  [POKEMON]使用模仿香草模仿了对手的能力变化！",
 	},
 	mistyseed: {
 		name: "薄雾种子",
-		desc: "让宝可梦携带后， 在薄雾场地上使用， 特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonball: {
 		name: "月亮球",
-		desc: "有点与众不同的球。 能很容易地捕捉 使用月之石进化的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonstone: {
 		name: "月之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 像夜空一样乌黑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	muscleband: {
 		name: "力量头带",
-		desc: "力如泉涌的头带。 携带后，物理招式的 威力就会少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mysticwater: {
 		name: "神秘水滴",
-		desc: "水滴形状的宝石。 携带后，水属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nanabberry: {
 		name: "蕉香果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨可爱。 粉红色的果实尝起来是甜的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nestball: {
 		name: "巢穴球",
-		desc: "有点与众不同的球。 捕捉的野生宝可梦越弱， 就会越容易捕捉。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	netball: {
 		name: "捕网球",
-		desc: "有点与众不同的球。 能很容易地捕捉 水属性和虫属性的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nevermeltice: {
 		name: "不融冰",
-		desc: "能隔绝热量的冰。 携带后，冰属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nomelberry: {
 		name: "檬柠果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨强壮。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	normalgem: {
 		name: "一般宝石",
-		desc: "一般属性的宝石。 携带后，一般属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	normaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	occaberry: {
 		name: "巧可果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的火属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oddincense: {
 		name: "奇异薰香",
-		desc: "有着神奇香气的薰香。 携带后，超能力属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oldamber: {
 		name: "秘密琥珀",
-		desc: "封存着古代宝可梦 遗传基因的琥珀， 透着点红色。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oranberry: {
 		name: "橙橙果",
-		desc: "让宝可梦携带后， 可以回复１０ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ovalstone: {
 		name: "浑圆之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像珠子一般圆润。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pamtreberry: {
 		name: "椰木果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨美丽。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	parkball: {
 		name: "公园球",
-		desc: "在伙伴公园里使用的 特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	passhoberry: {
 		name: "千香果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的水属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	payapaberry: {
 		name: "福禄果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的超能力属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pechaberry: {
 		name: "桃桃果",
-		desc: "让宝可梦携带后， 可以治愈中毒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	persimberry: {
 		name: "柿仔果",
-		desc: "让宝可梦携带后， 可以治愈混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	petayaberry: {
 		name: "龙火果",
-		desc: "让宝可梦携带后，危机时， 自己的特攻就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pidgeotite: {
 		name: "大比鸟进化石",
-		desc: "让大比鸟携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikashuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinapberry: {
 		name: "凰梨果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨强壮。 黄色的果实尝起来是酸的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinsirite: {
 		name: "凯罗斯进化石",
-		desc: "让凯罗斯携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pixieplate: {
 		name: "妖精石板",
-		desc: "妖精属性的石板。 携带后，妖精属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	plumefossil: {
 		name: "羽毛化石",
-		desc: "据说是鸟宝可梦的祖先， 古代宝可梦的化石。 好像是翅膀的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonbarb: {
 		name: "毒针",
-		desc: "有毒的小针。 携带后，毒属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	poisongem: {
 		name: "毒之宝石",
-		desc: "毒属性的宝石。 携带后，毒属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	poisoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonmemory: {
 		name: "毒存储碟",
-		desc: "装有毒属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pokeball: {
 		name: "精灵球",
-		desc: "用于投向野生宝可梦 并将其捕捉的球。 它是胶囊样式的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pomegberry: {
 		name: "榴石果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但ＨＰ的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poweranklet: {
 		name: "力量护踝",
-		desc: "虽然携带后速度会降低， 但宝可梦的速度 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerband: {
 		name: "力量束带",
-		desc: "虽然携带后速度会降低， 但宝可梦的特防 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbelt: {
 		name: "力量腰带",
-		desc: "虽然携带后速度会降低， 但宝可梦的防御 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbracer: {
 		name: "力量护腕",
-		desc: "虽然携带后速度会降低， 但宝可梦的攻击 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerherb: {
 		name: "强力香草",
-		desc: "携带它的宝可梦仅有１次机会 可以在第１回合使出 需要蓄力的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	powerlens: {
 		name: "力量镜",
-		desc: "虽然携带后速度会降低， 但宝可梦的特攻 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerweight: {
 		name: "力量负重",
-		desc: "虽然携带后速度会降低， 但宝可梦的ＨＰ 会比平时成长得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	premierball: {
 		name: "纪念球",
-		desc: "有点珍贵的球。 特制出来的某种纪念品。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	prettyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	primariumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	prismscale: {
 		name: "美丽鳞片",
-		desc: "能让某些特定宝可梦 进化的神奇鳞片。 散发着虹色光辉。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	protectivepads: {
 		name: "部位护具",
-		desc: "不会受到触碰攻击对手时 本应受到的效果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	protector: {
 		name: "护具",
-		desc: "某种护具。 非常坚硬而且沉重。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicgem: {
 		name: "超能力宝石",
-		desc: "超能力属性的宝石。 携带后，超能力属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	psychicmemory: {
 		name: "精神存储碟",
-		desc: "装有超能力属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicseed: {
 		name: "精神种子",
-		desc: "让宝可梦携带后， 在精神场地上使用， 特防就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psychiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	punchingglove: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pyroarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	qualotberry: {
 		name: "比巴果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但防御的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickball: {
 		name: "先机球",
-		desc: "有点与众不同的球。 如果战斗开始后立刻使用， 就能很容易地捉到宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickclaw: {
 		name: "先制之爪",
-		desc: "又轻又尖锐的爪子。 携带后，有时能比对手 先一步行动。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	quickpowder: {
 		name: "速度粉",
-		desc: "让百变怪携带后， 速度就会提高的神奇粉末。 非常细腻坚硬。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rabutaberry: {
 		name: "茸丹果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨聪明。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitex: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitey: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rarebone: {
 		name: "贵重骨头",
-		desc: "在宝可梦考古学上 非常贵重的骨头。 可以在商店高价出售。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rawstberry: {
 		name: "莓莓果",
-		desc: "让宝可梦携带后， 可以治愈灼伤。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorclaw: {
 		name: "锐利之爪",
 		desc: "尖锐的爪子。 携带后，招式会 变得容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorfang: {
 		name: "锐利之牙",
 		desc: "尖锐的牙齿。 携带后，在给予伤害时， 有时会让对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razzberry: {
 		name: "蔓莓果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨帅气。 红色的果实尝起来是辣的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	reapercloth: {
 		name: "灵界之布",
-		desc: "蕴含着惊人强大灵力的布。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	redcard: {
 		name: "红牌",
-		desc: "有着神奇力量的卡片。 携带后，能让使用了 招式的对手退场。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	redorb: {
 		name: "朱红色宝珠",
-		desc: "散发着红色光辉的宝珠。 据说和丰缘地区的传说渊源颇深。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	repeatball: {
 		name: "重复球",
-		desc: "有点与众不同的球。 能很容易地捕捉 以前曾捉到过的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ribbonsweet: {
 		name: "蝴蝶结糖饰",
-		desc: "蝴蝶结形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rindoberry: {
 		name: "罗子果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的草属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ringtarget: {
 		name: "标靶",
-		desc: "原本因宝可梦的属性相克关系 而无效的招式现在会变得 能够击中自己。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockgem: {
 		name: "岩石宝石",
-		desc: "岩石属性的宝石。 携带后，岩石属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	rockincense: {
 		name: "岩石薰香",
-		desc: "有着神奇香气的薰香。 携带后，岩石属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	rockiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockmemory: {
 		name: "岩石存储碟",
-		desc: "装有岩石属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockyhelmet: {
 		name: "凸凸头盔",
-		desc: "让宝可梦携带后， 在受到打击招式攻击时， 能给予对手伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "", // NOT CONVERTED: not in Champions
 	},
 	roomservice: {
 		name: "客房服务",
-		desc: "让宝可梦携带后， 在戏法空间使用时， 速度会下降。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rootfossil: {
 		name: "根状化石",
-		desc: "很久以前栖息在海里的 古代宝可梦的化石。 好像是根的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseincense: {
 		name: "花朵薰香",
-		desc: "有着神奇香气的薰香。 携带后，草属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseliberry: {
 		name: "洛玫果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的妖精属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rowapberry: {
 		name: "雾莲果",
-		desc: "让宝可梦携带后， 在受到特殊招式攻击时， 能给予对手伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedshield: {
 		name: "腐朽的盾",
-		desc: "据说很久以前，英雄就是 拿着这面盾驱走了灾厄。 而现在早已变得锈迹斑斑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedsword: {
 		name: "腐朽的剑",
-		desc: "据说很久以前，英雄就是 拿着这把剑驱走了灾厄。 而现在早已变得锈迹斑斑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sablenite: {
 		name: "勾魂眼进化石",
-		desc: "让勾魂眼携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sachet: {
 		name: "香袋",
-		desc: "装着散发微浓香气的 香料的袋子。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safariball: {
 		name: "狩猎球",
-		desc: "曾在关都地区的狩猎地带 以及神奥地区的大湿地被使用。 是一种特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safetygoggles: {
 		name: "防尘护目镜",
-		desc: "不单是天气造成的伤害， 就连粉末类招式的效果 也能防御的护目镜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	sailfossil: {
 		name: "鳍之化石",
-		desc: "很久以前生活在地上的 古代宝可梦的化石。 好像是头鳍的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salacberry: {
 		name: "沙鳞果",
-		desc: "让宝可梦携带后，危机时， 自己的速度就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salamencite: {
 		name: "暴飞龙进化石",
-		desc: "暴飞龙携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sceptilite: {
 		name: "蜥蜴王进化石",
-		desc: "让蜥蜴王携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scizorite: {
 		name: "巨钳螳螂进化石",
-		desc: "让巨钳螳螂携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scolipite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scopelens: {
 		name: "焦点镜",
-		desc: "能看见弱点的镜片。 携带它的宝可梦的招式 会变得容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scovillainite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scraftinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	seaincense: {
 		name: "海潮薰香",
-		desc: "有着神奇香气的薰香。 携带后，水属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpbeak: {
 		name: "锐利鸟嘴",
-		desc: "又长又尖的鸟嘴。 携带后，飞行属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpedonite: {
 		name: "巨牙鲨进化石",
-		desc: "让巨牙鲨携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shedshell: {
 		name: "美丽空壳",
-		desc: "结实坚硬的空壳。 携带它的宝可梦必定可以 和后备的宝可梦进行替换。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shellbell: {
 		name: "贝壳之铃",
-		desc: "当携带它的宝可梦 攻击对手并造成伤害时， 能回复少量ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	shinystone: {
 		name: "光之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 像光芒一样耀眼。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shockdrive: {
 		name: "闪电卡带",
-		desc: "这是让盖诺赛克特携带的卡带。 携带后，高科技光炮这招式 就会变为电属性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shucaberry: {
 		name: "腰木果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的地面属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	silkscarf: {
 		name: "丝绸围巾",
-		desc: "手感不错的围巾。 携带后，一般属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	silverpowder: {
 		name: "银粉",
-		desc: "散发着银色光辉的粉末。 携带后，虫属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sitrusberry: {
 		name: "文柚果",
-		desc: "让宝可梦携带后， 可以回复少量ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	skarmorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skullfossil: {
 		name: "头盖化石",
-		desc: "很久以前生活在地上的 古代宝可梦的化石。 好像是头部的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skyplate: {
 		name: "蓝天石板",
-		desc: "飞行属性的石板。 携带后，飞行属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	slowbronite: {
 		name: "呆壳兽进化石",
-		desc: "让呆壳兽携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		champions: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	smoothrock: {
 		name: "沙沙岩石",
-		desc: "携带它的宝可梦使出沙暴的话， 沙暴的时间就会比平时更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	snorliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	snowball: {
 		name: "雪球",
-		desc: "一次性使用的雪球。 携带它的宝可梦如果受到冰属性 招式攻击，攻击就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	softsand: {
 		name: "柔软沙子",
-		desc: "手感细腻的沙子。 携带后，地面属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	solganiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	souldew: {
 		name: "心之水滴",
-		desc: "让拉帝欧斯或拉帝亚斯携带后， 超能力和龙属性的招式威力 就会提高的神奇珠子。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelltag: {
 		name: "诅咒之符",
-		desc: "古怪可怕的咒符。 携带后，幽灵属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelonberry: {
 		name: "刺角果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨可爱。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	splashplate: {
 		name: "水滴石板",
-		desc: "水属性的石板。 携带后，水属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	spookyplate: {
 		name: "妖怪石板",
-		desc: "幽灵属性的石板。 携带后，幽灵属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sportball: {
 		name: "竞赛球",
-		desc: "曽在城都地区的捕虫大赛上使用的 特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	staraptite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starfberry: {
 		name: "星桃果",
-		desc: "让宝可梦携带后，危机时， 某一项能力就会大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	starminite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starsweet: {
 		name: "星星糖饰",
-		desc: "星星形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelgem: {
 		name: "钢之宝石",
-		desc: "钢属性的宝石。 携带后，钢属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	steeliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelixite: {
 		name: "大钢蛇进化石",
-		desc: "让大钢蛇携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelmemory: {
 		name: "钢铁存储碟",
-		desc: "装有钢属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stick: {
 		name: "大葱",
-		desc: "非常长且坚硬的茎。 让大葱鸭携带后， 招式会变得容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	stickybarb: {
 		name: "附着针",
-		desc: "携带后，每回合都会受到伤害。 有时也会附着到 碰到自己的对手身上。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stoneplate: {
 		name: "岩石石板",
-		desc: "岩石属性的石板。 携带后，岩石属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	strangeball: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strawberrysweet: {
 		name: "草莓糖饰",
-		desc: "草莓形状的工艺糖果。 让小仙奶携带的话， 会高兴地转圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sunstone: {
 		name: "日之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 像太阳一样赤红。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	swampertite: {
 		name: "巨沼怪进化石",
-		desc: "让巨沼怪携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sweetapple: {
 		name: "甜甜苹果",
-		desc: "这种神奇的苹果 可以使特定的宝可梦进化。 吃起来非常甜美。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	syrupyapple: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tamatoberry: {
 		name: "茄番果",
-		desc: "如果把它交给宝可梦， 宝可梦就会变得非常容易和训练家亲密， 但速度的基础点数会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tangaberry: {
 		name: "扁樱果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的虫属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tapuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tartapple: {
 		name: "酸酸苹果",
-		desc: "这种神奇的苹果 可以使特定的宝可梦进化。 吃起来酸酸的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tatsugirinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	terrainextender: {
 		name: "大地膜",
-		desc: "当携带它的宝可梦 利用招式或特性展开场地时， 场地的持续时间会比平时更长。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thickclub: {
 		name: "粗骨头",
-		desc: "某种坚硬的骨头。 让卡拉卡拉或嘎啦嘎啦携带后， 攻击就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	throatspray: {
 		name: "爽喉喷雾",
-		desc: "使用声音相关的招式时， 特攻会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thunderstone: {
 		name: "雷之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 有着闪电般的花纹。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	timerball: {
 		name: "计时球",
-		desc: "有点与众不同的球。 回合数花费得越多， 宝可梦就会越容易捕捉。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicorb: {
 		name: "剧毒宝珠",
-		desc: "触碰后会放出毒的神奇宝珠。 携带后，在战斗时会变成剧毒状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicplate: {
 		name: "剧毒石板",
-		desc: "毒属性的石板。 携带后，毒属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr00: {
 		name: "招式记录００",
-		desc: "激烈地跳起战舞提高气势。 大幅提高自己的攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr01: {
 		name: "招式记录０１",
-		desc: "用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr02: {
 		name: "招式记录０２",
-		desc: "向对手发射烈焰进行攻击。 有时会让对手陷入灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr03: {
 		name: "招式记录０３",
-		desc: "向对手猛烈地 喷射大量水流进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr04: {
 		name: "招式记录０４",
-		desc: "利用大浪 攻击自己周围所有的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr05: {
 		name: "招式记录０５",
-		desc: "向对手发射冰冻光束进行攻击。 有时会让对手陷入冰冻状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr06: {
 		name: "招式记录０６",
-		desc: "将猛烈的暴风雪 刮向对手进行攻击。 有时会让对手陷入冰冻状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr07: {
 		name: "招式记录０７",
-		desc: "用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr08: {
 		name: "招式记录０８",
-		desc: "向对手发出强力电击进行攻击。 有时会让对手陷入麻痹状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr09: {
 		name: "招式记录０９",
-		desc: "向对手劈下暴雷进行攻击。 有时会让对手陷入麻痹状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr10: {
 		name: "招式记录１０",
-		desc: "利用地震的冲击， 攻击自己周围所有的宝可梦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr11: {
 		name: "招式记录１１",
-		desc: "向对手发送强大的念力进行攻击。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr12: {
 		name: "招式记录１２",
-		desc: "让身体放松变得轻盈， 以便高速移动。 大幅提高自己的速度。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr13: {
 		name: "招式记录１３",
-		desc: "深深地吸口气，集中精神。 自己的攻击会变得 容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr14: {
 		name: "招式记录１４",
-		desc: "挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr15: {
 		name: "招式记录１５",
-		desc: "用大字形状的火焰烧尽对手。 有时会让对手陷入灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr16: {
 		name: "招式记录１６",
-		desc: "以惊人的气势扑向对手。 有时会使对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr17: {
 		name: "招式记录１７",
-		desc: "将头脑清空， 瞬间忘记某事， 从而大幅提高自己的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr18: {
 		name: "招式记录１８",
-		desc: "吸取血液攻击对手。 可以回复给予对手伤害的一半ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr19: {
 		name: "招式记录１９",
-		desc: "用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr20: {
 		name: "招式记录２０",
-		desc: "削减少许自己的ＨＰ， 制造分身。 分身将成为自己的替身。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr21: {
 		name: "招式记录２１",
-		desc: "竭尽全力进行攻击。 自己的ＨＰ越少， 招式的威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr22: {
 		name: "招式记录２２",
-		desc: "用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr23: {
 		name: "招式记录２３",
-		desc: "在对手的脚下扔撒菱。 对替换出场的 对手的宝可梦给予伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr24: {
 		name: "招式记录２４",
-		desc: "在２～３回合内， 乱打一气地进行攻击。 大闹一番后自己会陷入混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr25: {
 		name: "招式记录２５",
-		desc: "将神奇的念波实体化攻击对手。 给予物理伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr26: {
 		name: "招式记录２６",
-		desc: "即使受到攻击， 也至少会留下１ＨＰ。 连续使出则容易失败。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr27: {
 		name: "招式记录２７",
-		desc: "从自己已学会的招式中 任意使出１个。 只能在自己睡觉时使用。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr28: {
 		name: "招式记录２８",
-		desc: "用坚硬且华丽的角狠狠地 刺入对手进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr29: {
 		name: "招式记录２９",
-		desc: "和后备宝可梦进行替换。 换上的宝可梦 能直接继承其能力的变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr30: {
 		name: "招式记录３０",
-		desc: "让对手接受再来一次， 连续３次使出最后使用的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr31: {
 		name: "招式记录３１",
-		desc: "使用坚硬的尾巴 摔打对手进行攻击。 有时会降低对手的防御。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr32: {
 		name: "招式记录３２",
-		desc: "用利牙咬碎对手进行攻击。 有时会降低对手的防御。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr33: {
 		name: "招式记录３３",
-		desc: "投掷一团黑影进行攻击。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr34: {
 		name: "招式记录３４",
-		desc: "在使用招式２回合后， 向对手发送一团念力进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr35: {
 		name: "招式记录３５",
-		desc: "在３回合内 用骚乱攻击对手。 在此期间谁都不能入眠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr36: {
 		name: "招式记录３６",
-		desc: "将炎热的气息 吹向对手进行攻击。 有时会让对手陷入灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr37: {
 		name: "招式记录３７",
-		desc: "使对手愤怒。 在３回合内让对手只能使出 给予伤害的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr38: {
 		name: "招式记录３８",
-		desc: "抓住对手的空隙， 交换自己和对手的持有物。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr39: {
 		name: "招式记录３９",
-		desc: "发挥惊人的力量攻击对手。 自己的攻击和防御会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr40: {
 		name: "招式记录４０",
-		desc: "利用超能力互换 自己和对手的特性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr41: {
 		name: "招式记录４１",
-		desc: "攻击对手后， 有时会使其陷入灼伤状态。 也容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr42: {
 		name: "招式记录４２",
-		desc: "给予对手又吵又响的 巨大震动进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr43: {
 		name: "招式记录４３",
-		desc: "使出全部力量攻击对手。 使用之后会因为反作用力， 自己的特攻大幅降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr44: {
 		name: "招式记录４４",
-		desc: "汲取宇宙中神秘的力量， 从而提高自己的防御和特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr45: {
 		name: "招式记录４５",
-		desc: "向对手喷射浑浊的水进行攻击。 有时会降低对手的命中率。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr46: {
 		name: "招式记录４６",
-		desc: "将皮肤变得坚硬如铁， 从而大幅提高自己的防御。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr47: {
 		name: "招式记录４７",
-		desc: "用尖锐的巨爪 劈开对手进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr48: {
 		name: "招式记录４８",
-		desc: "使出全身力气绷紧肌肉， 从而提高自己的攻击和防御。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr49: {
 		name: "招式记录４９",
-		desc: "静心凝神， 从而提高自己的特攻和特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr50: {
 		name: "招式记录５０",
-		desc: "像用剑一般操纵叶片 切斩对手进行攻击。 容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr51: {
 		name: "招式记录５１",
-		desc: "激烈地跳起神秘且 强有力的舞蹈。 从而提高自己的攻击和速度。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr52: {
 		name: "招式记录５２",
-		desc: "让身体高速旋转并撞击对手。 速度比对手越慢，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr53: {
 		name: "招式记录５３",
-		desc: "放弃守护，向对手的怀里突击。 自己的防御和特防会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr54: {
 		name: "招式记录５４",
-		desc: "在对手的脚下撒毒菱。 使对手替换出场的宝可梦中毒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr55: {
 		name: "招式记录５５",
-		desc: "让火焰覆盖全身猛撞向对手。 自己也会受到不小的伤害。 有时会让对手陷入灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr56: {
 		name: "招式记录５６",
-		desc: "从体内产生出波导之力， 然后向对手发出。 攻击必定会命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr57: {
 		name: "招式记录５７",
-		desc: "用带毒的触手或手臂 刺入对手。 有时会让对手陷入中毒状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr58: {
 		name: "招式记录５８",
-		desc: "从体内发出 充满恶意的恐怖气场。 有时会使对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr59: {
 		name: "招式记录５９",
-		desc: "将外壳坚硬的大种子， 从上方砸下攻击对手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr60: {
 		name: "招式记录６０",
-		desc: "将镰刀或爪子像剪刀般地交叉， 顺势劈开对手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr61: {
 		name: "招式记录６１",
-		desc: "利用振动发出音波进行攻击。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr62: {
 		name: "招式记录６２",
-		desc: "从大大的口中 掀起冲击波攻击对手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr63: {
 		name: "招式记录６３",
-		desc: "发射如宝石般闪耀的光芒 攻击对手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr64: {
 		name: "招式记录６４",
-		desc: "提高气势， 释放出全部力量。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr65: {
 		name: "招式记录６５",
-		desc: "发射从自然收集的生命力量。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr66: {
 		name: "招式记录６６",
-		desc: "收拢翅膀， 通过低空飞行突击对手。 自己也会受到不小的伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr67: {
 		name: "招式记录６７",
-		desc: "向对手脚下释放出大地之力。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr68: {
 		name: "招式记录６８",
-		desc: "谋划诡计，激活头脑。 大幅提高自己的特攻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr69: {
 		name: "招式记录６９",
-		desc: "将思念的力量 集中在前额进行攻击。 有时会使对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr70: {
 		name: "招式记录７０",
-		desc: "将身体的光芒聚集在一点 释放出去。 有时会降低对手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr71: {
 		name: "招式记录７１",
-		desc: "用尖尖的叶片向对手卷起风暴。 使用之后因为反作用力 自己的特攻会大幅降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr72: {
 		name: "招式记录７２",
-		desc: "激烈地挥舞青藤或触手 摔打对手进行攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr73: {
 		name: "招式记录７３",
-		desc: "用肮脏的垃圾 撞向对手进行攻击。 有时会让对手陷入中毒状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr74: {
 		name: "招式记录７４",
-		desc: "用钢铁般坚硬的头部进行攻击。 有时会使对手畏缩。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr75: {
 		name: "招式记录７５",
-		desc: "用尖尖的岩石 刺入对手进行攻击。 容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr76: {
 		name: "招式记录７６",
-		desc: "将无数岩石悬浮在对手的周围， 从而对替换出场的 对手的宝可梦给予伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr77: {
 		name: "招式记录７７",
-		desc: "用草缠住并绊倒对手。 对手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr78: {
 		name: "招式记录７８",
-		desc: "用污泥波攻击 自己周围所有的宝可梦。 有时会陷入中毒状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr79: {
 		name: "招式记录７９",
-		desc: "用沉重的身体撞向对手进行攻击。 自己比对手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr80: {
 		name: "招式记录８０",
-		desc: "用电气团撞向对手。 自己比对手速度越快，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr81: {
 		name: "招式记录８１",
-		desc: "利用对手的力量进行攻击。 正和自己战斗的对手， 其攻击越高，伤害越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr82: {
 		name: "招式记录８２",
-		desc: "用蓄积起来的力量攻击对手。 自己的能力提高得越多，威力就越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr83: {
 		name: "招式记录８３",
-		desc: "用神奇的力量瞬间移动， 互换自己和同伴所在的位置。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr84: {
 		name: "招式记录８４",
-		desc: "向对手喷射煮得翻滚的开水进行攻击。 有时会让对手陷入灼伤状态。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr85: {
 		name: "招式记录８５",
-		desc: "激励自己， 从而提高攻击和特攻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr86: {
 		name: "招式记录８６",
-		desc: "让电流覆盖全身， 撞向对手进行攻击。 自己也会受到少许伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr87: {
 		name: "招式记录８７",
-		desc: "像钢钻一样， 一边旋转身体一边撞击对手。 容易击中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr88: {
 		name: "招式记录８８",
-		desc: "用燃烧的身体 撞向对手进行攻击。 自己比对手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr89: {
 		name: "招式记录８９",
-		desc: "用强烈的风 席卷对手进行攻击。 有时会使对手混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr90: {
 		name: "招式记录９０",
-		desc: "与对手嬉闹并攻击。 有时会降低对手的攻击。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr91: {
 		name: "招式记录９１",
-		desc: "将特殊的毒液泼向对手。 对处于中毒状态的对手， 其攻击、特攻和速度都会降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr92: {
 		name: "招式记录９２",
-		desc: "向对手发射强光， 并给予伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr93: {
 		name: "招式记录９３",
-		desc: "旋转双臂打向对手。 无视对手的能力变化， 直接给予伤害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr94: {
 		name: "招式记录９４",
-		desc: "使出全身力量， 猛攻对手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr95: {
 		name: "招式记录９５",
-		desc: "受到此招式攻击的对手， 会因为地狱般的痛苦，在２回合内， 变得无法使出声音类招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr96: {
 		name: "招式记录９６",
-		desc: "对敌人使用是会爆炸的团子。 对我方使用则是给予回复的团子。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr97: {
 		name: "招式记录９７",
-		desc: "利用精神力量咬住对手进行攻击。 还可以破坏光墙和反射壁等。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr98: {
 		name: "招式记录９８",
-		desc: "用水之力量 撞向对手进行攻击。 有时会降低对手的防御。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr99: {
 		name: "招式记录９９",
-		desc: "用身体撞向对手进行攻击。 防御越高， 给予的伤害就越高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	twistedspoon: {
 		name: "弯曲的汤匙",
-		desc: "注入了念力的汤匙。 携带后，超能力属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	tyranitarite: {
 		name: "班基拉斯进化石",
-		desc: "让班基拉斯携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ultraball: {
 		name: "高级球",
-		desc: "比起超级球来 更容易捉到宝可梦的， 性能非常不错的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	ultranecroziumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		transform: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	unremarkableteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	upgrade: {
 		name: "升级数据",
-		desc: "内部储存了各种信息的透明机器。 西尔佛公司制造。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	utilityumbrella: {
 		name: "万能伞",
 		desc: "携带它的宝可梦 在下雨或日照很强时， 不会受到天气的影响。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	venusaurite: {
 		name: "妙蛙花进化石",
-		desc: "让妙蛙花携带后， 在战斗时就能进行超级进化的 一种神奇超级石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	victreebelite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wacanberry: {
 		name: "烛木果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的电属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watergem: {
 		name: "水之宝石",
-		desc: "水属性的宝石。 携带后，水属性的 招式威力仅会增强１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	wateriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watermemory: {
 		name: "清水存储碟",
-		desc: "装有水属性数据的存储碟。 特定宝可梦携带后， 属性就会发生变化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waterstone: {
 		name: "水之石",
 		desc: "能让某些特定宝可梦 进化的神奇石头。 看上去是澄蓝色的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watmelberry: {
 		name: "瓜西果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨聪明。 在其他地区很少见的树果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waveincense: {
 		name: "涟漪薰香",
-		desc: "有着神奇香气的薰香。 携带后，水属性的 招式威力就会提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	weaknesspolicy: {
 		name: "弱点保险",
-		desc: "被针对弱点时， 攻击和特攻就会大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	wellspringmask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wepearberry: {
 		name: "西梨果",
-		desc: "用于制作宝可方块， 制作出来的宝可方块可用来打磨聪明。 绿色的果实尝起来是苦的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whippeddream: {
 		name: "泡沫奶油",
-		desc: "松松软软起着泡的， 稍微有点甜的奶油。 某种宝可梦很喜欢它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whiteherb: {
 		name: "白色香草",
-		desc: "当携带它的宝可梦能力降低时， 仅能回到之前的状态１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	widelens: {
 		name: "广角镜",
-		desc: "能放大观看物体的镜片。 携带后，招式的命中率 就会少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wikiberry: {
 		name: "异奇果",
-		desc: "让宝可梦携带后， 危机时可以回复ＨＰ。 如果讨厌这味道就会混乱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	wiseglasses: {
 		name: "博识眼镜",
-		desc: "装着很厚镜片的眼镜。 携带后，特殊招式的 威力就会少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	yacheberry: {
 		name: "番荔果",
-		desc: "让宝可梦携带后， 在受到效果绝佳的冰属性招式 攻击时，能令其威力减弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zapplate: {
 		name: "雷电石板",
-		desc: "电属性的石板。 携带后，电属性的 招式威力就会增强。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zeraorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zoomlens: {
 		name: "对焦镜",
-		desc: "当携带它的宝可梦比 对手行动迟缓时， 招式会变得容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zygardite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// Gen 2 items
+
+	berserkgene: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	berry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	bitterberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	burntberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	goldberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iceberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mintberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	miracleberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mysteryberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	pinkbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	polkadotbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	przcureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psncureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// CAP items
+
+	crucibellite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	vilevial: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 };

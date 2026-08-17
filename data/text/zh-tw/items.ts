@@ -1,1897 +1,2627 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
 		name: "特性护具",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	abomasite: {
 		name: "暴雪王進化石",
-		desc: "讓暴雪王攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absolite: {
 		name: "阿勃梭魯進化石",
-		desc: "讓阿勃梭魯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	absolitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	absorbbulb: {
 		name: "球根",
-		desc: "只能使用一次的球根。 攜帶它的寶可夢如果受到水屬性 招式的攻擊，特攻就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantcrystal: {
 		name: "大金刚宝玉",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adamantorb: {
 		name: "金剛寶珠",
-		desc: "讓帝牙盧卡攜帶的話， 龍和鋼屬性的招式威力就會提高。 散發著光輝的寶珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	adrenalineorb: {
 		name: "膽怯球",
-		desc: "讓寶可夢攜帶後， 受到威嚇時速度就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aerodactylite: {
 		name: "化石翼龍進化石",
-		desc: "讓化石翼龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aggronite: {
 		name: "波士可多拉進化石",
-		desc: "讓波士可多拉攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aguavberry: {
 		name: "樂芭果",
-		desc: "讓寶可夢攜帶後， 危機時可以回復ＨＰ。 如果討厭這味道就會混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	airballoon: {
 		name: "氣球",
-		desc: "讓寶可夢攜帶後， 寶可夢會浮在空中。 受到攻擊就會破裂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		start: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]的氣球破了！",
 	},
 	alakazite: {
 		name: "胡地進化石",
-		desc: "讓胡地攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	aloraichiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	altarianite: {
 		name: "七夕青鳥進化石",
-		desc: "讓七夕青鳥攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ampharosite: {
 		name: "電龍進化石",
-		desc: "讓電龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	apicotberry: {
 		name: "杏仔果",
-		desc: "讓寶可夢攜帶後， 危機時，自己的 特防就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	armorfossil: {
 		name: "盾甲化石",
-		desc: "很久以前生活在地上的 古代寶可夢的化石。 好像是領飾的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	aspearberry: {
 		name: "利木果",
-		desc: "讓寶可夢攜帶後， 可以治癒冰凍。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	assaultvest: {
 		name: "突擊背心",
-		desc: "會變得富有攻擊性的背心。 雖然攜帶後特防會提高， 但會無法使出變化招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	audinite: {
 		name: "差不多娃娃進化石",
-		desc: "讓差不多娃娃攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	auspiciousarmor: {
 		name: "庆祝之铠",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	babiriberry: {
 		name: "霹霹果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的鋼屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	banettite: {
 		name: "詛咒娃娃進化石",
-		desc: "讓詛咒娃娃攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	barbaracite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	baxcalibrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beastball: {
 		name: "究極球",
-		desc: "有點與眾不同的球。 很難捕捉寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	beedrillite: {
 		name: "大針蜂進化石",
-		desc: "大針蜂攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	belueberry: {
 		name: "靛莓果",
-		desc: "製作用於增進美麗的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berryjuice: {
 		name: "樹果汁",
-		desc: "１００％樹果果汁。 能讓１隻寶可夢 回復２０ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	berrysweet: {
 		name: "野莓糖飾",
-		desc: "莓果形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bignugget: {
 		name: "巨大金珠",
-		desc: "閃著金光的 純金製大珠子。 可以在商店高價出售。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bigroot: {
 		name: "大根莖",
-		desc: "攜帶後，吸取ＨＰ的招式 可以比平時回復更多 自己的ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	bindingband: {
 		name: "緊綁束帶",
-		desc: "輔助綁緊類招式的束帶。 攜帶後，綁緊類招式的 威力會變強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blackbelt: {
 		name: "黑帶",
-		desc: "能振作精神的帶子。 攜帶後，格鬥屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blacksludge: {
 		name: "黑色污泥",
-		desc: "攜帶後，毒屬性的寶可夢 會緩緩回復ＨＰ。 其他屬性的話，ＨＰ則會減少。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	blackglasses: {
 		name: "黑色眼鏡",
-		desc: "看起來很奇怪的眼鏡。 攜帶後，惡屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	blastoisinite: {
 		name: "水箭龜進化石",
-		desc: "讓水箭龜攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blazikenite: {
 		name: "火焰雞進化石",
-		desc: "讓火焰雞攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blueorb: {
 		name: "靛藍色寶珠",
-		desc: "散發著藍色光輝的寶珠。 據說和豐緣地區的傳說 有著很深的淵源。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blukberry: {
 		name: "墨莓果",
-		desc: "製作用於增進美麗的 寶可方塊時使用。 藍色的果實嘗起來是澀的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	blunderpolicy: {
 		name: "打空保險",
-		desc: "當招式受命中率影響 而未能擊中對手時， 自己的速度將大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	boosterenergy: {
 		name: "驱劲能量",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bottlecap: {
 		name: "銀色王冠",
-		desc: "銀色的美麗王冠。 有些人收到它會很高興。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	brightpowder: {
 		name: "光粉",
-		desc: "閃閃發光的粉末。 攜帶後，光芒會迷惑對手， 進而使其招式變得不容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	buggem: {
 		name: "蟲之寶石",
-		desc: "蟲屬性的寶石。 攜帶後，蟲屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	buginiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	bugmemory: {
 		name: "蟲子記憶碟",
-		desc: "裝有蟲屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	burndrive: {
 		name: "火焰卡帶",
-		desc: "讓蓋諾賽克特攜帶的卡帶。 攜帶後，招式高科技光炮 會變為火屬性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cameruptite: {
 		name: "噴火駝進化石",
-		desc: "噴火駝攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cellbattery: {
 		name: "充電電池",
-		desc: "只能使用一次的充電電池。 攜帶它的寶可夢如果受到電屬性 招式的攻擊，攻擊就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chandelurite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charcoal: {
 		name: "木炭",
-		desc: "燒東西的燃料。 攜帶後，火屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	charizarditex: {
 		name: "噴火龍進化石Ｘ",
-		desc: "讓噴火龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	charizarditey: {
 		name: "噴火龍進化石Ｙ",
-		desc: "讓噴火龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chartiberry: {
 		name: "草蠶果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的岩石屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cheriberry: {
 		name: "櫻子果",
-		desc: "讓寶可夢攜帶後， 可以治癒麻痺。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cherishball: {
 		name: "貴重球",
-		desc: "作為某種紀念品 而特別製造的， 頗稀奇的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chesnaughtite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chestoberry: {
 		name: "零餘果",
-		desc: "讓寶可夢攜帶後， 可以治癒睡眠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilanberry: {
 		name: "燈漿果",
-		desc: "讓寶可夢攜帶後， 在受到一般屬性招式攻擊時， 能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chilldrive: {
 		name: "冰凍卡帶",
-		desc: "讓蓋諾賽克特攜帶的卡帶。 攜帶後，招式高科技光炮 會變為冰屬性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	chimechite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chippedpot: {
 		name: "缺損的茶壺",
-		desc: "可以讓特定的寶可夢 進化的神奇茶壺。 雖然有缺口，但茶會變得美味。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choiceband: {
 		name: "講究頭帶",
-		desc: "有點講究的頭帶。 雖然攜帶後攻擊會提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicescarf: {
 		name: "講究圍巾",
-		desc: "有點講究的圍巾。 雖然攜帶後速度會提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	choicespecs: {
 		name: "講究眼鏡",
-		desc: "有點講究的眼鏡。 雖然攜帶後特攻會提高， 但只能使出相同的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	chopleberry: {
 		name: "蓮蒲果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的格鬥屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clawfossil: {
 		name: "爪子化石",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石。 好像是爪子的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	clearamulet: {
 		name: "清净坠饰",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
+	},
+	clefablite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cloversweet: {
 		name: "幸運草糖飾",
-		desc: "四葉草形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cobaberry: {
 		name: "稜瓜果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的飛行屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	colburberry: {
 		name: "刺耳果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的惡屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	cornerstonemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	cornnberry: {
 		name: "玉黍果",
-		desc: "製作用於增進美麗的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	coverfossil: {
 		name: "背蓋化石",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石。 好像是後背的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	covertcloak: {
 		name: "密探斗篷",
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	crabominite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	crackedpot: {
 		name: "破裂的茶壺",
-		desc: "可以讓特定的寶可夢 進化的神奇茶壺。 雖然有裂痕，但茶會變得美味。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	custapberry: {
 		name: "釋陀果",
-		desc: "讓寶可夢攜帶後， 危機時，行動會僅 變快１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	damprock: {
 		name: "潮濕岩石",
-		desc: "攜帶它的寶可夢 使出求雨的話， 下雨的時間就會比平時更長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkgem: {
 		name: "惡之寶石",
-		desc: "惡屬性的寶石。 攜帶後，惡屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	darkiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	darkmemory: {
 		name: "黑暗記憶碟",
-		desc: "裝有惡屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	darkranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dawnstone: {
 		name: "覺醒之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 像眼眸一般光彩動人。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	decidiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseascale: {
 		name: "深海鱗片",
 		desc: "讓珍珠貝攜帶後， 特防就會提高的鱗片。 散發著淡淡的粉紅色光芒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "深海之牙",
 		desc: "讓珍珠貝攜帶後， 特攻就會提高的牙齒。 散發著銳利的銀色光芒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	delphoxite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	destinyknot: {
 		name: "紅線",
-		desc: "長長的大紅色細線。 攜帶後，陷入著迷狀態時， 也能使對手陷入著迷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diancite: {
 		name: "蒂安希進化石",
-		desc: "讓蒂安希攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	diveball: {
 		name: "潛水球",
-		desc: "有點與眾不同的球。 能更容易地捉到 生活在水中世界的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	domefossil: {
 		name: "甲殼化石",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石。 好像是甲殼的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dousedrive: {
 		name: "水流卡帶",
-		desc: "讓蓋諾賽克特攜帶的卡帶。 攜帶後，招式高科技光炮 會變為水屬性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dracoplate: {
 		name: "龍之石板",
-		desc: "龍屬性的石板。 攜帶後，龍屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragalgite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonfang: {
 		name: "龍之牙",
-		desc: "堅硬銳利的牙齒。 攜帶後，龍屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dragongem: {
 		name: "龍之寶石",
-		desc: "龍屬性的寶石。 攜帶後，龍屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	dragoninite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	dragoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonmemory: {
 		name: "龍記憶碟",
-		desc: "裝有龍屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dragonscale: {
 		name: "龍之鱗片",
-		desc: "又硬又結實的鱗片。 有時龍屬性寶可夢 會攜帶著它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	drampanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreadplate: {
 		name: "惡顏石板",
-		desc: "惡屬性的石板。 攜帶後，惡屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	dreamball: {
 		name: "夢境球",
-		desc: "有點與眾不同的球。 能更容易地捉到 睡眠狀態的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	dubiousdisc: {
 		name: "可疑修正檔",
-		desc: "內部儲存了可疑 資訊的透明機器。 製造者不明。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	durinberry: {
 		name: "金枕果",
-		desc: "製作用於增進聰明的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskball: {
 		name: "黑暗球",
-		desc: "有點與眾不同的球。 容易在夜晚或洞窟等陰暗的地方 捉到寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	duskstone: {
 		name: "暗之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 像黑暗一般漆黑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	earthplate: {
 		name: "大地石板",
-		desc: "地面屬性的石板。 攜帶後，地面屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eelektrossite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	eeviumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ejectbutton: {
 		name: "逃脫按鍵",
-		desc: "攜帶它的寶可夢如果受到招式攻擊， 就能從戰鬥中逃脫，並和同行的 其他寶可夢進行替換。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]用逃脫按鍵回去了！",
 	},
 	ejectpack: {
 		name: "避難背包",
-		desc: "當攜帶它的寶可夢能力降低時， 將自動和同行寶可夢進行替換。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "  [POKEMON]用避難背包回去了！",
 	},
 	electirizer: {
 		name: "電力增幅器",
-		desc: "蓄積著龐大 電氣能量的箱子。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricgem: {
 		name: "電之寶石",
-		desc: "電屬性的寶石。 攜帶後，電屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	electricmemory: {
 		name: "電子記憶碟",
-		desc: "裝有電屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	electricseed: {
 		name: "電氣種子",
-		desc: "讓寶可夢攜帶後， 在電氣場地上使用， 就會提高防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	electriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	emboarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	enigmaberry: {
 		name: "謎芝果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的招式 攻擊時，可以回復ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	eviolite: {
 		name: "進化奇石",
-		desc: "進化的神奇石塊。 攜帶後，還能進化的寶可夢的 防禦和特防就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	excadrite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	expertbelt: {
 		name: "達人帶",
-		desc: "用慣了的黑色帶子。 攜帶後，效果絕佳時的 招式威力就會少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fairyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairygem: {
 		name: "妖精寶石",
-		desc: "妖精屬性的寶石。 攜帶後，妖精屬性的 招式威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fairymemory: {
 		name: "妖精記憶碟",
-		desc: "裝有妖精屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	falinksite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fastball: {
 		name: "速度球",
-		desc: "有點與眾不同的球。 能更容易地捉到 逃跑速度很快的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	feraligite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fightinggem: {
 		name: "格鬥寶石",
-		desc: "格鬥屬性的寶石。 攜帶後，格鬥屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	fightingmemory: {
 		name: "戰鬥記憶碟",
-		desc: "裝有格鬥屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	fightiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	figyberry: {
 		name: "勿花果",
-		desc: "讓寶可夢攜帶後， 危機時可以回復ＨＰ。 如果討厭這味道就會混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firegem: {
 		name: "火之寶石",
-		desc: "火屬性的寶石。 攜帶後，火屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	firememory: {
 		name: "火焰記憶碟",
-		desc: "裝有火屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	firestone: {
 		name: "火之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 看起來是橙黃色的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	firiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fistplate: {
 		name: "拳頭石板",
-		desc: "格鬥屬性的石板。 攜帶後，格鬥屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameorb: {
 		name: "火焰寶珠",
-		desc: "觸碰後會放出熱量的神奇寶珠。 攜帶後，在戰鬥時 會變成灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flameplate: {
 		name: "火球石板",
-		desc: "火屬性的石板。 攜帶後，火屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	floatstone: {
 		name: "輕石",
-		desc: "非常輕的石頭。 攜帶後，寶可夢的 體重會變輕。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	floettite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flowersweet: {
 		name: "花朵糖飾",
-		desc: "花朵形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	flyinggem: {
 		name: "飛行寶石",
-		desc: "飛行屬性的寶石。 攜帶後，飛行屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	flyingmemory: {
 		name: "飛翔記憶碟",
-		desc: "裝有飛行屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	flyiniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	focusband: {
 		name: "氣勢頭帶",
-		desc: "攜帶後，即便受到 可能會導致瀕死的招式， 有時也能僅以１ＨＰ撐過去。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	focussash: {
 		name: "氣勢披帶",
-		desc: "攜帶後，在ＨＰ全滿時， 即使受到可能導致瀕死的招式攻擊， 也能以１ＨＰ撐過１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	fossilizedbird: {
 		name: "化石鳥",
-		desc: "很久以前曾翱翔天際的 古代寶可夢的化石碎片。 本來面目至今仍是個謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddino: {
 		name: "化石海獸",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石碎片。 本來面目至今仍是個謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizeddrake: {
 		name: "化石龍",
-		desc: "很久以前棲息在陸地的 古代寶可夢的化石碎片。 本來面目至今仍是個謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fossilizedfish: {
 		name: "化石魚",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石碎片。 本來面目至今仍是個謎。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	friendball: {
 		name: "友友球",
-		desc: "有點與眾不同的球。 捉到的野生寶可夢會立刻 和訓練家變得親密。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	froslassite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	fullincense: {
 		name: "飽腹薰香",
-		desc: "有著神奇香氣的薰香。 攜帶它的寶可夢 行動會比平時更加緩慢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricacuff: {
 		name: "伽勒荳蔻手環",
-		desc: "用伽勒荳蔻枝編成的手環。 幫伽勒爾地區的呆呆獸戴上， 牠就會很高興。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galaricawreath: {
 		name: "伽勒荳蔻花圈",
-		desc: "用伽勒荳蔻枝編成的花冠。 給伽勒爾地區的呆呆獸戴上它， 呆呆獸就會很開心。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	galladite: {
 		name: "艾路雷朵進化石",
-		desc: "讓艾路雷朵攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ganlonberry: {
 		name: "龍睛果",
-		desc: "讓寶可夢攜帶後， 危機時，自己的 防禦就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	garchompite: {
 		name: "烈咬陸鯊進化石",
-		desc: "讓烈咬陸鯊攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	garchompitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gardevoirite: {
 		name: "沙奈朵進化石",
-		desc: "讓沙奈朵攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gengarite: {
 		name: "耿鬼進化石",
-		desc: "讓耿鬼攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostgem: {
 		name: "幽靈寶石",
-		desc: "幽靈屬性的寶石。 攜帶後，幽靈屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	ghostiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ghostmemory: {
 		name: "幽靈記憶碟",
-		desc: "裝有幽靈屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	glalitite: {
 		name: "冰鬼護進化石",
-		desc: "讓冰鬼護攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	glimmoranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	goldbottlecap: {
 		name: "金色王冠",
-		desc: "金色的美麗王冠。 比銀色王冠更珍貴。 有些人收到它會很高興。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golisopite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	golurkite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassgem: {
 		name: "草之寶石",
-		desc: "草屬性的寶石。 攜帶後，草屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	grassiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassmemory: {
 		name: "青草記憶碟",
-		desc: "裝有草屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grassyseed: {
 		name: "青草種子",
-		desc: "讓寶可夢攜帶後， 在青草場地上使用， 就會提高防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	greatball: {
 		name: "超級球",
-		desc: "性能還算不錯的球。 比起精靈球 更容易捉到寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	greninjite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	grepaberry: {
 		name: "萄葡果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但特防的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gripclaw: {
 		name: "緊纏鉤爪",
-		desc: "攜帶後，綁緊以及緊束等 會持續造成傷害的招式的 回合數會增加。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseouscore: {
 		name: "大白金宝玉",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	griseousorb: {
 		name: "白金寶珠",
-		desc: "讓騎拉帝納攜帶的話， 龍和幽靈屬性的招式威力就會提高。 散發著光輝的寶珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	groundgem: {
 		name: "地面寶石",
-		desc: "地面屬性的寶石。 攜帶後，地面屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	groundiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	groundmemory: {
 		name: "大地記憶碟",
-		desc: "裝有地面屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	gyaradosite: {
 		name: "暴鯉龍進化石",
-		desc: "讓暴鯉龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	habanberry: {
 		name: "莓榴果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的龍屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hardstone: {
 		name: "硬石頭",
-		desc: "絕對不會裂開的石頭。 攜帶後，岩石屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	hawluchanite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	healball: {
 		name: "治癒球",
-		desc: "有點溫柔的球。 能回復捉到的寶可夢的 ＨＰ並治癒異常狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	hearthflamemask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	heatranite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heatrock: {
 		name: "熾熱岩石",
-		desc: "攜帶它的寶可夢 使出大晴天的話， 晴天的時間就會比平時更長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavyball: {
 		name: "沉重球",
-		desc: "有點與眾不同的球。 能更容易地捉到 身體沉重的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heavydutyboots: {
 		name: "厚底靴",
-		desc: "攜帶後，將不會受 腳下的陷阱等所影響。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	helixfossil: {
 		name: "貝殼化石",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石。 好像是貝殼的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	heracronite: {
 		name: "赫拉克羅斯進化石",
-		desc: "讓赫拉克羅斯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	hondewberry: {
 		name: "哈密果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但特攻的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	houndoominite: {
 		name: "黑魯加進化石",
-		desc: "讓黑魯加攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	iapapaberry: {
 		name: "芭亞果",
-		desc: "讓寶可夢攜帶後， 危機時可以回復ＨＰ。 如果討厭這味道就會混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icegem: {
 		name: "冰之寶石",
-		desc: "冰屬性的寶石。 攜帶後，冰屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icememory: {
 		name: "冰雪記憶碟",
-		desc: "裝有冰屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icestone: {
 		name: "冰之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 有著雪花般的花紋。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	icicleplate: {
 		name: "冰柱石板",
-		desc: "冰屬性的石板。 攜帶後，冰屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iciumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	icyrock: {
 		name: "冰冷岩石",
-		desc: "攜帶它的寶可夢 使出冰雹的話， 冰雹的時間就會比平時更長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	inciniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	insectplate: {
 		name: "玉蟲石板",
-		desc: "蟲屬性的石板。 攜帶後，蟲屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ironball: {
 		name: "黑色鐵球",
-		desc: "攜帶後，速度會降低。 飛行屬性以及飄浮特性的 寶可夢會被地面招式擊中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	ironplate: {
 		name: "鋼鐵石板",
-		desc: "鋼屬性的石板。 攜帶後，鋼屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jabocaberry: {
 		name: "嘉珍果",
-		desc: "讓寶可夢攜帶後， 在受到物理招式攻擊時， 也能給予對手傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	jawfossil: {
 		name: "顎之化石",
-		desc: "很久以前生活在地上的 古代寶可夢的化石。 好像是很大的顎的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kangaskhanite: {
 		name: "袋獸進化石",
-		desc: "讓袋獸攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kasibberry: {
 		name: "佛柑果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的幽靈屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "通通果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的毒屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	keeberry: {
 		name: "亞開果",
-		desc: "讓寶可夢攜帶後， 在受到物理招式攻擊時， 自己的防禦就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kelpsyberry: {
 		name: "藻根果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但攻擊的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	kingsrock: {
 		name: "王者之證",
 		desc: "攜帶後進行攻擊， 並造成傷害時， 有時會讓對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	kommoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laggingtail: {
 		name: "後攻之尾",
-		desc: "非常沉重的某種尾巴。 攜帶後，行動會比 平時更加緩慢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lansatberry: {
 		name: "蘭薩果",
-		desc: "讓寶可夢攜帶後， 危機時，攻擊會變得 容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiasite: {
 		name: "拉帝亞斯進化石",
-		desc: "讓拉帝亞斯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	latiosite: {
 		name: "拉帝歐斯進化石",
-		desc: "讓拉帝歐斯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	laxincense: {
 		name: "悠閒薰香",
-		desc: "攜帶後，薰香的 神奇香氣會迷惑對手， 其招式會變得不容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	leafstone: {
 		name: "葉之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 上面有著葉子花紋。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	leek: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	leftovers: {
 		name: "吃剩的東西",
-		desc: "攜帶後，寶可夢的ＨＰ 會在戰鬥期間緩緩回復。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	leppaberry: {
 		name: "蘋野果",
-		desc: "讓寶可夢攜帶後， 可以回復１０ＰＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	levelball: {
 		name: "等級球",
-		desc: "有點與眾不同的球。 對手的等級比自己的寶可夢低越多， 就越容易捉到。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	liechiberry: {
 		name: "枝荔果",
-		desc: "讓寶可夢攜帶後， 危機時，自己的 攻擊就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lifeorb: {
 		name: "生命寶珠",
-		desc: "攜帶後，雖然每次攻擊時 ＨＰ會少量減少，但招式的 威力會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "  [POKEMON]的生命被削減了一些！",
 	},
 	lightball: {
 		name: "電氣球",
-		desc: "讓皮卡丘攜帶後， 攻擊和特攻的威力 就會提高的神奇之球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lightclay: {
 		name: "光之黏土",
-		desc: "當攜帶它的寶可夢 使出光牆或反射壁時， 效果會比平時持續得更久。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	loadeddice: {
 		name: "机变骰子",
+		desc: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lopunnite: {
 		name: "長耳兔進化石",
-		desc: "長耳兔攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	loveball: {
 		name: "甜蜜球",
-		desc: "有點與眾不同的球。 能更容易地捉到 與自己的寶可夢性別不同的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lovesweet: {
 		name: "愛心糖飾",
-		desc: "愛心形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lucarionite: {
 		name: "路卡利歐進化石",
-		desc: "讓路卡利歐攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lucarionitez: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luckypunch: {
 		name: "吉利拳",
-		desc: "能帶來幸運的拳套。 讓吉利蛋攜帶後，招式會 變得容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	lumberry: {
 		name: "木子果",
-		desc: "讓寶可夢攜帶後， 可以治癒所有異常狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luminousmoss: {
 		name: "光苔",
-		desc: "只能使用一次的光苔。 攜帶它的寶可夢如果受到水屬性 招式攻擊，特防就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lunaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lureball: {
 		name: "誘餌球",
-		desc: "有點與眾不同的球。 能更容易地捉到 用釣竿釣上來的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousglobe: {
 		name: "大白宝玉",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	lustrousorb: {
 		name: "白玉寶珠",
-		desc: "讓帕路奇亞攜帶的話， 龍和水屬性的招式威力就會提高。 散發著美麗光輝的寶珠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	luxuryball: {
 		name: "豪華球",
-		desc: "住起來十分舒適的球。 捉到的野生寶可夢會 非常容易和訓練家變得友好。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	lycaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	machobrace: {
 		name: "強制鍛鍊器",
-		desc: "又硬又重的鍛鍊器。 雖然攜帶後速度會降低， 但會比平時更容易茁壯成長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	magearnite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magmarizer: {
 		name: "熔岩增幅器",
-		desc: "蓄積著龐大 熔岩能量的箱子。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	magnet: {
 		name: "磁鐵",
-		desc: "強力的磁鐵。 攜帶後，電屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magoberry: {
 		name: "芒芒果",
-		desc: "讓寶可夢攜帶後， 危機時可以回復ＨＰ。 如果討厭這味道就會混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	magostberry: {
 		name: "岳竹果",
-		desc: "製作用於增進可愛的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mail: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	malamarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	maliciousarmor: {
 		name: "咒术之铠",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	manectite: {
 		name: "雷電獸進化石",
-		desc: "讓雷電獸攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	marangaberry: {
 		name: "香羅果",
-		desc: "讓寶可夢攜帶後， 在受到特殊招式攻擊時， 自己的特防就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	marshadiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	masterball: {
 		name: "大師球",
-		desc: "性能最好的球。 必定能捉到野生寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	masterpieceteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mawilite: {
 		name: "大嘴娃進化石",
-		desc: "讓大嘴娃攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	meadowplate: {
 		name: "碧綠石板",
-		desc: "草屬性的石板。 攜帶後，草屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	medichamite: {
 		name: "恰雷姆進化石",
-		desc: "讓恰雷姆攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	meganiumite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mentalherb: {
 		name: "心靈香草",
-		desc: "當攜帶它的寶可夢 無法自由使出招式時， 會僅回復１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	meowsticite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metagrossite: {
 		name: "巨金怪進化石",
-		desc: "讓巨金怪攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	metalalloy: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	metalcoat: {
 		name: "金屬膜",
 		desc: "特殊的金屬膜。 攜帶後，鋼屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metalpowder: {
 		name: "金屬粉",
-		desc: "讓百變怪攜帶後， 防禦就會提高的神奇粉末。 非常細緻堅硬。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	metronome: {
 		name: "節拍器",
-		desc: "攜帶後，連續使出相同招式時， 威力就會提高。停止時， 威力就會復原。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen4: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	mewniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitex: {
 		name: "超夢進化石Ｘ",
-		desc: "讓超夢攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mewtwonitey: {
 		name: "超夢進化石Ｙ",
-		desc: "讓超夢攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	micleberry: {
 		name: "奇秘果",
-		desc: "讓寶可夢攜帶後， 危機時，招式的命中率 會僅提高１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mimikiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mindplate: {
 		name: "神奇石板",
-		desc: "超能力屬性的石板。 攜帶後，超能力屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	miracleseed: {
 		name: "奇跡種子",
-		desc: "蘊藏生命的種子。 攜帶後，草屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	mirrorherb: {
 		name: "模仿香草",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "  [POKEMON]使用模仿香草，模仿了對手的能力變化！",
 	},
 	mistyseed: {
 		name: "薄霧種子",
-		desc: "讓寶可夢攜帶後， 在薄霧場地上使用， 就會提高特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonball: {
 		name: "月亮球",
-		desc: "有點與眾不同的球。 能更容易地捉到 使用月之石進化的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	moonstone: {
 		name: "月之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 像夜空一樣深黑。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	muscleband: {
 		name: "力量頭帶",
-		desc: "力如泉湧的頭帶。 攜帶後，物理招式的 威力就會少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	mysticwater: {
 		name: "神秘水滴",
-		desc: "水滴形狀的寶石。 攜帶後，水屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nanabberry: {
 		name: "蕉香果",
-		desc: "製作用於增進可愛的 寶可方塊時使用。 粉紅色的果實嘗起來是甜的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nestball: {
 		name: "巢穴球",
-		desc: "有點與眾不同的球。 捕捉的野生寶可夢越弱， 就越容易捉到。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	netball: {
 		name: "捕網球",
-		desc: "有點與眾不同的球。 能更容易地捉到 水屬性和蟲屬性寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	nevermeltice: {
 		name: "不融冰",
-		desc: "隔絕熱的冰。 攜帶後，冰屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	nomelberry: {
 		name: "檬檸果",
-		desc: "製作用於增進強壯的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	normalgem: {
 		name: "一般寶石",
-		desc: "一般屬性的寶石。 攜帶後，一般屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	normaliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	occaberry: {
 		name: "巧可果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的火屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oddincense: {
 		name: "奇異薰香",
-		desc: "有著神奇香氣的薰香。 攜帶後，超能力屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oldamber: {
 		name: "秘密琥珀",
-		desc: "封存著古代寶可夢 遺傳基因的琥珀， 透著點紅色。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	oranberry: {
 		name: "橙橙果",
-		desc: "讓寶可夢攜帶後， 可以回復１０ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ovalstone: {
 		name: "渾圓之石",
-		desc: "能讓特定寶可夢 進化的神奇石頭。 像珠子一般圓潤。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pamtreberry: {
 		name: "椰木果",
-		desc: "製作用於增進美麗的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	parkball: {
 		name: "公園球",
-		desc: "在夥伴公園裡使用的 特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	passhoberry: {
 		name: "千香果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的水屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	payapaberry: {
 		name: "福祿果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的超能力屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pechaberry: {
 		name: "桃桃果",
-		desc: "讓寶可夢攜帶後， 可以治癒中毒。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	persimberry: {
 		name: "柿仔果",
-		desc: "讓寶可夢攜帶後， 可以治癒混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	petayaberry: {
 		name: "龍火果",
-		desc: "讓寶可夢攜帶後， 危機時，自己的 特攻就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pidgeotite: {
 		name: "大比鳥進化石",
-		desc: "讓大比鳥攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikaniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pikashuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinapberry: {
 		name: "凰梨果",
-		desc: "製作用於增進強壯的 寶可方塊時使用。 黃色的果實嘗起來是酸的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pinsirite: {
 		name: "凱羅斯進化石",
-		desc: "讓凱羅斯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pixieplate: {
 		name: "妖精石板",
-		desc: "妖精屬性的石板。 攜帶後，妖精屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	plumefossil: {
 		name: "羽毛化石",
-		desc: "據說是鳥寶可夢祖先的 古代寶可夢的化石。 好像是翅膀的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonbarb: {
 		name: "毒針",
-		desc: "有毒的小針。 攜帶後，毒屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	poisongem: {
 		name: "毒之寶石",
-		desc: "毒屬性的寶石。 攜帶後，毒屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	poisoniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poisonmemory: {
 		name: "毒記憶碟",
-		desc: "裝有毒屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pokeball: {
 		name: "精靈球",
-		desc: "用於投向野生寶可夢 並將其捕捉的球。 它是膠囊樣式的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	pomegberry: {
 		name: "榴石果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但ＨＰ的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	poweranklet: {
 		name: "力量護踝",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的速度 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerband: {
 		name: "力量束帶",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的特防 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbelt: {
 		name: "力量腰帶",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的防禦 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerbracer: {
 		name: "力量護腕",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的攻擊 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerherb: {
 		name: "強力香草",
-		desc: "攜帶它的寶可夢將有１次機會， 可以在１回合內就發動 需要蓄力的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	powerlens: {
 		name: "力量鏡",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的特攻 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	powerweight: {
 		name: "力量負重",
-		desc: "雖然攜帶後速度會降低， 但寶可夢的ＨＰ 會比平時成長得更高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	premierball: {
 		name: "紀念球",
-		desc: "作為某種紀念品 而特別製造的， 有點稀奇的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	prettyfeather: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	primariumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	prismscale: {
 		name: "美麗鱗片",
-		desc: "能讓特定寶可夢 進化的神奇鱗片。 散發著虹色光輝。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	protectivepads: {
 		name: "部位護具",
-		desc: "觸碰要攻擊的對手時， 不會受到本應受到的效果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	protector: {
 		name: "護具",
-		desc: "某種護具。 非常堅硬而且沉重。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicgem: {
 		name: "超能力寶石",
-		desc: "超能力屬性的寶石。 攜帶後，超能力屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	psychicmemory: {
 		name: "精神記憶碟",
-		desc: "裝有超能力屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	psychicseed: {
 		name: "精神種子",
-		desc: "讓寶可夢攜帶後， 在精神場地上使用， 就會提高特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psychiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	punchingglove: {
 		name: "拳击手套",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	pyroarite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	qualotberry: {
 		name: "比巴果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但防禦的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickball: {
 		name: "先機球",
-		desc: "有點與眾不同的球。 在戰鬥開始後立刻使用， 就會變得容易捉到寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	quickclaw: {
 		name: "先制之爪",
-		desc: "又輕又尖銳的爪子。 攜帶後，有時能比對手 先一步行動。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+
+		activate: "", // NOT CONVERTED: not in Champions
 	},
 	quickpowder: {
 		name: "速度粉",
-		desc: "讓百變怪攜帶後， 速度就會提高的神奇粉末。 非常細緻堅硬。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rabutaberry: {
 		name: "茸丹果",
-		desc: "製作用於增進聰明的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitex: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	raichunitey: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rarebone: {
 		name: "貴重骨頭",
-		desc: "在寶可夢考古學上 非常貴重的骨頭。 可以在商店高價出售。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rawstberry: {
 		name: "莓莓果",
-		desc: "讓寶可夢攜帶後， 可以治癒灼傷。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorclaw: {
 		name: "銳利之爪",
 		desc: "尖銳的爪子。 攜帶後，招式會 變得容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razorfang: {
 		name: "銳利之牙",
 		desc: "尖銳的牙齒。 攜帶後，在給予傷害時， 有時會讓對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	razzberry: {
 		name: "蔓莓果",
-		desc: "製作用於增進帥氣的 寶可方塊時使用。 紅色的果實嘗起來是辣的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	reapercloth: {
 		name: "靈界之布",
-		desc: "蘊含著驚人的 強大靈力的布。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	redcard: {
 		name: "紅牌",
-		desc: "有著神奇力量的卡片。 攜帶後，能讓使用了 招式的對手退場。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	redorb: {
 		name: "朱紅色寶珠",
-		desc: "散發著紅色光輝的寶珠。 據說和豐緣地區的傳說 有著很深的淵源。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	repeatball: {
 		name: "重複球",
-		desc: "有點與眾不同的球。 曾經捉到過的寶可夢 會變得容易捉到。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ribbonsweet: {
 		name: "蝴蝶結糖飾",
-		desc: "蝴蝶結形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rindoberry: {
 		name: "羅子果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的草屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ringtarget: {
 		name: "標靶",
-		desc: "原本因寶可夢的屬性相剋關係 而無效的招式現在會變得 能夠擊中自己。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockgem: {
 		name: "岩石寶石",
-		desc: "岩石屬性的寶石。 攜帶後，岩石屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	rockincense: {
 		name: "岩石薰香",
-		desc: "有著神奇香氣的薰香。 攜帶後，岩石屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	rockiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockmemory: {
 		name: "岩石記憶碟",
-		desc: "裝有岩石屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rockyhelmet: {
 		name: "凸凸頭盔",
-		desc: "讓寶可夢攜帶後， 在受到打擊招式攻擊時， 也能給予對手傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		damage: "", // NOT CONVERTED: not in Champions
 	},
 	roomservice: {
 		name: "客房服務",
-		desc: "讓寶可夢攜帶後， 當戲法空間成功時， 速度會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rootfossil: {
 		name: "根狀化石",
-		desc: "很久以前棲息在海裡的 古代寶可夢的化石。 好像是根的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseincense: {
 		name: "花朵薰香",
-		desc: "有著神奇香氣的薰香。 攜帶後，草屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	roseliberry: {
 		name: "洛玫果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的妖精屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rowapberry: {
 		name: "霧蓮果",
-		desc: "讓寶可夢攜帶後， 在受到特殊招式攻擊時， 也能給予對手傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedshield: {
 		name: "腐朽的盾",
-		desc: "據說在很久以前，英雄就是 用這面盾來擊退災厄。 但現在已經生鏽，變得破爛不堪。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	rustedsword: {
 		name: "腐朽的劍",
-		desc: "據說在很久以前，英雄就是 用這把劍來擊退災厄。 但現在已經生鏽，變得破爛不堪。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sablenite: {
 		name: "勾魂眼進化石",
-		desc: "讓勾魂眼攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sachet: {
 		name: "香袋",
-		desc: "裝著散發有點濃的香氣的 香料的袋子。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safariball: {
 		name: "狩獵球",
-		desc: "曾在關都地區的狩獵地帶， 以及神奧地區的大濕地被使用。 是一種特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	safetygoggles: {
 		name: "防塵護目鏡",
-		desc: "不單是天氣造成的傷害， 連放出粉末的招式效果 也能防止的護目鏡。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		block: "", // NOT CONVERTED: not in Champions
 	},
 	sailfossil: {
 		name: "鰭之化石",
-		desc: "很久以前生活在地上的 古代寶可夢的化石。 好像是頭鰭的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salacberry: {
 		name: "沙鱗果",
-		desc: "讓寶可夢攜帶後， 危機時，自己的 速度就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	salamencite: {
 		name: "暴飛龍進化石",
-		desc: "暴飛龍攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sceptilite: {
 		name: "蜥蜴王進化石",
-		desc: "讓蜥蜴王攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scizorite: {
 		name: "巨鉗螳螂進化石",
-		desc: "讓巨鉗螳螂攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scolipite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	scopelens: {
 		name: "焦點鏡",
-		desc: "能看見弱點的鏡片。 攜帶它的寶可夢的招式 會變得容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scovillainite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	scraftinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	seaincense: {
 		name: "海潮薰香",
-		desc: "有著神奇香氣的薰香。 攜帶後，水屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpbeak: {
 		name: "銳利鳥嘴",
-		desc: "又長又尖的鳥嘴。 攜帶後，飛行屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sharpedonite: {
 		name: "巨牙鯊進化石",
-		desc: "讓巨牙鯊攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shedshell: {
 		name: "美麗空殼",
-		desc: "結實堅硬的空殼。 攜帶它的寶可夢必定可以 和後備的寶可夢進行替換。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shellbell: {
 		name: "貝殼之鈴",
-		desc: "當攜帶它的寶可夢 攻擊並造成對手傷害時， 能回復少量ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		heal: "", // NOT CONVERTED: not in Champions
 	},
 	shinystone: {
 		name: "光之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 像光芒一樣耀眼。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shockdrive: {
 		name: "閃電卡帶",
-		desc: "讓蓋諾賽克特攜帶的卡帶。 攜帶後，招式高科技光炮 會變為電屬性。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	shucaberry: {
 		name: "腰木果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的地面屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	silkscarf: {
 		name: "絲綢圍巾",
-		desc: "手感不錯的圍巾。 攜帶後，一般屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	silverpowder: {
 		name: "銀粉",
-		desc: "散發著銀色光輝的粉末。 攜帶後，蟲屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	sitrusberry: {
 		name: "文柚果",
-		desc: "讓寶可夢攜帶後， 可以回復少量ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	skarmorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skullfossil: {
 		name: "頭蓋化石",
-		desc: "很久以前生活在地上的 古代寶可夢的化石。 好像是頭部的一部分。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	skyplate: {
 		name: "藍天石板",
-		desc: "飛行屬性的石板。 攜帶後，飛行屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	slowbronite: {
 		name: "呆殼獸進化石",
-		desc: "讓呆殼獸攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		champions: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	smoothrock: {
 		name: "沙沙岩石",
-		desc: "攜帶它的寶可夢 使出沙暴的話， 沙暴的時間就會比平時更長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	snorliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	snowball: {
 		name: "雪球",
-		desc: "只能使用一次的雪球。 攜帶它的寶可夢如果受到冰屬性 招式攻擊，攻擊就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	softsand: {
 		name: "柔軟沙子",
-		desc: "手感細緻的沙子。 攜帶後，地面屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	solganiumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	souldew: {
 		name: "心之水滴",
-		desc: "讓拉帝歐斯或拉帝亞斯攜帶後， 超能力和龍屬性的招式威力 就會提高的神奇珠子。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelltag: {
 		name: "詛咒之符",
-		desc: "古怪可怕的咒符。 攜帶後，幽靈屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	spelonberry: {
 		name: "刺角果",
-		desc: "製作用於增進可愛的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	splashplate: {
 		name: "水滴石板",
-		desc: "水屬性的石板。 攜帶後，水屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	spookyplate: {
 		name: "妖怪石板",
-		desc: "幽靈屬性的石板。 攜帶後，幽靈屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sportball: {
 		name: "競賽球",
-		desc: "曾在城都地區的捕蟲大賽被使用。 是一種特殊的球。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	staraptite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starfberry: {
 		name: "星桃果",
-		desc: "讓寶可夢攜帶後， 危機時，某一項能力 就會大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	starminite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	starsweet: {
 		name: "星星糖飾",
-		desc: "星星形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelgem: {
 		name: "鋼之寶石",
-		desc: "鋼屬性的寶石。 攜帶後，鋼屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	steeliumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelixite: {
 		name: "大鋼蛇進化石",
-		desc: "讓大鋼蛇攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	steelmemory: {
 		name: "鋼鐵記憶碟",
-		desc: "裝有鋼屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stick: {
 		name: "大蔥",
-		desc: "非常長且堅硬的莖。 讓大蔥鴨攜帶後，招式會 變得容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen2: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	stickybarb: {
 		name: "附著針",
-		desc: "攜帶後，每回合都會受到傷害。 有時也會附著到 碰到自己的對手身上。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	stoneplate: {
 		name: "岩石石板",
-		desc: "岩石屬性的石板。 攜帶後，岩石屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strangeball: {
 		name: "奇异球",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	strawberrysweet: {
 		name: "草莓糖飾",
-		desc: "草莓形狀的工藝糖果。 讓小仙奶攜帶的話， 牠會高興得轉圈圈。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sunstone: {
 		name: "日之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 像太陽一樣赤紅。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	swampertite: {
 		name: "巨沼怪進化石",
-		desc: "讓巨沼怪攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	sweetapple: {
 		name: "甜甜蘋果",
-		desc: "能讓特定寶可夢 進化的神奇蘋果。 非常甜。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	syrupyapple: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tamatoberry: {
 		name: "茄番果",
-		desc: "如果把它餵給寶可夢， 寶可夢會非常容易和訓練家變得友好， 但速度的基礎點數會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tangaberry: {
 		name: "扁櫻果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的蟲屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tapuniumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tartapple: {
 		name: "酸酸蘋果",
-		desc: "能讓特定寶可夢 進化的神奇蘋果。 非常酸。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	tatsugirinite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	terrainextender: {
 		name: "大地膜",
-		desc: "當攜帶它的寶可夢 透過招式或特性展開場地時， 場地的持續時間會比平時更長。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thickclub: {
 		name: "粗骨頭",
-		desc: "某種堅硬的骨頭。 讓卡拉卡拉或嘎啦嘎啦攜帶後， 攻擊就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	throatspray: {
 		name: "爽喉噴霧",
-		desc: "使用與聲音有關的招式時， 特攻會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	thunderstone: {
 		name: "雷之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 上面有著閃電花紋。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	timerball: {
 		name: "計時球",
-		desc: "有點與眾不同的球。 回合數花費得越多， 就越容易捉到寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicorb: {
 		name: "劇毒寶珠",
-		desc: "觸碰後會放出毒的神奇寶珠。 攜帶後，在戰鬥時 會變成劇毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	toxicplate: {
 		name: "劇毒石板",
-		desc: "毒屬性的石板。 攜帶後，毒屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr00: {
 		name: "招式紀錄００",
-		desc: "激烈地跳起戰舞提升氣勢， 大幅提高自己的攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr01: {
 		name: "招式紀錄０１",
-		desc: "用整個身體 壓住對手進行攻擊。 有時會讓對手陷入麻痺狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr02: {
 		name: "招式紀錄０２",
-		desc: "向對手發射 強烈火焰進行攻擊。 有時會讓對手陷入灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr03: {
 		name: "招式紀錄０３",
-		desc: "向對手猛烈地噴射 大量水流進行攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr04: {
 		name: "招式紀錄０４",
-		desc: "使用大浪 攻擊自己周圍所有的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr05: {
 		name: "招式紀錄０５",
-		desc: "向對手發射 冰凍光束進行攻擊。 有時會讓對手陷入冰凍狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr06: {
 		name: "招式紀錄０６",
-		desc: "將猛烈的暴風雪 吹向對手進行攻擊。 有時會讓對手陷入冰凍狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr07: {
 		name: "招式紀錄０７",
-		desc: "用力踢對手的腳， 讓對手摔倒進行攻擊。 對手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr08: {
 		name: "招式紀錄０８",
-		desc: "向對手放出強力電流進行攻擊。 有時會讓對手陷入麻痺狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr09: {
 		name: "招式紀錄０９",
-		desc: "向對手劈下暴雷進行攻擊。 有時會讓對手陷入麻痺狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr10: {
 		name: "招式紀錄１０",
-		desc: "用地震的衝擊， 攻擊自己周圍所有的寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr11: {
 		name: "招式紀錄１１",
-		desc: "向對手發送 強大的念力進行攻擊。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr12: {
 		name: "招式紀錄１２",
-		desc: "放鬆身體， 讓自己變得輕盈以進行高速移動。 可大幅提高自己的速度。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr13: {
 		name: "招式紀錄１３",
-		desc: "深呼吸後集中精神。 讓自己的攻擊 變得容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr14: {
 		name: "招式紀錄１４",
-		desc: "揮動手指刺激自己的大腦， 從全部的招式中 隨機選出１招使出。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr15: {
 		name: "招式紀錄１５",
-		desc: "用大字形狀的火焰燒盡對手。 有時會讓對手陷入灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr16: {
 		name: "招式紀錄１６",
-		desc: "以驚人的氣勢撲向對手。 有時會讓對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr17: {
 		name: "招式紀錄１７",
-		desc: "將頭腦清空， 藉由在一瞬間遺忘某些事 大幅提高自己的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr18: {
 		name: "招式紀錄１８",
-		desc: "吸取對手的血液進行攻擊。 可以回復給予對手 傷害的一半ＨＰ。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr19: {
 		name: "招式紀錄１９",
-		desc: "用３種光線進行攻擊。 有時會讓對手陷入 麻痺、灼傷或冰凍的狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr20: {
 		name: "招式紀錄２０",
-		desc: "消耗一些自己的ＨＰ， 製造分身。 分身將成為自己的替身。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr21: {
 		name: "招式紀錄２１",
-		desc: "竭盡全力進行攻擊。 自己的ＨＰ越少， 招式的威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr22: {
 		name: "招式紀錄２２",
-		desc: "向對手投擲污泥進行攻擊。 有時會讓對手陷入中毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr23: {
 		name: "招式紀錄２３",
-		desc: "將撒菱散布在對手的腳下。 讓對手替換出場的寶可夢 受到傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr24: {
 		name: "招式紀錄２４",
-		desc: "在２～３回合內 瘋狂亂打對手進行攻擊。 大鬧一番後自己會陷入混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr25: {
 		name: "招式紀錄２５",
-		desc: "將神奇的念力波實體化後攻擊對手。 給予對手物理傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr26: {
 		name: "招式紀錄２６",
-		desc: "即使受到再強烈的攻擊， 也一定會剩下１ＨＰ。 連續使用時容易失敗。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr27: {
 		name: "招式紀錄２７",
-		desc: "從自己已學會的招式中 隨機選出１個使出。 只有在睡眠狀態時可以使用。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr28: {
 		name: "招式紀錄２８",
-		desc: "用堅硬且華麗的角狠狠地 刺進對手進行攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr29: {
 		name: "招式紀錄２９",
-		desc: "與後備寶可夢進行替換。 替換上場的寶可夢， 將承接目前寶可夢的能力變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr30: {
 		name: "招式紀錄３０",
-		desc: "要求對手再來一次， 讓對手連續３次 使出最近一次使用的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr31: {
 		name: "招式紀錄３１",
-		desc: "將堅硬的尾巴 甩向對手進行攻擊。 有時會降低對手的防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr32: {
 		name: "招式紀錄３２",
-		desc: "用尖銳的牙齒咬碎對手進行攻擊。 有時會降低對手的防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr33: {
 		name: "招式紀錄３３",
-		desc: "投擲一團黑影進行攻擊。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr34: {
 		name: "招式紀錄３４",
-		desc: "使用招式的２回合後， 向對手發送一團念力進行攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr35: {
 		name: "招式紀錄３５",
-		desc: "在３回合內 大吵大鬧攻擊對手。 在此期間誰都無法入眠。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr36: {
 		name: "招式紀錄３６",
-		desc: "將炎熱的氣息 吹向對手進行攻擊。 有時會讓對手陷入灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr37: {
 		name: "招式紀錄３７",
-		desc: "激怒對手。 在３回合內讓對手 只能使出給予傷害的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr38: {
 		name: "招式紀錄３８",
-		desc: "在對手露出空隙時， 趁機交換自己和對手的持有物。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr39: {
 		name: "招式紀錄３９",
-		desc: "發揮驚人的力量攻擊對手。 自己的攻擊和防禦會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr40: {
 		name: "招式紀錄４０",
-		desc: "用超能力將自己和 對手的特性互相交換。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr41: {
 		name: "招式紀錄４１",
-		desc: "有時會讓受到攻擊的對手 陷入灼傷狀態。 且容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr42: {
 		name: "招式紀錄４２",
-		desc: "製造出震耳欲聾的 巨大聲波攻擊對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr43: {
 		name: "招式紀錄４３",
-		desc: "釋放全部能量攻擊對手。 使用後因為反作用力， 自己的特攻會大幅降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr44: {
 		name: "招式紀錄４４",
-		desc: "吸取來自宇宙的神秘力量， 提高自己的防禦和特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr45: {
 		name: "招式紀錄４５",
-		desc: "用渾濁的污水攻擊對手。 有時會降低對手的命中率。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr46: {
 		name: "招式紀錄４６",
-		desc: "將皮膚變得堅硬如鐵， 大幅提高自己的防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr47: {
 		name: "招式紀錄４７",
-		desc: "用尖銳的巨爪 撕裂對手進行攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr48: {
 		name: "招式紀錄４８",
-		desc: "將力量集中於體內，增厚肌肉， 提高自己的攻擊和防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr49: {
 		name: "招式紀錄４９",
-		desc: "屏氣凝神， 提高自己的特攻和特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr50: {
 		name: "招式紀錄５０",
-		desc: "如用劍般操控葉子 切斬對手進行攻擊。 容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr51: {
 		name: "招式紀錄５１",
-		desc: "激烈地跳起神秘又強而有力的舞蹈。 提高自己的攻擊和速度。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr52: {
 		name: "招式紀錄５２",
-		desc: "高速旋轉身體，撞擊對手。 速度比對手越慢，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr53: {
 		name: "招式紀錄５３",
-		desc: "反守為攻，近身突擊對手。 自己的防禦和特防會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr54: {
 		name: "招式紀錄５４",
-		desc: "在對手腳下散布毒菱。 讓對手替換出場的寶可夢 陷入中毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr55: {
 		name: "招式紀錄５５",
-		desc: "將火焰圍繞全身後猛撞對手。 自己也會受到不小的傷害。 有時會讓對手陷入灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr56: {
 		name: "招式紀錄５６",
-		desc: "將來自體內深處的波導之力 擊向對手。 攻擊必定會命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr57: {
 		name: "招式紀錄５７",
-		desc: "以帶有毒性的觸手或手臂刺進對手。 有時會讓對手陷入中毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr58: {
 		name: "招式紀錄５８",
-		desc: "從身體散發出 充滿惡意的恐怖氣場。 有時會使對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr59: {
 		name: "招式紀錄５９",
-		desc: "從上方砸下外殼堅硬的 大種子，攻擊對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr60: {
 		name: "招式紀錄６０",
-		desc: "將鐮刀或爪子像剪刀般地交叉， 順勢劈開對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr61: {
 		name: "招式紀錄６１",
-		desc: "利用振動產生出的音波進行攻擊。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr62: {
 		name: "招式紀錄６２",
-		desc: "從張大的口中 發射衝擊波攻擊對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr63: {
 		name: "招式紀錄６３",
-		desc: "發射如寶石般 閃耀的光芒攻擊對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr64: {
 		name: "招式紀錄６４",
-		desc: "提高氣勢， 釋放全身所有力量。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr65: {
 		name: "招式紀錄６５",
-		desc: "發射從大自然匯聚而來的生命力量。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr66: {
 		name: "招式紀錄６６",
-		desc: "收起翅膀， 低空飛行突擊對手。 自己也會受到不小的傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr67: {
 		name: "招式紀錄６７",
-		desc: "向對手腳下 釋放出大地之力。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr68: {
 		name: "招式紀錄６８",
-		desc: "動歪腦筋，活化大腦。 大幅提高自己的特攻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr69: {
 		name: "招式紀錄６９",
-		desc: "將意念的力量集中在 前額進行攻擊。 有時會讓對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr70: {
 		name: "招式紀錄７０",
-		desc: "將身體的光芒 聚集在一個點後釋放出去。 有時會降低對手的特防。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr71: {
 		name: "招式紀錄７１",
-		desc: "用尖銳的葉子捲起風暴向對手進行攻擊。 使用後因為反作用力， 自己的特攻會大幅降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr72: {
 		name: "招式紀錄７２",
-		desc: "激烈地揮舞藤蔓或觸手 向對手進行攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr73: {
 		name: "招式紀錄７３",
-		desc: "將骯髒的垃圾 丟向對手進行攻擊。 有時會讓對手陷入中毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr74: {
 		name: "招式紀錄７４",
-		desc: "用如同鋼鐵般 堅硬的頭部進行攻擊。 有時會讓對手畏縮。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr75: {
 		name: "招式紀錄７５",
-		desc: "用尖銳的岩石 刺進對手進行攻擊。 容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr76: {
 		name: "招式紀錄７６",
-		desc: "在對手周圍撒下無數飄浮的岩石， 讓對手替換出場的寶可夢受到傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr77: {
 		name: "招式紀錄７７",
-		desc: "用打結的草絆倒對手。 對手越重，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr78: {
 		name: "招式紀錄７８",
-		desc: "用污泥波攻擊 自己周圍所有的寶可夢。 有時會讓對手陷入中毒狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr79: {
 		name: "招式紀錄７９",
-		desc: "用沉重的身體衝撞對手進行攻擊。 體重比對手重越多，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr80: {
 		name: "招式紀錄８０",
-		desc: "用電球攻擊對手。 速度比對手快越多， 威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr81: {
 		name: "招式紀錄８１",
-		desc: "利用對手的力量進行攻擊。 對手的攻擊越高， 給予對手的傷害越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr82: {
 		name: "招式紀錄８２",
-		desc: "用蓄積的力量攻擊對手。 自己的能力提高越多， 招式的威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr83: {
 		name: "招式紀錄８３",
-		desc: "用神奇的力量瞬間移動， 讓自己和同伴的所在位置互換。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr84: {
 		name: "招式紀錄８４",
-		desc: "向對手噴射 滾燙的熱水進行攻擊。 有時會讓對手陷入灼傷狀態。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr85: {
 		name: "招式紀錄８５",
-		desc: "激勵自己， 提高自己的攻擊和特攻。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr86: {
 		name: "招式紀錄８６",
-		desc: "讓電流圍繞全身， 衝撞對手進行攻擊。 自己也會受到少許傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr87: {
 		name: "招式紀錄８７",
-		desc: "像鑽頭一樣旋轉身體， 猛烈地撞擊對手。 容易擊中要害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr88: {
 		name: "招式紀錄８８",
-		desc: "用燃燒的身體重壓對手 進行攻擊。體重比對手 重越多，威力越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr89: {
 		name: "招式紀錄８９",
-		desc: "用強烈的風席捲 對手進行攻擊。 有時會使對手混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr90: {
 		name: "招式紀錄９０",
-		desc: "在和對手嬉鬧的同時進行攻擊。 有時會降低對手的攻擊。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr91: {
 		name: "招式紀錄９１",
-		desc: "向對手發射特殊的毒液。 陷入中毒狀態的對手 攻擊、特攻和速度會降低。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr92: {
 		name: "招式紀錄９２",
-		desc: "發出強烈的閃光， 給予對手傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr93: {
 		name: "招式紀錄９３",
-		desc: "旋轉雙臂並打向對手。 可不顧對手的能力變化 給予傷害。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr94: {
 		name: "招式紀錄９４",
-		desc: "使出全身力量， 猛攻對手。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr95: {
 		name: "招式紀錄９５",
-		desc: "受到此招式攻擊的對手， 會因為地獄般的痛苦，在２回合內 無法使用會發出聲音的招式。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr96: {
 		name: "招式紀錄９６",
-		desc: "對敵人使用時，用會爆炸的花粉團來攻擊。 對我方同伴使用時， 則給予有回復效果的花粉團。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr97: {
 		name: "招式紀錄９７",
-		desc: "利用精神力量咬住對手進行攻擊。 並可破壞光牆和反射壁等。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr98: {
 		name: "招式紀錄９８",
-		desc: "用水之力量撞向對手進行攻擊。 有時會降低對手的防禦。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	tr99: {
 		name: "招式紀錄９９",
-		desc: "用身體撞向對手進行攻擊。 自己的防禦越高， 給予對手的傷害越大。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	twistedspoon: {
 		name: "彎曲的湯匙",
-		desc: "注入了念力的湯匙。 攜帶後，超能力屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen3: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	tyranitarite: {
 		name: "班基拉斯進化石",
-		desc: "讓班基拉斯攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	ultraball: {
 		name: "高級球",
-		desc: "性能非常不錯的球。 比起超級球 更容易捉到寶可夢。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	ultranecroziumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		transform: "", // NOT CONVERTED: not in Champions
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	unremarkableteacup: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	upgrade: {
 		name: "升級資料",
-		desc: "內部儲存了各種 資訊的透明機器。 西爾佛公司製造。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	utilityumbrella: {
 		name: "萬能傘",
 		desc: "攜帶它的寶可夢 在下雨或日照很強時， 不會受到天氣的影響。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen8: {
+			desc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	venusaurite: {
 		name: "妙蛙花進化石",
-		desc: "讓妙蛙花攜帶後， 在戰鬥時就能進行超級進化的 一種神奇超級石。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	victreebelite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wacanberry: {
 		name: "燭木果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的電屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watergem: {
 		name: "水之寶石",
-		desc: "水屬性的寶石。 攜帶後，水屬性招式的 威力會僅增強１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen5: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+	},
+	wateriumz: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watermemory: {
 		name: "清水記憶碟",
-		desc: "裝有水屬性資料的記憶碟。 特定寶可夢攜帶後， 就會產生屬性的變化。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waterstone: {
 		name: "水之石",
 		desc: "能讓特定寶可夢 進化的神奇石頭。 看起來是澄澈的藍色。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	watmelberry: {
 		name: "瓜西果",
-		desc: "製作用於增進聰明的 寶可方塊時使用。 在其他地區很少見的樹果。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	waveincense: {
 		name: "漣漪薰香",
-		desc: "有著神奇香氣的薰香。 攜帶後，水屬性的 招式威力就會提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	weaknesspolicy: {
 		name: "弱點保險",
-		desc: "被攻擊到弱點時， 攻擊和特攻就會 分別大幅提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	wellspringmask: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wepearberry: {
 		name: "西梨果",
-		desc: "製作用於增進聰明的 寶可方塊時使用。 綠色的果實嘗起來是苦的。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whippeddream: {
 		name: "泡沫奶油",
-		desc: "鬆鬆軟軟起著泡的， 稍微有點甜的奶油。 某種寶可夢很喜歡它。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	whiteherb: {
 		name: "白色香草",
-		desc: "當攜帶它的寶可夢 能力降低時，將能回到 初始狀態１次。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		end: "", // NOT CONVERTED: not in Champions
 	},
 	widelens: {
 		name: "廣角鏡",
-		desc: "會讓物體看起來比較大的鏡片。 攜帶後，招式的命中率 就會少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	wikiberry: {
 		name: "異奇果",
-		desc: "讓寶可夢攜帶後， 危機時可以回復ＨＰ。 如果討厭這味道就會混亂。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		gen7: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
+		gen6: {
+			shortDesc: "", // NOT CONVERTED: not in PokeAPI
+		},
 	},
 	wiseglasses: {
 		name: "博識眼鏡",
-		desc: "裝著很厚鏡片的眼鏡。 攜帶後，特殊招式的 威力就會少量提高。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	yacheberry: {
 		name: "番荔果",
-		desc: "讓寶可夢攜帶後， 在受到效果絕佳的冰屬性招式 攻擊時，能使其威力減弱。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zapplate: {
 		name: "雷電石板",
-		desc: "電屬性的石板。 攜帶後，電屬性的 招式威力就會增強。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zeraorite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 	zoomlens: {
 		name: "對焦鏡",
-		desc: "當攜帶它的寶可夢比 對手行動緩慢時， 招式會變得容易命中。",
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	zygardite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// Gen 2 items
+
+	berserkgene: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	berry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	bitterberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	burntberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	goldberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	iceberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mintberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	miracleberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	mysteryberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+
+		activate: "", // NOT CONVERTED: not in Champions
+	},
+	pinkbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	polkadotbow: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	przcureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	psncureberry: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+
+	// CAP items
+
+	crucibellite: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
+	},
+	vilevial: {
+		name: "", // NOT CONVERTED: not in PokeAPI
+		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 	},
 };
